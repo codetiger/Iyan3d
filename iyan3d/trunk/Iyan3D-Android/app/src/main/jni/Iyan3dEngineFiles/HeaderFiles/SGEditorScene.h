@@ -198,6 +198,7 @@ public:
     void popLightProps();
     void clearLightProps();
     
+    Vector3 getTransformValue();
     Vector3 getPivotPoint(bool initial);
     
 };

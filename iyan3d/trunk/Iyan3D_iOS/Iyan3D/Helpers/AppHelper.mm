@@ -741,7 +741,7 @@
         }
         
         if(([receiptDataStr isEqualToString:@""] && status > 0) || receiptDataStr.length > 5)
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsused" object:nil];
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
@@ -786,7 +786,7 @@
             NSString *message = [dict objectForKey:@"message"];
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", nil]];
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);

@@ -475,6 +475,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
     editorScene->updater->updateControlsOrientaion();
     if (!_isPlaying) {
+        Vector3 trans = editorScene->getTransformValue();
+        [self.delegate updateXYZValuesHide:NO X:trans.x Y:trans.y Z:trans.z];
         [self.delegate undoRedoButtonState:DEACTIVATE_BOTH];
     }
 }

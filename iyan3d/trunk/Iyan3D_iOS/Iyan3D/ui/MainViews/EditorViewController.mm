@@ -144,6 +144,7 @@ BOOL missingAlertShown;
     [_center_progress startAnimating];
     [_rigCancelBtn setHidden:YES];
     [_rigAddToSceneBtn setHidden:YES];
+    [self updateXYZValuesHide:YES X:0.0 Y:0.0 Z:0.0];
 //    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //
@@ -246,6 +247,25 @@ BOOL missingAlertShown;
 - (void) reloadFrames
 {
     [_framesCollectionView reloadData];
+}
+
+- (void) updateXYZValuesHide:(BOOL)hide X:(float)x Y:(float)y Z:(float)z
+{
+    BOOL status = hide;
+    
+    if(x == -999.0 && y == -999.0 & z == -999.0)
+        status = YES;
+    
+    [_xLbl setHidden:status];
+    [_yLbl setHidden:status];
+    [_zLbl setHidden:status];
+    [_xValue setHidden:status];
+    [_yValue setHidden:status];
+    [_zValue setHidden:status];
+    
+    _xValue.text = [NSString stringWithFormat:@"%.1f", x];
+    _yValue.text = [NSString stringWithFormat:@"%.1f", y];
+    _zValue.text = [NSString stringWithFormat:@"%.1f", z];
 }
 
 - (void)changeAllButtonBG{

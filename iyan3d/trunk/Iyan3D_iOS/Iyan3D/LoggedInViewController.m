@@ -36,6 +36,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsupdate" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsused" object:nil];
+    
+    
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
         NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
         NSString* userName = [[AppHelper getAppHelper] userDefaultsForKey:@"username"];
@@ -163,7 +166,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:(BOOL)animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsupdate" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];
 }
 
 - (IBAction)add500Credits:(id)sender

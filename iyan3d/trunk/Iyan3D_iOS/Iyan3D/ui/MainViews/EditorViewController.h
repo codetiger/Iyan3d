@@ -123,6 +123,12 @@
 @property (weak, nonatomic) IBOutlet UIView *objTableview;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *rigTitle;
+@property (weak, nonatomic) IBOutlet UILabel *xLbl;
+@property (weak, nonatomic) IBOutlet UILabel *yLbl;
+@property (weak, nonatomic) IBOutlet UILabel *zLbl;
+@property (weak, nonatomic) IBOutlet UILabel *xValue;
+@property (weak, nonatomic) IBOutlet UILabel *yValue;
+@property (weak, nonatomic) IBOutlet UILabel *zValue;
 
 - (IBAction)moveLastAction:(id)sender;
 - (IBAction)moveFirstAction:(id)sender;

@@ -78,7 +78,7 @@
     [super viewDidLoad];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed) name:@"creditsupdate" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed:) name:@"creditsupdate" object:nil];
 
     cancelPressed = NO;
     selectedIndex = 0;
@@ -254,19 +254,10 @@
             [self renderBeginFunction:0];
         }
          else if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
-             int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
-                int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-             int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
-                int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
-                if(userCredits >= abs(credits)){
-                    [_creditLable setHidden:YES];
-                    [self renderBeginFunction:credits];                    
-                }
-                else{
-                    UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                    [userNameAlert show];
-                    [self.trimControl setHidden:NO];
-                }
+             
+             //TODO Begin loading
+             
+             [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:[[AppHelper getAppHelper] userDefaultsForKey:@"username"] Email:[[AppHelper getAppHelper] userDefaultsForKey:@"email"] SignInType:[[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue]];
             }
             else{
                 UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this.!!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -283,9 +274,30 @@
 }
 
 
-- (void) creditsUsed
+- (void) creditsUsed:(NSNotification*) notification
 {
-    NSLog(@"Credits Updated");
+    // TODO End Loading
+    NSDictionary* userInfo = notification.userInfo;
+    NSNumber* userCredits = userInfo[@"credits"];
+    NSLog(@"Credits Updated %@ ", userCredits);
+    [self performSelectorOnMainThread:@selector(verifyCreditsAndRender:) withObject:userCredits waitUntilDone:YES];
+}
+
+- (void) verifyCreditsAndRender:(NSNumber*)userCredits
+{
+    int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
+    int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
+    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
+    
+    if([userCredits intValue] >= abs(credits)) {
+        [_creditLable setHidden:YES];
+        [self renderBeginFunction:credits];
+    }
+    else{
+        UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [userNameAlert show];
+        [self.trimControl setHidden:NO];
+    }
 }
 
 - (void) updateCreditLable
@@ -1101,6 +1113,8 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     self.uploadVideo = nil;
     self.authController = nil;
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsupdate" object:nil];
+
 }
 
 - (IBAction)transparentBgValueChanged:(id)sender {

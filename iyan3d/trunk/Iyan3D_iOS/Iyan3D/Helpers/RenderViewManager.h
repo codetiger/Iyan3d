@@ -26,6 +26,7 @@
 @protocol RenderViewManagerDelegate
 
 - (bool) isMetalSupportedDevice;
+- (void) updateXYZValuesHide:(BOOL)hide X:(float)x Y:(float)y Z:(float)z;
 - (void) reloadFrames;
 - (void) presentPopOver:(CGRect )arect;
 - (void) updateAssetListInScenes;

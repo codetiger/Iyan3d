@@ -617,6 +617,22 @@ Vector3 SGEditorScene::getSelectedNodeScale()
     return Vector3(1.0);
 }
 
+Vector3 SGEditorScene::getTransformValue()
+{
+    if(!hasNodeSelected() || !isControlSelected)
+        return Vector3(-999.0 ,-999.0, -999.0);
+    
+    if(controlType == MOVE)
+        return getSelectedNode()->node->getAbsolutePosition();
+    else if (controlType == ROTATE)
+        return getSelectedNode()->node->getRotationInDegrees();
+    else if (controlType == SCALE)
+        return getSelectedNode()->node->getScale();
+    
+    return Vector3(-999.0 ,-999.0, -999.0);
+}
+
+
 Vector3 SGEditorScene::getPivotPoint(bool initial)
 {
     if(getParentNode() && initial)
