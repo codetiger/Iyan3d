@@ -297,7 +297,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
                             <rect key="frame" x="501" y="22" width="18" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Button" backgroundImage="View_IPhone.png"/>
+                            <state key="normal" backgroundImage="View_IPhone.png"/>
                             <connections>
                                 <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="6Gl-Tv-Qd8"/>
                             </connections>
@@ -305,7 +305,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Diu-e1-yeL">
                             <rect key="frame" x="467" y="22" width="18" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Button" backgroundImage="Login-IPhone.png"/>
+                            <state key="normal" backgroundImage="Login-IPhone.png"/>
                             <connections>
                                 <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="iPf-ly-6Zb"/>
                             </connections>

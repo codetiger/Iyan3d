@@ -46,6 +46,7 @@
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
     filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
+    self.importBtn.layer.cornerRadius=8.0;
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
     [_colorWheelBtn setHidden:YES];

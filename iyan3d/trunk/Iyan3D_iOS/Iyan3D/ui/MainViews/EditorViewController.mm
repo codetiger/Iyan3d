@@ -561,6 +561,8 @@ BOOL missingAlertShown;
         editorScene->renderAll();
         if(!isMetalSupported)
             [renderViewMan presentRenderBuffer];
+        
+        
     }
 }
 
