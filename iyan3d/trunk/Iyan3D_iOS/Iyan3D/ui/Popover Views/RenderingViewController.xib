@@ -66,6 +66,9 @@
                     <rect key="frame" x="77" y="196" width="47" height="47"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="color.png"/>
+                    <connections>
+                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="yca-Mo-LA6"/>
+                    </connections>
                 </button>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" id="dzw-IT-60p">
                     <rect key="frame" x="144" y="569" width="201" height="3"/>

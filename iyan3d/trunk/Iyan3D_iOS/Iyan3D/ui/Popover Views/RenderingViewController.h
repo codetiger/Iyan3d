@@ -19,6 +19,9 @@
 #import "GAI.h"
 #import "CacheSystem.h"
 #import "RETrimControl.h"
+#import "TextColorPicker.h"
+#import "WEPopoverController.h"
+#import "PopUpViewController.h"
 
 @protocol RenderingViewControllerDelegate
 - (void) renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark;
@@ -33,7 +36,7 @@
 
 @class GADBannerView;
 
-@interface RenderingViewController : GAITrackedViewController<YouTubeUploadVideoDelegate ,RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,PremiumUpgardeVCViewControllerDelegate>
+@interface RenderingViewController : GAITrackedViewController<YouTubeUploadVideoDelegate ,RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,PremiumUpgardeVCViewControllerDelegate,TextColorPickerDelegate>
 {
     int renderingStartFrame, renderingEndFrame, renderingFrame , shaderType,finalFrame,publishId;
     bool isCanceled,isAppInBg;
@@ -90,12 +93,17 @@
 @property(nonatomic, strong) YouTubeUploadVideo *uploadVideo;
 @property(nonatomic, strong) GTMOAuth2ViewControllerTouch *authController;
 @property (weak, nonatomic) id <RenderingViewControllerDelegate> delegate;
+@property (nonatomic, strong) TextColorPicker *bgColorProp;
+@property (nonatomic, strong) WEPopoverController *popoverController;
+@property (nonatomic, strong) PopUpViewController *popUpVc;
+
 
 @property (weak, nonatomic) IBOutlet UISwitch *watermarkSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *backgroundColorLable;
 @property (weak, nonatomic) IBOutlet UIButton *colorPickerBtn;
 @property (weak, nonatomic) IBOutlet UILabel *transparentLable;
 @property (weak, nonatomic) IBOutlet UISwitch *transparentBackgroundbtn;
+
 
 - (IBAction)cameraResolutionChanged:(id)sender;
 - (IBAction)transparentBgValueChanged:(id)sender;

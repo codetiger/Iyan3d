@@ -1545,7 +1545,7 @@
 		E20671271B049AA6006DD2F7 /* GTLYouTubeMonitorStreamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C3C491A0758B6006964E5 /* GTLYouTubeMonitorStreamInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E20671281B049AA6006DD2F7 /* GTLYouTubeSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C3C6D1A0758B6006964E5 /* GTLYouTubeSearchResult.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E20671291B049AA6006DD2F7 /* GTLYouTubePlaylistItemListResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C3C551A0758B6006964E5 /* GTLYouTubePlaylistItemListResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		E206712C1B049AA6006DD2F7 /* RenderingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2497647196BE0190025D442 /* RenderingViewController.m */; };
+		E206712C1B049AA6006DD2F7 /* RenderingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497647196BE0190025D442 /* RenderingViewController.mm */; };
 		E206712D1B049AA6006DD2F7 /* GTLYouTubeInvideoPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C3C2B1A0758B6006964E5 /* GTLYouTubeInvideoPosition.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E206712E1B049AA6006DD2F7 /* GTLBatchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = E29C10D61A075DBC00626544 /* GTLBatchResult.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E20671311B049AA6006DD2F7 /* GTLYouTubeChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = E21C3BE91A0758B6006964E5 /* GTLYouTubeChannel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -2178,7 +2178,7 @@
 		E2497669196BE0190025D442 /* ObjFileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497643196BE0190025D442 /* ObjFileViewController.mm */; };
 		E249766A196BE0190025D442 /* ObjFileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497644196BE0190025D442 /* ObjFileViewController.xib */; };
 		E249766B196BE0190025D442 /* ObjFileViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497645196BE0190025D442 /* ObjFileViewControllerPhone.xib */; };
-		E249766C196BE0190025D442 /* RenderingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2497647196BE0190025D442 /* RenderingViewController.m */; };
+		E249766C196BE0190025D442 /* RenderingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497647196BE0190025D442 /* RenderingViewController.mm */; };
 		E249766F196BE0190025D442 /* ScaleForAutoRigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */; };
 		E2497670196BE0190025D442 /* ScaleForAutoRigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */; };
 		E2497671196BE0190025D442 /* ScaleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764E196BE0190025D442 /* ScaleViewController.m */; };
@@ -3788,7 +3788,7 @@
 		E2497644196BE0190025D442 /* ObjFileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ObjFileViewController.xib; path = "ui/Popover Views/ObjFileViewController.xib"; sourceTree = "<group>"; };
 		E2497645196BE0190025D442 /* ObjFileViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ObjFileViewControllerPhone.xib; path = "ui/Popover Views/ObjFileViewControllerPhone.xib"; sourceTree = "<group>"; };
 		E2497646196BE0190025D442 /* RenderingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderingViewController.h; path = "ui/Popover Views/RenderingViewController.h"; sourceTree = "<group>"; };
-		E2497647196BE0190025D442 /* RenderingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RenderingViewController.m; path = "ui/Popover Views/RenderingViewController.m"; sourceTree = "<group>"; };
+		E2497647196BE0190025D442 /* RenderingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderingViewController.mm; path = "ui/Popover Views/RenderingViewController.mm"; sourceTree = "<group>"; };
 		E249764A196BE0190025D442 /* ScaleForAutoRigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScaleForAutoRigViewController.h; path = "ui/Popover Views/ScaleForAutoRigViewController.h"; sourceTree = "<group>"; };
 		E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScaleForAutoRigViewController.m; path = "ui/Popover Views/ScaleForAutoRigViewController.m"; sourceTree = "<group>"; };
 		E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ScaleForAutoRigViewController.xib; path = "ui/Popover Views/ScaleForAutoRigViewController.xib"; sourceTree = "<group>"; };
@@ -5557,7 +5557,7 @@
 				E2497644196BE0190025D442 /* ObjFileViewController.xib */,
 				E2497645196BE0190025D442 /* ObjFileViewControllerPhone.xib */,
 				E2497646196BE0190025D442 /* RenderingViewController.h */,
-				E2497647196BE0190025D442 /* RenderingViewController.m */,
+				E2497647196BE0190025D442 /* RenderingViewController.mm */,
 				257564BF1AE6E3D400B66113 /* RenderingViewController.xib */,
 				257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */,
 				E249764A196BE0190025D442 /* ScaleForAutoRigViewController.h */,
@@ -8024,7 +8024,7 @@
 				25EFBEB01BE25CA700DB300C /* RenPro.m in Sources */,
 				3D58CD6A1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
 				E21C3D061A0758B6006964E5 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
-				E249766C196BE0190025D442 /* RenderingViewController.m in Sources */,
+				E249766C196BE0190025D442 /* RenderingViewController.mm in Sources */,
 				256F6B871BF6246300154622 /* AutoRigJointsDataHelper.cpp in Sources */,
 				E21C3CF11A0758B6006964E5 /* GTLYouTubeInvideoPosition.m in Sources */,
 				25F0C26A1C2E931700C8EC85 /* SGSceneUpdater.cpp in Sources */,
@@ -8440,7 +8440,7 @@
 				E20671281B049AA6006DD2F7 /* GTLYouTubeSearchResult.m in Sources */,
 				E20671291B049AA6006DD2F7 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
 				256F6B8C1BF6246300154622 /* CameraViewHelper.cpp in Sources */,
-				E206712C1B049AA6006DD2F7 /* RenderingViewController.m in Sources */,
+				E206712C1B049AA6006DD2F7 /* RenderingViewController.mm in Sources */,
 				3D58CD6D1C3D43C2006371DE /* WEPopoverViewController.m in Sources */,
 				E206712D1B049AA6006DD2F7 /* GTLYouTubeInvideoPosition.m in Sources */,
 				018501DD1C2BDA730090FA65 /* EditorViewController.mm in Sources */,

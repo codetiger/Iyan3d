@@ -39,14 +39,14 @@
 #define SHADER_TOON 6
 #define SHADER_CLOUD 12
 
-enum constants {
-    UPLOAD_ALERT_VIEW = 3,
-    YOUTUBE_BUTTON_TAG = 2,
-    LOGOUT_BUTTON_INDEX = 1,
-    UPLOAD_BUTTON_INDEX = 2,
-    CANCEL_BUTTON_INDEX = 0,
-    OK_BUTTON_INDEX = 1
-};
+#define UPLOAD_ALERT_VIEW  3
+#define YOUTUBE_BUTTON_TAG  2
+#define LOGOUT_BUTTON_INDEX  1
+#define UPLOAD_BUTTON_INDEX  2
+#define CANCEL_BUTTON_INDEX  0
+#define OK_BUTTON_INDEX  1
+
+
 @implementation RenderingViewController
 
 @synthesize youtubeService;
@@ -272,6 +272,8 @@ enum constants {
         }
     }
 }
+
+
 
 -(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths
 {
@@ -683,6 +685,25 @@ enum constants {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.delegate resumeRenderingAnimationScene];
 }
+
+- (IBAction)colorPickerAction:(id)sender {
+    _bgColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
+    _bgColorProp.delegate = self;
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_bgColorProp];
+    self.popoverController.popoverContentSize = CGSizeMake(200, 200);
+    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [_popUpVc.view setClipsToBounds:YES];
+    CGRect rect = _colorPickerBtn.frame;
+    rect = [self.view convertRect:rect fromView:_colorPickerBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:NO];
+
+}
+
+
 - (void)uploadYouTubeVideo:(YouTubeUploadVideo *)uploadVideo
       didFinishWithResults:(GTLYouTubeVideo *)video {
     
@@ -934,6 +955,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 }
 - (void) makingGif
 {
+    /*
     imagesArray = [[NSMutableArray alloc] init];
     float fps = 8.0;
     NSString* tempDir = NSTemporaryDirectory();
@@ -960,6 +982,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
         NSLog(@"failed to finalize image destination");
     }
     CFRelease(destination);
+     */
     
 }
 - (IBAction) exportButtonAction:(id)sender
@@ -1045,6 +1068,11 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 {
     
 }
+
+- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{
+    NSLog(@"Vertex Color %f %f %f " , vetexColor.x, vetexColor.y,vetexColor.z);
+}
+
 - (void) dealloc
 {
     thread = nil;

@@ -233,6 +233,9 @@
                     <rect key="frame" x="364" y="89" width="28" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="color.png"/>
+                    <connections>
+                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="NJm-Tj-MMc"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,7 +243,7 @@
         </view>
     </objects>
     <resources>
-        <image name="color.png" width="47" height="47"/>
+        <image name="color.png" width="23" height="23"/>
         <image name="videoShare.png" width="40" height="30"/>
         <image name="youtubeUpload.png" width="50" height="30"/>
     </resources>
