@@ -28,9 +28,9 @@ public:
     bool checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
     void postNodeJointSelection();
     bool getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
-    bool getNodeColorFromTouchTexture(bool isMultiSelected ,bool touchMove = false);
-    bool selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove = false);
-    bool updateNodeSelectionFromColor(Vector3 pixel, bool isMultipleSelectionEnabled, bool touchMove = false);
+    bool getNodeColorFromTouchTexture(bool isMultiSelected ,bool touchMove);
+    bool selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove);
+    bool updateNodeSelectionFromColor(Vector3 pixel, bool isMultipleSelectionEnabled, bool touchMove);
     bool multipleSelections(int nodeId);
     void updateParentPosition();
     void unselectObjects();

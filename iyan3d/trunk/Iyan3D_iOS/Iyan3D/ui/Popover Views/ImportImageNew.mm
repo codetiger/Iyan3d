@@ -99,7 +99,6 @@
 - (void)moveTempToDoc:(NSString*)path
 {
     NSString* theFileName = [[path lastPathComponent] stringByDeletingPathExtension];
-    NSLog(@"Video Name : %@ " , theFileName);
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* videoFrom = [NSString stringWithFormat:@"%@",path];

@@ -57,73 +57,7 @@
     [self popZoomOut];
 }
 
-- (IBAction)cloneSceneButtonAction:(id)sender {
-    if([scenesArray count] <= 0)
-        return;
-    NSString* sceneCount = [NSString stringWithFormat:@"%i", [scenesArray count]];
-    SceneItem* scene = [[SceneItem alloc] init];
-    scene.name = [NSString stringWithFormat:@"%s%@", "MyScene", sceneCount];
-    scene.createdDate = [dateFormatter stringFromDate:[NSDate date]];
-    
-    if(![cache AddScene:scene]) {
-        [self.view endEditing:YES];
-        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Duplicate Scene Name" message:@"Another Scene with the same name already exists. Please provide a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [errorAlert show];
-    } else {
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        NSString *originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
-        NSString *newFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
-        [[NSFileManager defaultManager] copyItemAtPath:originalFilePath toPath:newFilePath error:nil];
-        originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
-        newFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
-        [[NSFileManager defaultManager] copyItemAtPath:originalFilePath toPath:newFilePath error:nil];
-        
-        scenesArray = [cache GetSceneList];
-        NSLog(@"Count%i" ,[scenesArray count]);
-        [self.scenesCollectionView reloadData];
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:[scenesArray count]-1 inSection:0];
-        [self.scenesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-        [self.scenesCollectionView reloadData];
-        
-    }
-
-}
-
-- (IBAction)deleteSceneButtonAction:(id)sender {
-    
-    
-        [_sceneTitle resignFirstResponder];
-        SceneItem* scene = scenesArray[currentSelectedScene];
-        [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:scene.name];
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        NSString *filePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
-        self.fileBeginsWith=scene.sceneFile;
-        NSArray* cachepath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString* cacheDirectory = [cachepath objectAtIndex:0];
-        NSArray *dirFiles = [[NSFileManager defaultManager]     contentsOfDirectoryAtPath:cacheDirectory error:nil];
-        NSArray *jpgFiles = [dirFiles filteredArrayUsingPredicate:
-                             [NSPredicate predicateWithFormat:@"self BEGINSWITH[cd] %@",self.fileBeginsWith]];
-        for (int i=0; i<[jpgFiles count]; i++) {
-            NSString *filePath1 = [NSString stringWithFormat:@"%@/%@-%d.png", cacheDirectory,self.fileBeginsWith,i];
-            [[NSFileManager defaultManager] removeItemAtPath:filePath1 error:nil];
-        }
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-        filePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-        
-        [cache DeleteScene:scene];
-        [scenesArray removeObjectAtIndex:currentSelectedScene];
-        currentSelectedScene = -1;
-        [self popZoomOut];
-    
-    [self.scenesCollectionView reloadData];
-
-}
-
 - (IBAction)feedBackButtonAction:(id)sender {
-    
     
     NSString *currentDeviceName;
     
@@ -394,6 +328,9 @@
     
     if([scenesArray count] <= 0)
         return;
+    
+    SceneItem* originalScene = scenesArray[indexValue];
+    
     NSString* sceneCount = [NSString stringWithFormat:@"%lu", (unsigned long)[scenesArray count]];
     SceneItem* scene = [[SceneItem alloc] init];
     scene.name = [NSString stringWithFormat:@"%s%@", "MyScene", sceneCount];
@@ -406,15 +343,14 @@
     } else {
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* documentsDirectory = [paths objectAtIndex:0];
-        NSString *originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
+        NSString *originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, originalScene.sceneFile];
         NSString *newFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
         [[NSFileManager defaultManager] copyItemAtPath:originalFilePath toPath:newFilePath error:nil];
-        originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
+        originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, originalScene.sceneFile];
         newFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
         [[NSFileManager defaultManager] copyItemAtPath:originalFilePath toPath:newFilePath error:nil];
         
         scenesArray = [cache GetSceneList];
-        NSLog(@"Count%i" ,[scenesArray count]);
         [self.scenesCollectionView reloadData];
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:[scenesArray count]-1 inSection:0];
         [self.scenesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
@@ -427,7 +363,6 @@
 
 -(void)deleteScene:(int)indexValue
 {
-    NSLog(@"Delete Delegate %ld",indexValue);
     [_sceneTitle resignFirstResponder];
     SceneItem* scene = scenesArray[indexValue];
     [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:scene.name];
@@ -503,7 +438,6 @@
                 }
             }
         }
-
     }
 }
 

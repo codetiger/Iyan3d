@@ -119,6 +119,11 @@ BOOL missingAlertShown;
     [_center_progress startAnimating];
     [_rigCancelBtn setHidden:YES];
     [_rigAddToSceneBtn setHidden:YES];
+//    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+//    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+//
+
+
     
 #if !(TARGET_IPHONE_SIMULATOR)
     if (iOSVersion >= 8.0)
@@ -497,7 +502,6 @@ BOOL missingAlertShown;
     assetAddType = actionType;
     assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
-    
 }
 
 - (void)loadNodeForImage:(NSMutableDictionary*)nsDict
@@ -563,8 +567,6 @@ BOOL missingAlertShown;
         editorScene->renderAll();
         if(!isMetalSupported)
             [renderViewMan presentRenderBuffer];
-        
-        
     }
 }
 
@@ -1299,15 +1301,18 @@ BOOL missingAlertShown;
         
         bool status = false;
         
-        if((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable()))
+        if((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable())){
             status = true;
-        else if(!(editorScene->selectedNodeIds.size() > 0) && (editorScene->isRigMode || (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)))
+        }
+        else if(!(editorScene->selectedNodeIds.size() > 0) && (editorScene->isRigMode ||(editorScene->hasNodeSelected() && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)))){
             status = true;
+        }
+        else
+            status = false;
         
         if(status){
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
-            NSLog(@"Function is here 2");
             editorScene->renHelper->setControlsVisibility(false);
             Vector3 currentScale = editorScene->getSelectedNodeScale();
             _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
@@ -2048,9 +2053,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
+        assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+                                                   encoding:[NSString defaultCStringEncoding]];
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
-        
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
@@ -2084,8 +2090,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
-        editorScene->animMan->copyPropsOfNode(selectedNode, editorScene->nodes.size()-1);
-        
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
     }
     else if(selectedNodeType == NODE_IMAGE && selectedAssetId != NOT_EXISTS){
         NSString* fileName = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
@@ -2128,7 +2133,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         objVc.objSlideDelegate=self;
         [self showOrHideLeftView:YES withView:objVc.view];
     }
-    
 }
 
 -(void) updateAssetListInScenes
@@ -2561,21 +2565,21 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 -(void) optionBtnDelegate:(int)indexValue
 {
-    NSLog(@"Mova camera Clicked");
     editorScene->nodes[0]->setPosition(editorScene->viewCamera->getPosition(), editorScene->currentFrame);
+    
+    
+    /*
+
     Vector3 nodeRot = editorScene->viewCamera->getViewMatrix().getRotationInDegree();
     Vector3 initDir = (editorScene->viewCamera->getTarget() - editorScene->nodes[0]->getNodePosition()).normalize();
     Vector3 targetDir = (editorScene->viewCamera->getTarget() - editorScene->viewCamera->getPosition()).normalize();
     Quaternion rotQ = MathHelper::rotationBetweenVectors(targetDir, initDir);
     rotQ = MathHelper::RotateNodeInWorld(nodeRot, rotQ);
     Vector3 rotation = MathHelper::toEuler(rotQ);
-    rotation.x -= 180.0;
-    rotation.y -= 180.0;
-    rotation.z -= 180.0;
+    rotation *= -1;
     
     editorScene->nodes[0]->setRotation(Quaternion(rotation * DEGTORAD), editorScene->currentFrame);
     editorScene->nodes[0]->setRotationOnNode(rotQ);
-    /*
      Vector3 camera = editorScene->nodes[0]->getNodePosition();
      Vector3 viewCamera = editorScene->viewCamera->getPosition();
      Vector3 rotDir = (viewCamera - camera).normalize();
@@ -3339,9 +3343,9 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if(!isTempNode){
         if(!isHaveTexture){
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1,false);
+            editorScene->selectMan->selectObject((int)editorScene->nodes.size()-1,false);
             [self changeTexture:@"0-cm" VertexColor:Vector3(1.0) IsTemp:YES]; // for White Texture Thumbnail
-            editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
+            editorScene->selectMan->unselectObject((int)editorScene->nodes.size()-1);
         }
         if(assetId >= 20000 && assetId <= 30000){
             NSMutableArray* nodes = [[NSMutableArray alloc]init];
@@ -3431,7 +3435,6 @@ void boneLimitsCallBack(){
 {
     renderBgColor = Vector4(vertexColor,1.0);
 }
-
 
 - (void)dealloc
 {

@@ -29,7 +29,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelect
    
     selectionScene->renHelper->rttNodeJointSelection(touchPosition,isMultiSelectEnabled);
     if(selectionScene->shaderMGR->deviceType == METAL){
-        getNodeColorFromTouchTexture(isMultiSelectEnabled);
+        getNodeColorFromTouchTexture(isMultiSelectEnabled,false);
     }
     selectionScene->isRTTCompleted = true;
     selectionScene->updater->updateControlsOrientaion();
@@ -54,7 +54,7 @@ bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
             if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
                 selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
                 if(selectionScene->shaderMGR->deviceType == METAL){
-                    getNodeColorFromTouchTexture(true);
+                    getNodeColorFromTouchTexture(false,true);
                 }
             }
     }

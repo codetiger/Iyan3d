@@ -59,8 +59,7 @@ bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
     textureName = videoFileName;
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
-    
-    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",videoFileName.c_str()]];
+    NSString* videoFilePath = [NSString stringWithFormat:@"%@/Resources/Videos/%@",documentsDirectory,[NSString stringWithFormat:@"%s",videoFileName.c_str()]];
     NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
     AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
@@ -117,7 +116,8 @@ void MTLTexture::updateTexture(string fileName, int frame)
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
     
-    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",fileName.c_str()]];
+    NSString* videoFilePath = [NSString stringWithFormat:@"%@/Resources/Videos/%@",documentsDirectory,[NSString stringWithFormat:@"%s",fileName.c_str()]];
+    NSLog(@"Video File Path Update : %@ " , videoFilePath);
     NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
     AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];

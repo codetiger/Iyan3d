@@ -52,6 +52,8 @@
     selectedAsset = -1;
     modelCategoryTab = 0;
     addToScenePressed = false;
+    [_addToSceneBtn setEnabled:NO];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,7 +109,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    
+        [_addToSceneBtn setEnabled:NO];
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
    
     for (int i = 0; i < [indexPathArr count]; i++) {
@@ -283,6 +285,7 @@
                 NSLog(@"Rig file not exists");
             else{
                 assetvalue.isTempAsset = isTempAsset;
+                [_addToSceneBtn setEnabled:YES];
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
             }
         }
@@ -299,6 +302,7 @@
                 if (activity == LOAD_NODE){
                     [self.assetSelectionDelegate showOrHideProgress:0];
                     assetvalue.isTempAsset = isTempAsset;
+                    [_addToSceneBtn setEnabled:YES];
                     [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
                 }
                 else{
@@ -318,6 +322,7 @@
                 NSLog(@"Rig file not exists");
             else{
                 assetvalue.isTempAsset = isTempAsset;
+                [_addToSceneBtn setEnabled:YES];
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
             }
         }
@@ -329,6 +334,7 @@
             if (activity == LOAD_NODE){
                 [self.assetSelectionDelegate showOrHideProgress:0];
                 assetvalue.isTempAsset = isTempAsset;
+                [_addToSceneBtn setEnabled:YES];
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
             }
             else{
@@ -403,6 +409,7 @@
         assetItem.isTempAsset = true;
     [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
     [self.assetSelectionDelegate showOrHideProgress:0];
+    [_addToSceneBtn setEnabled:YES];
     
 }
 

@@ -31,7 +31,7 @@
     if (self) {
         haveTexture = NO;
         color = Vector3(1.0,1.0,1.0);
-        basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
+        basicShapes = [NSArray arrayWithObjects:@"Cone",@"Cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
         indexPathOfOBJ = -1;
         viewType = type;
         textureFileName = @"-1";
@@ -95,6 +95,7 @@
             cell.layer.borderColor = [UIColor grayColor].CGColor;
             NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
             cell.assetImageView.image =[UIImage imageNamed:imageName];
+            NSLog(@"\nImage Name : %@",imageName);
             cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
             return cell;
         }

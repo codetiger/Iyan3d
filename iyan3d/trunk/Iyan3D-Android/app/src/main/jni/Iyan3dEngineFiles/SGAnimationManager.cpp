@@ -73,7 +73,6 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId){
     animScene->nodes[toNodeId]->props = animScene->nodes[fromNodeId]->props;
     animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
     animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
-    
 }
 
 void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames)
