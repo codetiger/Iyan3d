@@ -12,6 +12,7 @@
 @protocol LoginViewControllerDelegate
 -(void)googleSigninDelegate;
 -(void)dismisspopover;
+- (IBAction)loginBtnAction:(id)sender;
 @end
 
 @class GIDSignInButton;

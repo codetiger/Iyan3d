@@ -25,7 +25,6 @@
     [super viewDidLoad];
     [GIDSignIn sharedInstance].uiDelegate = self;
     [GIDSignIn sharedInstance].delegate = self;
-    NSLog(@"Frame Height :%f",self.view.frame.size.height);
     // Do any additional setup after loading the view from its nib.
     
 
@@ -48,13 +47,13 @@
 
 
 - (IBAction)cancelBtnAction:(id)sender {
-    NSLog(@"Frame Height :%f",self.view.frame.size.height);
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
 - (IBAction)googleSigninAction:(id)sender {
-[[GIDSignIn sharedInstance] signIn];
+    [self.delegare dismisspopover];
+    [[GIDSignIn sharedInstance] signIn];
 }
 
 - (IBAction)fbSigninAction:(id)sender {
@@ -148,6 +147,8 @@ didSignInForUser:(GIDGoogleUser *)user
      withError:(NSError *)error {
     
     if (error) {
+        [self.view removeFromSuperview];
+        [self deallocMem];
         return;
     }
     NSString *userId = user.userID;                  // For client-side use only!
@@ -155,7 +156,11 @@ didSignInForUser:(GIDGoogleUser *)user
     NSLog(@"\n User Id: %@",userId);
     [self reportAuthStatus];
     [self.delegare googleSigninDelegate];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.delegare dismisspopover];
+    [self.delegare loginBtnAction:nil];
+    [self.view removeFromSuperview];
+    [self deallocMem];
+    
     
 }
 
@@ -165,7 +170,7 @@ didSignInForUser:(GIDGoogleUser *)user
         NSLog(@"Error");
     }
     else {
-        NSLog(@"Success");
+        
     }
     [self reportAuthStatus];
     
@@ -226,9 +231,9 @@ didSignInForUser:(GIDGoogleUser *)user
     [GIDSignIn sharedInstance].allowsSignInWithWebView = sender.on;
 }
 
--(void)dealloc{
-//    [GIDSignIn sharedInstance].uiDelegate = nil;
-//    [GIDSignIn sharedInstance].delegate = nil;
+-(void)deallocMem{
+    [GIDSignIn sharedInstance].uiDelegate = nil;
+    [GIDSignIn sharedInstance].delegate = nil;
 }
 
 @end

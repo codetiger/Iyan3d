@@ -158,7 +158,12 @@
 
 - (void)dealloc
 {
-//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"creditsupdate"];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"creditsupdate"];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:(BOOL)animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsupdate" object:nil];
 }
 
 - (IBAction)add500Credits:(id)sender

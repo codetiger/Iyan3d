@@ -75,7 +75,6 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSLog(@"Collectionview count %lu",(unsigned long)[animationsItems count]);
     return [animationsItems count];
 }
 
