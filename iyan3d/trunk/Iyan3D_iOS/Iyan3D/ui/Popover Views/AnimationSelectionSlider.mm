@@ -25,8 +25,16 @@
     animDownloadQueue = [[NSOperationQueue alloc] init];
     [animDownloadQueue setMaxConcurrentOperationCount:1];
     [self getAnimationData];
-    [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCell" bundle:nil]forCellWithReuseIdentifier:@"CELL"];
+    if([Utility IsPadDevice]){
+        [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCell" bundle:nil]forCellWithReuseIdentifier:@"CELL"];
+    }
+    else{
+        [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCellPhone" bundle:nil]forCellWithReuseIdentifier:@"CELL"];
+    }
+    self.cancelBtn.layer.cornerRadius = 8.0f;
+    self.addBtn.layer.cornerRadius = 8.0f;
 
+    
 }
 
 - (void)didReceiveMemoryWarning {

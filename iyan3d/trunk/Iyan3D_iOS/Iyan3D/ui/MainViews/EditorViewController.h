@@ -29,6 +29,7 @@
 #import "WEPopoverController.h"
 #import "LoginViewController.h"
 #import "LoggedInViewController.h"
+#import "SettingsViewController.h"
 
 @interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate>{
     int totalFrames;
@@ -43,6 +44,7 @@
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
     SGEditorScene *editorScene;
+    SettingsViewController *settingsVc;
 }
 @property (weak, nonatomic) IBOutlet RenderingView *renderView;
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
@@ -60,6 +62,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *moveBtn;
 @property (weak, nonatomic) IBOutlet UIButton *rotateBtn;
 @property (weak, nonatomic) IBOutlet UIButton *scaleBtn;
+@property (weak, nonatomic) IBOutlet UIButton *myObjectsBtn;
 @property (weak, nonatomic) IBOutlet UIButton *undoBtn;
 @property (weak, nonatomic) IBOutlet UIButton *redoBtn;
 @property (weak, nonatomic) IBOutlet UIButton *lastFrameBtn;
@@ -90,6 +93,7 @@
 - (IBAction)viewBtn:(id)sender;
 - (IBAction)lastFrameBtnAction:(id)sender;
 - (IBAction)firstFrameBtnAction:(id)sender;
+- (IBAction)myObjectsBtnAction:(id)sender;
 
 
 @end

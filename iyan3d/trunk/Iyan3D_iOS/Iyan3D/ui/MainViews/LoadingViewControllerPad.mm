@@ -290,11 +290,7 @@
 - (void) loadSceneView
 {
     
-    if([Utility IsPadDevice]){
-        EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil];
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:editorView];
-    }
+  
     
     if([Utility IsPadDevice]) {
         EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil];

@@ -40,7 +40,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    if([Utility IsPadDevice]){
+       [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    }
+    else{
+        [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    }
     self.cancelBtn.layer.cornerRadius = 8.0f;
     self.addToSceneBtn.layer.cornerRadius = 8.0f;
     selectedAsset = -1;
@@ -92,11 +97,10 @@
             cell.layer.borderWidth = 0.0f;
             cell.layer.borderColor = [UIColor clearColor].CGColor;
         }
-        cell.layer.cornerRadius = 8.0;
         cell.assetImage.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1];
+       
         cell.assetName.text = assetItem.name;
         [cell.assetImage setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:ASSET_SELECTION OperationQueue:downloadQueue];
-        cell.assetName.textColor = [UIColor whiteColor];
         return cell;
     }
 }
@@ -104,17 +108,16 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
+   
     for (int i = 0; i < [indexPathArr count]; i++) {
         NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
         UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
         cell.layer.borderWidth = 0.0f;
-        cell.layer.borderColor = [UIColor clearColor].CGColor;
+        cell.layer.backgroundColor = [UIColor clearColor].CGColor;
+        cell.layer.borderColor = [UIColor colorWithRed:15.0/255.0 green:15.0/255.0 blue:15.0/255.0 alpha:1.0].CGColor;
     }
     UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
-    cell.layer.cornerRadius = 8.0;
-    cell.layer.borderWidth = 1.0f;
-    cell.layer.borderColor = [UIColor whiteColor].CGColor;
-    
+    cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
     [self displayBasedOnSelection:[NSNumber numberWithInteger:indexPath.row]];
 }
 

@@ -44,8 +44,13 @@
     cache = [CacheSystem cacheSystem];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     cacheDirectory = [paths objectAtIndex:0];
-    [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-
+    if([Utility IsPadDevice]){
+        [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    }
+    else
+    {
+       [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"]; 
+    }
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"fontDetails"]) {
         NSDictionary* fontDetails = [[AppHelper getAppHelper] userDefaultsForKey:@"fontDetails"];
         fontSize = 10;
@@ -83,8 +88,10 @@
         }
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetsSet) name:@"AssetsSet" object:nil];
-
+    self.cancelBtn.layer.cornerRadius=8.0f;
+    self.addToScene.layer.cornerRadius=8.0f;
     self.bevelSlider.value = bevelRadius;
+    
 }
 
 - (void)initializeFontListArray

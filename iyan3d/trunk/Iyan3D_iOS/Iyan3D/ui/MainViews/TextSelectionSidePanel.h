@@ -44,6 +44,8 @@
 
     
 }
+@property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
+@property (weak, nonatomic) IBOutlet UIButton *addToScene;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *fontTab;
 @property (weak, nonatomic) IBOutlet UISlider *bevelSlider;

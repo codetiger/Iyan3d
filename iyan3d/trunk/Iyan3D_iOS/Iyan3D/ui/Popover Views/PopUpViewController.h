@@ -15,6 +15,7 @@
 - (void) viewBtnDelegateAction:(int)indexValue;
 - (void) infoBtnDelegateAction:(int)indexValue;
 - (void) addFrameBtnDelegateAction:(int)indexValue;
+- (void) myObjectsBtnDelegateAction:(int)indexValue;
 - (void) loginBtnAction;
 @end
 

@@ -7,7 +7,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextSelectionSidePanel">
             <connections>
+                <outlet property="addToScene" destination="3Qp-dd-cNo" id="tce-F9-LaW"/>
                 <outlet property="bevelSlider" destination="l6Y-Fo-bKR" id="5i4-DW-KGg"/>
+                <outlet property="cancelBtn" destination="c9v-9A-XSr" id="43x-kw-hEK"/>
                 <outlet property="collectionView" destination="P2e-gr-fZj" id="Sz1-ag-nUf"/>
                 <outlet property="fontStoreTab" destination="X3h-3Z-EP7" id="wPg-bu-Tk8"/>
                 <outlet property="fontTab" destination="X3h-3Z-EP7" id="Zpy-ye-qkS"/>
@@ -25,7 +27,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Text" textAlignment="natural" minimumFontSize="17" id="CyO-w9-dd0">
-                            <rect key="frame" x="8" y="15" width="200" height="30"/>
+                            <rect key="frame" x="8" y="15" width="209" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -41,14 +43,6 @@
                                 <action selector="bevalChangeAction:" destination="-1" eventType="valueChanged" id="q1C-Y1-FKq"/>
                             </connections>
                         </slider>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4to-JM-G7I">
-                            <rect key="frame" x="228" y="18" width="24" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="color.png"/>
-                            <connections>
-                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="0IQ-wq-Fhy"/>
-                            </connections>
-                        </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="No-Bevel.png" id="xkl-kj-ZFs">
                             <rect key="frame" x="10" y="53" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -57,6 +51,14 @@
                             <rect key="frame" x="229" y="53" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4to-JM-G7I">
+                            <rect key="frame" x="227" y="18" width="24" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="color.png"/>
+                            <connections>
+                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="0IQ-wq-Fhy"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                 </view>

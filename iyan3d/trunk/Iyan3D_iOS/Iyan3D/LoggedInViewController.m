@@ -8,6 +8,7 @@
 
 #import "LoggedInViewController.h"
 #import "RenderTableViewCell.h"
+#include "Utility.h"
 @interface LoggedInViewController ()
 
 @end
@@ -60,19 +61,44 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"RenderTableViewCell"];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RenderTableViewCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
+    if([Utility IsPadDevice]){
+        RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"RenderTableViewCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RenderTableViewCell" owner:self options:nil];
+            cell = [nib objectAtIndex:0];
+            
+            
+            
+        }
+        // Configure the cell...
+        NSString *sectionTitle = [renderSectionTitles objectAtIndex:indexPath.section];
+        NSArray *sectionData = [renderData objectForKey:sectionTitle];
+        NSString *render = [sectionData objectAtIndex:indexPath.row];
+        cell.renderlabel.text = render;
+        return cell;
+
     }
-    // Configure the cell...
-    NSString *sectionTitle = [renderSectionTitles objectAtIndex:indexPath.section];
-    NSArray *sectionData = [renderData objectForKey:sectionTitle];
-    NSString *render = [sectionData objectAtIndex:indexPath.row];
-    cell.renderlabel.text = render;
-    return cell;
-}
+    else{
+        RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"RenderTableViewPhone"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RenderTableViewPhone" owner:self options:nil];
+            cell = [nib objectAtIndex:0];
+            
+            
+            
+        }
+        // Configure the cell...
+        NSString *sectionTitle = [renderSectionTitles objectAtIndex:indexPath.section];
+        NSArray *sectionData = [renderData objectForKey:sectionTitle];
+        NSString *render = [sectionData objectAtIndex:indexPath.row];
+        cell.renderlabel.text = render;
+        return cell;
+
+    }
+    
+    }
 
 - (IBAction)signOutBtn:(id)sender {
 }

@@ -26,7 +26,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hiU-h1-J3E">
                             <rect key="frame" x="187" y="11" width="103" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <state key="normal" title="All Models"/>
                             <connections>
                                 <action selector="categoryBtnFuction:" destination="-1" eventType="touchUpInside" id="qoP-Rh-8PL"/>
@@ -39,11 +39,11 @@
                     <rect key="frame" x="0.0" y="44" width="300" height="612"/>
                     <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="27" minimumInteritemSpacing="10" id="B7f-MH-kc0">
-                        <size key="itemSize" width="72" height="95"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="B7f-MH-kc0">
+                        <size key="itemSize" width="72" height="80"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="5" minY="13" maxX="5" maxY="5"/>
+                        <inset key="sectionInset" minX="20" minY="18" maxX="20" maxY="4"/>
                     </collectionViewFlowLayout>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="cdT-Xx-GVo"/>
@@ -57,7 +57,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VYm-aD-dU0">
                             <rect key="frame" x="171" y="7" width="110" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.40784313725490196" green="0.0" blue="0.72156862745098038" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" title="ADD TO SCENE">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

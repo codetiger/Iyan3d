@@ -55,9 +55,11 @@
 @property (strong, nonatomic) RETrimControl *trimControl;
 @property (strong, nonatomic) NSString *projectName;
 @property (strong, nonatomic) NSString *videoFilePath;
+@property (weak, nonatomic) IBOutlet UILabel *transparentBgLabel;
 
 @property(nonatomic, weak) IBOutlet GADBannerView *bannerView;
 @property (weak, nonatomic) IBOutlet UIImageView *renderedImageView;
+
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
@@ -72,6 +74,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *shareActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *cancelActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *makeVideoLoading;
+@property (weak, nonatomic) IBOutlet UISwitch *transparentBgSwitch;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *resolutionSegment;
 @property (weak, nonatomic) IBOutlet UILabel *resolutionTypeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *renderingStyleLabel;
@@ -90,7 +93,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *watermarkSwitch;
 
 - (IBAction)cameraResolutionChanged:(id)sender;
-
+- (IBAction)transparentBgValueChanged:(id)sender;
 - (IBAction)waterMarkValueChanged:(id)sender;
 - (IBAction)cancelButtonAction:(id)sender;
 - (IBAction)rateButtonAction:(id)sender;

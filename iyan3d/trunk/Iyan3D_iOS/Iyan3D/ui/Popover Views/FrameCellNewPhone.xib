@@ -8,13 +8,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FrameCellNew"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FRAMECELL" id="8mO-O1-g7L" customClass="FrameCellNew">
-            <rect key="frame" x="0.0" y="0.0" width="22" height="25"/>
+            <rect key="frame" x="0.0" y="0.0" width="22" height="27"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="22" height="25"/>
+                <rect key="frame" x="0.0" y="0.0" width="22" height="27"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qe1-bb-wdP">
-                        <rect key="frame" x="0.0" y="1" width="22" height="22"/>
+                        <rect key="frame" x="0.0" y="2" width="22" height="22"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -22,11 +22,11 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <size key="customSize" width="26" height="28"/>
+            <size key="customSize" width="26" height="25"/>
             <connections>
                 <outlet property="framesLabel" destination="qe1-bb-wdP" id="Id7-jm-UHC"/>
             </connections>
-            <point key="canvasLocation" x="599" y="247.5"/>
+            <point key="canvasLocation" x="599" y="246"/>
         </collectionViewCell>
     </objects>
 </document>

@@ -7,7 +7,7 @@
 //
 
 #import "PopUpViewController.h"
-
+#import "Utility.h"
 @implementation PopUpViewController
 
 
@@ -25,10 +25,21 @@
     
     [super viewDidLoad];
     if([clickedBtn isEqualToString:@"loginBtn"]){
-        [self.topBar setHidden:NO];
-        self.popoverBtns.hidden=YES;
-        [self.loginBtn setHidden:NO];
-        [self.loginImage setHidden:NO];
+        if ([Utility IsPadDevice]){
+            [self.topBar setHidden:NO];
+            self.popoverBtns.hidden=YES;
+            [self.loginBtn setHidden:NO];
+            [self.loginImage setHidden:NO];
+ 
+        }
+        else{
+            [self.topBar setHidden:NO];
+            self.popoverBtns.hidden=YES;
+            [self.loginBtn setHidden:NO];
+            [self.loginImage setHidden:NO];
+            UIImage *image = [UIImage imageNamed: @"Login-Icon_IPhone"];
+            [self.loginImage setImage:image];
+        }
     }
 }
 
@@ -51,6 +62,9 @@
     }
     else if([clickedBtnName isEqualToString:@"addFrames"]){
         tableData = [NSArray arrayWithObjects:@"1 Frame", @"24 Frames",@"240 Frames", nil];
+    }
+    else if([clickedBtnName isEqualToString:@"myObjectsBtn"]){
+        tableData = [NSArray arrayWithObjects:@"Camera", @"Light", nil];
     }
     else if([clickedBtnName isEqualToString:@"loginBtn"]){
         self.popoverBtns.hidden=YES;
@@ -84,25 +98,58 @@
     }
     
     cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
-    if([clickedBtn isEqualToString:@"exportBtn"]){
-        if(indexPath.row==0)
-            cell.imageView.image = [UIImage imageNamed:@"Export-image_Pad.png"];
-        if(indexPath.row==1)
-            cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad.png"];
+    if ([Utility IsPadDevice]){
+        if([clickedBtn isEqualToString:@"exportBtn"]){
+            if(indexPath.row==0)
+                cell.imageView.image = [UIImage imageNamed:@"Export-image_Pad.png"];
+            if(indexPath.row==1)
+                cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad.png"];
+        }
+        if([clickedBtn isEqualToString:@"importBtn"]){
+            if(indexPath.row==0)
+                cell.imageView.image = [UIImage imageNamed:@"Import-model_Pad.png"];
+            if(indexPath.row==1)
+                cell.imageView.image = [UIImage imageNamed:@"Import-image_Pad.png"];
+            if(indexPath.row==2)
+                cell.imageView.image = [UIImage imageNamed:@"Import-text_Pad.png"];
+            if(indexPath.row==3)
+                cell.imageView.image = [UIImage imageNamed:@"Import-Light_Pad.png"];
+            if(indexPath.row==4)
+                cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad.png"];
+            if(indexPath.row==5)
+                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad.png"];
+        }
     }
-    if([clickedBtn isEqualToString:@"importBtn"]){
-        if(indexPath.row==0)
-            cell.imageView.image = [UIImage imageNamed:@"Import-model_Pad.png"];
-        if(indexPath.row==1)
-            cell.imageView.image = [UIImage imageNamed:@"Import-image_Pad.png"];
-        if(indexPath.row==2)
-            cell.imageView.image = [UIImage imageNamed:@"Import-text_Pad.png"];
-        if(indexPath.row==3)
-            cell.imageView.image = [UIImage imageNamed:@"Import-Light_Pad.png"];
-        if(indexPath.row==4)
-            cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad.png"];
-        if(indexPath.row==5)
-            cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad.png"];
+    else
+    {
+        if([clickedBtn isEqualToString:@"exportBtn"]){
+            if(indexPath.row==0)
+                cell.imageView.image = [UIImage imageNamed:@"Export-image_IPhone.png"];
+            if(indexPath.row==1)
+                cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone.png"];
+        }
+        if([clickedBtn isEqualToString:@"importBtn"]){
+            if(indexPath.row==0)
+                cell.imageView.image = [UIImage imageNamed:@"Import-model_IPhone.png"];
+            if(indexPath.row==1)
+                cell.imageView.image = [UIImage imageNamed:@"Import-image_IPhone.png"];
+            if(indexPath.row==2)
+                cell.imageView.image = [UIImage imageNamed:@"Import-text_IPhone.png"];
+            if(indexPath.row==3)
+                cell.imageView.image = [UIImage imageNamed:@"Import-Light_IPhone.png"];
+            if(indexPath.row==4)
+                cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone.png"];
+            if(indexPath.row==5)
+                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
+        }
+        if([clickedBtn isEqualToString:@"myObjectsBtn"]){
+            if(indexPath.row==0)
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_IPhone.png"];
+            if(indexPath.row==1)
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_IPhone.png"];
+
+        }
+
     }
     cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
     [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
@@ -113,22 +160,25 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Clicked BTbn %@",clickedBtn);
     if([clickedBtn isEqualToString:@"importBtn"]){
-        [self.delegate importBtnDelegateAction:indexPath.row];
+        [self.delegate importBtnDelegateAction:(int)indexPath.row];
     }
     else if([clickedBtn isEqualToString:@"animationBtn"]){
-        [self.delegate animationBtnDelegateAction:indexPath.row];
+        [self.delegate animationBtnDelegateAction:(int)indexPath.row];
     }
     else if([clickedBtn isEqualToString:@"exportBtn"]){
-         [self.delegate exportBtnDelegateAction:indexPath.row];
+         [self.delegate exportBtnDelegateAction:(int)indexPath.row];
     }
     else if([clickedBtn isEqualToString:@"infoBtn"]){
-         [self.delegate infoBtnDelegateAction:indexPath.row];
+         [self.delegate infoBtnDelegateAction:(int)indexPath.row];
     }
     else if([clickedBtn isEqualToString:@"viewBtn"]){
-         [self.delegate viewBtnDelegateAction:indexPath.row];
+         [self.delegate viewBtnDelegateAction:(int)indexPath.row];
     }
     else if([clickedBtn isEqualToString:@"addFrames"]){
-        [self.delegate addFrameBtnDelegateAction:indexPath.row];
+        [self.delegate addFrameBtnDelegateAction:(int)indexPath.row];
+    }
+    else if([clickedBtn isEqualToString:@"myObjectsBtn"]){
+        [self.delegate myObjectsBtnDelegateAction:(int)indexPath.row];
     }
     else {
         

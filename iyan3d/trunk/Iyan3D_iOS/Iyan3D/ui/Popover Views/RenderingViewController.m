@@ -1051,4 +1051,6 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
+- (IBAction)transparentBgValueChanged:(id)sender {
+}
 @end

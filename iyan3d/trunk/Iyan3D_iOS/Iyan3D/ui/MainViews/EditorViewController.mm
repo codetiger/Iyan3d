@@ -61,7 +61,7 @@
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
 
     totalFrames = 24;
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
     if ([Utility IsPadDevice])
          [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
@@ -83,6 +83,7 @@
             [renderViewMan addCameraLight];
         }
     }
+    NSLog(@"Renderview height %f",_renderView.frame.size.height);
 }
 
 - (void)initScene
@@ -261,7 +262,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [self objectSelectionCompleted:indexPath.row];
+    [self objectSelectionCompleted:(int)indexPath.row];
     
 }
 
@@ -320,35 +321,70 @@
     }
 
 - (IBAction)loginBtnAction:(id)sender {
-    isLoggedin=YES;
+    //isLoggedin=YES;
     if(isLoggedin){
-        _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-        self.popoverController.popoverContentSize = CGSizeMake(305, 525);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_popUpVc.view setClipsToBounds:YES];
-        self.popUpVc.delegate=self;
-        self.popoverController.delegate =self;
-        [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionUp
-                                              animated:YES];
+        if ([Utility IsPadDevice]){
+            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
+            self.popoverController.popoverContentSize = CGSizeMake(305, 525);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_loggedInVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+        }
+        else {
+            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
+            self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_loggedInVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+        }
+        
     }
     else{
-    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"loginBtn"];
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(300, 360.0);
-    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    [_popUpVc.view setClipsToBounds:YES];
-    self.popUpVc.delegate=self;
-    self.popoverController.delegate =self;
-    [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                            inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
-                                          animated:YES];
+        if ([Utility IsPadDevice]){
+            _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"loginBtn"];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+            self.popoverController.popoverContentSize = CGSizeMake(300, 360.0);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_popUpVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
 
+        }
+        else{
+            _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewControllerPhone" bundle:nil clickedButton:@"loginBtn"];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+            self.popoverController.popoverContentSize = CGSizeMake(228.00, 274.0);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_popUpVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+
+        }
+    
     }
 }
 
@@ -431,6 +467,22 @@
 {
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:0 inSection:0];
     [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
+- (IBAction)myObjectsBtnAction:(id)sender {
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"myObjectsBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _myObjectsBtn.frame;
+    rect = [self.view convertRect:rect fromView:_myObjectsBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                                          animated:YES];
 }
 
 - (IBAction)optionsBtnAction:(id)sender
@@ -650,10 +702,19 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) animationBtnDelegateAction:(int)indexValue
 {
     if(indexValue==0){
-         [self.popoverController dismissPopoverAnimated:YES];
-        animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil];
-        animationsliderVC.delegate = self;
-        [self showOrHideLeftView:YES withView:animationsliderVC.view];
+        if([Utility IsPadDevice]){
+            [self.popoverController dismissPopoverAnimated:YES];
+            animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil];
+            animationsliderVC.delegate = self;
+            [self showOrHideLeftView:YES withView:animationsliderVC.view];
+        }
+        else{
+            [self.popoverController dismissPopoverAnimated:YES];
+            animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil];
+            animationsliderVC.delegate = self;
+            [self showOrHideLeftView:YES withView:animationsliderVC.view];
+        }
+        
     }
     else if(indexValue==1){
         NSLog(@"Save Animation");
@@ -663,30 +724,70 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) importBtnDelegateAction:(int)indexValue{
 
     if(indexValue==0){
+        if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
         assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
         assetSelectionSlider.assetSelectionDelegate = self;
         [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+        }
+        else{
+            [self.popoverController dismissPopoverAnimated:YES];
+            assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil];
+            assetSelectionSlider.view.frame = CGRectMake(0, 0, self.leftView.frame.size.width, self.view.frame.size.height);
+            assetSelectionSlider.assetSelectionDelegate = self;
+            [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+        }
     }
-    else if(indexValue==1){
-         [self.popoverController dismissPopoverAnimated:YES];
-        self.imagePicker = [[UIImagePickerController alloc] init];
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        [self.imagePicker setNavigationBarHidden:YES];
-        [self.imagePicker setToolbarHidden:YES];
-        importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
-        [self showOrHideLeftView:YES withView:importImageViewVC.view];
-        [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-        self.imagePicker.delegate=importImageViewVC;
-        importImageViewVC.delegate = self;
-        [importImageViewVC.imagesView addSubview:self.imagePicker.view];
+    else if(indexValue==1)
+    {
+        if([Utility IsPadDevice])
+        {
+            [self.popoverController dismissPopoverAnimated:YES];
+            self.imagePicker = [[UIImagePickerController alloc] init];
+            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            [self.imagePicker setNavigationBarHidden:YES];
+            [self.imagePicker setToolbarHidden:YES];
+            importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
+            [self showOrHideLeftView:YES withView:importImageViewVC.view];
+            [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
+            self.imagePicker.delegate=importImageViewVC;
+            importImageViewVC.delegate = self;
+            [importImageViewVC.imagesView addSubview:self.imagePicker.view];
+        }
+        else
+        {
+            [self.popoverController dismissPopoverAnimated:YES];
+            self.imagePicker = [[UIImagePickerController alloc] init];
+            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            [self.imagePicker setNavigationBarHidden:YES];
+            [self.imagePicker setToolbarHidden:YES];
+            importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNewPhone" bundle:nil];
+            [self showOrHideLeftView:YES withView:importImageViewVC.view];
+            [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
+            self.imagePicker.delegate=importImageViewVC;
+            importImageViewVC.delegate = self;
+            [importImageViewVC.imagesView addSubview:self.imagePicker.view];
+
+            
+        }
         
     }
     else if(indexValue==2){
-        [self.popoverController dismissPopoverAnimated:YES];
-        textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
-        textSelectionSlider.textSelectionDelegate = self;
-        [self showOrHideLeftView:YES withView:textSelectionSlider.view];
+        if([Utility IsPadDevice])
+        {
+            [self.popoverController dismissPopoverAnimated:YES];
+            textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
+            textSelectionSlider.textSelectionDelegate = self;
+            [self showOrHideLeftView:YES withView:textSelectionSlider.view];
+        }
+        else
+        {
+            [self.popoverController dismissPopoverAnimated:YES];
+            textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
+            textSelectionSlider.textSelectionDelegate = self;
+            [self showOrHideLeftView:YES withView:textSelectionSlider.view];
+  
+        }
 
     }
     else if(indexValue==3){
@@ -702,24 +803,47 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 - (void) exportBtnDelegateAction:(int)indexValue{
     if(indexValue==0){
-         [self.popoverController dismissPopoverAnimated:YES];
-        RenderingViewController* renderingView;
-        renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
-        renderingView.delegate = self;
-        renderingView.projectName=@"Scene 1";  //FOR TESTING
-        renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
-        CATransition* transition1 = [CATransition animation];
-        transition1.duration = 0.5;
-        transition1.type = kCATransitionPush;
-        transition1.subtype = kCATransitionFromLeft;
-        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-        [self.rightView setHidden:YES];
-        dispatch_async(dispatch_get_main_queue(), ^ {
+        if([Utility IsPadDevice])
+        {
+            [self.popoverController dismissPopoverAnimated:YES];
+            RenderingViewController* renderingView;
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+            renderingView.delegate = self;
+            renderingView.projectName=@"Scene 1";  //FOR TESTING
+            renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+            CATransition* transition1 = [CATransition animation];
+            transition1.duration = 0.5;
+            transition1.type = kCATransitionPush;
+            transition1.subtype = kCATransitionFromLeft;
+            [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+            [self.rightView setHidden:YES];
+            dispatch_async(dispatch_get_main_queue(), ^ {
             [self presentViewControllerInCurrentView:renderingView];
-        });
+            });
+            renderingView.view.superview.backgroundColor = [UIColor clearColor];
+            renderingView.view.layer.borderWidth = 2.0f;
+            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
         
-        if ([Utility IsPadDevice]) {
+        }
+        else
+        {
+            [self.popoverController dismissPopoverAnimated:YES];
+            RenderingViewController* renderingView;
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+            renderingView.delegate = self;
+            renderingView.projectName=@"Scene 1";  //FOR TESTING
+            renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+            CATransition* transition1 = [CATransition animation];
+            transition1.duration = 0.5;
+            transition1.type = kCATransitionPush;
+            transition1.subtype = kCATransitionFromLeft;
+            [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+            [self.rightView setHidden:YES];
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [self presentViewControllerInCurrentView:renderingView];
+            });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
             renderingView.view.layer.borderWidth = 2.0f;
             renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
@@ -810,19 +934,41 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 - (void) loginBtnAction{
   
+    if([Utility IsPadDevice]){
+        [self.popoverController dismissPopoverAnimated:YES];
+        loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+        [loginVc.view setClipsToBounds:YES];
+        loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:loginVc animated:YES completion:nil];
+        loginVc.view.superview.backgroundColor = [UIColor clearColor];
+        NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
+
+    }
+    else{
     [self.popoverController dismissPopoverAnimated:YES];
-    loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
     [loginVc.view setClipsToBounds:YES];
     loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentViewController:loginVc animated:YES completion:nil];
     loginVc.view.superview.backgroundColor = [UIColor clearColor];
     NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
-   
+    }
     
 }
 - (void) infoBtnDelegateAction:(int)indexValue{
-   
+    if(indexValue==3){
+        [self.popoverController dismissPopoverAnimated:YES];
+        settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController"bundle:nil];
+        [settingsVc.view setClipsToBounds:YES];
+        settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:settingsVc animated:YES completion:nil];
+        settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+    }
 
+}
+- (void) myObjectsBtnDelegateAction:(int)indexValue{
+    [self.popoverController dismissPopoverAnimated:YES];
+    [self objectSelectionCompleted:indexValue];
 }
 - (void)dealloc
 {
