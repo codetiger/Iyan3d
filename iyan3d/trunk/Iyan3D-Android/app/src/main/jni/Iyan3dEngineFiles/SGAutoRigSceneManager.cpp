@@ -612,7 +612,7 @@ void SGAutoRigSceneManager::changeNodeScale(Vector3 scale)
 bool SGAutoRigSceneManager::switchMirrorState()
 {
     rigScene->actionMan->setMirrorState((MIRROR_SWITCH_STATE)!rigScene->actionMan->getMirrorState());
-    if(sceneMode == RIG_MODE_MOVE_JOINTS)
+    if(sceneMode == RIG_MODE_MOVE_JOINTS || sceneMode == RIG_MODE_EDIT_ENVELOPES)
         rigScene->selectMan->updateSkeletonSelectionColors((selectedNodeId != NOT_SELECTED) ? selectedNodeId : 0);
     else
         rigScene->selectMan->highlightJointSpheres();

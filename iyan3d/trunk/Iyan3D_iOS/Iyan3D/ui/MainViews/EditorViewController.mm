@@ -3182,7 +3182,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) autoRigMirrorBtnHandler
 {
     bool status = true;
-    if(editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
+    if(editorScene && editorScene->isRigMode && (editorScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS || editorScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES)){
         status = (editorScene->rigMan->isNodeSelected) ? false : true;
     }
     [_autorigMirrorBtnHolder setHidden:status];

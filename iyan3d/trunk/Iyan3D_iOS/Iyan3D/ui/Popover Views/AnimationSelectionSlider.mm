@@ -641,7 +641,7 @@
     else
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
 
-    if(animBoneCount != bonecount){
+    if(animBoneCount != bonecount && animationType != TEXT_ANIMATION){
         UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
         [self.delegate showOrHideProgress:0];
@@ -661,7 +661,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         isFirstTimeAnimationApplyed = false;
         if(animationType == RIG_ANIMATION){
-            if(animBoneCount == bonecount){
+            if(animBoneCount == bonecount || animationType == TEXT_ANIMATION){
                 [self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
             }
             else{
