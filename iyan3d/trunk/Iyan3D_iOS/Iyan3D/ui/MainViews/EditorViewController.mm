@@ -114,7 +114,7 @@
      
 - (void) loadNode:(AssetItem*) asset
 {
-    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0];
+    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset];
 }
 
 - (void)createDisplayLink
@@ -126,10 +126,16 @@
 - (void) updateRenderer
 {
     if(editorScene) {
+        if (renderViewMan.checkCtrlSelection) {
+            editorScene->selectMan->checkCtrlSelection(renderViewMan.touchMovePosition[0]);
+            renderViewMan.checkCtrlSelection = false;
+        }
         if (renderViewMan.checkTapSelection) {
             editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
             renderViewMan.checkTapSelection = false;
         }
+        if(renderViewMan.makePanOrPinch)
+            [renderViewMan panOrPinchProgress];
         editorScene->renderAll();
         [renderViewMan presentRenderBuffer];
     }

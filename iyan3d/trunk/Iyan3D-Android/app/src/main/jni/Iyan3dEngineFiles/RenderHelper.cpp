@@ -174,7 +174,7 @@ void RenderHelper::renderControls()
         
         int nodeIndex = smgr->getNodeIndexByID(renderingScene->sceneControls[i]->node->getID());
         
-        if(renderingScene->sceneControls[i]->props.isVisible)
+        if(renderingScene->sceneControls[i]->props.isVisible && renderingScene->sceneControls[i]->props.transparency > 0.0)
             smgr->RenderNode(nodeIndex,(i == controlStartIndex)?true:false);
     }
 }
@@ -226,6 +226,7 @@ void RenderHelper::rttDrawCall()
 
     if(renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)
         drawCameraPreview();
+    // TODO shadow map fix
     //rttShadowMap(renderingScene);
 }
 
@@ -525,3 +526,41 @@ void RenderHelper::rttShadowMap()
     renderingScene->rotationCircle->node->setVisible(isRotationCircleVisible);
     ShaderManager::isRenderingDepthPass = false;
 }
+
+void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
+{
+    if(!renderingScene || !smgr)
+        return;
+
+    if(renderingScene->shaderMGR->deviceType == METAL){
+        bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+        if(!displayPrepared)
+            return;
+    }
+    int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
+    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    renderingScene->rotationCircle->node->setVisible(false);
+    smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
+    renderingScene->updater->updateControlsOrientaion(true);
+    for(int i = controlStartIndex;i <= controlEndIndex;i++){
+        renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        renderingScene->sceneControls[i]->props.vertexColor = Vector3(i/255.0,1.0,1.0);
+        renderingScene->sceneControls[i]->props.transparency = 1.0;
+        Vector3 ctrlToCam = (renderingScene->viewCamera->getPosition() - renderingScene->sceneControls[i]->node->getPosition()).normalize();
+        float angle = fabs(ctrlToCam.dotProduct(SceneHelper::controlDirection(i%3)));
+        int nodeIndex = smgr->getNodeIndexByID(renderingScene->sceneControls[i]->node->getID());
+        if(angle < 0.9)
+            smgr->RenderNode(nodeIndex);
+    }
+    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
+        renderingScene->selectMan->getCtrlColorFromTouchTextureAnim(touchPosition);
+    smgr->setRenderTarget(NULL,false,false);
+    for(int i = controlStartIndex;i <= controlEndIndex;i++) {
+        renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+    }
+    renderingScene->updater->updateControlsOrientaion();
+    if(renderingScene->shaderMGR->deviceType == METAL)
+        smgr->EndDisplay();
+    
+}
+

@@ -37,6 +37,7 @@
 #include "../../SGEngine2/Loaders/OBJMeshFileLoader.h"
 #include "SceneHelper.h"
 #include "RenderHelper.h"
+#include "SGActionManager.h"
 #include "SGMovementManager.h"
 #include "SGSelectionManager.h"
 #include "SGSceneUpdater.h"
@@ -48,13 +49,11 @@ class SGEditorScene {
 private:
     
     MIRROR_SWITCH_STATE mirrorSwitchState;
-    
-    std::map<int,Vector3>             ikJointsPositionMap;
-    std::map<int,Vector3>::iterator   ikJointsPositoinMapItr;
-    
+    bool isPreviewMode;
     SceneManager *smgr;
-    CollisionManager *cmgr;
 
+    void setTransparencyForObjects();
+    
 protected:
     
 public:
@@ -92,6 +91,8 @@ public:
     SGSceneUpdater *updater;
     SGSceneLoader *loader;
     SGMovementManager *moveMan;
+    SGActionManager *actionMan;
+    
     /* SGEngine class objects */
     
     std::map<int,Texture*> renderingTextureMap;
@@ -103,10 +104,13 @@ public:
     Vector2 nodeJointPickerPosition;
     Vector3 circleTouchPoint,cameraAngle;
     Vector3 cameraTarget;
+    std::map<int,Vector3>             ikJointsPositionMap;
+    std::map<int,Vector3>::iterator   ikJointsPositoinMapItr;
     shared_ptr<CameraNode> viewCamera;
     shared_ptr<CameraNode> lightCamera;
     shared_ptr<CameraNode> renderCamera;
     std::map<int,vector<Vector3> > textJointsBasePos;
+    CollisionManager *cmgr;
     
     /* Constructor and Destructor */
     

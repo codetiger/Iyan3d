@@ -31,6 +31,7 @@ public:
     void postRTTDrawCall();
     void rttDrawCall();
     void rttShadowMap();
+    void rttControlSelectionAnim(Vector2 touchPosition);
     void drawCameraPreview();
     void rttNodeJointSelection(Vector2 touchPosition);
     void drawJointsSpheresForRTT(bool enableDepthTest);

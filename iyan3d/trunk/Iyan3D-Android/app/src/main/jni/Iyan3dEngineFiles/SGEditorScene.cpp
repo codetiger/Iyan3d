@@ -47,8 +47,10 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     updater = new SGSceneUpdater(sceneMngr, this);
     loader = new SGSceneLoader(sceneMngr, this);
     moveMan = new SGMovementManager(sceneMngr, this);
+    actionMan = new SGActionManager(sceneMngr, this);
     
-    isJointSelected = isNodeSelected = isControlSelected = freezeRendering = isPlaying = false;
+    isJointSelected = isNodeSelected = isControlSelected = false;
+    freezeRendering = isPlaying = isPreviewMode = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
@@ -108,9 +110,25 @@ void SGEditorScene::renderAll()
         smgr->EndDisplay(); // draws all the rendering command
         
         moveMan->swipeToRotate();
-        //
-        //        if(selectedNodeId != NOT_SELECTED)
-        //            setTransparencyForIntrudingObjects();
+        setTransparencyForObjects();
+    }
+}
+
+void SGEditorScene::setTransparencyForObjects()
+{
+    if(!smgr && nodes.size() < 3)
+        return;
+    
+    if(nodes[nodes.size()-1]->isTempNode) {
+        isPreviewMode = true;
+        for(int index = 0; index < nodes.size()-1; index++)
+            nodes[index]->props.transparency = 0.3;
+    } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
+        isPreviewMode = false;
+        for(int index = 0; index < nodes.size(); index++) {
+            if(nodes[index]->props.isVisible)
+                nodes[index]->props.transparency = 1.0;
+        }
     }
 }
 

@@ -92,10 +92,9 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     // TODO add commented functions
     //setLightingOn();
     swipeTiming = 0;
-//    moveScene->updater->updateControlsMaterial();
+    moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
         Logger::log(INFO , "SGScene diff ", "touch end");
-//        prevRotX = prevRotY = prevRotZ = 0.0;
         moveScene->selectedControlId = NOT_SELECTED;
         moveScene->isControlSelected = false;
 //        moveScene->storeMovementAction();
@@ -158,6 +157,117 @@ void SGMovementManager::panProgress(Vector2 touch1, Vector2 touch2)
     
     prevTouchPoints[0] = touch1; prevTouchPoints[1] = touch2;
     moveScene->updater->updateControlsOrientaion();
+}
+
+void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height)
+{
+    if(!moveScene || !smgr || !moveScene->isNodeSelected)
+        return;
+
+    moveScene->updater->updateLightCam(moveScene->nodes[NODE_LIGHT]->node->getPosition());
+    
+    if(moveScene->isControlSelected) {
+        Vector3 outputValue;
+        bool isMoved = calculateControlMovements(curTouchPos,prevTouchPoints[0] ,outputValue);
+        prevTouchPoints[0] = curTouchPos;
+        isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue);
+    }
+    return;
+}
+
+bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,Vector3 &outputValue,bool isSGJoint)
+{
+    if(!moveScene || !smgr)
+        return false;
+
+    Vector3 center;
+    if(moveScene->isJointSelected)
+        center = moveScene->selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
+    else if(moveScene->isNodeSelected)
+        center = moveScene->selectedNode->node->getAbsoluteTransformation().getTranslation();
+    else
+        return false;
+    
+    moveScene->controlsPlane->setPositionAndNormal(center, (moveScene->selectedControlId == Z_ROTATE) ? Vector3(1, 0, 0) :  SceneHelper::planeFacingDirection(moveScene->selectedControlId % 3));
+
+    if(moveScene->controlType == MOVE){ // position and scale calculations are same
+        
+        Vector2 p1;
+        p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
+        Vector2 p2;
+        p2.x = curPoint.x;	p2.y = curPoint.y;
+        
+        Vector3 oldPos;
+        Vector3 newPos;
+        getOldAndNewPosInWorld(prevTouchPoint, curPoint, oldPos, newPos);
+        Vector3 delta = newPos - oldPos;
+        
+        if(delta.getLength() > 1.0f) {
+            delta = delta.normalize() * 1.0f;
+        }
+        
+        outputValue.x = ((moveScene->selectedControlId == X_MOVE) ? 1.0 : 0.0) * delta.x;
+        outputValue.y = ((moveScene->selectedControlId == Y_MOVE) ? 1.0 : 0.0) * delta.y;
+        outputValue.z = ((moveScene->selectedControlId == Z_MOVE) ? 1.0 : 0.0) * delta.z;
+        return true;
+    }
+    else if(moveScene->controlType == ROTATE){
+        
+        Vector2 p1;
+        p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
+        Vector2 p2;
+        p2.x = curPoint.x;	p2.y = curPoint.y;
+        
+        
+        Vector3 oldPos;
+        Vector3 newPos;
+        getOldAndNewPosInWorld(prevTouchPoint, curPoint, oldPos, newPos);
+        Vector3 parentToNewPos = (newPos - center).normalize();
+        Vector3 parentToOldPos = (oldPos - center).normalize();
+        
+        Quaternion delta = MathHelper::rotationBetweenVectors(parentToNewPos,parentToOldPos);
+        
+        Vector3 nodeRot;
+        if(moveScene->isJointSelected || !isSGJoint) {
+            if(!isSGJoint){
+                shared_ptr<Node> jointNode = moveScene->selectedNode->node;
+                MathHelper::getGlobalQuaternion((jointNode)).toEuler(nodeRot);
+                //jointNode.reset();
+            }else{
+                shared_ptr<JointNode> jointNode = moveScene->selectedJoint->jointNode;
+                MathHelper::getGlobalQuaternion(jointNode).toEuler(nodeRot);
+                //jointNode.reset();
+            }
+            nodeRot = nodeRot * RADTODEG;
+            Quaternion jointGlobalRot = MathHelper::RotateNodeInWorld(nodeRot, delta);
+            if(!isSGJoint){
+                delta = MathHelper::irrGetLocalQuaternion((moveScene->selectedNode->node),jointGlobalRot);
+            }else{
+                delta = MathHelper::irrGetLocalQuaternion(moveScene->selectedJoint->jointNode,jointGlobalRot);
+            }
+        }
+        else if(moveScene->selectedNode){
+            moveScene->selectedNode->node->updateAbsoluteTransformation();
+            nodeRot = moveScene->selectedNode->node->getRotationInDegrees();
+            delta =  MathHelper::RotateNodeInWorld(nodeRot,delta);
+        }
+        delta.toEuler(outputValue);
+        
+        return true;
+    }
+    return false;
+}
+
+void SGMovementManager::getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 curPoint, Vector3& oldPos, Vector3& newPos)
+{
+    Line3D oldRay = moveScene->cmgr->getRayFromScreenCoordinates(prevTouchPoint, smgr->getActiveCamera(), SceneHelper::screenWidth, SceneHelper::screenHeight);
+    Line3D newRay = moveScene->cmgr->getRayFromScreenCoordinates(curPoint, smgr->getActiveCamera(), SceneHelper::screenWidth, SceneHelper::screenHeight);
+
+    Vector3 oldRayDir = (oldRay.end - oldRay.start).normalize();
+    Vector3 newRayDir = (newRay.end - newRay.start).normalize();
+    moveScene->controlsPlane->getIntersectionWithLine(oldRay.start,oldRayDir,oldPos);
+    moveScene->controlsPlane->getIntersectionWithLine(newRay.start,newRayDir,newPos);
+    moveScene->circleTouchPoint = newPos;
 }
 
 

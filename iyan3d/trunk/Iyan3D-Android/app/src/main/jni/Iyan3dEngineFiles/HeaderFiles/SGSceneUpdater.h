@@ -23,6 +23,7 @@ public:
     ~SGSceneUpdater();
     
     void setDataForFrame(int frame);
+    void updateControlsMaterial();
     void updateControlsOrientaion(bool forRTT = false);
     void changeCameraView(CAMERA_VIEW_MODE mode);
     void updateLightCamera();

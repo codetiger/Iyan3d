@@ -26,13 +26,14 @@ private:
     int swipeTiming;
     float xAcceleration, yAcceleration;
     Vector2 panBeganPoints[2];
-    Vector2 prevTouchPoints[2];
     Vector3 previousTarget;
     float previousRadius;
     SceneManager *smgr;
 
-    
 public:
+    
+    Vector2 prevTouchPoints[2];
+
     SGMovementManager(SceneManager* smgr, void* scene);
     ~SGMovementManager();
     
@@ -45,6 +46,12 @@ public:
     /* Pan functions */
     void panBegan(Vector2 touch1, Vector2 touch2);
     void panProgress(Vector2 touch1, Vector2 touch2);
+    
+    /* touch move Related functions */
+    
+    void touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height);
+    bool calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,Vector3 &outputValue,bool isSGJoint = true);
+    void getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 curPoint, Vector3& oldPos, Vector3& newPos);
     
     void touchEnd(Vector2 curTouchPos);
 };

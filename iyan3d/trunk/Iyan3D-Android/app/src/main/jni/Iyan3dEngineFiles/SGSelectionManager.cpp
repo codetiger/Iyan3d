@@ -37,6 +37,24 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
     // TODO setTransparencyForIntrudingObjects();
 }
 
+void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)
+{
+    if(!selectionScene || !smgr || !selectionScene->isNodeSelected)
+        return;
+
+    selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
+    selectionScene->updater->updateControlsOrientaion();
+    
+    selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
+    if(selectionScene->shaderMGR->deviceType == METAL){
+        selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
+        getCtrlColorFromTouchTextureAnim(curTouchPos);
+    }
+    selectionScene->isRTTCompleted = true;
+    
+    // TODO storeInitialKeyForUndo();
+}
+
 void SGSelectionManager::postNodeJointSelection()
 {
     if(!selectionScene || !smgr)
@@ -56,6 +74,26 @@ void SGSelectionManager::postNodeJointSelection()
     
     if(!selectionScene->isNodeSelected || (currentSelectedNode->getType() != NODE_RIG && currentSelectedNode->getType() != NODE_TEXT))
         selectionScene->renHelper->setJointSpheresVisibility(false);
+}
+
+void SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
+{
+    if(!selectionScene || !smgr)
+        return;
+    
+    int controlStartIndex = (selectionScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
+    int controlEndIndex = (selectionScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    float xCoord = (touchPosition.x/SceneHelper::screenWidth) * selectionScene->touchTexture->width;
+    float yCoord = (touchPosition.y/SceneHelper::screenHeight) * selectionScene->touchTexture->height;
+    SceneHelper::limitPixelCoordsWithinTextureRange(selectionScene->touchTexture->width, selectionScene->touchTexture->height,xCoord,yCoord);
+    Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),selectionScene->touchTexture,Vector4(255,255,255,255));
+    int selectedCol = (int)pixel.x;
+    if(selectedCol != 255 && (selectedCol >= controlStartIndex && selectedCol <= controlEndIndex)){
+        selectionScene->isControlSelected = true;
+        selectionScene->selectedControlId = selectedCol;
+    }else if(selectedCol >= controlStartIndex && selectedCol <= controlEndIndex){
+        Logger::log(ERROR,"SGAnimationScene::getCtrlColorFromTouchTextureAnim","Wrong RTT Color");
+    }
 }
 
 void SGSelectionManager::getNodeColorFromTouchTexture()

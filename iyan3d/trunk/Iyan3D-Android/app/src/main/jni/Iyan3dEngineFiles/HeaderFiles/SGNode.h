@@ -33,6 +33,7 @@ private:
 public:
     bool isRigged;
     bool isMirrorEnabled;
+    bool isTempNode;
     int assetId,actionId;
     shared_ptr<Node> node;
     wstring name;

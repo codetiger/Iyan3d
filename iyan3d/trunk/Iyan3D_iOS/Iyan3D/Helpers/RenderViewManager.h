@@ -43,9 +43,10 @@
 @property (strong, atomic) id <RenderViewManagerDelegate> delegate;
 @property (nonatomic) bool isPlaying;
 @property (nonatomic) bool isPanned;
+@property (nonatomic) bool makePanOrPinch;
 @property (nonatomic) bool checkTapSelection;
 @property (nonatomic) Vector2 tapPosition;
-@property (nonatomic) Vector2 touchBeganPosition;
+@property (nonatomic) vector<Vector2> touchMovePosition;
 @property (nonatomic) bool checkCtrlSelection;
 - (void)setUpPaths;
 - (void)setupLayer:(UIView*)renderView;
@@ -54,11 +55,12 @@
 - (void)setupDepthBuffer:(UIView*)renderView;
 - (void)setupFrameBuffer:(SceneManager*)smgr;
 - (void)presentRenderBuffer;
-- (void) setUpCallBacks:(void*)scene;
-- (void) addCameraLight;
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight;
-- (bool) removeNodeFromScene:(int)nodeIndex;
+- (void)setUpCallBacks:(void*)scene;
+- (void)addCameraLight;
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode;
+- (bool)removeNodeFromScene:(int)nodeIndex;
 - (void)addGesturesToSceneView;
+- (void)panOrPinchProgress;
 
 @end
 

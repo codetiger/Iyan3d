@@ -125,13 +125,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void) addCameraLight
 {
-    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0];
-    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0];
+    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false];
+    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false];
     
 }
 
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode
 {
+    // TODO a lot to implement
     ActionType assetAddType = IMPORT_ASSET_ACTION;
     
     switch (type) {
@@ -146,22 +147,30 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_BACKGROUNDS:
         case ASSET_ACCESSORIES: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            editorScene->loader->loadNode(NODE_SGM, assetId, name, 0, 0, assetAddType);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, name, 0, 0, assetAddType);
+            if(sgNode)
+                sgNode->isTempNode = isTempNode;
             break;
         }
         case ASSET_RIGGED: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED_HUMAN];
-            editorScene->loader->loadNode(NODE_RIG, assetId, name, 0, 0, assetAddType);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, name, 0, 0, assetAddType);
+            if(sgNode)
+                sgNode->isTempNode = isTempNode;
             break;
         }
         case ASSET_OBJ: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            editorScene->loader->loadNode(NODE_OBJ, assetId, name, 0, 0, assetAddType);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, name, 0, 0, assetAddType);
+            if(sgNode)
+                sgNode->isTempNode = isTempNode;
             break;
         }
         case ASSET_IMAGE: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            editorScene->loader->loadNode(NODE_IMAGE, 0, name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0));
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0, name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0));
+            if(sgNode)
+                sgNode->isTempNode = isTempNode;
             break;
         }
         case ASSET_ANIMATION: {
@@ -276,7 +285,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             switch (touchCount) {
                 case 1: {
                     _checkCtrlSelection = true;
-                    _touchBeganPosition = p[0] * screenScale;
+                    _touchMovePosition.clear();
+                    _touchMovePosition.push_back(p[0] * screenScale);
                     editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
                     break;
                 }
@@ -292,17 +302,20 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case UIGestureRecognizerStateChanged: {
             if (editorScene->isControlSelected && touchCount == 2) {
+                _makePanOrPinch = false;
                 editorScene->moveMan->panBegan(p[0] * screenScale, p[1] * screenScale);
             }
             switch (touchCount) {
                 case 1: {
-                    //animationScene->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+                    editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
                     editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
                     break;
                 }
                 case 2: {
-                    editorScene->moveMan->panProgress(p[0] * screenScale, p[1] * screenScale);
-                    editorScene->updater->updateLightCamera();
+                    _touchMovePosition.clear();
+                    _touchMovePosition.push_back(p[0] * screenScale);
+                    _touchMovePosition.push_back(p[1] * screenScale);
+                    _makePanOrPinch = true;
                     break;
                 }
                 default:
@@ -311,14 +324,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         default: {
-//            if (editorScene->isControlSelected && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) {
-//                if (editorScene->isJointSelected)
-//                    [self showTipsViewForAction:JOINT_MOVED];
-//                else
-//                    [self showTipsViewForAction:OBJECT_RIG_MOVED];
-//            }
-//            else if (animationScene->isControlSelected)
-//                [self showTipsViewForAction:OBJECT_MOVED];
+            _makePanOrPinch = false;
             _isPanned = false;
             editorScene->moveMan->touchEnd(p[0] * screenScale);
             [self.delegate reloadFrames];
@@ -329,6 +335,12 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     if (editorScene->actions.size() > 0 && editorScene->currentAction > 0 && !_isPlaying) {
         //[self.undoButton setEnabled:YES];
     }
+}
+
+- (void) panOrPinchProgress
+{
+    editorScene->moveMan->panProgress(_touchMovePosition[0], _touchMovePosition[1]);
+    editorScene->updater->updateLightCamera();
 }
 
 @end

@@ -310,7 +310,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
         return false;
 
     currentScene->renHelper->setControlsVisibility(false);
-    currentScene->renHelper->setControlsVisibility(false);
+    currentScene->renHelper->setJointSpheresVisibility(false);
     
     SGNode * currentNode = currentScene->nodes[nodeIndex];
     if(currentNode->getType() == NODE_ADDITIONAL_LIGHT) {

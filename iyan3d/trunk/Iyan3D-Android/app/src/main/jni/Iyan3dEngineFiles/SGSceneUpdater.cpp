@@ -78,6 +78,24 @@ void SGSceneUpdater::setDataForFrame(int frame)
         updateLightProperties(frame);
 }
 
+void SGSceneUpdater::updateControlsMaterial()
+{
+    if(!updatingScene || !smgr)
+        return;
+
+    updatingScene->renHelper->setControlsVisibility();
+    if(!updatingScene->isControlSelected)
+        return;
+    int controlStartToVisible = (updatingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
+    int controlEndToVisible = (updatingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    for(int i = controlStartToVisible;i <= controlEndToVisible;i++){
+        if(i == updatingScene->selectedControlId)
+            updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        else
+            updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    }
+}
+
 void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
 {
     if(!updatingScene || !smgr)

@@ -122,7 +122,7 @@
             return;
         selectedAsset = assetItem.assetId;
         [cache checkDownloadedAsset:assetItem.assetId];
-        [self downloadAsset:assetItem ForActivity:LOAD_NODE];
+        [self downloadAsset:assetItem ForActivity:LOAD_NODE isTempAsset:true];
     }
 }
 
@@ -235,7 +235,7 @@
     
 }
 
-- (void)downloadAsset:(AssetItem*)assetvalue ForActivity:(int)activity
+- (void)downloadAsset:(AssetItem*)assetvalue ForActivity:(int)activity isTempAsset:(bool)isTempAsset
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
@@ -250,6 +250,7 @@
             if (![[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 NSLog(@"Rig file not exists");
             else{
+                assetvalue.isTempAsset = isTempAsset;
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue];
             }
         }
@@ -262,6 +263,7 @@
                 [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
             else {
                 if (activity == LOAD_NODE){
+                    assetvalue.isTempAsset = isTempAsset;
                     [self.assetSelectionDelegate loadNodeInScene:assetvalue];
                 }
                 else{
@@ -278,6 +280,7 @@
             [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
         else {
             if (activity == LOAD_NODE){
+                assetvalue.isTempAsset = isTempAsset;
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue];
             }
             else{

@@ -11,6 +11,7 @@ SGNode::SGNode(NODE_TYPE type){
     this->type = type;
     //node = shared_ptr<Node>();
 
+    isTempNode = false;
     optionalFilePath = "";
     props.transparency = 1.0;
     props.isVisible = true;
