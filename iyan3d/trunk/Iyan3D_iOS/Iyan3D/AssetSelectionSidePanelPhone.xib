@@ -85,7 +85,7 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="458" y="489"/>
+            <point key="canvasLocation" x="255" y="340"/>
         </view>
     </objects>
 </document>

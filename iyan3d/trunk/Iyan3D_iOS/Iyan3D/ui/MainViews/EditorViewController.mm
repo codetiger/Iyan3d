@@ -372,6 +372,7 @@ BOOL missingAlertShown;
         [self.scaleBtnAutorig setHidden:true];
         [self.moveBtnAutorig setHidden:true];
         [self.rotateBtnAutorig setHidden:true];
+        [self.autorigMirrorBtnHolder setHidden:true];
         [self.myObjectsBtn setHidden:NO];
     
     }
@@ -611,7 +612,7 @@ BOOL missingAlertShown;
             renderViewMan.checkTapSelection = false;
             [self highlightObjectList];
             if(editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
-                [_addJointBtn setHidden:(editorScene->rigMan->isSkeletonJointSelected)?NO:YES];
+                [_addJointBtn setEnabled:(editorScene->rigMan->isSkeletonJointSelected)?YES:NO];
             }
             if(editorScene && editorScene->isRigMode)
                 [self autoRigMirrorBtnHandler];
@@ -643,7 +644,7 @@ BOOL missingAlertShown;
     editorScene->setLightingOn();
     
     if(editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_PREVIEW)){
-        [_addJointBtn setHidden:(editorScene->rigMan->isSGRJointSelected)?NO:YES];
+        [_addJointBtn setEnabled:(editorScene->rigMan->isSGRJointSelected)?NO:YES];
     }
 }
 
@@ -804,6 +805,8 @@ BOOL missingAlertShown;
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_TEXT_SKIN)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_TEXT)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
@@ -904,8 +907,10 @@ BOOL missingAlertShown;
             [self exportSgr:sgrFilePath];
             [_rigAddToSceneBtn setHidden:NO];
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
-            [_addJointBtn setHidden:YES];
-        } else {
+            [_addJointBtn setEnabled:NO];
+        }
+        else
+        {
             [_rigAddToSceneBtn setHidden:YES];
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
@@ -944,7 +949,7 @@ BOOL missingAlertShown;
         }
     }
     [_rigAddToSceneBtn setHidden:YES];
-    [_addJointBtn setHidden:YES];
+    [_addJointBtn setEnabled:NO];
     [self autoRigMirrorBtnHandler];
 }
 
@@ -976,14 +981,13 @@ BOOL missingAlertShown;
     [self autoRigMirrorBtnHandler];
 }
 
-
 - (IBAction)addJoinAction:(id)sender {
     if(editorScene->rigMan->isSkeletonJointSelected)
         editorScene->rigMan->addNewJoint();
 }
 
 - (IBAction)publishBtnAction:(id)sender {
-    [animationsliderVC publishBtnaction];
+    [animationsliderVC publishBtnaction:sender];
 }
 
 - (IBAction)editFunction:(id)sender
@@ -1162,7 +1166,7 @@ BOOL missingAlertShown;
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = CGSizeMake(205.0, 345.0);
+    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 250.0) : CGSizeMake(205.0, 345.0);
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
     CGRect rect = _importBtn.frame;
@@ -1234,7 +1238,7 @@ BOOL missingAlertShown;
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 360);
         self.popoverController.delegate =self;
         self.popUpVc.delegate=self;
         CGRect rect = _myObjectsBtn.frame;
@@ -1251,7 +1255,7 @@ BOOL missingAlertShown;
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 360);
         self.popoverController.delegate =self;
         self.popUpVc.delegate=self;
         CGRect rect = _myObjectsBtn.frame;
@@ -1262,6 +1266,8 @@ BOOL missingAlertShown;
                                               animated:YES];
         [_popUpVc UpdateObjectList:assetsInScenes];
     }
+    
+    NSLog(@"\nPopup Size %f %f " , _popUpVc.view.frame.size.width,_popUpVc.view.frame.size.height);
 }
 
 - (IBAction)autorigMirrorSwitchAction:(id)sender {
@@ -1404,8 +1410,8 @@ BOOL missingAlertShown;
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             [_popUpVc.view setClipsToBounds:YES];
-            CGRect rect = _scaleBtn.frame;
-            rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
+            CGRect rect = ((UIButton*)sender).frame;
+            rect = [self.view convertRect:rect fromView:((UIButton*)sender).superview];
             [self.popoverController presentPopoverFromRect:rect
                                                     inView:self.view
                                   permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
@@ -1421,8 +1427,8 @@ BOOL missingAlertShown;
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         self.popoverController.popoverContentSize = CGSizeMake(390, 100.0);
         self.popoverController.delegate =self;
-        CGRect rect = _scaleBtn.frame;
-        rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
+        CGRect rect = ((UIButton*)sender).frame;
+        rect = [self.view convertRect:rect fromView:((UIButton*)sender).superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
@@ -1741,6 +1747,10 @@ BOOL missingAlertShown;
     }
 }
 
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    _popUpVc = nil;
+}
 
 - (void) presentViewControllerInCurrentView:(UIViewController*) vcToPresent
 {
@@ -2243,6 +2253,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN){
             [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
         }
+        else if(editorScene->nodes[i]->getType() == NODE_TEXT){
+            [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
+        }
         else if(editorScene->nodes[i]->getType() == NODE_VIDEO){
             [assetsInScenes addObject:[NSString stringWithFormat:@"Video : %@",name]];
         }
@@ -2429,7 +2442,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) beginRigging
 {
-    [self.addJointBtn setHidden:YES];
+    [self.addJointBtn setHidden:NO];
+    [self.addJointBtn setEnabled:NO];
     [self.moveLast setHidden:NO];
     [self.moveFirst setHidden:NO];
     [self.rigScreenLabel setHidden:NO];
@@ -2441,6 +2455,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     [self setupEnableDisableControls];
     [_rigCancelBtn setHidden:NO];
     [self autoRigMirrorBtnHandler];
+    [self moveLastAction:nil];
 }
 
 - (void) exportBtnDelegateAction:(int)indexValue {
@@ -3008,6 +3023,7 @@ void downloadFile(NSString* url, NSString* fileName)
             
         } else if(buttonIndex == OK_BUTTON_INDEX) {
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
+            [self moveLastAction:nil];
         }
     } else if (alertView.tag == SGR_WARNING) {
         if(buttonIndex == OK_BUTTON_INDEX) {
@@ -3165,37 +3181,37 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma AutoRig Delegates
 - (void) autoRigMirrorBtnHandler
 {
-    CGRect mirrorSwitchRight = _autoRigMirrorSwitch.frame;
-    CGRect mirrorLable = _autorigMirrorLable.frame;
-    CGRect cancelBtnRight = _rigCancelBtn.frame;
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue] == 1){
-        mirrorSwitchRight.origin.x = self.view.frame.size.width - (_autoRigMirrorSwitch.frame.size.width*1.5);
-        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
-        mirrorLable.origin.x = self.view.frame.size.width - _autoRigMirrorSwitch.frame.size.width - (_autorigMirrorLable.frame.size.width*1.5);
-        _autorigMirrorLable.frame = mirrorLable;
-        cancelBtnRight.origin.x = self.view.frame.size.width - (_rigCancelBtn.frame.size.width*1.5);
-        _rigCancelBtn.frame = cancelBtnRight;
-    }
-    else{
-        mirrorSwitchRight.origin.x = (_autoRigMirrorSwitch.frame.size.width*1.5);
-        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
-        mirrorLable.origin.x = _autorigMirrorLable.frame.size.width*0.5;
-        _autorigMirrorLable.frame = mirrorLable;
-        cancelBtnRight.origin.x = (_rigCancelBtn.frame.size.width*1.5);
-        _rigCancelBtn.frame = cancelBtnRight;
-    }
+//    CGRect mirrorSwitchRight = _autoRigMirrorSwitch.frame;
+//    CGRect mirrorLable = _autorigMirrorLable.frame;
+//    CGRect cancelBtnRight = _rigCancelBtn.frame;
+//    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue] == 1){
+//        mirrorSwitchRight.origin.x = self.view.frame.size.width - (_autoRigMirrorSwitch.frame.size.width*1.5);
+//        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
+//        mirrorLable.origin.x = self.view.frame.size.width - _autoRigMirrorSwitch.frame.size.width - (_autorigMirrorLable.frame.size.width*1.5);
+//        _autorigMirrorLable.frame = mirrorLable;
+////        cancelBtnRight.origin.x = self.view.frame.size.width - (_rigCancelBtn.frame.size.width*1.5);
+////        _rigCancelBtn.frame = cancelBtnRight;
+//    }
+//    else{
+//        mirrorSwitchRight.origin.x = (_autoRigMirrorSwitch.frame.size.width*1.5);
+//        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
+//        mirrorLable.origin.x = _autorigMirrorLable.frame.size.width*0.5;
+//        _autorigMirrorLable.frame = mirrorLable;
+////        cancelBtnRight.origin.x = (_rigCancelBtn.frame.size.width*1.5);
+////        _rigCancelBtn.frame = cancelBtnRight;
+//    }
     
     bool status = true;
     if(editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
         status = (editorScene->rigMan->isNodeSelected) ? false : true;
     }
+    [_autorigMirrorBtnHolder setHidden:status];
     [_autorigMirrorLable setHidden:status];
-    [_autoRigMirrorSwitch setHidden:status];
-    
+    [_autoRigMirrorSwitch setHidden:status];    
     if(editorScene && editorScene->isRigMode){
         switch (editorScene->rigMan->sceneMode) {
             case RIG_MODE_OBJVIEW:
-                _rigScreenLabel.text = @"IMPORT OBJ";
+                _rigScreenLabel.text = @"ATTACH SKELETON";
                 break;
             case RIG_MODE_MOVE_JOINTS:
                 _rigScreenLabel.text = @"ATTACH SKELETON";

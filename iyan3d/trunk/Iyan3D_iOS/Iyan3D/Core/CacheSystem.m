@@ -566,6 +566,11 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
             querySQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = %s OR %@ = %s OR %@ = %s",TABLE_ASSET_INFO,ASSET_TYPE,"1",ASSET_TYPE,"2",ASSET_TYPE,"3"];
         }
         
+        if(type == 0)
+        {
+            querySQL = [querySQL stringByAppendingFormat:@" ORDER BY datetime(%@) DESC", ASSET_DATE];
+        }
+        
         if([keyword length]) {
             querySQL = [querySQL stringByAppendingFormat:@" AND %@ LIKE '%s%@%s'", ASSET_KEYWORDS, "% ",[keyword lowercaseString],"%"];
         }

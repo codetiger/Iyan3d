@@ -524,7 +524,7 @@
 
 - (void)missingAlertView
 {
-    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Missing Data" message:@"Some resources files are missing." delegate:nil cancelButtonTitle:@"NO" otherButtonTitles:nil];
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Missing Data" message:@"Some resources files are missing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [closeAlert show];
 }
 - (void)restorePurchasedTransaction

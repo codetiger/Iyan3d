@@ -193,21 +193,23 @@
             enum NODE_TYPE nodeType = [self.delegate getNodeType:indexPath.row];
             
                 if(nodeType == NODE_CAMERA)
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_IPhone"];
                 else if(nodeType == NODE_LIGHT)
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_IPhone"];
                 else if(nodeType == NODE_ADDITIONAL_LIGHT)
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_IPhone"];
                 else if(nodeType == NODE_TEXT_SKIN)
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_IPhone"];
+                else if(nodeType == NODE_TEXT)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_IPhone"];
                 else if(nodeType == NODE_IMAGE)
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_IPhone"];
                 else if(nodeType == NODE_PARTICLES)
                     cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
                 else if(nodeType == NODE_VIDEO)
-                    cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_IPhone"];
                 else
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_IPhone"];
 
 //
 //            
@@ -288,7 +290,7 @@
 }
 
 - (void *)updateSelection:(NSIndexPath *)indexPath ScrollPosition:(int)scrolPosition{
-   [self.popoverBtns selectRowAtIndexPath:indexPath animated:YES scrollPosition:scrolPosition];
+//   [self.popoverBtns selectRowAtIndexPath:indexPath animated:YES scrollPosition:scrolPosition];
 }
 - (void *)updateDescelect:(NSIndexPath *)indexPath {
     [self.popoverBtns deselectRowAtIndexPath:indexPath animated:YES];
@@ -297,6 +299,5 @@
 -(void *)allowMultipleSelection :(BOOL)isMultipleselectionEnabled{
     self.popoverBtns.allowsMultipleSelection=isMultipleselectionEnabled;
 }
-
 
 @end

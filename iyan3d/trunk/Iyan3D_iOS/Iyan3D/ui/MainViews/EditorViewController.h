@@ -132,6 +132,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *zValue;
 @property (weak, nonatomic) IBOutlet UISwitch *autoRigMirrorSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *autorigMirrorLable;
+@property (weak, nonatomic) IBOutlet UIView *autorigMirrorBtnHolder;
+
 
 
 - (IBAction)moveLastAction:(id)sender;

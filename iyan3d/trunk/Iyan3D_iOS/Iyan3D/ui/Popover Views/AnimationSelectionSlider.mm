@@ -271,9 +271,11 @@
     [self deallocView];
 }
 
-- (void)publishBtnaction
+- (void)publishBtnaction:(id)sender
 {
+    _publishBtn = (UIButton*)sender;
     if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
+        [_publishBtn setHidden:YES];
         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Display Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
         [userNameAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         [[userNameAlert textFieldAtIndex:0] setPlaceholder:@"Enter Your Name Here"];
@@ -286,6 +288,7 @@
     {
         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Sign in with any of your accounts to publish the animation." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [userNameAlert show];
+        [_publishBtn setHidden:NO];
     }
 }
 
@@ -487,12 +490,15 @@
                 [self.view endEditing:YES];
                 UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [errorAlert show];
+                [self.publishBtn setHidden:NO];
+
             }
             else {
                 [self.view endEditing:YES];
                 if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
                     UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [errorAlert show];
+                    [self.publishBtn setHidden:NO];
                 }
                 else {
                     if ([[AppHelper getAppHelper] checkInternetConnected]) {
@@ -505,8 +511,6 @@
         }
     }
 }
-
-
 
 - (void)publishAssetWithUserName:(NSString*)userName{
     
@@ -526,6 +530,8 @@
             extension = @".sgta";
         
         NSString* filePathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirPath, selectedCell, extension];
+        
+        NSLog(@"\nAnimation File Locations : Image %@ \n Animation %@ \n" , imgPathLocation,filePathLocation);
         NSString* name = [NSString stringWithFormat:@"%@", asset.assetName];
         NSString* keyword = [NSString stringWithFormat:@"%@", asset.keywords];
         NSString* username = [NSString stringWithFormat:@"%@", asset.userName];
@@ -536,6 +542,10 @@
                     email = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"email"]];
                     userName = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"username"]];
                 }
+            else{
+                uniqueId =  @"99999999999999";
+                email = @"anonymous@mail.com";
+            }
         
         NSString* asset_id = [NSString stringWithFormat:@"%d", asset.assetId];
         NSString* bonecountanim = [NSString stringWithFormat:@"%d", asset.boneCount];
@@ -553,12 +563,8 @@
                                                             if (animationFile != nil)
                                                                 [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", selectedCell, extension] mimeType:@"image/png"];
                                                             [formData appendPartWithFormData:[userid dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
-                                                            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
-                                                            {
                                                                 [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueid"];
                                                                 [formData appendPartWithFormData:[email dataUsingEncoding:NSUTF8StringEncoding] name:@"email"];
-                                                            }
-                                                                                                                        
                                                             [formData appendPartWithFormData:[username dataUsingEncoding:NSUTF8StringEncoding] name:@"username"];
                                                             [formData appendPartWithFormData:[name dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_name"];
                                                             [formData appendPartWithFormData:[keyword dataUsingEncoding:NSUTF8StringEncoding] name:@"keyword"];
@@ -568,10 +574,12 @@
                                                         }];
         
         AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        
         __block BOOL complete = NO;
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
             //ret = [self handle:data];
+            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Animation Published Successfully." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [userNameAlert show];
+            //[_publishBtn setHidden:YES];
             complete = YES;
             asset.published = [[operation responseString] intValue];
             NSLog(@"Publishid : %d",asset.published);
@@ -581,25 +589,30 @@
                 int indexRow = (int)[animationsItems indexOfObject:asset];
                 [self displayBasedOnSelection:[NSNumber numberWithInt:indexRow]];
                 [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:YES];
+                [_publishBtn setHidden:YES];
             }
         } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
             NSLog(@"Failure: %@", error);
             [self.view setUserInteractionEnabled:YES];
             [self.view endEditing:YES];
-            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to publish, Please check your network settings." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to publish, Please check your network settings." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [userNameAlert show];
             complete = YES;
+            [_publishBtn setHidden:NO];
         }];
         [operation start];
     }
-
-        
 }
     
 - (void)reloadCollectionView
 {
     [self.animationCollectionView reloadData];
 }
+- (void)hideOrShowPublishBtn:(NSNumber*)value
+{
+    [_publishBtn setHidden:[value boolValue]];
+}
+
 #pragma mark OpenGl related Functions
 
 - (void)applyAnimationKeyToOriginalNode{

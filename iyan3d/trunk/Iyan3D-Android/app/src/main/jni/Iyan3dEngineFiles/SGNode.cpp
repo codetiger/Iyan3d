@@ -402,16 +402,18 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
     if (!checkFileExists(meshPath)) {
         return shared_ptr<Node>();
     }
+    
     if(!checkFileExists(textureFileName)){
-        textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
+        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
+        if(!checkFileExists(textureFileName))
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+        if(!checkFileExists(textureFileName))
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         if(!checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-            if(!checkFileExists(textureFileName))
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-                if(!checkFileExists(textureFileName))
-                    textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
+            textureFileName = FileHelper::getDocumentsDirectory() + "/Resources/Textures/White-texture.png";
         }
     }
+    
     AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);
     setSkinningData((SkinMesh*)mesh);
     shared_ptr<AnimatedMeshNode> node = smgr->createAnimatedNodeFromMesh(mesh,"setUniforms",CHARACTER_RIG,MESH_TYPE_HEAVY);
