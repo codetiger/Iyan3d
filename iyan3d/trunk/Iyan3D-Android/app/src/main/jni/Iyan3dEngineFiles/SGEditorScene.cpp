@@ -126,6 +126,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     animMan = new SGAnimationManager(sceneMngr, this);
     objMan = new SGOBJManager(sceneMngr, this);
 
+    camPreviewOrigin = camPreviewEnd = Vector2(0.0, 0.0);
     isMultipleSelection = false;
     isJointSelected = isNodeSelected = isControlSelected = false;
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;

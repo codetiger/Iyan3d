@@ -168,7 +168,6 @@ void SceneManager::RenderNode(int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTI
         renderMan->setUpDepthState(func,true,clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
     }
     nodes[index]->update();
-    
     Mesh* meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh();
     
     for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {

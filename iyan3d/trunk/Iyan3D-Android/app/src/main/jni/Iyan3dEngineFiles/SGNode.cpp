@@ -116,7 +116,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
             Texture *nodeTex = smgr->loadTexture("Particle Texture",constants::BundlePath + "/particleTexture.png",TEXTURE_RGBA8,TEXTURE_BYTE);
             node->setTexture(nodeTex, 1);
-            node->setID(555444);
             props.transparency = 0.7;
             break;
         }

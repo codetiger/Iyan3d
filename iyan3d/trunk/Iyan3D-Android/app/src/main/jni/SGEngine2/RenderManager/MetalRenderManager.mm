@@ -264,6 +264,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node,int nodeIndex, int meshBuf
         drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex], dynamic_pointer_cast<ParticleManager>(node)->getParticlesCount());
     } else
         drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex],node->instanceCount);
+    
     //node.reset();
     //MTLNode.reset();
     

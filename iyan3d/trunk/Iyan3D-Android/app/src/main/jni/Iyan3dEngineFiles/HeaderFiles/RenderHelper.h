@@ -46,7 +46,7 @@ public:
     bool isMovingCameraPreview(Vector2 currentTouchPos);
     void changeCameraPreviewCoords(Vector2 touchPos);
     void drawCameraPreview();
-    void rttNodeJointSelection(Vector2 touchPosition, bool isMultiSelectenabled, bool touchMove = false);
+    void rttNodeJointSelection(Vector2 touchPosition, bool isMultiSelectenabled, bool touchMove);
     void drawJointsSpheresForRTT(bool enableDepthTest);
     bool displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue = 0.7);
     bool createJointSpheres(int additionalJoints);

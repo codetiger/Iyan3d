@@ -27,7 +27,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelect
         return;
 
    
-    selectionScene->renHelper->rttNodeJointSelection(touchPosition,isMultiSelectEnabled);
+    selectionScene->renHelper->rttNodeJointSelection(touchPosition,isMultiSelectEnabled, false);
     if(selectionScene->shaderMGR->deviceType == METAL){
         getNodeColorFromTouchTexture(isMultiSelectEnabled,false);
     }
@@ -36,7 +36,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelect
     postNodeJointSelection();
 }
 
-bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)
+bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos, bool isMultiSelectEnabled, bool isDisplayPrepared)
 {
     if(!selectionScene || !smgr || (!selectionScene->hasNodeSelected() && selectionScene->selectedNodeIds.size() <= 0))
         return false;
@@ -52,7 +52,7 @@ bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
     
     if(!status && selectionScene->hasNodeSelected()) {
             if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
-                selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
+                selectionScene->renHelper->rttNodeJointSelection(curTouchPos, isMultiSelectEnabled, true);
                 if(selectionScene->shaderMGR->deviceType == METAL){
                     getNodeColorFromTouchTexture(false,true);
                 }

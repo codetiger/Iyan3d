@@ -560,7 +560,8 @@ BOOL missingAlertShown;
 {
     if(editorScene) {
         if (renderViewMan.checkCtrlSelection) {
-            editorScene->selectMan->checkCtrlSelection(renderViewMan.touchMovePosition[0]);
+            bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
+            editorScene->selectMan->checkCtrlSelection(renderViewMan.touchMovePosition[0], isMultiSelectEnabled);
             renderViewMan.checkCtrlSelection = false;
         }
         if (renderViewMan.checkTapSelection) {

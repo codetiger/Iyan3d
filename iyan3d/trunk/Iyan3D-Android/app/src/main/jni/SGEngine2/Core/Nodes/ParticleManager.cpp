@@ -55,7 +55,7 @@ void ParticleManager::update() {
         if(p) {
             p->isLive = true;
             p->age = maxLife * maxLifeRandPercent * 0.01f * rand()/(float)RAND_MAX;
-            p->position = position;
+            p->position = getAbsoluteTransformation().getTranslation();
             Vector3 direction = Vector3(0, 1, 0);
             Mat4 rotMatix;
             Vector3 rot = getRotationInRadians() + Vector3(- 0.5 + rand()/(float)RAND_MAX, 0.0, - 0.5 + rand()/(float)RAND_MAX) * startVelocitySpreadAngle * DEGTORAD;
@@ -79,7 +79,6 @@ void ParticleManager::update() {
         
         p = pool->getNextLiveParticle();
     }
-
 }
 
 void ParticleManager::updateParticles()

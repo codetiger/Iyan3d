@@ -384,6 +384,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     position = [rec locationInView:self.renderView];
     
     if(editorScene->renHelper->isMovingCameraPreview(Vector2(position.x, position.y) * screenScale)){
+        editorScene->setLightingOn();
         editorScene->camPreviewScale = (editorScene->camPreviewScale == 1.0) ? 2.0 : 1.0;
         return;
     }

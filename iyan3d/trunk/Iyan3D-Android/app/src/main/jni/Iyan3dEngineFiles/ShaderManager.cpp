@@ -288,7 +288,7 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex){
                 smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex+1,smgr->getNodeIndexByID(sgNode->node->getID()),tex,1);
             }
         }else if(deviceType == METAL){
-            textureValue = 2;
+             textureValue = 2;
             smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, SHADER_COMMON_texture2,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
         }
     }

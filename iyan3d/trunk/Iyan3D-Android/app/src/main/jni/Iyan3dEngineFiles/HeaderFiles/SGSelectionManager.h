@@ -25,7 +25,7 @@ public:
     ~SGSelectionManager();
         
     void checkSelection(Vector2 touchPosition, bool isMultiSelectEnabled, bool isDisplayPrepared = true);
-    bool checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
+    bool checkCtrlSelection(Vector2 curTouchPos, bool isMultiSelectEnabled, bool isDisplayPrepared = false);
     void postNodeJointSelection();
     bool getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
     bool getNodeColorFromTouchTexture(bool isMultiSelected ,bool touchMove);

@@ -397,6 +397,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     }
                     case NODE_ADDITIONAL_LIGHT:{
                         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+                        break;
                     }
                     case NODE_RIG: {
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
@@ -408,6 +409,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     }
                     case NODE_PARTICLES: {
                         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
+                        break;
                     }
                         
                     default:

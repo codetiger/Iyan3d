@@ -226,10 +226,10 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
 
 vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                   constant matrix_float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
-                                  constant packed_half4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
-                                  constant packed_half4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
-                                  constant packed_half4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
-                                  constant packed_half4& props [[ buffer(SHADER_PARTICLE_props) ]],
+                                  constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
+                                  constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
+                                  constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
+                                  constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
                                   constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
                                   constant matrix_float4x4& rotMatrix [[ buffer(SHADER_PARTICLE_rotMatrix) ]],
                                   unsigned int vid [[ vertex_id ]],
@@ -244,14 +244,14 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     
-    half percent = half(positions[iid].data[3])/props[0];
-    half phase = half(percent > 0.5);
+    float percent = (positions[iid].data[3]/props[0]);
+    float phase = (percent > 0.5);
     
-    half4 s = mix(sColor, mColor, phase);
-    half4 e = mix(mColor, eColor, phase);
-    half age = mix(percent, half(percent - 0.5), phase) * 2.0;
+    float4 s = mix(sColor, mColor, phase);
+    float4 e = mix(mColor, eColor, phase);
+    float age = mix(percent, float(percent - 0.5), phase) * 2.0;
     out.perVertexColor = float4(mix(s, e, age));
-    half scale = props[1] + (props[2] * half(positions[iid].data[3]));
+    float scale = float(props[1] + (props[2] * positions[iid].data[3]));
     
     matrix_float4x4 translation = matrix_float4x4(1);
     translation[3][0] = positions[iid].data[0];
@@ -263,8 +263,8 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     scaleMat[1][1] = scale;
     scaleMat[2][2] = scale;
     
-    half live = half(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
-    translation = translation * float(live);
+    float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
+    translation = translation * live;
     
     matrix_float4x4 trans = translation * rotMatrix;
     out.position = vp * trans * vertex_position_objectspace;
@@ -272,9 +272,9 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     return out;
 }
 
-fragment half4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
+fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
 {
-    half4 color = half4(in.perVertexColor);
+    float4 color = in.perVertexColor;
     constexpr sampler quad_sampler(address::repeat,filter::linear);
     color[3] =  tex2D.sample(quad_sampler,in.uv)[0];
     return color;

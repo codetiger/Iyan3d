@@ -38,6 +38,7 @@ RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
     isExportingImages = false;
     isExporting1stTime = true;
     renderingType = SHADER_COMMON_L1;
+    isMovingPreview = false;
     cameraPreviewMoveDist = Vector2(0.0, 0.0);
 }
 
@@ -723,7 +724,7 @@ void RenderHelper::rttShadowMap()
         if(!sgNode->props.isVisible || !sgNode->props.isLighting)
             sgNode->node->setVisible(false);
         
-        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT)
+        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT || sgNode->getType() == NODE_PARTICLES)
             sgNode->node->setVisible(false);
         previousMaterialNames.push_back(sgNode->node->material->name);
         
@@ -747,7 +748,7 @@ void RenderHelper::rttShadowMap()
         SGNode* sgNode = renderingScene->nodes[i];
         if(!sgNode->props.isVisible || !sgNode->props.isLighting)
             sgNode->node->setVisible(true);
-        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT)
+        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT || sgNode->getType() == NODE_PARTICLES)
             sgNode->node->setVisible(true);
         sgNode->node->setMaterial(smgr->getMaterialByName(previousMaterialNames[i - 2]));
     }
