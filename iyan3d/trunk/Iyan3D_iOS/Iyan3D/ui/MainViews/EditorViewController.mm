@@ -335,11 +335,11 @@
                         [self.imagePicker setNavigationBarHidden:YES];
                         [self.imagePicker setToolbarHidden:YES];
                         importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
-                        [self.leftView addSubview:importImageViewVC.view];
+                        [self showOrHideLeftView:YES withView:importImageViewVC.view];
                         [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
                         self.imagePicker.delegate=importImageViewVC;
                         importImageViewVC.delegate = self;
-                        [self showOrHideLeftView:YES withView:importImageViewVC.view];
+                        [importImageViewVC.imagesView addSubview:self.imagePicker.view];
                     break;
                 }
                 case IMPORT_TEXT:
@@ -437,12 +437,17 @@
     [self.rightView setHidden:showView];
 }
 
-
-
 -(void)pickedImageWithInfo:(NSDictionary*)info;
 {
     NSURL *imageURL = [info valueForKey:UIImagePickerControllerReferenceURL];
     NSLog(@"Image Path %@",imageURL);
+}
+
+- (void)playTimer
+{/*
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:animationScene->currentFrame inSection:0];
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+  */
 }
 
 - (void)dealloc
