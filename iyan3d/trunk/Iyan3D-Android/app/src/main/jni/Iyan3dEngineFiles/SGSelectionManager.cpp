@@ -54,14 +54,14 @@ bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos, bool isMultiSel
         status = getCtrlColorFromTouchTextureAnim(curTouchPos);
     }
     
-    if(!status && selectionScene->hasNodeSelected()) {
-            if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
-                selectionScene->renHelper->rttNodeJointSelection(curTouchPos, isMultiSelectEnabled, true);
-                if(selectionScene->shaderMGR->deviceType == METAL){
-                    getNodeColorFromTouchTexture(false,true);
-                }
-            }
-    }
+//    if(!status && selectionScene->hasNodeSelected()) {
+//            if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
+//                selectionScene->renHelper->rttNodeJointSelection(curTouchPos, isMultiSelectEnabled, true);
+//                if(selectionScene->shaderMGR->deviceType == METAL){
+//                    getNodeColorFromTouchTexture(false,true);
+//                }
+//            }
+//    }
     selectionScene->isRTTCompleted = true;
     
     if(selectionScene->selectedNodeIds.size() > 0)
