@@ -979,7 +979,7 @@ void SGNode::readData(ifstream *filePointer)
     props.reflection = FileHelper::readFloat(filePointer);
     
     if(sgbVersion > SGB_VERSION_1) {
-        
+
         std::wstring nodeSpecificString = FileHelper::readWString(filePointer);
         
         if (nodeSpecificString.find(L"$_@") != std::wstring::npos) {

@@ -17,6 +17,9 @@ struct Scene
 	Scene(RTCDevice rtcDevice) {
 		srand(time(0));
 		sgScene = rtcDeviceNewScene(rtcDevice, RTC_SCENE_STATIC, RTC_INTERSECT1);
+		if(!sgScene) {
+			printf("Error: Failed initializing RTCScene\n");
+		}
 	}
 
 	~Scene() {

@@ -35,7 +35,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
     bool lightChanged = false;
     
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
-        
+
         if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
             Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(1);
             nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);

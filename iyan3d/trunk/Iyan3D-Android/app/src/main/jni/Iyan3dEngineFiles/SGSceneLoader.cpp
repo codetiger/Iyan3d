@@ -54,7 +54,6 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     for(int i = 0;i < nodeCount;i++){
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
         sgNode->readData(filePointer);
-        printf("SGNode Read Data Finished");
         bool status = true;
         
         if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ)

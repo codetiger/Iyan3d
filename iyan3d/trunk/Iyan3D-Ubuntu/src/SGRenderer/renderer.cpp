@@ -39,7 +39,7 @@ string getFileContent(const char* file) {
 }
 
 TaskDetails getRenderTaskFromServer(string machineId) {
-	string url = "http://www.iyan3dapp.com/appapi/requesttask.php?machineid=" + machineId;
+	string url = "https://www.iyan3dapp.com/appapi/requesttask.php?machineid=" + machineId;
 	downloadFile(url.c_str(), "taskid.txt");
 	string taskInfo = getFileContent("taskid.txt");
 	TaskDetails td;
@@ -61,7 +61,7 @@ TaskDetails getRenderTaskFromServer(string machineId) {
 }
 
 TaskDetails getVideoTaskFromServer(string machineId) {
-	string url = "http://www.iyan3dapp.com/appapi/videotask.php?machineid=" + machineId;
+	string url = "https://www.iyan3dapp.com/appapi/videotask.php?machineid=" + machineId;
 	downloadFile(url.c_str(), "taskid.txt");
 	string taskInfo = getFileContent("taskid.txt");
 	TaskDetails td;
@@ -102,7 +102,7 @@ bool downloadTaskFiles(TaskDetails td) {
 	mkpath("data/" + to_string(td.taskId), 0755);
 	printf("Downloading Task Files\n");
 	string fileName = "data/" + to_string(td.taskId) + "/" + to_string(td.taskId) + ".zip";
-	string url = "http://www.iyan3dapp.com/appapi/renderFiles/" + to_string(td.taskId) + ".zip";
+	string url = "https://www.iyan3dapp.com/appapi/renderFiles/" + to_string(td.taskId) + ".zip";
 
 	if(file_exists(fileName)) {
 		return true;
@@ -160,7 +160,7 @@ bool renderFile(TaskDetails td) {
 	bool status = scene->loadScene((to_string(td.frame) + ".sgfd").c_str(), td.width, td.height);
 	if(status) {
 		scene->render();
-		scene->SaveToFile((to_string(td.taskId) + "t" + to_string(td.frame) + "f_render.png").c_str(), ImageFormat_PNG);
+		scene->SaveToFile((convert2String(td.taskId) + "t" + convert2String(td.frame) + "f_render.png").c_str(), ImageFormat_PNG);
 	}
 	delete scene;
 	rtcDeleteDevice(device);
@@ -168,8 +168,8 @@ bool renderFile(TaskDetails td) {
 }
 
 bool uploadOutputToServer(TaskDetails td) {
-	string filename = to_string(td.taskId) + "t" + to_string(td.frame) + "f_render.png";
-	return uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId) + "&frame=" + to_string(td.frame)).c_str(), filename.c_str());
+	string filename = convert2String(td.taskId) + "t" + convert2String(td.frame) + "f_render.png";
+	return uploadFile(("https://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId) + "&frame=" + to_string(td.frame)).c_str(), filename.c_str());
 }
 
 bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::string folder) {
@@ -178,7 +178,7 @@ bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::str
 
 	string commonFilePath = "../" + filePath;
 	if(!file_exists(commonFilePath)) {
-		string url = "http://www.iyan3dapp.com/appapi" + folder + "/" + serverPath;
+		string url = "https://www.iyan3dapp.com/appapi" + folder + "/" + serverPath;
 		printf("Fetching Url: %s\n", url.c_str());
 		downloadFile(url.c_str(), commonFilePath.c_str());
 	}
@@ -224,8 +224,8 @@ bool downloadVideoTaskFiles(TaskDetails td) {
 	printf("Start: %d End: %d\n", td.startFrame, td.endFrame);
 	for(int i = td.startFrame; i <= td.endFrame; i++) {
 		printf("Downloading Frame: %d\n", i);
-		string fileName = "data/video/" + to_string(td.taskId) + "/" + to_string(td.taskId) + "t" + to_string(i) + "f_render.png";
-		string url = "http://www.iyan3dapp.com/appapi/renderFiles/"  + to_string(td.taskId) + "/" + to_string(td.taskId) + "t" + to_string(i) + "f_render.png";
+		string fileName = "data/video/" + to_string(td.taskId) + "/" + convert2String(td.taskId) + "t" + convert2String(i) + "f_render.png";
+		string url = "https://www.iyan3dapp.com/appapi/renderFiles/"  + to_string(td.taskId) + "/" + convert2String(td.taskId) + "t" + convert2String(i) + "f_render.png";
 		if(!file_exists(fileName))
 			if(!downloadFile(url.c_str(), fileName.c_str()))
 				return false;
@@ -247,7 +247,7 @@ string exec(const char* cmd) {
 
 bool uploadVideoToServer(TaskDetails td) {
 	string filename = to_string(td.taskId) + ".mp4";
-	return uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId) + "&frame=0").c_str(), filename.c_str());
+	return uploadFile(("https://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId) + "&frame=0").c_str(), filename.c_str());
 }
 
 bool videoTask(TaskDetails td) {
@@ -258,7 +258,7 @@ bool videoTask(TaskDetails td) {
 
 	chdir(("data/video/" + to_string(td.taskId)).c_str());
 
-	string cmd = "convert -delay 1 " + to_string(td.taskId) + "t*f_render.png " + to_string(td.taskId) + ".mp4";
+	string cmd = "convert -delay 1 " + convert2String(td.taskId) + "t*f_render.png " + to_string(td.taskId) + ".mp4";
 	exec(cmd.c_str());
 
 	uploadVideoToServer(td);
@@ -324,7 +324,7 @@ int main(int argc, char** argv)
 		randomSamples = configData["randomSamples"].asInt();
 	}
 
-	printf("Working as Machine Id:%s isRenderMachine:%d taskFetchFrequency:%d MAX_RAY_DEPTH:%d samplesAO:%d minAOBrightness:%f antiAliasingSamples:%d randomSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, antiAliasingSamples, randomSamples);
+	printf("Working as Machine Id:%s\nisRenderMachine:%d\ntaskFetchFrequency:%d\nMAX_RAY_DEPTH:%d\nsamplesAO:%d\nminAOBrightness:%f\nantiAliasingSamples:%d\nrandomSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, antiAliasingSamples, randomSamples);
 
 	do {
 		printf("Asking Server for new task\n");

@@ -7,7 +7,7 @@ struct SGRMaterial
 {
     Vec3fa emissionColor;
     Vec3fa diffuse;
-    float emission, shininess, transparency, reflection, refraction;
+    float emission, transparency, reflection, refraction;
 	float shadowDarkness;
     bool hasTexture;
     bool hasFaceNormals;

@@ -219,6 +219,14 @@ bool file_copy (const std::string& source, const std::string& dest) {
 	return true;
 }
 
+string convert2String(int i) {
+	string r = to_string(i);
+	while(r.size() < 4) {
+		r = "0" + r;
+	}
+	return r;
+}
+
 #include "texture.h"
 #include "camera.h"
 #include "material.h"

@@ -29,9 +29,6 @@ public:
 
 		if (material.emission == 0) {
 			material.emissionColor = Vec3fa();
-		// } else {
-		// 	printf("emission %f \n", material.emission);
-		// 	printf("emission color %f %f %f \n", material.emissionColor.x, material.emissionColor.y, material.emissionColor.z);
 		}
 
 		material.diffuse = readVec3fa(data).normalize();
@@ -41,10 +38,10 @@ public:
 		if(material.hasTexture) {
 			texture = new SGRTTexture(texFile);
 		}
-		material.shininess = readFloat(data);
+
+		material.reflection = readFloat(data);
+		material.refraction = readFloat(data);
 		material.transparency = readFloat(data);
-		material.reflection = 0.0f;
-		material.refraction = 0.0f;
 		material.hasFaceNormals = false;
 		numberOfTriangles = readInt(data);
 
@@ -58,6 +55,9 @@ public:
 			rtcSetMask(rtcScene, id, 0xFFFF0000);
 
 		Vertex* vs = (Vertex*) rtcMapBuffer(rtcScene, id, RTC_VERTEX_BUFFER); 
+		if(!vs) {
+			printf("Error: Vertex Array Initializing failed %d\n", numberOfTriangles);
+		}
 		for (unsigned int i = 0; i < numberOfTriangles; i++) {
 			for(int j = 0; j < 3; j++) {
 				Vec3fa v = readVec3fa(data);
