@@ -31,6 +31,11 @@
         cache = [CacheSystem cacheSystem];
         downloadQueue = [[NSOperationQueue alloc] init];
         [downloadQueue setMaxConcurrentOperationCount:3];
+        NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        docDirPath = [srcDirPath objectAtIndex:0];
+        tabValue = FONT_STORE;
+        red = green = blue = alpha = 1;
+        
     }
     return self;
 }
@@ -39,53 +44,17 @@
     [super viewDidLoad];
     
     fontArray = [cache GetAssetList:FONT Search:@""];
-    [self initializeFontListArray];
     typedText = [NSString stringWithFormat:@"Text"];
     cache = [CacheSystem cacheSystem];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     cacheDirectory = [paths objectAtIndex:0];
+    //[self initializeFontListArray];
     if([Utility IsPadDevice]){
         [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
     else
     {
        [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"]; 
-    }
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"fontDetails"]) {
-        NSDictionary* fontDetails = [[AppHelper getAppHelper] userDefaultsForKey:@"fontDetails"];
-        fontSize = 10;
-        fontFileName = [fontDetails objectForKey:@"font"];
-        red = [[fontDetails objectForKey:@"red"] floatValue];
-        green = [[fontDetails objectForKey:@"green"] floatValue];
-        blue = [[fontDetails objectForKey:@"blue"] floatValue];
-        alpha = [[fontDetails objectForKey:@"alpha"] floatValue];
-        bevelRadius = [[fontDetails objectForKey:@"bevel"] floatValue];
-        tabValue = [[fontDetails objectForKey:@"tabValue"] intValue];
-        
-        [self.fontTab setSelectedSegmentIndex:[[fontDetails objectForKey:@"tabValue"] integerValue]];
-        if (tabValue == MY_FONT) {
-            [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"My_Font_Array"];
-            if ([fontArray count] > 0) {
-                AssetItem* assetItem = [fontArray objectAtIndex:0];
-                [[AppHelper getAppHelper] saveToUserDefaults:assetItem.name withKey:@"Font_Store_Array"];
-            }
-        }
-        else {
-            [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
-            if ([fontListArray count] != 0)
-                [[AppHelper getAppHelper] saveToUserDefaults:[fontListArray objectAtIndex:0] withKey:@"My_Font_Array"];
-        }
-    }
-    else {
-        if ([fontArray count] > 0) {
-            AssetItem* assetItem = [fontArray objectAtIndex:0];
-            fontSize = 20;
-            bevelRadius = 0;
-            fontFileName = [NSString stringWithFormat:@"%@", assetItem.name];
-            tabValue = FONT_STORE;
-            red = green = blue = alpha = 0.5;
-            [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
-        }
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetsSet) name:@"AssetsSet" object:nil];
     self.cancelBtn.layer.cornerRadius=8.0f;
@@ -97,22 +66,12 @@
 - (void)initializeFontListArray
 {
     fontListArray = Nil;
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
     fontDirectoryPath = [NSString stringWithFormat:@"%@/Resources/Fonts", docDirPath];
     NSArray* fontExtensions = [NSArray arrayWithObjects:@"ttf", @"otf", nil];
     NSArray* filesGathered;
-    
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"]) {
-        if (![[NSFileManager defaultManager] fileExistsAtPath:fontDirectoryPath]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:fontDirectoryPath withIntermediateDirectories:YES attributes:Nil error:Nil];
-        }
-        [self copyFontFilesFromDirectory:docDirPath ToDirectory:fontDirectoryPath withExtensions:fontExtensions];
-        filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fontDirectoryPath error:Nil];
-        fontListArray = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
-        fontArray = [[NSMutableArray alloc]initWithArray:fontListArray];
-
-    }
+    [self copyFontFilesFromDirectory:docDirPath ToDirectory:fontDirectoryPath withExtensions:fontExtensions];
+    filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fontDirectoryPath error:Nil];
+    fontListArray = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
 }
 
 - (void)copyFontFilesFromDirectory:(NSString*)sourceDir ToDirectory:(NSString*)destinationDir withExtensions:(NSArray*)extensions
@@ -209,40 +168,55 @@
 
 - (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [fontArray count];
+    if (tabValue == FONT_STORE) {
+        return [fontArray count];
+    }
+    else {
+        return [fontListArray count];
+    }
 }
 
 - (TextFrameCell*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
     TextFrameCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
-    NSLog(@"TextAssets CollectionView");
-    
-    
     cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-    cell.displayText.text = typedText;
     
-    AssetItem* assetItem = fontArray[indexPath.row];
-    cell.fontName.text = [assetItem.name stringByDeletingPathExtension];
-    NSString* fileName = [NSString stringWithFormat:@"%@/%@", cacheDirectory, assetItem.name];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-        NSLog(@" Font file path %@ ", fileName);
-        [cell.progress setHidden:NO];
-        [cell.displayText setHidden:YES];
+    if (tabValue == FONT_STORE) {
+        AssetItem* assetItem = fontArray[indexPath.row];
+        cell.fontName.text = [assetItem.name stringByDeletingPathExtension];
+        NSString* fileName = [NSString stringWithFormat:@"%@/%@", cacheDirectory, assetItem.name];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+            [cell.displayText setHidden:YES];
+            [cell.progress setHidden:NO];
+            [cell.progress startAnimating];
+        }
+        else {
+            [self loadFont:fileName withExtension:[fontFileName pathExtension]];
+            cell.displayText.font = [UIFont fontWithName:customFontName size:15];
+            CGFontRelease(customFont);
+            cell.displayText.textColor = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+            [cell.displayText setHidden:NO];
+            [cell.progress stopAnimating];
+            [cell.progress setHidden:YES];
+        }
     }
     else {
-        [self loadFont:fileName withExtension:[fontFileName pathExtension]];
-        cell.displayText.font = [UIFont fontWithName:customFontName size:fontSize];
-        
-        CGFontRelease(customFont);
-        
-        cell.displayText.textColor = [UIColor whiteColor];
-        [cell.progress setHidden:YES];
-        [cell.displayText setHidden:NO];
-    }
-    if ([[[AppHelper getAppHelper] userDefaultsForKey:@"Font_Store_Array"] isEqualToString:assetItem.name]) {
-        cell.backgroundColor = [UIColor colorWithRed:37.0f / 255.0f green:37.0f / 255.0f blue:37.0f / 255.0f alpha:1.0f];
-        selectedIndex = (int)indexPath.row;
+        cell.fontName.text = [fontListArray[indexPath.row] stringByDeletingPathExtension];
+        NSString* fileName = [NSString stringWithFormat:@"%@/%@", fontDirectoryPath, fontListArray[indexPath.row]];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+            [cell.displayText setHidden:YES];
+            [cell.progress setHidden:NO];
+            [cell.progress startAnimating];
+        }
+        else {
+            [self loadFont:fileName withExtension:[fontFileName pathExtension]];
+            cell.displayText.font = [UIFont fontWithName:customFontName size:15];
+            cell.displayText.textColor = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+            CGFontRelease(customFont);
+            [cell.displayText setHidden:NO];
+            [cell.progress stopAnimating];
+            [cell.progress setHidden:YES];
+        }
     }
     return cell;
 }
@@ -277,8 +251,6 @@
     if ((int)self.fontTab.selectedSegmentIndex == MY_FONT) {
             [self initializeFontListArray];
             if ([fontArray count] != 0) {
-                if (![[AppHelper getAppHelper] userDefaultsForKey:@"My_Font_Array"])
-                    [[AppHelper getAppHelper] saveToUserDefaults:[fontArray objectAtIndex:0] withKey:@"My_Font_Array"];
                 [self.fontTab setSelectedSegmentIndex:MY_FONT];
                 tabValue = MY_FONT;
                 [self.collectionView reloadData];
@@ -290,12 +262,11 @@
         else {
             [self.fontTab setSelectedSegmentIndex:FONT_STORE];
             tabValue = FONT_STORE;
-            [self.collectionView reloadData];
+            [self loadAllFonts];
         }
 }
 
-- (IBAction)colorPickerAction:(id)sender {
-    //[_textSelectionDelegate textColorPicker:_colorWheelbtn];
+- (IBAction)colorPickerAction:(id)sender {    
     _textColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
     _textColorProp.delegate = self;
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_textColorProp];
@@ -329,6 +300,17 @@
 }
 
 - (void) load3dText{
+    if(_inputText.text.length ==0){
+         UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Field Empty" message:@"Please enter some text to add." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [loadNodeAlert show];
+        return;
+    }
+    if(fontFileName.length == 0){
+    UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please Choose Font Style." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [loadNodeAlert show];
+        return;
+    }
+    
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
     [_textSelectionDelegate load3DTex:FONT AssetId:0 TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];

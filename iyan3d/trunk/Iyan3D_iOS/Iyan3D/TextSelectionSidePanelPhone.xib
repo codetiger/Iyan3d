@@ -11,6 +11,7 @@
                 <outlet property="bevelSlider" destination="vy3-C5-L16" id="akc-SV-zuu"/>
                 <outlet property="cancelBtn" destination="Mev-Ov-cY1" id="TD2-yc-Zzz"/>
                 <outlet property="collectionView" destination="eIk-mP-vhY" id="hwb-au-jMN"/>
+                <outlet property="colorWheelbtn" destination="fyl-eu-bU3" id="GQu-4J-yw7"/>
                 <outlet property="fontTab" destination="En3-oy-ObV" id="o97-q1-BUm"/>
                 <outlet property="inputText" destination="Mgu-M5-NDE" id="kQj-9s-7gU"/>
                 <outlet property="view" destination="NWe-6l-AkU" id="ARx-ft-kZc"/>

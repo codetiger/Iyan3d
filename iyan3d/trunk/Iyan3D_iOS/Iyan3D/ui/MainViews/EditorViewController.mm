@@ -1695,6 +1695,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 #pragma Download Missing Assets
 bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
 {
+    
+    NSLog(@"File Name %s Node Type %d",fileName.c_str(),nodeType);
+    
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     
@@ -1705,7 +1708,6 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
         case NODE_SGM:
         case NODE_RIG: {
             BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];
-            if (assetPurchaseStatus) {
                 NSString* extension = (nodeType == NODE_SGM) ? @"sgm" : @"sgr";
                 NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
                 NSString* file = [name stringByDeletingPathExtension];
@@ -1740,7 +1742,6 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
                 }
                 else
                     return true;
-            }
             break;
         }
         case NODE_TEXT: {
@@ -1932,6 +1933,8 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void)dealloc
 {
+    if(smgr)
+        delete smgr;
     assetsInScenes = nil;
     importImageViewVC.delegate = nil;
     importImageViewVC = nil;
@@ -1951,6 +1954,11 @@ void downloadFile(NSString* url, NSString* fileName)
     settingsVc = nil;
     renderViewMan.delegate = nil;
     renderViewMan = nil;
+    objVc.delegate = nil;
+    objVc = nil;
+    currentScene = nil;
+    settingsVc = nil;
+    screenHeight = nil;
 }
 
 @end

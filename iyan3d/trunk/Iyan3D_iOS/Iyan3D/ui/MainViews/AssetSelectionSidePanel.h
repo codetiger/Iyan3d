@@ -20,7 +20,6 @@
 @end
 
 @interface AssetSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate>{
-    
     CacheSystem* cache;
     AssetItem* asset;
     NSMutableArray* assetArray;
