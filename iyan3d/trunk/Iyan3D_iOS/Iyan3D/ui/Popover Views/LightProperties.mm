@@ -15,11 +15,12 @@
 
 @implementation LightProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType Distance:(float)distance {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         color = currentLightColor;
         light = lightType;
+        previousDistance = distance;
     }
     return self;
 }
@@ -30,7 +31,8 @@
     [self initializeColorWheel];
     [self.colorPreview setBackgroundColor:[UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0]];
     [_distance setEnabled:(light == NODE_ADDITIONAL_LIGHT) ? YES : NO];
-    [_distance setValue:(light == NODE_ADDITIONAL_LIGHT) ? color.w : 1.0];
+    [_distance setValue:(light == NODE_ADDITIONAL_LIGHT) ? previousDistance : 1.0];
+    [_shadowDarkness setValue:color.w];
 }
 
 - (void)viewDidAppear:(BOOL)animated{

@@ -133,6 +133,9 @@
 @property (weak, nonatomic) IBOutlet UISwitch *autoRigMirrorSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *autorigMirrorLable;
 @property (weak, nonatomic) IBOutlet UIView *autorigMirrorBtnHolder;
+@property (weak, nonatomic) IBOutlet UILabel *sceneMirrorLable;
+@property (weak, nonatomic) IBOutlet UISwitch *sceneMirrorSwitch;
+
 
 
 
@@ -158,6 +161,7 @@
 - (IBAction)firstFrameBtnAction:(id)sender;
 - (IBAction)myObjectsBtnAction:(id)sender;
 - (IBAction)autorigMirrorSwitchAction:(id)sender;
+- (IBAction)sceneMirrorAction:(id)sender;
 
 @end
 

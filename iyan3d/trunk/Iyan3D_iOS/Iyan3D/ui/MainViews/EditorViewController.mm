@@ -323,11 +323,12 @@ BOOL missingAlertShown;
 }
 
 -(void)setupEnableDisableControls{
-    
-//    if(editorScene && (editorScene->isJointSelected || (editorScene->isRigMode && (editorScene->rigMan->isSGRJointSelected || editorScene->rigMan->isSkeletonJointSelected))) &&
-//       editorScene->controlType == SCALE){
-//        editorScene->controlType = MOVE;
-//    }
+    [self sceneMirrorUIPositionChanger];
+    bool sceneMirrorState = !(editorScene && !editorScene->isRigMode && editorScene->hasNodeSelected() && editorScene->getSelectedNode()->joints.size() == HUMAN_JOINTS_SIZE);
+    NSLog(@"Scene Mirror State : %d " , sceneMirrorState);
+    [_sceneMirrorLable setHidden:sceneMirrorState];
+    [_sceneMirrorSwitch setHidden:sceneMirrorState];
+    [_sceneMirrorSwitch setOn:editorScene->getMirrorState() animated:YES];
     
     if (editorScene->isRigMode){
         [self.moveBtn setHidden:true];
@@ -407,7 +408,6 @@ BOOL missingAlertShown;
         [self.optionsBtn setEnabled:true];
         [self.rotateBtn setEnabled:true];
         [self.scaleBtn setEnabled:true];
-        return;
     }
     else if (editorScene->selectedNodeIds.size()>0)
     {
@@ -422,8 +422,6 @@ BOOL missingAlertShown;
         [self.rotateBtn setEnabled:true];
         [self.scaleBtn setEnabled:true];
         [self.optionsBtn setEnabled:false];
-        return;
-        
     }
     else{
         [self.optionsBtn setEnabled:true];
@@ -435,7 +433,6 @@ BOOL missingAlertShown;
         [self.animationBtn setEnabled:true];
         [self.objectList setUserInteractionEnabled:true];
         [self.playBtn setEnabled:true];
-        return;
     }
 }
 
@@ -476,6 +473,17 @@ BOOL missingAlertShown;
     }
 }
 
+- (void) sceneMirrorUIPositionChanger
+{
+    bool positionState = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+    
+        CGRect mirrorLableFrame = _sceneMirrorLable.frame;
+    mirrorLableFrame.origin.x =(positionState) ? ScreenWidth-_sceneMirrorLable.frame.size.width : _sceneMirrorLable.frame.size.width;
+        _sceneMirrorLable.frame = mirrorLableFrame;
+        CGRect mirrorSwitchFrame = _sceneMirrorSwitch.frame;
+    mirrorSwitchFrame.origin.x =(positionState) ? ScreenWidth-_sceneMirrorLable.frame.size.width - _sceneMirrorSwitch.frame.size.width : _sceneMirrorLable.frame.size.width - _sceneMirrorSwitch.frame.size.width;
+        _sceneMirrorSwitch.frame = mirrorSwitchFrame;
+}
 
 - (void) removeTempNodeFromScene
 {
@@ -582,6 +590,7 @@ BOOL missingAlertShown;
 
 - (void) loadNode:(AssetItem*) asset
 {
+    NSLog(@"Texture Name : %@ ",asset.textureName);
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] TextureName:(asset.textureName) Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!asset.isTempAsset) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -900,6 +909,8 @@ BOOL missingAlertShown;
         [self stopPlaying];
         return;
     }
+    if(editorScene)
+        editorScene->isPreviewMode = false;
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(saveThumbnail) withObject:nil waitUntilDone:YES];
     [self loadSceneSelectionView];
@@ -1301,6 +1312,10 @@ BOOL missingAlertShown;
         editorScene->rigMan->switchMirrorState();
 }
 
+- (IBAction)sceneMirrorAction:(id)sender {
+    editorScene->switchMirrorState();
+}
+
 
 - (IBAction)optionsBtnAction:(id)sender
 {
@@ -1332,10 +1347,12 @@ BOOL missingAlertShown;
             lightProps = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(editorScene->currentFrame,editorScene->nodes[editorScene->selectedNodeId]->rotationKeys,true);
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT){
             Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
-            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
+            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,ShaderManager::shadowDensity);
         }
+        lightProps.w = ShaderManager::shadowDensity;
+        float distance = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType()];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType() Distance:distance];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         self.popoverController.popoverContentSize = CGSizeMake(270, 335);
@@ -2130,10 +2147,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             lightProps = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(editorScene->currentFrame,editorScene->nodes[editorScene->selectedNodeId]->rotationKeys,true);
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT){
             Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
-            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
+            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,ShaderManager::shadowDensity);
         }
+        lightProps.w = ShaderManager::shadowDensity;
 //        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType()];
+        float distance = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType() Distance:distance];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         self.popoverController.popoverContentSize = CGSizeMake(270, 335);
@@ -2169,7 +2189,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self presentPopOver:rect];
     }
-    else {
+    else if(editorScene && editorScene->hasNodeSelected()){
         bool isVideoOrImageOrParticle = false;
         NODE_TYPE nodeType = NODE_UNDEFINED;
         if(editorScene && editorScene->hasNodeSelected()){
@@ -3227,6 +3247,7 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->renHelper->movePreviewToCorner();
     }
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
+    [self setupEnableDisableControls];
 }
 
 -(void)multiSelectUpdate:(BOOL)value{
@@ -3255,9 +3276,9 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma AutoRig Delegates
 - (void) autoRigMirrorBtnHandler
 {
-    bool status = true;
+    bool status = YES;
     if(editorScene && editorScene->isRigMode && (editorScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS || editorScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES)){
-        status = (editorScene->rigMan->isNodeSelected) ? false : true;
+        status = (editorScene->rigMan->isNodeSelected && editorScene->rigMan->skeletonType == SKELETON_HUMAN) ? NO : YES;
     }
     [_autorigMirrorBtnHolder setHidden:status];
     [_autorigMirrorLable setHidden:status];

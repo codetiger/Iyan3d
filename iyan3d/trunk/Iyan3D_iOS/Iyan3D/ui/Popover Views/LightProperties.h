@@ -24,9 +24,11 @@
 {
     Quaternion color;
     NODE_TYPE light;
+    float previousDistance;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType Distance:(float)distance;
+
 @property (weak, nonatomic) IBOutlet UIView *colorPickerView;
 @property (strong, nonatomic) GetPixelDemo *demoView;
 @property (weak, nonatomic) IBOutlet UIView *colorPreview;
