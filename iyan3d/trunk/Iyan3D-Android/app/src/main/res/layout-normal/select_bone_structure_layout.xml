@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="6">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Bone Structure"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:id="@+id/select_bone_dialog_head"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You can either start with a complete Human Bone structure or with a single bone?"
+            android:gravity="center"
+            android:id="@+id/select_bone_sub_head"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <Button
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:id="@+id/single_bone_btn"
+        android:text="Single Bone">
+
+    </Button>
+
+    <Button
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:weightSum="1"
+        android:id="@+id/human_bone_btn"
+        android:text="Human Bone Structure">
+    </Button>
+
+    <Button
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:id="@+id/cancel_btn"
+        android:clickable="true"
+        android:text="CANCEL">
+    </Button>
+</LinearLayout>

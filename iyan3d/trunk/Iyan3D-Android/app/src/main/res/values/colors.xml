@@ -1,0 +1,16 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="white">#ffffff</color>
+    <color name="purple">#7229cb</color>
+
+    <color name="default_screen_bg">#f9f9f9</color>
+    <color name="rounded_container_bg">#222222</color>
+    <color name="rounded_container_border">#3b3f44</color>
+    <color name="light_gray_header_color">#646663</color>
+    <color name="list_pressed">#fdd000</color>
+    <color name="list_not_pressed">#000000</color>
+    <color name="video_mode_pressed">#72268a</color>
+    <color name="video_mode_non_pressed">#000000</color>
+    <color name="red">#ff0000</color>
+</resources>
