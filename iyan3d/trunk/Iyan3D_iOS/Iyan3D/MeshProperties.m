@@ -18,13 +18,13 @@
 
 @implementation MeshProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil BrightnessValue:(float)brightness SpecularValue:(float)specular LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil RefractionValue:(float)refraction ReflectionValue:(float)reflection LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState {
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        brightnessValue=brightness;
-        specularValue=specular;
+        refractionValue=refraction;
+        reflectionValue=reflection;
         isLightningValue=lightningValue;
         isVisibleValue=isVisible;
         mirrorStatus = mirrorState;
@@ -34,8 +34,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.brightnessSlider setValue:brightnessValue];
-    [self.specularSlider setValue:specularValue];
+    [self.refractionSlider setValue:refractionValue];
+    [self.reflectionSlider setValue:reflectionValue];
     self.lightingSwitch.on=isLightningValue;
     self.visibleChanged.on=isVisibleValue;
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
@@ -50,30 +50,24 @@
 
 
 
-- (IBAction)brightnessValueChanged:(id)sender {
-    brightnessValue=self.brightnessSlider.value;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
-}
-
-- (IBAction)specularValueChanged:(id)sender {
-    specularValue=self.specularSlider.value;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+- (IBAction)refractionValueChanged:(id)sender {
+    refractionValue=self.refractionSlider.value;
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)reflectionValueChanged:(id)sender {
-}
-
-- (IBAction)refractionValueChanged:(id)sender {
+    reflectionValue=self.reflectionSlider.value;
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)lightingSwitchChanged:(id)sender {
     isLightningValue=self.lightingSwitch.on;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)visibleValueChanged:(id)sender {
     isVisibleValue=self.visibleChanged.on;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)cloneButtonAction:(id)sender {
@@ -90,7 +84,7 @@
 
 - (IBAction)faceNormalAction:(id)sender {
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)reflectionHqBtnAction:(id)sender {

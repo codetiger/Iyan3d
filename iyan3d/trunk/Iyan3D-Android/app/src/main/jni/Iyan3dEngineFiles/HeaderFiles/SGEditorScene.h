@@ -153,6 +153,7 @@ public:
     void (*fileWriteCallBack)();
     bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType);
     void shaderCallBackForNode(int nodeID,string matName);
+    float getNodeTransparency(int nodeId);
     bool isNodeTransparent(int nodeId);
     void setJointsUniforms(int nodeID,string matName);
     void setRotationCircleUniforms(int nodeID,string matName);

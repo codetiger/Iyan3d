@@ -18,8 +18,6 @@ SGNode::SGNode(NODE_TYPE type){
     props.isSelected = false;
     isMirrorEnabled = false;
     props.isLighting = true;
-    props.brightness = 1.0;
-    props.shininess = 0.0;
     props.fontSize = 20;
     props.perVertexColor = props.faceNormals = false;
     props.nodeSpecificFloat = 0.0;
@@ -977,8 +975,8 @@ void SGNode::readData(ifstream *filePointer)
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     isRigged = FileHelper::readBool(filePointer);
     props.isLighting = FileHelper::readBool(filePointer);
-    props.brightness = FileHelper::readFloat(filePointer);
-    props.shininess = FileHelper::readFloat(filePointer);
+    props.refraction = FileHelper::readFloat(filePointer);
+    props.reflection = FileHelper::readFloat(filePointer);
     
     if(sgbVersion > SGB_VERSION_1) {
         
@@ -1065,8 +1063,8 @@ void SGNode::writeData(ofstream *filePointer)
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeBool(filePointer,isRigged);
     FileHelper::writeBool(filePointer,props.isLighting);
-    FileHelper::writeFloat(filePointer,props.brightness);
-    FileHelper::writeFloat(filePointer,props.shininess);
+    FileHelper::writeFloat(filePointer,props.refraction);
+    FileHelper::writeFloat(filePointer,props.reflection);
     
     std::wstring nodeSpecificString;
     if(type == NODE_TEXT_SKIN || type == NODE_TEXT) {
@@ -1084,11 +1082,11 @@ void SGNode::writeData(ofstream *filePointer)
     for(i = 0; i < joints.size(); i++)
         joints[i]->writeData(filePointer);
 }
-void SGNode::setShaderProperties(float brightness, float specular, bool isLighting, bool isVisible , float currentFrame)
+void SGNode::setShaderProperties(float refraction, float reflection, bool isLighting, bool isVisible , float currentFrame)
 {
     props.isLighting = isLighting;
-    props.brightness = brightness;
-    props.shininess = specular;
+    props.refraction = refraction;
+    props.reflection = reflection;
     props.isVisible = isVisible;
     setVisibility(isVisible, currentFrame);
 }

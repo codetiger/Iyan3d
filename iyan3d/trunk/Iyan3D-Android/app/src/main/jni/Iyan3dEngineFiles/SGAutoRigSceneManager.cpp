@@ -201,7 +201,8 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                 }
                 AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(animatedSGRPath, rigScene->shaderMGR->deviceType);
                 sgrSGNode->setSkinningData((SkinMesh*)mesh);
-                sgrSGNode->node = smgr->createAnimatedNodeFromMesh(mesh,"sgrUniforms",CHARACTER_RIG, MESH_TYPE_HEAVY);
+                shared_ptr<AnimatedMeshNode> riggedAnimNode = smgr->createAnimatedNodeFromMesh(mesh,"sgrUniforms",CHARACTER_RIG, MESH_TYPE_HEAVY);
+                sgrSGNode->node = riggedAnimNode;
                 if(sgrSGNode->node){
                     sgrSGNode->createSGJoints();
                     sgrSGNode->node->setID(SGR_ID);
@@ -568,6 +569,8 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
     for(std::map<int, SGNode *>::iterator it = envelopes.begin(); it!=envelopes.end(); it++)
     {
         if (it->second) {
+            if(it->second->node)
+                smgr->RemoveNode(it->second->node);
             delete it->second;
         }
     }

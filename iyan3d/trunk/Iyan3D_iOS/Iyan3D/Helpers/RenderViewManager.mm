@@ -97,6 +97,7 @@ SGEditorScene *editorScene;
     
     smgr->ShaderCallBackForNode = &shaderCallBackForNode;
     smgr->isTransparentCallBack = &isTransparentCallBack;
+//    SceneManager::getTransparencyCB = &getTransparency;
     //    animationScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     //    animationScene->fileWriteCallBack = &fileWriteCallBack;
 
@@ -155,6 +156,11 @@ void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
     }else if(callbackFuncName.compare("sgrUniforms") == 0){
         editorScene->rigMan->setSGRUniforms(nodeID,matName);
     }
+}
+
+float getTransparency(int nodeId, string callbackFuncName)
+{
+    return editorScene->getNodeTransparency(nodeId);
 }
 
 bool isTransparentCallBack(int nodeId, string callbackFuncName)
@@ -344,6 +350,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     if(editorScene->nodes.size()>nodeIndex){
         if(editorScene->isNodeInSelection(editorScene->nodes[nodeIndex]))
             editorScene->selectMan->multipleSelections(nodeIndex);
+        if(editorScene->isNodeSelected && editorScene->selectedNodeId != nodeIndex)
+            editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
         editorScene->selectedNodeId = nodeIndex;
         if(!isUndoOrRedo){
             if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT_SKIN || editorScene->nodes[nodeIndex]->getType() == NODE_TEXT || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE)
@@ -416,6 +424,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
     switch (rec.state) {
         case UIGestureRecognizerStateBegan: {
+            editorScene->setLightingOff();
             touchCountTracker = (int)touchCount;
             editorScene->moveMan->touchBegan(p[0] * screenScale);
             switch (touchCount) {

@@ -121,7 +121,6 @@ void MTLTexture::updateTexture(string fileName, int frame)
     NSString* documentsDirectory = [paths objectAtIndex:0];
     
     NSString* videoFilePath = [NSString stringWithFormat:@"%@/Resources/Videos/%@",documentsDirectory,[NSString stringWithFormat:@"%s",fileName.c_str()]];
-    NSLog(@"Video File Path Update : %@ " , videoFilePath);
     NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
     AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
@@ -133,8 +132,8 @@ void MTLTexture::updateTexture(string fileName, int frame)
     gen.requestedTimeToleranceBefore =  kCMTimeZero;
     
     NSError *err = NULL;
-    double duration = [asset duration].value;
-    int videoFrames = (int)(duration/24.0);
+    double duration = CMTimeGetSeconds(asset.duration);
+    int videoFrames = (int)(duration * 24.0);
     int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
     videoFrames = videoFrames - extraFrames;
     int x = frame/ videoFrames;

@@ -115,12 +115,19 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
     isRigMode = rigMode;
     if(rigMode){
         riggingNodeId = selectedNodeId;
+        for(int i = 0; i < nodes.size(); i++) {
+            if(i != riggingNodeId)
+                nodes[i]->node->setVisible(false);
+        }
         rigMan = new SGAutoRigSceneManager(smgr,this);
         //setTransparencyForObjects();
         selectMan->unselectObject(selectedNodeId);
         clearSelections();
     }
     else{
+        for(int i = 0; i < nodes.size(); i++) {
+                nodes[i]->node->setVisible(true);
+        }
         riggingNodeId = NOT_EXISTS;
         delete rigMan;
         updater->resetMaterialTypes(false);
@@ -297,6 +304,7 @@ vector<string> SGEditorScene::getUserFileNames()
             userFileNames.push_back(sgNode->optionalFilePath);
         }
     }
+    return userFileNames;
 }
 
 void SGEditorScene::getIKJointPosition()
@@ -341,6 +349,18 @@ void SGEditorScene::shaderCallBackForNode(int nodeID,string matName)
         }
     }
 }
+
+float SGEditorScene::getNodeTransparency(int nodeId)
+{
+    for(int i = 0; i < nodes.size();i++){
+        if(nodes[i]->node->getID() == nodeId){
+            return nodes[i]->props.transparency;
+            break;
+        }
+    }
+    return -1.0;
+}
+
 bool SGEditorScene::isNodeTransparent(int nodeId)
 {
     if(nodeId == -1)
@@ -620,9 +640,9 @@ bool SGEditorScene::allNodesRemovable()
 
 Vector3 SGEditorScene::getSelectedNodeScale()
 {
-    if(selectedNodeIds.size() > 0)
+    if(selectedNodeIds.size() > 0 && getParentNode())
         return getParentNode()->getScale();
-    else if(isNodeSelected) {
+    else if(isNodeSelected && selectedNode) {
         if(isJointSelected && selectedNode->getType() == NODE_TEXT_SKIN)
             return selectedNode->joints[selectedJointId]->jointNode->getScale();
         else

@@ -62,11 +62,6 @@ static NSString* dbLock = nil;
                 }
                 
                 sqlite3_free(errMsg);
-                static const NSString* TABLE_SCENE_INFO = @"scene_info";
-                static const NSString* SCENE_NAME = @"scene_name";
-                static const NSString* SCENE_DATE = @"scene_date";
-                static const NSString* SCENE_FILE = @"scene_file";
-                
 
             } else {
             }
@@ -77,31 +72,6 @@ static NSString* dbLock = nil;
     }
 }
 }
-
--(void) insertSampleScene
-{
-    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc]init];
-    
-    static const NSString* TABLE_SCENE_INFO = @"scene_info";
-    static const NSString* SCENE_NAME = @"scene_name";
-    static const NSString* SCENE_DATE = @"scene_date";
-    static const NSString* SCENE_FILE = @"scene_file";
-    static const NSString* SAMP_NAME = @"Stay Hungry Stay Foolish";
-    static const NSString* SAMP_FILE = @"1c8ccd62ec29cc2fb116ecc6892cbab2";
-
-    
-    NSString *currentDateString = @"2015-06-04T21:38:22";
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    NSDate *currentDate = [dateFormatter dateFromString:currentDateString];
-    
-    sqlite3_stmt    *statement;
-    NSString* insertSceneTable = [NSString stringWithFormat: @"INSERT INTO %@ (%@, %@, %@) VALUES (\"%@\", \"%@\", \"%@\")", TABLE_SCENE_INFO, SCENE_NAME, SCENE_DATE, SCENE_FILE, SAMP_NAME, currentDate, SAMP_FILE];
-    sqlite3_prepare_v2(_cacheSystem, [insertSceneTable UTF8String], -1, &statement, NULL);
-    if (sqlite3_step(statement) != SQLITE_DONE)
-        NSLog(@"Failed Inserting Scene %s", sqlite3_errmsg(_cacheSystem));
-    sqlite3_finalize(statement);
-}
-
 
 static const NSString* TABLE_ASSET_INFO = @"asset_info";
 static const NSString* OBJ_IMPORTER_TABLE = @"addons";

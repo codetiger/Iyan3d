@@ -26,6 +26,8 @@
 #define ASSET_DOWNLOAD_BEGIN 0.80F
 #define ASSETS_DOWNLOADED 0.95
 
+#define APP_VERSION @"5.0"
+
 
 @implementation LoadingViewControllerPad
 
@@ -127,24 +129,6 @@
         if(![fileManager fileExistsAtPath:videos])
             [[NSFileManager defaultManager] createDirectoryAtPath:videos withIntermediateDirectories:NO attributes:nil error:nil];
 
-        NSError *error;
-        NSString *thumnail = [projectDir stringByAppendingPathComponent:@"1c8ccd62ec29cc2fb116ecc6892cbab2.png"];
-        NSString *sgbPath = [projectDir stringByAppendingPathComponent:@"1c8ccd62ec29cc2fb116ecc6892cbab2.sgb"];
-        
-        // Copy sample project files
-        if (![fileManager fileExistsAtPath:sgbPath])
-        {
-            NSString *resourcePath1 = [[NSBundle mainBundle] pathForResource:@"1c8ccd62ec29cc2fb116ecc6892cbab2" ofType:@"png"];
-            [fileManager copyItemAtPath:resourcePath1 toPath:thumnail error:&error];
-            NSString *resourcePath2 = [[NSBundle mainBundle] pathForResource:@"1c8ccd62ec29cc2fb116ecc6892cbab2" ofType:@"sgb"];
-            [fileManager copyItemAtPath:resourcePath2 toPath:sgbPath error:&error];
-            NSString *resourcePath3 = [[NSBundle mainBundle] pathForResource:@"32553-cm" ofType:@"png"];
-            if([fileManager fileExistsAtPath:resourcePath3]){
-                [fileManager copyItemAtPath:resourcePath3 toPath:texture error:&error];
-                NSString *resourcePath4 = [[NSBundle mainBundle] pathForResource:@"32553" ofType:@"sgr"];
-                [fileManager copyItemAtPath:resourcePath4 toPath:sgrFile error:&error];
-            }
-        }
         
         NSArray* basicShapes = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
         /*
@@ -263,11 +247,10 @@
         [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
     }
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
-        [cache insertSampleScene];
-        [[AppHelper getAppHelper] saveToUserDefaults:@"4.1" withKey:@"APP_VERSION"];
+        [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
         
     }else if([[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
-        [[AppHelper getAppHelper] saveToUserDefaults:@"4.1" withKey:@"APP_VERSION"];
+        [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
     }
     
     //TODO :

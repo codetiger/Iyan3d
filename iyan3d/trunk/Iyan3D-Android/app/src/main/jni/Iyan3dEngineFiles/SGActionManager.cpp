@@ -134,6 +134,8 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
 
 void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
 {
+    if(actionScene->selectedNodeId == NOT_SELECTED || actionScene->selectedNodeId > actionScene->nodes.size())
+        return;
     
     SGNode* selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     SGJoint * selectedJoint = actionScene->selectedJoint;
@@ -295,7 +297,7 @@ void SGActionManager::switchFrame(int frame)
     actionScene->selectMan->updateParentPosition();
 }
 
-void SGActionManager::changeMeshProperty(float brightness, float specular, bool isLighting, bool isVisible, bool isChanged)
+void SGActionManager::changeMeshProperty(float refraction, float reflection, bool isLighting, bool isVisible, bool isChanged)
 {
     if(!actionScene || !smgr || !actionScene->isNodeSelected)
         return;
@@ -306,16 +308,16 @@ void SGActionManager::changeMeshProperty(float brightness, float specular, bool 
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_MESH;
         propertyAction.objectIndex = selectedNode->actionId;
         propertyAction.frameId = actionScene->currentFrame;
-        propertyAction.actionSpecificFloats.push_back(selectedNode->props.brightness);
-        propertyAction.actionSpecificFloats.push_back(selectedNode->props.shininess);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.refraction);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.reflection);
         propertyAction.actionSpecificFlags.push_back(selectedNode->props.isLighting);
         propertyAction.actionSpecificFlags.push_back(selectedNode->props.isVisible);
     }
     
-    selectedNode->setShaderProperties(brightness, specular, isLighting, isVisible, actionScene->currentFrame);
+    selectedNode->setShaderProperties(refraction, reflection, isLighting, isVisible, actionScene->currentFrame);
     if(isChanged){
-        propertyAction.actionSpecificFloats.push_back(brightness);
-        propertyAction.actionSpecificFloats.push_back(specular);
+        propertyAction.actionSpecificFloats.push_back(refraction);
+        propertyAction.actionSpecificFloats.push_back(reflection);
         propertyAction.actionSpecificFlags.push_back(isLighting);
         propertyAction.actionSpecificFlags.push_back(isVisible);
         finalizeAndAddAction(propertyAction);
@@ -439,6 +441,12 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
     } else if(actionType == ACTION_NODE_DELETED) {
         assetAction.drop();
         assetAction.actionType = ACTION_NODE_DELETED;
+        
+        if(actionScene->selectedNodeIds.size() > 0 && (assetId < 2 || assetId > actionScene->nodes.size()))
+            return;
+        else if (actionScene->selectedNodeIds.size() <= 0 && (actionScene->selectedNodeId < 2 || actionScene->selectedNodeId > actionScene->nodes.size()))
+            return;
+        
         SGNode * selectedNode = actionScene->nodes[(actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId];
         assetAction.frameId = selectedNode->assetId;
         assetAction.objectIndex = selectedNode->actionId;

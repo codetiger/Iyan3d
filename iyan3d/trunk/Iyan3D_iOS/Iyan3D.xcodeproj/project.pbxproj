@@ -661,10 +661,6 @@
 		253F536E1C20209D005AC97D /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 253F536C1C20209D005AC97D /* GoogleMobileAds.framework */; };
 		254BA1A51B08377100F248A6 /* Iyan3Dcopy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */; };
 		254F7DB11A94CC52004D63A8 /* AppHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 254F7DB01A94CC52004D63A8 /* AppHelper.mm */; };
-		2557122F1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2557122D1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png */; };
-		255712301B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2557122D1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png */; };
-		255712311B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb in Resources */ = {isa = PBXBuildFile; fileRef = 2557122E1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb */; };
-		255712321B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb in Resources */ = {isa = PBXBuildFile; fileRef = 2557122E1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb */; };
 		25641C9E1B0524250067A4F4 /* watermark.png in Resources */ = {isa = PBXBuildFile; fileRef = 25641C9D1B0524250067A4F4 /* watermark.png */; };
 		25651D141B3C91570058706E /* helpStatements.json in Resources */ = {isa = PBXBuildFile; fileRef = 25651D131B3C91570058706E /* helpStatements.json */; };
 		25651D151B3C91570058706E /* helpStatements.json in Resources */ = {isa = PBXBuildFile; fileRef = 25651D131B3C91570058706E /* helpStatements.json */; };
@@ -2739,10 +2735,6 @@
 		254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Iyan3Dcopy-Info.plist"; sourceTree = SOURCE_ROOT; };
 		254F7DAF1A94CC52004D63A8 /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
 		254F7DB01A94CC52004D63A8 /* AppHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppHelper.mm; sourceTree = "<group>"; };
-		2551246A1B504B6E00E930BE /* AnimationSelectionViewControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimationSelectionViewControllerPad.xib; path = ui/MainViews/AnimationSelectionViewControllerPad.xib; sourceTree = "<group>"; };
-		2551246B1B504B6E00E930BE /* AnimationSelectionViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimationSelectionViewControllerPhone.xib; path = ui/MainViews/AnimationSelectionViewControllerPhone.xib; sourceTree = "<group>"; };
-		2557122D1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 1c8ccd62ec29cc2fb116ecc6892cbab2.png; path = Resources/sampleProject/1c8ccd62ec29cc2fb116ecc6892cbab2.png; sourceTree = "<group>"; };
-		2557122E1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb */ = {isa = PBXFileReference; lastKnownFileType = file; name = 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb; path = Resources/sampleProject/1c8ccd62ec29cc2fb116ecc6892cbab2.sgb; sourceTree = "<group>"; };
 		25641C9D1B0524250067A4F4 /* watermark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = watermark.png; path = ../watermark.png; sourceTree = "<group>"; };
 		25651D131B3C91570058706E /* helpStatements.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = helpStatements.json; path = Resources/jsonFiles/helpStatements.json; sourceTree = "<group>"; };
 		256ED8D51B1FEDED008ADEF8 /* Amatic SC Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Amatic SC Regular.ttf"; sourceTree = "<group>"; };
@@ -3118,8 +3110,6 @@
 		257564C31AE6E3D400B66113 /* ShaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ShaderCell.xib; path = "ui/Popover Views/ShaderCell.xib"; sourceTree = "<group>"; };
 		25895B711B4F031100E833F8 /* AnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationItem.h; path = "Core/Header Files/AnimationItem.h"; sourceTree = "<group>"; };
 		25895B771B4F056700E833F8 /* AnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationItem.m; path = Core/AnimationItem.m; sourceTree = "<group>"; };
-		25895B7E1B4F2D8300E833F8 /* AnimationSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationSelectionViewController.h; path = ui/MainViews/AnimationSelectionViewController.h; sourceTree = "<group>"; };
-		25895B7F1B4F2D8300E833F8 /* AnimationSelectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AnimationSelectionViewController.mm; path = ui/MainViews/AnimationSelectionViewController.mm; sourceTree = "<group>"; };
 		259826261BBC77EC005A3FA6 /* UIImagePickerController+NonRotating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImagePickerController+NonRotating.m"; path = "ui/Popover Views/UIImagePickerController+NonRotating.m"; sourceTree = "<group>"; };
 		2598262A1BBC7836005A3FA6 /* UIImagePickerController+NonRotating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImagePickerController+NonRotating.h"; sourceTree = "<group>"; };
 		259EE1461BDE081200C99784 /* commonL2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL2.fsh; path = Resources/shaders/commonL2.fsh; sourceTree = "<group>"; };
@@ -3325,8 +3315,6 @@
 		62F0DFD2198F623D0039083D /* FrameCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FrameCellView.m; path = "ui/Popover Views/FrameCellView.m"; sourceTree = "<group>"; };
 		62F0DFD3198F623D0039083D /* FrameCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FrameCellView.xib; path = "ui/Popover Views/FrameCellView.xib"; sourceTree = "<group>"; };
 		62F3385B196C1508007694C5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		62F4D2A3199C7ABA0052EF95 /* AnimationEditorViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationEditorViewControllerPad.h; path = ui/MainViews/AnimationEditorViewControllerPad.h; sourceTree = "<group>"; };
-		62F4D2A5199C7ABA0052EF95 /* AnimationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimationView.xib; path = ui/MainViews/AnimationView.xib; sourceTree = "<group>"; };
 		62FA5F441990A386003B0893 /* view-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "view-img.png"; path = "Resources/imgs/view-img.png"; sourceTree = "<group>"; };
 		62FA5F461990DE94003B0893 /* stop-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-img.png"; path = "Resources/imgs/stop-img.png"; sourceTree = "<group>"; };
 		62FA5F4A1990E9D4003B0893 /* back-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back-img.png"; path = "Resources/imgs/back-img.png"; sourceTree = "<group>"; };
@@ -3694,10 +3682,6 @@
 		C8E6173618C5DD7100BC5342 /* FPTouchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPTouchView.m; path = 3rdParty/FPPopOver/FPTouchView.m; sourceTree = "<group>"; };
 		E20674061B049AA6006DD2F7 /* Iyan3Dcopy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Iyan3Dcopy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E211247C1AF20A0D00C23624 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = Shaders.metal; path = Resources/shaders/Shaders.metal; sourceTree = "<group>"; };
-		E21A4EB61AC9795700AD61DD /* AutoRigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoRigViewController.h; path = ui/MainViews/AutoRigViewController.h; sourceTree = "<group>"; };
-		E21A4EB71AC9795700AD61DD /* AutoRigViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AutoRigViewController.mm; path = ui/MainViews/AutoRigViewController.mm; sourceTree = "<group>"; };
-		E21A4EB81AC9795700AD61DD /* AutoRigViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AutoRigViewController.xib; path = ui/MainViews/AutoRigViewController.xib; sourceTree = "<group>"; };
-		E21A4EB91AC9795700AD61DD /* AutoRigViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AutoRigViewControllerPhone.xib; path = ui/MainViews/AutoRigViewControllerPhone.xib; sourceTree = "<group>"; };
 		E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ShaderCellPhone.xib; path = "ui/Popover Views/ShaderCellPhone.xib"; sourceTree = "<group>"; };
 		E21A893E1B08939600435C87 /* normalShader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = normalShader.png; path = Resources/imgs/normalShader.png; sourceTree = "<group>"; };
 		E21A893F1B08939600435C87 /* toonShadere.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toonShadere.png; path = Resources/imgs/toonShadere.png; sourceTree = "<group>"; };
@@ -4012,20 +3996,10 @@
 		E2497650196BE0190025D442 /* TextImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextImportViewController.h; path = "ui/Popover Views/TextImportViewController.h"; sourceTree = "<group>"; };
 		E2497651196BE0190025D442 /* TextImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextImportViewController.mm; path = "ui/Popover Views/TextImportViewController.mm"; sourceTree = "<group>"; };
 		E2497652196BE0190025D442 /* TextImportViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextImportViewController.xib; path = "ui/Popover Views/TextImportViewController.xib"; sourceTree = "<group>"; };
-		E2497679196BE0310025D442 /* AnimationEditorViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimationEditorViewControllerPhone.xib; path = ui/MainViews/AnimationEditorViewControllerPhone.xib; sourceTree = "<group>"; };
-		E249767A196BE0310025D442 /* AssetSelectionViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetSelectionViewControllerPad.h; path = ui/MainViews/AssetSelectionViewControllerPad.h; sourceTree = "<group>"; };
-		E249767B196BE0310025D442 /* AssetSelectionViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AssetSelectionViewControllerPad.mm; path = ui/MainViews/AssetSelectionViewControllerPad.mm; sourceTree = "<group>"; };
-		E249767C196BE0310025D442 /* AssetSelectionViewControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetSelectionViewControllerPad.xib; path = ui/MainViews/AssetSelectionViewControllerPad.xib; sourceTree = "<group>"; };
-		E249767D196BE0310025D442 /* AssetSelectionViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetSelectionViewControllerPhone.xib; path = ui/MainViews/AssetSelectionViewControllerPhone.xib; sourceTree = "<group>"; };
 		E2497682196BE0310025D442 /* LoadingViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingViewControllerPad.h; path = ui/MainViews/LoadingViewControllerPad.h; sourceTree = "<group>"; };
 		E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LoadingViewControllerPad.mm; path = ui/MainViews/LoadingViewControllerPad.mm; sourceTree = "<group>"; };
 		E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPad.xib; path = ui/MainViews/LoadingViewControllerPad.xib; sourceTree = "<group>"; };
 		E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPhone.xib; path = ui/MainViews/LoadingViewControllerPhone.xib; sourceTree = "<group>"; };
-		E249768A196BE0310025D442 /* SceneSelectionControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SceneSelectionControllerPad.xib; path = ui/MainViews/SceneSelectionControllerPad.xib; sourceTree = "<group>"; };
-		E249768B196BE0310025D442 /* SceneSelectionControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SceneSelectionControllerPhone.xib; path = ui/MainViews/SceneSelectionControllerPhone.xib; sourceTree = "<group>"; };
-		E249768C196BE0310025D442 /* SceneSelectionViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneSelectionViewControllerPad.h; path = ui/MainViews/SceneSelectionViewControllerPad.h; sourceTree = "<group>"; };
-		E249768D196BE0310025D442 /* SceneSelectionViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SceneSelectionViewControllerPad.mm; path = ui/MainViews/SceneSelectionViewControllerPad.mm; sourceTree = "<group>"; };
-		E24FBD0A1ACBFD9600CF7F8C /* AnimationEditorViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AnimationEditorViewControllerPad.mm; path = ui/MainViews/AnimationEditorViewControllerPad.mm; sourceTree = "<group>"; };
 		E25285991B340319007C50F8 /* vertexColorSkin.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vertexColorSkin.vert; path = Resources/shaders/vertexColorSkin.vert; sourceTree = "<group>"; };
 		E262744119234C540036F8E3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E262744319234C890036F8E3 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -5761,15 +5735,6 @@
 			name = Base64;
 			sourceTree = "<group>";
 		};
-		7F79ED541A139ED6003BE0A3 /* sampleProject */ = {
-			isa = PBXGroup;
-			children = (
-				2557122D1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png */,
-				2557122E1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb */,
-			);
-			name = sampleProject;
-			sourceTree = "<group>";
-		};
 		7F7D5A111B8C366500E6BA86 /* googleLogin */ = {
 			isa = PBXGroup;
 			children = (
@@ -5933,7 +5898,6 @@
 			isa = PBXGroup;
 			children = (
 				7F30F5AB1B576D5600B311E3 /* Helper */,
-				7F79ED541A139ED6003BE0A3 /* sampleProject */,
 				E24973FB196BD9B90025D442 /* JsonFiles */,
 				C844F2A018894D750079B6F4 /* Mesh */,
 				C82EA4BD187EAACE00A8468A /* Shaders */,
@@ -6968,7 +6932,6 @@
 				01B4D03F1C2937000091E19B /* Animation_Pad@2x.png in Resources */,
 				7F0087851ADFC15400764DDE /* center-align-pad@3x.png in Resources */,
 				E21A89411B08939600435C87 /* toonShadere.png in Resources */,
-				2557122F1B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png in Resources */,
 				7FC9015F1A0A54850051B941 /* first-phone.png in Resources */,
 				7F7D5A361B8C91D100E6BA86 /* googlelogout_Iphone@3x.png in Resources */,
 				01B3953D1C37AC54003955C6 /* Normal-shader_Pad@2x.png in Resources */,
@@ -7057,7 +7020,6 @@
 				01B4D0711C2937000091E19B /* Undo_Pad@2x.png in Resources */,
 				01B4CF841C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
 				7F1D56A41A0CF9F80060D4DD /* MenuReverse-phone@2x.png in Resources */,
-				255712311B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb in Resources */,
 				7FC9016C1A0A54850051B941 /* Stop-video-phone.png in Resources */,
 				62FB86751988D33A00AC7424 /* Menu.png in Resources */,
 				01F872A21C3A5A06009AA31E /* Play_IPhone.png in Resources */,
@@ -7853,7 +7815,6 @@
 				E20672801B049AA6006DD2F7 /* round83.png in Resources */,
 				01B395021C37A42C003955C6 /* Import-image_Pad.png in Resources */,
 				01ACD0A81C3CEF360096AD14 /* color_IPhone@2x.png in Resources */,
-				255712301B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.png in Resources */,
 				01F872781C3A42EF009AA31E /* Import_IPhone.png in Resources */,
 				01B4D0701C2937000091E19B /* Undo_Pad.png in Resources */,
 				E20672821B049AA6006DD2F7 /* move-first@2x.png in Resources */,
@@ -7923,7 +7884,6 @@
 				E20672C41B049AA6006DD2F7 /* controls2.sgm in Resources */,
 				01B02CD71C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
 				3DAC8C3E1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */,
-				255712321B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb in Resources */,
 				E20672C51B049AA6006DD2F7 /* properties-img-phone@3x.png in Resources */,
 				E20672C61B049AA6006DD2F7 /* bonelimits.json in Resources */,
 				3D5F99211C4D04EB00DD47F5 /* Plane@2x.png in Resources */,

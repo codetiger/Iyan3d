@@ -19,7 +19,6 @@
 }
 + (CacheSystem*) cacheSystem;
 - (void) OpenDatabase;
-- (void) insertSampleScene;
 - (void) UpdateAsset:(AssetItem *)a;
 -(void)updateAssetPrice:(AssetItem*)asset;
 - (NSMutableArray*) GetAssetList:(int)type Search:(NSString*)keyword;

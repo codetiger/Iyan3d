@@ -10,7 +10,7 @@ precision highp float;
 uniform sampler2D depthTexture;
 
 uniform  float transparency,shadowDarkness;
-uniform float brightness, shininess;
+uniform float reflection;
 uniform  float shadowTextureSize;
 uniform float numberOfLights;
 uniform vec3 lightColor[5] , lightPos[5];
@@ -61,7 +61,7 @@ void main()
         
         vec4 reflection = -lightDir + 2.0 * n_dot_l * normal;
         float e_dot_r =  clamp(dot(eyeVec,reflection),0.0,1.0);
-        specular = vec4(shininess * pow(e_dot_r,maxSpecular));
+        specular = vec4(reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = vec4(0.0);
@@ -88,7 +88,7 @@ void main()
             
             vec4 reflection = -lightDir + 2.0 * n_dot_l * normal;
             float e_dot_r =  clamp(dot(eyeVec,reflection),0.0,1.0);
-            specular += vec4(shininess * pow(e_dot_r,maxSpecular));
+            specular += vec4(reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)

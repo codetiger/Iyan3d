@@ -49,8 +49,8 @@ typedef struct
 
 typedef struct {
     float isLighting;
-    float vertexDepth,shininess;
-    float brightness,shadowDarkness,transparency;
+    float vertexDepth,reflection;
+    float shadowDarkness,transparency;
     float2 uv,texture2UV;
     float4 position [[position]] , vertexPosCam;
     float4 normal,eyeVec,lightDir,lightColor,perVertexColor;
@@ -71,8 +71,8 @@ typedef struct {
 #define SHADER_COMMON_SKIN_transparency 2
 #define SHADER_COMMON_SKIN_world 3
 #define SHADER_COMMON_SKIN_isLighting 4
-#define SHADER_COMMON_SKIN_brightness 5
-#define SHADER_COMMON_SKIN_shininess 6
+#define SHADER_COMMON_SKIN_refraction 5
+#define SHADER_COMMON_SKIN_reflection 6
 #define SHADER_COMMON_SKIN_shadowDarkness 7
 #define SHADER_COMMON_SKIN_lightPos 8
 #define SHADER_COMMON_SKIN_eyePos 9
@@ -92,8 +92,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
                                      constant float& transparency [[ buffer(SHADER_COMMON_SKIN_transparency) ]],
                                      constant matrix_float4x4& world [[ buffer(SHADER_COMMON_SKIN_world) ]],
                                      constant int& isLighting [[ buffer(SHADER_COMMON_SKIN_isLighting) ]],
-                                     constant float& brightness [[ buffer(SHADER_COMMON_SKIN_brightness) ]],
-                                     constant float& shininess [[ buffer(SHADER_COMMON_SKIN_shininess) ]],
+                                     constant float& reflection [[ buffer(SHADER_COMMON_SKIN_reflection) ]],
                                      constant float& shadowDarkness [[ buffer(SHADER_COMMON_SKIN_shadowDarkness) ]],
                                      constant packed_float3& eyePos [[ buffer(SHADER_COMMON_SKIN_eyePos) ]],
                                      constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
@@ -203,8 +202,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
         
         out.normal = normalize(world * float4(float3(nor.xyz),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.brightness = brightness;
-        out.shininess = shininess;
+        out.reflection = reflection;
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -307,8 +305,8 @@ fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  t
 #define SHADER_COMMON_transparency 2
 #define SHADER_COMMON_world 3
 #define SHADER_COMMON_isLighting 4
-#define SHADER_COMMON_brightness 5
-#define SHADER_COMMON_shininess 6
+#define SHADER_COMMON_refraction 5
+#define SHADER_COMMON_reflection 6
 #define SHADER_COMMON_shadowDarkness 7
 #define SHADER_COMMON_lightPos 8
 #define SHADER_COMMON_eyePos 9
@@ -325,8 +323,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant matrix_float4x4& world [[ buffer(SHADER_COMMON_world) ]],
                                 constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
                                 constant int& isLighting [[ buffer(SHADER_COMMON_isLighting) ]],
-                                constant float& brightness [[ buffer(SHADER_COMMON_brightness) ]],
-                                constant float& shininess [[ buffer(SHADER_COMMON_shininess) ]],
+                                constant float& reflection [[ buffer(SHADER_COMMON_reflection) ]],
                                 constant packed_float3& eyePos [[ buffer(SHADER_COMMON_eyePos) ]],
                                 constant float& shadowDarkness [[ buffer(SHADER_COMMON_shadowDarkness) ]],
                                 unsigned int vid [[ vertex_id ]],
@@ -360,8 +357,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
         
         out.normal = normalize(world * float4(float3(vertex_array[vid].normal),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.brightness = brightness;
-        out.shininess = shininess;
+        out.reflection = reflection;
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -417,11 +413,11 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         float4 normal = normalize(in.normal);
         float4 eyeVec = normalize(in.eyeVec);
         float n_dot_l = saturate(dot(normal,lightDir));
-        half4 diffuse = half4(half3(in.brightness * n_dot_l),1.0);
+        half4 diffuse = half4(half3(n_dot_l),1.0);
         
         float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
         float e_dot_r = saturate(dot(eyeVec,reflection));
-        specular = half4(in.shininess * pow(e_dot_r,maxSpecular));
+        specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
         
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
@@ -478,11 +474,11 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(in.brightness * n_dot_l),1.0);
+            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflection));
-            specular = half4(in.shininess * pow(e_dot_r,maxSpecular));
+            specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
@@ -540,11 +536,11 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(in.brightness * n_dot_l),1.0);
+            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflection));
-            specular = half4(in.shininess * pow(e_dot_r,maxSpecular));
+            specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
@@ -602,11 +598,11 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(in.brightness * n_dot_l),1.0);
+            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflection));
-            specular = half4(in.shininess * pow(e_dot_r,maxSpecular));
+            specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
@@ -664,11 +660,11 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(in.brightness * n_dot_l),1.0);
+            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflection));
-            specular = half4(in.shininess * pow(e_dot_r,maxSpecular));
+            specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
@@ -688,8 +684,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
 #define SHADER_TOON_SKIN_transparency 2
 #define SHADER_TOON_SKIN_world 3
 #define SHADER_TOON_SKIN_isLighting 4
-#define SHADER_TOON_SKIN_brightness 5
-#define SHADER_TOON_SKIN_shininess 6
+#define SHADER_TOON_SKIN_refraction 5
+#define SHADER_TOON_SKIN_reflection 6
 #define SHADER_TOON_SKIN_shadowDarkness 7
 #define SHADER_TOON_SKIN_lightPos 8
 #define SHADER_TOON_SKIN_eyePos 9
@@ -703,8 +699,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
 #define SHADER_TOON_transparency 2
 #define SHADER_TOON_world 3
 #define SHADER_TOON_isLighting 4
-#define SHADER_TOON_brightness 5
-#define SHADER_TOON_shininess 6
+#define SHADER_TOON_refraction 5
+#define SHADER_TOON_reflection 6
 #define SHADER_TOON_shadowDarkness 7
 #define SHADER_TOON_lightPos 8
 #define SHADER_TOON_eyePos 9
@@ -746,12 +742,12 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
         float4 eyeVec = normalize(in.eyeVec);
         
         float n_dot_l = saturate(dot(normal,lightDir));
-        float4 diffuse = float4(float3(in.brightness * n_dot_l),1.0);
+        float4 diffuse = float4(float3(n_dot_l),1.0);
         diffuse_color = diffuse * float4(textureColor);
         
         float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
         float e_dot_r =  saturate(dot(eyeVec,reflection));
-        specular = float4(in.shininess * pow(e_dot_r,maxSpecular));
+        specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = float4(0.0);
@@ -874,8 +870,8 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
 #define SHADER_PERVERTEXCOLOR_mvp 1
 #define SHADER_PERVERTEXCOLOR_transparency 2
 #define SHADER_PERVERTEXCOLOR_isLighting 3
-#define SHADER_PERVERTEXCOLOR_brightness 4
-#define SHADER_PERVERTEXCOLOR_shininess 5
+#define SHADER_PERVERTEXCOLOR_refraction 4
+#define SHADER_PERVERTEXCOLOR_reflection 5
 #define SHADER_PERVERTEXCOLOR_shadowDarkness 6
 #define SHADER_PERVERTEXCOLOR_lightPos 7
 #define SHADER_PERVERTEXCOLOR_eyePos 8
@@ -891,8 +887,7 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
                                    constant float& transparency [[ buffer(SHADER_PERVERTEXCOLOR_transparency) ]],
                                    constant matrix_float4x4& world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
                                    constant int& isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
-                                   constant float& brightness [[ buffer(SHADER_PERVERTEXCOLOR_brightness) ]],
-                                   constant float& shininess [[ buffer(SHADER_PERVERTEXCOLOR_shininess) ]],
+                                   constant float& reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
                                    constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
@@ -925,8 +920,7 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
         out.normal = normalize(world * float4(float3(vertex_array[vid].normal),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.brightness = brightness;
-        out.shininess = shininess;
+        out.reflection = reflection;
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -941,8 +935,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
                                    constant float& transparency [[ buffer(SHADER_PERVERTEXCOLOR_transparency) ]],
                                    constant matrix_float4x4& world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
                                    constant int& isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
-                                   constant float& brightness [[ buffer(SHADER_PERVERTEXCOLOR_brightness) ]],
-                                   constant float& shininess [[ buffer(SHADER_PERVERTEXCOLOR_shininess) ]],
+                                   constant float& reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
                                    constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
@@ -1005,8 +998,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
         
         out.normal = normalize(world * nor);
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.brightness = brightness;
-        out.shininess = shininess;
+        out.reflection = reflection;
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -1049,11 +1041,11 @@ fragment half4 Per_Vertex_Color_Shadow_Fragment(ColorInOut in [[stage_in]],depth
         float4 normal = normalize(in.normal);
         float4 eyeVec = normalize(in.eyeVec);
         float n_dot_l = saturate(dot(normal,lightDir));
-        float4 diffuse = float4(float3(in.brightness * n_dot_l),1.0);
+        float4 diffuse = float4(float3(n_dot_l),1.0);
         
         float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
         float e_dot_r =  saturate(dot(eyeVec,reflection));
-        specular = float4(in.shininess * pow(e_dot_r,maxSpecular));
+        specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
         
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
@@ -1098,12 +1090,12 @@ fragment half4 Per_Vertex_Color_Toon_Fragment(ColorInOut in [[stage_in]],depth2d
         float4 eyeVec = normalize(in.eyeVec);
         
         float n_dot_l = saturate(dot(normal,lightDir));
-        float4 diffuse = float4(float3(in.brightness * n_dot_l),1.0);
+        float4 diffuse = float4(float3(n_dot_l),1.0);
         diffuse_color = diffuse * in.perVertexColor;
         
         float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
         float e_dot_r =  saturate(dot(eyeVec,reflection));
-        specular = float4(in.shininess * pow(e_dot_r,maxSpecular));
+        specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = float4(0.0);
@@ -1155,11 +1147,11 @@ fragment half4 Per_Vertex_Color_Skin_Fragment(ColorInOut in [[stage_in]],
             float4 eyeVec = normalize(in.eyeVec);
         
             float n_dot_l = saturate(dot(normal,lightDir));
-            float4 diffuse = float4(float3(in.brightness * n_dot_l),1.0);
+            float4 diffuse = float4(float3(n_dot_l),1.0);
             
             float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r =  saturate(dot(eyeVec,reflection));
-            specular = float4(in.shininess * pow(e_dot_r,maxSpecular));
+            specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = float4(0.0);

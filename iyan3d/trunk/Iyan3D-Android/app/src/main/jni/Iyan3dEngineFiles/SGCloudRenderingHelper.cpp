@@ -88,7 +88,8 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             	textureFileName = scene->nodes[nodeId]->node->getActiveTexture()->textureName;
             
             FileHelper::writeString(&frameFilePtr, textureFileName); // Texture File Name with extension
-            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.shininess);
+            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.reflection);
+            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.refraction);
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.transparency);
 
             SGCloudRenderingHelper *renderHelper = new SGCloudRenderingHelper();

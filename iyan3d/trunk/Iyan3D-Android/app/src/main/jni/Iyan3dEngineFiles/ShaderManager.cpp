@@ -74,8 +74,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setNodeTransparency(sgNode,SHADER_PERVERTEXCOLOR_transparency);
         setNodeLighting(sgNode,SHADER_PERVERTEXCOLOR_isLighting);
         setShadowDakness(sgNode,SHADER_PERVERTEXCOLOR_shadowDarkness);
-        setBrightnessValue(sgNode,SHADER_PERVERTEXCOLOR_brightness);
-        setShininessValue(sgNode,SHADER_PERVERTEXCOLOR_shininess);
+        setReflectionValue(sgNode,SHADER_PERVERTEXCOLOR_reflection);
         setLightsProperties(sgNode, SHADER_COMMON_lightPos,SHADER_COMMON_lightColor);
         setEyePos(sgNode,SHADER_PERVERTEXCOLOR_eyePos);
         setJointTransform(sgNode,SHADER_COMMON_SKIN_jointData,smgr);
@@ -89,8 +88,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setNodeTransparency(sgNode,SHADER_PERVERTEXCOLOR_transparency);
         setNodeLighting(sgNode,SHADER_PERVERTEXCOLOR_isLighting);
         setShadowDakness(sgNode,SHADER_PERVERTEXCOLOR_shadowDarkness);
-        setBrightnessValue(sgNode,SHADER_PERVERTEXCOLOR_brightness);
-        setShininessValue(sgNode,SHADER_PERVERTEXCOLOR_shininess);
+        setReflectionValue(sgNode,SHADER_PERVERTEXCOLOR_reflection);
         setLightsProperties(sgNode, SHADER_COMMON_lightPos,SHADER_COMMON_lightColor);
         setEyePos(sgNode,SHADER_PERVERTEXCOLOR_eyePos);
         setLightViewProjMatrix(sgNode,SHADER_PERVERTEXCOLOR_lightViewProjMatrix);
@@ -117,8 +115,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setNodeTransparency(sgNode,SHADER_COMMON_SKIN_transparency);
         setNodeLighting(sgNode,SHADER_COMMON_SKIN_isLighting);
         setShadowDakness(sgNode,SHADER_COMMON_SKIN_shadowDarkness);
-        setBrightnessValue(sgNode,SHADER_COMMON_SKIN_brightness);
-        setShininessValue(sgNode,SHADER_COMMON_SKIN_shininess);
+        setReflectionValue(sgNode,SHADER_COMMON_SKIN_reflection);
         setLightsProperties(sgNode, SHADER_COMMON_lightPos,SHADER_COMMON_lightColor);
         setEyePos(sgNode,SHADER_COMMON_SKIN_eyePos);
         setJointTransform(sgNode,SHADER_COMMON_SKIN_jointData,smgr);
@@ -135,8 +132,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setNodeTransparency(sgNode,SHADER_COMMON_transparency);
         setNodeLighting(sgNode,SHADER_COMMON_isLighting);
         setShadowDakness(sgNode,SHADER_COMMON_shadowDarkness);
-        setBrightnessValue(sgNode,SHADER_COMMON_brightness);
-        setShininessValue(sgNode,SHADER_COMMON_shininess);
+        setReflectionValue(sgNode,SHADER_COMMON_reflection);
         setEyePos(sgNode,SHADER_COMMON_eyePos);
         setLightsProperties(sgNode, SHADER_COMMON_lightPos,SHADER_COMMON_lightColor);
         setLightViewProjMatrix(sgNode,SHADER_COMMON_lightViewProjMatrix);
@@ -224,13 +220,10 @@ void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
 void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex){
     smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &shadowDensity, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
-void ShaderManager::setBrightnessValue(SGNode *sgNode,int paramIndex){
-    float value = sgNode->props.brightness;
-    smgr->setPropertyValue(sgNode->node->material, "brightness", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-}
-void ShaderManager::setShininessValue(SGNode *sgNode,int paramIndex){
-    float value = sgNode->props.shininess;
-    smgr->setPropertyValue(sgNode->node->material, "shininess", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+
+void ShaderManager::setReflectionValue(SGNode *sgNode,int paramIndex){
+    float value = sgNode->props.reflection;
+    smgr->setPropertyValue(sgNode->node->material, "reflection", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 void ShaderManager::setLightPos(SGNode *sgNode,int paramIndex){
     if(lightPosition.size()) {

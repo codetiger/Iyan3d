@@ -213,7 +213,9 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->nodes.push_back(sgnode);
     sgnode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(sgnode,actionType);
+    currentScene->selectMan->removeChildren(currentScene->getParentNode());
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
+    currentScene->selectMan->updateParentPosition();
     currentScene->updater->resetMaterialTypes(false);
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
@@ -232,7 +234,6 @@ void SGSceneLoader::setJointsScale(SGNode *sgNode)
     
     for(int i = 0; i < (int)sMesh->joints->size(); i++) {
         float scale = currentScene->tPoseJoints[i].sphereRadius;
-        printf("\n Sphere radius %f ", scale);
         (*sMesh->joints)[i]->sphereRadius = scale;
     }
     
@@ -399,6 +400,8 @@ bool SGSceneLoader::removeSelectedObjects()
     currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED_BEFORE, 0);
     for(int i =0; i < actionIds.size(); i++){
         int nodeId = currentScene->actionMan->getObjectIndex(actionIds[i]);
+        if(nodeId < 2 || nodeId > currentScene->nodes.size())
+            continue;
         if(currentScene->nodes[nodeId]->getType() == NODE_TEXT_SKIN || currentScene->nodes[nodeId]->getType() == NODE_TEXT || currentScene->nodes[nodeId]->getType() == NODE_IMAGE)
             currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, nodeId);
         else if (currentScene->nodes[nodeId]->getType() == NODE_OBJ || currentScene->nodes[nodeId]->getType() == NODE_SGM || currentScene->nodes[nodeId]->getType() == NODE_RIG || currentScene->nodes[nodeId]->getType() == NODE_ADDITIONAL_LIGHT)

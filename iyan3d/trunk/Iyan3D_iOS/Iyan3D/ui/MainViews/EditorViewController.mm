@@ -529,8 +529,8 @@ BOOL missingAlertShown;
     if([[NSFileManager defaultManager] fileExistsAtPath:videoPath]) {
         NSURL *videoURL = [NSURL fileURLWithPath:videoPath];
         AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
-        double duration = [asset duration].value;
-        int videoFrames = (int)(duration/24.0);
+        double duration = CMTimeGetSeconds(asset.duration);
+        int videoFrames = (int)(duration * 24.0);
         int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
         videoFrames = videoFrames - extraFrames;
         printf(" \n duration %f frames %d ", duration, videoFrames);
@@ -632,11 +632,6 @@ BOOL missingAlertShown;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     return YES;
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    editorScene->setLightingOff();
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -1346,13 +1341,13 @@ BOOL missingAlertShown;
     }
     else
     {
-        float brightnessValue = editorScene->nodes[editorScene->selectedNodeId]->props.brightness;
-        float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
+        float refractionValue = editorScene->nodes[editorScene->selectedNodeId]->props.refraction;
+        float reflectionValue = editorScene->nodes[editorScene->selectedNodeId]->props.reflection;
         bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
         bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
+        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil RefractionValue:refractionValue ReflectionValue:reflectionValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
         self.popoverController.popoverContentSize = CGSizeMake(407 , 203);
@@ -1779,6 +1774,18 @@ BOOL missingAlertShown;
     return fileNamesToZip;
 }
 
+- (CGPoint) getCameraResolution
+{
+    CGPoint resolution = CGPointMake(0.0, 0.0);
+    if(!editorScene)
+        return resolution;
+    
+    float resWidth = RESOLUTION[editorScene->cameraResolutionType][0];
+    float resHeight = RESOLUTION[editorScene->cameraResolutionType][1];
+    
+    return CGPointMake(resWidth, resHeight);
+}
+
 
 - (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored{
     
@@ -2119,12 +2126,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     else if(editorScene->isNodeSelected)
     {
-        float brightnessValue = editorScene->nodes[editorScene->selectedNodeId]->props.brightness;
-        float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
+        float refractionValue = editorScene->nodes[editorScene->selectedNodeId]->props.refraction;
+        float reflectionValue = editorScene->nodes[editorScene->selectedNodeId]->props.reflection;
         bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
         bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
+        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil RefractionValue:refractionValue ReflectionValue:reflectionValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
         self.popoverController.popoverContentSize = CGSizeMake(407 , 203);
@@ -2243,6 +2250,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     [assetsInScenes removeAllObjects];
     for(int i = 0; i < editorScene->nodes.size(); i++){
         NSString* name = [self stringWithwstring:editorScene->nodes[i]->name];
+        if(name == nil)
+            name = @"";
+        
         if(editorScene->nodes[i]->getType() == NODE_CAMERA){
             [assetsInScenes addObject:@"CAMERA"];
         }
@@ -2877,16 +2887,16 @@ void downloadFile(NSString* url, NSString* fileName)
 
 #pragma mark Meshproperties Delegate
 
-- (void)meshPropertyChanged:(float)brightness Specular:(float)specular Lighting:(BOOL)light Visible:(BOOL)visible FaceNormal:(BOOL)isHaveFaceNormal
+- (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible FaceNormal:(BOOL)isHaveFaceNormal
 {
     if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
         return;
     
     if (editorScene->nodes[editorScene->selectedNodeId]->props.isLighting != light || editorScene->nodes[editorScene->selectedNodeId]->props.isVisible != visible) { //switch action
-        editorScene->actionMan->changeMeshProperty(brightness, specular, light, visible, true);
+        editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, true);
     }
     else { //slider action
-        editorScene->actionMan->changeMeshProperty(brightness, specular, light, visible, false);
+        editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, false);
     }
     
 }
@@ -3040,14 +3050,14 @@ void downloadFile(NSString* url, NSString* fileName)
             [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:NO];
         }
     }
-    [self autoRigMirrorBtnHandler];
+    if(editorScene && editorScene->isRigMode)
+        [self autoRigMirrorBtnHandler];
 }
 
 
 #pragma mark SettingsViewControllerDelegate
 
 -(void)frameCountDisplayMode:(int)selctedIndex{
-        NSLog(@"Frame Vount Display");
         [self.framesCollectionView setTag:(selctedIndex == FRAME_COUNT) ? FRAME_COUNT : FRAME_DURATION];
         [self.framesCollectionView reloadData];
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];

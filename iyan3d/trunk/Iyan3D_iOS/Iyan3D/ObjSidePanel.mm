@@ -57,7 +57,11 @@
     }
     else
         [_importBtn setHidden:YES];
+    
     _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
+    if(viewType == CHANGE_TEXTURE) {
+        [_addBtn setTitle:@"APPLY" forState:UIControlStateNormal];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -198,7 +202,7 @@
         NSString* docDirPath = [srcDirPath objectAtIndex:0];
         NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
         filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
-        [self.addBtn setTitle:@"ADD TO SCENE" forState:UIControlStateNormal];
+        [self.addBtn setTitle:(viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE" forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
         self.addBtn.tag = Texture;
         [self.importFilesCollectionView reloadData];

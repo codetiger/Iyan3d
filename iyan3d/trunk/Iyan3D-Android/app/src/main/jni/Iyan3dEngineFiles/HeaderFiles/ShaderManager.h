@@ -58,8 +58,7 @@ public:
     void setJointTransform(SGNode *node,int paramIndex,SceneManager *smgr);
     void setLightViewProjMatrix(SGNode *sgNode,int paramIndex);
     void setShadowDakness(SGNode *node,int paramIndex);
-    void setBrightnessValue(SGNode *node,int paramIndex);
-    void setShininessValue(SGNode *node,int paramIndex);
+    void setReflectionValue(SGNode *node,int paramIndex);
     void setLightPos(SGNode *sgNode,int paramIndex);
     void setLightsPosition(SGNode *sgNode , float *lightPositions , int paramIndex);
     void setLightEndDistance(SGNode *sgNode , float *fadeDistances , int paramIndex);

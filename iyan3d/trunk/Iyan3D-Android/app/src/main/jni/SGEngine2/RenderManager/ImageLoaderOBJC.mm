@@ -78,8 +78,8 @@ uint8_t* getImageDataFromVideo(string fileName, int frame, int &width, int &heig
         gen.requestedTimeToleranceBefore =  kCMTimeZero;
 
         NSError *err = NULL;
-        double duration = [asset duration].value;
-        int videoFrames = (int)(duration/24.0);
+        double duration = CMTimeGetSeconds(asset.duration);
+        int videoFrames = (int)(duration * 24.0);
         int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
         videoFrames = videoFrames - extraFrames;
         int x = frame/ videoFrames;

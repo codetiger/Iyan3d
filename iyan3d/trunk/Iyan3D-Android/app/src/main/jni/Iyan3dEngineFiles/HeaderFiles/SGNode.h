@@ -18,7 +18,7 @@
 
 struct properties{
     int isLighting,isSelected,fontSize;
-    float brightness,shininess,transparency,isColorMaterial,nodeSpecificFloat;
+    float transparency,isColorMaterial,nodeSpecificFloat;
     float reflection, refraction;
     bool isVisible,perVertexColor, faceNormals;
     Vector3 vertexColor,oriVertexColor;
@@ -83,7 +83,7 @@ public:
     void setInitialKeyValues(int actionType);
     void CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,int currentFrame);
     void MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame);
-    void setShaderProperties(float brightness, float specular, bool isLighting, bool isVisible , float currentFrame);
+    void setShaderProperties(float refraction, float reflection, bool isLighting, bool isVisible , float currentFrame);
     void clearSGJoints();
     void createSGJoints();
     void faceUserCamera(shared_ptr<CameraNode> viewCamera,int currentFrame);
