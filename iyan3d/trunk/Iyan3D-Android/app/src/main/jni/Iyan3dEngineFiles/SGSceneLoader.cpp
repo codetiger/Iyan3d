@@ -8,7 +8,6 @@
 
 #include "HeaderFiles/SGSceneLoader.h"
 #include "HeaderFiles/SGEditorScene.h"
-#include "HeaderFiles/SGAnimationSceneHelper.h"
 
 SGEditorScene *currentScene;
 
