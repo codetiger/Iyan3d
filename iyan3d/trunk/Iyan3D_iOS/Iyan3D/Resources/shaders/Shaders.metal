@@ -720,12 +720,9 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
 fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_TOON_SKIN_texture1)]],
                                     depth2d<float> shadow_texture [[texture(SHADER_TOON_SKIN_texture2)]],
                                     constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
-                                    constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]])
+                                    constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
+                                    constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
 {
-    constexpr sampler quad_sampler(address::repeat,filter::linear);
-    half4 textureColor =  tex2D.sample(quad_sampler,in.uv);
-    
-    
     // Shadow Calculation----------
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
@@ -738,7 +735,14 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     
     
     // Lighting Calculation----------
-    float4 diffuse_color,specular;
+    half4 diffuse_color = half4(in.perVertexColor);
+    
+    if(isVertexColored == 0.0) {
+        constexpr sampler quad_sampler(address::repeat,filter::linear);
+        diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+    }
+
+    half4 specular;
     half4 finalColor;
     if(in.isLighting != 0.0){
         
@@ -751,14 +755,14 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
         
         float n_dot_l = saturate(dot(normal,lightDir));
         float4 diffuse = float4(float3(n_dot_l),1.0);
-        diffuse_color = diffuse * float4(textureColor);
+        diffuse_color = half4(diffuse) * half4(diffuse_color);
         
         float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
         float e_dot_r =  saturate(dot(eyeVec,reflectValue));
-        specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
+        specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
-            specular = float4(0.0);
+            specular = half4(0.0);
         
         //Toon Calculation----------
         half4 toonColor = half4(diffuse_color + specular);
@@ -773,8 +777,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
         //----------------
         finalColor = toonColor * half4(half3(lightColor[0]),1.0);
     }else{
-        diffuse_color = float4(textureColor);
-        specular = float4(0.0);
+        specular = half4(0.0);
         finalColor = half4(diffuse_color);
     }
     //-------------

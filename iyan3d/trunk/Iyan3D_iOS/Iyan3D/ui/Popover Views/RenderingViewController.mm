@@ -382,7 +382,7 @@
         NSString *filePath5 = [NSString stringWithFormat:@"%@/%@", sgmDirPath, [filePaths objectAtIndex:i]];
         NSString *filePath6 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
         
-        
+    
         if([fm fileExistsAtPath:filePath1]) {
             if(![filtFilePaths containsObject:filePath1])
                 [filtFilePaths addObject:filePath1];
