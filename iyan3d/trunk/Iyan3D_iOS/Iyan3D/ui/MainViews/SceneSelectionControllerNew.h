@@ -37,9 +37,10 @@
     SettingsViewController *settingsVc;
     LoginViewController *loginVc;
     bool isLoggedin;
-    
-
+    bool isFirstTime;
 }
+
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil IsFirstTimeOpen:(BOOL)value;
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;
 @property (nonatomic, strong) NSString *fileBeginsWith;

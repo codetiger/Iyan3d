@@ -1139,8 +1139,6 @@
 		3DAC8C3E1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */; };
 		3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
 		3DAC8C411C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
-		3DAEFFED1C6A27A1008AAD81 /* My-objects-Particles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */; };
-		3DAEFFEE1C6A27A1008AAD81 /* My-objects-Particles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */; };
 		3DAEFFF01C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */; };
 		3DAEFFF11C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */; };
 		3DAEFFF31C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */; };
@@ -3272,7 +3270,6 @@
 		3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SceneSelectionControllerNewPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LoadingViewControllerPhone@2x.xib"; path = "ui/MainViews/LoadingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RenderingViewControllerPhone@2x.xib"; path = "ui/Popover Views/RenderingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
-		3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
 		3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone.png"; sourceTree = "<group>"; };
 		3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone@3x.png"; sourceTree = "<group>"; };
 		3DB4AB971C75DA9400C89B5C /* Add-Bone-IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bone-IPhone.png"; sourceTree = "<group>"; };
@@ -4360,7 +4357,6 @@
 				3DC60FF71C6B192D00A8D412 /* hq-IPhone@2x.png */,
 				3DC60FF81C6B192D00A8D412 /* hq.png */,
 				3DC60FF91C6B192D00A8D412 /* hq@2x.png */,
-				3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */,
 				3D5D0F3C1C632864006B987E /* Particles.png */,
 				3D5D0F3D1C632864006B987E /* Particles@2x.png */,
 				01BA32401C5CC086000A5F3E /* popover-clone.png */,
@@ -7059,7 +7055,6 @@
 				7F32A01E1AA1ACF7003FEFF9 /* playing-pad@2x.png in Resources */,
 				7FC524D61B6F6F3600C5D26D /* Full-screen-phone@2x.png in Resources */,
 				01B4D0711C2937000091E19B /* Undo_Pad@2x.png in Resources */,
-				3DAEFFED1C6A27A1008AAD81 /* My-objects-Particles@2x.png in Resources */,
 				01B4CF841C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
 				7F1D56A41A0CF9F80060D4DD /* MenuReverse-phone@2x.png in Resources */,
 				255712311B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb in Resources */,
@@ -7848,7 +7843,6 @@
 				25EA8EE21BD90506005DBA15 /* light_Phone@2x.png in Resources */,
 				E20672751B049AA6006DD2F7 /* topbarView@2x.png in Resources */,
 				01B4D05A1C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
-				3DAEFFEE1C6A27A1008AAD81 /* My-objects-Particles@2x.png in Resources */,
 				3D04EAF61C25830F00C18E1A /* No-Bevel.png in Resources */,
 				259EE1511BDE081200C99784 /* commonL5.fsh in Resources */,
 				256ED8EC1B1FEDED008ADEF8 /* Idigital Bold.otf in Resources */,

@@ -120,6 +120,8 @@
         
         if(![fileManager fileExistsAtPath:textures])
             [[NSFileManager defaultManager] createDirectoryAtPath:textures withIntermediateDirectories:NO attributes:nil error:nil];
+        if(![fileManager fileExistsAtPath:fonts])
+            [[NSFileManager defaultManager] createDirectoryAtPath:fonts withIntermediateDirectories:NO attributes:nil error:nil];
         if(![fileManager fileExistsAtPath:sgm])
             [[NSFileManager defaultManager] createDirectoryAtPath:sgm withIntermediateDirectories:NO attributes:nil error:nil];
         if(![fileManager fileExistsAtPath:videos])
@@ -270,7 +272,7 @@
     
     //TODO :
     
-     //[[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
+//     [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"])
        [[AppHelper getAppHelper] initializeFontListArray];
@@ -331,11 +333,11 @@
  
     
     if([Utility IsPadDevice]) {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:YES];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     } else {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ?  @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ?  @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:YES];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     }

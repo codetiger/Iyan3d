@@ -28,7 +28,7 @@
 
 @implementation SceneSelectionControllerNew
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil IsFirstTimeOpen:(BOOL)value {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         cache = [CacheSystem cacheSystem];
@@ -36,6 +36,7 @@
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
         currentSelectedScene = -1;
+        isFirstTime = value;
     }
     return self;
 }
@@ -53,11 +54,10 @@
     }
     [self.sceneView setHidden:YES];
     
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"]) {
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && isFirstTime) {
         UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You have already upgraded to Premium. Please Signin and use 'Restore Purchase' in 'Settings' menu to verify your purchase." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [infoAlert show];
-    }
-    
+    }    
     
     /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -176,7 +176,7 @@
         [appDelegate.window setRootViewController:animationEditor];
     }
     else{
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }
@@ -206,7 +206,7 @@
     if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
-                      (screenHeight>320) ? @"SettingsViewControllerPhone" :
+                      ([self iPhone6Plus]) ? @"SettingsViewControllerPhone2x" :
                       @"SettingsViewControllerPhone" bundle:nil];
         [settingsVc.view setClipsToBounds:YES];
         settingsVc.delegate=self;

@@ -16,7 +16,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="360"/>
+            <rect key="frame" x="0.0" y="0.0" width="200" height="320"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Login-Img_Pad.png" translatesAutoresizingMaskIntoConstraints="NO" id="MXr-j7-aWC">
@@ -29,8 +29,8 @@
                         <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="hFw-pt-FOi"/>
                     </connections>
                 </button>
-                <tableView contentMode="redraw" fixedFrame="YES" keyboardDismissMode="interactive" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="43" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YpO-8P-C6W">
-                    <rect key="frame" x="0.0" y="0.0" width="200" height="360"/>
+                <tableView contentMode="redraw" fixedFrame="YES" keyboardDismissMode="interactive" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="39" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="YpO-8P-C6W">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="320"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="sectionIndexColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
@@ -46,7 +46,7 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="443" y="298"/>
+            <point key="canvasLocation" x="393" y="298"/>
         </view>
     </objects>
     <resources>

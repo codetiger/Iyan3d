@@ -823,6 +823,7 @@ BOOL missingAlertShown;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [renderViewMan removeNodeFromScene:(int)indexPath.row IsUndoOrRedo:NO];
+        [self reloadFrames];
         [tableView reloadData];
     }
 }
@@ -1166,7 +1167,7 @@ BOOL missingAlertShown;
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 250.0) : CGSizeMake(205.0, 345.0);
+    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 320) : CGSizeMake(205.0, 320);
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
     CGRect rect = _importBtn.frame;
@@ -1175,6 +1176,7 @@ BOOL missingAlertShown;
                                             inView:self.view
                           permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                           animated:YES];
+    
 }
 - (IBAction)infoBtnAction:(id)sender
 {
@@ -1457,6 +1459,7 @@ BOOL missingAlertShown;
             int nodeIndex = returnValue2;
             if (nodeIndex < assetsInScenes.count) {
                 [renderViewMan removeNodeFromScene:nodeIndex IsUndoOrRedo:YES];
+                [self reloadFrames];
             }
             break;
         }
@@ -1537,6 +1540,7 @@ BOOL missingAlertShown;
     else if (returnValue == DELETE_ASSET) {
         if (editorScene->selectedNodeId < assetsInScenes.count) {
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:YES];
+            [self reloadFrames];
         }
     }
     else if (returnValue == ADD_TEXT_IMAGE_BACK) {
@@ -2041,6 +2045,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                            else{
                                                [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
                                                [self undoRedoButtonState:DEACTIVATE_BOTH];
+                                               [self reloadFrames];
                                            }
                                            [self updateAssetListInScenes];
                                            
@@ -2919,7 +2924,7 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma Switch to SceneSelection
 - (void) loadSceneSelectionView
 {
-    SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([Utility IsPadDevice]) ? @"SceneSelectionControllerNew" : @"SceneSelectionControllerNewPhone" bundle:nil];
+    SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([Utility IsPadDevice]) ? @"SceneSelectionControllerNew" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:NO];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate.window setRootViewController:sceneSelectionView];
     [self performSelectorOnMainThread:@selector(removeSGEngine) withObject:nil waitUntilDone:YES];
@@ -2980,12 +2985,17 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(alertView.tag == DELETE_BUTTON_OBJECT){
-        if(buttonIndex == 1)
+        if(buttonIndex == 1){
             [self removeAnimationFromCurrentFrame];
-        else if(buttonIndex == 2)
+            [self reloadFrames];
+        }
+        else if(buttonIndex == 2){
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+            [self reloadFrames];
+        }
     } else if(alertView.tag == DELETE_BUTTON_OBJECT_ANIMATION){
         [self removeAnimationFromCurrentFrame];
+        [self reloadFrames];
     } else if (alertView.tag == ADD_BUTTON_TAG) {
         NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
         
@@ -3206,6 +3216,17 @@ void downloadFile(NSString* url, NSString* fileName)
             default:
                 break;
         }
+    }
+    
+    if((editorScene && editorScene->isRigMode) && (((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS)) || (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_PREVIEW))){
+        [_moveBtnAutorig setEnabled:YES];
+        [_rotateBtnAutorig setEnabled:YES];
+        [_scaleBtnAutorig setEnabled:YES];
+    }
+    else{
+        [_moveBtnAutorig setEnabled:NO];
+        [_rotateBtnAutorig setEnabled:NO];
+        [_scaleBtnAutorig setEnabled:(editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_EDIT_ENVELOPES) ? YES : NO ];
     }
 }
 

@@ -276,8 +276,8 @@
                             <rect key="frame" x="10" y="9" width="139" height="38"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
-                            <state key="normal" title="   ADD JOINT" image="Add-Bone-pad.png"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <state key="normal" title="  ADD JOINT" image="Add-Bone-pad.png"/>
                             <connections>
                                 <action selector="addJoinAction:" destination="-1" eventType="touchUpInside" id="nGb-sr-rS1"/>
                             </connections>
