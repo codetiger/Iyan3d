@@ -317,7 +317,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition)
         nodesVisibility.push_back(renderingScene->nodes[i]->props.isVisible);
         renderingScene->nodes[i]->props.transparency = 1.0;
         renderingScene->nodes[i]->props.isSelected = false;
-        renderingScene->nodes[i]->props.isVisible = true;
+        renderingScene->nodes[i]->props.isVisible = renderingScene->nodes[i]->isTempNode ? false : true;
         renderingScene->nodes[i]->props.vertexColor = Vector3((i/255.0),1.0,1.0);
         if(renderingScene->nodes[i]->getType() == NODE_RIG)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
