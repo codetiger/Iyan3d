@@ -30,7 +30,7 @@
                             <rect key="frame" x="141" y="52" width="228" height="31"/>
                             <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                             <connections>
-                                <action selector="refractionValueChanged:" destination="-1" eventType="touchUpInside" id="cTC-aS-oPX"/>
+                                <action selector="refractionValueChanged:" destination="-1" eventType="valueChanged" id="7Kf-GP-oFi"/>
                             </connections>
                         </slider>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GLASSY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ggf-Le-lmH">

@@ -54,6 +54,9 @@
 #define DONE 1
 #define START 0
 
+#define SIGNIN_ALERT_VIEW 4
+#define CREDITS_VIEW 5
+
 
 
 @implementation RenderingViewController
@@ -279,6 +282,7 @@
             else{
                 UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [signinAlert show];
+                [signinAlert setTag:SIGNIN_ALERT_VIEW];
                 [self.trimControl setHidden:NO];
             }
         }
@@ -333,8 +337,9 @@
             [self renderBeginFunction:credits];
     }
     else{
-        UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [userNameAlert show];
+        UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [notEnoughCredit show];
+        [notEnoughCredit setTag:CREDITS_VIEW];
         [self.trimControl setHidden:NO];
         [_nextButton setHidden:NO];
     }
@@ -778,6 +783,24 @@
     }
 }
 
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case SIGNIN_ALERT_VIEW:
+            if(buttonIndex == CANCEL_BUTTON_INDEX){
+                [self dismissViewControllerAnimated:NO completion:^{
+                    [_delegate loginBtnAction:nil];
+                    [self deallocMem];
+                }];
+            }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     self.youtubeService = [[GTLServiceYouTube alloc] init];
@@ -881,7 +904,6 @@
 
 - (void)uploadYouTubeVideo:(YouTubeUploadVideo *)uploadVideo
       didFinishWithResults:(GTLYouTubeVideo *)video {
-    
     
     NSString *postString = [NSString stringWithFormat:@"id=%@",video.identifier];
     NSData *postData = [postString dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];

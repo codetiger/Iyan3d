@@ -49,7 +49,7 @@
 - (void) createTablesForPrice;
 - (void) createAnimationTables;
 - (int) getNextAutoRigAssetId;
-- (void) checkAndCreateGroupColumnInAssetsTable;
+- (BOOL) checkAndCreateGroupColumnInAssetsTable;
 - (void) createRenderTaskTables;
 - (NSMutableArray *) getRenderTask;
 - (RenderItem *)getRenderTaskByTaskId:(int) taskId;

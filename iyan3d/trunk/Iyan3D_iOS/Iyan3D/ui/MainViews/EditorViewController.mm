@@ -1128,7 +1128,7 @@ BOOL missingAlertShown;
         {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(230.0, 320.0);
+            self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             _loggedInVc.delegare=self;
@@ -1139,8 +1139,7 @@ BOOL missingAlertShown;
                                                     inView:self.view
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:YES];
-        }
-        
+        }        
     }
     else
     {
@@ -1165,7 +1164,7 @@ BOOL missingAlertShown;
         {
             loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
-            self.popoverController.popoverContentSize = CGSizeMake(228.00, 274.0);
+            self.popoverController.popoverContentSize = CGSizeMake(228.00, 208.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             [loginVc.view setClipsToBounds:YES];
@@ -3001,7 +3000,6 @@ void downloadFile(NSString* url, NSString* fileName)
     else { //slider action
         editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, false);
     }
-    
 }
 
 - (void) switchMirror

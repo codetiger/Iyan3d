@@ -26,14 +26,6 @@
                         <action selector="twitterSigninAction:" destination="-1" eventType="touchUpInside" id="Svw-qH-cVN"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XC8-5H-C4c">
-                    <rect key="frame" x="41" y="43" width="221" height="41"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="Facebook_Pad.png"/>
-                    <connections>
-                        <action selector="fbSigninAction:" destination="-1" eventType="touchUpInside" id="Tu6-2O-pbP"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8UU-lq-KgC">
                     <rect key="frame" x="41" y="157" width="221" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -56,6 +48,14 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XC8-5H-C4c">
+                    <rect key="frame" x="41" y="43" width="221" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="Facebook_Pad.png"/>
+                    <connections>
+                        <action selector="fbSigninAction:" destination="-1" eventType="touchUpInside" id="Tu6-2O-pbP"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

@@ -35,6 +35,7 @@
 - (void) resumeRenderingAnimationScene;
 - (void) saveScene;
 - (void) changeRenderingBgColor:(Vector4)vertexColor;
+- (IBAction)loginBtnAction:(id)sender;
 @end
 
 @class GADBannerView;

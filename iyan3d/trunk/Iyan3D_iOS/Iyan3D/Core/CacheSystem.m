@@ -107,15 +107,15 @@ static const NSString* RENDER_TASK_STATUS = @"task_status";
 static const NSString* RENDER_TASK_FRAMES = @"task_frames";
 static const NSString* RENDER_TASK_DATE = @"task_date";
 
--(void) checkAndCreateGroupColumnInAssetsTable
+-(BOOL) checkAndCreateGroupColumnInAssetsTable
 {
-    BOOL columnExists = NO;
+    BOOL columnAdded = NO;
     
     sqlite3_stmt *statement;
     
     NSString *querySQL = [NSString stringWithFormat:@"SELECT %@ FROM %@", ASSET_GROUP, TABLE_ASSET_INFO];
     if(sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-        columnExists = YES;
+        columnAdded = YES;
         NSLog(@" \n GROUP column exits");
     } else {
         NSString *updateSQL = [NSString stringWithFormat: @"ALTER TABLE %@ ADD COLUMN %@ INTEGER", TABLE_ASSET_INFO, ASSET_GROUP];
@@ -124,14 +124,16 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
         
         if(sqlite3_step(statement)==SQLITE_DONE)
         {
-            
+            columnAdded = YES;
         }
         else
         {
             NSLog(@"\n Failed inserting column ");
+            columnAdded = NO;
         }
         sqlite3_finalize(statement);
     }
+    return columnAdded;
 }
 
 -(void) createRenderTaskTables{
@@ -597,7 +599,9 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
         NSMutableArray *array = [[NSMutableArray alloc] init];
         NSString *querySQL = @"";
         
-        if(type > 2) {
+        if(type == 5 || type == 6){/*Type 5 For Minecraft Category 6 for FNAF Category */
+            querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_GROUP, (type == 5) ? 1 : 2];
+        } else if(type > 2) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_TYPE, type];
         } else if(type == -1) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@, %@ WHERE %@.%@ <= 6 AND %@.%@ != 4 AND %@.%@ = %@.%@", TABLE_ASSET_INFO, TABLE_DOWNLOADED_ASSET_INFO, TABLE_ASSET_INFO, ASSET_TYPE,TABLE_ASSET_INFO, ASSET_TYPE, TABLE_ASSET_INFO, ASSET_ID, TABLE_DOWNLOADED_ASSET_INFO, DOWNLOADED_ASSET_ID];

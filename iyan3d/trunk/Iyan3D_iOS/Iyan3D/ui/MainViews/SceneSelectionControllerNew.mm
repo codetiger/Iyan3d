@@ -25,6 +25,7 @@
 #define FRAME_COUNT 0
 #define FRAME_DURATION 1
 
+#define RESTORE_PURCHASH_ALERT 2
 
 @implementation SceneSelectionControllerNew
 
@@ -56,8 +57,9 @@
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && isFirstTime) {
         UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You have already upgraded to Premium. Please 'Signin' and use 'Restore Purchase' in 'Settings' menu to verify your purchase." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [infoAlert setTag:RESTORE_PURCHASH_ALERT];
         [infoAlert show];
-    }    
+    }
     
     /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -372,7 +374,7 @@
         {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(230.0, 320.0);
+            self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             _loggedInVc.delegare=self;
@@ -409,7 +411,7 @@
         {
             loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
-            self.popoverController.popoverContentSize = CGSizeMake(228.00, 274.0);
+            self.popoverController.popoverContentSize = CGSizeMake(228.00, 208.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             [loginVc.view setClipsToBounds:YES];
@@ -540,8 +542,15 @@
                 }
             }
         }
+        [alertView resignFirstResponder];
     }
-    [alertView resignFirstResponder];
+    else if (alertView.tag == RESTORE_PURCHASH_ALERT){
+        if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
+            [self infoBtnDelegateAction:SETTINGS];
+        }
+        else
+            [self loginBtnAction:nil];
+    }
 }
 
 #pragma Settings Delegates
@@ -582,7 +591,6 @@
     [self.popoverController dismissPopoverAnimated:YES];
 
 }
-
 
 #pragma Dealloc Delegate
 

@@ -207,9 +207,9 @@
     [cache createTablesForPrice];
     [cache createRenderTaskTables];
     [cache createAnimationTables];
-    [cache checkAndCreateGroupColumnInAssetsTable];
+    BOOL update = [cache checkAndCreateGroupColumnInAssetsTable];
     [self performSelectorInBackground:@selector(progressTimerSelector) withObject:nil];
-    [self performSelectorInBackground:@selector(performBackgroundTasks) withObject:nil];
+    [self performSelectorInBackground:@selector(performBackgroundTasks:) withObject:[NSNumber numberWithBool:update]];
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
     [[AppHelper getAppHelper] setIdentifierForVendor];
 
@@ -235,10 +235,10 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) performBackgroundTasks
+- (void) performBackgroundTasks:(NSNumber*) object
 {
     
-    [[AppHelper getAppHelper] downloadJsonData];
+    [[AppHelper getAppHelper] downloadJsonData:[object boolValue]];
     
     maxProgress = JSON_DATA_DOWNLOADED;
     maxProgress = JSON_DECRYPTED;
@@ -254,9 +254,8 @@
         [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
     }
     
-    //TODO :
-    
-//     [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
+    //TODO :    
+    // [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"])
        [[AppHelper getAppHelper] initializeFontListArray];

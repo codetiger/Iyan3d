@@ -21,10 +21,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qsI-FI-Xp0" userLabel="renderStatus">
-                    <rect key="frame" x="0.0" y="150" width="305" height="345"/>
+                    <rect key="frame" x="0.0" y="150" width="305" height="318"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yzw-Fb-Um1">
-                            <rect key="frame" x="0.0" y="0.0" width="305" height="45"/>
+                            <rect key="frame" x="0.0" y="0.0" width="305" height="37"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Render Progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nML-Fd-Itc">
                                     <rect key="frame" x="88" y="11" width="129" height="21"/>

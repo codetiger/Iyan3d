@@ -50,7 +50,7 @@
 -(void) removeTransactionObserver;
 -(void) initHelper;
 -(void) missingAlertView;
--(void) downloadJsonData;
+-(void) downloadJsonData:(BOOL) forceUpdate;
 -(BOOL) checkInternetConnected;
 -(NSLocale*) getPriceLocale;
 -(NSMutableArray*) getRestoreIds;

@@ -46,12 +46,12 @@
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 
-- (void)downloadJsonData
+- (void)downloadJsonData:(BOOL) forceUpdate
 {
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdate"]) {
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:[[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdate"]];
         int hours = timeInterval / 3600;
-        if (hours > 5) {
+        if (hours > 5 || forceUpdate) {
             if ([self checkInternetConnected]) {
                 
                 [self initHelper];

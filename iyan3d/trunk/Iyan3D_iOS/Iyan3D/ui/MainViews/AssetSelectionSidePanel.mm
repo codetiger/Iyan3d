@@ -20,6 +20,8 @@
 #define OBJFile 6
 #define IMPORT_MODELS 0
 #define IMPORT_PARTICLE 13
+#define MINECRAFT 5
+#define FNAF 6
 
 
 @implementation AssetSelectionSidePanel
@@ -157,15 +159,10 @@
 
 - (IBAction)categoryBtnFuction:(id)sender
 {
-    
-    
     UIAlertController * view=   [UIAlertController
                                  alertControllerWithTitle:@"Category"
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    
-    
     UIAlertAction* allmodels = [UIAlertAction
                                 actionWithTitle:@"All Models"
                                 style:UIAlertActionStyleDefault
@@ -230,6 +227,38 @@
                                       [self.assetSelectionDelegate removeTempNodeFromScene];
                                       [_addToSceneBtn setEnabled:NO];
                                   }];
+    UIAlertAction* minecraft = [UIAlertAction
+                                  actionWithTitle:@"Minecraft"
+                                  style:UIAlertActionStyleDefault
+                                  handler:^(UIAlertAction * action)
+                                  {
+                                      if(modelCategoryTab == MINECRAFT)
+                                          return;
+                                      [_modelCategory setTitle: @"Minecraft" forState:UIControlStateNormal];
+                                      assetArray = [cache GetAssetList:MINECRAFT Search:@""];
+                                      [_assetsCollectionView reloadData];
+                                      modelCategoryTab = MINECRAFT;
+                                      selectedAsset = -1;
+                                      [view dismissViewControllerAnimated:YES completion:nil];
+                                      [self.assetSelectionDelegate removeTempNodeFromScene];
+                                      [_addToSceneBtn setEnabled:NO];
+                                  }];
+    UIAlertAction* fnaf = [UIAlertAction
+                                  actionWithTitle:@"FNAF"
+                                  style:UIAlertActionStyleDefault
+                                  handler:^(UIAlertAction * action)
+                                  {
+                                      if(modelCategoryTab == FNAF)
+                                          return;
+                                      [_modelCategory setTitle: @"FNAF" forState:UIControlStateNormal];
+                                      assetArray = [cache GetAssetList:FNAF Search:@""];
+                                      [_assetsCollectionView reloadData];
+                                      modelCategoryTab = FNAF;
+                                      selectedAsset = -1;
+                                      [view dismissViewControllerAnimated:YES completion:nil];
+                                      [self.assetSelectionDelegate removeTempNodeFromScene];
+                                      [_addToSceneBtn setEnabled:NO];
+                                  }];
     UIAlertAction* mylibrary = [UIAlertAction
                                   actionWithTitle:@"My Library"
                                   style:UIAlertActionStyleDefault
@@ -259,6 +288,12 @@
         case ACCESSORIES:
             [accessories setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
+        case MINECRAFT:
+            [minecraft setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
+            break;
+        case FNAF:
+            [fnaf setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
+            break;
         case ASSET_LIBRARY:
             [mylibrary setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
@@ -267,13 +302,15 @@
     [view addAction:character];
     [view addAction:backgrounds];
     [view addAction:accessories];
+    [view addAction:minecraft];
+    [view addAction:fnaf];
     [view addAction:mylibrary];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceView = _modelCategory;
     popover.permittedArrowDirections = UIPopoverArrowDirectionUp;
     popover.sourceRect = _modelCategory.bounds;
     [self presentViewController:view animated:YES completion:nil];
-   }
+}
 
 #pragma mark - ActionSheet Delegate Functions
 
@@ -409,8 +446,6 @@
         NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", [returnId intValue]];
         NSLog(@" \n Particles mesh %@ ", url);
         [self addDownloadTaskWithFileName:meshFileName URL:url returnId:returnId andSelector:@selector(downloadParticleTexture:) priority:NSOperationQueuePriorityHigh];
-        
-
     }
     
     /*
@@ -513,7 +548,6 @@
     downloadTask.queuePriority = priority;
     [assetDownloadQueue addOperation:downloadTask];
 }
-
 
 - (void) cancelOperations:(NSOperationQueue*) queue
 {
