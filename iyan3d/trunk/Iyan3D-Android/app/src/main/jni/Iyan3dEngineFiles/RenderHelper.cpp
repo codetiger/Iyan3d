@@ -216,12 +216,49 @@ void RenderHelper::setControlsVisibility(bool isVisible)
     }
 }
 
+void RenderHelper::movePreviewToCorner()
+{
+    if(cameraPreviewMoveDist.x != 0.0 || cameraPreviewMoveDist.y != 0.0)
+        return;
+    
+    Vector2 leftTop = Vector2(0.0, renderingScene->topLimit);
+    Vector2 leftBottom = Vector2(0.0, SceneHelper::screenHeight);
+    Vector2 rightTop = Vector2 (SceneHelper::screenWidth - renderingScene->rightLimit, renderingScene->topLimit);
+    Vector2 rightBotton = Vector2(SceneHelper::screenWidth - renderingScene->rightLimit, SceneHelper::screenHeight);
+    
+    Vector2 origin = renderingScene->camPreviewOrigin;
+    Vector2 end = renderingScene->camPreviewEnd;
+    
+    Vector2 center = (origin+end)/2.0;
+    float distance1 = leftTop.getDistanceFrom(center);
+    float distance2 = leftBottom.getDistanceFrom(center);
+    float distance3 = rightTop.getDistanceFrom(center);
+    float distance4 = rightBotton.getDistanceFrom(center);
+    float minimumDistance = MIN(MIN(distance1, distance2) , MIN(distance3, distance4));
+    
+    if(distance1 == minimumDistance && distance1 > 0.0) {
+        renderingScene->camPreviewOrigin.x -= 10.0;
+        renderingScene->camPreviewOrigin.y -= 10.0;
+    } else if(distance2 == minimumDistance && distance2 > 0.0){
+        renderingScene->camPreviewOrigin.x -= 10.0;
+        renderingScene->camPreviewOrigin.y += 10.0;
+    } else if(distance3 == minimumDistance && distance3 > 0.0){
+        renderingScene->camPreviewOrigin.x += 10.0;
+        renderingScene->camPreviewOrigin.y -= 10.0;
+    } else if(distance4 == minimumDistance && distance4 > 0.0){
+        renderingScene->camPreviewOrigin.x += 10.0;
+        renderingScene->camPreviewOrigin.y += 10.0;
+    }
+    
+}
+
 void RenderHelper::postRTTDrawCall()
 {
     if(!renderingScene || !smgr)
         return;
     
     if(renderingScene->previewTexture && (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)) {
+        movePreviewToCorner();
         Vector4 previewLayout = renderingScene->getCameraPreviewLayout();
         smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x,previewLayout.y),Vector2(previewLayout.z,previewLayout.w), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
     }
@@ -240,9 +277,9 @@ void RenderHelper::rttDrawCall()
 bool RenderHelper::isMovingCameraPreview(Vector2 curTouchPos)
 {
     Vector4 prevLay = renderingScene->getCameraPreviewLayout();
-    if(curTouchPos.x > prevLay.x && curTouchPos.x < prevLay.z && curTouchPos.y > prevLay.y && curTouchPos.y < prevLay.w)
+    if(curTouchPos.x > prevLay.x && curTouchPos.x < prevLay.z && curTouchPos.y > prevLay.y && curTouchPos.y < prevLay.w) {
         return true;
-    cameraPreviewMoveDist = Vector2(0.0, 0.0);
+    }
     return false;
 }
 

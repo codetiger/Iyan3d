@@ -51,8 +51,6 @@ class SGEditorScene {
 private:
     
     SceneManager *smgr;
-    Vector2 camPreviewOrigin;
-    Vector2 camPreviewEnd;
     Vector2 previousDistance;
     void setTransparencyForObjects();
     
@@ -74,6 +72,9 @@ public:
     float screenScale;
     float cameraFOV;
     float cameraRadius;
+    float camPreviewScale;
+    float topLimit;
+    float rightLimit;
 
     std::map<int,int> isKeySetForFrame;
     std::map<int,int>::iterator keyFramesIterator;
@@ -111,6 +112,9 @@ public:
     Vector2 nodeJointPickerPosition;
     Vector3 circleTouchPoint,cameraAngle;
     Vector3 cameraTarget;
+    Vector2 camPreviewOrigin;
+    Vector2 camPreviewEnd;
+
     std::map<int,Vector3>             ikJointsPositionMap;
     std::map<int,Vector3>::iterator   ikJointsPositoinMapItr;
     shared_ptr<CameraNode> viewCamera;

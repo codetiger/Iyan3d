@@ -20,6 +20,7 @@ private:
 public:
     int renderingType;
     bool isExportingImages,isExporting1stTime;
+    bool isMovingPreview;
     Vector2 cameraPreviewMoveDist;
     
     RenderHelper(SceneManager *smgr, void *scene);
@@ -37,6 +38,7 @@ public:
     void drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId);
     void renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark);
     
+    void movePreviewToCorner();
     void postRTTDrawCall();
     void rttDrawCall();
     void rttShadowMap();

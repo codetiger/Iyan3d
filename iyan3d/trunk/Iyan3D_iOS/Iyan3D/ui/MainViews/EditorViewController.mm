@@ -156,7 +156,15 @@ BOOL missingAlertShown;
         [renderViewMan setupRenderBuffer];
         [renderViewMan setupFrameBuffer:smgr];
     }
-
+    if(editorScene) {
+        if([Utility IsPadDevice]) {
+            editorScene->topLimit = 64.0 * editorScene->screenScale;
+            editorScene->rightLimit = self.leftView.frame.size.width * editorScene->screenScale;// 160.0;
+        } else {
+            editorScene->topLimit = 48.0 * editorScene->screenScale;
+            editorScene->rightLimit = self.leftView.frame.size.width * editorScene->screenScale;//110.0;
+        }
+    }
     missingAlertShown = false;
     [renderViewMan setUpPaths];
     [renderViewMan setUpCallBacks:editorScene];

@@ -352,9 +352,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 // TODO add missing
     
 //    isTapped = true;
+    CGPoint position;
+    position = [rec locationInView:self.renderView];
+
+    if(editorScene->renHelper->isMovingCameraPreview(Vector2(position.x, position.y) * screenScale)){
+        editorScene->camPreviewScale = (editorScene->camPreviewScale == 1.0) ? 2.0 : 1.0;
+        return;
+    }
     if (!_isPlaying && !_isPanned) {
-        CGPoint position;
-        position = [rec locationInView:self.renderView];
         _checkTapSelection = true;
         _tapPosition = Vector2(position.x, position.y) * screenScale;
         editorScene->isRTTCompleted = true;
@@ -390,7 +395,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->moveMan->touchBegan(p[0] * screenScale);
             switch (touchCount) {
                 case 1: {
-                    if(!editorScene->renHelper->isMovingCameraPreview(p[0] * screenScale)) {
+                    if(!editorScene->renHelper->isMovingPreview) {
                     _checkCtrlSelection = true;
                     _touchMovePosition.clear();
                     _touchMovePosition.push_back(p[0] * screenScale);
@@ -418,7 +423,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             switch (touchCount) {
                 case 1: {
                     editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
-                    if(!editorScene->renHelper->isMovingCameraPreview(p[0] * screenScale))
+                    if(!editorScene->renHelper->isMovingPreview)
                         editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
                     break;
                 }
