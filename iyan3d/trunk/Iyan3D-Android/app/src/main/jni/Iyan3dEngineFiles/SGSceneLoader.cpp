@@ -250,7 +250,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 #endif
     } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT)
         addLight(sgNode);
-    else if(sgNode->getType() == NODE_IMAGE && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
+    else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
         sgNode->props.isLighting = false;
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->updater->resetMaterialTypes(false);

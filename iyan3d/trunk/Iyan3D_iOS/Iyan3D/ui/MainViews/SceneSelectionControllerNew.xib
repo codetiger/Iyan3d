@@ -69,7 +69,7 @@
                     </subviews>
                     <color key="backgroundColor" red="0.53333333329999999" green="0.0" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" id="GtZ-Ek-nEF" userLabel="SceneSelection Collection View">
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" keyboardDismissMode="onDrag" dataMode="none" id="GtZ-Ek-nEF" userLabel="SceneSelection Collection View">
                     <rect key="frame" x="0.0" y="59" width="1024" height="709"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                     <inset key="contentInset" minX="10" minY="10" maxX="10" maxY="10"/>

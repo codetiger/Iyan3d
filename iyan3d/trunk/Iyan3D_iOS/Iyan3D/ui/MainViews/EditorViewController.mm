@@ -701,11 +701,7 @@ BOOL missingAlertShown;
 
 - (void) reloadSceneObjects{
     NSUInteger assetsCount = editorScene->nodes.size();
-    for (int i = 0; i < assetsCount; i++) {
-        NSString* assetName = [self stringWithwstring:editorScene->nodes[i]->name];
-    encoding:[NSString defaultCStringEncoding];
-        [assetsInScenes addObject:assetName];
-    }
+    [self updateAssetListInScenes];
     [self.objectList reloadData];
 }
 
@@ -807,17 +803,19 @@ BOOL missingAlertShown;
     cell.textLabel.text = [assetsInScenes objectAtIndex:indexPath.row];
     if(editorScene && editorScene->nodes.size() > indexPath.row){
         if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_CAMERA)
-            cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_LIGHT)
-            cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_ADDITIONAL_LIGHT)
-            cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_TEXT_SKIN)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
         else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_VIDEO)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad"];
         else
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
     }
@@ -1145,8 +1143,6 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:YES];
-        
-        
     }
 }
 
@@ -1560,9 +1556,8 @@ BOOL missingAlertShown;
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
     [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     [self HighlightFrame];
-    [self.framesCollectionView reloadData];
     [self updateAssetListInScenes];
-    
+    [self.framesCollectionView reloadData];
 }
 
 
@@ -2238,6 +2233,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
         else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN){
             [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
+        }
+        else if(editorScene->nodes[i]->getType() == NODE_VIDEO){
+            [assetsInScenes addObject:[NSString stringWithFormat:@"Video : %@",name]];
         }
         else{
             [assetsInScenes addObject:name];

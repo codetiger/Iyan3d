@@ -56,6 +56,7 @@
         NSString *textures = [resourcesDir stringByAppendingPathComponent:@"/Textures"];
         NSString *videos = [resourcesDir stringByAppendingPathComponent:@"/Videos"];
         NSString *anims = [resourcesDir stringByAppendingPathComponent:@"/Animations"];
+        NSString *fonts = [resourcesDir stringByAppendingPathComponent:@"/Fonts"];
 
         if (![fileManager fileExistsAtPath:projectFolderPath]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:projectDir withIntermediateDirectories:NO attributes:nil error:nil];
@@ -63,11 +64,10 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:rigs withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:objs withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
-
+            [[NSFileManager defaultManager] createDirectoryAtPath:fonts withIntermediateDirectories:NO attributes:nil error:nil];
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:databasePath]) {
                 isAppFirstTime = true;
-                
             }else{
                 NSFileManager *fm = [NSFileManager defaultManager];
                 NSString* resourceDirPath = [NSString stringWithFormat:@"%@/Resources",docsDir];

@@ -59,6 +59,7 @@
 - (IBAction)cancelBtnAction:(id)sender
 {
     [self.delegate showOrHideLeftView:NO withView:nil];
+    [self.delegate removeTempNodeFromScene];
     [self.view removeFromSuperview];
 }
 
@@ -93,6 +94,7 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self.delegate showOrHideLeftView:NO withView:nil];
+    [self.delegate removeTempNodeFromScene];
     [self.view removeFromSuperview];
 }
 

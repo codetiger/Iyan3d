@@ -204,8 +204,10 @@
                     cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
                 else if(nodeType == NODE_PARTICLES)
                     cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
+                else if(nodeType == NODE_VIDEO)
+                    cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone"];
                 else
-                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
 
 //
 //            

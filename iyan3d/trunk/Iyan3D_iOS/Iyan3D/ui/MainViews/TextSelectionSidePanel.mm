@@ -40,6 +40,7 @@
         tabValue = FONT_STORE;
         red = green = blue = alpha = 1;
         withRig = true;
+        isCanceled = false;
         
     }
     return self;
@@ -71,6 +72,7 @@
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField{
+    if(isCanceled) return NO;
     [self load3dText];
     [textField resignFirstResponder];
     return NO;
@@ -96,6 +98,7 @@
     for (NSString* aFile in fontFilesToCopy) {
         NSError* error;
         if (![[NSFileManager defaultManager] fileExistsAtPath:[destinationDir stringByAppendingPathComponent:aFile]]) {
+            NSLog(@"DESTINATION DIR %@ FILE %@ SOURCE DIR %@" , destinationDir,aFile, sourceDir);
             [[NSFileManager defaultManager] copyItemAtPath:[sourceDir stringByAppendingPathComponent:aFile] toPath:[destinationDir stringByAppendingPathComponent:aFile] error:&error];
         }
         if (error)
@@ -261,12 +264,24 @@
 }
 
 - (IBAction)inputTextChangedAction:(id)sender {
+    if(isCanceled) return NO;
     [self load3dText];
     [_inputText resignFirstResponder];
 }
 
 - (IBAction)bevalChangeAction:(id)sender {
     [self load3dText];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    // Prevent crashing undo bug – see note below.
+    if(range.length + range.location > textField.text.length)
+    {
+        return NO;
+    }
+    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 160;
 }
 
 - (IBAction)fontStoreTapChangeAction:(id)sender {
@@ -305,6 +320,8 @@
 }
 
 - (IBAction)cancelBtnAction:(id)sender {
+    isCanceled = true;
+    [_inputText resignFirstResponder];
     [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
@@ -312,6 +329,7 @@
 }
 
 - (IBAction)addToSceneBtnAction:(id)sender {
+    isCanceled = true;
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
     [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
@@ -362,6 +380,7 @@
     [downloadQueue cancelAllOperations];
     downloadQueue = nil;
     _textSelectionDelegate = nil;
+    _inputText.delegate = nil;
 }
 
 @end

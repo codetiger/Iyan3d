@@ -58,6 +58,7 @@
         [infoAlert show];
     }
     
+    
     /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   
@@ -237,6 +238,27 @@
     }
 }
 
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+}
+
 -(NSString*) deviceName
 {
     struct utsname systemInfo;
@@ -405,9 +427,11 @@
     
     SceneItem* originalScene = scenesArray[indexValue];
     
-    NSString* sceneCount = [NSString stringWithFormat:@"%lu", (unsigned long)[scenesArray count]];
     SceneItem* scene = [[SceneItem alloc] init];
-    scene.name = [NSString stringWithFormat:@"%s%@", "MyScene", sceneCount];
+    SceneItem *previousScene;
+    if([scenesArray count] != 0)
+        previousScene = scenesArray[[scenesArray count]-1];
+    scene.name = [NSString stringWithFormat:@"MyScene %d", previousScene.sceneId+1];
     scene.createdDate = [dateFormatter stringFromDate:[NSDate date]];
     
     if(![cache AddScene:scene]) {

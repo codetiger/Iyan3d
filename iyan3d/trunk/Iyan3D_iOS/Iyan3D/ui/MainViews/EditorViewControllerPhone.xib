@@ -12,6 +12,7 @@
                 <outlet property="autoRigMirrorSwitch" destination="sjM-8J-tg4" id="ETK-Jo-m0y"/>
                 <outlet property="autorigMirrorLable" destination="he0-im-Bzm" id="jDn-o2-Fgf"/>
                 <outlet property="backButton" destination="G8Y-1j-55x" id="zHQ-v5-7Qe"/>
+                <outlet property="center_progress" destination="Aex-sz-efG" id="Y81-tY-OEK"/>
                 <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
                 <outlet property="firstFrameBtn" destination="tmF-dh-ZfO" id="iV5-ye-qB3"/>
                 <outlet property="framesCollectionView" destination="Sij-qL-4rT" id="AQQ-Tb-blg"/>
@@ -151,6 +152,10 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="Aex-sz-efG" userLabel="center_progress">
+                            <rect key="frame" x="274" y="150" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
                 </view>

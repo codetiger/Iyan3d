@@ -49,6 +49,7 @@
     NSString *fontFileName;
     int bevelRadius;
     bool withRig;
+    bool isCanceled;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
