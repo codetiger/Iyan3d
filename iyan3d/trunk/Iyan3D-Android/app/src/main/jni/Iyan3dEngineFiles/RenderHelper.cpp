@@ -394,7 +394,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
     setControlsVisibility(false);
     renderingScene->rotationCircle->node->setVisible(false);
     SGNode *selectedSGNode = (renderingScene->isNodeSelected) ? renderingScene->nodes[renderingScene->selectedNodeId] : NULL;
-    if(!selectedSGNode || (selectedSGNode->getType() != NODE_RIG && selectedSGNode->getType() != NODE_TEXT))
+    if(!selectedSGNode || (selectedSGNode->getType() != NODE_RIG && selectedSGNode->getType() != NODE_TEXT_SKIN))
         setJointSpheresVisibility(false);
     
     smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
@@ -415,7 +415,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
         renderingScene->nodes[i]->props.vertexColor = Vector3((i/255.0),1.0,1.0);
         if(renderingScene->nodes[i]->getType() == NODE_RIG)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-        else if (renderingScene->nodes[i]->getType() == NODE_TEXT)
+        else if (renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
         else
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -423,7 +423,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
     }
     smgr->Render();
     // Draw Joints
-    if((selectedSGNode && renderingScene->selectedNodeIds.size() <= 0 && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT) && !touchMove) || renderingScene->isJointSelected)
+    if((selectedSGNode && renderingScene->selectedNodeIds.size() <= 0 && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT_SKIN) && !touchMove) || renderingScene->isJointSelected)
         drawJointsSpheresForRTT(true);
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
@@ -478,12 +478,12 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     visibilityFlag = (!isNodeSelected || renderingScene->selectedNodeIds.size() > 0) ?false:visibilityFlag;
     
     if (isNodeSelected && selectedNode)
-        visibilityFlag = (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT) ? visibilityFlag : false;
+        visibilityFlag = (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT_SKIN) ? visibilityFlag : false;
     
     if(renderingScene->jointSpheres.size())
         renderingScene->jointSpheres[0]->node->setVisible(false);
     for(int i=1;i<renderingScene->jointSpheres.size();i++){
-        if(isNodeSelected && selectedNode && (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT) && i < selectedNode->joints.size())
+        if(isNodeSelected && selectedNode && (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT_SKIN) && i < selectedNode->joints.size())
                 renderingScene->jointSpheres[i]->node->setVisible(visibilityFlag);
         else if (renderingScene->selectedNodeIds.size() > 0)
             renderingScene->jointSpheres[i]->node->setVisible(false);
@@ -731,7 +731,7 @@ void RenderHelper::rttShadowMap()
         } else {
             if(sgNode->getType() == NODE_RIG)
                 sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SHADOW_DEPTH_PASS_SKIN));
-            else if (sgNode->getType() == NODE_TEXT)
+            else if (sgNode->getType() == NODE_TEXT_SKIN)
                 sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SHADOW_DEPTH_PASS_TEXT));
             else
                 sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SHADOW_DEPTH_PASS));

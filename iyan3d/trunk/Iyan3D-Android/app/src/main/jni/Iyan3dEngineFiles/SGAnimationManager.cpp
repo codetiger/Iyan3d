@@ -50,7 +50,7 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
     }
     if(sgNode->getType() == NODE_RIG) {
         applySGRAnimations(filePath, sgNode, animScene->totalFrames, animScene->currentFrame, animTotalFrames);
-    } else if (sgNode->getType() == NODE_TEXT) {
+    } else if (sgNode->getType() == NODE_TEXT_SKIN) {
         applyTextAnimations(filePath, sgNode, animScene->totalFrames, animScene->currentFrame ,animScene->textJointsBasePos[nodeIndex], animTotalFrames);
     }
     animScene->updater->setDataForFrame(animScene->currentFrame);

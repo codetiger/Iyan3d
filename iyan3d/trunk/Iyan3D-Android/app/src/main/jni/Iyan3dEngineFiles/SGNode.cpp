@@ -65,7 +65,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node = loadImage(ConversionHelper::getStringForWString(objectName) + ".png", smgr , aspectRatio);
             break;
         }
-        case NODE_TEXT:{
+        case NODE_TEXT_SKIN:{
             // 'width' here is font size and 'height' is bevel value
             node = load3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
@@ -436,7 +436,7 @@ void SGNode::setPositionOnNode(Vector3 position)
     node->setPosition(position);
     node->updateAbsoluteTransformation();
     
-    if(type == NODE_RIG || type == NODE_TEXT) {
+    if(type == NODE_RIG || type == NODE_TEXT_SKIN) {
         shared_ptr<JointNode> rootJointNode = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(0);
         if(rootJointNode)
             rootJointNode->updateAbsoluteTransformationOfChildren();
@@ -447,7 +447,7 @@ void SGNode::setRotationOnNode(Quaternion rotation)
     node->setRotationInDegrees(MathHelper::getEulerRotation(rotation));
     node->updateAbsoluteTransformation();
     
-    if(type == NODE_RIG || type == NODE_TEXT)
+    if(type == NODE_RIG || type == NODE_TEXT_SKIN)
         (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(0)->updateAbsoluteTransformationOfChildren();
 }
 void SGNode::setScaleOnNode(Vector3 scale)
@@ -455,7 +455,7 @@ void SGNode::setScaleOnNode(Vector3 scale)
     node->setScale(scale);
     node->updateAbsoluteTransformation();
     
-    if(type == NODE_RIG || type == NODE_TEXT)
+    if(type == NODE_RIG || type == NODE_TEXT_SKIN)
         (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(0)->updateAbsoluteTransformationOfChildren();
 }
 void SGNode::setVisibilityOnNode(bool visibility)
@@ -511,7 +511,7 @@ void SGNode::setInitialKeyValues(int actionType)
             KeyHelper::addKey(scaleKeys, scaleKey);
             KeyHelper::addKey(visibilityKeys, visibilityKey);
             
-            int jointCount = (type == NODE_RIG || type == NODE_TEXT) ? (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointCount():0;
+            int jointCount = (type == NODE_RIG || type == NODE_TEXT_SKIN) ? (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointCount():0;
             
             for (int i = 0; i < jointCount; i++) {
                 SGJoint *joint = joints[i];
@@ -520,7 +520,7 @@ void SGNode::setInitialKeyValues(int actionType)
                     shared_ptr<JointNode> jointNode = (dynamic_pointer_cast<AnimatedMeshNode>(
                                                                                               node))->getJointNode(i);
                     SGPositionKey jointPositionKey;
-                    if (type == NODE_TEXT)
+                    if (type == NODE_TEXT_SKIN)
                         jointPositionKey.position = jointNode->getPosition();
                     else
                         jointPositionKey.position = Vector3(0.0f);
@@ -541,7 +541,7 @@ void SGNode::setInitialKeyValues(int actionType)
             }
         }
     }else if(actionType == OPEN_SAVED_FILE){
-        int jointCount = (type == NODE_RIG || type == NODE_TEXT) ? (int)(dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointCount():0;
+        int jointCount = (type == NODE_RIG || type == NODE_TEXT_SKIN) ? (int)(dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointCount():0;
         if(type == NODE_ADDITIONAL_LIGHT) {
             if(rotationKeys.size() > 0) {
                 rotationKeys[0].rotation.x = (rotationKeys[0].rotation.x < 0.0 || rotationKeys[0].rotation.x > 1.0) ? 1.0 : rotationKeys[0].rotation.x;
@@ -921,7 +921,7 @@ void SGNode::writeData(ofstream *filePointer)
     FileHelper::writeFloat(filePointer,props.shininess);
     
     std::wstring nodeSpecificString;
-    if(type == NODE_TEXT) {
+    if(type == NODE_TEXT_SKIN) {
         nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(props.fontSize) + L"$_@" + to_wstring(props.nodeSpecificFloat) + L"$_@";
     } else
         nodeSpecificString = name;
@@ -946,7 +946,7 @@ void SGNode::setShaderProperties(float brightness, float specular, bool isLighti
 }
 void SGNode::clearSGJoints()
 {
-    if(type != NODE_RIG && type != NODE_TEXT)
+    if(type != NODE_RIG && type != NODE_TEXT_SKIN)
         return;
     for(int i = 0;i < joints.size();i++){
         if(joints[i])

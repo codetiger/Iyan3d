@@ -157,7 +157,7 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
             if(selectedJoint)
                 selectedNode->MoveBone(selectedJoint->jointNode,target,actionScene->currentFrame);
         }
-    } else if(selectedNode->getType() == NODE_TEXT){
+    } else if(selectedNode->getType() == NODE_TEXT_SKIN){
         
         selectedJoint = selectedNode->joints[actionScene->selectedJointId];
         Vector3 jointLocalPos = selectedJoint->jointNode->getPosition();
@@ -508,7 +508,7 @@ void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
     for (int i = 0; i < (int)sgNode->joints.size(); i++) {
         //assetAction.jointsRotationKeys[i] = nodes[nodeIndex]->joints[i]->rotationKeys;
         assetAction.jointRotKeys[i] = sgNode->joints[i]->rotationKeys;
-        if(sgNode->getType() == NODE_TEXT){
+        if(sgNode->getType() == NODE_TEXT_SKIN){
             assetAction.jointPosKeys[i] = sgNode->joints[i]->positionKeys;
             assetAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
         }
@@ -517,11 +517,11 @@ void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
 
 void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
 {
-    if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT) || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0)) return;
+    if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT_SKIN) || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0)) return;
     
     if(actionScene->actionMan->scaleAction.actionType == ACTION_EMPTY){
         if(actionScene->selectedNodeIds.size() > 0) {
-        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
+        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) {
             scaleAction.actionType = ACTION_CHANGE_JOINT_KEYS;
             scaleAction.objectIndex =actionScene->nodes[actionScene->selectedNodeId]->actionId;
             for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
@@ -534,7 +534,7 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
     }
     if(isChanged){
         if(actionScene->selectedNodeIds.size() > 0) {
-        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
+        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) {
             for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
                 scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->joints[i]->getKeyForFrame(actionScene->currentFrame));
         } else {
@@ -548,7 +548,7 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
         printf(" Scale %f %f %f ", pScale.x, pScale.y, pScale.z);
         actionScene->getParentNode()->setScale(scale);
         actionScene->getParentNode()->updateAbsoluteTransformation();
-    } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT){
+    } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN){
         actionScene->nodes[actionScene->selectedNodeId]->joints[actionScene->selectedJointId]->setScale(scale, actionScene->currentFrame);
     } else {
         actionScene->nodes[actionScene->selectedNodeId]->setScale(scale, actionScene->currentFrame);

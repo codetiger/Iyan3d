@@ -63,7 +63,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
             SGJoint *joint = sgNode->joints[j];
             Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame,joint->rotationKeys,true);
             bool changed = joint->setRotationOnNode(rotation);
-            if(updatingScene->nodes[i]->getType() == NODE_TEXT) {
+            if(updatingScene->nodes[i]->getType() == NODE_TEXT_SKIN) {
                 Vector3 jointPosition = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, joint->positionKeys);
                 changed = joint->setPositionOnNode(jointPosition);
                 Vector3 jointScale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frame, joint->scaleKeys);
@@ -117,7 +117,7 @@ void SGSceneUpdater::setKeysForFrame(int frame)
                 joint->setRotationOnNode(joint->rotationKeys[rotKeyindex].rotation);
             }
             
-            if(sgNode->getType() == NODE_TEXT) {
+            if(sgNode->getType() == NODE_TEXT_SKIN) {
                 
                 posKeyindex = KeyHelper::getKeyIndex(joint->positionKeys, frame);
                 if(posKeyindex != -1){
@@ -204,7 +204,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
                 break;
         }
         
-        if(isJointSelected && selectedNode->getType() == NODE_TEXT) {
+        if(isJointSelected && selectedNode->getType() == NODE_TEXT_SKIN) {
             Vector3 rot = selectedNode->node->getRotationInRadians();
             Vector3 delta;
             switch(i%3) {
@@ -393,7 +393,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
                         break;
                     }
-                    case NODE_TEXT: {
+                    case NODE_TEXT_SKIN: {
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
                         break;
                     }
@@ -434,7 +434,7 @@ void SGSceneUpdater::reloadKeyFrameMap()
             for(unsigned long j = 0; j < selectedMesh->joints[i]->rotationKeys.size(); j++) {
                 updatingScene->isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->rotationKeys[j].id,selectedMesh->joints[i]->rotationKeys[j].id));
             }
-            if(selectedMesh->getType() == NODE_TEXT) {
+            if(selectedMesh->getType() == NODE_TEXT_SKIN) {
                 for(unsigned long j = 0; j < selectedMesh->joints[i]->positionKeys.size(); j++)
                     updatingScene->isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->positionKeys[j].id,selectedMesh->joints[i]->positionKeys[j].id));
                 for(unsigned long j = 0; j < selectedMesh->joints[i]->scaleKeys.size(); j++)

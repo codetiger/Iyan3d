@@ -382,7 +382,7 @@ BOOL missingAlertShown;
     for (int i = 0; i < assetsCount; i++) {
         NSString* assetName = [self stringWithwstring:editorScene->nodes[i]->name];
     encoding:[NSString defaultCStringEncoding];
-       // if (editorScene->nodes[i]->getType() == NODE_TEXT)
+       // if (editorScene->nodes[i]->getType() == NODE_TEXT_SKIN)
        //     assetName = [NSString stringWithFormat:@"TEXT: %@", assetName];
        // else if (editorScene->nodes[i]->getType() == NODE_IMAGE)
         //    assetName = [NSString stringWithFormat:@"IMAGE: %@", assetName];
@@ -1647,7 +1647,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
         
     }
-      else if(selectedNodeType == NODE_TEXT && selectedAssetId != NOT_EXISTS){
+      else if(selectedNodeType == NODE_TEXT_SKIN && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
@@ -1688,7 +1688,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
         [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
     }
-    else if(selectedNodeType == NODE_TEXT && selectedAssetId != NOT_EXISTS){
+    else if(selectedNodeType == NODE_TEXT_SKIN && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                     encoding:[NSString defaultCStringEncoding]];
@@ -1746,13 +1746,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 {
     if(indexValue==APPLY_ANIMATION){
         [self.popoverController dismissPopoverAnimated:YES];
-        if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT)) || editorScene->isJointSelected) {
+        if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN)) || editorScene->isJointSelected) {
             [self.view endEditing:YES];
             UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please select a text or character to apply the animation." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [closeAlert show];
         }
         else{
-            ANIMATION_TYPE animType = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT) ? TEXT_ANIMATION : RIG_ANIMATION;
+            ANIMATION_TYPE animType = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) ? TEXT_ANIMATION : RIG_ANIMATION;
             if([Utility IsPadDevice]){
                 animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:animType  EditorScene:editorScene FirstTime:YES];
                 animationsliderVC.delegate = self;
@@ -1767,7 +1767,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     else if(indexValue==SAVE_ANIMATION){
         [self.popoverController dismissPopoverAnimated:YES];
-        if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT)) || editorScene->isJointSelected) {
+        if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN)) || editorScene->isJointSelected) {
             [self.view endEditing:YES];
             UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please select a text or character to save the animation as a template." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [closeAlert show];
@@ -2118,7 +2118,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void)saveUserAnimation:(NSString*)assetName
 {
     int assetId = ANIMATIONS_ID + [cache getNextAnimationAssetId];
-    int type = editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT ? 1 : 0;
+    int type = editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN ? 1 : 0;
     
     bool status = editorScene->animMan->storeAnimations(assetId);
     
@@ -2206,7 +2206,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
                     return true;
             break;
         }
-        case NODE_TEXT: {
+        case NODE_TEXT_SKIN: {
             AssetItem* assetObj = [[CacheSystem cacheSystem] GetAssetByName:[NSString stringWithUTF8String:fileName.c_str()]];
             BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:assetObj.assetId];
             NSString* extension = [[NSString stringWithUTF8String:fileName.c_str()] pathExtension];

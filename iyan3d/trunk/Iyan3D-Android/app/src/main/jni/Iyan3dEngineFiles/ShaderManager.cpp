@@ -62,7 +62,7 @@ short ShaderManager::LoadShader(DEVICE_TYPE deviceType,string materialName,strin
 void ShaderManager::setUniforms(SGNode *sgNode,string matName){
     if(matName == "SHADER_SHADOW_1ST_PASS"){
         
-    }else if(matName.find("SHADER_VERTEX_COLOR_SHADOW_SKIN") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN_TOON") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN") !=  string::npos){
+    } else if(matName.find("SHADER_VERTEX_COLOR_SHADOW_SKIN") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN_TOON") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN") !=  string::npos) {
         setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, true);
         setJointTransform(sgNode, SHADER_PERVERTEXCOLOR_jointData, smgr);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
@@ -78,7 +78,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setJointTransform(sgNode,SHADER_COMMON_SKIN_jointData,smgr);
         setLightViewProjMatrix(sgNode,SHADER_PERVERTEXCOLOR_lightViewProjMatrix);
         setViewMatrix(sgNode,SHADER_PERVERTEXCOLOR_viewMatrix);
-    }else if(matName.find("SHADER_VERTEX_COLOR_SHADOW") !=  string::npos || matName.find("SHADER_VERTEX_COLOR") !=  string::npos){
+    } else if(matName.find("SHADER_VERTEX_COLOR_SHADOW") !=  string::npos || matName.find("SHADER_VERTEX_COLOR") !=  string::npos) {
         setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, true);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);

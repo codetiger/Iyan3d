@@ -61,7 +61,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         {
             status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType());
         }
-        else if (sgNode->getType() == NODE_TEXT) {
+        else if (sgNode->getType() == NODE_TEXT_SKIN) {
             status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType());
         } else if (sgNode->getType() == NODE_IMAGE) {
             status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType());
@@ -119,7 +119,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
         {
             status = currentScene->downloadMissingAssetsCallBack(to_string(sgNode->assetId),sgNode->getType(), env, type);
         }
-        else if (sgNode->getType() == NODE_TEXT) {
+        else if (sgNode->getType() == NODE_TEXT_SKIN) {
             
             status = currentScene->downloadMissingAssetsCallBack(sgNode->optionalFilePath,sgNode->getType(),env,type);
         } else if (sgNode->getType() == NODE_IMAGE) {
@@ -177,7 +177,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         return NULL;
     }
 
-    if(sgnode->getType() == NODE_TEXT)
+    if(sgnode->getType() == NODE_TEXT_SKIN)
         currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgnode);
     sgnode->assetId = assetId;
     sgnode->name = name;
@@ -195,7 +195,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         sgnode->props.isLighting = false;
     } else if (type == NODE_RIG) {
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(CHARACTER_RIG);
-    } else if (type == NODE_TEXT) {
+    } else if (type == NODE_TEXT_SKIN) {
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(TEXT_RIG);
     } else if (type == NODE_ADDITIONAL_LIGHT) {
         addLight(sgnode);
@@ -227,7 +227,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         return false;
     }
-    if(sgNode->getType() == NODE_TEXT)
+    if(sgNode->getType() == NODE_TEXT_SKIN)
         currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgNode);
 
     sgNode->setInitialKeyValues(actionType);
@@ -312,7 +312,7 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
                 //meshObject->joints[i]->rotationKeys = deleteAction.jointsRotationKeys[i];
                 meshObject->joints[i]->rotationKeys = deleteAction.jointRotKeys[i];
             }
-            if(meshObject->getType() == NODE_TEXT) {
+            if(meshObject->getType() == NODE_TEXT_SKIN) {
                 if(deleteAction.jointPosKeys.find(i) != deleteAction.jointPosKeys.end())
                     meshObject->joints[i]->positionKeys = deleteAction.jointPosKeys[i];
                 if(deleteAction.jointScaleKeys.find(i) != deleteAction.jointScaleKeys.end())
@@ -346,7 +346,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
         currentScene->updater->resetMaterialTypes(false);
     }
     
-    if(currentNode->getType() != NODE_TEXT && currentNode->getType() != NODE_ADDITIONAL_LIGHT)
+    if(currentNode->getType() != NODE_TEXT_SKIN && currentNode->getType() != NODE_ADDITIONAL_LIGHT)
         smgr->RemoveTexture(currentNode->node->getActiveTexture());
     
     smgr->RemoveNode(currentNode->node);

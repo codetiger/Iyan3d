@@ -84,7 +84,7 @@ void SGSelectionManager::postNodeJointSelection()
     if(selectionScene->isJointSelected && selectionScene->selectedJointId != NOT_SELECTED)
         highlightJointSpheres();
     
-    if(!selectionScene->isNodeSelected || (currentSelectedNode->getType() != NODE_RIG && currentSelectedNode->getType() != NODE_TEXT))
+    if(!selectionScene->isNodeSelected || (currentSelectedNode->getType() != NODE_RIG && currentSelectedNode->getType() != NODE_TEXT_SKIN))
         selectionScene->renHelper->setJointSpheresVisibility(false);
 }
 
@@ -183,7 +183,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchM
     if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && selectionScene->selectedNodeIds.size() <= 0) {
         if(!touchMove)
             highlightSelectedNode();
-        if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT){
+        if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN){
             if(touchMove)
                 selectionScene->moveJointId = (jointId != 255) ? jointId : NOT_EXISTS;
             else {
@@ -364,7 +364,7 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     //currentSelectedNode->props.isLighting = false;
     if(currentSelectedNode->getType() == NODE_RIG)
         currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-    else if (currentSelectedNode->getType() == NODE_TEXT)
+    else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
         currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
     else
         currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -376,7 +376,7 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     if(selectionScene->selectedNodeIds.size() <= 0) {
         if(currentSelectedNode->getType() == NODE_RIG)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
-        else if (currentSelectedNode->getType() == NODE_TEXT)
+        else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->props.fontSize/3.0);
     }
     if(!status)
@@ -430,7 +430,7 @@ void SGSelectionManager::selectObject(int objectId)
     
     if(selectionScene->selectedNode->getType() == NODE_RIG)
         selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-    else if (selectionScene->selectedNode->getType() == NODE_TEXT)
+    else if (selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
         selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
     else
         selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -440,19 +440,19 @@ void SGSelectionManager::selectObject(int objectId)
     bool status = true;
     if(selectionScene->selectedNode->getType() == NODE_RIG)
         status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node));
-    else if (selectionScene->selectedNode->getType() == NODE_TEXT)
+    else if (selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
         status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node), selectionScene->selectedNode->props.fontSize/3.0);
     if(!status)
         unselectObject(selectionScene->selectedNodeId);
     
-    if(selectionScene->selectedNode->getType() == NODE_RIG || selectionScene->selectedNode->getType() == NODE_TEXT){
+    if(selectionScene->selectedNode->getType() == NODE_RIG || selectionScene->selectedNode->getType() == NODE_TEXT_SKIN){
         if(selectionScene->selectedNodeId != NOT_SELECTED)
             highlightJointSpheres();
         
     }else if(selectionScene->selectedNode->getType() == NODE_CAMERA){
         selectionScene->selectedNode->props.perVertexColor = false;
     }
-    if(!selectionScene->isNodeSelected || (selectionScene->selectedNode->getType() != NODE_RIG && selectionScene->selectedNode->getType() != NODE_TEXT))
+    if(!selectionScene->isNodeSelected || (selectionScene->selectedNode->getType() != NODE_RIG && selectionScene->selectedNode->getType() != NODE_TEXT_SKIN))
         selectionScene->renHelper->setJointSpheresVisibility(false);
     
     selectionScene->updater->updateControlsOrientaion(selectionScene);

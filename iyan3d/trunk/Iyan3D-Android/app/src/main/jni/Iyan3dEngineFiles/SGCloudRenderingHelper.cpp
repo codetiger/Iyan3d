@@ -54,7 +54,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
 
         if(thisNode->props.isVisible) {
             Vector4 vertColor;
-            if(nodeType == NODE_TEXT)
+            if(nodeType == NODE_TEXT_SKIN)
                 Vector4 vertColor = dynamic_pointer_cast<AnimatedMeshNode>(thisNode->node)->getMesh()->getHeavyVertexByIndex(0)->optionalData4;
             
             Quaternion lightProp;
@@ -75,9 +75,9 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             FileHelper::writeFloat(&frameFilePtr, lightColor.y); //Emission Color g
             FileHelper::writeFloat(&frameFilePtr, lightColor.z); //Emission Color b
             FileHelper::writeFloat(&frameFilePtr, 0.5); //Emission Radius
-            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT) ? vertColor.x : 1.0); // Diffusion Color r
-            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT) ? vertColor.y : 1.0); // Diffusion Color g
-            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT) ? vertColor.z : 1.0); // Diffusion Color b
+            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT_SKIN) ? vertColor.x : 1.0); // Diffusion Color r
+            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT_SKIN) ? vertColor.y : 1.0); // Diffusion Color g
+            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT_SKIN) ? vertColor.z : 1.0); // Diffusion Color b
             FileHelper::writeBool(&frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) ? false : true); // Has Texture
             
             unsigned long lastSlashPos  = (scene->nodes[nodeId]->node->getActiveTexture()->textureName).find_last_of("\\/");
@@ -142,7 +142,7 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode
     
     //TODO Write according to new meshbuffer implementation
     
-    if (sgNode->getType() == NODE_TEXT || sgNode->getType() == NODE_RIG) {
+    if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_RIG) {
         unsigned int verticesCount = dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node)->getMesh()->getVerticesCount();
         sgNode->node->updateAbsoluteTransformation();
         sgNode->node->updateAbsoluteTransformationOfChildren();
