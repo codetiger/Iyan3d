@@ -72,7 +72,7 @@
     [super viewDidLoad];
     
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed) name:@"creditsupdate" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed) name:@"creditsupdate" object:nil];
 
     cancelPressed = NO;
     selectedIndex = 0;
@@ -237,50 +237,39 @@
             renderingFrame = _trimControl.leftValue;
             [self.trimControl setHidden:YES];
         }
-        
-        if(renderingExportImage == RENDER_GIF){
-            if (resolutionType == FULL_HD) {
-                if (renderingEndFrame <= FULL_HD_GIF_RANGE)
-                    [self renderBeginFunction];
-                else
-                {
-                    UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Creating a GIF at Full HD resolution supports only upto 100 frames." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [closeAlert show];
-                }
-            }else if (resolutionType == HD){
-                if (renderingEndFrame <= HD_GIF_RANGE)
-                    [self renderBeginFunction];
-                else
-                {
-                    UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Creating a GIF at HD resolution supports only upto 200 frames." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [closeAlert show];
-                }
-            }else if (resolutionType == DVD){
-                if (renderingEndFrame <= DVD_GIF_RANGE)
-                    [self renderBeginFunction];
-                else
-                {
-                    UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Creating a GIF at DVD resolution supports only upto 300 frames." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [closeAlert show];
-                }
-            }
-        }else{
-            [self renderBeginFunction];
             NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
             if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
-                
-            }
-            //if(resolutionType == FULL_HD) {
-            //    int frames = (int)_trimControl.rightValue - (int)_trimControl.leftValue;
-            //    int credits = (frames * 3) * -1;
-            // int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
-            //    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:@"FULLHD"];
-          //  }
+                int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 1;
+                int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
+                int credits = (frames * valueForRender) * -1;
+                int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
+                if(userCredits >= abs(credits)){
+                    [self renderBeginFunction:credits];
+                }
+                else{
+                    UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@%d%@",@"Please Recharge Your credits. you Need more ",abs(credits)-userCredits,@" credits. Thank You." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [userNameAlert show];
+                }
 
+            }
+            else{
+                UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this. Thank you.  !!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [userNameAlert show];
+            }
         }
-    }
 }
 
+- (void) saveDeductedCredits:(int)credits
+{
+    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
+    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
+}
+
+
+- (void) creditsUsed
+{
+    NSLog(@"Credits Updated");
+}
 
 
 -(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths
@@ -446,7 +435,7 @@
         [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:filesToDelete[i]] error:nil];
 }
 
-- (void) renderingProgress
+- (void) renderingProgress:(NSNumber*)credits
 {
     finalFrame=(int)_trimControl.rightValue - (int)_trimControl.leftValue;
     
@@ -490,19 +479,12 @@
         [self.rateButtonImage setEnabled:YES];
         [self.rateButtonText setEnabled:YES];
     }
-    if(renderingExportImage == RENDER_GIF) {
-        [self performSelectorOnMainThread:@selector(doMakeGifUIUpdate) withObject:nil waitUntilDone:YES];
-        [self makingGif];
-        [self.makeVideoLoading stopAnimating];
-        [self.makeVideoLoading setHidden:YES];
-        [self.youtubeButton setHidden:true];
-        [self.rateButtonImage setEnabled:YES];
-        [self.rateButtonText setEnabled:YES];
-    }
+    
     [self.exportButton setHidden:false];
     [self.exportButton setEnabled:true];
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
+    [self saveDeductedCredits:[credits intValue]];
 }
 - (IBAction)youtubeButtonAction:(id)sender
 {
@@ -779,7 +761,7 @@
     [[AppHelper getAppHelper] saveToUserDefaults:userEmail withKey:@"YouTube_Login"];
     [self alertView:logoutAlert clickedButtonAtIndex:UPLOAD_BUTTON_INDEX];
 }
-- (void) renderBeginFunction
+- (void) renderBeginFunction:(int)credits
 {
     [self beginViewHideAndShow:false];
     [self.resolutionSegment setEnabled:false];
@@ -799,7 +781,7 @@
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
     self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d/%d",(int)_trimControl.leftValue,(int)_trimControl.rightValue];
-    thread = [[NSThread alloc] initWithTarget:self selector:@selector(renderingProgress) object:nil];
+    thread = [[NSThread alloc] initWithTarget:self selector:@selector(renderingProgress:) object:[NSNumber numberWithInt:credits]];
     [thread start];
 }
 - (void) doRenderingOnMainThread

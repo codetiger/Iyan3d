@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @protocol MeshPropertiesDelegate
-- (void)meshPropertyChanged:(float)brightness Specular:(float)specular Lighting:(BOOL)light Visible:(BOOL)visible;
+- (void)meshPropertyChanged:(float)brightness Specular:(float)specular Lighting:(BOOL)light Visible:(BOOL)visible FaceNormal:(BOOL)isHaveFaceNormal;
 -(void) deleteDelegateAction;
 -(void)cloneDelegateAction;
 -(void)changeSkinDelgate;
@@ -19,6 +19,7 @@
     float specularValue;
     bool isLightningValue;
     bool isVisibleValue;
+    bool isFaceNormal;
     
 }
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil BrightnessValue:(float)brightness SpecularValue:(float)specular LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible;
@@ -33,6 +34,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *cloneBtn;
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 @property (weak, nonatomic) IBOutlet UIButton *skinBtn;
+@property (weak, nonatomic) IBOutlet UISwitch *faceNormalBtn;
+
 
 - (IBAction)brightnessValueChanged:(id)sender;
 - (IBAction)specularValueChanged:(id)sender;
@@ -43,6 +46,7 @@
 - (IBAction)cloneButtonAction:(id)sender;
 - (IBAction)deleteBtnAction:(id)sender;
 - (IBAction)skinBtnAction:(id)sender;
+- (IBAction)faceNormalAction:(id)sender;
 
 
 @end

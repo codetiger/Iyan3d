@@ -59,6 +59,10 @@
     self.addBtn.layer.cornerRadius = CORNER_RADIUS;
     [self.publishBtn setHidden:YES];
     [self.delegate createDuplicateAssetsForAnimation];
+    editorSceneLocal->currentFrame = currentFrame;
+    editorSceneLocal->totalFrames = totalFrame;
+    editorSceneLocal->updater->setDataForFrame(currentFrame);
+    editorSceneLocal->nodes[selectedNodeId]->node->setVisible(false);
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
 }
 

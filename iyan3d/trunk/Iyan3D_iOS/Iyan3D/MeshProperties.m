@@ -33,6 +33,7 @@
     [self.specularSlider setValue:specularValue];
     self.lightingSwitch.on=isLightningValue;
     self.visibleChanged.on=isVisibleValue;
+    isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -45,12 +46,12 @@
 
 - (IBAction)brightnessValueChanged:(id)sender {
     brightnessValue=self.brightnessSlider.value;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue];
+    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)specularValueChanged:(id)sender {
     specularValue=self.specularSlider.value;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue];
+    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)reflectionValueChanged:(id)sender {
@@ -61,12 +62,12 @@
 
 - (IBAction)lightingSwitchChanged:(id)sender {
     isLightningValue=self.lightingSwitch.on;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue];
+    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)visibleValueChanged:(id)sender {
     isVisibleValue=self.visibleChanged.on;
-    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue];
+    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 
 - (IBAction)cloneButtonAction:(id)sender {
@@ -79,5 +80,10 @@
 
 - (IBAction)skinBtnAction:(id)sender {
     [self.delegate changeSkinDelgate];
+}
+
+- (IBAction)faceNormalAction:(id)sender {
+    isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
+    [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
 @end
