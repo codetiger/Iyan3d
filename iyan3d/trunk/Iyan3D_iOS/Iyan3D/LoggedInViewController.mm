@@ -268,12 +268,15 @@
 
  - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
-    [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:error waitUntilDone:NO];
+    if(error != nil)
+        [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
+    else
+        [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:NO];
 }
 
  - (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
-    if(error)
+    if(error != nil)
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
     else
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:NO];
