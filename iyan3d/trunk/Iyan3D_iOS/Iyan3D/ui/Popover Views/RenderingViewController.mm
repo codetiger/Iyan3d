@@ -707,7 +707,7 @@
         NSLog(@" Selcted index: %d",(int)indexPath.row);
         tempSelectedIndex = (int)indexPath.row;
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [self.renderDesc setText:[NSString stringWithFormat:@"Render Toon Shader in your device!!!"]];
+        [self.renderDesc setText:[NSString stringWithFormat:@"Render Toon Shader in your device."]];
         selectedIndex = (int)indexPath.row;
         [self.renderingTypes reloadData];
     }
@@ -715,7 +715,7 @@
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [self.renderDesc setText:[NSString stringWithFormat:@"Render Normal Shader in your device!!!"]];
+        [self.renderDesc setText:[NSString stringWithFormat:@"Render Normal Shader in your device."]];
         selectedIndex = (int)indexPath.row;
         [self.renderingTypes reloadData];
     }
@@ -724,6 +724,7 @@
 //        NSLog(@" Selcted index: %d",(int)indexPath.row);
 //        [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
 //        [self showUpgradeView:(int)indexPath.row];
+        [self.renderDesc setText:[NSString stringWithFormat:@"Render with High Quality in cloud."]];
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];

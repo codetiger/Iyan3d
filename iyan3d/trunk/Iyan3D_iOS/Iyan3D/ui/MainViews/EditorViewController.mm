@@ -589,8 +589,8 @@ BOOL missingAlertShown;
     std::wstring saltedFileName = [self getwstring:[nsDict objectForKey:@"AssetName"]];
     int type = [[nsDict objectForKey:@"type"]intValue];
     int assetId = [[nsDict objectForKey:@"AssetId"]intValue];
-    int imgWidth = [[nsDict objectForKey:@"Width"]intValue];
-    int imgHeight = [[nsDict objectForKey:@"Height"]intValue];
+    float imgWidth = [[nsDict objectForKey:@"Width"]floatValue];
+    float imgHeight = [[nsDict objectForKey:@"Height"]floatValue];
     int isTempNode = [[nsDict objectForKey:@"isTempNode"]intValue];
     [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:saltedFileName TextureName:(@"") Width:imgWidth Height:imgHeight isTempNode:isTempNode More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!isTempNode) {
@@ -2298,7 +2298,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [imageDetails setObject:[NSNumber numberWithFloat:imgW] forKey:@"Width"];
         [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
+        assetAddType = IMPORT_ASSET_ACTION;
         [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];

@@ -37,6 +37,7 @@
 {
     cache = [CacheSystem cacheSystem];
     processTransaction = false;
+    isTestPurchase = false; //TODO to modify it to 'false'
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     restoreIdArr = [[NSMutableArray alloc] init];
 }
@@ -530,7 +531,7 @@
 - (void)restorePurchasedTransaction
 {
     if ([SKPaymentQueue canMakePayments]) {
-        [self statusForRestorePurchase:[NSNumber numberWithBool:NO]];
+        [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
         [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
     }
     else {
@@ -541,14 +542,20 @@
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue*)queue
 {
+    for (SKPaymentTransaction* transaction in queue.transactions) {
+        [restoreIdArr addObject:transaction.payment.productIdentifier];
+        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     for (int i = 0; i < [restoreIdArr count]; i++) {
         if ([[restoreIdArr objectAtIndex:i] isEqual:OBJ_IMPORT_IAP]) {
             [cache addOBJImporterColumn];
             [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
-            [self performSelectorInBackground:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:YES]];
+            [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:NO];
             break;
         }
     }
+    }
+    if([restoreIdArr count] == 0)
+        [self.delegate transactionCancelled];
     [self removeTransactionObserver];
 }
 
@@ -565,7 +572,7 @@
                                             cancelButtonTitle:@"OK"
                                             otherButtonTitles:nil];
     [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-    [self performSelectorInBackground:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO]];
+    [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
     [self.delegate transactionCancelled];
     [self performSelectorInBackground:@selector(transactionCancelled) withObject:nil];
 }
@@ -577,6 +584,7 @@
 
 - (void)paymentQueue:(SKPaymentQueue*)queue updatedTransactions:(NSArray*)transactions
 {
+    [restoreIdArr removeAllObjects];
     if (transactions.count > 1) {
         for (int i = 1; i < transactions.count; i++)
             [[SKPaymentQueue defaultQueue] finishTransaction:transactions[i]];
@@ -596,15 +604,15 @@
 
             if ([productId isEqualToString:FIVE_THOUSAND_CREDITS]) {
                 processTransaction = false;
-                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:500]];
+                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:5000]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             } else if ([productId isEqualToString:TWENTY_THOUSAND_CREDITS]) {
                 processTransaction = false;
-                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:2000]];
+                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:20000]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             } else if ([productId isEqualToString:FIFTY_THOUSAND_CREDITS]) {
                 processTransaction = false;
-                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:5000]];
+                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:50000]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             }
 
@@ -714,10 +722,11 @@
     NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
     
     NSString* receiptDataStr = (credits < 0) ? @"" : [receiptData base64EncodedStringWithOptions:0];
-    __block int balance = -1;
-    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/credits.php"];
-    NSString *postPath = @"https://www.iyan3dapp.com/appapi/credits.php";
+    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/credits%@.php",(isTestPurchase) ? @"sb" : @""];
+    NSURL *url = [NSURL URLWithString:phpPath];
+    NSString *postPath = phpPath;
     
+    NSLog(@" \n Num of Credits %d ", credits);
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSLog(@" \n unique id %@ Deduct credits %d ", uniqueId, credits);
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", usageType, @"usagetype", [NSString stringWithFormat:@"%d", credits], @"credits", receiptDataStr, @"receiptdata", nil]];
@@ -730,9 +739,6 @@
         int status = [[dict objectForKey:@"result"] intValue];
         NSLog(@" \n Dictonary %@ ", dict);
         if(status > 0) {
-            balance = [[dict objectForKey:@"balance"] intValue];
-            NSLog(@" \n Balance %d ", balance);
-            [self saveToUserDefaults:[NSNumber numberWithInt:balance] withKey:@"credits"];
         } else {
             NSString *message = [dict objectForKey:@"message"];
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
@@ -806,8 +812,10 @@
     
     NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
     
-    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/restore.php"];
-    NSString *postPath = @"https://www.iyan3dapp.com/appapi/restore.php";
+    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/restore%@.php",(isTestPurchase) ? @"sb" : @""];
+
+    NSURL *url = [NSURL URLWithString:phpPath];
+    NSString *postPath = phpPath;
 
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSString * uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
@@ -823,6 +831,9 @@
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         int status = [[dict objectForKey:@"result"] intValue];
         if(status > 0) {
+            NSString *message = [dict objectForKey:@"message"];
+            UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Success" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [userNameAlert show];
         } else {
             NSString *message = [dict objectForKey:@"message"];
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];

@@ -844,6 +844,7 @@ int SGActionManager::redo()
         }
         case ACTION_APPLY_ANIM: {
             actionScene->selectedNodeId = indexOfAction;
+            actionScene->currentFrame = recentAction.frameId;
             actionScene->updater->setDataForFrame(actionScene->currentFrame);
             actionScene->animMan->applyAnimations(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]), actionScene->selectedNodeId);
             actionScene->updater->reloadKeyFrameMap();

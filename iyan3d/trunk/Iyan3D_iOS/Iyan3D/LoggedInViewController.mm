@@ -57,16 +57,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsupdate" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsused" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestCredits) name:@"creditsused" object:nil];
     
-    
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
-        NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-        NSString* userName = [[AppHelper getAppHelper] userDefaultsForKey:@"username"];
-        NSString* email = [[AppHelper getAppHelper] userDefaultsForKey:@"email"];
-        int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
-        [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:userName Email:email SignInType:signinType];
-    }
+    [self requestCredits];
     NSNumber *credits = [[AppHelper getAppHelper] userDefaultsForKey:@"credits"];
     self.creditsLabel.text = [NSString stringWithFormat:@"%@", credits];
 
@@ -87,6 +80,17 @@
     self.creditsView.layer.masksToBounds = YES;
     
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void) requestCredits
+{
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
+        NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+        NSString* userName = [[AppHelper getAppHelper] userDefaultsForKey:@"username"];
+        NSString* email = [[AppHelper getAppHelper] userDefaultsForKey:@"email"];
+        int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
+        [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:userName Email:email SignInType:signinType];
+    }
 }
 
 - (void) getRenderTaskProgress:(int)taskId
@@ -367,6 +371,10 @@
 
 - (IBAction)add500Credits:(id)sender
 {
+    [self.creditsLoading setHidden:NO];
+    [self.creditsLoading startAnimating];
+    [self.creditsLoading setHidesWhenStopped:YES];
+
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
     [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_THOUSAND_CREDITS];
@@ -374,6 +382,10 @@
 
 - (IBAction)add2KCredits:(id)sender
 {
+    [self.creditsLoading setHidden:NO];
+    [self.creditsLoading startAnimating];
+    [self.creditsLoading setHidesWhenStopped:YES];
+
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
     [[AppHelper getAppHelper] callPaymentGateWayForProduct:TWENTY_THOUSAND_CREDITS];
@@ -381,6 +393,10 @@
 
 - (IBAction)add5KCredits:(id)sender
 {
+    [self.creditsLoading setHidden:NO];
+    [self.creditsLoading startAnimating];
+    [self.creditsLoading setHidesWhenStopped:YES];
+
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
     [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIFTY_THOUSAND_CREDITS];
@@ -390,12 +406,15 @@
 {
     if([status intValue] != 0) {
         NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-        [[AppHelper getAppHelper] useOrRechargeCredits:uniqueId credits:[status intValue] For:0];
+        [[AppHelper getAppHelper] useOrRechargeCredits:uniqueId credits:[status intValue] For:@"RECHARGE"];
     }
 }
 
 - (void)transactionCancelled
 {
+    [self.creditsLoading setHidden:YES];
+    [self.creditsLoading stopAnimating];
+
     [[AppHelper getAppHelper] removeTransactionObserver];
     [AppHelper getAppHelper].delegate = nil;
 }

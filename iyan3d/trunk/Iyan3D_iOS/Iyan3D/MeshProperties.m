@@ -90,12 +90,12 @@
 }
 
 - (IBAction)reflectionHqBtnAction:(id)sender {
-    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"PThis Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"This Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [closeAlert show];   
 }
 
 - (IBAction)refractionHqBtnAction:(id)sender {
-    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"PThis Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"This Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [closeAlert show];
 }
 
