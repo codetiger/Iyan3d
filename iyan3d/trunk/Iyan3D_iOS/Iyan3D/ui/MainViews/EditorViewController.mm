@@ -1752,6 +1752,7 @@ BOOL missingAlertShown;
     [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
     [self.rightView setHidden:showView];
+     
     
 }
 - (void) showOrHideRightView:(BOOL)showView{

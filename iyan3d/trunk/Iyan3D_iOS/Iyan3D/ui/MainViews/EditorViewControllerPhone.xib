@@ -105,11 +105,11 @@
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" id="L0B-6d-c1X" userLabel="leftView">
                     <rect key="frame" x="0.0" y="48" width="212" height="272"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                 </view>
                 <view contentMode="scaleToFill" id="85u-8e-wxJ" userLabel="rightView">
                     <rect key="frame" x="459" y="42" width="110" height="280"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="w8E-u6-axF">
                             <rect key="frame" x="0.0" y="118" width="107" height="25"/>
@@ -312,7 +312,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="037-BU-8q5">
                             <rect key="frame" x="417" y="19" width="20" height="27"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <state key="normal" image="Next-frame_IPhone.png"/>
                             <connections>
@@ -328,20 +328,11 @@
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="w5e-Hu-oAW">
                             <rect key="frame" x="437" y="19" width="20" height="27"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <state key="normal" image="Add-Frames_IPhone.png"/>
                             <connections>
                                 <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="DwN-7s-xcx"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tmF-dh-ZfO">
-                            <rect key="frame" x="82" y="19" width="20" height="27"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <state key="normal" image="Previous-frame_IPhone.png"/>
-                            <connections>
-                                <action selector="firstFrameBtnAction:" destination="-1" eventType="touchUpInside" id="5xP-I4-4aV"/>
                             </connections>
                         </button>
                         <collectionView clipsSubviews="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="Sij-qL-4rT">
@@ -362,11 +353,20 @@
                         </collectionView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="G8Y-1j-55x">
                             <rect key="frame" x="0.0" y="15" width="82" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" title=" Scenes" image="Back_IPhone.png"/>
                             <connections>
                                 <action selector="backToScenes:" destination="-1" eventType="touchUpInside" id="ehs-S9-CAT"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tmF-dh-ZfO">
+                            <rect key="frame" x="82" y="19" width="20" height="27"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal" image="Previous-frame_IPhone.png"/>
+                            <connections>
+                                <action selector="firstFrameBtnAction:" destination="-1" eventType="touchUpInside" id="5xP-I4-4aV"/>
                             </connections>
                         </button>
                     </subviews>
