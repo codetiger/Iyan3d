@@ -22,8 +22,8 @@
 #define SELECT_COLOR_B 0.0
 
 
-#include "RenderHelper.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/RenderHelper.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene * renderingScene;
 
@@ -395,7 +395,7 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
 bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue)
 {
     if(!renderingScene || !smgr)
-        return;
+        return false;
 
     bool status;
     removeJointSpheres();
@@ -420,7 +420,7 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
 bool RenderHelper::createJointSpheres(int additionalJoints)
 {
     if(!renderingScene || !smgr)
-        return;
+        return false;
 
     if(additionalJoints <= 0)
         return false;

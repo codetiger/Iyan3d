@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGEditorScene.h"
-#include "SGCloudRenderingHelper.h"
+#include "HeaderFiles/SGEditorScene.h"
+#include "HeaderFiles/SGCloudRenderingHelper.h"
 
 string constants::BundlePath = " ";
 string constants::CachesStoragePath = " ";

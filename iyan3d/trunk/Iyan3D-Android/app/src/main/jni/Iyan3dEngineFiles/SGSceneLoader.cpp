@@ -6,9 +6,9 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGSceneLoader.h"
-#include "SGEditorScene.h"
-#include "SGAnimationSceneHelper.h"
+#include "HeaderFiles/SGSceneLoader.h"
+#include "HeaderFiles/SGEditorScene.h"
+#include "HeaderFiles/SGAnimationSceneHelper.h"
 
 SGEditorScene *currentScene;
 
@@ -26,7 +26,7 @@ SGSceneLoader::~SGSceneLoader()
 bool SGSceneLoader::loadSceneData(std::string *filePath)
 {
     if(!currentScene || !smgr)
-        return;
+        return false;
 
     ifstream inputSGBFile(*filePath,ios::in | ios::binary );
     FileHelper::resetSeekPosition();
@@ -162,7 +162,7 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
 SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath)
 {
     if(!currentScene || !smgr)
-        return;
+        return NULL;
     
     currentScene->selectMan->unselectObject(currentScene->selectedNodeId);
     currentScene->freezeRendering = true;
@@ -214,7 +214,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
 bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
 {
     if(!currentScene || !smgr)
-        return;
+        return false;
 
     Vector4 nodeSpecificColor = Vector4(sgNode->props.vertexColor.x,sgNode->props.vertexColor.y,sgNode->props.vertexColor.z,1.0);
     sgNode->node = sgNode->loadNode(sgNode->assetId,sgNode->getType(),smgr,sgNode->name,sgNode->props.fontSize,sgNode->props.nodeSpecificFloat,nodeSpecificColor,sgNode->optionalFilePath);

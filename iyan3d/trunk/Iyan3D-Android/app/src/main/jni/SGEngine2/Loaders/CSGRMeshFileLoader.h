@@ -12,6 +12,10 @@
 #elif IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/gl.h>
+#elif UBUNTU
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#include <fstream>
 #endif
 
 class CSGRMeshFileLoader {

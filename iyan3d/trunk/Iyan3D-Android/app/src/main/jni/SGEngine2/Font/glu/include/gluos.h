@@ -2,6 +2,11 @@
 ** gluos.h - operating system dependencies for GLU
 **
 */
+
+#ifndef UBUNTU
+#include <cstring>
+#endif
+
 #ifdef __VMS
 #ifdef __cplusplus
 #pragma message disable nocordel

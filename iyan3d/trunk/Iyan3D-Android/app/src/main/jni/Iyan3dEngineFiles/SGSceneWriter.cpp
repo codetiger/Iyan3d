@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGSceneWriter.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGSceneWriter.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene *writingScene;
 

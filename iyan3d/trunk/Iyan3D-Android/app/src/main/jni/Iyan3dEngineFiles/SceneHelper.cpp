@@ -7,8 +7,8 @@
 //
 
 
-#include "SceneHelper.h"
-#include "ShaderParamOrder.h"
+#include "HeaderFiles/SceneHelper.h"
+#include "HeaderFiles/ShaderParamOrder.h"
 
 float SceneHelper::screenWidth = 0.0;
 float SceneHelper::screenHeight = 0.0;
@@ -79,12 +79,12 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         Mesh *ctrlMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/controls" + to_string(i+1) + ".sgm",smgr->device);
         if(ctrlMesh == NULL){
             Logger::log(ERROR,"SGScene", "SGRSpheres Mesh Not Loaded");
-            return;
+            return sceneControls;
         }
         shared_ptr<MeshNode> ctrlNode = smgr->createNodeFromMesh(ctrlMesh,"setCtrlUniforms");
         if(!ctrlNode){
             Logger::log(ERROR,"SGScene", "Unable to create sgrSpheres");
-            return;
+            return sceneControls;
         }
         sgNode->node = ctrlNode;
         sgNode->props.isLighting = false;

@@ -13,11 +13,16 @@
 #include "iostream"
 #include "../Meshes/Mesh.h"
 #include "APIData.h"
+
+#ifndef UBUNTU
 #include "OGLNodeData.h"
+#endif
+
 #include "../Textures/Texture.h"
 #include "InstanceNode.h"
 #include "../Material/Material.h"
 #include <sys/types.h>
+#include <memory>
 #ifdef IOS
 #include <sys/sysctl.h>
 #include <mach/machine.h>
@@ -63,7 +68,7 @@ enum DRAW_MODE{
 };
 
 class Node : public enable_shared_from_this<Node>{
-    
+
 private:
     shared_ptr< vector< shared_ptr<InstanceNode> > > instancedNodes;
     int id,textureCount;

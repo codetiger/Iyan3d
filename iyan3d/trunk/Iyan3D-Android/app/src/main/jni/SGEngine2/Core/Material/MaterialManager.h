@@ -11,11 +11,14 @@
 
 #include "../../RenderManager/MetalWrapperForMaterial.h"
 #include "../../Core/Textures/Texture.h"
-#include "../../Core/Textures/OGLTexture.h"
 #include "../../Core/Nodes/MeshNode.h"
 #include "../../Core/Nodes/Node.h"
 #include "../../Core/common/common.h"
 #include "Material.h"
+
+#ifndef UBUNTU
+#include "../../Core/Textures/OGLTexture.h"
+#endif
 
 class MaterialManager {
 public:

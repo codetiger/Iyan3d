@@ -9,7 +9,7 @@
 #ifndef __SGEngine2__Logger__
 #define __SGEngine2__Logger__
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 #ifdef ANDROID

@@ -15,6 +15,9 @@
 #include "Utilities/Maths.h"
 #elif IOS
 #include "Maths.h"
+#elif UBUNTU
+#include "Maths.h"
+#include <string.h>
 #endif
 
 class Mat4 {

@@ -1,5 +1,5 @@
 #include "HeaderFiles/SGNode.h"
-#include "ShaderManager.h"
+#include "HeaderFiles/ShaderManager.h"
 #include "Font2OBJ.h"
 
 #ifdef ANDROID

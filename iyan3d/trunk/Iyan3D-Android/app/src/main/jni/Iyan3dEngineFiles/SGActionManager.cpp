@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGActionManager.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGActionManager.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene* actionScene;
 
@@ -42,7 +42,7 @@ void SGActionManager::addAction(SGAction& action){
 void SGActionManager::finalizeAndAddAction(SGAction& action)
 {
     if(!actionScene || !smgr)
-        return false;
+        return;
     
     removeActions();
     if(action.actionType == ACTION_CHANGE_JOINT_KEYS|| action.actionType == ACTION_CHANGE_NODE_JOINT_KEYS|| action.actionType == ACTION_CHANGE_NODE_KEYS) {
@@ -57,7 +57,7 @@ void SGActionManager::finalizeAndAddAction(SGAction& action)
 void SGActionManager::removeActions()
 {
     if(!actionScene || !smgr)
-        return false;
+        return;
 
     if(currentAction < 0)
         currentAction = 0;
@@ -433,7 +433,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
 void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
 {
     if(!actionScene || !smgr)
-        return false;
+        return;
     
     SGNode *sgNode = actionScene->nodes[nodeIndex];
 

@@ -156,8 +156,10 @@ void SceneManager::RenderNode(int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTI
         return;
     
     if(clearDepthBuffer){
-        if(device == OPENGLES2)
-            glClear(GL_DEPTH_BUFFER_BIT);
+		#ifndef UBUNTU
+        	if(device == OPENGLES2)
+        		glClear(GL_DEPTH_BUFFER_BIT);
+		#endif
     }
     if(device == METAL) {
         renderMan->setUpDepthState(func,true,clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
@@ -174,10 +176,12 @@ void SceneManager::RenderNode(int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTI
     }
 }
 void SceneManager::setDepthTest(bool enable){
-    if(enable)
-        glEnable(GL_DEPTH_TEST);
-    else
-        glDisable(GL_DEPTH_TEST);
+	#ifndef UBUNTU
+    	if(enable)
+    		glEnable(GL_DEPTH_TEST);
+    	else
+    		glDisable(GL_DEPTH_TEST);
+	#endif
 }
 void SceneManager::setShaderState(int nodeIndex){
     if(nodes[nodeIndex]->type <= NODE_TYPE_CAMERA)
@@ -353,7 +357,9 @@ void SceneManager::writeImageToFile(Texture *texture, char* filePath, IMAGE_FLIP
     renderMan->writeImageToFile(texture, filePath , flipType);
 }
 void SceneManager::setFrameBufferObjects(uint32_t fb,uint32_t cb,uint32_t db){
-    ((OGLES2RenderManager*)renderMan)->setFrameBufferObjects(fb,cb,db);
+	#ifndef UBUNTU
+    	((OGLES2RenderManager*)renderMan)->setFrameBufferObjects(fb,cb,db);
+	#endif
 }
 shared_ptr<EmptyNode> SceneManager::addEmptyNode(){
     shared_ptr<EmptyNode> eNode = make_shared<EmptyNode>(); //shared_ptr<EmptyNode>(new EmptyNode());
@@ -361,10 +367,12 @@ shared_ptr<EmptyNode> SceneManager::addEmptyNode(){
     return eNode;
 }
 void SceneManager::updateVertexBuffer(int nodeIndex){
-    if(device == OPENGLES2)
-        dynamic_pointer_cast<OGLNodeData>(nodes[nodeIndex]->nodeData)->removeVertexBuffers();
-    for(int i = 0; i < dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->getMeshBufferCount(); i++)
-        renderMan->createVertexBuffer(nodes[nodeIndex],i);
+	#ifndef UBUNTU
+		if(device == OPENGLES2)
+			dynamic_pointer_cast<OGLNodeData>(nodes[nodeIndex]->nodeData)->removeVertexBuffers();
+		for(int i = 0; i < dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->getMeshBufferCount(); i++)
+			renderMan->createVertexBuffer(nodes[nodeIndex],i);
+	#endif
 }
 
 

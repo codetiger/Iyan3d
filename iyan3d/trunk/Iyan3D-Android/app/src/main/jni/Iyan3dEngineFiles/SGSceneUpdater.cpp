@@ -11,8 +11,8 @@
 #define CONTROLS_MARKED_DISTANCE_FROM_NODE 1.019
 
 
-#include "SGSceneUpdater.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGSceneUpdater.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene * updatingScene;
 

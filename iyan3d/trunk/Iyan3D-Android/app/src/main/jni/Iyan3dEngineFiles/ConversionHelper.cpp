@@ -6,7 +6,7 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "ConversionHelper.h"
+#include "HeaderFiles/ConversionHelper.h"
 
 wstring ConversionHelper::getWStringForString(string inputString)
 {

@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGMovementManager.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGMovementManager.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene *moveScene;
 

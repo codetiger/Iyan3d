@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGSelectionManager.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGSelectionManager.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene *selectionScene;
 SGSelectionManager::SGSelectionManager(SceneManager* sceneMngr, void* scene)
@@ -123,7 +123,7 @@ void SGSelectionManager::getNodeColorFromTouchTexture()
 bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel)
 {
     if(!selectionScene || !smgr)
-        return;
+        return false;
 
     float xCoord = (touchPixel.x/SceneHelper::screenWidth) * selectionScene->touchTexture->width;
     float yCoord = (touchPixel.y/SceneHelper::screenHeight) * selectionScene->touchTexture->height;
@@ -139,7 +139,7 @@ bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel)
 bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel)
 {
     if(!selectionScene || !smgr)
-        return;
+        return false;
 
     int prevSelectedNodeId = selectionScene->selectedNodeId;
     unselectObject(prevSelectedNodeId);
@@ -147,7 +147,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel)
     int nodeId = (int) pixel.x,jointId = pixel.y;
     if(nodeId != 255 && nodeId >= selectionScene->nodes.size()){
         Logger::log(ERROR, "SganimationSceneRTT","Wrong Color from RTT texture colorx:" + to_string(nodeId));
-        return;
+        return false;
     }
     
     selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;

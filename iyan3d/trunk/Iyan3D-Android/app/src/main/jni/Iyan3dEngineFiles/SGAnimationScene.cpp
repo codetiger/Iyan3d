@@ -581,7 +581,7 @@ bool SGAnimationScene::updateNodeSelectionFromColor(Vector3 pixel)
     int nodeId = (int) pixel.x,jointId = pixel.y;
     if(nodeId != 255 && nodeId >= nodes.size()){
         Logger::log(ERROR, "SganimationSceneRTT","Wrong Color from RTT texture colorx:" + to_string(nodeId));
-        return;
+        return false;
     }
     
     isNodeSelected = (selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
