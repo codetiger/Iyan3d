@@ -260,7 +260,10 @@ void SGSceneUpdater::updateLightCamera()
         return;
 
     if(updatingScene->nodes.size() > NODE_LIGHT) {
-        updatingScene->nodes[NODE_LIGHT]->faceUserCamera(updatingScene->viewCamera,updatingScene->currentFrame);
+        for(int i = 0; i < updatingScene->nodes.size(); i++) {
+            updatingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),updatingScene->currentFrame);
+        }
+        
         updateLightCam(updatingScene->nodes[NODE_LIGHT]->node->getAbsolutePosition());
     }
 }
@@ -399,6 +402,9 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     case NODE_TEXT_SKIN: {
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
                         break;
+                    }
+                    case NODE_PARTICLES: {
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
                     }
                         
                     default:

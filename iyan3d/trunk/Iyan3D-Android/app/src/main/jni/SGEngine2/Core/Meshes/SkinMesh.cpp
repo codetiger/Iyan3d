@@ -8,6 +8,7 @@
 
 #include "SkinMesh.h"
 SkinMesh::SkinMesh(){
+    versionId = NOT_EXISTS;
     joints = new vector<Joint*>();
     RootJoints = new vector<Joint*>();
     meshType = MESH_TYPE_HEAVY;

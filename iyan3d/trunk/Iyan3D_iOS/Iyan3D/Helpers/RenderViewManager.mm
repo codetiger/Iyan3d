@@ -25,6 +25,7 @@
 #define ASSET_TEXT_RIG 10
 #define ASSET_TEXT 11
 #define ASSET_VIDEO 12
+#define ASSET_PARTICLES 13
 #define ASSET_ADDITIONAL_LIGHT 900
 #define ADD_OBJECT 100
 #define DELETE_OBJECT 200
@@ -316,6 +317,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 NSLog(@"Max lights 5");
             }            
             break;
+        }
+        case ASSET_PARTICLES: {
+            editorScene->loader->loadNode(NODE_PARTICLES, assetId, "");
         }
         default: {
             break;

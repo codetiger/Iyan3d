@@ -106,6 +106,16 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             props.nodeSpecificFloat = (height == 0) ? 50.0 : height;
             break;
         }
+        case NODE_PARTICLES:{
+            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/60004.sgm",smgr->device);
+            node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
+            node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
+            Texture *nodeTex = smgr->loadTexture("Particle Texture",constants::BundlePath + "/particleTexture.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+            node->setTexture(nodeTex, 1);
+            node->setID(555444);
+            props.transparency = 0.7;
+            break;
+        }
         default:
             Logger::log(ERROR, "SGNode::loadNode ", "Unknown node type to load");
             break;
@@ -1064,13 +1074,24 @@ void SGNode::createSGJoints()
         joints.push_back(joint);
     }
 }
-void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera,int currentFrame){
+void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame) {
+    if(type != NODE_PARTICLES && type != NODE_LIGHT)
+        return;
     Vector3 lightPos = node->getAbsolutePosition();
     Vector3 camPos = viewCamera->getPosition();
     Vector3 rotDir = (camPos - lightPos).normalize();
-    Quaternion rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,0.0,1.0));
-    setRotation(rotQ, currentFrame);
+    Quaternion rotQ;
+    if(type == NODE_PARTICLES)
+        rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,1.0,0.0));
+    else
+        rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,0.0,1.0));
+
+    if(type != NODE_PARTICLES)
+        setRotation(rotQ, currentFrame);
     Vector3 rotEuler;rotQ.toEuler(rotEuler);
-    node->setRotationInDegrees(rotEuler * RADTODEG);
-    //viewCamera.reset();
+
+    if(type == NODE_PARTICLES)
+        dynamic_pointer_cast<ParticleManager>(node)->setParticleRotation(rotEuler);
+    else
+        node->setRotationInDegrees(rotEuler * RADTODEG);
 }

@@ -113,7 +113,7 @@ public:
     std::map<int,Texture*> renderingTextureMap;
     OBJMeshFileLoader *objLoader;
     Texture *bgTexture,*watermarkTexture,*whiteBorderTexture,*touchTexture;
-    Texture *previewTexture ,*thumbnailTexture,*shadowTexture;
+    Texture *previewTexture ,*thumbnailTexture,*shadowTexture, *alphaTexture;
     Mesh *jointSphereMesh;
     Plane3D *controlsPlane;
     Vector2 nodeJointPickerPosition;
@@ -168,6 +168,7 @@ public:
     
     void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo);
     void removeTempTextureAndVertex(int selectedNode);
+    bool canEditRigBones(SGNode *sgNode);
     bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();
     bool allNodesRemovable();

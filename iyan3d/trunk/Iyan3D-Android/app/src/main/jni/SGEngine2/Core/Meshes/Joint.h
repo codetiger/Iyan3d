@@ -29,6 +29,8 @@ public:
     Joint();
     ~Joint();
     
+    double envelopeRadius;
+    double sphereRadius;
     unsigned short Index;
     Mat4 LocalAnimatedMatrix; //  filed from jointnode local transformation and ,esh file loader
     Mat4 GlobalAnimatedMatrix; // calculated from the local matrix

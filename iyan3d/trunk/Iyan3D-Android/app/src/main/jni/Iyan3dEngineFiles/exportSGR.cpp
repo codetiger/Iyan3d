@@ -89,7 +89,7 @@ bool exportSGR::createSGR(std::string filePath,shared_ptr<MeshNode> node, std::m
         return false;
 	Mesh *mesh = node->getMesh();
 	unsigned int vertexCount = mesh->getVerticesCount();
-    u16 versionIdentifier = 0; // 0 for HighPoly models
+    u16 versionIdentifier = 1; // 0 for HighPoly models, 1 For writing envelope radius
     FileHelper::writeShort(&filePointer, versionIdentifier);// write VertexCount
 	FileHelper::writeInt(&filePointer, vertexCount);// write VertexCount
 	for(int i = 0; i < vertexCount; i++){
@@ -136,7 +136,11 @@ bool exportSGR::createSGR(std::string filePath,shared_ptr<MeshNode> node, std::m
 			FileHelper::writeInt(&filePointer,vertexIndex);
 			FileHelper::writeShort(&filePointer,strength);
 		}
+        
+        FileHelper::writeFloat(&filePointer, (rigKeys[j].sphere->node) ? rigKeys[j].sphere->node->getScale().x : 0.2);
+        printf(" \n write Env radius %f Id %d ", rigKeys[j].envelopeRadius, j);
+        FileHelper::writeFloat(&filePointer, rigKeys[j].envelopeRadius);
 	}
-    //node.reset();
+        //node.reset();
 	return true;
 }

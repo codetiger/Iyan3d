@@ -13,6 +13,7 @@ SGEditorScene* rigScene;
 
 SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
 {
+    sMesh = NULL;
     this->smgr = smgr;
     rigScene = (SGEditorScene*)scene;
     sceneMode = RIG_MODE_OBJVIEW;
@@ -45,6 +46,40 @@ void SGAutoRigSceneManager::clearNodeSelections()
     scaleRatio = 0.0f;
 }
 
+SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
+{
+    rigNode->setType(NODE_SGM);
+    rigNode->isRigged = false;
+    Mesh *mesh = new Mesh();
+    shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
+    sMesh = (SkinMesh*)animNode->mesh;
+    for(int i = 0; i < animNode->mesh->getVerticesCount(); i++) {
+        vertexDataHeavy *vHData = animNode->mesh->getHeavyVertexByIndex(i);
+        vertexData vData;
+        vData.vertPosition = vHData->vertPosition;
+        vData.vertNormal = vHData->vertNormal;
+        vData.texCoord1 = vHData->texCoord1;
+        vData.optionalData1 = Vector4(1.0);
+        mesh->addVertex(&vData);
+    }
+    
+    for(int j = 0; j <  animNode->mesh->getTotalIndicesCount(); j++) {
+        mesh->addToIndicesArray(animNode->mesh->getTotalIndicesArray()[j]);
+    }
+    mesh->Commit();
+    shared_ptr<AnimatedMeshNode> nodeToRemove = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
+    nodeToRemove->setVisible(false);
+    shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
+    meshNode->setTexture(rigNode->node->getTextureByIndex(1), 1);
+    rigNode->node = meshNode;
+    rigNode->node->setID(SGM_ID);
+    rigNode->node->setPosition(rigNode->node->getAbsolutePosition());
+    rigNode->node->setRotationInDegrees(rigNode->node->getRotationInDegrees());
+    rigNode->node->setScale(rigNode->node->getScale());
+    rigNode->node->setVisible(false);
+    return rigNode;
+}
+
 void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
 {
     if(!rigScene || !smgr || !sgNode)
@@ -53,7 +88,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     if(nodeToRig->node){
         smgr->RemoveNode(nodeToRig->node);
     }
-    nodeToRig = sgNode;
+    nodeToRig = (sgNode->getType() == NODE_RIG) ? getSGMNodeForRig(sgNode) : sgNode;
     sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
     // scale to fit all obj in same proportion-----
@@ -175,7 +210,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->props.transparency = 1.0;
                     sgrSGNode->props.isLighting = true;
                     sgrSGNode->node->setVisible(true);
-                    printf("setscenemode - Vertices count %d ", dynamic_pointer_cast<MeshNode>(sgrSGNode->node)->getMesh()->getVerticesCount());
+                    printf("\n setscenemode - Vertices count %d ", dynamic_pointer_cast<MeshNode>(sgrSGNode->node)->getMesh()->getVerticesCount());
                 }
             }
             else{
@@ -229,7 +264,9 @@ void SGAutoRigSceneManager::initSkeletonJoints()
 {
     rigKeys.clear();
     rigScene->tPoseJoints.clear();
-    if(skeletonType == SKELETON_OWN)
+    if(sMesh)
+        AutoRigJointsDataHelper::getTPoseJointsDataFromMesh(rigScene->tPoseJoints, sMesh);
+    else if(skeletonType == SKELETON_OWN)
         AutoRigJointsDataHelper::getTPoseJointsDataForOwnRig(rigScene->tPoseJoints,rigBoneCount);
     else
         AutoRigJointsDataHelper::getTPoseJointsData(rigScene->tPoseJoints);

@@ -150,6 +150,9 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setJointTransform(sgNode,SHADER_DEPTH_PASS_SKIN_jointdata,smgr);
     }else if(matName == "SHADER_SHADOW_DEPTH_PASS"){
         setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_mvp);
+    }else if (matName == "SHADER_PARTICLES") {
+        setMVPForParticles(sgNode,0);
+        setTexturesUniforms(sgNode, 0);
     }
 }
 
@@ -304,6 +307,71 @@ void ShaderManager::setModelViewProjMatrix(SGNode *sgNode,u16 paramIndex){
         Mat4 mvp = projMat * viewMat * sgNode->node->getModelMatrix();
         smgr->setPropertyValue(sgNode->node->material,"mvp",mvp.pointer(),DATA_FLOAT_MAT4,16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
+void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
+{
+    Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
+    Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
+    Mat4 viewProj = projMat * viewMat;
+    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
+    pNode->sortParticles(smgr->getActiveCamera()->getPosition());
+    pNode->updateParticles();
+    int instanceCount = pNode->getParticlesCount();
+    float *posArray = new float[instanceCount * 4];
+    float *colors = new float[instanceCount * 4];
+    
+    Mat4 rotMatrix = Mat4();
+    rotMatrix.setRotationRadians(pNode->particleRotation);
+    Mat4 model = sgNode->node->getModelMatrix();
+    
+    float* particleProps = new float[4];
+    Vector4 props = pNode->getParticleProps();
+    particleProps[0] = props.x;
+    particleProps[1] = props.y;
+    particleProps[2] = props.z;
+    particleProps[3] = props.w;
+    
+    float* sColor = new float[4];
+    sColor[0] = pNode->startColor.x;
+    sColor[1] = pNode->startColor.y;
+    sColor[2] = pNode->startColor.z;
+    sColor[3] = pNode->startColor.w;
+    
+    float* mColor = new float[4];
+    mColor[0] = pNode->midColor.x;
+    mColor[1] = pNode->midColor.y;
+    mColor[2] = pNode->midColor.z;
+    mColor[3] = pNode->midColor.w;
+
+    float* eColor = new float[4];
+    eColor[0] = pNode->endColor.x;
+    eColor[1] = pNode->endColor.y;
+    eColor[2] = pNode->endColor.z;
+    eColor[3] = pNode->endColor.w;
+
+    
+    for(int i = 0; i < instanceCount; i++) {
+        Vector4 position =  pNode->getPositions()[i];
+        posArray[i * 4 + 0] = position.x;
+        posArray[i * 4 + 1] = position.y;
+        posArray[i * 4 + 2] = position.z;
+        posArray[i * 4 + 3] = position.w;
+    }
+    
+    smgr->setPropertyValue(sgNode->node->material,"props", particleProps, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"startColor", sColor, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"midColor", mColor, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"endColor", eColor, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    
+    smgr->setPropertyValue(sgNode->node->material,"model", model.pointer(), DATA_FLOAT_MAT4,  16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"vp", viewProj.pointer(), DATA_FLOAT_MAT4,  16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"rotMatrix", rotMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    
+    smgr->setPropertyValue(sgNode->node->material,"positions", posArray, DATA_FLOAT_VEC4,  instanceCount * 4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    delete posArray;
+    delete colors;
+
+}
+
 void ShaderManager::setViewProjMatrix(SGNode *sgNode,u16 paramIndex){
     Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
     Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
@@ -327,6 +395,7 @@ void ShaderManager::setJointTransform(SGNode *sgNode,int paramIndex,SceneManager
     SkinMesh *sMesh = (SkinMesh*)(dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getMesh();
     float* JointArray = new float[sMesh->joints->size() * 16];
     int copyIncrement = 0;
+    
     for(int i = 0; i < sMesh->joints->size(); ++i){
         Mat4 JointVertexPull;
         JointVertexPull.setbyproduct((*sMesh->joints)[i]->GlobalAnimatedMatrix,(*sMesh->joints)[i]->GlobalInversedMatrix);

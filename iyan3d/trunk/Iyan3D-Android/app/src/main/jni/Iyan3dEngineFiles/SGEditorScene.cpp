@@ -302,6 +302,8 @@ bool SGEditorScene::isNodeTransparent(int nodeId)
     else{
         for(int i = 0; i < nodes.size();i++){
             if(nodes[i]->node->getID() == nodeId){
+                if(nodes[i]->getType() == NODE_PARTICLES)
+                    return true;
                 return (nodes[i]->props.transparency < 1.0) || nodes[i]->props.isSelected || (!nodes[i]->props.isVisible);
                 break;
             }
@@ -327,7 +329,7 @@ void SGEditorScene::setControlsUniforms(int nodeID,string matName)
 }
 bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 {
-    return (sceneControls[nodeID - CONTROLS_START_ID]->props.transparency < 1.0);
+    return true;//(sceneControls[nodeID - CONTROLS_START_ID]->props.transparency < 1.0);
 }
 
 bool SGEditorScene::hasNodeSelected()
@@ -517,6 +519,16 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
         nodes[selectedNode]->props.vertexColor = nodes[selectedNode]->props.oriVertexColor;
         nodes[selectedNode]->props.perVertexColor = true;
     }
+}
+
+bool SGEditorScene::canEditRigBones(SGNode *sgNode)
+{
+    if(sgNode->getType() == NODE_RIG) {
+        shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node);
+        if(((SkinMesh*)animNode->mesh)->versionId == 1)
+            return true;
+    }
+    return false;
 }
 
 bool SGEditorScene::isNodeInSelection(SGNode *sgNode)

@@ -16,12 +16,15 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
     unsigned int vertCount = 0;
     f.read((char*)&versionIdentifier, sizeof(unsigned short));
     
-    if (versionIdentifier == 0) // for large Mesh identification
+    if (versionIdentifier == 0 || versionIdentifier == 1) // for large Mesh identification
         f.read((char*)&vertCount, sizeof(unsigned int));
     else
         vertCount = versionIdentifier;
 
     SkinMesh* animMesh = new SkinMesh();
+    if(versionIdentifier == 1)
+        animMesh->versionId = versionIdentifier;
+
     for (int i = 0; i < vertCount; i++) {
         SSGRVectHeader vert;
         f.read((char*)&vert, sizeof(SSGRVectHeader));
@@ -41,7 +44,7 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
         animMesh->addHeavyVertex(&vts);
     }
     unsigned int indicesCount = 0;
-    if (versionIdentifier != 0) {
+    if (versionIdentifier > 1) {
         unsigned short indCount;
         f.read((char*)&indCount, sizeof(unsigned short));
         indicesCount = (unsigned int)indCount;
@@ -54,7 +57,7 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
     
     for (int i = 0; i < indicesCount; i++) {
         unsigned int vertexIndex = 0;
-        if (versionIdentifier != 0) {
+        if (versionIdentifier > 1) {
             unsigned short ind;
             f.read((char*)&ind, sizeof(unsigned short));
             vertexIndex = (unsigned int)ind;
@@ -90,7 +93,7 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
 
         for (int j = 0; j < boneWeightCount; ++j) {
             unsigned int vertexIndex = 0;
-            if (versionIdentifier != 0) {
+            if (versionIdentifier > 1) {
                 unsigned short ind;
                 f.read((char*)&ind, sizeof(unsigned short));
                 vertexIndex = (unsigned int)ind;
@@ -107,6 +110,20 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
             PaintedVertexInfo->weight = ((float)vertWeight) / 255.0f;
             ibone->PaintedVertices->push_back(PaintedVertexInfo);
         }
+        
+        //TODO Read envelope radius
+        if(versionIdentifier == 1) {
+            float sphereRadius;
+            f.read((char*)&sphereRadius, sizeof(float));
+            float envRadius;
+            f.read((char*)&envRadius, sizeof(float));
+
+            printf(" \n Env radius %f Id %d ", envRadius, i);
+            
+            ibone->envelopeRadius = envRadius;
+            ibone->sphereRadius = sphereRadius;
+        }
+        
     }
     animMesh->finalize();
     return animMesh;

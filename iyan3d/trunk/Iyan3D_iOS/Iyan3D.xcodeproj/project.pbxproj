@@ -633,6 +633,14 @@
 		01F8734A1C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */; };
 		25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
 		25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
+		2516DC091C5F52FD0034145D /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC081C5F52FD0034145D /* ParticleManager.cpp */; };
+		2516DC0A1C5F52FD0034145D /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC081C5F52FD0034145D /* ParticleManager.cpp */; };
+		2516DC0C1C5F90C70034145D /* particles.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 2516DC0B1C5F90C70034145D /* particles.vsh */; };
+		2516DC0D1C5F90C70034145D /* particles.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 2516DC0B1C5F90C70034145D /* particles.vsh */; };
+		2516DC0F1C5F915C0034145D /* particles.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 2516DC0E1C5F915C0034145D /* particles.fsh */; };
+		2516DC101C5F915C0034145D /* particles.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 2516DC0E1C5F915C0034145D /* particles.fsh */; };
+		2516DC121C5F9B280034145D /* ParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC111C5F9B280034145D /* ParticlePool.cpp */; };
+		2516DC131C5F9B280034145D /* ParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC111C5F9B280034145D /* ParticlePool.cpp */; };
 		251BF4501C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
 		251BF4511C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
 		251BF4521C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */; };
@@ -998,6 +1006,10 @@
 		25E7611F1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E7611D1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib */; };
 		25E86EC51B44D10300BC48DC /* depthPassText.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 25E86EC41B44D10300BC48DC /* depthPassText.vsh */; };
 		25E86EC61B44D10300BC48DC /* depthPassText.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 25E86EC41B44D10300BC48DC /* depthPassText.vsh */; };
+		25EA75501C60B5B3007E17CA /* particleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA754F1C60B5B3007E17CA /* particleTexture.png */; };
+		25EA75511C60B5B3007E17CA /* particleTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA754F1C60B5B3007E17CA /* particleTexture.png */; };
+		25EA75541C60C70A007E17CA /* alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA75531C60C70A007E17CA /* alpha.png */; };
+		25EA75551C60C70A007E17CA /* alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA75531C60C70A007E17CA /* alpha.png */; };
 		25EA8EDB1BD90506005DBA15 /* light_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA8ED61BD90506005DBA15 /* light_ipad.png */; };
 		25EA8EDC1BD90506005DBA15 /* light_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA8ED61BD90506005DBA15 /* light_ipad.png */; };
 		25EA8EDD1BD90506005DBA15 /* light_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA8ED71BD90506005DBA15 /* light_ipad@2x.png */; };
@@ -2663,6 +2675,13 @@
 		01F873431C3A84BF009AA31E /* Previous-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Previous-frame_IPhone.png"; sourceTree = "<group>"; };
 		01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoggedInViewControllerPhone.xib; sourceTree = "<group>"; };
 		25095F381C5B631900CF7C68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2516DC051C5F4ED80034145D /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		2516DC061C5F4ED80034145D /* ParticleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleManager.h; sourceTree = "<group>"; };
+		2516DC071C5F4ED80034145D /* ParticlePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePool.h; sourceTree = "<group>"; };
+		2516DC081C5F52FD0034145D /* ParticleManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleManager.cpp; sourceTree = "<group>"; };
+		2516DC0B1C5F90C70034145D /* particles.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = particles.vsh; path = Resources/shaders/particles.vsh; sourceTree = "<group>"; };
+		2516DC0E1C5F915C0034145D /* particles.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = particles.fsh; path = Resources/shaders/particles.fsh; sourceTree = "<group>"; };
+		2516DC111C5F9B280034145D /* ParticlePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePool.cpp; sourceTree = "<group>"; };
 		251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = FrameWorks/GoogleSignIn.bundle; sourceTree = "<group>"; };
 		251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = FrameWorks/GoogleSignIn.framework; sourceTree = "<group>"; };
 		251BF4541C2C191700A5D41D /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = FrameWorks/Crashlytics.framework; sourceTree = "<group>"; };
@@ -3118,6 +3137,8 @@
 		25E7611C1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PremiumUpgardeVCViewController.m; path = "ui/Popover Views/PremiumUpgardeVCViewController.m"; sourceTree = "<group>"; };
 		25E7611D1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PremiumUpgardeVCViewController.xib; path = "ui/Popover Views/PremiumUpgardeVCViewController.xib"; sourceTree = "<group>"; };
 		25E86EC41B44D10300BC48DC /* depthPassText.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPassText.vsh; path = Resources/shaders/depthPassText.vsh; sourceTree = "<group>"; };
+		25EA754F1C60B5B3007E17CA /* particleTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = particleTexture.png; path = Resources/images/particleTexture.png; sourceTree = "<group>"; };
+		25EA75531C60C70A007E17CA /* alpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alpha.png; path = Resources/images/alpha.png; sourceTree = "<group>"; };
 		25EA8ED61BD90506005DBA15 /* light_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light_ipad.png; path = Resources/imgs/light_ipad.png; sourceTree = "<group>"; };
 		25EA8ED71BD90506005DBA15 /* light_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "light_ipad@2x.png"; path = "Resources/imgs/light_ipad@2x.png"; sourceTree = "<group>"; };
 		25EA8ED81BD90506005DBA15 /* light_Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light_Phone.png; path = Resources/imgs/light_Phone.png; sourceTree = "<group>"; };
@@ -4731,6 +4752,11 @@
 		256F6BE51BF624FB00154622 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				2516DC051C5F4ED80034145D /* Particle.h */,
+				2516DC071C5F4ED80034145D /* ParticlePool.h */,
+				2516DC111C5F9B280034145D /* ParticlePool.cpp */,
+				2516DC061C5F4ED80034145D /* ParticleManager.h */,
+				2516DC081C5F52FD0034145D /* ParticleManager.cpp */,
 				256F6BE61BF624FB00154622 /* AnimatedMeshNode.cpp */,
 				256F6BE71BF624FB00154622 /* AnimatedMeshNode.h */,
 				256F6BE81BF624FB00154622 /* AnimatedMorphNode.cpp */,
@@ -5875,6 +5901,8 @@
 				E24975C2196BDD590025D442 /* color.frag */,
 				E24975CB196BDD590025D442 /* color.vert */,
 				E22678851AC4557A001C8C66 /* colorskin.vert */,
+				2516DC0B1C5F90C70034145D /* particles.vsh */,
+				2516DC0E1C5F915C0034145D /* particles.fsh */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -5934,6 +5962,8 @@
 				3D04EAF01C25830F00C18E1A /* TextSelection */,
 				C8AA46F71C227D3600C4AB53 /* SceneSelection */,
 				259EE1521BDE342800C99784 /* dummy.png */,
+				25EA75531C60C70A007E17CA /* alpha.png */,
+				25EA754F1C60B5B3007E17CA /* particleTexture.png */,
 				25641C9D1B0524250067A4F4 /* watermark.png */,
 				01CB22DF1C4E679A00A2EE69 /* property-icon.png */,
 				01CB22E01C4E679A00A2EE69 /* property-icon@2x.png */,
@@ -6653,6 +6683,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				01F873101C3A6C4E009AA31E /* Scale_IPhone@2x.png in Resources */,
+				2516DC0F1C5F915C0034145D /* particles.fsh in Resources */,
+				25EA75541C60C70A007E17CA /* alpha.png in Resources */,
 				01ACD09B1C3CEEE70096AD14 /* Bevel_IPhone.png in Resources */,
 				7FC527621B6F96FF00C5D26D /* Mail-phone@2x.png in Resources */,
 				7FC900C51A0A01470051B941 /* add-frame-phone.png in Resources */,
@@ -6672,6 +6704,7 @@
 				01B4BCC11C32A69900E09269 /* PopUpViewController.xib in Resources */,
 				7FC901211A0A07860051B941 /* delete-img@2x.png in Resources */,
 				25CACF651B27C23C0027F48C /* FontCellView.xib in Resources */,
+				2516DC0C1C5F90C70034145D /* particles.vsh in Resources */,
 				7F31A7411AA4960300A6E7B1 /* model-phone@3x.png in Resources */,
 				01ACD0E21C3D3AE20096AD14 /* Frame-Count-Display_Frames@2x.png in Resources */,
 				624641CE19939BB700CE8547 /* Animation-topviewBg.png in Resources */,
@@ -7093,6 +7126,7 @@
 				25EA8EDB1BD90506005DBA15 /* light_ipad.png in Resources */,
 				0169C47B1C33ED5A00132FF6 /* popoverBg-white@2x.png in Resources */,
 				01F872691C3A42EF009AA31E /* Export-video_IPhone.png in Resources */,
+				25EA75501C60B5B3007E17CA /* particleTexture.png in Resources */,
 				7F307CEE1B58FBF10065BBC1 /* like.png in Resources */,
 				62FB86811988D33A00AC7424 /* select-img.png in Resources */,
 				01B02CEA1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */,
@@ -7418,6 +7452,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				01F873111C3A6C4E009AA31E /* Scale_IPhone@2x.png in Resources */,
+				2516DC101C5F915C0034145D /* particles.fsh in Resources */,
+				25EA75551C60C70A007E17CA /* alpha.png in Resources */,
 				01ACD09C1C3CEEE70096AD14 /* Bevel_IPhone.png in Resources */,
 				7F7D5A391B8CA54B00E6BA86 /* googlelogin_Iphone.png in Resources */,
 				7F7D5A3A1B8CA54B00E6BA86 /* googlelogin_Iphone@2x.png in Resources */,
@@ -7437,6 +7473,7 @@
 				01B4BCC21C32A69900E09269 /* PopUpViewController.xib in Resources */,
 				7F7D5A411B8CA54B00E6BA86 /* googlelogout_Pad.png in Resources */,
 				7F7D5A421B8CA54B00E6BA86 /* googlelogout_Pad@2x.png in Resources */,
+				2516DC0D1C5F90C70034145D /* particles.vsh in Resources */,
 				7FDF55101B73688F006DC41F /* premium-phone.png in Resources */,
 				01ACD0E31C3D3AE20096AD14 /* Frame-Count-Display_Frames@2x.png in Resources */,
 				7FDF55111B73688F006DC41F /* premium-phone@2x.png in Resources */,
@@ -7858,6 +7895,7 @@
 				01F8726A1C3A42EF009AA31E /* Export-video_IPhone.png in Resources */,
 				0169C47C1C33ED5A00132FF6 /* popoverBg-white@2x.png in Resources */,
 				3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
+				25EA75511C60B5B3007E17CA /* particleTexture.png in Resources */,
 				E20672FF1B049AA6006DD2F7 /* add-frame.png in Resources */,
 				01E618911C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */,
 				01B02CEB1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */,
@@ -8241,6 +8279,7 @@
 				256F6E801BF624FB00154622 /* png.c in Sources */,
 				E24973F9196BD80F0025D442 /* SmartImageView.mm in Sources */,
 				7F30F5B31B576D8C00B311E3 /* Base64.m in Sources */,
+				2516DC091C5F52FD0034145D /* ParticleManager.cpp in Sources */,
 				E21C3CC81A0758B6006964E5 /* GTLYouTubeActivityContentDetailsPromotedItem.m in Sources */,
 				E21C3D2A1A0758B6006964E5 /* GTLYouTubeVideoListResponse.m in Sources */,
 				E21C3CF61A0758B6006964E5 /* GTLYouTubeLiveBroadcastListResponse.m in Sources */,
@@ -8354,6 +8393,7 @@
 				256F6DA01BF624FB00154622 /* EmptyNode.cpp in Sources */,
 				01ACD0D31C3D38D90096AD14 /* SGAutoRigSceneManager.cpp in Sources */,
 				E21C3D101A0758B6006964E5 /* GTLYouTubeResourceId.m in Sources */,
+				2516DC121C5F9B280034145D /* ParticlePool.cpp in Sources */,
 				3D3F59131C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */,
 				018501DC1C2BDA730090FA65 /* EditorViewController.mm in Sources */,
 				7F30F5B51B576D8C00B311E3 /* NSString+NSHash.m in Sources */,
@@ -8633,6 +8673,7 @@
 				25CACF6C1B27D5000027F48C /* FontCellView.m in Sources */,
 				E20670DE1B049AA6006DD2F7 /* Reachability.mm in Sources */,
 				E20670DF1B049AA6006DD2F7 /* GTLYouTubeGuideCategorySnippet.m in Sources */,
+				2516DC0A1C5F52FD0034145D /* ParticleManager.cpp in Sources */,
 				25EFBEBD1BE25D2800DB300C /* RenderItem.m in Sources */,
 				256F6D991BF624FB00154622 /* AnimatedMeshNode.cpp in Sources */,
 				E20670E01B049AA6006DD2F7 /* GTLYouTubeGeoPoint.m in Sources */,
@@ -8732,6 +8773,7 @@
 				3D3F591B1C2801C600713C79 /* TextFrameCell.m in Sources */,
 				E20671261B049AA6006DD2F7 /* GTLJSONParser.m in Sources */,
 				256F6B981BF6246300154622 /* json_reader.cpp in Sources */,
+				2516DC131C5F9B280034145D /* ParticlePool.cpp in Sources */,
 				E20671271B049AA6006DD2F7 /* GTLYouTubeMonitorStreamInfo.m in Sources */,
 				256F6D911BF624FB00154622 /* Mesh.cpp in Sources */,
 				E20671281B049AA6006DD2F7 /* GTLYouTubeSearchResult.m in Sources */,

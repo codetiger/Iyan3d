@@ -278,6 +278,20 @@ shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMe
     AddNode(node,meshType);
     return node;
 }
+shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh,string callBackFuncName,MESH_TYPE meshType,int matIndex)
+{
+    shared_ptr<ParticleManager> node = shared_ptr<ParticleManager>(new ParticleManager(1000));
+    if(matIndex != NOT_EXISTS && mtlManger->materials->size())
+        node->setMaterial(getMaterialByIndex(matIndex));
+    node->mesh = mesh;
+    node->needsVertexNormal = true;
+    node->callbackFuncName = callBackFuncName;
+    if(node->mesh)
+        node->mesh->Commit();
+    AddNode(node,meshType);
+    return node;
+}
+
 shared_ptr<CameraNode> SceneManager::createCameraNode(string callBackFuncName){
     shared_ptr<CameraNode> cam = make_shared<CameraNode>();
     cam->callbackFuncName = callBackFuncName;

@@ -18,7 +18,7 @@
 #define OBJ_IMPORT_IAP @"objimport"
 #define VIEWCAMERA_ZOOM_START 1.89
 #define CONTROLS_DEFAULT_DISTANCE 7.0
-#define TOTAL_MATERIALS 31
+#define TOTAL_MATERIALS 32
 #define SELECTION_COLOR_R 0.0
 #define SELECTION_COLOR_G 1.0
 #define SELECTION_COLOR_B 0.0
@@ -101,7 +101,8 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4", "vertexColorSkin.vert" , "commonL4.fsh"},
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5", "vertexColorSkin.vert" , "commonL5.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
-    {"SHADER_COLOR_TEXT", "depthPassText.vsh","color.frag"}
+    {"SHADER_COMMON_L1","shader.vsh","commonL1.fsh"},
+    {"SHADER_PARTICLES", "particles.vsh","particles.fsh"}
 };
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
 {
@@ -135,7 +136,8 @@ const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4","Per_Vertex_Color_Skin","Common_Fragment_L4"},
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5","Per_Vertex_Color_Skin","Common_Fragment_L5"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
-    {"SHADER_COLOR_TEXT","Color_Skin_Vertex","Color_Fragment"}
+    {"SHADER_COLOR_TEXT","Color_Skin_Vertex","Color_Fragment"},
+    {"SHADER_PARTICLES", "Particles_Vertex","Particles_Fragment"}
 };
 
 
@@ -176,7 +178,8 @@ enum NODE_TYPE
     NODE_BITS = 4,
     NODE_ADDITIONAL_LIGHT = 7,
     NODE_TEXT = 8,
-    NODE_VIDEO = 9
+    NODE_VIDEO = 9,
+    NODE_PARTICLES = 10
 };
 
 enum Slidername
@@ -222,7 +225,8 @@ enum MATERIAL_TYPE
     SHADER_VERTEX_COLOR_SHADOW_SKIN_L4,
     SHADER_VERTEX_COLOR_SHADOW_SKIN_L5,
     SHADER_SHADOW_DEPTH_PASS_TEXT,
-    SHADER_COLOR_TEXT
+    SHADER_COLOR_TEXT,
+    SHADER_PARTICLES
 };
 enum ActionType
 {

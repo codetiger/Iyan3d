@@ -8,6 +8,7 @@
 //
 
 #include <stdint.h>
+#include "../Core/Nodes/ParticleManager.h"
 #include "OGLES2RenderManager.h"
 
 #ifdef ANDROID
@@ -98,7 +99,13 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node,int nodeIndex, int meshBu
     GLenum indicesDataType = GL_UNSIGNED_SHORT;
     if(node->instanceCount)
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, node->instanceCount + 1);
-    else
+    else if (node->type == NODE_TYPE_PARTICLES) {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, dynamic_pointer_cast<ParticleManager>(node)->getParticlesCount());
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, 0);
     
     for(int i = 0; i < node->getBufferCount();i++){

@@ -23,6 +23,7 @@ class AutoRigJointsDataHelper{
     
 public:
     static void getTPoseJointsData(vector<TPoseJoint> & tPoseJoints);
+    static void getTPoseJointsDataFromMesh(vector<TPoseJoint> & tPoseJoints, SkinMesh *sMesh);
     static void getTPoseJointsDataForOwnRig(vector<TPoseJoint> & tPoseJoints,int boneCount);
     static void addNewTPoseJointData(vector<TPoseJoint> & tPoseJoints,int fromJointId);
     

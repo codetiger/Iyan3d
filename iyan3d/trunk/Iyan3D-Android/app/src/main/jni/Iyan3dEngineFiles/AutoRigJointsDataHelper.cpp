@@ -42,6 +42,30 @@ void AutoRigJointsDataHelper::getTPoseJointsData(vector<TPoseJoint> & tPoseJoint
     return;
 }
 
+void AutoRigJointsDataHelper::getTPoseJointsDataFromMesh(vector<TPoseJoint> &tPoseJoints, SkinMesh *sMesh)
+{
+    tPoseJoints.clear();
+
+    TPoseJoint tJoint;
+    
+    Mat4 globalTransfrom;
+
+    for(int i = 0 ; i < sMesh->joints->size(); i++) {
+        Joint * joint = (*sMesh->joints)[i];
+        tJoint.id = joint->Index;
+        tJoint.parentId = (joint->Parent) ? joint->Parent->Index : -1;
+        Vector3 localPos = joint->LocalAnimatedMatrix.getTranslation();
+        Vector3 localRot = joint->LocalAnimatedMatrix.getRotationInDegree();
+        tJoint.position = Vector3(localPos.x, localPos.y, localPos.z);
+        tJoint.rotation = Vector3(localRot.x, localRot.y, localRot.z);
+        tJoint.sphereRadius = (i ==0) ? 0.0 : (joint->sphereRadius > 1.0) ? 1.0 :joint->sphereRadius;
+        tJoint.envelopeRadius = joint->envelopeRadius;
+        tPoseJoints.push_back(tJoint);
+    }
+    
+    return;
+}
+
 void AutoRigJointsDataHelper::getTPoseJointsDataForOwnRig(vector<TPoseJoint> & tPoseJoints,int boneCount)
 {
     tPoseJoints.clear();

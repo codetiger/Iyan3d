@@ -28,6 +28,7 @@ class SGAutoRigSceneManager
 {
 private:
     std::string animatedSGRPath;
+    SkinMesh* sMesh;
     SceneManager *smgr;
     SGNode* sgrSGNode;
     Mesh *boneMesh,*sphereMesh;
@@ -58,6 +59,7 @@ public:
     SGAutoRigSceneManager(SceneManager* smgr, void *scene);
     
     void clearNodeSelections();
+    SGNode* getSGMNodeForRig(SGNode *rigNode);
     void sgmForRig(SGNode* sgNode); // Pass the node to be rigged to this method
     void addNewJoint();
     void removeJoint();

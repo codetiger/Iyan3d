@@ -16,6 +16,8 @@
 
 class SkinMesh:public AnimatedMesh{
 public:
+    int versionId;
+    
     SkinMesh();
     ~SkinMesh();
     vector<Joint*> *joints;

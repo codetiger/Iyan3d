@@ -73,6 +73,7 @@
 #define ASSET_TEXT_RIG 10
 #define ASSET_TEXT 11
 #define ASSET_VIDEO 12
+#define ASSET_PARTICLES 13
 #define ASSET_ADDITIONAL_LIGHT 900
 
 #define ADD_BUTTON_TAG 99
@@ -2294,7 +2295,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
                 selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
                 
-                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT) {
+                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
                     UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones cannot be added to this model." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     [error show];
                 }
