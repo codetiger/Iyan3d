@@ -20,9 +20,9 @@
 + (CacheSystem*) cacheSystem;
 - (void) OpenDatabase;
 - (void) UpdateAsset:(AssetItem *)a;
--(void)updateAssetPrice:(AssetItem*)asset;
+- (void)updateAssetPrice:(AssetItem*)asset;
 - (NSMutableArray*) GetAssetList:(int)type Search:(NSString*)keyword;
--(NSString*)getAssetPrice:(NSString*)iap;
+- (NSString*)getAssetPrice:(NSString*)iap;
 - (AssetItem*) GetAsset:(int)assetId;
 - (AssetItem*) GetAssetByName:(NSString*)assetName;
 - (AssetItem*) GetAssetItem:(NSString*)assetIap;
@@ -44,17 +44,18 @@
 - (void) AddDownloadedAsset:(AssetItem*)a;
 - (int) getNextObjAssetId;
 - (bool) checkOBJImporterPurchase;
--(bool) checkDownloadedAsset:(int)assetId;
+- (bool) checkDownloadedAsset:(int)assetId;
 - (void) addOBJImporterColumn;
 - (void) createTablesForPrice;
--(void) createAnimationTables;
+- (void) createAnimationTables;
 - (int) getNextAutoRigAssetId;
--(void) createRenderTaskTables;
--(NSMutableArray *) getRenderTask;
+- (void) checkAndCreateGroupColumnInAssetsTable;
+- (void) createRenderTaskTables;
+- (NSMutableArray *) getRenderTask;
 - (RenderItem *)getRenderTaskByTaskId:(int) taskId;
 - (RenderItem *)getRenderTaskByDate:(NSString*) dateTime;
 - (void) updateRenderTask:(int)taskId WithProgress:(int)progress;
--(void) deleteRenderTaskData: (int)taskId;
--(void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName date:(NSString*) dateStr;
+- (void) deleteRenderTaskData: (int)taskId;
+- (void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName date:(NSString*) dateStr;
 
 @end

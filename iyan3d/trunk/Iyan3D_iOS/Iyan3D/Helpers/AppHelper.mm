@@ -271,6 +271,7 @@
             asset.hash = [dict valueForKey:@"hash"];
             asset.iap = [dict valueForKey:@"iap"];
             asset.keywords = [dict valueForKey:@"keywords"];
+            asset.group = [[dict valueForKey:@"group"] intValue];
 
             AssetItem* checkAsset = [cache GetAsset:asset.assetId];
             if ([checkAsset.modifiedDate length] > 0) {

@@ -284,7 +284,7 @@ BOOL missingAlertShown;
     [renderViewMan setUpCallBacks:editorScene];
     editorScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     [renderViewMan addGesturesToSceneView];
-    [self loadScene];
+    [self performSelectorOnMainThread:@selector(loadScene) withObject:nil waitUntilDone:YES];
 }
 
 - (bool) isMetalSupportedDevice
@@ -629,12 +629,12 @@ BOOL missingAlertShown;
         return;
     
     if(editorScene) {
-        if (renderViewMan.checkCtrlSelection) {
+        if (editorScene && renderViewMan.checkCtrlSelection) {
             bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
             editorScene->selectMan->checkCtrlSelection(renderViewMan.touchMovePosition[0], isMultiSelectEnabled);
             renderViewMan.checkCtrlSelection = false;
         }
-        if (renderViewMan.checkTapSelection) {
+        if (editorScene && renderViewMan.checkTapSelection) {
             if(editorScene->isRigMode){
                 editorScene->selectMan->checkSelectionForAutoRig(renderViewMan.tapPosition);
             }
@@ -2164,6 +2164,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         return;
     }
     */
+    
+    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED)
+        return;
+    
     if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
     {
         Quaternion lightProps;

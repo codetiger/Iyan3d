@@ -13,6 +13,7 @@
 @synthesize hash = _hash;
 
 -(void) dealloc{
+    _group = 0;
 	_name = nil;
 	_iap = nil;
 	_hash = nil;

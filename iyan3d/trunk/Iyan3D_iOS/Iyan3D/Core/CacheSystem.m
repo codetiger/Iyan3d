@@ -88,6 +88,7 @@ static const NSString* ASSET_DATE = @"asset_date";
 static const NSString* ASSET_TYPE = @"asset_type";
 static const NSString* ASSET_BONES = @"asset_bones";
 static const NSString* ASSET_PRICE = @"asset_price";
+static const NSString* ASSET_GROUP = @"asset_group";
 
 static const NSString* ASSET_PUBLISHED = @"asset_published";
 static const NSString* ASSET_RATING = @"asset_rating";
@@ -105,6 +106,33 @@ static const NSString* RENDER_TASK_ID = @"task_id";
 static const NSString* RENDER_TASK_STATUS = @"task_status";
 static const NSString* RENDER_TASK_FRAMES = @"task_frames";
 static const NSString* RENDER_TASK_DATE = @"task_date";
+
+-(void) checkAndCreateGroupColumnInAssetsTable
+{
+    BOOL columnExists = NO;
+    
+    sqlite3_stmt *statement;
+    
+    NSString *querySQL = [NSString stringWithFormat:@"SELECT %@ FROM %@", ASSET_GROUP, TABLE_ASSET_INFO];
+    if(sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
+        columnExists = YES;
+        NSLog(@" \n GROUP column exits");
+    } else {
+        NSString *updateSQL = [NSString stringWithFormat: @"ALTER TABLE %@ ADD COLUMN %@ INTEGER", TABLE_ASSET_INFO, ASSET_GROUP];
+        const char *update_stmt = [updateSQL UTF8String];
+        sqlite3_prepare_v2(_cacheSystem, update_stmt, -1, &statement, NULL);
+        
+        if(sqlite3_step(statement)==SQLITE_DONE)
+        {
+            
+        }
+        else
+        {
+            NSLog(@"\n Failed inserting column ");
+        }
+        sqlite3_finalize(statement);
+    }
+}
 
 -(void) createRenderTaskTables{
     @synchronized (dbLock) {
@@ -509,7 +537,7 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
                 NSString *iap = [Utility encryptString:a.iap password:@"SGmanKindWin5SG"];
                 NSString *has = [Utility encryptString:a.hash password:@"SGmanKindWin5SG"];
                 
-                NSString *querySQL = [NSString stringWithFormat: @"UPDATE %@ SET %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = %d, %@ = %d WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_NAME, name, ASSET_KEYWORDS, a.keywords, ASSET_IAP, iap, ASSET_HASH, has, ASSET_DATE, a.modifiedDate, ASSET_TYPE, a.type, ASSET_BONES, a.boneCount, ASSET_ID, a.assetId];
+                NSString *querySQL = [NSString stringWithFormat: @"UPDATE %@ SET %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = %d, %@ = %d, %@ = %d WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_NAME, name, ASSET_KEYWORDS, a.keywords, ASSET_IAP, iap, ASSET_HASH, has, ASSET_DATE, a.modifiedDate, ASSET_TYPE, a.type, ASSET_BONES, a.boneCount, ASSET_GROUP, a.group, ASSET_ID, a.assetId];
                 
                 sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
                 if (sqlite3_step(statement) != SQLITE_DONE)
@@ -522,7 +550,7 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
                 NSString *iap = [Utility encryptString:a.iap password:@"SGmanKindWin5SG"];
                 NSString *has = [Utility encryptString:a.hash password:@"SGmanKindWin5SG"];
                 
-                NSString *querySQL = [NSString stringWithFormat: @"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@) VALUES (%d, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", %d, %d)", TABLE_ASSET_INFO, ASSET_ID, ASSET_NAME, ASSET_KEYWORDS, ASSET_IAP, ASSET_HASH, ASSET_DATE, ASSET_TYPE, ASSET_BONES, a.assetId, name, a.keywords, iap, has, a.modifiedDate, a.type, a.boneCount];
+                NSString *querySQL = [NSString stringWithFormat: @"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@, %@) VALUES (%d, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", %d, %d, %d)", TABLE_ASSET_INFO, ASSET_ID, ASSET_NAME, ASSET_KEYWORDS, ASSET_IAP, ASSET_HASH, ASSET_DATE, ASSET_TYPE, ASSET_BONES, ASSET_GROUP, a.assetId, name, a.keywords, iap, has, a.modifiedDate, a.type, a.boneCount, a.group];
                 
                 sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
                 if (sqlite3_step(statement) != SQLITE_DONE)

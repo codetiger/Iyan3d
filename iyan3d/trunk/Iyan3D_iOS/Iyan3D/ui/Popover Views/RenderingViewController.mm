@@ -458,6 +458,7 @@
         printf("\n Frame %d %d " , startFrame , endFrame);
         NSString *sFrame = [NSString stringWithFormat:@"%d",startFrame];
         NSString *eFrame = [NSString stringWithFormat:@"%d",endFrame];
+        NSString *creditsStr = [NSString stringWithFormat:@"%d",credits];
         
         NSString *resolutionWidth = [NSString stringWithFormat:@"%f",camResolution.x];
         NSString *resolutionHeight = [NSString stringWithFormat:@"%f",camResolution.y];
@@ -484,6 +485,7 @@
                 [formData appendPartWithFormData:[eFrame dataUsingEncoding:NSUTF8StringEncoding] name:@"endFrame"];
                 [formData appendPartWithFormData:[resolutionWidth dataUsingEncoding:NSUTF8StringEncoding] name:@"width"];
                 [formData appendPartWithFormData:[resolutionHeight dataUsingEncoding:NSUTF8StringEncoding] name:@"height"];
+                [formData appendPartWithFormData:[creditsStr dataUsingEncoding:NSUTF8StringEncoding] name:@"credits"];
             }];
             NSLog(@"Request initiated");
             
@@ -514,7 +516,6 @@
                 [_youtubeButton setHidden:YES];
                 [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
                 _nextButton.tag = DONE;
-                [self saveDeductedCredits:credits];
             }
              
                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {

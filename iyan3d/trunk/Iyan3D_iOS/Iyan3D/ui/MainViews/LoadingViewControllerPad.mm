@@ -207,6 +207,7 @@
     [cache createTablesForPrice];
     [cache createRenderTaskTables];
     [cache createAnimationTables];
+    [cache checkAndCreateGroupColumnInAssetsTable];
     [self performSelectorInBackground:@selector(progressTimerSelector) withObject:nil];
     [self performSelectorInBackground:@selector(performBackgroundTasks) withObject:nil];
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
