@@ -21,7 +21,6 @@
     _outputPath = filePath;
     _inputURL = url;
     _returnObj = retObj;
-
     return self;
 }
 
@@ -30,7 +29,7 @@
     switch (_taskType) {
     case DOWNLOAD_AND_WRITE: {
         [self downloadFile:_inputURL FileName:_outputPath];
-
+        
         if (_delegate && selectorMethod != nil && ![self isCancelled])
             [_delegate performSelectorOnMainThread:selectorMethod withObject:self waitUntilDone:NO];
         break;
@@ -64,7 +63,7 @@
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
         return;
-
+    NSLog(@"File NAme %@",fileName);
     NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
     [data writeToFile:fileName atomically:YES];
 }
