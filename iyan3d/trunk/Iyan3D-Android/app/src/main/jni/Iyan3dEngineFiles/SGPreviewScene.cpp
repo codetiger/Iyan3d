@@ -51,6 +51,7 @@ void SGPreviewScene::renderAll()
     if(viewType == ALL_ANIMATION_VIEW)
     drawGrid();
     smgr->EndDisplay();
+
 }
 
 void SGPreviewScene::shaderCallBackForNode(int nodeID,string matName)
@@ -157,7 +158,7 @@ bool SGPreviewScene::applyAnimations(int assetId)
         SGAnimationSceneHelper::applySGRAnimations(filePath, nodes[nodes.size() - 1], totalFrames, currentFrame, animTotalFrames);
     else if (nodes[nodes.size() - 1]->getType() == NODE_TEXT)
         SGAnimationSceneHelper::applyTextAnimations(filePath, nodes[nodes.size() - 1], totalFrames, currentFrame ,textJointsBasePos[(int)nodes.size()-1], animTotalFrames);
-    
+
     setDataForFrame(currentFrame);
     return true;
 }
@@ -331,7 +332,6 @@ void SGPreviewScene::swipeToRotate(float angleX , float angleY)
 void SGPreviewScene::pinchBegan(Vector2 touch1, Vector2 touch2)
 {
     prevTouchPoints[0] = touch1; prevTouchPoints[1] = touch2;
-    panBeganPoints[0] = touch1; panBeganPoints[1] = touch2;
     previousTarget = cameraTarget;
     previousRadius = cameraRadius;
     prevZoomDif = 0.0;

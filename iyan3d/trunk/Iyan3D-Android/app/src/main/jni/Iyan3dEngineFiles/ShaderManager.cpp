@@ -280,8 +280,8 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex){
     }
 }
 void ShaderManager::setNodeTransparency(SGNode *sgNode,u16 paramIndex){
-    float transparency = sgNode->props.isSelected ?  0.3 : sgNode->props.transparency;
-    transparency = sgNode->props.isVisible ? transparency : 0.3;
+    float transparency = sgNode->props.isSelected ?  NODE_SELECTION_TRANSPARENCY : sgNode->props.transparency;
+    transparency = sgNode->props.isVisible ? transparency : NODE_SELECTION_TRANSPARENCY;
     smgr->setPropertyValue(sgNode->node->material,"transparency",&transparency,DATA_FLOAT,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 void ShaderManager::setSceneDataUniforms(SGNode *node,u16 paramIndex){

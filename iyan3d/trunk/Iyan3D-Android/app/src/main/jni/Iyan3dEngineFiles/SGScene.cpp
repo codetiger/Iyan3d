@@ -38,6 +38,9 @@ SGScene::SGScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int scree
     planeFacingDirection[0] = Vector3(0,1,0);
     planeFacingDirection[1] = Vector3(0,0,1);
     planeFacingDirection[2] = Vector3(0,1,0);
+    controlDirection[0] = Vector3(1,0,0);
+    controlDirection[1] = Vector3(0,1,0);
+    controlDirection[2] = Vector3(0,0,1);
     controlsPlane = new Plane3D();
     CameraViewHelper::readData();
 
@@ -52,6 +55,7 @@ SGScene::SGScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int scree
     AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
     }
     swipeTiming = 0;
+    xAcceleration = yAcceleration = 0.0;
 }
 SGScene::~SGScene()
 {    
@@ -122,74 +126,64 @@ bool SGScene::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,
     else
         return false;
     
-    Vector3 cameraDir = Vector3(0.0,1.0,0.0);
-    Mat4 rotmat;
-    rotmat.setRotationRadians(viewCamera->getRotationInDegrees() * DEGTORAD);
-    rotmat.rotateVect(cameraDir);
-    
-    controlsPlane->setPositionAndNormal(center,cameraDir);
-    
-    Vector2 p1;
-    p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
-    Vector2 p2;
-    p2.x = curPoint.x;	p2.y = curPoint.y;
-    
-    Line3D oldRay = cmgr->getRayFromScreenCoordinates(prevTouchPoint, smgr->getActiveCamera(), screenWidth, screenHeight);
-    Line3D newRay = cmgr->getRayFromScreenCoordinates(curPoint, smgr->getActiveCamera(), screenWidth, screenHeight);
-    
-    Vector3 oldPos;
-    Vector3 newPos;
-    Vector3 oldRayDir = (oldRay.end - oldRay.start).normalize();
-    Vector3 newRayDir = (newRay.end - newRay.start).normalize();
-    controlsPlane->getIntersectionWithLine(oldRay.start,oldRayDir,oldPos);
-    controlsPlane->getIntersectionWithLine(newRay.start,newRayDir,newPos);
     if(controlType == MOVE){ // position and scale calculations are same
+        
+        Vector3 cameraDir = Vector3(1.0,1.0,1.0);
+        Mat4 rotmat;
+        rotmat.setRotationRadians(viewCamera->getRotationInDegrees() * DEGTORAD);
+        rotmat.rotateVect(cameraDir);
+        
+        //controlsPlane->setPositionAndNormal(center,cameraDir);
+        controlsPlane->setPositionAndNormal(center, (selectedControlId == Z_ROTATE) ? Vector3(1, 0, 0) : planeFacingDirection[selectedControlId % 3]);
+
+        Vector2 p1;
+        p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
+        Vector2 p2;
+        p2.x = curPoint.x;	p2.y = curPoint.y;
+        
+        Line3D oldRay = cmgr->getRayFromScreenCoordinates(prevTouchPoint, smgr->getActiveCamera(), screenWidth, screenHeight);
+        Line3D newRay = cmgr->getRayFromScreenCoordinates(curPoint, smgr->getActiveCamera(), screenWidth, screenHeight);
+        
+        Vector3 oldPos;
+        Vector3 newPos;
+        Vector3 oldRayDir = (oldRay.end - oldRay.start).normalize();
+        Vector3 newRayDir = (newRay.end - newRay.start).normalize();
+        controlsPlane->getIntersectionWithLine(oldRay.start,oldRayDir,oldPos);
+        controlsPlane->getIntersectionWithLine(newRay.start,newRayDir,newPos);
         Vector3 delta = newPos - oldPos;
-//        if(delta.getLength() > 5.0f) {
-//            delta = delta.normalize() * 5.0f;
-//        }
+        
+        if(delta.getLength() > 1.0f) {
+            delta = delta.normalize() * 1.0f;
+        }
+        
         outputValue.x = ((selectedControlId == X_MOVE) ? 1.0 : 0.0) * delta.x;
         outputValue.y = ((selectedControlId == Y_MOVE) ? 1.0 : 0.0) * delta.y;
         outputValue.z = ((selectedControlId == Z_MOVE) ? 1.0 : 0.0) * delta.z;
         return true;
     }
     else if(controlType == ROTATE){
-
-        controlsPlane->setPositionAndNormal(center, (selectedControlId == Z_ROTATE) ? Vector3(1, 0, 0) : planeFacingDirection[selectedControlId % 3]);
         
+        controlsPlane->setPositionAndNormal(center, (selectedControlId == Z_ROTATE) ? Vector3(1, 0, 0) : planeFacingDirection[selectedControlId % 3]);
+        Vector2 p1;
+        p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
+        Vector2 p2;
+        p2.x = curPoint.x;	p2.y = curPoint.y;
+        
+        Line3D oldRay = cmgr->getRayFromScreenCoordinates(prevTouchPoint, smgr->getActiveCamera(), screenWidth, screenHeight);
+        Line3D newRay = cmgr->getRayFromScreenCoordinates(curPoint, smgr->getActiveCamera(), screenWidth, screenHeight);
+        
+        Vector3 oldPos;
+        Vector3 newPos;
+        Vector3 oldRayDir = (oldRay.end - oldRay.start).normalize();
+        Vector3 newRayDir = (newRay.end - newRay.start).normalize();
+        controlsPlane->getIntersectionWithLine(oldRay.start,oldRayDir,oldPos);
+        controlsPlane->getIntersectionWithLine(newRay.start,newRayDir,newPos);
+        circleTouchPoint = newPos;
         Vector3 parentToNewPos = (newPos - center).normalize();
         Vector3 parentToOldPos = (oldPos - center).normalize();
         
         Quaternion delta = MathHelper::rotationBetweenVectors(parentToNewPos,parentToOldPos);
         
-//        Vector3 o;
-//        delta.toEuler(o);
-//
-//        if(selectedControlId == Z_ROTATE && o.x > 0.04) {
-//            o.x = 0.04; o.y = 0.0; o.z = 0.0;
-//            circleTouchPoint = oldPos;
-//        } else if(selectedControlId == X_ROTATE && o.y > 0.03) {
-//            o.y = 0.04; o.z = 0.0;  o.x = 0.0;
-//            circleTouchPoint = oldPos;
-//        } else if(selectedControlId == Y_ROTATE && o.z > 0.03) {
-//            o.z = 0.04; o.x = 0.0; o.y = 0.0;
-//            circleTouchPoint = oldPos;
-//        } else if(selectedControlId == Z_ROTATE && o.x < -0.04) {
-//            o.x = -0.04; o.y = 0.0; o.z = 0.0;
-//            circleTouchPoint = oldPos;
-//        } else if(selectedControlId == X_ROTATE && o.y < -0.04) {
-//            o.y = -0.04; o.z = 0.0;  o.x = 0.0;
-//            circleTouchPoint = oldPos;
-//        } else if(selectedControlId == Y_ROTATE && o.z < -0.04) {
-//            o.z = -0.04; o.x = 0.0; o.y = 0.0;
-//            circleTouchPoint = oldPos;
-//        } else {
-//            circleTouchPoint = newPos;
-//        }
-//        Logger::log(INFO, "SGScene", "Reset Deg " + to_string(o.x) + " " + to_string(o.y) + " " + to_string(o.z) + " control " + to_string(selectedControlId) );
-//
-//        delta = Quaternion(o);
-
         Vector3 nodeRot;
         if(isJointSelected || !isSGJoint) {
             if(!isSGJoint){
@@ -204,7 +198,7 @@ bool SGScene::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,
             nodeRot = nodeRot * RADTODEG;
             Quaternion jointGlobalRot = MathHelper::RotateNodeInWorld(nodeRot, delta);
             if(!isSGJoint){
-                    delta = MathHelper::irrGetLocalQuaternion((selectedNode->node),jointGlobalRot);
+                delta = MathHelper::irrGetLocalQuaternion((selectedNode->node),jointGlobalRot);
             }else{
                 delta = MathHelper::irrGetLocalQuaternion(selectedJoint->jointNode,jointGlobalRot);
             }
@@ -215,82 +209,10 @@ bool SGScene::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,
             delta =  MathHelper::RotateNodeInWorld(nodeRot,delta);
         }
         delta.toEuler(outputValue);
-
-//        if(prevRotX == 0.0 && prevRotY == 0.0 && prevRotZ == 0.0) {
-//            prevRotX = outputValue.x;
-//            prevRotY = outputValue.y;
-//            prevRotZ = outputValue.z;
-//        }
-//
-//        float diffX = (outputValue.x - prevRotX) * RADTODEG;
-//        float diffY = (outputValue.y - prevRotY) * RADTODEG;
-//        float diffZ = (outputValue.z - prevRotZ) * RADTODEG;
-//
-//        if(diffX >= 360)
-//            diffX -= 360;
-//        if(diffY >= 360)
-//            diffY -= 360;
-//        if(diffZ >= 360)
-//            diffZ -= 360;
-//
-//        if(diffX < 0)
-//            diffX += 360;
-//        if(diffY < 0)
-//            diffY += 360;
-//        if(diffZ < 0)
-//            diffZ += 360;
-//
-//        if(abs(diffX) > 3)
-//            diffX = (diffX > 0 ? 1 : -1) * 3.0f;
-//        if(abs(diffY) > 3)
-//            diffY = (diffY > 0 ? 1 : -1) * 3.0f;
-//        if(abs(diffZ) > 3)
-//            diffZ = (diffZ > 0 ? 1 : -1) * 3.0f;
-
-//        outputValue.x = prevRotX + diffX * DEGTORAD;
-//        outputValue.y = prevRotY + diffY * DEGTORAD;
-//        outputValue.z = prevRotZ + diffZ * DEGTORAD;
-
-//        if(!isJointSelected && (prevRotX != 0.0 || prevRotY != 0.0 || prevRotZ != 0.0)) {
-//            float diffX = outputValue.x - prevRotX;
-//            float diffY = outputValue.y - prevRotY;
-//            float diffZ = outputValue.z - prevRotZ;
-//
-//            if((abs(diffX) > 0.1 && abs(diffX) < 3.0) || (abs(diffY) > 0.1 && abs(diffY) < 3.0) || (abs(diffZ) > 0.1 && abs(diffZ) < 3.0)) {
-//                circleTouchPoint = oldPos;
-//                outputValue = Vector3(prevRotX, prevRotY, prevRotZ);
-//            } else if(abs(diffX) > 6.28 || abs(diffY) > 6.28 || abs(diffZ) > 6.28) {
-//                circleTouchPoint = oldPos;
-//                outputValue = Vector3(prevRotX, prevRotY, prevRotZ);
-//            }
-//          }
-
-//        Vector3 v = outputValue * RADTODEG;
-//
-//
-//        while(!((v.x > 0 && v.x < 360) || (v.y > 0 && v.y < 360) || (v.z > 0 && v.z < 360))) {
-//            if(v.x >= 360)
-//                v.x -= 360;
-//            if(v.y >= 360)
-//                v.y -= 360;
-//            if(v.z >= 360)
-//                v.z -= 360;
-//
-//            if(v.x <= 0)
-//                v.x += 360;
-//            if(v.y <= 0)
-//                v.y += 360;
-//            if(v.z <= 0)
-//                v.z += 360;
-//
-//            Logger::log(INFO,"SGScene","Reset Deg" + to_string(v.x)+" "+to_string(v.y)+" " +to_string(v.z));
-//        }
-//
-//        outputValue = v * DEGTORAD;
-
-            prevRotX = outputValue.x;
-            prevRotY = outputValue.y;
-            prevRotZ = outputValue.z;
+        
+        prevRotX = outputValue.x;
+        prevRotY = outputValue.y;
+        prevRotZ = outputValue.z;
         return true;
 
     }
@@ -302,30 +224,54 @@ void SGScene::swipeProgress(float angleX , float angleY)
         swipeTiming++;
         return;
     }
+    xAcceleration += angleX;
+    yAcceleration += angleY;
     
-    Vector3 camForward = (viewCamera->getTarget() - viewCamera->getPosition()).normalize();
-    Vector3 camRight = (camForward.crossProduct(viewCamera->getUpVector())).normalize();
-    Vector3 camUpReal = (camRight.crossProduct(camForward)).normalize();
-    Vector3 cameraPos = viewCamera->getPosition();
-    Vector3 camOldPos = cameraPos;
-    
-    float angleBWCamYAndUpVec = camForward.dotProduct(viewCamera->getUpVector());
-    if(angleBWCamYAndUpVec < CAM_UPVEC_UPREAL_MAX_DIF && angleBWCamYAndUpVec > -CAM_UPVEC_UPREAL_MAX_DIF)
-        viewCamera->setUpVector(camUpReal);
-    cameraPos += camUpReal * (-angleY / CAM_SWIPE_SPEED) + camRight * (-angleX / CAM_SWIPE_SPEED);
-    viewCamera->setPosition(cameraPos);
-    float swipeAdjustDis = cameraPos.getDistanceFrom(viewCamera->getTarget()) - camOldPos.getDistanceFrom(viewCamera->getTarget());
-    if(swipeAdjustDis > 0.0){
-        Vector3 camNewFwd = (viewCamera->getTarget() - viewCamera->getPosition()).normalize();
-        cameraPos -= (camNewFwd * -(swipeAdjustDis));
-        viewCamera->setPosition(cameraPos);
-    }
-    updateControlsOrientaion();
+    xAcceleration = (xAcceleration > 300.0) ? 300.0 : (xAcceleration < -300.0 ? -300.0 : xAcceleration) ;
+    yAcceleration = (yAcceleration > 200.0) ? 200.0 : (yAcceleration < -200.0 ? -200.0 : yAcceleration) ;
 }
+
+void SGScene::swipeToRotate()
+{
+    if((fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0)) {
+        
+        Vector3 camForward = (viewCamera->getTarget() - viewCamera->getPosition()).normalize();
+        Vector3 camRight = (camForward.crossProduct(viewCamera->getUpVector())).normalize();
+        Vector3 camUpReal = (camRight.crossProduct(camForward)).normalize();
+        Vector3 cameraPos = viewCamera->getPosition();
+        Vector3 camOldPos = cameraPos;
+        
+        float distanceRatio = cameraPos.getDistanceFrom(viewCamera->getTarget());
+                distanceRatio = distanceRatio/50.0;
+                distanceRatio = (distanceRatio > 1.0) ? 1.0 : distanceRatio;
+        
+        float angleBWCamYAndUpVec = camForward.dotProduct(viewCamera->getUpVector());
+        if(angleBWCamYAndUpVec < CAM_UPVEC_UPREAL_MAX_DIF && angleBWCamYAndUpVec > -CAM_UPVEC_UPREAL_MAX_DIF)
+            viewCamera->setUpVector(camUpReal);
+        cameraPos += camUpReal * (-yAcceleration * distanceRatio/ CAM_SWIPE_SPEED) + camRight * (-xAcceleration * distanceRatio/ CAM_SWIPE_SPEED);
+        viewCamera->setPosition(cameraPos);
+        float swipeAdjustDis = cameraPos.getDistanceFrom(viewCamera->getTarget()) - camOldPos.getDistanceFrom(viewCamera->getTarget());
+        
+        if(swipeAdjustDis > 0.0){
+            Vector3 camNewFwd = (viewCamera->getTarget() - viewCamera->getPosition()).normalize();
+            cameraPos -= (camNewFwd * -(swipeAdjustDis));
+            viewCamera->setPosition(cameraPos);
+        }
+        updateControlsOrientaion();
+        xAcceleration = xAcceleration / (1.25f);
+        yAcceleration = yAcceleration / (1.25f);
+        
+        if(fabs(xAcceleration) < 0.001f)
+            xAcceleration = 0.0f;
+
+        if(fabs(yAcceleration) < 0.001f)
+            yAcceleration = 0.0f;
+    }
+}
+
 void SGScene::panBegan(Vector2 touch1, Vector2 touch2)
 {
     prevTouchPoints[0] = touch1; prevTouchPoints[1] = touch2;
-    panBeganPoints[0] = touch1; panBeganPoints[1] = touch2;
     previousTarget = cameraTarget;
     previousRadius = cameraRadius;
     prevZoomDif = 0.0;
@@ -510,14 +456,19 @@ void SGScene::drawJointsSpheresForRTT(SGNode* sgNode,bool enableDepthTest)
     if(jointSpheres.size() <= 0)
         return;
     vector<Vector3> vertexColors;
+    vector<Vector3> scaleValues;
     for(int j = 0;j < (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getJointCount();j++) {
         vertexColors.push_back(jointSpheres[j]->props.vertexColor);
+        scaleValues.push_back(jointSpheres[j]->node->getScale());
+        jointSpheres[j]->setScaleOnNode(scaleValues[j] * 1.3);
         jointSpheres[j]->props.vertexColor = Vector3(selectedNodeId/255.0,j/255.0,1.0);
         smgr->RenderNode(smgr->getNodeIndexByID(jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
     }
     // Reset joints
-    for(int j = 0;j < (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getJointCount();j++)
+    for(int j = 0;j < (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getJointCount();j++) {
         jointSpheres[j]->props.vertexColor = vertexColors[j];
+        jointSpheres[j]->setScaleOnNode(scaleValues[j]);
+    }
     vertexColors.clear();
 }
 void SGScene::removeActions(){
@@ -621,17 +572,30 @@ void SGScene::renderControls()
     smgr->clearDepthBuffer();
     int controlStartIndex = (controlType == MOVE) ? X_MOVE : X_ROTATE;
     int controlEndIndex = (controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
-        if(i == selectedControlId){
-            sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-            sceneControls[i]->props.vertexColor = Vector3(0.0,1.0,0.0);
-            sceneControls[i]->props.transparency = 1.0;
-        }else{
+        
+        Vector3 ctrlToCam = (viewCamera->getPosition() - sceneControls[i]->node->getPosition()).normalize();
+        float angle = fabs(ctrlToCam.dotProduct(controlDirection[i%3]));
+        float ctrlTransparency = (angle > 0.9) ? (0.95 - angle) * 20.0 : 1.0;
+        ctrlTransparency = (ctrlTransparency < 0.0) ? 0.0 : ctrlTransparency;
+        sceneControls[i]->props.transparency = ctrlTransparency;
+        
+        if(selectedControlId == NOT_SELECTED){
+            sceneControls[i]->props.isVisible = true;
             sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+        }else if(i == selectedControlId) {
+            sceneControls[i]->props.isVisible = true;
+            sceneControls[i]->props.vertexColor = Vector3(SELECTION_COLOR_R, SELECTION_COLOR_G, SELECTION_COLOR_B);
+            sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        }else {
+            sceneControls[i]->props.isVisible = false;
         }
+        
         int nodeIndex = smgr->getNodeIndexByID(sceneControls[i]->node->getID());
-//        printf("\n nodeIndex %d controlStartIndex %d ",nodeIndex,controlStartIndex);
-        smgr->RenderNode(nodeIndex,(i == controlStartIndex)?true:false);
+
+        if(sceneControls[i]->props.isVisible)
+            smgr->RenderNode(nodeIndex,(i == controlStartIndex)?true:false);
     }
 }
 void SGScene::updateControlsMaterial()
@@ -675,20 +639,46 @@ void SGScene::updateControlsOrientaion(bool forRTT)
     
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
         sceneControls[i]->node->setScale(Vector3(ctrlScale));
-        switch(i%3){
+        switch(i%3) {
             case 0:
                 sceneControls[i]->node->setPosition(Vector3(nodePos) + Vector3(ctrlDistanceFromNode,0,0));
+                sceneControls[i]->node->setRotationInDegrees(Vector3(0.0,180.0,0.0));
             break;
             case 1:
                 sceneControls[i]->node->setPosition(Vector3(nodePos) + Vector3(0,ctrlDistanceFromNode,0));
+                sceneControls[i]->node->setRotationInDegrees(Vector3(0.0));
             break;
             case 2:
                 sceneControls[i]->node->setPosition(Vector3(nodePos) + Vector3(0,0,ctrlDistanceFromNode));
+                sceneControls[i]->node->setRotationInDegrees(Vector3(0.0));
             break;
         }
         if(viewType == AUTO_RIG)
             setControlsVariations();
-        
+
+        if(isJointSelected && selectedNode->getType() == NODE_TEXT) {
+            Vector3 rot = selectedNode->node->getRotationInRadians();
+            Vector3 delta;
+            switch(i%3) {
+                case 0:
+                    //rot.y = (180.0 - (rot.y * RADTODEG)) * DEGTORAD;
+                    delta = Vector3(-ctrlDistanceFromNode, 0, 0);
+                    break;
+                case 1:
+                    delta = Vector3(0, ctrlDistanceFromNode, 0);
+                    break;
+                case 2:
+                    delta = Vector3(0, 0, ctrlDistanceFromNode);
+                    break;
+            }
+            Mat4 rotMat;
+            rotMat.setRotationRadians(rot);
+            rotMat.rotateVect(delta);
+            
+            sceneControls[i]->node->setRotationInRadians(rot);
+            sceneControls[i]->node->setPosition(Vector3(nodePos) + delta);
+        }
+
         sceneControls[i]->node->updateAbsoluteTransformation();
     }
 }
@@ -762,6 +752,9 @@ void SGScene::limitPixelCoordsWithinTextureRange(float texWidth,float texHeight,
 {
     xCoord = (xCoord >= texWidth)?(texWidth-1.0):xCoord;
     yCoord = (yCoord >= texHeight)?(texHeight-1.0):yCoord;
+    
+    xCoord = (xCoord < 0.0)? 0.0 : xCoord;
+    yCoord = (yCoord < 0.0) ? 0.0 : yCoord;
 }
 void SGScene::clearSelections()
 {

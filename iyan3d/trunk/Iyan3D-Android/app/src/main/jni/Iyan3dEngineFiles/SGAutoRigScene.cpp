@@ -117,6 +117,7 @@ void SGAutoRigScene::touchBeganRig(Vector2 curTouchPos)
     }
     moveAction.actionType = (sceneMode == RIG_MODE_MOVE_JOINTS && selectedNodeId >= 0) ? ACTION_CHANGE_SKELETON_KEYS : ACTION_CHANGE_SGR_KEYS;
     moveAction.keys = getNodeKeys();
+    xAcceleration = yAcceleration = 0.0;
 }
 void SGAutoRigScene::rttControlSelectionAutoRig(Vector2 touchPosition)
 {
@@ -670,6 +671,7 @@ void SGAutoRigScene::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
     if(!displayPrepared)
         return;
     smgr->setRenderTarget(touchTexture,true,true,false,Vector4(255,255,255,255));
+    vector<Vector3> scaleValues;
     for(int i = 0; i < tPoseJoints.size(); i++){
         if(rigKeys[tPoseJoints[i].id].parentId > 0){
             Vector3 vertColor = rigKeys[tPoseJoints[i].id].bone->props.vertexColor;
@@ -688,6 +690,8 @@ void SGAutoRigScene::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
             Vector3 vertColor = rigKeys[tPoseJoints[i].id].sphere->props.vertexColor;
             float transparency = rigKeys[tPoseJoints[i].id].sphere->props.transparency;
             int nodeId = smgr->getNodeIndexByID(rigKeys[tPoseJoints[i].id].sphere->node->getID());
+            scaleValues.push_back(rigKeys[tPoseJoints[i].id].sphere->node->getScale());
+            rigKeys[tPoseJoints[i].id].sphere->node->setScale(rigKeys[tPoseJoints[i].id].sphere->node->getScale() * 1.3);
             rigKeys[tPoseJoints[i].id].sphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
             rigKeys[tPoseJoints[i].id].sphere->props.vertexColor = Vector3(i/255.0,255/255.0,255/255.0);
             rigKeys[tPoseJoints[i].id].sphere->props.transparency = 1.0;
@@ -696,18 +700,50 @@ void SGAutoRigScene::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
             rigKeys[tPoseJoints[i].id].sphere->props.vertexColor = vertColor;
         }
     }
+    
+    for(int i = 0; i < tPoseJoints.size(); i++) {
+        if(tPoseJoints[i].id != 0)
+            rigKeys[tPoseJoints[i].id].sphere->node->setScale(scaleValues[i]);
+    }
     // Draw Joints
     if(shaderMGR->deviceType == OPENGLES2)
         readSkeletonSelectionTexture();
     smgr->setRenderTarget(NULL,false,false);
     smgr->EndDisplay();
 }
-void SGAutoRigScene::readSkeletonSelectionTexture(){
+
+void SGAutoRigScene::readSkeletonSelectionTexture() {
+    
+    Vector2 touchPixel = touchPosForSkeletonSelection;
+    if(selectSkeletonJointInPixel(touchPixel))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0)))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y)))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0)))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y)))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0)))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0)))
+        return;
+    if(selectSkeletonJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0)))
+        return;
+    selectSkeletonJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0));
+}
+
+
+bool SGAutoRigScene::selectSkeletonJointInPixel(Vector2 touchPixel)
+{
     int prevSelectedNodeId = selectedNodeId;
-    float xCoord = (touchPosForSkeletonSelection.x/screenWidth) * touchTexture->width;
-    float yCoord = (touchPosForSkeletonSelection.y/screenHeight) * touchTexture->height;
+
+    float xCoord = (touchPixel.x/screenWidth) * touchTexture->width;
+    float yCoord = (touchPixel.y/screenHeight) * touchTexture->height;
     limitPixelCoordsWithinTextureRange(touchTexture->width,touchTexture->height,xCoord,yCoord);
     Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),touchTexture);
+    
     isJointSelected = isSkeletonJointSelected = false;
     isNodeSelected = isSkeletonSelected = true;
     selectedJoint = NULL;
@@ -720,7 +756,10 @@ void SGAutoRigScene::readSkeletonSelectionTexture(){
     }
     updateSkeletonSelectionColors(prevSelectedNodeId);
     updateControlsOrientaion();
+   
+    return selectedNode;
 }
+
 void SGAutoRigScene::setEnvelopVisibility(bool isVisible)
 {
     for(std::map<int,SGNode *> :: iterator it = envelopes.begin(); it!=envelopes.end(); it++){
@@ -959,6 +998,11 @@ void SGAutoRigScene::renderAll()
     if(sceneMode == RIG_MODE_MOVE_JOINTS || sceneMode == RIG_MODE_PREVIEW)
         renderControls();
     smgr->EndDisplay();
+    
+    if(fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0) {
+        swipeToRotate();
+    }
+
 }
 void SGAutoRigScene::addObjToScene(string objPath,string texturePath)
 {

@@ -112,6 +112,14 @@ void SGAnimationScene::renderAll()
         postRTTDrawCall();
         rttDrawCall();
         smgr->EndDisplay(); // draws all the rendering command
+        
+        if(fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0) {
+            swipeToRotate();
+            updateLightCamera();
+        }
+        
+        if(selectedNodeId != NOT_SELECTED)
+            setTransparencyForIntrudingObjects();
     }
 }
 void SGAnimationScene::rttShadowMap()
@@ -411,6 +419,7 @@ void SGAnimationScene::checkSelection(Vector2 touchPosition,bool isDisplayPrepar
     isRTTCompleted = true;
 
     postNodeJointSelection();
+    setTransparencyForIntrudingObjects();
 }
 void SGAnimationScene::postNodeJointSelection(){
     if(isJointSelected && selectedJointId <= HIP && selectedNode->joints.size() >= HUMAN_JOINTS_SIZE)
@@ -529,14 +538,40 @@ void SGAnimationScene::rttNodeJointSelection(Vector2 touchPosition)
         smgr->EndDisplay();
 }
 void SGAnimationScene::getNodeColorFromTouchTexture(){
-    float xCoord = (nodeJointPickerTouchPosition.x/screenWidth) * touchTexture->width;
-    float yCoord = (nodeJointPickerTouchPosition.y/screenHeight) * touchTexture->height;
+    Vector2 touchPixel = nodeJointPickerTouchPosition;
+    if(selectNodeOrJointInPixel(touchPixel))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0)))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y)))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0)))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y)))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0)))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0)))
+        return;
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0)))
+        return;
+    selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0));
+}
+
+bool SGAnimationScene::selectNodeOrJointInPixel(Vector2 touchPixel)
+{
+    float xCoord = (touchPixel.x/screenWidth) * touchTexture->width;
+    float yCoord = (touchPixel.y/screenHeight) * touchTexture->height;
+    
     limitPixelCoordsWithinTextureRange(touchTexture->width,touchTexture->height,xCoord,yCoord);
     Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),touchTexture);
-    updateNodeSelectionFromColor(pixel);
-    reloadKeyFrameMap();
+    bool status = updateNodeSelectionFromColor(pixel);
+    if(status)
+        reloadKeyFrameMap();
+    return status;
 }
-void SGAnimationScene::updateNodeSelectionFromColor(Vector3 pixel)
+
+bool SGAnimationScene::updateNodeSelectionFromColor(Vector3 pixel)
 {
     int prevSelectedNodeId = selectedNodeId;
     unselectObject(prevSelectedNodeId);
@@ -549,37 +584,47 @@ void SGAnimationScene::updateNodeSelectionFromColor(Vector3 pixel)
     
     isNodeSelected = (selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
     if(selectedNodeId != NOT_EXISTS){
-        nodes[selectedNodeId]->props.prevMatName = nodes[selectedNodeId]->node->material->name;
-        nodes[selectedNodeId]->props.isSelected = true;
-        
-        if(nodes[selectedNodeId]->getType() == NODE_RIG)
-            nodes[selectedNodeId]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-        else if (nodes[selectedNodeId]->getType() == NODE_TEXT)
-            nodes[selectedNodeId]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
-        else
-            nodes[selectedNodeId]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-
-        nodes[selectedNodeId]->props.transparency = NODE_SELECTION_TRANSPARENCY;
-        selectedNode = nodes[selectedNodeId];
-        
-        bool status = true;
-        if(nodes[selectedNodeId]->getType() == NODE_RIG)
-            status = displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(nodes[selectedNodeId]->node));
-        else if (nodes[selectedNodeId]->getType() == NODE_TEXT)
-            status = displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(nodes[selectedNodeId]->node), nodes[selectedNodeId]->props.fontSize/3.0);
-        if(!status)
-            unselectObject(selectedNodeId);
-        
+        highlightSelectedNode();
         if(nodes[selectedNodeId]->getType() == NODE_RIG || nodes[selectedNodeId]->getType() == NODE_TEXT){
             isJointSelected = (selectedJointId = (jointId != 255) ? jointId : NOT_EXISTS) != NOT_EXISTS ? true:false;
             if(isJointSelected)
                 displayJointsBasedOnSelection();
         }
     }
-    
-    updateControlsOrientaion();
-    highlightJointSpheres();
+    if(isNodeSelected || isJointSelected) {
+        updateControlsOrientaion();
+        if(isJointSelected)
+            highlightJointSpheres();
+        return true;
+    } else
+        return false;
 }
+
+void SGAnimationScene::highlightSelectedNode()
+{
+    nodes[selectedNodeId]->props.prevMatName = nodes[selectedNodeId]->node->material->name;
+    nodes[selectedNodeId]->props.isSelected = true;
+    nodes[selectedNodeId]->props.isLighting = false;
+    if(nodes[selectedNodeId]->getType() == NODE_RIG)
+        nodes[selectedNodeId]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
+    else if (nodes[selectedNodeId]->getType() == NODE_TEXT)
+        nodes[selectedNodeId]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
+    else
+        nodes[selectedNodeId]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    
+    nodes[selectedNodeId]->props.transparency = NODE_SELECTION_TRANSPARENCY;
+    selectedNode = nodes[selectedNodeId];
+    
+    bool status = true;
+    if(nodes[selectedNodeId]->getType() == NODE_RIG)
+        status = displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(nodes[selectedNodeId]->node));
+    else if (nodes[selectedNodeId]->getType() == NODE_TEXT)
+        status = displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(nodes[selectedNodeId]->node), nodes[selectedNodeId]->props.fontSize/3.0);
+    if(!status)
+        unselectObject(selectedNodeId);
+    
+}
+
 void SGAnimationScene::setKeysForFrame(int frame)
 {
     for (unsigned long i = 0; i < nodes.size(); i++) {
@@ -834,19 +879,45 @@ Quaternion SGAnimationScene::readRotationFromSGAFile(float rollValue,ifstream* f
 void SGAnimationScene::setLightingOff()
 {
     ShaderManager::sceneLighting = false;
+}
+
+void SGAnimationScene::setTransparencyForIntrudingObjects()
+{
+    return;
     
-    /*
-    nodesLighting.clear();
-    for(int i = NODE_LIGHT+1; i < nodes.size();i++) {
-        nodesLighting.push_back(nodes[i]->props.isLighting);
-        nodes[i]->props.isLighting = false;
+    if(selectedNodeId != NOT_SELECTED) {
+        Vector3 cameraToSelection = (nodes[selectedNodeId]->node->getPosition() - viewCamera->getPosition()).normalize();
+        float selectionDistance = viewCamera->getPosition().getDistanceFrom(nodes[selectedNodeId]->node->getPosition());
+        
+        for(int index = 0; index < nodes.size(); index++) {
+            if(index != selectedNodeId) {
+                Vector3 camToObject = (nodes[index]->node->getPosition() - viewCamera->getPosition()).normalize();
+                float objectDistance = viewCamera->getPosition().getDistanceFrom(nodes[index]->node->getPosition());
+                
+                float angle = fabs(cameraToSelection.dotProduct(camToObject));
+                printf(" index %d distance %f select distance %f ", index, objectDistance, selectionDistance);
+                if(objectDistance <= selectionDistance + 1.0) {
+                    float nodeTrans = (angle > 0.9) ? (0.95 - angle) * 20.0 : 1.0;
+                    nodeTrans = (nodeTrans < 0.0) ? 0.0 : nodeTrans;
+                    nodes[index]->props.transparency = nodeTrans;
+                    nodes[index]->node->setVisible((nodeTrans == 0.0) ? false : true);
+                } else {
+                    nodes[index]->node->setVisible(true);
+                    nodes[index]->props.transparency = 1.0;
+                }
+            }
+        }
+    } else {
+        for(int index = 0; index < nodes.size(); index++) {
+            nodes[index]->node->setVisible(true);
+            nodes[index]->props.transparency = 1.0;
+        }
     }
-     */
 }
 
 void SGAnimationScene::touchBegan(Vector2 curTouchPos)
 {
-    //setLightingOff();
+    xAcceleration = yAcceleration = 0.0;
 }
 void SGAnimationScene::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared){
     prevTouchPoints[0] = curTouchPos;
@@ -881,8 +952,11 @@ void SGAnimationScene::rttControlSelectionAnim(Vector2 touchPosition)
         sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         sceneControls[i]->props.vertexColor = Vector3(i/255.0,1.0,1.0);
         sceneControls[i]->props.transparency = 1.0;
+        Vector3 ctrlToCam = (viewCamera->getPosition() - sceneControls[i]->node->getPosition()).normalize();
+        float angle = fabs(ctrlToCam.dotProduct(controlDirection[i%3]));
         int nodeIndex = smgr->getNodeIndexByID(sceneControls[i]->node->getID());
-        smgr->RenderNode(nodeIndex);
+        if(angle < 0.9)
+            smgr->RenderNode(nodeIndex);
     }
     if(shaderMGR->deviceType == OPENGLES2)
         getCtrlColorFromTouchTextureAnim(touchPosition);
@@ -950,8 +1024,6 @@ void SGAnimationScene::switchFrame(int frame)
         switchFrameAction.actionSpecificIntegers.push_back(previousFrame);
         switchFrameAction.frameId = currentFrame;
         addAction(switchFrameAction);
-//        actions.push_back(switchFrameAction);
-//        currentAction++;
     }
 
     setDataForFrame(frame);
@@ -973,12 +1045,6 @@ void SGAnimationScene::touchEnd(Vector2 curTouchPos)
 void SGAnimationScene::setLightingOn()
 {
     ShaderManager::sceneLighting = true;
-    /*
-    for(int i = NODE_LIGHT+1; i < nodes.size(); i++) {
-        nodes[i]->props.isLighting = nodesLighting[i-(NODE_LIGHT+1)];
-    }
-    nodesLighting.clear();
-     */
 }
 
 void SGAnimationScene::storeMovementAction()
@@ -1024,7 +1090,7 @@ void SGAnimationScene::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float 
     //if(selectedNodeId != NOT_SELECTED && nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)
         //updateLightProperties(currentFrame);
     
-    if(isControlSelected){
+    if(isControlSelected) {
         Vector3 outputValue;
         calculateControlMovements(curTouchPos,prevTouchPoints[0] ,outputValue);
         prevTouchPoints[0] = curTouchPos;
@@ -1065,17 +1131,25 @@ bool SGAnimationScene::changeObjectOrientation(Vector3 outputValue)
                                 int jointId = ((*ikJointsPositoinMapItr).first);
                                 selectedNode->MoveBone((shared_ptr<JointNode>)(selectedNode->joints[jointId]->jointNode),ikJointsPositionMap.find((*ikJointsPositoinMapItr).first)->second,currentFrame);
                             }
-                            //rigNode.reset();
                         }
                     }else{
                         if(selectedJoint)
                             selectedNode->MoveBone(selectedJoint->jointNode,target,currentFrame);
                     }
                 } else if(nodes[selectedNodeId]->getType() == NODE_TEXT){
+                    
                     selectedJoint = nodes[selectedNodeId]->joints[selectedJointId];
-                    Vector3 position = selectedJoint->jointNode->getPosition() + outputValue;
+                    Vector3 jointLocalPos = selectedJoint->jointNode->getPosition();
+
+                    Vector3 moveDir = Vector3((selectedControlId == X_MOVE ? 1.0 : 0.0),(selectedControlId == Y_MOVE ? 1.0 : 0.0),(selectedControlId == Z_MOVE ? 1.0 : 0.0));
+                                        
+                    float trnsValue = (selectedControlId == X_MOVE) ? outputValue.x : (selectedControlId == Y_MOVE) ? outputValue.y : outputValue.z;
+                    moveDir = moveDir * trnsValue;
+                    
+                    Vector3 position = jointLocalPos + moveDir;
                     selectedJoint->setPosition(position, currentFrame);
                     selectedJoint->setPositionOnNode(position);
+                    
                 }
                 else{
                     shared_ptr<Node> parent = nodes[selectedNodeId]->joints[selectedJointId]->jointNode->getParent();
@@ -1094,9 +1168,7 @@ bool SGAnimationScene::changeObjectOrientation(Vector3 outputValue)
                         rot = Quaternion(nodes[selectedNodeId]->joints[selectedJoint->jointNode->getParent()->getID()]->jointNode->getRotationInDegrees()*Vector3(1.0,-1.0,-1.0)*DEGTORAD);
                         nodes[selectedNodeId]->joints[mirrorNode->getParent()->getID()]->setRotation(rot,currentFrame);
                         nodes[selectedNodeId]->joints[mirrorNode->getParent()->getID()]->setRotationOnNode(rot);
-                        //mirrorNode.reset();
                     }
-                    //parent.reset();
                 }
 //                if(nodes[selectedNodeId]->getType() == NODE_RIG)
 //                    dynamic_pointer_cast<AnimatedMeshNode>(nodes[selectedNodeId]->node)->updatePartOfMeshCache(CHARACTER_RIG,selectedJointId);
@@ -1105,9 +1177,7 @@ bool SGAnimationScene::changeObjectOrientation(Vector3 outputValue)
                 
             }else if(isNodeSelected){
                 success = true;
-                //if(nodes[selectedNodeId]->getType() == NODE_LIGHT || nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)
-                    //updateLightProperties(currentFrame);
-                    
+                
                 nodes[selectedNodeId]->setPosition(nodes[selectedNodeId]->node->getPosition() + outputValue,currentFrame);
                 nodes[selectedNodeId]->setPositionOnNode(nodes[selectedNodeId]->node->getPosition() + outputValue);
                 break;
@@ -1784,13 +1854,13 @@ void SGAnimationScene::unselectObject(int objectId)
         nodes[objectId]->props.transparency = 1.0;
         nodes[objectId]->props.isSelected = false;
         //nodes[objectId]->node->setMaterial(smgr->getMaterialByName(nodes[objectId]->props.prevMatName)); TODO
-        resetMaterialTypes(false);
-        setJointSpheresVisibility(false);
         selectedJoint = NULL;
         selectedNode = NULL;
         selectedJointId = NOT_EXISTS;
         selectedNodeId = NOT_EXISTS;
         isJointSelected = isNodeSelected = false;
+        resetMaterialTypes(false);
+        setJointSpheresVisibility(false);
 
         if(nodes[objectId]->getType() == NODE_CAMERA)
             nodes[objectId]->props.perVertexColor = true;
@@ -2113,6 +2183,7 @@ void SGAnimationScene::resetMaterialTypes(bool isToonShader)
     int count = (int)ShaderManager::lightPosition.size();
     
     switch (count) {
+        
         case 1: {
             commonType = SHADER_COMMON_L1;
             commonSkinType = SHADER_COMMON_SKIN_L1;
@@ -2149,29 +2220,33 @@ void SGAnimationScene::resetMaterialTypes(bool isToonShader)
     
     for(int index = 0; index < nodes.size(); index++)
     {
-        switch (nodes[index]->getType()) {
-            case NODE_CAMERA: {
-                nodes[index]->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
-                break;
+        if(selectedNodeId == index) {
+            //DO NOTHING
+        } else {
+            switch (nodes[index]->getType()) {
+                case NODE_CAMERA: {
+                    nodes[index]->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+                    break;
+                }
+                case NODE_LIGHT:
+                case NODE_SGM:
+                case NODE_OBJ:
+                case NODE_IMAGE: {
+                    nodes[index]->node->setMaterial(smgr->getMaterialByIndex((isToonShader && nodes[index]->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
+                    break;
+                }
+                case NODE_RIG: {
+                    nodes[index]->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
+                    break;
+                }
+                case NODE_TEXT: {
+                    nodes[index]->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
+                    break;
+                }
+                    
+                default:
+                    break;
             }
-            case NODE_LIGHT:
-            case NODE_SGM:
-            case NODE_OBJ:
-            case NODE_IMAGE: {
-                nodes[index]->node->setMaterial(smgr->getMaterialByIndex((isToonShader && nodes[index]->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
-                break;
-            }
-            case NODE_RIG: {
-                nodes[index]->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
-                break;
-            }
-            case NODE_TEXT: {
-                nodes[index]->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
-                break;
-            }
-                
-            default:
-                break;
         }
     }
     
