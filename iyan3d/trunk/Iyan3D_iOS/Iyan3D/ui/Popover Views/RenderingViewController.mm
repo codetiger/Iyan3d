@@ -426,7 +426,7 @@
         NSLog(@"The file has been zipped");
         
         
-        NSString *userId= @"sankarsmackall";
+        NSString *uniqueId= [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
         int startFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.leftValue + 1);
         int endFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.rightValue);
         printf("\n Frame %d %d " , startFrame , endFrame);
@@ -453,7 +453,7 @@
             NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock:^(id <AFMultipartFormData>formData) {
                 
                 [formData appendPartWithFileData:dataZip  name:@"renderFile" fileName:[NSString stringWithFormat:@"test.zip"] mimeType:@"image/png"];
-                [formData appendPartWithFormData:[userId dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
+                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
                 [formData appendPartWithFormData:[sFrame dataUsingEncoding:NSUTF8StringEncoding] name:@"startFrame"];
                 [formData appendPartWithFormData:[eFrame dataUsingEncoding:NSUTF8StringEncoding] name:@"endFrame"];
                 [formData appendPartWithFormData:[resolutionWidth dataUsingEncoding:NSUTF8StringEncoding] name:@"width"];
@@ -971,7 +971,7 @@
         if(selectedIndex < [shaderArray count])
             shaderType = [shaderArray[selectedIndex] intValue];
         
-        [self.delegate renderFrame:renderingFrame withType:shaderType andRemoveWatermark:(!self.watermarkSwitch.isOn)];
+        [self.delegate renderFrame:renderingFrame withType:shaderType isImage:(renderingExportImage == RENDER_IMAGE) andRemoveWatermark:(!self.watermarkSwitch.isOn)];
         
         NSString *tempDir = NSTemporaryDirectory();
         NSString *imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, renderingFrame];

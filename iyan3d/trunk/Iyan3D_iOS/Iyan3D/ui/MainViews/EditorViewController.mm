@@ -2088,13 +2088,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     editorScene->updater->resetMaterialTypes((shaderType == 0) ? false : true);
 }
 
-- (void)renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark
+- (void) renderFrame:(int)frame withType:(int)shaderType isImage:(bool)isImage andRemoveWatermark:(bool)removeWatermark
 {
     editorScene->renHelper->isExportingImages = true;
     editorScene->updater->setDataForFrame(frame);
     NSString* tempDir = NSTemporaryDirectory();
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, frame];
-    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark,renderBgColor);
+    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark,(isImage) ? -1 : frame, renderBgColor);
 }
 
 - (void) freezeEditorRender:(BOOL) freeze
@@ -3577,7 +3577,7 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->updater->setDataForFrame(editorScene->currentFrame);
             NSString* imageFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, assetId];
             renderBgColor = Vector4(0.1,0.1,0.1,1.0);
-            editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], 0, false, YES,renderBgColor);
+            editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], 0, false, YES, editorScene->currentFrame, renderBgColor);
             
             for(int i = 0; i < [nodes count]; i++){
                 editorScene->nodes[[[nodes objectAtIndex:i]intValue]]->node->setVisible(true);

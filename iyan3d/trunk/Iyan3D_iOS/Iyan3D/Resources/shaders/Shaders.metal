@@ -484,12 +484,14 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
             colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            if(i == 0)
+                colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
     }
     //-------------
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
-    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
+//    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     return half4(half3(finalColor.xyz) , in.transparency);
 }
 
@@ -546,12 +548,14 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
             colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            if(i == 0)
+                colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
     }
     //-------------
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
-    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
+//    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     return half4(half3(finalColor.xyz) , in.transparency);
 }
 
@@ -608,12 +612,14 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
             colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            if(i == 0)
+                colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
     }
     //-------------
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
-    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
+//    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     return half4(half3(finalColor.xyz) , in.transparency);
 }
 
@@ -670,12 +676,14 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
             colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            if(i == 0)
+                colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
     }
     //-------------
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
-    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
+//    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     return half4(half3(finalColor.xyz) , in.transparency);
 }
 

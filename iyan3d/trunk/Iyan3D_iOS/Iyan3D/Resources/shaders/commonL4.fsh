@@ -85,6 +85,7 @@ void main()
     if(lightingValue != 0.0){
         colorOfLight = vec4(0.0);
         getColorOfLight(0,specular,colorOfLight);
+        colorOfLight = colorOfLight + (vec4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         getColorOfLight(1,specular,colorOfLight);
         getColorOfLight(2,specular,colorOfLight);
         getColorOfLight(3,specular,colorOfLight);
@@ -93,7 +94,7 @@ void main()
     //-------------
     
     vec4 finalColor = vec4(diffuse_color + specular) * colorOfLight;
-    finalColor = finalColor + (vec4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
+//    finalColor = finalColor + (vec4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     
     gl_FragColor.xyz = finalColor.xyz;
     gl_FragColor.a = diffuse_color.a * transparency;

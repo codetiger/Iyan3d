@@ -569,7 +569,7 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
     //childs.reset();
 }
 
-void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, Vector4 bgColor)
+void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, int frame, Vector4 bgColor)
 {
     if(!renderingScene || !smgr || renderingScene->isRigMode)
         return;
@@ -618,8 +618,22 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     
     smgr->Render();
     
+    if(renderingScene->watermarkTexture)
+        smgr->RemoveTexture(renderingScene->watermarkTexture);
+    
+    int totalImgs = 118;
+    int index = 0;
+    if(frame > -1) {
+        int divisor = (frame > totalImgs) ? frame/totalImgs : 1;
+        index = (frame > totalImgs) ? frame - (divisor * totalImgs) : frame;
+    }
+    
+    string watermarkPath = constants::BundlePath + "/wm" + to_string(index) + ".png";
+    renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture" ,watermarkPath, TEXTURE_RGBA8,TEXTURE_BYTE);
+    int waterMarkSize = SceneHelper::screenWidth * 0.2;
+    
     if(!removeWaterMark)
-        smgr->draw2DImage(renderingScene->watermarkTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        smgr->draw2DImage(renderingScene->watermarkTexture,Vector2(SceneHelper::screenWidth - waterMarkSize ,SceneHelper::screenHeight - waterMarkSize),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     if(smgr->device == METAL)
         rttShadowMap();
     
