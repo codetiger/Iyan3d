@@ -626,7 +626,7 @@ bool SGEditorScene::allObjectsScalable()
     bool status = true;
     for(int i = 0; i < selectedNodeIds.size(); i++) {
         NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
-        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT) {
+        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT || nType == NODE_PARTICLES) {
             status = false;
             break;
         }
