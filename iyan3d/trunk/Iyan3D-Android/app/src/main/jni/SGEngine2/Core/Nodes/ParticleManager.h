@@ -29,6 +29,7 @@ private:
     int maxLifeRandPercent;
     
     double startScale;
+    bool isSelected;
     
     Vector4* positions;
 public:
@@ -46,7 +47,7 @@ public:
     
     void setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale);
     virtual void update();
-    void updateParticles();
+    void updateParticles(bool isSelected);
     Vector4* getPositions();
     Vector4 getParticleProps();
     int getParticlesCount();

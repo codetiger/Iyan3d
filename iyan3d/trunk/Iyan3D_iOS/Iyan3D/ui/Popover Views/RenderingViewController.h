@@ -24,6 +24,7 @@
 #import "PopUpViewController.h"
 
 @protocol RenderingViewControllerDelegate
+- (void) freezeEditorRender:(BOOL) freeze;
 - (void) renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark;
 - (void) setShaderTypeForRendering:(int)shaderType;
 - (NSMutableArray*) getFileNamesToAttach;

@@ -22,6 +22,7 @@ ParticleManager::ParticleManager() {
     maxLifeRandPercent = 10;
     startScale = 0.0 + getScale().x;
     deltaScale = 0.001;
+    isSelected = false;
 }
 
 void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale)
@@ -67,7 +68,7 @@ void ParticleManager::update() {
     
     pool->resetIteration();
     Particle* p = pool->getNextLiveParticle();
-    while(p != NULL) {
+    while(p != NULL && isSelected) {
         p->age++;
         p->position += p->velocity;
         
@@ -81,12 +82,22 @@ void ParticleManager::update() {
     }
 }
 
-void ParticleManager::updateParticles()
+void ParticleManager::updateParticles(bool isSelected)
 {
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
+        this->isSelected = isSelected;
+        Vector3 nodePos = getAbsoluteTransformation().getTranslation();
+        
+        if(!isSelected) {
+            positions[i] = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
+            if(i > 0)
+                p->isLive = false;
+        }
+
         if(p->isLive) {
-            positions[i] = Vector4(p->position.x, p->position.y, p->position.z, p->age);
+            if(isSelected)
+                positions[i] = Vector4(p->position.x, p->position.y, p->position.z, p->age);
         } else {
             positions[i] = Vector4(0.0, 0.0, 0.0, p->age);
         }

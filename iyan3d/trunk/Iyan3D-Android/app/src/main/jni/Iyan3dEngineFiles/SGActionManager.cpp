@@ -326,7 +326,7 @@ void SGActionManager::changeMeshProperty(float brightness, float specular, bool 
 
 void SGActionManager::changeCameraProperty(float fov , int resolutionType, bool isChanged)
 {
-    if(!actionScene || !smgr || !actionScene->isNodeSelected)
+    if(!actionScene || !smgr)
         return;
 
     if(propertyAction.actionType == ACTION_EMPTY){

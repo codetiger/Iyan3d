@@ -23,9 +23,9 @@
 
 @implementation LoggedInViewController
 
-#define FIVE_HUNDERED_CREDITS @"fivehundredcredits"
-#define TWO_THOUSAND_CREDITS @"twothousandcredits"
-#define FIVE_THOUSAND_CREDITS @"fivethousandcredits"
+#define FIVE_HUNDERED_CREDITS @"500credits"
+#define TWO_THOUSAND_CREDITS @"2000credits"
+#define FIVE_THOUSAND_CREDITS @"5000credits"
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,7 +38,7 @@
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
         NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-        NSString* userName = [[AppHelper getAppHelper] userDefaultsForKey:@"name"];
+        NSString* userName = [[AppHelper getAppHelper] userDefaultsForKey:@"username"];
         NSString* email = [[AppHelper getAppHelper] userDefaultsForKey:@"email"];
         int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
         [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:userName Email:email SignInType:signinType];

@@ -177,8 +177,10 @@ void SGEditorScene::initTextures()
 
 void SGEditorScene::renderAll()
 {
-    if(freezeRendering)
+    if(freezeRendering) {
+        ShaderManager::isRendering = true;
         return;
+    }
     
     bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false,
                                                 Vector4(0.1, 0.1, 0.1, 1.0));
@@ -186,7 +188,12 @@ void SGEditorScene::renderAll()
     if(displayPrepared) {
         rotationCircle->node->setVisible(false);
         renHelper->drawGrid();
-
+        
+        if(selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA)
+            ShaderManager::isRendering = true;
+        else
+            ShaderManager::isRendering = false;
+        
         smgr->Render();
         
         renHelper->drawCircle();

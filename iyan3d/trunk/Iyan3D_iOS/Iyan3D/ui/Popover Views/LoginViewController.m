@@ -79,7 +79,7 @@
                       NSLog(@"fetched user:%@  and Email : %@", result[@"id"],[result objectForKey:@"name"]);
                       [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"signedin"];
                       [[AppHelper getAppHelper]saveToUserDefaults:result[@"id"] withKey:@"uniqueid"];
-                      [[AppHelper getAppHelper]saveToUserDefaults:result[@"name"] withKey:@"name"];
+                      [[AppHelper getAppHelper]saveToUserDefaults:result[@"name"] withKey:@"username"];
                       [[AppHelper getAppHelper]saveToUserDefaults:result[@"email"] withKey:@"email"];
                       [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:FACEBOOK_SIGNIN] withKey:@"signintype"];
                       [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"credits"];
@@ -107,7 +107,7 @@
             NSLog(@"signed in as %@", [session userName]);
             
             [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"signedin"];
-            [[AppHelper getAppHelper]saveToUserDefaults:[session userName] withKey:@"name"];
+            [[AppHelper getAppHelper]saveToUserDefaults:[session userName] withKey:@"username"];
             [[AppHelper getAppHelper]saveToUserDefaults:[session userID] withKey:@"uniqueid"];
             [[AppHelper getAppHelper]saveToUserDefaults:@"" withKey:@"email"];
             [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:TWITTER_SIGNIN] withKey:@"signintype"];

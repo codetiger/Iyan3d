@@ -96,6 +96,9 @@
     [shaderArray addObject:[NSNumber numberWithInt:SHADER_TOON ]];
     [shaderArray addObject:[NSNumber numberWithInt:SHADER_CLOUD ]];
     //[shaderArray addObject:[NSNumber numberWithInt:SHADER_PHOTO ]];
+    
+    [self.delegate freezeEditorRender:YES];
+    
     [shaderTypesDict setObject:@"Normal Shader" forKey:[NSNumber numberWithInt:SHADER_DEFAULT]];
     [shaderTypesDict setObject:@"Toon Shader" forKey:[NSNumber numberWithInt:SHADER_TOON ]];
     [shaderTypesDict setObject:@"Cloud Rendering" forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
@@ -1092,6 +1095,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 - (void) dealloc
 {
     thread = nil;
+    [self.delegate freezeEditorRender:NO];
     self.videoFilePath = nil;
     self.youtubeService = nil;
     self.uploadVideo = nil;

@@ -19,7 +19,7 @@
 struct properties{
     int isLighting,isSelected,fontSize;
     float brightness,shininess,transparency,isColorMaterial,nodeSpecificFloat;
-    bool isVisible,perVertexColor;
+    bool isVisible,perVertexColor, faceNormals;
     Vector3 vertexColor,oriVertexColor;
     Vector3 textColor;
     std::string prevMatName;

@@ -21,7 +21,7 @@ SGNode::SGNode(NODE_TYPE type){
     props.brightness = 1.0;
     props.shininess = 0.0;
     props.fontSize = 20;
-    props.perVertexColor = false;
+    props.perVertexColor = props.faceNormals = false;
     props.nodeSpecificFloat = 0.0;
     textureName = "";
 }

@@ -426,7 +426,8 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         nodesVisibility.push_back(renderingScene->nodes[i]->props.isVisible);
         nodeSelection.push_back(renderingScene->nodes[i]->props.isSelected);
         renderingScene->nodes[i]->props.transparency = 1.0;
-        renderingScene->nodes[i]->props.isSelected = false;
+        if(renderingScene->nodes[i]->getType() != NODE_PARTICLES)
+            renderingScene->nodes[i]->props.isSelected = false;
         renderingScene->nodes[i]->props.isVisible = renderingScene->nodes[i]->isTempNode ? false : true;
         renderingScene->nodes[i]->props.vertexColor = Vector3((i/255.0),1.0,1.0);
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
@@ -595,6 +596,8 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(false);
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
+        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
+            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
     
     smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],true,true,false,Vector4(bgColor));
@@ -618,6 +621,8 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(true);
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
+        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
+            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
     
     if(renderingType != shaderType)

@@ -1919,6 +1919,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark,renderBgColor);
 }
 
+- (void) freezeEditorRender:(BOOL) freeze
+{
+    editorScene->freezeRendering = freeze;
+}
+
 - (void) presentPopOver:(CGRect )arect{
     
     UIAlertController * view=   [UIAlertController
