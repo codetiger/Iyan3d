@@ -50,59 +50,38 @@ ParticleManager::~ParticleManager()
 
 void ParticleManager::update() {
     
-}
-
-void ParticleManager::updateParticles(int frame)
-{
-    for (int i = 0; i < maxParticleCount; i++) {
-        Particle* p = pool->getParticleByIndex(i);
-        p->isLive = false;
+    for (int i = 0; i < emissionSpeed; ++i) {
+        Particle *p = pool->reuseDeadParticle();
+        if(p) {
+            p->isLive = true;
+            p->age = maxLife * maxLifeRandPercent * 0.01f * rand()/(float)RAND_MAX;
+            p->position = getAbsoluteTransformation().getTranslation();
+            Vector3 direction = Vector3(0, 1, 0);
+            Mat4 rotMatix;
+            Vector3 rot = getRotationInRadians() + Vector3(- 0.5 + rand()/(float)RAND_MAX, 0.0, - 0.5 + rand()/(float)RAND_MAX) * startVelocitySpreadAngle * DEGTORAD;
+            rotMatix.setRotationRadians(rot);
+            rotMatix.rotateVect(direction);
+            p->velocity = direction * (startVelocityMagnitude + rand()/RAND_MAX *  startVelocityMagnitudeRand);
+        } else break;
     }
-    srand(0);
     
-    int startIndex = frame - maxLife;
-    if(startIndex < 0)
-        startIndex = 0;
-    
-    for (int j = startIndex; j <= frame; j++) {
-        for (int i = 0; i < emissionSpeed; ++i) {
-            Particle *p = pool->reuseDeadParticle();
-            if(p) {
-                p->isLive = true;
-                p->initialAge = maxLife * maxLifeRandPercent * 0.01f * rand()/(float)RAND_MAX;
-                p->startedFrame = j;
-                Vector3 direction = Vector3(0, 1, 0);
-                Mat4 rotMatix;
-                Vector3 rot = getRotationInRadians() + Vector3(- 0.5 + rand()/(float)RAND_MAX, 0.0, - 0.5 + rand()/(float)RAND_MAX) * startVelocitySpreadAngle * DEGTORAD;
-                rotMatix.setRotationRadians(rot);
-                rotMatix.rotateVect(direction);
-                p->velocity = p->initVelocity = direction * (0.1 + rand()/RAND_MAX *  startVelocityMagnitudeRand);
-            } else break;
-        }
+    pool->resetIteration();
+    Particle* p = pool->getNextLiveParticle();
+    while(p != NULL) {
+        p->age++;
+        p->position += p->velocity;
         
-        pool->resetIteration();
-        Particle* p = pool->getNextLiveParticle();
-        while(p != NULL) {
-            int frameDiff = (j - p->startedFrame);
-            p->age = (frameDiff >= 0) ? p->initialAge + (j - p->startedFrame) : 0;
-            
-            if(p->age > maxLife || p->age <= 0)
-                p->isLive = false;
-
-            if(j == frame) {
-                frameDiff = (frameDiff) >= 0 ? (frameDiff) : 0;
-                p->position = getAbsoluteTransformation().getTranslation() + (p->velocity * frameDiff);
-                
-                if(hasGravity)
-                    p->velocity.y = p->initVelocity.y - (0.001f * frameDiff);
-            }
-            
-            p = pool->getNextLiveParticle();
-        }
+        if(p->age > maxLife)
+            p->isLive = false;
+        
+        if(hasGravity)
+            p->velocity.y -= 0.001f;
+        
+        p = pool->getNextLiveParticle();
     }
 }
 
-void ParticleManager::updatePostionArray()
+void ParticleManager::updateParticles()
 {
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);

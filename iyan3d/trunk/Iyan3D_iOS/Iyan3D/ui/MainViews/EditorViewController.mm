@@ -1524,7 +1524,8 @@ BOOL missingAlertShown;
     else if (editorScene->currentFrame == editorScene->totalFrames) {
         [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
     }
-    editorScene->updater->setDataForFrame(editorScene->currentFrame);}
+
+}
 
 - (void) stopPlaying{
     [self.playBtn setImage:[UIImage imageNamed:@"Play_Pad.png"] forState:UIControlStateNormal];

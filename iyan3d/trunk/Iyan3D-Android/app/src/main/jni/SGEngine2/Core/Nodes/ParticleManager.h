@@ -7,47 +7,46 @@
 
 enum EmitterType
 {
-	EmitterTypeSphere,
-	EmitterTypeSurface,
+    EmitterTypeSphere,
+    EmitterTypeSurface,
 };
 
 class ParticleManager : public MeshNode {
-
+    
 private:
     
-	int maxParticleCount;
-	ParticlePool *pool;
-	bool hasGravity;
-
-	int startVelocitySpreadAngle; //[ 0 - 360 ]
-	float startVelocityMagnitude;
-	float startVelocityMagnitudeRand;
-
-	int emissionSpeed;
-
-	int maxLife;
-	int maxLifeRandPercent;
-
-	double startScale;
-
+    int maxParticleCount;
+    ParticlePool *pool;
+    bool hasGravity;
+    
+    int startVelocitySpreadAngle; //[ 0 - 360 ]
+    float startVelocityMagnitude;
+    float startVelocityMagnitudeRand;
+    
+    int emissionSpeed;
+    
+    int maxLife;
+    int maxLifeRandPercent;
+    
+    double startScale;
+    
     Vector4* positions;
 public:
     
     double deltaScale;
-
+    
     Vector3 particleRotation;
     
     Vector4 startColor;
     Vector4 midColor;
     Vector4 endColor;
-
+    
     ParticleManager();
     ~ParticleManager();
-
+    
     void setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale);
     virtual void update();
-    void updateParticles(int frame);
-    void updatePostionArray();
+    void updateParticles();
     Vector4* getPositions();
     Vector4 getParticleProps();
     int getParticlesCount();

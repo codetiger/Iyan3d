@@ -6,15 +6,12 @@
 
 class Particle {
 public:
-	bool isLive;
-	int age;
-    int initialAge;
-    int startedFrame;
-
-	Vector3 position;
-    Vector3 initVelocity;
-	Vector3 velocity;
-
+    bool isLive;
+    int age;
+    
+    Vector3 position;
+    Vector3 velocity;
+    
     double distance;
 };
 
