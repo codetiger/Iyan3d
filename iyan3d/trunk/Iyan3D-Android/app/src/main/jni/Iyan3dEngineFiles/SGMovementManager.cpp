@@ -267,4 +267,67 @@ void SGMovementManager::getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 c
     moveScene->circleTouchPoint = newPos;
 }
 
+void SGMovementManager::touchBeganRig(Vector2 curTouchPos)
+{
+    if(!moveScene || !smgr || !moveScene->isRigMode)
+        return;
+
+    prevTouchPoints[0] = curTouchPos;
+    moveScene->updater->updateControlsOrientaion();
+    moveScene->renHelper->rttControlSelectionAnim(curTouchPos);
+    if(moveScene->shaderMGR->deviceType == METAL){
+        moveScene->renHelper->rttControlSelectionAnim(curTouchPos);
+        moveScene->selectMan->getCtrlColorFromTouchTextureAnim(curTouchPos);
+    }
+    xAcceleration = yAcceleration = 0.0;
+}
+
+void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height)
+{
+    if(!moveScene || !smgr || !moveScene->isRigMode || !moveScene->rigMan->isNodeSelected)
+        return;
+
+    bool isNodeSelected = moveScene->hasNodeSelected();
+    bool isJointSelected = moveScene->hasJointSelected();
+    
+    if(moveScene->isControlSelected) {
+        Vector3 outputValue;
+        calculateControlMovements(curTouchPos,prevTouchPoints[0] ,outputValue, isJointSelected ? true:false);
+        prevTouchPoints[0] = curTouchPos;
+        switch(moveScene->controlType){
+            case MOVE:
+                if(isNodeSelected){
+                    if(moveScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS)
+                        moveScene->actionMan->changeSkeletonPosition(outputValue);
+                    else
+                        moveScene->actionMan->changeSGRPosition(outputValue);
+                    
+                }
+                break;
+            case ROTATE:
+                if(isNodeSelected){
+                    moveScene->actionMan->changeSkeletonRotation(outputValue);
+                    moveScene->actionMan->changeSGRRotation(outputValue);
+                }
+                break;
+            default:
+                break;
+        }
+        moveScene->updater->updateControlsOrientaion();
+    }
+    return;
+}
+
+void SGMovementManager::touchEndRig(Vector2 curTouchPos)
+{
+    if(!moveScene || !smgr || !moveScene->isRigMode)
+        return;
+
+    swipeTiming = 0;
+    moveScene->updater->updateControlsMaterial();
+    if(moveScene->isControlSelected) {
+        moveScene->selectedControlId = NOT_SELECTED;
+        moveScene->isControlSelected = false;
+    }
+}
 

@@ -54,6 +54,11 @@ public:
     void getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 curPoint, Vector3& oldPos, Vector3& newPos);
     
     void touchEnd(Vector2 curTouchPos);
+    
+    /* Auto Rig Related */
+    void touchBeganRig(Vector2 curTouchPos);
+    void touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height);
+    void touchEndRig(Vector2 curTouchPos);
 };
 
 #endif /* SGMovementManager_h */

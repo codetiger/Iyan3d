@@ -72,14 +72,18 @@
     
     [self.objectList reloadData];
     
-    [self initScene];
-    [self createDisplayLink];
-    if(renderViewMan){
-        [renderViewMan addCameraLight];
-    }
 }
 
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    if(!editorScene) {
+        [self initScene];
+        [self createDisplayLink];
+        if(renderViewMan){
+            [renderViewMan addCameraLight];
+        }
+    }
+}
 
 - (void)initScene
 {
@@ -157,7 +161,8 @@
         if(renderViewMan.makePanOrPinch)
             [renderViewMan panOrPinchProgress];
         editorScene->renderAll();
-        [renderViewMan presentRenderBuffer];
+        if(!isMetalSupported)
+            [renderViewMan presentRenderBuffer];
     }
 }
 

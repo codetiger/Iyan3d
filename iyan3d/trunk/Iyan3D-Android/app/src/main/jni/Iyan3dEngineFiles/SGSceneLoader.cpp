@@ -377,3 +377,45 @@ bool SGSceneLoader::removeTempNodeIfExists()
     return true;
 }
 
+void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
+{
+    std::map<int, RigKey> rigKeys = currentScene->rigMan->rigKeys;
+
+    SGNode *envelopeSgNod = (envelopes.find(jointId) == envelopes.end()) ? NULL:envelopes[jointId];
+    if(jointId<=1) return;  //skipping envelope between hip and it's parent.
+    int parentId = rigKeys[jointId].parentId;
+    
+    if(envelopeSgNod == NULL){
+        envelopeSgNod = new SGNode(NODE_RIG);
+        AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr", currentScene->shaderMGR->deviceType);
+        envelopeSgNod->setSkinningData((SkinMesh*)mesh);
+        shared_ptr<AnimatedMeshNode> envelopeNode = smgr->createAnimatedNodeFromMesh(mesh,"envelopeUniforms",CHARACTER_RIG, MESH_TYPE_HEAVY);
+        envelopeNode->setID(ENVELOPE_START_ID + jointId);
+        envelopeNode->setParent(rigKeys[parentId].referenceNode->node);
+        envelopeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
+        envelopeSgNod->node = envelopeNode;
+        envelopeSgNod->props.vertexColor = Vector3(1.0);
+        envelopeSgNod->props.transparency = 0.4;
+    }
+    if(envelopeSgNod->node) {
+        envelopeSgNod->node->updateAbsoluteTransformation();
+        
+        Vector3 currentDir = BONE_BASE_DIRECTION;
+        Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
+        envelopeSgNod->node->setRotationInDegrees(MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))*RADTODEG);
+        envelopeSgNod->node->updateAbsoluteTransformation();
+        shared_ptr<JointNode> topJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_TOP_JOINT_ID);
+        shared_ptr<JointNode> bottomJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_BOTTOM_JOINT_ID);
+        
+        float height = rigKeys[parentId].referenceNode->node->getAbsolutePosition().getDistanceFrom(rigKeys[jointId].referenceNode->node->getAbsolutePosition());
+        topJoint->setPosition(Vector3(0,height,0));
+        topJoint->updateAbsoluteTransformation();
+        
+        bottomJoint->setScale(Vector3(rigKeys[parentId].envelopeRadius));
+        bottomJoint->updateAbsoluteTransformation();
+        topJoint->setScale(Vector3(rigKeys[jointId].envelopeRadius));
+        topJoint->updateAbsoluteTransformation();
+        envelopes[jointId] = envelopeSgNod;
+        envelopes[jointId]->node->setVisible(true);
+    }
+}

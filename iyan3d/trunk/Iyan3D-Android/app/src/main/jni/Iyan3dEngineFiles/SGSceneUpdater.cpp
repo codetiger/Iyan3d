@@ -159,17 +159,21 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     if(!updatingScene || !smgr)
         return;
 
-    updatingScene->renHelper->setControlsVisibility(updatingScene);
+    updatingScene->renHelper->setControlsVisibility(true);
+    bool isNodeSelected = updatingScene->hasNodeSelected();
+    bool isJointSelected = updatingScene->hasJointSelected();
+    SGNode* selectedNode = updatingScene->getSelectedNode();
+    SGJoint* selectedJoint = updatingScene->getSelectedJoint();
     
-    if(!updatingScene->isNodeSelected)
+    if(!isNodeSelected)
         return;
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
     Vector3 nodePos;
-    if(updatingScene->isJointSelected && updatingScene->selectedJoint)
-        nodePos = updatingScene->selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
-    else if( updatingScene->isNodeSelected && updatingScene->selectedNode)
-        nodePos = updatingScene->selectedNode->node->getAbsoluteTransformation().getTranslation();
+    if(isJointSelected && selectedJoint)
+        nodePos = selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
+    else if( isNodeSelected && selectedNode)
+        nodePos = selectedNode->node->getAbsoluteTransformation().getTranslation();
     
     float distanceFromCamera = nodePos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
     float ctrlScale = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_SCALE);
@@ -198,8 +202,8 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
                 break;
         }
         
-        if(updatingScene->isJointSelected && updatingScene->selectedNode->getType() == NODE_TEXT) {
-            Vector3 rot = updatingScene->selectedNode->node->getRotationInRadians();
+        if(isJointSelected && selectedNode->getType() == NODE_TEXT) {
+            Vector3 rot = selectedNode->node->getRotationInRadians();
             Vector3 delta;
             switch(i%3) {
                 case 0:
@@ -359,7 +363,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
     for(int index = 0; index < updatingScene->nodes.size(); index++)
     {
         SGNode *sgNode = updatingScene->nodes[index];
-        if(updatingScene->selectedNodeId == index) {
+        if(updatingScene->selectedNodeId == index && !updatingScene->isRigMode) {
             //DO NOTHING
         } else {
             switch (sgNode->getType()) {
@@ -440,4 +444,71 @@ void SGSceneUpdater::setCameraProperty(float fov , int resolutionType)
     updatingScene->renderCamera->setFOVInRadians(updatingScene->cameraFOV * PI / 180.0f);
 }
 
+void SGSceneUpdater::updateEnvelopes()
+{
+    //update all visible envelopes.
+    if(!updatingScene || !smgr || !updatingScene->isRigMode)
+        return;
+    
+    std::map<int, SGNode*> envelopes = updatingScene->rigMan->envelopes;
 
+    for(std::map<int, SGNode *>::iterator it = envelopes.begin(); it!=envelopes.end(); it++)
+    {
+        if(it->second && (updatingScene->rigMan->selectedNodeId == updatingScene->rigMan->rigKeys[it->first].parentId || it->first == updatingScene->rigMan->selectedNodeId))
+              updatingScene->loader->initEnvelope(envelopes, it->first);
+        
+        int mirrorJoint = BoneLimitsHelper::getMirrorJointId(updatingScene->rigMan->selectedNodeId);
+        
+        if(updatingScene->getMirrorState() == MIRROR_ON && it->second && (mirrorJoint == updatingScene->rigMan->rigKeys[it->first].parentId || it->first == mirrorJoint))
+            updatingScene->loader->initEnvelope(envelopes, it->first);
+    }
+}
+
+void SGSceneUpdater::updateOBJVertexColor()
+{
+    if(!updatingScene || !smgr || !updatingScene->isRigMode)
+        return;
+    std::map<int, SGNode*> envelopes = updatingScene->rigMan->envelopes;
+
+    int mirrorJointIdToUpdate = updatingScene->getMirrorState() ? BoneLimitsHelper::getMirrorJointId(updatingScene->rigMan->selectedNodeId) : NOT_EXISTS;
+    AutoRigHelper::updateOBJVertexColors(dynamic_pointer_cast<MeshNode>(updatingScene->rigMan->objSGNode->node),envelopes,updatingScene->rigMan->rigKeys,updatingScene->rigMan->selectedNodeId, mirrorJointIdToUpdate);
+    
+    int nodeIndex = smgr->getNodeIndexByID(updatingScene->rigMan->objSGNode->node->getID());
+    dynamic_pointer_cast<MeshNode>(updatingScene->rigMan->objSGNode->node)->getMesh()->Commit();
+    smgr->updateVertexBuffer(nodeIndex);
+}
+
+void SGSceneUpdater::updateSkeletonBone(std::map<int, RigKey>& rigKeys, int jointId)
+{
+    if(!updatingScene || !smgr || !updatingScene->isRigMode)
+        return;
+
+    if(jointId <= 1) return;    //skipping the bone between hip and pivot.
+    int parentId = rigKeys[jointId].parentId;
+    if(parentId <= 0) return;
+    Vector3 currentDir = BONE_BASE_DIRECTION;
+    if(rigKeys[jointId].bone && rigKeys[jointId].bone->node) {
+        Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
+        rigKeys[jointId].bone->node->setRotationInDegrees(MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))*RADTODEG);
+        rigKeys[jointId].bone->node->updateAbsoluteTransformation();
+        f32 boneLength = rigKeys[jointId].referenceNode->node->getAbsolutePosition().getDistanceFrom(rigKeys[parentId].referenceNode->node->getAbsolutePosition());
+        Mat4 childGlobal;
+        childGlobal.scale(boneLength);
+        Mat4 parentGlobal;
+        parentGlobal.scale(rigKeys[0].referenceNode->node->getAbsoluteTransformation().getScale());
+        parentGlobal.invert();
+        Mat4 childLocal = parentGlobal * childGlobal;
+        rigKeys[jointId].bone->node->setScale(Vector3(rigKeys[jointId].bone->node->getScale().x,childLocal.getScale().y,rigKeys[jointId].bone->node->getScale().z));
+        rigKeys[jointId].bone->node->updateAbsoluteTransformationOfChildren();
+    }
+}
+
+void SGSceneUpdater::updateSkeletonBones()
+{
+    if(!updatingScene || !smgr || !updatingScene->isRigMode)
+        return;
+    
+    std::map<int, RigKey>& rigKeys = updatingScene->rigMan->rigKeys;
+    for(int i=0;i < updatingScene->tPoseJoints.size();i++)
+        updateSkeletonBone(rigKeys, updatingScene->tPoseJoints[i].id);
+}

@@ -44,6 +44,7 @@
 #include "SGSceneLoader.h"
 #include "SGSceneWriter.h"
 #include "SGAnimationManager.h"
+#include "SGAutoRigSceneManager.h"
 
 class SGEditorScene {
     
@@ -59,7 +60,7 @@ public:
     
     /* cpp class objects */
     
-    bool isPreviewMode;
+    bool isPreviewMode, isRigMode;
     bool freezeRendering , isPlaying, isRTTCompleted;
     bool isNodeSelected,isJointSelected,isControlSelected;
     int selectedJointId,selectedNodeId,selectedControlId,controlType;
@@ -93,6 +94,7 @@ public:
     SGActionManager *actionMan;
     SGSceneWriter *writer;
     SGAnimationManager *animMan;
+    SGAutoRigSceneManager *rigMan;
     
     /* SGEngine class objects */
     
@@ -142,6 +144,10 @@ public:
     bool isJointTransparent(int nodeID,string matName);
     void setControlsUniforms(int nodeID,string matName);
     bool isControlsTransparent(int nodeID,string matName);
+    bool hasNodeSelected();
+    bool hasJointSelected();
+    SGNode* getSelectedNode();
+    SGJoint* getSelectedJoint();
     
     /* Read and Write */
     

@@ -19,12 +19,6 @@
 		0169C4331C33DA2700132FF6 /* WEPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4261C33DA2700132FF6 /* WEPopoverController.m */; };
 		0169C4341C33DA2700132FF6 /* WETouchableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4291C33DA2700132FF6 /* WETouchableView.m */; };
 		0169C4351C33DA2700132FF6 /* WETouchableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4291C33DA2700132FF6 /* WETouchableView.m */; };
-		0169C4401C33DB5800132FF6 /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4391C33DB5800132FF6 /* WEPopoverContentViewController.m */; };
-		0169C4411C33DB5800132FF6 /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4391C33DB5800132FF6 /* WEPopoverContentViewController.m */; };
-		0169C4421C33DB5800132FF6 /* WEPopoverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C43B1C33DB5800132FF6 /* WEPopoverTableViewController.m */; };
-		0169C4431C33DB5800132FF6 /* WEPopoverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C43B1C33DB5800132FF6 /* WEPopoverTableViewController.m */; };
-		0169C4441C33DB5800132FF6 /* WEPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C43D1C33DB5800132FF6 /* WEPopoverViewController.m */; };
-		0169C4451C33DB5800132FF6 /* WEPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C43D1C33DB5800132FF6 /* WEPopoverViewController.m */; };
 		0169C45B1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */; };
 		0169C45C1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */; };
 		0169C45D1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4481C33ED5A00132FF6 /* popoverArrowDown.png */; };
@@ -698,6 +692,8 @@
 		25EFBEBA1BE25CB400DB300C /* RETrimControl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */; };
 		25EFBEBC1BE25D2800DB300C /* RenderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEBB1BE25D2800DB300C /* RenderItem.m */; };
 		25EFBEBD1BE25D2800DB300C /* RenderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEBB1BE25D2800DB300C /* RenderItem.m */; };
+		25F032891C34F59500A55D8A /* SGAutoRigSceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F032881C34F59500A55D8A /* SGAutoRigSceneManager.cpp */; };
+		25F0328A1C34F59500A55D8A /* SGAutoRigSceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F032881C34F59500A55D8A /* SGAutoRigSceneManager.cpp */; };
 		25F0C25E1C2E6F0D00C8EC85 /* SGSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C25D1C2E6F0D00C8EC85 /* SGSceneLoader.cpp */; };
 		25F0C25F1C2E6F0D00C8EC85 /* SGSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C25D1C2E6F0D00C8EC85 /* SGSceneLoader.cpp */; };
 		25F0C2621C2E912800C8EC85 /* SGAnimationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C2611C2E912800C8EC85 /* SGAnimationManager.cpp */; };
@@ -1963,12 +1959,6 @@
 		0169C4271C33DA2700132FF6 /* WEPopoverParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverParentView.h; sourceTree = "<group>"; };
 		0169C4281C33DA2700132FF6 /* WETouchableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WETouchableView.h; sourceTree = "<group>"; };
 		0169C4291C33DA2700132FF6 /* WETouchableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WETouchableView.m; sourceTree = "<group>"; };
-		0169C4381C33DB5800132FF6 /* WEPopoverContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WEPopoverContentViewController.h; path = "../../../../../../../../../../Downloads/WEPopover-master/Classes/WEPopoverContentViewController.h"; sourceTree = "<group>"; };
-		0169C4391C33DB5800132FF6 /* WEPopoverContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WEPopoverContentViewController.m; path = "../../../../../../../../../../Downloads/WEPopover-master/Classes/WEPopoverContentViewController.m"; sourceTree = "<group>"; };
-		0169C43A1C33DB5800132FF6 /* WEPopoverTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WEPopoverTableViewController.h; path = "../../../../../../../../../../Downloads/WEPopover-master/Classes/WEPopoverTableViewController.h"; sourceTree = "<group>"; };
-		0169C43B1C33DB5800132FF6 /* WEPopoverTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WEPopoverTableViewController.m; path = "../../../../../../../../../../Downloads/WEPopover-master/Classes/WEPopoverTableViewController.m"; sourceTree = "<group>"; };
-		0169C43C1C33DB5800132FF6 /* WEPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WEPopoverViewController.h; path = "../../../../../../../../../../Downloads/WEPopover-master/Classes/WEPopoverViewController.h"; sourceTree = "<group>"; };
-		0169C43D1C33DB5800132FF6 /* WEPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WEPopoverViewController.m; path = "../../../../../../../../../../Downloads/WEPopover-master/Classes/WEPopoverViewController.m"; sourceTree = "<group>"; };
 		0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown-white@2x.png"; sourceTree = "<group>"; };
 		0169C4481C33ED5A00132FF6 /* popoverArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popoverArrowDown.png; sourceTree = "<group>"; };
 		0169C4491C33ED5A00132FF6 /* popoverArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown@2x.png"; sourceTree = "<group>"; };
@@ -2590,6 +2580,8 @@
 		25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = RETrimControl.bundle; path = Iyan3D/RETrimControl.bundle; sourceTree = "<group>"; };
 		25EFBEBB1BE25D2800DB300C /* RenderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderItem.m; sourceTree = "<group>"; };
 		25EFBEBE1BE25D3000DB300C /* RenderItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderItem.h; sourceTree = "<group>"; };
+		25F032871C34F57D00A55D8A /* SGAutoRigSceneManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAutoRigSceneManager.h; sourceTree = "<group>"; };
+		25F032881C34F59500A55D8A /* SGAutoRigSceneManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGAutoRigSceneManager.cpp; sourceTree = "<group>"; };
 		25F0C25C1C2E6EF400C8EC85 /* SGSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSceneLoader.h; sourceTree = "<group>"; };
 		25F0C25D1C2E6F0D00C8EC85 /* SGSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSceneLoader.cpp; sourceTree = "<group>"; };
 		25F0C2601C2E910F00C8EC85 /* SGAnimationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAnimationManager.h; sourceTree = "<group>"; };
@@ -3518,12 +3510,6 @@
 		0169C41C1C33DA2700132FF6 /* Popover */ = {
 			isa = PBXGroup;
 			children = (
-				0169C4381C33DB5800132FF6 /* WEPopoverContentViewController.h */,
-				0169C4391C33DB5800132FF6 /* WEPopoverContentViewController.m */,
-				0169C43A1C33DB5800132FF6 /* WEPopoverTableViewController.h */,
-				0169C43B1C33DB5800132FF6 /* WEPopoverTableViewController.m */,
-				0169C43C1C33DB5800132FF6 /* WEPopoverViewController.h */,
-				0169C43D1C33DB5800132FF6 /* WEPopoverViewController.m */,
 				0169C41D1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.h */,
 				0169C41E1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m */,
 				0169C41F1C33DA2700132FF6 /* WEBlockingGestureRecognizer.h */,
@@ -3803,6 +3789,7 @@
 				25F0C2691C2E931700C8EC85 /* SGSceneUpdater.cpp */,
 				25F0C26D1C2EB27800C8EC85 /* SGSceneWriter.cpp */,
 				25FCAB4C1C3003330051DBBA /* SGMovementManager.cpp */,
+				25F032881C34F59500A55D8A /* SGAutoRigSceneManager.cpp */,
 			);
 			name = Iyan3DEngineFiles;
 			path = "../../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles";
@@ -3861,6 +3848,7 @@
 				25F0C2681C2E930400C8EC85 /* SGSceneUpdater.h */,
 				25F0C26C1C2EB26500C8EC85 /* SGSceneWriter.h */,
 				25FCAB4B1C3003220051DBBA /* SGMovementManager.h */,
+				25F032871C34F57D00A55D8A /* SGAutoRigSceneManager.h */,
 			);
 			path = HeaderFiles;
 			sourceTree = "<group>";
@@ -7099,7 +7087,6 @@
 				256F6D8C1BF624FB00154622 /* CubeMeshNode.cpp in Sources */,
 				E21C3D001A0758B6006964E5 /* GTLYouTubeMonitorStreamInfo.m in Sources */,
 				E21C3D121A0758B6006964E5 /* GTLYouTubeSearchResult.m in Sources */,
-				0169C4421C33DB5800132FF6 /* WEPopoverTableViewController.m in Sources */,
 				256F6E861BF624FB00154622 /* pngmem.c in Sources */,
 				25EFBEB01BE25CA700DB300C /* RenPro.m in Sources */,
 				E21C3D061A0758B6006964E5 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
@@ -7269,7 +7256,6 @@
 				256F6EA41BF624FB00154622 /* MetalHandler.mm in Sources */,
 				E21C3D211A0758B6006964E5 /* GTLYouTubeVideoCategorySnippet.m in Sources */,
 				E2A343CB19F12AAF000EF7C2 /* Utils.m in Sources */,
-				0169C4401C33DB5800132FF6 /* WEPopoverContentViewController.m in Sources */,
 				256F6D8A1BF624FB00154622 /* AnimatedMesh.cpp in Sources */,
 				256F6EA21BF624FB00154622 /* OBJMeshFileLoader.cpp in Sources */,
 				256F6EBA1BF624FB00154622 /* Maths.cpp in Sources */,
@@ -7284,7 +7270,6 @@
 				E24973F7196BD80F0025D442 /* CacheSystem.m in Sources */,
 				E21C3D291A0758B6006964E5 /* GTLYouTubeVideoGetRatingResponse.m in Sources */,
 				7F19F67D1B5E6C9F001A342C /* AFPropertyListRequestOperation.m in Sources */,
-				0169C4441C33DB5800132FF6 /* WEPopoverViewController.m in Sources */,
 				256F6F7E1BF6257C00154622 /* Makefile in Sources */,
 				256F6E8C1BF624FB00154622 /* pngrio.c in Sources */,
 				E21C3D051A0758B6006964E5 /* GTLYouTubePlaylistItemContentDetails.m in Sources */,
@@ -7351,6 +7336,7 @@
 				E29C10E91A075DBC00626544 /* GTLObject.m in Sources */,
 				256F6F5E1BF6257C00154622 /* dict.c in Sources */,
 				25F0C2701C2ECEBF00C8EC85 /* SGAnimationSceneHelper.cpp in Sources */,
+				25F032891C34F59500A55D8A /* SGAutoRigSceneManager.cpp in Sources */,
 				256F6D701BF624FB00154622 /* CollisionManager.cpp in Sources */,
 				E29C10F91A075E2000626544 /* GTLBase64.m in Sources */,
 				256F6F741BF6257C00154622 /* tessmono.c in Sources */,
@@ -7385,7 +7371,6 @@
 				256F6EAD1BF624FB00154622 /* PngFileManager.cpp in Sources */,
 				256F6B901BF6246300154622 /* FileHelper.cpp in Sources */,
 				256F6B8E1BF6246300154622 /* exportSGR.cpp in Sources */,
-				0169C4411C33DB5800132FF6 /* WEPopoverContentViewController.m in Sources */,
 				256F6D731BF624FB00154622 /* Frustum.cpp in Sources */,
 				7F35D9B01B5F53770003F1CE /* AFImageRequestOperation.m in Sources */,
 				7F35D9B21B5F53770003F1CE /* AFJSONRequestOperation.m in Sources */,
@@ -7504,7 +7489,6 @@
 				E20671261B049AA6006DD2F7 /* GTLJSONParser.m in Sources */,
 				256F6B981BF6246300154622 /* json_reader.cpp in Sources */,
 				E20671271B049AA6006DD2F7 /* GTLYouTubeMonitorStreamInfo.m in Sources */,
-				0169C4451C33DB5800132FF6 /* WEPopoverViewController.m in Sources */,
 				256F6D911BF624FB00154622 /* Mesh.cpp in Sources */,
 				E20671281B049AA6006DD2F7 /* GTLYouTubeSearchResult.m in Sources */,
 				E20671291B049AA6006DD2F7 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
@@ -7580,7 +7564,6 @@
 				E20671691B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsFavorite.m in Sources */,
 				E206716A1B049AA6006DD2F7 /* main.m in Sources */,
 				256F6EAF1BF624FB00154622 /* RenderingView.m in Sources */,
-				0169C4431C33DB5800132FF6 /* WEPopoverTableViewController.m in Sources */,
 				E206716C1B049AA6006DD2F7 /* GTLYouTubeVideoRecordingDetails.m in Sources */,
 				25F0C2631C2E912800C8EC85 /* SGAnimationManager.cpp in Sources */,
 				0169C42F1C33DA2700132FF6 /* WEPopoverContainerView.m in Sources */,
@@ -7648,6 +7631,7 @@
 				256F6BB41BF6246300154622 /* ShaderManager.cpp in Sources */,
 				E20671AB1B049AA6006DD2F7 /* GTLYouTubeVideoCategorySnippet.m in Sources */,
 				E20671AC1B049AA6006DD2F7 /* Utils.m in Sources */,
+				25F0328A1C34F59500A55D8A /* SGAutoRigSceneManager.cpp in Sources */,
 				256F6F751BF6257C00154622 /* tessmono.c in Sources */,
 				256F6D751BF624FB00154622 /* Line3D.cpp in Sources */,
 				251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */,

@@ -9,6 +9,7 @@
 #ifndef SGSceneUpdater_h
 #define SGSceneUpdater_h
 
+#include "RigKey.h"
 #include "SGNode.h"
 #include "Constants.h"
 
@@ -33,6 +34,11 @@ public:
     void resetMaterialTypes(bool isToonShader);
     void reloadKeyFrameMap();
     void setCameraProperty(float fov , int resolutionType);
+    
+    void updateEnvelopes();
+    void updateOBJVertexColor();
+    void updateSkeletonBone(std::map<int, RigKey>& rigKeys, int jointId);
+    void updateSkeletonBones();
 };
 
 #endif /* SGSceneUpdater_h */

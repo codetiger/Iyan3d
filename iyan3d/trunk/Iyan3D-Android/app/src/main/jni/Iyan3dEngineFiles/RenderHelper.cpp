@@ -13,10 +13,6 @@
 #define CONTROLS_MARKED_SCALE 0.27
 #define CONTROLS_MARKED_DISTANCE_FROM_NODE 1.019
 
-#define SGR_JOINT_DEFAULT_COLOR_R 0.6
-#define SGR_JOINT_DEFAULT_COLOR_G 0.6
-#define SGR_JOINT_DEFAULT_COLOR_B 1.0
-
 #define SELECT_COLOR_R 0.0
 #define SELECT_COLOR_G 1.0
 #define SELECT_COLOR_B 0.0
@@ -183,12 +179,14 @@ void RenderHelper::setControlsVisibility(bool isVisible)
 {
     if(!renderingScene || renderingScene->sceneControls.size() == 0)
         return;
+    bool isNodeSelected = (renderingScene->isRigMode) ? renderingScene->rigMan->isNodeSelected : renderingScene->isNodeSelected;
+    SGNode* selectedNode = (renderingScene->isRigMode) ? renderingScene->rigMan->selectedNode : renderingScene->selectedNode;
     
-    if(renderingScene->isNodeSelected && renderingScene->selectedNode->getType() == NODE_LIGHT)
+    if(isNodeSelected && selectedNode->getType() == NODE_LIGHT)
         renderingScene->controlType = MOVE;
     
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
-    if(renderingScene->isNodeSelected && isVisible){
+    if(isNodeSelected && isVisible){
         if(renderingScene->controlType == MOVE){
             controlStartToVisible = X_MOVE;
             controlEndToVisible = Z_MOVE;
@@ -394,6 +392,54 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     }
 }
 
+void RenderHelper::setJointAndBonesVisibility(std::map<int, RigKey>& rigKeys, bool isVisible)
+{
+    if(!renderingScene || !smgr || !renderingScene->isRigMode)
+        return false;
+    vector<TPoseJoint> tPoseJoints(renderingScene->tPoseJoints);
+    for(int i = 1;i < rigKeys.size();i++){
+        if(rigKeys[tPoseJoints[i].id].referenceNode && rigKeys[tPoseJoints[i].id].referenceNode->node)
+            rigKeys[tPoseJoints[i].id].referenceNode->node->setVisible(isVisible);
+        if(rigKeys[tPoseJoints[i].id].sphere && rigKeys[tPoseJoints[i].id].sphere->node)
+            rigKeys[tPoseJoints[i].id].sphere->node->setVisible(isVisible);
+        if(rigKeys[tPoseJoints[i].id].parentId > 0){
+            if(rigKeys[tPoseJoints[i].id].bone && rigKeys[tPoseJoints[i].id].bone->node)
+                rigKeys[tPoseJoints[i].id].bone->node->setVisible(isVisible);
+        }
+    }
+}
+
+void RenderHelper::setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool isVisible)
+{
+    if(!renderingScene || !smgr || !renderingScene->isRigMode)
+        return false;
+    for(std::map<int,SGNode *> :: iterator it = envelopes.begin(); it!=envelopes.end(); it++){
+        if(it->second != NULL){
+            it->second->node->setVisible(isVisible);
+        }
+    }
+}
+void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
+{
+    setEnvelopVisibility(envelopes, false);
+    if(jointId<=0)  return;
+    if(jointId != 1)   //skipping the envelop between hip and pivot
+        renderingScene->loader->initEnvelope(envelopes, jointId);
+    
+    std::map<int, RigKey> rigKeys = renderingScene->rigMan->rigKeys;
+    
+    shared_ptr< vector< shared_ptr<Node> > > childs = rigKeys[jointId].referenceNode->node->Children;
+    int childCount = (int)childs->size();
+    for(int i = 0; i < childCount;i++){
+        shared_ptr<MeshNode> childReference = dynamic_pointer_cast<MeshNode>((*childs)[i]);
+        if(childReference && (childReference->getID() >= REFERENCE_NODE_START_ID && childReference->getID() <= REFERENCE_NODE_START_ID + rigKeys.size()))
+            renderingScene->loader->initEnvelope(envelopes, childReference->getID() - REFERENCE_NODE_START_ID);
+        
+        //childReference.reset();
+    }
+    //childs.reset();
+}
+
 bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue)
 {
     if(!renderingScene || !smgr)
@@ -562,6 +608,109 @@ void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
     renderingScene->updater->updateControlsOrientaion();
     if(renderingScene->shaderMGR->deviceType == METAL)
         smgr->EndDisplay();
-    
 }
 
+void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
+{
+    if(!renderingScene || !smgr || !renderingScene->isRigMode)
+        return;
+
+    renderingScene->rigMan->touchPosForSkeletonSelection = touchPosition;
+    setControlsVisibility(false);
+    renderingScene->rotationCircle->node->setVisible(false);
+    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth,SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+    if(!displayPrepared)
+        return;
+    smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
+    std::map<int, RigKey>& rigKeys = renderingScene->rigMan->rigKeys;
+    vector<Vector3> scaleValues;
+    for(int i = 0; i < renderingScene->tPoseJoints.size(); i++){
+        if(rigKeys[renderingScene->tPoseJoints[i].id].parentId > 0){
+            Vector3 vertColor = rigKeys[renderingScene->tPoseJoints[i].id].bone->props.vertexColor;
+            float transparency = rigKeys[renderingScene->tPoseJoints[i].id].bone->props.transparency;
+            Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->node->setMaterial(mat);
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->props.vertexColor = Vector3(i/255.0,255/255.0,255/255.0);
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->props.transparency = 1.0;
+            int nodeId = smgr->getNodeIndexByID(rigKeys[renderingScene->tPoseJoints[i].id].bone->node->getID());
+            smgr->RenderNode(nodeId);
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->props.vertexColor = transparency;
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->props.vertexColor = vertColor;
+        }
+        
+        if(renderingScene->tPoseJoints[i].id != 0){
+            Vector3 vertColor = rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor;
+            float transparency = rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.transparency;
+            int nodeId = smgr->getNodeIndexByID(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getID());
+            scaleValues.push_back(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale());
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale() * 1.3);
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor = Vector3(i/255.0,255/255.0,255/255.0);
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.transparency = 1.0;
+            smgr->RenderNode(nodeId);
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor = transparency;
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor = vertColor;
+        }
+    }
+    
+    for(int i = 0; i < renderingScene->tPoseJoints.size(); i++) {
+        if(renderingScene->tPoseJoints[i].id != 0)
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(scaleValues[i]);
+    }
+    // Draw Joints
+    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
+        renderingScene->selectMan->readSkeletonSelectionTexture();
+    smgr->setRenderTarget(NULL,false,false);
+    smgr->EndDisplay();
+}
+
+void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
+{
+    if(!renderingScene || !smgr || !renderingScene->isRigMode || renderingScene->rigMan->sceneMode != RIG_MODE_PREVIEW)
+        return;
+
+    renderingScene->rigMan->touchPosForSkeletonSelection = touchPosition;
+    SGNode* sgrSGNode = renderingScene->rigMan->getRiggedNode();
+    if(sgrSGNode == NULL)
+        return;
+    shared_ptr<AnimatedMeshNode> animNode = (dynamic_pointer_cast<AnimatedMeshNode>(sgrSGNode->node));
+    setControlsVisibility(false);
+    renderingScene->rotationCircle->node->setVisible(false);
+    //render SGR
+    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+    if(!displayPrepared)
+        return;
+    smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
+    sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
+    sgrSGNode->props.transparency = 1.0;
+    sgrSGNode->props.vertexColor = Vector3(0.0,1.0,1.0);
+    
+    smgr->RenderNode(smgr->getNodeIndexByID(sgrSGNode->node->getID()));
+    
+    sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
+    sgrSGNode->props.transparency = 1.0;
+    
+    // render Joints
+    if(renderingScene->rigMan->isNodeSelected){
+        if(!renderingScene->rigMan->isSGRJointSelected)
+            setJointSpheresVisibility(true);
+        for(int i = 1;i < animNode->getJointCount();i++){
+            SGNode* jointSphere = renderingScene->jointSpheres[i];
+            Vector3 vertexColors = Vector3(jointSphere->props.vertexColor);
+            float transparency = (jointSphere->props.transparency);
+            jointSphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+            jointSphere->props.vertexColor = Vector3(0.0,i/255.0,1.0);
+            jointSphere->props.transparency = 1.0;
+            smgr->RenderNode(smgr->getNodeIndexByID(jointSphere->node->getID()),(i == 1) ? true:false);
+            jointSphere->props.vertexColor = vertexColors;
+            jointSphere->props.transparency = transparency;
+        }
+        if(!renderingScene->rigMan->isSGRJointSelected)
+            setJointSpheresVisibility(false);
+    }
+    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
+        renderingScene->selectMan->readSGRSelectionTexture();
+    smgr->setRenderTarget(NULL,false,false);
+    smgr->EndDisplay();
+    //animNode.reset();
+}

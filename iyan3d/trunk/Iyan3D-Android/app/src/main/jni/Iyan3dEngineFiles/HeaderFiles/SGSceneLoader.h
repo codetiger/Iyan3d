@@ -27,6 +27,8 @@ public:
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
     bool removeTempNodeIfExists();
     
+    void initEnvelope(std::map<int, SGNode*>& envelopes, int jointId);
+    
     #ifdef ANDROID
         bool loadSceneData(std::string *filePath, JNIEnv *env, jclass type);
         bool readScene(ifstream *filePointer, JNIEnv *env, jclass type);

@@ -55,7 +55,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     animMan = new SGAnimationManager(sceneMngr, this);
     
     isJointSelected = isNodeSelected = isControlSelected = false;
-    freezeRendering = isPlaying = isPreviewMode = false;
+    freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
@@ -123,10 +123,13 @@ void SGEditorScene::setTransparencyForObjects()
     if(!smgr && nodes.size() < 3)
         return;
     
-    if(nodes[nodes.size()-1]->isTempNode && !isPreviewMode) {
+    if((nodes[nodes.size()-1]->isTempNode && !isPreviewMode) || isRigMode) {
         isPreviewMode = true;
-        for(int index = 0; index < nodes.size()-1; index++)
-            nodes[index]->props.transparency = 0.2;
+        int excludeNodeId = (isRigMode) ? selectedNodeId : nodes.size()-1;
+        for(int index = 0; index < nodes.size(); index++) {
+            if(index != excludeNodeId)
+                nodes[index]->props.transparency = 0.2;
+        }
     } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
         isPreviewMode = false;
         for(int index = 0; index < nodes.size(); index++) {
@@ -234,6 +237,32 @@ bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 {
     return (sceneControls[nodeID - CONTROLS_START_ID]->props.transparency < 1.0);
 }
+
+bool SGEditorScene::hasNodeSelected()
+{
+    return (isRigMode) ? rigMan->isNodeSelected : isNodeSelected;
+}
+bool SGEditorScene::hasJointSelected()
+{
+    return (isRigMode) ? rigMan->isSGRJointSelected : isJointSelected;
+}
+SGNode* SGEditorScene::getSelectedNode()
+{
+    if(isRigMode && rigMan->isNodeSelected)
+        return rigMan->selectedNode;
+    else if (isNodeSelected)
+        return selectedNode;
+    return NULL;
+}
+SGJoint* SGEditorScene::getSelectedJoint()
+{
+    if(isRigMode && rigMan->isSGRJointSelected)
+        return rigMan->selectedJoint;
+    else if (isJointSelected)
+        return selectedJoint;
+    return NULL;    
+}
+
 
 bool SGEditorScene::loadSceneData(std::string *filePath)
 {

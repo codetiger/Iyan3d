@@ -10,6 +10,7 @@
 #define RenderHelper_h
 
 #include "Constants.h"
+#include "RigKey.h"
 
 class RenderHelper
 {
@@ -27,6 +28,9 @@ public:
     void setControlsVisibility(bool isVisible = true);
     void setRenderCameraOrientation();
     void setJointSpheresVisibility(bool visibilityFlag);
+    void setJointAndBonesVisibility(std::map<int, RigKey>& rigKeys, bool isVisible);
+    void setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool isVisible);
+    void drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId);
     
     void postRTTDrawCall();
     void rttDrawCall();
@@ -39,6 +43,9 @@ public:
     bool createJointSpheres(int additionalJoints);
     void displayJointsBasedOnSelection();
     void removeJointSpheres();
+    
+    void AttachSkeletonModeRTTSelection(Vector2 touchPosition);
+    void rttSGRNodeJointSelection(Vector2 touchPosition);
 };
 
 #endif /* RenderHelper_h */

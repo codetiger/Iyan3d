@@ -684,3 +684,156 @@ int SGActionManager::getObjectIndex(int actionIndex)
     }
     return 0;
 }
+
+bool SGActionManager::changeSkeletonPosition(Vector3 outputValue)
+{
+    if(!actionScene || !smgr || !actionScene->isRigMode)
+        return false;
+    
+    bool isNodeSelected = actionScene->hasNodeSelected();
+    int selectedNodeId = actionScene->rigMan->selectedNodeId;
+    SGNode* selectedNode = actionScene->getSelectedNode();
+    std::map<int, RigKey>& rigKeys = actionScene->rigMan->rigKeys;
+    
+    if(!isNodeSelected || actionScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES || actionScene->rigMan->sceneMode == RIG_MODE_PREVIEW)
+        return false;
+    
+    if(selectedNodeId > 0){
+        Mat4 parentGlobalMat = selectedNode->node->getParent()->getAbsoluteTransformation();
+        selectedNode->node->setPosition(MathHelper::getRelativePosition(parentGlobalMat, selectedNode->node->getAbsolutePosition() + outputValue));
+        selectedNode->node->updateAbsoluteTransformation();
+        actionScene->updater->updateSkeletonBone(rigKeys, selectedNodeId);
+        
+        if(getMirrorState() == MIRROR_ON){
+            int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedNodeId);
+            if(mirrorJointId != -1){
+                {
+                    shared_ptr<Node> mirrorNode = rigKeys[mirrorJointId].referenceNode->node;
+                    mirrorNode->setPosition(selectedNode->node->getPosition() * Vector3(-1.0,1.0,1.0));
+                    mirrorNode->updateAbsoluteTransformation();
+                    actionScene->updater->updateSkeletonBone(rigKeys, mirrorJointId);
+                }
+            }
+        }
+        actionScene->updater->updateSkeletonBones();
+        return true;
+    }
+    else if(selectedNodeId == 0){
+        selectedNode->node->setPosition(selectedNode->node->getAbsolutePosition() + outputValue);
+        selectedNode->node->updateAbsoluteTransformation();
+        return true;
+    }
+    return false;
+}
+
+bool SGActionManager::changeSkeletonRotation(Vector3 outputValue)
+{
+    if(!actionScene || !smgr || !actionScene->isRigMode || actionScene->rigMan->sceneMode != RIG_MODE_MOVE_JOINTS)
+        return false;
+
+    outputValue *= RADTODEG;
+    
+    bool isNodeSelected = actionScene->hasNodeSelected();
+    int selectedNodeId = actionScene->rigMan->selectedNodeId;
+    SGNode* selectedNode = actionScene->getSelectedNode();
+    
+    if (actionScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS && selectedNodeId > 0){
+        selectedNode->node->setRotationInDegrees(outputValue);
+        selectedNode->node->updateAbsoluteTransformation();
+        actionScene->updater->updateSkeletonBone(actionScene->rigMan->rigKeys, selectedNodeId);
+        if(getMirrorState() == MIRROR_ON)
+        {
+            int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedNodeId);
+            if(mirrorJointId != -1){
+                shared_ptr<Node> mirrorNode = actionScene->rigMan->rigKeys[mirrorJointId].referenceNode->node;
+                mirrorNode->setRotationInDegrees(outputValue * Vector3(1.0,-1.0,-1.0));
+                mirrorNode->updateAbsoluteTransformation();
+                actionScene->updater->updateSkeletonBone(actionScene->rigMan->rigKeys, mirrorJointId);
+                //mirrorNode.reset();
+            }
+        }
+        //        updateEnvelopes();
+        return true;
+    }
+    else if(selectedNode){
+        selectedNode->node->setRotationInDegrees(outputValue);
+        if(isNodeSelected)
+            selectedNode->node->updateAbsoluteTransformationOfChildren();
+        else selectedNode->node->updateAbsoluteTransformation();
+        return true;
+    }
+    return false;
+}
+
+bool SGActionManager::changeSGRPosition(Vector3 outputValue)
+{
+    if(!actionScene || !smgr || !actionScene->isRigMode || actionScene->rigMan->sceneMode != RIG_MODE_PREVIEW)
+        return false;
+
+    bool isJointSelected = actionScene->hasJointSelected();
+    bool isNodeSelected = actionScene->hasNodeSelected();
+    SGNode* selectedNode = actionScene->getSelectedNode();
+    SGJoint* selectedJoint = actionScene->getSelectedJoint();
+    int selectedJointId = actionScene->rigMan->selectedJointId;
+    SGNode* sgrSGNode = actionScene->rigMan->getRiggedNode();
+    
+    if(isJointSelected){
+        Vector3 target = selectedJoint->jointNode->getAbsolutePosition() + outputValue;
+        selectedJoint->jointNode->getParent()->setRotationInDegrees(MathHelper::getRelativeParentRotation(selectedJoint->jointNode,target));
+        (dynamic_pointer_cast<JointNode>(selectedJoint->jointNode->getParent()))->updateAbsoluteTransformationOfChildren();
+        if(getMirrorState() == MIRROR_ON){
+            int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);
+            if(mirrorJointId != -1){
+                shared_ptr<JointNode> mirrorNode = (dynamic_pointer_cast<AnimatedMeshNode>(sgrSGNode->node))->getJointNode(mirrorJointId);
+                mirrorNode->getParent()->setRotationInDegrees(selectedJoint->jointNode->getParent()->getRotationInDegrees() * Vector3(1.0,-1.0,-1.0));
+                (dynamic_pointer_cast<JointNode>(mirrorNode->getParent()))->updateAbsoluteTransformationOfChildren();
+            }
+        }
+        return true;
+    }
+    else if(isNodeSelected){
+        selectedNode->node->setPosition(selectedNode->node->getAbsolutePosition() + outputValue);
+        selectedNode->node->updateAbsoluteTransformationOfChildren();
+        return true;
+    }
+    return false;
+}
+
+bool SGActionManager::changeSGRRotation(Vector3 outputValue)
+{
+    if(!actionScene || !smgr || !actionScene->isRigMode || actionScene->rigMan->sceneMode != RIG_MODE_PREVIEW)
+        return false;
+    
+    bool isJointSelected = actionScene->hasJointSelected();
+    bool isNodeSelected = actionScene->hasNodeSelected();
+    SGNode* selectedNode = actionScene->getSelectedNode();
+    SGJoint* selectedJoint = actionScene->getSelectedJoint();
+    int selectedJointId = actionScene->rigMan->selectedJointId;
+    SGNode* sgrSGNode = actionScene->rigMan->getRiggedNode();
+    
+    outputValue *= RADTODEG;
+    if(isJointSelected){
+        selectedJoint->jointNode->setRotationInDegrees(outputValue);
+        selectedJoint->jointNode->updateAbsoluteTransformationOfChildren();
+        if(getMirrorState() == MIRROR_ON){
+            int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);
+            if(mirrorJointId != -1){
+                shared_ptr<JointNode> mirrorNode = (dynamic_pointer_cast<AnimatedMeshNode>(sgrSGNode->node))->getJointNode(mirrorJointId);
+                mirrorNode->setRotationInDegrees(outputValue * Vector3(1.0,-1.0,-1.0));
+                mirrorNode->updateAbsoluteTransformationOfChildren();
+                //mirrorNode.reset();
+            }
+        }
+        return true;
+    }
+    else if(selectedNode){
+        selectedNode->node->setRotationInDegrees(outputValue);
+        if(isNodeSelected)
+            selectedNode->node->updateAbsoluteTransformation();
+        else
+            selectedNode->node->updateAbsoluteTransformationOfChildren();
+        return true;
+    }
+    return false;
+}
+

@@ -31,6 +31,8 @@ private:
 public:
     
     int currentAction;
+    SGAction addJointAction;
+    
     vector<SGAction> actions;
 
     SGActionManager(SceneManager* smgr, void* scene);
@@ -70,6 +72,13 @@ public:
     
     int undo(int& returnValue2);
     int redo();
+    
+    /* AutoRig */
+    
+    bool changeSkeletonPosition(Vector3 outputValue);
+    bool changeSkeletonRotation(Vector3 outputValue);
+    bool changeSGRPosition(Vector3 outputValue);
+    bool changeSGRRotation(Vector3 outputValue);
 };
 
 #endif /* SGActionManager_h */

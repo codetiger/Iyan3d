@@ -10,6 +10,7 @@
 #import "Logger.h"
 #import <OpenGLES/ES2/glext.h>
 #import "SGEditorScene.h"
+#import "AppDelegate.h"
 
 #define ASSET_ANIMATION 4
 #define ASSET_RIGGED 1
@@ -92,6 +93,42 @@ SGEditorScene *editorScene;
 
 }
 
+- (void) setupAutoRigCallBacks
+{
+    editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
+    editorScene->rigMan->objLoaderCallBack = &objLoaderCallBack;
+    //editorScene->rigMan->notRespondingCallBack = &notRespondingCallBackAutoRigScene;
+}
+
+void boneLimitsCallBack() {
+    /* TODO show alert
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    AutoRigViewController *autoRigVC = (AutoRigViewController*)[[appDelegate window] rootViewController];
+    [autoRigVC boneLimitsAlert];
+     */
+}
+
+void objLoaderCallBack(int status)
+{
+    
+    /* TODO show alert
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    AutoRigViewController *autoRigVC = (AutoRigViewController*)[[appDelegate window] rootViewController];
+    if(status == OBJ_CROSSED_MAX_VERTICES_LIMIT){
+        [autoRigVC.view endEditing:YES];
+        UIAlertView *objLoadMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"The obj file is too heavy. Maximum vertices limit is 2.7 Millions." delegate:autoRigVC cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [objLoadMsg show];
+    }else if(status == OBJ_NOT_LOADED){
+        UIAlertView *objLoadMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please load any obj file to rig." delegate:autoRigVC cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [objLoadMsg show];
+    }else{
+        [autoRigVC.view endEditing:YES];
+        UIAlertView *objLoadMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Obj file corrupted please try another file." delegate:autoRigVC cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [objLoadMsg show];
+    }
+     */
+}
+
 void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
 {
     if(!editorScene)
@@ -105,6 +142,17 @@ void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
         editorScene->setControlsUniforms(nodeID, matName);
     else if (callbackFuncName.compare("RotationCircle") == 0)
         editorScene->setRotationCircleUniforms(nodeID, matName);
+    else if(callbackFuncName.compare("ObjUniforms") == 0){
+        editorScene->rigMan->objNodeCallBack(matName);
+    }else if(callbackFuncName.compare("jointUniforms") == 0){
+        editorScene->rigMan->jointNodeCallBack(nodeID,matName);
+    }else if(callbackFuncName.compare("BoneUniforms") == 0){
+        editorScene->rigMan-> boneNodeCallBack(nodeID,matName);
+    }else if(callbackFuncName.compare("envelopeUniforms") == 0){
+        editorScene->rigMan->setEnvelopeUniforms(nodeID,matName);
+    }else if(callbackFuncName.compare("sgrUniforms") == 0){
+        editorScene->rigMan->setSGRUniforms(nodeID,matName);
+    }
 }
 
 bool isTransparentCallBack(int nodeId, string callbackFuncName)
@@ -122,7 +170,17 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             return false;
         else if (callbackFuncName.compare("RotationCircle") == 0)
             return false;
-        return false;
+        else if(callbackFuncName.compare("ObjUniforms") == 0)
+            return editorScene->rigMan->isOBJTransparent(callbackFuncName);
+        else if(callbackFuncName.compare("jointUniforms") == 0)
+            return false;
+        else if(callbackFuncName.compare("BoneUniforms") == 0)
+            return false;
+        else if(callbackFuncName.compare("envelopeUniforms") == 0)
+            return false;
+        else if(callbackFuncName.compare("sgrUniforms") == 0)
+            return editorScene->rigMan->isSGRTransparent(nodeId,callbackFuncName);
+
 }
 
 - (void) addCameraLight

@@ -140,7 +140,7 @@ std::string FileHelper::getCachesDirectory()
 {
 #ifdef UBUNTU
 	return "";
-#elif
+#else
 	std::string home = getenv("HOME");
 	std::string caches = "/Library/Caches/";
 	std::string cachesPath = home + caches;
@@ -152,7 +152,7 @@ std::string FileHelper::getDocumentsDirectory()
 {
 #ifdef UBUNTU
 	return "";
-#elif
+#else
     std::string home = getenv("HOME");
     std::string documents = "/Documents/";
     std::string documentsPath = home + documents;
