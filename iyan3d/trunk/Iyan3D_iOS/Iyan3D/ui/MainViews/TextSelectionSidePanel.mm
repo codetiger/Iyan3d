@@ -64,13 +64,17 @@
     self.addToScene.layer.cornerRadius=CORNER_RADIUS;
     self.bevelSlider.value = bevelRadius;
     _inputText.delegate = self;
+    //_inputText.returnKeyType = UIReturnKeyDone  ;
+
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
+- (BOOL) textFieldShouldReturn:(UITextField *)textField{
     [self load3dText];
+    [textField resignFirstResponder];
     return NO;
 }
+
+
 
 - (void)initializeFontListArray
 {
@@ -256,7 +260,8 @@
 }
 
 - (IBAction)inputTextChangedAction:(id)sender {
-    //[self load3dText];
+    [self load3dText];
+    [_inputText resignFirstResponder];
 }
 
 - (IBAction)bevalChangeAction:(id)sender {
