@@ -39,6 +39,8 @@
 #define IMPORT_ADDPARTICLE 7
 #define CHANGE_TEXTURE 7
 
+
+
 #define ABOUT 0
 #define HELP 1
 #define TUTORIAL 2
@@ -89,6 +91,27 @@
 #define CANCEL_BUTTON_INDEX 0
 #define DELETE_OBJECT 200
 
+
+#define CAMERA_PREVIEW_SMALL 0
+
+#define FRAME_COUNT 0
+#define FRAME_DURATION 1
+
+#define PREVIEW_LEFTBOTTOM 0
+#define PREVIEW_LEFTTOP 1
+#define PREVIEW_RIGHTBOTTOM 2
+#define PREVIEW_RIGHTTOP 3
+
+#define TOOLBAR_RIGHT 0
+#define TOOLBAR_LEFT 1
+
+#define ONE_FRAME 0
+#define TWENTY_FOUR_FRAMES 1
+#define TWO_FOURTY_FRAMES 2
+
+
+#define SETTINGS 3
+#define CONTACT_US 4
 
 BOOL missingAlertShown;
 
@@ -143,7 +166,7 @@ BOOL missingAlertShown;
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"])
         [self.framesCollectionView setTag:[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"] longValue]];
     else
-        [self.framesCollectionView setTag:1];
+        [self.framesCollectionView setTag:FRAME_COUNT];
     
     [self.framesCollectionView reloadData];
     [self.objectList reloadData];
@@ -691,10 +714,10 @@ BOOL missingAlertShown;
     //                                                   alpha:1.0f];
     
     cell.layer.borderWidth = 0.0f;
-    if (_framesCollectionView.tag==1) {
+    if (_framesCollectionView.tag==FRAME_COUNT) {
         cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
     }
-    else if (_framesCollectionView.tag==2){
+    else if (_framesCollectionView.tag==FRAME_DURATION){
         cell.framesLabel.text = [NSString stringWithFormat:@"%.2fs", ((float)indexPath.row + 1) / 24];
     }
     
@@ -928,7 +951,7 @@ BOOL missingAlertShown;
 
 - (IBAction)exportAction:(id)sender
 {
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT){
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
         self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
@@ -1039,7 +1062,7 @@ BOOL missingAlertShown;
 
 - (IBAction)animationBtnAction:(id)sender
 {
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT){
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -1075,7 +1098,7 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -1147,7 +1170,7 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)myObjectsBtnAction:(id)sender {
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT){
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"myObjectsBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -1188,7 +1211,7 @@ BOOL missingAlertShown;
     
     if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
     {
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"optionsBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -1214,7 +1237,7 @@ BOOL missingAlertShown;
             Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
             lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
         }
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         _lightProp = [[LightProperties alloc] initWithNibName:@"LightProperties" bundle:nil LightColor:lightProps];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
@@ -1233,7 +1256,7 @@ BOOL missingAlertShown;
     {
         float fovValue = editorScene->cameraFOV;
         NSInteger resolutionType = editorScene->cameraResolutionType;
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
@@ -1255,7 +1278,7 @@ BOOL missingAlertShown;
         float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
         bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
         bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
@@ -1312,7 +1335,7 @@ BOOL missingAlertShown;
             Vector3 currentScale = editorScene->getSelectedNodeScale();
             _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
             _scaleProps.delegate = self;
-            BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+            BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
             self.popoverController.popoverContentSize = CGSizeMake(270, 177);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
@@ -1544,7 +1567,7 @@ BOOL missingAlertShown;
 
 -(void) myAnimation:(BOOL)showorHide
 {
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1)
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT)
     {
         self.publishBtn.frame = CGRectMake(self.rightView.frame.size.width,self.scaleBtn.frame.origin.y , 110, 40);
         [self.publishBtn setHidden:showorHide];
@@ -1724,7 +1747,7 @@ BOOL missingAlertShown;
 {
     if(editorScene)
         editorScene->selectMan->unselectObjects();
-    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
     
     if(showView){
         subViewToAdd.frame = CGRectMake(0, 0, _leftView.frame.size.width, _leftView.frame.size.height);
@@ -1761,7 +1784,7 @@ BOOL missingAlertShown;
     
 }
 - (void) showOrHideRightView:(BOOL)showView{
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT){
         CATransition* transition1 = [CATransition animation];
         transition1.duration = 0.5;
         transition1.type = kCATransitionPush;
@@ -2361,7 +2384,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             RenderingViewController* renderingView;
             renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
             renderingView.delegate = self;
-             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             renderingView.projectName=@"Scene 1";  //FOR TESTING
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             CATransition* transition1 = [CATransition animation];
@@ -2389,7 +2412,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         renderingView.delegate = self;
         renderingView.projectName=@"Scene 1";  //FOR TESTING
         renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         CATransition* transition1 = [CATransition animation];
         transition1.duration = 0.5;
         transition1.type = kCATransitionPush;
@@ -2435,21 +2458,21 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
 }
 - (void) addFrameBtnDelegateAction:(int)indexValue{
-    if(indexValue==0){
+    if(indexValue==ONE_FRAME){
         [self.popoverController dismissPopoverAnimated:YES];
         totalFrames++;
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
         [self.framesCollectionView reloadData];
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
-    else if (indexValue==1){
+    else if (indexValue==TWENTY_FOUR_FRAMES){
         [self.popoverController dismissPopoverAnimated:YES];
         totalFrames+=24;
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
         [self.framesCollectionView reloadData];
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
-    else if(indexValue==2){
+    else if(indexValue==TWO_FOURTY_FRAMES){
         [self.popoverController dismissPopoverAnimated:YES];
         totalFrames+=240;
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
@@ -2482,7 +2505,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 - (void) infoBtnDelegateAction:(int)indexValue{
     
-    if(indexValue==3){
+    if(indexValue==SETTINGS){
         if([Utility IsPadDevice]){
             [self.popoverController dismissPopoverAnimated:YES];
             settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController"bundle:nil];
@@ -2529,7 +2552,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             
         }
     }
-    if(indexValue==4){
+    if(indexValue==CONTACT_US){
         [self.popoverController dismissPopoverAnimated:YES];
         
         NSString *currentDeviceName;
@@ -2556,6 +2579,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     
 }
+
 
 
 
@@ -2960,23 +2984,23 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma mark SettingsViewControllerDelegate
 
 -(void)frameCountDisplayMode:(int)selctedIndex{
-    if(selctedIndex==0){
+    if(selctedIndex==FRAME_COUNT){
         NSLog(@"Frame Vount Display");
-        [self.framesCollectionView setTag:1];
+        [self.framesCollectionView setTag:FRAME_COUNT];
         [self.framesCollectionView reloadData];
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];
     }
     else
     {
         NSLog(@"Frame Durations Display");
-        [self.framesCollectionView setTag:2];
+        [self.framesCollectionView setTag:FRAME_DURATION];
         [self.framesCollectionView reloadData];
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];
     }
 }
 
 -(void)cameraPreviewSize:(int)selctedIndex{
-    if(selctedIndex==0)
+    if(selctedIndex==CAMERA_PREVIEW_SMALL)
     {
         editorScene->camPreviewScale=1.0;
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:editorScene->camPreviewScale] withKey:@"cameraPreviewSize"];
@@ -2989,9 +3013,8 @@ void downloadFile(NSString* url, NSString* fileName)
 }
 
 -(void)cameraPreviewPosition:(int)selctedIndex{
-    NSLog(@"Camera preview Origin: X Value: %f Y Value: %f ",self.renderView.bounds.size.width,self.renderView.bounds.size.height);
     float camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-    if(selctedIndex==0){
+    if(selctedIndex==PREVIEW_LEFTBOTTOM){
         camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0){
             editorScene->camPreviewOrigin.x=0;
@@ -3009,7 +3032,7 @@ void downloadFile(NSString* url, NSString* fileName)
             
         }
     }
-    if(selctedIndex==1){
+    if(selctedIndex==PREVIEW_LEFTTOP){
         camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0){
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
@@ -3026,7 +3049,7 @@ void downloadFile(NSString* url, NSString* fileName)
         }
     }
     
-    if(selctedIndex==2){
+    if(selctedIndex==PREVIEW_RIGHTBOTTOM){
         if(editorScene->camPreviewScale==1.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=self.renderView.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale-camPrevRatio;
@@ -3046,7 +3069,7 @@ void downloadFile(NSString* url, NSString* fileName)
             
         }
     }
-    if(selctedIndex==3){
+    if(selctedIndex==PREVIEW_RIGHTTOP){
         
         if(editorScene->camPreviewScale==1.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
@@ -3069,19 +3092,19 @@ void downloadFile(NSString* url, NSString* fileName)
 -(void)toolbarPosition:(int)selctedIndex
 {
     CGRect frame = self.rightView.frame;
-    frame.origin.x = (selctedIndex==1) ? 0 : self.view.frame.size.width-self.rightView.frame.size.width;
+    frame.origin.x = (selctedIndex==TOOLBAR_LEFT) ? 0 : self.view.frame.size.width-self.rightView.frame.size.width;
     //frame.origin.y = self.topView.frame.size.height; // new y coordinate
     self.rightView.frame = frame;
     CGRect frame1 = self.leftView.frame;
-    frame1.origin.x = ((selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : 0);
+    frame1.origin.x = ((selctedIndex==TOOLBAR_LEFT) ? self.view.frame.size.width-self.leftView.frame.size.width : 0);
     //frame1.origin.y = (self.topView.frame.size.height); // new y coordinate
     self.leftView.frame = frame1;
 
     if(editorScene) {
-        editorScene->topLeft = Vector2((selctedIndex==0) ? 0.0 : self.rightView.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
-        editorScene->topRight = Vector2((selctedIndex==0) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
-        editorScene->bottomLeft = Vector2((selctedIndex==0) ? 0.0 : self.rightView.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
-        editorScene->bottomRight = Vector2((selctedIndex==0) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
+        editorScene->topLeft = Vector2((selctedIndex==TOOLBAR_RIGHT) ? 0.0 : self.rightView.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
+        editorScene->topRight = Vector2((selctedIndex==TOOLBAR_RIGHT) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
+        editorScene->bottomLeft = Vector2((selctedIndex==TOOLBAR_RIGHT) ? 0.0 : self.rightView.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
+        editorScene->bottomRight = Vector2((selctedIndex==TOOLBAR_RIGHT) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
         
         editorScene->renHelper->movePreviewToCorner();
     }

@@ -113,14 +113,6 @@
         [self.rateButtonImage setEnabled:NO];
         [self.rateButtonText setEnabled:NO];
     }
-    else if(renderingExportImage == RENDER_GIF)
-    {
-        
-        self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d/%d",1,(int)(_trimControl.rightValue-_trimControl.leftValue)];
-        [self.youtubeButton setHidden:true];
-        [self.rateButtonImage setEnabled:NO];
-        [self.rateButtonText setEnabled:NO];
-    }
     self.renderingProgressBar.progress = ((float)(renderingFrame - renderingStartFrame))/(1 + renderingEndFrame - renderingStartFrame);
     [self.makeVideoLoading setHidden:YES];
     [self.exportButton setHidden:true];
@@ -157,10 +149,7 @@
     }
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    
-}
+
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     if([Utility IsPadDevice])
@@ -213,6 +202,11 @@
         [self.colorPickerBtn setHidden:isHidden];
         [self.transparentLable setHidden:isHidden];
         [self.transparentBackgroundbtn setHidden:isHidden];
+        [self.backgroundColorLable setHidden:isHidden];
+        [self.transparentBackgroundbtn setHidden:isHidden];
+        [self.colorPickerBtn setHidden:isHidden];
+        [self.transparentBgLabel setHidden:isHidden];
+        
     }
 }
 

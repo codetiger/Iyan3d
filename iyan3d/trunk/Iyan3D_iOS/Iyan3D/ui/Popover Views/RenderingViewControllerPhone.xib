@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RenderingViewController">
             <connections>
                 <outlet property="activityIndicatorView" destination="ESt-EA-JnN" id="zN0-7j-60i"/>
+                <outlet property="backgroundColorLable" destination="5xo-sK-aOd" id="0It-rh-fVc"/>
                 <outlet property="cancelActivityIndicator" destination="zPE-vB-GV8" id="BW0-qq-Zfc"/>
                 <outlet property="cancelButton" destination="ZQF-TY-3kd" id="Ph4-Jc-ZgH"/>
                 <outlet property="colorPickerBtn" destination="gvb-oT-QNE" id="VKT-FS-Rzl"/>
@@ -27,6 +28,9 @@
                 <outlet property="shaderStyle" destination="8hd-nw-Euc" id="ctd-6D-BW2"/>
                 <outlet property="shareActivityIndicator" destination="QcO-uo-AeA" id="JDU-rZ-Bzq"/>
                 <outlet property="startButtonText" destination="jxD-ic-6yT" id="MgT-g5-3Ck"/>
+                <outlet property="transparentBackgroundbtn" destination="gyP-WU-cYe" id="Lxt-30-AvI"/>
+                <outlet property="transparentBgLabel" destination="bhJ-SM-Mzq" id="E86-8y-arn"/>
+                <outlet property="transparentBgSwitch" destination="gyP-WU-cYe" id="gch-ME-Te7"/>
                 <outlet property="view" destination="22B-4k-y0q" id="tQ3-K1-1EI"/>
                 <outlet property="waterMarkLabel" destination="Zza-L3-rRe" id="65k-fn-IPH"/>
                 <outlet property="watermarkSwitch" destination="MPY-C0-WiO" id="CcC-iL-jtU"/>
