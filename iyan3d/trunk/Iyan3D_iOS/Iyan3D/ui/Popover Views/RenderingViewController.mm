@@ -274,8 +274,8 @@
 
 - (void) saveDeductedCredits:(int)credits
 {
-//    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
-//    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
+    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
+    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
 }
 
 
