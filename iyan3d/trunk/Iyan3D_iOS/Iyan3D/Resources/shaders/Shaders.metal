@@ -287,8 +287,8 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
     translation = translation * live;
     
-    matrix_float4x4 trans = translation * rotationMat;
-    out.position = vp * trans * vertex_position_objectspace;
+    matrix_float4x4 model = translation * rotationMat;
+    out.position = vp * model * vertex_position_objectspace;
     
     return out;
 }

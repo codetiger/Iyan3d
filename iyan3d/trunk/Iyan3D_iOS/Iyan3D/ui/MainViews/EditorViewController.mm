@@ -915,6 +915,7 @@ BOOL missingAlertShown;
 
 - (IBAction)backToScenes:(id)sender {
    
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
     if(editorScene->isPlaying){
         [self stopPlaying];
@@ -1012,6 +1013,7 @@ BOOL missingAlertShown;
 
 - (IBAction)rigAddToSceneAction:(id)sender
 {
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     Vector3 vertexColor = Vector3(-1.0);
     if(editorScene->rigMan->nodeToRig->props.perVertexColor){
         vertexColor = editorScene->rigMan->nodeToRig->props.vertexColor;
@@ -1026,6 +1028,7 @@ BOOL missingAlertShown;
     [self updateAssetListInScenes];
     selectedNodeId = -1;
     [self autoRigMirrorBtnHandler];
+    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
 }
 
 - (IBAction)addJoinAction:(id)sender {
@@ -3057,7 +3060,6 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma mark LoggedinViewController Delegate
 
 -(void)dismissView{
-    NSLog(@"delegate called");
     [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
     
@@ -3345,6 +3347,8 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode
 {
+
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
@@ -3408,7 +3412,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     [dict setObject:[NSNumber numberWithBool:isHaveTexture] forKey:@"isHaveTexture"];
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
-    [self showOrHideProgress:HIDE_PROGRESS];
+    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
 }
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName

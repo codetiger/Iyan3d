@@ -675,10 +675,14 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     for(int i = 0;i < bonesCount;i++){
         shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
         renderingScene->jointSpheres[i]->node->setParent(jointNode);
+//        Vector3 scaleRatio;
+//        scaleRatio.x = (jointNode->getScale().x > 1.0) ? jointNode->getScale().x : 1.0;
+//        scaleRatio.y = (jointNode->getScale().y > 1.0) ? jointNode->getScale().y : 1.0;
+//        scaleRatio.z = (jointNode->getScale().z > 1.0) ? jointNode->getScale().z : 1.0;
         if(bonesCount != renderingScene->tPoseJoints.size())
             renderingScene->jointSpheres[i]->node->setScale(scaleValue);
         else
-            renderingScene->jointSpheres[i]->node->setScale(Vector3(renderingScene->tPoseJoints[i].sphereRadius) * animNode->getScale());
+            renderingScene->jointSpheres[i]->node->setScale(Vector3(renderingScene->tPoseJoints[i].sphereRadius));
     }
     setJointSpheresVisibility(true);
     displayJointsBasedOnSelection();

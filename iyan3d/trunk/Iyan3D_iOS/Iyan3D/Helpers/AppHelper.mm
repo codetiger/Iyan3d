@@ -79,7 +79,7 @@
 
 - (void) showInternetErrorAlert
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warining" message:@"Please connect with internet some resources files are missing need to download it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warining" message:@"Please connect with internet some resources files are missing need to download it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }
 

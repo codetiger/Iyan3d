@@ -129,7 +129,6 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.objSlideDelegate showOrHideProgress:1];
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
     for (int i = 0; i < [indexPathArr count]; i++)
     {
@@ -211,7 +210,7 @@
    else if(self.addBtn.tag == Texture){
        [self.objSlideDelegate showOrHideProgress:1];
        if(viewType == IMPORT_OBJFILE)
-           [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
+           [self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
        else
            [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];

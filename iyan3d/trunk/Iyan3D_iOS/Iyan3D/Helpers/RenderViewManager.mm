@@ -494,7 +494,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
 }
 
-- (void)handleLongPressGestures:(UILongPressGestureRecognizer *)sender{
+- (void)handleLongPressGestures:(UILongPressGestureRecognizer *)sender
+{
+    if(editorScene && editorScene->isRigMode)
+        return;
+    
     if (sender.state == UIGestureRecognizerStateBegan)
     {
         _longPress=true;
