@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
-                <outlet property="cancelBtn" destination="O9p-wd-bV0" id="u5d-RI-voT"/>
                 <outlet property="facebookSignin" destination="j8h-QJ-Jin" id="r8v-Kn-UsQ"/>
                 <outlet property="googleSigninBtn" destination="Qkh-7C-86D" id="ogv-qU-LXb"/>
                 <outlet property="twitterSignin" destination="Lau-Fl-t5Q" id="Ref-v3-ks1"/>
@@ -16,66 +15,51 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+            <rect key="frame" x="0.0" y="0.0" width="228" height="265"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IoW-Bj-WbJ">
-                    <rect key="frame" x="0.0" y="0.0" width="568" height="37"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9p-wd-bV0">
-                            <rect key="frame" x="502" y="11" width="58" height="30"/>
-                            <state key="normal" title="Cancel"/>
-                            <connections>
-                                <action selector="cancelBtnAction:" destination="-1" eventType="touchUpInside" id="Uub-em-deH"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" red="0.78823529410000004" green="0.78823529410000004" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iyan3d-text-sign-in_IPhone.png" translatesAutoresizingMaskIntoConstraints="NO" id="l4S-zw-CXU">
-                    <rect key="frame" x="270" y="80" width="115" height="24"/>
-                </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Login to enjoy more features" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNH-l3-QS5">
-                    <rect key="frame" x="177" y="291" width="240" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lau-Fl-t5Q">
-                    <rect key="frame" x="176" y="194" width="217" height="29"/>
+                    <rect key="frame" x="44" y="91" width="140" height="30"/>
                     <state key="normal" image="Twitter_IPhone.png"/>
                     <connections>
                         <action selector="twitterSigninAction:" destination="-1" eventType="touchUpInside" id="asI-dr-tFe"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8h-QJ-Jin">
-                    <rect key="frame" x="176" y="145" width="217" height="29"/>
+                    <rect key="frame" x="44" y="42" width="140" height="30"/>
                     <state key="normal" image="Facebook_IPhone.png"/>
                     <connections>
                         <action selector="fbSigninAction:" destination="-1" eventType="touchUpInside" id="ehc-em-fYS"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qkh-7C-86D">
-                    <rect key="frame" x="176" y="244" width="217" height="29"/>
+                    <rect key="frame" x="44" y="140" width="140" height="30"/>
                     <state key="normal" image="Google_IPhone.png"/>
                     <connections>
                         <action selector="googleSigninAction:" destination="-1" eventType="touchUpInside" id="NKh-O2-094"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iyan3d-sign-in_IPhone.png" translatesAutoresizingMaskIntoConstraints="NO" id="S96-zp-93i">
-                    <rect key="frame" x="190" y="60" width="59" height="64"/>
-                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="LOGIN WITH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vp6-HK-cOU">
+                    <rect key="frame" x="73" y="8" width="83" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Login to enjoy more features" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNH-l3-QS5">
+                    <rect key="frame" x="20" y="202" width="189" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="378" y="294"/>
+            <point key="canvasLocation" x="378" y="293.5"/>
         </view>
     </objects>
     <resources>
-        <image name="Facebook_IPhone.png" width="217" height="29"/>
-        <image name="Google_IPhone.png" width="217" height="30"/>
-        <image name="Twitter_IPhone.png" width="217" height="30"/>
-        <image name="iyan3d-sign-in_IPhone.png" width="59" height="64"/>
-        <image name="iyan3d-text-sign-in_IPhone.png" width="115" height="24"/>
+        <image name="Facebook_IPhone.png" width="140" height="30"/>
+        <image name="Google_IPhone.png" width="140" height="30"/>
+        <image name="Twitter_IPhone.png" width="140" height="30"/>
     </resources>
 </document>

@@ -8,14 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
             <connections>
                 <outlet property="addSceneBtn" destination="g7e-JY-bEf" id="zM1-5k-HDY"/>
-                <outlet property="deleteSceneBtn" destination="vDP-fZ-BHX" id="Qfk-Un-lj0"/>
                 <outlet property="mailBtn" destination="vFR-si-8pK" id="2rz-Mz-kam"/>
-                <outlet property="openScene" destination="x2J-U0-6if" id="Mhu-gP-B3G"/>
-                <outlet property="sceneDate" destination="KvE-gq-BfS" id="QmZ-E3-qg8"/>
-                <outlet property="scenePreview" destination="eUr-UB-GZb" id="afO-Oj-1uq"/>
-                <outlet property="scenePreviewCloseBtn" destination="gne-pK-FRZ" id="yoS-ta-zXA"/>
-                <outlet property="sceneTitle" destination="elO-mN-Cws" id="k6w-rJ-Sf2"/>
-                <outlet property="sceneView" destination="cew-sL-hQZ" id="q0o-VY-Fx9"/>
                 <outlet property="scenesCollectionView" destination="GtZ-Ek-nEF" id="4xu-p6-Mnr"/>
                 <outlet property="topBar" destination="wjS-eD-GYe" id="i4s-q4-jm4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -75,84 +68,24 @@
                         <size key="itemSize" width="200" height="200"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="15" minY="15" maxX="15" maxY="15"/>
+                        <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                     </collectionViewFlowLayout>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="LgN-UV-1Mh"/>
                         <outlet property="delegate" destination="-1" id="zSo-pW-Mks"/>
                     </connections>
                 </collectionView>
-                <view hidden="YES" contentMode="scaleToFill" id="cew-sL-hQZ">
-                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" id="7Hy-TK-bgQ">
-                            <rect key="frame" x="0.0" y="714" width="1024" height="51"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vDP-fZ-BHX" userLabel="deleteBtn">
-                                    <rect key="frame" x="484" y="-1" width="50" height="50"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="Delete.png"/>
-                                    <connections>
-                                        <action selector="deleteSceneButtonAction:" destination="-1" eventType="touchUpInside" id="xGx-Xe-Jzf"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </view>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" textAlignment="center" minimumFontSize="17" id="elO-mN-Cws">
-                            <rect key="frame" x="234" y="608" width="556" height="58"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <action selector="titleChangeAction:" destination="-1" eventType="editingDidEnd" id="P8x-je-pLz"/>
-                            </connections>
-                        </textField>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KvE-gq-BfS">
-                            <rect key="frame" x="364" y="674" width="297" height="32"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="eUr-UB-GZb" userLabel="thumbnail">
-                            <rect key="frame" x="57" y="66" width="911" height="500"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gne-pK-FRZ">
-                            <rect key="frame" x="8" y="8" width="55" height="55"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="close.png"/>
-                            <connections>
-                                <action selector="scenePreviewClosebtn:" destination="-1" eventType="touchUpInside" id="evF-sW-sog"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="x2J-U0-6if">
-                            <rect key="frame" x="457" y="525" width="111" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Open Scene"/>
-                            <connections>
-                                <action selector="openSceneAction:" destination="-1" eventType="touchUpInside" id="cbe-lo-BRc"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="616" y="335"/>
         </view>
     </objects>
     <resources>
-        <image name="Delete.png" width="16" height="22"/>
         <image name="Mail.png" width="30" height="21"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>
-        <image name="close.png" width="19" height="19"/>
     </resources>
 </document>

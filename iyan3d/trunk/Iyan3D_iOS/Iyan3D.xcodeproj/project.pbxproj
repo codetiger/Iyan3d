@@ -5624,7 +5624,6 @@
 		C82EA4BC187EAAA800A8468A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */,
 				7F30F5AB1B576D5600B311E3 /* Helper */,
 				7F79ED541A139ED6003BE0A3 /* sampleProject */,
 				E24973FB196BD9B90025D442 /* JsonFiles */,
@@ -5835,6 +5834,7 @@
 		C885D7851876BE6100A45D71 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */,
 				C885D7861876BE6100A45D71 /* Iyan3D-Info.plist */,
 				C885D7871876BE6100A45D71 /* InfoPlist.strings */,
 				C885D78A1876BE6100A45D71 /* main.m */,

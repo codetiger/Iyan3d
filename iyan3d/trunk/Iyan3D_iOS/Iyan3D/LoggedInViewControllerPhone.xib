@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="creditsView" destination="74D-nF-Tef" id="hVf-IE-GhJ"/>
                 <outlet property="renderStatus" destination="ttT-PA-bti" id="uWd-FS-jgs"/>
+                <outlet property="signOutBtn" destination="iTa-Bm-te9" id="nC1-FG-VIt"/>
                 <outlet property="view" destination="iN0-l3-epB" id="EdW-pj-n6W"/>
             </connections>
         </placeholder>
@@ -94,6 +95,9 @@
                             <rect key="frame" x="158" y="-2" width="72" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Sign Out"/>
+                            <connections>
+                                <action selector="signOutBtn:" destination="-1" eventType="touchUpInside" id="ST0-PJ-yE8"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.78823529410000004" green="0.78823529410000004" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>

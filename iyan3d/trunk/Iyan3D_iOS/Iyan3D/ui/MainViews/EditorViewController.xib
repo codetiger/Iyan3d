@@ -26,6 +26,7 @@
                 <outlet property="objectList" destination="Oe9-3f-sks" id="TJH-gg-q1p"/>
                 <outlet property="optionsBtn" destination="kZM-y0-mYT" id="DkH-nx-7V3"/>
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
+                <outlet property="publishBtn" destination="cSH-2J-bnb" id="f3V-47-dK5"/>
                 <outlet property="redoBtn" destination="WSd-xV-ijo" id="ug4-eC-5Ka"/>
                 <outlet property="renderView" destination="Irr-tp-tWS" id="ATu-Qm-GS4"/>
                 <outlet property="rigScreenLabel" destination="h2z-Ga-oHa" id="pyX-sE-m1w"/>
@@ -87,6 +88,18 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cSH-2J-bnb">
+                            <rect key="frame" x="755" y="698" width="110" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <state key="normal" title="PUBLISH">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="publishBtnAction:" destination="-1" eventType="touchUpInside" id="olo-Pk-2YH"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </glkView>
@@ -187,7 +200,7 @@
                             <rect key="frame" x="5" y="52" width="150" height="288"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="33" sectionHeaderHeight="28" sectionFooterHeight="28" id="Oe9-3f-sks">
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="33" sectionHeaderHeight="28" sectionFooterHeight="28" id="Oe9-3f-sks">
                                     <rect key="frame" x="0.0" y="29" width="150" height="231"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

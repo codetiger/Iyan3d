@@ -40,33 +40,34 @@
             [self.loginImage setImage:image];
         }
     }
+    
 }
 
 - (void) setTableData:(NSString *)clickedBtnName{
     
     if([clickedBtnName isEqualToString:@"importBtn"]){
-        tableData = [NSArray arrayWithObjects:@"Models", @"Images", @"Text", @"Light", @"OBJ File", @"Add Bone",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Models", @"Images", @"Text", @"Light", @"OBJ File", @"Add Bone",nil];
     }
     else if([clickedBtnName isEqualToString:@"animationBtn"]){
-        tableData = [NSArray arrayWithObjects:@"Apply Animation", @"Save Animation",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Apply Animation", @"Save Animation",nil];
     }
     else if([clickedBtnName isEqualToString:@"exportBtn"]){
-        tableData = [NSArray arrayWithObjects:@"Images", @"Videos",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Images", @"Videos",nil];
     }
     else if([clickedBtnName isEqualToString:@"infoBtn"]){
-        tableData = [NSArray arrayWithObjects:@"About", @"Help",@"Tutorials",@"Settings",@"Contact Us",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"About", @"Help",@"Tutorials",@"Settings",@"Contact Us",nil];
     }
     else if([clickedBtnName isEqualToString:@"viewBtn"]){
-        tableData = [NSArray arrayWithObjects:@"Front", @"Top",@"Left",@"Back",@"Right",@"Bottom", nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Front", @"Top",@"Left",@"Back",@"Right",@"Bottom", nil];
     }
     else if([clickedBtnName isEqualToString:@"addFrames"]){
-        tableData = [NSArray arrayWithObjects:@"1 Frame", @"24 Frames",@"240 Frames", nil];
+        tableData = [NSMutableArray arrayWithObjects:@"1 Frame", @"24 Frames",@"240 Frames", nil];
     }
     else if([clickedBtnName isEqualToString:@"myObjectsBtn"]){
-        tableData = [NSArray arrayWithObjects:@"Camera", @"Light", nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Camera", @"Light", nil];
     }
     else if([clickedBtnName isEqualToString:@"propertiesBtn"]){
-        tableData = [NSArray arrayWithObjects:@"Duplicate", @"Delete",@"Rename", nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Duplicate", @"Delete",@"Rename", nil];
     }
     else if([clickedBtnName isEqualToString:@"loginBtn"]){
         self.popoverBtns.hidden=YES;
@@ -74,7 +75,7 @@
         [self.loginImage setHidden:NO];
     }
     else {
-        tableData = [NSArray arrayWithObjects:@"No data",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"No data",nil];
     }
  
 }
@@ -151,10 +152,18 @@
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
         }
         if([clickedBtn isEqualToString:@"myObjectsBtn"]){
-            if(indexPath.row==0)
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_IPhone.png"];
-            if(indexPath.row==1)
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_IPhone.png"];
+            if([cell.textLabel.text isEqualToString:@"CAMERA"])
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+            else if([cell.textLabel.text isEqualToString:@"LIGHT"])
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+            else if([cell.textLabel.text hasPrefix:@"TEXT"])
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+            else if([cell.textLabel.text hasPrefix:@"IMAGE"])
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+            else if([cell.textLabel.text hasPrefix:@"LIGHT"])
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+            else
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
 
         }
      }
@@ -208,4 +217,22 @@
 - (IBAction)loginBtnAction:(id)sender {
     [self.delegate loginBtnAction];
 }
+
+
+-(void)UpdateObjectList:(NSArray*) objectList{
+    [tableData removeAllObjects];
+    [tableData addObjectsFromArray:objectList];
+    [self.popoverBtns reloadData];
+    [self.delegate highlightObjectList];
+    
+}
+
+- (void *)updateSelection:(NSIndexPath *)indexPath ScrollPosition:(int)scrolPosition{
+   [self.popoverBtns selectRowAtIndexPath:indexPath animated:YES scrollPosition:scrolPosition];
+}
+- (void *)updateDescelect:(NSIndexPath *)indexPath {
+    [self.popoverBtns deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+
 @end

@@ -103,6 +103,7 @@ BOOL missingAlertShown;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    isSelected=NO;
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
     
@@ -297,6 +298,7 @@ BOOL missingAlertShown;
             editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
+            [self highlightObjectList];
             [renderViewMan showPopOver:editorScene->selectedNodeId];
         }
         if(renderViewMan.makePanOrPinch)
@@ -519,6 +521,9 @@ BOOL missingAlertShown;
     [self objectSelectionCompleted:(int)indexPath.row];
     
 }
+-(void)tableView:(UITableView *)tableView deSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.objectList deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -540,89 +545,6 @@ BOOL missingAlertShown;
     [self playAnimation];
 }
 
-- (void) playAnimation{
-    isPlaying = !isPlaying;
-    editorScene->isPlaying = isPlaying;
-    [self showOrHideRightView:YES];
-    if (editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
-        [self.framesCollectionView reloadData];
-    }
-    if (isPlaying) {
-        //[self setInterfaceVisibility:YES];
-        [self setupEnableDisableControlsPlayAnimation];
-        [self.playBtn setImage:[UIImage imageNamed:@"Pause_Pad.png"] forState:UIControlStateNormal];
-        
-        playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0f / 24.0f) target:self selector:@selector(playTimerTarget) userInfo:nil repeats:YES];
-    }
-    else {
-        [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
-    }
-}
-
-- (void) playTimerTarget{
-    if (editorScene->currentFrame + 1 < editorScene->totalFrames) {
-        [self NormalHighLight];
-        editorScene->currentFrame++;
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-        [self HighlightFrame];
-        editorScene->setLightingOff();
-        editorScene->actionMan->switchFrame((float)editorScene->currentFrame);
-    }
-    else if (editorScene->currentFrame + 1 >= editorScene->totalFrames) {
-        [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
-    }
-    else if (editorScene->currentFrame == editorScene->totalFrames) {
-        [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
-    }
-    editorScene->updater->setDataForFrame(editorScene->currentFrame);}
-
-- (void) stopPlaying{
-    NSLog(@"Stop playing");
-    [self.playBtn setImage:[UIImage imageNamed:@"Play_Pad.png"] forState:UIControlStateNormal];
-    if(_leftView.isHidden)
-        [self showOrHideRightView:NO];
-    editorScene->setLightingOn();
-    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
-    todatasetCell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
-                                                      green:156.0f / 255.0f
-                                                       blue:156.0f / 255.0f
-                                                      alpha:1.0f]
-    .CGColor; // highlight selection
-    todatasetCell.layer.borderWidth = 2.0f;
-
-    [playTimer invalidate];
-    playTimer = nil;
-    if (isPlaying) {
-        isPlaying = false;
-        editorScene->isPlaying = false;
-    }
-    [self setupEnableDisableControlsPlayAnimation];
-    editorScene->actionMan->switchFrame(editorScene->currentFrame);
-}
-
-- (void)NormalHighLight
-{
-    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
-    todatasetCell.layer.borderColor = [UIColor colorWithRed:61.0f / 255.0f green:62.0f / 255.0f blue:63.0f / 255.0f alpha:1.0f].CGColor;
-    todatasetCell.layer.borderWidth = 2.0f;
-}
-
-- (void)HighlightFrame
-{
-    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
-    todatasetCell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
-                                                      green:156.0f / 255.0f
-                                                       blue:156.0f / 255.0f
-                                                      alpha:1.0f]
-    .CGColor;
-    todatasetCell.layer.borderWidth = 2.0f;
-}
-
 
 - (IBAction)moveLastAction:(id)sender {
     [self.moveLast setTag:self.moveLast.tag+1];
@@ -638,6 +560,11 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)addJoinAction:(id)sender {
+}
+
+- (IBAction)publishBtnAction:(id)sender {
+   
+    [animationsliderVC publishBtnaction];
 }
 
 - (IBAction)editFunction:(id)sender
@@ -920,6 +847,7 @@ BOOL missingAlertShown;
                                             inView:self.view
                           permittedArrowDirections:UIPopoverArrowDirectionLeft
                                           animated:YES];
+         [_popUpVc UpdateObjectList:assetsInScenes];
     }
     else
     {
@@ -936,6 +864,7 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:YES];
+        [_popUpVc UpdateObjectList:assetsInScenes];
     }
 }
 
@@ -1169,6 +1098,174 @@ BOOL missingAlertShown;
 }
 
 
+#pragma mark EditorScene Functions
+
+- (void) playAnimation{
+    isPlaying = !isPlaying;
+    editorScene->isPlaying = isPlaying;
+    [self showOrHideRightView:YES];
+    if (editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
+        [self.framesCollectionView reloadData];
+    }
+    if (isPlaying) {
+        //[self setInterfaceVisibility:YES];
+        [self setupEnableDisableControlsPlayAnimation];
+        [self.playBtn setImage:[UIImage imageNamed:@"Pause_Pad.png"] forState:UIControlStateNormal];
+        
+        playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0f / 24.0f) target:self selector:@selector(playTimerTarget) userInfo:nil repeats:YES];
+    }
+    else {
+        [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
+    }
+}
+
+- (void) playTimerTarget{
+    if (editorScene->currentFrame + 1 < editorScene->totalFrames) {
+        [self NormalHighLight];
+        editorScene->currentFrame++;
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        [self HighlightFrame];
+        editorScene->setLightingOff();
+        editorScene->actionMan->switchFrame((float)editorScene->currentFrame);
+    }
+    else if (editorScene->currentFrame + 1 >= editorScene->totalFrames) {
+        [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
+    }
+    else if (editorScene->currentFrame == editorScene->totalFrames) {
+        [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
+    }
+    editorScene->updater->setDataForFrame(editorScene->currentFrame);}
+
+- (void) stopPlaying{
+    NSLog(@"Stop playing");
+    [self.playBtn setImage:[UIImage imageNamed:@"Play_Pad.png"] forState:UIControlStateNormal];
+    if(_leftView.isHidden)
+        [self showOrHideRightView:NO];
+    editorScene->setLightingOn();
+    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
+    todatasetCell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
+                                                      green:156.0f / 255.0f
+                                                       blue:156.0f / 255.0f
+                                                      alpha:1.0f]
+    .CGColor; // highlight selection
+    todatasetCell.layer.borderWidth = 2.0f;
+    
+    [playTimer invalidate];
+    playTimer = nil;
+    if (isPlaying) {
+        isPlaying = false;
+        editorScene->isPlaying = false;
+    }
+    [self setupEnableDisableControlsPlayAnimation];
+    editorScene->actionMan->switchFrame(editorScene->currentFrame);
+}
+
+-(void) myAnimation:(BOOL)showorHide
+{
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1)
+    {
+        self.publishBtn.frame = CGRectMake(self.rightView.frame.size.width,self.scaleBtn.frame.origin.y , 110, 40);
+        [self.publishBtn setHidden:showorHide];
+
+    }
+    else
+    {
+        self.publishBtn.frame = CGRectMake( self.view.frame.size.width-self.rightView.frame.size.width, self.scaleBtn.frame.origin.y, 110, 40);
+        [self.publishBtn setHidden:showorHide];
+
+    }
+}
+
+- (void)NormalHighLight
+{
+    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
+    todatasetCell.layer.borderColor = [UIColor colorWithRed:61.0f / 255.0f green:62.0f / 255.0f blue:63.0f / 255.0f alpha:1.0f].CGColor;
+    todatasetCell.layer.borderWidth = 2.0f;
+}
+
+- (void)HighlightFrame
+{
+    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
+    todatasetCell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
+                                                      green:156.0f / 255.0f
+                                                       blue:156.0f / 255.0f
+                                                      alpha:1.0f]
+    .CGColor;
+    todatasetCell.layer.borderWidth = 2.0f;
+}
+
+
+-(void)highlightObjectList
+{
+    if(editorScene->selectedNodeId==-1){
+        for(int i=0;i<[assetsInScenes count];i++){
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+            if([Utility IsPadDevice]){
+                [self.objectList deselectRowAtIndexPath:path animated:YES];
+            }
+            else{
+                [_popUpVc updateDescelect:path];
+            }
+           
+        }
+    }
+    
+    if(!editorScene->isMultipleSelection)
+    {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:editorScene->selectedNodeId inSection:0];
+        NSLog(@"Selected node id : %d",editorScene->selectedNodeId);
+        if(editorScene->selectedNodeId!=-1)
+        {
+            isSelected=YES;
+            if([Utility IsPadDevice]){
+                [self.objectList selectRowAtIndexPath:path animated:YES scrollPosition:editorScene->selectedNodeId];
+            }
+            else
+            {
+                [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeId];
+            }
+            prevSelection=path;
+        }
+        if(editorScene->selectedNodeId==-1)
+        {
+            if(isSelected)
+            {
+                NSLog(@"Prev Selected node id : %d",prevSelection.row);
+                if([Utility IsPadDevice]){
+                    [self.objectList deselectRowAtIndexPath:path animated:YES];
+                }
+                else{
+                    [_popUpVc updateDescelect:path];
+                }
+                isSelected=NO;
+                
+            }
+            
+        }
+    
+    }
+    else
+    {
+        for(int i=0; i < editorScene->selectedNodeIds.size(); i++){
+            NSLog(@"Multi-Selected node ids : %d",editorScene->selectedNodeIds[i]);
+            NSIndexPath *path = [NSIndexPath indexPathForRow:editorScene->selectedNodeIds[i] inSection:0];
+            if([Utility IsPadDevice]){
+                [self.objectList selectRowAtIndexPath:path animated:YES scrollPosition:editorScene->selectedNodeIds[i]];
+            }
+            else
+            {
+                [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeIds[i]];
+            }
+        }
+        
+        
+    }
+}
 
 
 - (void) presentViewControllerInCurrentView:(UIViewController*) vcToPresent
@@ -1214,13 +1311,7 @@ BOOL missingAlertShown;
 {
 //    animationScene->isExportingImages = false;
 //    animationScene->setDataForFrame(animationScene->currentFrame);
-    CATransition* transition1 = [CATransition animation];
-    transition1.duration = 0.5;
-    transition1.type = kCATransitionPush;
-    transition1.subtype = kCATransitionFromRight;
-    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-    [self.rightView setHidden:NO];
+    [self showOrHideRightView:NO];
     
 }
 
@@ -1726,13 +1817,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             renderingView.delegate = self;
             renderingView.projectName=@"Scene 1";  //FOR TESTING
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
-            CATransition* transition1 = [CATransition animation];
-            transition1.duration = 0.5;
-            transition1.type = kCATransitionPush;
-            transition1.subtype = kCATransitionFromLeft;
-            [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-            [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-            [self.rightView setHidden:YES];
+            [self showOrHideRightView:YES];
             dispatch_async(dispatch_get_main_queue(), ^ {
             [self presentViewControllerInCurrentView:renderingView];
             });
@@ -1930,7 +2015,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void) myObjectsBtnDelegateAction:(int)indexValue{
-    [self.popoverController dismissPopoverAnimated:YES];
     [self objectSelectionCompleted:indexValue];
 }
 
@@ -2168,6 +2252,9 @@ void downloadFile(NSString* url, NSString* fileName)
     isLoggedin= true;
 }
 
+-(void)dismisspopover{
+    [self.popoverController dismissPopoverAnimated:YES];
+}
 
 #pragma mark LoggedinViewController Delegate
 
@@ -2535,6 +2622,8 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void)setupEnableDisableControls{
     
 }
+
+
 
 - (void)dealloc
 {

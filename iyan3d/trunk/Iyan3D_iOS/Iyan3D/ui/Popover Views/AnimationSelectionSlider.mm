@@ -44,6 +44,7 @@
     [self.downloadIndicator setHidden:NO];
     [self.downloadIndicator startAnimating];
     cache = [CacheSystem cacheSystem];
+    [self.delegate myAnimation:YES];
     animDownloadQueue = [[NSOperationQueue alloc] init];
     [animDownloadQueue setMaxConcurrentOperationCount:1];
     userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
@@ -130,7 +131,7 @@
                                         return;
                                     [self.categoryBtn setTitle: @"Trending" forState:UIControlStateNormal];
                                     animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
-                                    [self.publishBtn setHidden:YES];
+                                    [self.delegate myAnimation:YES];
                                     [self.animationCollectionView reloadData];
                                     animationCategoryTab = TRENDING;
                                     selectedAssetId=-1;
@@ -147,7 +148,7 @@
                                     animationsItems = [cache GetAnimationList:0 fromTable:6 Search:@""];
                                     [self.categoryBtn setTitle:@"Featured" forState:UIControlStateNormal];
                                     [self.animationCollectionView reloadData];
-                                    [self.publishBtn setHidden:YES];
+                                    [self.delegate myAnimation:YES];
                                     animationCategoryTab = FEATURED;
                                     selectedAssetId = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
@@ -165,7 +166,7 @@
                                       animationsItems = [cache GetAnimationList:0 fromTable:5 Search:@""];
                                       [self.categoryBtn setTitle:@"Top Rated" forState:UIControlStateNormal];
                                       [self.animationCollectionView reloadData];
-                                      [self.publishBtn setHidden:YES];
+                                      [self.delegate myAnimation:YES];
                                       animationCategoryTab = TOP_RATED;
                                       selectedAssetId = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
@@ -181,7 +182,7 @@
                                           return;
                                       [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
                                       animationsItems = [cache GetAnimationList:0 fromTable:7 Search:@""];
-                                      [self.publishBtn setHidden:NO];
+                                      [self.delegate myAnimation:YES];
                                       [self.animationCollectionView reloadData];
                                       animationCategoryTab = MY_ANIMATION;
                                       selectedAssetId = -1;
@@ -232,12 +233,13 @@
         editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
         [self.delegate removeTempAnimation];
     }
+    [self.delegate myAnimation:YES];
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self.view removeFromSuperview];
     [self deallocView];
 }
 
-- (IBAction)publishBtnaction:(id)sender
+- (void)publishBtnaction
 {
     if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"] || [[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"]){
         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Display Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
@@ -278,15 +280,15 @@
             [self downloadAnimation:assetItem];
         if (animationCategoryTab == MY_ANIMATION) {
             if (assetItem.published == 0) {
-                [self.publishBtn setHidden:NO];
+               [self.delegate myAnimation:NO];
             }
             else
             {
-                [self.publishBtn setHidden:YES];
+               [self.delegate myAnimation:YES];
             }
         }
         else {
-            [self.publishBtn setHidden:YES];
+            [self.delegate myAnimation:YES];
         }
 
     }

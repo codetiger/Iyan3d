@@ -16,13 +16,14 @@
 - (void) infoBtnDelegateAction:(int)indexValue;
 - (void) addFrameBtnDelegateAction:(int)indexValue;
 - (void) myObjectsBtnDelegateAction:(int)indexValue;
+-(void)highlightObjectList;
 - (void) loginBtnAction;
 - (void) propertiesBtnDelegate:(int)indexValue;
 
 @end
 
 @interface PopUpViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>{
-     NSArray *tableData;
+     NSMutableArray *tableData;
     NSString *clickedBtn;
     
 }
@@ -34,4 +35,7 @@
 - (IBAction)loginBtnAction:(id)sender;
 @property (weak, nonatomic) id <PopUpViewControllerDelegate> delegate;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil clickedButton:(NSString*)buttonValue;
+- (void *)updateDescelect:(NSIndexPath *)indexPath;
+- (void *)updateSelection:(NSIndexPath *)indexPath ScrollPosition:(int)scrolPosition;
+-(void)UpdateObjectList:(NSArray*) objectList;
 @end

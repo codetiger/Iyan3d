@@ -21,6 +21,7 @@
 - (void) showOrHideProgress:(BOOL) value;
 - (void) applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame;
 - (void) stopPlaying;
+-(void) myAnimation:(BOOL)showorHide;
 - (void) removeTempAnimation;
 - (void) createDuplicateAssetsForAnimation;
 - (bool) removeNodeFromScene:(int)nodeIndex;
@@ -49,6 +50,8 @@
 
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime;
+
+- (void)publishBtnaction;
 
 @property (weak, nonatomic) IBOutlet UIButton *publishBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *downloadIndicator;

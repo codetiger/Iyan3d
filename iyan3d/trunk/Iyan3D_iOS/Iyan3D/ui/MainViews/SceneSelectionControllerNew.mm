@@ -456,7 +456,6 @@
 
 -(void)renameScene:(int)indexValue
 {
-    [self.view endEditing:YES];
     UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Scene" message:@"Please enter a new Scene name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
     sceneToBeRenamed=indexValue;
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];

@@ -17,11 +17,11 @@
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="8HG-bM-qkJ">
             <rect key="frame" x="0.0" y="0.0" width="212" height="278"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="UzA-T5-EJs">
                     <rect key="frame" x="0.0" y="0.0" width="212" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bIe-QS-dnk">
                             <rect key="frame" x="133" y="0.0" width="95" height="20"/>
@@ -37,7 +37,7 @@
                 </view>
                 <collectionView clipsSubviews="YES" contentMode="scaleToFill" dataMode="none" id="5py-vs-tUs">
                     <rect key="frame" x="0.0" y="18" width="212" height="222"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="wPL-Y6-ZlP">
                         <size key="itemSize" width="50" height="70"/>
@@ -52,7 +52,7 @@
                 </collectionView>
                 <view contentMode="scaleToFill" id="h2T-Eh-N8T">
                     <rect key="frame" x="-1" y="238" width="213" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gEY-l0-gwb">
                             <rect key="frame" x="8" y="5" width="80" height="30"/>

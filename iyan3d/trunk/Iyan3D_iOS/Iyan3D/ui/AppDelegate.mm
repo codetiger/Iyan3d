@@ -31,17 +31,20 @@ SceneManager *scenemgr;
 
 static NSString *const kTrackingId = @"UA-49819146-1";
 static NSString *const kAllowTracking = @"allowTracking";
-static NSString * const kClient =
-@"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm.apps.googleusercontent.com";
+static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm.apps.googleusercontent.com";
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    #if !(TARGET_IPHONE_SIMULATOR)
-    [Fabric with:@[[Crashlytics class],[Twitter class]]];
 
-    #endif
+    [[Twitter sharedInstance] startWithConsumerKey:@"FVYtYJI6e4lZMHoZvYCt2ejao" consumerSecret:@"eiFIXzb9zjoaH0lrDZ2Jrh2ezvbmuFv6rvPJdIXLYxgkaZ7YKC"];
+    
+#if !(TARGET_IPHONE_SIMULATOR)
+    [Fabric with:@[[Crashlytics class], [Twitter class]]];
+#else
+    [Fabric with:@[[Twitter class]]];
+#endif
+    
     [GIDSignIn sharedInstance].clientID = kClient;
 
     NSDictionary *appDefaults = @{kAllowTracking: @(YES)};

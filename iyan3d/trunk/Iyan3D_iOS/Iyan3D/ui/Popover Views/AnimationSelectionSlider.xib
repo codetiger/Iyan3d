@@ -12,7 +12,6 @@
                 <outlet property="cancelBtn" destination="0RM-RT-nS4" id="ZDc-K6-27B"/>
                 <outlet property="categoryBtn" destination="EGz-lJ-VNn" id="D6O-FW-cdN"/>
                 <outlet property="downloadIndicator" destination="QBP-4X-LKz" id="2Wy-dj-g6x"/>
-                <outlet property="publishBtn" destination="hWt-rM-qjH" id="M7i-FQ-0hq"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -46,13 +45,6 @@
                             </state>
                             <connections>
                                 <action selector="cancelBtnFunction:" destination="-1" eventType="touchUpInside" id="jbX-Z7-mvJ"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-rM-qjH">
-                            <rect key="frame" x="123" y="16" width="55" height="22"/>
-                            <state key="normal" title="Publish"/>
-                            <connections>
-                                <action selector="publishBtnaction:" destination="-1" eventType="touchUpInside" id="sJn-A7-cGd"/>
                             </connections>
                         </button>
                     </subviews>

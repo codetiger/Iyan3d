@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="doneBtn" destination="K0O-5a-7bb" id="FCW-6X-sca"/>
                 <outlet property="frameCountDisplay" destination="SB8-W0-hYL" id="4zE-Ly-GUQ"/>
-                <outlet property="renderPreviewPosition" destination="NKd-i8-fme" id="yBp-Tt-Oxo"/>
+                <outlet property="renderPreviewPosition" destination="aIt-tV-K9Y" id="tjT-nk-UhJ"/>
                 <outlet property="renderPreviewSize" destination="hXC-GN-UIJ" id="Egs-ti-Eiv"/>
                 <outlet property="toolbarPosition" destination="DR4-hq-Opf" id="2Ox-GC-taB"/>
                 <outlet property="view" destination="JSk-PW-0a1" id="Dex-54-031"/>
@@ -121,17 +121,17 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NKd-i8-fme">
-                            <rect key="frame" x="21" y="35" width="522" height="29"/>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aIt-tV-K9Y">
+                            <rect key="frame" x="23" y="38" width="522" height="29"/>
                             <segments>
-                                <segment title="RIGHT BOTTOM"/>
-                                <segment title="RIGHT TOP"/>
                                 <segment title="LEFT BOTTOM"/>
                                 <segment title="LEFT TOP"/>
+                                <segment title="RIGHT BOTTOM"/>
+                                <segment title="RIGHT TOP"/>
                             </segments>
                             <color key="tintColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="previewpositionChanged:" destination="-1" eventType="valueChanged" id="fQM-K7-tEO"/>
+                                <action selector="previewpositionChanged:" destination="-1" eventType="valueChanged" id="7je-Jl-VEg"/>
                             </connections>
                         </segmentedControl>
                     </subviews>

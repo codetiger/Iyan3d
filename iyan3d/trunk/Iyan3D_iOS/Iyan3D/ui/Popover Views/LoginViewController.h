@@ -11,6 +11,7 @@
 #import "AppHelper.h"
 @protocol LoginViewControllerDelegate
 -(void)googleSigninDelegate;
+-(void)dismisspopover;
 @end
 
 @class GIDSignInButton;

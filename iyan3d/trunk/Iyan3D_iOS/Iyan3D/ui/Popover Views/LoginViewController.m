@@ -106,7 +106,7 @@
             [self.cancelBtn setEnabled:true];
             [self.facebookSignin setEnabled:true];
             [self.googleSigninBtn setEnabled:true];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.delegare dismisspopover];
         }
         else
         {

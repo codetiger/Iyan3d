@@ -50,6 +50,8 @@
     LightProperties *lightProperties;
     bool isMetalSupported;
     bool isLoggedin;
+    BOOL isSelected;
+    NSIndexPath *prevSelection;
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
     SGEditorScene *editorScene;
@@ -109,10 +111,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *rigScreenLabel;
 @property (weak, nonatomic) IBOutlet UIButton *moveLast;
 @property (weak, nonatomic) IBOutlet UIButton *addJointBtn;
+@property (weak, nonatomic) IBOutlet UIButton *publishBtn;
 - (IBAction)moveLastAction:(id)sender;
 
 - (IBAction)moveFirstAction:(id)sender;
 - (IBAction)addJoinAction:(id)sender;
+- (IBAction)publishBtnAction:(id)sender;
 
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;
