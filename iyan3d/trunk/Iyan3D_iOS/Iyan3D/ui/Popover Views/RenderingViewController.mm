@@ -670,7 +670,7 @@
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [shaderArray count];
+    return (renderingExportImage == RENDER_IMAGE) ? [shaderArray count] : 2;
 }
 
 - (ShaderCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
