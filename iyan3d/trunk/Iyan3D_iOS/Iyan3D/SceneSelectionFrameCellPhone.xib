@@ -23,6 +23,13 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OcL-d6-rFs">
+                        <rect key="frame" x="80" y="0.0" width="20" height="20"/>
+                        <state key="normal" image="property-icon.png"/>
+                        <connections>
+                            <action selector="propertiesAction:" destination="nWb-jv-i5f" eventType="touchUpInside" id="xLi-DQ-Gvm"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
@@ -30,11 +37,13 @@
             <connections>
                 <outlet property="image" destination="GYs-4b-Vr7" id="UfC-JM-SdJ"/>
                 <outlet property="name" destination="CA3-bm-cdA" id="bqz-za-dH8"/>
+                <outlet property="propertiesBtn" destination="OcL-d6-rFs" id="sph-UA-Kgx"/>
             </connections>
             <point key="canvasLocation" x="474" y="525"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="New-scene.png" width="431" height="376"/>
+        <image name="property-icon.png" width="40" height="40"/>
     </resources>
 </document>

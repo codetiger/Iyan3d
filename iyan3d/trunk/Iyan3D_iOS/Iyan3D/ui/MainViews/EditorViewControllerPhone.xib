@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addFrameBtn" destination="w5e-Hu-oAW" id="ULL-KG-xTQ"/>
                 <outlet property="animationBtn" destination="58f-dD-DRm" id="xhC-4N-gIj"/>
+                <outlet property="backButton" destination="G8Y-1j-55x" id="zHQ-v5-7Qe"/>
                 <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
                 <outlet property="firstFrameBtn" destination="tmF-dh-ZfO" id="iV5-ye-qB3"/>
                 <outlet property="framesCollectionView" destination="Sij-qL-4rT" id="AQQ-Tb-blg"/>
@@ -18,14 +19,23 @@
                 <outlet property="leftView" destination="L0B-6d-c1X" id="Pu8-ZT-SOi"/>
                 <outlet property="loginBtn" destination="Diu-e1-yeL" id="EuC-We-Win"/>
                 <outlet property="moveBtn" destination="6eX-px-hba" id="jIJ-DK-UgE"/>
+                <outlet property="moveBtnAutorig" destination="rRU-cR-7ay" id="J7J-zn-kma"/>
+                <outlet property="moveFirst" destination="D8h-yp-xgX" id="R16-a4-MKF"/>
+                <outlet property="moveLast" destination="ppu-Mk-vaf" id="b7O-W6-lH9"/>
                 <outlet property="myObjectsBtn" destination="hOI-Vg-cWf" id="D1j-Xi-lxn"/>
                 <outlet property="optionsBtn" destination="vjP-Os-nSO" id="4Q7-DF-Z0P"/>
                 <outlet property="playBtn" destination="qOP-cU-h2X" id="yrL-b7-DGC"/>
                 <outlet property="redoBtn" destination="58E-D6-XBN" id="qt2-nl-f6B"/>
                 <outlet property="renderView" destination="r4X-gk-zDO" id="OHf-j3-hkZ"/>
+                <outlet property="rigAddToSceneBtn" destination="tas-gG-dDx" id="1De-ZL-DIh"/>
+                <outlet property="rigCancelBtn" destination="LIQ-ou-vmF" id="GyQ-O8-WLW"/>
+                <outlet property="rigScreenLabel" destination="Imw-FQ-ihq" id="VCA-gZ-8nW"/>
+                <outlet property="rigTitle" destination="QA5-Gc-qcB" id="1j5-L4-RqT"/>
                 <outlet property="rightView" destination="85u-8e-wxJ" id="xPl-8g-ns0"/>
                 <outlet property="rotateBtn" destination="vf5-0G-U3P" id="jjq-LL-aGa"/>
+                <outlet property="rotateBtnAutorig" destination="vTn-2H-x7a" id="rAl-7x-mDU"/>
                 <outlet property="scaleBtn" destination="iUY-rU-QIk" id="Woe-eg-cgU"/>
+                <outlet property="scaleBtnAutorig" destination="8L9-7X-gH3" id="uZw-co-wtP"/>
                 <outlet property="undoBtn" destination="eqQ-LU-buM" id="HJh-7o-ySd"/>
                 <outlet property="view" destination="iN0-l3-epB" id="FBl-yy-ocb"/>
                 <outlet property="viewBtn" destination="A5V-XI-dmt" id="ON6-We-lks"/>
@@ -38,6 +48,53 @@
             <subviews>
                 <view autoresizesSubviews="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r4X-gk-zDO" userLabel="renderview" customClass="RenderingView">
                     <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+                    <subviews>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIQ-ou-vmF">
+                            <rect key="frame" x="26" y="265" width="100" height="25"/>
+                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rigCancelAction:" destination="-1" eventType="touchUpInside" id="lyU-3o-1mG"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tas-gG-dDx">
+                            <rect key="frame" x="358" y="265" width="98" height="25"/>
+                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" title="Add To Scene">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rigAddToSceneAction:" destination="-1" eventType="touchUpInside" id="4q8-5Z-gMp"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppu-Mk-vaf">
+                            <rect key="frame" x="304" y="260" width="25" height="25"/>
+                            <state key="normal" image="move-last.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="moveLastAction:" destination="-1" eventType="touchUpInside" id="QIU-8A-45O"/>
+                            </connections>
+                        </button>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="IMPORT OBJ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Imw-FQ-ihq">
+                            <rect key="frame" x="195" y="262" width="100" height="25"/>
+                            <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.42352944609999998" alpha="1" colorSpace="deviceRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D8h-yp-xgX">
+                            <rect key="frame" x="160" y="262" width="25" height="25"/>
+                            <state key="normal" image="move-first.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="moveFirstAction:" destination="-1" eventType="touchUpInside" id="nTC-7x-Xbk"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L0B-6d-c1X" userLabel="leftView">
@@ -48,7 +105,7 @@
                     <rect key="frame" x="459" y="42" width="110" height="280"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8E-u6-axF">
-                            <rect key="frame" x="0.0" y="63" width="107" height="25"/>
+                            <rect key="frame" x="0.0" y="118" width="107" height="25"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title=" EXPORT" image="EXPORT.png">
@@ -69,11 +126,47 @@
                                 <action selector="myObjectsBtnAction:" destination="-1" eventType="touchUpInside" id="vmF-1m-3ul"/>
                             </connections>
                         </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rRU-cR-7ay">
+                            <rect key="frame" x="1" y="7" width="107" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  MOVE" image="Move_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="OGu-35-qHQ"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8L9-7X-gH3">
+                            <rect key="frame" x="1" y="35" width="107" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  SCALE" image="Scale_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="scaleBtnAction:" destination="-1" eventType="touchUpInside" id="jlf-Gy-68b"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTn-2H-x7a">
+                            <rect key="frame" x="0.0" y="63" width="107" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="YNG-pv-Lwy"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aga-VX-vgX">
-                            <rect key="frame" x="1" y="119" width="107" height="25"/>
+                            <rect key="frame" x="0.0" y="63" width="107" height="26"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <state key="normal" title=" IMPORT" image="Import_IPhone.png">
+                            <state key="normal" title="ADD" image="Import_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -200,6 +293,12 @@
                                 <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="XTe-RW-oz4"/>
                             </connections>
                         </button>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="RIGGING MODE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QA5-Gc-qcB">
+                            <rect key="frame" x="219" y="19" width="130" height="21"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5e-Hu-oAW">
                             <rect key="frame" x="437" y="19" width="20" height="27"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -247,27 +346,32 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="562" y="293"/>
+            <point key="canvasLocation" x="663" y="318"/>
         </view>
     </objects>
     <resources>
         <image name="Add-Frames_IPhone.png" width="22" height="26"/>
-        <image name="Animation_IPhone.png" width="20" height="26"/>
+        <image name="Animation_IPhone.png" width="25" height="18"/>
         <image name="Back_IPhone.png" width="11" height="19"/>
-        <image name="EXPORT.png" width="20" height="26"/>
-        <image name="Import_IPhone.png" width="20" height="26"/>
+        <image name="EXPORT.png" width="25" height="18"/>
+        <image name="Import_IPhone.png" width="25" height="18"/>
         <image name="Info_IPhone.png" width="20" height="19"/>
         <image name="Login-IPhone.png" width="20" height="19"/>
-        <image name="MY-OBJECTS_IPhone.png" width="20" height="26"/>
-        <image name="Move_IPhone.png" width="20" height="26"/>
+        <image name="MY-OBJECTS_IPhone.png" width="25" height="18"/>
+        <image name="Move_IPhone.png" width="25" height="18"/>
+        <image name="Move_Pad.png" width="42" height="29"/>
         <image name="Next-frame_IPhone.png" width="23" height="26"/>
         <image name="Options_IPhone.png" width="20" height="26"/>
         <image name="Play_IPhone.png" width="20" height="26"/>
         <image name="Previous-frame_IPhone.png" width="21" height="26"/>
         <image name="Redo_IPhone.png" width="20" height="26"/>
-        <image name="Rotate_IPhone.png" width="20" height="26"/>
-        <image name="Scale_IPhone.png" width="20" height="26"/>
+        <image name="Rotate_IPhone.png" width="25" height="18"/>
+        <image name="Rotate_Pad.png" width="42" height="29"/>
+        <image name="Scale_IPhone.png" width="25" height="18"/>
+        <image name="Scale_Pad.png" width="42" height="29"/>
         <image name="Undo_IPhone.png" width="17" height="20"/>
         <image name="View_IPhone.png" width="19" height="19"/>
+        <image name="move-first.png" width="40" height="40"/>
+        <image name="move-last.png" width="40" height="40"/>
     </resources>
 </document>

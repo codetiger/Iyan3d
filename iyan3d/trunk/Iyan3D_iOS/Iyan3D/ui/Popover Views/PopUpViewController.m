@@ -8,6 +8,7 @@
 
 #import "PopUpViewController.h"
 #import "Utility.h"
+#import <AppHelper.h>
 @implementation PopUpViewController
 
 
@@ -39,6 +40,16 @@
             UIImage *image = [UIImage imageNamed: @"Login-Icon_IPhone"];
             [self.loginImage setImage:image];
         }
+        
+    }
+    if ([clickedBtn isEqualToString:@"myObjectsBtn"]) {
+        if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
+            self.popoverBtns.allowsMultipleSelection=YES;
+        }
+        else
+        {
+            self.popoverBtns.allowsMultipleSelection=NO;
+        }
     }
     
 }
@@ -46,30 +57,38 @@
 - (void) setTableData:(NSString *)clickedBtnName{
     
     if([clickedBtnName isEqualToString:@"importBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Models", @"Images",@"Videos", @"Text", @"Light", @"OBJ File", @"Add Bone",nil];
     }
     else if([clickedBtnName isEqualToString:@"animationBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Apply Animation", @"Save Animation",nil];
     }
     else if([clickedBtnName isEqualToString:@"exportBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Images", @"Videos",nil];
     }
     else if([clickedBtnName isEqualToString:@"infoBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"About", @"Help",@"Tutorials",@"Settings",@"Contact Us",nil];
     }
     else if([clickedBtnName isEqualToString:@"viewBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Front", @"Top",@"Left",@"Back",@"Right",@"Bottom", nil];
     }
     else if([clickedBtnName isEqualToString:@"addFrames"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"1 Frame", @"24 Frames",@"240 Frames", nil];
     }
     else if([clickedBtnName isEqualToString:@"myObjectsBtn"]){
         tableData = [NSMutableArray arrayWithObjects:@"Camera", @"Light", nil];
     }
     else if([clickedBtnName isEqualToString:@"propertiesBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Duplicate", @"Delete",@"Rename", nil];
     }
     else if([clickedBtnName isEqualToString:@"optionsBtn"]){
+        [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Move Camera", nil];
     }
     else if([clickedBtnName isEqualToString:@"loginBtn"]){
@@ -241,6 +260,10 @@
 }
 - (void *)updateDescelect:(NSIndexPath *)indexPath {
     [self.popoverBtns deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+-(void *)allowMultipleSelection :(BOOL)isMultipleselectionEnabled{
+    self.popoverBtns.allowsMultipleSelection=isMultipleselectionEnabled;
 }
 
 

@@ -37,5 +37,6 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil clickedButton:(NSString*)buttonValue;
 - (void *)updateDescelect:(NSIndexPath *)indexPath;
 - (void *)updateSelection:(NSIndexPath *)indexPath ScrollPosition:(int)scrolPosition;
+-(void *)allowMultipleSelection :(BOOL)isMultipleselectionEnabled;
 -(void)UpdateObjectList:(NSArray*) objectList;
 @end

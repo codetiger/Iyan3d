@@ -11,6 +11,7 @@
                 <outlet property="frameCountDisplay" destination="7w5-0u-Qkb" id="ZGb-c8-aca"/>
                 <outlet property="framesDisplayCount" destination="0mj-C5-4vP" id="0iO-bV-qJr"/>
                 <outlet property="framesDisplayDuration" destination="b9h-ak-AHa" id="Rxl-RU-8zc"/>
+                <outlet property="multiSelectSwitch" destination="c9W-Bx-TQb" id="kLA-4q-A6K"/>
                 <outlet property="previewPositionLeftBottom" destination="lfS-Ij-M9L" id="v6l-g3-Fa7"/>
                 <outlet property="previewPositionLeftTop" destination="wIP-cI-3Ss" id="X8c-wG-Dru"/>
                 <outlet property="previewPositionRightBottom" destination="m5d-mx-Kfl" id="OeB-Vn-dY6"/>
@@ -115,6 +116,18 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="rGj-ef-zLk">
                             <rect key="frame" x="258" y="66" width="90" height="63"/>
                         </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MultiSelect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NbO-lJ-RJP">
+                            <rect key="frame" x="643" y="7" width="74" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="c9W-Bx-TQb">
+                            <rect key="frame" x="656" y="28" width="51" height="31"/>
+                            <connections>
+                                <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="sJc-hp-o3p"/>
+                            </connections>
+                        </switch>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

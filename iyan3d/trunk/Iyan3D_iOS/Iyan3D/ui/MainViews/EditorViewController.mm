@@ -293,6 +293,7 @@ BOOL missingAlertShown;
         [self.scaleBtnAutorig setHidden:false];
         [self.moveBtnAutorig setHidden:false];
         [self.rotateBtnAutorig setHidden:false];
+        [self.myObjectsBtn setHidden:YES];
         
         return;
     }
@@ -320,6 +321,7 @@ BOOL missingAlertShown;
         [self.scaleBtnAutorig setHidden:true];
         [self.moveBtnAutorig setHidden:true];
         [self.rotateBtnAutorig setHidden:true];
+        [self.myObjectsBtn setHidden:NO];
     
     }
 
