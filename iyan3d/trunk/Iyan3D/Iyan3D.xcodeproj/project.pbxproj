@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01B4CF721C291E3F0091E19B /* EditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.m */; };
-		01B4CF731C291E3F0091E19B /* EditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.m */; };
+		01B4CF721C291E3F0091E19B /* EditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.mm */; };
+		01B4CF731C291E3F0091E19B /* EditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.mm */; };
 		01B4CF821C291EFD0091E19B /* AnimationSelectionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF771C291EFC0091E19B /* AnimationSelectionCollectionViewCell.m */; };
 		01B4CF831C291EFD0091E19B /* AnimationSelectionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF771C291EFC0091E19B /* AnimationSelectionCollectionViewCell.m */; };
 		01B4CF841C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4CF781C291EFC0091E19B /* AnimationSelectionCollectionViewCell.xib */; };
@@ -508,6 +508,24 @@
 		3D3F591B1C2801C600713C79 /* TextFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59181C2801C600713C79 /* TextFrameCell.m */; };
 		3D3F591C1C2801C600713C79 /* TextFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59191C2801C600713C79 /* TextFrameCell.xib */; };
 		3D3F591D1C2801C600713C79 /* TextFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59191C2801C600713C79 /* TextFrameCell.xib */; };
+		3D71B06C1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */; };
+		3D71B06D1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */; };
+		3D71B06E1C2930BE0038C4BD /* AssetSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */; };
+		3D71B06F1C2930BE0038C4BD /* AssetSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */; };
+		3D71B0731C2930E30038C4BD /* AssetFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B0711C2930E30038C4BD /* AssetFrameCell.m */; };
+		3D71B0741C2930E30038C4BD /* AssetFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B0711C2930E30038C4BD /* AssetFrameCell.m */; };
+		3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
+		3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
+		3DBC85E31C2BC11B00B512AB /* selected_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85E11C2BC11B00B512AB /* selected_mark.png */; };
+		3DBC85E41C2BC11B00B512AB /* selected_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85E11C2BC11B00B512AB /* selected_mark.png */; };
+		3DBC85E81C2BCBDC00B512AB /* Delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85E71C2BCBDC00B512AB /* Delete@2x.png */; };
+		3DBC85E91C2BCBDC00B512AB /* Delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85E71C2BCBDC00B512AB /* Delete@2x.png */; };
+		3DBC85EB1C2BCBE400B512AB /* New@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85EA1C2BCBE400B512AB /* New@2x.png */; };
+		3DBC85EC1C2BCBE400B512AB /* New@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85EA1C2BCBE400B512AB /* New@2x.png */; };
+		3DBC85EE1C2BCBEC00B512AB /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85ED1C2BCBEC00B512AB /* close@2x.png */; };
+		3DBC85EF1C2BCBEC00B512AB /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85ED1C2BCBEC00B512AB /* close@2x.png */; };
+		3DBC85F41C2BCCD000B512AB /* selected_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */; };
+		3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */; };
 		62044E3419920D8F0067E21E /* button-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 62044E3319920D8F0067E21E /* button-background.png */; };
 		6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED51B1484AE00DCD585 /* depthPass.fsh */; };
 		6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED61B1484AE00DCD585 /* depthPass.vsh */; };
@@ -1742,7 +1760,7 @@
 
 /* Begin PBXFileReference section */
 		01B4CF6F1C291E3F0091E19B /* EditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditorViewController.h; path = ui/MainViews/EditorViewController.h; sourceTree = "<group>"; };
-		01B4CF701C291E3F0091E19B /* EditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditorViewController.m; path = ui/MainViews/EditorViewController.m; sourceTree = "<group>"; };
+		01B4CF701C291E3F0091E19B /* EditorViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EditorViewController.mm; path = ui/MainViews/EditorViewController.mm; sourceTree = "<group>"; };
 		01B4CF761C291EFC0091E19B /* AnimationSelectionCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationSelectionCollectionViewCell.h; path = "ui/Popover Views/AnimationSelectionCollectionViewCell.h"; sourceTree = "<group>"; };
 		01B4CF771C291EFC0091E19B /* AnimationSelectionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationSelectionCollectionViewCell.m; path = "ui/Popover Views/AnimationSelectionCollectionViewCell.m"; sourceTree = "<group>"; };
 		01B4CF781C291EFC0091E19B /* AnimationSelectionCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimationSelectionCollectionViewCell.xib; path = "ui/Popover Views/AnimationSelectionCollectionViewCell.xib"; sourceTree = "<group>"; };
@@ -2268,6 +2286,17 @@
 		3D3F59171C2801C600713C79 /* TextFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFrameCell.h; path = "ui/Popover Views/TextFrameCell.h"; sourceTree = "<group>"; };
 		3D3F59181C2801C600713C79 /* TextFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFrameCell.m; path = "ui/Popover Views/TextFrameCell.m"; sourceTree = "<group>"; };
 		3D3F59191C2801C600713C79 /* TextFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextFrameCell.xib; path = "ui/Popover Views/TextFrameCell.xib"; sourceTree = "<group>"; };
+		3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetSelectionSidePanel.h; path = ui/MainViews/AssetSelectionSidePanel.h; sourceTree = "<group>"; };
+		3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AssetSelectionSidePanel.mm; path = ui/MainViews/AssetSelectionSidePanel.mm; sourceTree = "<group>"; };
+		3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetSelectionSidePanel.xib; path = ui/MainViews/AssetSelectionSidePanel.xib; sourceTree = "<group>"; };
+		3D71B0701C2930E30038C4BD /* AssetFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetFrameCell.h; path = "ui/Popover Views/AssetFrameCell.h"; sourceTree = "<group>"; };
+		3D71B0711C2930E30038C4BD /* AssetFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetFrameCell.m; path = "ui/Popover Views/AssetFrameCell.m"; sourceTree = "<group>"; };
+		3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetFrameCell.xib; path = "ui/Popover Views/AssetFrameCell.xib"; sourceTree = "<group>"; };
+		3DBC85E11C2BC11B00B512AB /* selected_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected_mark.png; sourceTree = "<group>"; };
+		3DBC85E71C2BCBDC00B512AB /* Delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Delete@2x.png"; sourceTree = "<group>"; };
+		3DBC85EA1C2BCBE400B512AB /* New@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "New@2x.png"; sourceTree = "<group>"; };
+		3DBC85ED1C2BCBEC00B512AB /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
+		3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_mark@2x.png"; sourceTree = "<group>"; };
 		62044E3319920D8F0067E21E /* button-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-background.png"; path = "Resources/imgs/button-background.png"; sourceTree = "<group>"; };
 		6231CED51B1484AE00DCD585 /* depthPass.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.fsh; path = Resources/shaders/depthPass.fsh; sourceTree = "<group>"; };
 		6231CED61B1484AE00DCD585 /* depthPass.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.vsh; path = Resources/shaders/depthPass.vsh; sourceTree = "<group>"; };
@@ -3937,6 +3966,16 @@
 			path = Resources/images/TextSelection;
 			sourceTree = "<group>";
 		};
+		3DBC85D41C2BC06600B512AB /* assetSelection */ = {
+			isa = PBXGroup;
+			children = (
+				3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */,
+				3DBC85E11C2BC11B00B512AB /* selected_mark.png */,
+			);
+			name = assetSelection;
+			path = Resources/images/assetSelection;
+			sourceTree = "<group>";
+		};
 		62FB86591988D32000AC7424 /* imgs */ = {
 			isa = PBXGroup;
 			children = (
@@ -4429,6 +4468,9 @@
 				3D3F59171C2801C600713C79 /* TextFrameCell.h */,
 				3D3F59181C2801C600713C79 /* TextFrameCell.m */,
 				3D3F59191C2801C600713C79 /* TextFrameCell.xib */,
+				3D71B0701C2930E30038C4BD /* AssetFrameCell.h */,
+				3D71B0711C2930E30038C4BD /* AssetFrameCell.m */,
+				3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */,
 			);
 			name = "Popover Views";
 			sourceTree = "<group>";
@@ -4523,6 +4565,7 @@
 		C83D627218783A1500D285C4 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3DBC85D41C2BC06600B512AB /* assetSelection */,
 				01B4CF921C29219A0091E19B /* editorViewController */,
 				3D04EAF01C25830F00C18E1A /* TextSelection */,
 				C8AA46F71C227D3600C4AB53 /* SceneSelection */,
@@ -4649,7 +4692,10 @@
 		C8AA46F71C227D3600C4AB53 /* SceneSelection */ = {
 			isa = PBXGroup;
 			children = (
+				3DBC85E71C2BCBDC00B512AB /* Delete@2x.png */,
 				C8DF1FE01C242DBD00F689D6 /* close.png */,
+				3DBC85ED1C2BCBEC00B512AB /* close@2x.png */,
+				3DBC85EA1C2BCBE400B512AB /* New@2x.png */,
 				C8AA46F81C227D3600C4AB53 /* Clone.png */,
 				C8AA46F91C227D3600C4AB53 /* Delete.png */,
 				C8AA46FA1C227D3600C4AB53 /* Mail.png */,
@@ -4666,8 +4712,11 @@
 			children = (
 				01B4D01F1C292CD50091E19B /* EditorViewController.xib */,
 				01B4CF6F1C291E3F0091E19B /* EditorViewController.h */,
-				01B4CF701C291E3F0091E19B /* EditorViewController.m */,
+				01B4CF701C291E3F0091E19B /* EditorViewController.mm */,
 				62F4D2A5199C7ABA0052EF95 /* AnimationView.xib */,
+				3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */,
+				3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */,
+				3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */,
 				E2497679196BE0310025D442 /* AnimationEditorViewControllerPhone.xib */,
 				62F4D2A3199C7ABA0052EF95 /* AnimationEditorViewControllerPad.h */,
 				E24FBD0A1ACBFD9600CF7F8C /* AnimationEditorViewControllerPad.mm */,
@@ -5253,6 +5302,7 @@
 				7FC901221A0A07860051B941 /* feedback-img@2x.png in Resources */,
 				01B4D0591C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
 				7FC900D91A0A01470051B941 /* model-phone@2x.png in Resources */,
+				3D71B06E1C2930BE0038C4BD /* AssetSelectionSidePanel.xib in Resources */,
 				7FC900D81A0A01470051B941 /* model-phone.png in Resources */,
 				7FDF550B1B736108006DC41F /* premium-phone.png in Resources */,
 				7FED9E841A8E0F780089869B /* AutoRigHelp4.png in Resources */,
@@ -5307,6 +5357,7 @@
 				256F6F581BF6257C00154622 /* darwin-iphone in Resources */,
 				62FB86831988D33A00AC7424 /* undo-img.png in Resources */,
 				7FC901371A0A07860051B941 /* texts@2x.png in Resources */,
+				3DBC85EB1C2BCBE400B512AB /* New@2x.png in Resources */,
 				62FB86701988D33A00AC7424 /* animate-img.png in Resources */,
 				C8E1799E1C2060FB00C78C07 /* Images.xcassets in Resources */,
 				6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */,
@@ -5369,6 +5420,7 @@
 				7FC900F71A0A01470051B941 /* select-img-phone@2x.png in Resources */,
 				7F31A70C1AA469EA00A6E7B1 /* back-img-phone@3x.png in Resources */,
 				E24974C5196BDC650025D442 /* controls6.sgm in Resources */,
+				3DBC85EE1C2BCBEC00B512AB /* close@2x.png in Resources */,
 				7FC901621A0A54850051B941 /* frames-phone@2x.png in Resources */,
 				7FBE04E71B1DB88500F9B7C1 /* whiteborder.png in Resources */,
 				7FC9011E1A0A07860051B941 /* back-img@2x.png in Resources */,
@@ -5548,6 +5600,7 @@
 				7F22BB571AC54C96006B44C6 /* center-align.png in Resources */,
 				25641C9E1B0524250067A4F4 /* watermark.png in Resources */,
 				E24975FA196BDD590025D442 /* color.vert in Resources */,
+				3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				7F0C02CC1A931B0300E2E09D /* cancelButton.png in Resources */,
 				7FC900CC1A0A01470051B941 /* clone-img-phone.png in Resources */,
 				25C90F4A1B3616B400D803DB /* bevel-phone@2x.png in Resources */,
@@ -5576,6 +5629,7 @@
 				7FC900DD1A0A01470051B941 /* move-img-phone@2x.png in Resources */,
 				7F31A74F1AA4960300A6E7B1 /* scale-img-phone@3x.png in Resources */,
 				7FC900E41A0A01470051B941 /* play-video-phone.png in Resources */,
+				3DBC85F41C2BCCD000B512AB /* selected_mark@2x.png in Resources */,
 				7F0087921ADFC15400764DDE /* up-arrow-25-30.png in Resources */,
 				7F31A7441AA4960300A6E7B1 /* move-last-phone@3x.png in Resources */,
 				25C90F461B3616B400D803DB /* bevel-on-phone@2x.png in Resources */,
@@ -5630,6 +5684,7 @@
 				7FC901251A0A07860051B941 /* info@2x.png in Resources */,
 				627A5F4119ED346600CB545C /* stage.png in Resources */,
 				8A9DE20E197FEFF10079727D /* mirrorJoints.json in Resources */,
+				3DBC85E31C2BC11B00B512AB /* selected_mark.png in Resources */,
 				6231CEE31B1484AE00DCD585 /* draw2dImage.vsh in Resources */,
 				7F7D5A0C1B8C2DBD00E6BA86 /* GoogleSignIn.bundle in Resources */,
 				7F31A73C1AA4960300A6E7B1 /* info-phone@3x.png in Resources */,
@@ -5674,6 +5729,7 @@
 				7F2104E51A7A0F13000E1C26 /* iphoneband.png in Resources */,
 				7FC900CD1A0A01470051B941 /* clone-img-phone@2x.png in Resources */,
 				7F1D56A31A0CF9F70060D4DD /* MenuReverse-phone.png in Resources */,
+				3DBC85E81C2BCBDC00B512AB /* Delete@2x.png in Resources */,
 				7FC524D71B6F6F3600C5D26D /* Full-screen-phone@3x.png in Resources */,
 				25EA8EE31BD90506005DBA15 /* light_Phone@3x.png in Resources */,
 				7FC900F21A0A01470051B941 /* scale-img-phone.png in Resources */,
@@ -5772,6 +5828,7 @@
 				7F307CF91B58FDBF0065BBC1 /* like@2x.png in Resources */,
 				25C90F4D1B362D6D00D803DB /* bevel-on-phone.png in Resources */,
 				25C90F4E1B362D6E00D803DB /* bevel-on-phone@2x.png in Resources */,
+				3D71B06F1C2930BE0038C4BD /* AssetSelectionSidePanel.xib in Resources */,
 				3D3F59001C27C12A00713C79 /* Mail2x.png in Resources */,
 				25C90F4F1B362D6E00D803DB /* bevel-on.png in Resources */,
 				25C90F501B362D6E00D803DB /* bevel-on@2x.png in Resources */,
@@ -5828,6 +5885,7 @@
 				E20672251B049AA6006DD2F7 /* left-align@3x.png in Resources */,
 				3D3F591D1C2801C600713C79 /* TextFrameCell.xib in Resources */,
 				E20672261B049AA6006DD2F7 /* home-phone@3x.png in Resources */,
+				3DBC85E91C2BCBDC00B512AB /* Delete@2x.png in Resources */,
 				E20672281B049AA6006DD2F7 /* texts.png in Resources */,
 				E206722A1B049AA6006DD2F7 /* videoShare@2x.png in Resources */,
 				E206722D1B049AA6006DD2F7 /* move-first-phone@3x.png in Resources */,
@@ -5914,6 +5972,7 @@
 				3D04EAEC1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */,
 				E20672901B049AA6006DD2F7 /* play-video@2x.png in Resources */,
 				E20672921B049AA6006DD2F7 /* center-align-pad@3x.png in Resources */,
+				3DBC85E41C2BC11B00B512AB /* selected_mark.png in Resources */,
 				256ED8F01B1FEDED008ADEF8 /* Open Sans Light.ttf in Resources */,
 				256F6F5D1BF6257C00154622 /* alg-outline in Resources */,
 				E20672941B049AA6006DD2F7 /* first-phone.png in Resources */,
@@ -5996,6 +6055,7 @@
 				259EE14D1BDE081200C99784 /* commonL3.fsh in Resources */,
 				01B4CFF31C29219A0091E19B /* Play.png in Resources */,
 				E20672FE1B049AA6006DD2F7 /* helpimage6.png in Resources */,
+				3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				E20672FF1B049AA6006DD2F7 /* add-frame.png in Resources */,
 				E20673021B049AA6006DD2F7 /* frames-phone.png in Resources */,
 				25E86EC61B44D10300BC48DC /* depthPassText.vsh in Resources */,
@@ -6018,6 +6078,7 @@
 				01B4D0561C2937000091E19B /* My-objects-Light_Pad@2x.png in Resources */,
 				E20673131B049AA6006DD2F7 /* rotate-img-phone.png in Resources */,
 				E20673141B049AA6006DD2F7 /* rotate-img-phone@3x.png in Resources */,
+				3DBC85EC1C2BCBE400B512AB /* New@2x.png in Resources */,
 				01B4D06A1C2937000091E19B /* Rotate_Pad@2x.png in Resources */,
 				E20673151B049AA6006DD2F7 /* helpimage2.png in Resources */,
 				E20673161B049AA6006DD2F7 /* view-img@2x.png in Resources */,
@@ -6085,6 +6146,7 @@
 				E20673651B049AA6006DD2F7 /* picture-img-phone@2x.png in Resources */,
 				01B4D0211C292CD50091E19B /* EditorViewController.xib in Resources */,
 				E20673661B049AA6006DD2F7 /* move-img-phone.png in Resources */,
+				3DBC85EF1C2BCBEC00B512AB /* close@2x.png in Resources */,
 				E20673671B049AA6006DD2F7 /* select-img@2x.png in Resources */,
 				E20673691B049AA6006DD2F7 /* last-phone@3x.png in Resources */,
 				E206736A1B049AA6006DD2F7 /* center-align.png in Resources */,
@@ -6202,6 +6264,7 @@
 				E20673F91B049AA6006DD2F7 /* first-pad@2x.png in Resources */,
 				256ED8EE1B1FEDED008ADEF8 /* League Gothic Italic.otf in Resources */,
 				E20673FA1B049AA6006DD2F7 /* helpimage3.png in Resources */,
+				3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */,
 				E20673FB1B049AA6006DD2F7 /* AssetCellViewPhone.xib in Resources */,
 				E20673FE1B049AA6006DD2F7 /* AutoRigHelp5.png in Resources */,
 				E20673FF1B049AA6006DD2F7 /* picture-img@2x.png in Resources */,
@@ -6486,7 +6549,7 @@
 				01B4CF8A1C291EFD0091E19B /* FrameCellNew.m in Sources */,
 				E21C3D361A0758B6006964E5 /* GTLYouTubeVideoSuggestions.m in Sources */,
 				25730E611AFD3C7B0042F81A /* BitmapContextRep.m in Sources */,
-				01B4CF721C291E3F0091E19B /* EditorViewController.m in Sources */,
+				01B4CF721C291E3F0091E19B /* EditorViewController.mm in Sources */,
 				256F6B8D1BF6246300154622 /* exportSGR.cpp in Sources */,
 				25730E6B1AFD3C7B0042F81A /* BitmapScaleManipulator.m in Sources */,
 				E2497669196BE0190025D442 /* ObjFileViewController.mm in Sources */,
@@ -6531,6 +6594,7 @@
 				E21C3D051A0758B6006964E5 /* GTLYouTubePlaylistItemContentDetails.m in Sources */,
 				256F6D7E1BF624FB00154622 /* Vector3.cpp in Sources */,
 				256F6F6A1BF6257C00154622 /* priorityq.c in Sources */,
+				3D71B0731C2930E30038C4BD /* AssetFrameCell.m in Sources */,
 				25895B781B4F056700E833F8 /* AnimationItem.m in Sources */,
 				01B4CF861C291EFD0091E19B /* AnimationSelectionSlider.m in Sources */,
 				E21C3D071A0758B6006964E5 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
@@ -6583,6 +6647,7 @@
 				E21C3CBC1A0758B6006964E5 /* GTLQueryYouTube.m in Sources */,
 				E21C3D011A0758B6006964E5 /* GTLYouTubePageInfo.m in Sources */,
 				7F30F5B41B576D8C00B311E3 /* NSData+Base64.m in Sources */,
+				3D71B06C1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */,
 				E21C3D331A0758B6006964E5 /* GTLYouTubeVideoSnippet.m in Sources */,
 				E29C10E91A075DBC00626544 /* GTLObject.m in Sources */,
 				256F6F5E1BF6257C00154622 /* dict.c in Sources */,
@@ -6712,6 +6777,7 @@
 				25B5B1711BE33EFB00AC2525 /* ZipArchive.mm in Sources */,
 				E206710F1B049AA6006DD2F7 /* GTMOAuth2Authentication.m in Sources */,
 				E20671111B049AA6006DD2F7 /* GTLYouTubeVideoCategory.m in Sources */,
+				3D71B0741C2930E30038C4BD /* AssetFrameCell.m in Sources */,
 				E20671131B049AA6006DD2F7 /* GTLYouTubePromotedItemId.m in Sources */,
 				E20671151B049AA6006DD2F7 /* GTLYouTubeVideo.m in Sources */,
 				C8AA46F41C227D1000C4AB53 /* SceneSelectionControllerNew.mm in Sources */,
@@ -6750,7 +6816,7 @@
 				E20671341B049AA6006DD2F7 /* GTLYouTubeVideoStatistics.m in Sources */,
 				256F6BB21BF6246300154622 /* SGScene.cpp in Sources */,
 				25B5B16B1BE33EFB00AC2525 /* mztools.c in Sources */,
-				01B4CF731C291E3F0091E19B /* EditorViewController.m in Sources */,
+				01B4CF731C291E3F0091E19B /* EditorViewController.mm in Sources */,
 				E20671351B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsRecommendation.m in Sources */,
 				E20671371B049AA6006DD2F7 /* GTLYouTubeChannelListResponse.m in Sources */,
 				E206713A1B049AA6006DD2F7 /* GTLYouTube_Sources.m in Sources */,
@@ -6886,6 +6952,7 @@
 				256F6DA71BF624FB00154622 /* LightNode.cpp in Sources */,
 				E20671B41B049AA6006DD2F7 /* GTLYouTubeVideoGetRatingResponse.m in Sources */,
 				C8DF1FDD1C23E65600F689D6 /* SceneSelectionEnteredView.m in Sources */,
+				3D71B06D1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */,
 				E20671B51B049AA6006DD2F7 /* GTLYouTubePlaylistItemContentDetails.m in Sources */,
 				E20671B61B049AA6006DD2F7 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
 				256F6DB11BF624FB00154622 /* OGLNodeData.cpp in Sources */,

@@ -552,7 +552,10 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@, %@ WHERE %@.%@ = 4 AND %@.%@ = %@.%@", TABLE_ASSET_INFO, TABLE_DOWNLOADED_ASSET_INFO, TABLE_ASSET_INFO, ASSET_TYPE, TABLE_ASSET_INFO, ASSET_ID, TABLE_DOWNLOADED_ASSET_INFO, DOWNLOADED_ASSET_ID];
         } else if(type == 1) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d AND %@ < 40000", TABLE_ASSET_INFO, ASSET_TYPE, type, ASSET_ID];
+        }else if(type == 0){
+            querySQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = %s OR %@ = %s OR %@ = %s",TABLE_ASSET_INFO,ASSET_TYPE,"1",ASSET_TYPE,"2",ASSET_TYPE,"3"];
         }
+        
         if([keyword length]) {
             querySQL = [querySQL stringByAppendingFormat:@" AND %@ LIKE '%s%@%s'", ASSET_KEYWORDS, "% ",[keyword lowercaseString],"%"];
         }
