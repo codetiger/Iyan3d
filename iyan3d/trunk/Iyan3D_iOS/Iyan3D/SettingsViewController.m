@@ -33,6 +33,8 @@
     [super viewDidLoad];
     [self setupImageTap];
     self.doneBtn.layer.cornerRadius=CORNER_RADIUS;
+    self.restoreBtn.layer.cornerRadius=CORNER_RADIUS;
+
     [self readUserSettings];
     
 }

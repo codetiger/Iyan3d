@@ -34,6 +34,7 @@
 #define FULL_HD 0
 #define HD 1
 #define DVD 2
+#define VCD 3
 
 #define SHADER_DEFAULT 0
 #define SHADER_TOON 6
@@ -64,6 +65,7 @@
         renderingExportImage = exportType;
         resolutionType = resolution;
         shaderType = SHADER_DEFAULT;
+        bgColor = Vector3(0.1,0.1,0.1);
     }
     return self;
 }
@@ -147,12 +149,14 @@
             _trimControl.delegate = self;
             [self.view addSubview:_trimControl];
         }
-        
-        
     }
+    [self updateCreditLable];
 }
 
-
+- (void)trimControl:(RETrimControl *)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue
+{
+    [self updateCreditLable];
+}
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     if([Utility IsPadDevice])
@@ -195,6 +199,7 @@
         [self.resolutionType1 setHidden:isHidden];
         [self.resolutionType2 setHidden:isHidden];
         [self.resolutionType3 setHidden:isHidden];
+        [self.resolutionType4 setHidden:isHidden];
         [self.resolutionTypeLabel setHidden:isHidden];
         [self.startButtonText setHidden:isHidden];
         [self.waterMarkLabel setHidden:isHidden];
@@ -238,37 +243,58 @@
             [self.trimControl setHidden:YES];
         }
             NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-            if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
+            if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5 && resolutionType != VCD) {
                 int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 1;
                 int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-                int credits = (frames * valueForRender) * -1;
+                int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
                 int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
                 if(userCredits >= abs(credits)){
-                    [self renderBeginFunction:credits];
+                    [_creditLable setHidden:YES];
+                    [self renderBeginFunction:credits];                    
                 }
                 else{
                     UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@%d%@",@"Please Recharge Your credits. you Need more ",abs(credits)-userCredits,@" credits. Thank You." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [userNameAlert show];
+                    [self.trimControl setHidden:NO];
                 }
-
+            }
+            else if (resolutionType == VCD){
+                [_creditLable setHidden:YES];
+                [self renderBeginFunction:0];
             }
             else{
                 UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this. Thank you.  !!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [userNameAlert show];
+                [self.trimControl setHidden:NO];
             }
         }
 }
 
 - (void) saveDeductedCredits:(int)credits
 {
-    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
-    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
+//    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
+//    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
 }
 
 
 - (void) creditsUsed
 {
     NSLog(@"Credits Updated");
+}
+
+- (void) updateCreditLable
+{
+    if(resolutionType != VCD){
+    [_creditLable setHidden:NO];
+    int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 1;
+    int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
+
+        int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
+//    int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
+    _creditLable.text = [NSString stringWithFormat:@"%d Credits", credits];
+    }
+    else
+        [_creditLable setHidden:YES];
 }
 
 
@@ -484,7 +510,8 @@
     [self.exportButton setEnabled:true];
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
-    [self saveDeductedCredits:[credits intValue]];
+    if(resolutionType != VCD)
+        [self saveDeductedCredits:[credits intValue]];
 }
 - (IBAction)youtubeButtonAction:(id)sender
 {
@@ -647,13 +674,11 @@
 - (IBAction)cameraResolutionChanged:(id)sender {
     resolutionType = (int)self.resolutionSegment.selectedSegmentIndex;
     [self.delegate cameraResolutionChanged:resolutionType];
+    [self updateCreditLable];
 }
 
 - (IBAction)waterMarkValueChanged:(id)sender {
-    if(!self.watermarkSwitch.isOn) {
-        [self.watermarkSwitch setOn:YES];
-        [self showUpgradeView:-1];
-    }
+        [self updateCreditLable];
 }
 
 - (IBAction) cancelButtonAction:(id)sender
@@ -773,9 +798,12 @@
     } else if(resolutionType == 1) {
         cameraResolutionWidth = 1280.0f;
         cameraResolutionHeight = 720.0f;
-    } else {
+    } else if(resolutionType == 2) {
         cameraResolutionWidth = 720.0f;
         cameraResolutionHeight = 480.0f;
+    } else{
+        cameraResolutionWidth = 352.0f;
+        cameraResolutionHeight = 240.0f;
     }
     [[AppHelper getAppHelper] saveToUserDefaults:[NSString stringWithFormat:@"%d",resolutionType] withKey:@"cameraResolution"];
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -821,6 +849,8 @@
 }
 - (void) MakeVideo
 {
+    NSLog(@"Camera Width %f Height %f " ,cameraResolutionWidth,cameraResolutionHeight);
+    
     imagesArray = [[NSMutableArray alloc] init];
     NSString *tempDir = NSTemporaryDirectory();
     
@@ -838,6 +868,7 @@
     [fileMgr removeItemAtPath:self.videoFilePath error:&error];
     
     AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:self.videoFilePath] fileType:AVFileTypeQuickTimeMovie error:&error];
+    NSLog(@" Video Error %@ ", error.localizedDescription);
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264, AVVideoCodecKey, [NSNumber numberWithInt:cameraResolutionWidth], AVVideoWidthKey, [NSNumber numberWithInt:cameraResolutionHeight], AVVideoHeightKey, nil];
     
     AVAssetWriterInput* videoWriterInput = [AVAssetWriterInput
@@ -1052,8 +1083,10 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 }
 
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{
-    if(isDragFinish)
-        [self.delegate changeRenderingBgColor:vetexColor];
+    bgColor = vetexColor;
+    if(isDragFinish){
+        [self.delegate changeRenderingBgColor:Vector4(bgColor,(_transparentBgSwitch.isOn) ? 0.0 : 1.0)];
+    }
 }
 
 - (void) dealloc
@@ -1067,6 +1100,8 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 }
 
 - (IBAction)transparentBgValueChanged:(id)sender {
+    (_transparentBgSwitch.isOn) ? [self.delegate changeRenderingBgColor:(Vector4(bgColor,0.0))] : [self.delegate changeRenderingBgColor:(Vector4(bgColor,1.0))];
     
 }
+
 @end

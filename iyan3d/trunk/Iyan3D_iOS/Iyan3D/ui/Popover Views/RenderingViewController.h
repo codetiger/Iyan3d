@@ -32,7 +32,7 @@
 - (void) clearFolder:(NSString*)dirPath;
 - (void) resumeRenderingAnimationScene;
 - (void) saveScene;
-- (void) changeRenderingBgColor:(Vector3)vertexColor;
+- (void) changeRenderingBgColor:(Vector4)vertexColor;
 @end
 
 @class GADBannerView;
@@ -54,6 +54,7 @@
     PremiumUpgardeVCViewController* upgradeView;
     int selectedIndex,tempSelectedIndex;
     BOOL cancelPressed;
+    Vector3 bgColor;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution;
@@ -102,6 +103,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *colorPickerBtn;
 @property (weak, nonatomic) IBOutlet UILabel *transparentLable;
 @property (weak, nonatomic) IBOutlet UISwitch *transparentBackgroundbtn;
+@property (weak, nonatomic) IBOutlet UILabel *creditLable;
+@property (weak, nonatomic) IBOutlet UILabel *resolutionType4;
+
 
 - (IBAction)cameraResolutionChanged:(id)sender;
 - (IBAction)transparentBgValueChanged:(id)sender;

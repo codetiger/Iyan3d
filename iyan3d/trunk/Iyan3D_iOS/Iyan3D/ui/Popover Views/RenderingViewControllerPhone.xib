@@ -12,6 +12,7 @@
                 <outlet property="cancelActivityIndicator" destination="zPE-vB-GV8" id="BW0-qq-Zfc"/>
                 <outlet property="cancelButton" destination="ZQF-TY-3kd" id="Ph4-Jc-ZgH"/>
                 <outlet property="colorPickerBtn" destination="gvb-oT-QNE" id="VKT-FS-Rzl"/>
+                <outlet property="creditLable" destination="uzw-0x-DE0" id="kqJ-2r-cUl"/>
                 <outlet property="exportButton" destination="Gld-fi-edq" id="agU-yN-wOg"/>
                 <outlet property="makeVideoLoading" destination="V7W-A0-gIs" id="qey-f4-wPq"/>
                 <outlet property="nextButton" destination="jxD-ic-6yT" id="2Py-pf-esi"/>
@@ -24,6 +25,7 @@
                 <outlet property="resolutionType1" destination="cqV-hC-Wtm" id="7L6-xf-aJ2"/>
                 <outlet property="resolutionType2" destination="rH5-up-h3T" id="ATv-a3-fbk"/>
                 <outlet property="resolutionType3" destination="0t8-PQ-7ER" id="rkg-LH-htg"/>
+                <outlet property="resolutionType4" destination="pC1-8N-QZR" id="Qoy-IH-x8Y"/>
                 <outlet property="resolutionTypeLabel" destination="0gK-8w-KH3" id="uUd-T7-pmg"/>
                 <outlet property="shaderStyle" destination="8hd-nw-Euc" id="ctd-6D-BW2"/>
                 <outlet property="shareActivityIndicator" destination="QcO-uo-AeA" id="JDU-rZ-Bzq"/>
@@ -66,22 +68,22 @@
                     <color key="progressTintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                     <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                 </progressView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BACKGROUND COLOR" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5xo-sK-aOd">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BG COLOR" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5xo-sK-aOd">
                     <rect key="frame" x="320" y="63" width="128" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BACKGROUND" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bhJ-SM-Mzq">
-                    <rect key="frame" x="221" y="59" width="88" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRANSPARENT BG" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bhJ-SM-Mzq">
+                    <rect key="frame" x="217" y="59" width="104" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="gyP-WU-cYe">
-                    <rect key="frame" x="236" y="81" width="51" height="31"/>
+                    <rect key="frame" x="245" y="81" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                 </switch>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Gld-fi-edq">
@@ -122,12 +124,13 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="8I1-7e-l7o">
-                    <rect key="frame" x="29" y="82" width="169" height="29"/>
+                    <rect key="frame" x="29" y="82" width="199" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <segments>
                         <segment title="Full HD"/>
                         <segment title="HD"/>
                         <segment title="DVD"/>
+                        <segment title="VCD"/>
                     </segments>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -135,16 +138,16 @@
                     </connections>
                 </segmentedControl>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1920x1080" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cqV-hC-Wtm">
-                    <rect key="frame" x="32" y="113" width="54" height="21"/>
+                    <rect key="frame" x="29" y="113" width="49" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1280x720" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rH5-up-h3T">
-                    <rect key="frame" x="84" y="113" width="59" height="21"/>
+                    <rect key="frame" x="80" y="113" width="47" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -203,9 +206,16 @@
                     </connections>
                 </collectionView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="720x480" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0t8-PQ-7ER">
-                    <rect key="frame" x="142" y="113" width="57" height="21"/>
+                    <rect key="frame" x="131" y="113" width="46" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="352x240" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pC1-8N-QZR">
+                    <rect key="frame" x="176" y="113" width="57" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -242,6 +252,13 @@
                     <rect key="frame" x="438" y="276" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="uzw-0x-DE0">
+                    <rect key="frame" x="152" y="285" width="225" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>

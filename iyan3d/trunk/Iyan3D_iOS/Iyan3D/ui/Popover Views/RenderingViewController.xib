@@ -12,6 +12,7 @@
                 <outlet property="cancelActivityIndicator" destination="nif-U0-BwV" id="T3H-Ag-uTc"/>
                 <outlet property="cancelButton" destination="BrA-Pe-0Ve" id="ojj-c7-nZ9"/>
                 <outlet property="colorPickerBtn" destination="8g0-ud-PUd" id="y0C-mw-5rB"/>
+                <outlet property="creditLable" destination="hLk-cO-cda" id="Yw6-OV-HId"/>
                 <outlet property="exportButton" destination="ZUU-pt-gvf" id="fmO-uG-1Cq"/>
                 <outlet property="makeVideoLoading" destination="chg-7r-BYf" id="wFs-ZV-FnW"/>
                 <outlet property="nextButton" destination="pdo-ld-rqe" id="fBG-Me-oIy"/>
@@ -25,6 +26,7 @@
                 <outlet property="resolutionType1" destination="V7f-2g-A19" id="vMH-j0-UfF"/>
                 <outlet property="resolutionType2" destination="m5I-iq-MS9" id="iDb-ca-LvS"/>
                 <outlet property="resolutionType3" destination="3kd-R7-eKE" id="6qr-tR-I5x"/>
+                <outlet property="resolutionType4" destination="heE-bQ-KtQ" id="VQ2-bQ-eqP"/>
                 <outlet property="resolutionTypeLabel" destination="E66-VV-JUT" id="rk3-mG-S4h"/>
                 <outlet property="shaderStyle" destination="MVH-u3-p41" id="zuG-Tg-MoH"/>
                 <outlet property="shareActivityIndicator" destination="qZj-v7-ywE" id="Svx-Fb-Iek"/>
@@ -133,12 +135,13 @@
                     </connections>
                 </collectionView>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="eXO-4u-FHT">
-                    <rect key="frame" x="131" y="87" width="230" height="29"/>
+                    <rect key="frame" x="121" y="87" width="258" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <segments>
                         <segment title="Full HD"/>
                         <segment title="HD"/>
                         <segment title="DVD"/>
+                        <segment title="VCD"/>
                     </segments>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -146,9 +149,9 @@
                     </connections>
                 </segmentedControl>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1280x720" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="m5I-iq-MS9">
-                    <rect key="frame" x="207" y="123" width="87" height="21"/>
+                    <rect key="frame" x="187" y="123" width="64" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -221,9 +224,16 @@
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="720x480" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3kd-R7-eKE">
-                    <rect key="frame" x="289" y="123" width="72" height="21"/>
+                    <rect key="frame" x="249" y="123" width="67" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="352x240" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="heE-bQ-KtQ">
+                    <rect key="frame" x="312" y="123" width="67" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -242,19 +252,26 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1920x1080" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="V7f-2g-A19">
-                    <rect key="frame" x="131" y="123" width="87" height="21"/>
+                    <rect key="frame" x="119" y="123" width="68" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="gTf-Gy-xHP">
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="gTf-Gy-xHP">
                     <rect key="frame" x="235" y="204" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <connections>
                         <action selector="transparentBgValueChanged:" destination="-1" eventType="valueChanged" id="GrX-eD-yjV"/>
                     </connections>
                 </switch>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="hLk-cO-cda">
+                    <rect key="frame" x="153" y="559" width="183" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

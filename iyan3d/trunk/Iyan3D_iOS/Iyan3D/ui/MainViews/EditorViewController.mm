@@ -3367,9 +3367,9 @@ void boneLimitsCallBack(){
 
 #pragma Rendering Delegates
 
-- (void) changeRenderingBgColor:(Vector3)vertexColor
+- (void) changeRenderingBgColor:(Vector4)vertexColor
 {
-    renderBgColor = Vector4(vertexColor,1.0);
+    renderBgColor = vertexColor;
 }
 
 - (void)cameraResolutionChanged:(int)changedResolutionType

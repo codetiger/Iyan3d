@@ -12,6 +12,7 @@
                 <outlet property="multiSelectSwitch" destination="HLY-Y3-GAG" id="8q7-cK-IfQ"/>
                 <outlet property="renderPreviewPosition" destination="aIt-tV-K9Y" id="tjT-nk-UhJ"/>
                 <outlet property="renderPreviewSize" destination="hXC-GN-UIJ" id="Egs-ti-Eiv"/>
+                <outlet property="restoreBtn" destination="6f4-Gj-L9N" id="kND-NE-2n2"/>
                 <outlet property="toolbarPosition" destination="DR4-hq-Opf" id="2Ox-GC-taB"/>
                 <outlet property="view" destination="JSk-PW-0a1" id="Dex-54-031"/>
             </connections>
@@ -35,17 +36,29 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MultiSelect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACw-lA-AL8">
-                            <rect key="frame" x="16" y="7" width="86" height="21"/>
+                            <rect key="frame" x="16" y="9" width="86" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="HLY-Y3-GAG">
-                            <rect key="frame" x="115" y="2" width="51" height="31"/>
+                            <rect key="frame" x="115" y="5" width="51" height="31"/>
                             <connections>
                                 <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="n5b-Bt-Uyc"/>
                             </connections>
                         </switch>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6f4-Gj-L9N">
+                            <rect key="frame" x="225" y="8" width="184" height="30"/>
+                            <color key="backgroundColor" red="0.00024560625339999998" green="0.63386878189999996" blue="0.10996116240000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <state key="normal" title="RESTORE PURCHASE">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="Hkn-2z-ndJ"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

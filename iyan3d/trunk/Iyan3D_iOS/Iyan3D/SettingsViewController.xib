@@ -20,7 +20,7 @@
                 <outlet property="renderPreviewSize" destination="jZ1-zD-G95" id="SaT-oX-tYa"/>
                 <outlet property="renderPreviewSizeLarge" destination="a3w-eS-iyn" id="hoZ-G5-AiS"/>
                 <outlet property="renderPreviewSizeSmall" destination="Xqy-dv-PAd" id="cs5-sN-vHj"/>
-                <outlet property="restoreBtn" destination="6tb-ew-FYE" id="XG0-B9-VwP"/>
+                <outlet property="restoreBtn" destination="Tt3-Ct-3uo" id="Ln9-Ea-hon"/>
                 <outlet property="toolbarLeft" destination="BnY-cJ-lir" id="XTn-1t-vSr"/>
                 <outlet property="toolbarPosition" destination="TcA-9S-yyh" id="NWI-RQ-a2d"/>
                 <outlet property="toolbarRight" destination="DOc-LE-l8X" id="iVP-Zc-8Xn"/>
@@ -176,24 +176,27 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MultiSelect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oMY-Au-PYQ">
-                            <rect key="frame" x="14" y="5" width="86" height="21"/>
+                            <rect key="frame" x="14" y="9" width="86" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EsN-jX-vMF">
-                            <rect key="frame" x="113" y="0.0" width="51" height="31"/>
+                            <rect key="frame" x="113" y="4" width="51" height="31"/>
                             <connections>
                                 <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="kDp-Ve-xvn"/>
                             </connections>
                         </switch>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6tb-ew-FYE">
-                            <rect key="frame" x="248" y="0.0" width="46" height="30"/>
-                            <state key="normal" title="Button">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tt3-Ct-3uo">
+                            <rect key="frame" x="206" y="5" width="184" height="30"/>
+                            <color key="backgroundColor" red="0.00024560625339999998" green="0.63386878189999996" blue="0.10996116240000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <state key="normal" title="RESTORE PURCHASE">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="DpC-WZ-EBJ"/>
+                                <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="6nO-Nt-Z8v"/>
                             </connections>
                         </button>
                     </subviews>
