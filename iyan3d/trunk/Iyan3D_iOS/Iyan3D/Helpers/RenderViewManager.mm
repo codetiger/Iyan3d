@@ -36,6 +36,7 @@ SGEditorScene *editorScene;
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cachesDir = [paths objectAtIndex:0];
     constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
+    touchCountTracker = 0;
 }
 
 - (void)setupLayer:(UIView*)renderView
@@ -385,13 +386,16 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
     switch (rec.state) {
         case UIGestureRecognizerStateBegan: {
+            touchCountTracker = touchCount;
             editorScene->moveMan->touchBegan(p[0] * screenScale);
             switch (touchCount) {
                 case 1: {
+                    if(!editorScene->renHelper->isMovingCameraPreview(p[0] * screenScale)) {
                     _checkCtrlSelection = true;
                     _touchMovePosition.clear();
                     _touchMovePosition.push_back(p[0] * screenScale);
                     editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
+                    }
                     break;
                 }
                 case 2: {
@@ -405,14 +409,17 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         case UIGestureRecognizerStateChanged: {
-            if (editorScene->isControlSelected && touchCount == 2) {
+            if (touchCountTracker != touchCount) {
+                if(editorScene->isControlSelected)
+                    return;
                 _makePanOrPinch = false;
                 editorScene->moveMan->panBegan(p[0] * screenScale, p[1] * screenScale);
             }
             switch (touchCount) {
                 case 1: {
                     editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
-                    editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
+                    if(!editorScene->renHelper->isMovingCameraPreview(p[0] * screenScale))
+                        editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
                     break;
                 }
                 case 2: {

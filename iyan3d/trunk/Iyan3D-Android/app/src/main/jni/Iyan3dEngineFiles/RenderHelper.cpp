@@ -36,6 +36,7 @@ RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
     isExportingImages = false;
     isExporting1stTime = true;
     renderingType = SHADER_COMMON_L1;
+    cameraPreviewMoveDist = Vector2(0.0, 0.0);
 }
 
 RenderHelper::~RenderHelper(){
@@ -236,6 +237,24 @@ void RenderHelper::rttDrawCall()
     rttShadowMap();
 }
 
+bool RenderHelper::isMovingCameraPreview(Vector2 curTouchPos)
+{
+    Vector4 prevLay = renderingScene->getCameraPreviewLayout();
+    if(curTouchPos.x > prevLay.x && curTouchPos.x < prevLay.z && curTouchPos.y > prevLay.y && curTouchPos.y < prevLay.w)
+        return true;
+    cameraPreviewMoveDist = Vector2(0.0, 0.0);
+    return false;
+}
+
+void RenderHelper::changeCameraPreviewCoords(Vector2 touchPos)
+{
+    if(!renderingScene || !smgr)
+        return;
+    Vector2 previousTouchPos = renderingScene->moveMan->prevTouchPoints[0];
+    cameraPreviewMoveDist = previousTouchPos - touchPos;
+    renderingScene->moveMan->prevTouchPoints[0] = touchPos;
+}
+
 void RenderHelper::drawCameraPreview()
 {
     if(!renderingScene || !smgr)
@@ -251,13 +270,13 @@ void RenderHelper::drawCameraPreview()
         if(!(renderingScene->nodes[i]->props.isVisible))
             renderingScene->nodes[i]->node->setVisible(false);
     }
-    smgr->draw2DImage(renderingScene->bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    smgr->draw2DImage(renderingScene->bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth ,SceneHelper::screenHeight ),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     setControlsVisibility(false);
     
     
     smgr->Render();
     if(renderingScene->whiteBorderTexture)
-        smgr->draw2DImage(renderingScene->whiteBorderTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        smgr->draw2DImage(renderingScene->whiteBorderTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight ),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     smgr->setRenderTarget(NULL,false,false);
     smgr->setActiveCamera(renderingScene->viewCamera);
     

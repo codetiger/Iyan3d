@@ -89,6 +89,13 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     currentFrame = previousFrame = 0;
     cameraFOV = 72.0;
     cameraResolutionType = 0;
+    
+    camPreviewOrigin.x = SceneHelper::screenWidth - (SceneHelper::screenWidth * CAM_PREV_PERCENT) * CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE;
+    camPreviewOrigin.y = SceneHelper::screenHeight - (SceneHelper::screenHeight * CAM_PREV_PERCENT) * CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE;
+    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT);
+    camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+    camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;;
+    previousDistance = Vector2(0.0, 0.0);
 }
 
 void SGEditorScene::initTextures()
@@ -159,15 +166,22 @@ void SGEditorScene::setTransparencyForObjects()
 
 Vector4 SGEditorScene::getCameraPreviewLayout()
 {
-    float camPrevWidth = (SceneHelper::screenWidth) * CAM_PREV_PERCENT;
-    float camPrevHeight = (SceneHelper::screenHeight) * CAM_PREV_PERCENT;
-    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / camPrevHeight;
-    
-    float originX = SceneHelper::screenWidth - camPrevWidth * CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE;
-    float originY = SceneHelper::screenHeight - camPrevHeight * CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE;
-    float endX = originX + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
-    float endY = originY + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
-    return Vector4(originX,originY,endX,endY);
+    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT);
+    float limitX = SceneHelper::screenWidth - (SceneHelper::screenWidth * CAM_PREV_PERCENT);
+    float limitY = SceneHelper::screenHeight - (SceneHelper::screenHeight * CAM_PREV_PERCENT);
+    if(previousDistance != renHelper->cameraPreviewMoveDist && camPreviewOrigin.x > 0.0 && camPreviewOrigin.y > 0.0 && camPreviewOrigin.x <= limitX && camPreviewOrigin.y <= limitY) {
+        camPreviewOrigin.x -= renHelper->cameraPreviewMoveDist.x;
+        camPreviewOrigin.y -= renHelper->cameraPreviewMoveDist.y;
+    } else {
+        camPreviewOrigin.x = (camPreviewOrigin.x <= 0.0) ? 0.1 : camPreviewOrigin.x;
+        camPreviewOrigin.y = (camPreviewOrigin.y <= 0.0) ? 0.1 : camPreviewOrigin.y;
+        camPreviewOrigin.x = (camPreviewOrigin.x >= limitX) ? limitX : camPreviewOrigin.x;
+        camPreviewOrigin.y = (camPreviewOrigin.y >= limitY) ? limitY : camPreviewOrigin.y;
+    }
+    camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+    camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
+    previousDistance = renHelper->cameraPreviewMoveDist;
+    return Vector4(camPreviewOrigin.x, camPreviewOrigin.y, camPreviewEnd.x, camPreviewEnd.y);
 }
 
 void SGEditorScene::findAndInsertInIKPositionMap(int jointId)

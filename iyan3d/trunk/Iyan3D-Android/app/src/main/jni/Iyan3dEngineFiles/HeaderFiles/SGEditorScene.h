@@ -51,7 +51,9 @@ class SGEditorScene {
 private:
     
     SceneManager *smgr;
-
+    Vector2 camPreviewOrigin;
+    Vector2 camPreviewEnd;
+    Vector2 previousDistance;
     void setTransparencyForObjects();
     
 protected:

@@ -41,6 +41,7 @@
     GLuint _frameBuffer;
     float screenScale;
     SceneManager *smgr;
+    int touchCountTracker;
 }
 @property (strong, atomic) RenderingView *renderView;
 @property (strong, atomic) id <RenderViewManagerDelegate> delegate;

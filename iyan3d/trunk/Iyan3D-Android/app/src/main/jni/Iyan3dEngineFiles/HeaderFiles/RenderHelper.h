@@ -20,6 +20,7 @@ private:
 public:
     int renderingType;
     bool isExportingImages,isExporting1stTime;
+    Vector2 cameraPreviewMoveDist;
     
     RenderHelper(SceneManager *smgr, void *scene);
     ~RenderHelper();
@@ -40,6 +41,8 @@ public:
     void rttDrawCall();
     void rttShadowMap();
     void rttControlSelectionAnim(Vector2 touchPosition);
+    bool isMovingCameraPreview(Vector2 currentTouchPos);
+    void changeCameraPreviewCoords(Vector2 touchPos);
     void drawCameraPreview();
     void rttNodeJointSelection(Vector2 touchPosition);
     void drawJointsSpheresForRTT(bool enableDepthTest);

@@ -26,6 +26,7 @@ SGMovementManager::~SGMovementManager(){
 
 void SGMovementManager::touchBegan(Vector2 curTouchPos)
 {
+    prevTouchPoints[0] = curTouchPos;
     xAcceleration = yAcceleration = 0.0;
 }
 
@@ -33,8 +34,7 @@ void SGMovementManager::swipeProgress(float angleX , float angleY)
 {
     if(!moveScene || !smgr)
         return;
-    
-    if(moveScene->isControlSelected || swipeTiming < 3) {
+    if(moveScene->isControlSelected || swipeTiming < 5) {
         swipeTiming++;
         return;
     }
@@ -94,6 +94,7 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     if(!moveScene || !smgr)
         return;
 
+    moveScene->renHelper->cameraPreviewMoveDist = Vector2(0.0, 0.0);
     moveScene->setLightingOn();
     swipeTiming = 0;
     moveScene->updater->updateControlsMaterial();
@@ -168,6 +169,12 @@ void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float
     if(!moveScene || !smgr || !moveScene->isNodeSelected)
         return;
 
+    Vector4 prevLay = moveScene->getCameraPreviewLayout();
+    if(moveScene->renHelper->isMovingCameraPreview(curTouchPos)) {
+        moveScene->renHelper->changeCameraPreviewCoords(curTouchPos);
+        return;
+    }
+    
     moveScene->updater->updateLightCam(moveScene->nodes[NODE_LIGHT]->node->getPosition());
     
     if(moveScene->isControlSelected) {
