@@ -46,33 +46,41 @@ Node::~Node() {
     if(this->instancedNodes->size()){
         for(u16 i = 0;i < instancedNodes->size();i++){
             if((*instancedNodes)[i]) {
-                (*instancedNodes)[i].reset();
+                while ((*instancedNodes)[i].use_count() > 0)
+                    (*instancedNodes)[i].reset();
                 instancedNodes->erase(instancedNodes->begin() + i);
             }
         }
     }
     this->instancedNodes->clear();
-    if(this->instancedNodes)
-        this->instancedNodes.reset();
+    if(this->instancedNodes) {
+        while(this->instancedNodes.use_count() > 0)
+            this->instancedNodes.reset();
+    }
 
     
     if(this->Children->size()){
         for(u16 i = 0;i < Children->size();i++){
             if((*Children)[i]) {
-                (*Children)[i].reset();
+                while((*Children)[i].use_count() > 0)
+                    (*Children)[i].reset();
                 Children->erase(Children->begin() + i);
             }
         }
     }
     this->Children->clear();
-    if(this->Children)
-        this->Children.reset();
+    if(this->Children) {
+        while(this->Children.use_count() > 0)
+            this->Children.reset();
+    }
     
     if(this->Parent)
     this->Parent.reset();
     
-    if(nodeData)
-        nodeData.reset();
+    if(nodeData) {
+        while (nodeData.use_count() > 0)
+            nodeData.reset();
+    }
 }
 bool Node::operator==(shared_ptr<Node> n) {
     if(n->getID() != id || n->position != position || n->scale != scale || n->rotation != rotation || n->callbackFuncName.compare(callbackFuncName) != 0 || n->type != type)

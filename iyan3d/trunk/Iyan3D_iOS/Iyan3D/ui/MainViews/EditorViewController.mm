@@ -193,6 +193,9 @@ BOOL missingAlertShown;
     [_center_progress stopAnimating];
     [_center_progress setHidden:YES];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersBG) name:@"AppGoneBackground" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersFG) name:@"applicationDidBecomeActive" object:nil];
+    
     ScreenWidth = self.renderView.frame.size.width;
     ScreenHeight = self.renderView.frame.size.height;
     if(!editorScene){
@@ -212,6 +215,22 @@ BOOL missingAlertShown;
     [self.framesCollectionView reloadData];
     if (editorScene && editorScene->actionMan->actions.size() > 0)
         [self.undoBtn setEnabled:YES];
+}
+
+ - (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AppGoneBackground" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"applicationDidBecomeActive" object:nil];
+}
+
+- (void) appEntersBG
+{
+    isAppInBG = true;
+}
+
+- (void) appEntersFG
+{
+    isAppInBG = false;
 }
 
 - (void)initScene
@@ -570,6 +589,9 @@ BOOL missingAlertShown;
 
 - (void) updateRenderer
 {
+    if(isAppInBG)
+        return;
+    
     if(editorScene) {
         if (renderViewMan.checkCtrlSelection) {
             bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
@@ -1679,7 +1701,6 @@ BOOL missingAlertShown;
                 if(_popUpVc != nil)
                     [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeId];
             }
-            prevSelection=path;
         }
         if(editorScene->selectedNodeId==-1)
         {
@@ -3507,6 +3528,7 @@ void boneLimitsCallBack(){
 {
     if(smgr)
         delete smgr;
+    [assetsInScenes removeAllObjects];
     assetsInScenes = nil;
     importImageViewVC.delegate = nil;
     importImageViewVC = nil;
@@ -3516,6 +3538,7 @@ void boneLimitsCallBack(){
     textSelectionSlider = nil;
     assetSelectionSlider.assetSelectionDelegate = nil;
     assetSelectionSlider = nil;
+    loginVc.delegare = nil;
     loginVc = nil;
     lightProperties.delegate = nil;
     lightProperties = nil;
@@ -3523,13 +3546,31 @@ void boneLimitsCallBack(){
     cache = nil;
     [playTimer invalidate];
     playTimer = nil;
+    settingsVc.delegate = nil;
     settingsVc = nil;
     renderViewMan.delegate = nil;
     renderViewMan = nil;
     objVc.objSlideDelegate = nil;
     objVc = nil;
-    currentScene = nil;
-    settingsVc = nil;
+    scaleAutoRig.delegate = nil;
+    scaleAutoRig = nil;
+    deviceNames = nil;
+    self.imagePicker.delegate = nil;
+    self.imagePicker = nil;
+    self.popoverController.delegate = nil;
+    self.popoverController = nil;
+    self.popUpVc.delegate = nil;
+    self.popUpVc = nil;
+    _loggedInVc.delegare = nil;
+    _loggedInVc = nil;
+    _lightProp.delegate = nil;
+    _lightProp = nil;
+    _scaleProps.delegate = nil;
+    _scaleProps = nil;
+    _camProp.delegate = nil;
+    _camProp = nil;
+    _meshProp.delegate = nil;
+    _meshProp = nil;
 }
 
 @end

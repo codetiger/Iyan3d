@@ -847,8 +847,6 @@
 		256F6EA81BF624FB00154622 /* MetalRenderManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D531BF624FB00154622 /* MetalRenderManager.mm */; };
 		256F6EAA1BF624FB00154622 /* OGLES2RenderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D571BF624FB00154622 /* OGLES2RenderManager.cpp */; };
 		256F6EAB1BF624FB00154622 /* OGLES2RenderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D571BF624FB00154622 /* OGLES2RenderManager.cpp */; };
-		256F6EAC1BF624FB00154622 /* PngFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D591BF624FB00154622 /* PngFileManager.cpp */; };
-		256F6EAD1BF624FB00154622 /* PngFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D591BF624FB00154622 /* PngFileManager.cpp */; };
 		256F6EAE1BF624FB00154622 /* RenderingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D5C1BF624FB00154622 /* RenderingView.m */; };
 		256F6EAF1BF624FB00154622 /* RenderingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D5C1BF624FB00154622 /* RenderingView.m */; };
 		256F6EB01BF624FB00154622 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D5F1BF624FB00154622 /* SceneManager.cpp */; };
@@ -2928,8 +2926,6 @@
 		256F6D561BF624FB00154622 /* MTLNodeDataWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLNodeDataWrapper.h; sourceTree = "<group>"; };
 		256F6D571BF624FB00154622 /* OGLES2RenderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OGLES2RenderManager.cpp; sourceTree = "<group>"; };
 		256F6D581BF624FB00154622 /* OGLES2RenderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGLES2RenderManager.h; sourceTree = "<group>"; };
-		256F6D591BF624FB00154622 /* PngFileManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PngFileManager.cpp; sourceTree = "<group>"; };
-		256F6D5A1BF624FB00154622 /* PngFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PngFileManager.h; sourceTree = "<group>"; };
 		256F6D5B1BF624FB00154622 /* RenderingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderingView.h; sourceTree = "<group>"; };
 		256F6D5C1BF624FB00154622 /* RenderingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderingView.m; sourceTree = "<group>"; };
 		256F6D5D1BF624FB00154622 /* RenderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderManager.h; sourceTree = "<group>"; };
@@ -4910,8 +4906,6 @@
 				256F6D561BF624FB00154622 /* MTLNodeDataWrapper.h */,
 				256F6D571BF624FB00154622 /* OGLES2RenderManager.cpp */,
 				256F6D581BF624FB00154622 /* OGLES2RenderManager.h */,
-				256F6D591BF624FB00154622 /* PngFileManager.cpp */,
-				256F6D5A1BF624FB00154622 /* PngFileManager.h */,
 				256F6D5B1BF624FB00154622 /* RenderingView.h */,
 				256F6D5C1BF624FB00154622 /* RenderingView.m */,
 				256F6D5D1BF624FB00154622 /* RenderManager.h */,
@@ -8421,7 +8415,6 @@
 				E21C3CC61A0758B6006964E5 /* GTLYouTubeActivityContentDetailsLike.m in Sources */,
 				256F6E8A1BF624FB00154622 /* pngread.c in Sources */,
 				E29C11B71A07CAD500626544 /* GTMOAuth2Authentication.m in Sources */,
-				256F6EAC1BF624FB00154622 /* PngFileManager.cpp in Sources */,
 				01AAE2961C43C25000B194E0 /* MeshProperties.m in Sources */,
 				E21C3D1F1A0758B6006964E5 /* GTLYouTubeVideoCategory.m in Sources */,
 				E21C3D0E1A0758B6006964E5 /* GTLYouTubePromotedItemId.m in Sources */,
@@ -8736,7 +8729,6 @@
 				256F6E911BF624FB00154622 /* pngrutil.c in Sources */,
 				7F35D9AC1B5F53770003F1CE /* AFHTTPClient.m in Sources */,
 				7F35D9AE1B5F53770003F1CE /* AFHTTPRequestOperation.m in Sources */,
-				256F6EAD1BF624FB00154622 /* PngFileManager.cpp in Sources */,
 				256F6B901BF6246300154622 /* FileHelper.cpp in Sources */,
 				256F6B8E1BF6246300154622 /* exportSGR.cpp in Sources */,
 				256F6D731BF624FB00154622 /* Frustum.cpp in Sources */,

@@ -14,11 +14,17 @@ SGSelectionManager::SGSelectionManager(SceneManager* sceneMngr, void* scene)
 {
     this->smgr = sceneMngr;
     selectionScene = (SGEditorScene*)scene;
+    sphereMesh = NULL;
 }
 
 SGSelectionManager::~SGSelectionManager()
 {
-    
+    globalPositions.clear();
+    relPositions.clear();
+    if(sphereMesh != NULL) {
+        delete sphereMesh;
+        sphereMesh = NULL;
+    }
 }
 
 void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelectEnabled, bool isDisplayPrepared)
@@ -218,6 +224,10 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         removeChildren(getParentNode(), true);
         if(parentNode)
             smgr->RemoveNode(parentNode);
+        if(sphereMesh != NULL) {
+            delete sphereMesh;
+            sphereMesh = NULL;
+        }
         sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
         parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
         getParentNode()->setVisible(false);
@@ -235,6 +245,10 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         removeChildren(getParentNode(),true);
         if(parentNode)
             smgr->RemoveNode(parentNode);
+        if(sphereMesh != NULL) {
+            delete sphereMesh;
+            sphereMesh = NULL;
+        }
         for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
             if(selectionScene->selectedNodeIds[i] == nodeId)
                 selectionScene->selectedNodeIds.erase(selectionScene->selectedNodeIds.begin() + i);

@@ -17,6 +17,17 @@ ParticlePool::ParticlePool(int count) {
     }
 }
 
+ParticlePool::~ParticlePool()
+{
+    for(int i = 0; i < particles.size(); i++) {
+        if(particles[i]) {
+            delete particles[i];
+            particles[i] = NULL;
+        }
+    }
+    particles.clear();
+}
+
 Particle* ParticlePool::reuseDeadParticle() {
     int stopIteration = deadIterator;
     

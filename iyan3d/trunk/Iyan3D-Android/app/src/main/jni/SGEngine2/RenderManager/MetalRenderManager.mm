@@ -512,10 +512,11 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
     
     if(MTLNode->VertexBuffers != nil && [MTLNode->VertexBuffers count] > 0) {
         
-    } else
+    } else if(MTLNode->VertexBuffers == nil)
         MTLNode->VertexBuffers = [[NSMutableArray alloc] init];
     
-    MTLNode->indexBuffers = [[NSMutableArray alloc] init];
+    if(MTLNode->indexBuffers == nil)
+        MTLNode->indexBuffers = [[NSMutableArray alloc] init];
     
     Mesh *nodeMes;
     if(node->type == NODE_TYPE_MORPH)
@@ -549,7 +550,7 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
     
     if(MTLNode->VertexBuffers != nil && [MTLNode->VertexBuffers count] > 0) {
         
-    } else
+    } else if(MTLNode->VertexBuffers == nil)
         MTLNode->VertexBuffers = [[NSMutableArray alloc] init];
     
     u16 meshCount = 1;
@@ -619,8 +620,12 @@ void MetalRenderManager::writeImageToFile(Texture *texture , char* filePath,IMAG
             buffer[pixelPos + 3] = A;
         }
     }
+#ifndef IOS
     PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
-    //writePNGImage(buffer,texture->width,texture->height,filePath);
+#else
+    writePNGImage(buffer,texture->width,texture->height,filePath);
+#endif
+    
     delete buffer;
 }
 int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode){

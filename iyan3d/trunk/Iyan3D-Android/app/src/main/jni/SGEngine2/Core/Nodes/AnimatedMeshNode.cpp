@@ -25,7 +25,8 @@ AnimatedMeshNode::~AnimatedMeshNode()
                 //TODO Have to be fixed - Memory leak
                 //                jointNodes[i]->detachFromParent();
                 //                jointNodes[i]->detachAllChildren();
-                jointNodes[i].reset();
+                while(jointNodes[i].use_count() > 0)
+                    jointNodes[i].reset();
                 jointNodes.erase(jointNodes.begin() + i);
             }
         }

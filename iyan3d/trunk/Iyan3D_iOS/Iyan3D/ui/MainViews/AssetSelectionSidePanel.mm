@@ -463,6 +463,7 @@
     if ([idObj isKindOfClass:[DownloadTask class]]) {
         fileName = ((DownloadTask*)idObj).outputPath;
         assetId = [((DownloadTask*)idObj).returnObj intValue];
+        idObj = nil;
     }
     else {
         fileName = [idObj objectForKey:@"fileName"];

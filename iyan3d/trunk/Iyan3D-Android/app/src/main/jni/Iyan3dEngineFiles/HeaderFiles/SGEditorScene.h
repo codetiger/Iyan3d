@@ -111,10 +111,8 @@ public:
     /* SGEngine class objects */
     
     std::map<int,Texture*> renderingTextureMap;
-    OBJMeshFileLoader *objLoader;
     Texture *bgTexture,*watermarkTexture,*whiteBorderTexture,*touchTexture;
     Texture *previewTexture ,*thumbnailTexture,*shadowTexture, *alphaTexture;
-    Mesh *jointSphereMesh;
     Plane3D *controlsPlane;
     Vector2 nodeJointPickerPosition;
     Vector3 circleTouchPoint,cameraAngle;

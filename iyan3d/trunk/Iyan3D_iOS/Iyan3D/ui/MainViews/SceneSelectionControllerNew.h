@@ -31,9 +31,7 @@
     NSDateFormatter *dateFormatter;
     int currentSelectedScene;
     CGPoint cell_center;
-    UITapGestureRecognizer *tapGesture;
     NSDictionary *deviceNames;
-    SceneSelectionFrameCell *cell;
     int sceneToBeRenamed;
     CGFloat screenHeight;
     SettingsViewController *settingsVc;

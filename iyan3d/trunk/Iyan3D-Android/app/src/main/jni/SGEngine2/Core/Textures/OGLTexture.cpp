@@ -42,8 +42,12 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     texelFormat = format;
     this->texelType = texelType;
 
-//    unsigned char *imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
-    unsigned char *imageData = loadPNGImage(texturePath , width , height);
+    unsigned char *imageData;
+#ifndef IOS
+    imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
+#else
+    imageData = loadPNGImage(texturePath , width , height);
+#endif
 
     if(!imageData)
         return false;

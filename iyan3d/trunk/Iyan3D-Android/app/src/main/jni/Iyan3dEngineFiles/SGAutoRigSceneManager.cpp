@@ -24,7 +24,6 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
 
 SGAutoRigSceneManager::~SGAutoRigSceneManager()
 {    
-
 }
 
 void SGAutoRigSceneManager::clearNodeSelections()

@@ -13,6 +13,7 @@ class ParticlePool {
 public:
 
     ParticlePool(int count);
+    ~ParticlePool();
     Particle* reuseDeadParticle();
     Particle* getNextLiveParticle();
     Particle* getParticleByIndex(int index);

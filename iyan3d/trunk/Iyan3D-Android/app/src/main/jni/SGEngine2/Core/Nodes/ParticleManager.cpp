@@ -47,7 +47,20 @@ void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor,
 
 ParticleManager::~ParticleManager()
 {
+    if(pool) {
+        delete pool;
+        pool = NULL;
+    }
     
+    if(positions) {
+        delete positions;
+        positions = NULL;
+    }
+    
+    if(rotations) {
+        delete rotations;
+        rotations = NULL;
+    }
 }
 
 void ParticleManager::update() {

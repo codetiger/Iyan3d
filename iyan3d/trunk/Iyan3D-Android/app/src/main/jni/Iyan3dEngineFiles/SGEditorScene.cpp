@@ -26,7 +26,6 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 
 #ifndef UBUNTU
     initTextures();
-    jointSphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
     rotationCircle = SceneHelper::createCircle(smgr);
     sceneControls.clear();
     sceneControls = SceneHelper::initControls(smgr);
@@ -42,6 +41,9 @@ SGEditorScene::~SGEditorScene()
     ShaderManager::lightPosition.clear();
     ShaderManager::lightColor.clear();
     ShaderManager::lightFadeDistances.clear();
+    
+    selectedNodeIds.clear();
+    isKeySetForFrame.clear();
     
     for(int i = 0;i < nodes.size();i++){
         if(nodes[i])
@@ -59,15 +61,28 @@ SGEditorScene::~SGEditorScene()
     if(ikJointsPositionMap.size())
         ikJointsPositionMap.clear();
     
-    nodes.clear();
+    for(int i = 0;i < jointSpheres.size();i++){
+        if(jointSpheres[i])
+            delete jointSpheres[i];
+    }
     jointSpheres.clear();
+    
     tPoseJoints.clear();
     
     if(renderingTextureMap.size())
         renderingTextureMap.clear();
-    if(sceneControls.size())
+    if(sceneControls.size()) {
+        for (int i = 0; i < sceneControls.size(); i++) {
+            if(sceneControls[i]) {
+                delete sceneControls[i];
+                sceneControls[i] = NULL;
+            }
+        }
         sceneControls.clear();
+    }
     
+    if(controlsPlane)
+        delete controlsPlane;
     if(smgr)
         delete smgr;
     if(shaderMGR)
@@ -88,14 +103,12 @@ SGEditorScene::~SGEditorScene()
         delete writer;
     if(animMan)
         delete animMan;
-    if(jointSphereMesh)
-        delete jointSphereMesh;
+    if(objMan)
+        delete objMan;
     if(rotationCircle)
         delete rotationCircle;
     if(cmgr)
         delete cmgr;
-    if(objLoader)
-        delete objLoader;
 }
 void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
 {
@@ -139,7 +152,6 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     selectedControlId = NOT_EXISTS;
     selectedNode = NULL;
     controlsPlane = new Plane3D();
-    objLoader = new OBJMeshFileLoader;
     nodes.clear();
     totalFrames = 24;
     currentFrame = previousFrame = 0;

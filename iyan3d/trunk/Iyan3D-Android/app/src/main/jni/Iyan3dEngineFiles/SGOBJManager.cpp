@@ -25,8 +25,10 @@ SGOBJManager::SGOBJManager(SceneManager* smgr, void *scene)
 
 SGOBJManager::~SGOBJManager()
 {
-    delete objLoader;
-    objLoader = NULL;
+    if(objLoader) {
+        delete objLoader;
+        objLoader = NULL;
+    }
 }
 
 bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int assetId, bool isVertexColor, Vector3 vColor)

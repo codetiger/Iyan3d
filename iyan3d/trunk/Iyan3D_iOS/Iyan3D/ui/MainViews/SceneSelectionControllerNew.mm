@@ -108,8 +108,9 @@
     return [scenesArray count]+1;
 }
 
-- (SceneSelectionFrameCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-   cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+- (SceneSelectionFrameCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+   SceneSelectionFrameCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
     cell.delegate=self;
     if(indexPath.row < [scenesArray count]){
         SceneItem* scenes = scenesArray[indexPath.row];
@@ -134,21 +135,16 @@
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    cell = (SceneSelectionFrameCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    
-    
-    
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    SceneSelectionFrameCell *cell = (SceneSelectionFrameCell*)[collectionView cellForItemAtIndexPath:indexPath];
     cell_center = [self.scenesCollectionView convertPoint:cell.center fromView:cell];
     cell_center = [self.view convertPoint:cell_center fromView:self.scenesCollectionView];
     
     if(indexPath.row == [scenesArray count])
         [self addNewScene];
     else
-        [self openSCene:indexPath.row];
-    
-    
-    
+        [self openSCene:(int)indexPath.row];
 }
 
 #pragma Scene Update Delegates
@@ -304,13 +300,6 @@
         else
             _scenePreview.image = [UIImage imageNamed:@"bgImageforall.png"];
     }
-}
-
-#pragma Keyboard handler Delegate
-
-- (void) closeKeyBoard {
-    [self.view removeGestureRecognizer:tapGesture];
-    [_sceneTitle resignFirstResponder];
 }
 
 #pragma View Animation Delegate
@@ -576,14 +565,19 @@
 
 #pragma Dealloc Delegate
 
-- (void)dealloc {
+- (void)dealloc
+{
     self.fileBeginsWith = nil;
     cache = nil;
     [scenesArray removeAllObjects];
     scenesArray = nil;
     dateFormatter = nil;
-    tapGesture = nil;
     deviceNames = nil;
+    settingsVc = nil;
+    loginVc = nil;
+    self.popUpVc = nil;
+    self.popoverController = nil;
+    self.loggedInVc = nil;
 }
 
 @end

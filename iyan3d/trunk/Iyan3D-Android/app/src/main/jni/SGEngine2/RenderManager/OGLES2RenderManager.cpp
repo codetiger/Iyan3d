@@ -316,48 +316,50 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
 }
 void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath , IMAGE_FLIP flipType)
 {
-  int bytesPerPix = 4;
-  size_t imageSize = bytesPerPix * size_t(texture->width) * size_t(texture->height);
-  uint8_t * buffer = new uint8_t[imageSize];
-  glReadPixels(0, 0, texture->width, texture->height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-  uint8_t *imageData = new uint8_t[imageSize];
+    int bytesPerPix = 4;
+    size_t imageSize = bytesPerPix * size_t(texture->width) * size_t(texture->height);
+    uint8_t * buffer = new uint8_t[imageSize];
+    glReadPixels(0, 0, texture->width, texture->height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    uint8_t *imageData = new uint8_t[imageSize];
+    
+    if(flipType == FLIP_VERTICAL) {
+        for (int j = 0; j * 2 < texture->height; ++j) {
+            int x = j * texture->width * 4;
+            int y = (texture->height - 1 - j) * texture->width * 4;
+            for (int i = texture->width * 4; i > 0; --i) {
+                uint8_t tmp = buffer[x];
+                buffer[x] = buffer[y];
+                buffer[y] = tmp;
+                ++x;
+                ++y;
+            }
+        }
+    }
+    else if(flipType == FLIP_HORIZONTAL){
+        int bytesperRow = (texture->width * bytesPerPix);
+        int pixelsPerRow = (texture->width);
+        for(int r = 0; r < texture->height; r++)
+        {
+            for(int c = 0; c < (pixelsPerRow)/2; c++)
+            {
+                int firstByte = (r * bytesperRow);
+                int lastByte = (r * bytesperRow) + (bytesperRow - 1);
+                for(int b = 0; b < bytesPerPix;b++){
+                    int curByte = (c * bytesPerPix) + b;
+                    int reversByte = (lastByte - (c * bytesPerPix));
+                    imageData[firstByte + curByte] = buffer[reversByte - (bytesPerPix - (b + 1))];
+                    imageData[reversByte - (bytesPerPix - (b + 1))] = buffer[firstByte + curByte];
+                }
+            }
+        }
+    }
+    
+#ifndef IOS
+    PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
+#else
+    writePNGImage(buffer,texture->width,texture->height,filePath);
+#endif
 
-  if(flipType == FLIP_VERTICAL) {
-      for (int j = 0; j * 2 < texture->height; ++j) {
-          int x = j * texture->width * 4;
-          int y = (texture->height - 1 - j) * texture->width * 4;
-          for (int i = texture->width * 4; i > 0; --i) {
-              uint8_t tmp = buffer[x];
-              buffer[x] = buffer[y];
-              buffer[y] = tmp;
-              ++x;
-              ++y;
-          }
-      }
-      PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
-
-  }
-  else if(flipType == FLIP_HORIZONTAL){
-  int bytesperRow = (texture->width * bytesPerPix);
-  int pixelsPerRow = (texture->width);
-  for(int r = 0; r < texture->height; r++)
-  {
-      for(int c = 0; c < (pixelsPerRow)/2; c++)
-      {
-          int firstByte = (r * bytesperRow);
-          int lastByte = (r * bytesperRow) + (bytesperRow - 1);
-          for(int b = 0; b < bytesPerPix;b++){
-              int curByte = (c * bytesPerPix) + b;
-              int reversByte = (lastByte - (c * bytesPerPix));
-              imageData[firstByte + curByte] = buffer[reversByte - (bytesPerPix - (b + 1))];
-              imageData[reversByte - (bytesPerPix - (b + 1))] = buffer[firstByte + curByte];
-          }
-      }
-  }
-      PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
-  } else {
-      PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
-  }
   delete buffer;
   delete imageData;
 }

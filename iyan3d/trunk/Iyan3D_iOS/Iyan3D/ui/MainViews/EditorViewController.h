@@ -51,7 +51,6 @@
     bool isMetalSupported;
     bool isLoggedin;
     BOOL isSelected;
-    NSIndexPath *prevSelection;
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
     SGEditorScene *editorScene;
@@ -73,6 +72,7 @@
     NSString *cachesDir , *docDir;
     int ScreenWidth;
     int ScreenHeight;
+    BOOL isAppInBG;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
@@ -102,7 +102,6 @@
 @property (weak, nonatomic) IBOutlet UIView *rightView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
-@property (nonatomic, strong) FPPopoverController* popOverView;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
