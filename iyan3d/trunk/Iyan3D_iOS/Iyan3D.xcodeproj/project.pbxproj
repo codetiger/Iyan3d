@@ -1057,6 +1057,18 @@
 		3DBC85EF1C2BCBEC00B512AB /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85ED1C2BCBEC00B512AB /* close@2x.png */; };
 		3DBC85F41C2BCCD000B512AB /* selected_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */; };
 		3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */; };
+		3DD47BF01C60A43500E7CCFD /* 60001.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEA1C60A43500E7CCFD /* 60001.sgm */; };
+		3DD47BF11C60A43500E7CCFD /* 60001.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEA1C60A43500E7CCFD /* 60001.sgm */; };
+		3DD47BF21C60A43500E7CCFD /* 60002.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEB1C60A43500E7CCFD /* 60002.sgm */; };
+		3DD47BF31C60A43500E7CCFD /* 60002.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEB1C60A43500E7CCFD /* 60002.sgm */; };
+		3DD47BF41C60A43500E7CCFD /* 60003.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEC1C60A43500E7CCFD /* 60003.sgm */; };
+		3DD47BF51C60A43500E7CCFD /* 60003.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEC1C60A43500E7CCFD /* 60003.sgm */; };
+		3DD47BF61C60A43500E7CCFD /* 60004.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BED1C60A43500E7CCFD /* 60004.sgm */; };
+		3DD47BF71C60A43500E7CCFD /* 60004.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BED1C60A43500E7CCFD /* 60004.sgm */; };
+		3DD47BF81C60A43500E7CCFD /* 60005.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEE1C60A43500E7CCFD /* 60005.sgm */; };
+		3DD47BF91C60A43500E7CCFD /* 60005.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEE1C60A43500E7CCFD /* 60005.sgm */; };
+		3DD47BFA1C60A43500E7CCFD /* 60006.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEF1C60A43500E7CCFD /* 60006.sgm */; };
+		3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEF1C60A43500E7CCFD /* 60006.sgm */; };
 		62044E3419920D8F0067E21E /* button-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 62044E3319920D8F0067E21E /* button-background.png */; };
 		6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED51B1484AE00DCD585 /* depthPass.fsh */; };
 		6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED61B1484AE00DCD585 /* depthPass.vsh */; };
@@ -3098,6 +3110,12 @@
 		3DBC85EA1C2BCBE400B512AB /* New@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "New@2x.png"; sourceTree = "<group>"; };
 		3DBC85ED1C2BCBEC00B512AB /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_mark@2x.png"; sourceTree = "<group>"; };
+		3DD47BEA1C60A43500E7CCFD /* 60001.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60001.sgm; sourceTree = "<group>"; };
+		3DD47BEB1C60A43500E7CCFD /* 60002.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60002.sgm; sourceTree = "<group>"; };
+		3DD47BEC1C60A43500E7CCFD /* 60003.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60003.sgm; sourceTree = "<group>"; };
+		3DD47BED1C60A43500E7CCFD /* 60004.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60004.sgm; sourceTree = "<group>"; };
+		3DD47BEE1C60A43500E7CCFD /* 60005.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60005.sgm; sourceTree = "<group>"; };
+		3DD47BEF1C60A43500E7CCFD /* 60006.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60006.sgm; sourceTree = "<group>"; };
 		62044E3319920D8F0067E21E /* button-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-background.png"; path = "Resources/imgs/button-background.png"; sourceTree = "<group>"; };
 		6231CED51B1484AE00DCD585 /* depthPass.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.fsh; path = Resources/shaders/depthPass.fsh; sourceTree = "<group>"; };
 		6231CED61B1484AE00DCD585 /* depthPass.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.vsh; path = Resources/shaders/depthPass.vsh; sourceTree = "<group>"; };
@@ -5079,6 +5097,12 @@
 		3D5F98CE1C4CD3E300DD47F5 /* BasicShapes */ = {
 			isa = PBXGroup;
 			children = (
+				3DD47BEA1C60A43500E7CCFD /* 60001.sgm */,
+				3DD47BEB1C60A43500E7CCFD /* 60002.sgm */,
+				3DD47BEC1C60A43500E7CCFD /* 60003.sgm */,
+				3DD47BED1C60A43500E7CCFD /* 60004.sgm */,
+				3DD47BEE1C60A43500E7CCFD /* 60005.sgm */,
+				3DD47BEF1C60A43500E7CCFD /* 60006.sgm */,
 			);
 			name = BasicShapes;
 			path = Resources/mesh/BasicShapes;
@@ -6503,6 +6527,7 @@
 				25EA8EE11BD90506005DBA15 /* light_Phone@2x.png in Resources */,
 				01F872FA1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A51C3CEF360096AD14 /* color_IPhone.png in Resources */,
+				3DD47BFA1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				7FC900DA1A0A01470051B941 /* move-first-phone.png in Resources */,
 				7FC901581A0A54850051B941 /* Animation-topviewBg@2x.png in Resources */,
 				7F00878F1ADFC15400764DDE /* left-align@3x.png in Resources */,
@@ -6579,6 +6604,7 @@
 				7FC900E81A0A01470051B941 /* redo-img-phone.png in Resources */,
 				7F307CEC1B58FBF10065BBC1 /* like-phone@2x.png in Resources */,
 				01F872D61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */,
+				3DD47BF61C60A43500E7CCFD /* 60004.sgm in Resources */,
 				7FED9E811A8E0F780089869B /* AutoRigHelp1.png in Resources */,
 				7F31A7451AA4960300A6E7B1 /* new-img-phone@3x.png in Resources */,
 				01B4D06F1C2937000091E19B /* Undo_Pad.png in Resources */,
@@ -6659,6 +6685,7 @@
 				01F8726B1C3A42EF009AA31E /* EXPORT.png in Resources */,
 				01B6F3F31C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
 				62FB86731988D33A00AC7424 /* home.png in Resources */,
+				3DD47BF21C60A43500E7CCFD /* 60002.sgm in Resources */,
 				7F00878B1ADFC15400764DDE /* down-arrow-pad@3x.png in Resources */,
 				E28C83D51B07417400D116DE /* ImageImportViewPhone.xib in Resources */,
 				62FB867D1988D33A00AC7424 /* render_video.png in Resources */,
@@ -6808,6 +6835,7 @@
 				7FC524DB1B6F6F3600C5D26D /* Minimize-Full-screen-phone@2x.png in Resources */,
 				7FC901611A0A54850051B941 /* frames-phone.png in Resources */,
 				3D5F99181C4D04EB00DD47F5 /* Cube@2x.png in Resources */,
+				3DD47BF81C60A43500E7CCFD /* 60005.sgm in Resources */,
 				E2497672196BE0190025D442 /* ScaleViewController.xib in Resources */,
 				01F873041C3A6C4E009AA31E /* Options_IPhone@2x.png in Resources */,
 				0184EC831C352DCC006F0B57 /* LoggedInViewController.xib in Resources */,
@@ -7030,6 +7058,7 @@
 				E24974CA196BDC650025D442 /* sphere.sgm in Resources */,
 				01F872DC1C3A6C4E009AA31E /* Back_IPhone@2x.png in Resources */,
 				3D04EAF81C25883900C18E1A /* color.png in Resources */,
+				3DD47BF41C60A43500E7CCFD /* 60003.sgm in Resources */,
 				01B4CFF01C29219A0091E19B /* Next-Frame.png in Resources */,
 				7FC527611B6F96FF00C5D26D /* Mail-phone.png in Resources */,
 				7F31A7561AA4960300A6E7B1 /* videoShare@3x.png in Resources */,
@@ -7173,6 +7202,7 @@
 				01B3950C1C37A72B003955C6 /* Add-Bones_Pad.png in Resources */,
 				7FC900F91A0A01470051B941 /* texts-phone@2x.png in Resources */,
 				7F0087931ADFC15400764DDE /* up-arrow-50-60.png in Resources */,
+				3DD47BF01C60A43500E7CCFD /* 60001.sgm in Resources */,
 				E24974C3196BDC650025D442 /* controls4.sgm in Resources */,
 				257564C71AE6E3D400B66113 /* ShaderCell.xib in Resources */,
 				01F872991C3A42EF009AA31E /* undo_IPhone.png in Resources */,
@@ -7226,6 +7256,7 @@
 				7FDF55131B73688F006DC41F /* premium.png in Resources */,
 				01F872FB1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A61C3CEF360096AD14 /* color_IPhone.png in Resources */,
+				3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				7FDF55141B73688F006DC41F /* premium@2x.png in Resources */,
 				7FC5276B1B6F983D00C5D26D /* Mail-phone.png in Resources */,
 				C8DF1FE21C242DBD00F689D6 /* close.png in Resources */,
@@ -7302,6 +7333,7 @@
 				25CACF6B1B27D4DD0027F48C /* FontCellViewPhone.xib in Resources */,
 				2567B0551B179CAD008D25E9 /* depthPass.fsh in Resources */,
 				25EA8EE41BD90506005DBA15 /* light_Phone@3x.png in Resources */,
+				3DD47BF71C60A43500E7CCFD /* 60004.sgm in Resources */,
 				2567B0561B179CAD008D25E9 /* depthPass.vsh in Resources */,
 				2567B0571B179CAD008D25E9 /* depthPassSkin.vsh in Resources */,
 				01F872FF1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
@@ -7382,6 +7414,7 @@
 				E20672311B049AA6006DD2F7 /* topbarView-phone@2x.png in Resources */,
 				E20672321B049AA6006DD2F7 /* undo-img-phone.png in Resources */,
 				E20672341B049AA6006DD2F7 /* feedback-img@2x.png in Resources */,
+				3DD47BF31C60A43500E7CCFD /* 60002.sgm in Resources */,
 				01B4D0481C2937000091E19B /* Import_Pad.png in Resources */,
 				E20672351B049AA6006DD2F7 /* model-phone@2x.png in Resources */,
 				E20672361B049AA6006DD2F7 /* model-phone.png in Resources */,
@@ -7531,6 +7564,7 @@
 				E20672B81B049AA6006DD2F7 /* ImageImportViewPad.xib in Resources */,
 				01F873051C3A6C4E009AA31E /* Options_IPhone@2x.png in Resources */,
 				3D5F99191C4D04EB00DD47F5 /* Cube@2x.png in Resources */,
+				3DD47BF91C60A43500E7CCFD /* 60005.sgm in Resources */,
 				E20672B91B049AA6006DD2F7 /* right-align@2x.png in Resources */,
 				0184EC841C352DCC006F0B57 /* LoggedInViewController.xib in Resources */,
 				01F8734A1C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib in Resources */,
@@ -7753,6 +7787,7 @@
 				E206736D1B049AA6006DD2F7 /* cancelButton.png in Resources */,
 				01F872DD1C3A6C4E009AA31E /* Back_IPhone@2x.png in Resources */,
 				256F6F5B1BF6257C00154622 /* default in Resources */,
+				3DD47BF51C60A43500E7CCFD /* 60003.sgm in Resources */,
 				E206736F1B049AA6006DD2F7 /* clone-img-phone.png in Resources */,
 				E20673701B049AA6006DD2F7 /* clone-img@2x.png in Resources */,
 				256ED8E41B1FEDED008ADEF8 /* Bernstein Regular.ttf in Resources */,
@@ -7896,6 +7931,7 @@
 				01B3950D1C37A72B003955C6 /* Add-Bones_Pad.png in Resources */,
 				E20673F11B049AA6006DD2F7 /* texts-phone@2x.png in Resources */,
 				E20673F41B049AA6006DD2F7 /* up-arrow-50-60.png in Resources */,
+				3DD47BF11C60A43500E7CCFD /* 60001.sgm in Resources */,
 				E20673F61B049AA6006DD2F7 /* controls4.sgm in Resources */,
 				E20673F81B049AA6006DD2F7 /* ShaderCell.xib in Resources */,
 				01F8729A1C3A42EF009AA31E /* undo_IPhone.png in Resources */,
