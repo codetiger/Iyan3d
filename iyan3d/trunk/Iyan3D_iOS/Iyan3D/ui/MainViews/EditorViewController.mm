@@ -37,14 +37,14 @@
 #define SETTINGS 3
 #define CONTACT_US 4
 
-#define VIEW_FRONT 0
-#define VIEW_TOP 1
-#define VIEW_LEFT 2
-#define VIEW_BACK 3
-#define VIEW_RIGHT 4
-#define VIEW_BOTTOM 5
+#define FRONT_VIEW 0
+#define TOP_VIEW 1
+#define LEFT_VIEW 2
+#define BACK_VIEW 3
+#define RIGHT_VIEW 4
+#define BOTTOM_VIEW 5
 
-    
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -64,20 +64,22 @@
     
     [self initScene];
     [self createDisplayLink];
+    if(renderViewMan)
+        [renderViewMan addCameraLight];
 }
 
 - (void)initScene
 {
     float screenScale = [[UIScreen mainScreen] scale];
+    renderViewMan = [[RenderViewManager alloc] init];
+    renderViewMan.delegate = self;
     if (isMetalSupported) {
         [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
          smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(METAL, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
     }
     else {
-        
-        renderViewMan = [[RenderViewManager alloc] init];
-        
+    
         [renderViewMan setupLayer:_renderView];
         [renderViewMan setupContext];
         
@@ -90,12 +92,29 @@
         [renderViewMan setupRenderBuffer];
         [renderViewMan setupFrameBuffer:smgr];
     }
-//    smgr>ShaderCallBackForNode = &shaderCallBackForNode;
-//    smgr>isTransparentCallBack = &isTransparentCallBack;
-//    animationScene->notRespondingCallBack = &notRespondingCallBackAnimationScene;
-//    animationScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
-//    animationScene->fileWriteCallBack = &fileWriteCallBack;
-//    [self addGesturesToSceneView];
+    [renderViewMan setUpPaths];
+    [renderViewMan setUpCallBacks:editorScene];
+    [renderViewMan addGesturesToSceneView];
+}
+
+- (bool) isMetalSupportedDevice
+{
+    return isMetalSupported;
+}
+
+- (void) reloadFrames
+{
+    [_framesCollectionView reloadData];
+}
+
+- (void) loadNodeInScene:(AssetItem*)assetItem
+{
+    [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
+}
+     
+- (void) loadNode:(AssetItem*) asset
+{
+    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0];
 }
 
 - (void)createDisplayLink
@@ -107,6 +126,10 @@
 - (void) updateRenderer
 {
     if(editorScene) {
+        if (renderViewMan.checkTapSelection) {
+            editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
+            renderViewMan.checkTapSelection = false;
+        }
         editorScene->renderAll();
         [renderViewMan presentRenderBuffer];
     }
@@ -445,23 +468,23 @@
         {
             switch ( buttonIndex )
             {
-                case VIEW_FRONT:
-                    NSLog(@"Front View Clicked");
+                case FRONT_VIEW:
+                    editorScene->updater->changeCameraView(VIEW_FRONT);
                     break;
-                case VIEW_TOP:
-                    NSLog(@"Top View Clicked");
+                case TOP_VIEW:
+                    editorScene->updater->changeCameraView(VIEW_TOP);
                     break;
-                case VIEW_LEFT:
-                    NSLog(@"Left View Clicked");
+                case LEFT_VIEW:
+                    editorScene->updater->changeCameraView(VIEW_LEFT);
                     break;
-                case VIEW_BACK:
-                    NSLog(@"Back View Clicked");
+                case BACK_VIEW:
+                    editorScene->updater->changeCameraView(VIEW_BACK);
                     break;
-                case VIEW_RIGHT:
-                    NSLog(@"Right View Clicked");
+                case RIGHT_VIEW:
+                    editorScene->updater->changeCameraView(VIEW_RIGHT);
                     break;
-                case VIEW_BOTTOM:
-                    NSLog(@"Bottom View Clicked");
+                case BOTTOM_VIEW:
+                    editorScene->updater->changeCameraView(VIEW_BOTTOM);
                     break;
             }
         }
@@ -508,9 +531,33 @@
   */
 }
 
+#if TARGET_RT_BIG_ENDIAN
+const NSStringEncoding kEncoding_wchar_t =
+CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32BE);
+#else
+const NSStringEncoding kEncoding_wchar_t =
+CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
+#endif
+
+-(NSString*) stringWithwstring:(const std::wstring&)ws
+{
+    char* data = (char*)ws.data();
+    unsigned size = (int)ws.size() * sizeof(wchar_t);
+    
+    NSString* result = [[NSString alloc] initWithBytes:data length:size encoding:kEncoding_wchar_t];
+    return result;
+}
+
+-(std::wstring) getwstring:(NSString*) sourceString
+{
+    NSData* asData = [sourceString dataUsingEncoding:kEncoding_wchar_t];
+    return std::wstring((wchar_t*)[asData bytes], [asData length] / sizeof(wchar_t));
+}
+
 - (void)dealloc
 {
-    
+    renderViewMan.delegate = nil;
+    renderViewMan = nil;
 }
 
 @end

@@ -17,25 +17,27 @@ private:
     SceneManager *smgr;
     
 public:
-    RenderHelper(SceneManager *smgr);
+    RenderHelper(SceneManager *smgr, void *scene);
     ~RenderHelper();
     void drawGrid();
-    void drawCircle(void* currentScene);
-    void drawMoveAxisLine(void *scene);
-    void drawMoveControlLine(Vector3 nodePos, void * scene);
-    void renderControls(void *scene);
-    void setControlsVisibility(void *scene, bool isVisible = true);
-    void setRenderCameraOrientation(void *scene);
-    void setJointSpheresVisibility(void * scene, bool visibilityFlag);
+    void drawCircle();
+    void drawMoveAxisLine();
+    void drawMoveControlLine(Vector3 nodePos);
+    void renderControls();
+    void setControlsVisibility(bool isVisible = true);
+    void setRenderCameraOrientation();
+    void setJointSpheresVisibility(bool visibilityFlag);
     
-    void postRTTDrawCall(void *scene);
-    void rttDrawCall(void *scene);
-    void drawCameraPreview(void *scene);
-    void rttNodeJointSelection(void * scene, Vector2 touchPosition);
-    void drawJointsSpheresForRTT(void *scene, bool enableDepthTest);
-    bool displayJointSpheresForNode(void *scene, shared_ptr<AnimatedMeshNode> animNode , float scaleValue = 0.7);
-    bool createJointSpheres(void *scene, int additionalJoints);
-    void removeJointSpheres(void *scene);
+    void postRTTDrawCall();
+    void rttDrawCall();
+    void rttShadowMap();
+    void drawCameraPreview();
+    void rttNodeJointSelection(Vector2 touchPosition);
+    void drawJointsSpheresForRTT(bool enableDepthTest);
+    bool displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue = 0.7);
+    bool createJointSpheres(int additionalJoints);
+    void displayJointsBasedOnSelection();
+    void removeJointSpheres();
 };
 
 #endif /* RenderHelper_h */

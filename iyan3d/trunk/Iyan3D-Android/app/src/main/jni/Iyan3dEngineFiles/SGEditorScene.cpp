@@ -8,6 +8,12 @@
 
 #include "SGEditorScene.h"
 
+string constants::BundlePath = " ";
+string constants::CachesStoragePath = " ";
+string constants::DocumentsStoragePath="";
+string constants::impotedImagesPathAndroid="";
+float constants::iOS_Version = 0;
+
 SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight)
 {
     SceneHelper::screenWidth = screenWidth;
@@ -36,7 +42,12 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     cmgr = new CollisionManager();
     shaderMGR = new ShaderManager(sceneMngr, devType);
 
-    renHelper = new RenderHelper(sceneMngr);
+    renHelper = new RenderHelper(sceneMngr, this);
+    selectMan = new SGSelectionManager(sceneMngr, this);
+    updater = new SGSceneUpdater(sceneMngr, this);
+    loader = new SGSceneLoader(sceneMngr, this);
+    moveMan = new SGMovementManager(sceneMngr, this);
+    
     isJointSelected = isNodeSelected = isControlSelected = freezeRendering = isPlaying = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
@@ -85,21 +96,18 @@ void SGEditorScene::renderAll()
         rotationCircle->node->setVisible(false);
         smgr->draw2DImage(bgTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth,  SceneHelper::screenHeight), true,
                           smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
-        //smgr->Render();
+        smgr->Render();
         
         renHelper->drawGrid();
-        renHelper->drawCircle(this);
-        renHelper->drawMoveAxisLine(this);
-        renHelper->renderControls(this);
+        renHelper->drawCircle();
+        renHelper->drawMoveAxisLine();
+        renHelper->renderControls();
         //        // rtt division atlast post and pre stage
-        renHelper->postRTTDrawCall(this);
-        renHelper->rttDrawCall(this);
+        renHelper->postRTTDrawCall();
+        renHelper->rttDrawCall();
         smgr->EndDisplay(); // draws all the rendering command
         
-        //        if(fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0) {
-        //            swipeToRotate();
-        //            updateLightCamera();
-        //        }
+        moveMan->swipeToRotate();
         //
         //        if(selectedNodeId != NOT_SELECTED)
         //            setTransparencyForIntrudingObjects();
@@ -143,7 +151,7 @@ void SGEditorScene::setMirrorState(MIRROR_SWITCH_STATE flag)
 {
     mirrorSwitchState = flag;
     if(isJointSelected)
-        selectMan->highlightJointSpheres(this);
+        selectMan->highlightJointSpheres();
 }
 
 MIRROR_SWITCH_STATE SGEditorScene::getMirrorState()
@@ -151,40 +159,64 @@ MIRROR_SWITCH_STATE SGEditorScene::getMirrorState()
     return mirrorSwitchState;
 }
 
-void SGEditorScene::reloadKeyFrameMap()
+void SGEditorScene::initLightCamera(Vector3 position)
 {
-    if(selectedNodeId != NOT_SELECTED) {
-        SGNode *selectedMesh = nodes[selectedNodeId];
-        bool searchPos = true,searchRot = false,searchScale = false;
-        isKeySetForFrame.clear();
-        searchRot = (nodes[selectedNodeId]->getType() == NODE_LIGHT) ? false:true;
-        searchScale = (nodes[selectedNodeId]->getType() > NODE_LIGHT) ? true:false;
-        if(searchPos){
-            for(unsigned long i = 0; i < selectedMesh->positionKeys.size(); i++)
-                isKeySetForFrame.insert(pair<int,int>(selectedMesh->positionKeys[i].id,selectedMesh->positionKeys[i].id));
+    lightCamera = smgr->createCameraNode("LightUniforms");
+    lightCamera->setFOVInRadians(150.0 * DEGTORAD);
+    lightCamera->setNearValue(5.0);
+    updater->updateLightCam(position);
+}
+
+void SGEditorScene::clearSelections()
+{
+    isNodeSelected = isJointSelected = false;
+    selectedNode = NULL;
+    selectedJoint = NULL;
+    selectedNodeId = selectedJointId = NOT_SELECTED;
+}
+
+void SGEditorScene::shaderCallBackForNode(int nodeID,string matName)
+{
+    for(int i = 0; i < nodes.size();i++){
+        if(nodes[i]->node->getID() == nodeID){
+            shaderMGR->setUniforms(nodes[i],matName);
+            break;
         }
-        if(searchRot){
-            for(unsigned long i = 0; i < selectedMesh->rotationKeys.size(); i++)
-                isKeySetForFrame.insert(pair<int,int>(selectedMesh->rotationKeys[i].id,selectedMesh->rotationKeys[i].id));
-        }
-        if(searchScale){
-            for(unsigned long i = 0; i < selectedMesh->scaleKeys.size(); i++)
-                isKeySetForFrame.insert(pair<int,int>(selectedMesh->scaleKeys[i].id,selectedMesh->scaleKeys[i].id));
-        }
-        
-        for( unsigned long i = 0; i < selectedMesh->joints.size(); i++){
-            for(unsigned long j = 0; j < selectedMesh->joints[i]->rotationKeys.size(); j++) {
-                isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->rotationKeys[j].id,selectedMesh->joints[i]->rotationKeys[j].id));
-            }
-            if(selectedMesh->getType() == NODE_TEXT) {
-                for(unsigned long j = 0; j < selectedMesh->joints[i]->positionKeys.size(); j++)
-                    isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->positionKeys[j].id,selectedMesh->joints[i]->positionKeys[j].id));
-                for(unsigned long j = 0; j < selectedMesh->joints[i]->scaleKeys.size(); j++)
-                    isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->scaleKeys[j].id,selectedMesh->joints[i]->scaleKeys[j].id));
+    }
+}
+bool SGEditorScene::isNodeTransparent(int nodeId)
+{
+    if(nodeId == -1)
+        return false;
+    else{
+        for(int i = 0; i < nodes.size();i++){
+            if(nodes[i]->node->getID() == nodeId){
+                return (nodes[i]->props.transparency < 1.0) || nodes[i]->props.isSelected || (!nodes[i]->props.isVisible);
+                break;
             }
         }
     }
-    else
-        isKeySetForFrame.clear();
 }
+
+void SGEditorScene::setJointsUniforms(int nodeID,string matName)
+{
+    shaderMGR->setUniforms(jointSpheres[nodeID - JOINT_SPHERES_START_ID],matName);
+}
+void SGEditorScene::setRotationCircleUniforms(int nodeID,string matName)
+{
+    shaderMGR->setUniforms(rotationCircle,matName);
+}
+bool SGEditorScene::isJointTransparent(int nodeID,string matName)
+{
+    return (jointSpheres[nodeID - JOINT_SPHERES_START_ID]->props.transparency < 1.0);
+}
+void SGEditorScene::setControlsUniforms(int nodeID,string matName)
+{
+    shaderMGR->setUniforms(sceneControls[nodeID - CONTROLS_START_ID],matName);
+}
+bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
+{
+    return (sceneControls[nodeID - CONTROLS_START_ID]->props.transparency < 1.0);
+}
+
 

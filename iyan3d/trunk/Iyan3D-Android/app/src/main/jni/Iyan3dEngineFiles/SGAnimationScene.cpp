@@ -176,7 +176,7 @@ void SGAnimationScene::rttShadowMap()
 void SGAnimationScene::postRTTDrawCall()
 {
     if(previewTexture && (selectedNodeId == NODE_CAMERA || isPlaying)) {
-        Vector4 previewLayout = getCameraPreviewLayout();
+        Vector4 previewLayout = getCameraPreviewLayout1();
         smgr->draw2DImage(previewTexture,Vector2(previewLayout.x,previewLayout.y),Vector2(previewLayout.z,previewLayout.w), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
     }
 }
@@ -228,7 +228,7 @@ void SGAnimationScene::drawCameraPreview()
     setRenderCameraOrientation();
     rotationCircle->node->setVisible(false);
     smgr->setRenderTarget(previewTexture,true,true,false,Vector4(255,255,255,255));
-    Vector4 camprevlay = getCameraPreviewLayout();
+    Vector4 camprevlay = getCameraPreviewLayout1();
     for(unsigned long i = 1; i < nodes.size(); i++){
         if(nodes[i]->getType() == NODE_LIGHT || nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             nodes[i]->node->setVisible(false);
@@ -254,7 +254,8 @@ void SGAnimationScene::drawCameraPreview()
     }
 
 }
-Vector4 SGAnimationScene::getCameraPreviewLayout()
+
+Vector4 SGAnimationScene::getCameraPreviewLayout1()
 {
     float camPrevWidth = (screenWidth) * CAM_PREV_PERCENT;
     float camPrevHeight = (screenHeight) * CAM_PREV_PERCENT;
@@ -266,28 +267,28 @@ Vector4 SGAnimationScene::getCameraPreviewLayout()
     float endY = originY + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
     return Vector4(originX,originY,endX,endY);
 }
-void SGAnimationScene::shaderCallBackForNode(int nodeID,string matName)
-{
-    for(int i = 0; i < nodes.size();i++){
-        if(nodes[i]->node->getID() == nodeID){
-            shaderMGR->setUniforms(nodes[i],matName);
-            break;
-        }
-    }
-}
-bool SGAnimationScene::isNodeTransparent(int nodeId)
-{
-    if(nodeId == -1)
-        return false;
-    else{
-        for(int i = 0; i < nodes.size();i++){
-            if(nodes[i]->node->getID() == nodeId){
-                return (nodes[i]->props.transparency < 1.0) || nodes[i]->props.isSelected || (!nodes[i]->props.isVisible);
-                break;
-            }
-        }
-    }
-}
+//void SGAnimationScene::shaderCallBackForNode(int nodeID,string matName)
+//{
+//    for(int i = 0; i < nodes.size();i++){
+//        if(nodes[i]->node->getID() == nodeID){
+//            shaderMGR->setUniforms(nodes[i],matName);
+//            break;
+//        }
+//    }
+//}
+//bool SGAnimationScene::isNodeTransparent(int nodeId)
+//{
+//    if(nodeId == -1)
+//        return false;
+//    else{
+//        for(int i = 0; i < nodes.size();i++){
+//            if(nodes[i]->node->getID() == nodeId){
+//                return (nodes[i]->props.transparency < 1.0) || nodes[i]->props.isSelected || (!nodes[i]->props.isVisible);
+//                break;
+//            }
+//        }
+//    }
+//}
 
 SGNode* SGAnimationScene::loadNode(NODE_TYPE type,int assetId,wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath)
 {
@@ -772,7 +773,6 @@ void SGAnimationScene::applyAnimations(string filePath , int nodeIndex)
     }
     setDataForFrame(currentFrame);
     reloadKeyFrameMap();
-
 }
 void SGAnimationScene::applySGAOnNode(std::string *filePath)
 {

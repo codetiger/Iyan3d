@@ -37,22 +37,21 @@
 #include "../../SGEngine2/Loaders/OBJMeshFileLoader.h"
 #include "SceneHelper.h"
 #include "RenderHelper.h"
+#include "SGMovementManager.h"
 #include "SGSelectionManager.h"
+#include "SGSceneUpdater.h"
+#include "SGSceneLoader.h"
+#include "SGSceneWriter.h"
 
 class SGEditorScene {
     
 private:
-    float cameraRadius;
     
     MIRROR_SWITCH_STATE mirrorSwitchState;
     
-    vector<SGAction> actions;
-    
     std::map<int,Vector3>             ikJointsPositionMap;
     std::map<int,Vector3>::iterator   ikJointsPositoinMapItr;
-    std::map<int,vector<Vector3> > textJointsBasePos;
     
-    Vector3 cameraTarget;
     SceneManager *smgr;
     CollisionManager *cmgr;
 
@@ -66,10 +65,14 @@ public:
     bool isNodeSelected,isJointSelected,isControlSelected;
     int selectedJointId,selectedNodeId,selectedControlId,controlType,currentAction;
     int totalFrames, cameraResolutionType;
+    int currentFrame;
+    int actionObjectsSize;
+    int assetIDCounter;
     
     float screenScale;
     float cameraFOV;
-    
+    float cameraRadius;
+
     std::map<int,int> isKeySetForFrame;
     std::map<int,int>::iterator keyFramesIterator;
     
@@ -81,11 +84,14 @@ public:
     vector<SGNode*> sceneControls;
     vector<SGNode*> nodes;
     vector<SGNode*> jointSpheres;
+    vector<SGAction> actions;
     vector<TPoseJoint> tPoseJoints;
     ShaderManager *shaderMGR;
     RenderHelper *renHelper;
     SGSelectionManager *selectMan;
-    
+    SGSceneUpdater *updater;
+    SGSceneLoader *loader;
+    SGMovementManager *moveMan;
     /* SGEngine class objects */
     
     std::map<int,Texture*> renderingTextureMap;
@@ -96,8 +102,11 @@ public:
     Plane3D *controlsPlane;
     Vector2 nodeJointPickerPosition;
     Vector3 circleTouchPoint,cameraAngle;
+    Vector3 cameraTarget;
     shared_ptr<CameraNode> viewCamera;
+    shared_ptr<CameraNode> lightCamera;
     shared_ptr<CameraNode> renderCamera;
+    std::map<int,vector<Vector3> > textJointsBasePos;
     
     /* Constructor and Destructor */
     
@@ -108,10 +117,26 @@ public:
     
     void initTextures();
     void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType);
+    void initLightCamera(Vector3 position);
     
     /* Rendering Methods */
     
     void renderAll();
+    
+    /* Call backs */
+    #ifdef ANDROID
+        bool (*downloadMissingAssetsCallBack)(std::string filePath, NODE_TYPE nodeType, JNIEnv *env, jclass type);
+    #endif
+    
+    void (*fileWriteCallBack)();
+    bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType);
+    void shaderCallBackForNode(int nodeID,string matName);
+    bool isNodeTransparent(int nodeId);
+    void setJointsUniforms(int nodeID,string matName);
+    void setRotationCircleUniforms(int nodeID,string matName);
+    bool isJointTransparent(int nodeID,string matName);
+    void setControlsUniforms(int nodeID,string matName);
+    bool isControlsTransparent(int nodeID,string matName);
     
     /* Other Methods */
     
@@ -120,8 +145,7 @@ public:
     void findAndInsertInIKPositionMap(int jointId);
     void setMirrorState(MIRROR_SWITCH_STATE flag);
     MIRROR_SWITCH_STATE getMirrorState();
-    void reloadKeyFrameMap();
-    
+    void clearSelections();
     Vector4 getCameraPreviewLayout();
 
 };

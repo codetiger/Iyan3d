@@ -24,7 +24,7 @@
 #import "SGEditorScene.h"
 #import "RenderViewManager.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,UIAlertViewDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,UIAlertViewDelegate, RenderViewManagerDelegate>{
     int totalFrames;
     NSMutableArray *tableData;
     ImportImageNew *importImageViewVC;

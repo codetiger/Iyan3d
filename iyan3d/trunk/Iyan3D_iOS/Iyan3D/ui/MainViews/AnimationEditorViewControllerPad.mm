@@ -723,28 +723,28 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
 }
 void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
 {
-    if (callbackFuncName.compare("setUniforms") == 0)
-        animationScene->shaderCallBackForNode(nodeID, matName);
-    else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
-        animationScene->setJointsUniforms(nodeID, matName);
-    else if (callbackFuncName.compare("setCtrlUniforms") == 0)
-        animationScene->setControlsUniforms(nodeID, matName);
-    else if (callbackFuncName.compare("RotationCircle") == 0)
-        animationScene->setRotationCircleUniforms(nodeID, matName);
+//    if (callbackFuncName.compare("setUniforms") == 0)
+//        animationScene->shaderCallBackForNode(nodeID, matName);
+//    else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
+//        animationScene->setJointsUniforms(nodeID, matName);
+//    else if (callbackFuncName.compare("setCtrlUniforms") == 0)
+//        animationScene->setControlsUniforms(nodeID, matName);
+//    else if (callbackFuncName.compare("RotationCircle") == 0)
+//        animationScene->setRotationCircleUniforms(nodeID, matName);
 }
 bool isTransparentCallBack(int nodeId, string callbackFuncName)
 {
-    if (callbackFuncName.compare("setUniforms") == 0)
-        return animationScene->isNodeTransparent(nodeId);
-    else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
-        return animationScene->isJointTransparent(nodeId, callbackFuncName);
-    else if (callbackFuncName.compare("setCtrlUniforms") == 0)
-        return animationScene->isControlsTransparent(nodeId, callbackFuncName);
-    else if (callbackFuncName.compare("setOBJUniforms") == 0)
-        return false;
-    else if (callbackFuncName.compare("RotationCircle") == 0)
-        return false;
-    return false;
+//    if (callbackFuncName.compare("setUniforms") == 0)
+//        return animationScene->isNodeTransparent(nodeId);
+//    else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
+//        return animationScene->isJointTransparent(nodeId, callbackFuncName);
+//    else if (callbackFuncName.compare("setCtrlUniforms") == 0)
+//        return animationScene->isControlsTransparent(nodeId, callbackFuncName);
+//    else if (callbackFuncName.compare("setOBJUniforms") == 0)
+//        return false;
+//    else if (callbackFuncName.compare("RotationCircle") == 0)
+//        return false;
+//    return false;
 }
 void downloadFile(NSString* url, NSString* fileName)
 {

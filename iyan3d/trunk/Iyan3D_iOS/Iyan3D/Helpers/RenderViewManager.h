@@ -21,9 +21,15 @@
 #import "RenderingView.h"
 #import "SceneManager.h"
 
+@protocol RenderViewManagerDelegate
+
+- (bool) isMetalSupportedDevice;
+- (void) reloadFrames;
+
+@end
 
 
-@interface RenderViewManager : NSObject
+@interface RenderViewManager : NSObject <UIGestureRecognizerDelegate>
 {
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
@@ -31,15 +37,27 @@
     GLuint _depthRenderBuffer;
     GLuint _frameBuffer;
     float screenScale;
+    SceneManager *smgr;
 }
-
-
+@property (strong, atomic) RenderingView *renderView;
+@property (strong, atomic) id <RenderViewManagerDelegate> delegate;
+@property (nonatomic) bool isPlaying;
+@property (nonatomic) bool isPanned;
+@property (nonatomic) bool checkTapSelection;
+@property (nonatomic) Vector2 tapPosition;
+@property (nonatomic) Vector2 touchBeganPosition;
+@property (nonatomic) bool checkCtrlSelection;
+- (void)setUpPaths;
 - (void)setupLayer:(UIView*)renderView;
 - (void)setupContext;
 - (void)setupRenderBuffer;
 - (void)setupDepthBuffer:(UIView*)renderView;
 - (void)setupFrameBuffer:(SceneManager*)smgr;
 - (void)presentRenderBuffer;
+- (void) setUpCallBacks:(void*)scene;
+- (void) addCameraLight;
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight;
+- (void)addGesturesToSceneView;
 
 @end
 

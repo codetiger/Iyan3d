@@ -250,7 +250,7 @@
             if (![[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 NSLog(@"Rig file not exists");
             else{
-                //[self loadNodeInRenderingThread:assetvalue.assetId];
+                [self.assetSelectionDelegate loadNodeInScene:assetvalue];
             }
         }
         else {
@@ -262,7 +262,7 @@
                 [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
             else {
                 if (activity == LOAD_NODE){
-                    //[self loadNodeInRenderingThread:assetvalue.assetId];
+                    [self.assetSelectionDelegate loadNodeInScene:assetvalue];
                 }
                 else{
                    //[self updateUIForRestoringPurchase:assetvalue.assetId];
@@ -278,7 +278,7 @@
             [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
         else {
             if (activity == LOAD_NODE){
-                //[self loadNodeInRenderingThread:assetvalue.assetId];
+                [self.assetSelectionDelegate loadNodeInScene:assetvalue];
             }
             else{
                 //[self updateUIForRestoringPurchase:assetvalue.assetId];
@@ -312,7 +312,6 @@
 
 - (void)proceedToFileVerification:(id)idObj
 {
-
     NSString* fileName;
     int assetId;
     
@@ -326,6 +325,8 @@
     }
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+        AssetItem * assetItem = [cache GetAsset:assetId];
+        [self.assetSelectionDelegate loadNodeInScene:assetItem];
     }
     else {
         [self.view endEditing:YES];
@@ -342,7 +343,9 @@
     
     int assetId = [task.returnObj intValue];
     
-
+    AssetItem *assetItem = [cache GetAsset:assetId];
+    [self.assetSelectionDelegate loadNodeInScene:assetItem];
+    
 }
 
 

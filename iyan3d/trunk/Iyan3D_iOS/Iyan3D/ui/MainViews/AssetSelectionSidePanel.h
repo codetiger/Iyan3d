@@ -13,6 +13,7 @@
 @protocol AssetSelectionDelegate
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
+- (void) loadNodeInScene:(AssetItem*)assetItem;
 
 @end
 

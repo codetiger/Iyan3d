@@ -67,7 +67,7 @@ public:
     void checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
     void initTextures();
     void initRenderCamera();
-    void shaderCallBackForNode(int nodeIndex,string matName);
+    //void shaderCallBackForNode(int nodeIndex,string matName);
     void checkSelection(Vector2 touchPosition,bool isDisplayPrepared = false);
     void changeObjectScale(Vector3 scale, bool isChanged);
     void rttNodeJointSelection(Vector2 touchPosition);
@@ -120,7 +120,7 @@ public:
     void storeLightPropertyChangeAction(float redValue , float greenValue, float blueValue , float shadowDensity);
     bool removeAnimationForSelectedNodeAtFrame(int selectedFrame);
     bool changeObjectOrientation(Vector3 outputValue);
-    bool isNodeTransparent(int nodeId);
+    //bool isNodeTransparent(int nodeId);
     void addAction(SGAction& action);
     void updateLightCamera();
     void setDocumentsDirectory(string documentsPath);
@@ -142,7 +142,7 @@ public:
     //Have to be moved to SGAnimationSceneHelper
     Quaternion readRotationFromSGAFile(float rollValue,ifstream* filePointer);
     Vector3 getSelectedNodeScale();
-    Vector4 getCameraPreviewLayout();
+    Vector4 getCameraPreviewLayout1();
     int undo(int &returnValue2);
     int redo();
 };

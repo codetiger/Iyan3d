@@ -16,18 +16,18 @@ class SGSelectionManager
 private:
     SceneManager *smgr;
 public:
-    SGSelectionManager(SceneManager* smgr);
+    SGSelectionManager(SceneManager* smgr, void* scene);
     ~SGSelectionManager();
         
-    void checkSelection(void *scene, Vector2 touchPosition,bool isDisplayPrepared);
-    void postNodeJointSelection(void *scene);
-    void getNodeColorFromTouchTexture(void *scene);
-    bool selectNodeOrJointInPixel(void *scene, Vector2 touchPixel);
-    bool updateNodeSelectionFromColor(void *scene, Vector3 pixel);
-    void highlightSelectedNode(void *scene);
-    void highlightJointSpheres(void *scene);
-    void selectObject(void *scene, int objectId);
-    void unselectObject(void *scene, int objectId);
+    void checkSelection(Vector2 touchPosition,bool isDisplayPrepared = true);
+    void postNodeJointSelection();
+    void getNodeColorFromTouchTexture();
+    bool selectNodeOrJointInPixel(Vector2 touchPixel);
+    bool updateNodeSelectionFromColor(Vector3 pixel);
+    void highlightSelectedNode();
+    void highlightJointSpheres();
+    void selectObject(int objectId);
+    void unselectObject(int objectId);
 };
 
 #endif /* SGGestureManager_h */
