@@ -8,13 +8,17 @@
 
 #import "ObjSidePanel.h"
 #import "ObjCellView.h"
+
+
+#define OBJ 0
+#define Texture 1
+
 @interface ObjSidePanel ()
 
 @end
 
 @implementation ObjSidePanel{
     NSArray *filesList;
-    NSArray *tempFiles;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
@@ -23,6 +27,9 @@
     if (self) {
         haveTexture = NO;
         color = Vector3(1.0,1.0,1.0);
+        basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
+        indexPathOfOBJ = -1;
+
     }
     return self;
 }
@@ -38,8 +45,8 @@
     NSLog(@"Obj path: %@",docDirPath);
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
-    [_colorWheelBtn setHidden:YES];    
-    // Do any additional setup after loading the view from its nib.
+    [_colorWheelBtn setHidden:YES];
+    self.addBtn.tag = OBJ;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,81 +57,94 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [filesList count];
+    if(_addBtn.tag == OBJ)
+        return [filesList count]+6;
+    else
+        return [filesList count];
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *extension = [[filesList objectAtIndex:indexPath.row]pathExtension];
-    NSLog(@"path extension %@",extension);
-    if([extension isEqualToString:@"obj"]){
-        ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
-        cell.assetNameLabel.text = filesList[indexPath.row];
-        cell.layer.borderColor = [UIColor grayColor].CGColor;
-        cell.assetImageView.image =[UIImage imageNamed:@"objfile.png"];
-        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-        return cell;
-   
-    }
-    else{
-        NSArray* cachepaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString* cacheDirectory = [cachepaths objectAtIndex:0];
-        NSString* srcFilePath = [NSString stringWithFormat:@"%@/texureFile/%@",cacheDirectory,tempFiles[indexPath.row]];
-        ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
-        cell.assetNameLabel.text = tempFiles[indexPath.row];
-        cell.layer.borderColor = [UIColor grayColor].CGColor;
-        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-        cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
-        return cell;
-
-    }
     
+    if(_addBtn.tag == OBJ)
+    {
+        if(indexPath.row > basicShapes.count-1){
+            NSLog(@"Files Count %lu " , (unsigned long)[filesList count]);
+            NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
+            NSLog(@"path extension %@",extension);
+            if([extension isEqualToString:@"obj"]){
+                ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+                cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
+                cell.layer.borderColor = [UIColor grayColor].CGColor;
+                cell.assetImageView.image =[UIImage imageNamed:@"objfile.png"];
+                cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+                return cell;
+            }
+        }
+        else{
+            ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+            cell.assetNameLabel.text = [basicShapes objectAtIndex:indexPath.row];
+            cell.layer.borderColor = [UIColor grayColor].CGColor;
+            NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
+            cell.assetImageView.image =[UIImage imageNamed:imageName];
+            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+            return cell;
+        }
+    }
+    else
+    {
+            NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString* docDirPath = [srcDirPath objectAtIndex:0];
+            NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row]];
+            NSLog(@"Source File Path %@",srcFilePath);
+            ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+            cell.assetNameLabel.text = filesList[indexPath.row];
+            cell.layer.borderColor = [UIColor grayColor].CGColor;
+            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+            cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
+            return cell;
+    }
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
-     for (int i = 0; i < [indexPathArr count]; i++)
-     {
-         NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
-         UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
-         cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-     }
+    for (int i = 0; i < [indexPathArr count]; i++)
+    {
+        NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
+        UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
+        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+    }
     UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
     cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
-    NSString *extension = [[filesList objectAtIndex:indexPath.row]pathExtension];
-    if([extension isEqualToString:@"obj"])
-    {
-        objFileName = [filesList objectAtIndex:indexPath.row];
-    }
+
+    if(_addBtn.tag == OBJ)
+        indexPathOfOBJ = indexPath.row;
     else
     {
         haveTexture = YES;
-        textureFileName = [filesList objectAtIndex:indexPath.row];
+        textureFileName = [[filesList objectAtIndex:indexPath.row]stringByDeletingPathExtension];
     }
 }
 
 - (IBAction)addBtnAction:(id)sender {
-    if(!objFileName.length)
+    if(indexPathOfOBJ == -1)
         return;
-    if([self.addBtn.titleLabel.text isEqualToString:@"NEXT"]){
+    if(self.addBtn.tag == OBJ){
         filesList=nil;
         NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* docDirPath = [srcDirPath objectAtIndex:0];
         NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
         filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
-        NSArray* cachepaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString* cacheDirectory = [cachepaths objectAtIndex:0];
-        NSString *dataPath = [cacheDirectory stringByAppendingPathComponent:@"/texureFile"];
-         NSArray *dirFiles1 = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dataPath error:nil];
-        tempFiles = [dirFiles1 filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
-        [self.importFilesCollectionView reloadData];
         [self.addBtn setTitle:@"ADD TO SCENE" forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
+        self.addBtn.tag = Texture;
+        [self.importFilesCollectionView reloadData];
         [_colorWheelBtn setHidden:NO];
     }
-    if([self.addBtn.titleLabel.text isEqualToString:@"ADD TO SCENE"]){
-        [_objSlideDelegate importObjAndTexture:objFileName TextureName:textureFileName VertexColor:color haveTexture:haveTexture];
+   else if(self.addBtn.tag == Texture){
+        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
         [self removeFromParentViewController];
     }

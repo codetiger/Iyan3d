@@ -131,6 +131,26 @@
                 [fileManager copyItemAtPath:resourcePath4 toPath:sgrFile error:&error];
             }
         }
+        
+        NSArray* basicShapes = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
+        /*
+         CONE = 60001
+         CUBE = 60002
+         CYLINDER = 60003
+         PLANE = 60004
+         SPHERE = 60005
+         TORUS = 60006
+         */
+        
+        for(int i = 0; i < basicShapes.count; i++){
+            NSString *mesh = [[NSBundle mainBundle] pathForResource:[basicShapes objectAtIndex:i] ofType:@"sgm"];
+            NSString *fileName = [NSString stringWithFormat:@"%@.sgm",[basicShapes objectAtIndex:i]];
+            NSString *sgmFile = [docsDir stringByAppendingPathComponent:fileName];
+            if([fileManager fileExistsAtPath:mesh]&& ![fileManager fileExistsAtPath:sgmFile]){
+                [fileManager copyItemAtPath:mesh toPath:sgmFile error:nil];
+            }
+        }
+        
         NSString *resourcePath3 = [[NSBundle mainBundle] pathForResource:@"32553-cm" ofType:@"png"];
         NSString *resourcePath4 = [[NSBundle mainBundle] pathForResource:@"32553" ofType:@"sgr"];
         if([fileManager fileExistsAtPath:resourcePath3] && ![fileManager fileExistsAtPath:texture]) {

@@ -209,6 +209,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->isPreviewMode = false;
     }
     
+    
+    
     switch (type) {
         case ASSET_CAMERA: {
             editorScene->loader->loadNode(NODE_CAMERA, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);

@@ -330,30 +330,35 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
             commonType = SHADER_COMMON_L1;
             commonSkinType = SHADER_COMMON_SKIN_L1;
             vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L1;
+            vertexColorType = SHADER_VERTEX_COLOR_L1;
             break;
         }
         case 2: {
             commonType = SHADER_COMMON_L2;
             commonSkinType = SHADER_COMMON_SKIN_L2;
             vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L2;
+            vertexColorType = SHADER_VERTEX_COLOR_L2;
             break;
         }
         case 3: {
             commonType = SHADER_COMMON_L3;
             commonSkinType = SHADER_COMMON_SKIN_L3;
             vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L3;
+            vertexColorType = SHADER_VERTEX_COLOR_L3;
             break;
         }
         case 4: {
             commonType = SHADER_COMMON_L4;
             commonSkinType = SHADER_COMMON_SKIN_L4;
             vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L4;
+            vertexColorType = SHADER_VERTEX_COLOR_L4;
             break;
         }
         case 5: {
             commonType = SHADER_COMMON_L5;
             commonSkinType = SHADER_COMMON_SKIN_L5;
             vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L5;
+            vertexColorType = SHADER_VERTEX_COLOR_L5;
             break;
         }
         default:
@@ -365,31 +370,35 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
         SGNode *sgNode = updatingScene->nodes[index];
         if(updatingScene->selectedNodeId == index && !updatingScene->isRigMode) {
             //DO NOTHING
-        } else {
-            switch (sgNode->getType()) {
-                case NODE_CAMERA: {
-                    sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
-                    break;
+        }
+        else if((sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ) && sgNode->props.perVertexColor){
+            sgNode->node->setMaterial(smgr->getMaterialByIndex(vertexColorType));
+        }
+        else {
+                switch (sgNode->getType()) {
+                    case NODE_CAMERA: {
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+                        break;
+                    }
+                    case NODE_LIGHT:
+                    case NODE_OBJ:
+                    case NODE_SGM:
+                    case NODE_IMAGE: {
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
+                        break;
+                    }
+                    case NODE_RIG: {
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
+                        break;
+                    }
+                    case NODE_TEXT: {
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
+                        break;
+                    }
+                        
+                    default:
+                        break;
                 }
-                case NODE_LIGHT:
-                case NODE_SGM:
-                case NODE_OBJ:
-                case NODE_IMAGE: {
-                    sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
-                    break;
-                }
-                case NODE_RIG: {
-                    sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
-                    break;
-                }
-                case NODE_TEXT: {
-                    sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
-                    break;
-                }
-                    
-                default:
-                    break;
-            }
         }
     }
 #endif

@@ -200,25 +200,32 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
             if(!checkFileExists(meshPath))
                 return shared_ptr<Node>();
         }
-
+        
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
     
-    shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
-
         if(!checkFileExists(textureFileName))
         {
-            node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+            props.perVertexColor = true;
             for(int i = 0; i < mesh->getVerticesCount(); i++) {
-                vertexData *vData = mesh->getLiteVertexByIndex(i);
-                vData->optionalData1 = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z, 1.0);
+                Vector4 *optionalData1 = &(mesh->getLiteVertexByIndex(i)->optionalData1);
+                (*optionalData1) = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z, 1.0);
             }
-        } else {
+        } else
+            props.perVertexColor = false;
+        
+        mesh->Commit();
+        
+        shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
+
+        if(props.perVertexColor)
+            node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+        else {
             node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
             Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
             node->setTexture(nodeTex,1);
         }
-        mesh->Commit();
+
     if(objectType == NODE_OBJ && objLoader != NULL)
         delete objLoader;
     
@@ -354,6 +361,7 @@ shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
     props.isLighting = false;
     return lightNode;
 }
+
 void SGNode::setPosition(Vector3 position, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(positionKeys,frameId);

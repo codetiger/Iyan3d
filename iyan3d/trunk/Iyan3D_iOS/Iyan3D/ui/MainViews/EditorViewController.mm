@@ -228,7 +228,6 @@ BOOL missingAlertShown;
 - (void) importAdditionalLight{
     if(ShaderManager::lightPosition.size() < 5) {
         assetAddType = IMPORT_ASSET_ACTION;
-        //editorScene->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
         [self addLightToScene:[NSString stringWithFormat:@"Light%d",lightCount] assetId:ASSET_ADDITIONAL_LIGHT + lightCount ];
         lightCount++;
     } else {
@@ -925,7 +924,7 @@ BOOL missingAlertShown;
         editorScene->controlType = SCALE;
         editorScene->updater->updateControlsOrientaion();
 
-        /*
+        
         
         editorScene->renHelper->setControlsVisibility(false);
         Vector3 currentScale = editorScene->getSelectedNodeScale();
@@ -942,7 +941,7 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:NO];
-         */
+        
     }
 }
 
@@ -1804,6 +1803,18 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
                     else
                         return true;
                 }
+            if ([file intValue] >= 60000 && ([file intValue] < 70000)) {
+                NSString* rigPath = [NSString stringWithFormat:@"%@/%d.sgm", documentsDirectory, [file intValue]];
+                if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
+                    if (!missingAlertShown) {
+                        [[AppHelper getAppHelper] missingAlertView];
+                        missingAlertShown = true;
+                    }
+                    return false;
+                }
+                else
+                    return true;
+            }
                 // TODO for sgr in documents directory
                 NSString* filePath = [NSString stringWithFormat:@"%@/%s.%@", cacheDirectory, fileName.c_str(), extension];
                 NSString* url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%s.%@", fileName.c_str(), extension];
@@ -2036,12 +2047,54 @@ void downloadFile(NSString* url, NSString* fileName)
 
 #pragma AutoRig Delegates
 
-- (void)importObjAndTexture:(NSString*)objFileName TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture
+- (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture
 {
-    NSLog(@"OBJ File Name %@ Texture Name %@ %f %f %f %hhd",objFileName,textureFileName,color.x,color.y,color.z,isHaveTexture);
+    NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+    NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
+    std::string *objStr = NULL;
+    std::string *textureStr = new std::string([(!isHaveTexture) ? @"-1" : textureFileName UTF8String]);
+    NSString* assetName;
+    int assetId = -1;
+    
+    if(indexPathOfOBJ < 6){//Total Basic Shapes 6
+        assetName = [basicShapes objectAtIndex:indexPathOfOBJ];
+        NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
+        assetId = [[basicShapesId objectAtIndex:indexPathOfOBJ]intValue];
+    }
+    else{
+        assetName = [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
+        objStr = new std::string([[[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension] UTF8String]);
+        editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 12345,!isHaveTexture,color);
+        assetId =12345;
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* docPath = [paths objectAtIndex:0];
+        NSString* from = [NSString stringWithFormat:@"%@/%@.png",docPath,textureFileName];
+        NSString* to = [NSString stringWithFormat:@"%@/123456-cm.png",docPath];
+        NSFileManager* fm = [[NSFileManager alloc]init];
+        [fm moveItemAtPath:from toPath:to error:nil];
+    }    
+    
+        NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
+        [dict setObject:assetName forKey:@"name"];
+        [dict setObject:[NSNumber numberWithInt:assetId] forKey:@"assetId"];
+        [dict setObject:[NSNumber numberWithFloat:color.x] forKey:@"x"];
+        [dict setObject:[NSNumber numberWithFloat:color.y] forKey:@"y"];
+        [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
+        [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
 }
 
-
+- (void) loadObjOrSGM:(NSMutableDictionary*)dict
+{
+    Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue],[[dict objectForKey:@"y"]floatValue],[[dict objectForKey:@"z"]floatValue],1.0);
+    int assetId = [[dict objectForKey:@"assetId"]intValue];
+    NSString* assetName = [dict objectForKey:@"name"];
+    editorScene->loader->loadNode(NODE_SGM,assetId,[self getwstring:assetName], 0, 0, IMPORT_ASSET_ACTION,color,"",NO);
+    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+    [self updateAssetListInScenes:NODE_SGM assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+}
 
 - (void)setupEnableDisableControls{
     

@@ -435,6 +435,15 @@ enum OPERATION_TYPE {
     DOWNLOAD_AND_RETURN_OBJ
 };
 
+enum BASIC_SHAPES{
+    CONE = 60001,
+    CUBE,
+    CYLINDER,
+    PLANE,
+    SPHERE,
+    TORUS
+};
+
 class constants{
     
 public:

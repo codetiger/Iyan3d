@@ -14,16 +14,17 @@
 @protocol ObjSliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 
-- (void)importObjAndTexture:(NSString*)objFileName TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture;
+- (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture;
 @end
 
 
 @interface ObjSidePanel : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate>
 {
-    NSString* objFileName;
+    int indexPathOfOBJ;
     NSString* textureFileName;
     BOOL haveTexture;
     Vector3 color;
+    NSArray* basicShapes;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;

@@ -24,7 +24,7 @@ varying vec4 texCoordsBias,normal,eyeVec,lightDir , vertexPosCam;
 
 void main()
 {
-    vertexColor = optionalData1.xyz;
+    vertexColor = vec3(optionalData1.xyz);
     vTexCoord = vec2(0.0);
     lightingValue = float(isLighting);
     vec4 vertex_position_cameraspace = Model * vec4(vertPosition, 1.0);
@@ -50,7 +50,6 @@ void main()
         shadowDist = 0.0;
     }
     //-----------
-    vTexCoord = texCoord1;
     gl_Position = (mvp) * vec4(vec3(vertPosition),1.0);
 }
 
