@@ -396,6 +396,15 @@ BOOL missingAlertShown;
             [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
             return;
         }
+        else if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES){
+            [self.moveBtn setEnabled:true];
+            [self.rotateBtn setEnabled:true];
+            [self.optionsBtn setEnabled:true];
+            [self.scaleBtn setEnabled:false];
+            if(editorScene->controlType == SCALE)
+                [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
+            return;
+        }
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA){
             [self.moveBtn setEnabled:true];
             [self.rotateBtn setEnabled:true];
@@ -1446,7 +1455,12 @@ BOOL missingAlertShown;
         else
             status = false;
         
-        if(status){
+        if(status && editorScene->selectedNodeIds.size() > 0){
+            editorScene->controlType = SCALE;
+            editorScene->updater->updateControlsOrientaion();
+            editorScene->renHelper->setControlsVisibility(false);
+        }
+        else if(status){
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
             editorScene->renHelper->setControlsVisibility(false);
