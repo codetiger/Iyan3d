@@ -242,12 +242,7 @@
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    
-    if(UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone) {
-        [picker dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [popover dismissPopoverAnimated:YES];
-    }
+    [_popoverController dismissPopoverAnimated:YES];
     NSDate *now = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
