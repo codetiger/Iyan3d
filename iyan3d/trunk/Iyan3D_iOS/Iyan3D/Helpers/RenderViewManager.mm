@@ -24,6 +24,7 @@
 #define ASSET_IMAGE 9
 #define ASSET_TEXT_RIG 10
 #define ASSET_TEXT 11
+#define ASSET_VIDEO 12
 #define ASSET_ADDITIONAL_LIGHT 900
 #define ADD_OBJECT 100
 #define DELETE_OBJECT 200
@@ -249,9 +250,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             }
             break;
         }
+        case ASSET_VIDEO:
         case ASSET_IMAGE: {
+            NODE_TYPE nType = (type == ASSET_VIDEO) ? NODE_VIDEO : NODE_IMAGE;
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0,"",name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(nType, 0,"",name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){

@@ -1836,6 +1836,7 @@ BOOL missingAlertShown;
     [videoDetail setObject:[NSNumber numberWithFloat:resolution.x] forKey:@"Width"];
     [videoDetail setObject:[NSNumber numberWithFloat:resolution.y] forKey:@"Height"];
     [videoDetail setObject:[NSNumber numberWithBool:isTemp] forKey:@"isTempNode"];
+    assetAddType = IMPORT_ASSET_ACTION;
     [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:videoDetail waitUntilDone:YES];
 }
 
