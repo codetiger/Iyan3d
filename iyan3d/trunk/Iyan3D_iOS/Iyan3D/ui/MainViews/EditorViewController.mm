@@ -153,7 +153,14 @@ BOOL missingAlertShown;
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
         [self toolbarPosition:0];
     }
-    
+    if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
+        self.objectList.allowsMultipleSelection=YES;
+    }
+    else
+    {
+         self.objectList.allowsMultipleSelection=NO;
+    }
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -262,6 +269,61 @@ BOOL missingAlertShown;
 }
 
 -(void)setupEnableDisableControls{
+    
+    if (editorScene->isRigMode){
+        [self.moveBtn setHidden:true];
+        [self.optionsBtn setHidden:true];
+        [self.rotateBtn setHidden:true];
+        [self.scaleBtn setHidden:true];
+        [self.undoBtn setHidden:true];
+        [self.redoBtn setHidden:true];
+        [self.importBtn setHidden:true];
+        [self.exportBtn setHidden:true];
+        [self.animationBtn setHidden:true];
+        [self.optionsBtn setHidden:true];
+        [self.objectList setHidden:true];
+        [self.playBtn setHidden:true];
+        [self.framesCollectionView setHidden:true];
+        [self.lastFrameBtn setHidden:true];
+        [self.firstFrameBtn setHidden:true];
+        [self.addFrameBtn setHidden:true];
+        [self.objTableview setHidden:true];
+        [self.backButton setHidden:true];
+        [self.rigTitle setHidden:false];
+        [self.scaleBtnAutorig setHidden:false];
+        [self.moveBtnAutorig setHidden:false];
+        [self.rotateBtnAutorig setHidden:false];
+        
+        return;
+    }
+    else
+    {
+        [self.moveBtn setHidden:false];
+        [self.optionsBtn setHidden:false];
+        [self.rotateBtn setHidden:false];
+        [self.scaleBtn setHidden:false];
+        [self.undoBtn setHidden:false];
+        [self.redoBtn setHidden:false];
+        [self.importBtn setHidden:false];
+        [self.exportBtn setHidden:false];
+        [self.animationBtn setHidden:false];
+        [self.optionsBtn setHidden:false];
+        [self.objectList setHidden:false];
+        [self.playBtn setHidden:false];
+        [self.framesCollectionView setHidden:false];
+        [self.lastFrameBtn setHidden:false];
+        [self.firstFrameBtn setHidden:false];
+        [self.addFrameBtn setHidden:false];
+        [self.objTableview setHidden:false];
+        [self.backButton setHidden:false];
+        [self.rigTitle setHidden:true];
+        [self.scaleBtnAutorig setHidden:true];
+        [self.moveBtnAutorig setHidden:true];
+        [self.rotateBtnAutorig setHidden:true];
+    
+    }
+
+    
     if(editorScene->isNodeSelected)
     {
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT){
@@ -300,23 +362,7 @@ BOOL missingAlertShown;
         return;
         
     }
-    else if (editorScene->isRigMode){
-        [self.moveBtn setEnabled:true];
-        [self.optionsBtn setEnabled:false];
-        [self.rotateBtn setEnabled:true];
-        [self.scaleBtn setEnabled:true];
-        [self.undoBtn setEnabled:false];
-        [self.redoBtn setEnabled:false];
-        [self.importBtn setEnabled:false];
-        [self.exportBtn setEnabled:false];
-        [self.animationBtn setEnabled:false];
-        [self.optionsBtn setEnabled:false];
-        [self.objectList setUserInteractionEnabled:false];
-        [self.playBtn setEnabled:false];
-        return;
-    }
-    else
-    {
+    else{
         [self.optionsBtn setEnabled:true];
         [self.moveBtn setEnabled:false];
         [self.rotateBtn setEnabled:false];
@@ -491,9 +537,11 @@ BOOL missingAlertShown;
                 editorScene->selectMan->checkSelectionForAutoRig(renderViewMan.tapPosition);
             }
             else{
-                editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
-                [self changeAllButtonBG];
-                [self setupEnableDisableControls];
+                bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
+                 NSLog(@"%d",isMultiSelectEnabled);
+                editorScene->selectMan->checkSelection(renderViewMan.tapPosition,isMultiSelectEnabled);
+                 [self changeAllButtonBG];
+                 [self setupEnableDisableControls];
             }
             
             [self reloadFrames];
@@ -728,7 +776,10 @@ BOOL missingAlertShown;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self objectSelectionCompleted:(int)indexPath.row];
+   
+        [self objectSelectionCompleted:(int)indexPath.row];
+    
+    
     
 }
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1205,7 +1256,7 @@ BOOL missingAlertShown;
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = CGSizeMake(300 , 300);
+        self.popoverController.popoverContentSize = CGSizeMake(380 , 273);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -1840,45 +1891,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if(!editorScene->hasNodeSelected() && !(editorScene->selectedNodeIds.size() > 0))
-    {
-        UIAlertAction* movaCam = [UIAlertAction
-                                  actionWithTitle:@"Move Camera"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
-                                  {
-                                      editorScene->nodes[0]->setPosition(editorScene->viewCamera->getPosition(), editorScene->currentFrame);
-                                      Vector3 nodeRot = editorScene->viewCamera->getViewMatrix().getRotationInDegree();
-                                      Vector3 initDir = (editorScene->viewCamera->getTarget() - editorScene->nodes[0]->getNodePosition()).normalize();
-                                      Vector3 targetDir = (editorScene->viewCamera->getTarget() - editorScene->viewCamera->getPosition()).normalize();
-                                      Quaternion rotQ = MathHelper::rotationBetweenVectors(targetDir, initDir);
-                                      rotQ = MathHelper::RotateNodeInWorld(nodeRot, rotQ);
-                                      Vector3 rotation = MathHelper::toEuler(rotQ);
-                                      rotation.x -= 180.0;
-                                      rotation.y -= 180.0;
-                                      rotation.z -= 180.0;
-                                      
-                                      editorScene->nodes[0]->setRotation(Quaternion(rotation * DEGTORAD), editorScene->currentFrame);
-                                      editorScene->nodes[0]->setRotationOnNode(rotQ);
-                                      /*
-                                       Vector3 camera = editorScene->nodes[0]->getNodePosition();
-                                       Vector3 viewCamera = editorScene->viewCamera->getPosition();
-                                       Vector3 rotDir = (viewCamera - camera).normalize();
-                                       Quaternion rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(1.0,1.0,1.0));
-                                       editorScene->nodes[0]->setRotation(rotQ, editorScene->currentFrame);
-                                       */
-                                      NSLog(@"\nCamera Rotation : %f %f %f ",editorScene->viewCamera->getViewMatrix().getRotationInDegree().x,
-                                            editorScene->viewCamera->getRotationInRadians().x,
-                                            editorScene->viewCamera->getTarget().x);
-                                      
-                                      editorScene->updater->setDataForFrame(editorScene->currentFrame);
-                                  }];
-        
-        [view addAction:movaCam];
-    }
-    else
-    {
-        UIAlertAction* deleteButton = [UIAlertAction
+ 
+    UIAlertAction* deleteButton = [UIAlertAction
                                        actionWithTitle:@"Delete"
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction * action)
@@ -1896,32 +1910,29 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                        }];
         [view addAction:deleteButton];
         
-        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->selectedNodeId!=-1){
-            UIAlertAction* duplicateButton = [UIAlertAction
-                                              actionWithTitle:@"Duplicate"
-                                              style:UIAlertActionStyleDefault
-                                              handler:^(UIAlertAction * action)
-                                              {
-                                                  [self createDuplicateAssets];
-                                                  [self updateAssetListInScenes];
-                                              }];
-            
-            [view addAction:duplicateButton];
-        }
-        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE && editorScene->selectedNodeId!=-1){
-            UIAlertAction* changeTexture = [UIAlertAction
-                                            actionWithTitle:@"Change Texture"
-                                            style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction * action)
-                                            {
-                                                selectedNodeId = editorScene->selectedNodeId;
-                                                [self changeTextureForAsset];
-                                            }];
-            [view addAction:changeTexture];
-        }
-        
-        
-    }
+//        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->selectedNodeId!=-1){
+//            UIAlertAction* duplicateButton = [UIAlertAction
+//                                              actionWithTitle:@"Duplicate"
+//                                              style:UIAlertActionStyleDefault
+//                                              handler:^(UIAlertAction * action)
+//                                              {
+//                                                  [self createDuplicateAssets];
+//                                                  [self updateAssetListInScenes];
+//                                              }];
+//            
+//            [view addAction:duplicateButton];
+//        }
+//        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE && editorScene->selectedNodeId!=-1){
+//            UIAlertAction* changeTexture = [UIAlertAction
+//                                            actionWithTitle:@"Change Texture"
+//                                            style:UIAlertActionStyleDefault
+//                                            handler:^(UIAlertAction * action)
+//                                            {
+//                                                [self changeTextureForAsset];
+//                                            }];
+//            [view addAction:changeTexture];
+//        }
+
     
     
     UIPopoverPresentationController *popover = view.popoverPresentationController;
@@ -1929,6 +1940,86 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     popover.sourceView=self.renderView;
     popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:view animated:YES completion:nil];
+}
+
+-(void)showOptions :(CGRect)longPressposition{
+    if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
+    {
+//        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"optionsBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 42);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        [self.popoverController presentPopoverFromRect:longPressposition
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionAny
+                                              animated:YES];
+        return;
+    }
+    
+    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
+    {
+        Quaternion lightProps;
+        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)
+            lightProps = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(editorScene->currentFrame,editorScene->nodes[editorScene->selectedNodeId]->rotationKeys,true);
+        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT){
+            Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
+            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
+        }
+//        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        _lightProp = [[LightProperties alloc] initWithNibName:@"LightProperties" bundle:nil LightColor:lightProps];
+        _lightProp.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
+        self.popoverController.popoverContentSize = CGSizeMake(270, 300);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_lightProp.view setClipsToBounds:YES];
+
+        [self.popoverController presentPopoverFromRect:longPressposition
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionAny
+                                              animated:NO];
+    }
+    else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
+    {
+        float fovValue = editorScene->cameraFOV;
+        NSInteger resolutionType = editorScene->cameraResolutionType;
+        _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
+        _camProp.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
+        self.popoverController.popoverContentSize = CGSizeMake(300 , 200);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_camProp.view setClipsToBounds:YES];
+        [self.popoverController presentPopoverFromRect:longPressposition
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionAny
+                                              animated:NO];
+        
+    }
+    else
+    {
+        float brightnessValue = editorScene->nodes[editorScene->selectedNodeId]->props.brightness;
+        float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
+        bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
+        bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
+//        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
+        _meshProp.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
+        self.popoverController.popoverContentSize = CGSizeMake(380 , 273);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_meshProp.view setClipsToBounds:YES];
+        [self.popoverController presentPopoverFromRect:longPressposition
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionAny
+                                              animated:NO];
+    }
+
 }
 
 #pragma Duplicate Actions
@@ -2059,9 +2150,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 
+
 - (void)objectSelectionCompleted:(int)assetIndex
 {
-    editorScene->selectMan->selectObject(assetIndex);
+    bool isMultiSelectenabled= [[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
+    editorScene->selectMan->selectObject(assetIndex,isMultiSelectenabled);
     [self setupEnableDisableControls];
     
 }
@@ -2430,6 +2523,31 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 -(void) optionBtnDelegate:(int)indexValue
 {
     NSLog(@"Mova camera Clicked");
+    editorScene->nodes[0]->setPosition(editorScene->viewCamera->getPosition(), editorScene->currentFrame);
+    Vector3 nodeRot = editorScene->viewCamera->getViewMatrix().getRotationInDegree();
+    Vector3 initDir = (editorScene->viewCamera->getTarget() - editorScene->nodes[0]->getNodePosition()).normalize();
+    Vector3 targetDir = (editorScene->viewCamera->getTarget() - editorScene->viewCamera->getPosition()).normalize();
+    Quaternion rotQ = MathHelper::rotationBetweenVectors(targetDir, initDir);
+    rotQ = MathHelper::RotateNodeInWorld(nodeRot, rotQ);
+    Vector3 rotation = MathHelper::toEuler(rotQ);
+    rotation.x -= 180.0;
+    rotation.y -= 180.0;
+    rotation.z -= 180.0;
+    
+    editorScene->nodes[0]->setRotation(Quaternion(rotation * DEGTORAD), editorScene->currentFrame);
+    editorScene->nodes[0]->setRotationOnNode(rotQ);
+    /*
+     Vector3 camera = editorScene->nodes[0]->getNodePosition();
+     Vector3 viewCamera = editorScene->viewCamera->getPosition();
+     Vector3 rotDir = (viewCamera - camera).normalize();
+     Quaternion rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(1.0,1.0,1.0));
+     editorScene->nodes[0]->setRotation(rotQ, editorScene->currentFrame);
+     */
+    NSLog(@"\nCamera Rotation : %f %f %f ",editorScene->viewCamera->getViewMatrix().getRotationInDegree().x,
+          editorScene->viewCamera->getRotationInRadians().x,
+          editorScene->viewCamera->getTarget().x);
+    
+    editorScene->updater->setDataForFrame(editorScene->currentFrame);
     [self.popoverController dismissPopoverAnimated:YES];
 }
 
@@ -2651,6 +2769,31 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->actionMan->changeMeshProperty(brightness, specular, light, visible, false);
     }
     
+}
+
+-(void) deleteDelegateAction
+{
+    if(editorScene->selectedNodeIds.size() > 0){
+        editorScene->loader->removeSelectedObjects();
+        [self undoRedoButtonState:DEACTIVATE_BOTH];
+    }
+    else{
+        [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+        [self undoRedoButtonState:DEACTIVATE_BOTH];
+    }
+    [self.popoverController dismissPopoverAnimated:YES];
+    [self updateAssetListInScenes];
+}
+
+-(void)cloneDelegateAction{
+    [self createDuplicateAssets];
+    [self updateAssetListInScenes];
+    [self.popoverController dismissPopoverAnimated:YES];
+}
+
+-(void)changeSkinDelgate{
+    [self changeTextureForAsset];
+    [self.popoverController dismissPopoverAnimated:YES];
 }
 
 #pragma Switch to SceneSelection
@@ -2896,6 +3039,12 @@ void downloadFile(NSString* url, NSString* fileName)
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
 }
 
+-(void)multiSelectUpdate:(BOOL)value{
+  
+        self.objectList.allowsMultipleSelection=value;
+         [[AppHelper getAppHelper] saveBoolUserDefaults:value withKey:@"multiSelectOption"];
+    NSLog(@"%d",[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"]);
+}
 
 - (void)setupEnableDisableControlsPlayAnimation{
     if(editorScene->isPlaying){
@@ -3127,7 +3276,7 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if(!isTempNode){
         if(!isHaveTexture){
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1,false);
             [self changeTexture:@"0-cm" VertexColor:Vector3(1.0) IsTemp:YES]; // for White Texture Thumbnail
             editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
         }
@@ -3152,7 +3301,7 @@ void downloadFile(NSString* url, NSString* fileName)
             nodes = nil;
         }
         if(!isHaveTexture){
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1,false);
             [self changeTexture:[dict objectForKey:@"textureName"] VertexColor:Vector3(color.x,color.y,color.z) IsTemp:YES]; // back to original Texture
             editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
         }
@@ -3201,7 +3350,7 @@ void boneLimitsCallBack(){
         [imageData writeToFile:desFilePath atomically:YES];
         *texture = *new std::string([(isTemp)?@"temp" : textureName UTF8String]);
     }
-    editorScene->selectMan->selectObject(selectedNodeId);
+    editorScene->selectMan->selectObject(selectedNodeId,false);
     if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
         editorScene->changeTexture(*texture, Vector3(color),isTemp,NO);
         editorScene->selectMan->unselectObject(selectedNodeId);

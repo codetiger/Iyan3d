@@ -703,7 +703,7 @@ int SGActionManager::undo(int &returnValue2)
             break;
         }
         case ACTION_TEXTURE_CHANGE:{
-            actionScene->selectMan->selectObject(indexOfAction);
+            actionScene->selectMan->selectObject(indexOfAction,false);
             actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]).c_str(), Vector3(recentAction.actionSpecificFloats[0],recentAction.actionSpecificFloats[1],recentAction.actionSpecificFloats[2]), false,true);
             actionScene->selectMan->unselectObject(indexOfAction);
             break;
@@ -842,7 +842,7 @@ int SGActionManager::redo()
             break;
         }
         case ACTION_TEXTURE_CHANGE:{
-            actionScene->selectMan->selectObject(indexOfAction);
+            actionScene->selectMan->selectObject(indexOfAction,false);
             actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[1]).c_str(), Vector3(recentAction.actionSpecificFloats[3],recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5]), false,true);
             actionScene->selectMan->unselectObject(indexOfAction);
             break;

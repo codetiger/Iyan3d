@@ -14,12 +14,17 @@
 
 @end
 
-@interface ChangeTextureSidePanel : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface ChangeTextureSidePanel : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>{
+   
+    UIPopoverController *popover;
+}
 @property (weak, nonatomic) id <ChangeTextureDelegate> textureDelegate;
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;
-
+@property (nonatomic, strong) UIImagePickerController *ipc;
 @property (weak, nonatomic) IBOutlet UIButton *cancelbtn;
+@property (weak, nonatomic) IBOutlet UIButton *importBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *texturefilesList;
 - (IBAction)cancelBtnAction:(id)sender;
 - (IBAction)addBtnAction:(id)sender;
+- (IBAction)importBtnAction:(id)sender;
 @end

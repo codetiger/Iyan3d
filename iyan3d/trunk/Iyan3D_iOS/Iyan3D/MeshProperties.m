@@ -68,4 +68,16 @@
     isVisibleValue=self.visibleChanged.on;
     [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue];
 }
+
+- (IBAction)cloneButtonAction:(id)sender {
+    [self.delegate cloneDelegateAction];
+}
+
+- (IBAction)deleteBtnAction:(id)sender {
+    [self.delegate deleteDelegateAction];
+}
+
+- (IBAction)skinBtnAction:(id)sender {
+    [self.delegate changeSkinDelgate];
+}
 @end

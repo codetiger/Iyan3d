@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 @protocol MeshPropertiesDelegate
 - (void)meshPropertyChanged:(float)brightness Specular:(float)specular Lighting:(BOOL)light Visible:(BOOL)visible;
+-(void) deleteDelegateAction;
+-(void)cloneDelegateAction;
+-(void)changeSkinDelgate;
 @end
 
 @interface MeshProperties : UIViewController{
@@ -27,6 +30,9 @@
 @property (weak, nonatomic) IBOutlet UISwitch *lightingSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *visibleChanged;
 @property (strong, nonatomic) id <MeshPropertiesDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UIButton *cloneBtn;
+@property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
+@property (weak, nonatomic) IBOutlet UIButton *skinBtn;
 
 - (IBAction)brightnessValueChanged:(id)sender;
 - (IBAction)specularValueChanged:(id)sender;
@@ -34,5 +40,9 @@
 - (IBAction)refractionValueChanged:(id)sender;
 - (IBAction)lightingSwitchChanged:(id)sender;
 - (IBAction)visibleValueChanged:(id)sender;
+- (IBAction)cloneButtonAction:(id)sender;
+- (IBAction)deleteBtnAction:(id)sender;
+- (IBAction)skinBtnAction:(id)sender;
+
 
 @end

@@ -117,6 +117,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *publishBtn;
 @property (weak, nonatomic) IBOutlet UIButton *rigCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *rigAddToSceneBtn;
+@property (weak, nonatomic) IBOutlet UIButton *moveBtnAutorig;
+@property (weak, nonatomic) IBOutlet UIButton *scaleBtnAutorig;
+@property (weak, nonatomic) IBOutlet UIButton *rotateBtnAutorig;
+@property (weak, nonatomic) IBOutlet UIView *objTableview;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UILabel *rigTitle;
+
 
 
 

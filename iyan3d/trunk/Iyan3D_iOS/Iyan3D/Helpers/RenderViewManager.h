@@ -31,6 +31,7 @@
 - (void) updateAssetListInScenes;
 - (void) stopPlaying;
 - (void)undoRedoButtonState:(int)state;
+-(void)showOptions :(CGRect)longPressposition;
 
 @end
 

@@ -10,6 +10,7 @@
                 <outlet property="addFrameBtn" destination="euE-kx-9ry" id="QPc-Cg-jPZ"/>
                 <outlet property="addJointBtn" destination="fwg-e6-BF2" id="xz2-3o-ea1"/>
                 <outlet property="animationBtn" destination="xCo-ML-HQa" id="6qx-QH-suT"/>
+                <outlet property="backButton" destination="Pow-v7-nF2" id="oNj-Fi-K3x"/>
                 <outlet property="center_progress" destination="gib-cQ-h37" id="aOD-QL-gOg"/>
                 <outlet property="editobjectBtn" destination="cF5-Om-aXQ" id="Hz2-TZ-6oP"/>
                 <outlet property="exportBtn" destination="Zs9-wP-4jN" id="3ZR-nP-FKb"/>
@@ -21,9 +22,10 @@
                 <outlet property="leftView" destination="J91-Zq-MM8" id="zw6-fn-tY4"/>
                 <outlet property="loginBtn" destination="kGA-sa-HX4" id="p8g-zq-NKC"/>
                 <outlet property="moveBtn" destination="2KQ-lp-58n" id="9XV-Gw-Fgb"/>
+                <outlet property="moveBtnAutorig" destination="3o8-L5-yrV" id="tSa-C9-LYQ"/>
                 <outlet property="moveFirst" destination="GJx-oe-voh" id="aDk-Kf-Jtf"/>
                 <outlet property="moveLast" destination="hqf-aQ-aK5" id="q4T-bf-GhI"/>
-                <outlet property="objectList" destination="Oe9-3f-sks" id="TJH-gg-q1p"/>
+                <outlet property="objTableview" destination="0go-cP-r4u" id="hXs-EQ-Xed"/>
                 <outlet property="optionsBtn" destination="kZM-y0-mYT" id="DkH-nx-7V3"/>
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
                 <outlet property="publishBtn" destination="cSH-2J-bnb" id="f3V-47-dK5"/>
@@ -32,9 +34,12 @@
                 <outlet property="rigAddToSceneBtn" destination="LIw-J1-TwZ" id="rG7-rO-rCo"/>
                 <outlet property="rigCancelBtn" destination="hQW-uY-VHV" id="WE4-Un-pxO"/>
                 <outlet property="rigScreenLabel" destination="h2z-Ga-oHa" id="pyX-sE-m1w"/>
+                <outlet property="rigTitle" destination="IrV-Kk-m6o" id="T8N-FA-qjg"/>
                 <outlet property="rightView" destination="RgQ-Eo-s8S" id="auz-s6-o1K"/>
                 <outlet property="rotateBtn" destination="kdb-Pl-f7f" id="Vdr-7W-QsP"/>
+                <outlet property="rotateBtnAutorig" destination="04v-sm-YgU" id="ODg-M5-yG5"/>
                 <outlet property="scaleBtn" destination="6N0-LM-Ula" id="i1O-dg-bRl"/>
+                <outlet property="scaleBtnAutorig" destination="XNK-gI-GK5" id="Kap-yG-S4U"/>
                 <outlet property="topView" destination="kC1-6X-WNk" id="TKS-SD-0Dl"/>
                 <outlet property="undoBtn" destination="Gxg-1c-S8x" id="FOc-xv-Tjn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -212,6 +217,13 @@
                                 <action selector="backToScenes:" destination="-1" eventType="touchUpInside" id="1O8-eE-8nK"/>
                             </connections>
                         </button>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RIGGING MODE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IrV-Kk-m6o">
+                            <rect key="frame" x="447" y="31" width="130" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.61568627450980395" green="0.12549019607843137" blue="0.83137254901960778" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -224,6 +236,13 @@
                             <rect key="frame" x="5" y="52" width="150" height="288"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MY OBJECTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AOn-20-20f">
+                                    <rect key="frame" x="22" y="7" width="106" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="33" sectionHeaderHeight="28" sectionFooterHeight="28" id="Oe9-3f-sks">
                                     <rect key="frame" x="0.0" y="29" width="150" height="231"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -250,13 +269,6 @@
                             </subviews>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MY OBJECTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AOn-20-20f">
-                            <rect key="frame" x="27" y="58" width="106" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cen-Sr-AzL">
                             <rect key="frame" x="5" y="5" width="150" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -381,6 +393,45 @@
                                 <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="Ga5-e3-VWf"/>
                             </connections>
                         </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3o8-L5-yrV">
+                            <rect key="frame" x="9" y="9" width="140" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  MOVE" image="Move_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="GGw-ys-1KS"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="04v-sm-YgU">
+                            <rect key="frame" x="9" y="50" width="140" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="ZMc-sR-zOd"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XNK-gI-GK5">
+                            <rect key="frame" x="9" y="91" width="140" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  SCALE" image="Scale_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="scaleBtnAction:" destination="-1" eventType="touchUpInside" id="KV5-Fe-mzH"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.16078431372549018" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -398,20 +449,20 @@
     </objects>
     <resources>
         <image name="Add-Frames.png" width="37" height="36"/>
-        <image name="Animation_Pad.png" width="23" height="40"/>
+        <image name="Animation_Pad.png" width="26" height="26"/>
         <image name="Back.png" width="14" height="23"/>
-        <image name="Export_Pad.png" width="23" height="40"/>
-        <image name="Import_Pad.png" width="23" height="40"/>
+        <image name="Export_Pad.png" width="26" height="26"/>
+        <image name="Import_Pad.png" width="26" height="26"/>
         <image name="Info.png" width="22" height="22"/>
         <image name="Login-icon.png" width="22" height="22"/>
-        <image name="Move_Pad.png" width="58" height="40"/>
+        <image name="Move_Pad.png" width="31" height="20"/>
         <image name="Next-Frame.png" width="31" height="36"/>
         <image name="Options_Pad.png" width="23" height="40"/>
         <image name="Play_Pad.png" width="18" height="40"/>
         <image name="Previous-Frame.png" width="31" height="36"/>
         <image name="Redo_Pad.png" width="26" height="40"/>
-        <image name="Rotate_Pad.png" width="58" height="40"/>
-        <image name="Scale_Pad.png" width="58" height="40"/>
+        <image name="Rotate_Pad.png" width="40" height="28"/>
+        <image name="Scale_Pad.png" width="20" height="20"/>
         <image name="Undo_Pad.png" width="26" height="40"/>
         <image name="View.png" width="22" height="22"/>
         <image name="add-frame.png" width="18" height="18"/>

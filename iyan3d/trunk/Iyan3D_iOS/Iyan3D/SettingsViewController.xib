@@ -11,6 +11,7 @@
                 <outlet property="frameCountDisplay" destination="14a-cr-DF6" id="jMr-m2-YpE"/>
                 <outlet property="framesDisplayCount" destination="4AM-Oh-6u7" id="0BO-75-0PK"/>
                 <outlet property="framesDisplayDuration" destination="pi2-nh-JrL" id="VcP-JD-c0j"/>
+                <outlet property="multiSelectSwitch" destination="EsN-jX-vMF" id="JuG-fd-UZo"/>
                 <outlet property="previewPositionLeftBottom" destination="5bg-aT-8wg" id="i8w-0S-1H7"/>
                 <outlet property="previewPositionLeftTop" destination="jZB-4p-lN6" id="t04-h5-A35"/>
                 <outlet property="previewPositionRightBottom" destination="pRf-UT-BZD" id="VaJ-jm-rqS"/>
@@ -173,6 +174,18 @@
                                 <action selector="doneBtnAction:" destination="-1" eventType="touchUpInside" id="gD3-9b-6Hd"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MultiSelect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oMY-Au-PYQ">
+                            <rect key="frame" x="14" y="5" width="86" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EsN-jX-vMF">
+                            <rect key="frame" x="113" y="0.0" width="51" height="31"/>
+                            <connections>
+                                <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="kDp-Ve-xvn"/>
+                            </connections>
+                        </switch>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

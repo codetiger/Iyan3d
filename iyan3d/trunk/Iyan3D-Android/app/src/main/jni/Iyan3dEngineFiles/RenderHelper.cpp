@@ -383,7 +383,7 @@ void RenderHelper::setRenderCameraOrientation()
 #endif
 }
 
-void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
+void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSelectenabled, bool touchMove)
 {
     if(!renderingScene || !smgr)
         return;
@@ -439,7 +439,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
     previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();
     
     if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        renderingScene->selectMan->getNodeColorFromTouchTexture(touchMove);
+        renderingScene->selectMan->getNodeColorFromTouchTexture(isMultiSelectenabled,touchMove);
     smgr->setRenderTarget(NULL,false,false);
     if(renderingScene->shaderMGR->deviceType == METAL)
         smgr->EndDisplay();
@@ -609,7 +609,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         renderingScene->updater->resetMaterialTypes(false);
     
     if(selectedObjectId != NOT_SELECTED)
-        renderingScene->selectMan->selectObject(selectedObjectId);
+        renderingScene->selectMan->selectObject(selectedObjectId,false);
 }
 
 

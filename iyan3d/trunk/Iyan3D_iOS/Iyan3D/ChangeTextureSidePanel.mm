@@ -8,6 +8,7 @@
 
 #import "ChangeTextureSidePanel.h"
 #import "ObjCellView.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 @interface ChangeTextureSidePanel ()
 
 @end
@@ -20,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.texturefilesList registerNib:[UINib nibWithNibName:@"ObjCellView" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-    NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
+    NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", @"JPG",nil];
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
@@ -38,6 +39,22 @@
 {
     [self.textureDelegate changeTexture:imagefileName VertexColor:1];
     [self.textureDelegate showOrHideLeftView:NO withView:nil];
+}
+
+- (IBAction)importBtnAction:(id)sender
+{
+    self.ipc= [[UIImagePickerController alloc] init];
+    self.ipc.delegate = self;
+    self.ipc.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    if(UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone)
+        [self presentViewController:_ipc animated:YES completion:nil];
+    else
+    {
+        popover=[[UIPopoverController alloc]initWithContentViewController:_ipc];
+        [popover presentPopoverFromRect:self.importBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    }
+    
+    
 }
 - (IBAction)cancelBtnAction:(id)sender
 {
@@ -77,4 +94,46 @@
     imagefileName = [filesList objectAtIndex:indexPath.row];
 }
 
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    
+    if(UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone) {
+        [picker dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [popover dismissPopoverAnimated:YES];
+    }
+//    NSURL *imaginfo =[info objectForKey:UIImagePickerControllerReferenceURL];
+//    NSString *url = [imaginfo absoluteString];
+//    NSArray *parts = [url componentsSeparatedByString:@"/"];
+//    NSString *filename = [parts lastObject];
+//    NSLog(@"Imagepath : %@",filename );
+    NSDate *now = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"hh:mm:ss";
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSLog(@"The Current Time is %@",[dateFormatter stringFromDate:now]);
+    NSString *date = [@"Texture_"stringByAppendingString:[dateFormatter stringFromDate:now]];
+    NSString *fileName = [date stringByAppendingString:@".png"];
+    NSLog(@"Imagepath : %@",fileName );
+    UIImage* image=(UIImage*)[info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    NSData *pngData = UIImagePNGRepresentation(image);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:fileName]; //Add the file name
+    [pngData writeToFile:filePath atomically:YES]; //Write the file
+    filesList=nil;
+    NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", @"JPG",nil];
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
+    [self.texturefilesList reloadData];
+
+
+    
+    
+}
+-(void)reloadData{
+    [self.texturefilesList reloadData];
+}
 @end

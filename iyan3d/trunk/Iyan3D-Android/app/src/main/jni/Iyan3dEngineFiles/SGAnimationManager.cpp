@@ -59,7 +59,7 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
 
 void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
 {
-    animScene->selectMan->selectObject(toNodeId);
+    animScene->selectMan->selectObject(toNodeId,false);
     animScene->nodes[toNodeId]->positionKeys = animScene->nodes[fromNodeId]->positionKeys;
     animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
     animScene->nodes[toNodeId]->scaleKeys = animScene->nodes[fromNodeId]->scaleKeys;

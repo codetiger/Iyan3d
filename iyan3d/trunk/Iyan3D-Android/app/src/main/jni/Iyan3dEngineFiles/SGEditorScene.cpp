@@ -415,7 +415,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     if(selectedNodeId != NOT_SELECTED)
         nodes[selectedNodeId]->props.isSelected = true;
     
-    selectMan->selectObject(selectedNodeId);
+    selectMan->selectObject(selectedNodeId,false);
     renHelper->setControlsVisibility(true);
     smgr->EndDisplay();
 }

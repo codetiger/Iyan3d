@@ -13,6 +13,7 @@
 -(void)cameraPreviewSize:(int)selctedIndex;
 -(void)cameraPreviewPosition:(int)selctedIndex;
 -(void)toolbarPosition:(int)selctedIndex;
+-(void)multiSelectUpdate:(BOOL)value;
 @end
 
 @interface SettingsViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate>{
@@ -31,15 +32,16 @@
 @property (weak, nonatomic) IBOutlet UIImageView *renderPreviewSizeSmall;
 @property (weak, nonatomic) IBOutlet UIImageView *renderPreviewSizeLarge;
 @property (weak, nonatomic) IBOutlet UIImageView *framesDisplayCount;
+@property (weak, nonatomic) IBOutlet UISwitch *multiSelectSwitch;
 @property (weak, nonatomic) IBOutlet UIImageView *framesDisplayDuration;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionRightBottom;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionRightTop;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftBottom;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftTop;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrolView;
 - (IBAction)toolBarPositionChanged:(id)sender;
 - (IBAction)renderPreviewSizeChanged:(id)sender;
 - (IBAction)frameCountDisplayType:(id)sender;
 - (IBAction)previewpositionChanged:(id)sender;
 - (IBAction)doneBtnAction:(id)sender;
+- (IBAction)multiselectValueChanged:(id)sender;
 @end

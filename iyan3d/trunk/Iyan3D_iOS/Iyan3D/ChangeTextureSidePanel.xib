@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addBtn" destination="JMJ-E3-cdE" id="hIQ-sA-vgI"/>
                 <outlet property="cancelbtn" destination="019-jW-hla" id="RTE-8U-CoF"/>
+                <outlet property="importBtn" destination="mAd-DC-Tzt" id="Lne-D1-ze6"/>
                 <outlet property="texturefilesList" destination="1UD-Bb-Ghh" id="tYU-hT-kOd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -30,36 +31,8 @@
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ISA-bW-j0Y">
-                    <rect key="frame" x="0.0" y="649" width="300" height="60"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMJ-E3-cdE">
-                            <rect key="frame" x="180" y="8" width="110" height="40"/>
-                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <state key="normal" title="ADD TO SCENE">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="addBtnAction:" destination="-1" eventType="touchUpInside" id="ico-PX-xKs"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="019-jW-hla">
-                            <rect key="frame" x="8" y="8" width="110" height="40"/>
-                            <color key="backgroundColor" red="0.15686274510000001" green="0.16078431369999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <state key="normal" title="CANCEL">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="cancelBtnAction:" destination="-1" eventType="touchUpInside" id="bxC-vt-NmM"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
                 <collectionView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="1UD-Bb-Ghh">
-                    <rect key="frame" x="0.0" y="44" width="300" height="606"/>
+                    <rect key="frame" x="0.0" y="44" width="300" height="567"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="0Du-qF-i8e">
                         <size key="itemSize" width="72" height="80"/>
@@ -72,6 +45,45 @@
                         <outlet property="delegate" destination="-1" id="bUc-uc-6Ia"/>
                     </connections>
                 </collectionView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ISA-bW-j0Y">
+                    <rect key="frame" x="0.0" y="589" width="300" height="120"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMJ-E3-cdE">
+                            <rect key="frame" x="182" y="72" width="110" height="40"/>
+                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <state key="normal" title="ADD TO SCENE">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="addBtnAction:" destination="-1" eventType="touchUpInside" id="ico-PX-xKs"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="019-jW-hla">
+                            <rect key="frame" x="8" y="72" width="110" height="40"/>
+                            <color key="backgroundColor" red="0.15686274510000001" green="0.16078431369999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <state key="normal" title="CANCEL">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="cancelBtnAction:" destination="-1" eventType="touchUpInside" id="bxC-vt-NmM"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mAd-DC-Tzt">
+                            <rect key="frame" x="182" y="27" width="110" height="40"/>
+                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <state key="normal" title="IMPORT ">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="C9k-sq-1Ph"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

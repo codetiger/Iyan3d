@@ -19,53 +19,8 @@
     [super viewDidLoad];
     [self setupImageTap];
     self.doneBtn.layer.cornerRadius=8.0f;
-    int framesIndicatorValue= (int)[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]longValue];
-    float cameraPreviewSize= [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewSize"]floatValue];
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
-        if(framesIndicatorValue==2)
-        {
-            [self.frameCountDisplay setSelectedSegmentIndex:1];
-        }
-        else
-        {
-            
-        }
-        
-    }
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
-        if(cameraPreviewSize==2.0){
-            [self.renderPreviewSize setSelectedSegmentIndex:1];
-        }
-        else{
-            
-        }
-    }
-    NSLog(@"Toolpar : %ld",(long)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]);
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1)
-    {
-        [self.toolbarPosition setSelectedSegmentIndex:1];
-    }
-    else
-    {
-        [self.toolbarPosition setSelectedSegmentIndex:0];
-    }
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==1)
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:1];
-    }
-    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==2)
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:2];
-    }
-    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==3)
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:3];
-    }
-    else
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:0];
-    }
-
+    [self readUserSettings];
+    
 }
 
 
@@ -270,4 +225,69 @@
 }
 
 
+- (IBAction)multiselectValueChanged:(id)sender {
+    if(self.multiSelectSwitch.isOn){
+        [self.delegate multiSelectUpdate:YES];
+    }
+    else{
+        [self.delegate multiSelectUpdate:NO];
+    }
+}
+
+-(void) readUserSettings{
+    int framesIndicatorValue= (int)[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]longValue];
+    float cameraPreviewSize= [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewSize"]floatValue];
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
+        if(framesIndicatorValue==2)
+        {
+            [self.frameCountDisplay setSelectedSegmentIndex:1];
+        }
+        else
+        {
+            
+        }
+        
+    }
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
+        if(cameraPreviewSize==2.0){
+            [self.renderPreviewSize setSelectedSegmentIndex:1];
+        }
+        else{
+            
+        }
+    }
+    NSLog(@"Toolpar : %ld",(long)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]);
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1)
+    {
+        [self.toolbarPosition setSelectedSegmentIndex:1];
+    }
+    else
+    {
+        [self.toolbarPosition setSelectedSegmentIndex:0];
+    }
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==1)
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:1];
+    }
+    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==2)
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:2];
+    }
+    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==3)
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:3];
+    }
+    else
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:0];
+    }
+    if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
+        [self.multiSelectSwitch setOn:YES];
+    }
+    else
+    {
+        [self.multiSelectSwitch setOn:NO];
+    }
+
+}
 @end

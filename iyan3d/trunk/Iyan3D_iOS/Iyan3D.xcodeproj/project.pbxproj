@@ -331,6 +331,20 @@
 		01B6F3F41C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B6F3F21C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib */; };
 		01B6F3F61C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B6F3F51C3E94890041D42F /* SettingsViewControllerPhone.xib */; };
 		01B6F3F71C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B6F3F51C3E94890041D42F /* SettingsViewControllerPhone.xib */; };
+		01BA32431C5CC086000A5F3E /* popover-clone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32401C5CC086000A5F3E /* popover-clone.png */; };
+		01BA32441C5CC086000A5F3E /* popover-clone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32401C5CC086000A5F3E /* popover-clone.png */; };
+		01BA32451C5CC086000A5F3E /* popover-delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32411C5CC086000A5F3E /* popover-delete.png */; };
+		01BA32461C5CC086000A5F3E /* popover-delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32411C5CC086000A5F3E /* popover-delete.png */; };
+		01BA32471C5CC086000A5F3E /* popover-skin.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32421C5CC086000A5F3E /* popover-skin.png */; };
+		01BA32481C5CC086000A5F3E /* popover-skin.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32421C5CC086000A5F3E /* popover-skin.png */; };
+		01BA324C1C5CC292000A5F3E /* popover-clone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32491C5CC292000A5F3E /* popover-clone@2x.png */; };
+		01BA324D1C5CC292000A5F3E /* popover-clone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA32491C5CC292000A5F3E /* popover-clone@2x.png */; };
+		01BA324E1C5CC292000A5F3E /* popover-delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324A1C5CC292000A5F3E /* popover-delete@2x.png */; };
+		01BA324F1C5CC292000A5F3E /* popover-delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324A1C5CC292000A5F3E /* popover-delete@2x.png */; };
+		01BA32501C5CC292000A5F3E /* popover-skin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */; };
+		01BA32511C5CC292000A5F3E /* popover-skin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */; };
+		01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */; };
+		01BA32541C5CEC8C000A5F3E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */; };
 		01C2B77C1C462CF300384370 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77B1C462CF300384370 /* Accounts.framework */; };
 		01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
 		01C2B7941C46419300384370 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7911C46419300384370 /* TwitterKit.framework */; };
@@ -2417,6 +2431,13 @@
 		01B6F3EF1C3E5C700041D42F /* SceneSelectionControllerNewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SceneSelectionControllerNewPhone.xib; sourceTree = "<group>"; };
 		01B6F3F21C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SceneSelectionFrameCellPhone.xib; sourceTree = "<group>"; };
 		01B6F3F51C3E94890041D42F /* SettingsViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewControllerPhone.xib; sourceTree = "<group>"; };
+		01BA32401C5CC086000A5F3E /* popover-clone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-clone.png"; sourceTree = "<group>"; };
+		01BA32411C5CC086000A5F3E /* popover-delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-delete.png"; sourceTree = "<group>"; };
+		01BA32421C5CC086000A5F3E /* popover-skin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-skin.png"; sourceTree = "<group>"; };
+		01BA32491C5CC292000A5F3E /* popover-clone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-clone@2x.png"; sourceTree = "<group>"; };
+		01BA324A1C5CC292000A5F3E /* popover-delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-delete@2x.png"; sourceTree = "<group>"; };
+		01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-skin@2x.png"; sourceTree = "<group>"; };
+		01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		01C2B77B1C462CF300384370 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		01C2B77D1C462CFB00384370 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		01C2B7911C46419300384370 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterKit.framework; path = FrameWorks/TwitterKit.framework; sourceTree = "<group>"; };
@@ -3904,6 +3925,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */,
 				25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */,
 				01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */,
 				01C2B77C1C462CF300384370 /* Accounts.framework in Frameworks */,
@@ -3943,6 +3965,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01BA32541C5CEC8C000A5F3E /* AssetsLibrary.framework in Frameworks */,
 				25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */,
 				01C2B79E1C46554A00384370 /* Accounts.framework in Frameworks */,
 				01C2B79D1C46553500384370 /* Social.framework in Frameworks */,
@@ -4098,6 +4121,12 @@
 		01B4CF931C29219A0091E19B /* rightview */ = {
 			isa = PBXGroup;
 			children = (
+				01BA32401C5CC086000A5F3E /* popover-clone.png */,
+				01BA32491C5CC292000A5F3E /* popover-clone@2x.png */,
+				01BA324A1C5CC292000A5F3E /* popover-delete@2x.png */,
+				01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */,
+				01BA32411C5CC086000A5F3E /* popover-delete.png */,
+				01BA32421C5CC086000A5F3E /* popover-skin.png */,
 				01B3951D1C37AA3A003955C6 /* Add-Bones_Pad@2x.png */,
 				01B3951E1C37AA3A003955C6 /* Back@2x.png */,
 				01B395291C37AACE003955C6 /* Import-image_Pad@2x.png */,
@@ -5800,6 +5829,7 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */,
 				25095F381C5B631900CF7C68 /* AVFoundation.framework */,
 				01C2B77D1C462CFB00384370 /* Social.framework */,
 				01C2B77B1C462CF300384370 /* Accounts.framework */,
@@ -6532,6 +6562,7 @@
 				7FC901331A0A07860051B941 /* save-img@2x.png in Resources */,
 				01AAE29B1C43DA7B00B194E0 /* Mail@2x.png in Resources */,
 				62FB867F1988D33A00AC7424 /* save-img.png in Resources */,
+				01BA32501C5CC292000A5F3E /* popover-skin@2x.png in Resources */,
 				01C2B79B1C46543200384370 /* color@2x.png in Resources */,
 				7FC901691A0A54850051B941 /* Scene-topviewBg@2x.png in Resources */,
 				01F872811C3A42EF009AA31E /* My-objects-Light_IPhone.png in Resources */,
@@ -6692,6 +6723,7 @@
 				0169C45B1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */,
 				E24974C5196BDC650025D442 /* controls6.sgm in Resources */,
 				3DBC85EE1C2BCBEC00B512AB /* close@2x.png in Resources */,
+				01BA324C1C5CC292000A5F3E /* popover-clone@2x.png in Resources */,
 				01ACD0E81C3D3AE20096AD14 /* Render-Preview-position_Right-Bottom@2x.png in Resources */,
 				01B395321C37AACE003955C6 /* Import-model_Pad@2x.png in Resources */,
 				01F8729E1C3A4790009AA31E /* Move_IPhone.png in Resources */,
@@ -6709,6 +6741,7 @@
 				7FFF74231A9F2B280015FA0F /* helpimage5.png in Resources */,
 				7FC900D21A0A01470051B941 /* home-phone.png in Resources */,
 				7FC900F31A0A01470051B941 /* scale-img-phone@2x.png in Resources */,
+				01BA32471C5CC086000A5F3E /* popover-skin.png in Resources */,
 				E24974C4196BDC650025D442 /* controls5.sgm in Resources */,
 				E24974C1196BDC650025D442 /* controls2.sgm in Resources */,
 				01F8731D1C3A7500009AA31E /* PopUpViewControllerPhone.xib in Resources */,
@@ -6848,6 +6881,8 @@
 				7FC900EA1A0A01470051B941 /* render_image-phone.png in Resources */,
 				01B3951B1C37A8DD003955C6 /* View@2x.png in Resources */,
 				01F872D81C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png in Resources */,
+				01BA324E1C5CC292000A5F3E /* popover-delete@2x.png in Resources */,
+				01BA32431C5CC086000A5F3E /* popover-clone.png in Resources */,
 				0169C4651C33ED5A00132FF6 /* popoverArrowLeft.png in Resources */,
 				25E7611F1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib in Resources */,
 				7FC900C81A0A01470051B941 /* animate-img-phone@2x.png in Resources */,
@@ -6995,6 +7030,7 @@
 				7F0087921ADFC15400764DDE /* up-arrow-25-30.png in Resources */,
 				7F31A7441AA4960300A6E7B1 /* move-last-phone@3x.png in Resources */,
 				25C90F461B3616B400D803DB /* bevel-on-phone@2x.png in Resources */,
+				01BA32451C5CC086000A5F3E /* popover-delete.png in Resources */,
 				7FC524DC1B6F6F3600C5D26D /* Minimize-Full-screen-phone@3x.png in Resources */,
 				25E364491B38DDE10039A8C5 /* wheel2.png in Resources */,
 				259EE14C1BDE081200C99784 /* commonL3.fsh in Resources */,
@@ -7252,6 +7288,7 @@
 				7F307CF71B58FDBF0065BBC1 /* like-phone@3x.png in Resources */,
 				01AAE29C1C43DA7B00B194E0 /* Mail@2x.png in Resources */,
 				7F307CF81B58FDBF0065BBC1 /* like.png in Resources */,
+				01BA32511C5CC292000A5F3E /* popover-skin@2x.png in Resources */,
 				01C2B79C1C46543200384370 /* color@2x.png in Resources */,
 				01F872821C3A42EF009AA31E /* My-objects-Light_IPhone.png in Resources */,
 				7F307CF91B58FDBF0065BBC1 /* like@2x.png in Resources */,
@@ -7412,6 +7449,7 @@
 				01ACD0E91C3D3AE20096AD14 /* Render-Preview-position_Right-Bottom@2x.png in Resources */,
 				01B395331C37AACE003955C6 /* Import-model_Pad@2x.png in Resources */,
 				01F8729F1C3A4790009AA31E /* Move_IPhone.png in Resources */,
+				01BA324D1C5CC292000A5F3E /* popover-clone@2x.png in Resources */,
 				01B395241C37AA3A003955C6 /* Back@2x.png in Resources */,
 				E20672581B049AA6006DD2F7 /* frames.png in Resources */,
 				E206725A1B049AA6006DD2F7 /* render_image-phone@3x.png in Resources */,
@@ -7429,6 +7467,7 @@
 				E20672641B049AA6006DD2F7 /* texts-phone.png in Resources */,
 				E20672671B049AA6006DD2F7 /* move-last-phone@2x.png in Resources */,
 				E20672681B049AA6006DD2F7 /* undo-img.png in Resources */,
+				01BA32481C5CC086000A5F3E /* popover-skin.png in Resources */,
 				01F8731E1C3A7500009AA31E /* PopUpViewControllerPhone.xib in Resources */,
 				E206726B1B049AA6006DD2F7 /* texts@2x.png in Resources */,
 				01F8731B1C3A7463009AA31E /* Login-Icon_IPhone@2x.png in Resources */,
@@ -7568,6 +7607,8 @@
 				01F872D91C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png in Resources */,
 				01B3951C1C37A8DD003955C6 /* View@2x.png in Resources */,
 				E20672F01B049AA6006DD2F7 /* GTMOAuth2ViewTouch.xib in Resources */,
+				01BA324F1C5CC292000A5F3E /* popover-delete@2x.png in Resources */,
+				01BA32441C5CC086000A5F3E /* popover-clone.png in Resources */,
 				0169C4661C33ED5A00132FF6 /* popoverArrowLeft.png in Resources */,
 				E20672F11B049AA6006DD2F7 /* rotate-img.png in Resources */,
 				E20672F21B049AA6006DD2F7 /* AutoRigHelp6.png in Resources */,
@@ -7715,6 +7756,7 @@
 				E20673601B049AA6006DD2F7 /* center-align-pad@2x.png in Resources */,
 				E20673611B049AA6006DD2F7 /* CrossForMain-pad@2x.png in Resources */,
 				E20673631B049AA6006DD2F7 /* picture-img-phone@3x.png in Resources */,
+				01BA32461C5CC086000A5F3E /* popover-delete.png in Resources */,
 				E20673641B049AA6006DD2F7 /* color.frag in Resources */,
 				E20673651B049AA6006DD2F7 /* picture-img-phone@2x.png in Resources */,
 				01B4D0211C292CD50091E19B /* EditorViewController.xib in Resources */,

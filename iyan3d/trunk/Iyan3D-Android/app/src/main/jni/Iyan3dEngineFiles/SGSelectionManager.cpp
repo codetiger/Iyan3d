@@ -21,14 +21,15 @@ SGSelectionManager::~SGSelectionManager()
     
 }
 
-void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrepared)
+void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelectEnabled, bool isDisplayPrepared)
 {
     if(!selectionScene || !smgr)
         return;
-    
-    selectionScene->renHelper->rttNodeJointSelection(touchPosition);
+
+   
+    selectionScene->renHelper->rttNodeJointSelection(touchPosition,isMultiSelectEnabled);
     if(selectionScene->shaderMGR->deviceType == METAL){
-        getNodeColorFromTouchTexture();
+        getNodeColorFromTouchTexture(isMultiSelectEnabled);
     }
     selectionScene->isRTTCompleted = true;
     selectionScene->updater->updateControlsOrientaion();
@@ -92,7 +93,7 @@ bool SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
 {
     if(!selectionScene || !smgr)
         return false;
-    
+ 
     int controlStartIndex = (selectionScene->controlType == MOVE) ? X_MOVE : (selectionScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (selectionScene->controlType == MOVE) ? Z_MOVE : (selectionScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     float xCoord = (touchPosition.x/SceneHelper::screenWidth) * selectionScene->touchTexture->width;
@@ -110,33 +111,34 @@ bool SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
     return false;
 }
 
-bool SGSelectionManager::getNodeColorFromTouchTexture(bool touchMove)
+bool SGSelectionManager::getNodeColorFromTouchTexture(bool isMultiSelected,bool touchMove)
 {
     if(!selectionScene || !smgr)
         return false;
 
     Vector2 touchPixel = selectionScene->nodeJointPickerPosition;
-    if(selectNodeOrJointInPixel(touchPixel, touchMove))
+    if(selectNodeOrJointInPixel(touchPixel,isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0),isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y),isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0),isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y),isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0),isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0),isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0), touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0),isMultiSelected, touchMove))
         return true;
-    return selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0), touchMove);
+    return selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0),isMultiSelected, touchMove);
 }
 
-bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove)
+bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove)
 {
+    
     if(!selectionScene || !smgr)
         return false;
 
@@ -145,15 +147,16 @@ bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel, bool touch
     
     SceneHelper::limitPixelCoordsWithinTextureRange(selectionScene->touchTexture->width,selectionScene->touchTexture->height,xCoord,yCoord);
     Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),selectionScene->touchTexture);
-    bool status = updateNodeSelectionFromColor(pixel, touchMove);
+    bool status = updateNodeSelectionFromColor(pixel, isMultiSelectEnabled,touchMove);
     if(status) {
         selectionScene->updater->reloadKeyFrameMap();
     }
     return status;
 }
 
-bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchMove)
+bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMultipleSelectionEnabled, bool touchMove)
 {
+    
     if(!selectionScene || !smgr)
         return false;
     
@@ -175,10 +178,12 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchM
         selectionScene->moveNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS;
     else {
         selectionScene->moveNodeId = NOT_EXISTS;
-        if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected)
+        if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected && isMultipleSelectionEnabled)
             return multipleSelections(nodeId);
-        else
+        else {
+            unselectObject(selectionScene->selectedNodeId);
             selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
+        }
     }
     if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && selectionScene->selectedNodeIds.size() <= 0) {
         if(!touchMove)
@@ -410,11 +415,11 @@ void SGSelectionManager::highlightJointSpheres()
     selectionScene->updater->updateControlsOrientaion(selectionScene);
 }
 
-void SGSelectionManager::selectObject(int objectId)
+void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled)
 {
     if(!selectionScene || !smgr)
         return;
-    if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != objectId) || selectionScene->selectedNodeIds.size() > 0) && !selectionScene->isJointSelected) {
+    if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != objectId) || selectionScene->selectedNodeIds.size() > 0) && !selectionScene->isJointSelected &&isMultiSelectionEnabled) {
         multipleSelections(objectId);
         return;
     } else

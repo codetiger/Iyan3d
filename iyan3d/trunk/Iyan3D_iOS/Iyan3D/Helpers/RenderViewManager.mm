@@ -24,7 +24,6 @@
 #define ASSET_IMAGE 9
 #define ASSET_TEXT_RIG 10
 #define ASSET_TEXT 11
-#define ASSET_VIDEO 12
 #define ASSET_ADDITIONAL_LIGHT 900
 #define ADD_OBJECT 100
 #define DELETE_OBJECT 200
@@ -221,12 +220,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
-//                    editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
-//                    editorScene->actionMan->storeAddOrRemoveAssetAction((vertexColor != Vector4(-1)) ? ACTION_VERTEX_COLOR_CHANGE : ACTION_TEXTURE_CHANGE, 0);
-//                    editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
-                }
               [self.delegate updateAssetListInScenes];
             }
             break;
@@ -254,11 +249,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             }
             break;
         }
-        case ASSET_VIDEO:
         case ASSET_IMAGE: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            NODE_TYPE nType = (type == ASSET_VIDEO) ? NODE_VIDEO : NODE_IMAGE;
-            SGNode* sgNode = editorScene->loader->loadNode(nType, 0,"",name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0,"",name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -293,7 +286,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
-            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
+            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,"",name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
@@ -357,7 +350,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     longpressRecogniser.minimumPressDuration = 1.0f;
     longpressRecogniser.allowableMovement = 100.0f;
     
-    
     if (![self.delegate isMetalSupportedDevice]) {
         [self.renderView addGestureRecognizer:panRecognizer];
         [self.renderView addGestureRecognizer:tapRecognizer];
@@ -372,7 +364,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void)tapGesture:(UITapGestureRecognizer*)rec
 {
-// TODO add missing
+    
     
 //    isTapped = true;
     CGPoint position;
@@ -386,10 +378,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         _checkTapSelection = true;
         _tapPosition = Vector2(position.x, position.y) * screenScale;
         editorScene->isRTTCompleted = true;
-//        [self setupEnableDisableControls];
         
-//        if (editorScene->actions.size() > 0 && editorScene->currentAction > 0)
-//            [self.undoButton setEnabled:YES];
     }
     if(editorScene->isPlaying){
         [self.delegate stopPlaying];
@@ -494,12 +483,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
         if (!_isPlaying && !_isPanned)
         {
-            if(editorScene->selectedNodeId==-1 && editorScene->selectedNodeIds.size() == 0)
-            {
-                [self.delegate presentPopOver:_longPresPosition];
-                _longPress=false;
-            }
-            
 
             if(editorScene->selectedNodeIds.size() > 0) {
                 if(editorScene->allNodesRemovable())
@@ -526,14 +509,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 -(void) showPopOver:(int) selectedNodeId{
     if(_longPress){
-        if(editorScene->selectedNodeId != NOT_SELECTED ){
-            if ((editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT))
-            {
-                [self.delegate presentPopOver:_longPresPosition];
-                _longPress=false;
-            }
         
-        }
+        [self.delegate showOptions:_longPresPosition];
         _longPress=false;
     }
 }

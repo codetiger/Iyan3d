@@ -24,13 +24,13 @@ public:
     SGSelectionManager(SceneManager* smgr, void* scene);
     ~SGSelectionManager();
         
-    void checkSelection(Vector2 touchPosition,bool isDisplayPrepared = true);
+    void checkSelection(Vector2 touchPosition, bool isMultiSelectEnabled, bool isDisplayPrepared = true);
     bool checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
     void postNodeJointSelection();
     bool getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
-    bool getNodeColorFromTouchTexture(bool touchMove = false);
-    bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
-    bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
+    bool getNodeColorFromTouchTexture(bool isMultiSelected ,bool touchMove = false);
+    bool selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove = false);
+    bool updateNodeSelectionFromColor(Vector3 pixel, bool isMultipleSelectionEnabled, bool touchMove = false);
     bool multipleSelections(int nodeId);
     void updateParentPosition();
     void unselectObjects();
@@ -41,7 +41,7 @@ public:
     void removeChildren(shared_ptr<Node> fromParent, bool resetKeys = false);
     void highlightSelectedNode(int nodeId = -1);
     void highlightJointSpheres();
-    void selectObject(int objectId);
+    void selectObject(int objectId ,bool isMultiSelectionEnabled);
     void unselectObject(int objectId);
     
     void checkSelectionForAutoRig(Vector2 touchPosition);
