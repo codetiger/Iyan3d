@@ -314,7 +314,7 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     Mat4 viewProj = projMat * viewMat;
     shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
     pNode->sortParticles(smgr->getActiveCamera()->getPosition());
-    pNode->updateParticles();
+    pNode->updatePostionArray();
     int instanceCount = pNode->getParticlesCount();
     float *posArray = new float[instanceCount * 4];
     float *colors = new float[instanceCount * 4];

@@ -46,7 +46,8 @@ public:
 
     void setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale);
     virtual void update();
-    void updateParticles();
+    void updateParticles(int frame);
+    void updatePostionArray();
     Vector4* getPositions();
     Vector4 getParticleProps();
     int getParticlesCount();

@@ -33,12 +33,16 @@ void SGSceneUpdater::setDataForFrame(int frame)
         return;
     
     bool lightChanged = false;
+    
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
         
         if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
             Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(1);
             nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
+        } else if (updatingScene->nodes[i]->getType() == NODE_PARTICLES && updatingScene->nodes[i]->props.isVisible) {
+            dynamic_pointer_cast<ParticleManager>(updatingScene->nodes[i]->node)->updateParticles(frame);
         }
+        
         Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, updatingScene->nodes[i]->positionKeys);
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame, updatingScene->nodes[i]->rotationKeys,true);
         Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frame, updatingScene->nodes[i]->scaleKeys);

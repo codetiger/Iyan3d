@@ -337,6 +337,9 @@ void RenderHelper::drawCameraPreview()
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
+        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
+            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
+
         if(!(renderingScene->nodes[i]->props.isVisible))
             renderingScene->nodes[i]->node->setVisible(false);
     }
