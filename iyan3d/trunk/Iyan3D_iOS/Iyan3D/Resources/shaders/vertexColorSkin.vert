@@ -9,6 +9,7 @@
 
 attribute vec3 vertPosition;
 attribute vec3 vertNormal;
+attribute vec2 texCoord1;
 attribute vec4 optionalData1;
 attribute vec4 optionalData2;
 attribute vec4 optionalData3;
