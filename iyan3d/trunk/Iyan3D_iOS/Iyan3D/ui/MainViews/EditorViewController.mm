@@ -1834,7 +1834,7 @@ BOOL missingAlertShown;
     NSMutableDictionary *videoDetail = [[NSMutableDictionary alloc] init];
     [videoDetail setObject:[NSNumber numberWithInt:ASSET_VIDEO] forKey:@"type"];
     [videoDetail setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
-    [videoDetail setObject:fileName forKey:@"AssetName"];
+    [videoDetail setObject:[NSString stringWithFormat:@"%@.MOV",fileName] forKey:@"AssetName"];
     [videoDetail setObject:[NSNumber numberWithFloat:resolution.x] forKey:@"Width"];
     [videoDetail setObject:[NSNumber numberWithFloat:resolution.y] forKey:@"Height"];
     [videoDetail setObject:[NSNumber numberWithBool:isTemp] forKey:@"isTempNode"];

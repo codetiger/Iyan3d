@@ -135,7 +135,7 @@
     cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
 
     if(_addBtn.tag == OBJ)
-        indexPathOfOBJ = indexPath.row;
+        indexPathOfOBJ = (int)indexPath.row;
     else
     {
         if(indexPath.row == 0){
@@ -175,7 +175,11 @@
     else
     {
         popover=[[UIPopoverController alloc]initWithContentViewController:_ipc];
-        [popover presentPopoverFromRect:self.importBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+        //[popover presentPopoverFromRect:self.importBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+        [popover presentPopoverFromRect:[sender bounds]
+                            inView:sender
+          permittedArrowDirections:UIPopoverArrowDirectionAny
+                          animated:YES];
     }
 }
 
