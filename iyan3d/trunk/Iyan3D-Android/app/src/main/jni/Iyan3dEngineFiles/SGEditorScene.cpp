@@ -129,6 +129,8 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     camPreviewScale = 1.0;
     previousDistance = Vector2(0.0, 0.0);
     actionObjectsSize = 0;
+    moveNodeId = NOT_SELECTED;
+    moveJointId = NOT_SELECTED;
 }
 
 void SGEditorScene::initTextures()

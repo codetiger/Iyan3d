@@ -47,9 +47,9 @@ shared_ptr<CameraNode> SceneHelper::initRenderCamera(SceneManager *smgr, float f
 
 Vector3 SceneHelper::planeFacingDirection(int controlType)
 {
-    if(controlType == X_MOVE || controlType == X_ROTATE)
+    if(controlType == X_MOVE || controlType == X_ROTATE || controlType == X_SCALE)
         return Vector3(0,1,0);
-    else if(controlType == Y_MOVE || controlType == Y_ROTATE)
+    else if(controlType == Y_MOVE || controlType == Y_ROTATE || controlType == Y_SCALE)
         return Vector3(0,0,1);
     else
         return Vector3(0,1,0);
@@ -57,9 +57,9 @@ Vector3 SceneHelper::planeFacingDirection(int controlType)
 
 Vector3 SceneHelper::controlDirection(int controlType)
 {
-    if(controlType == X_MOVE || controlType == X_ROTATE)
+    if(controlType == X_MOVE || controlType == X_ROTATE || controlType == X_SCALE)
         return Vector3(1,0,0);
-    else if(controlType == Y_MOVE || controlType == Y_ROTATE)
+    else if(controlType == Y_MOVE || controlType == Y_ROTATE || controlType == Y_SCALE)
         return Vector3(0,1,0);
     else
         return Vector3(0,0,1);
@@ -100,8 +100,10 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         
         sceneControls.push_back(sgNode);
         sgNode->node->setID(CONTROLS_START_ID + (int)sceneControls.size() - 1);
-        if(i == X_MOVE || i == X_ROTATE) // flipped control meshes
-            sgNode->node->setRotationInDegrees(Vector3(0.0,180.0,0.0));
+//        if(i == X_MOVE || i == X_ROTATE) // flipped control meshes
+//            sgNode->node->setRotationInDegrees(Vector3(0.0,180.0,0.0));
+        if(i == Y_ROTATE)
+            sgNode->node->setRotationInDegrees(Vector3(180.0, 1800.0, 0.0));
     }
     
     return sceneControls;

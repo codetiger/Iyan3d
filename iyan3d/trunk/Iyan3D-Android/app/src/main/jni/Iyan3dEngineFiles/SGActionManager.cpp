@@ -110,6 +110,9 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
             }
             break;
         }
+        case SCALE: {
+            break;
+        }
         default:
             break;
     }
@@ -118,20 +121,21 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
     return success;
 }
 
-void SGActionManager::moveJoint(Vector3 outputValue)
+void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
 {
     
     SGNode* selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     SGJoint * selectedJoint = actionScene->selectedJoint;
     
-    Vector3 target = selectedJoint->jointNode->getAbsolutePosition() + outputValue;
+    Vector3 target = (touchMove) ? outputValue : selectedJoint->jointNode->getAbsolutePosition() + outputValue;
     if((selectedNode->joints.size() == HUMAN_JOINTS_SIZE) && isIKJoint(actionScene->selectedJointId)){
         if(actionScene->selectedJointId <= HIP){
             shared_ptr<AnimatedMeshNode> rigNode = dynamic_pointer_cast<AnimatedMeshNode>(selectedNode->node);
             if(rigNode) {
-                selectedNode->setPosition(rigNode->getPosition() + outputValue, actionScene->currentFrame);
-                selectedNode->setPositionOnNode(rigNode->getPosition() + outputValue);
-                rigNode->setPosition(rigNode->getPosition() + outputValue);
+                Vector3 newPosition = (touchMove) ? outputValue : rigNode->getPosition() + outputValue;
+                selectedNode->setPosition(newPosition, actionScene->currentFrame);
+                selectedNode->setPositionOnNode(newPosition);
+                rigNode->setPosition(newPosition);
                 rigNode->updateAbsoluteTransformation();
                 for (actionScene->ikJointsPositoinMapItr = actionScene->ikJointsPositionMap.begin(); actionScene->ikJointsPositoinMapItr != actionScene->ikJointsPositionMap.end(); actionScene->ikJointsPositoinMapItr++){
                     int jointId = ((*actionScene->ikJointsPositoinMapItr).first);

@@ -860,6 +860,14 @@
 		25CACF6A1B27D4DD0027F48C /* FontCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25CACF641B27C23C0027F48C /* FontCellView.xib */; };
 		25CACF6B1B27D4DD0027F48C /* FontCellViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25CACF661B27C2500027F48C /* FontCellViewPhone.xib */; };
 		25CACF6C1B27D5000027F48C /* FontCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 25CACF621B27C20F0027F48C /* FontCellView.m */; };
+		25D671931C46353100BE685D /* controls1.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671921C46353100BE685D /* controls1.sgm */; };
+		25D671941C46353100BE685D /* controls1.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671921C46353100BE685D /* controls1.sgm */; };
+		25D671981C46930900BE685D /* controls7.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671951C46930900BE685D /* controls7.sgm */; };
+		25D671991C46930900BE685D /* controls7.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671951C46930900BE685D /* controls7.sgm */; };
+		25D6719A1C46930900BE685D /* controls8.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671961C46930900BE685D /* controls8.sgm */; };
+		25D6719B1C46930900BE685D /* controls8.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671961C46930900BE685D /* controls8.sgm */; };
+		25D6719C1C46930900BE685D /* controls9.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671971C46930900BE685D /* controls9.sgm */; };
+		25D6719D1C46930900BE685D /* controls9.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671971C46930900BE685D /* controls9.sgm */; };
 		25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
 		25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
 		25E364491B38DDE10039A8C5 /* wheel2.png in Resources */ = {isa = PBXBuildFile; fileRef = 25E364481B38DDE10039A8C5 /* wheel2.png */; };
@@ -1808,7 +1816,6 @@
 		E20673361B049AA6006DD2F7 /* view-img-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC900C31A0A01470051B941 /* view-img-phone.png */; };
 		E20673381B049AA6006DD2F7 /* first-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F31A7161AA4960300A6E7B1 /* first-phone@3x.png */; };
 		E206733A1B049AA6006DD2F7 /* ipadband.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F2104DF1A7A0F12000E1C26 /* ipadband.png */; };
-		E206733B1B049AA6006DD2F7 /* controls1.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AA196BDC650025D442 /* controls1.sgm */; };
 		E206733C1B049AA6006DD2F7 /* justify.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F22BB541AC54C96006B44C6 /* justify.png */; };
 		E206733D1B049AA6006DD2F7 /* ObjCellViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249763E196BE0190025D442 /* ObjCellViewPhone.xib */; };
 		E206733E1B049AA6006DD2F7 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -2082,7 +2089,6 @@
 		E24973FA196BD80F0025D442 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E24973F5196BD80F0025D442 /* Utility.m */; };
 		E24974BE196BDC650025D442 /* BoneMesh.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974A8196BDC650025D442 /* BoneMesh.sgm */; };
 		E24974BF196BDC650025D442 /* camera.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974A9196BDC650025D442 /* camera.sgm */; };
-		E24974C0196BDC650025D442 /* controls1.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AA196BDC650025D442 /* controls1.sgm */; };
 		E24974C1196BDC650025D442 /* controls2.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AB196BDC650025D442 /* controls2.sgm */; };
 		E24974C2196BDC650025D442 /* controls3.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AC196BDC650025D442 /* controls3.sgm */; };
 		E24974C3196BDC650025D442 /* controls4.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AD196BDC650025D442 /* controls4.sgm */; };
@@ -2876,6 +2882,10 @@
 		25CACF621B27C20F0027F48C /* FontCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FontCellView.m; path = "ui/Popover Views/FontCellView.m"; sourceTree = "<group>"; };
 		25CACF641B27C23C0027F48C /* FontCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FontCellView.xib; path = "ui/Popover Views/FontCellView.xib"; sourceTree = "<group>"; };
 		25CACF661B27C2500027F48C /* FontCellViewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FontCellViewPhone.xib; path = "ui/Popover Views/FontCellViewPhone.xib"; sourceTree = "<group>"; };
+		25D671921C46353100BE685D /* controls1.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls1.sgm; path = Resources/mesh/controls1.sgm; sourceTree = "<group>"; };
+		25D671951C46930900BE685D /* controls7.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls7.sgm; path = Resources/mesh/controls7.sgm; sourceTree = "<group>"; };
+		25D671961C46930900BE685D /* controls8.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls8.sgm; path = Resources/mesh/controls8.sgm; sourceTree = "<group>"; };
+		25D671971C46930900BE685D /* controls9.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls9.sgm; path = Resources/mesh/controls9.sgm; sourceTree = "<group>"; };
 		25DAD21C1C2D48F00050BC88 /* SGSelectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSelectionManager.h; sourceTree = "<group>"; };
 		25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSelectionManager.cpp; sourceTree = "<group>"; };
 		25E364481B38DDE10039A8C5 /* wheel2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wheel2.png; path = ../wheel2.png; sourceTree = "<group>"; };
@@ -3647,7 +3657,6 @@
 		E24973F5196BD80F0025D442 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Core/Utility.m; sourceTree = "<group>"; };
 		E24974A8196BDC650025D442 /* BoneMesh.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = BoneMesh.sgm; path = Resources/mesh/BoneMesh.sgm; sourceTree = "<group>"; };
 		E24974A9196BDC650025D442 /* camera.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = camera.sgm; path = Resources/mesh/camera.sgm; sourceTree = "<group>"; };
-		E24974AA196BDC650025D442 /* controls1.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls1.sgm; path = Resources/mesh/controls1.sgm; sourceTree = "<group>"; };
 		E24974AB196BDC650025D442 /* controls2.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls2.sgm; path = Resources/mesh/controls2.sgm; sourceTree = "<group>"; };
 		E24974AC196BDC650025D442 /* controls3.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls3.sgm; path = Resources/mesh/controls3.sgm; sourceTree = "<group>"; };
 		E24974AD196BDC650025D442 /* controls4.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls4.sgm; path = Resources/mesh/controls4.sgm; sourceTree = "<group>"; };
@@ -5583,15 +5592,18 @@
 		C844F2A018894D750079B6F4 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				25D671921C46353100BE685D /* controls1.sgm */,
 				E24974A8196BDC650025D442 /* BoneMesh.sgm */,
 				E24974A9196BDC650025D442 /* camera.sgm */,
-				E24974AA196BDC650025D442 /* controls1.sgm */,
 				E24974AB196BDC650025D442 /* controls2.sgm */,
 				E24974AC196BDC650025D442 /* controls3.sgm */,
 				E2C4DB591A9F5FFC00F0AD12 /* light.sgm */,
 				E24974AD196BDC650025D442 /* controls4.sgm */,
 				E24974AE196BDC650025D442 /* controls5.sgm */,
 				E24974AF196BDC650025D442 /* controls6.sgm */,
+				25D671951C46930900BE685D /* controls7.sgm */,
+				25D671961C46930900BE685D /* controls8.sgm */,
+				25D671971C46930900BE685D /* controls9.sgm */,
 				E24974B3196BDC650025D442 /* Envelop.sgr */,
 				E24974B4196BDC650025D442 /* sphere.sgm */,
 			);
@@ -6313,6 +6325,7 @@
 				7FC900FA1A0A01470051B941 /* undo-img-phone.png in Resources */,
 				3D04EAEB1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */,
 				256ED8F11B1FEDED008ADEF8 /* Walkway Bold.ttf in Resources */,
+				25D6719A1C46930900BE685D /* controls8.sgm in Resources */,
 				7FC901221A0A07860051B941 /* feedback-img@2x.png in Resources */,
 				01B4D0591C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
 				7FC900D91A0A01470051B941 /* model-phone@2x.png in Resources */,
@@ -6675,7 +6688,6 @@
 				25C90F471B3616B400D803DB /* bevel-on.png in Resources */,
 				7F31A7391AA4960300A6E7B1 /* first-phone@3x.png in Resources */,
 				7F2104E31A7A0F13000E1C26 /* ipadband.png in Resources */,
-				E24974C0196BDC650025D442 /* controls1.sgm in Resources */,
 				7F22BB581AC54C96006B44C6 /* justify.png in Resources */,
 				256ED8E71B1FEDED008ADEF8 /* Hemi Head bd.ttf in Resources */,
 				01F873121C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
@@ -6739,6 +6751,7 @@
 				3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				7F0C02CC1A931B0300E2E09D /* cancelButton.png in Resources */,
 				7FC900CC1A0A01470051B941 /* clone-img-phone.png in Resources */,
+				25D6719C1C46930900BE685D /* controls9.sgm in Resources */,
 				0169C47F1C33ED5A00132FF6 /* popoverBg@2x.png in Resources */,
 				01F8730A1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
 				25C90F4A1B3616B400D803DB /* bevel-phone@2x.png in Resources */,
@@ -6861,6 +6874,7 @@
 				0169C45D1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				7FC5276A1B6F96FF00C5D26D /* Rate@2x.png in Resources */,
 				7FC9015B1A0A54850051B941 /* CrossForMain-pad.png in Resources */,
+				25D671931C46353100BE685D /* controls1.sgm in Resources */,
 				7FC900DE1A0A01470051B941 /* move-last-phone.png in Resources */,
 				62FA5F541990E9D4003B0893 /* new-img.png in Resources */,
 				6231CEE61B1484AE00DCD585 /* shader.fsh in Resources */,
@@ -6904,6 +6918,7 @@
 				01F872751C3A42EF009AA31E /* Import-text_IPhone.png in Resources */,
 				7F31A73D1AA4960300A6E7B1 /* iphoneband@3x.png in Resources */,
 				7F2104E51A7A0F13000E1C26 /* iphoneband.png in Resources */,
+				25D671981C46930900BE685D /* controls7.sgm in Resources */,
 				7FC900CD1A0A01470051B941 /* clone-img-phone@2x.png in Resources */,
 				7F1D56A31A0CF9F70060D4DD /* MenuReverse-phone.png in Resources */,
 				3DBC85E81C2BCBDC00B512AB /* Delete@2x.png in Resources */,
@@ -7006,6 +7021,7 @@
 				7FC524EF1B6F8C0A00C5D26D /* Full-screen.png in Resources */,
 				7FC524F01B6F8C0A00C5D26D /* Full-screen@2x.png in Resources */,
 				C8AA46F61C227D1000C4AB53 /* SceneSelectionControllerNew.xib in Resources */,
+				25D6719B1C46930900BE685D /* controls8.sgm in Resources */,
 				7FC524F11B6F8C0A00C5D26D /* Minimize-Full-screen-phone.png in Resources */,
 				7FC524F21B6F8C0A00C5D26D /* Minimize-Full-screen-phone@2x.png in Resources */,
 				7FC524F31B6F8C0A00C5D26D /* Minimize-Full-screen-phone@3x.png in Resources */,
@@ -7431,6 +7447,7 @@
 				256F6B921BF6246300154622 /* json_internalarray.inl in Resources */,
 				259EE14F1BDE081200C99784 /* commonL4.fsh in Resources */,
 				256ED8E81B1FEDED008ADEF8 /* Hemi Head bd.ttf in Resources */,
+				25D6719D1C46930900BE685D /* controls9.sgm in Resources */,
 				0169C4801C33ED5A00132FF6 /* popoverBg@2x.png in Resources */,
 				01F8730B1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
 				E20673321B049AA6006DD2F7 /* Scene-topviewBg-phone.png in Resources */,
@@ -7440,7 +7457,6 @@
 				01B394FB1C37A337003955C6 /* Export-video_Pad.png in Resources */,
 				E20673381B049AA6006DD2F7 /* first-phone@3x.png in Resources */,
 				E206733A1B049AA6006DD2F7 /* ipadband.png in Resources */,
-				E206733B1B049AA6006DD2F7 /* controls1.sgm in Resources */,
 				01F872E11C3A6C4E009AA31E /* Export-video_IPhone@2x.png in Resources */,
 				01F8733D1C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png in Resources */,
 				01F873151C3A6C4E009AA31E /* View_IPhone@2x.png in Resources */,
@@ -7554,6 +7570,7 @@
 				0169C45E1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				256F6B941BF6246300154622 /* json_internalmap.inl in Resources */,
 				E20673B41B049AA6006DD2F7 /* youtubeUpload.png in Resources */,
+				25D671941C46353100BE685D /* controls1.sgm in Resources */,
 				E20673B51B049AA6006DD2F7 /* first-phone@2x.png in Resources */,
 				E20673B61B049AA6006DD2F7 /* delete-img-phone@3x.png in Resources */,
 				E20673B71B049AA6006DD2F7 /* new-img-phone.png in Resources */,
@@ -7597,6 +7614,7 @@
 				01F872761C3A42EF009AA31E /* Import-text_IPhone.png in Resources */,
 				E20673D51B049AA6006DD2F7 /* last-phone.png in Resources */,
 				E20673D71B049AA6006DD2F7 /* InfoPlist.strings in Resources */,
+				25D671991C46930900BE685D /* controls7.sgm in Resources */,
 				E20673D81B049AA6006DD2F7 /* add-frame-phone@2x.png in Resources */,
 				E20673D91B049AA6006DD2F7 /* AutoRigHelp2.png in Resources */,
 				E20673DA1B049AA6006DD2F7 /* scale-img.png in Resources */,

@@ -278,12 +278,16 @@ enum Controlls
 	Z_MOVE,
 	X_ROTATE,
 	Y_ROTATE,
-	Z_ROTATE
+	Z_ROTATE,
+    X_SCALE,
+    Y_SCALE,
+    Z_SCALE
 };
 enum CONTROL_TYPE
 {
     MOVE = 0,
-	ROTATE
+	ROTATE,
+    SCALE
 };
 enum LoggingType
 {

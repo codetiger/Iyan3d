@@ -156,8 +156,8 @@ void RenderHelper::renderControls()
     
     setControlsVisibility(renderingScene);
     smgr->clearDepthBuffer();
-    int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
-    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
+    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE ;
     
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
         
@@ -203,6 +203,9 @@ void RenderHelper::setControlsVisibility(bool isVisible)
         }else if(renderingScene->controlType == ROTATE){
             controlStartToVisible = X_ROTATE;
             controlEndToVisible = Z_ROTATE;
+        } else if(renderingScene->controlType == SCALE){
+            controlStartToVisible = X_SCALE;
+            controlEndToVisible = Z_SCALE;
         } else {
             for (int i = 0; i < renderingScene->sceneControls.size(); i++) {
                 renderingScene->sceneControls[i]->node->setVisible(false);
@@ -210,8 +213,10 @@ void RenderHelper::setControlsVisibility(bool isVisible)
             return;
         }
     }
-    for(int i = X_MOVE;i <= Z_ROTATE;i++){
+    for(int i = X_MOVE;i <= Z_SCALE;i++){
         isVisible = (i >= controlStartToVisible && i <= controlEndToVisible) ? true:false;
+        if(renderingScene->isControlSelected)
+            isVisible = (i == renderingScene->selectedControlId) ? true : false;
         renderingScene->sceneControls[i]->node->setVisible(isVisible);
     }
 }
@@ -352,7 +357,7 @@ void RenderHelper::setRenderCameraOrientation()
 #endif
 }
 
-void RenderHelper::rttNodeJointSelection(Vector2 touchPosition)
+void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
 {
     if(!renderingScene || !smgr)
         return;
@@ -374,11 +379,13 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition)
     vector<float> transparency;
     vector<std::string> previousMaterialNames;
     vector<bool> nodesVisibility;
+    vector<bool> nodeSelection;
     for(int i = 0; i < renderingScene->nodes.size(); i++){
         vertexColors.push_back(renderingScene->nodes[i]->props.vertexColor);
         previousMaterialNames.push_back(renderingScene->nodes[i]->node->material->name);
         transparency.push_back(renderingScene->nodes[i]->props.transparency);
         nodesVisibility.push_back(renderingScene->nodes[i]->props.isVisible);
+        nodeSelection.push_back(renderingScene->nodes[i]->props.isSelected);
         renderingScene->nodes[i]->props.transparency = 1.0;
         renderingScene->nodes[i]->props.isSelected = false;
         renderingScene->nodes[i]->props.isVisible = renderingScene->nodes[i]->isTempNode ? false : true;
@@ -393,7 +400,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition)
     }
     smgr->Render();
     // Draw Joints
-    if(selectedSGNode && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT))
+    if((selectedSGNode && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT) && !touchMove) || renderingScene->isJointSelected)
         drawJointsSpheresForRTT(true);
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
@@ -401,11 +408,12 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition)
         renderingScene->nodes[i]->props.transparency = transparency[i];
         renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByName(previousMaterialNames[i]));
         renderingScene->nodes[i]->props.isVisible = nodesVisibility[i];
+        renderingScene->nodes[i]->props.isSelected = nodeSelection[i];
     }
     previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();
     
     if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        renderingScene->selectMan->getNodeColorFromTouchTexture();
+        renderingScene->selectMan->getNodeColorFromTouchTexture(touchMove);
     smgr->setRenderTarget(NULL,false,false);
     if(renderingScene->shaderMGR->deviceType == METAL)
         smgr->EndDisplay();
@@ -721,11 +729,11 @@ void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
         if(!displayPrepared)
             return;
     }
-    int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
-    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
+    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     renderingScene->rotationCircle->node->setVisible(false);
     smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
-    renderingScene->updater->updateControlsOrientaion(true);
+    renderingScene->updater->updateControlsOrientaion(false); // TODO
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
         renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         renderingScene->sceneControls[i]->props.vertexColor = Vector3(i/255.0,1.0,1.0);

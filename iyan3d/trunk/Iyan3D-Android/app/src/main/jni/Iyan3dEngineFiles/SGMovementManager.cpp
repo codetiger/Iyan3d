@@ -35,7 +35,7 @@ void SGMovementManager::touchBegan(Vector2 curTouchPos)
 
 void SGMovementManager::swipeProgress(float angleX , float angleY)
 {
-    if(!moveScene || !smgr)
+    if(!moveScene || !smgr || moveScene->moveNodeId != NOT_EXISTS || moveScene->moveJointId != NOT_EXISTS)
         return;
     if(moveScene->isControlSelected || swipeTiming < 5) {
         swipeTiming++;
@@ -101,8 +101,14 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     moveScene->renHelper->isMovingPreview = false;
     moveScene->setLightingOn();
     swipeTiming = 0;
+    moveScene->moveNodeId = NOT_EXISTS;
+    moveScene->moveJointId = NOT_EXISTS;
+    
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
+        if(moveScene->controlType == SCALE && moveScene->selectedNodeId != NOT_SELECTED)
+            moveScene->actionMan->changeObjectScale(moveScene->nodes[moveScene->selectedNodeId]->getNodeScale(), true);
+
         Logger::log(INFO , "SGScene diff ", "touch end");
         moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
@@ -185,9 +191,65 @@ void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float
         Vector3 outputValue;
         bool isMoved = calculateControlMovements(curTouchPos,prevTouchPoints[0] ,outputValue);
         prevTouchPoints[0] = curTouchPos;
-        isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue);
+        
+        if(moveScene->controlType == SCALE) {
+            Vector3 currentScale = moveScene->getSelectedNodeScale();
+            if(currentScale.x <= 0.01 && moveScene->selectedControlId == X_SCALE) outputValue.x = 0.01;
+            if(currentScale.y <= 0.01 && moveScene->selectedControlId == Y_SCALE) outputValue.y = 0.01;
+            if(currentScale.z <= 0.01 && moveScene->selectedControlId == Z_SCALE) outputValue.z = 0.01;
+            moveScene->actionMan->changeObjectScale(moveScene->getSelectedNodeScale() + outputValue, false);
+        }
+        else
+            isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue);
+        
+    } else if (moveScene->moveNodeId != NOT_EXISTS && moveScene->controlType == MOVE) {
+        moveObjectInPlane(curTouchPos, prevTouchPoints[0], true);
     }
+    
     return;
+}
+
+bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoint, bool isSGJoint)
+{
+    if(!moveScene || !smgr)
+        return false;
+    
+    Vector3 center;
+    if(moveScene->moveJointId != NOT_EXISTS)
+        center = moveScene->selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
+    else if(moveScene->moveNodeId != NOT_EXISTS)
+        center = moveScene->selectedNode->node->getAbsoluteTransformation().getTranslation();
+    else
+        return false;
+
+    Vector3 cameraDir;// = Vector3(1.0, 1.0, 1.0);
+//    Mat4 rotMat;
+//    rotMat.setRotationRadians(moveScene->viewCamera->getRotationInRadians());
+//    rotMat.rotateVect(cameraDir);
+    cameraDir = moveScene->viewCamera->getTarget() - moveScene->viewCamera->getPosition();
+    cameraDir.normalize();
+    moveScene->controlsPlane->setPositionAndNormal(center, cameraDir);
+    
+    Vector2 p1;
+    p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
+    Vector2 p2;
+    p2.x = curPoint.x;	p2.y = curPoint.y;
+    
+    Vector3 oldPos;
+    Vector3 newPos;
+    getOldAndNewPosInWorld(prevTouchPoint, curPoint, oldPos, newPos);
+    SGNode* selectedNode;
+    if(moveScene->moveNodeId != NOT_EXISTS && moveScene->selectedNodeId != NOT_EXISTS)
+        selectedNode = moveScene->nodes[moveScene->selectedNodeId];
+    
+    if(moveScene->moveJointId != NOT_EXISTS) {
+        moveScene->actionMan->moveJoint(newPos, true);
+    }
+    else if(moveScene->moveNodeId != NOT_EXISTS) {
+        selectedNode->setPosition(newPos , moveScene->currentFrame);
+        selectedNode->setPositionOnNode(newPos);
+    }
+    
 }
 
 bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,Vector3 &outputValue,bool isSGJoint)
@@ -205,7 +267,7 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
     
     moveScene->controlsPlane->setPositionAndNormal(center, (moveScene->selectedControlId == Z_ROTATE) ? Vector3(1, 0, 0) :  SceneHelper::planeFacingDirection(moveScene->selectedControlId % 3));
 
-    if(moveScene->controlType == MOVE){ // position and scale calculations are same
+    if(moveScene->controlType == MOVE || moveScene->controlType == SCALE){ // position and scale calculations are same
         
         Vector2 p1;
         p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
@@ -220,10 +282,9 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         if(delta.getLength() > 1.0f) {
             delta = delta.normalize() * 1.0f;
         }
-        
-        outputValue.x = ((moveScene->selectedControlId == X_MOVE) ? 1.0 : 0.0) * delta.x;
-        outputValue.y = ((moveScene->selectedControlId == Y_MOVE) ? 1.0 : 0.0) * delta.y;
-        outputValue.z = ((moveScene->selectedControlId == Z_MOVE) ? 1.0 : 0.0) * delta.z;
+        outputValue.x = ((moveScene->selectedControlId == X_MOVE || moveScene->selectedControlId == X_SCALE) ? 1.0 : 0.0) * delta.x;
+        outputValue.y = ((moveScene->selectedControlId == Y_MOVE || moveScene->selectedControlId == Y_SCALE) ? 1.0 : 0.0) * delta.y;
+        outputValue.z = ((moveScene->selectedControlId == Z_MOVE || moveScene->selectedControlId == Z_SCALE) ? 1.0 : 0.0) * delta.z;
         return true;
     }
     else if(moveScene->controlType == ROTATE){
@@ -325,6 +386,8 @@ void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,fl
                     moveScene->actionMan->changeSkeletonRotation(outputValue);
                     moveScene->actionMan->changeSGRRotation(outputValue);
                 }
+                break;
+            case SCALE:
                 break;
             default:
                 break;

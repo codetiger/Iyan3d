@@ -646,7 +646,7 @@ void SGScene::updateControlsOrientaion(bool forRTT)
             break;
             case 1:
                 sceneControls[i]->node->setPosition(Vector3(nodePos) + Vector3(0,ctrlDistanceFromNode,0));
-                sceneControls[i]->node->setRotationInDegrees(Vector3(0.0));
+                sceneControls[i]->node->setRotationInDegrees(Vector3(0.0, (i == Y_ROTATE) ? 180.0 : 0.0, 0.0));
             break;
             case 2:
                 sceneControls[i]->node->setPosition(Vector3(nodePos) + Vector3(0,0,ctrlDistanceFromNode));

@@ -64,6 +64,7 @@ public:
     bool freezeRendering , isPlaying;
     bool isNodeSelected,isJointSelected,isControlSelected;
     int selectedJointId,selectedNodeId,selectedControlId,controlType;
+    int moveNodeId, moveJointId;
     int totalFrames, cameraResolutionType;
     int currentFrame, previousFrame;
     int actionObjectsSize;

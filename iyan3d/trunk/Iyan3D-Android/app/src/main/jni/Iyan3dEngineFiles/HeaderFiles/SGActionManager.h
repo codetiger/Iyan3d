@@ -24,7 +24,6 @@ private:
 
     MIRROR_SWITCH_STATE mirrorSwitchState;
     
-    void moveJoint(Vector3 outputValue);
     void rotateJoint(Vector3 outputValue);
     void StoreDeleteObjectKeys(int nodeIndex);
     int getObjectIndex(int actionIndex);
@@ -48,6 +47,7 @@ public:
     /* Move/Rotate node/joint actions */
     
     bool changeObjectOrientation(Vector3 outputValue);
+    void moveJoint(Vector3 outputValue, bool touchMove = false);
     bool isIKJoint(int jointId);
     void storeActionKeys(bool finished);
     

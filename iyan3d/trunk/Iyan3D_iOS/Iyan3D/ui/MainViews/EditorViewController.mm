@@ -855,8 +855,14 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)scaleBtnAction:(id)sender
-{    
+{
     if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
+        
+        editorScene->controlType = SCALE;
+        editorScene->updater->updateControlsOrientaion();
+
+        /*
+        
         editorScene->renHelper->setControlsVisibility(false);
         Vector3 currentScale = editorScene->getSelectedNodeScale();
         _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
@@ -872,6 +878,7 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:NO];
+         */
     }
 }
 

@@ -144,8 +144,8 @@ void SGSceneUpdater::updateControlsMaterial()
     updatingScene->renHelper->setControlsVisibility();
     if(!updatingScene->isControlSelected)
         return;
-    int controlStartToVisible = (updatingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
-    int controlEndToVisible = (updatingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    int controlStartToVisible = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
+    int controlEndToVisible = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     for(int i = controlStartToVisible;i <= controlEndToVisible;i++){
         if(i == updatingScene->selectedControlId)
             updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -167,8 +167,8 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     
     if(!isNodeSelected)
         return;
-    int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
-    int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
+    int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     Vector3 nodePos;
     if(isJointSelected && selectedJoint)
         nodePos = selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
@@ -194,11 +194,11 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
                 break;
             case 1:
                 currentControl->node->setPosition(Vector3(nodePos) + Vector3(0,ctrlDistanceFromNode,0));
-                currentControl->node->setRotationInDegrees(Vector3(0.0));
+                currentControl->node->setRotationInDegrees(Vector3(0.0, 0.0, (i == Y_ROTATE) ? 180.0 : 0.0));
                 break;
             case 2:
                 currentControl->node->setPosition(Vector3(nodePos) + Vector3(0,0,ctrlDistanceFromNode));
-                currentControl->node->setRotationInDegrees(Vector3(0.0));
+                currentControl->node->setRotationInDegrees(Vector3(0.0, (i == Z_ROTATE) ? 90.0 : 0.0, (i == Z_ROTATE) ? -90.0 : 0.0));
                 break;
         }
         

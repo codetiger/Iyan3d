@@ -9,7 +9,7 @@
 #ifndef SceneHelper_h
 #define SceneHelper_h
 
-#define TOTAL_CONTROLS 6
+#define TOTAL_CONTROLS 9
 
 #include "SGNode.h"
 #include "CameraViewHelper.h"

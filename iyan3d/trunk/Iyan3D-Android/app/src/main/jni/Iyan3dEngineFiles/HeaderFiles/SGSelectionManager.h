@@ -23,9 +23,9 @@ public:
     void checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
     void postNodeJointSelection();
     void getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
-    void getNodeColorFromTouchTexture();
-    bool selectNodeOrJointInPixel(Vector2 touchPixel);
-    bool updateNodeSelectionFromColor(Vector3 pixel);
+    void getNodeColorFromTouchTexture(bool touchMove = false);
+    bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
+    bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
     void highlightSelectedNode();
     void highlightJointSpheres();
     void selectObject(int objectId);

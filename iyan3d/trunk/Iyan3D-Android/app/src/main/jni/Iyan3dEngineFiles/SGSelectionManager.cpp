@@ -41,6 +41,12 @@ void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
     if(!selectionScene || !smgr || !selectionScene->isNodeSelected)
         return;
 
+    selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
+    if(selectionScene->shaderMGR->deviceType == METAL){
+        selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
+        getNodeColorFromTouchTexture(true);
+    }
+    
     selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
     selectionScene->updater->updateControlsOrientaion();
     
@@ -80,8 +86,8 @@ void SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
     if(!selectionScene || !smgr)
         return;
     
-    int controlStartIndex = (selectionScene->controlType == MOVE) ? X_MOVE : X_ROTATE;
-    int controlEndIndex = (selectionScene->controlType == MOVE) ? Z_MOVE : Z_ROTATE;
+    int controlStartIndex = (selectionScene->controlType == MOVE) ? X_MOVE : (selectionScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
+    int controlEndIndex = (selectionScene->controlType == MOVE) ? Z_MOVE : (selectionScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     float xCoord = (touchPosition.x/SceneHelper::screenWidth) * selectionScene->touchTexture->width;
     float yCoord = (touchPosition.y/SceneHelper::screenHeight) * selectionScene->touchTexture->height;
     SceneHelper::limitPixelCoordsWithinTextureRange(selectionScene->touchTexture->width, selectionScene->touchTexture->height,xCoord,yCoord);
@@ -95,32 +101,32 @@ void SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
     }
 }
 
-void SGSelectionManager::getNodeColorFromTouchTexture()
+void SGSelectionManager::getNodeColorFromTouchTexture(bool touchMove)
 {
     if(!selectionScene || !smgr)
         return;
 
     Vector2 touchPixel = selectionScene->nodeJointPickerPosition;
-    if(selectNodeOrJointInPixel(touchPixel))
+    if(selectNodeOrJointInPixel(touchPixel, touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0), touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y), touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0), touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y), touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0), touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0), touchMove))
         return;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0)))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0), touchMove))
         return;
-    selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0));
+    selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0), touchMove);
 }
 
-bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel)
+bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove)
 {
     if(!selectionScene || !smgr)
         return false;
@@ -130,41 +136,58 @@ bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel)
     
     SceneHelper::limitPixelCoordsWithinTextureRange(selectionScene->touchTexture->width,selectionScene->touchTexture->height,xCoord,yCoord);
     Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),selectionScene->touchTexture);
-    bool status = updateNodeSelectionFromColor(pixel);
+    bool status = updateNodeSelectionFromColor(pixel, touchMove);
     if(status)
         selectionScene->updater->reloadKeyFrameMap();
     return status;
 }
 
-bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel)
+bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchMove)
 {
     if(!selectionScene || !smgr)
         return false;
 
+    if(!touchMove) {
     int prevSelectedNodeId = selectionScene->selectedNodeId;
     unselectObject(prevSelectedNodeId);
+    }
     
     int nodeId = (int) pixel.x,jointId = pixel.y;
     if(nodeId != 255 && nodeId >= selectionScene->nodes.size()){
         Logger::log(ERROR, "SganimationSceneRTT","Wrong Color from RTT texture colorx:" + to_string(nodeId));
         return false;
     }
+    if(touchMove)
+        selectionScene->moveNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS;
+    else {
+        selectionScene->moveNodeId = NOT_EXISTS;
+        selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
+    }
     
-    selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
-    if(selectionScene->selectedNodeId != NOT_EXISTS){
-        highlightSelectedNode();
+    if(selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS)){
+        
+        if(!touchMove)
+            highlightSelectedNode();
         if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT){
-            selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId != 255) ? jointId : NOT_EXISTS) != NOT_EXISTS ? true:false;
-            if(selectionScene->isJointSelected)
+            if(touchMove)
+                selectionScene->moveJointId = (jointId != 255) ? jointId : NOT_EXISTS;
+            else {
+                selectionScene->moveJointId = NOT_EXISTS;
+                selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId != 255) ? jointId : NOT_EXISTS) != NOT_EXISTS ? true:false;
+            }
+            if(selectionScene->isJointSelected && !touchMove) {
                 selectionScene->renHelper->displayJointsBasedOnSelection();
+            }
         }
     }
-    if(selectionScene->isNodeSelected || selectionScene->isJointSelected) {
+    if((selectionScene->isNodeSelected || selectionScene->isJointSelected) && !touchMove) {
         selectionScene->updater->updateControlsOrientaion(selectionScene);
         if(selectionScene->isJointSelected)
             highlightJointSpheres();
         return true;
-    } else
+    } else if(selectionScene->moveJointId != NOT_EXISTS || selectionScene->moveNodeId != NOT_EXISTS)
+        return true;
+    else
         return false;
 }
 
