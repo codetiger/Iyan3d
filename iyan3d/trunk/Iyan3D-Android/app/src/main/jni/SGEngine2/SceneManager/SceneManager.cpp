@@ -45,7 +45,7 @@ SceneManager::~SceneManager(){
     if(mtlManger)
         delete mtlManger;
     if(renderMan)
-        delete renderMan;   // ToDoMemory
+        delete renderMan;
 }
 
 void SceneManager::RemoveAllTextures()
@@ -62,6 +62,7 @@ void SceneManager::setDisplayResolution(int width,int height){
     displayWidth = width;
     displayHeight = height;
 }
+
 void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #ifndef UBUNTU
     renderMan->createVertexAndIndexBuffers(node,meshType);

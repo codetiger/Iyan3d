@@ -24,9 +24,11 @@ Mat4 ShaderManager::lighCamProjMatrix;
 Mat4 ShaderManager::lighCamViewMatrix;
 string ShaderManager::BundlePath = " ";
 DEVICE_TYPE ShaderManager::deviceType = OPENGLES2;
+
 ShaderManager::~ShaderManager(){
     
 }
+
 ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType){
     isRenderingDepthPass = false;
     shadowDensity = 0.0;

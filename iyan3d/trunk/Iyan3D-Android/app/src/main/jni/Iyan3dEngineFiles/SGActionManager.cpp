@@ -26,6 +26,7 @@ SGActionManager::~SGActionManager()
     assetAction.drop();
     propertyAction.drop();
     scaleAction.drop();
+    addJointAction.drop();
     actions.clear();
 }
 

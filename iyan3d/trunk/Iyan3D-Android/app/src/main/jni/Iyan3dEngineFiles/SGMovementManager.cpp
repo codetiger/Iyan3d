@@ -20,7 +20,7 @@ SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene)
 }
 
 SGMovementManager::~SGMovementManager(){
-    
+
 }
 
 

@@ -46,8 +46,7 @@ SGEditorScene::~SGEditorScene()
         if(nodes[i])
             delete nodes[i];
     }
-    nodes.clear();
-   
+    nodes.clear();   
     
     if (renderCamera)
         renderCamera.reset();
@@ -63,6 +62,11 @@ SGEditorScene::~SGEditorScene()
     nodes.clear();
     jointSpheres.clear();
     tPoseJoints.clear();
+    
+    if(renderingTextureMap.size())
+        renderingTextureMap.clear();
+    if(sceneControls.size())
+        sceneControls.clear();
     
     if(smgr)
         delete smgr;
@@ -86,8 +90,12 @@ SGEditorScene::~SGEditorScene()
         delete animMan;
     if(jointSphereMesh)
         delete jointSphereMesh;
+    if(rotationCircle)
+        delete rotationCircle;
     if(cmgr)
         delete cmgr;
+    if(objLoader)
+        delete objLoader;
 }
 
 void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)

@@ -54,7 +54,6 @@ public:
     Vector2 touchPosForSkeletonSelection;
 
     SGAutoRigSceneManager(SceneManager* smgr, void *scene);
-    ~SGAutoRigSceneManager();
     
     void clearNodeSelections();
     void objForRig(SGNode* sgNode);
@@ -81,6 +80,7 @@ public:
     bool findInRigKeys(int key);
     void removeRigKeys();
     void resetRigKeys();
+    ~SGAutoRigSceneManager();
 
 };
 

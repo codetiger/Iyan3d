@@ -85,16 +85,15 @@
     NSString *extension = [[filesList objectAtIndex:indexPath.row]pathExtension];
     if([extension isEqualToString:@"obj"])
     {
-        NSLog(@"Obj File Selected %@",[filesList objectAtIndex:indexPath.row]);
+        objFileName = [filesList objectAtIndex:indexPath.row];
     }
     else
     {
-        NSLog(@"Texture File Selected %@",[filesList objectAtIndex:indexPath.row]);
+        textureFileName = [filesList objectAtIndex:indexPath.row];
     }
 }
 
 - (IBAction)addBtnAction:(id)sender {
-    NSLog(@"Sender %@",self.addBtn.titleLabel.text);
     if([self.addBtn.titleLabel.text isEqualToString:@"NEXT"]){
         filesList=nil;
         NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
@@ -112,7 +111,9 @@
         [self.viewTitle setText:@"Import Texture"];
     }
     if([self.addBtn.titleLabel.text isEqualToString:@"ADD TO SCENE"]){
+        [self.delegate importObj:objFileName TextureName:textureFileName];
         [self.delegate showOrHideLeftView:NO withView:nil];
+        [self removeFromParentViewController];
     }
 }
 

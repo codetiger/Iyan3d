@@ -22,6 +22,18 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
     clearNodeSelections();
 }
 
+SGAutoRigSceneManager::~SGAutoRigSceneManager()
+{    
+    if(sgrSGNode)
+        delete sgrSGNode;
+    if(boneMesh)
+        delete boneMesh;
+    if(sphereMesh)
+        delete sphereMesh;
+    if(objSGNode)
+        delete objSGNode;    
+}
+
 void SGAutoRigSceneManager::clearNodeSelections()
 {
     if(!rigScene || !smgr)

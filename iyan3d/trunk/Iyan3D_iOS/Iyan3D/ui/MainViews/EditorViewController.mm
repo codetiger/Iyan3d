@@ -131,6 +131,7 @@ BOOL missingAlertShown;
     [super viewDidAppear:animated];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSLog(@"Document Path : %@ ",documentsDirectory);
     [_center_progress stopAnimating];
     [_center_progress setHidden:YES];
 }
@@ -1930,6 +1931,14 @@ void downloadFile(NSString* url, NSString* fileName)
         }
     }
 
+}
+
+
+#pragma AutoRig Delegates
+
+- (void)importObj:(NSString*)objFileName TextureName:(NSString*)textureFileName
+{
+    editorScene->
 }
 
 
