@@ -64,8 +64,12 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
     animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
     animScene->nodes[toNodeId]->scaleKeys = animScene->nodes[fromNodeId]->scaleKeys;
     
+    printf("Scale Size %lu ",animScene->nodes[fromNodeId]->scaleKeys.size());
+    
+    if(animScene->nodes[fromNodeId]->joints.size() > 0){
     for (int i =0; i < animScene->nodes[toNodeId]->joints.size(); i++)
         animScene->nodes[toNodeId]->joints[i]->rotationKeys = animScene->nodes[fromNodeId]->joints[i]->rotationKeys;
+    }
 }
 
 void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames)

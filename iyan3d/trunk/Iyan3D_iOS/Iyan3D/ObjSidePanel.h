@@ -15,6 +15,8 @@
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode;
+- (void) removeTempNodeFromScene;
+
 @end
 
 

@@ -33,7 +33,6 @@
 
 @end
 
-
 @interface RenderViewManager : NSObject <UIGestureRecognizerDelegate>
 {
     CAEAGLLayer* _eaglLayer;

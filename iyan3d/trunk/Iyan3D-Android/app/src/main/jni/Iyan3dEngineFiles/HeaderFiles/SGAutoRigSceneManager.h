@@ -43,6 +43,7 @@ public:
     bool isSGRJointSelected, isNodeSelected;
 
     int selectedNodeId, selectedJointId, rigBoneCount;
+    float scaleRatio;
     AUTORIG_SCENE_MODE sceneMode;
     SKELETON_TYPE skeletonType;
     
@@ -52,6 +53,7 @@ public:
     std::map<int, SGNode*> envelopes;
     std::map<int, RigKey> rigKeys;
     Vector2 touchPosForSkeletonSelection;
+    shared_ptr<MeshNode> sgmNode;
 
     SGAutoRigSceneManager(SceneManager* smgr, void *scene);
     
@@ -76,11 +78,16 @@ public:
     void (*objLoaderCallBack)(int);
     
     bool setSceneMode(AUTORIG_SCENE_MODE mode);
+    void switchSceneMode(AUTORIG_SCENE_MODE mode);
     void initSkeletonJoints();
     bool findInRigKeys(int key);
     void removeRigKeys();
     void resetRigKeys();
     ~SGAutoRigSceneManager();
+    void changeEnvelopeScale(Vector3 scale, bool isChanged);
+    void updateEnvelopes();
+    void initEnvelope(int jointId);
+    bool deallocAutoRig(bool isCompleted);
 
 };
 

@@ -99,18 +99,11 @@ SGEditorScene *editorScene;
 
 - (void) setupAutoRigCallBacks
 {
-    editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
+    //editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
     editorScene->rigMan->objLoaderCallBack = &objLoaderCallBack;
     //editorScene->rigMan->notRespondingCallBack = &notRespondingCallBackAutoRigScene;
 }
 
-void boneLimitsCallBack() {
-    /* TODO show alert
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    AutoRigViewController *autoRigVC = (AutoRigViewController*)[[appDelegate window] rootViewController];
-    [autoRigVC boneLimitsAlert];
-     */
-}
 
 void objLoaderCallBack(int status)
 {
@@ -328,7 +321,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (bool) removeNodeFromScene:(int)nodeIndex IsUndoOrRedo:(BOOL)isUndoOrRedo
 {
-    NSLog(@"Node Index %d ",nodeIndex);
     if(editorScene->nodes.size()>nodeIndex){
         editorScene->selectMan->selectObject(nodeIndex);
         if(!isUndoOrRedo){
@@ -446,7 +438,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             }
             switch (touchCount) {
                 case 1: {
-                    editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+                    if(editorScene->isRigMode)
+                        editorScene->moveMan->touchMoveRig(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+                    else
+                        editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
                     if(!editorScene->renHelper->isMovingPreview)
                         editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
                     break;
@@ -478,11 +473,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 }
 
 - (void)handleLongPressGestures:(UILongPressGestureRecognizer *)sender{
-    
     if (sender.state == UIGestureRecognizerStateBegan)
     {
         _longPress=true;
-        
         if (!_isPlaying && !_isPanned)
         {
             CGPoint position;
@@ -490,16 +483,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             _checkTapSelection = true;
             _tapPosition = Vector2(position.x, position.y) * screenScale;
             editorScene->isRTTCompleted = true;
-            
         }
         CGPoint position;
         position = [sender locationInView:self.renderView];
         _longPresPosition=CGRectMake(position.x, position.y, 1, 1);
-        
-        
-        
     }
-
 }
 
 - (void) panOrPinchProgress
@@ -507,7 +495,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     editorScene->moveMan->panProgress(_touchMovePosition[0], _touchMovePosition[1]);
     editorScene->updater->updateLightCamera();
 }
-
 
 -(void) showPopOver:(int) selectedNodeId{
     if(_longPress){
@@ -521,8 +508,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         _longPress=false;
     }
-    
-    
 }
 
 @end

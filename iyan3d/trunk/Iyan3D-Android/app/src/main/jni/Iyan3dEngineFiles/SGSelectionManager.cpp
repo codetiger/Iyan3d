@@ -38,12 +38,12 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
 
 void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)
 {
-    if(!selectionScene || !smgr || (!selectionScene->isNodeSelected && selectionScene->selectedNodeIds.size() <= 0))
+    if(!selectionScene || !smgr || (!selectionScene->hasNodeSelected() && selectionScene->selectedNodeIds.size() <= 0))
         return;
 
     selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
 
-    if(selectionScene->selectedNodeIds.size() <= 0) {
+    if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
         selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
         if(selectionScene->shaderMGR->deviceType == METAL){
             selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
@@ -372,13 +372,16 @@ void SGSelectionManager::highlightJointSpheres()
 {
     if(!selectionScene || !smgr)
         return;
-
-    if(selectionScene->isNodeSelected  || selectionScene->isJointSelected) {
+    bool isNodeSelected = selectionScene->hasNodeSelected();
+    bool isJointSelected = selectionScene->hasJointSelected();
+    int selectedJointId = (selectionScene->isRigMode) ? selectionScene->rigMan->selectedJointId : selectionScene->selectedJointId;
+    
+    if((isNodeSelected  || isJointSelected) && selectionScene->selectedNodeIds.size() <= 0) {
         selectionScene->renHelper->setJointSpheresVisibility(true);
         for(int i = 0; i< selectionScene->jointSpheres.size(); i++)
             if(selectionScene->jointSpheres[i]){
-                int mirrorjointId = BoneLimitsHelper::getMirrorJointId(selectionScene->selectedJointId);
-                if((i == selectionScene->selectedJointId) || (selectionScene->getMirrorState() && (i == mirrorjointId))) {
+                int mirrorjointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);
+                if((i == selectedJointId) || (selectionScene->getMirrorState() && (i == mirrorjointId))) {
                     selectionScene->jointSpheres[i]->props.vertexColor = constants::selectionColor;
                 }else{
                     selectionScene->jointSpheres[i]->props.vertexColor = constants::sgrJointDefaultColor;
@@ -471,7 +474,7 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
 {
     if(!selectionScene || !smgr || !selectionScene->isRigMode)
         return;
-    
+        
     switch(selectionScene->rigMan->sceneMode){
         case RIG_MODE_OBJVIEW:
             break;
@@ -575,7 +578,7 @@ void SGSelectionManager::updateSkeletonSelectionColors(int prevSelectedBoneId)
     if(!selectionScene || !smgr || !selectionScene->isRigMode)
         return;
     
-    std::map<int, RigKey> rigKeys = selectionScene->rigMan->rigKeys;
+    std::map<int, RigKey>& rigKeys = selectionScene->rigMan->rigKeys;
     
     if(prevSelectedBoneId > 0 && prevSelectedBoneId < selectionScene->tPoseJoints.size() && selectionScene->rigMan->findInRigKeys(prevSelectedBoneId))
         rigKeys[prevSelectedBoneId].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
@@ -602,8 +605,9 @@ void SGSelectionManager::updateSkeletonSelectionColors(int prevSelectedBoneId)
     if(selectionScene->rigMan->selectedNodeId == 0 || selectionScene->rigMan->selectedNodeId == NOT_EXISTS) {
         for (int i = 1; i < selectionScene->tPoseJoints.size(); i++) {
             int id = selectionScene->tPoseJoints[i].id;
-            if(selectionScene->rigMan->findInRigKeys(id))
+            if(selectionScene->rigMan->findInRigKeys(id)){
                 rigKeys[id].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
+            }
         }
     }
     
@@ -611,11 +615,9 @@ void SGSelectionManager::updateSkeletonSelectionColors(int prevSelectedBoneId)
         selectionScene->renHelper->drawEnvelopes(selectionScene->rigMan->envelopes, selectionScene->rigMan->selectedNodeId);
         if(selectionScene->getMirrorState() == MIRROR_ON && selectionScene->rigMan->selectedNodeId > 0 && BoneLimitsHelper::getMirrorJointId(selectionScene->rigMan->selectedNodeId) != -1)
             selectionScene->renHelper->drawEnvelopes(selectionScene->rigMan->envelopes, BoneLimitsHelper::getMirrorJointId(selectionScene->rigMan->selectedNodeId));
-        
         selectionScene->updater->updateEnvelopes();
         selectionScene->updater->updateOBJVertexColor();
     }
-    
 }
 
 void SGSelectionManager::readSGRSelectionTexture()
@@ -633,7 +635,6 @@ void SGSelectionManager::readSGRSelectionTexture()
 }
 void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJointColor, shared_ptr<AnimatedMeshNode> animNode)
 {
-    int prevJointId = selectionScene->rigMan->selectedJointId;
     if(selectedNodeColor != 255){
         selectionScene->rigMan->isNodeSelected = true;
         selectionScene->rigMan->selectedNodeId = selectedNodeColor;
@@ -646,14 +647,17 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
             highlightJointSpheres();
         }
         bool status = selectionScene->renHelper->displayJointSpheresForNode(animNode);
+        Vector3 jScale = selectionScene->rigMan->selectedNode->joints[1]->jointNode->getScale();
+        printf(" joint scale %f %f %f ", jScale.x, jScale.y, jScale.z);
         if(!status)
             updateSGRSelection(255, 0, animNode);
     }else{
+        if(selectionScene->rigMan->selectedNode)
+            selectionScene->rigMan->selectedNode->props.transparency = 1.0;
         selectionScene->rigMan->clearNodeSelections();
         selectionScene->renHelper->setJointSpheresVisibility(false);
         selectionScene->rigMan->selectedNodeId = 0;
         selectionScene->rigMan->selectedJointId = NOT_SELECTED;
-        selectionScene->rigMan->selectedNode->props.transparency = 1.0;
     }
     highlightJointSpheres();
 }

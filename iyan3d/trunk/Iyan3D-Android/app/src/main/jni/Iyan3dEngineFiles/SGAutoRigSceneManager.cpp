@@ -23,14 +23,7 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
 
 SGAutoRigSceneManager::~SGAutoRigSceneManager()
 {    
-    if(sgrSGNode)
-        delete sgrSGNode;
-    if(boneMesh)
-        delete boneMesh;
-    if(sphereMesh)
-        delete sphereMesh;
-    if(nodeToRig)
-        delete nodeToRig;    
+
 }
 
 void SGAutoRigSceneManager::clearNodeSelections()
@@ -49,6 +42,7 @@ void SGAutoRigSceneManager::clearNodeSelections()
     selectedJointId = NOT_SELECTED;
     selectedNode = NULL;
     selectedJoint = NULL;
+    scaleRatio = 0.0f;
 }
 
 void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
@@ -60,7 +54,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
         smgr->RemoveNode(nodeToRig->node);
     }
     nodeToRig = sgNode;
-    shared_ptr<MeshNode> sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
+    sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
     // scale to fit all obj in same proportion-----
     float extendX = sgmNode->getMesh()->getBoundingBox()->getXExtend();
@@ -68,7 +62,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     float extendZ = sgmNode->getMesh()->getBoundingBox()->getZExtend();
     float max = ((extendX >= extendY) ? extendX:extendY);
     max = ((max >= extendZ) ? max:extendZ);
-    float scaleRatio = (max / OBJ_BOUNDINGBOX_MAX_LIMIT);
+    scaleRatio = (max / OBJ_BOUNDINGBOX_MAX_LIMIT);
     sgmNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
     
@@ -122,6 +116,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             selectedNodeId = 0;
             selectedNode = rigKeys[0].referenceNode;
             rigScene->selectMan->updateSkeletonSelectionColors(0);
+            printf("Skeleton Color Updated");
             rigScene->updater->updateControlsOrientaion();
             break;
             
@@ -194,6 +189,12 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             return false;
     }
     return true;
+}
+
+void SGAutoRigSceneManager::switchSceneMode(AUTORIG_SCENE_MODE mode){
+    sceneMode = mode;
+    clearNodeSelections();
+    setSceneMode(mode);
 }
 
 void SGAutoRigSceneManager::removeRigKeys()
@@ -313,7 +314,6 @@ void SGAutoRigSceneManager::addNewJoint()
     rigScene->actionMan->addAction(rigScene->actionMan->addJointAction);
     resetRigKeys();
     
-    
     int id = rigScene->tPoseJoints[rigScene->tPoseJoints.size()-1].id;
     if (rigKeys.find(id) != rigKeys.end()) {
         int prevSelectedBoneId = selectedNodeId;
@@ -410,4 +410,113 @@ bool SGAutoRigSceneManager::isOBJTransparent(string materialName)
 SGNode* SGAutoRigSceneManager::getRiggedNode()
 {
     return sgrSGNode;
+}
+
+void SGAutoRigSceneManager::changeEnvelopeScale(Vector3 scale, bool isChanged)
+{
+    if(selectedNodeId > 0)
+    {
+        rigKeys[selectedNodeId].envelopeRadius =  scale.x;
+        if(rigScene->getMirrorState() == MIRROR_ON)
+        {
+            int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedNodeId);
+            if(mirrorJointId != -1){
+                rigKeys[mirrorJointId].envelopeRadius = scale.x;
+            }
+        }
+        updateEnvelopes();
+        //updateOBJVertexColor();
+        AutoRigHelper::updateOBJVertexColors(sgmNode, envelopes, rigKeys);
+    }
+}
+
+void SGAutoRigSceneManager::updateEnvelopes()
+{
+    //update all visible envelopes.
+    for(std::map<int, SGNode *>::iterator it = envelopes.begin(); it!=envelopes.end(); it++)
+    {
+        if(it->second && (selectedNodeId == rigKeys[it->first].parentId || it->first == selectedNodeId))
+            initEnvelope(it->first);
+        
+        int mirrorJoint = BoneLimitsHelper::getMirrorJointId(selectedNodeId);
+        
+        if(rigScene->getMirrorState() == MIRROR_ON && it->second && (mirrorJoint == rigKeys[it->first].parentId || it->first == mirrorJoint))
+            initEnvelope(it->first);
+    }
+}
+
+void SGAutoRigSceneManager::initEnvelope(int jointId)
+{
+    SGNode *envelopeSgNod = (envelopes.find(jointId) == envelopes.end()) ? NULL:envelopes[jointId];
+    if(jointId<=1) return;  //skipping envelope between hip and it's parent.
+    int parentId = rigKeys[jointId].parentId;
+    
+    if(envelopeSgNod == NULL){
+        envelopeSgNod = new SGNode(NODE_RIG);
+        AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr",rigScene->shaderMGR->deviceType);
+        envelopeSgNod->setSkinningData((SkinMesh*)mesh);
+        shared_ptr<AnimatedMeshNode> envelopeNode = smgr->createAnimatedNodeFromMesh(mesh,"envelopeUniforms",CHARACTER_RIG, MESH_TYPE_HEAVY);
+        envelopeNode->setID(ENVELOPE_START_ID + jointId);
+        envelopeNode->setParent(rigKeys[parentId].referenceNode->node);
+        envelopeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
+        envelopeSgNod->node = envelopeNode;
+        envelopeSgNod->props.vertexColor = Vector3(1.0);
+        envelopeSgNod->props.transparency = 0.4;
+    }
+    if(envelopeSgNod->node) {
+        envelopeSgNod->node->updateAbsoluteTransformation();
+        
+        Vector3 currentDir = BONE_BASE_DIRECTION;
+        Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
+        envelopeSgNod->node->setRotationInDegrees(MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))*RADTODEG);
+        envelopeSgNod->node->updateAbsoluteTransformation();
+        shared_ptr<JointNode> topJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_TOP_JOINT_ID);
+        shared_ptr<JointNode> bottomJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_BOTTOM_JOINT_ID);
+        
+        float height = rigKeys[parentId].referenceNode->node->getAbsolutePosition().getDistanceFrom(rigKeys[jointId].referenceNode->node->getAbsolutePosition());
+        topJoint->setPosition(Vector3(0,height,0));
+        topJoint->updateAbsoluteTransformation();
+        
+        bottomJoint->setScale(Vector3(rigKeys[parentId].envelopeRadius));
+        bottomJoint->updateAbsoluteTransformation();
+        topJoint->setScale(Vector3(rigKeys[jointId].envelopeRadius));
+        topJoint->updateAbsoluteTransformation();
+        envelopes[jointId] = envelopeSgNod;
+        envelopes[jointId]->node->setVisible(true);
+        //topJoint.reset();
+        //bottomJoint.reset();
+    }
+}
+
+bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
+{    
+    if(sgrSGNode){
+        if(sgrSGNode->node)
+            smgr->RemoveNode(sgrSGNode->node);
+        delete sgrSGNode;
+    }
+    if(!isCompleted){
+        nodeToRig->props.transparency = 1.0;
+        nodeToRig->node->setVisible(true);
+    }
+    if(isCompleted){
+        for(int i = 0; i < rigScene->nodes.size(); i++){
+            if(rigScene->nodes[i] == nodeToRig){
+                rigScene->loader->removeObject(i);
+                break;
+            }
+        }
+    }
+    
+    for(std::map<int, SGNode *>::iterator it = envelopes.begin(); it!=envelopes.end(); it++)
+    {
+        if (it->second) {
+            delete it->second;
+        }
+    }
+    envelopes.clear();
+    removeRigKeys();
+    sceneMode = RIG_MODE_OBJVIEW;
+    clearNodeSelections();
+    return true;
 }

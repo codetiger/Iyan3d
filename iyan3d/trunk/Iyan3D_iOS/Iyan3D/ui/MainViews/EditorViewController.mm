@@ -75,9 +75,12 @@
 #define CHOOSE_RIGGING_METHOD 8
 #define OWN_RIGGING 1
 #define HUMAN_RIGGING 2
+#define DATA_LOSS_ALERT 999
 
 #define OK_BUTTON_INDEX 1
 #define CANCEL_BUTTON_INDEX 0
+#define DELETE_OBJECT 200
+
 
 BOOL missingAlertShown;
 
@@ -106,24 +109,22 @@ BOOL missingAlertShown;
     isSelected=NO;
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
+    [_rigCancelBtn setHidden:YES];
+    [_rigAddToSceneBtn setHidden:YES];
     
     #if !(TARGET_IPHONE_SIMULATOR)
         if (iOSVersion >= 8.0)
             isMetalSupported = false;//(MTLCreateSystemDefaultDevice() != NULL) ? true : false;
     #endif
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
     screenHeight = screenRect.size.height;
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
-
     totalFrames = 24;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    
     if ([Utility IsPadDevice])
          [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
     else
          [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNewPhone" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
-
     assetsInScenes = [NSMutableArray array];
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"])
         [self.framesCollectionView setTag:[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"] longValue]];
@@ -295,10 +296,18 @@ BOOL missingAlertShown;
             renderViewMan.checkCtrlSelection = false;
         }
         if (renderViewMan.checkTapSelection) {
-            editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
+            if(editorScene->isRigMode){
+                editorScene->selectMan->checkSelectionForAutoRig(renderViewMan.tapPosition);
+            }
+            else
+                editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
+
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
             [self highlightObjectList];
+            if(editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
+                [_addJointBtn setHidden:(editorScene->rigMan->isSkeletonJointSelected)?NO:YES];
+            }
             [renderViewMan showPopOver:editorScene->selectedNodeId];
         }
         if(renderViewMan.makePanOrPinch)
@@ -319,6 +328,10 @@ BOOL missingAlertShown;
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     editorScene->setLightingOn();
+    
+    if(editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_PREVIEW)){
+        [_addJointBtn setHidden:(editorScene->rigMan->isSGRJointSelected)?NO:YES];
+    }
 }
 
 #pragma Scene Loading
@@ -547,24 +560,80 @@ BOOL missingAlertShown;
 
 
 - (IBAction)moveLastAction:(id)sender {
-    [self.moveLast setTag:self.moveLast.tag+1];
-    if(_moveLast.tag==2){
-        UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
-        [closeAlert setTag:CHOOSE_RIGGING_METHOD];
-        [closeAlert show];
+    if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW){
+        if(editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW){
+            UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
+            [closeAlert setTag:CHOOSE_RIGGING_METHOD];
+            [closeAlert show];
+        }
+        else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW){
+            //[[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+            NSString *tempDir = NSTemporaryDirectory();
+            NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
+            string path = (char*)[sgrFilePath cStringUsingEncoding:NSUTF8StringEncoding];
+            NSLog(@"Temp Path %s ",path.c_str());
+            [self performSelectorOnMainThread:@selector(exportSgr:) withObject:sgrFilePath waitUntilDone:YES];
+            [_rigAddToSceneBtn setHidden:NO];
+            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+        }
+        else
+        {
+            [_rigAddToSceneBtn setHidden:YES];
+            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+        }
     }
-    
+    [_addJointBtn setHidden:YES];
+}
+
+- (void)exportSgr:(NSString*)pathStr
+{
+    string path = (char*)[pathStr cStringUsingEncoding:NSUTF8StringEncoding];
+    editorScene->rigMan->exportSGR(path);
+
 }
 
 - (IBAction)moveFirstAction:(id)sender {
+    if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_OBJVIEW){
+        if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1) == RIG_MODE_OBJVIEW) {
+            [self.view endEditing:YES];
+            UIAlertView *dataLossAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Are you sure you want to go back to previous mode? By pressing Yes all your changes will be discarded." delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"Yes", nil];
+            [dataLossAlert setTag:DATA_LOSS_ALERT];
+            [dataLossAlert show];
+        } else {
+            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
+        }
+    }
+    [_rigAddToSceneBtn setHidden:YES];
+    [_addJointBtn setHidden:YES];
+
 }
 
+- (IBAction)rigCancelAction:(id)sender
+{
+    editorScene->rigMan->deallocAutoRig(NO);
+    editorScene->enterOrExitAutoRigMode(false);
+    [self autoRigViewButtonHandler:YES];
+    selectedNodeId = -1;
+}
+
+- (IBAction)rigAddToSceneAction:(id)sender
+{
+    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%d",editorScene->nodes[selectedNodeId]->assetId] TextureFileName:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"]];
+    if(editorScene->rigMan->deallocAutoRig(YES)){
+        editorScene->enterOrExitAutoRigMode(false);    }
+    [self autoRigViewButtonHandler:YES];
+    [self updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:selectedNodeId];
+    selectedNodeId = -1;
+}
+
+
 - (IBAction)addJoinAction:(id)sender {
+    if(editorScene->rigMan->isSkeletonJointSelected)
+        editorScene->rigMan->addNewJoint();
 }
 
 - (IBAction)publishBtnAction:(id)sender {
-   
-    [animationsliderVC publishBtnaction];
+   [animationsliderVC publishBtnaction];
 }
 
 - (IBAction)editFunction:(id)sender
@@ -957,13 +1026,11 @@ BOOL missingAlertShown;
 - (IBAction)scaleBtnAction:(id)sender
 {
     if(self.rigScreenLabel.isHidden){
-        if((editorScene->isNodeSelected || editorScene->allObjectsScalable()) && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
+        if((editorScene->hasNodeSelected() || editorScene->allObjectsScalable()) && ((editorScene->isRigMode) || (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT))){
             
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
-            
-            /*
-             
+        
              editorScene->renHelper->setControlsVisibility(false);
              Vector3 currentScale = editorScene->getSelectedNodeScale();
              _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
@@ -979,9 +1046,7 @@ BOOL missingAlertShown;
              inView:self.view
              permittedArrowDirections:UIPopoverArrowDirectionRight
              animated:NO];
-             */
         }
-  
     }
     else{
 //        float scale = autoRigObject->getSelectedJointScale();
@@ -1795,7 +1860,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     else if(indexValue==IMPORT_ADDBONE){
         [self.popoverController dismissPopoverAnimated:YES];
-        NSLog(@"ADD BONE Button");
         NODE_TYPE selectedNodeType = NODE_UNDEFINED;
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
             selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
@@ -1805,21 +1869,23 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             }
             else if (selectedNodeType!= NODE_CAMERA && selectedNodeType != NODE_LIGHT && selectedNodeType != NODE_ADDITIONAL_LIGHT)
             {
-                
-                [self.addJointBtn setHidden:NO];
+                [self.addJointBtn setHidden:YES];
                 [self.moveLast setHidden:NO];
                 [self.moveFirst setHidden:NO];
                 [self.rigScreenLabel setHidden:NO];
+                selectedNodeId = editorScene->selectedNodeId;
+                editorScene->enterOrExitAutoRigMode(true);
+                editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
+                editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
+                editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
+                [_rigCancelBtn setHidden:NO];
             }
-            
-
         }
         else
         {
             UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Select any Node to add Bone" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [error show];
-        }
-        
+        }        
     }
 }
 
@@ -2084,7 +2150,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
     switch (nodeType) {
         case NODE_SGM:
         case NODE_RIG: {
-            BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];
+                //BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];
                 NSString* extension = (nodeType == NODE_SGM) ? @"sgm" : @"sgr";
                 NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
                 NSString* file = [name stringByDeletingPathExtension];
@@ -2329,11 +2395,19 @@ void downloadFile(NSString* url, NSString* fileName)
     }
     if (alertView.tag == CHOOSE_RIGGING_METHOD) {
         if(buttonIndex == HUMAN_RIGGING) {
-           
+            editorScene->rigMan->skeletonType = SKELETON_HUMAN;
+            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }else if(buttonIndex == OWN_RIGGING) {
-            
+            editorScene->rigMan->skeletonType = SKELETON_OWN;
+            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
-        
+    }
+    if (alertView.tag == DATA_LOSS_ALERT) {
+        if(buttonIndex == CANCEL_BUTTON_INDEX) {
+            
+        } else if(buttonIndex == OK_BUTTON_INDEX) {
+            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
+        }
     }
 }
 
@@ -2494,6 +2568,16 @@ void downloadFile(NSString* url, NSString* fileName)
 
 #pragma AutoRig Delegates
 
+- (void) autoRigViewButtonHandler:(bool)disable
+{
+    [self.addJointBtn setHidden:disable];
+    [self.moveLast setHidden:disable];
+    [self.moveFirst setHidden:disable];
+    [self.rigScreenLabel setHidden:disable];
+    [_rigAddToSceneBtn setHidden:disable];
+    [_rigCancelBtn setHidden:disable];
+}
+
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode
 {
     NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
@@ -2514,13 +2598,10 @@ void downloadFile(NSString* url, NSString* fileName)
         objStr = new std::string([[[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension] UTF8String]);
         editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 123456,!isHaveTexture,color);
     }
-    
     if(indexPathOfOBJ > 5 && !isTempNode)
         assetId =  [self addSgmFileToCacheDirAndDatabase:assetName];
-    
     if(assetId < 0)
         return;
-
     NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetId];
     [fm removeItemAtPath:texTo error:nil];
     if(isHaveTexture){
@@ -2530,13 +2611,11 @@ void downloadFile(NSString* url, NSString* fileName)
         NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetId];
         [fm copyItemAtPath:texFrom toPath:texTo error:nil];
     }
-    
     if (indexPathOfOBJ > 5 && !isTempNode){
         NSString* sgmFrom = [NSString stringWithFormat:@"%@%@/%d.sgm",docDirPath,@"/Resources/Sgm/",123456];
         NSString* sgmTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm",docDirPath,assetId];
         [fm moveItemAtPath:sgmFrom toPath:sgmTo error:nil];
     }
-    
     NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
     [dict setObject:assetName forKey:@"name"];
     [dict setObject:[NSNumber numberWithInt:assetId] forKey:@"assetId"];
@@ -2548,13 +2627,10 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSString stringWithFormat:@"%@",textureName] forKey:@"textureName"];
     [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
-    
 }
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
 {
-    
-    
     NSArray* directoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectoryPath = [directoryPath objectAtIndex:0];
     NSDate *currDate = [NSDate date];
@@ -2576,6 +2652,104 @@ void downloadFile(NSString* url, NSString* fileName)
     return sgmAsset.assetId;
 }
 
+-(int)addrigFileToCacheDirAndDatabase:(NSString*)objmainfilenameRig TextureFileName:(NSString*)texturemainFileNameRig
+{
+    NSString *tempDir = NSTemporaryDirectory();
+    NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
+    NSDate *currDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"YY-MM-DD HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:currDate];
+    AssetItem* objAsset = [[AssetItem alloc] init];
+    objAsset.assetId = 40000 + [cache getNextAutoRigAssetId];
+    objAsset.type = 1;
+    objAsset.name = [NSString stringWithFormat:@"autorig%d",[cache getNextAutoRigAssetId]];
+    objAsset.iap = 0;
+    objAsset.keywords = [NSString stringWithFormat:@" %@ , %@ , %@",objmainfilenameRig,texturemainFileNameRig,@"autorig"];
+    objAsset.boneCount = 0;
+    objAsset.hash = [self getMD5ForNonReadableFile:sgrFilePath];
+    objAsset.modifiedDate = dateString;
+    objAsset.price = @"FREE";
+    [cache UpdateAsset:objAsset];
+    [cache AddDownloadedAsset:objAsset];
+    [self storeRiginCachesDirectory:objAsset.name assetId:objAsset.assetId];
+    [self storeRigTextureinCachesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
+    assetAddType = IMPORT_ASSET_ACTION;
+    objAsset.isTempAsset = NO;
+    [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
+    editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size()-1);
+    editorScene->updater->setDataForFrame(editorScene->currentFrame);
+    ActionKey action = editorScene->nodes[editorScene->nodes.size()-1]->getKeyForFrame(editorScene->currentFrame);
+}
+
+-(void) storeRiginCachesDirectory:(NSString*)desFilename assetId:(int)localAssetId
+{
+    NSString *tempDir = NSTemporaryDirectory();
+    NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
+    NSArray* desDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [desDirPath objectAtIndex:0];
+    NSString* rigDirPath = [NSString stringWithFormat:@"%@/Resources/Rigs",docDirPath];
+    NSString* desFilePath = [NSString stringWithFormat:@"%@/%d.sgr",rigDirPath,localAssetId];
+    NSData *objData = [NSData dataWithContentsOfFile:sgrFilePath];
+    [objData writeToFile:desFilePath atomically:YES];
+}
+
+-(void) storeRigTextureinCachesDirectory:(NSString*)fileName assetId:(int)localAssetId
+{
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [paths objectAtIndex:0];
+    NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,fileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
+            srcTextureFilePath = [NSString stringWithFormat:@"%@/%@",cacheDirectory,fileName];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
+                srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%@",docDirPath,fileName];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
+                    return;
+        }
+    }
+   
+    NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d-cm.png",docDirPath,localAssetId];
+    NSString* desFilePathForDisplay = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.png",docDirPath,localAssetId];
+    
+    UIImage *image =[UIImage imageWithContentsOfFile:srcTextureFilePath];
+    NSData *imageData = [self convertAndScaleImage:image size:-1];
+    NSData *imageDataforDisplay = [self convertAndScaleImage:image size:128];
+    // image File size should be exactly 128 for display.
+    [imageData writeToFile:desFilePath atomically:YES];
+    [imageDataforDisplay writeToFile:desFilePathForDisplay atomically:YES];
+}
+
+- (NSData*) convertAndScaleImage:(UIImage*)image size:(int)textureRes
+{
+    float target = 0;
+    if(textureRes == -1) {
+        
+        float imgW = image.size.width;
+        float imgH = image.size.height;
+        float bigSide = (imgW >= imgH) ? imgW : imgH;
+        //Convert texture image size should be the 2 to the power values for convinent case.
+        if(bigSide <= 128)
+            target = 128;
+        else if(bigSide <= 256)
+            target = 256;
+        else if(bigSide <= 512)
+            target = 512;
+        else
+            target = 1024;
+    }
+    else
+        target = (float)textureRes;
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(target, target), NO, 1.0);
+    [image drawInRect:CGRectMake(0, 0, target, target)];
+    UIImage* nImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData* data = UIImagePNGRepresentation(nImage);
+    return data;
+}
+
 -(NSString*) getMD5ForNonReadableFile:(NSString*) path
 {
     NSData* data = [NSData dataWithContentsOfFile:path];
@@ -2592,7 +2766,6 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    
     Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue],[[dict objectForKey:@"y"]floatValue],[[dict objectForKey:@"z"]floatValue],1.0);
     int assetId = [[dict objectForKey:@"assetId"]intValue];
     wstring assetName = [self getwstring:[dict objectForKey:@"name"]];
@@ -2610,7 +2783,6 @@ void downloadFile(NSString* url, NSString* fileName)
                     [nodes addObject:[NSNumber numberWithInt:i]];
                 }
             }
-            
             editorScene->renHelper->isExportingImages = true;
             editorScene->updater->setDataForFrame(editorScene->currentFrame);
             NSString* imageFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, assetId];
@@ -2625,10 +2797,25 @@ void downloadFile(NSString* url, NSString* fileName)
     }
 }
 
+void boneLimitsCallBack(){
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    EditorViewController *autoRigVC = (EditorViewController*)[[appDelegate window] rootViewController];
+    [autoRigVC boneLimitsAlert];
+}
+
+- (void) boneLimitsAlert
+{
+    [self.view endEditing:YES];
+    UIAlertView *boneLimitMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"The maximum bones per object cannot exceed 57." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [boneLimitMsg show];
+}
+
 #pragma mark Autorig ScaleView Delegate
 
 - (void) scalePropertyChangedInRigView:(float)scaleValue{
-    NSLog(@"Scale vale %2f",scaleValue);
+    if((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_EDIT_ENVELOPES)) &&  editorScene->rigMan->isSkeletonJointSelected){
+        editorScene->rigMan->changeEnvelopeScale(Vector3(scaleValue), false);
+    }
 }
 
 - (void) scaleValueForAction:(float)scaleValue{

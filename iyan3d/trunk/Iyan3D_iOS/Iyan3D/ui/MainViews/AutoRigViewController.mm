@@ -1024,6 +1024,8 @@ bool isTransparentCallBackRig(int nodeId,string callbackFuncName)
     [closeAlert setTag:SAVE_BUTTON_TAG];
     [closeAlert show];
 }
+
+
 - (IBAction)helpButtonAction:(id)sender
 {
     [self resetViewVisibility];

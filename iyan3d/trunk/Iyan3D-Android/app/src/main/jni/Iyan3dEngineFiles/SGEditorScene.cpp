@@ -100,6 +100,16 @@ SGEditorScene::~SGEditorScene()
 void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
 {
     isRigMode = rigMode;
+    if(rigMode){
+        rigMan = new SGAutoRigSceneManager(smgr,this);
+        //setTransparencyForObjects();
+        selectMan->unselectObject(selectedNodeId);
+        clearSelections();
+    }
+    else{
+        delete rigMan;
+        updater->resetMaterialTypes(false);
+    }
 }
 
 void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
@@ -114,7 +124,6 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     actionMan = new SGActionManager(sceneMngr, this);
     writer = new SGSceneWriter(sceneMngr, this);
     animMan = new SGAnimationManager(sceneMngr, this);
-    rigMan = new SGAutoRigSceneManager(sceneMngr, this);
     objMan = new SGOBJManager(sceneMngr, this);
 
     isMultipleSelection = false;
@@ -190,7 +199,8 @@ void SGEditorScene::renderAll()
         smgr->EndDisplay(); // draws all the rendering command
         
         moveMan->swipeToRotate();
-        setTransparencyForObjects();
+        if(!isRigMode)
+            setTransparencyForObjects();
     }
 }
 
@@ -203,8 +213,9 @@ void SGEditorScene::setTransparencyForObjects()
         isPreviewMode = true;
         int excludeNodeId = (isRigMode) ? selectedNodeId : nodes.size()-1;
         for(int index = 0; index < nodes.size(); index++) {
-            if(index != excludeNodeId)
+            if(index != excludeNodeId){
                 nodes[index]->props.transparency = 0.2;
+            }
         }
     } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
         isPreviewMode = false;
@@ -323,11 +334,11 @@ bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 
 bool SGEditorScene::hasNodeSelected()
 {
-    return (isRigMode) ? rigMan->isNodeSelected : isNodeSelected;
+    return (isRigMode && rigMan) ? rigMan->isNodeSelected : isNodeSelected;
 }
 bool SGEditorScene::hasJointSelected()
 {
-    return (isRigMode) ? rigMan->isSGRJointSelected : isJointSelected;
+    return (isRigMode && rigMan) ? rigMan->isSGRJointSelected : isJointSelected;
 }
 SGNode* SGEditorScene::getSelectedNode()
 {

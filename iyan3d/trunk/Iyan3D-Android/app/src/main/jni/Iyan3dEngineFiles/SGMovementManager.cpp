@@ -282,10 +282,10 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
     Vector3 center;
     if(moveScene->selectedNodeIds.size() > 0)
         center = moveScene->getPivotPoint(false);
-    else if(moveScene->isJointSelected)
-        center = moveScene->selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
-    else if(moveScene->isNodeSelected)
-        center = moveScene->selectedNode->node->getAbsoluteTransformation().getTranslation();
+    else if(moveScene->hasJointSelected())
+        center = moveScene->getSelectedJoint()->jointNode->getAbsoluteTransformation().getTranslation();
+    else if(moveScene->hasNodeSelected())
+        center = moveScene->getSelectedNode()->node->getAbsoluteTransformation().getTranslation();
     else
         return false;
     
@@ -332,25 +332,25 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
             moveScene->getParentNode()->updateAbsoluteTransformation();
             nodeRot = moveScene->getParentNode()->getRotationInDegrees();
             delta = MathHelper::RotateNodeInWorld(nodeRot, delta);
-        } else if(moveScene->isJointSelected || !isSGJoint) {
+        } else if(moveScene->hasJointSelected() || !isSGJoint) {
             if(!isSGJoint){
-                shared_ptr<Node> jointNode = moveScene->selectedNode->node;
+                shared_ptr<Node> jointNode = moveScene->getSelectedNode()->node;
                 MathHelper::getGlobalQuaternion((jointNode)).toEuler(nodeRot);
             }else{
-                shared_ptr<JointNode> jointNode = moveScene->selectedJoint->jointNode;
+                shared_ptr<JointNode> jointNode = moveScene->getSelectedJoint()->jointNode;
                 MathHelper::getGlobalQuaternion(jointNode).toEuler(nodeRot);
             }
             nodeRot = nodeRot * RADTODEG;
             Quaternion jointGlobalRot = MathHelper::RotateNodeInWorld(nodeRot, delta);
             if(!isSGJoint){
-                delta = MathHelper::irrGetLocalQuaternion((moveScene->selectedNode->node),jointGlobalRot);
+                delta = MathHelper::irrGetLocalQuaternion((moveScene->getSelectedNode()->node),jointGlobalRot);
             }else{
-                delta = MathHelper::irrGetLocalQuaternion(moveScene->selectedJoint->jointNode,jointGlobalRot);
+                delta = MathHelper::irrGetLocalQuaternion(moveScene->getSelectedJoint()->jointNode,jointGlobalRot);
             }
         }
-        else if(moveScene->selectedNode){
-            moveScene->selectedNode->node->updateAbsoluteTransformation();
-            nodeRot = moveScene->selectedNode->node->getRotationInDegrees();
+        else if(moveScene->getSelectedNode()){
+            moveScene->getSelectedNode()->node->updateAbsoluteTransformation();
+            nodeRot = moveScene->getSelectedNode()->node->getRotationInDegrees();
             delta =  MathHelper::RotateNodeInWorld(nodeRot,delta);
         }
         delta.toEuler(outputValue);

@@ -202,6 +202,7 @@
 
 
 - (IBAction)cancelBtnAction:(id)sender {
+    [self.objSlideDelegate removeTempNodeFromScene];
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
 }
 @end

@@ -61,7 +61,7 @@
     int IndexOfSelected;
     CacheSystem *cache;
     bool isViewLoaded , isPlaying;
-    int previousAction , lightCount;
+    int previousAction , lightCount,selectedNodeId;
     ActionType assetAddType;
     NSString *imgSalt;
     NSTimer *playTimer;
@@ -114,8 +114,12 @@
 @property (weak, nonatomic) IBOutlet UIButton *moveLast;
 @property (weak, nonatomic) IBOutlet UIButton *addJointBtn;
 @property (weak, nonatomic) IBOutlet UIButton *publishBtn;
-- (IBAction)moveLastAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *rigCancelBtn;
+@property (weak, nonatomic) IBOutlet UIButton *rigAddToSceneBtn;
 
+
+
+- (IBAction)moveLastAction:(id)sender;
 - (IBAction)moveFirstAction:(id)sender;
 - (IBAction)addJoinAction:(id)sender;
 - (IBAction)publishBtnAction:(id)sender;

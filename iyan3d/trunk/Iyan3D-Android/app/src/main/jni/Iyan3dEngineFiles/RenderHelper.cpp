@@ -166,7 +166,7 @@ void RenderHelper::drawMoveControlLine(Vector3 nodePos)
 
 void RenderHelper::renderControls()
 {
-    if(!renderingScene || !smgr || (!renderingScene->isNodeSelected && renderingScene->selectedNodeIds.size() <=0))
+    if(!renderingScene || !smgr || (!renderingScene->hasNodeSelected() && renderingScene->selectedNodeIds.size() <=0))
         return;
     
     setControlsVisibility(true);
@@ -203,8 +203,8 @@ void RenderHelper::setControlsVisibility(bool isVisible)
 {
     if(!renderingScene || renderingScene->sceneControls.size() == 0)
         return;
-    bool isNodeSelected = (renderingScene->isRigMode) ? renderingScene->rigMan->isNodeSelected : renderingScene->isNodeSelected;
-    SGNode* selectedNode = (renderingScene->isRigMode) ? renderingScene->rigMan->selectedNode : renderingScene->selectedNode;
+    bool isNodeSelected = renderingScene->hasNodeSelected();
+    SGNode* selectedNode = renderingScene->getSelectedNode();
     
     if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT)
         renderingScene->controlType = MOVE;
@@ -290,7 +290,8 @@ void RenderHelper::rttDrawCall()
 
     if(renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)
         drawCameraPreview();
-    //rttShadowMap();
+    if(!renderingScene->isRigMode)
+        rttShadowMap();
 }
 
 bool RenderHelper::isMovingCameraPreview(Vector2 curTouchPos)
@@ -464,15 +465,17 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     if(!renderingScene || !smgr)
         return;
 
-    visibilityFlag = (renderingScene->selectedNodeId == NOT_EXISTS || renderingScene->selectedNodeIds.size() > 0)?false:visibilityFlag;
+    bool isNodeSelected = renderingScene->hasNodeSelected();
+    SGNode *selectedNode = renderingScene->getSelectedNode();
+    visibilityFlag = (!isNodeSelected || renderingScene->selectedNodeIds.size() > 0) ?false:visibilityFlag;
     
-    if (renderingScene->selectedNodeId != NOT_EXISTS && renderingScene->selectedNode)
-        visibilityFlag = (renderingScene->selectedNode->getType() == NODE_RIG || renderingScene->selectedNode->getType() == NODE_TEXT) ? visibilityFlag : false;
+    if (isNodeSelected && selectedNode)
+        visibilityFlag = (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT) ? visibilityFlag : false;
     
     if(renderingScene->jointSpheres.size())
         renderingScene->jointSpheres[0]->node->setVisible(false);
     for(int i=1;i<renderingScene->jointSpheres.size();i++){
-        if(renderingScene->selectedNodeId != NOT_EXISTS && renderingScene->selectedNode && (renderingScene->selectedNode->getType() == NODE_RIG || renderingScene->selectedNode->getType() == NODE_TEXT) && i < renderingScene->selectedNode->joints.size())
+        if(isNodeSelected && selectedNode && (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT) && i < selectedNode->joints.size())
                 renderingScene->jointSpheres[i]->node->setVisible(visibilityFlag);
         else if (renderingScene->selectedNodeIds.size() > 0)
             renderingScene->jointSpheres[i]->node->setVisible(false);
@@ -515,7 +518,7 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
     if(jointId != 1)   //skipping the envelop between hip and pivot
         renderingScene->loader->initEnvelope(envelopes, jointId);
     
-    std::map<int, RigKey> rigKeys = renderingScene->rigMan->rigKeys;
+    std::map<int, RigKey>& rigKeys = renderingScene->rigMan->rigKeys;
     
     shared_ptr< vector< shared_ptr<Node> > > childs = rigKeys[jointId].referenceNode->node->Children;
     int childCount = (int)childs->size();
@@ -659,11 +662,20 @@ void RenderHelper::displayJointsBasedOnSelection()
 {
     if(!renderingScene || !smgr)
         return;
+    
+    SGNode* selectedNode = renderingScene->getSelectedNode();
+    if(!selectedNode)
+        return;
 
     for(int i = 0;i < renderingScene->jointSpheres.size();i++){
+        int selectedJointId = (!renderingScene->isRigMode) ? renderingScene->selectedJointId : renderingScene->rigMan->selectedJointId;
         //jointSpheres[i]->props.vertexColor = (i == selectedJointId) ? selectionColor :sgrJointDefaultColor;
-        if(i == renderingScene->selectedJointId){
-            renderingScene->selectedJoint = renderingScene->selectedNode->joints[i];
+        if(i == selectedJointId){
+            if(renderingScene->isRigMode)
+                renderingScene->rigMan->selectedJoint = selectedNode->joints[i];
+            else
+                renderingScene->selectedJoint = selectedNode->joints[i];
+            
         }
     }
 }
@@ -786,7 +798,7 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
         return;
     smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
     std::map<int, RigKey>& rigKeys = renderingScene->rigMan->rigKeys;
-    vector<Vector3> scaleValues;
+    //vector<Vector3> scaleValues;
     for(int i = 0; i < renderingScene->tPoseJoints.size(); i++){
         if(rigKeys[renderingScene->tPoseJoints[i].id].parentId > 0){
             Vector3 vertColor = rigKeys[renderingScene->tPoseJoints[i].id].bone->props.vertexColor;
@@ -805,8 +817,8 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
             Vector3 vertColor = rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor;
             float transparency = rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.transparency;
             int nodeId = smgr->getNodeIndexByID(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getID());
-            scaleValues.push_back(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale());
-            rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale() * 1.3);
+            //scaleValues.push_back(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale());
+            //rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale() * 1.3);
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor = Vector3(i/255.0,255/255.0,255/255.0);
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.transparency = 1.0;
@@ -815,11 +827,12 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->props.vertexColor = vertColor;
         }
     }
-    
+    /*
     for(int i = 0; i < renderingScene->tPoseJoints.size(); i++) {
         if(renderingScene->tPoseJoints[i].id != 0)
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(scaleValues[i]);
     }
+    */
     // Draw Joints
     if(renderingScene->shaderMGR->deviceType == OPENGLES2)
         renderingScene->selectMan->readSkeletonSelectionTexture();
