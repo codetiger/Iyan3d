@@ -31,6 +31,7 @@ private:
     std::map<int,Vector3>::iterator   ikJointsPositoinMapItr;
     std::map<int,vector<Vector3> > textJointsBasePos;
     void getNodeColorFromTouchTexture();
+    bool selectNodeOrJointInPixel(Vector2 touchPixel);
     void rttDrawCall();
     void postRTTDrawCall();
     void rttShadowMap();
@@ -70,7 +71,8 @@ public:
     void checkSelection(Vector2 touchPosition,bool isDisplayPrepared = false);
     void changeObjectScale(Vector3 scale, bool isChanged);
     void rttNodeJointSelection(Vector2 touchPosition);
-    void updateNodeSelectionFromColor(Vector3 pixel);
+    bool updateNodeSelectionFromColor(Vector3 pixel);
+    void highlightSelectedNode();
     void setDataForFrame(int frame);
     void setKeysForFrame(int frame);
     void applySGAOnNode(std::string *filePath);
@@ -130,6 +132,7 @@ public:
     void clearLightProps();
     void setLightingOff();
     void setLightingOn();
+    void setTransparencyForIntrudingObjects();
 
     void resetMaterialTypes(bool isToonShader);
 

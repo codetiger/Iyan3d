@@ -4,7 +4,7 @@
 #define CAM_ZOOM_SPEED 30.0
 #define CAM_PAN_SPEED 30.0
 #define CAM_ZOOM_IN_LIMIT 5.0
-#define CAM_SWIPE_SPEED 10.0
+#define CAM_SWIPE_SPEED 20.0
 #define CAM_UPVEC_UPREAL_MAX_DIF 0.80
 #define CAM_PREV_PERCENT 0.18
 #define CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE 1.5
@@ -54,9 +54,6 @@
 class SGScene{
 private:
     MIRROR_SWITCH_STATE mirrorSwitchState;
-    
-    
-    
     Plane3D *controlsPlane;
     Vector3 circleTouchPoint,cameraAngle;
     
@@ -72,11 +69,13 @@ protected:
     void createCircle();
     
 public:
+    float xAcceleration, yAcceleration;
     float prevRotX , prevRotY, prevRotZ;
     bool isNodeSelected,isJointSelected,isControlSelected,shouldUpdateShadows;
     int selectedJointId,selectedNodeId,selectedControlId,controlType,currentAction, previousMaterialIndex , swipeTiming;
     float screenWidth,screenHeight,screenScale;
     Vector3	planeFacingDirection[3];
+    Vector3 controlDirection[3];
     Vector3 cameraTarget,previousTarget;
     Texture *touchTexture;
     SGNode *selectedNode;
@@ -97,6 +96,7 @@ public:
     ~SGScene();
     virtual void renderAll() = 0;
     void swipeProgress(float angleX , float angleY);
+    void swipeToRotate();
     void panBegan(Vector2 touch1, Vector2 touch2);
     void panProgress(Vector2 touch1, Vector2 touch2);
     bool createJointSpheres(int additionalJoints);

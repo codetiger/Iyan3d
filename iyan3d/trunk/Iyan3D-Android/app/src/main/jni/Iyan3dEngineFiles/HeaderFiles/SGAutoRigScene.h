@@ -43,6 +43,7 @@ private:
     void setRigBonesScale(int jointId,int parentId);
     bool findInRigKeys(int key);
     void rttControlSelectionAutoRig(Vector2 touchPosition);
+    bool selectSkeletonJointInPixel(Vector2 touchPixel);
 
 protected:
     bool isMoved;
