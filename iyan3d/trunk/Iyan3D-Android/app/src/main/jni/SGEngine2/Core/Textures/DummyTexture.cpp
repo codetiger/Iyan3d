@@ -30,3 +30,11 @@ void DummyTexture::createRenderTargetTexture(string name, TEXTURE_DATA_FORMAT fo
     width = textureWidth;
     height = textureHeight;
 }
+
+void DummyTexture::updateTexture(string filePath, int frame) {
+
+}
+
+bool DummyTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType) {
+
+}

@@ -2,7 +2,7 @@
 #ifndef __SGEngine2__Particle_h__
 #define __SGEngine2__Particle_h__
 
-#include "common.h"
+#include "../common/common.h"
 
 class Particle {
 public:

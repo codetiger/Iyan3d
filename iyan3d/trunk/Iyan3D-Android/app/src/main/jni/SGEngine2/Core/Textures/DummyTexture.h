@@ -19,5 +19,7 @@ public:
     ~DummyTexture();
     bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
     void createRenderTargetTexture(string textureName , TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height);
+    void updateTexture(string filePath, int frame);
+    bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
 };
 #endif /* defined(__SGEngine2__DummyTexture__) */

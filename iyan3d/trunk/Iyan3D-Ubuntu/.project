@@ -691,6 +691,31 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/Node.h</locationURI>
 		</link>
 		<link>
+			<name>src/SGEngine2/Core/Nodes/Particle.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/Particle.h</locationURI>
+		</link>
+		<link>
+			<name>src/SGEngine2/Core/Nodes/ParticleManager.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/ParticleManager.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/SGEngine2/Core/Nodes/ParticleManager.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/ParticleManager.h</locationURI>
+		</link>
+		<link>
+			<name>src/SGEngine2/Core/Nodes/ParticlePool.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/ParticlePool.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/SGEngine2/Core/Nodes/ParticlePool.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/ParticlePool.h</locationURI>
+		</link>
+		<link>
 			<name>src/SGEngine2/Core/Textures/DummyTexture.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Textures/DummyTexture.cpp</locationURI>

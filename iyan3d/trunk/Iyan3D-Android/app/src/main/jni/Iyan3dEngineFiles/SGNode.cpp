@@ -295,7 +295,7 @@ Json::Value SGNode::parseParticlesJson(int assetId)
     Json::Reader reader;
     if(!reader.parse(jsonFile, particlesData, false)){
         Logger::log(ERROR, "Unable to parse jointsData.json", "AutoRigHelper");
-        return;
+        return particlesData;
     }
     jsonFile.close();
     return particlesData;

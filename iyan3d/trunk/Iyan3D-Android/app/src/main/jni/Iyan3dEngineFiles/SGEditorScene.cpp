@@ -546,18 +546,19 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
     string StoragePath;
 #ifdef IOS
     StoragePath = constants::CachesStoragePath + "/";
-    string textureFileName = StoragePath + nodes[selectedNode]->textureName+".png";
-        if(!nodes[selectedNode]->checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Sgm/" + nodes[selectedNode]->textureName+".png";
-            if(!nodes[selectedNode]->checkFileExists(textureFileName))
-                textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Textures/" + nodes[selectedNode]->textureName+".png";
-                if(!nodes[selectedNode]->checkFileExists(textureFileName))
-                    textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Rigs/" + nodes[selectedNode]->textureName+".png";
-        }
 #endif
 #ifdef ANDROID
     StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
+    string textureFileName = StoragePath + nodes[selectedNode]->textureName+".png";
+	if(!nodes[selectedNode]->checkFileExists(textureFileName)){
+		textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Sgm/" + nodes[selectedNode]->textureName+".png";
+		if(!nodes[selectedNode]->checkFileExists(textureFileName))
+			textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Textures/" + nodes[selectedNode]->textureName+".png";
+			if(!nodes[selectedNode]->checkFileExists(textureFileName))
+				textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Rigs/" + nodes[selectedNode]->textureName+".png";
+	}
+
     if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
