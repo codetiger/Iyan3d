@@ -18,13 +18,13 @@
 @interface MeshProperties : UIViewController{
     float refractionValue;
     float reflectionValue;
-    bool isLightningValue;
+    bool isLightningValue,isHaveLightOption;
     bool isVisibleValue;
     bool isFaceNormal;
     int mirrorStatus;
     
 }
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil RefractionValue:(float)refraction ReflectionValue:(float)reflection LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil RefractionValue:(float)refraction ReflectionValue:(float)reflection LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState LightState:(BOOL)ishaveLighting;
 
 @property (weak, nonatomic) IBOutlet UISlider *refractionSlider;
 @property (weak, nonatomic) IBOutlet UISlider *reflectionSlider;

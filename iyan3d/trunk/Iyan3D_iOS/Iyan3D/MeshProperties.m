@@ -18,7 +18,7 @@
 
 @implementation MeshProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil RefractionValue:(float)refraction ReflectionValue:(float)reflection LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil RefractionValue:(float)refraction ReflectionValue:(float)reflection LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState LightState:(BOOL)ishaveLighting {
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
@@ -28,6 +28,7 @@
         isLightningValue=lightningValue;
         isVisibleValue=isVisible;
         mirrorStatus = mirrorState;
+        isHaveLightOption = ishaveLighting;
     }
     return self;
 }
@@ -39,6 +40,7 @@
     self.lightingSwitch.on=isLightningValue;
     self.visibleChanged.on=isVisibleValue;
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
+    [_lightingSwitch setEnabled:isHaveLightOption];
     [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
     [_mirrorBtn setOn:(mirrorStatus == MIRROR_DISABLE) ? NO : (mirrorStatus == MIRROR_ON) ? YES : NO  animated:YES];
 }

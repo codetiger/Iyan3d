@@ -1183,6 +1183,12 @@
 		3DD47BF91C60A43500E7CCFD /* 60005.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEE1C60A43500E7CCFD /* 60005.sgm */; };
 		3DD47BFA1C60A43500E7CCFD /* 60006.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEF1C60A43500E7CCFD /* 60006.sgm */; };
 		3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEF1C60A43500E7CCFD /* 60006.sgm */; };
+		3DE065351C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */; };
+		3DE065361C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */; };
+		3DE065381C7C28B600CB7158 /* My-objects-Particles.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065371C7C28B600CB7158 /* My-objects-Particles.png */; };
+		3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065371C7C28B600CB7158 /* My-objects-Particles.png */; };
+		3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
+		3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
 		62044E3419920D8F0067E21E /* button-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 62044E3319920D8F0067E21E /* button-background.png */; };
 		6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED51B1484AE00DCD585 /* depthPass.fsh */; };
 		6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED61B1484AE00DCD585 /* depthPass.vsh */; };
@@ -3284,6 +3290,9 @@
 		3DD47BED1C60A43500E7CCFD /* 60004.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60004.sgm; sourceTree = "<group>"; };
 		3DD47BEE1C60A43500E7CCFD /* 60005.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60005.sgm; sourceTree = "<group>"; };
 		3DD47BEF1C60A43500E7CCFD /* 60006.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60006.sgm; sourceTree = "<group>"; };
+		3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
+		3DE065371C7C28B600CB7158 /* My-objects-Particles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles.png"; sourceTree = "<group>"; };
+		3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightAndVideoProperties.xib; path = "ui/Popover Views/LightAndVideoProperties.xib"; sourceTree = "<group>"; };
 		62044E3319920D8F0067E21E /* button-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-background.png"; path = "Resources/imgs/button-background.png"; sourceTree = "<group>"; };
 		6231CED51B1484AE00DCD585 /* depthPass.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.fsh; path = Resources/shaders/depthPass.fsh; sourceTree = "<group>"; };
 		6231CED61B1484AE00DCD585 /* depthPass.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.vsh; path = Resources/shaders/depthPass.vsh; sourceTree = "<group>"; };
@@ -4327,6 +4336,8 @@
 		01B4CF931C29219A0091E19B /* rightview */ = {
 			isa = PBXGroup;
 			children = (
+				3DE065371C7C28B600CB7158 /* My-objects-Particles.png */,
+				3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */,
 				3DC60FF61C6B192D00A8D412 /* hq-IPhone.png */,
 				3DC60FF71C6B192D00A8D412 /* hq-IPhone@2x.png */,
 				3DC60FF81C6B192D00A8D412 /* hq.png */,
@@ -5890,6 +5901,7 @@
 				01AAE2931C43C25000B194E0 /* MeshProperties.h */,
 				01AAE2941C43C25000B194E0 /* MeshProperties.m */,
 				01AAE2951C43C25000B194E0 /* MeshProperties.xib */,
+				3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */,
 			);
 			name = "Popover Views";
 			sourceTree = "<group>";
@@ -6163,40 +6175,20 @@
 				01B4BCB61C32904C00E09269 /* EditorViewControllerPhone.xib */,
 				3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */,
 				01B4CF6F1C291E3F0091E19B /* EditorViewController.h */,
-				62F4D2A5199C7ABA0052EF95 /* AnimationView.xib */,
 				3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */,
 				3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */,
 				3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */,
 				01B6C8BB1C3BB8940050D2F9 /* AssetSelectionSidePanelPhone.xib */,
-				62F4D2A3199C7ABA0052EF95 /* AnimationEditorViewControllerPad.h */,
-				E24FBD0A1ACBFD9600CF7F8C /* AnimationEditorViewControllerPad.mm */,
 				C8AA46F01C227D1000C4AB53 /* SceneSelectionControllerNew.h */,
 				C8AA46F11C227D1000C4AB53 /* SceneSelectionControllerNew.mm */,
 				C8AA46F21C227D1000C4AB53 /* SceneSelectionControllerNew.xib */,
 				3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */,
 				01B6F3EF1C3E5C700041D42F /* SceneSelectionControllerNewPhone.xib */,
-				E21A4EB81AC9795700AD61DD /* AutoRigViewController.xib */,
-				E21A4EB91AC9795700AD61DD /* AutoRigViewControllerPhone.xib */,
-				E2497679196BE0310025D442 /* AnimationEditorViewControllerPhone.xib */,
-				E21A4EB61AC9795700AD61DD /* AutoRigViewController.h */,
-				E21A4EB71AC9795700AD61DD /* AutoRigViewController.mm */,
-				E249767A196BE0310025D442 /* AssetSelectionViewControllerPad.h */,
-				E249767B196BE0310025D442 /* AssetSelectionViewControllerPad.mm */,
-				E249767C196BE0310025D442 /* AssetSelectionViewControllerPad.xib */,
-				E249767D196BE0310025D442 /* AssetSelectionViewControllerPhone.xib */,
 				E2497682196BE0310025D442 /* LoadingViewControllerPad.h */,
 				E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */,
 				E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */,
 				E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */,
 				3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */,
-				E249768C196BE0310025D442 /* SceneSelectionViewControllerPad.h */,
-				E249768D196BE0310025D442 /* SceneSelectionViewControllerPad.mm */,
-				E249768A196BE0310025D442 /* SceneSelectionControllerPad.xib */,
-				E249768B196BE0310025D442 /* SceneSelectionControllerPhone.xib */,
-				25895B7E1B4F2D8300E833F8 /* AnimationSelectionViewController.h */,
-				2551246A1B504B6E00E930BE /* AnimationSelectionViewControllerPad.xib */,
-				2551246B1B504B6E00E930BE /* AnimationSelectionViewControllerPhone.xib */,
-				25895B7F1B4F2D8300E833F8 /* AnimationSelectionViewController.mm */,
 				3D04EAE61C2581BC00C18E1A /* TextSelectionSidePanel.h */,
 				3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */,
 				3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */,
@@ -6754,6 +6746,7 @@
 				01F872FA1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A51C3CEF360096AD14 /* color_IPhone.png in Resources */,
 				3DD47BFA1C60A43500E7CCFD /* 60006.sgm in Resources */,
+				3DE065381C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				7FC900DA1A0A01470051B941 /* move-first-phone.png in Resources */,
 				7FC901581A0A54850051B941 /* Animation-topviewBg@2x.png in Resources */,
 				7F00878F1ADFC15400764DDE /* left-align@3x.png in Resources */,
@@ -7184,6 +7177,7 @@
 				3D5F99221C4D04EB00DD47F5 /* Sphere.png in Resources */,
 				7F22BB581AC54C96006B44C6 /* justify.png in Resources */,
 				256ED8E71B1FEDED008ADEF8 /* Hemi Head bd.ttf in Resources */,
+				3DE065351C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */,
 				01F873121C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
 				E2497666196BE0190025D442 /* ObjCellViewPhone.xib in Resources */,
 				01F873301C3A78B4009AA31E /* Twitter_IPhone.png in Resources */,
@@ -7228,6 +7222,7 @@
 				01ACD0FE1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */,
 				7F0C02C91A930F6E00E2E09D /* videoShare.png in Resources */,
 				01CCD1C51C3F927D00565664 /* ObjSidePanel.xib in Resources */,
+				3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */,
 				25C90F4B1B3616B400D803DB /* bevel.png in Resources */,
 				7F0087841ADFC15400764DDE /* center-align-pad@2x.png in Resources */,
 				01B4D0491C2937000091E19B /* Import_Pad@2x.png in Resources */,
@@ -7540,6 +7535,7 @@
 				01F872FB1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A61C3CEF360096AD14 /* color_IPhone.png in Resources */,
 				3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */,
+				3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				7FDF55141B73688F006DC41F /* premium@2x.png in Resources */,
 				7FC5276B1B6F983D00C5D26D /* Mail-phone.png in Resources */,
 				C8DF1FE21C242DBD00F689D6 /* close.png in Resources */,
@@ -7970,6 +7966,7 @@
 				3D5F99231C4D04EB00DD47F5 /* Sphere.png in Resources */,
 				01B4D0621C2937000091E19B /* OPtions_Pad@2x.png in Resources */,
 				01F873131C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
+				3DE065361C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */,
 				E206730A1B049AA6006DD2F7 /* render_image.png in Resources */,
 				01F873311C3A78B4009AA31E /* Twitter_IPhone.png in Resources */,
 				01B4D05C1C2937000091E19B /* My-objects-Text_Pad.png in Resources */,
@@ -8014,6 +8011,7 @@
 				01ACD0FF1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */,
 				E206731C1B049AA6006DD2F7 /* move-first-phone@2x.png in Resources */,
 				01CCD1C61C3F927D00565664 /* ObjSidePanel.xib in Resources */,
+				3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */,
 				E206731F1B049AA6006DD2F7 /* render_video@2x.png in Resources */,
 				E20673241B049AA6006DD2F7 /* left-align@2x.png in Resources */,
 				C8AA46EF1C227CED00C4AB53 /* SceneSelectionFrameCell.xib in Resources */,

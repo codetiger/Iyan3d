@@ -14,9 +14,9 @@
 
 
 @protocol SettingsViewControllerDelegate
--(void)frameCountDisplayMode:(int)selctedIndex;
--(void)cameraPreviewSize:(int)selctedIndex;
--(void)cameraPreviewPosition:(int)selctedIndex;
+-(void)frameCountDisplayMode;
+-(void)cameraPreviewSize;
+-(void)cameraPreviewPosition;
 -(void)toolbarPosition:(int)selctedIndex;
 -(void)multiSelectUpdate:(BOOL)value;
 @end
@@ -45,6 +45,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionRightTop;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftBottom;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftTop;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *restorePurchaseProgress;
+
 
 - (IBAction)restoreAction:(id)sender;
 - (IBAction)toolBarPositionChanged:(id)sender;

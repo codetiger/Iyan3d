@@ -540,22 +540,13 @@
 
 #pragma Settings Delegates
 
--(void)frameCountDisplayMode:(int)selctedIndex{
-    int tag = (selctedIndex == FRAME_COUNT) ? FRAME_COUNT : FRAME_DURATION;
-    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:tag] withKey:@"indicationType"];
+-(void)frameCountDisplayMode{
+    
 }
--(void)cameraPreviewSize:(int)selctedIndex{
-    if(selctedIndex==CAMERA_PREVIEW_SMALL)
-    {
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:1.0] withKey:@"cameraPreviewSize"];
-    }
-    else
-    {
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:2.0] withKey:@"cameraPreviewSize"];
-    }
+-(void)cameraPreviewSize{
+   
 }
--(void)cameraPreviewPosition:(int)selctedIndex{
-    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"cameraPreviewPosition"];
+-(void)cameraPreviewPosition{
 
 }
 -(void)toolbarPosition:(int)selctedIndex{

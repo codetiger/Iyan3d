@@ -535,8 +535,17 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         return;
     
     string texturePath = FileHelper::getDocumentsDirectory() + "Resources/Textures/" + textureFileName+".png";
-    if(!nodes[selectedNodeId]->checkFileExists(texturePath))
+    if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
         texturePath = FileHelper::getCachesDirectory()+textureFileName+".png";
+        if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
+            texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureFileName+".png";
+            if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
+                texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureFileName+".png";
+                if(!nodes[selectedNodeId]->checkFileExists(texturePath))
+                    texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureFileName+".png";
+            }
+        }
+    }
     
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->props.perVertexColor = false;

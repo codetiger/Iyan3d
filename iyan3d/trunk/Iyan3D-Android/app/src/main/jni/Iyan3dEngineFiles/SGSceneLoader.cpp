@@ -290,7 +290,9 @@ bool SGSceneLoader::loadNodeOnUndoORedo(SGAction action, int actionType)
     //sgNode->props.prevMatName = ConversionHelper::getStringForWString(action.actionSpecificStrings[0]);
     sgNode->optionalFilePath = ConversionHelper::getStringForWString(action.actionSpecificStrings[1]);
     sgNode->name = action.actionSpecificStrings[2];
-    
+    sgNode->oriTextureName = ConversionHelper::getStringForWString(action.actionSpecificStrings[3]);
+    sgNode->textureName = ConversionHelper::getStringForWString(action.actionSpecificStrings[4]);
+    sgNode->props.isLighting = action.actionSpecificFlags[0];
     if(!loadNode(sgNode, actionType)) {
         delete sgNode;
         return false;

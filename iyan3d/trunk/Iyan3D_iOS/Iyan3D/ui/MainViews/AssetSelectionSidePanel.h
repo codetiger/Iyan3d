@@ -16,6 +16,7 @@
 - (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType;
 - (void) removeTempNodeFromScene;
 - (void) showOrHideProgress:(BOOL) value;
+- (void)deallocSubViews;
 
 @end
 
@@ -43,5 +44,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *addToSceneBtn;
 @property (weak, nonatomic) id <AssetSelectionDelegate> assetSelectionDelegate;
+- (IBAction)cancelButtonAction:(id)sender;
 
 @end

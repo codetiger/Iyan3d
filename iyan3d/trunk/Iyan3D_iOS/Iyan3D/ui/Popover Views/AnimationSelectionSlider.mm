@@ -249,6 +249,8 @@
     [self.delegate showOrHideLeftView:NO withView:nil];
     editorSceneLocal->loader->removeTempNodeIfExists();
     [self.view removeFromSuperview];
+    [self.delegate reloadFrames];
+    [self.delegate deallocSubViews];
     [self deallocView];
 }
 
@@ -268,6 +270,8 @@
     [self.delegate myAnimation:YES];
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self.view removeFromSuperview];
+    [self.delegate reloadFrames];
+    [self.delegate deallocSubViews];
     [self deallocView];
 }
 
@@ -563,7 +567,7 @@
                                                             if (animationFile != nil)
                                                                 [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", selectedCell, extension] mimeType:@"image/png"];
                                                             [formData appendPartWithFormData:[userid dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
-                                                                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueid"];
+                                                                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueId"];
                                                                 [formData appendPartWithFormData:[email dataUsingEncoding:NSUTF8StringEncoding] name:@"email"];
                                                             [formData appendPartWithFormData:[username dataUsingEncoding:NSUTF8StringEncoding] name:@"username"];
                                                             [formData appendPartWithFormData:[name dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_name"];
@@ -674,7 +678,6 @@
     }
    [self.delegate showOrHideProgress:0];
 }
-
 
 - (void)deallocView
 {

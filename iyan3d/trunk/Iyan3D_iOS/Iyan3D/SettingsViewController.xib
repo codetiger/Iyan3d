@@ -21,6 +21,7 @@
                 <outlet property="renderPreviewSizeLarge" destination="a3w-eS-iyn" id="hoZ-G5-AiS"/>
                 <outlet property="renderPreviewSizeSmall" destination="Xqy-dv-PAd" id="cs5-sN-vHj"/>
                 <outlet property="restoreBtn" destination="Tt3-Ct-3uo" id="Ln9-Ea-hon"/>
+                <outlet property="restorePurchaseProgress" destination="IBQ-JF-AsA" id="Sre-ut-SsE"/>
                 <outlet property="toolbarLeft" destination="BnY-cJ-lir" id="XTn-1t-vSr"/>
                 <outlet property="toolbarPosition" destination="TcA-9S-yyh" id="NWI-RQ-a2d"/>
                 <outlet property="toolbarRight" destination="DOc-LE-l8X" id="iVP-Zc-8Xn"/>
@@ -199,6 +200,9 @@
                                 <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="6nO-Nt-Z8v"/>
                             </connections>
                         </button>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="IBQ-JF-AsA">
+                            <rect key="frame" x="288" y="10" width="20" height="20"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

@@ -161,6 +161,7 @@
     [self.collectionView reloadData];
     AssetItem* assetItem = fontArray[0];
     fontFileName = assetItem.name;
+    [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
 }
 
 - (void)loadFont:(NSString*)customFontPath withExtension:(NSString*)extension
@@ -224,6 +225,10 @@
             [cell.progress stopAnimating];
             [cell.progress setHidden:YES];
         }
+        if ([[[AppHelper getAppHelper] userDefaultsForKey:@"Font_Store_Array"] isEqualToString:assetItem.name]) {
+            cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
+        }
+
     }
     else {
         cell.fontName.text = [fontListArray[indexPath.row] stringByDeletingPathExtension];
@@ -243,6 +248,8 @@
             [cell.progress setHidden:YES];
         }
     }
+    
+    
     return cell;
 }
 
@@ -257,15 +264,21 @@
         else
             fontFileName = [fontListArray objectAtIndex:indexPath.row];
         NSLog(@"Font File Name : %@ " , fontFileName);
-        NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
-        for (int i = 0; i < [indexPathArr count]; i++) {
-            NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
-            TextFrameCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
-            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-        }
-        TextFrameCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
+        [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
+        [self unselectAll];
+        UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
         cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
         [self load3dText];
+    }
+}
+
+- (void)unselectAll
+{
+    NSArray* indexPathArr = [self.collectionView indexPathsForVisibleItems];
+    for (int i = 0; i < [indexPathArr count]; i++) {
+        NSIndexPath* indexPathValue = [indexPathArr objectAtIndex:i];
+        UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPathValue];
+        cell.backgroundColor = [UIColor clearColor];
     }
 }
 
@@ -331,8 +344,9 @@
     [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.textSelectionDelegate showOrHideProgress:0];
+    [self.view removeFromSuperview];
+    [self.textSelectionDelegate deallocSubViews];
     [self deallocMem];
-    [self.view removeFromSuperview];    
 }
 
 - (IBAction)addToSceneBtnAction:(id)sender {
@@ -343,19 +357,23 @@
     [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:DEFAULT_FONT_SIZE BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
     [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
-    [self deallocMem];
     [self.view removeFromSuperview];
+    [self.textSelectionDelegate deallocSubViews];
+    [self deallocMem];
+
 }
 
 - (void) load3dText{
     if(_inputText.text.length ==0){
          UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Field Empty" message:@"Please enter some text to add." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [loadNodeAlert show];
+        [self.textSelectionDelegate showOrHideProgress:0];
         return;
     }
    else if(fontFileName.length == 0){
     UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please Choose Font Style." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [loadNodeAlert show];
+       [self.textSelectionDelegate showOrHideProgress:0];
         return;
     }
     Vector4 color = Vector4(red,green,blue,1.0);

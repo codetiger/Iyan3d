@@ -74,6 +74,7 @@
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
+    [self.assetSelectionDelegate deallocSubViews];
     [self deallocMem];
 }
 
@@ -84,6 +85,7 @@
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.view removeFromSuperview];
+    [self.assetSelectionDelegate deallocSubViews];
     [self deallocMem];
 }
 

@@ -58,6 +58,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_TEXT:{
             textureName = texturePath;
+            oriTextureName = textureName;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             props.oriVertexColor = props.vertexColor;
             node = load3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
@@ -91,7 +92,9 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         case NODE_TEXT_SKIN:{
             // 'width' here is font size and 'height' is bevel value
             textureName = texturePath;
+            oriTextureName = textureName;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
+            props.oriVertexColor = props.vertexColor;
             node = loadSkin3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;
@@ -211,6 +214,17 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     node->getMesh()->Commit();
     
     string textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
+    if(!checkFileExists(textureFileName)){
+        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
+        if(!checkFileExists(textureFileName)){
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+            if(!checkFileExists(textureFileName))
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
+        }
+    }
+    
+    printf("Texture File Path : %s " , textureFileName.c_str());
+    
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -271,8 +285,15 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     
-    string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
-    
+    string textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
+    if(!checkFileExists(textureFileName)){
+        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
+        if(!checkFileExists(textureFileName)){
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+            if(!checkFileExists(textureFileName))
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
+        }
+    }
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -342,12 +363,11 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
             return shared_ptr<Node>();
     }
     if(!checkFileExists(textureFileName)){
-        textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
-        if(!checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-            if(!checkFileExists(textureFileName))
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-        }
+        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
+        if(!checkFileExists(textureFileName))
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+        if(!checkFileExists(textureFileName))
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
     }
 
     int objLoadStatus = 0;
@@ -357,6 +377,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
 
+    printf("Texture Name : %s " , textureFileName.c_str());
     if(textureName != "" && checkFileExists(textureFileName))
     {
         props.perVertexColor = false;
@@ -403,12 +424,10 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
     
     if(!checkFileExists(textureFileName)){
         textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-        if(!checkFileExists(textureFileName))
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-        if(!checkFileExists(textureFileName))
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         if(!checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory() + "/Resources/Textures/White-texture.png";
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+            if(!checkFileExists(textureFileName))
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         }
     }
     

@@ -30,6 +30,7 @@
 - (void) removeTempNodeFromScene;
 - (void) textColorPicker:(UIView*)colorPickerButton;
 - (void) showOrHideProgress:(BOOL) value;
+- (void) deallocSubViews;
 
 @end
 
@@ -67,7 +68,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *colorWheelbtn;
 @property (weak, nonatomic) IBOutlet UISwitch *boneSwitch;
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
-
+- (IBAction)cancelBtnAction:(id)sender;
 
 @end
 

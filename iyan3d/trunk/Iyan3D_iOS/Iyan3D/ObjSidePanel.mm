@@ -277,5 +277,6 @@
     else
         [self.objSlideDelegate removeTempTextureAndVertex];
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
+    [self.objSlideDelegate deallocSubViews];
 }
 @end

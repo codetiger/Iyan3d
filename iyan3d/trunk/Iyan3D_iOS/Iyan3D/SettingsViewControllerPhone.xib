@@ -13,6 +13,7 @@
                 <outlet property="renderPreviewPosition" destination="aIt-tV-K9Y" id="tjT-nk-UhJ"/>
                 <outlet property="renderPreviewSize" destination="hXC-GN-UIJ" id="Egs-ti-Eiv"/>
                 <outlet property="restoreBtn" destination="6f4-Gj-L9N" id="kND-NE-2n2"/>
+                <outlet property="restorePurchaseProgress" destination="0Dv-zy-mGN" id="0r9-mP-OeK"/>
                 <outlet property="toolbarPosition" destination="DR4-hq-Opf" id="2Ox-GC-taB"/>
                 <outlet property="view" destination="JSk-PW-0a1" id="Dex-54-031"/>
             </connections>
@@ -64,6 +65,10 @@
                                 <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="Hkn-2z-ndJ"/>
                             </connections>
                         </button>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="0Dv-zy-mGN">
+                            <rect key="frame" x="307" y="11" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

@@ -46,8 +46,8 @@
     [self setupImageTap];
     self.doneBtn.layer.cornerRadius=CORNER_RADIUS;
     self.restoreBtn.layer.cornerRadius=CORNER_RADIUS;
-
     [self readUserSettings];
+    [_restorePurchaseProgress setHidden:YES];
     
 }
 
@@ -134,17 +134,19 @@
 
 - (IBAction)renderPreviewSizeChanged:(id)sender {
     NSLog(@"Render preview size Changed");
-    [self.delegate cameraPreviewSize:(int)self.renderPreviewSize.selectedSegmentIndex];
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:(int)self.renderPreviewSize.selectedSegmentIndex] withKey:@"cameraPreviewSize"];
+    [self.delegate cameraPreviewSize];
 }
 
 - (IBAction)frameCountDisplayType:(id)sender {
     NSLog(@"frame display type Changed");
-    [self.delegate frameCountDisplayMode:(int)self.frameCountDisplay.selectedSegmentIndex];
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.frameCountDisplay.selectedSegmentIndex] withKey:@"indicationType"];
+    [self.delegate frameCountDisplayMode];
 }
 
 - (IBAction)previewpositionChanged:(id)sender {
-    NSLog(@"Preview position Changed");
-    [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.renderPreviewPosition.selectedSegmentIndex] withKey:@"cameraPreviewPosition"];
+    [self.delegate cameraPreviewPosition];
 }
 
 - (IBAction)doneBtnAction:(id)sender {
@@ -177,14 +179,18 @@
     }
     else{
         self.renderPreviewSize.selectedSegmentIndex=0;
-        [self.delegate cameraPreviewSize:(int)self.renderPreviewSize.selectedSegmentIndex];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:(int)self.renderPreviewSize.selectedSegmentIndex] withKey:@"cameraPreviewSize"];
+
+        [self.delegate cameraPreviewSize];
     }
     
 }
 - (void)renderPreviewSizeLargeTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewSize.selectedSegmentIndex==0){
         self.renderPreviewSize.selectedSegmentIndex=1;
-        [self.delegate cameraPreviewSize:(int)self.renderPreviewSize.selectedSegmentIndex];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:(int)self.renderPreviewSize.selectedSegmentIndex] withKey:@"cameraPreviewSize"];
+
+        [self.delegate cameraPreviewSize];
     }
     else{
         
@@ -194,7 +200,8 @@
 - (void)framesDisplayDurationTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.frameCountDisplay.selectedSegmentIndex==0){
         self.frameCountDisplay.selectedSegmentIndex=1;
-        [self.delegate frameCountDisplayMode:(int)self.frameCountDisplay.selectedSegmentIndex];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.frameCountDisplay.selectedSegmentIndex] withKey:@"indicationType"];
+        [self.delegate frameCountDisplayMode];
     }
     else{
         
@@ -207,14 +214,16 @@
     }
     else{
         self.frameCountDisplay.selectedSegmentIndex=0;
-        [self.delegate frameCountDisplayMode:(int)self.frameCountDisplay.selectedSegmentIndex];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.frameCountDisplay.selectedSegmentIndex] withKey:@"indicationType"];
+        [self.delegate frameCountDisplayMode];
     }
     
 }
 - (void)previewPositionRightBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=0){
          self.renderPreviewPosition.selectedSegmentIndex=0;
-        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"cameraPreviewPosition"];
+        [self.delegate cameraPreviewPosition];
     }
     else{
        
@@ -224,7 +233,8 @@
 - (void)previewPositionRightTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=1){
         self.renderPreviewPosition.selectedSegmentIndex=1;
-        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
+                [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:1] withKey:@"cameraPreviewPosition"];
+        [self.delegate cameraPreviewPosition];
     }
     else{
         
@@ -234,7 +244,8 @@
 - (void)previewPositionLeftBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=2){
         self.renderPreviewPosition.selectedSegmentIndex=2;
-        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
+                [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:2] withKey:@"cameraPreviewPosition"];
+        [self.delegate cameraPreviewPosition];
     }
     else{
         
@@ -244,7 +255,8 @@
 - (void)previewPositionLeftTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=3){
         self.renderPreviewPosition.selectedSegmentIndex=3;
-        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
+                [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:3] withKey:@"cameraPreviewPosition"];
+        [self.delegate cameraPreviewPosition];
     }
     else{
         
@@ -263,19 +275,10 @@
 }
 
 -(void) readUserSettings{
-    int framesIndicatorValue= (int)[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]longValue];
     float cameraPreviewSize= [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewSize"]floatValue];
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
-        if(framesIndicatorValue==2)
-        {
-            [self.frameCountDisplay setSelectedSegmentIndex:1];
-        }
-        else
-        {
-            
-        }
-        
-    }
+    int cameraPosition = [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]intValue];
+    int frameCountMode = [[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]intValue];
+    
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
         if(cameraPreviewSize==2.0){
             [self.renderPreviewSize setSelectedSegmentIndex:1];
@@ -284,7 +287,8 @@
             
         }
     }
-    NSLog(@"Toolpar : %ld",(long)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]);
+    [self.renderPreviewPosition setSelectedSegmentIndex:cameraPosition];
+    [self.frameCountDisplay setSelectedSegmentIndex:frameCountMode];
     if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT)
     {
         [self.toolbarPosition setSelectedSegmentIndex:TOOLBAR_LEFT];
@@ -311,6 +315,9 @@
         [signinAlert show];
         return;
     }
+    [_restoreBtn setHidden:YES];
+    [_restorePurchaseProgress setHidden:NO];
+    [_restorePurchaseProgress startAnimating];
     [[AppHelper getAppHelper] addTransactionObserver];
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] restorePurchasedTransaction];
@@ -329,10 +336,16 @@
                 [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"hasRestored"];
                 [[AppHelper getAppHelper] verifyRestorePurchase];
                 [AppHelper getAppHelper].delegate = nil;
+                [_restoreBtn setHidden:NO];
+                [_restorePurchaseProgress stopAnimating];
+                [_restorePurchaseProgress setHidden:YES];
                 break;
             } else {
                 [[AppHelper getAppHelper] saveBoolUserDefaults:false withKey:@"premiumUnlocked"];
                 [[AppHelper getAppHelper] saveBoolUserDefaults:false withKey:@"hasRestored"];
+                [_restoreBtn setHidden:NO];
+                [_restorePurchaseProgress stopAnimating];
+                [_restorePurchaseProgress setHidden:YES];
             }
         }
         
@@ -340,15 +353,18 @@
             UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"There seems to be a problem with your purchase. Please make sure that you have upgraded to Premium with the current account." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [infoAlert show];
         }
-
     }
+    
+    
 }
 
 -(void)transactionCancelled
 {
     [[AppHelper getAppHelper] removeTransactionObserver];
     [AppHelper getAppHelper].delegate = nil;
-    NSLog(@"\n Cancelled restore ");
+    [_restoreBtn setHidden:NO];
+    [_restorePurchaseProgress stopAnimating];
+    [_restorePurchaseProgress setHidden:YES];
 }
 
 

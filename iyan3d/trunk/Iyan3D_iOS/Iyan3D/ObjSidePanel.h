@@ -21,7 +21,7 @@
 - (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp;
 - (void) removeTempTextureAndVertex;
 -(void) showOrHideProgress:(BOOL) value;
-
+- (void) deallocSubViews;
 @end
 
 

@@ -466,12 +466,15 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->node->material->name));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->optionalFilePath));
         assetAction.actionSpecificStrings.push_back(actionScene->nodes[indexOfAsset]->name);
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->oriTextureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->textureName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.vertexColor.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.vertexColor.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.vertexColor.z);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.nodeSpecificFloat);
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->getType());
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->props.fontSize);
+        assetAction.actionSpecificFlags.push_back(actionScene->nodes[indexOfAsset]->props.isLighting);
         if(actionType == ACTION_TEXT_IMAGE_DELETE)
             StoreDeleteObjectKeys(indexOfAsset);
         addAction(assetAction);

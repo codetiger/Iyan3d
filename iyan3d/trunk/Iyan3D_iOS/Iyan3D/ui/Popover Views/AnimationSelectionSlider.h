@@ -27,6 +27,9 @@
 - (bool) removeNodeFromScene:(int)nodeIndex;
 - (void) updateAssetListInScenes;
 - (void) removeTempNodeFromScene;
+- (void)deallocSubViews;
+- (void) reloadFrames;
+
 @end
 
 @interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>
