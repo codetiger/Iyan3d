@@ -51,14 +51,14 @@
                     </connections>
                 </collectionView>
                 <view contentMode="scaleToFill" id="I0N-EX-a4s">
-                    <rect key="frame" x="0.0" y="650" width="300" height="59"/>
+                    <rect key="frame" x="0.0" y="650" width="300" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VYm-aD-dU0">
-                            <rect key="frame" x="171" y="7" width="110" height="40"/>
+                            <rect key="frame" x="180" y="8" width="110" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <state key="normal" title="ADD TO SCENE">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -67,10 +67,10 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="87a-NJ-bmX">
-                            <rect key="frame" x="21" y="8" width="110" height="40"/>
+                            <rect key="frame" x="8" y="8" width="110" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549021" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <state key="normal" title="CANCEL">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>

@@ -100,9 +100,11 @@ BOOL missingAlertShown;
     
     #if !(TARGET_IPHONE_SIMULATOR)
         if (iOSVersion >= 8.0)
-            isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
+            isMetalSupported = false;//(MTLCreateSystemDefaultDevice() != NULL) ? true : false;
     #endif
-
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    screenHeight = screenRect.size.height;
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
 
     totalFrames = 24;
@@ -231,6 +233,7 @@ BOOL missingAlertShown;
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
     
 }
+
 
 - (void)loadNodeForImage:(NSMutableDictionary*)nsDict
 {
@@ -475,8 +478,7 @@ BOOL missingAlertShown;
     if (isPlaying) {
         //[self setInterfaceVisibility:YES];
         
-        //[self.playButton setImage:[UIImage imageNamed:@"stop-img.png"] forState:UIControlStateNormal];
-        //[self.playButton setTitle:@"  STOP" forState:UIControlStateNormal];
+        [self.playBtn setImage:[UIImage imageNamed:@"Pause_Pad.png"] forState:UIControlStateNormal];
         playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0f / 24.0f) target:self selector:@selector(playTimerTarget) userInfo:nil repeats:YES];
     }
     else {
@@ -756,7 +758,14 @@ BOOL missingAlertShown;
 
 - (IBAction)optionsBtnAction:(id)sender
 {
-    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)){
+  
+    if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
+    {
+        return;
+    }
+
+    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
+    {
         Quaternion lightProps;
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)
             lightProps = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(editorScene->currentFrame,editorScene->nodes[editorScene->selectedNodeId]->rotationKeys,true);
@@ -771,7 +780,46 @@ BOOL missingAlertShown;
         self.popoverController.popoverContentSize = CGSizeMake(270, 300);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_popUpVc.view setClipsToBounds:YES];
+        [_lightProp.view setClipsToBounds:YES];
+        CGRect rect = _optionsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:NO];
+    }
+    else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
+    {
+        float fovValue = editorScene->cameraFOV;
+        NSInteger resolutionType = editorScene->cameraResolutionType;
+        _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
+        _camProp.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
+        self.popoverController.popoverContentSize = CGSizeMake(300 , 200);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_camProp.view setClipsToBounds:YES];
+        CGRect rect = _optionsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:NO];
+   
+    }
+    else
+    {
+        float brightnessValue = editorScene->nodes[editorScene->selectedNodeId]->props.brightness;
+        float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
+        bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
+        bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
+        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
+        _meshProp.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
+        self.popoverController.popoverContentSize = CGSizeMake(300 , 300);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_meshProp.view setClipsToBounds:YES];
         CGRect rect = _optionsBtn.frame;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
@@ -816,7 +864,57 @@ BOOL missingAlertShown;
 
 - (IBAction)undoBtnAction:(id)sender
 {
-    NSLog(@"UndoBtn Clicked");
+//    int returnValue2 = NOT_SELECTED;
+//    ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);
+//    switch (actionType) {
+//        case DO_NOTHING: {
+//            break;
+//        }
+//        case DELETE_ASSET: {
+//            int nodeIndex = returnValue2;
+//            if (nodeIndex < assetsInScenes.count) {
+//                [assetsInScenes removeObjectAtIndex:nodeIndex];
+//                editorScene->loader->removeObject(nodeIndex);
+//            }
+//            break;
+//        }
+//            
+//        case ADD_TEXT_IMAGE_BACK: {
+//            std::wstring name = editorScene->nodes[editorScene->nodes.size() - 1]->name;
+//            [assetsInScenes addObject:[self stringWithwstring:name]];
+//            break;
+//        }
+//        case ADD_ASSET_BACK: {
+//            int assetId = returnValue2;
+//            assetAddType = UNDO_ACTION;
+//            AssetItem* assetObject = [cache GetAsset:assetId];
+//            [self loadNodeInScene:assetObject];
+//            break;
+//        }
+//        case SWITCH_FRAME: {
+//            NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+//            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+//            [self HighlightFrame];
+//            [self.framesCollectionView reloadData];
+//            break;
+//        }
+//        case RELOAD_FRAMES: {
+//            [self.framesCollectionView reloadData];
+//            break;
+//        }
+//        case SWITCH_MIRROR:
+//            
+//            break;
+//        default: {
+//            break;
+//        }
+//    }
+//    
+//    if (editorScene->actionMan->actions.size() <= 0 || editorScene->actionMan->currentAction <= 0){
+//        
+//    }
+//    
+
 }
 
 - (IBAction)redoBtnAction:(id)sender
@@ -1239,7 +1337,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [self.popoverController dismissPopoverAnimated:YES];
             textSelectionSlider = [[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
             textSelectionSlider.textSelectionDelegate = self;
-            textSelectionSlider.view.frame = self.leftView.frame;
             [self showOrHideLeftView:YES withView:textSelectionSlider.view];
         }
     }
@@ -1423,12 +1520,37 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             settingsVc.view.superview.backgroundColor = [UIColor clearColor];
         }
         else{
-            [self.popoverController dismissPopoverAnimated:YES];
-            settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone"bundle:nil];
-            [settingsVc.view setClipsToBounds:YES];
-            settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
-            [self presentViewController:settingsVc animated:YES completion:nil];
-            settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+            
+            NSLog(@"Screen Height %f",screenHeight);
+            if(screenHeight>320){
+                if(screenHeight<400)
+                {
+                    [self.popoverController dismissPopoverAnimated:YES];
+                    settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone2x"bundle:nil];
+                    [settingsVc.view setClipsToBounds:YES];
+                    settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+                    [self presentViewController:settingsVc animated:YES completion:nil];
+                    settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+                }
+                else
+                {
+                    [self.popoverController dismissPopoverAnimated:YES];
+                    settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone2x"bundle:nil];
+                    [settingsVc.view setClipsToBounds:YES];
+                    [self presentViewController:settingsVc animated:YES completion:nil];
+                    settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+                    
+                }
+            }
+            else{
+                [self.popoverController dismissPopoverAnimated:YES];
+                settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone"bundle:nil];
+                [settingsVc.view setClipsToBounds:YES];
+                settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+                [self presentViewController:settingsVc animated:YES completion:nil];
+                settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+            }
+            
         }
     }
 
@@ -1586,6 +1708,33 @@ void downloadFile(NSString* url, NSString* fileName)
         [[AppHelper getAppHelper] writeDataToFile:data FileName:fileName];
 }
 
+#pragma mark Camerasettings
+
+- (void)cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution{
+    NSLog(@"Fov value : %f Resolution type: %ld",fov,(long)resolution);
+    if (editorScene->cameraResolutionType != resolution) {
+        
+        editorScene->actionMan->changeCameraProperty(fov, (int)resolution, true);
+    } //switch action
+    else
+        editorScene->actionMan->changeCameraProperty(fov, (int)resolution, false); //slider action
+}
+
+#pragma mark Meshproperties Delegate
+
+- (void)meshPropertyChanged:(float)brightness Specular:(float)specular Lighting:(BOOL)light Visible:(BOOL)visible
+{
+    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+        return;
+    
+    if (editorScene->nodes[editorScene->selectedNodeId]->props.isLighting != light || editorScene->nodes[editorScene->selectedNodeId]->props.isVisible != visible) { //switch action
+        editorScene->actionMan->changeMeshProperty(brightness, specular, light, visible, true);
+    }
+    else { //slider action
+        editorScene->actionMan->changeMeshProperty(brightness, specular, light, visible, false);
+    }
+    
+}
 
 #pragma Switch to SceneSelection
 - (void) loadSceneSelectionView
@@ -1616,6 +1765,9 @@ void downloadFile(NSString* url, NSString* fileName)
     }
 }
 
+
+
+
 #pragma Show Or Hide Progress
 
 -(void) showOrHideProgress:(BOOL) value{
@@ -1628,6 +1780,11 @@ void downloadFile(NSString* url, NSString* fileName)
         [_center_progress stopAnimating];
         [_center_progress setHidden:YES];
     }
+}
+
+
+- (void)setupEnableDisableControls{
+    
 }
 
 - (void)dealloc

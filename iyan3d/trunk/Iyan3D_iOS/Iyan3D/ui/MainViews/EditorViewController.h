@@ -34,8 +34,10 @@
 #import "SettingsViewController.h"
 #import "ScaleViewController.h"
 #import "ObjSidePanel.h"
+#import "CameraSettings.h"
+#import "MeshProperties.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate>{
     int totalFrames;
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
@@ -59,6 +61,7 @@
     NSTimer *playTimer;
     SettingsViewController *settingsVc;
     CADisplayLink* displayLink;
+    CGFloat screenHeight;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
@@ -94,7 +97,8 @@
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
 @property (nonatomic, strong) LightProperties *lightProp;
 @property (nonatomic, strong) ScaleViewController *scaleProps;
-
+@property (nonatomic, strong) CameraSettings *camProp;
+@property (nonatomic, strong) MeshProperties *meshProp;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *center_progress;
 

@@ -125,7 +125,6 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title=" Scenes" image="Back.png"/>
                             <connections>
-                                <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="PnD-fD-0mV"/>
                                 <action selector="backToScenes:" destination="-1" eventType="touchUpInside" id="1O8-eE-8nK"/>
                             </connections>
                         </button>
@@ -228,7 +227,7 @@
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  MOVE" image="move-img.png">
+                            <state key="normal" title="  MOVE" image="Move_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -316,15 +315,15 @@
         <image name="Import_Pad.png" width="23" height="40"/>
         <image name="Info.png" width="22" height="22"/>
         <image name="Login-icon.png" width="24" height="24"/>
+        <image name="Move_Pad.png" width="58" height="40"/>
         <image name="Next-Frame.png" width="31" height="36"/>
         <image name="Options_Pad.png" width="23" height="40"/>
         <image name="Play_Pad.png" width="18" height="40"/>
         <image name="Previous-Frame.png" width="31" height="36"/>
         <image name="Redo_Pad.png" width="26" height="40"/>
-        <image name="Rotate_Pad.png" width="23" height="40"/>
-        <image name="Scale_Pad.png" width="23" height="40"/>
+        <image name="Rotate_Pad.png" width="58" height="40"/>
+        <image name="Scale_Pad.png" width="58" height="40"/>
         <image name="Undo_Pad.png" width="26" height="40"/>
         <image name="View.png" width="22" height="22"/>
-        <image name="move-img.png" width="24" height="24"/>
     </resources>
 </document>

@@ -51,11 +51,11 @@
                     </connections>
                 </collectionView>
                 <view contentMode="scaleToFill" id="h2T-Eh-N8T">
-                    <rect key="frame" x="-1" y="239" width="213" height="40"/>
+                    <rect key="frame" x="-1" y="238" width="213" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gEY-l0-gwb">
-                            <rect key="frame" x="8" y="7" width="80" height="30"/>
+                            <rect key="frame" x="8" y="5" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.15686274510000001" green="0.16078431369999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
@@ -67,7 +67,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gcn-GM-XYN">
-                            <rect key="frame" x="125" y="7" width="80" height="30"/>
+                            <rect key="frame" x="124" y="5" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>

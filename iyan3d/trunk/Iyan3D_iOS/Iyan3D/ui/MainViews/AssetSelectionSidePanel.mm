@@ -98,7 +98,7 @@
             cell.layer.borderWidth = 0.0f;
             cell.layer.borderColor = [UIColor clearColor].CGColor;
         }
-        cell.assetImage.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1];
+        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
        
         cell.assetName.text = assetItem.name;
         [cell.assetImage setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:ASSET_SELECTION OperationQueue:downloadQueue];
@@ -114,7 +114,7 @@
         NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
         UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
         cell.layer.borderWidth = 0.0f;
-        cell.layer.backgroundColor = [UIColor clearColor].CGColor;
+        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
         cell.layer.borderColor = [UIColor colorWithRed:15.0/255.0 green:15.0/255.0 blue:15.0/255.0 alpha:1.0].CGColor;
     }
     UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];

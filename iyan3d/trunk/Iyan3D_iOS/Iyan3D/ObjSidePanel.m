@@ -26,6 +26,9 @@
     filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
     
     NSLog(@"Obj path: %@",docDirPath);
+    self.addBtn.layer.cornerRadius=8.0;
+    self.cancelBtn.layer.cornerRadius=8.0;
+    
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -92,7 +95,7 @@
 
 - (IBAction)addBtnAction:(id)sender {
     NSLog(@"Sender %@",self.addBtn.titleLabel.text);
-    if([self.addBtn.titleLabel.text isEqualToString:@"Next"]){
+    if([self.addBtn.titleLabel.text isEqualToString:@"NEXT"]){
         filesList=nil;
         NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

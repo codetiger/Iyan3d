@@ -167,25 +167,6 @@
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="JNr-I9-ifr"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" id="mqD-VX-gWA">
-                            <rect key="frame" x="-1" y="11" width="80" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Back_IPhone.png" id="T2h-ug-OEW">
-                                    <rect key="frame" x="8" y="10" width="11" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scenes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iTY-Ih-jjQ">
-                                    <rect key="frame" x="26" y="10" width="65" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="13"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" red="0.61568627450000002" green="0.12549019610000001" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
-                        </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
                             <rect key="frame" x="501" y="22" width="18" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -245,6 +226,15 @@
                                 <outlet property="delegate" destination="-1" id="pDY-Fq-wqD"/>
                             </connections>
                         </collectionView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="G8Y-1j-55x">
+                            <rect key="frame" x="0.0" y="15" width="82" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title=" Scenes" image="Back_IPhone.png"/>
+                            <connections>
+                                <action selector="backToScenes:" destination="-1" eventType="touchUpInside" id="ehs-S9-CAT"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.61568627450000002" green="0.12549019610000001" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

@@ -99,12 +99,18 @@
     cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
     if ([Utility IsPadDevice]){
         if([clickedBtn isEqualToString:@"exportBtn"]){
+            cell.textLabel.textColor = [UIColor blackColor];
+            [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
             if(indexPath.row==0)
                 cell.imageView.image = [UIImage imageNamed:@"Export-image_Pad.png"];
             if(indexPath.row==1)
                 cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad.png"];
         }
         if([clickedBtn isEqualToString:@"importBtn"]){
+            cell.textLabel.textColor = [UIColor blackColor];
+            [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
             if(indexPath.row==0)
                 cell.imageView.image = [UIImage imageNamed:@"Import-model_Pad.png"];
             if(indexPath.row==1)
@@ -148,11 +154,19 @@
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_IPhone.png"];
 
         }
-
+     }
+    
+    if([clickedBtn isEqualToString:@"viewBtn"] || [clickedBtn isEqualToString:@"infoBtn"] || [clickedBtn isEqualToString:@"addFrames"] ){
+        cell.textLabel.textColor = [UIColor colorWithRed:0.0 green:0.478 blue:1.0 alpha:1.0];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
     }
-    cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
-    [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    else{
+        cell.textLabel.textColor = [UIColor blackColor];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    }
+   
     return cell;
 }
 

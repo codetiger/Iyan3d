@@ -215,10 +215,8 @@
     TextFrameCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
     NSLog(@"TextAssets CollectionView");
     
-    cell.layer.cornerRadius = 8.0;
-    cell.layer.borderWidth = 1.0f;
-    cell.layer.borderColor = [UIColor grayColor].CGColor;
-    cell.backgroundColor = [UIColor clearColor];
+    
+    cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
     cell.displayText.text = typedText;
     
     AssetItem* assetItem = fontArray[indexPath.row];
@@ -236,7 +234,7 @@
         
         CGFontRelease(customFont);
         
-        cell.displayText.textColor = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+        cell.displayText.textColor = [UIColor whiteColor];
         [cell.progress setHidden:YES];
         [cell.displayText setHidden:NO];
     }
@@ -252,6 +250,15 @@
     if(fontArray != NULL && fontArray.count != 0 && fontArray.count > indexPath.row){
         AssetItem* assetItem = fontArray[indexPath.row];
         fontFileName = assetItem.name;
+        NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
+        for (int i = 0; i < [indexPathArr count]; i++) {
+            NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
+            TextFrameCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
+            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+        }
+        TextFrameCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
+        cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
+
         [self load3dText];
     }
 }

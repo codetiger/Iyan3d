@@ -21,30 +21,30 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dzY-wX-3js">
-                    <rect key="frame" x="0.0" y="651" width="300" height="58"/>
+                    <rect key="frame" x="0.0" y="649" width="300" height="60"/>
                     <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pc9-v9-Q82">
+                            <rect key="frame" x="180" y="8" width="110" height="40"/>
+                            <color key="backgroundColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <state key="normal" title="ADD TO SCENE">
+                                <color key="titleShadowColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="deviceRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="addBtnFunction:" destination="-1" eventType="touchUpInside" id="3pD-z1-7P0"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0RM-RT-nS4">
-                            <rect key="frame" x="8" y="7" width="118" height="38"/>
+                            <rect key="frame" x="8" y="8" width="110" height="40"/>
                             <color key="backgroundColor" red="0.1529411765" green="0.1529411765" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <state key="normal" title="CANCEL">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="cancelBtnFunction:" destination="-1" eventType="touchUpInside" id="jbX-Z7-mvJ"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pc9-v9-Q82">
-                            <rect key="frame" x="174" y="7" width="118" height="38"/>
-                            <color key="backgroundColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <state key="normal" title="ADD">
-                                <color key="titleShadowColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="deviceRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="addBtnFunction:" destination="-1" eventType="touchUpInside" id="3pD-z1-7P0"/>
                             </connections>
                         </button>
                     </subviews>

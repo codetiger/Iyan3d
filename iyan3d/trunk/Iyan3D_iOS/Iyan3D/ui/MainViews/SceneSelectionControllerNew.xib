@@ -68,14 +68,14 @@
                     <color key="backgroundColor" red="0.53333333329999999" green="0.0" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" id="GtZ-Ek-nEF" userLabel="SceneSelection Collection View">
-                    <rect key="frame" x="30" y="86" width="964" height="655"/>
+                    <rect key="frame" x="0.0" y="59" width="1024" height="709"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                    <inset key="contentInset" minX="19" minY="11" maxX="0.0" maxY="0.0"/>
+                    <inset key="contentInset" minX="10" minY="10" maxX="10" maxY="10"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="23" minimumInteritemSpacing="10" id="BA4-Kl-xUa">
                         <size key="itemSize" width="200" height="200"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="18" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="sectionInset" minX="15" minY="15" maxX="15" maxY="15"/>
                     </collectionViewFlowLayout>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="LgN-UV-1Mh"/>
