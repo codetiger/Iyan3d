@@ -501,7 +501,7 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
         case RIG_MODE_OBJVIEW:
             break;
         case RIG_MODE_MOVE_JOINTS:{
-            selectionScene->rigMan->clearNodeSelections();
+//            selectionScene->rigMan->clearNodeSelections();
             selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
             if(selectionScene->shaderMGR->deviceType == METAL){
                 readSkeletonSelectionTexture();
@@ -509,7 +509,7 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
             break;
         }
         case RIG_MODE_EDIT_ENVELOPES:{
-            selectionScene->rigMan->clearNodeSelections();
+//            selectionScene->rigMan->clearNodeSelections();
             selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
             if(selectionScene->shaderMGR->deviceType == METAL){
                 readSkeletonSelectionTexture();

@@ -400,7 +400,7 @@ void SGActionManager::storeLightPropertyChangeAction(float red , float green , f
 
 void SGActionManager::setMirrorState(MIRROR_SWITCH_STATE flag)
 {
-    if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
+    if(!actionScene || !smgr)
         return;
 
     mirrorSwitchState = flag;

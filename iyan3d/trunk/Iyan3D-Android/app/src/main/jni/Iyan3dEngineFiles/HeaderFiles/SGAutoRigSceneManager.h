@@ -28,6 +28,7 @@ class SGAutoRigSceneManager
 {
 private:
     std::string animatedSGRPath;
+    shared_ptr<AnimatedMeshNode> animNode;
     SkinMesh* sMesh;
     SceneManager *smgr;
     SGNode* sgrSGNode;

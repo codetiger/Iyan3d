@@ -87,7 +87,6 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
         for (int j = 0; j < 16; ++j)
             ibone->LocalAnimatedMatrix[j] = boneMatrix[j];
         delete boneMatrix;
-
         unsigned short boneWeightCount;
         f.read((char*)&boneWeightCount, sizeof(unsigned short));
 
@@ -128,6 +127,7 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
     animMesh->finalize();
     return animMesh;
 }
+
 Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
 {
 

@@ -51,7 +51,7 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     rigNode->setType(NODE_SGM);
     rigNode->isRigged = false;
     Mesh *mesh = new Mesh();
-    shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
+    animNode = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
     sMesh = (SkinMesh*)animNode->mesh;
     for(int i = 0; i < animNode->mesh->getVerticesCount(); i++) {
         vertexDataHeavy *vHData = animNode->mesh->getHeavyVertexByIndex(i);
@@ -67,8 +67,7 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
         mesh->addToIndicesArray(animNode->mesh->getTotalIndicesArray()[j]);
     }
     mesh->Commit();
-    shared_ptr<AnimatedMeshNode> nodeToRemove = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
-    nodeToRemove->setVisible(false);
+    animNode->setVisible(false);
     shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
     meshNode->setTexture(rigNode->node->getTextureByIndex(1), 1);
     rigNode->node = meshNode;
@@ -466,7 +465,7 @@ void SGAutoRigSceneManager::changeEnvelopeScale(Vector3 scale, bool isChanged)
             }
         }
         updateEnvelopes();
-        //updateOBJVertexColor();
+        rigScene->updater->updateOBJVertexColor();
         AutoRigHelper::updateOBJVertexColors(sgmNode, envelopes, rigKeys);
     }
 }
@@ -532,10 +531,23 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
 bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
 {    
     if(!isCompleted){
+        if(animNode) {
+            nodeToRig->setType(NODE_RIG);
+            nodeToRig->isRigged = true;
+            animNode->setVisible(true);
+            shared_ptr<MeshNode> meshNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
+            nodeToRig->node = animNode;
+            nodeToRig->node->setTexture(rigScene->shadowTexture, 2);
+            smgr->RemoveNode(meshNode);
+        }
         nodeToRig->props.transparency = 1.0;
         nodeToRig->node->setVisible(true);
     }
     if(isCompleted){
+        if(animNode) {
+            smgr->RemoveNode(animNode);
+        }
+        
         for(int i = 0; i < rigScene->nodes.size(); i++){
             if(rigScene->nodes[i] == nodeToRig){
                 rigScene->selectMan->unselectObjects();
@@ -600,7 +612,9 @@ void SGAutoRigSceneManager::changeNodeScale(Vector3 scale)
 bool SGAutoRigSceneManager::switchMirrorState()
 {
     rigScene->actionMan->setMirrorState((MIRROR_SWITCH_STATE)!rigScene->actionMan->getMirrorState());
-    if(isSkeletonJointSelected)
-           rigScene->selectMan->highlightJointSpheres();    
+    if(sceneMode == RIG_MODE_MOVE_JOINTS)
+        rigScene->selectMan->updateSkeletonSelectionColors((selectedNodeId != NOT_SELECTED) ? selectedNodeId : 0);
+    else
+        rigScene->selectMan->highlightJointSpheres();
     return rigScene->actionMan->getMirrorState();
 }

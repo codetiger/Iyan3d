@@ -124,6 +124,7 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
         riggingNodeId = NOT_EXISTS;
         delete rigMan;
         updater->resetMaterialTypes(false);
+        AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
     }
 }
 
@@ -234,7 +235,7 @@ void SGEditorScene::setTransparencyForObjects()
         int excludeNodeId = (isRigMode) ? riggingNodeId : (int)nodes.size()-1;
         for(int index = 0; index < nodes.size(); index++) {
             if(index != excludeNodeId){
-                nodes[index]->props.transparency = 0.2;
+                nodes[index]->props.transparency = (isRigMode) ? 0.0 : 0.2;
             }
         }
     } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {

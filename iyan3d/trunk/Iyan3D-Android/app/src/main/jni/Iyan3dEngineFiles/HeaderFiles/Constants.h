@@ -6,9 +6,9 @@
 #include "ConversionHelper.h"
 #define LOG_TYPE LOG_ERROR
 #define BITSPERPIXEL 16
-#define LIGHT_INIT_POS_X 10.0
+#define LIGHT_INIT_POS_X 5.0
 #define LIGHT_INIT_POS_Y 15.0
-#define LIGHT_INIT_POS_Z 0.0
+#define LIGHT_INIT_POS_Z 10.0
 #define VIEW_CAM_INIT_POS_X 0.0
 #define VIEW_CAM_INIT_POS_Y 15.0
 #define VIEW_CAM_INIT_POS_Z 30.0

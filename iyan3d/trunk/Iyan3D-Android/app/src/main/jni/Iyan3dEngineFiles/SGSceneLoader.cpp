@@ -198,6 +198,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     }else if(type == NODE_IMAGE || type == NODE_VIDEO){
         sgnode->props.isLighting = false;
     } else if (type == NODE_RIG) {
+        setJointsScale(sgnode);
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(CHARACTER_RIG);
     } else if (type == NODE_TEXT_SKIN) {
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(TEXT_RIG);
@@ -217,6 +218,24 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
     return sgnode;
+}
+
+void SGSceneLoader::setJointsScale(SGNode *sgNode)
+{
+    if(sgNode->getType() != NODE_RIG)
+        return;
+    
+    shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node);
+    SkinMesh * sMesh = (SkinMesh*)animNode->getMesh();
+    if(sMesh->joints->size() != currentScene->tPoseJoints.size())
+        return;
+    
+    for(int i = 0; i < (int)sMesh->joints->size(); i++) {
+        float scale = currentScene->tPoseJoints[i].sphereRadius;
+        printf("\n Sphere radius %f ", scale);
+        (*sMesh->joints)[i]->sphereRadius = scale;
+    }
+    
 }
 
 bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)

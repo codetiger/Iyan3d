@@ -39,6 +39,7 @@ public:
     bool loadNode(SGNode *sgNode,int actionType,bool isTempNode = false);
     bool loadNodeOnUndoORedo(SGAction action, int actionType);
     
+    void setJointsScale(SGNode *sgNode);
     void addLight(SGNode *light);
     void performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType);
 };

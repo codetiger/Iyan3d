@@ -1272,7 +1272,7 @@ BOOL missingAlertShown;
 
 - (IBAction)autorigMirrorSwitchAction:(id)sender {
     if(editorScene && editorScene->isRigMode)
-        editorScene->switchMirrorState();
+        editorScene->rigMan->switchMirrorState();
 }
 
 
@@ -3181,26 +3181,6 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma AutoRig Delegates
 - (void) autoRigMirrorBtnHandler
 {
-//    CGRect mirrorSwitchRight = _autoRigMirrorSwitch.frame;
-//    CGRect mirrorLable = _autorigMirrorLable.frame;
-//    CGRect cancelBtnRight = _rigCancelBtn.frame;
-//    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue] == 1){
-//        mirrorSwitchRight.origin.x = self.view.frame.size.width - (_autoRigMirrorSwitch.frame.size.width*1.5);
-//        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
-//        mirrorLable.origin.x = self.view.frame.size.width - _autoRigMirrorSwitch.frame.size.width - (_autorigMirrorLable.frame.size.width*1.5);
-//        _autorigMirrorLable.frame = mirrorLable;
-////        cancelBtnRight.origin.x = self.view.frame.size.width - (_rigCancelBtn.frame.size.width*1.5);
-////        _rigCancelBtn.frame = cancelBtnRight;
-//    }
-//    else{
-//        mirrorSwitchRight.origin.x = (_autoRigMirrorSwitch.frame.size.width*1.5);
-//        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
-//        mirrorLable.origin.x = _autorigMirrorLable.frame.size.width*0.5;
-//        _autorigMirrorLable.frame = mirrorLable;
-////        cancelBtnRight.origin.x = (_rigCancelBtn.frame.size.width*1.5);
-////        _rigCancelBtn.frame = cancelBtnRight;
-//    }
-    
     bool status = true;
     if(editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
         status = (editorScene->rigMan->isNodeSelected) ? false : true;
