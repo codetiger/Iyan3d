@@ -10,7 +10,6 @@
 #import "SceneSelectionControllerNew.h"
 #import "SceneSelectionEnteredView.h"
 #import "SceneItem.h"
-#import <sys/utsname.h>
 
 
 @implementation SceneSelectionControllerNew
@@ -61,8 +60,8 @@
     
     NSString *currentDeviceName;
     
-    if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
-        currentDeviceName = [deviceNames objectForKey:[self deviceName]];
+    if(deviceNames != nil && [deviceNames objectForKey:[[AppHelper getAppHelper] deviceName]])
+        currentDeviceName = [deviceNames objectForKey:[[AppHelper getAppHelper] deviceName]];
     else
         currentDeviceName = @"Unknown Device";
     
@@ -70,7 +69,7 @@
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         picker.mailComposeDelegate = self;
         NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[self deviceName]],iOSVersion]];
+        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[[AppHelper getAppHelper] deviceName]],iOSVersion]];
         [picker setToRecipients:usersTo];
         [self presentModalViewController:picker animated:YES];
     }else {
@@ -79,15 +78,6 @@
         [alert show];
         return;
     }
-}
-
--(NSString*) deviceName
-{
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    
-    return [NSString stringWithCString:systemInfo.machine
-                              encoding:NSUTF8StringEncoding];
 }
 
 #pragma CollectionView Delegates

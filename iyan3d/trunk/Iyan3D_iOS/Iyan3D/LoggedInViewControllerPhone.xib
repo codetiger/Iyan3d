@@ -7,6 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoggedInViewController">
             <connections>
+                <outlet property="creditsLabel" destination="QeD-hz-DuD" id="4Bj-Yr-zCO"/>
+                <outlet property="creditsLoading" destination="T4I-9o-jS1" id="K9b-o3-FT2"/>
                 <outlet property="creditsView" destination="74D-nF-Tef" id="hVf-IE-GhJ"/>
                 <outlet property="renderStatus" destination="ttT-PA-bti" id="uWd-FS-jgs"/>
                 <outlet property="signOutBtn" destination="iTa-Bm-te9" id="nC1-FG-VIt"/>
@@ -55,37 +57,51 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DSl-vz-YoS">
                             <rect key="frame" x="14" y="37" width="79" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.54117647059999996" green="0.0" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QeD-hz-DuD">
-                            <rect key="frame" x="5" y="-5" width="71" height="53"/>
+                            <rect key="frame" x="-1" y="-5" width="71" height="53"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="textColor" red="0.54117647059999996" green="0.0" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="T4I-9o-jS1">
+                            <rect key="frame" x="60" y="12" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ePu-FU-9oa">
-                    <rect key="frame" x="97" y="3" width="125" height="20"/>
+                    <rect key="frame" x="97" y="7" width="125" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" title="Add 100 Credits"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <state key="normal" title="Add 500 Credits"/>
+                    <connections>
+                        <action selector="add500Credits:" destination="-1" eventType="touchUpInside" id="8yB-bV-kB3"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="JuS-GA-eHd">
                     <rect key="frame" x="105" y="47" width="115" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" title="Add 1000 Credits"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <state key="normal" title="Add 5000 Credits"/>
+                    <connections>
+                        <action selector="add5KCredits:" destination="-1" eventType="touchUpInside" id="oqK-8E-jdZ"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="j0n-CH-6b2">
-                    <rect key="frame" x="105" y="24" width="109" height="20"/>
+                    <rect key="frame" x="105" y="27" width="109" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" title="Add 500 Credits"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <state key="normal" title="Add 2000 Credits"/>
+                    <connections>
+                        <action selector="add2KCredits:" destination="-1" eventType="touchUpInside" id="wBg-Az-WBv"/>
+                    </connections>
                 </button>
                 <view autoresizesSubviews="NO" contentMode="scaleToFill" id="biq-47-Emr">
                     <rect key="frame" x="0.0" y="224" width="230" height="25"/>

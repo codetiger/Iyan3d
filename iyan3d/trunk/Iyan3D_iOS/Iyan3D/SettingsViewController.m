@@ -8,7 +8,6 @@
 
 #import "SettingsViewController.h"
 #import "Utility.h"
-#import <AppHelper.h>
 
 #define FRAME_COUNT 0
 #define FRAME_DURATION 1
@@ -290,4 +289,39 @@
     }
 
 }
+
+- (IBAction)restoreAction:(id)sender
+{
+    [[AppHelper getAppHelper] addTransactionObserver];
+    [AppHelper getAppHelper].delegate = self;
+    [[AppHelper getAppHelper] restorePurchasedTransaction];
+}
+
+-(void)statusForRestorePurchase:(NSNumber *)object
+{
+    if([object boolValue]) {
+        NSLog(@" Restored ");
+        NSArray *restoreIds = [[AppHelper getAppHelper] getRestoreIds];
+        for (int i = 0; i < [restoreIds count]; i++) {
+            if ([[restoreIds objectAtIndex:i] isEqual:@"objimport"]) {
+                CacheSystem* cacheSystem = [CacheSystem cacheSystem];
+                [cacheSystem addOBJImporterColumn];
+                [[AppHelper getAppHelper] saveBoolUserDefaults:[cacheSystem checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
+                
+                [[AppHelper getAppHelper] verifyRestorePurchase];
+                [AppHelper getAppHelper].delegate = nil;
+            }
+        }
+
+    }
+}
+
+-(void)transactionCancelled
+{
+    [[AppHelper getAppHelper] removeTransactionObserver];
+    [AppHelper getAppHelper].delegate = nil;
+    NSLog(@"\n Cancelled restore ");
+}
+
+
 @end

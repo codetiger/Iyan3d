@@ -964,7 +964,7 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)loginBtnAction:(id)sender {
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"]||[[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"] || [[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"] )
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
     {
         if ([Utility IsPadDevice])
         {

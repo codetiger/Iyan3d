@@ -16,14 +16,20 @@
 
 @class GIDSignIn;
 
-@interface LoggedInViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate>{
+@interface LoggedInViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate, AppHelperDelegate>{
     NSDictionary *renderData;
     NSArray *renderSectionTitles;
     
 }
+- (IBAction)add500Credits:(id)sender;
+- (IBAction)add2KCredits:(id)sender;
+- (IBAction)add5KCredits:(id)sender;
+
 @property (weak, nonatomic) IBOutlet UIView *creditsView;
 @property (weak, nonatomic) IBOutlet UITableView *renderStatus;
 @property (weak, nonatomic) IBOutlet UIButton *signOutBtn;
 @property (weak, nonatomic) id <LoggedinViewControllerDelegat> delegare;
+@property (weak, nonatomic) IBOutlet UILabel *creditsLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *creditsLoading;
 - (IBAction)signOutBtn:(id)sender;
 @end

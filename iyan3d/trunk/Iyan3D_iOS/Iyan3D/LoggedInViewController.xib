@@ -7,6 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoggedInViewController">
             <connections>
+                <outlet property="creditsLabel" destination="W6X-Gk-Nbc" id="x4m-rt-RaH"/>
+                <outlet property="creditsLoading" destination="sJo-Vn-f2a" id="b9l-gT-03N"/>
                 <outlet property="creditsView" destination="azG-rY-D24" id="xe9-pB-11t"/>
                 <outlet property="renderStatus" destination="cjG-Jk-ict" id="tJs-RW-cBZ"/>
                 <outlet property="signOutBtn" destination="6dJ-Nl-VGu" id="gkc-gf-TVZ"/>
@@ -60,35 +62,48 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="azG-rY-D24" userLabel="totalCredits">
                     <rect key="frame" x="16" y="14" width="145" height="125"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="120" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6X-Gk-Nbc">
-                            <rect key="frame" x="37" y="30" width="71" height="53"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="120" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6X-Gk-Nbc">
+                            <rect key="frame" x="0.0" y="30" width="145" height="53"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
                             <color key="textColor" red="0.54117647059999996" green="0.0" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Credits" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aBU-84-0Dh">
-                            <rect key="frame" x="33" y="91" width="79" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aBU-84-0Dh">
+                            <rect key="frame" x="0.0" y="91" width="145" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="23"/>
                             <color key="textColor" red="0.54117647059999996" green="0.0" blue="0.79215686269999996" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sJo-Vn-f2a">
+                            <rect key="frame" x="63" y="16" width="20" height="20"/>
+                            <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NT-QT-Yg3">
                     <rect key="frame" x="164" y="14" width="140" height="30"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="Add 100 Credits"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="Add 500 Credits"/>
+                    <connections>
+                        <action selector="add500Credits:" destination="-1" eventType="touchUpInside" id="jhC-Vv-eTc"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5W-c5-7em">
                     <rect key="frame" x="164" y="108" width="141" height="34"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="Add 1000 Credits"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="Add 5000 Credits"/>
+                    <connections>
+                        <action selector="add5KCredits:" destination="-1" eventType="touchUpInside" id="eEP-xP-rzv"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FG0-MY-6tR">
                     <rect key="frame" x="165" y="60" width="140" height="34"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="Add 500 Credits"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="Add 2000 Credits"/>
+                    <connections>
+                        <action selector="add2KCredits:" destination="-1" eventType="touchUpInside" id="xdb-mu-YXE"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

@@ -6,9 +6,18 @@
 //  Copyright (c) 2015 Smackall Games. All rights reserved.
 //
 
+
+#import <sys/utsname.h>
 #import "AppHelper.h"
 #import "Constants.h"
 #import "DownloadTask.h"
+#import "AFHTTPRequestOperation.h"
+#import "AFHTTPClient.h"
+
+
+#define FIVE_HUNDERED_CREDITS @"fivehundredcredits"
+#define TWO_THOUSAND_CREDITS @"twothousandcredits"
+#define FIVE_THOUSAND_CREDITS @"fivethousandcredits"
 
 @implementation AppHelper
 
@@ -499,12 +508,12 @@
     }
 }
 
-- (void)callPaymentGateWayForPremiumUpgrade
+- (void)callPaymentGateWayForProduct:(NSString*) productId
 {
     transactionCount = 0;
     if ([SKPaymentQueue canMakePayments]) {
         processTransaction = true;
-        SKPayment* payment = [SKPayment paymentWithProductIdentifier:@"objimport"];
+        SKPayment* payment = [SKPayment paymentWithProductIdentifier:productId];
         [[SKPaymentQueue defaultQueue] addPayment:payment];
     }
     else {
@@ -537,10 +546,10 @@
         if ([[restoreIdArr objectAtIndex:i] isEqual:OBJ_IMPORT_IAP]) {
             [cache addOBJImporterColumn];
             [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
+            [self performSelectorInBackground:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:YES]];
+            break;
         }
     }
-    //[self moveFontFilesIfNeccasary];
-    [self performSelectorInBackground:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:YES]];
     [self removeTransactionObserver];
 }
 
@@ -582,25 +591,34 @@
 
         switch (transaction.transactionState) {
         case SKPaymentTransactionStatePurchased: {
-            [self.delegate loadingViewStatus:NO];
-            if ([transaction.payment.productIdentifier isEqualToString:@"objimport"]) {
-                NSLog(@"Purchased");
-                [cache addOBJImporterColumn];
-                [self performSelectorOnMainThread:@selector(premiumUnlocked) withObject:nil waitUntilDone:NO];
+//            [self.delegate loadingViewStatus:NO];
+            NSString *productId = transaction.payment.productIdentifier;
+            NSLog(@"Purchased %@ ", transaction.payment.productIdentifier);
+
+            if ([productId isEqualToString:FIVE_HUNDERED_CREDITS]) {
                 processTransaction = false;
+                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:500]];
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+            } else if ([productId isEqualToString:TWO_THOUSAND_CREDITS]) {
+                processTransaction = false;
+                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:2000]];
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+            } else if ([productId isEqualToString:FIVE_THOUSAND_CREDITS]) {
+                processTransaction = false;
+                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:5000]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             }
+
             break;
         }
 
         case SKPaymentTransactionStateFailed: {
-            [self.delegate loadingViewStatus:NO];
+//            [self.delegate loadingViewStatus:NO];
             processTransaction = false;
             NSLog(@"Cancelled");
 
             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-            [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithBool:NO]];
-            [self.delegate transactionCancelled];
+            [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:0]];
             [self performSelectorInBackground:@selector(transactionCancelled) withObject:nil];
             if (transaction.error.code != SKErrorPaymentCancelled) {
                 UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Error" message:transaction.error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -685,6 +703,146 @@
         return [actionStatements objectAtIndex:randindex];
     }
     return @"";
+}
+
+- (void) useOrRechargeCredits:(NSString*) uniqueId credits:(int) credits For:(NSString*)usageType
+{
+    if(uniqueId.length < 5) {
+        NSLog(@" \n Show alert ");
+        return;
+    }
+    
+    NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
+    
+    NSString* receiptDataStr = (credits < 0) ? @"" : [receiptData base64EncodedStringWithOptions:0];
+    __block int balance = -1;
+    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/credits.php"];
+    NSString *postPath = @"https://www.iyan3dapp.com/appapi/credits.php";
+    
+    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    NSLog(@" \n unique id %@ Deduct credits %d ", uniqueId, credits);
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", usageType, @"usagetype", [NSString stringWithFormat:@"%d", credits], @"credits", receiptDataStr, @"receiptdata", nil]];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        int status = [[dict objectForKey:@"result"] intValue];
+        NSLog(@" \n Dictonary %@ ", dict);
+        if(status > 0) {
+            balance = [[dict objectForKey:@"balance"] intValue];
+            NSLog(@" \n Balance %d ", balance);
+            [self saveToUserDefaults:[NSNumber numberWithInt:balance] withKey:@"credits"];
+        } else {
+            NSString *message = [dict objectForKey:@"message"];
+            [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
+
+        }
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil];
+    }
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Failure: %@", error.localizedDescription);
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         [userNameAlert show];
+                                     }];
+    [operation start];
+}
+
+
+- (void) getCreditsForUniqueId: (NSString*)uniqueId Name:(NSString*) name Email:(NSString*) email SignInType:(int) type
+{
+    if(uniqueId.length < 5) {
+        NSLog(@" \n Show alert ");
+        return;
+    }
+    
+    __block int credits = -1;
+    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/login.php"];
+    NSString *postPath = @"https://www.iyan3dapp.com/appapi/login.php";
+    
+    NSString* deviceId = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
+    NSString* osVersion = [UIDevice currentDevice].systemVersion;
+    NSDictionary* deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];
+    NSString* hwversion = @"Unknown";
+    if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]]) {
+        hwversion = [deviceNames objectForKey:[self deviceName]];
+    }
+    
+    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", name, @"username", email, @"email", hwversion, @"hwversion", osVersion, @"osversion", deviceId, @"deviceid", [NSString stringWithFormat:@"%d",type], @"signintype", nil]];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        int status = [[dict objectForKey:@"result"] intValue];
+        if(status > 0) {
+            credits = [[dict objectForKey:@"credits"] intValue];
+            [self saveToUserDefaults:[NSNumber numberWithInt:credits] withKey:@"credits"];
+        } else {
+            NSString *message = [dict objectForKey:@"message"];
+            [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil];
+    }
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Failure: %@", error.localizedDescription);
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         [userNameAlert show];
+                                     }];
+    [operation start];
+}
+
+- (void) verifyRestorePurchase
+{
+    
+    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
+        return;
+    
+    NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
+    
+    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/restore.php"];
+    NSString *postPath = @"https://www.iyan3dapp.com/appapi/restore.php";
+
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    NSString * uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", [receiptData base64EncodedStringWithOptions:0], @"receiptdata", nil]];
+    
+    NSLog(@"Request initiated");
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Request Successfull");
+        NSLog(@"response %@",[operation responseString]);
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+    }
+     
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Failure: %@", error);
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         [userNameAlert show];
+                                         
+                                     }];
+    [operation start];
+}
+
+-(NSString*) deviceName
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    
+    return [NSString stringWithCString:systemInfo.machine
+                              encoding:NSUTF8StringEncoding];
+}
+
+- (NSData*) getReceiptData
+{
+    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+    NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+    return receipt;
 }
 
 -(NSString*) stringWithwstring:(const std::wstring&)ws

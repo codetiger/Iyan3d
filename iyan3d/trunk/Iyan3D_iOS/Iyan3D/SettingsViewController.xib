@@ -20,6 +20,7 @@
                 <outlet property="renderPreviewSize" destination="jZ1-zD-G95" id="SaT-oX-tYa"/>
                 <outlet property="renderPreviewSizeLarge" destination="a3w-eS-iyn" id="hoZ-G5-AiS"/>
                 <outlet property="renderPreviewSizeSmall" destination="Xqy-dv-PAd" id="cs5-sN-vHj"/>
+                <outlet property="restoreBtn" destination="6tb-ew-FYE" id="XG0-B9-VwP"/>
                 <outlet property="toolbarLeft" destination="BnY-cJ-lir" id="XTn-1t-vSr"/>
                 <outlet property="toolbarPosition" destination="TcA-9S-yyh" id="NWI-RQ-a2d"/>
                 <outlet property="toolbarRight" destination="DOc-LE-l8X" id="iVP-Zc-8Xn"/>
@@ -186,6 +187,15 @@
                                 <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="kDp-Ve-xvn"/>
                             </connections>
                         </switch>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6tb-ew-FYE">
+                            <rect key="frame" x="248" y="0.0" width="46" height="30"/>
+                            <state key="normal" title="Button">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="DpC-WZ-EBJ"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

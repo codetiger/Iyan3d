@@ -12,14 +12,40 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <TwitterKit/TwitterKit.h>
+
+#define GOOGLE_SIGNIN 0
+#define FACEBOOK_SIGNIN 1
+#define TWITTER_SIGNIN 2
+
 @interface LoggedInViewController ()
 
 @end
 
 @implementation LoggedInViewController
 
+#define FIVE_HUNDERED_CREDITS @"fivehundredcredits"
+#define TWO_THOUSAND_CREDITS @"twothousandcredits"
+#define FIVE_THOUSAND_CREDITS @"fivethousandcredits"
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.creditsLoading setHidden:NO];
+    [self.creditsLoading startAnimating];
+    [self.creditsLoading setHidesWhenStopped:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsupdate" object:nil];
+    
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
+        NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+        NSString* userName = [[AppHelper getAppHelper] userDefaultsForKey:@"name"];
+        NSString* email = [[AppHelper getAppHelper] userDefaultsForKey:@"email"];
+        int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
+        [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:userName Email:email SignInType:signinType];
+    }
+    NSNumber *credits = [[AppHelper getAppHelper] userDefaultsForKey:@"credits"];
+    self.creditsLabel.text = [NSString stringWithFormat:@"%@", credits];
+
     [GIDSignIn sharedInstance].uiDelegate = self;
     [GIDSignIn sharedInstance].delegate = self;
     renderData = @{@"In Progress" : @[@"My Scene 1", @"My Scene 2", @"My Scene 3",@"My Scene 4",@"My Scene 5"],
@@ -30,6 +56,13 @@
     self.creditsView.layer.masksToBounds = YES;
     
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void) setUserCredits_stopLoading
+{
+    NSNumber *credits = [[AppHelper getAppHelper] userDefaultsForKey:@"credits"];
+    self.creditsLabel.text = [NSString stringWithFormat:@"%@", credits];
+    [self.creditsLoading stopAnimating];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,68 +100,39 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([Utility IsPadDevice]){
-        RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"RenderTableViewCell"];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RenderTableViewCell" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-            
-            
-            
-        }
-        // Configure the cell...
-        NSString *sectionTitle = [renderSectionTitles objectAtIndex:indexPath.section];
-        NSArray *sectionData = [renderData objectForKey:sectionTitle];
-        NSString *render = [sectionData objectAtIndex:indexPath.row];
-        cell.renderlabel.text = render;
-        return cell;
-
+    NSString *renderCellStr = ([Utility IsPadDevice]) ? @"RenderTableViewCell" : @"RenderTableViewPhone";
+    RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:renderCellStr];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:renderCellStr owner:self options:nil];
+        cell = [nib objectAtIndex:0];
     }
-    else{
-        RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"RenderTableViewPhone"];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RenderTableViewPhone" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-            
-            
-            
-        }
-        // Configure the cell...
-        NSString *sectionTitle = [renderSectionTitles objectAtIndex:indexPath.section];
-        NSArray *sectionData = [renderData objectForKey:sectionTitle];
-        NSString *render = [sectionData objectAtIndex:indexPath.row];
-        cell.renderlabel.text = render;
-        return cell;
-
-    }
-    
-    }
+    // Configure the cell...
+    NSString *sectionTitle = [renderSectionTitles objectAtIndex:indexPath.section];
+    NSArray *sectionData = [renderData objectForKey:sectionTitle];
+    NSString *render = [sectionData objectAtIndex:indexPath.row];
+    cell.renderlabel.text = render;
+    return cell;
+}
 
 - (IBAction)signOutBtn:(id)sender
 {
     NSLog(@"Signout Clicked");
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"]){
-        [[GIDSignIn sharedInstance] disconnect];
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
+        
+        int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
+        if(signinType == GOOGLE_SIGNIN)
+            [[GIDSignIn sharedInstance] disconnect];
+        else if (signinType == FACEBOOK_SIGNIN) {
+            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+            [loginManager logOut];
+        } else if (signinType == TWITTER_SIGNIN) {
+            [[Twitter sharedInstance]logOut];
+        }
+
         [self reportAuthStatus];
         [self.delegare dismissView];
     }
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"]){
-        FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-        [loginManager logOut];
-        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"facebookauthentication"];
-        [self.delegare dismissView];
-    }
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"]){
-        [[Twitter sharedInstance]logOut];
-        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"twitterauthentication"];
-        [self.delegare dismissView];
-
-    }
-   
-    
-    
 }
 
 - (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error {
@@ -140,12 +144,56 @@
         NSLog(@"Success");
          [self reportAuthStatus];
     }
-   
-    
 }
+
 - (void)reportAuthStatus
 {
-   [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"googleAuthentication"];
-
+    [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"signedin"];
+    [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:@"email"];
+    [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:@"uniqueid"];
+    [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:@"username"];
+    [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:@"signintype"];
+    [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:@"credits"];
 }
+
+- (void)dealloc
+{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"creditsupdate"];
+}
+
+- (IBAction)add500Credits:(id)sender
+{
+    [AppHelper getAppHelper].delegate = self;
+    [[AppHelper getAppHelper] addTransactionObserver];
+    [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_HUNDERED_CREDITS];
+}
+
+- (IBAction)add2KCredits:(id)sender
+{
+    [AppHelper getAppHelper].delegate = self;
+    [[AppHelper getAppHelper] addTransactionObserver];
+    [[AppHelper getAppHelper] callPaymentGateWayForProduct:TWO_THOUSAND_CREDITS];
+}
+
+- (IBAction)add5KCredits:(id)sender
+{
+    [AppHelper getAppHelper].delegate = self;
+    [[AppHelper getAppHelper] addTransactionObserver];
+    [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_THOUSAND_CREDITS];
+}
+
+-(void)statusForOBJImport:(NSNumber*)status
+{
+    if([status intValue] != 0) {
+        NSString* uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+        [[AppHelper getAppHelper] useOrRechargeCredits:uniqueId credits:[status intValue] For:0];
+    }
+}
+
+- (void)transactionCancelled
+{
+    [[AppHelper getAppHelper] removeTransactionObserver];
+    [AppHelper getAppHelper].delegate = nil;
+}
+
 @end

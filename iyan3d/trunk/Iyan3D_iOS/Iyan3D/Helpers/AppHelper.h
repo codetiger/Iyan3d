@@ -66,12 +66,21 @@
 -(NSMutableDictionary*) dictionaryForKey:(NSString*)key;
 - (id) userDefaultsForKey:(NSString*)key;
 -(BOOL) userDefaultsBoolForKey:(NSString*)key;
--(void) callPaymentGateWayForPremiumUpgrade;
+-(void) callPaymentGateWayForProduct:(NSString*) productId;
 -(void) restorePurchasedTransaction;
 -(void) moveFontFilesIfNeccasary;
 -(void) moveFilesFromInboxDirectory:(CacheSystem*)presentCache;
 -(void) resetAppHelper;
 -(void) writeDataToFile:(NSData*)data FileName:(NSString*)fileName;
+
+
+// User and credits related methods
+
+- (void) useOrRechargeCredits:(NSString*) uniqueId credits:(int) credits For:(NSString*)usageType;
+- (void) getCreditsForUniqueId: (NSString*)uniqueId Name:(NSString*) name Email:(NSString*) email SignInType:(int) type;
+- (NSString*) deviceName;
+- (NSData*) getReceiptData;
+- (void) verifyRestorePurchase;
 
 
 @end

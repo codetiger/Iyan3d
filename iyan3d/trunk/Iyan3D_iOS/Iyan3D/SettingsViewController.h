@@ -6,7 +6,12 @@
 //  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
+#ifndef SettingsViewController_h
+#define SettingsViewController_h
+
 #import <UIKit/UIKit.h>
+#import "AppHelper.h"
+
 
 @protocol SettingsViewControllerDelegate
 -(void)frameCountDisplayMode:(int)selctedIndex;
@@ -16,10 +21,10 @@
 -(void)multiSelectUpdate:(BOOL)value;
 @end
 
-@interface SettingsViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate>{
+@interface SettingsViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate, AppHelperDelegate>{
     UIScrollView *myScrollView;
 }
-
+@property (weak, nonatomic) IBOutlet UIButton *restoreBtn;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toolbarPosition;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *renderPreviewSize;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *frameCountDisplay;
@@ -38,6 +43,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionRightTop;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftBottom;
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftTop;
+
+- (IBAction)restoreAction:(id)sender;
 - (IBAction)toolBarPositionChanged:(id)sender;
 - (IBAction)renderPreviewSizeChanged:(id)sender;
 - (IBAction)frameCountDisplayType:(id)sender;
@@ -45,3 +52,5 @@
 - (IBAction)doneBtnAction:(id)sender;
 - (IBAction)multiselectValueChanged:(id)sender;
 @end
+
+#endif

@@ -160,7 +160,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
         [AppHelper getAppHelper].delegate = self;
         [[AppHelper getAppHelper] addTransactionObserver];
-        [[AppHelper getAppHelper] callPaymentGateWayForPremiumUpgrade];
+        //[[AppHelper getAppHelper] callPaymentGateWayForPremiumUpgrade];
     }
 }
 

@@ -263,6 +263,13 @@
             }
         }else{
             [self renderBeginFunction];
+            //if(resolutionType == FULL_HD) {
+            //    int frames = (int)_trimControl.rightValue - (int)_trimControl.leftValue;
+            //    int credits = (frames * 3) * -1;
+                
+            //    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:@"FULLHD"];
+          //  }
+
         }
     }
 }
@@ -355,7 +362,6 @@
             NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:postPath parameters:nil constructingBodyWithBlock:^(id <AFMultipartFormData>formData) {
                 
                 [formData appendPartWithFileData:dataZip  name:@"renderFile" fileName:[NSString stringWithFormat:@"test.zip"] mimeType:@"image/png"];
-                
                 [formData appendPartWithFormData:[userId dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
                 [formData appendPartWithFormData:[totFrames dataUsingEncoding:NSUTF8StringEncoding] name:@"totalFrames"];
                 [formData appendPartWithFormData:[resolutionWidth dataUsingEncoding:NSUTF8StringEncoding] name:@"width"];
@@ -1025,7 +1031,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 -(void) upgradeButtonPressed
 {
     //[self.delegate upgradeButtonPressed];
-    [[AppHelper getAppHelper] callPaymentGateWayForPremiumUpgrade];
+    //[[AppHelper getAppHelper] callPaymentGateWayForPremiumUpgrade];
 }
 -(void)loadingViewStatus:(BOOL)status
 {

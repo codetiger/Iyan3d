@@ -241,7 +241,7 @@
 
 - (void)publishBtnaction
 {
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"] || [[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"]){
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Display Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
         [userNameAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         [[userNameAlert textFieldAtIndex:0] setPlaceholder:@"Enter Your Name Here"];
@@ -496,22 +496,13 @@
         NSString* keyword = [NSString stringWithFormat:@"%@", asset.keywords];
         NSString* username = [NSString stringWithFormat:@"%@", asset.userName];
         NSString* type = [NSString stringWithFormat:@"%d", animationType];
-            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"])
+            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
                 {
-                    uniqueId = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"googleUserId"]];
-                    email = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"googleEmail"]];
-                    
+                    uniqueId = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]];
+                    email = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"email"]];
+                    userName = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"username"]];
                 }
-            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"])
-                {
-                    fbid = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"facebookid"]];
-                   fbname = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"facebookname"]];
-
-                }
-            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"]){
-                twitterId = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"twitterid"]];
-                twitterName = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"twittername"]];
-            }
+        
         NSString* asset_id = [NSString stringWithFormat:@"%d", asset.assetId];
         NSString* bonecountanim = [NSString stringWithFormat:@"%d", asset.boneCount];
         NSData* animationFile = [NSData dataWithContentsOfFile:filePathLocation];
@@ -528,21 +519,12 @@
                                                             if (animationFile != nil)
                                                                 [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", selectedCell, extension] mimeType:@"image/png"];
                                                             [formData appendPartWithFormData:[userid dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
-                                                            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"])
+                                                            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
                                                             {
-                                                                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueId"];
+                                                                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueid"];
                                                                 [formData appendPartWithFormData:[email dataUsingEncoding:NSUTF8StringEncoding] name:@"email"];
                                                             }
-                                                            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"])
-                                                            {
-                                                                [formData appendPartWithFormData:[fbid dataUsingEncoding:NSUTF8StringEncoding] name:@"facebookid"];
-                                                                [formData appendPartWithFormData:[fbname dataUsingEncoding:NSUTF8StringEncoding] name:@"facebookname"];
-                                                            }
-                                                            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"])
-                                                            {
-                                                                [formData appendPartWithFormData:[twitterId dataUsingEncoding:NSUTF8StringEncoding] name:@"twitterid"];
-                                                                [formData appendPartWithFormData:[twitterName dataUsingEncoding:NSUTF8StringEncoding] name:@"twittername"];
-                                                            }
+                                                                                                                        
                                                             [formData appendPartWithFormData:[username dataUsingEncoding:NSUTF8StringEncoding] name:@"username"];
                                                             [formData appendPartWithFormData:[name dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_name"];
                                                             [formData appendPartWithFormData:[keyword dataUsingEncoding:NSUTF8StringEncoding] name:@"keyword"];
@@ -589,7 +571,7 @@
 - (void)applyAnimationKeyToOriginalNode{
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
-    editorSceneLocal->animMan->copyKeysOfNode(editorSceneLocal->nodes.size()-1, selectedNodeId);
+    editorSceneLocal->animMan->copyKeysOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes];
     editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
