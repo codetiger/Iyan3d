@@ -36,6 +36,8 @@
 
 - (IBAction)addBtnAction:(id)sender
 {
+    [self.textureDelegate changeTexture:imagefileName VertexColor:1];
+    [self.textureDelegate showOrHideLeftView:NO withView:nil];
 }
 - (IBAction)cancelBtnAction:(id)sender
 {
@@ -73,7 +75,6 @@
     cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
     
     imagefileName = [filesList objectAtIndex:indexPath.row];
-    NSLog(@"Array Count %@",imagefileName);
 }
 
 @end

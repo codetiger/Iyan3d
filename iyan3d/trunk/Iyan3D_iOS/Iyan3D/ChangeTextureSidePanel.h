@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Vector3.h"
 @protocol ChangeTextureDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
-
+- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color;
 
 @end
 

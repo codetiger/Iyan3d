@@ -2860,6 +2860,16 @@ void boneLimitsCallBack(){
     
 }
 
+#pragma mark change Texture Delegates
+
+- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color
+{
+    std::string *texture = new std::string([textureName UTF8String]);
+
+    if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
+        editorScene->changeTexture(*texture, Vector3(1));
+    }
+}
 
 
 - (void)dealloc
