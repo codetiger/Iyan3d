@@ -32,7 +32,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
         getNodeColorFromTouchTexture();
     }
     selectionScene->isRTTCompleted = true;
-    
+    selectionScene->updater->updateControlsOrientaion();
     postNodeJointSelection();
     // TODO setTransparencyForIntrudingObjects();
 }

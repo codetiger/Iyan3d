@@ -212,7 +212,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (bool) removeNodeFromScene:(int)nodeIndex
 {
-    
+    editorScene->loader->removeObject(nodeIndex);
 }
 
 - (void)addGesturesToSceneView
@@ -319,7 +319,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 //            }
 //            else if (animationScene->isControlSelected)
 //                [self showTipsViewForAction:OBJECT_MOVED];
-            
+            _isPanned = false;
             editorScene->moveMan->touchEnd(p[0] * screenScale);
             [self.delegate reloadFrames];
             break;

@@ -57,6 +57,7 @@
 - (void) setUpCallBacks:(void*)scene;
 - (void) addCameraLight;
 - (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight;
+- (bool) removeNodeFromScene:(int)nodeIndex;
 - (void)addGesturesToSceneView;
 
 @end
