@@ -25,6 +25,7 @@ public:
     bool readScene(ifstream *filePointer);
     void readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
+    bool removeSelectedObjects();
     bool removeTempNodeIfExists();
     
     void initEnvelope(std::map<int, SGNode*>& envelopes, int jointId);

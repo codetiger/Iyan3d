@@ -178,7 +178,7 @@ void SGMovementManager::panProgress(Vector2 touch1, Vector2 touch2)
 
 void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height)
 {
-    if(!moveScene || !smgr || !moveScene->isNodeSelected)
+    if(!moveScene || !smgr || (!moveScene->isNodeSelected && moveScene->selectedNodeIds.size() <= 0))
         return;
 
     Vector4 prevLay = moveScene->getCameraPreviewLayout();
@@ -280,7 +280,9 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         return false;
 
     Vector3 center;
-    if(moveScene->isJointSelected)
+    if(moveScene->selectedNodeIds.size() > 0)
+        center = moveScene->getPivotPoint(false);
+    else if(moveScene->isJointSelected)
         center = moveScene->selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
     else if(moveScene->isNodeSelected)
         center = moveScene->selectedNode->node->getAbsoluteTransformation().getTranslation();

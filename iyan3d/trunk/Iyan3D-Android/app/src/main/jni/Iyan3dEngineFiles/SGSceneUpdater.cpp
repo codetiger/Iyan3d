@@ -165,7 +165,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     SGNode* selectedNode = updatingScene->getSelectedNode();
     SGJoint* selectedJoint = updatingScene->getSelectedJoint();
     
-    if(!isNodeSelected)
+    if((!isNodeSelected && updatingScene->selectedNodeIds.size() <= 0))
         return;
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
@@ -370,7 +370,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
     for(int index = 0; index < updatingScene->nodes.size(); index++)
     {
         SGNode *sgNode = updatingScene->nodes[index];
-        if(updatingScene->selectedNodeId == index && !updatingScene->isRigMode) {
+        if((updatingScene->selectedNodeId == index || std::find(updatingScene->selectedNodeIds.begin(), updatingScene->selectedNodeIds.end(), index) != updatingScene->selectedNodeIds.end())&& !updatingScene->isRigMode) {
             //DO NOTHING
         }
         else if((sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ) && sgNode->props.perVertexColor){

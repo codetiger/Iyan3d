@@ -31,7 +31,7 @@ public:
     void getNodeColorFromTouchTexture(bool touchMove = false);
     bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
     bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
-    void multipleSelections(int nodeId);
+    bool multipleSelections(int nodeId);
     void updateParentPosition();
     void unselectObjects();
     shared_ptr<Node> getParentNode();

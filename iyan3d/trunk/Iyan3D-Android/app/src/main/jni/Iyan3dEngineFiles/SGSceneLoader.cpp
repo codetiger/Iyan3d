@@ -364,6 +364,16 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     return true;
 }
 
+bool SGSceneLoader::removeSelectedObjects()
+{
+    if(!currentScene || !smgr)
+        return false;
+    
+    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++)
+        removeObject(currentScene->selectedNodeIds[i]);
+    return true;
+}
+
 bool SGSceneLoader::removeTempNodeIfExists()
 {
     if(!currentScene || !smgr || currentScene->nodes.size() < 3)

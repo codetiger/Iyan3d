@@ -166,10 +166,10 @@ void RenderHelper::drawMoveControlLine(Vector3 nodePos)
 
 void RenderHelper::renderControls()
 {
-    if(!renderingScene || !smgr || !renderingScene->isNodeSelected)
+    if(!renderingScene || !smgr || (!renderingScene->isNodeSelected && renderingScene->selectedNodeIds.size() <=0))
         return;
     
-    setControlsVisibility(renderingScene);
+    setControlsVisibility(true);
     smgr->clearDepthBuffer();
     int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
@@ -210,7 +210,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
         renderingScene->controlType = MOVE;
     
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
-    if(isNodeSelected && isVisible){
+    if((isNodeSelected || renderingScene->selectedNodeIds.size() > 0) && isVisible){
         if(renderingScene->controlType == MOVE){
             controlStartToVisible = X_MOVE;
             controlEndToVisible = Z_MOVE;
@@ -290,7 +290,7 @@ void RenderHelper::rttDrawCall()
 
     if(renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)
         drawCameraPreview();
-    rttShadowMap();
+    //rttShadowMap();
 }
 
 bool RenderHelper::isMovingCameraPreview(Vector2 curTouchPos)

@@ -78,7 +78,7 @@ bool SGActionManager::isIKJoint(int jointId)
 
 bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
 {
-    if(!actionScene || !smgr || !actionScene->isNodeSelected)
+    if(!actionScene || !smgr || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0))
         return false;
     
     SGNode* selectedNode = (actionScene->selectedNodeIds.size() > 0) ? NULL : actionScene->nodes[actionScene->selectedNodeId];
@@ -108,8 +108,6 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
                 success = true;
                 Quaternion r = Quaternion(outputValue * DEGTORAD);
                 actionScene->getParentNode()->setRotationInDegrees(MathHelper::getEulerRotation(r));
-                    Vector3 posn = actionScene->getParentNode()->getPosition();
-                    printf("\n Position %f %f %f ", posn.x, posn.y, posn.z);
                 break;
             } else if(actionScene->isJointSelected){
                 success = true;

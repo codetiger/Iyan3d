@@ -465,7 +465,7 @@ Vector3 SGEditorScene::getSelectedNodeScale()
 {
     if(selectedNodeIds.size() > 0)
         return getParentNode()->getScale();
-    if(isNodeSelected) {
+    else if(isNodeSelected) {
         if(isJointSelected && selectedNode->getType() == NODE_TEXT)
             return selectedNode->joints[selectedJointId]->jointNode->getScale();
         else
