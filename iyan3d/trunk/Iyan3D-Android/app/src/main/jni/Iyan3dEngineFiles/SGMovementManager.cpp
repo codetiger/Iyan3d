@@ -104,12 +104,10 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     if(!moveScene || !smgr)
         return;
 
-
     moveScene->renHelper->cameraPreviewMoveDist = Vector2(0.0, 0.0);
     moveScene->renHelper->isMovingPreview = false;
     moveScene->setLightingOn();
     swipeTiming = 0;
-    moveScene->moveNodeId = NOT_EXISTS;
     
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
@@ -130,7 +128,13 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
             moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
         moveScene->isControlSelected = false;
+    } else if (moveScene->moveNodeId != NOT_EXISTS) {
+        moveScene->actionMan->storeActionKeys(true);
+        moveScene->moveNodeId = NOT_EXISTS;
     }
+    
+    
+
 }
 
 void SGMovementManager::panBegan(Vector2 touch1, Vector2 touch2)

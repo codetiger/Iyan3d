@@ -216,8 +216,8 @@ void SGActionManager::storeActionKeys(bool finished)
         return;
     
     SGNode * selectedNode = actionScene->nodes[actionScene->selectedNodeId];
-    if(actionScene->selectedControlId != NOT_SELECTED) {
-        actionScene->isControlSelected = true;
+    if(actionScene->selectedControlId != NOT_SELECTED || actionScene->moveNodeId != NOT_EXISTS) {
+        actionScene->isControlSelected = (actionScene->moveNodeId != NOT_EXISTS) ? false : true;
         if(!finished)
             changeKeysAction.drop();
         changeKeysAction.objectIndex = selectedNode->actionId;

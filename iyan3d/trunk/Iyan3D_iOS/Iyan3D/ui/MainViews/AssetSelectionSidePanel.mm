@@ -279,13 +279,18 @@
     if(assetvalue.type == IMPORT_PARTICLE){
         if(assetvalue.assetId >= 50000 && assetvalue.assetId <= 60000){
             fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, assetvalue.assetId];
+            NSString* meshFileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
+            NSString* texFileName = [NSString stringWithFormat:@"%@/%d.png", cacheDirectory, assetvalue.assetId];
             url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", assetvalue.assetId];
             
             NSLog(@"File Name : %@", fileName);
             
-           if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]){
+            
+//TODO           if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || ![[NSFileManager defaultManager] fileExistsAtPath:meshFileName] || ![[NSFileManager defaultManager] fileExistsAtPath:texFileName]) {
+
+           if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
                 [self.assetSelectionDelegate showOrHideProgress:1];
-                [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadParticleJson:) priority:NSOperationQueuePriorityHigh];
+                [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadParticleMesh:) priority:NSOperationQueuePriorityHigh];
             }
             else {
                 if (activity == LOAD_NODE){
@@ -374,15 +379,27 @@
     
 }
 
-- (void) downloadParticleJson:(DownloadTask*)task
+- (void) downloadParticleMesh:(DownloadTask*)task
 {
     NSNumber* returnId = task.returnObj;
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
-    NSString* fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [returnId intValue]];
+    NSString* jsonFileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [returnId intValue]];
 
-    [self proceedToFileVerification:task];
-   /*
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jsonFileName]) {
+        NSString* jsonContent = [NSString stringWithContentsOfFile:jsonFileName encoding:NSUTF8StringEncoding error:nil];
+        NSLog(@" \n Json : %@ ", jsonContent);
+        
+        NSString* meshFileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, [returnId intValue]];
+        NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.sgm", [returnId intValue]];
+
+        [self addDownloadTaskWithFileName:meshFileName URL:url returnId:returnId andSelector:@selector(downloadParticleTexture:) priority:NSOperationQueuePriorityHigh];
+        
+        [self proceedToFileVerification:task]; // TODO Remove this
+
+    }
+    
+    /*
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         int assetId = [task.returnObj intValue];        
         AssetItem *assetItem = [cache GetAsset:assetId];
@@ -393,6 +410,32 @@
     }
     */
 
+}
+
+- (void) downloadParticleTexture:(DownloadTask*)task
+{
+    NSNumber* returnId = task.returnObj;
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [paths objectAtIndex:0];
+    NSString* meshFileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, [returnId intValue]];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:meshFileName]) {
+        NSString* texFileName = [NSString stringWithFormat:@"%@/%d.png", cacheDirectory, [returnId intValue]];
+        NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.png", [returnId intValue]];
+        
+        [self addDownloadTaskWithFileName:texFileName URL:url returnId:returnId andSelector:@selector(downloadParticleCompleted:) priority:NSOperationQueuePriorityHigh];
+    }
+}
+
+- (void) downloadParticleCompleted:(DownloadTask*)task
+{
+    NSNumber* returnId = task.returnObj;
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [paths objectAtIndex:0];
+    NSString* texFileName = [NSString stringWithFormat:@"%@/%d.png", cacheDirectory, [returnId intValue]];
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:texFileName])
+        [self proceedToFileVerification:task];
 }
 
 - (void)downloadTextureFileWithReturnId:(DownloadTask*)task
