@@ -16,11 +16,12 @@ class SGAnimationManager
 {
 private:
     SceneManager* smgr;
+public:
+    
     string animFilePath;
     int animStartFrame;
     int animTotalFrames;
-public:
-    
+
     SGAnimationManager(SceneManager* smgr, void* scene);
     ~SGAnimationManager();
     

@@ -26,7 +26,7 @@
 - (bool) isMetalSupportedDevice;
 - (void) reloadFrames;
 - (void) presentPopOver:(CGRect )arect;
--(void) updateAssetListInScenes :(int)nodeType assetId:(int)assetId actionType:(int)action;
+- (void) updateAssetListInScenes :(int)nodeType assetName:(NSString*)assetName actionType:(int)action removeObjectAtIndex:(int)index;
 
 
 @end
@@ -63,7 +63,7 @@
 - (void) setUpCallBacks:(void*)scene;
 - (void) addCameraLight;
 -(void) showPopOver:(int) selectedNodeId;
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode;
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail;
 - (bool) removeNodeFromScene:(int)nodeIndex;
 - (void)addGesturesToSceneView;
 - (void)panOrPinchProgress;

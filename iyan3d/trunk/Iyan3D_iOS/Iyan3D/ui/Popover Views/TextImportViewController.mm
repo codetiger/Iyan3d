@@ -876,7 +876,6 @@ SGPreviewScene* textPreviewScene;
 
 - (void) load3DTextInRenderingThread
 {
-    
     if([NSThread currentThread] != renderingThread)
         NSLog(@"loading in different thread");
     

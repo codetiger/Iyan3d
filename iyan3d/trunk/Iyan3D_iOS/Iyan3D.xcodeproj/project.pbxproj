@@ -7,18 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0169C42A1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C41E1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m */; };
-		0169C42B1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C41E1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m */; };
-		0169C42C1C33DA2700132FF6 /* WEBlockingGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4201C33DA2700132FF6 /* WEBlockingGestureRecognizer.m */; };
-		0169C42D1C33DA2700132FF6 /* WEBlockingGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4201C33DA2700132FF6 /* WEBlockingGestureRecognizer.m */; };
-		0169C42E1C33DA2700132FF6 /* WEPopoverContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4221C33DA2700132FF6 /* WEPopoverContainerView.m */; };
-		0169C42F1C33DA2700132FF6 /* WEPopoverContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4221C33DA2700132FF6 /* WEPopoverContainerView.m */; };
-		0169C4301C33DA2700132FF6 /* WEPopoverContainerViewProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4241C33DA2700132FF6 /* WEPopoverContainerViewProperties.m */; };
-		0169C4311C33DA2700132FF6 /* WEPopoverContainerViewProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4241C33DA2700132FF6 /* WEPopoverContainerViewProperties.m */; };
-		0169C4321C33DA2700132FF6 /* WEPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4261C33DA2700132FF6 /* WEPopoverController.m */; };
-		0169C4331C33DA2700132FF6 /* WEPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4261C33DA2700132FF6 /* WEPopoverController.m */; };
-		0169C4341C33DA2700132FF6 /* WETouchableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4291C33DA2700132FF6 /* WETouchableView.m */; };
-		0169C4351C33DA2700132FF6 /* WETouchableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0169C4291C33DA2700132FF6 /* WETouchableView.m */; };
 		0169C45B1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */; };
 		0169C45C1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */; };
 		0169C45D1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4481C33ED5A00132FF6 /* popoverArrowDown.png */; };
@@ -383,12 +371,6 @@
 		01F872A51C3A5A06009AA31E /* Redo_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872A11C3A5A06009AA31E /* Redo_IPhone.png */; };
 		01F872A71C3A689B009AA31E /* Add-Bones_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872A61C3A689B009AA31E /* Add-Bones_IPhone.png */; };
 		01F872A81C3A689B009AA31E /* Add-Bones_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872A61C3A689B009AA31E /* Add-Bones_IPhone.png */; };
-		01F872AF1C3A69C0009AA31E /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F872AA1C3A69C0009AA31E /* WEPopoverContentViewController.m */; };
-		01F872B01C3A69C0009AA31E /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F872AA1C3A69C0009AA31E /* WEPopoverContentViewController.m */; };
-		01F872B11C3A69C0009AA31E /* WEPopoverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F872AC1C3A69C0009AA31E /* WEPopoverTableViewController.m */; };
-		01F872B21C3A69C0009AA31E /* WEPopoverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F872AC1C3A69C0009AA31E /* WEPopoverTableViewController.m */; };
-		01F872B31C3A69C0009AA31E /* WEPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F872AE1C3A69C0009AA31E /* WEPopoverViewController.m */; };
-		01F872B41C3A69C0009AA31E /* WEPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F872AE1C3A69C0009AA31E /* WEPopoverViewController.m */; };
 		01F872D61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872B61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png */; };
 		01F872D71C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872B61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png */; };
 		01F872D81C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872B71C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png */; };
@@ -909,6 +891,32 @@
 		3D3F591B1C2801C600713C79 /* TextFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59181C2801C600713C79 /* TextFrameCell.m */; };
 		3D3F591C1C2801C600713C79 /* TextFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59191C2801C600713C79 /* TextFrameCell.xib */; };
 		3D3F591D1C2801C600713C79 /* TextFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59191C2801C600713C79 /* TextFrameCell.xib */; };
+		3D5348991C3BF60200C6A437 /* LightProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D5348971C3BF60200C6A437 /* LightProperties.mm */; };
+		3D53489A1C3BF60200C6A437 /* LightProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D5348971C3BF60200C6A437 /* LightProperties.mm */; };
+		3D53489B1C3BF60200C6A437 /* LightProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D5348981C3BF60200C6A437 /* LightProperties.xib */; };
+		3D53489C1C3BF60200C6A437 /* LightProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D5348981C3BF60200C6A437 /* LightProperties.xib */; };
+		3D58CD471C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
+		3D58CD481C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
+		3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */; };
+		3D58CD4A1C3D0D3D006371DE /* TextColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */; };
+		3D58CD5E1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD4C1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m */; };
+		3D58CD5F1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD4C1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m */; };
+		3D58CD601C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD4E1C3D43C2006371DE /* WEBlockingGestureRecognizer.m */; };
+		3D58CD611C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD4E1C3D43C2006371DE /* WEBlockingGestureRecognizer.m */; };
+		3D58CD621C3D43C2006371DE /* WEPopoverContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD501C3D43C2006371DE /* WEPopoverContainerView.m */; };
+		3D58CD631C3D43C2006371DE /* WEPopoverContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD501C3D43C2006371DE /* WEPopoverContainerView.m */; };
+		3D58CD641C3D43C2006371DE /* WEPopoverContainerViewProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD521C3D43C2006371DE /* WEPopoverContainerViewProperties.m */; };
+		3D58CD651C3D43C2006371DE /* WEPopoverContainerViewProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD521C3D43C2006371DE /* WEPopoverContainerViewProperties.m */; };
+		3D58CD661C3D43C2006371DE /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD541C3D43C2006371DE /* WEPopoverContentViewController.m */; };
+		3D58CD671C3D43C2006371DE /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD541C3D43C2006371DE /* WEPopoverContentViewController.m */; };
+		3D58CD681C3D43C2006371DE /* WEPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD561C3D43C2006371DE /* WEPopoverController.m */; };
+		3D58CD691C3D43C2006371DE /* WEPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD561C3D43C2006371DE /* WEPopoverController.m */; };
+		3D58CD6A1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD591C3D43C2006371DE /* WEPopoverTableViewController.m */; };
+		3D58CD6B1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD591C3D43C2006371DE /* WEPopoverTableViewController.m */; };
+		3D58CD6C1C3D43C2006371DE /* WEPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD5B1C3D43C2006371DE /* WEPopoverViewController.m */; };
+		3D58CD6D1C3D43C2006371DE /* WEPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD5B1C3D43C2006371DE /* WEPopoverViewController.m */; };
+		3D58CD6E1C3D43C2006371DE /* WETouchableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD5D1C3D43C2006371DE /* WETouchableView.m */; };
+		3D58CD6F1C3D43C2006371DE /* WETouchableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD5D1C3D43C2006371DE /* WETouchableView.m */; };
 		3D71B06C1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */; };
 		3D71B06D1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */; };
 		3D71B06E1C2930BE0038C4BD /* AssetSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */; };
@@ -2124,19 +2132,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0169C41D1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+WEPopover.h"; sourceTree = "<group>"; };
-		0169C41E1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+WEPopover.m"; sourceTree = "<group>"; };
-		0169C41F1C33DA2700132FF6 /* WEBlockingGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEBlockingGestureRecognizer.h; sourceTree = "<group>"; };
-		0169C4201C33DA2700132FF6 /* WEBlockingGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEBlockingGestureRecognizer.m; sourceTree = "<group>"; };
-		0169C4211C33DA2700132FF6 /* WEPopoverContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverContainerView.h; sourceTree = "<group>"; };
-		0169C4221C33DA2700132FF6 /* WEPopoverContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverContainerView.m; sourceTree = "<group>"; };
-		0169C4231C33DA2700132FF6 /* WEPopoverContainerViewProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverContainerViewProperties.h; sourceTree = "<group>"; };
-		0169C4241C33DA2700132FF6 /* WEPopoverContainerViewProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverContainerViewProperties.m; sourceTree = "<group>"; };
-		0169C4251C33DA2700132FF6 /* WEPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverController.h; sourceTree = "<group>"; };
-		0169C4261C33DA2700132FF6 /* WEPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverController.m; sourceTree = "<group>"; };
-		0169C4271C33DA2700132FF6 /* WEPopoverParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverParentView.h; sourceTree = "<group>"; };
-		0169C4281C33DA2700132FF6 /* WETouchableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WETouchableView.h; sourceTree = "<group>"; };
-		0169C4291C33DA2700132FF6 /* WETouchableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WETouchableView.m; sourceTree = "<group>"; };
 		0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown-white@2x.png"; sourceTree = "<group>"; };
 		0169C4481C33ED5A00132FF6 /* popoverArrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popoverArrowDown.png; sourceTree = "<group>"; };
 		0169C4491C33ED5A00132FF6 /* popoverArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown@2x.png"; sourceTree = "<group>"; };
@@ -2330,12 +2325,6 @@
 		01F872A01C3A5A06009AA31E /* Play_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Play_IPhone.png; sourceTree = "<group>"; };
 		01F872A11C3A5A06009AA31E /* Redo_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Redo_IPhone.png; sourceTree = "<group>"; };
 		01F872A61C3A689B009AA31E /* Add-Bones_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bones_IPhone.png"; sourceTree = "<group>"; };
-		01F872A91C3A69C0009AA31E /* WEPopoverContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverContentViewController.h; sourceTree = "<group>"; };
-		01F872AA1C3A69C0009AA31E /* WEPopoverContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverContentViewController.m; sourceTree = "<group>"; };
-		01F872AB1C3A69C0009AA31E /* WEPopoverTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverTableViewController.h; sourceTree = "<group>"; };
-		01F872AC1C3A69C0009AA31E /* WEPopoverTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverTableViewController.m; sourceTree = "<group>"; };
-		01F872AD1C3A69C0009AA31E /* WEPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverViewController.h; sourceTree = "<group>"; };
-		01F872AE1C3A69C0009AA31E /* WEPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverViewController.m; sourceTree = "<group>"; };
 		01F872B61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bones_IPhone@2x.png"; sourceTree = "<group>"; };
 		01F872B71C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Frames_IPhone@2x.png"; sourceTree = "<group>"; };
 		01F872B81C3A6C4E009AA31E /* Animation_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Animation_IPhone@2x.png"; sourceTree = "<group>"; };
@@ -2887,6 +2876,31 @@
 		3D3F59171C2801C600713C79 /* TextFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFrameCell.h; path = "ui/Popover Views/TextFrameCell.h"; sourceTree = "<group>"; };
 		3D3F59181C2801C600713C79 /* TextFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFrameCell.m; path = "ui/Popover Views/TextFrameCell.m"; sourceTree = "<group>"; };
 		3D3F59191C2801C600713C79 /* TextFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextFrameCell.xib; path = "ui/Popover Views/TextFrameCell.xib"; sourceTree = "<group>"; };
+		3D5348961C3BF60200C6A437 /* LightProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightProperties.h; path = "ui/Popover Views/LightProperties.h"; sourceTree = "<group>"; };
+		3D5348971C3BF60200C6A437 /* LightProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LightProperties.mm; path = "ui/Popover Views/LightProperties.mm"; sourceTree = "<group>"; };
+		3D5348981C3BF60200C6A437 /* LightProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightProperties.xib; path = "ui/Popover Views/LightProperties.xib"; sourceTree = "<group>"; };
+		3D58CD441C3D0D3D006371DE /* TextColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextColorPicker.h; path = "ui/Popover Views/TextColorPicker.h"; sourceTree = "<group>"; };
+		3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextColorPicker.mm; path = "ui/Popover Views/TextColorPicker.mm"; sourceTree = "<group>"; };
+		3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextColorPicker.xib; path = "ui/Popover Views/TextColorPicker.xib"; sourceTree = "<group>"; };
+		3D58CD4B1C3D43C2006371DE /* UIBarButtonItem+WEPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+WEPopover.h"; sourceTree = "<group>"; };
+		3D58CD4C1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+WEPopover.m"; sourceTree = "<group>"; };
+		3D58CD4D1C3D43C2006371DE /* WEBlockingGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEBlockingGestureRecognizer.h; sourceTree = "<group>"; };
+		3D58CD4E1C3D43C2006371DE /* WEBlockingGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEBlockingGestureRecognizer.m; sourceTree = "<group>"; };
+		3D58CD4F1C3D43C2006371DE /* WEPopoverContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverContainerView.h; sourceTree = "<group>"; };
+		3D58CD501C3D43C2006371DE /* WEPopoverContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverContainerView.m; sourceTree = "<group>"; };
+		3D58CD511C3D43C2006371DE /* WEPopoverContainerViewProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverContainerViewProperties.h; sourceTree = "<group>"; };
+		3D58CD521C3D43C2006371DE /* WEPopoverContainerViewProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverContainerViewProperties.m; sourceTree = "<group>"; };
+		3D58CD531C3D43C2006371DE /* WEPopoverContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverContentViewController.h; sourceTree = "<group>"; };
+		3D58CD541C3D43C2006371DE /* WEPopoverContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverContentViewController.m; sourceTree = "<group>"; };
+		3D58CD551C3D43C2006371DE /* WEPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverController.h; sourceTree = "<group>"; };
+		3D58CD561C3D43C2006371DE /* WEPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverController.m; sourceTree = "<group>"; };
+		3D58CD571C3D43C2006371DE /* WEPopoverParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverParentView.h; sourceTree = "<group>"; };
+		3D58CD581C3D43C2006371DE /* WEPopoverTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverTableViewController.h; sourceTree = "<group>"; };
+		3D58CD591C3D43C2006371DE /* WEPopoverTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverTableViewController.m; sourceTree = "<group>"; };
+		3D58CD5A1C3D43C2006371DE /* WEPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverViewController.h; sourceTree = "<group>"; };
+		3D58CD5B1C3D43C2006371DE /* WEPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverViewController.m; sourceTree = "<group>"; };
+		3D58CD5C1C3D43C2006371DE /* WETouchableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WETouchableView.h; sourceTree = "<group>"; };
+		3D58CD5D1C3D43C2006371DE /* WETouchableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WETouchableView.m; sourceTree = "<group>"; };
 		3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetSelectionSidePanel.h; path = ui/MainViews/AssetSelectionSidePanel.h; sourceTree = "<group>"; };
 		3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AssetSelectionSidePanel.mm; path = ui/MainViews/AssetSelectionSidePanel.mm; sourceTree = "<group>"; };
 		3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetSelectionSidePanel.xib; path = ui/MainViews/AssetSelectionSidePanel.xib; sourceTree = "<group>"; };
@@ -3781,25 +3795,25 @@
 		0169C41C1C33DA2700132FF6 /* Popover */ = {
 			isa = PBXGroup;
 			children = (
-				01F872A91C3A69C0009AA31E /* WEPopoverContentViewController.h */,
-				01F872AA1C3A69C0009AA31E /* WEPopoverContentViewController.m */,
-				01F872AB1C3A69C0009AA31E /* WEPopoverTableViewController.h */,
-				01F872AC1C3A69C0009AA31E /* WEPopoverTableViewController.m */,
-				01F872AD1C3A69C0009AA31E /* WEPopoverViewController.h */,
-				01F872AE1C3A69C0009AA31E /* WEPopoverViewController.m */,
-				0169C41D1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.h */,
-				0169C41E1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m */,
-				0169C41F1C33DA2700132FF6 /* WEBlockingGestureRecognizer.h */,
-				0169C4201C33DA2700132FF6 /* WEBlockingGestureRecognizer.m */,
-				0169C4211C33DA2700132FF6 /* WEPopoverContainerView.h */,
-				0169C4221C33DA2700132FF6 /* WEPopoverContainerView.m */,
-				0169C4231C33DA2700132FF6 /* WEPopoverContainerViewProperties.h */,
-				0169C4241C33DA2700132FF6 /* WEPopoverContainerViewProperties.m */,
-				0169C4251C33DA2700132FF6 /* WEPopoverController.h */,
-				0169C4261C33DA2700132FF6 /* WEPopoverController.m */,
-				0169C4271C33DA2700132FF6 /* WEPopoverParentView.h */,
-				0169C4281C33DA2700132FF6 /* WETouchableView.h */,
-				0169C4291C33DA2700132FF6 /* WETouchableView.m */,
+				3D58CD4B1C3D43C2006371DE /* UIBarButtonItem+WEPopover.h */,
+				3D58CD4C1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m */,
+				3D58CD4D1C3D43C2006371DE /* WEBlockingGestureRecognizer.h */,
+				3D58CD4E1C3D43C2006371DE /* WEBlockingGestureRecognizer.m */,
+				3D58CD4F1C3D43C2006371DE /* WEPopoverContainerView.h */,
+				3D58CD501C3D43C2006371DE /* WEPopoverContainerView.m */,
+				3D58CD511C3D43C2006371DE /* WEPopoverContainerViewProperties.h */,
+				3D58CD521C3D43C2006371DE /* WEPopoverContainerViewProperties.m */,
+				3D58CD531C3D43C2006371DE /* WEPopoverContentViewController.h */,
+				3D58CD541C3D43C2006371DE /* WEPopoverContentViewController.m */,
+				3D58CD551C3D43C2006371DE /* WEPopoverController.h */,
+				3D58CD561C3D43C2006371DE /* WEPopoverController.m */,
+				3D58CD571C3D43C2006371DE /* WEPopoverParentView.h */,
+				3D58CD581C3D43C2006371DE /* WEPopoverTableViewController.h */,
+				3D58CD591C3D43C2006371DE /* WEPopoverTableViewController.m */,
+				3D58CD5A1C3D43C2006371DE /* WEPopoverViewController.h */,
+				3D58CD5B1C3D43C2006371DE /* WEPopoverViewController.m */,
+				3D58CD5C1C3D43C2006371DE /* WETouchableView.h */,
+				3D58CD5D1C3D43C2006371DE /* WETouchableView.m */,
 			);
 			name = Popover;
 			path = 3rdParty/Popover;
@@ -5365,6 +5379,12 @@
 				0184EC851C35406A006F0B57 /* RenderTableViewCell.h */,
 				0184EC861C35406A006F0B57 /* RenderTableViewCell.m */,
 				0184EC871C35406A006F0B57 /* RenderTableViewCell.xib */,
+				3D5348961C3BF60200C6A437 /* LightProperties.h */,
+				3D5348971C3BF60200C6A437 /* LightProperties.mm */,
+				3D5348981C3BF60200C6A437 /* LightProperties.xib */,
+				3D58CD441C3D0D3D006371DE /* TextColorPicker.h */,
+				3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */,
+				3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */,
 				01B6C8B21C3B90500050D2F9 /* RenderTableViewPhone.xib */,
 				01ACD0AC1C3D11BF0096AD14 /* SettingsViewController.h */,
 				01ACD0AD1C3D11BF0096AD14 /* SettingsViewController.m */,
@@ -5621,7 +5641,6 @@
 				3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */,
 				3D71B06B1C2930BE0038C4BD /* AssetSelectionSidePanel.xib */,
 				01B6C8BB1C3BB8940050D2F9 /* AssetSelectionSidePanelPhone.xib */,
-				E2497679196BE0310025D442 /* AnimationEditorViewControllerPhone.xib */,
 				62F4D2A3199C7ABA0052EF95 /* AnimationEditorViewControllerPad.h */,
 				E24FBD0A1ACBFD9600CF7F8C /* AnimationEditorViewControllerPad.mm */,
 				C8AA46F01C227D1000C4AB53 /* SceneSelectionControllerNew.h */,
@@ -5629,6 +5648,7 @@
 				C8AA46F21C227D1000C4AB53 /* SceneSelectionControllerNew.xib */,
 				E21A4EB81AC9795700AD61DD /* AutoRigViewController.xib */,
 				E21A4EB91AC9795700AD61DD /* AutoRigViewControllerPhone.xib */,
+				E2497679196BE0310025D442 /* AnimationEditorViewControllerPhone.xib */,
 				E21A4EB61AC9795700AD61DD /* AutoRigViewController.h */,
 				E21A4EB71AC9795700AD61DD /* AutoRigViewController.mm */,
 				E249767A196BE0310025D442 /* AssetSelectionViewControllerPad.h */,
@@ -6490,6 +6510,7 @@
 				62FB867C1988D33A00AC7424 /* render_image.png in Resources */,
 				01F872731C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
 				7FDF550C1B736108006DC41F /* premium-phone@2x.png in Resources */,
+				3D53489B1C3BF60200C6A437 /* LightProperties.xib in Resources */,
 				7FC900E11A0A01470051B941 /* new-img-phone@2x.png in Resources */,
 				01B4D04F1C2937000091E19B /* My-objects-Camera_Pad.png in Resources */,
 				01F8727D1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
@@ -6793,6 +6814,7 @@
 				7FC900CD1A0A01470051B941 /* clone-img-phone@2x.png in Resources */,
 				7F1D56A31A0CF9F70060D4DD /* MenuReverse-phone.png in Resources */,
 				3DBC85E81C2BCBDC00B512AB /* Delete@2x.png in Resources */,
+				3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */,
 				7FC524D71B6F6F3600C5D26D /* Full-screen-phone@3x.png in Resources */,
 				25EA8EE31BD90506005DBA15 /* light_Phone@3x.png in Resources */,
 				7FC900F21A0A01470051B941 /* scale-img-phone.png in Resources */,
@@ -7166,6 +7188,7 @@
 				E20672BA1B049AA6006DD2F7 /* helpimage5.png in Resources */,
 				01F872741C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
 				E20672BB1B049AA6006DD2F7 /* home-phone.png in Resources */,
+				3D53489C1C3BF60200C6A437 /* LightProperties.xib in Resources */,
 				E20672BD1B049AA6006DD2F7 /* scale-img-phone@2x.png in Resources */,
 				E20672BF1B049AA6006DD2F7 /* controls5.sgm in Resources */,
 				01F8727E1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
@@ -7469,6 +7492,7 @@
 				E20673D81B049AA6006DD2F7 /* add-frame-phone@2x.png in Resources */,
 				E20673D91B049AA6006DD2F7 /* AutoRigHelp2.png in Resources */,
 				E20673DA1B049AA6006DD2F7 /* scale-img.png in Resources */,
+				3D58CD4A1C3D0D3D006371DE /* TextColorPicker.xib in Resources */,
 				E20673DB1B049AA6006DD2F7 /* light.sgm in Resources */,
 				C8AA47021C227D3600C4AB53 /* Mail.png in Resources */,
 				E20673DE1B049AA6006DD2F7 /* iphoneband@3x.png in Resources */,
@@ -7595,14 +7619,13 @@
 				E2A343D319F1598A000EF7C2 /* VideoUploadViewController.m in Sources */,
 				256F6F6E1BF6257C00154622 /* render.c in Sources */,
 				E21C3D251A0758B6006964E5 /* GTLYouTubeVideoConversionPings.m in Sources */,
-				01F872B31C3A69C0009AA31E /* WEPopoverViewController.m in Sources */,
 				251BF4821C2C20A300A5D41D /* RenderViewManager.mm in Sources */,
 				25E7611E1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m in Sources */,
+				3D58CD5E1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */,
 				256F6F761BF6257C00154622 /* error.c in Sources */,
 				E21C3D041A0758B6006964E5 /* GTLYouTubePlaylistItem.m in Sources */,
 				E21C3D1E1A0758B6006964E5 /* GTLYouTubeVideoAgeGating.m in Sources */,
 				E2497664196BE0190025D442 /* ObjCellView.mm in Sources */,
-				01F872AF1C3A69C0009AA31E /* WEPopoverContentViewController.m in Sources */,
 				25EFBEB61BE25CA700DB300C /* RETrimPopover.m in Sources */,
 				256F6D8E1BF624FB00154622 /* Joint.cpp in Sources */,
 				E21C3CFC1A0758B6006964E5 /* GTLYouTubeLiveStreamSnippet.m in Sources */,
@@ -7620,7 +7643,6 @@
 				E21C3D0F1A0758B6006964E5 /* GTLYouTubePropertyValue.m in Sources */,
 				E21C3CF91A0758B6006964E5 /* GTLYouTubeLiveStream.m in Sources */,
 				25B5B16A1BE33EFB00AC2525 /* mztools.c in Sources */,
-				0169C4301C33DA2700132FF6 /* WEPopoverContainerViewProperties.m in Sources */,
 				256F6B891BF6246300154622 /* BoneLimitsHelper.cpp in Sources */,
 				256F6E9C1BF624FB00154622 /* pngwtran.c in Sources */,
 				E24973FA196BD80F0025D442 /* Utility.m in Sources */,
@@ -7648,7 +7670,6 @@
 				25B5B1681BE33EFB00AC2525 /* ioapi.c in Sources */,
 				E21C3D2F1A0758B6006964E5 /* GTLYouTubeVideoProcessingDetailsProcessingProgress.m in Sources */,
 				7F19F6791B5E6C9F001A342C /* AFHTTPRequestOperation.m in Sources */,
-				0169C42C1C33DA2700132FF6 /* WEBlockingGestureRecognizer.m in Sources */,
 				E21C3CEA1A0758B6006964E5 /* GTLYouTubeI18nLanguageSnippet.m in Sources */,
 				256F6DB41BF624FB00154622 /* OGLTexture.cpp in Sources */,
 				E21C3D2C1A0758B6006964E5 /* GTLYouTubeVideoMonetizationDetails.m in Sources */,
@@ -7656,8 +7677,10 @@
 				256F6D8C1BF624FB00154622 /* CubeMeshNode.cpp in Sources */,
 				E21C3D001A0758B6006964E5 /* GTLYouTubeMonitorStreamInfo.m in Sources */,
 				E21C3D121A0758B6006964E5 /* GTLYouTubeSearchResult.m in Sources */,
+				3D58CD681C3D43C2006371DE /* WEPopoverController.m in Sources */,
 				256F6E861BF624FB00154622 /* pngmem.c in Sources */,
 				25EFBEB01BE25CA700DB300C /* RenPro.m in Sources */,
+				3D58CD6A1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
 				E21C3D061A0758B6006964E5 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
 				E249766C196BE0190025D442 /* RenderingViewController.m in Sources */,
 				256F6B871BF6246300154622 /* AutoRigJointsDataHelper.cpp in Sources */,
@@ -7666,6 +7689,7 @@
 				E29C10E61A075DBC00626544 /* GTLBatchResult.m in Sources */,
 				C8DF1FDC1C23E65600F689D6 /* SceneSelectionEnteredView.m in Sources */,
 				E21C3CD01A0758B6006964E5 /* GTLYouTubeChannel.m in Sources */,
+				3D58CD641C3D43C2006371DE /* WEPopoverContainerViewProperties.m in Sources */,
 				256F6B9D1BF6246300154622 /* KeyHelper.cpp in Sources */,
 				25F51F7D1C3291930021D3F5 /* SGCloudRenderingHelper.cpp in Sources */,
 				E21C3D151A0758B6006964E5 /* GTLYouTubeSubscriptionContentDetails.m in Sources */,
@@ -7678,7 +7702,6 @@
 				E21C3CBE1A0758B6006964E5 /* GTLYouTube_Sources.m in Sources */,
 				E2497622196BDD9D0025D442 /* AppDelegate.mm in Sources */,
 				E2A343C719F12AAF000EF7C2 /* GTLNetworking_Sources.m in Sources */,
-				0169C4321C33DA2700132FF6 /* WEPopoverController.m in Sources */,
 				E21C3D031A0758B6006964E5 /* GTLYouTubePlaylistContentDetails.m in Sources */,
 				25B5B16E1BE33EFB00AC2525 /* zip.c in Sources */,
 				E21C3CCD1A0758B6006964E5 /* GTLYouTubeActivityListResponse.m in Sources */,
@@ -7702,14 +7725,11 @@
 				C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */,
 				256F6D881BF624FB00154622 /* OGLMaterial.cpp in Sources */,
 				E29C11B11A07CACC00626544 /* GTMOAuth2ViewControllerTouch.m in Sources */,
-				0169C4341C33DA2700132FF6 /* WETouchableView.m in Sources */,
-				0169C42A1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m in Sources */,
 				25730E671AFD3C7B0042F81A /* BitmapContextManipulator.m in Sources */,
 				256F6D821BF624FB00154622 /* Material.cpp in Sources */,
 				256F6B9B1BF6246300154622 /* json_writer.cpp in Sources */,
 				256F6DA41BF624FB00154622 /* JointNode.cpp in Sources */,
 				E21C3CC01A0758B6006964E5 /* GTLYouTubeActivity.m in Sources */,
-				0169C42E1C33DA2700132FF6 /* WEPopoverContainerView.m in Sources */,
 				7F19F6771B5E6C9F001A342C /* AFAPIClient.m in Sources */,
 				E21C3CD51A0758B6006964E5 /* GTLYouTubeChannelContentOwnerDetails.m in Sources */,
 				256F6F621BF6257C00154622 /* memalloc.c in Sources */,
@@ -7722,10 +7742,13 @@
 				256F6D941BF624FB00154622 /* SGCircleNode.cpp in Sources */,
 				E21C3D391A0758B6006964E5 /* GTLYouTubeWatchSettings.m in Sources */,
 				E21C3D081A0758B6006964E5 /* GTLYouTubePlaylistItemStatus.m in Sources */,
+				3D58CD6C1C3D43C2006371DE /* WEPopoverViewController.m in Sources */,
 				E21C3D301A0758B6006964E5 /* GTLYouTubeVideoProjectDetails.m in Sources */,
+				3D58CD661C3D43C2006371DE /* WEPopoverContentViewController.m in Sources */,
 				E21C3CCB1A0758B6006964E5 /* GTLYouTubeActivityContentDetailsSubscription.m in Sources */,
 				256F6E881BF624FB00154622 /* pngpread.c in Sources */,
 				256F6DB21BF624FB00154622 /* MTLTexture.mm in Sources */,
+				3D58CD601C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */,
 				E2A343D019F12AAF000EF7C2 /* YouTubeUploadVideo.m in Sources */,
 				25730E601AFD3C7B0042F81A /* ANImageBitmapRep.m in Sources */,
 				25730E631AFD3C7B0042F81A /* OSCommonImage.m in Sources */,
@@ -7749,6 +7772,7 @@
 				E21C3CFD1A0758B6006964E5 /* GTLYouTubeLiveStreamStatus.m in Sources */,
 				25730E781AFD3E2B0042F81A /* GetPixelDemo.m in Sources */,
 				E21C3CE81A0758B6006964E5 /* GTLYouTubeI18nLanguage.m in Sources */,
+				3D58CD471C3D0D3D006371DE /* TextColorPicker.mm in Sources */,
 				E21C3D091A0758B6006964E5 /* GTLYouTubePlaylistListResponse.m in Sources */,
 				E21C3D181A0758B6006964E5 /* GTLYouTubeSubscriptionSubscriberSnippet.m in Sources */,
 				E2497671196BE0190025D442 /* ScaleViewController.m in Sources */,
@@ -7806,6 +7830,7 @@
 				E2497669196BE0190025D442 /* ObjFileViewController.mm in Sources */,
 				62F0DFD4198F623D0039083D /* FrameCellView.m in Sources */,
 				256F6EB41BF624FB00154622 /* DownloadTask.mm in Sources */,
+				3D5348991C3BF60200C6A437 /* LightProperties.mm in Sources */,
 				256F6EA81BF624FB00154622 /* MetalRenderManager.mm in Sources */,
 				256F6E921BF624FB00154622 /* pngset.c in Sources */,
 				E21C3CDA1A0758B6006964E5 /* GTLYouTubeChannelSectionContentDetails.m in Sources */,
@@ -7848,12 +7873,12 @@
 				256F6F6A1BF6257C00154622 /* priorityq.c in Sources */,
 				3D71B0731C2930E30038C4BD /* AssetFrameCell.m in Sources */,
 				0184EC811C352DCC006F0B57 /* LoggedInViewController.m in Sources */,
+				3D58CD6E1C3D43C2006371DE /* WETouchableView.m in Sources */,
 				25895B781B4F056700E833F8 /* AnimationItem.m in Sources */,
 				01B4CF861C291EFD0091E19B /* AnimationSelectionSlider.mm in Sources */,
 				01B4BCBF1C32A69900E09269 /* PopUpViewController.m in Sources */,
 				E21C3D071A0758B6006964E5 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
 				E21C3CFE1A0758B6006964E5 /* GTLYouTubeLocalizedProperty.m in Sources */,
-				01F872B11C3A69C0009AA31E /* WEPopoverTableViewController.m in Sources */,
 				251BF4751C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
 				E211247D1AF20A0D00C23624 /* Shaders.metal in Sources */,
 				256F6D801BF624FB00154622 /* Vector4.cpp in Sources */,
@@ -7890,6 +7915,7 @@
 				E21C3D0B1A0758B6006964E5 /* GTLYouTubePlaylistSnippet.m in Sources */,
 				E29C11AB1A07CABD00626544 /* GTMHTTPUploadFetcher.m in Sources */,
 				E21C3D371A0758B6006964E5 /* GTLYouTubeVideoSuggestionsTagSuggestion.m in Sources */,
+				3D58CD621C3D43C2006371DE /* WEPopoverContainerView.m in Sources */,
 				256F6DAA1BF624FB00154622 /* MorphNode.cpp in Sources */,
 				256F6EB61BF624FB00154622 /* Helper.cpp in Sources */,
 				E21C3CC21A0758B6006964E5 /* GTLYouTubeActivityContentDetailsBulletin.m in Sources */,
@@ -7984,6 +8010,7 @@
 				E20670EB1B049AA6006DD2F7 /* GTLYouTubeLiveStreamListResponse.m in Sources */,
 				256F6D7D1BF624FB00154622 /* Vector2.cpp in Sources */,
 				256F6BAE1BF6246300154622 /* SGNode.cpp in Sources */,
+				3D58CD6F1C3D43C2006371DE /* WETouchableView.m in Sources */,
 				E20670EC1B049AA6006DD2F7 /* ShaderCell.m in Sources */,
 				E20670ED1B049AA6006DD2F7 /* GTLYouTubeThumbnailDetails.m in Sources */,
 				25895B791B4F056700E833F8 /* AnimationItem.m in Sources */,
@@ -7993,7 +8020,9 @@
 				E20670F01B049AA6006DD2F7 /* SmartImageView.mm in Sources */,
 				E20670F11B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsPromotedItem.m in Sources */,
 				251BF4831C2C20A300A5D41D /* RenderViewManager.mm in Sources */,
+				3D58CD651C3D43C2006371DE /* WEPopoverContainerViewProperties.m in Sources */,
 				256F6F651BF6257C00154622 /* mesh.c in Sources */,
+				3D58CD481C3D0D3D006371DE /* TextColorPicker.mm in Sources */,
 				E20670F21B049AA6006DD2F7 /* GTLYouTubeVideoListResponse.m in Sources */,
 				E20670F31B049AA6006DD2F7 /* GTLYouTubeLiveBroadcastListResponse.m in Sources */,
 				E20670F51B049AA6006DD2F7 /* GTLUploadParameters.m in Sources */,
@@ -8004,6 +8033,7 @@
 				E20670F81B049AA6006DD2F7 /* VideoUploadViewController.m in Sources */,
 				256F6E991BF624FB00154622 /* pngwio.c in Sources */,
 				256F6EA11BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */,
+				3D58CD671C3D43C2006371DE /* WEPopoverContentViewController.m in Sources */,
 				E20670F91B049AA6006DD2F7 /* GTLYouTubeVideoConversionPings.m in Sources */,
 				0184EC891C35406A006F0B57 /* RenderTableViewCell.m in Sources */,
 				E20670FA1B049AA6006DD2F7 /* PremiumUpgardeVCViewController.m in Sources */,
@@ -8019,6 +8049,7 @@
 				E20671001B049AA6006DD2F7 /* GTLYouTubeTokenPagination.m in Sources */,
 				E20671011B049AA6006DD2F7 /* GTLYouTubeLiveBroadcastSnippet.m in Sources */,
 				E20671021B049AA6006DD2F7 /* GTLYouTubeContentRating.m in Sources */,
+				3D58CD611C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */,
 				256F6DAB1BF624FB00154622 /* MorphNode.cpp in Sources */,
 				256F6D9D1BF624FB00154622 /* APIData.cpp in Sources */,
 				E20671031B049AA6006DD2F7 /* GTLYouTubeInvideoBranding.m in Sources */,
@@ -8052,7 +8083,6 @@
 				E206711C1B049AA6006DD2F7 /* GTLYouTubeSubscription.m in Sources */,
 				E206711D1B049AA6006DD2F7 /* GTLYouTubeVideoProcessingDetailsProcessingProgress.m in Sources */,
 				E206711F1B049AA6006DD2F7 /* GTLYouTubeI18nLanguageSnippet.m in Sources */,
-				0169C4331C33DA2700132FF6 /* WEPopoverController.m in Sources */,
 				E20671231B049AA6006DD2F7 /* GTLYouTubeVideoMonetizationDetails.m in Sources */,
 				256F6E971BF624FB00154622 /* pngtrans.c in Sources */,
 				256F6D771BF624FB00154622 /* Mat4.cpp in Sources */,
@@ -8065,18 +8095,20 @@
 				E20671291B049AA6006DD2F7 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
 				256F6B8C1BF6246300154622 /* CameraViewHelper.cpp in Sources */,
 				E206712C1B049AA6006DD2F7 /* RenderingViewController.m in Sources */,
+				3D58CD6D1C3D43C2006371DE /* WEPopoverViewController.m in Sources */,
 				E206712D1B049AA6006DD2F7 /* GTLYouTubeInvideoPosition.m in Sources */,
 				018501DD1C2BDA730090FA65 /* EditorViewController.mm in Sources */,
 				256F6DA31BF624FB00154622 /* InstanceNode.cpp in Sources */,
 				E206712E1B049AA6006DD2F7 /* GTLBatchResult.m in Sources */,
 				E20671311B049AA6006DD2F7 /* GTLYouTubeChannel.m in Sources */,
 				E20671321B049AA6006DD2F7 /* GTLYouTubeSubscriptionContentDetails.m in Sources */,
-				01F872B21C3A69C0009AA31E /* WEPopoverTableViewController.m in Sources */,
+				3D58CD5F1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */,
 				E20671331B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsSocial.m in Sources */,
 				256F6F531BF6257C00154622 /* FtglPoint.cpp in Sources */,
 				E20671341B049AA6006DD2F7 /* GTLYouTubeVideoStatistics.m in Sources */,
 				01ACD0B01C3D11BF0096AD14 /* SettingsViewController.m in Sources */,
 				25B5B16B1BE33EFB00AC2525 /* mztools.c in Sources */,
+				3D58CD631C3D43C2006371DE /* WEPopoverContainerView.m in Sources */,
 				E20671351B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsRecommendation.m in Sources */,
 				E20671371B049AA6006DD2F7 /* GTLYouTubeChannelListResponse.m in Sources */,
 				E206713A1B049AA6006DD2F7 /* GTLYouTube_Sources.m in Sources */,
@@ -8085,7 +8117,6 @@
 				E206713C1B049AA6006DD2F7 /* GTLNetworking_Sources.m in Sources */,
 				256F6DA51BF624FB00154622 /* JointNode.cpp in Sources */,
 				E206713D1B049AA6006DD2F7 /* GTLYouTubePlaylistContentDetails.m in Sources */,
-				01F872B41C3A69C0009AA31E /* WEPopoverViewController.m in Sources */,
 				E206713F1B049AA6006DD2F7 /* GTLYouTubeActivityListResponse.m in Sources */,
 				256F6F7D1BF6257C00154622 /* registry.c in Sources */,
 				E20671401B049AA6006DD2F7 /* GTLYouTubeCdnSettings.m in Sources */,
@@ -8103,7 +8134,6 @@
 				E206714C1B049AA6006DD2F7 /* GTLYouTubeActivityContentDetails.m in Sources */,
 				E206714D1B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsPlaylistItem.m in Sources */,
 				E206714E1B049AA6006DD2F7 /* iCarousel.m in Sources */,
-				0169C4311C33DA2700132FF6 /* WEPopoverContainerViewProperties.m in Sources */,
 				E20671501B049AA6006DD2F7 /* GTLYouTubeWatchSettings.m in Sources */,
 				256F6F6F1BF6257C00154622 /* render.c in Sources */,
 				E20671511B049AA6006DD2F7 /* GTLYouTubePlaylistItemStatus.m in Sources */,
@@ -8141,7 +8171,6 @@
 				256F6EAF1BF624FB00154622 /* RenderingView.m in Sources */,
 				E206716C1B049AA6006DD2F7 /* GTLYouTubeVideoRecordingDetails.m in Sources */,
 				25F0C2631C2E912800C8EC85 /* SGAnimationManager.cpp in Sources */,
-				0169C42F1C33DA2700132FF6 /* WEPopoverContainerView.m in Sources */,
 				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */,
 				256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */,
 				256F6EB91BF624FB00154622 /* Logger.cpp in Sources */,
@@ -8154,7 +8183,6 @@
 				E20671751B049AA6006DD2F7 /* GTLYouTubeVideoConversionPing.m in Sources */,
 				E20671761B049AA6006DD2F7 /* GTLYouTubeI18nRegionListResponse.m in Sources */,
 				E20671771B049AA6006DD2F7 /* AssetCellView.mm in Sources */,
-				0169C42B1C33DA2700132FF6 /* UIBarButtonItem+WEPopover.m in Sources */,
 				25B5B16D1BE33EFB00AC2525 /* unzip.c in Sources */,
 				E20671791B049AA6006DD2F7 /* GTMHTTPFetcherService.m in Sources */,
 				256F6D711BF624FB00154622 /* CollisionManager.cpp in Sources */,
@@ -8171,9 +8199,9 @@
 				E20671891B049AA6006DD2F7 /* GTLYouTubeVideoFileDetailsVideoStream.m in Sources */,
 				25FCAB4E1C3003330051DBBA /* SGMovementManager.cpp in Sources */,
 				E206718A1B049AA6006DD2F7 /* UIImage+ANImageBitmapRep.m in Sources */,
-				0169C42D1C33DA2700132FF6 /* WEBlockingGestureRecognizer.m in Sources */,
 				E206718B1B049AA6006DD2F7 /* GTLYouTubeVideoTopicDetails.m in Sources */,
 				E206718D1B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsChannelItem.m in Sources */,
+				3D53489A1C3BF60200C6A437 /* LightProperties.mm in Sources */,
 				E206718E1B049AA6006DD2F7 /* GTLYouTubeVideoLiveStreamingDetails.m in Sources */,
 				251BF4741C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */,
 				256F6D9F1BF624FB00154622 /* CameraNode.cpp in Sources */,
@@ -8211,6 +8239,7 @@
 				251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */,
 				E20671AD1B049AA6006DD2F7 /* GTLYouTubeVideoFileDetailsAudioStream.m in Sources */,
 				E20671AE1B049AA6006DD2F7 /* GTLYouTubeChannelTopicDetails.m in Sources */,
+				3D58CD691C3D43C2006371DE /* WEPopoverController.m in Sources */,
 				01B4CF8B1C291EFD0091E19B /* FrameCellNew.mm in Sources */,
 				E20671AF1B049AA6006DD2F7 /* GTMReadMonitorInputStream.m in Sources */,
 				256F6EB71BF624FB00154622 /* Helper.cpp in Sources */,
@@ -8225,7 +8254,6 @@
 				3D71B06D1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */,
 				E20671B51B049AA6006DD2F7 /* GTLYouTubePlaylistItemContentDetails.m in Sources */,
 				E20671B61B049AA6006DD2F7 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
-				01F872B01C3A69C0009AA31E /* WEPopoverContentViewController.m in Sources */,
 				256F6DB11BF624FB00154622 /* OGLNodeData.cpp in Sources */,
 				E20671B81B049AA6006DD2F7 /* GTLYouTubeLocalizedProperty.m in Sources */,
 				E20671BA1B049AA6006DD2F7 /* GTLQuery.m in Sources */,
@@ -8246,7 +8274,6 @@
 				E20671C81B049AA6006DD2F7 /* FPTouchView.m in Sources */,
 				E20671CA1B049AA6006DD2F7 /* GTLYouTubeChannelStatistics.m in Sources */,
 				E20671CC1B049AA6006DD2F7 /* GTLYouTubeChannelBannerResource.m in Sources */,
-				0169C4351C33DA2700132FF6 /* WETouchableView.m in Sources */,
 				E20671CD1B049AA6006DD2F7 /* GTLYouTubeLocalizedString.m in Sources */,
 				256F6E9D1BF624FB00154622 /* pngwtran.c in Sources */,
 				E20671CE1B049AA6006DD2F7 /* GTLYouTubeGuideCategoryListResponse.m in Sources */,
@@ -8256,6 +8283,7 @@
 				E20671D11B049AA6006DD2F7 /* GTLYouTubeThumbnailSetResponse.m in Sources */,
 				256F6B881BF6246300154622 /* AutoRigJointsDataHelper.cpp in Sources */,
 				25B5B16F1BE33EFB00AC2525 /* zip.c in Sources */,
+				3D58CD6B1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
 				E20671D31B049AA6006DD2F7 /* GTMMIMEDocument.m in Sources */,
 				E20671D41B049AA6006DD2F7 /* GTLYouTubeI18nRegion.m in Sources */,
 				E20671D71B049AA6006DD2F7 /* GTLYouTubeLiveBroadcastContentDetails.m in Sources */,

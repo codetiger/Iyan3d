@@ -11,10 +11,17 @@
 
 #import <UIKit/UIKit.h>
 #import "AppHelper.h"
+#import "Constants.h"
 #import "AnimationSelectionCollectionViewCell.h"
+#import "SGEditorScene.h"
 
 @protocol SliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
+- (void) showOrHideProgress:(BOOL) value;
+- (void)applyAnimationToSelectedNode:(NSString*)filePath;
+- (void) stopPlaying;
+- (void) removeTempAnimation;
+
 @end
 
 @interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>
@@ -27,9 +34,15 @@
     int tabValue , previousTabValue;
     int _assetId,selectedCell,animationCategoryTab;
     NSString* docDirPath;
-
-
+    ANIMATION_TYPE animationType;
+    SGEditorScene *editorSceneLocal;
+    int selectedNodeId, bonecount, currentFrame, totalFrame;
+    bool isFirstTimeEntered;
 }
+
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime;
+
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *downloadIndicator;
 @property (strong, nonatomic) id <SliderDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIButton *categoryBtn;

@@ -176,7 +176,7 @@ void SGSelectionManager::highlightSelectedNode()
     
     currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
     currentSelectedNode->props.isSelected = true;
-    currentSelectedNode->props.isLighting = false;
+    //currentSelectedNode->props.isLighting = false;
     if(currentSelectedNode->getType() == NODE_RIG)
         currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
     else if (currentSelectedNode->getType() == NODE_TEXT)

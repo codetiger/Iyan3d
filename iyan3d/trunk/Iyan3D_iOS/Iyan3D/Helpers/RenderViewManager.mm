@@ -10,12 +10,14 @@
 #import "Logger.h"
 #import <OpenGLES/ES2/glext.h>
 #import "SGEditorScene.h"
+#import "AppHelper.h"
 #import "AppDelegate.h"
 
-#define ASSET_ANIMATION 4
+#define UNDEFINED_OBJECT -1
 #define ASSET_RIGGED 1
 #define ASSET_BACKGROUNDS 2
 #define ASSET_ACCESSORIES 3
+#define ASSET_ANIMATION 4
 #define ASSET_OBJ 6
 #define ASSET_CAMERA 7
 #define ASSET_LIGHT 8
@@ -185,16 +187,19 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void) addCameraLight
 {
-    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false];
-    [self.delegate updateAssetListInScenes:ASSET_CAMERA assetId:0 actionType:(int)ADD_OBJECT];
-    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false];
-    [self.delegate updateAssetListInScenes:ASSET_LIGHT assetId:0 actionType:(int)ADD_OBJECT];
+    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil];
+    [self.delegate updateAssetListInScenes:ASSET_CAMERA assetName:@"CAMERA" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil];
+    [self.delegate updateAssetListInScenes:ASSET_LIGHT assetName:@"LIGHT" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
     
 }
 
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail
 {
     // TODO a lot to implement
+   
+    NSString *assetName = [NSString stringWithCString:ConversionHelper::getStringForWString(name).c_str()
+                                                encoding:[NSString defaultCStringEncoding]];    
     ActionType assetAddType = IMPORT_ASSET_ACTION;
     
     if(editorScene) {
@@ -219,7 +224,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetId:assetId actionType:(int)ADD_OBJECT];
+              [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
@@ -229,7 +234,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                [self.delegate updateAssetListInScenes:ASSET_RIGGED assetId:assetId actionType:(int)ADD_OBJECT];
+                
+                
+                [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
@@ -239,7 +246,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                [self.delegate updateAssetListInScenes:ASSET_OBJ assetId:assetId actionType:(int)ADD_OBJECT];
+                [self.delegate updateAssetListInScenes:ASSET_OBJ assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
@@ -249,47 +256,54 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                [self.delegate updateAssetListInScenes:ASSET_IMAGE assetId:assetId actionType:(int)ADD_OBJECT];
+                [self.delegate updateAssetListInScenes:ASSET_IMAGE assetName:[NSString stringWithFormat:@"IMAGE %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
         case ASSET_ANIMATION: {
-            /*
+            
             NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
             NSString* documentsDirectory = [paths objectAtIndex:0];
             NSString* filePath = [NSString stringWithFormat:@"%@/%d.sga", documentsDirectory, assetId];
             std::string* sgaFilePath = new std::string([filePath UTF8String]);
-            animationScene->animFilePath = "";
-            animationScene->applySGAOnNode(sgaFilePath);
+            editorScene->animMan->applyAnimations(*sgaFilePath, editorScene->selectedNodeId);
             delete sgaFilePath;
-            animationScene->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
-            [self.frameCarouselView reloadData];
-            [self showTipsViewForAction:ANIMATION_APPLIED];
-            isFileSaved = !(animationScene->changeAction = true);
-             */
+            //animationScene->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
+            //[self.frameCarouselView reloadData];
+            //[self showTipsViewForAction:ANIMATION_APPLIED];
+            //isFileSaved = !(animationScene->changeAction = true);
+            
             break;
         }
         case ASSET_TEXT: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            /*
-            SGNode* textNode = editorScene->loader->loadNode(editorScene, NODE_TEXT, 0, name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String]);
+            float red = [[moreDetail objectForKey:@"red"]floatValue];
+            float green = [[moreDetail objectForKey:@"green"]floatValue];
+            float blue = [[moreDetail objectForKey:@"blue"]floatValue];
+            float alpha = [[moreDetail objectForKey:@"alpha"]floatValue];
+            NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
+            Vector4 textColor = Vector4(red,green,blue,alpha);
+            SGNode* textNode = editorScene->loader->loadNode(NODE_TEXT, 0, name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String]);
             if (textNode == NULL) {
-                [self.view endEditing:YES];
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
                 return false;
             }
-             */
+            if(textNode)
+                textNode->isTempNode = isTempNode;
+            if(!isTempNode){
+                [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetName:[NSString stringWithFormat:@"TEXT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+            }
             break;
         }
         case ASSET_ADDITIONAL_LIGHT: {
             //TODO enum for max lights
             if(ShaderManager::lightPosition.size() < 5) {
                 editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId , name, imgWidth , imgHeight , assetAddType , Vector4(1.0));
+                [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:[NSString stringWithFormat:@"LIGHT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             } else {
                 NSLog(@"Max lights 5");
-            }
-            
+            }            
             break;
         }
         default: {
@@ -302,7 +316,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 - (bool) removeNodeFromScene:(int)nodeIndex
 {
     editorScene->loader->removeObject(nodeIndex);
-    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetId:nodeIndex actionType:DELETE_OBJECT];
+    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:(int)nodeIndex];
 }
 
 - (void)addGesturesToSceneView
@@ -347,7 +361,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 //        if (editorScene->actions.size() > 0 && editorScene->currentAction > 0)
 //            [self.undoButton setEnabled:YES];
     }
-//    animationScene->setLightingOn();
+    editorScene->setLightingOn();
 }
 
 - (void)panGesture:(UIPanGestureRecognizer*)rec

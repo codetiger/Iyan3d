@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol ImageImportNewDelgate
--(void)pickedImageWithInfo:(NSDictionary*)info;
+-(void)pickedImageWithInfo:(NSDictionary*)info type:(BOOL)isTempNode;
 -(void)loadingViewStatus:(BOOL)status;
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 @end

@@ -66,8 +66,8 @@ public:
     MIRROR_SWITCH_STATE getMirrorState();
     /* Node add or remove actions */
     
-    void storeAddOrRemoveAssetAction(int actionType, int assetId, string optionalFilePath);
-    
+    void storeAddOrRemoveAssetAction(int actionType, int assetId, string optionalFilePath = "");
+    void removeDemoAnimation();
     /* Undo and Redo*/
     
     int undo(int& returnValue2);

@@ -16,6 +16,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PopUpViewController.h"
+#import "LightProperties.h"
 #import <GameKit/GameKit.h>
 #import "RenderingView.h"
 #import "ImportImageNew.h"
@@ -29,9 +30,10 @@
 #import "WEPopoverController.h"
 #import "LoginViewController.h"
 #import "LoggedInViewController.h"
+#import "SceneItem.h"
 #import "SettingsViewController.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate>{
     int totalFrames;
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
@@ -39,13 +41,26 @@
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
     LoginViewController *loginVc;
+    LightProperties *lightProperties;
     bool isMetalSupported;
     bool isLoggedin;
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
     SGEditorScene *editorScene;
+    SceneItem *currentScene;
+    int IndexOfSelected;
+    CacheSystem *cache;
+    bool isViewLoaded , isPlaying;
+    int assetAddType , previousAction , lightCount;
+    NSString *imgSalt;
+    NSTimer *playTimer;
+
     SettingsViewController *settingsVc;
 }
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
+
+
 @property (weak, nonatomic) IBOutlet RenderingView *renderView;
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *framesCollectionView;
@@ -74,7 +89,9 @@
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
+@property (nonatomic, strong) LightProperties *lightProp;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *center_progress;
 
 
 - (IBAction)editFunction:(id)sender;

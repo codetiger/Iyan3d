@@ -30,7 +30,9 @@
 
 - (IBAction)addBtnAction:(id)sender
 {
-    [self.delegate pickedImageWithInfo:imageInfo];
+    [self.delegate pickedImageWithInfo:imageInfo type:NO];
+    [self.delegate showOrHideLeftView:NO withView:nil];
+    [self.view removeFromSuperview];
 }
 
 - (IBAction)cancelBtnAction:(id)sender
@@ -46,14 +48,16 @@
     imageInfo = nil;
     imageInfo = [NSDictionary dictionaryWithDictionary:info];
     
-    if(imageInfo)
+    if(imageInfo){
+        [self.delegate pickedImageWithInfo:imageInfo type:YES];
         [self.addBtn setEnabled:YES];
+    }
     else
         [self.addBtn setEnabled:NO];
     
     }
 
 - (void)dealloc{
-    NSLog(@"Dealloc called");
+    
 }
 @end

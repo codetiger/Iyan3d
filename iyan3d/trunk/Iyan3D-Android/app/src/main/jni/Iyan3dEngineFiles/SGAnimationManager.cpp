@@ -55,15 +55,13 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
 void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames)
 {
     ifstream sgraFile(filePath,ios::in | ios::binary);
-    
     FileHelper::resetSeekPosition();
     FileHelper::readShort(&sgraFile); // version number
     FileHelper::readShort(&sgraFile); // type
     short numberOfJoints = FileHelper::readShort(&sgraFile);
     FileHelper::readShort(&sgraFile); // Number of frames
     short numberOfKeyFrames = FileHelper::readShort(&sgraFile);
-    short lastFrameId = FileHelper::readShort(&sgraFile);
-    
+    short lastFrameId = FileHelper::readShort(&sgraFile);   
     
     if((currentFrame + lastFrameId+1) > totalFrames)
         totalFrames = currentFrame + lastFrameId+1;

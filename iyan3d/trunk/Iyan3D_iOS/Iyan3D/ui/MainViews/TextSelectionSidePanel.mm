@@ -249,15 +249,19 @@
 
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if(fontArray != NULL && fontArray.count != 0 && fontArray.count > indexPath.row){
+        AssetItem* assetItem = fontArray[indexPath.row];
+        fontFileName = assetItem.name;
+        [self load3dText];
+    }
 }
 
 - (IBAction)inputTextChangedAction:(id)sender {
-    NSLog(@"Input Text : %@",_inputText.text);
+    [self load3dText];
 }
 
 - (IBAction)bevalChangeAction:(id)sender {
-    NSLog(@"SilderValue %f",_bevelSlider.value);
+    [self load3dText];
 }
 
 - (IBAction)fontStoreTapChangeAction:(id)sender {
@@ -265,24 +269,57 @@
 }
 
 - (IBAction)colorPickerAction:(id)sender {
-    NSLog(@"Color Picker");
+    //[_textSelectionDelegate textColorPicker:_colorWheelbtn];
+    
+    _textColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
+    _textColorProp.delegate = self;
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_textColorProp];
+    self.popoverController.popoverContentSize = CGSizeMake(200, 200);
+    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [_popUpVc.view setClipsToBounds:YES];
+    CGRect rect = _colorWheelbtn.frame;
+    rect = [self.view convertRect:rect fromView:_colorWheelbtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:NO];
 }
 
 - (IBAction)cancelBtnAction:(id)sender {
-    NSLog(@"Cancel Button");
+    [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
-    [self.view removeFromSuperview];
-    
+    [self.view removeFromSuperview];    
 }
 
 - (IBAction)addToSceneBtnAction:(id)sender {
-    
+    Vector4 color = Vector4(red,green,blue,1.0);
+    float bevelValue = _bevelSlider.value;
+    [_textSelectionDelegate load3DTex:FONT AssetId:0 TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
+    [_textSelectionDelegate removeTempNodeFromScene];
+    [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
+    [self deallocMem];
+    [self.view removeFromSuperview];
+}
+
+- (void) load3dText{
+    Vector4 color = Vector4(red,green,blue,1.0);
+    float bevelValue = _bevelSlider.value;
+    [_textSelectionDelegate load3DTex:FONT AssetId:0 TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
+}
+
+- (void) changeTextColor:(Vector3)textColor dragFinish:(BOOL)isDragFinish{
+    red = textColor.x;
+    green = textColor.y;
+    blue = textColor.z;
+    [_collectionView reloadData];
+    if(isDragFinish)
+        [self load3dText];
 }
 
 - (void)deallocMem
 {
-    NSLog(@"Dealloc");
     fontListArray = nil;
     docDirPath = nil;
     fontArray = nil;

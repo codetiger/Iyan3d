@@ -16,6 +16,20 @@
 
 @implementation AnimationSelectionSlider
 
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        editorSceneLocal = editorScene;
+        selectedNodeId = editorSceneLocal->selectedNodeId;
+        bonecount = editorSceneLocal->nodes[selectedNodeId]->joints.size();
+        currentFrame = editorSceneLocal->currentFrame;
+        totalFrame = editorSceneLocal->totalFrames;
+        isFirstTimeEntered = isFirstTime;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     downloadQueue = [[NSOperationQueue alloc] init];
@@ -80,12 +94,15 @@
         cell.backgroundColor = [UIColor clearColor];
         cell.layer.borderWidth = 1.0f;
         cell.layer.borderColor = [UIColor clearColor].CGColor;
-
     }
     UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
     cell.layer.borderWidth = 1.0f;
     cell.layer.borderColor = [UIColor whiteColor].CGColor;
     cell.layer.cornerRadius = 8.0;
+    [_delegate stopPlaying];
+    if(!isFirstTimeEntered)
+    [self.delegate removeTempAnimation];
+    editorSceneLocal->selectMan->selectObject(selectedNodeId);
     [self displayBasedOnSelection:[NSNumber numberWithInteger:indexPath.row]];
 
 }
@@ -185,15 +202,19 @@
     
     popover.permittedArrowDirections = UIPopoverArrowDirectionUp;
     [self presentViewController:view animated:YES completion:nil];
-
-
-    
 }
 
 - (IBAction)addBtnFunction:(id)sender {
+    
 }
 
 - (IBAction)cancelBtnFunction:(id)sender {
+
+
+    editorSceneLocal->currentFrame = currentFrame;
+    editorSceneLocal->totalFrames = totalFrame;
+    if(!isFirstTimeEntered)
+        [self.delegate removeTempAnimation];
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self deallocView];
     [self.view removeFromSuperview];
@@ -219,26 +240,42 @@
         _assetId = assetItem.assetId;
         if (assetItem)
             [self downloadAnimation:assetItem];
-        NSLog(@"Clicked Asste Item %d",_assetId);
-
     }
 }
 
 - (void)downloadAnimation:(AnimationItem*)assetItem
 {
-    NSString *fileName;
-    NSString *url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationFile/%d.sgra", assetItem.assetId];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
-    fileName = [NSString stringWithFormat:@"%@/%d.sgra", cacheDirectory, assetItem.assetId];
-    [self cancelOperations:animDownloadQueue];
-    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:(id)self selectorMethod:@selector(loadNode:) returnObject:[NSNumber numberWithInt:assetItem.assetId] outputFilePath:fileName andURL:url];
-    task.queuePriority = NSOperationQueuePriorityHigh;
-    [animDownloadQueue addOperation:task];
-    
-  
-    
-    
+    NSString *fileName, *url;
+    NSString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
+    if (tabValue == MY_ANIMATION) {
+        fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, assetItem.assetId, extension];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+            [self loadNode:[NSNumber numberWithInt:assetItem.assetId]];
+        }
+        else {
+            NSLog(@"File not exists");
+        }
+    }
+    else {
+        fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, assetItem.assetId, extension];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+            if (assetItem)
+                [self loadNode:[NSNumber numberWithInt:assetItem.assetId]];
+            isFirstTimeEntered = false;
+            [self.delegate applyAnimationToSelectedNode:fileName];
+        }
+        else {
+            [self.delegate showOrHideProgress:1];
+            url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
+            //[animDownloadQueue cancelAllOperations];
+            [self cancelOperations:animDownloadQueue];
+            DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(loadNode:) returnObject:[NSNumber numberWithInt:assetItem.assetId] outputFilePath:fileName andURL:url];
+            task.queuePriority = NSOperationQueuePriorityHigh;
+            [animDownloadQueue addOperation:task];
+        }
+    }    
 }
 
 
@@ -264,31 +301,6 @@
     [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AnimationUpdate"];
 }
 
-- (void)downloadAsset
-{
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths objectAtIndex:0];
-    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirectory = [docPaths objectAtIndex:0];
-    NSString* animDirPath = [docDirectory stringByAppendingPathComponent:@"Resources/Animations"];
-    AnimationItem* assetItem = [cache GetAnimation:_assetId fromTable:(tabValue == 7) ? 7 : 0];
-    NSString *fileName, *url;
-    //NString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
-    NSString* extension = @"sgra";
-    if (tabValue == 7) {
-        fileName = [NSString stringWithFormat:@"%@/%d.%@", animDirPath, assetItem.assetId, extension];
-        [self proceedToFileVerification:fileName];
-    }
-    else {
-        fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, assetItem.assetId, extension];
-        url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
-        //[animDownloadQueue cancelAllOperations];
-        [self cancelOperations:animDownloadQueue];
-        DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(proceedToFileVerification:) returnObject:fileName outputFilePath:fileName andURL:url];
-        task.queuePriority = NSOperationQueuePriorityVeryHigh;
-        [animDownloadQueue addOperation:task];
-    }
-}
 - (void)proceedToFileVerification:(id)object
 {
     NSString* filePath;
@@ -296,7 +308,6 @@
         filePath = ((DownloadTask*)object).outputPath;
     else
         filePath = object;
-    
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -312,7 +323,7 @@
     }
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-       // [self addAssetToScene:filePath];
+        NSLog(@"Download Completed");
     }
     else {
         [self.view endEditing:YES];
@@ -382,12 +393,13 @@
 
 - (void)loadNode:(id)returnValue
 {
+    NSLog(@"Download Completed");
+   [self.delegate showOrHideProgress:0];
 }
 
 
 - (void)deallocView
 {
-    NSLog(@"Dealloc called");
     [downloadQueue cancelAllOperations];
     downloadQueue = nil;
     cache = nil;

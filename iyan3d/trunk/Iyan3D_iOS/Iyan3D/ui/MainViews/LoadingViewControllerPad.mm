@@ -8,6 +8,7 @@
 
 #import "LoadingViewControllerPad.h"
 #import "SceneSelectionViewControllerPad.h"
+#import "SceneSelectionControllerNew.h"
 #import "EditorViewController.h"
 #import "AppDelegate.h"
 #import "Utility.h"
@@ -289,17 +290,16 @@
 
 - (void) loadSceneView
 {
-    
-  
+ 
     
     if([Utility IsPadDevice]) {
-        EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:editorView];
+        [appDelegate.window setRootViewController:sceneSelectionView];
     } else {
-        EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNewPhone" bundle:nil];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:editorView];
+        [appDelegate.window setRootViewController:sceneSelectionView];
     }
     [self deallocMemory];
 }

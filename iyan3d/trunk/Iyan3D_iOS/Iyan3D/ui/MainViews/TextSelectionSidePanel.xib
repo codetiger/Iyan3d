@@ -11,9 +11,10 @@
                 <outlet property="bevelSlider" destination="l6Y-Fo-bKR" id="5i4-DW-KGg"/>
                 <outlet property="cancelBtn" destination="c9v-9A-XSr" id="43x-kw-hEK"/>
                 <outlet property="collectionView" destination="P2e-gr-fZj" id="Sz1-ag-nUf"/>
+                <outlet property="colorWheelbtn" destination="4to-JM-G7I" id="0Qw-jw-mg4"/>
                 <outlet property="fontStoreTab" destination="X3h-3Z-EP7" id="wPg-bu-Tk8"/>
                 <outlet property="fontTab" destination="X3h-3Z-EP7" id="Zpy-ye-qkS"/>
-                <outlet property="inputText" destination="CyO-w9-dd0" id="vKH-tk-0S2"/>
+                <outlet property="inputText" destination="CyO-w9-dd0" id="Y4K-HK-YZu"/>
                 <outlet property="view" destination="D2q-EF-2et" id="T7L-vs-Kw9"/>
             </connections>
         </placeholder>
@@ -32,10 +33,10 @@
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
-                                <action selector="inputTextChangedAction:" destination="-1" eventType="primaryActionTriggered" id="BAO-cy-ZvB"/>
+                                <action selector="inputTextChangedAction:" destination="-1" eventType="editingDidEnd" id="YqC-zd-Dxo"/>
                             </connections>
                         </textField>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="l6Y-Fo-bKR">
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="50" id="l6Y-Fo-bKR">
                             <rect key="frame" x="42" y="49" width="177" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

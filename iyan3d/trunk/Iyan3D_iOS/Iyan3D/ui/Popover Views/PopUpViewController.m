@@ -14,7 +14,6 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil clickedButton:(NSString *)buttonValue{
    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self) {
-        NSLog(@"Clicked Btn %@",buttonValue);
         clickedBtn=buttonValue;
         [self setTableData:buttonValue];
         return self;

@@ -343,13 +343,21 @@
                      }];
 }
 
-- (void) loadScene {
-    [self removeFromParentViewController];
-}
-
 - (IBAction)openSceneAction:(id)sender {
-    EditorViewController* editorVC = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil];
-    [self presentViewController:editorVC animated:YES completion:nil];
+    SceneItem *scene = scenesArray[currentSelectedScene];
+    [[AppHelper getAppHelper] resetAppHelper];
+    if([Utility IsPadDevice]){
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate.window setRootViewController:animationEditor];
+    }
+    else{
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditoViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate.window setRootViewController:animationEditor];
+    }
+    
+    [self removeFromParentViewController];
 }
 #pragma Dealloc Delegate
 

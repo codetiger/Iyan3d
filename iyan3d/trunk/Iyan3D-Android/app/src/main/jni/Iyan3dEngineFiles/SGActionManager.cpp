@@ -302,9 +302,9 @@ void SGActionManager::changeCameraProperty(float fov , int resolutionType, bool 
 
 void SGActionManager::changeLightProperty(float red , float green, float blue, float shadow, bool isChanged)
 {
-    if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
+    if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
         return;
-
+    
     SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     if(propertyAction.actionType == ACTION_EMPTY){
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_LIGHT;
@@ -318,8 +318,9 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
         changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
     }
     
-    if(selectedNode->getType() == NODE_LIGHT)
+    if(selectedNode->getType() == NODE_LIGHT){
         ShaderManager::shadowDensity = shadow;
+    }
     else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
         selectedNode->props.nodeSpecificFloat = (shadow + 0.001) * 300.0;
     }
@@ -420,13 +421,11 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
     } else if (actionType == ACTION_APPLY_ANIM) {
         assetAction.drop();
         assetAction.actionType = ACTION_APPLY_ANIM;
-        /* TODO store action for animations
-        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(animFilePath));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->animMan->animFilePath));
         assetAction.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
-        assetAction.frameId = animStartFrame;
-        assetAction.actionSpecificIntegers.push_back(animTotalFrames);
+        assetAction.frameId = actionScene->animMan->animStartFrame;
+        assetAction.actionSpecificIntegers.push_back(actionScene->animMan->animTotalFrames);
         addAction(assetAction);
-         */
     }
 }
 
@@ -452,6 +451,22 @@ void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
             assetAction.jointPosKeys[i] = sgNode->joints[i]->positionKeys;
             assetAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
         }
+    }
+}
+
+void SGActionManager::removeDemoAnimation()
+{
+    SGAction &recentAction = actions[currentAction-1];
+    if(currentAction <= 0 || !actionScene || !smgr) {
+        currentAction = 0;
+        return;
+    }
+    if(recentAction.actionType == ACTION_APPLY_ANIM){
+        int indexOfAction = getObjectIndex(recentAction.objectIndex);
+        actionScene->selectedNodeId = indexOfAction;
+        actionScene->animMan->removeAppliedAnimation(recentAction.frameId, recentAction.actionSpecificIntegers[0]);
+        actions.erase(actions.begin()+(currentAction-1));
+        currentAction--;
     }
 }
 

@@ -10,6 +10,8 @@
 #import "AssetFrameCell.h"
 #import "Utility.h"
 #import "DownloadTask.h"
+#import "SceneSelectionControllerNew.h"
+#import "AppDelegate.h"
 
 #define RESTORING 11
 #define LOAD_NODE 22
@@ -63,6 +65,7 @@
     [self.assetSelectionDelegate removeTempNodeFromScene];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
+    [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
     
 }
@@ -72,8 +75,8 @@
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
+    [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
-
 }
 
 #pragma mark CollectionView Delegate methods
@@ -270,10 +273,13 @@
             NSLog(@"File Path : %@",fileName);
             url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%d.sgr", assetvalue.assetId];
             
-            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE)
+            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
+                [self.assetSelectionDelegate showOrHideProgress:1];
                 [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
+            }
             else {
                 if (activity == LOAD_NODE){
+                    [self.assetSelectionDelegate showOrHideProgress:0];
                     assetvalue.isTempAsset = isTempAsset;
                     [self.assetSelectionDelegate loadNodeInScene:assetvalue];
                 }
@@ -287,10 +293,13 @@
         fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
         url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
         
-        if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE)
+        if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
+            [self.assetSelectionDelegate showOrHideProgress:1];
             [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
+        }
         else {
             if (activity == LOAD_NODE){
+                [self.assetSelectionDelegate showOrHideProgress:0];
                 assetvalue.isTempAsset = isTempAsset;
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue];
             }
@@ -343,8 +352,10 @@
         if(!addToScenePressed)
             assetItem.isTempAsset = true;
         [self.assetSelectionDelegate loadNodeInScene:assetItem];
+        [self.assetSelectionDelegate showOrHideProgress:0];
     }
     else {
+        [self.assetSelectionDelegate showOrHideProgress:0];
         [self.view endEditing:YES];
         UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
@@ -363,25 +374,39 @@
     if(!addToScenePressed)
         assetItem.isTempAsset = true;
     [self.assetSelectionDelegate loadNodeInScene:assetItem];
+    [self.assetSelectionDelegate showOrHideProgress:0];
     
 }
 
 
 - (void)addDownloadTaskWithFileName:(NSString*)fileName URL:(NSString*)url returnId:(NSNumber*)returnId andSelector:(SEL)selector priority:(NSOperationQueuePriority)priority
 {
+
     DownloadTask* downloadTask;
     downloadTask = [[DownloadTask alloc] initWithDelegateObject:(id)self selectorMethod:selector returnObject:(id)returnId outputFilePath:fileName andURL:url];
     downloadTask.queuePriority = priority;
     [assetDownloadQueue addOperation:downloadTask];
 }
 
+
+- (void) cancelOperations:(NSOperationQueue*) queue
+{
+    [queue cancelAllOperations];
+    
+    for (DownloadTask *task in [queue operations]) {
+        [task cancel];
+    }
+}
+
 - (void)deallocMem
 {
+    [self cancelOperations:downloadQueue];
+    downloadQueue = nil;
+    [self cancelOperations:assetDownloadQueue];
+    assetDownloadQueue = nil;
     cache =nil;
     asset = nil;
     assetArray = nil;
-    downloadQueue = nil;
-    assetDownloadQueue = nil;
     docDirPath = nil;
 
 }
