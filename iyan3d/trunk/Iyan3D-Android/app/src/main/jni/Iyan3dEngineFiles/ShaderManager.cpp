@@ -218,7 +218,6 @@ void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
     smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex){
-    printf("\n shadow density %f ", shadowDensity);
     smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &shadowDensity, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
