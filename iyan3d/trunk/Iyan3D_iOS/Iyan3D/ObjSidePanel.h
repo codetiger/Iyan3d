@@ -37,6 +37,7 @@
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 
 @property (weak, nonatomic) IBOutlet UIButton *colorWheelBtn;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 - (IBAction)addBtnAction:(id)sender;
 - (IBAction)cancelBtnAction:(id)sender;

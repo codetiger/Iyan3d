@@ -214,6 +214,22 @@
                                       
                                   }];
     
+    UIAlertAction* mylibrary = [UIAlertAction
+                                  actionWithTitle:@"My Library"
+                                  style:UIAlertActionStyleDefault
+                                  handler:^(UIAlertAction * action)
+                                  {
+                                      if(modelCategoryTab == MY_LIBRARY_TYPE)
+                                          return;
+                                      [_modelCategory setTitle: @"My Library" forState:UIControlStateNormal];
+                                      assetArray = [cache GetAssetList:MY_LIBRARY_TYPE Search:@""];
+                                      [_assetsCollectionView reloadData];
+                                      modelCategoryTab = MY_LIBRARY_TYPE;
+                                      selectedAsset = -1;
+                                      [view dismissViewControllerAnimated:YES completion:nil];
+                                      
+                                  }];
+    
     switch (modelCategoryTab) {
         case ALLMODELS:
             [allmodels setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
@@ -227,12 +243,16 @@
         case ACCESSORIES:
             [accessories setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
+        case ASSET_LIBRARY:
+            [mylibrary setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
+            break;
     }
     
     [view addAction:allmodels];
     [view addAction:character];
     [view addAction:backgrounds];
     [view addAction:accessories];
+    [view addAction:mylibrary];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceView = _modelCategory;
     popover.permittedArrowDirections = UIPopoverArrowDirectionUp;

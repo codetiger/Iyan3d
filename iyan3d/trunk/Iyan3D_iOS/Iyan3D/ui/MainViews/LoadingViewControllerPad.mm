@@ -51,6 +51,7 @@
         NSString *resourcesDir = [docsDir stringByAppendingPathComponent:@"/Resources"];
         NSString *rigs = [resourcesDir stringByAppendingPathComponent:@"/Objs"];
         NSString *objs = [resourcesDir stringByAppendingPathComponent:@"/Rigs"];
+        NSString *sgm = [resourcesDir stringByAppendingPathComponent:@"/Sgm"];
         NSString *anims = [resourcesDir stringByAppendingPathComponent:@"/Animations"];
 
         if (![fileManager fileExistsAtPath:projectFolderPath]) {
@@ -58,6 +59,7 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:resourcesDir withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:rigs withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:objs withIntermediateDirectories:NO attributes:nil error:nil];
+            [[NSFileManager defaultManager] createDirectoryAtPath:sgm withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:databasePath]) {
@@ -145,7 +147,7 @@
         for(int i = 0; i < basicShapes.count; i++){
             NSString *mesh = [[NSBundle mainBundle] pathForResource:[basicShapes objectAtIndex:i] ofType:@"sgm"];
             NSString *fileName = [NSString stringWithFormat:@"%@.sgm",[basicShapes objectAtIndex:i]];
-            NSString *sgmFile = [docsDir stringByAppendingPathComponent:fileName];
+            NSString *sgmFile = [sgm stringByAppendingPathComponent:fileName];
             if([fileManager fileExistsAtPath:mesh]&& ![fileManager fileExistsAtPath:sgmFile]){
                 [fileManager copyItemAtPath:mesh toPath:sgmFile error:nil];
             }

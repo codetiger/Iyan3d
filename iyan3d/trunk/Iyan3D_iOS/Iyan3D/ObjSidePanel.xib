@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addBtn" destination="hmZ-Gp-sTd" id="feS-s7-AHY"/>
                 <outlet property="cancelBtn" destination="gba-ht-Eqv" id="wwy-7V-a3M"/>
+                <outlet property="collectionView" destination="iSK-at-mkm" id="F3R-5h-EnV"/>
                 <outlet property="colorWheelBtn" destination="iBb-rI-NfD" id="sNb-0v-KeF"/>
                 <outlet property="importFilesCollectionView" destination="iSK-at-mkm" id="M4D-Sv-T4N"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>

@@ -1803,8 +1803,8 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
                     else
                         return true;
                 }
-            if ([file intValue] >= 60000 && ([file intValue] < 70000)) {
-                NSString* rigPath = [NSString stringWithFormat:@"%@/%d.sgm", documentsDirectory, [file intValue]];
+            if (([file intValue] >= 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
+                NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", documentsDirectory, [file intValue]];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
                     if (!missingAlertShown) {
                         [[AppHelper getAppHelper] missingAlertView];
@@ -2054,46 +2054,102 @@ void downloadFile(NSString* url, NSString* fileName)
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
     NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
+    NSFileManager* fm = [[NSFileManager alloc]init];
     std::string *objStr = NULL;
     std::string *textureStr = new std::string([(!isHaveTexture) ? @"-1" : textureFileName UTF8String]);
-    NSString* assetName;
+    NSString* assetName = (indexPathOfOBJ < 6 ) ? [basicShapes objectAtIndex:indexPathOfOBJ] : [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
     int assetId = -1;
-    
+    NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
     if(indexPathOfOBJ < 6){//Total Basic Shapes 6
-        assetName = [basicShapes objectAtIndex:indexPathOfOBJ];
-        NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
         assetId = [[basicShapesId objectAtIndex:indexPathOfOBJ]intValue];
     }
     else{
-        assetName = [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
         objStr = new std::string([[[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension] UTF8String]);
-        editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 12345,!isHaveTexture,color);
-        assetId =12345;
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* docPath = [paths objectAtIndex:0];
-        NSString* from = [NSString stringWithFormat:@"%@/%@.png",docPath,textureFileName];
-        NSString* to = [NSString stringWithFormat:@"%@/123456-cm.png",docPath];
-        NSFileManager* fm = [[NSFileManager alloc]init];
-        [fm moveItemAtPath:from toPath:to error:nil];
-    }    
+        editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 123456,!isHaveTexture,color);
+    }
     
-        NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
-        [dict setObject:assetName forKey:@"name"];
-        [dict setObject:[NSNumber numberWithInt:assetId] forKey:@"assetId"];
-        [dict setObject:[NSNumber numberWithFloat:color.x] forKey:@"x"];
-        [dict setObject:[NSNumber numberWithFloat:color.y] forKey:@"y"];
-        [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
-        [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
+    if(assetId < 0)
+        return;
+    
+    if(isHaveTexture){
+        assetId =  [self addSgmFileToCacheDirAndDatabase:assetName];
+        NSString* sgmFrom = [NSString stringWithFormat:@"%@%@/%d.sgm",docDirPath,(indexPathOfOBJ<6) ? @"/Resources/Sgm/" : @"",(indexPathOfOBJ<6)?[[basicShapesId objectAtIndex:indexPathOfOBJ]intValue] : 123456];
+        NSString* sgmTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm",docDirPath,assetId];
+        [fm moveItemAtPath:sgmFrom toPath:sgmTo error:nil];
+        NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,textureFileName];
+        NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetId];
+        [fm copyItemAtPath:texFrom toPath:texTo error:nil];
+    }
+    
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
+    [dict setObject:assetName forKey:@"name"];
+    [dict setObject:[NSNumber numberWithInt:assetId] forKey:@"assetId"];
+    [dict setObject:[NSNumber numberWithFloat:color.x] forKey:@"x"];
+    [dict setObject:[NSNumber numberWithFloat:color.y] forKey:@"y"];
+    [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
+    [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
+    
+}
+
+-(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
+{
+    NSArray* directoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectoryPath = [directoryPath objectAtIndex:0];
+    NSDate *currDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"YY-MM-DD HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:currDate];
+    AssetItem* sgmAsset = [[AssetItem alloc] init];
+    sgmAsset.assetId = 20000 + [cache getNextObjAssetId];
+    sgmAsset.type = NODE_SGM;
+    sgmAsset.name = [NSString stringWithFormat:@"%@%d",fileName,[cache getNextObjAssetId]];
+    sgmAsset.iap = 0;
+    sgmAsset.keywords = [NSString stringWithFormat:@" %@",fileName];
+    sgmAsset.boneCount = 0;
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath, fileName];
+    sgmAsset.hash = [self getMD5ForNonReadableFile:filePath];
+    sgmAsset.modifiedDate = dateString;
+    [cache UpdateAsset:sgmAsset];
+    [cache AddDownloadedAsset:sgmAsset];
+    return sgmAsset.assetId;
+}
+
+-(NSString*) getMD5ForNonReadableFile:(NSString*) path
+{
+    NSData* data = [NSData dataWithContentsOfFile:path];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5([data bytes], (int)[data length], result);
+    NSMutableString *hashString = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; ++i) {
+        [hashString appendFormat:@"%02x", result[i]];
+    }
+    return [NSString stringWithString:hashString];
 }
 
 - (void) loadObjOrSGM:(NSMutableDictionary*)dict
 {
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    
     Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue],[[dict objectForKey:@"y"]floatValue],[[dict objectForKey:@"z"]floatValue],1.0);
     int assetId = [[dict objectForKey:@"assetId"]intValue];
     NSString* assetName = [dict objectForKey:@"name"];
     editorScene->loader->loadNode(NODE_SGM,assetId,[self getwstring:assetName], 0, 0, IMPORT_ASSET_ACTION,color,"",NO);
     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
     [self updateAssetListInScenes:NODE_SGM assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+
+    
+    
+    for(int i = 0; i < editorScene->nodes.size(); i++){
+        if(i != editorScene->nodes.size()-1){
+            
+        }
+    }
+    
+    editorScene->renHelper->isExportingImages = true;
+    editorScene->updater->setDataForFrame(editorScene->currentFrame);
+    NSString* imageFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, assetId];
+    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], 0, false, YES);
 }
 
 - (void)setupEnableDisableControls{

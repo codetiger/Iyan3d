@@ -60,7 +60,7 @@
     if(_addBtn.tag == OBJ)
         return [filesList count]+6;
     else
-        return [filesList count];
+        return ([filesList count] == 0) ? 1 : [filesList count];
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -68,9 +68,7 @@
     if(_addBtn.tag == OBJ)
     {
         if(indexPath.row > basicShapes.count-1){
-            NSLog(@"Files Count %lu " , (unsigned long)[filesList count]);
             NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
-            NSLog(@"path extension %@",extension);
             if([extension isEqualToString:@"obj"]){
                 ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
@@ -92,22 +90,28 @@
     }
     else
     {
+        ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+        cell.layer.borderColor = [UIColor grayColor].CGColor;
+        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+
+        if([filesList count] == 0){
+            cell.assetNameLabel.text = @"Pick Color";
+            cell.assetImageView.backgroundColor = [UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0];
+            cell.assetImageView.image = NULL;
+        }
+        else{
             NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString* docDirPath = [srcDirPath objectAtIndex:0];
             NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row]];
-            NSLog(@"Source File Path %@",srcFilePath);
-            ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
             cell.assetNameLabel.text = filesList[indexPath.row];
-            cell.layer.borderColor = [UIColor grayColor].CGColor;
-            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
             cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
+        }
             return cell;
     }
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
     for (int i = 0; i < [indexPathArr count]; i++)
     {
@@ -122,8 +126,26 @@
         indexPathOfOBJ = indexPath.row;
     else
     {
-        haveTexture = YES;
-        textureFileName = [[filesList objectAtIndex:indexPath.row]stringByDeletingPathExtension];
+        if([filesList count] == 0){
+            haveTexture = NO;
+            _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
+            _vertexColorProp.delegate = self;
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_vertexColorProp];
+            self.popoverController.popoverContentSize = CGSizeMake(200, 200);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_popUpVc.view setClipsToBounds:YES];
+            CGRect rect = _colorWheelBtn.frame;
+            rect = [self.view convertRect:rect fromView:_colorWheelBtn.superview];
+            [self.popoverController presentPopoverFromRect:rect
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:NO];
+        }
+        else{
+            haveTexture = YES;
+            textureFileName = [[filesList objectAtIndex:indexPath.row]stringByDeletingPathExtension];
+        }
     }
 }
 
@@ -163,13 +185,13 @@
                                             inView:self.view
                           permittedArrowDirections:UIPopoverArrowDirectionUp
                                           animated:NO];
-
 }
 
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish
 {
     haveTexture = NO;
     color = vetexColor;
+    [self.collectionView reloadData];
 }
 
 

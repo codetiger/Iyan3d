@@ -197,6 +197,10 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
         if(!checkFileExists(meshPath)) {
             meshPath = FileHelper::getDocumentsDirectory() + to_string(assetId) + fileExt;
             textureFileName = FileHelper::getDocumentsDirectory() + to_string(assetId)+"-cm.png";
+            if(!checkFileExists(meshPath)){
+                meshPath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId) + fileExt;
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId)+"-cm.png";
+            }
             if(!checkFileExists(meshPath))
                 return shared_ptr<Node>();
         }

@@ -72,7 +72,7 @@
             updateImage = [[AppHelper getAppHelper] userDefaultsBoolForKey:[NSString stringWithFormat:@"updateImage%@", assetId]];
         else
             updateImage = false;
-
+        
         if (image && !updateImage) {
             [self setImage:image];
             [activityIndicator stopAnimating];
@@ -164,8 +164,10 @@
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     if (_viewType != ALL_ANIMATION_VIEW) {
-        if ([assetId hasPrefix:@"2"] && localId >= 20000)
-            storagePath = [NSString stringWithFormat:@"%@/Resources/Objs", docDirectory];
+        if ([assetId hasPrefix:@"2"] && localId >= 20000){
+            storagePath = [NSString stringWithFormat:@"%@/Resources/Sgm", docDirectory];
+            //storagePath = [NSString stringWithFormat:@"%@/Resources/Objs", docDirectory];
+        }
         else if ([assetId hasPrefix:@"4"] && localId >= 40000)
             storagePath = [NSString stringWithFormat:@"%@/Resources/Rigs", docDirectory];
         else if ([assetId hasPrefix:@"8"] && localId >= 80000)
