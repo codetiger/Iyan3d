@@ -232,8 +232,8 @@ enum constants {
 - (IBAction)startButtonAction:(id)sender
 {
     if([shaderArray[tempSelectedIndex] intValue] == SHADER_CLOUD){
+        [self.delegate saveScene];
         [self shaderPhotoAction];
-        
     }
     else{
         if(renderingExportImage != RENDER_IMAGE) {
@@ -351,8 +351,8 @@ enum constants {
         NSLog(@"Document Directory %@",docDirectory);
         NSString *fileUrl= [docDirectory stringByAppendingString:@"/test2.zip"];
         NSLog(@"File Url: %@",fileUrl);
-        NSURL *url = [NSURL URLWithString:@"http://www.iyan3dapp.com/appapi/rendertask.php"];
-        NSString *postPath = @"http://www.iyan3dapp.com/appapi/rendertask.php";
+        NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/rendertask.php"];
+        NSString *postPath = @"https://www.iyan3dapp.com/appapi/rendertask.php";
         NSData *dataZip = [NSData dataWithContentsOfFile:fileUrl];
         //NSLog(@"%@ Data Items:", dataZip);
         if(dataZip==NULL){
@@ -691,7 +691,7 @@ enum constants {
     NSData *postData = [postString dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.smackall.com/app/anim3/youtube.php"]]];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.smackall.com/app/anim3/youtube.php"]]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Current-Type"];

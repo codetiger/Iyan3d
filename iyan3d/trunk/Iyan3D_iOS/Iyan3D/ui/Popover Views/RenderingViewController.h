@@ -28,6 +28,7 @@
 - (void) cameraResolutionChanged:(int)resolutinType;
 - (void) clearFolder:(NSString*)dirPath;
 - (void) resumeRenderingAnimationScene;
+- (void) saveScene;
 @end
 
 @class GADBannerView;
