@@ -97,6 +97,7 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     if(!moveScene || !smgr)
         return;
 
+
     moveScene->renHelper->cameraPreviewMoveDist = Vector2(0.0, 0.0);
     moveScene->renHelper->isMovingPreview = false;
     moveScene->setLightingOn();
@@ -106,6 +107,9 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
+        moveScene->selectMan->removeChildren(moveScene->getParentNode(), true);
+        moveScene->selectMan->updateParentPosition();
+
         if(moveScene->controlType == SCALE && moveScene->selectedNodeIds.size() > 0)
             moveScene->actionMan->changeObjectScale(moveScene->getParentNode()->getScale(), true);
         else if(moveScene->controlType == SCALE && moveScene->selectedNodeId != NOT_SELECTED)

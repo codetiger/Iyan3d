@@ -366,11 +366,23 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
 
 bool SGSceneLoader::removeSelectedObjects()
 {
-    if(!currentScene || !smgr)
+    if(!currentScene || !smgr || !currentScene->allNodesRemovable())
         return false;
     
-    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++)
+    currentScene->selectMan->removeChildren(currentScene->getParentNode());
+    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++) {
+        currentScene->selectMan->unselectObject(currentScene->selectedNodeIds[i]);
         removeObject(currentScene->selectedNodeIds[i]);
+    }
+    
+    if(currentScene->getParentNode()) {
+        smgr->RemoveNode(currentScene->getParentNode());
+        currentScene->getParentNode().reset();
+    }
+    currentScene->isMultipleSelection = false;
+    currentScene->selectedNodeIds.clear();
+    currentScene->updater->resetMaterialTypes(false);
+
     return true;
 }
 

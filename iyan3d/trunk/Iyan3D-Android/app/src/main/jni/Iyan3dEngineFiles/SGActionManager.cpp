@@ -265,7 +265,9 @@ void SGActionManager::switchFrame(int frame)
         switchFrameAction.frameId = actionScene->currentFrame;
         addAction(switchFrameAction);
     }
+    actionScene->selectMan->removeChildren(actionScene->getParentNode());
     actionScene->updater->setDataForFrame(frame);
+    actionScene->selectMan->updateParentPosition();
 }
 
 void SGActionManager::changeMeshProperty(float brightness, float specular, bool isLighting, bool isVisible, bool isChanged)

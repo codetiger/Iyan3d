@@ -38,7 +38,7 @@ public:
     void storeGlobalPositions();
     void storeRelativePositions();
     void addSelectedChildren(shared_ptr<Node> toParent);
-    void removeChildren(shared_ptr<Node> fromParent);
+    void removeChildren(shared_ptr<Node> fromParent, bool resetKeys = false);
     void highlightSelectedNode(int nodeId = -1);
     void highlightJointSpheres();
     void selectObject(int objectId);

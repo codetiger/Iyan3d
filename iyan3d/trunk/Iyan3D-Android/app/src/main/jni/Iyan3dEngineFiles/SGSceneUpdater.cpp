@@ -31,7 +31,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
 {
     if(!updatingScene || !smgr)
         return;
-
+    
     bool lightChanged = false;
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
         Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, updatingScene->nodes[i]->positionKeys);

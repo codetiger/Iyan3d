@@ -322,7 +322,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 - (bool) removeNodeFromScene:(int)nodeIndex IsUndoOrRedo:(BOOL)isUndoOrRedo
 {
     if(editorScene->nodes.size()>nodeIndex){
-        editorScene->selectMan->selectObject(nodeIndex);
+        if(editorScene->isNodeInSelection(editorScene->nodes[nodeIndex]));
+            editorScene->selectMan->multipleSelections(nodeIndex);
+        editorScene->selectedNodeId = nodeIndex;
         if(!isUndoOrRedo){
             if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, 0);
@@ -478,11 +480,18 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         _longPress=true;
         if (!_isPlaying && !_isPanned)
         {
-            CGPoint position;
-            position = [sender locationInView:self.renderView];
-            _checkTapSelection = true;
-            _tapPosition = Vector2(position.x, position.y) * screenScale;
-            editorScene->isRTTCompleted = true;
+            if(editorScene->selectedNodeIds.size() > 0) {
+                if(editorScene->allNodesRemovable())
+                    [self.delegate presentPopOver:_longPresPosition];
+                _longPress=false;
+            } else {
+                CGPoint position;
+                position = [sender locationInView:self.renderView];
+                _checkTapSelection = true;
+                _tapPosition = Vector2(position.x, position.y) * screenScale;
+                editorScene->isRTTCompleted = true;
+            }
+            
         }
         CGPoint position;
         position = [sender locationInView:self.renderView];
@@ -498,8 +507,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 -(void) showPopOver:(int) selectedNodeId{
     if(_longPress){
-        if(editorScene->selectedNodeId != NOT_SELECTED){
-            if (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT)
+        if(editorScene->selectedNodeId != NOT_SELECTED ){
+            if ((editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT))
             {
                 [self.delegate presentPopOver:_longPresPosition];
                 _longPress=false;

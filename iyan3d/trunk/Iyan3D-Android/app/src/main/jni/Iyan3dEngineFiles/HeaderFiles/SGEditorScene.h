@@ -78,6 +78,10 @@ public:
     float camPreviewScale;
     float topLimit;
     float rightLimit;
+    Vector2 topLeft;
+    Vector2 topRight;
+    Vector2 bottomLeft;
+    Vector2 bottomRight;
 
     vector<int> selectedNodeIds;
     std::map<int,int> isKeySetForFrame;
@@ -164,7 +168,9 @@ public:
     SGJoint* getSelectedJoint();
     shared_ptr<Node> getParentNode();
     
+    bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();
+    bool allNodesRemovable();
     Vector3 getSelectedNodeScale();
     bool checkNodeSize();
     void saveThumbnail(char* imagePath);

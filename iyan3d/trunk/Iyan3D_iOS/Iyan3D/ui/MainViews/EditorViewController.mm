@@ -132,12 +132,13 @@ BOOL missingAlertShown;
         [self.framesCollectionView setTag:1];
 
     [self.framesCollectionView reloadData];
-    if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
-        [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
-    }
     [self.objectList reloadData];
     [self initScene];
     [self createDisplayLink];
+    if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
+        [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+    }
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -534,6 +535,11 @@ BOOL missingAlertShown;
     [self objectSelectionCompleted:(int)indexPath.row];
     
 }
+- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self objectSelectionCompleted:(int)indexPath.row];
+    return indexPath;
+}
 -(void)tableView:(UITableView *)tableView deSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.objectList deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -813,7 +819,7 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -825,25 +831,8 @@ BOOL missingAlertShown;
         rect = [self.view convertRect:rect fromView:_importBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionLeft
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                           animated:YES];
-    }
-    else{
-        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
-        [_popUpVc.view setClipsToBounds:YES];
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
-        self.popoverController.delegate =self;
-        self.popUpVc.delegate=self;
-        CGRect rect = _importBtn.frame;
-        rect = [self.view convertRect:rect fromView:_importBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionRight
-                                              animated:YES];
-
-    }
 }
 - (IBAction)infoBtnAction:(id)sender
 {
@@ -1175,6 +1164,8 @@ BOOL missingAlertShown;
     }
     if (isPlaying) {
         //[self setInterfaceVisibility:YES];
+        if(editorScene->selectedNodeIds.size() > 0)
+            editorScene->selectMan->unselectObjects();
         [self setupEnableDisableControlsPlayAnimation];
         [self.playBtn setImage:[UIImage imageNamed:@"Pause_Pad.png"] forState:UIControlStateNormal];
         
@@ -1418,6 +1409,9 @@ BOOL missingAlertShown;
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd
 {
+    if(editorScene)
+        editorScene->selectMan->unselectObjects();
+    
     if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
         if(showView)
             [self.leftView addSubview:subViewToAdd];
@@ -1592,10 +1586,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                    style:UIAlertActionStyleDefault
                                    handler:^(UIAlertAction * action)
                                    {
-                                       [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+                                       if(editorScene->selectedNodeIds.size() > 0)
+                                           editorScene->loader->removeSelectedObjects();
+                                        else
+                                            [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
                                    }];
     [view addAction:deleteButton];
-    if(editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT){
+    if(editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT){
         UIAlertAction* duplicateButton = [UIAlertAction
                                           actionWithTitle:@"Duplicate"
                                           style:UIAlertActionStyleDefault
@@ -1606,7 +1603,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         [view addAction:duplicateButton];
     }
-    if(editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE){
+    if(editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE){
         UIAlertAction* changeTexture = [UIAlertAction
                                         actionWithTitle:@"Change Texture"
                                         style:UIAlertActionStyleDefault
@@ -2521,32 +2518,24 @@ void downloadFile(NSString* url, NSString* fileName)
 
        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"cameraPreviewPosition"];
 }
--(void)toolbarPosition:(int)selctedIndex{
-    
-    if(selctedIndex==1){
-        CGRect frame = self.rightView.frame;
-        frame.origin.x = 0;
-        frame.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
-        self.rightView.frame = frame;
-        CGRect frame1 = self.leftView.frame;
-        frame1.origin.x = self.view.layer.bounds.size.width-self.leftView.layer.bounds.size.width;
-        frame1.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
-        self.leftView.frame = frame1;
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
+-(void)toolbarPosition:(int)selctedIndex
+{
+    CGRect frame = self.rightView.frame;
+    frame.origin.x = (selctedIndex==1) ? 0 : self.view.frame.size.width-self.rightView.frame.size.width;
+    frame.origin.y = self.topView.frame.size.height; // new y coordinate
+    self.rightView.frame = frame;
+    CGRect frame1 = self.leftView.frame;
+    frame1.origin.x = (selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : 0;
+    frame1.origin.y = self.topView.frame.size.height; // new y coordinate
+    self.leftView.frame = frame1;
+    if(editorScene) {
+        editorScene->topLeft = Vector2((selctedIndex==1) ? 0.0 : self.view.frame.size.width-self.leftView.frame.size.width, 0.0);
+        editorScene->topRight = Vector2((selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : self.view.frame.size.width, 0.0);
+        editorScene->bottomLeft = Vector2((selctedIndex==1) ? 0.0 : self.view.frame.size.width-self.leftView.frame.size.width, self.view.frame.size.height);
+        editorScene->bottomRight = Vector2((selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : self.view.frame.size.width, self.view.frame.size.height);
+        editorScene->renHelper->movePreviewToCorner();
     }
-    else{
-        NSLog(@"Toolbar");
-        CGRect frame = self.rightView.frame;
-        frame.origin.x = self.view.layer.bounds.size.width-self.rightView.frame.size.width;
-        frame.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
-        self.rightView.frame = frame;
-        CGRect frame1 = self.leftView.frame;
-        frame1.origin.x = 0;
-        frame1.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
-        self.leftView.frame = frame1;
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
-    }
-    
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
 }
 
 

@@ -461,13 +461,40 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
+bool SGEditorScene::isNodeInSelection(SGNode *sgNode)
+{
+    bool status = false;
+    for(int i = 0; i < selectedNodeIds.size(); i++) {
+        if(nodes[selectedNodeIds[i]] == sgNode) {
+            status = true;
+            break;
+        }
+    }
+    return status;
+}
+
 bool SGEditorScene::allObjectsScalable()
 {
     bool status = true;
     for(int i = 0; i < selectedNodeIds.size(); i++) {
         NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
-        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT)
+        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT) {
             status = false;
+            break;
+        }
+    }
+    return status;
+}
+
+bool SGEditorScene::allNodesRemovable()
+{
+    bool status = true;
+    for(int i = 0; i < selectedNodeIds.size(); i++) {
+        NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
+        if(nType == NODE_CAMERA || nType == NODE_LIGHT) {
+            status = false;
+            break;
+        }
     }
     return status;
 }

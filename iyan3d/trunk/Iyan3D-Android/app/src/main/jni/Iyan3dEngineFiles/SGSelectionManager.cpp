@@ -169,7 +169,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchM
         selectionScene->moveNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS;
     else {
         selectionScene->moveNodeId = NOT_EXISTS;
-        if((selectionScene->isNodeSelected || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected)
+        if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected)
             return multipleSelections(nodeId);
         else
             selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
@@ -207,7 +207,7 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         if(std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), selectionScene->selectedNodeId) == selectionScene->selectedNodeIds.end() && selectionScene->selectedNodeId != NOT_EXISTS)
             selectionScene->selectedNodeIds.push_back(selectionScene->selectedNodeId);
         selectionScene->selectedNodeIds.push_back(nodeId);
-        removeChildren(getParentNode());
+        removeChildren(getParentNode(), true);
         if(parentNode)
             smgr->RemoveNode(parentNode);
         sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
@@ -224,7 +224,7 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         }
         selectionScene->clearSelections();
     } else if(nodeId != 255 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) != selectionScene->selectedNodeIds.end()){
-        removeChildren(getParentNode());
+        removeChildren(getParentNode(),true);
         if(parentNode)
             smgr->RemoveNode(parentNode);
         for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
@@ -251,6 +251,9 @@ bool SGSelectionManager::multipleSelections(int nodeId)
 
 void SGSelectionManager::updateParentPosition()
 {
+    if(!getParentNode())
+        return;
+    
     storeGlobalPositions();
     addSelectedChildren(getParentNode());
     static_pointer_cast<Node>(getParentNode())->updateBoundingBox();
@@ -259,13 +262,14 @@ void SGSelectionManager::updateParentPosition()
     getParentNode()->updateAbsoluteTransformation();
     storeRelativePositions();
     static_pointer_cast<Node>(getParentNode())->updateBoundingBox();
+    selectionScene->updater->updateControlsOrientaion();
 }
 
 void SGSelectionManager::unselectObjects()
 {    
     for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++)
         unselectObject(selectionScene->selectedNodeIds[i]);
-    removeChildren(getParentNode());
+    removeChildren(getParentNode(), true);
     if(parentNode) {
         smgr->RemoveNode(parentNode);
         parentNode.reset();
@@ -308,17 +312,20 @@ void SGSelectionManager::addSelectedChildren(shared_ptr<Node> toParent)
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent((toParent) ? toParent : getParentNode());
 }
 
-void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent)
+void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent, bool resetKeys)
 {
     vector<Vector3> positions;
     vector<Quaternion> rotations;
     vector<Vector3> scales;
-    for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->updateAbsoluteTransformation();
-        positions.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsolutePosition());
-        Vector3 delta = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getRotationInDegree();
-        rotations.push_back(Quaternion(delta * DEGTORAD));
-        scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
+
+    if(resetKeys) {
+        for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
+            selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->updateAbsoluteTransformation();
+            positions.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsolutePosition());
+            Vector3 delta = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getRotationInDegree();
+            rotations.push_back(Quaternion(delta * DEGTORAD));
+            scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
+        }
     }
 
     if(fromParent)
@@ -328,9 +335,11 @@ void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent)
     
     for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent(shared_ptr<Node>());
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setPosition(positions[i], selectionScene->currentFrame);
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setRotation(rotations[i], selectionScene->currentFrame);
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setScale(scales[i], selectionScene->currentFrame);
+        if(resetKeys) {
+            selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setPosition(positions[i], selectionScene->currentFrame);
+            selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setRotation(rotations[i], selectionScene->currentFrame);
+            selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setScale(scales[i], selectionScene->currentFrame);
+        }
     }
     if(selectionScene->selectedNodeIds.size())
         selectionScene->updater->setDataForFrame(selectionScene->currentFrame);
@@ -397,13 +406,14 @@ void SGSelectionManager::selectObject(int objectId)
 {
     if(!selectionScene || !smgr)
         return;
-    // TODO multiple selection
-    unselectObject(selectionScene->selectedNodeId);
+    if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != objectId) || selectionScene->selectedNodeIds.size() > 0) && !selectionScene->isJointSelected) {
+        multipleSelections(objectId);
+        return;
+    } else
+        unselectObject(selectionScene->selectedNodeId);
     
     if(objectId < 0 || objectId >= selectionScene->nodes.size() || objectId == selectionScene->selectedNodeId)
         return;
-    
-    
     
     selectionScene->selectedNodeId = objectId;
     selectionScene->selectedNode = selectionScene->nodes[selectionScene->selectedNodeId];

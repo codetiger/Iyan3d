@@ -240,10 +240,10 @@ void RenderHelper::movePreviewToCorner()
     if(cameraPreviewMoveDist.x != 0.0 || cameraPreviewMoveDist.y != 0.0)
         return;
     
-    Vector2 leftTop = Vector2(0.0, renderingScene->topLimit);
-    Vector2 leftBottom = Vector2(0.0, SceneHelper::screenHeight);
-    Vector2 rightTop = Vector2 (SceneHelper::screenWidth - renderingScene->rightLimit, renderingScene->topLimit);
-    Vector2 rightBotton = Vector2(SceneHelper::screenWidth - renderingScene->rightLimit, SceneHelper::screenHeight);
+    Vector2 leftTop = renderingScene->topLeft;
+    Vector2 leftBottom = renderingScene->bottomLeft;
+    Vector2 rightTop = renderingScene->topRight;
+    Vector2 rightBotton = renderingScene->bottomRight;
     
     Vector2 origin = renderingScene->camPreviewOrigin;
     Vector2 end = renderingScene->camPreviewEnd;
@@ -256,17 +256,17 @@ void RenderHelper::movePreviewToCorner()
     float minimumDistance = MIN(MIN(distance1, distance2) , MIN(distance3, distance4));
     
     if(distance1 == minimumDistance && distance1 > 0.0) {
-        renderingScene->camPreviewOrigin.x -= 10.0;
-        renderingScene->camPreviewOrigin.y -= 10.0;
+        renderingScene->camPreviewOrigin.x -= 20.0;
+        renderingScene->camPreviewOrigin.y -= 20.0;
     } else if(distance2 == minimumDistance && distance2 > 0.0){
-        renderingScene->camPreviewOrigin.x -= 10.0;
-        renderingScene->camPreviewOrigin.y += 10.0;
+        renderingScene->camPreviewOrigin.x -= 20.0;
+        renderingScene->camPreviewOrigin.y += 20.0;
     } else if(distance3 == minimumDistance && distance3 > 0.0){
-        renderingScene->camPreviewOrigin.x += 10.0;
-        renderingScene->camPreviewOrigin.y -= 10.0;
+        renderingScene->camPreviewOrigin.x += 20.0;
+        renderingScene->camPreviewOrigin.y -= 20.0;
     } else if(distance4 == minimumDistance && distance4 > 0.0){
-        renderingScene->camPreviewOrigin.x += 10.0;
-        renderingScene->camPreviewOrigin.y += 10.0;
+        renderingScene->camPreviewOrigin.x += 20.0;
+        renderingScene->camPreviewOrigin.y += 20.0;
     }
     
 }
