@@ -1938,7 +1938,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void)importObj:(NSString*)objFileName TextureName:(NSString*)textureFileName
 {
-    editorScene->
+
 }
 
 
