@@ -53,9 +53,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
         SGNode *thisNode = scene->nodes[nodeId];
 
         if(thisNode->props.isVisible) {
-            Vector4 vertColor;
-            if(nodeType == NODE_TEXT_SKIN)
-                Vector4 vertColor = dynamic_pointer_cast<AnimatedMeshNode>(thisNode->node)->getMesh()->getHeavyVertexByIndex(0)->optionalData4;
+            Vector3 vertColor = thisNode->props.vertexColor;
             
             Quaternion lightProp;
             if(nodeType == NODE_ADDITIONAL_LIGHT) {
@@ -75,17 +73,17 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             FileHelper::writeFloat(&frameFilePtr, lightColor.y); //Emission Color g
             FileHelper::writeFloat(&frameFilePtr, lightColor.z); //Emission Color b
             FileHelper::writeFloat(&frameFilePtr, 0.5); //Emission Radius
-            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT_SKIN) ? vertColor.x : 1.0); // Diffusion Color r
-            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT_SKIN) ? vertColor.y : 1.0); // Diffusion Color g
-            FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT_SKIN) ? vertColor.z : 1.0); // Diffusion Color b
-            FileHelper::writeBool(&frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) ? false : true); // Has Texture
+            FileHelper::writeFloat(&frameFilePtr, vertColor.x); // Diffusion Color r
+            FileHelper::writeFloat(&frameFilePtr, vertColor.y); // Diffusion Color g
+            FileHelper::writeFloat(&frameFilePtr, vertColor.z); // Diffusion Color b
+            FileHelper::writeBool(&frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "") ? false : true); // Has Texture
             
-            unsigned long lastSlashPos  = (scene->nodes[nodeId]->node->getActiveTexture()->textureName).find_last_of("\\/");
+            unsigned long lastSlashPos  = (thisNode->textureName).find_last_of("\\/");
             string textureFileName;
             if(string::npos != lastSlashPos)
-                textureFileName = (scene->nodes[nodeId]->node->getActiveTexture()->textureName).substr( lastSlashPos + 1);
+                textureFileName = (thisNode->textureName).substr( lastSlashPos + 1);
             else
-            	textureFileName = scene->nodes[nodeId]->node->getActiveTexture()->textureName;
+            	textureFileName = thisNode->textureName;
             
             FileHelper::writeString(&frameFilePtr, textureFileName); // Texture File Name with extension
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.reflection);
