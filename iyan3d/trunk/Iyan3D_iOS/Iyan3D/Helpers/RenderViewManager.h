@@ -26,6 +26,8 @@
 - (bool) isMetalSupportedDevice;
 - (void) reloadFrames;
 - (void) presentPopOver:(CGRect )arect;
+-(void) updateAssetListInScenes :(int)nodeType assetId:(int)assetId actionType:(int)action;
+
 
 @end
 

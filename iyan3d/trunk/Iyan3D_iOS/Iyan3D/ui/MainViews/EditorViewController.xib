@@ -11,13 +11,13 @@
                 <outlet property="animationBtn" destination="xCo-ML-HQa" id="6qx-QH-suT"/>
                 <outlet property="editobjectBtn" destination="cF5-Om-aXQ" id="Hz2-TZ-6oP"/>
                 <outlet property="exportBtn" destination="Zs9-wP-4jN" id="3ZR-nP-FKb"/>
-                <outlet property="extrenderBtn" destination="kGA-sa-HX4" id="48F-nL-xMY"/>
                 <outlet property="firstFrameBtn" destination="q9T-TD-6di" id="DlF-pn-kq7"/>
                 <outlet property="framesCollectionView" destination="1c4-QV-Hsl" id="Vd7-kq-Niw"/>
                 <outlet property="importBtn" destination="rE1-GS-WgE" id="ENi-bU-btV"/>
                 <outlet property="infoBtn" destination="G1U-ai-hxF" id="ojw-GT-csK"/>
                 <outlet property="lastFrameBtn" destination="awG-hy-li5" id="z1s-ln-Nhm"/>
                 <outlet property="leftView" destination="J91-Zq-MM8" id="zw6-fn-tY4"/>
+                <outlet property="loginBtn" destination="kGA-sa-HX4" id="p8g-zq-NKC"/>
                 <outlet property="moveBtn" destination="2KQ-lp-58n" id="9XV-Gw-Fgb"/>
                 <outlet property="objectList" destination="Oe9-3f-sks" id="TJH-gg-q1p"/>
                 <outlet property="optionsBtn" destination="kZM-y0-mYT" id="DkH-nx-7V3"/>
@@ -38,21 +38,21 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Irr-tp-tWS">
-                    <rect key="frame" x="-3" y="0.0" width="1024" height="768"/>
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </glkView>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J91-Zq-MM8" userLabel="leftView">
-                    <rect key="frame" x="0.0" y="59" width="260" height="709"/>
+                    <rect key="frame" x="-2" y="59" width="260" height="709"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kC1-6X-WNk" userLabel="topView">
-                    <rect key="frame" x="0.0" y="0.0" width="1024" height="62"/>
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="64"/>
                     <subviews>
                         <collectionView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="1c4-QV-Hsl">
-                            <rect key="frame" x="137" y="18" width="675" height="36"/>
+                            <rect key="frame" x="134" y="24" width="667" height="36"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.4156863093" alpha="1" colorSpace="deviceRGB"/>
                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="OwQ-PO-AhP">
-                                <size key="itemSize" width="30" height="36"/>
+                                <size key="itemSize" width="36" height="36"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -64,46 +64,35 @@
                             </connections>
                         </collectionView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G1U-ai-hxF">
-                            <rect key="frame" x="994" y="33" width="22" height="22"/>
-                            <state key="normal" backgroundImage="Info.png"/>
+                            <rect key="frame" x="980" y="33" width="22" height="22"/>
+                            <state key="normal" title="Button" backgroundImage="Info.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="IrJ-B4-4b1"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9T-TD-6di">
-                            <rect key="frame" x="102" y="18" width="36" height="36"/>
-                            <state key="normal" backgroundImage="Previous-Frame.png"/>
-                            <connections>
-                                <action selector="firstFrameBtnAction:" destination="-1" eventType="touchUpInside" id="CRF-xc-BVO"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="awG-hy-li5">
-                            <rect key="frame" x="811" y="18" width="36" height="36"/>
-                            <state key="normal" backgroundImage="Next-Frame.png"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="awG-hy-li5">
+                            <rect key="frame" x="801" y="24" width="31" height="36"/>
+                            <state key="normal" image="Next-Frame.png"/>
                             <connections>
                                 <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="Tx6-ke-ZS4"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="euE-kx-9ry">
-                            <rect key="frame" x="846" y="18" width="36" height="36"/>
-                            <state key="normal" backgroundImage="Add-Frames.png"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="euE-kx-9ry">
+                            <rect key="frame" x="832" y="24" width="37" height="36"/>
+                            <state key="normal" image="Add-Frames.png"/>
                             <connections>
                                 <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="hqU-7U-POi"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kGA-sa-HX4">
-                            <rect key="frame" x="895" y="30" width="34" height="24"/>
-                            <state key="normal" title="Button" backgroundImage="External-Render.png"/>
-                        </button>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oF2-nk-gAt">
-                            <rect key="frame" x="0.0" y="18" width="100" height="36"/>
+                            <rect key="frame" x="8" y="19" width="98" height="36"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Back.png" translatesAutoresizingMaskIntoConstraints="NO" id="kUR-u6-Iep">
-                                    <rect key="frame" x="8" y="7" width="13" height="21"/>
+                                    <rect key="frame" x="0.0" y="12" width="13" height="21"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SCENES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xoy-XE-xmG">
-                                    <rect key="frame" x="29" y="7" width="65" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Scenes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xoy-XE-xmG">
+                                    <rect key="frame" x="21" y="12" width="65" height="21"/>
+                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -111,10 +100,24 @@
                             <color key="backgroundColor" red="0.61568627450980395" green="0.12549019607843137" blue="0.83137254901960778" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wLO-9c-KMj">
-                            <rect key="frame" x="945" y="32" width="22" height="22"/>
+                            <rect key="frame" x="932" y="33" width="22" height="22"/>
                             <state key="normal" title="Button" backgroundImage="View.png"/>
                             <connections>
                                 <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="vwX-Dj-z9m"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9T-TD-6di">
+                            <rect key="frame" x="104" y="24" width="31" height="36"/>
+                            <state key="normal" backgroundImage="Previous-Frame.png"/>
+                            <connections>
+                                <action selector="firstFrameBtnAction:" destination="-1" eventType="touchUpInside" id="CRF-xc-BVO"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kGA-sa-HX4">
+                            <rect key="frame" x="884" y="31" width="24" height="24"/>
+                            <state key="normal" title="Button" backgroundImage="Login-icon.png"/>
+                            <connections>
+                                <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="hbl-We-cMW"/>
                             </connections>
                         </button>
                     </subviews>
@@ -122,13 +125,13 @@
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RgQ-Eo-s8S" userLabel="rightView">
-                    <rect key="frame" x="864" y="62" width="160" height="706"/>
+                    <rect key="frame" x="864" y="64" width="160" height="704"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-cP-r4u">
-                            <rect key="frame" x="5" y="56" width="150" height="254"/>
+                            <rect key="frame" x="5" y="52" width="150" height="288"/>
                             <subviews>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Oe9-3f-sks">
-                                    <rect key="frame" x="0.0" y="24" width="150" height="206"/>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="33" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Oe9-3f-sks">
+                                    <rect key="frame" x="0.0" y="29" width="150" height="231"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <connections>
@@ -136,15 +139,19 @@
                                         <outlet property="delegate" destination="-1" id="wL1-5l-ceu"/>
                                     </connections>
                                 </tableView>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ni9-Sx-gYu">
+                                    <rect key="frame" x="0.0" y="258" width="150" height="31"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cF5-Om-aXQ">
-                                    <rect key="frame" x="104" y="229" width="46" height="30"/>
+                                    <rect key="frame" x="104" y="259" width="46" height="30"/>
                                     <state key="normal" title="Edit"/>
                                     <connections>
                                         <action selector="editFunction:" destination="-1" eventType="touchUpInside" id="1gK-at-C7P"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" red="0.79215686269999996" green="0.78823529410000004" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MY OBJECTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOn-20-20f">
                             <rect key="frame" x="27" y="58" width="106" height="21"/>
@@ -152,70 +159,65 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cen-Sr-AzL">
-                            <rect key="frame" x="9" y="8" width="142" height="40"/>
-                            <state key="normal" backgroundImage="Play.png"/>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zs9-wP-4jN">
-                            <rect key="frame" x="10" y="318" width="140" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cen-Sr-AzL">
+                            <rect key="frame" x="5" y="5" width="150" height="40"/>
                             <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" EXPORT" image="Export_Pad.png">
+                            <state key="normal" image="Play_Pad.png"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zs9-wP-4jN">
+                            <rect key="frame" x="10" y="346" width="140" height="40"/>
+                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  EXPORT" image="Export_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="exportAction:" destination="-1" eventType="touchUpInside" id="Mjk-cP-FJf"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rE1-GS-WgE">
-                            <rect key="frame" x="10" y="414" width="140" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rE1-GS-WgE">
+                            <rect key="frame" x="10" y="437" width="140" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" IMPORT" image="Import_Pad.png">
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  IMPORT" image="Import_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="jTu-rU-0By"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZM-y0-mYT">
-                            <rect key="frame" x="10" y="462" width="140" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZM-y0-mYT">
+                            <rect key="frame" x="10" y="483" width="140" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" OPTIONS" image="Options_Pad.png">
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  OPTIONS" image="Options_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="optionsBtnAction:" destination="-1" eventType="touchUpInside" id="A20-DP-Cz9"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2KQ-lp-58n">
-                            <rect key="frame" x="10" y="510" width="140" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2KQ-lp-58n">
+                            <rect key="frame" x="10" y="529" width="140" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" MOVE" image="move-img.png">
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  MOVE" image="move-img.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="jVm-Rs-PPe"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-Pl-f7f">
-                            <rect key="frame" x="10" y="550" width="140" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6N0-LM-Ula">
+                            <rect key="frame" x="10" y="611" width="140" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" ROTATE" image="Rotate_Pad.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="Ga5-e3-VWf"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6N0-LM-Ula">
-                            <rect key="frame" x="10" y="590" width="140" height="40"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" SCALE" image="Scale_Pad.png">
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  SCALE" image="Scale_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -223,7 +225,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gxg-1c-S8x">
-                            <rect key="frame" x="10" y="651" width="50" height="40"/>
+                            <rect key="frame" x="10" y="658" width="50" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" image="Redo_Pad.png">
@@ -234,7 +236,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WSd-xV-ijo">
-                            <rect key="frame" x="100" y="651" width="50" height="40"/>
+                            <rect key="frame" x="100" y="658" width="50" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" image="Undo_Pad.png">
@@ -244,15 +246,28 @@
                                 <action selector="redoBtnAction:" destination="-1" eventType="touchUpInside" id="3fi-gq-gmE"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCo-ML-HQa">
-                            <rect key="frame" x="10" y="366" width="140" height="40"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCo-ML-HQa">
+                            <rect key="frame" x="10" y="391" width="140" height="40"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title=" ANIMATION" image="Animation_Pad.png">
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  ANIMATION" image="Animation_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="animationBtnAction:" destination="-1" eventType="touchUpInside" id="wFE-Mu-XdK"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdb-Pl-f7f">
+                            <rect key="frame" x="10" y="570" width="140" height="40"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="Ga5-e3-VWf"/>
                             </connections>
                         </button>
                     </subviews>
@@ -266,22 +281,22 @@
         </view>
     </objects>
     <resources>
-        <image name="Add-Frames.png" width="73" height="72"/>
-        <image name="Animation_Pad.png" width="14" height="18"/>
-        <image name="Back.png" width="26" height="43"/>
-        <image name="Export_Pad.png" width="21" height="22"/>
-        <image name="External-Render.png" width="68" height="48"/>
-        <image name="Import_Pad.png" width="21" height="22"/>
-        <image name="Info.png" width="44" height="44"/>
-        <image name="Next-Frame.png" width="65" height="72"/>
-        <image name="Options_Pad.png" width="18" height="12"/>
-        <image name="Play.png" width="283" height="80"/>
-        <image name="Previous-Frame.png" width="61" height="72"/>
-        <image name="Redo_Pad.png" width="26" height="30"/>
-        <image name="Rotate_Pad.png" width="17" height="18"/>
-        <image name="Scale_Pad.png" width="23" height="24"/>
-        <image name="Undo_Pad.png" width="26" height="30"/>
-        <image name="View.png" width="44" height="44"/>
+        <image name="Add-Frames.png" width="37" height="36"/>
+        <image name="Animation_Pad.png" width="23" height="40"/>
+        <image name="Back.png" width="14" height="23"/>
+        <image name="Export_Pad.png" width="23" height="40"/>
+        <image name="Import_Pad.png" width="23" height="40"/>
+        <image name="Info.png" width="22" height="22"/>
+        <image name="Login-icon.png" width="24" height="24"/>
+        <image name="Next-Frame.png" width="31" height="36"/>
+        <image name="Options_Pad.png" width="23" height="40"/>
+        <image name="Play_Pad.png" width="18" height="40"/>
+        <image name="Previous-Frame.png" width="31" height="36"/>
+        <image name="Redo_Pad.png" width="26" height="40"/>
+        <image name="Rotate_Pad.png" width="23" height="40"/>
+        <image name="Scale_Pad.png" width="23" height="40"/>
+        <image name="Undo_Pad.png" width="26" height="40"/>
+        <image name="View.png" width="22" height="22"/>
         <image name="move-img.png" width="24" height="24"/>
     </resources>
 </document>

@@ -9,7 +9,7 @@
 #import "EditorViewController.h"
 #import "FrameCellNew.h"
 #import "AppDelegate.h"
-
+#import "WEPopoverContentViewController.h"
 @implementation EditorViewController
 
 #define EXPORT_POPUP 1
@@ -61,7 +61,13 @@
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
 
     totalFrames = 24;
-    [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
+    
+    
+    if ([Utility IsPadDevice])
+         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
+    else
+         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNewPhone" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
+
     assetsInScenes = [NSMutableArray array];
     
     [self.objectList reloadData];
@@ -70,8 +76,6 @@
     [self createDisplayLink];
     if(renderViewMan){
         [renderViewMan addCameraLight];
-        [assetsInScenes addObject:@"Camera"];
-        [assetsInScenes addObject:@"Light"];
     }
 }
 
@@ -167,15 +171,12 @@
 - (FrameCellNew*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
     FrameCellNew* cell = [self.framesCollectionView dequeueReusableCellWithReuseIdentifier:@"FRAMECELL" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor colorWithRed:61.0f / 255.0f
-                                                   green:62.0f / 255.0f
-                                                    blue:63.0f / 255.0f
+    cell.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f
+                                                   green:56.0f / 255.0f
+                                                    blue:57.0f / 255.0f
                                                    alpha:1.0f];
-    cell.layer.borderColor = [UIColor colorWithRed:61.0f / 255.0f
-                                                     green:62.0f / 255.0f
-                                                      blue:63.0f / 255.0f
-                                                     alpha:1.0f].CGColor;
-    cell.layer.borderWidth = 2.0f;
+    
+    cell.layer.borderWidth = 0.0f;
     cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
     cell.framesLabel.adjustsFontSizeToFitWidth = YES;
     cell.framesLabel.minimumFontSize = 3.0;
@@ -210,14 +211,13 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    
-    
+    cell.textLabel.font=[cell.textLabel.font fontWithSize:13];
     cell.textLabel.text = [assetsInScenes objectAtIndex:indexPath.row];
-    if([cell.textLabel.text isEqualToString:@"Camera"])
+    if([cell.textLabel.text isEqualToString:@"CAMERA"])
     {
         cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
     }
-    else if([cell.textLabel.text isEqualToString:@"Light"])
+    else if([cell.textLabel.text isEqualToString:@"LIGHT"])
     {
         cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
     }
@@ -231,7 +231,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [assetsInScenes removeObjectAtIndex:indexPath.row];
+        [renderViewMan removeNodeFromScene:(int)indexPath.row];
         [tableView reloadData];
     }
 }
@@ -252,6 +252,12 @@
         return YES;
     
     return NO;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [self objectSelectionCompleted:indexPath.row];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -275,75 +281,139 @@
 
 - (IBAction)addFrames:(id)sender
 {
-    totalFrames++;
-    NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
-    [self.framesCollectionView reloadData];
-    [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"addFrames"];
+    [_popUpVc.view setClipsToBounds:YES];
+     
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.popoverContentSize = CGSizeMake(205.0, 130.0);
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    [self.popoverController presentPopoverFromRect:_addFrameBtn.frame
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:YES];
 }
 
 - (IBAction)exportAction:(id)sender
 {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Images", @"Video", nil];
-    
-    CGRect rect = [self.view convertRect:self.exportBtn.frame fromView:self.exportBtn.superview];
-    [actionSheet setTag:EXPORT_POPUP];
-    [actionSheet showFromRect:rect inView:self.view animated:YES];
+
+     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popUpVc.delegate=self;
+    self.popoverController.delegate =self;
+    CGRect rect = _exportBtn.frame;
+    rect = [self.view convertRect:rect fromView:_exportBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                                          animated:YES];
     }
+
+- (IBAction)loginBtnAction:(id)sender {
+    isLoggedin=YES;
+    if(isLoggedin){
+        _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
+        self.popoverController.popoverContentSize = CGSizeMake(305, 525);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popUpVc.delegate=self;
+        self.popoverController.delegate =self;
+        [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionUp
+                                              animated:YES];
+    }
+    else{
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"loginBtn"];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.popoverContentSize = CGSizeMake(300, 360.0);
+    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popUpVc.delegate=self;
+    self.popoverController.delegate =self;
+    [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:YES];
+
+    }
+}
 
 - (IBAction)animationBtnAction:(id)sender
 {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Apply Animation", @"Save Animation", nil];    
-    
-    CGRect rect = [self.view convertRect:self.animationBtn.frame fromView:self.animationBtn.superview];
-    [actionSheet setTag: ANIMATION_POPUP];
-    [actionSheet showFromRect:rect inView:self.view animated:YES];
+
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _animationBtn.frame;
+    rect = [self.view convertRect:rect fromView:_animationBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                                          animated:YES];
 }
 
 - (IBAction)importBtnAction:(id)sender
 {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Models", @"Images",@"Text",@"Light",@"OBJ File",@"Add Bone", nil];
-    CGRect rect = [self.view convertRect:self.importBtn.frame fromView:self.importBtn.superview];
-    [actionSheet setTag:IMPORT_POPUP];
-    [actionSheet showFromRect:rect inView:self.view animated:YES];
+
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _importBtn.frame;
+    rect = [self.view convertRect:rect fromView:_importBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                                          animated:YES];
 }
 - (IBAction)infoBtnAction:(id)sender
 {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"About", @"Help",@"Tutorials",@"Settings",@"Contact Us", nil];
-    
-    
-    CGRect rect = [self.view convertRect:self.infoBtn.frame fromView:self.infoBtn.superview];
-    [actionSheet setTag:INFO_POPUP];
-    [actionSheet showFromRect:rect inView:self.view animated:YES];
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 213.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _infoBtn.frame;
+    rect = [self.view convertRect:rect fromView:_infoBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:YES];
 }
 
 - (IBAction)viewBtn:(id)sender
 {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:nil
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Front", @"Top",@"Left",@"Back",@"Right",@"Bottom", nil];
-    
-    
-    CGRect rect = [self.view convertRect:self.viewBtn.frame fromView:self.viewBtn.superview];
-    [actionSheet setTag:VIEW_POPUP];
-    [actionSheet showFromRect:rect inView:self.view animated:YES];
+
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"viewBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+     self.popoverController.popoverContentSize = CGSizeMake(182.0, 265.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    [self.popoverController presentPopoverFromRect:_viewBtn.frame
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:YES];
+
 }
 
 - (IBAction)lastFrameBtnAction:(id)sender
@@ -359,7 +429,7 @@
 }
 
 - (IBAction)optionsBtnAction:(id)sender
-{
+{		
     NSLog(@"Options Clicked");
 }
 
@@ -390,189 +460,6 @@
 
 
 
-#pragma mark Gesture Functions
-
-
-#pragma mark - ActionSheet Delegate Functions
-
--(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch ( actionSheet.tag )
-    {
-        case EXPORT_POPUP:
-        {
-            switch ( buttonIndex )
-            {
-                case EXPORT_IMAGE:
-                {
-                    [actionSheet dismissWithClickedButtonIndex:buttonIndex animated:NO];
-                    RenderingViewController* renderingView;
-                    renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
-                    renderingView.delegate = self;
-                    renderingView.projectName=@"Scene 1";  //FOR TESTING
-                    renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
-                    CATransition* transition1 = [CATransition animation];
-                    transition1.duration = 0.5;
-                    transition1.type = kCATransitionPush;
-                    transition1.subtype = kCATransitionFromLeft;
-                    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-                    [self.rightView setHidden:YES];
-                    dispatch_async(dispatch_get_main_queue(), ^ {
-                        [self presentViewControllerInCurrentView:renderingView];
-                    });
-                    
-                    if ([Utility IsPadDevice]) {
-                        renderingView.view.superview.backgroundColor = [UIColor clearColor];
-                        renderingView.view.layer.borderWidth = 2.0f;
-                        renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
-                        
-
-                    }
-                    NSLog(@"Images Clicked");
-                    break;
-                }
-                case EXPORT_VIDEO:
-                        [actionSheet dismissWithClickedButtonIndex:buttonIndex animated:NO];
-                        RenderingViewController* renderingView;
-                        if ([Utility IsPadDevice])
-                            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
-                        else
-                            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
-                        renderingView.delegate = self;
-                        renderingView.projectName=@"Scene 1";  //FOR TESTING
-                        renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
-                        CATransition* transition1 = [CATransition animation];
-                        transition1.duration = 0.5;
-                        transition1.type = kCATransitionPush;
-                        transition1.subtype = kCATransitionFromLeft;
-                        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-                        [self.rightView setHidden:YES];
-                        dispatch_async(dispatch_get_main_queue(), ^ {
-                            [self presentViewControllerInCurrentView:renderingView];
-                        });
-                    
-                        if ([Utility IsPadDevice]) {
-                            renderingView.view.superview.backgroundColor = [UIColor clearColor];
-                            renderingView.view.layer.borderWidth = 2.0f;
-                            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
-                       
-                        NSLog(@"Videos Clicked");
-                    }
-                    
-                    break;
-            }
-        }
-            break;
-        case ANIMATION_POPUP:
-        {
-            switch ( buttonIndex )
-            {
-                case APPLY_ANIMATION:{
-                        animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil];
-                        animationsliderVC.delegate = self;
-                        [self showOrHideLeftView:YES withView:animationsliderVC.view];
-                    break;
-                }
-                case SAVE_ANIMATION:
-                    NSLog(@"Save Animation Clicked");
-                    break;
-            }
-        }
-            break;
-        case IMPORT_POPUP:
-        {
-            switch ( buttonIndex )
-            {
-                case IMPORT_MODELS:{
-                    assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
-                    assetSelectionSlider.assetSelectionDelegate = self;
-                    [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-                    break;
-                }
-                case IMPORT_IMAGES:{
-                        self.imagePicker = [[UIImagePickerController alloc] init];
-                        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-                        [self.imagePicker setNavigationBarHidden:YES];
-                        [self.imagePicker setToolbarHidden:YES];
-                        importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
-                        [self showOrHideLeftView:YES withView:importImageViewVC.view];
-                        [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-                        self.imagePicker.delegate=importImageViewVC;
-                        importImageViewVC.delegate = self;
-                        [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-                    break;
-                }
-                case IMPORT_TEXT:
-                        {
-                        textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
-                        textSelectionSlider.textSelectionDelegate = self;
-                        [self showOrHideLeftView:YES withView:textSelectionSlider.view];
-                        break;
-                        }
-                case IMPORT_LIGHT:
-                    NSLog(@"Light Clicked");
-                    break;
-                case IMPORT_OBJFILE:
-                    NSLog(@"OBJ File Clicked");
-                    break;
-                case IMPORT_ADDBONE:
-                    NSLog(@"Add Bone Clicked");
-                    break;
-            }
-        }
-            break;
-        case INFO_POPUP:
-        {
-            switch ( buttonIndex )
-            {
-                case ABOUT:
-                    NSLog(@"About Clicked");
-                    break;
-                case HELP:
-                    NSLog(@"Help Clicked");
-                    break;
-                case TUTORIAL:
-                    NSLog(@"Tutorials Clicked");
-                    break;
-                case SETTINGS:
-                    NSLog(@"Settings Clicked");
-                    break;
-                case CONTACT_US:
-                    NSLog(@"Contact Us Clicked");
-                    break;
-            }
-        }
-            break;
-        case VIEW_POPUP:
-        {
-            switch ( buttonIndex )
-            {
-                case FRONT_VIEW:
-                    editorScene->updater->changeCameraView(VIEW_FRONT);
-                    break;
-                case TOP_VIEW:
-                    editorScene->updater->changeCameraView(VIEW_TOP);
-                    break;
-                case LEFT_VIEW:
-                    editorScene->updater->changeCameraView(VIEW_LEFT);
-                    break;
-                case BACK_VIEW:
-                    editorScene->updater->changeCameraView(VIEW_BACK);
-                    break;
-                case RIGHT_VIEW:
-                    editorScene->updater->changeCameraView(VIEW_RIGHT);
-                    break;
-                case BOTTOM_VIEW:
-                    editorScene->updater->changeCameraView(VIEW_BOTTOM);
-                    break;
-            }
-        }
-            break;
-    }
-    
-}
 
 - (void) presentViewControllerInCurrentView:(UIViewController*) vcToPresent
 {
@@ -691,7 +578,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     NSLog(@"Delegate called");
     
     UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:@"Action"
+                                 alertControllerWithTitle:nil
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction* deleteButton = [UIAlertAction
@@ -710,8 +597,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                       {
                                           
                                       }];
-    [view addAction:deleteButton];
+    
     [view addAction:duplicateButton];
+    [view addAction:deleteButton];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceRect = arect;
     popover.sourceView=self.renderView;
@@ -720,7 +608,217 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
     
 }
+-(void) updateAssetListInScenes :(int)nodeType assetId:(int)assetId actionType:(int)action
 
+{
+    if(action==100){
+        if(nodeType==7){
+            [assetsInScenes addObject:@"CAMERA"];
+        }
+        else if(nodeType==8){
+            [assetsInScenes addObject:@"LIGHT"];
+        }
+        else{
+            CacheSystem *cacheSystem;
+            cacheSystem = [CacheSystem cacheSystem];
+            AssetItem *assetObj = [cacheSystem GetAsset:assetId];
+            [assetsInScenes addObject:assetObj.name];
+            [self.objectList reloadData];
+        }
+    }
+    else if (action==200){
+        [assetsInScenes removeObjectAtIndex:assetId];
+        [self.objectList reloadData];
+    }
+    
+}
+
+
+- (void)objectSelectionCompleted:(int)assetIndex
+{
+    editorScene->selectMan->selectObject(assetIndex);
+   
+}
+
+#pragma mark PopUpViewConrollerDelegate
+
+- (void) animationBtnDelegateAction:(int)indexValue
+{
+    if(indexValue==0){
+         [self.popoverController dismissPopoverAnimated:YES];
+        animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil];
+        animationsliderVC.delegate = self;
+        [self showOrHideLeftView:YES withView:animationsliderVC.view];
+    }
+    else if(indexValue==1){
+        NSLog(@"Save Animation");
+    }
+    
+}
+- (void) importBtnDelegateAction:(int)indexValue{
+
+    if(indexValue==0){
+        [self.popoverController dismissPopoverAnimated:YES];
+        assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
+        assetSelectionSlider.assetSelectionDelegate = self;
+        [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+    }
+    else if(indexValue==1){
+         [self.popoverController dismissPopoverAnimated:YES];
+        self.imagePicker = [[UIImagePickerController alloc] init];
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [self.imagePicker setNavigationBarHidden:YES];
+        [self.imagePicker setToolbarHidden:YES];
+        importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
+        [self showOrHideLeftView:YES withView:importImageViewVC.view];
+        [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
+        self.imagePicker.delegate=importImageViewVC;
+        importImageViewVC.delegate = self;
+        [importImageViewVC.imagesView addSubview:self.imagePicker.view];
+        
+    }
+    else if(indexValue==2){
+        [self.popoverController dismissPopoverAnimated:YES];
+        textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
+        textSelectionSlider.textSelectionDelegate = self;
+        [self showOrHideLeftView:YES withView:textSelectionSlider.view];
+
+    }
+    else if(indexValue==3){
+        NSLog(@"Light Button");
+    }
+    else if(indexValue==4){
+        NSLog(@"OBJ Button");
+    }
+    else if(indexValue==5){
+        NSLog(@"ADD BONE Button");
+    }
+
+}
+- (void) exportBtnDelegateAction:(int)indexValue{
+    if(indexValue==0){
+         [self.popoverController dismissPopoverAnimated:YES];
+        RenderingViewController* renderingView;
+        renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+        renderingView.delegate = self;
+        renderingView.projectName=@"Scene 1";  //FOR TESTING
+        renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+        CATransition* transition1 = [CATransition animation];
+        transition1.duration = 0.5;
+        transition1.type = kCATransitionPush;
+        transition1.subtype = kCATransitionFromLeft;
+        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+        [self.rightView setHidden:YES];
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [self presentViewControllerInCurrentView:renderingView];
+        });
+        
+        if ([Utility IsPadDevice]) {
+            renderingView.view.superview.backgroundColor = [UIColor clearColor];
+            renderingView.view.layer.borderWidth = 2.0f;
+            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
+        }
+    
+    }
+    else if(indexValue==1){
+         [self.popoverController dismissPopoverAnimated:YES];
+        RenderingViewController* renderingView;
+        if ([Utility IsPadDevice])
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
+        else
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
+        renderingView.delegate = self;
+        renderingView.projectName=@"Scene 1";  //FOR TESTING
+        renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+        CATransition* transition1 = [CATransition animation];
+        transition1.duration = 0.5;
+        transition1.type = kCATransitionPush;
+        transition1.subtype = kCATransitionFromLeft;
+        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+        [self.rightView setHidden:YES];
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [self presentViewControllerInCurrentView:renderingView];
+        });
+        
+        if ([Utility IsPadDevice]) {
+            renderingView.view.superview.backgroundColor = [UIColor clearColor];
+            renderingView.view.layer.borderWidth = 2.0f;
+            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
+            
+            NSLog(@"Videos Clicked");
+        }
+        
+    }
+
+}
+- (void) viewBtnDelegateAction:(int)indexValue{
+    if(indexValue==0){
+        [self.popoverController dismissPopoverAnimated:YES];
+       editorScene->updater->changeCameraView(VIEW_FRONT);
+    }
+    else if(indexValue==1){
+         [self.popoverController dismissPopoverAnimated:YES];
+        editorScene->updater->changeCameraView(VIEW_TOP);
+    }
+    else if(indexValue==2){
+         [self.popoverController dismissPopoverAnimated:YES];
+        editorScene->updater->changeCameraView(VIEW_LEFT);
+    }
+    else if(indexValue==3){
+         [self.popoverController dismissPopoverAnimated:YES];
+        editorScene->updater->changeCameraView(VIEW_BACK);
+    }
+    else if(indexValue==4){
+         [self.popoverController dismissPopoverAnimated:YES];
+        editorScene->updater->changeCameraView(VIEW_RIGHT);
+    }
+    else if(indexValue==5){
+         [self.popoverController dismissPopoverAnimated:YES];
+        editorScene->updater->changeCameraView(VIEW_BOTTOM);
+    }
+
+}
+- (void) addFrameBtnDelegateAction:(int)indexValue{
+    if(indexValue==0){
+            [self.popoverController dismissPopoverAnimated:YES];
+            totalFrames++;
+            NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+            [self.framesCollectionView reloadData];
+            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
+    else if (indexValue==1){
+            [self.popoverController dismissPopoverAnimated:YES];
+            totalFrames+=24;
+            NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+            [self.framesCollectionView reloadData];
+            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
+    else if(indexValue==2){
+            [self.popoverController dismissPopoverAnimated:YES];
+            totalFrames+=240;
+            NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+            [self.framesCollectionView reloadData];
+            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }
+}
+- (void) loginBtnAction{
+  
+    [self.popoverController dismissPopoverAnimated:YES];
+    loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    [loginVc.view setClipsToBounds:YES];
+    loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self presentViewController:loginVc animated:YES completion:nil];
+    loginVc.view.superview.backgroundColor = [UIColor clearColor];
+    NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
+   
+    
+}
+- (void) infoBtnDelegateAction:(int)indexValue{
+   
+
+}
 - (void)dealloc
 {
     renderViewMan.delegate = nil;

@@ -21,6 +21,8 @@
 #define ASSET_IMAGE 9
 #define ASSET_TEXT 10
 #define ASSET_ADDITIONAL_LIGHT 900
+#define ADD_OBJECT 100
+#define DELETE_OBJECT 200
 
 @implementation RenderViewManager
 
@@ -126,7 +128,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 - (void) addCameraLight
 {
     [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false];
+    [self.delegate updateAssetListInScenes:ASSET_CAMERA assetId:0 actionType:(int)ADD_OBJECT];
     [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false];
+    [self.delegate updateAssetListInScenes:ASSET_LIGHT assetId:0 actionType:(int)ADD_OBJECT];
     
 }
 
@@ -156,6 +160,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, name, 0, 0, assetAddType);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
+            if(!isTempNode){
+                [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetId:assetId actionType:(int)ADD_OBJECT];
+            }
             break;
         }
         case ASSET_RIGGED: {
@@ -163,6 +170,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, name, 0, 0, assetAddType);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
+            if(!isTempNode){
+                [self.delegate updateAssetListInScenes:ASSET_RIGGED assetId:assetId actionType:(int)ADD_OBJECT];
+            }
             break;
         }
         case ASSET_OBJ: {
@@ -170,6 +180,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, name, 0, 0, assetAddType);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
+            if(!isTempNode){
+                [self.delegate updateAssetListInScenes:ASSET_OBJ assetId:assetId actionType:(int)ADD_OBJECT];
+            }
             break;
         }
         case ASSET_IMAGE: {
@@ -177,6 +190,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0, name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0));
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
+            if(!isTempNode){
+                [self.delegate updateAssetListInScenes:ASSET_IMAGE assetId:assetId actionType:(int)ADD_OBJECT];
+            }
             break;
         }
         case ASSET_ANIMATION: {
@@ -228,6 +244,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 - (bool) removeNodeFromScene:(int)nodeIndex
 {
     editorScene->loader->removeObject(nodeIndex);
+    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetId:nodeIndex actionType:DELETE_OBJECT];
 }
 
 - (void)addGesturesToSceneView

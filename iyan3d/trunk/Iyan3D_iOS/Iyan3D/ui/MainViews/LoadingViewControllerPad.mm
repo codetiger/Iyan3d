@@ -295,18 +295,16 @@
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:editorView];
     }
-    /*
+    
     if([Utility IsPadDevice]) {
-        SceneSelectionViewControllerPad* sceneSelection = [[SceneSelectionViewControllerPad alloc] initWithNibName:@"SceneSelectionControllerPad" bundle:nil SceneNo:0 isAppFirstTime:(BOOL)isAppFirstTime];
-        sceneSelection.priceLocale = priceFormatter.locale;
+        EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelection];
+        [appDelegate.window setRootViewController:editorView];
     } else {
-        SceneSelectionViewControllerPad* sceneSelection = [[SceneSelectionViewControllerPad alloc]  initWithNibName:@"SceneSelectionControllerPhone" bundle:nil SceneNo:0 isAppFirstTime:(BOOL)isAppFirstTime];
-        sceneSelection.priceLocale = priceFormatter.locale;
+        EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelection];
-    }*/
+        [appDelegate.window setRootViewController:editorView];
+    }
     [self deallocMemory];
 }
 

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorViewController">
+            <connections>
+                <outlet property="addFrameBtn" destination="w5e-Hu-oAW" id="ULL-KG-xTQ"/>
+                <outlet property="animationBtn" destination="58f-dD-DRm" id="xhC-4N-gIj"/>
+                <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
+                <outlet property="firstFrameBtn" destination="tmF-dh-ZfO" id="iV5-ye-qB3"/>
+                <outlet property="framesCollectionView" destination="Sij-qL-4rT" id="AQQ-Tb-blg"/>
+                <outlet property="importBtn" destination="Aga-VX-vgX" id="D9r-nS-Bci"/>
+                <outlet property="infoBtn" destination="jnS-gW-EaC" id="k6p-US-bPT"/>
+                <outlet property="lastFrameBtn" destination="037-BU-8q5" id="RkI-Wm-3aD"/>
+                <outlet property="leftView" destination="L0B-6d-c1X" id="Pu8-ZT-SOi"/>
+                <outlet property="playBtn" destination="qOP-cU-h2X" id="yrL-b7-DGC"/>
+                <outlet property="renderView" destination="r4X-gk-zDO" id="OHf-j3-hkZ"/>
+                <outlet property="rightView" destination="85u-8e-wxJ" id="xPl-8g-ns0"/>
+                <outlet property="view" destination="iN0-l3-epB" id="FBl-yy-ocb"/>
+                <outlet property="viewBtn" destination="A5V-XI-dmt" id="ON6-We-lks"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r4X-gk-zDO" userLabel="renderview" customClass="RenderingView">
+                    <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+                    <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cjt-no-Q40" userLabel="topView">
+                    <rect key="frame" x="0.0" y="-3" width="568" height="44"/>
+                    <subviews>
+                        <collectionView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Sij-qL-4rT">
+                            <rect key="frame" x="101" y="16" width="315" height="25"/>
+                            <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.4156863093" alpha="1" colorSpace="deviceRGB"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="uvS-2u-9PT">
+                                <size key="itemSize" width="20" height="25"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                            <cells/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="0ms-9F-uQW"/>
+                                <outlet property="delegate" destination="-1" id="pDY-Fq-wqD"/>
+                            </connections>
+                        </collectionView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnS-gW-EaC">
+                            <rect key="frame" x="536" y="19" width="18" height="18"/>
+                            <state key="normal" backgroundImage="Info_IPhone.png"/>
+                            <connections>
+                                <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="JNr-I9-ifr"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="037-BU-8q5">
+                            <rect key="frame" x="416" y="16" width="20" height="25"/>
+                            <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.15686274509803921" alpha="1" colorSpace="deviceRGB"/>
+                            <state key="normal" image="Next-frame_IPhone.png"/>
+                            <connections>
+                                <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="XTe-RW-oz4"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5e-Hu-oAW">
+                            <rect key="frame" x="435" y="16" width="20" height="25"/>
+                            <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.15686274509803921" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="Add-Frames_IPhone.png"/>
+                            <connections>
+                                <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="DwN-7s-xcx"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mqD-VX-gWA">
+                            <rect key="frame" x="0.0" y="7" width="80" height="30"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Back_IPhone.png" translatesAutoresizingMaskIntoConstraints="NO" id="T2h-ug-OEW">
+                                    <rect key="frame" x="5" y="9" width="13" height="21"/>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Scenes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iTY-Ih-jjQ">
+                                    <rect key="frame" x="26" y="9" width="65" height="21"/>
+                                    <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="13"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.61568627450000002" green="0.12549019610000001" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A5V-XI-dmt">
+                            <rect key="frame" x="500" y="19" width="18" height="18"/>
+                            <state key="normal" title="Button" backgroundImage="View_IPhone.png"/>
+                            <connections>
+                                <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="6Gl-Tv-Qd8"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tmF-dh-ZfO">
+                            <rect key="frame" x="81" y="16" width="20" height="25"/>
+                            <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.15686274509803921" alpha="1" colorSpace="deviceRGB"/>
+                            <state key="normal" image="Previous-frame_IPhone.png"/>
+                            <connections>
+                                <action selector="firstFrameBtnAction:" destination="-1" eventType="touchUpInside" id="5xP-I4-4aV"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Diu-e1-yeL">
+                            <rect key="frame" x="467" y="19" width="18" height="18"/>
+                            <state key="normal" title="Button" backgroundImage="Login-IPhone.png"/>
+                        </button>
+                        <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L0B-6d-c1X" userLabel="leftView">
+                            <rect key="frame" x="4" y="44" width="195" height="277"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.61568627450000002" green="0.12549019610000001" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="85u-8e-wxJ" userLabel="rightView">
+                    <rect key="frame" x="459" y="42" width="110" height="280"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8E-u6-axF">
+                            <rect key="frame" x="1" y="86" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="EXPORT" image="EXPORT.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="exportAction:" destination="-1" eventType="touchUpInside" id="cpR-50-lf2"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOI-Vg-cWf">
+                            <rect key="frame" x="1" y="30" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="MY OBJECTS" image="MY-OBJECTS_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aga-VX-vgX">
+                            <rect key="frame" x="1" y="114" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="IMPORT" image="Import_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="oXw-sj-v1c"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vjP-Os-nSO">
+                            <rect key="frame" x="1" y="142" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="OPTIONS" image="Options_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-px-hba">
+                            <rect key="frame" x="2" y="170" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="  MOVE" image="Move_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqQ-LU-buM">
+                            <rect key="frame" x="3" y="249" width="49" height="26"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" image="Redo_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58E-D6-XBN">
+                            <rect key="frame" x="59" y="249" width="48" height="26"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" image="Undo_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58f-dD-DRm">
+                            <rect key="frame" x="1" y="58" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="ANIMATION" image="Animation_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="animationBtnAction:" destination="-1" eventType="touchUpInside" id="pwd-xt-auY"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vf5-0G-U3P">
+                            <rect key="frame" x="2" y="196" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="  ROTATE" image="Rotate_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUY-rU-QIk">
+                            <rect key="frame" x="2" y="222" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <state key="normal" title="  SCALE" image="Scale_IPhone.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qOP-cU-h2X">
+                            <rect key="frame" x="2" y="3" width="108" height="25"/>
+                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="deviceRGB"/>
+                            <state key="normal" image="Play_IPhone.png"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.1529411765" green="0.1529411765" blue="0.16078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="562" y="293"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Add-Frames_IPhone.png" width="22" height="26"/>
+        <image name="Animation_IPhone.png" width="20" height="26"/>
+        <image name="Back_IPhone.png" width="11" height="19"/>
+        <image name="EXPORT.png" width="20" height="26"/>
+        <image name="Import_IPhone.png" width="20" height="26"/>
+        <image name="Info_IPhone.png" width="20" height="19"/>
+        <image name="Login-IPhone.png" width="20" height="19"/>
+        <image name="MY-OBJECTS_IPhone.png" width="20" height="26"/>
+        <image name="Move_IPhone.png" width="20" height="26"/>
+        <image name="Next-frame_IPhone.png" width="23" height="26"/>
+        <image name="Options_IPhone.png" width="20" height="26"/>
+        <image name="Play_IPhone.png" width="20" height="26"/>
+        <image name="Previous-frame_IPhone.png" width="21" height="26"/>
+        <image name="Redo_IPhone.png" width="20" height="26"/>
+        <image name="Rotate_IPhone.png" width="20" height="26"/>
+        <image name="Scale_IPhone.png" width="20" height="26"/>
+        <image name="Undo_IPhone.png" width="17" height="20"/>
+        <image name="View_IPhone.png" width="19" height="19"/>
+    </resources>
+</document>

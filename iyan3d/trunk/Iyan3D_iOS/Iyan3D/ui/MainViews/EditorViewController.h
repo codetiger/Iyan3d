@@ -15,6 +15,7 @@
 #endif
 
 #import <UIKit/UIKit.h>
+#import "PopUpViewController.h"
 #import <GameKit/GameKit.h>
 #import "RenderingView.h"
 #import "ImportImageNew.h"
@@ -23,16 +24,22 @@
 #import "AssetSelectionSidePanel.h"
 #import "RenderingViewController.h"
 #import "SGEditorScene.h"
+#import "FPPopoverController.h"
 #import "RenderViewManager.h"
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate>{
+#import "WEPopoverController.h"
+#import "LoginViewController.h"
+#import "LoggedInViewController.h"
+
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate>{
     int totalFrames;
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
-    
+    LoginViewController *loginVc;
     bool isMetalSupported;
+    bool isLoggedin;
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
     SGEditorScene *editorScene;
@@ -60,11 +67,17 @@
 @property (weak, nonatomic) IBOutlet UIView *leftView;
 @property (weak, nonatomic) IBOutlet UIView *rightView;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic, strong) FPPopoverController* popOverView;
+@property (nonatomic, strong) WEPopoverController *popoverController;
+@property (nonatomic, strong) PopUpViewController *popUpVc;
+@property (nonatomic, strong) LoggedInViewController *loggedInVc;
+@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
 
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;
 - (IBAction)exportAction:(id)sender;
+- (IBAction)loginBtnAction:(id)sender;
 - (IBAction)animationBtnAction:(id)sender;
 - (IBAction)importBtnAction:(id)sender;
 - (IBAction)optionsBtnAction:(id)sender;

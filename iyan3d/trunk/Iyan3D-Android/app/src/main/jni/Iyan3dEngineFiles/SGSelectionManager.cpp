@@ -229,9 +229,9 @@ void SGSelectionManager::selectObject(int objectId)
     
     
     selectionScene->selectedNodeId = objectId;
-    selectionScene->isNodeSelected = selectionScene->selectedNode->props.isSelected = true;
-    
     selectionScene->selectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
+
+    selectionScene->isNodeSelected = selectionScene->selectedNode->props.isSelected = true;
     
     selectionScene->selectedNode->props.prevMatName = selectionScene->selectedNode->node->material->name;
     
