@@ -17,6 +17,11 @@ SGAnimationManager::SGAnimationManager(SceneManager* smgr, void* scene)
     animScene = (SGEditorScene*)scene;
 }
 
+SGAnimationManager::~SGAnimationManager(){
+    
+}
+
+
 vector<Vector3> SGAnimationManager::storeTextInitialPositions(SGNode *sgnode)
 {
     vector<Vector3> jointPositions;

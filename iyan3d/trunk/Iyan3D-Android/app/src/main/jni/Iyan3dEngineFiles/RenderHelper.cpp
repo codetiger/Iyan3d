@@ -35,6 +35,12 @@ RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
     renderingScene = (SGEditorScene*)scene;
 }
 
+RenderHelper::~RenderHelper(){
+    
+}
+
+
+
 void RenderHelper::drawGrid()
 {
     if(!smgr)

@@ -17,6 +17,11 @@ SGSceneWriter::SGSceneWriter(SceneManager* smgr, void* scene)
     writingScene = (SGEditorScene*)scene;
 }
 
+SGSceneWriter::~SGSceneWriter(){
+    
+}
+
+
 void SGSceneWriter::saveSceneData(std::string *filePath)
 {
     if(!writingScene || !smgr)

@@ -21,7 +21,7 @@ private:
     SGAction changeKeysAction;
     SGAction propertyAction;
     SGAction assetAction;
-    SGAction scaleAction;
+
     MIRROR_SWITCH_STATE mirrorSwitchState;
     
     void moveJoint(Vector3 outputValue);
@@ -33,6 +33,8 @@ public:
     
     int currentAction;
     SGAction addJointAction;
+    //sabish
+    SGAction scaleAction;
     
     vector<SGAction> actions;
 
@@ -50,7 +52,7 @@ public:
     void storeActionKeys(bool finished);
     
     /* Scale Mesh*/
-    
+    //sabish
     void changeObjectScale(Vector3 scale, bool isChanged);
     
     /* Frames change related actions */

@@ -19,6 +19,11 @@ SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene)
     xAcceleration = yAcceleration = 0.0;
 }
 
+SGMovementManager::~SGMovementManager(){
+    
+}
+
+
 void SGMovementManager::touchBegan(Vector2 curTouchPos)
 {
     xAcceleration = yAcceleration = 0.0;

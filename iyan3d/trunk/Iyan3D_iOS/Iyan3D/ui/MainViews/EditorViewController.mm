@@ -142,7 +142,6 @@ BOOL missingAlertShown;
         editorScene = new SGEditorScene(METAL, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
     }
     else {
-    
         [renderViewMan setupLayer:_renderView];
         [renderViewMan setupContext];
         
@@ -157,9 +156,9 @@ BOOL missingAlertShown;
     }
 
     missingAlertShown = false;
-    editorScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     [renderViewMan setUpPaths];
     [renderViewMan setUpCallBacks:editorScene];
+    editorScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     [renderViewMan addGesturesToSceneView];
     [self loadScene];
 }
@@ -250,13 +249,11 @@ BOOL missingAlertShown;
 - (void) loadNode:(AssetItem*) asset
 {
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset More:nil];
-
-
 }
 
 - (void)createDisplayLink
 {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateRenderer)];
+    displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateRenderer)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
@@ -459,7 +456,7 @@ BOOL missingAlertShown;
 #pragma mark - Button Actions
 
 - (IBAction)backToScenes:(id)sender {
-    [self performSelectorInBackground:@selector(saveAnimationData) withObject:nil];
+    [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
     [self loadSceneSelectionView];
 }
 
@@ -1149,13 +1146,14 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [closeAlert show];
         }
         else{
+            ANIMATION_TYPE animType = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT) ? TEXT_ANIMATION : RIG_ANIMATION;
             if([Utility IsPadDevice]){
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:(ANIMATION_TYPE)editorScene->nodes[editorScene->selectedNodeId]->getType()  EditorScene:editorScene FirstTime:YES];
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:animType  EditorScene:editorScene FirstTime:YES];
                 animationsliderVC.delegate = self;
                 [self showOrHideLeftView:YES withView:animationsliderVC.view];
             }
             else{
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:(ANIMATION_TYPE)editorScene->nodes[editorScene->selectedNodeId]->getType() EditorScene:editorScene FirstTime:YES];
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:animType EditorScene:editorScene FirstTime:YES];
                 animationsliderVC.delegate = self;
                 [self showOrHideLeftView:YES withView:animationsliderVC.view];
             }
@@ -1179,12 +1177,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [[addAnimAlert textFieldAtIndex:0] becomeFirstResponder];
         }
     }
-    
 }
 
-
 - (void) importBtnDelegateAction:(int)indexValue{
-
     if(indexValue==IMPORT_MODELS){
         if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
@@ -1229,10 +1224,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             self.imagePicker.delegate=importImageViewVC;
             importImageViewVC.delegate = self;
             [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-
-            
         }
-        
     }
     else if(indexValue==IMPORT_TEXT){
         if([Utility IsPadDevice])
@@ -1248,9 +1240,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
             textSelectionSlider.textSelectionDelegate = self;
             [self showOrHideLeftView:YES withView:textSelectionSlider.view];
-  
         }
-
     }
     else if(indexValue==IMPORT_LIGHT){
         [self.popoverController dismissPopoverAnimated:YES];
@@ -1262,8 +1252,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     else if(indexValue==5){
         NSLog(@"ADD BONE Button");
     }
-
 }
+
 - (void) exportBtnDelegateAction:(int)indexValue{
     if(indexValue==EXPORT_IMAGE){
         if([Utility IsPadDevice])
@@ -1341,10 +1331,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             
             NSLog(@"Videos Clicked");
         }
-        
     }
-
 }
+
 - (void) viewBtnDelegateAction:(int)indexValue{
     if(indexValue==FRONT_VIEW){
         [self.popoverController dismissPopoverAnimated:YES];
@@ -1595,7 +1584,21 @@ void downloadFile(NSString* url, NSString* fileName)
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     }
+    
+    [self performSelectorOnMainThread:@selector(removeSGEngine) withObject:nil waitUntilDone:YES];
     [self removeFromParentViewController];
+}
+
+- (void)removeSGEngine
+{
+    if (displayLink) {
+        [displayLink invalidate];
+        displayLink = nil;
+    }
+    if (editorScene) {
+        delete editorScene;
+        editorScene = NULL;
+    }
 }
 
 #pragma Show Or Hide Progress
@@ -1614,8 +1617,23 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void)dealloc
 {
-    if(editorScene)
-        delete editorScene;
+    assetsInScenes = nil;
+    importImageViewVC.delegate = nil;
+    importImageViewVC = nil;
+    animationsliderVC.delegate = nil;
+    animationsliderVC = nil;
+    textSelectionSlider.textSelectionDelegate = nil;
+    textSelectionSlider = nil;
+    assetSelectionSlider.assetSelectionDelegate = nil;
+    assetSelectionSlider = nil;
+    loginVc = nil;
+    lightProperties.delegate = nil;
+    lightProperties = nil;
+    currentScene = nil;
+    cache = nil;
+    [playTimer invalidate];
+    playTimer = nil;
+    settingsVc = nil;
     renderViewMan.delegate = nil;
     renderViewMan = nil;
 }

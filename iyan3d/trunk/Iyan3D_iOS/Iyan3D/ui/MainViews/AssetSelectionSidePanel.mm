@@ -30,8 +30,7 @@
         assetArray = [cache GetAssetList:ALLMODELS Search:@""];
         
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        docDirPath = [srcDirPath objectAtIndex:0];
-        
+        docDirPath = [srcDirPath objectAtIndex:0];        
         downloadQueue = [[NSOperationQueue alloc] init];
         [downloadQueue setMaxConcurrentOperationCount:3];
         assetDownloadQueue = [[NSOperationQueue alloc] init];
@@ -64,10 +63,9 @@
 - (IBAction)cancelButtonAction:(id)sender {
     [self.assetSelectionDelegate removeTempNodeFromScene];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
-    [self deallocMem];
     [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
-    
+    [self deallocMem];    
 }
 
 - (IBAction)addToSceneButtonAction:(id)sender {
@@ -408,7 +406,8 @@
     asset = nil;
     assetArray = nil;
     docDirPath = nil;
-
+    screenScale = nil;
+    _assetSelectionDelegate = nil;
 }
 
 @end

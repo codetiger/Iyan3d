@@ -43,6 +43,25 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 SGEditorScene::~SGEditorScene()
 {
     
+    //sabish
+    ShaderManager::lightPosition.clear();
+    ShaderManager::lightColor.clear();
+    ShaderManager::lightFadeDistances.clear();
+    
+    actionMan->scaleAction.drop();
+    for(int i = 0;i < nodes.size();i++){
+        if(nodes[i])
+            delete nodes[i];
+    }
+    nodes.clear();
+    
+    if (renderCamera)
+        renderCamera.reset();
+    
+    if(ikJointsPositionMap.size())
+        ikJointsPositionMap.clear();
+    if(smgr)
+        delete smgr;    
 }
 
 void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)

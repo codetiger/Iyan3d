@@ -21,7 +21,6 @@
 - (void)applyAnimationToSelectedNode:(NSString*)filePath;
 - (void) stopPlaying;
 - (void) removeTempAnimation;
-
 @end
 
 @interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>
@@ -37,7 +36,7 @@
     ANIMATION_TYPE animationType;
     SGEditorScene *editorSceneLocal;
     int selectedNodeId, bonecount, currentFrame, totalFrame;
-    bool isFirstTimeEntered;
+    bool isFirstTimeAnimationApplyed;
 }
 
 

@@ -26,7 +26,7 @@
         bonecount = editorSceneLocal->nodes[selectedNodeId]->joints.size();
         currentFrame = editorSceneLocal->currentFrame;
         totalFrame = editorSceneLocal->totalFrames;
-        isFirstTimeEntered = isFirstTime;
+        isFirstTimeAnimationApplyed = isFirstTime;
     }
     return self;
 }
@@ -36,6 +36,7 @@
     downloadQueue = [[NSOperationQueue alloc] init];
     [downloadQueue setMaxConcurrentOperationCount:3];
     [self.downloadIndicator setHidden:NO];
+    [self.downloadIndicator startAnimating];
     cache = [CacheSystem cacheSystem];
     animDownloadQueue = [[NSOperationQueue alloc] init];
     [animDownloadQueue setMaxConcurrentOperationCount:1];
@@ -82,6 +83,7 @@
         cell.layer.borderWidth = 1.0f;
         cell.layer.borderColor = [UIColor grayColor].CGColor;
     }
+    [self.downloadIndicator stopAnimating];
     [self.downloadIndicator setHidden:YES];
     return cell;
 }
@@ -202,11 +204,13 @@
 }
 
 - (IBAction)addBtnFunction:(id)sender {
-    
+    [self.delegate showOrHideLeftView:NO withView:nil];
+    [self.view removeFromSuperview];
+    [self deallocView];
 }
 
 - (IBAction)cancelBtnFunction:(id)sender {
-    if(!isFirstTimeEntered){
+    if(!isFirstTimeAnimationApplyed){
         editorSceneLocal->selectMan->selectObject(selectedNodeId);
         editorSceneLocal->totalFrames = totalFrame;
         editorSceneLocal->currentFrame = currentFrame;
@@ -214,8 +218,8 @@
         [self.delegate removeTempAnimation];
     }
     [self.delegate showOrHideLeftView:NO withView:nil];
-    [self deallocView];
     [self.view removeFromSuperview];
+    [self deallocView];
 }
 
 #pragma mark animations related data methods
@@ -249,7 +253,7 @@
     if (tabValue == MY_ANIMATION) {
         fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-            [self loadNode:[NSNumber numberWithInt:assetItem.boneCount]];
+            [self applyAnimation:[NSNumber numberWithInt:assetItem.boneCount]];
         }
         else {
             NSLog(@"File not exists");
@@ -259,14 +263,14 @@
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
             if (assetItem)
-            [self loadNode:[NSNumber numberWithInt:assetItem.boneCount]];
+            [self applyAnimation:[NSNumber numberWithInt:assetItem.boneCount]];
         }
         else {
             [self.delegate showOrHideProgress:1];
             url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
             [animDownloadQueue cancelAllOperations];
             //[self cancelOperations:animDownloadQueue];
-            DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(loadNode:) returnObject:[NSNumber numberWithInt:assetItem.boneCount] outputFilePath:fileName andURL:url];
+            DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(applyAnimation:) returnObject:[NSNumber numberWithInt:assetItem.boneCount] outputFilePath:fileName andURL:url];
             task.queuePriority = NSOperationQueuePriorityHigh;
             [animDownloadQueue addOperation:task];
         }
@@ -375,29 +379,25 @@
     [AppHelper getAppHelper].delegate = nil;
     if (allAnimations != nil && allAnimations.count > 0)
         animationJsonArray = [NSMutableArray arrayWithArray:allAnimations];
-    
     if (animationJsonArray != nil && [animationJsonArray count] > 0)
         [self storeDataToLocalDB];
-    
-    animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
+    NSLog(@"Animation Type : %d",animationType);
+    animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
     [self.animationCollectionView reloadData];
 }
 
-
 #pragma mark OpenGl related Functions
 
-- (void)loadNode:(id)returnValue
+- (void)applyAnimation:(id)returnValue
 {
-    
     [_delegate stopPlaying];
-    if(!isFirstTimeEntered){
+    if(!isFirstTimeAnimationApplyed){
         editorSceneLocal->selectMan->selectObject(selectedNodeId);
         editorSceneLocal->currentFrame = currentFrame;
         editorSceneLocal->totalFrames = totalFrame;
         editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
         [self.delegate removeTempAnimation];
     }
-    
     int animBoneCount = [returnValue intValue];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
@@ -405,15 +405,18 @@
     NSString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
     fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-        isFirstTimeEntered = false;        
-        if(animBoneCount == bonecount)
-            [self.delegate applyAnimationToSelectedNode:fileName];
-        else{
-            UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+        isFirstTimeAnimationApplyed = false;
+        if(animationType == RIG_ANIMATION){
+            if(animBoneCount == bonecount)
+                [self.delegate applyAnimationToSelectedNode:fileName];
+            else{
+                UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+            }
         }
+        else
+            [self.delegate applyAnimationToSelectedNode:fileName];
     }
-    
    [self.delegate showOrHideProgress:0];
 }
 
@@ -424,6 +427,13 @@
     downloadQueue = nil;
     cache = nil;
     self.delegate=nil;
+    animationJsonArray = nil;
+    animationsItems = nil;
+    animDownloadQueue = nil;
+    jsonUserArray = nil;
+    docDirPath = nil;
+    editorSceneLocal = nil;
+    _delegate = nil;
 }
 
 @end

@@ -55,8 +55,8 @@
     int assetAddType , previousAction , lightCount;
     NSString *imgSalt;
     NSTimer *playTimer;
-
     SettingsViewController *settingsVc;
+    CADisplayLink* displayLink;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
