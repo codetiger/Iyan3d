@@ -82,6 +82,7 @@ public:
 
     void clearVerticesArray();
     void clearIndicesArray();
+    void generateUV();
     void recalculateNormalsT(bool smooth = true);
     void removeDoubles();
     void pivotToOrigin();

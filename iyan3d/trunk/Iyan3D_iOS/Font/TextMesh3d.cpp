@@ -429,6 +429,7 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
 
     mesh->pivotToOrigin();
     mesh->recalculateNormalsT(true);
+    mesh->generateUV();
 
     return mesh;
 }
@@ -498,6 +499,7 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         unsigned int in = mesh->getHighPolyIndicesArray()[i];
         m->addToIndicesArray(in);
     }
+    m->generateUV();
     m->pivotToOrigin();
     m->recalculateNormalsT(true);
     m->Commit();

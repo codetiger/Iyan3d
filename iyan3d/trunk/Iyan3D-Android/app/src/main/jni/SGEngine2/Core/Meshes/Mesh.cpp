@@ -192,6 +192,26 @@ void Mesh::clearIndicesArray()
     meshBufferIndices.clear();
 }
 
+void Mesh::generateUV() {
+    BoundingBox *bb = getBoundingBox();
+    float largeExtend = bb->getXExtend() > bb->getYExtend() ? bb->getXExtend() : bb->getYExtend();
+    
+    const u32 vtxcnt = getVerticesCount();
+    for (int i = 0; i!= vtxcnt;i++) {
+        Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
+        
+        Vector2 tex;
+        tex.x = (pos.x - bb->getMinEdge().x) / largeExtend;
+        tex.y = (pos.y - bb->getMinEdge().y) / largeExtend;
+        
+        if (meshType == MESH_TYPE_LITE)
+            getLiteVertexByIndex(i)->texCoord1 = tex;
+        else
+            getHeavyVertexByIndex(i)->texCoord1 = tex;
+    }
+    
+}
+
 vertexData* Mesh::getLiteVertexByIndex(unsigned int index)
 {
     return &tempVerticesData[index];
