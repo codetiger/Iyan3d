@@ -53,6 +53,7 @@
         NSString *objs = [resourcesDir stringByAppendingPathComponent:@"/Rigs"];
         NSString *sgm = [resourcesDir stringByAppendingPathComponent:@"/Sgm"];
         NSString *textures = [resourcesDir stringByAppendingPathComponent:@"/Textures"];
+        NSString *videos = [resourcesDir stringByAppendingPathComponent:@"/Videos"];
         NSString *anims = [resourcesDir stringByAppendingPathComponent:@"/Animations"];
 
         if (![fileManager fileExistsAtPath:projectFolderPath]) {
@@ -120,7 +121,9 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:textures withIntermediateDirectories:NO attributes:nil error:nil];
         if(![fileManager fileExistsAtPath:sgm])
             [[NSFileManager defaultManager] createDirectoryAtPath:sgm withIntermediateDirectories:NO attributes:nil error:nil];
-        
+        if(![fileManager fileExistsAtPath:videos])
+            [[NSFileManager defaultManager] createDirectoryAtPath:videos withIntermediateDirectories:NO attributes:nil error:nil];
+
         NSError *error;
         NSString *thumnail = [projectDir stringByAppendingPathComponent:@"1c8ccd62ec29cc2fb116ecc6892cbab2.png"];
         NSString *sgbPath = [projectDir stringByAppendingPathComponent:@"1c8ccd62ec29cc2fb116ecc6892cbab2.sgb"];

@@ -69,6 +69,7 @@
     CADisplayLink* displayLink;
     CGFloat screenHeight;
     ScaleForAutoRigViewController *scaleAutoRig;
+    Vector4 renderBgColor;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;

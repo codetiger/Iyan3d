@@ -65,7 +65,7 @@ uint8_t* getImageDataFromVideo(string fileName, int frame, int &width, int &heig
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
 
-    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",fileName.c_str()]];
+    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%s.MOV",@"Resources/Videos/",fileName.c_str()]];
     if([[NSFileManager defaultManager] fileExistsAtPath:videoFilePath]) {
         NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
         AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];

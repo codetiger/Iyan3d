@@ -409,4 +409,5 @@ inline Quaternion& Quaternion::makeIdentity()
     z = 0.f;
     return *this;
 }
+
 #endif

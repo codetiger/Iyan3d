@@ -293,7 +293,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
-            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,"",name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
+            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
@@ -496,7 +496,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         {
             if(editorScene->selectedNodeId==-1 && editorScene->selectedNodeIds.size() == 0)
             {
-                
                 [self.delegate presentPopOver:_longPresPosition];
                 _longPress=false;
             }

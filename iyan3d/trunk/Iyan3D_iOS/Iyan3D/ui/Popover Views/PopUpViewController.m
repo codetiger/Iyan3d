@@ -46,7 +46,7 @@
 - (void) setTableData:(NSString *)clickedBtnName{
     
     if([clickedBtnName isEqualToString:@"importBtn"]){
-        tableData = [NSMutableArray arrayWithObjects:@"Models", @"Images", @"Text", @"Light", @"OBJ File", @"Add Bone",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Models", @"Images",@"Videos", @"Text", @"Light", @"OBJ File", @"Add Bone",nil];
     }
     else if([clickedBtnName isEqualToString:@"animationBtn"]){
         tableData = [NSMutableArray arrayWithObjects:@"Apply Animation", @"Save Animation",nil];
@@ -123,12 +123,14 @@
             if(indexPath.row==1)
                 cell.imageView.image = [UIImage imageNamed:@"Import-image_Pad.png"];
             if(indexPath.row==2)
-                cell.imageView.image = [UIImage imageNamed:@"Import-text_Pad.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad.png"];
             if(indexPath.row==3)
-                cell.imageView.image = [UIImage imageNamed:@"Import-Light_Pad.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Import-text_Pad.png"];
             if(indexPath.row==4)
-                cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Import-Light_Pad.png"];
             if(indexPath.row==5)
+                cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad.png"];
+            if(indexPath.row==6)
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad.png"];
         }
     }
@@ -146,12 +148,14 @@
             if(indexPath.row==1)
                 cell.imageView.image = [UIImage imageNamed:@"Import-image_IPhone.png"];
             if(indexPath.row==2)
-                cell.imageView.image = [UIImage imageNamed:@"Import-text_IPhone.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone.png"];
             if(indexPath.row==3)
-                cell.imageView.image = [UIImage imageNamed:@"Import-Light_IPhone.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Import-text_IPhone.png"];
             if(indexPath.row==4)
-                cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Import-Light_IPhone.png"];
             if(indexPath.row==5)
+                cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone.png"];
+            if(indexPath.row==6)
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
         }
         if([clickedBtn isEqualToString:@"myObjectsBtn"]){

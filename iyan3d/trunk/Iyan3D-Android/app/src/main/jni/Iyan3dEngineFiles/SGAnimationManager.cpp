@@ -63,13 +63,17 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
     animScene->nodes[toNodeId]->positionKeys = animScene->nodes[fromNodeId]->positionKeys;
     animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
     animScene->nodes[toNodeId]->scaleKeys = animScene->nodes[fromNodeId]->scaleKeys;
-    
-    printf("Scale Size %lu ",animScene->nodes[fromNodeId]->scaleKeys.size());
-    
     if(animScene->nodes[fromNodeId]->joints.size() > 0){
     for (int i =0; i < animScene->nodes[toNodeId]->joints.size(); i++)
         animScene->nodes[toNodeId]->joints[i]->rotationKeys = animScene->nodes[fromNodeId]->joints[i]->rotationKeys;
     }
+}
+
+void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId){    
+    animScene->nodes[toNodeId]->props = animScene->nodes[fromNodeId]->props;
+    animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
+    animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
+    
 }
 
 void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames)

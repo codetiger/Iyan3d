@@ -292,7 +292,7 @@
 - (IBAction)addToSceneBtnAction:(id)sender {
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
-    [_textSelectionDelegate load3DTex:FONT AssetId:0 TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
+    [_textSelectionDelegate load3DTex:FONT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
     [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
@@ -313,7 +313,7 @@
     
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
-    [_textSelectionDelegate load3DTex:FONT AssetId:0 TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
+    [_textSelectionDelegate load3DTex:FONT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
 }
 
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{

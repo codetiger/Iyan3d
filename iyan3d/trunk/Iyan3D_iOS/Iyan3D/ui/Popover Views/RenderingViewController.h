@@ -32,6 +32,7 @@
 - (void) clearFolder:(NSString*)dirPath;
 - (void) resumeRenderingAnimationScene;
 - (void) saveScene;
+- (void) changeRenderingBgColor:(Vector3)vertexColor;
 @end
 
 @class GADBannerView;

@@ -52,6 +52,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             textureName = texturePath;
             oriTextureName = textureName;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
+            props.oriVertexColor = props.vertexColor;
             node = loadSGMandOBJ(assetId,objectType,smgr);
             break;
         }
@@ -68,6 +69,9 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_RIG:{
             textureName = texturePath;
+            oriTextureName = textureName;
+            props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
+            props.oriVertexColor = props.vertexColor;
             node = loadSGR(assetId,objectType,smgr);
             isMirrorEnabled = joints.size() == HUMAN_JOINTS_SIZE ? true : false;
             break;
@@ -192,8 +196,7 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_SHADOW_SKIN_L1));
     node->getMesh()->Commit();
     
-    string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
-    
+    string textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -354,6 +357,14 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
     string textureFileName = StoragePath + textureName+".png";
     if (!checkFileExists(meshPath)) {
         return shared_ptr<Node>();
+    }
+    if(!checkFileExists(textureFileName)){
+        textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
+        if(!checkFileExists(textureFileName)){
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
+            if(!checkFileExists(textureFileName))
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+        }
     }
     AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);
     setSkinningData((SkinMesh*)mesh);

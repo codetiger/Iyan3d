@@ -31,11 +31,13 @@
 
 #define IMPORT_MODELS 0
 #define IMPORT_IMAGES 1
-#define IMPORT_TEXT 2
-#define IMPORT_LIGHT 3
-#define IMPORT_OBJFILE 4
-#define IMPORT_ADDBONE 5
-#define CHANGE_TEXTURE 6
+#define IMPORT_VIDEO 2
+#define IMPORT_TEXT 3
+#define IMPORT_LIGHT 4
+#define IMPORT_OBJFILE 5
+#define IMPORT_ADDBONE 6
+#define CHANGE_TEXTURE 7
+
 
 #define ABOUT 0
 #define HELP 1
@@ -104,6 +106,7 @@ BOOL missingAlertShown;
         constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
         isViewLoaded = false;
         lightCount = 1;
+        renderBgColor = Vector4(0.1,0.1,0.1,1.0);
     }
     return self;
 }
@@ -117,25 +120,25 @@ BOOL missingAlertShown;
     [_rigCancelBtn setHidden:YES];
     [_rigAddToSceneBtn setHidden:YES];
     
-    #if !(TARGET_IPHONE_SIMULATOR)
-        if (iOSVersion >= 8.0)
-            isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
-    #endif
+#if !(TARGET_IPHONE_SIMULATOR)
+    if (iOSVersion >= 8.0)
+        isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
+#endif
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
     totalFrames = 24;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     if ([Utility IsPadDevice])
-         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
+        [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
     else
-         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNewPhone" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
+        [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNewPhone" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
     assetsInScenes = [NSMutableArray array];
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"])
         [self.framesCollectionView setTag:[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"] longValue]];
     else
         [self.framesCollectionView setTag:1];
-
+    
     [self.framesCollectionView reloadData];
     [self.objectList reloadData];
     [self initScene];
@@ -150,7 +153,7 @@ BOOL missingAlertShown;
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
         [self toolbarPosition:0];
     }
-
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -173,17 +176,16 @@ BOOL missingAlertShown;
     renderViewMan = [[RenderViewManager alloc] init];
     renderViewMan.delegate = self;
     [renderViewMan setupLayer:_renderView];
-
+    
     if (isMetalSupported) {
         [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
-         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
+        smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(METAL, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
         [renderViewMan setUpPaths:smgr];
         editorScene->screenScale = screenScale;
     }
     else {
         [renderViewMan setupContext];
-        
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(OPENGLES2, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
@@ -216,7 +218,6 @@ BOOL missingAlertShown;
 - (void)changeAllButtonBG{
     if(editorScene->isNodeSelected)
     {
-        
         if(editorScene->controlType==MOVE){
             [self.moveBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
             [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
@@ -227,15 +228,12 @@ BOOL missingAlertShown;
             [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
             [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
             [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            
         }
         if(editorScene->controlType==SCALE){
             [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
             [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
             [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            
         }
-
     }
     else if (editorScene->selectedNodeIds.size()>0)
     {
@@ -243,22 +241,17 @@ BOOL missingAlertShown;
             [self.moveBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
             [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
             [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            
         }
         if(editorScene->controlType==ROTATE){
             [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
             [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
             [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            
         }
         if(editorScene->controlType==SCALE){
             [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
             [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
             [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            
         }
-
-        
     }
     else
     {
@@ -266,8 +259,6 @@ BOOL missingAlertShown;
         [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
         [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
     }
-
-    
 }
 
 -(void)setupEnableDisableControls{
@@ -307,7 +298,7 @@ BOOL missingAlertShown;
         [self.scaleBtn setEnabled:true];
         [self.optionsBtn setEnabled:false];
         return;
-
+        
     }
     else if (editorScene->isRigMode){
         [self.moveBtn setEnabled:true];
@@ -336,8 +327,6 @@ BOOL missingAlertShown;
         [self.objectList setUserInteractionEnabled:true];
         [self.playBtn setEnabled:true];
         return;
-
-
     }
 }
 
@@ -382,14 +371,14 @@ BOOL missingAlertShown;
 - (void) removeTempNodeFromScene
 {
     if(editorScene && editorScene->loader)
-        editorScene->loader->removeTempNodeIfExists();        
+        editorScene->loader->removeTempNodeIfExists();
 }
 
-- (void) load3DTex:(int)type AssetId:(int)assetId TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors
+- (void) load3DTex:(int)type AssetId:(int)assetId TextureName:(NSString*)textureName TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors
           FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode{
-    
     NSMutableDictionary *textDetails = [[NSMutableDictionary alloc] init];
     [textDetails setObject:[NSNumber numberWithInt:assetId] forKey:@"AssetId"];
+    [textDetails setObject:textureName forKey:@"textureName"];
     [textDetails setObject:typedText forKey:@"typedText"];
     [textDetails setObject:[NSNumber numberWithInt:fontSize] forKey:@"fontSize"];
     [textDetails setObject:[NSNumber numberWithInt:bevelRadius] forKey:@"bevelRadius"];
@@ -401,7 +390,6 @@ BOOL missingAlertShown;
     [textDetails setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     assetAddType = IMPORT_ASSET_ACTION;
     [self performSelectorOnMainThread:@selector(load3dTextOnMainThread:) withObject:textDetails waitUntilDone:YES];
-
 }
 
 - (void) load3dTextOnMainThread:(NSMutableDictionary*)fontDetails{
@@ -410,8 +398,9 @@ BOOL missingAlertShown;
     bool isTempNode = [[fontDetails objectForKey:@"isTempNode"]boolValue];
     int fontSize = [[fontDetails objectForKey:@"fontSize"]intValue];
     float bevalValue = [[fontDetails objectForKey:@"bevelRadius"]floatValue];
+    NSString* textureName = [fontDetails objectForKey:@"textureName"];
     
-    [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName TextureName:(@"") Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName TextureName:textureName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!isTempNode) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
     }
@@ -431,31 +420,21 @@ BOOL missingAlertShown;
     }
 }
 
-- (Vector2) getVideoResolution:(string) fileName
+- (Vector2) getVideoResolution:(NSString*) videoPath
 {
     Vector2 res = Vector2(0.0, 0.0);
-    
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [paths objectAtIndex:0];
-    
-    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",fileName.c_str()]];
-    if([[NSFileManager defaultManager] fileExistsAtPath:videoFilePath]) {
-        NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
+    if([[NSFileManager defaultManager] fileExistsAtPath:videoPath]) {
+        NSURL *videoURL = [NSURL fileURLWithPath:videoPath];
         AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
         AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-        
         gen.appliesPreferredTrackTransform = YES;
-        
         NSError *err = NULL;
         CMTime midpoint = CMTimeMake(0, 24);
-        
         CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
-        
         res.x = CGImageGetWidth(imageRef);
         res.y = CGImageGetHeight(imageRef);
     }
     return res;
-
 }
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
@@ -483,8 +462,6 @@ BOOL missingAlertShown;
     if (!isTempNode) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
     }
-   
-    
 }
 
 - (void) loadNode:(AssetItem*) asset
@@ -515,10 +492,10 @@ BOOL missingAlertShown;
             }
             else{
                 editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
-                 [self changeAllButtonBG];
-                 [self setupEnableDisableControls];
+                [self changeAllButtonBG];
+                [self setupEnableDisableControls];
             }
-
+            
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
             [self highlightObjectList];
@@ -529,7 +506,7 @@ BOOL missingAlertShown;
         }
         if(renderViewMan.makePanOrPinch)
             [renderViewMan panOrPinchProgress];
-
+        
         
         editorScene->renderAll();
         if(!isMetalSupported)
@@ -603,9 +580,9 @@ BOOL missingAlertShown;
     for (int i = 0; i < assetsCount; i++) {
         NSString* assetName = [self stringWithwstring:editorScene->nodes[i]->name];
     encoding:[NSString defaultCStringEncoding];
-       // if (editorScene->nodes[i]->getType() == NODE_TEXT_SKIN)
-       //     assetName = [NSString stringWithFormat:@"TEXT: %@", assetName];
-       // else if (editorScene->nodes[i]->getType() == NODE_IMAGE)
+        // if (editorScene->nodes[i]->getType() == NODE_TEXT_SKIN)
+        //     assetName = [NSString stringWithFormat:@"TEXT: %@", assetName];
+        // else if (editorScene->nodes[i]->getType() == NODE_IMAGE)
         //    assetName = [NSString stringWithFormat:@"IMAGE: %@", assetName];
         [assetsInScenes addObject:assetName];
     }
@@ -656,15 +633,15 @@ BOOL missingAlertShown;
         .CGColor;
         cell.layer.borderWidth = 2.0f;
     }
-
-//    cell.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f
-//                                                   green:56.0f / 255.0f
-//                                                    blue:57.0f / 255.0f
-//                                                   alpha:1.0f];
+    
+    //    cell.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f
+    //                                                   green:56.0f / 255.0f
+    //                                                    blue:57.0f / 255.0f
+    //                                                   alpha:1.0f];
     
     cell.layer.borderWidth = 0.0f;
     if (_framesCollectionView.tag==1) {
-      cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
+        cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
     }
     else if (_framesCollectionView.tag==2){
         cell.framesLabel.text = [NSString stringWithFormat:@"%.2fs", ((float)indexPath.row + 1) / 24];
@@ -816,7 +793,7 @@ BOOL missingAlertShown;
 {
     string path = (char*)[pathStr cStringUsingEncoding:NSUTF8StringEncoding];
     editorScene->rigMan->exportSGR(path);
-
+    
 }
 
 - (IBAction)moveFirstAction:(id)sender {
@@ -832,7 +809,7 @@ BOOL missingAlertShown;
     }
     [_rigAddToSceneBtn setHidden:YES];
     [_addJointBtn setHidden:YES];
-
+    
 }
 
 - (IBAction)rigCancelAction:(id)sender
@@ -864,7 +841,7 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)publishBtnAction:(id)sender {
-   [animationsliderVC publishBtnaction];
+    [animationsliderVC publishBtnaction];
 }
 
 - (IBAction)editFunction:(id)sender
@@ -880,10 +857,10 @@ BOOL missingAlertShown;
 
 - (IBAction)addFrames:(id)sender
 {
-
+    
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"addFrames"];
     [_popUpVc.view setClipsToBounds:YES];
-     
+    
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.popoverContentSize = CGSizeMake(205.0, 130.0);
@@ -908,9 +885,9 @@ BOOL missingAlertShown;
         CGRect rect = _exportBtn.frame;
         rect = [self.view convertRect:rect fromView:_exportBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
-                                            inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionLeft
-                                          animated:YES];
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionLeft
+                                              animated:YES];
     }
     else{
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
@@ -983,7 +960,7 @@ BOOL missingAlertShown;
                                                     inView:self.view
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:YES];
-
+            
         }
         else
         {
@@ -1000,9 +977,9 @@ BOOL missingAlertShown;
                                                     inView:self.view
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:YES];
-
+            
         }
-    
+        
     }
 }
 
@@ -1019,9 +996,9 @@ BOOL missingAlertShown;
         CGRect rect = _animationBtn.frame;
         rect = [self.view convertRect:rect fromView:_animationBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
-                                            inView:self.view
+                                                inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionLeft
-                                          animated:YES];
+                                              animated:YES];
     }
     else{
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
@@ -1037,7 +1014,7 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:YES];
-
+        
         
     }
 }
@@ -1045,18 +1022,18 @@ BOOL missingAlertShown;
 - (IBAction)importBtnAction:(id)sender
 {
     BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
-        [_popUpVc.view setClipsToBounds:YES];
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
-        self.popoverController.delegate =self;
-        self.popUpVc.delegate=self;
-        CGRect rect = _importBtn.frame;
-        rect = [self.view convertRect:rect fromView:_importBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _importBtn.frame;
+    rect = [self.view convertRect:rect fromView:_importBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                          permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                           animated:YES];
 }
 - (IBAction)infoBtnAction:(id)sender
@@ -1078,11 +1055,11 @@ BOOL missingAlertShown;
 
 - (IBAction)viewBtn:(id)sender
 {
-
+    
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"viewBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-     self.popoverController.popoverContentSize = CGSizeMake(182.0, 265.0);
+    self.popoverController.popoverContentSize = CGSizeMake(182.0, 265.0);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -1090,7 +1067,7 @@ BOOL missingAlertShown;
                                             inView:self.view
                           permittedArrowDirections:UIPopoverArrowDirectionUp
                                           animated:YES];
-
+    
 }
 
 - (IBAction)lastFrameBtnAction:(id)sender
@@ -1127,10 +1104,10 @@ BOOL missingAlertShown;
         CGRect rect = _myObjectsBtn.frame;
         rect = [self.view convertRect:rect fromView:_myObjectsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
-                                            inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionLeft
-                                          animated:YES];
-         [_popUpVc UpdateObjectList:assetsInScenes];
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionLeft
+                                              animated:YES];
+        [_popUpVc UpdateObjectList:assetsInScenes];
     }
     else
     {
@@ -1154,7 +1131,7 @@ BOOL missingAlertShown;
 
 - (IBAction)optionsBtnAction:(id)sender
 {
-  
+    
     if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
     {
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
@@ -1173,7 +1150,7 @@ BOOL missingAlertShown;
                                               animated:YES];
         return;
     }
-
+    
     if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
     {
         Quaternion lightProps;
@@ -1195,7 +1172,7 @@ BOOL missingAlertShown;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
-                               permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
     }
     else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
@@ -1216,7 +1193,7 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
-   
+        
     }
     else
     {
@@ -1268,33 +1245,33 @@ BOOL missingAlertShown;
         if((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable()))
             status = true;
         else if(!(editorScene->selectedNodeIds.size() > 0) && (editorScene->isRigMode || (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)))
-                status = true;
+            status = true;
         
         if(status){
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
             NSLog(@"Function is here 2");
-             editorScene->renHelper->setControlsVisibility(false);
-             Vector3 currentScale = editorScene->getSelectedNodeScale();
-             _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
-             _scaleProps.delegate = self;
+            editorScene->renHelper->setControlsVisibility(false);
+            Vector3 currentScale = editorScene->getSelectedNodeScale();
+            _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
+            _scaleProps.delegate = self;
             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
-             self.popoverController.popoverContentSize = CGSizeMake(270, 177);
-             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-             [_popUpVc.view setClipsToBounds:YES];
-             CGRect rect = _scaleBtn.frame;
-             rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
-             [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                                   permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                                   animated:NO];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
+            self.popoverController.popoverContentSize = CGSizeMake(270, 177);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_popUpVc.view setClipsToBounds:YES];
+            CGRect rect = _scaleBtn.frame;
+            rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
+            [self.popoverController presentPopoverFromRect:rect
+                                                    inView:self.view
+                                  permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                                  animated:NO];
             [self changeAllButtonBG];
         }
     }
     else{
-//        float scale = autoRigObject->getSelectedJointScale();
+        //        float scale = autoRigObject->getSelectedJointScale();
         float scale = 10.0;
         scaleAutoRig=[[ScaleForAutoRigViewController alloc] initWithNibName:@"ScaleForAutoRigViewController" bundle:nil updateScale:scale];
         scaleAutoRig.delegate = self;
@@ -1314,7 +1291,7 @@ BOOL missingAlertShown;
 - (IBAction)undoBtnAction:(id)sender
 {
     int returnValue2 = NOT_SELECTED;
-
+    
     ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);
     [self undoRedoButtonState:actionType];
     
@@ -1372,14 +1349,14 @@ BOOL missingAlertShown;
             
             
     }
-     [self undoRedoButtonState:DEACTIVATE_BOTH];
+    [self undoRedoButtonState:DEACTIVATE_BOTH];
     [self updateAssetListInScenes];
 }
 
 - (void) undoMultiAssetDeleted:(int)size
 {
     for (int i = 0; i < size; i++)
-            [self undoBtnAction:nil];
+        [self undoBtnAction:nil];
     editorScene->actionMan->currentAction--;
 }
 
@@ -1429,14 +1406,14 @@ BOOL missingAlertShown;
         }
     }
     if (editorScene->actionMan->actions.size() <= 0 || editorScene->actionMan->currentAction >= editorScene->actionMan->actions.size())
-            [self undoRedoButtonState:DEACTIVATE_REDO];
+        [self undoRedoButtonState:DEACTIVATE_REDO];
     
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-        [self HighlightFrame];
-        [self.framesCollectionView reloadData];
+    [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    [self HighlightFrame];
+    [self.framesCollectionView reloadData];
     [self updateAssetListInScenes];
-
+    
 }
 
 
@@ -1513,13 +1490,13 @@ BOOL missingAlertShown;
     {
         self.publishBtn.frame = CGRectMake(self.rightView.frame.size.width,self.scaleBtn.frame.origin.y , 110, 40);
         [self.publishBtn setHidden:showorHide];
-
+        
     }
     else
     {
         self.publishBtn.frame = CGRectMake( self.view.frame.size.width-self.rightView.frame.size.width, self.scaleBtn.frame.origin.y, 110, 40);
         [self.publishBtn setHidden:showorHide];
-
+        
     }
 }
 
@@ -1555,7 +1532,7 @@ BOOL missingAlertShown;
             else{
                 [_popUpVc updateDescelect:path];
             }
-           
+            
         }
     }
     
@@ -1589,7 +1566,7 @@ BOOL missingAlertShown;
             }
             
         }
-    
+        
     }
     else
     {
@@ -1634,7 +1611,7 @@ BOOL missingAlertShown;
     editorScene->animMan->copyKeysOfNode(originalId, editorScene->nodes.size()-1);
     editorScene->nodes[originalId]->node->setVisible(false);
     editorScene->currentFrame = selectedFrame;
-    editorScene->actionMan->switchFrame(selectedFrame);   
+    editorScene->actionMan->switchFrame(selectedFrame);
     std::string *filePathStr = new std::string([filePath UTF8String]);
     editorScene->animMan->applyAnimations(*filePathStr, editorScene->selectedNodeId);
     totalFrames = editorScene->totalFrames;
@@ -1650,8 +1627,8 @@ BOOL missingAlertShown;
 
 - (void)resumeRenderingAnimationScene
 {
-//    animationScene->isExportingImages = false;
-//    animationScene->setDataForFrame(animationScene->currentFrame);
+    //    animationScene->isExportingImages = false;
+    //    animationScene->setDataForFrame(animationScene->currentFrame);
     [self showOrHideRightView:NO];
     
 }
@@ -1672,25 +1649,16 @@ BOOL missingAlertShown;
 
 - (void)scalePropertyChanged:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
 {
-    
-    NSLog(@"Scale Values : %f %f %f",XValue ,YValue,ZValue);
-    
     if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
         return;
     editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
-    //isFileSaved = !(animationScene->changeAction = true);
     [_framesCollectionView reloadData];
 }
 - (void)scaleValueForAction:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
 {
-    
-    NSLog(@"Scale Values : %f %f %f",XValue ,YValue,ZValue);
-
     if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
         return;
-    editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
-    //[self showTipsViewForAction:OBJECT_MOVED];
-    //isFileSaved = !(animationScene->changeAction = true);
+    editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), true);
     [_framesCollectionView reloadData];
     [self undoRedoButtonState:DEACTIVATE_BOTH];
 }
@@ -1701,35 +1669,35 @@ BOOL missingAlertShown;
         editorScene->selectMan->unselectObjects();
     BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
     
-        if(showView)
-            [self.leftView addSubview:subViewToAdd];
+    if(showView)
+        [self.leftView addSubview:subViewToAdd];
     
-        [self.leftView setHidden:(!showView)];
-        CATransition *transition = [CATransition animation];
-        transition.duration = 0.5;
-        transition.type = kCATransitionPush;
-        if (status) {
-            transition.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
-        }
-        else{
-            transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-        }
-        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.leftView.layer addAnimation:transition forKey:nil];
+    [self.leftView setHidden:(!showView)];
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.5;
+    transition.type = kCATransitionPush;
+    if (status) {
+        transition.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+    }
+    else{
+        transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+    }
+    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [self.leftView.layer addAnimation:transition forKey:nil];
     
-        CATransition* transition1 = [CATransition animation];
-        transition1.duration = 0.5;
-        transition1.type = kCATransitionPush;
-        if (status) {
-            transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
-        }
-        else{
-            transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-        }
-        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+    CATransition* transition1 = [CATransition animation];
+    transition1.duration = 0.5;
+    transition1.type = kCATransitionPush;
+    if (status) {
+        transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+    }
+    else{
+        transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+    }
+    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
     
-        [self.rightView setHidden:showView];
+    [self.rightView setHidden:showView];
     
 }
 - (void) showOrHideRightView:(BOOL)showView{
@@ -1740,7 +1708,7 @@ BOOL missingAlertShown;
         transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
         [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-    
+        
         [self.rightView setHidden:showView];
     }
     else{
@@ -1755,9 +1723,8 @@ BOOL missingAlertShown;
     }
 }
 
--(void)pickedImageWithInfo:(NSDictionary*)info type:(BOOL)isTempNode;
+-(void)pickedImageWithInfo:(NSDictionary*)info type:(BOOL)isTempNode
 {
-
     [self.center_progress setHidden:NO];
     [self.center_progress startAnimating];
     UIImage* imageData = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -1789,14 +1756,14 @@ BOOL missingAlertShown;
     [data writeToFile:saveFileName atomically:YES];
     
     fileNameSalt = [Utility getMD5ForString:imgSalt];
-
+    
     NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
-        [imageDetails setObject:[NSNumber numberWithInt:ASSET_IMAGE] forKey:@"type"];
-        [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
-        [imageDetails setObject:fileNameSalt forKey:@"AssetName"];
-        [imageDetails setObject:[NSNumber numberWithFloat:imgW] forKey:@"Width"];
-        [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
-        [imageDetails setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
+    [imageDetails setObject:[NSNumber numberWithInt:ASSET_IMAGE] forKey:@"type"];
+    [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
+    [imageDetails setObject:fileNameSalt forKey:@"AssetName"];
+    [imageDetails setObject:[NSNumber numberWithFloat:imgW] forKey:@"Width"];
+    [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
+    [imageDetails setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     
     assetAddType = IMPORT_ASSET_ACTION;
     [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
@@ -1804,10 +1771,25 @@ BOOL missingAlertShown;
     [self.center_progress setHidden:YES];
 }
 
+-(void)pickedVideoWithInfo:(NSString*)path FileName:(NSString*)fileName IsTemp:(BOOL)isTemp
+{
+    Vector2 resolution = [self getVideoResolution:path];
+    NSMutableDictionary *videoDetail = [[NSMutableDictionary alloc] init];
+    [videoDetail setObject:[NSNumber numberWithInt:ASSET_VIDEO] forKey:@"type"];
+    [videoDetail setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
+    [videoDetail setObject:fileName forKey:@"AssetName"];
+    [videoDetail setObject:[NSNumber numberWithFloat:resolution.x] forKey:@"Width"];
+    [videoDetail setObject:[NSNumber numberWithFloat:resolution.y] forKey:@"Height"];
+    [videoDetail setObject:[NSNumber numberWithBool:isTemp] forKey:@"isTempNode"];
+    [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:videoDetail waitUntilDone:YES];
+}
+
+
+
 - (void)playTimer
 {/*
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:animationScene->currentFrame inSection:0];
-        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+  NSIndexPath* toPath = [NSIndexPath indexPathForItem:animationScene->currentFrame inSection:0];
+  [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
   */
 }
 
@@ -1843,12 +1825,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void)renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark
-{   
+{
     editorScene->renHelper->isExportingImages = true;
     editorScene->updater->setDataForFrame(frame);
     NSString* tempDir = NSTemporaryDirectory();
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, frame];
-    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark);
+    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark,renderBgColor);
 }
 
 - (void) presentPopOver:(CGRect )arect{
@@ -1858,14 +1840,38 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if(editorScene->selectedNodeId==-1 && editorScene->selectedNodeIds.size()<=0)
+    if(!editorScene->hasNodeSelected() && !(editorScene->selectedNodeIds.size() > 0))
     {
         UIAlertAction* movaCam = [UIAlertAction
                                   actionWithTitle:@"Move Camera"
                                   style:UIAlertActionStyleDefault
                                   handler:^(UIAlertAction * action)
                                   {
+                                      editorScene->nodes[0]->setPosition(editorScene->viewCamera->getPosition(), editorScene->currentFrame);
+                                      Vector3 nodeRot = editorScene->viewCamera->getViewMatrix().getRotationInDegree();
+                                      Vector3 initDir = (editorScene->viewCamera->getTarget() - editorScene->nodes[0]->getNodePosition()).normalize();
+                                      Vector3 targetDir = (editorScene->viewCamera->getTarget() - editorScene->viewCamera->getPosition()).normalize();
+                                      Quaternion rotQ = MathHelper::rotationBetweenVectors(targetDir, initDir);
+                                      rotQ = MathHelper::RotateNodeInWorld(nodeRot, rotQ);
+                                      Vector3 rotation = MathHelper::toEuler(rotQ);
+                                      rotation.x -= 180.0;
+                                      rotation.y -= 180.0;
+                                      rotation.z -= 180.0;
                                       
+                                      editorScene->nodes[0]->setRotation(Quaternion(rotation * DEGTORAD), editorScene->currentFrame);
+                                      editorScene->nodes[0]->setRotationOnNode(rotQ);
+                                      /*
+                                       Vector3 camera = editorScene->nodes[0]->getNodePosition();
+                                       Vector3 viewCamera = editorScene->viewCamera->getPosition();
+                                       Vector3 rotDir = (viewCamera - camera).normalize();
+                                       Quaternion rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(1.0,1.0,1.0));
+                                       editorScene->nodes[0]->setRotation(rotQ, editorScene->currentFrame);
+                                       */
+                                      NSLog(@"\nCamera Rotation : %f %f %f ",editorScene->viewCamera->getViewMatrix().getRotationInDegree().x,
+                                            editorScene->viewCamera->getRotationInRadians().x,
+                                            editorScene->viewCamera->getTarget().x);
+                                      
+                                      editorScene->updater->setDataForFrame(editorScene->currentFrame);
                                   }];
         
         [view addAction:movaCam];
@@ -1913,7 +1919,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                             }];
             [view addAction:changeTexture];
         }
-
+        
         
     }
     
@@ -1930,10 +1936,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) createDuplicateAssetsForAnimation {
     
     int selectedAssetId  = NOT_EXISTS;
+    int selectedNode = NOT_EXISTS;
     NODE_TYPE selectedNodeType = NODE_UNDEFINED;
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         selectedAssetId = editorScene->nodes[editorScene->selectedNodeId]->assetId;
         selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
+        selectedNode = editorScene->selectedNodeId;
     }
     
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
@@ -1943,15 +1951,16 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
         
     }
-      else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
+    else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
         Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-          
-          [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+                                                                                                                               encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
 }
 
@@ -1959,19 +1968,23 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) createDuplicateAssets {
     
     int selectedAssetId  = NOT_EXISTS;
+    int selectedNode = NOT_EXISTS;
     NODE_TYPE selectedNodeType = NODE_UNDEFINED;
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         selectedAssetId = editorScene->nodes[editorScene->selectedNodeId]->assetId;
         selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
+        selectedNode = editorScene->selectedNodeId;
     }
     
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
+        assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+                                                   encoding:[NSString defaultCStringEncoding]];
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
-
+        editorScene->animMan->copyPropsOfNode(selectedNode, editorScene->nodes.size()-1);
+        
     }
     else if(selectedNodeType == NODE_IMAGE && selectedAssetId != NOT_EXISTS){
         NSString* fileName = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
@@ -1989,11 +2002,14 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
-                                                    encoding:[NSString defaultCStringEncoding]];
+                                                encoding:[NSString defaultCStringEncoding]];
         Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+                                                                                                                               encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        //   [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        editorScene->animMan->copyPropsOfNode(selectedNode, editorScene->nodes.size()-1);
     }
 }
 
@@ -2010,7 +2026,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         objVc.objSlideDelegate=self;
         [self showOrHideLeftView:YES withView:objVc.view];
     }
-
+    
 }
 
 -(void) updateAssetListInScenes
@@ -2018,26 +2034,26 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     [assetsInScenes removeAllObjects];
     for(int i = 0; i < editorScene->nodes.size(); i++){
         NSString* name = [self stringWithwstring:editorScene->nodes[i]->name];
-            if(editorScene->nodes[i]->getType() == NODE_CAMERA){
-                [assetsInScenes addObject:@"CAMERA"];
-            }
-            else if(editorScene->nodes[i]->getType() == NODE_LIGHT){
-                [assetsInScenes addObject:@"LIGHT"];
-            }
-            else if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT){
-                [assetsInScenes addObject:name];
-            }
-            else if(editorScene->nodes[i]->getType() == NODE_IMAGE){
-                [assetsInScenes addObject:[NSString stringWithFormat:@"Image : %@",name]];
-            }
-            else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN){
-                [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
-            }
-            else{
-                [assetsInScenes addObject:name];
-            }        
+        if(editorScene->nodes[i]->getType() == NODE_CAMERA){
+            [assetsInScenes addObject:@"CAMERA"];
+        }
+        else if(editorScene->nodes[i]->getType() == NODE_LIGHT){
+            [assetsInScenes addObject:@"LIGHT"];
+        }
+        else if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT){
+            [assetsInScenes addObject:name];
+        }
+        else if(editorScene->nodes[i]->getType() == NODE_IMAGE){
+            [assetsInScenes addObject:[NSString stringWithFormat:@"Image : %@",name]];
+        }
+        else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN){
+            [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
+        }
+        else{
+            [assetsInScenes addObject:name];
+        }
     }
-
+    
     [self.objectList reloadData];
     
 }
@@ -2047,7 +2063,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 {
     editorScene->selectMan->selectObject(assetIndex);
     [self setupEnableDisableControls];
-   
+    
 }
 
 #pragma mark PopUpViewConrollerDelegate
@@ -2096,120 +2112,132 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void) importBtnDelegateAction:(int)indexValue{
-    if(indexValue==IMPORT_MODELS){
-        if([Utility IsPadDevice]){
-        [self.popoverController dismissPopoverAnimated:YES];
-        assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
-        assetSelectionSlider.assetSelectionDelegate = self;
-        [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-        }
-        else{
+    
+    switch (indexValue) {
+        case IMPORT_MODELS:
+            if([Utility IsPadDevice]){
+                [self.popoverController dismissPopoverAnimated:YES];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
+                assetSelectionSlider.assetSelectionDelegate = self;
+                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+            }
+            else{
+                [self.popoverController dismissPopoverAnimated:YES];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil];
+                assetSelectionSlider.assetSelectionDelegate = self;
+                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+            }
+            break;
+        case IMPORT_VIDEO:
+        case IMPORT_IMAGES:
+            if([Utility IsPadDevice])
+            {
+                [self.popoverController dismissPopoverAnimated:YES];
+                self.imagePicker = [[UIImagePickerController alloc] init];
+                self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+                if(indexValue == IMPORT_VIDEO)
+                    self.imagePicker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie,nil];
+                [self.imagePicker setNavigationBarHidden:YES];
+                [self.imagePicker setToolbarHidden:YES];
+                importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil Type:(indexValue == IMPORT_VIDEO) ? IMPORT_VIDEO : IMPORT_IMAGES];
+                [self showOrHideLeftView:YES withView:importImageViewVC.view];
+                [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
+                self.imagePicker.delegate=importImageViewVC;
+                importImageViewVC.delegate = self;
+                [importImageViewVC.imagesView addSubview:self.imagePicker.view];
+            }
+            else
+            {
+                [self.popoverController dismissPopoverAnimated:YES];
+                self.imagePicker = [[UIImagePickerController alloc] init];
+                self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+                if(indexValue == IMPORT_VIDEO)
+                    self.imagePicker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie,nil];
+                [self.imagePicker setNavigationBarHidden:YES];
+                [self.imagePicker setToolbarHidden:YES];
+                importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNewPhone" bundle:nil Type:(indexValue == IMPORT_VIDEO) ? IMPORT_VIDEO : IMPORT_IMAGES];
+                [self showOrHideLeftView:YES withView:importImageViewVC.view];
+                [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
+                self.imagePicker.delegate=importImageViewVC;
+                importImageViewVC.delegate = self;
+                [importImageViewVC.imagesView addSubview:self.imagePicker.view];
+            }
+            break;
+        case IMPORT_LIGHT:
             [self.popoverController dismissPopoverAnimated:YES];
-            assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil];
-            assetSelectionSlider.assetSelectionDelegate = self;
-            [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-        }
-    }
-    else if(indexValue==IMPORT_IMAGES)
-    {
-        if([Utility IsPadDevice])
-        {
+            [self importAdditionalLight];
+            break;
+        case IMPORT_OBJFILE:
+            if([Utility IsPadDevice]){
+                [self.popoverController dismissPopoverAnimated:YES];
+                objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:IMPORT_OBJFILE];
+                objVc.objSlideDelegate=self;
+                [self showOrHideLeftView:YES withView:objVc.view];
+            }
+            else{
+                [self.popoverController dismissPopoverAnimated:YES];
+                objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil Type:IMPORT_OBJFILE];
+                objVc.objSlideDelegate=self;
+                [self showOrHideLeftView:YES withView:objVc.view];
+            }
+            break;
+        case IMPORT_ADDBONE:{
+            NSLog(@"Bundle Path %s " , constants::BundlePath.c_str());
             [self.popoverController dismissPopoverAnimated:YES];
-            self.imagePicker = [[UIImagePickerController alloc] init];
-            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            [self.imagePicker setNavigationBarHidden:YES];
-            [self.imagePicker setToolbarHidden:YES];
-            importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
-            [self showOrHideLeftView:YES withView:importImageViewVC.view];
-            [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-            self.imagePicker.delegate=importImageViewVC;
-            importImageViewVC.delegate = self;
-            [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-        }
-        else
-        {
-            [self.popoverController dismissPopoverAnimated:YES];
-            self.imagePicker = [[UIImagePickerController alloc] init];
-            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            [self.imagePicker setNavigationBarHidden:YES];
-            [self.imagePicker setToolbarHidden:YES];
-            importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNewPhone" bundle:nil];
-            [self showOrHideLeftView:YES withView:importImageViewVC.view];
-            [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-            self.imagePicker.delegate=importImageViewVC;
-            importImageViewVC.delegate = self;
-            [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-        }
-    }
-    else if(indexValue==IMPORT_TEXT){
-        if([Utility IsPadDevice])
-        {
-            [self.popoverController dismissPopoverAnimated:YES];
-            textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
-            textSelectionSlider.textSelectionDelegate = self;
-            [self showOrHideLeftView:YES withView:textSelectionSlider.view];
-        }
-        else
-        {
-            [self.popoverController dismissPopoverAnimated:YES];
-            textSelectionSlider = [[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
-            textSelectionSlider.textSelectionDelegate = self;
-            [self showOrHideLeftView:YES withView:textSelectionSlider.view];
-        }
-    }
-    else if(indexValue==IMPORT_LIGHT){
-        [self.popoverController dismissPopoverAnimated:YES];
-        [self importAdditionalLight];
-    }
-    else if(indexValue==IMPORT_OBJFILE){
-        if([Utility IsPadDevice]){
-            [self.popoverController dismissPopoverAnimated:YES];
-            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:IMPORT_OBJFILE];
-            objVc.objSlideDelegate=self;
-            [self showOrHideLeftView:YES withView:objVc.view];
-        }
-        else{
-            [self.popoverController dismissPopoverAnimated:YES];
-            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil Type:IMPORT_OBJFILE];
-            objVc.objSlideDelegate=self;
-            [self showOrHideLeftView:YES withView:objVc.view];
-        }
-    }
-    else if(indexValue==IMPORT_ADDBONE){
-        NSLog(@"Bundle Path %s " , constants::BundlePath.c_str());
-        [self.popoverController dismissPopoverAnimated:YES];
-        NODE_TYPE selectedNodeType = NODE_UNDEFINED;
-        if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-            selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
-            
-            if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT) {
-                UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones cannot be added to this model." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NODE_TYPE selectedNodeType = NODE_UNDEFINED;
+            if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+                selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
+                
+                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT) {
+                    UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones cannot be added to this model." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [error show];
+                }
+                else {
+                    [self.addJointBtn setHidden:YES];
+                    [self.moveLast setHidden:NO];
+                    [self.moveFirst setHidden:NO];
+                    [self.rigScreenLabel setHidden:NO];
+                    selectedNodeId = editorScene->selectedNodeId;
+                    editorScene->enterOrExitAutoRigMode(true);
+                    editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
+                    editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
+                    editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
+                    [self setupEnableDisableControls];
+                    [_rigCancelBtn setHidden:NO];
+                }
+            }
+            else
+            {
+                UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Select any Node to add Bone" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [error show];
             }
-            else {
-                [self.addJointBtn setHidden:YES];
-                [self.moveLast setHidden:NO];
-                [self.moveFirst setHidden:NO];
-                [self.rigScreenLabel setHidden:NO];
-                selectedNodeId = editorScene->selectedNodeId;
-                editorScene->enterOrExitAutoRigMode(true);
-                editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
-                editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
-                editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
-                [self setupEnableDisableControls];
-                [_rigCancelBtn setHidden:NO];
-            }
+            break;
         }
-        else
-        {
-            UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Select any Node to add Bone" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [error show];
-        }        
+        case IMPORT_TEXT:{
+            if([Utility IsPadDevice])
+            {
+                [self.popoverController dismissPopoverAnimated:YES];
+                textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
+                textSelectionSlider.textSelectionDelegate = self;
+                [self showOrHideLeftView:YES withView:textSelectionSlider.view];
+            }
+            else
+            {
+                [self.popoverController dismissPopoverAnimated:YES];
+                textSelectionSlider = [[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
+                textSelectionSlider.textSelectionDelegate = self;
+                [self showOrHideLeftView:YES withView:textSelectionSlider.view];
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 
 - (void) exportBtnDelegateAction:(int)indexValue{
     if(indexValue==EXPORT_IMAGE){
+        renderBgColor = Vector4(0.1,0.1,0.1,1.0);
         if([Utility IsPadDevice])
         {
             [self.popoverController dismissPopoverAnimated:YES];
@@ -2220,10 +2248,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             [self showOrHideRightView:YES];
             dispatch_async(dispatch_get_main_queue(), ^ {
-            [self presentViewControllerInCurrentView:renderingView];
+                [self presentViewControllerInCurrentView:renderingView];
             });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
-        
+            
         }
         else
         {
@@ -2245,10 +2273,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
         }
-    
+        
     }
     else if(indexValue==EXPORT_VIDEO){
-         [self.popoverController dismissPopoverAnimated:YES];
+        renderBgColor = Vector4(0.1,0.1,0.1,1.0);
+        [self.popoverController dismissPopoverAnimated:YES];
         RenderingViewController* renderingView;
         if ([Utility IsPadDevice])
             renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
@@ -2270,7 +2299,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         if ([Utility IsPadDevice]) {
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
-            NSLog(@"Videos Clicked");
         }
     }
 }
@@ -2278,55 +2306,55 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) viewBtnDelegateAction:(int)indexValue{
     if(indexValue==FRONT_VIEW){
         [self.popoverController dismissPopoverAnimated:YES];
-       editorScene->updater->changeCameraView(VIEW_FRONT);
+        editorScene->updater->changeCameraView(VIEW_FRONT);
     }
     else if(indexValue==TOP_VIEW){
-         [self.popoverController dismissPopoverAnimated:YES];
+        [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_TOP);
     }
     else if(indexValue==LEFT_VIEW){
-         [self.popoverController dismissPopoverAnimated:YES];
+        [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_LEFT);
     }
     else if(indexValue==BACK_VIEW){
-         [self.popoverController dismissPopoverAnimated:YES];
+        [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_BACK);
     }
     else if(indexValue==RIGHT_VIEW){
-         [self.popoverController dismissPopoverAnimated:YES];
+        [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_RIGHT);
     }
     else if(indexValue==BOTTOM_VIEW){
-         [self.popoverController dismissPopoverAnimated:YES];
+        [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_BOTTOM);
     }
-
+    
 }
 - (void) addFrameBtnDelegateAction:(int)indexValue{
     if(indexValue==0){
-            [self.popoverController dismissPopoverAnimated:YES];
-            totalFrames++;
-            NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
-            [self.framesCollectionView reloadData];
-            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        [self.popoverController dismissPopoverAnimated:YES];
+        totalFrames++;
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+        [self.framesCollectionView reloadData];
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
     else if (indexValue==1){
-            [self.popoverController dismissPopoverAnimated:YES];
-            totalFrames+=24;
-            NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
-            [self.framesCollectionView reloadData];
-            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        [self.popoverController dismissPopoverAnimated:YES];
+        totalFrames+=24;
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+        [self.framesCollectionView reloadData];
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
     else if(indexValue==2){
-            [self.popoverController dismissPopoverAnimated:YES];
-            totalFrames+=240;
-            NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
-            [self.framesCollectionView reloadData];
-            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        [self.popoverController dismissPopoverAnimated:YES];
+        totalFrames+=240;
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+        [self.framesCollectionView reloadData];
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
 }
 - (void) loginBtnAction{
-  
+    
     if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
         loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
@@ -2335,16 +2363,16 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self presentViewController:loginVc animated:YES completion:nil];
         loginVc.view.superview.backgroundColor = [UIColor clearColor];
         NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
-
+        
     }
     else{
-    [self.popoverController dismissPopoverAnimated:YES];
-    loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
-    [loginVc.view setClipsToBounds:YES];
-    loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
-    [self presentViewController:loginVc animated:YES completion:nil];
-    loginVc.view.superview.backgroundColor = [UIColor clearColor];
-    NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
+        [self.popoverController dismissPopoverAnimated:YES];
+        loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
+        [loginVc.view setClipsToBounds:YES];
+        loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:loginVc animated:YES completion:nil];
+        loginVc.view.superview.backgroundColor = [UIColor clearColor];
+        NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
     }
     
 }
@@ -2396,7 +2424,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             
         }
     }
-
+    
 }
 
 -(void) optionBtnDelegate:(int)indexValue
@@ -2475,22 +2503,22 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
     switch (nodeType) {
         case NODE_SGM:
         case NODE_RIG: {
-                //BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];
-                NSString* extension = (nodeType == NODE_SGM) ? @"sgm" : @"sgr";
-                NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
-                NSString* file = [name stringByDeletingPathExtension];
-                if ([file intValue] >= 40000 && ([file intValue] < 50000)) {
-                    NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", documentsDirectory, [file intValue]];
-                    if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
-                        if (!missingAlertShown) {
-                            [[AppHelper getAppHelper] missingAlertView];
-                            missingAlertShown = true;
-                        }
-                        return false;
+            //BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];
+            NSString* extension = (nodeType == NODE_SGM) ? @"sgm" : @"sgr";
+            NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
+            NSString* file = [name stringByDeletingPathExtension];
+            if ([file intValue] >= 40000 && ([file intValue] < 50000)) {
+                NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", documentsDirectory, [file intValue]];
+                if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
+                    if (!missingAlertShown) {
+                        [[AppHelper getAppHelper] missingAlertView];
+                        missingAlertShown = true;
                     }
-                    else
-                        return true;
+                    return false;
                 }
+                else
+                    return true;
+            }
             if (([file intValue] >= 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
                 NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", documentsDirectory, [file intValue]];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
@@ -2503,25 +2531,25 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
                 else
                     return true;
             }
-                // TODO for sgr in documents directory
-                NSString* filePath = [NSString stringWithFormat:@"%@/%s.%@", cacheDirectory, fileName.c_str(), extension];
-                NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%s.%@", fileName.c_str(), extension];
-                if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
-                    downloadFile(url, filePath);
-                NSString* texfilePath = [NSString stringWithFormat:@"%@/%s-cm.png", cacheDirectory, fileName.c_str()];
-                NSString* texurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%s.png", fileName.c_str()];
-                if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath])
-                    downloadFile(texurl, texfilePath);
-                
-                if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-                    if (!missingAlertShown) {
-                        [[AppHelper getAppHelper] missingAlertView];
-                        missingAlertShown = true;
-                    }
-                    return false;
+            // TODO for sgr in documents directory
+            NSString* filePath = [NSString stringWithFormat:@"%@/%s.%@", cacheDirectory, fileName.c_str(), extension];
+            NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%s.%@", fileName.c_str(), extension];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
+                downloadFile(url, filePath);
+            NSString* texfilePath = [NSString stringWithFormat:@"%@/%s-cm.png", cacheDirectory, fileName.c_str()];
+            NSString* texurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%s.png", fileName.c_str()];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath])
+                downloadFile(texurl, texfilePath);
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+                if (!missingAlertShown) {
+                    [[AppHelper getAppHelper] missingAlertView];
+                    missingAlertShown = true;
                 }
-                else
-                    return true;
+                return false;
+            }
+            else
+                return true;
             break;
         }
         case NODE_TEXT:
@@ -2691,7 +2719,7 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma AlertView
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-       alertView.delegate = nil;
+    alertView.delegate = nil;
 }
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -2806,7 +2834,7 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
         }
     }
-
+    
     if(selctedIndex==2){
         if(editorScene->camPreviewScale==1.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
@@ -2844,8 +2872,8 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
         }
     }
-
-       [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"cameraPreviewPosition"];
+    
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"cameraPreviewPosition"];
 }
 -(void)toolbarPosition:(int)selctedIndex
 {
@@ -2925,7 +2953,7 @@ void downloadFile(NSString* url, NSString* fileName)
     if(!isTempNode){
         assetIdReturn =  [self addSgmFileToCacheDirAndDatabase:assetName];
     }
-  
+    
     NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Sgm/White-texture":textureFileName];
     texTo = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetIdReturn];
     [fm copyItemAtPath:texFrom toPath:texTo error:nil];
@@ -2943,11 +2971,12 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
     NSString *textureName;
     if(isTempNode)
-       textureName = textureFileName;
+        textureName = textureFileName;
     else
-       textureName = [NSString stringWithFormat:@"%d%@",assetIdReturn,@"-cm"];
+        textureName = [NSString stringWithFormat:@"%d%@",assetIdReturn,@"-cm"];
     [dict setObject:[NSString stringWithFormat:@"%@",(isHaveTexture) ? textureName : @"-1"] forKey:@"textureName"];
     [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
+    [dict setObject:[NSNumber numberWithBool:isHaveTexture] forKey:@"isHaveTexture"];
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
 }
 
@@ -3024,14 +3053,14 @@ void downloadFile(NSString* url, NSString* fileName)
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,fileName];
     if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
-            srcTextureFilePath = [NSString stringWithFormat:@"%@/%@",cacheDirectory,fileName];
+        srcTextureFilePath = [NSString stringWithFormat:@"%@/%@",cacheDirectory,fileName];
         if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
-                srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%@",docDirPath,fileName];
+            srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%@",docDirPath,fileName];
             if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
-                    return;
+                return;
         }
     }
-   
+    
     NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d-cm.png",docDirPath,localAssetId];
     NSString* desFilePathForDisplay = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.png",docDirPath,localAssetId];
     
@@ -3092,14 +3121,16 @@ void downloadFile(NSString* url, NSString* fileName)
     int assetId = [[dict objectForKey:@"assetId"]intValue];
     wstring assetName = [self getwstring:[dict objectForKey:@"name"]];
     BOOL isTempNode = [[dict objectForKey:@"isTempNode"]boolValue];
+    BOOL isHaveTexture = [[dict objectForKey:@"isHaveTexture"]boolValue];
     
     [renderViewMan loadNodeInScene:NODE_SGM AssetId:assetId AssetName:assetName TextureName:([dict objectForKey:@"textureName"]) Width:0 Height:0 isTempNode:isTempNode More:dict ActionType:IMPORT_ASSET_ACTION VertexColor:color];
-   
-    
     
     if(!isTempNode){
-        editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
-        [self changeTexture:@"0-cm.png" VertexColor:Vector3(1.0)]; // for White Texture Thumbnail
+        if(!isHaveTexture){
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
+            [self changeTexture:@"0-cm" VertexColor:Vector3(1.0) IsTemp:YES]; // for White Texture Thumbnail
+            editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
+        }
         if(assetId >= 20000 && assetId <= 30000){
             NSMutableArray* nodes = [[NSMutableArray alloc]init];
             for(int i = 0; i < editorScene->nodes.size(); i++){
@@ -3111,7 +3142,8 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->renHelper->isExportingImages = true;
             editorScene->updater->setDataForFrame(editorScene->currentFrame);
             NSString* imageFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, assetId];
-            editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], 0, false, YES);
+            renderBgColor = Vector4(0.1,0.1,0.1,1.0);
+            editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], 0, false, YES,renderBgColor);
             
             for(int i = 0; i < [nodes count]; i++){
                 editorScene->nodes[[[nodes objectAtIndex:i]intValue]]->node->setVisible(true);
@@ -3119,8 +3151,11 @@ void downloadFile(NSString* url, NSString* fileName)
             [nodes removeAllObjects];
             nodes = nil;
         }
-        [self changeTexture:[dict objectForKey:@"textureName"] VertexColor:Vector3(color.x,color.y,color.z)]; // back to original Texture
-        editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
+        if(!isHaveTexture){
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
+            [self changeTexture:[dict objectForKey:@"textureName"] VertexColor:Vector3(color.x,color.y,color.z) IsTemp:YES]; // back to original Texture
+            editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
+        }
     }
 }
 
@@ -3165,9 +3200,8 @@ void boneLimitsCallBack(){
         NSData *imageData = [self convertAndScaleImage:image size:-1];
         [imageData writeToFile:desFilePath atomically:YES];
         *texture = *new std::string([(isTemp)?@"temp" : textureName UTF8String]);
-
     }
-        editorScene->selectMan->selectObject(selectedNodeId);
+    editorScene->selectMan->selectObject(selectedNodeId);
     if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
         editorScene->changeTexture(*texture, Vector3(color),isTemp,NO);
         editorScene->selectMan->unselectObject(selectedNodeId);
@@ -3178,6 +3212,13 @@ void boneLimitsCallBack(){
 - (void) removeTempTextureAndVertex
 {
     editorScene->removeTempTextureAndVertex(selectedNodeId);
+}
+
+#pragma Rendering Delegates
+
+- (void) changeRenderingBgColor:(Vector3)vertexColor
+{
+    renderBgColor = Vector4(vertexColor,1.0);
 }
 
 

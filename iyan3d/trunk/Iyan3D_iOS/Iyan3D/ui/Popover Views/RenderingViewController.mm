@@ -1070,7 +1070,8 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 }
 
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{
-    NSLog(@"Vertex Color %f %f %f " , vetexColor.x, vetexColor.y,vetexColor.z);
+    if(isDragFinish)
+        [self.delegate changeRenderingBgColor:vetexColor];
 }
 
 - (void) dealloc

@@ -543,7 +543,7 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
     //childs.reset();
 }
 
-void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark)
+void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, Vector4 bgColor)
 {
     if(!renderingScene || !smgr || renderingScene->isRigMode)
         return;
@@ -555,7 +555,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     if(smgr->device == OPENGLES2)
         rttShadowMap();
     
-    bool displayPrepared = smgr->PrepareDisplay(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->width, renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->height,false,true,false,Vector4(255,255,255,255));
+    bool displayPrepared = smgr->PrepareDisplay(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->width, renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->height,false,true,false,Vector4(bgColor));
     if(!displayPrepared)
         return;
     setRenderCameraOrientation();
@@ -568,7 +568,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         selectedObjectId = renderingScene->selectedNodeId;
         renderingScene->selectMan->unselectObject(renderingScene->selectedNodeId);
     }
-    
     
     vector<string> previousMaterialNames;
     if(renderingType != shaderType)
@@ -583,8 +582,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(false);
     }
     
-    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],true,true,false,Vector4(255,255,255,255));
-    smgr->draw2DImage(renderingScene->bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],true,true,false,Vector4(bgColor));
     
     smgr->Render();
     
@@ -597,7 +595,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     smgr->writeImageToFile(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],imagePath,(renderingScene->shaderMGR->deviceType == OPENGLES2) ?FLIP_VERTICAL : NO_FLIP);
     
     smgr->setActiveCamera(renderingScene->viewCamera);
-    smgr->setRenderTarget(NULL,true,true,false,Vector4(255,255,255,255));
+    smgr->setRenderTarget(NULL,true,true,false,Vector4(bgColor));
     
     
     for(unsigned long i = 0; i < renderingScene->nodes.size(); i++){

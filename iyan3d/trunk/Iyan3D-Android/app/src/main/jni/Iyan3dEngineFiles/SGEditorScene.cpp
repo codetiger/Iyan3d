@@ -494,18 +494,12 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     }
 }
 
-void SGEditorScene::removeTempTextureAndVertex(int selectedNode){
-
+void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
+{    
     string StoragePath;
 #ifdef IOS
-        StoragePath = constants::CachesStoragePath + "/";
-#endif
-#ifdef ANDROID
-    StoragePath = constants::DocumentsStoragePath + "/mesh/";
-#endif
-    
+    StoragePath = constants::CachesStoragePath + "/";
     string textureFileName = StoragePath + nodes[selectedNode]->textureName+".png";
-    
     if(!nodes[selectedNode]->checkFileExists(textureFileName)){
         textureFileName = FileHelper::getDocumentsDirectory() + nodes[selectedNode]->textureName+".png";
         if(!nodes[selectedNode]->checkFileExists(textureFileName)){
@@ -514,7 +508,10 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode){
                 textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Textures/" + nodes[selectedNode]->textureName+".png";
         }
     }
-    
+#endif
+#ifdef ANDROID
+    StoragePath = constants::DocumentsStoragePath + "/mesh/";
+#endif
     if(nodes[selectedNode]->textureName != "" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);

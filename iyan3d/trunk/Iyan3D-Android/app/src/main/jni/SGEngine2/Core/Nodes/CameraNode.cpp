@@ -37,6 +37,7 @@ void CameraNode::setTarget(Vector3 target){
 void CameraNode::setRotation(Vector3 rotation){
     if(bindTargetAndRotation)
         this->target = position + rotation.rotationToDirection();
+    this->rotation = rotation;
     update();
 }
 void CameraNode::setScale(Vector3 Scale){

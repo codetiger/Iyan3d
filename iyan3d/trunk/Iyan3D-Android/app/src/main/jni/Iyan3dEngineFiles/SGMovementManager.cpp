@@ -49,6 +49,9 @@ void SGMovementManager::swipeProgress(float angleX , float angleY)
     
     xAcceleration = (xAcceleration > 300.0) ? 300.0 : (xAcceleration < -300.0 ? -300.0 : xAcceleration) ;
     yAcceleration = (yAcceleration > 200.0) ? 200.0 : (yAcceleration < -200.0 ? -200.0 : yAcceleration) ;
+    
+    Vector3 rotation = moveScene->viewCamera->getViewMatrix().getRotationInDegree();
+
 }
 
 void SGMovementManager::swipeToRotate()
@@ -93,6 +96,7 @@ void SGMovementManager::swipeToRotate()
         
         moveScene->updater->updateLightCamera();
     }
+    
 }
 
 void SGMovementManager::touchEnd(Vector2 curTouchPos)

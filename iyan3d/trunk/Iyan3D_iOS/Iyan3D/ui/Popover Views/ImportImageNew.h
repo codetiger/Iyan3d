@@ -7,16 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+
 
 @protocol ImageImportNewDelgate
 -(void)pickedImageWithInfo:(NSDictionary*)info type:(BOOL)isTempNode;
 -(void)loadingViewStatus:(BOOL)status;
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
+-(void)pickedVideoWithInfo:(NSString*)path FileName:(NSString*)fileName IsTemp:(BOOL)isTemp;
 @end
 
 @interface ImportImageNew : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
     NSDictionary* imageInfo;
+    
+    int viewType;
 }
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;
+
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIView *imagesView;
