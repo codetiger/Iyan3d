@@ -56,12 +56,12 @@
 @property (nonatomic) CGRect longPresPosition;
 @property (nonatomic) vector<Vector2> touchMovePosition;
 @property (nonatomic) bool checkCtrlSelection;
-- (void)setUpPaths;
+- (void)setUpPaths:(SceneManager*)sceneMngr;
 - (void)setupLayer:(UIView*)renderView;
 - (void)setupContext;
 - (void)setupRenderBuffer;
 - (void)setupDepthBuffer:(UIView*)renderView;
-- (void)setupFrameBuffer:(SceneManager*)smgr;
+- (void)setupFrameBuffer;
 - (void)presentRenderBuffer;
 - (void) setUpCallBacks:(void*)scene;
 - (void) addCameraLight;

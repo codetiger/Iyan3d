@@ -25,10 +25,10 @@ public:
     ~SGSelectionManager();
         
     void checkSelection(Vector2 touchPosition,bool isDisplayPrepared = true);
-    void checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
+    bool checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared = false);
     void postNodeJointSelection();
-    void getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
-    void getNodeColorFromTouchTexture(bool touchMove = false);
+    bool getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
+    bool getNodeColorFromTouchTexture(bool touchMove = false);
     bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
     bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
     bool multipleSelections(int nodeId);

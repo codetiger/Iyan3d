@@ -36,7 +36,7 @@ public:
     short LoadShader(DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName);
     ~ShaderManager();
     
-    void setIsVertexColored(SGNode *sgNode,bool status, int paramIndex);
+    void setIsVertexColored(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData);
     void setNumberOfLights(SGNode *sgNode , int paramIndex);
     void setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2);
     void setJointTransform(SGNode *node,SkinMesh *SMesh,int paramIndex);

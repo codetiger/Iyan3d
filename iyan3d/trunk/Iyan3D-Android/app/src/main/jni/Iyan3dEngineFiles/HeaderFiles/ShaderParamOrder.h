@@ -25,6 +25,7 @@
 #define SHADER_COMMON_SKIN_lightViewProjMatrix 11
 #define SHADER_COMMON_SKIN_jointData 12
 #define SHADER_COMMON_SKIN_ViewMatrix 13
+#define SHADER_COMMON_SKIN_VertexColor 14
 #define SHADER_COMMON_SKIN_texture1 0
 #define SHADER_COMMON_SKIN_texture2 1
 

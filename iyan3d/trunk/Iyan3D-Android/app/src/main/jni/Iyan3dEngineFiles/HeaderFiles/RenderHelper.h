@@ -42,7 +42,7 @@ public:
     void postRTTDrawCall();
     void rttDrawCall();
     void rttShadowMap();
-    void rttControlSelectionAnim(Vector2 touchPosition);
+    bool rttControlSelectionAnim(Vector2 touchPosition);
     bool isMovingCameraPreview(Vector2 currentTouchPos);
     void changeCameraPreviewCoords(Vector2 touchPos);
     void drawCameraPreview();

@@ -273,7 +273,7 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
     
     string meshPath = StoragePath + to_string(assetId) + ".sgr";
     string textureFileName = StoragePath + textureName+".png";
-    if (!checkFileExists(meshPath) || !checkFileExists(textureFileName)) {
+    if (!checkFileExists(meshPath)) {
         return shared_ptr<Node>();
     }
     AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);
@@ -289,8 +289,14 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
         }
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1),true);
-    Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
-    node->setTexture(nodeTex,1);
+    
+    if(checkFileExists(textureFileName)) {
+        props.perVertexColor = false;
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        node->setTexture(nodeTex,1);
+    } else {
+        props.perVertexColor = true;
+    }
     return node;
 }
 void SGNode::setSkinningData(SkinMesh *mesh){

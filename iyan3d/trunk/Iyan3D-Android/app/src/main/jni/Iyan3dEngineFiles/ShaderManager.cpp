@@ -63,7 +63,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
     if(matName == "SHADER_SHADOW_1ST_PASS"){
         
     }else if(matName.find("SHADER_VERTEX_COLOR_SHADOW_SKIN") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN_TOON") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN") !=  string::npos){
-        setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored);
+        setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, true);
         setJointTransform(sgNode, SHADER_PERVERTEXCOLOR_jointData, smgr);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);
@@ -79,7 +79,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setLightViewProjMatrix(sgNode,SHADER_PERVERTEXCOLOR_lightViewProjMatrix);
         setViewMatrix(sgNode,SHADER_PERVERTEXCOLOR_viewMatrix);
     }else if(matName.find("SHADER_VERTEX_COLOR_SHADOW") !=  string::npos || matName.find("SHADER_VERTEX_COLOR") !=  string::npos){
-        setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored);
+        setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, true);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);
         setModelMatrix(sgNode, SHADER_PERVERTEXCOLOR_world);
@@ -104,7 +104,10 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setNodeTransparency(sgNode,SHADER_COLOR_SKIN_transparency);
         setJointTransform(sgNode,SHADER_COLOR_SKIN_jointData,smgr);
     }else if(matName.find("SHADER_COMMON_SKIN") !=  string::npos || matName.find("SHADER_TOON_SKIN") !=  string::npos){
-        setIsVertexColored(sgNode, false , SHADER_COMMON_isVertexColored);
+        setVertexColorUniform(sgNode->node->material,sgNode->props.vertexColor,SHADER_COMMON_SKIN_VertexColor,smgr->getNodeIndexByID(sgNode->node->getID()));
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, false);
+        
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, true);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode,SHADER_COMMON_SKIN_mvp);
         setModelMatrix(sgNode, SHADER_COMMON_SKIN_world);
@@ -119,7 +122,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setLightViewProjMatrix(sgNode,SHADER_COMMON_SKIN_lightViewProjMatrix);
         setViewMatrix(sgNode,SHADER_COMMON_SKIN_ViewMatrix);
     }else if(matName.find("SHADER_COMMON") !=  string::npos || matName.find("SHADER_TOON") !=  string::npos){
-        setIsVertexColored(sgNode, false , SHADER_COMMON_isVertexColored);
+        setIsVertexColored(sgNode, false , SHADER_COMMON_isVertexColored, true);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode,SHADER_COMMON_mvp);
         setModelMatrix(sgNode, SHADER_COMMON_world);
@@ -144,10 +147,10 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
     }
 }
 
-void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramIndex)
+void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData)
 {
     float isVertexColored = (status) ? 1.0 : 0.0;
-    smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,true,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,isFragmentData,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
 void ShaderManager::setNumberOfLights(SGNode *sgNode, int paramIndex)
@@ -254,7 +257,7 @@ void ShaderManager::setVertexColorUniform(Material *material , Vector3 color,int
     vertColor[0] = color.x;
     vertColor[1] = color.y;
     vertColor[2] = color.z;
-    smgr->setPropertyValue(material, "vertexColor", vertColor, DATA_FLOAT_VEC3, 3, false, paramIndex,nodeIndex);
+    smgr->setPropertyValue(material, "perVertexColor", vertColor, DATA_FLOAT_VEC3, 3, false, paramIndex,nodeIndex);
     delete vertColor;
 }
 void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex){

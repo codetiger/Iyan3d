@@ -31,22 +31,25 @@
 
 SGEditorScene *editorScene;
 
-- (void)setUpPaths
+- (void)setUpPaths:(SceneManager*)sceneMngr
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cachesDir = [paths objectAtIndex:0];
     constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
     touchCountTracker = 0;
     lightCount = 1;
+    smgr = sceneMngr;
 }
 
 - (void)setupLayer:(UIView*)renderView
 {
     _renderView = (RenderingView*)renderView;
     screenScale = [[UIScreen mainScreen] scale];
-    _eaglLayer = (CAEAGLLayer*)renderView.layer;
-    _eaglLayer.opaque = YES;
-    _eaglLayer.contentsScale = screenScale;
+    if(![self.delegate isMetalSupportedDevice]) {
+        _eaglLayer = (CAEAGLLayer*)renderView.layer;
+        _eaglLayer.opaque = YES;
+        _eaglLayer.contentsScale = screenScale;
+    }
 }
 - (void)setupContext
 {
@@ -70,9 +73,8 @@ SGEditorScene *editorScene;
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, renderView.frame.size.width * screenScale, renderView.frame.size.height * screenScale);
 }
-- (void)setupFrameBuffer:(SceneManager*) sceneMngr
+- (void)setupFrameBuffer
 {
-    smgr = sceneMngr;
     glGenFramebuffers(1, &_frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
@@ -406,7 +408,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
     switch (rec.state) {
         case UIGestureRecognizerStateBegan: {
-            touchCountTracker = touchCount;
+            touchCountTracker = (int)touchCount;
             editorScene->moveMan->touchBegan(p[0] * screenScale);
             switch (touchCount) {
                 case 1: {
@@ -434,7 +436,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     return;
                 _makePanOrPinch = false;
                 editorScene->moveMan->panBegan(p[0] * screenScale, p[1] * screenScale);
-                touchCountTracker = touchCount;
+                touchCountTracker = (int)touchCount;
             }
             switch (touchCount) {
                 case 1: {

@@ -28,7 +28,7 @@
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
                 <outlet property="publishBtn" destination="cSH-2J-bnb" id="f3V-47-dK5"/>
                 <outlet property="redoBtn" destination="WSd-xV-ijo" id="ug4-eC-5Ka"/>
-                <outlet property="renderView" destination="Irr-tp-tWS" id="ATu-Qm-GS4"/>
+                <outlet property="renderView" destination="1HF-XL-EYs" id="SUb-1h-g6Q"/>
                 <outlet property="rigAddToSceneBtn" destination="LIw-J1-TwZ" id="rG7-rO-rCo"/>
                 <outlet property="rigCancelBtn" destination="hQW-uY-VHV" id="WE4-Un-pxO"/>
                 <outlet property="rigScreenLabel" destination="h2z-Ga-oHa" id="pyX-sE-m1w"/>
@@ -105,6 +105,11 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </glkView>
+                <view contentMode="scaleToFill" id="1HF-XL-EYs" customClass="RenderingView">
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
                 <activityIndicatorView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="gib-cQ-h37" userLabel="center_progress">
                     <rect key="frame" x="493" y="366" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

@@ -114,7 +114,7 @@ BOOL missingAlertShown;
     
     #if !(TARGET_IPHONE_SIMULATOR)
         if (iOSVersion >= 8.0)
-            isMetalSupported = false;//(MTLCreateSystemDefaultDevice() != NULL) ? true : false;
+            isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
     #endif
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
@@ -137,6 +137,9 @@ BOOL missingAlertShown;
     [self createDisplayLink];
     if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
         [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+    } else {
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
+        [self toolbarPosition:0];
     }
 
 }
@@ -158,29 +161,31 @@ BOOL missingAlertShown;
     float screenScale = [[UIScreen mainScreen] scale];
     renderViewMan = [[RenderViewManager alloc] init];
     renderViewMan.delegate = self;
+    [renderViewMan setupLayer:_renderView];
+
     if (isMetalSupported) {
         [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
          smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(METAL, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+        [renderViewMan setUpPaths:smgr];
+        editorScene->screenScale = screenScale;
     }
     else {
-        [renderViewMan setupLayer:_renderView];
         [renderViewMan setupContext];
         
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(OPENGLES2, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
         editorScene->screenScale = screenScale;
-        
+        [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
         [renderViewMan setupRenderBuffer];
-        [renderViewMan setupFrameBuffer:smgr];
+        [renderViewMan setupFrameBuffer];
     }
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
         editorScene->camPreviewScale=[[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]floatValue];
     }
     missingAlertShown = false;
-    [renderViewMan setUpPaths];
     [renderViewMan setUpCallBacks:editorScene];
     editorScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     [renderViewMan addGesturesToSceneView];

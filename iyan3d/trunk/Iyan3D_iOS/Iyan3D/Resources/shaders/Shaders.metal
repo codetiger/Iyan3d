@@ -74,8 +74,12 @@ typedef struct {
 #define SHADER_COMMON_SKIN_lightViewProjMatrix 11
 #define SHADER_COMMON_SKIN_jointData 12
 #define SHADER_COMMON_SKIN_ViewMatrix 13
+#define SHADER_COMMON_SKIN_VertexColor 14
 #define SHADER_COMMON_SKIN_texture1 0
 #define SHADER_COMMON_SKIN_texture2 1
+
+#define SHADER_COMMON_isVertexColored 21
+
 vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                                      constant matrix_float4x4& mvp [[ buffer(SHADER_COMMON_SKIN_mvp) ]],
                                      constant JointData* Joint_Data [[ buffer(SHADER_COMMON_SKIN_jointData) ]],
@@ -87,7 +91,9 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
                                      constant float& shadowDarkness [[ buffer(SHADER_COMMON_SKIN_shadowDarkness) ]],
                                      constant packed_float3& eyePos [[ buffer(SHADER_COMMON_SKIN_eyePos) ]],
                                      constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
-                                     unsigned int vid [[ vertex_id ]]
+                                     unsigned int vid [[ vertex_id ]],
+                                     constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                     constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                      )
 {
     
@@ -102,7 +108,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     float4 pos = float4(0.0);
     float4 nor = float4(0.0);
     
-    out.perVertexColor = float4(1.0);
+    out.perVertexColor = (int(isVertexColored) == 0) ? float4(1.0) : float4(float3(vertColor[0].data),1.0);
     
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
@@ -171,7 +177,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     
     out.transparency = transparency;
     out.position = mvp * vertex_position_objectspace;
-    float2 uv = vertex_array[vid].texCoord1;
+    float2 uv = (int(isVertexColored) == 0) ? vertex_array[vid].texCoord1 : float2(0.0,0.0);
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     
@@ -216,7 +222,6 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
 #define SHADER_COMMON_lightViewProjMatrix 11
 #define SHADER_COMMON_viewMatrix 12
 #define SHADER_COMMON_lightFadeDistance 20
-#define SHADER_COMMON_isVertexColored 21
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 

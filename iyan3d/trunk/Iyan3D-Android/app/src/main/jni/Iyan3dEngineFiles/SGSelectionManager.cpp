@@ -28,7 +28,6 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
     
     selectionScene->renHelper->rttNodeJointSelection(touchPosition);
     if(selectionScene->shaderMGR->deviceType == METAL){
-        selectionScene->renHelper->rttNodeJointSelection(touchPosition);
         getNodeColorFromTouchTexture();
     }
     selectionScene->isRTTCompleted = true;
@@ -36,27 +35,27 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
     postNodeJointSelection();
 }
 
-void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)
+bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)
 {
     if(!selectionScene || !smgr || (!selectionScene->hasNodeSelected() && selectionScene->selectedNodeIds.size() <= 0))
         return;
 
     selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
 
-    if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
-        selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
-        if(selectionScene->shaderMGR->deviceType == METAL){
-            selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
-            getNodeColorFromTouchTexture(true);
-        }
+    selectionScene->updater->updateControlsOrientaion();
+    bool status = false;
+    status = selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
+    if(selectionScene->shaderMGR->deviceType == METAL){
+        status = getCtrlColorFromTouchTextureAnim(curTouchPos);
     }
     
-    selectionScene->updater->updateControlsOrientaion();
-    
-    selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
-    if(selectionScene->shaderMGR->deviceType == METAL){
-        selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
-        getCtrlColorFromTouchTextureAnim(curTouchPos);
+    if(!status && selectionScene->hasNodeSelected()) {
+            if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
+                selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
+                if(selectionScene->shaderMGR->deviceType == METAL){
+                    getNodeColorFromTouchTexture(true);
+                }
+            }
     }
     selectionScene->isRTTCompleted = true;
     
@@ -64,6 +63,8 @@ void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
         selectionScene->actionMan->storeActionKeysForMulti(false);
     else
         selectionScene->actionMan->storeActionKeys(false);
+
+    return status;
 }
 
 void SGSelectionManager::postNodeJointSelection()
@@ -87,7 +88,7 @@ void SGSelectionManager::postNodeJointSelection()
         selectionScene->renHelper->setJointSpheresVisibility(false);
 }
 
-void SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
+bool SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
 {
     if(!selectionScene || !smgr)
         return;
@@ -102,34 +103,36 @@ void SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
     if(selectedCol != 255 && (selectedCol >= controlStartIndex && selectedCol <= controlEndIndex)){
         selectionScene->isControlSelected = true;
         selectionScene->selectedControlId = selectedCol;
+        return true;
     }else if(selectedCol >= controlStartIndex && selectedCol <= controlEndIndex){
         Logger::log(ERROR,"SGAnimationScene::getCtrlColorFromTouchTextureAnim","Wrong RTT Color");
     }
+    return false;
 }
 
-void SGSelectionManager::getNodeColorFromTouchTexture(bool touchMove)
+bool SGSelectionManager::getNodeColorFromTouchTexture(bool touchMove)
 {
     if(!selectionScene || !smgr)
         return;
 
     Vector2 touchPixel = selectionScene->nodeJointPickerPosition;
     if(selectNodeOrJointInPixel(touchPixel, touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0), touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y), touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0), touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y), touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0), touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0), touchMove))
-        return;
+        return true;
     if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0), touchMove))
-        return;
-    selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0), touchMove);
+        return true;
+    return selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0), touchMove);
 }
 
 bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove)
@@ -495,7 +498,6 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
             selectionScene->rigMan->clearNodeSelections();
             selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
             if(selectionScene->shaderMGR->deviceType == METAL){
-                selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
                 readSkeletonSelectionTexture();
             }
             break;
@@ -504,7 +506,6 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
             selectionScene->rigMan->clearNodeSelections();
             selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
             if(selectionScene->shaderMGR->deviceType == METAL){
-                selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
                 readSkeletonSelectionTexture();
             }
             break;
@@ -512,7 +513,6 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
         case RIG_MODE_PREVIEW:{
             selectionScene->renHelper->rttSGRNodeJointSelection(touchPosition);
             if(selectionScene->shaderMGR->deviceType == METAL){
-                selectionScene->renHelper->rttSGRNodeJointSelection(touchPosition);
                 readSGRSelectionTexture();
             }
             break;

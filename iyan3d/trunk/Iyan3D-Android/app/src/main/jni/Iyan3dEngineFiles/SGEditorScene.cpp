@@ -28,6 +28,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     initTextures();
     jointSphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
     rotationCircle = SceneHelper::createCircle(smgr);
+    sceneControls.clear();
     sceneControls = SceneHelper::initControls(smgr);
     BoneLimitsHelper::init();
     AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
@@ -58,7 +59,6 @@ SGEditorScene::~SGEditorScene()
     if(ikJointsPositionMap.size())
         ikJointsPositionMap.clear();
     
-    sceneControls.clear();
     nodes.clear();
     jointSpheres.clear();
     tPoseJoints.clear();

@@ -16,7 +16,7 @@ struct BufferState{
     bool isOccupied;
 };
 std::map<int,vector<BufferState> > MTLBuffersMap;
-MetalRenderManager::MetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale){
+MetalRenderManager::MetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale) {
     _currentDrawable = drawable = nil;
     this->renderView = (__bridge UIView*)renderView;
     mtlRenderView = (RenderingView*)this->renderView;

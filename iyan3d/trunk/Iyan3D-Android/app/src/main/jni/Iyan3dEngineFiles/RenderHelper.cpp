@@ -229,7 +229,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
     }
     for(int i = X_MOVE;i <= Z_SCALE;i++){
         isVisible = (i >= controlStartToVisible && i <= controlEndToVisible) ? true:false;
-        if(renderingScene->isControlSelected)
+        if(renderingScene->isControlSelected && isVisible)
             isVisible = (i == renderingScene->selectedControlId) ? true : false;
         renderingScene->sceneControls[i]->node->setVisible(isVisible);
     }
@@ -757,7 +757,7 @@ void RenderHelper::rttShadowMap()
     ShaderManager::isRenderingDepthPass = false;
 }
 
-void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
+bool RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
 {
     if(!renderingScene || !smgr)
         return;
@@ -782,8 +782,9 @@ void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
         if(angle < 0.9)
             smgr->RenderNode(nodeIndex);
     }
+    bool status = true;
     if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        renderingScene->selectMan->getCtrlColorFromTouchTextureAnim(touchPosition);
+        status = renderingScene->selectMan->getCtrlColorFromTouchTextureAnim(touchPosition);
     smgr->setRenderTarget(NULL,false,false);
     for(int i = controlStartIndex;i <= controlEndIndex;i++) {
         renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
@@ -791,6 +792,7 @@ void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
     renderingScene->updater->updateControlsOrientaion();
     if(renderingScene->shaderMGR->deviceType == METAL)
         smgr->EndDisplay();
+    return status;
 }
 
 void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
