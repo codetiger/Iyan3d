@@ -2388,7 +2388,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void) addFrameBtnDelegateAction:(int)indexValue{
-    int addCount = (indexValue == ONE_FRAME) ? 1 : (indexValue == TWENTY_FOUR_FRAMES) ? 24 : TWO_FOURTY_FRAMES;
+    int addCount = (indexValue == ONE_FRAME) ? 1 : (indexValue == TWENTY_FOUR_FRAMES) ? 24 : 240;
         [self.popoverController dismissPopoverAnimated:YES];
         editorScene->totalFrames += addCount;
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->totalFrames-1 inSection:0];
