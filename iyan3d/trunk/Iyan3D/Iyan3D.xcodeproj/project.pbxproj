@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01B4CF721C291E3F0091E19B /* EditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.mm */; };
-		01B4CF731C291E3F0091E19B /* EditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.mm */; };
+		01B4CF721C291E3F0091E19B /* EditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.m */; };
+		01B4CF731C291E3F0091E19B /* EditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF701C291E3F0091E19B /* EditorViewController.m */; };
 		01B4CF821C291EFD0091E19B /* AnimationSelectionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF771C291EFC0091E19B /* AnimationSelectionCollectionViewCell.m */; };
 		01B4CF831C291EFD0091E19B /* AnimationSelectionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4CF771C291EFC0091E19B /* AnimationSelectionCollectionViewCell.m */; };
 		01B4CF841C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4CF781C291EFC0091E19B /* AnimationSelectionCollectionViewCell.xib */; };
@@ -1760,7 +1760,7 @@
 
 /* Begin PBXFileReference section */
 		01B4CF6F1C291E3F0091E19B /* EditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditorViewController.h; path = ui/MainViews/EditorViewController.h; sourceTree = "<group>"; };
-		01B4CF701C291E3F0091E19B /* EditorViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EditorViewController.mm; path = ui/MainViews/EditorViewController.mm; sourceTree = "<group>"; };
+		01B4CF701C291E3F0091E19B /* EditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditorViewController.m; path = ui/MainViews/EditorViewController.m; sourceTree = "<group>"; };
 		01B4CF761C291EFC0091E19B /* AnimationSelectionCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationSelectionCollectionViewCell.h; path = "ui/Popover Views/AnimationSelectionCollectionViewCell.h"; sourceTree = "<group>"; };
 		01B4CF771C291EFC0091E19B /* AnimationSelectionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationSelectionCollectionViewCell.m; path = "ui/Popover Views/AnimationSelectionCollectionViewCell.m"; sourceTree = "<group>"; };
 		01B4CF781C291EFC0091E19B /* AnimationSelectionCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AnimationSelectionCollectionViewCell.xib; path = "ui/Popover Views/AnimationSelectionCollectionViewCell.xib"; sourceTree = "<group>"; };
@@ -4712,7 +4712,7 @@
 			children = (
 				01B4D01F1C292CD50091E19B /* EditorViewController.xib */,
 				01B4CF6F1C291E3F0091E19B /* EditorViewController.h */,
-				01B4CF701C291E3F0091E19B /* EditorViewController.mm */,
+				01B4CF701C291E3F0091E19B /* EditorViewController.m */,
 				62F4D2A5199C7ABA0052EF95 /* AnimationView.xib */,
 				3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */,
 				3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */,
@@ -6549,7 +6549,7 @@
 				01B4CF8A1C291EFD0091E19B /* FrameCellNew.m in Sources */,
 				E21C3D361A0758B6006964E5 /* GTLYouTubeVideoSuggestions.m in Sources */,
 				25730E611AFD3C7B0042F81A /* BitmapContextRep.m in Sources */,
-				01B4CF721C291E3F0091E19B /* EditorViewController.mm in Sources */,
+				01B4CF721C291E3F0091E19B /* EditorViewController.m in Sources */,
 				256F6B8D1BF6246300154622 /* exportSGR.cpp in Sources */,
 				25730E6B1AFD3C7B0042F81A /* BitmapScaleManipulator.m in Sources */,
 				E2497669196BE0190025D442 /* ObjFileViewController.mm in Sources */,
@@ -6816,7 +6816,7 @@
 				E20671341B049AA6006DD2F7 /* GTLYouTubeVideoStatistics.m in Sources */,
 				256F6BB21BF6246300154622 /* SGScene.cpp in Sources */,
 				25B5B16B1BE33EFB00AC2525 /* mztools.c in Sources */,
-				01B4CF731C291E3F0091E19B /* EditorViewController.mm in Sources */,
+				01B4CF731C291E3F0091E19B /* EditorViewController.m in Sources */,
 				E20671351B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsRecommendation.m in Sources */,
 				E20671371B049AA6006DD2F7 /* GTLYouTubeChannelListResponse.m in Sources */,
 				E206713A1B049AA6006DD2F7 /* GTLYouTube_Sources.m in Sources */,
