@@ -111,7 +111,7 @@
     
     [shaderTypesDict setObject:@"Normal Shader" forKey:[NSNumber numberWithInt:SHADER_DEFAULT]];
     [shaderTypesDict setObject:@"Toon Shader" forKey:[NSNumber numberWithInt:SHADER_TOON ]];
-    [shaderTypesDict setObject:@"Cloud Rendering" forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
+    [shaderTypesDict setObject:@"HQ Rendering" forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
     //[shaderTypesDict setObject:@"Photo Realistic" forKey:[NSNumber numberWithInt:SHADER_PHOTO ]];
     if([Utility IsPadDevice])
         [self.renderingTypes registerNib:[UINib nibWithNibName:@"ShaderCell" bundle:nil] forCellWithReuseIdentifier:@"TYPE"];
@@ -314,17 +314,14 @@
     
     
     if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
-        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
+        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 8 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
     else
-        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 5 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 3 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 2 : 1;   
-    
+        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 230 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 100 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 45 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 25 : 10;
     
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
     int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
     int creditsForFrames = frames * valueForRender;
     int credits = (creditsForFrames + waterMarkCredit)  * -1;
-    credits *= ([shaderArray[selectedIndex] intValue] == SHADER_CLOUD) ? 2 : 1;
-   
     
     if([userCredits intValue] >= abs(credits)) {
         [_creditLable setHidden:YES];
@@ -351,15 +348,14 @@
         [_creditLable setHidden:NO];
         int valueForRender = 0;
         if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
-            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
+            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 8 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
         else
-            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 5 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 3 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 2 : 1;
+            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 230 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 100 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 45 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 25 : 10;
 
         int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
         int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
         int creditsForFrames = frames * valueForRender;
         int credits = (creditsForFrames + waterMarkCredit)  * -1;
-        credits *= ([shaderArray[selectedIndex] intValue] == SHADER_CLOUD) ? 2 : 1;
         _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
     }
 }
@@ -423,7 +419,7 @@
         [self.makeVideoLoading startAnimating];
         NSMutableArray *fileNames = [self.delegate getFileNamesToAttach];
         if(![self.delegate canUploadToCloud]) {
-            UIAlertView *errAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Scene contains video/praticles which is currently not supported in cloud rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *errAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Scene contains video/praticles which is currently not supported in HQ rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [errAlert show];
             [_cancelButton setHidden:YES];
             [_nextButton setHidden:NO];

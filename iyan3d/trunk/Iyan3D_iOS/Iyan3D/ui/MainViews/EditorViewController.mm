@@ -865,15 +865,10 @@ BOOL missingAlertShown;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   
         [self objectSelectionCompleted:(int)indexPath.row];
-    
-    
-    
 }
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Deselected");
     [self objectSelectionCompleted:(int)indexPath.row];
     return indexPath;
 }
@@ -3271,7 +3266,8 @@ void downloadFile(NSString* url, NSString* fileName)
 }
 
 -(void)multiSelectUpdate:(BOOL)value{
-  
+        if(!value)
+            editorScene->selectMan->unselectObjects();
         self.objectList.allowsMultipleSelection=value;
          [[AppHelper getAppHelper] saveBoolUserDefaults:value withKey:@"multiSelectOption"];
     NSLog(@"%d",[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"]);

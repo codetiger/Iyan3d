@@ -66,6 +66,7 @@
     [GIDSignIn sharedInstance].uiDelegate = self;
     [GIDSignIn sharedInstance].delegate = self;
     
+    
     if(renderData != nil) {
         for(int i = 0; i < [renderData count]; i++) {
             RenderItem* renderItem = [renderData objectAtIndex:i];
@@ -100,9 +101,8 @@
     
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",taskId], @"taskid", nil]];
-    
+
     AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
     __block BOOL complete = NO;
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
         //ret = [self handle:data];
@@ -213,7 +213,8 @@
     
     cell.renderlabel.text = rItem.taskName;
     [cell.renderProgressLabel setHidden:(indexPath.section == COMPLETED || (progressingTasks != nil && [progressingTasks count] == 0))];
-    cell.renderProgressLabel.text = [NSString stringWithFormat:@"%d%%", rItem.taskProgress];
+    NSString* progressStr = (rItem.taskProgress > 0) ? [NSString stringWithFormat:@"%d%%",rItem.taskProgress] : @"In Queue";
+    cell.renderProgressLabel.text = progressStr;
     cell.dateLabel.text = rItem.dateAdded;
     [cell.downloadBtn setHidden:(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0)];
     
