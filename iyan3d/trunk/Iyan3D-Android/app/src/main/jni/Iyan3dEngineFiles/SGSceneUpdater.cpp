@@ -265,7 +265,7 @@ void SGSceneUpdater::updateLightCamera()
 
     if(updatingScene->nodes.size() > NODE_LIGHT) {
         for(int i = 0; i < updatingScene->nodes.size(); i++) {
-            updatingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),updatingScene->currentFrame);
+            updatingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(), updatingScene->currentFrame);
         }
         
         updateLightCam(updatingScene->nodes[NODE_LIGHT]->node->getAbsolutePosition());

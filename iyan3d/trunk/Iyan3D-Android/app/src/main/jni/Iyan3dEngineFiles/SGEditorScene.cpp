@@ -255,6 +255,28 @@ void SGEditorScene::findAndInsertInIKPositionMap(int jointId)
         ikJointsPositionMap.find(jointId)->second = rigNode->getJointNode(jointId)->getAbsolutePosition();
 }
 
+vector<string> SGEditorScene::getUserFileNames()
+{
+    vector<string> userFileNames;
+    for(int index = 0; index < nodes.size(); index++) {
+        SGNode *sgNode = nodes[index];
+        NODE_TYPE nType = sgNode->getType();
+        
+        if(sgNode->assetId >= 0 && sgNode->textureName.find(to_string(sgNode->assetId)) ==  string::npos)
+            userFileNames.push_back(sgNode->textureName + ".png");
+        
+        if(sgNode->assetId >= 40000 && sgNode->assetId < 50000 && sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos) {
+            userFileNames.push_back(to_string(sgNode->assetId) + ".sgr");
+            userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
+        } else if (sgNode->assetId >= 20000 && sgNode->assetId < 30000 && sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos) {
+            userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
+            userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
+        } else if ((nType == NODE_TEXT || nType == NODE_TEXT_SKIN) && (sgNode->assetId < 10000 || sgNode->assetId > 20000)) {
+            userFileNames.push_back(sgNode->optionalFilePath);
+        }
+    }
+}
+
 void SGEditorScene::getIKJointPosition()
 {
     shared_ptr<AnimatedMeshNode> rigNode = dynamic_pointer_cast<AnimatedMeshNode>(selectedNode->node);

@@ -311,25 +311,18 @@
         [self.nextButton setHidden:YES];
         [self.makeVideoLoading setHidden:NO];
         [self.makeVideoLoading startAnimating];
-        NSMutableArray *fileNames = [self.delegate exportSGFDsWith:(int)_trimControl.leftValue EndFrame:(int)_trimControl.rightValue];
+        NSMutableArray *fileNames = [self.delegate getFileNamesToAttach];
         CGPoint camResolution = [self.delegate getCameraResolution];
         NSLog(@"\n width %f height %f ",camResolution.x , camResolution.y);
         NSString* zipfile = [docDirectory stringByAppendingPathComponent:@"test2.zip"] ;
-        NSArray *dirFiles1 = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirectory error:nil];
-        sgfdFiles = [dirFiles1 filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.sgfd'"]];
         
-        NSMutableArray *textureFiles = [self getFileteredFilePathsFrom:fileNames];
+        NSMutableArray *userFiles = [self getFileteredFilePathsFrom:fileNames];
         ZipArchive* zip = [[ZipArchive alloc] init];
         BOOL ret = [zip CreateZipFile2:zipfile];
         
-        for (int i = 0; i < [sgfdFiles count]; i++) {
-            NSString* filesZip = [docDirectory stringByAppendingPathComponent:sgfdFiles[i]] ;
-            ret = [zip addFileToZip:filesZip newname:sgfdFiles[i]];//zip
-            NSLog(@" SGFD File %@ " , sgfdFiles[i]);
-        }
         
-        for(int i = 0; i < [textureFiles count]; i++) {
-            ret = [zip addFileToZip:[textureFiles objectAtIndex:i] newname:[[textureFiles objectAtIndex:i] lastPathComponent]];
+        for(int i = 0; i < [userFiles count]; i++) {
+            ret = [zip addFileToZip:[userFiles objectAtIndex:i] newname:[[userFiles objectAtIndex:i] lastPathComponent]];
         }
         
         if( ![zip CloseZipFile2] )

@@ -26,7 +26,7 @@
 @protocol RenderingViewControllerDelegate
 - (void) renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark;
 - (void) setShaderTypeForRendering:(int)shaderType;
-- (NSMutableArray*) exportSGFDsWith:(int)startFrame EndFrame:(int)endFrame;
+- (NSMutableArray*) getFileNamesToAttach;
 - (CGPoint) getCameraResolution;
 - (void) cameraResolutionChanged:(int)resolutinType;
 - (void) clearFolder:(NSString*)dirPath;
@@ -58,6 +58,7 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution;
 @property (strong, nonatomic) RETrimControl *trimControl;
+@property (strong, nonatomic) NSString *sgbPath;
 @property (strong, nonatomic) NSString *projectName;
 @property (strong, nonatomic) NSString *videoFilePath;
 @property (weak, nonatomic) IBOutlet UILabel *transparentBgLabel;

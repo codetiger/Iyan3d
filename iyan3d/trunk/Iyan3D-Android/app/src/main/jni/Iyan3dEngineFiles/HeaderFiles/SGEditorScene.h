@@ -186,6 +186,7 @@ public:
     int undo(int& returnValue2);
     int redo();
     
+    vector<string> getUserFileNames();
     void getIKJointPosition();
     void findAndInsertInIKPositionMap(int jointId);
     MIRROR_SWITCH_STATE getMirrorState();

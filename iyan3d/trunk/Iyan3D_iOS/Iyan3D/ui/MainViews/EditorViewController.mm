@@ -586,12 +586,18 @@ BOOL missingAlertShown;
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
 }
 
-- (bool)loadFromFile
+- (NSString*) getSGBPath
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
     NSString* srcFilePath = [NSString stringWithFormat:@"%@/Projects", documentsDirectory];
     NSString* filePath = [NSString stringWithFormat:@"%@/%@.sgb", srcFilePath, currentScene.sceneFile];
+    return filePath;
+}
+
+- (bool)loadFromFile
+{
+    NSString* filePath = [self getSGBPath];
     std::string* SGBFilePath = new std::string([filePath UTF8String]);
     
     NSDictionary* fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
@@ -1521,7 +1527,6 @@ BOOL missingAlertShown;
     editorScene->updater->setDataForFrame(editorScene->currentFrame);}
 
 - (void) stopPlaying{
-    NSLog(@"Stop playing");
     [self.playBtn setImage:[UIImage imageNamed:@"Play_Pad.png"] forState:UIControlStateNormal];
     if(_leftView.isHidden)
         [self showOrHideRightView:NO];
@@ -1658,6 +1663,18 @@ BOOL missingAlertShown;
 {
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
 }
+
+- (NSMutableArray*) getFileNamesToAttach
+{
+    NSMutableArray *fileNamesToZip = [[NSMutableArray alloc] init];
+    vector<string> textureFileNames = editorScene->getUserFileNames();
+    
+    for(int i = 0; i < textureFileNames.size(); i++)
+        [fileNamesToZip addObject:[NSString stringWithCString:textureFileNames[i].c_str() encoding:NSUTF8StringEncoding]];
+    
+    return fileNamesToZip;
+}
+
 
 - (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored{
     
@@ -2322,6 +2339,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
             renderingView.delegate = self;
             renderingView.projectName=@"Scene 1";  //FOR TESTING
+            renderingView.sgbPath = [self getSGBPath];
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             [self showOrHideRightView:YES];
             dispatch_async(dispatch_get_main_queue(), ^ {
@@ -2338,6 +2356,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             renderingView.delegate = self;
              BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             renderingView.projectName=@"Scene 1";  //FOR TESTING
+            renderingView.sgbPath = [self getSGBPath];
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             CATransition* transition1 = [CATransition animation];
             transition1.duration = 0.5;
