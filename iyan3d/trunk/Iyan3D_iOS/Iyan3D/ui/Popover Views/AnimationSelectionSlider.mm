@@ -77,7 +77,7 @@
     
     cell.assetNameLabel.textColor = [UIColor whiteColor];
     cell.assetNameLabel.font=[UIFont fontWithName:@"Helvetica-Bold" size:11];
-    if (assetItem.assetId == selectedCell) {
+    if (assetItem.assetId == selectedAssetId) {
         cell.layer.borderWidth = 1.0f;
         cell.layer.borderColor = [UIColor grayColor].CGColor;
     }
@@ -99,10 +99,6 @@
     cell.layer.borderWidth = 1.0f;
     cell.layer.borderColor = [UIColor whiteColor].CGColor;
     cell.layer.cornerRadius = 8.0;
-    [_delegate stopPlaying];
-    if(!isFirstTimeEntered)
-    [self.delegate removeTempAnimation];
-    editorSceneLocal->selectMan->selectObject(selectedNodeId);
     [self displayBasedOnSelection:[NSNumber numberWithInteger:indexPath.row]];
 
 }
@@ -125,7 +121,7 @@
                                     animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
                                     [self.animationCollectionView reloadData];
                                     animationCategoryTab = TRENDING;
-                                    selectedCell=0;
+                                    selectedAssetId=-1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
                                     
                                 }];
@@ -141,7 +137,7 @@
                                     [self.animationCollectionView reloadData];
 
                                     animationCategoryTab = FEATURED;
-                                    selectedCell = -1;
+                                    selectedAssetId = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
                                     
                                 }];
@@ -158,7 +154,7 @@
                                       [self.categoryBtn setTitle:@"Top Rated" forState:UIControlStateNormal];
                                       [self.animationCollectionView reloadData];
                                       animationCategoryTab = TOP_RATED;
-                                      selectedCell = -1;
+                                      selectedAssetId = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       
                                   }];
@@ -174,7 +170,7 @@
                                       animationsItems = [cache GetAnimationList:0 fromTable:7 Search:@""];
                                       [self.animationCollectionView reloadData];
                                       animationCategoryTab = MY_ANIMATION;
-                                      selectedCell = -1;
+                                      selectedAssetId = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       
                                   }];
@@ -211,10 +207,13 @@
 - (IBAction)cancelBtnFunction:(id)sender {
 
 
-    editorSceneLocal->currentFrame = currentFrame;
-    editorSceneLocal->totalFrames = totalFrame;
-    if(!isFirstTimeEntered)
+    if(!isFirstTimeEntered){
+        editorSceneLocal->selectMan->selectObject(selectedNodeId);
+        editorSceneLocal->totalFrames = totalFrame;
+        editorSceneLocal->currentFrame = currentFrame;
+        editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
         [self.delegate removeTempAnimation];
+    }
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self deallocView];
     [self.view removeFromSuperview];
@@ -236,8 +235,7 @@
 {
     if ([animationsItems count] > [rowIndex intValue]) {
         AnimationItem* assetItem = animationsItems[[rowIndex intValue]];
-        selectedCell = assetItem.assetId;
-        _assetId = assetItem.assetId;
+        selectedAssetId = assetItem.assetId;
         if (assetItem)
             [self downloadAnimation:assetItem];
     }
@@ -252,7 +250,7 @@
     if (tabValue == MY_ANIMATION) {
         fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-            [self loadNode:[NSNumber numberWithInt:assetItem.assetId]];
+            [self loadNode:[NSNumber numberWithInt:assetItem.boneCount]];
         }
         else {
             NSLog(@"File not exists");
@@ -262,20 +260,18 @@
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
             if (assetItem)
-                [self loadNode:[NSNumber numberWithInt:assetItem.assetId]];
-            isFirstTimeEntered = false;
-            [self.delegate applyAnimationToSelectedNode:fileName];
+            [self loadNode:[NSNumber numberWithInt:assetItem.boneCount]];
         }
         else {
             [self.delegate showOrHideProgress:1];
             url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
-            //[animDownloadQueue cancelAllOperations];
-            [self cancelOperations:animDownloadQueue];
-            DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(loadNode:) returnObject:[NSNumber numberWithInt:assetItem.assetId] outputFilePath:fileName andURL:url];
+            [animDownloadQueue cancelAllOperations];
+            //[self cancelOperations:animDownloadQueue];
+            DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(loadNode:) returnObject:[NSNumber numberWithInt:assetItem.boneCount] outputFilePath:fileName andURL:url];
             task.queuePriority = NSOperationQueuePriorityHigh;
             [animDownloadQueue addOperation:task];
         }
-    }    
+    }
 }
 
 
@@ -393,7 +389,32 @@
 
 - (void)loadNode:(id)returnValue
 {
-    NSLog(@"Download Completed");
+    
+    [_delegate stopPlaying];
+    if(!isFirstTimeEntered){
+        editorSceneLocal->selectMan->selectObject(selectedNodeId);
+        editorSceneLocal->currentFrame = currentFrame;
+        editorSceneLocal->totalFrames = totalFrame;
+        editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
+        [self.delegate removeTempAnimation];
+    }
+    
+    int animBoneCount = [returnValue intValue];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [paths objectAtIndex:0];
+    NSString *fileName;
+    NSString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
+    fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+        isFirstTimeEntered = false;        
+        if(animBoneCount == bonecount)
+            [self.delegate applyAnimationToSelectedNode:fileName];
+        else{
+            UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+        }
+    }
+    
    [self.delegate showOrHideProgress:0];
 }
 

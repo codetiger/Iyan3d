@@ -74,9 +74,9 @@
      addToScenePressed = YES;
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
-    [self deallocMem];
     [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
+    [self deallocMem];
 }
 
 #pragma mark CollectionView Delegate methods

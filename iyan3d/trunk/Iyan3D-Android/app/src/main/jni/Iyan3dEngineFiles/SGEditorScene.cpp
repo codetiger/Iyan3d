@@ -315,3 +315,15 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
+Vector3 SGEditorScene::getSelectedNodeScale()
+{
+    if(isNodeSelected) {
+        if(isJointSelected && selectedNode->getType() == NODE_TEXT)
+            return selectedNode->joints[selectedJointId]->jointNode->getScale();
+        else
+            return selectedNode->node->getScale();
+    }
+    
+    return Vector3(1.0);
+}
+

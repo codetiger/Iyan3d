@@ -32,8 +32,9 @@
 #import "LoggedInViewController.h"
 #import "SceneItem.h"
 #import "SettingsViewController.h"
+#import "ScaleViewController.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate>{
     int totalFrames;
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
@@ -90,6 +91,8 @@
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
 @property (nonatomic, strong) LightProperties *lightProp;
+@property (nonatomic, strong) ScaleViewController *scaleProps;
+
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *center_progress;
 

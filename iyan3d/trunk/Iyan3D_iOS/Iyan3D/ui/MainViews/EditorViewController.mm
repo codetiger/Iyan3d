@@ -68,6 +68,8 @@
 #define ASSET_TEXT 10
 #define ASSET_ADDITIONAL_LIGHT 900
 
+#define ADD_BUTTON_TAG 99
+
 
 BOOL missingAlertShown;
 
@@ -222,13 +224,13 @@ BOOL missingAlertShown;
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
 {
-    //[self loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] Width:20 Height:50];
     [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] Width:20 Height:50 isTempNode:NO More:nil];
 }
 
 - (void) loadNodeInScene:(AssetItem*)assetItem
 {
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
+    
 }
 
 - (void)loadNodeForImage:(NSMutableDictionary*)nsDict
@@ -248,6 +250,8 @@ BOOL missingAlertShown;
 - (void) loadNode:(AssetItem*) asset
 {
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset More:nil];
+
+
 }
 
 - (void)createDisplayLink
@@ -793,8 +797,24 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)scaleBtnAction:(id)sender
-{
-    NSLog(@"Scale Button Clicked");
+{    
+    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
+        editorScene->renHelper->setControlsVisibility(false);
+        Vector3 currentScale = editorScene->getSelectedNodeScale();
+        _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
+        _scaleProps.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
+        self.popoverController.popoverContentSize = CGSizeMake(270, 177);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_popUpVc.view setClipsToBounds:YES];
+        CGRect rect = _scaleBtn.frame;
+        rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:NO];
+    }
 }
 
 - (IBAction)undoBtnAction:(id)sender
@@ -836,8 +856,8 @@ BOOL missingAlertShown;
 }
 
 - (void) removeTempAnimation{
-    if(editorScene)
-        editorScene->actionMan->removeDemoAnimation();
+    //if(editorScene)
+        //editorScene->actionMan->removeDemoAnimation();
     
     totalFrames = editorScene->totalFrames;
     [_framesCollectionView reloadData];
@@ -870,6 +890,31 @@ BOOL missingAlertShown;
 }
 
 #pragma mark - Other Delegate Functions
+
+- (void)scalePropertyChanged:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
+{
+    
+    NSLog(@"Scale Values : %f %f %f",XValue ,YValue,ZValue);
+    
+    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+        return;
+    editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
+    //isFileSaved = !(animationScene->changeAction = true);
+    [_framesCollectionView reloadData];
+}
+- (void)scaleValueForAction:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
+{
+    
+    NSLog(@"Scale Values : %f %f %f",XValue ,YValue,ZValue);
+
+    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+        return;
+    editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
+    //[self showTipsViewForAction:OBJECT_MOVED];
+    //isFileSaved = !(animationScene->changeAction = true);
+    [_framesCollectionView reloadData];
+    //[self undoRedoButtonState:DEACTIVATE_BOTH];
+}
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd
 {
@@ -932,7 +977,7 @@ BOOL missingAlertShown;
     NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
         [imageDetails setObject:[NSNumber numberWithInt:ASSET_IMAGE] forKey:@"type"];
         [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
-        [imageDetails setObject:[NSString stringWithFormat:fileNameSalt] forKey:@"AssetName"];
+        [imageDetails setObject:fileNameSalt forKey:@"AssetName"];
         [imageDetails setObject:[NSNumber numberWithFloat:imgW] forKey:@"Width"];
         [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
@@ -1032,7 +1077,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
         [imageDetails setObject:[NSNumber numberWithInt:ASSET_IMAGE] forKey:@"type"];
         [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
-        [imageDetails setObject:[NSString stringWithFormat:fileName] forKey:@"AssetName"];
+        [imageDetails setObject:fileName forKey:@"AssetName"];
         [imageDetails setObject:[NSNumber numberWithFloat:imgW] forKey:@"Width"];
         [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
@@ -1082,23 +1127,43 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) animationBtnDelegateAction:(int)indexValue
 {
-    if(indexValue==0){
-        if([Utility IsPadDevice]){
-            [self.popoverController dismissPopoverAnimated:YES];
-            animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil EditorScene:editorScene FirstTime:YES];
-            animationsliderVC.delegate = self;
-            [self showOrHideLeftView:YES withView:animationsliderVC.view];
+    if(indexValue==APPLY_ANIMATION){
+        [self.popoverController dismissPopoverAnimated:YES];
+        if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT)) || editorScene->isJointSelected) {
+            [self.view endEditing:YES];
+            UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please select a text or character to apply the animation." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [closeAlert show];
         }
         else{
-            [self.popoverController dismissPopoverAnimated:YES];
-            animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil EditorScene:editorScene FirstTime:YES];
-            animationsliderVC.delegate = self;
-            [self showOrHideLeftView:YES withView:animationsliderVC.view];
+            if([Utility IsPadDevice]){
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil EditorScene:editorScene FirstTime:YES];
+                animationsliderVC.delegate = self;
+                [self showOrHideLeftView:YES withView:animationsliderVC.view];
+            }
+            else{
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil EditorScene:editorScene FirstTime:YES];
+                animationsliderVC.delegate = self;
+                [self showOrHideLeftView:YES withView:animationsliderVC.view];
+            }
         }
-        
     }
-    else if(indexValue==1){
-        NSLog(@"Save Animation");
+    else if(indexValue==SAVE_ANIMATION){
+        [self.popoverController dismissPopoverAnimated:YES];
+        if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT)) || editorScene->isJointSelected) {
+            [self.view endEditing:YES];
+            UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please select a text or character to save the animation as a template." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [closeAlert show];
+        }
+        else {
+            [self.view endEditing:YES];
+            UIAlertView* addAnimAlert = [[UIAlertView alloc] initWithTitle:@"Save your Animation as template" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+            [addAnimAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+            [[addAnimAlert textFieldAtIndex:0] setPlaceholder:@"Animation Name"];
+            [[addAnimAlert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
+            [addAnimAlert setTag:ADD_BUTTON_TAG];
+            [addAnimAlert show];
+            [[addAnimAlert textFieldAtIndex:0] becomeFirstResponder];
+        }
     }
     
 }
@@ -1106,7 +1171,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) importBtnDelegateAction:(int)indexValue{
 
-    if(indexValue==0){
+    if(indexValue==IMPORT_MODELS){
         if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
         assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
@@ -1121,7 +1186,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
         }
     }
-    else if(indexValue==1)
+    else if(indexValue==IMPORT_IMAGES)
     {
         if([Utility IsPadDevice])
         {
@@ -1155,7 +1220,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
         
     }
-    else if(indexValue==2){
+    else if(indexValue==IMPORT_TEXT){
         if([Utility IsPadDevice])
         {
             [self.popoverController dismissPopoverAnimated:YES];
@@ -1173,11 +1238,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
 
     }
-    else if(indexValue==3){
+    else if(indexValue==IMPORT_LIGHT){
         [self.popoverController dismissPopoverAnimated:YES];
         [self importAdditionalLight];
     }
-    else if(indexValue==4){
+    else if(indexValue==IMPORT_OBJFILE){
         NSLog(@"OBJ Button");
     }
     else if(indexValue==5){
@@ -1186,7 +1251,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 }
 - (void) exportBtnDelegateAction:(int)indexValue{
-    if(indexValue==0){
+    if(indexValue==EXPORT_IMAGE){
         if([Utility IsPadDevice])
         {
             [self.popoverController dismissPopoverAnimated:YES];
@@ -1234,7 +1299,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
     
     }
-    else if(indexValue==1){
+    else if(indexValue==EXPORT_VIDEO){
          [self.popoverController dismissPopoverAnimated:YES];
         RenderingViewController* renderingView;
         if ([Utility IsPadDevice])
@@ -1267,27 +1332,27 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 }
 - (void) viewBtnDelegateAction:(int)indexValue{
-    if(indexValue==0){
+    if(indexValue==FRONT_VIEW){
         [self.popoverController dismissPopoverAnimated:YES];
        editorScene->updater->changeCameraView(VIEW_FRONT);
     }
-    else if(indexValue==1){
+    else if(indexValue==TOP_VIEW){
          [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_TOP);
     }
-    else if(indexValue==2){
+    else if(indexValue==LEFT_VIEW){
          [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_LEFT);
     }
-    else if(indexValue==3){
+    else if(indexValue==BACK_VIEW){
          [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_BACK);
     }
-    else if(indexValue==4){
+    else if(indexValue==RIGHT_VIEW){
          [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_RIGHT);
     }
-    else if(indexValue==5){
+    else if(indexValue==BOTTOM_VIEW){
          [self.popoverController dismissPopoverAnimated:YES];
         editorScene->updater->changeCameraView(VIEW_BOTTOM);
     }

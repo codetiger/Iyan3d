@@ -224,6 +224,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
+                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
               [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
@@ -235,7 +236,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
                 
-                
+                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
@@ -247,6 +248,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
                 [self.delegate updateAssetListInScenes:ASSET_OBJ assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
             }
             break;
         }

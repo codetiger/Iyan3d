@@ -32,7 +32,7 @@
     NSOperationQueue *downloadQueue , *animDownloadQueue;
     NSArray *jsonUserArray;
     int tabValue , previousTabValue;
-    int _assetId,selectedCell,animationCategoryTab;
+    int selectedAssetId,animationCategoryTab;
     NSString* docDirPath;
     ANIMATION_TYPE animationType;
     SGEditorScene *editorSceneLocal;

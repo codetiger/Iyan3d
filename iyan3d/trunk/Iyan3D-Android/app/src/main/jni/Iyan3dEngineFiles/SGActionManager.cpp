@@ -24,6 +24,7 @@ SGActionManager::~SGActionManager()
     changeKeysAction.drop();
     assetAction.drop();
     propertyAction.drop();
+    scaleAction.drop();
     actions.clear();
 }
 
@@ -454,20 +455,53 @@ void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
     }
 }
 
+void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
+{
+    if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT) || !actionScene->isNodeSelected) return;
+    
+    if(actionScene->actionMan->scaleAction.actionType == ACTION_EMPTY){
+        if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
+            scaleAction.actionType = ACTION_CHANGE_JOINT_KEYS;
+            scaleAction.objectIndex =actionScene->nodes[actionScene->selectedNodeId]->actionId;
+            for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
+                scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->joints[i]->getKeyForFrame(actionScene->currentFrame));
+        } else {
+            scaleAction.actionType = ACTION_CHANGE_NODE_KEYS;
+            scaleAction.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
+            scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->getKeyForFrame(actionScene->currentFrame));
+        }
+    }
+    if(isChanged){
+        if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
+            for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
+                scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->joints[i]->getKeyForFrame(actionScene->currentFrame));
+        } else {
+            scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->getKeyForFrame(actionScene->currentFrame));
+        }
+        addAction(scaleAction);
+        scaleAction.drop();
+    }
+    if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT){
+        actionScene->nodes[actionScene->selectedNodeId]->joints[actionScene->selectedJointId]->setScale(scale, actionScene->currentFrame);
+    } else {
+        actionScene->nodes[actionScene->selectedNodeId]->setScale(scale, actionScene->currentFrame);
+    }
+    actionScene->updater->setDataForFrame(actionScene->currentFrame);
+    actionScene->updater->reloadKeyFrameMap();
+    actionScene->updater->updateControlsOrientaion();
+}
+
 void SGActionManager::removeDemoAnimation()
 {
+
     SGAction &recentAction = actions[currentAction-1];
-    if(currentAction <= 0 || !actionScene || !smgr) {
-        currentAction = 0;
-        return;
-    }
-    if(recentAction.actionType == ACTION_APPLY_ANIM){
+    
         int indexOfAction = getObjectIndex(recentAction.objectIndex);
         actionScene->selectedNodeId = indexOfAction;
         actionScene->animMan->removeAppliedAnimation(recentAction.frameId, recentAction.actionSpecificIntegers[0]);
         actions.erase(actions.begin()+(currentAction-1));
         currentAction--;
-    }
+    
 }
 
 int SGActionManager::undo(int &returnValue2)

@@ -148,6 +148,7 @@ public:
     bool hasJointSelected();
     SGNode* getSelectedNode();
     SGJoint* getSelectedJoint();
+    Vector3 getSelectedNodeScale();
     
     /* Read and Write */
     

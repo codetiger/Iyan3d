@@ -21,6 +21,7 @@ private:
     SGAction changeKeysAction;
     SGAction propertyAction;
     SGAction assetAction;
+    SGAction scaleAction;
     MIRROR_SWITCH_STATE mirrorSwitchState;
     
     void moveJoint(Vector3 outputValue);
@@ -47,6 +48,10 @@ public:
     bool changeObjectOrientation(Vector3 outputValue);
     bool isIKJoint(int jointId);
     void storeActionKeys(bool finished);
+    
+    /* Scale Mesh*/
+    
+    void changeObjectScale(Vector3 scale, bool isChanged);
     
     /* Frames change related actions */
     
