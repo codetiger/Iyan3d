@@ -55,8 +55,8 @@
     else{
         [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCellPhone" bundle:nil]forCellWithReuseIdentifier:@"CELL"];
     }
-    self.cancelBtn.layer.cornerRadius = 8.0f;
-    self.addBtn.layer.cornerRadius = 8.0f;
+    self.cancelBtn.layer.cornerRadius = CORNER_RADIUS;
+    self.addBtn.layer.cornerRadius = CORNER_RADIUS;
     [self.publishBtn setHidden:YES];
     [self.delegate createDuplicateAssetsForAnimation];
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);

@@ -12,9 +12,14 @@
 
 #import "CacheSystem.h"
 
+#define CORNER_RADIUS 8.0
+
 @interface Utility : NSObject {
     CacheSystem* cache;
+    
 }
+
+
 
 + (NSMutableData*)decryptData:(NSData*)data Password:(NSString*)pwd;
 + (NSMutableData*)decryptData1:(NSData*)data Password:(NSString*)pwd;

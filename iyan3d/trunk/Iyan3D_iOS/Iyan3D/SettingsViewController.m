@@ -9,6 +9,21 @@
 #import "SettingsViewController.h"
 #import "Utility.h"
 #import <AppHelper.h>
+
+#define FRAME_COUNT 0
+#define FRAME_DURATION 1
+
+#define PREVIEW_LEFTBOTTOM 0
+#define PREVIEW_LEFTTOP 1
+#define PREVIEW_RIGHTBOTTOM 2
+#define PREVIEW_RIGHTTOP 3
+
+#define TOOLBAR_RIGHT 0
+#define TOOLBAR_LEFT 1
+
+
+
+
 @interface SettingsViewController ()
 
 @end
@@ -18,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupImageTap];
-    self.doneBtn.layer.cornerRadius=8.0f;
+    self.doneBtn.layer.cornerRadius=CORNER_RADIUS;
     [self readUserSettings];
     
 }
@@ -248,7 +263,7 @@
         }
         
     }
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
         if(cameraPreviewSize==2.0){
             [self.renderPreviewSize setSelectedSegmentIndex:1];
         }
@@ -257,13 +272,13 @@
         }
     }
     NSLog(@"Toolpar : %ld",(long)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]);
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1)
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT)
     {
-        [self.toolbarPosition setSelectedSegmentIndex:1];
+        [self.toolbarPosition setSelectedSegmentIndex:TOOLBAR_LEFT];
     }
     else
     {
-        [self.toolbarPosition setSelectedSegmentIndex:0];
+        [self.toolbarPosition setSelectedSegmentIndex:TOOLBAR_RIGHT];
     }
 
     if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {

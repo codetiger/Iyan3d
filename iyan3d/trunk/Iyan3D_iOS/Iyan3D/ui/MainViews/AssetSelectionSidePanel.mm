@@ -50,8 +50,8 @@
     else{
         [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
-    self.cancelBtn.layer.cornerRadius = 8.0f;
-    self.addToSceneBtn.layer.cornerRadius = 8.0f;
+    self.cancelBtn.layer.cornerRadius = CORNER_RADIUS;
+    self.addToSceneBtn.layer.cornerRadius = CORNER_RADIUS;
     selectedAsset = -1;
     modelCategoryTab = 0;
     addToScenePressed = false;

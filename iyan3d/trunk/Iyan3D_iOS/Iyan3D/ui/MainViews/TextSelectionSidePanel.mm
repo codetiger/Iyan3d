@@ -57,8 +57,8 @@
        [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"]; 
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetsSet) name:@"AssetsSet" object:nil];
-    self.cancelBtn.layer.cornerRadius=8.0f;
-    self.addToScene.layer.cornerRadius=8.0f;
+    self.cancelBtn.layer.cornerRadius=CORNER_RADIUS;
+    self.addToScene.layer.cornerRadius=CORNER_RADIUS;
     self.bevelSlider.value = bevelRadius;
     
 }
