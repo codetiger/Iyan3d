@@ -11,6 +11,10 @@
 #import "SceneSelectionEnteredView.h"
 #import "SceneItem.h"
 
+#define SCENE_NAME_ALERT 0
+#define CANCEL 0
+#define OK 1
+
 
 @implementation SceneSelectionControllerNew
 
@@ -37,9 +41,10 @@
     }
     [self.sceneView setHidden:YES];
     
-    
+    /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   
+     */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,7 +58,7 @@
 }
 
 - (IBAction)scenePreviewClosebtn:(id)sender {
-    [self popZoomOut];
+    //[self popZoomOut];
 }
 
 - (IBAction)feedBackButtonAction:(id)sender {
@@ -198,13 +203,12 @@
     [self updateSceneDB];
 }
 
-
 #pragma Scene Preview Delegates
 
 - (void) showSceneEnteredView:(NSIndexPath*)sceneIndex{
     
     [self.sceneView setHidden:NO];
-    [self popUpZoomIn];
+    //[self popUpZoomIn];
     currentSelectedScene = sceneIndex.row;
     if(sceneIndex.row < [scenesArray count]) {
         SceneItem* scenes = scenesArray[sceneIndex.row];
@@ -225,76 +229,12 @@
 
 #pragma Keyboard handler Delegate
 
-
 - (void) closeKeyBoard {
     [self.view removeGestureRecognizer:tapGesture];
     [_sceneTitle resignFirstResponder];
 }
 
-- (void)keyboardWillShow:(NSNotification*)aNotification {
-    
-    tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeKeyBoard)];
-    
-    [self.view addGestureRecognizer:tapGesture];
-    
-    NSDictionary* keyboardInfo = [aNotification userInfo];
-    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-
-    [UIView animateWithDuration:0.25 animations:^
-     {
-         CGRect newFrame = [self.view frame];
-         newFrame.origin.y -= keyboardFrameBeginRect.size.height; // tweak here to adjust the moving position
-         [self.view setFrame:newFrame];
-         
-     }completion:^(BOOL finished)
-     {
-         
-     }];
-}
-
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-    NSDictionary* keyboardInfo = [aNotification userInfo];
-    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-
-    [UIView animateWithDuration:0.25 animations:^
-     {
-         CGRect newFrame = [self.view frame];
-         newFrame.origin.y += keyboardFrameBeginRect.size.height; // tweak here to adjust the moving position
-         [self.view setFrame:newFrame];
-         
-     }completion:^(BOOL finished)
-     {
-         
-     }];
-    
-}
-
 #pragma View Animation Delegate
-
-- (void)popUpZoomIn {
-    [_sceneView setHidden:NO];
-    _sceneView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
-    _sceneView.center = cell_center;
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         _sceneView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
-                         _sceneView.center = self.view.center;
-                     } completion:^(BOOL finished) {
-                         
-                     }];
-}
-
-- (void)popZoomOut {
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         _sceneView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
-                         _sceneView.center = cell_center;
-                     } completion:^(BOOL finished) {
-                         _sceneView.hidden = TRUE;
-                     }];
-}
 
 - (IBAction)openSceneAction:(id)sender {
     SceneItem *scene = scenesArray[currentSelectedScene];
@@ -386,22 +326,20 @@
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[renameScene textFieldAtIndex:0] setPlaceholder:@"Scene Name"];
     [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
-    [renameScene setTag:0];
+    [renameScene setTag:SCENE_NAME_ALERT];
     [renameScene show];
-//    [[renameScene textFieldAtIndex:0] becomeFirstResponder];
-    [self updateSceneDB];
+    [[renameScene textFieldAtIndex:0] becomeFirstResponder];
 }
 
 #pragma AlertView
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag==0) {
-        NSLog(@"Index : %ld",(long)buttonIndex);
+    if (alertView.tag==SCENE_NAME_ALERT) {
         NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
         
-        if (buttonIndex == 0) {
+        if (buttonIndex == CANCEL) {
         }
-        else if (buttonIndex == 1) {
+        else if (buttonIndex == OK) {
             NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if ([name length] == 0) {
                 [self.view endEditing:YES];
@@ -429,6 +367,7 @@
             }
         }
     }
+    [alertView resignFirstResponder];
 }
 
 #pragma Dealloc Delegate

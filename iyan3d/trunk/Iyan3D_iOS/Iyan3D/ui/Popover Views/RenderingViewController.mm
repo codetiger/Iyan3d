@@ -246,8 +246,11 @@
             [self.trimControl setHidden:YES];
         }
             NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-            if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5 && resolutionType != VCD) {
-                int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 1;
+        if(resolutionType == VCD && _watermarkSwitch.isOn){
+            [self renderBeginFunction:0];
+        }
+         else if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
+                int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 0;
                 int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
                 int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
                 int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
@@ -261,10 +264,6 @@
                     [self.trimControl setHidden:NO];
                 }
             }
-            else if (resolutionType == VCD){
-                [_creditLable setHidden:YES];
-                [self renderBeginFunction:0];
-            }
             else{
                 UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this. Thank you.  !!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [userNameAlert show];
@@ -275,8 +274,8 @@
 
 - (void) saveDeductedCredits:(int)credits
 {
-    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
-    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
+//    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
+//    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
 }
 
 
@@ -287,17 +286,13 @@
 
 - (void) updateCreditLable
 {
-    if(resolutionType != VCD){
     [_creditLable setHidden:NO];
-    int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 1;
+    int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 0;
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
 
         int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
-//    int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
-    _creditLable.text = [NSString stringWithFormat:@"%d Credits", credits];
-    }
-    else
-        [_creditLable setHidden:YES];
+    _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
+    
 }
 
 
@@ -513,7 +508,7 @@
     [self.exportButton setEnabled:true];
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
-    if(resolutionType != VCD)
+    if(resolutionType != VCD || (resolutionType == VCD && !_watermarkSwitch.isOn))
         [self saveDeductedCredits:[credits intValue]];
 }
 - (IBAction)youtubeButtonAction:(id)sender

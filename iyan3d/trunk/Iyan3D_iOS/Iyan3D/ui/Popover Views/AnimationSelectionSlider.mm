@@ -33,22 +33,16 @@
         isFirstTimeAnimationApplyed = isFirstTime;
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         docDirPath = [srcDirPath objectAtIndex:0];
+
+        
+      
+
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    downloadQueue = [[NSOperationQueue alloc] init];
-    [downloadQueue setMaxConcurrentOperationCount:3];
-    [self.downloadIndicator setHidden:NO];
-    [self.downloadIndicator startAnimating];
-    cache = [CacheSystem cacheSystem];
-    [self.delegate myAnimation:YES];
-    animDownloadQueue = [[NSOperationQueue alloc] init];
-    [animDownloadQueue setMaxConcurrentOperationCount:1];
-    userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
-    [self getAnimationData];
     if([Utility IsPadDevice]){
         [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCell" bundle:nil]forCellWithReuseIdentifier:@"CELL"];
     }
@@ -64,6 +58,19 @@
     editorSceneLocal->updater->setDataForFrame(currentFrame);
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(false);
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
+    cache = [CacheSystem cacheSystem];
+    animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
+    [self.animationCollectionView reloadData];
+    
+    downloadQueue = [[NSOperationQueue alloc] init];
+    [downloadQueue setMaxConcurrentOperationCount:3];
+    [self.downloadIndicator setHidden:NO];
+    [self.downloadIndicator startAnimating];
+    [self.delegate myAnimation:YES];
+    animDownloadQueue = [[NSOperationQueue alloc] init];
+    [animDownloadQueue setMaxConcurrentOperationCount:1];
+    userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
+    [self getAnimationData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -221,6 +228,7 @@
 - (IBAction)addBtnFunction:(id)sender {
     [self applyAnimationKeyToOriginalNode];
     [self.delegate showOrHideLeftView:NO withView:nil];
+    editorSceneLocal->loader->removeTempNodeIfExists();
     [self.view removeFromSuperview];
     [self deallocView];
 }
@@ -229,6 +237,7 @@
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
+    editorSceneLocal->loader->removeTempNodeIfExists();
     [self.delegate updateAssetListInScenes];
     if(!isFirstTimeAnimationApplyed){
         editorSceneLocal->totalFrames = totalFrame;

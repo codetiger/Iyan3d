@@ -748,11 +748,15 @@ BOOL missingAlertShown;
     if(editorScene->nodes.size() > indexPath.row){
         if(editorScene->nodes[indexPath.row]->getType() == NODE_CAMERA)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
-        else if(editorScene->nodes[indexPath.row]->getType() == (NODE_LIGHT || NODE_ADDITIONAL_LIGHT))
+        else if(editorScene->nodes[indexPath.row]->getType() == NODE_LIGHT)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+        else if(editorScene->nodes[indexPath.row]->getType() == NODE_ADDITIONAL_LIGHT)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
         else if(editorScene->nodes[indexPath.row]->getType() == NODE_TEXT_SKIN)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
         else if(editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+        else if(editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
         else
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
@@ -1045,9 +1049,7 @@ BOOL missingAlertShown;
                                                     inView:self.view
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:YES];
-            
         }
-        
     }
 }
 
@@ -2066,6 +2068,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
+        assetItem.isTempAsset = YES;
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
         editorScene->animMan->copyKeysOfNode(selectedNode, (int)editorScene->nodes.size()-1);
         editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);

@@ -29,7 +29,7 @@
     float screenScale;
     NSString* docDirPath;
     int selectedAsset, modelCategoryTab;
-    BOOL addToScenePressed;
+    //BOOL addToScenePressed;
     int viewType;
 }
 

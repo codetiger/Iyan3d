@@ -54,7 +54,7 @@
     self.addToSceneBtn.layer.cornerRadius = CORNER_RADIUS;
     selectedAsset = -1;
     modelCategoryTab = 0;
-    addToScenePressed = false;
+    //addToScenePressed = false;
     [_addToSceneBtn setEnabled:YES];
     [_modelCategory setHidden:(viewType == IMPORT_MODELS) ? NO : YES];
 }
@@ -66,6 +66,7 @@
 #pragma Button Actions
 
 - (IBAction)cancelButtonAction:(id)sender {
+    [self cancelOperations:downloadQueue];
     [self.assetSelectionDelegate removeTempNodeFromScene];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.assetSelectionDelegate showOrHideProgress:0];
@@ -74,7 +75,8 @@
 }
 
 - (IBAction)addToSceneButtonAction:(id)sender {
-     addToScenePressed = YES;
+     //addToScenePressed = YES;
+    [self cancelOperations:downloadQueue];
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.assetSelectionDelegate showOrHideProgress:0];
@@ -186,7 +188,6 @@
                                     [view dismissViewControllerAnimated:YES completion:nil];
                                     
                                 }];
-    
     UIAlertAction* backgrounds = [UIAlertAction
                                   actionWithTitle:@"Backgrounds"
                                   style:UIAlertActionStyleDefault
@@ -200,9 +201,7 @@
                                       modelCategoryTab = BACKGROUNDS;
                                       selectedAsset = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
-                                      
                                   }];
-    
     UIAlertAction* accessories = [UIAlertAction
                                   actionWithTitle:@"Accessories"
                                   style:UIAlertActionStyleDefault
@@ -218,7 +217,6 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       
                                   }];
-    
     UIAlertAction* mylibrary = [UIAlertAction
                                   actionWithTitle:@"My Library"
                                   style:UIAlertActionStyleDefault
@@ -234,7 +232,6 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       
                                   }];
-    
     switch (modelCategoryTab) {
         case ALLMODELS:
             [allmodels setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
@@ -387,7 +384,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         int assetId = [task.returnObj intValue];        
         AssetItem *assetItem = [cache GetAsset:assetId];
-        if(!addToScenePressed)
+        //if(!addToScenePressed)
             assetItem.isTempAsset = true;
         [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
         [self.assetSelectionDelegate showOrHideProgress:0];
@@ -427,7 +424,7 @@
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         AssetItem * assetItem = [cache GetAsset:assetId];
-        if(!addToScenePressed)
+        //if(!addToScenePressed)
             assetItem.isTempAsset = true;
         [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
         [self.assetSelectionDelegate showOrHideProgress:0];
@@ -449,7 +446,7 @@
     int assetId = [task.returnObj intValue];
     
     AssetItem *assetItem = [cache GetAsset:assetId];
-    if(!addToScenePressed)
+    //if(!addToScenePressed)
         assetItem.isTempAsset = true;
     [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
     [self.assetSelectionDelegate showOrHideProgress:0];

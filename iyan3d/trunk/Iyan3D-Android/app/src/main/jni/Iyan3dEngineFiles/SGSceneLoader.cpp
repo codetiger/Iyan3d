@@ -175,7 +175,11 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         return NULL;
     }
-
+    if(sgnode->getType() == NODE_PARTICLES && isTempNode)
+        sgnode->props.isSelected = true;
+    else if(sgnode->getType() == NODE_PARTICLES && !isTempNode)
+        sgnode->props.isSelected = false;
+        
     if(sgnode->getType() == NODE_TEXT_SKIN)
         currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgnode);
     sgnode->assetId = assetId;
