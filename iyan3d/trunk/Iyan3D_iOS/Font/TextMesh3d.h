@@ -13,6 +13,7 @@
 #include "ftgl/FtglPoint.h"
 #include "ftgl/Vectoriser.h"
 #include "SkinMesh.h"
+#include "Mesh.h"
 
 using namespace std;
 typedef unsigned short u16;
@@ -23,5 +24,6 @@ public:
     static void AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius);
     static double AddCharacter(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius);
     static void AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius, int bevelSegments, int height);
-    static AnimatedMesh* getTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments);
+    static AnimatedMesh* get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments);
+    static Mesh* get3DTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments);
 };

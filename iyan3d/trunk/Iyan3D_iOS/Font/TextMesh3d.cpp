@@ -360,7 +360,7 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
     prevCharIndex = curCharIndex;
 }
 
-AnimatedMesh* TextMesh3d::getTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments) {
+AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments) {
     FT_Library library;
     if (FT_Init_FreeType(&library)) {
         printf("FT_Init_FreeType failed\n");
@@ -431,4 +431,76 @@ AnimatedMesh* TextMesh3d::getTextMesh(wstring text, u16 beizerSteps, float extru
     mesh->recalculateNormalsT(true);
 
     return mesh;
+}
+
+Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments) {
+    FT_Library library;
+    if (FT_Init_FreeType(&library)) {
+        printf("FT_Init_FreeType failed\n");
+        return NULL;
+    }
+    
+    FT_Face face;
+    if (FT_New_Face(library, filepath, 0, &face)) {
+        printf("FT_New_Face failed (there is probably a problem with your font file\n");
+        return NULL;
+    }
+    FT_Set_Char_Size(face, height * 64.0, height * 64.0, 96, 96);
+    
+    mesh = new SkinMesh();
+    mesh->finalize();
+    double offset = 0, prevOffset = 0;
+    vertexColor = color;
+    
+    for(int i = 0; i < text.length(); i++){
+        SkinMesh *tempMesh = new SkinMesh();
+       	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius);
+       	AddBevel(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius, bevelSegments, height);
+        tempMesh->removeDoublesInHeavyMesh(true, false, false);
+        unsigned int oldVertCount = mesh->getVerticesCount();
+        
+        for (int j = 0; j < tempMesh->getVerticesCount(); j++) {
+            vertexDataHeavy *vtx = tempMesh->getHeavyVertexByIndex(j);
+            mesh->addHeavyVertex(vtx);
+        }
+        
+        for (int j = 0; j < tempMesh->getTotalIndicesCount(); j++) {
+            unsigned int in = tempMesh->getHighPolyIndicesArray()[j];
+            mesh->addToIndicesArray(in + oldVertCount);
+        }
+        
+        delete tempMesh;
+        
+       	offset = AddCharacter(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
+        
+        if(offset == -10000.0)
+            return NULL;
+        
+        prevOffset = offset;
+    }
+    FT_Done_Face(face);
+    FT_Done_FreeType(library);
+    
+    if(mesh->getVerticesCount() <= 0)
+        return NULL;
+    
+    Mesh* m = new Mesh();
+    for (int i = 0; i < mesh->getVerticesCount(); i++) {
+        vertexDataHeavy *vtx = mesh->getHeavyVertexByIndex(i);
+        vertexData v;
+        v.vertPosition = vtx->vertPosition;
+        v.vertNormal = vtx->vertNormal;
+        v.texCoord1 = vtx->texCoord1;
+        v.optionalData1 = vtx->optionalData4;
+        m->addVertex(&v);
+    }
+    for (int i = 0; i < mesh->getTotalIndicesCount(); i++) {
+        unsigned int in = mesh->getHighPolyIndicesArray()[i];
+        m->addToIndicesArray(in);
+    }
+    m->pivotToOrigin();
+    m->recalculateNormalsT(true);
+    m->Commit();
+
+    return m;
 }
