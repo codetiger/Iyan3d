@@ -415,8 +415,8 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         float n_dot_l = saturate(dot(normal,lightDir));
         half4 diffuse = half4(half3(n_dot_l),1.0);
         
-        float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-        float e_dot_r = saturate(dot(eyeVec,reflection));
+        float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+        float e_dot_r = saturate(dot(eyeVec,reflectValue));
         specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
         
         float e_dot_l = dot(lightDir,eyeVec);
@@ -476,8 +476,8 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             float n_dot_l = saturate(dot(normal,lightDir));
             half4 diffuse = half4(half3(n_dot_l),1.0);
             
-            float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-            float e_dot_r = saturate(dot(eyeVec,reflection));
+            float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+            float e_dot_r = saturate(dot(eyeVec,reflectValue));
             specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
@@ -538,8 +538,8 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             float n_dot_l = saturate(dot(normal,lightDir));
             half4 diffuse = half4(half3(n_dot_l),1.0);
             
-            float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-            float e_dot_r = saturate(dot(eyeVec,reflection));
+            float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+            float e_dot_r = saturate(dot(eyeVec,reflectValue));
             specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
@@ -600,8 +600,8 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             float n_dot_l = saturate(dot(normal,lightDir));
             half4 diffuse = half4(half3(n_dot_l),1.0);
             
-            float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-            float e_dot_r = saturate(dot(eyeVec,reflection));
+            float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+            float e_dot_r = saturate(dot(eyeVec,reflectValue));
             specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
@@ -662,8 +662,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             float n_dot_l = saturate(dot(normal,lightDir));
             half4 diffuse = half4(half3(n_dot_l),1.0);
             
-            float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-            float e_dot_r = saturate(dot(eyeVec,reflection));
+            float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+            float e_dot_r = saturate(dot(eyeVec,reflectValue));
             specular = half4(in.reflection * pow(e_dot_r,maxSpecular));
             
             float e_dot_l = dot(lightDir,eyeVec);
@@ -745,8 +745,8 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
         float4 diffuse = float4(float3(n_dot_l),1.0);
         diffuse_color = diffuse * float4(textureColor);
         
-        float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-        float e_dot_r =  saturate(dot(eyeVec,reflection));
+        float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+        float e_dot_r =  saturate(dot(eyeVec,reflectValue));
         specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
@@ -1043,8 +1043,8 @@ fragment half4 Per_Vertex_Color_Shadow_Fragment(ColorInOut in [[stage_in]],depth
         float n_dot_l = saturate(dot(normal,lightDir));
         float4 diffuse = float4(float3(n_dot_l),1.0);
         
-        float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-        float e_dot_r =  saturate(dot(eyeVec,reflection));
+        float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+        float e_dot_r =  saturate(dot(eyeVec,reflectValue));
         specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
         
         float e_dot_l = dot(lightDir,eyeVec);
@@ -1093,8 +1093,8 @@ fragment half4 Per_Vertex_Color_Toon_Fragment(ColorInOut in [[stage_in]],depth2d
         float4 diffuse = float4(float3(n_dot_l),1.0);
         diffuse_color = diffuse * in.perVertexColor;
         
-        float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-        float e_dot_r =  saturate(dot(eyeVec,reflection));
+        float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+        float e_dot_r =  saturate(dot(eyeVec,reflectValue));
         specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
@@ -1149,8 +1149,8 @@ fragment half4 Per_Vertex_Color_Skin_Fragment(ColorInOut in [[stage_in]],
             float n_dot_l = saturate(dot(normal,lightDir));
             float4 diffuse = float4(float3(n_dot_l),1.0);
             
-            float4 reflection = -lightDir + 2.0f * n_dot_l * normal;
-            float e_dot_r =  saturate(dot(eyeVec,reflection));
+            float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
+            float e_dot_r =  saturate(dot(eyeVec,reflectValue));
             specular = float4(in.reflection * pow(e_dot_r,maxSpecular));
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)

@@ -68,8 +68,8 @@ void main()
         float n_dot_l = clamp(dot(normal,lightDir),0.0,1.0);
         vec4 diffuse = vec4(vec3(n_dot_l),1.0);
         
-        vec4 reflection = -lightDir + 2.0 * n_dot_l * normal;
-        float e_dot_r =  clamp(dot(eyeVec,reflection),0.0,1.0);
+        vec4 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
+        float e_dot_r =  clamp(dot(eyeVec,reflectValue),0.0,1.0);
         specular += vec4(reflection * pow(e_dot_r,maxSpecular));
             
         float e_dot_l = dot(lightDir,eyeVec);
