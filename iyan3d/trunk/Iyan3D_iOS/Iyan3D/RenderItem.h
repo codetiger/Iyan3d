@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface RenderItem : NSObject
-@property (atomic, assign) NSString* taskName;
+@property (nonatomic, strong) NSString* taskName;
 @property (nonatomic, strong) NSString* dateAdded;
 @property (atomic, assign) int taskId;
 @property (atomic, assign) int taskProgress;

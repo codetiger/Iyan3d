@@ -34,6 +34,19 @@
 #define TWENTY_THOUSAND_CREDITS @"mediumrecharge"
 #define FIFTY_THOUSAND_CREDITS @"megarecharge"
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        cache = [CacheSystem cacheSystem];
+        downloadQueue = [[NSOperationQueue alloc] init];
+        completedTask = [[NSMutableArray alloc] init];
+        progressingTasks = [[NSMutableArray alloc] init];
+        [self updateTableViewData];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -41,9 +54,6 @@
     [self.creditsLoading startAnimating];
     [self.creditsLoading setHidesWhenStopped:YES];
     
-    downloadQueue = [[NSOperationQueue alloc] init];
-    completedTask = [[NSMutableArray alloc] init];
-    progressingTasks = [[NSMutableArray alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsupdate" object:nil];
     
@@ -62,12 +72,12 @@
 
     [GIDSignIn sharedInstance].uiDelegate = self;
     [GIDSignIn sharedInstance].delegate = self;
-    cache = [CacheSystem cacheSystem];
-    [self updateTableViewData];
     
-    for(int i = 0; i < [renderData count]; i++) {
-        RenderItem* renderItem = [renderData objectAtIndex:i];
-        [self getRenderTaskProgress:renderItem.taskId];
+    if(renderData != nil) {
+        for(int i = 0; i < [renderData count]; i++) {
+            RenderItem* renderItem = [renderData objectAtIndex:i];
+            [self getRenderTaskProgress:renderItem.taskId];
+        }
     }
 
     
@@ -114,6 +124,10 @@
     renderData = [cache getRenderTask];
     [completedTask removeAllObjects];
     [progressingTasks removeAllObjects];
+    
+    if(renderData == nil)
+        return;
+
     for(int i = 0; i < [renderData count]; i++) {
         RenderItem* r = [renderData objectAtIndex:i];
         if(r.taskProgress >= 100)
@@ -151,9 +165,9 @@
 {
     // Return the number of sections.
     NSInteger count = 0;
-    if([progressingTasks count] > 0)
+    if(progressingTasks != nil && [progressingTasks count] > 0)
         count++;
-    if([completedTask count] > 0)
+    if(completedTask != nil && [completedTask count] > 0)
         count++;
     
     return count;
@@ -167,10 +181,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if((section == IN_PROGRESS && [progressingTasks count] > 0))
+    if((section == IN_PROGRESS && progressingTasks != nil && [progressingTasks count] > 0))
         return [progressingTasks count];
     else
-        return [completedTask count];
+        return (completedTask != nil) ? [completedTask count] : 0;
 }
 
 - (RenderTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -182,25 +196,21 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:renderCellStr owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    int index = (int)indexPath.row;
-    index = (indexPath.section == COMPLETED) ? index - (int)[progressingTasks count] : index;
     
-    RenderItem* rItem;
-    if(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) {
+    RenderItem* rItem = nil;
+    if(indexPath.section == IN_PROGRESS && progressingTasks != nil && [progressingTasks count] > 0) {
         rItem = (RenderItem*)[progressingTasks objectAtIndex:indexPath.row];
-    } else {
+    } else if(completedTask != nil) {
         rItem = (RenderItem*)[completedTask objectAtIndex:indexPath.row];
     }
     
-    NSLog(@" \n RenderArray %@ %ld %@ ", rItem.taskName, (long)indexPath.row, rItem.dateAdded);
+    if(rItem == nil)
+        return nil;
     
     cell.renderlabel.text = rItem.taskName;
-    [cell.renderProgressLabel setHidden:(indexPath.section == COMPLETED || [progressingTasks count] == 0)];
+    [cell.renderProgressLabel setHidden:(indexPath.section == COMPLETED || (progressingTasks != nil && [progressingTasks count] == 0))];
     cell.renderProgressLabel.text = [NSString stringWithFormat:@"%d%%", rItem.taskProgress];
     cell.dateLabel.text = rItem.dateAdded;
-//    cell.nameLabel.text = rItem.taskName;
-//    [cell.renProgress setProgress:rItem.taskProgress];
-//    cell.frameLabel.text = [NSString stringWithFormat:@"%d", rItem.taskProgress];
     [cell.downloadBtn setHidden:(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0)];
     
     [cell.downloadBtn setTag:rItem.taskId];
@@ -346,6 +356,13 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:(BOOL)animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];
+    [renderData removeAllObjects];
+    [progressingTasks removeAllObjects];
+    [completedTask removeAllObjects];
+    
+    renderData = nil;
+    progressingTasks = nil;
+    completedTask = nil;
 }
 
 - (IBAction)add500Credits:(id)sender
