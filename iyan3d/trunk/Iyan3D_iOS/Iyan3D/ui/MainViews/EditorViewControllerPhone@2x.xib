@@ -12,6 +12,7 @@
                 <outlet property="autoRigMirrorSwitch" destination="Re7-TE-mzC" id="5HJ-IB-H9e"/>
                 <outlet property="autorigMirrorLable" destination="OT2-U5-ngG" id="PsV-DQ-cfm"/>
                 <outlet property="backButton" destination="G8Y-1j-55x" id="zHQ-v5-7Qe"/>
+                <outlet property="center_progress" destination="ebG-GY-iXz" id="RKS-h9-YEs"/>
                 <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
                 <outlet property="firstFrameBtn" destination="tmF-dh-ZfO" id="iV5-ye-qB3"/>
                 <outlet property="framesCollectionView" destination="Sij-qL-4rT" id="AQQ-Tb-blg"/>
@@ -109,6 +110,10 @@
                                 <action selector="moveFirstAction:" destination="-1" eventType="touchUpInside" id="nTC-7x-Xbk"/>
                             </connections>
                         </button>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="ebG-GY-iXz" userLabel="center_progress">
+                            <rect key="frame" x="358" y="197" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
