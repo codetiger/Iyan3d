@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lz -lglut -lGL
+LIBS := -lz -lglut -lGL -lpthread -lcurl -lzip -lavcodec -lavutil -lswscale -lembree
 

@@ -23,6 +23,7 @@ C_UPPER_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+src/SGRenderer \
 src/SGEngine2/libpng \
 src/SGEngine2/Utilities \
 src/SGEngine2/SceneManager \
@@ -46,5 +47,4 @@ src/SGEngine2/Core/Nodes \
 src/SGEngine2/Core/Meshes \
 src/SGEngine2/Core/Material \
 src/Iyan3dEngineFiles \
-src \
 

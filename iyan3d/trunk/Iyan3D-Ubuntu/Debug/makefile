@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/SGRenderer/subdir.mk
 -include src/SGEngine2/libpng/subdir.mk
 -include src/SGEngine2/Utilities/subdir.mk
 -include src/SGEngine2/SceneManager/subdir.mk
@@ -31,7 +32,6 @@ RM := rm -rf
 -include src/SGEngine2/Core/Meshes/subdir.mk
 -include src/SGEngine2/Core/Material/subdir.mk
 -include src/Iyan3dEngineFiles/subdir.mk
--include src/subdir.mk
 -include subdir.mk
 -include objects.mk
 
