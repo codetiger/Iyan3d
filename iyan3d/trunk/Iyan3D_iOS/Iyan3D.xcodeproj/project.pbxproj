@@ -95,6 +95,12 @@
 		01B4D0701C2937000091E19B /* Undo_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4D03B1C2937000091E19B /* Undo_Pad.png */; };
 		01B4D0711C2937000091E19B /* Undo_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4D03C1C2937000091E19B /* Undo_Pad@2x.png */; };
 		01B4D0721C2937000091E19B /* Undo_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4D03C1C2937000091E19B /* Undo_Pad@2x.png */; };
+		01E6188C1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
+		01E6188D1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
+		01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
+		01E6188F1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
+		01E618901C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */; };
+		01E618911C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */; };
 		251BF4501C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
 		251BF4511C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
 		251BF4521C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */; };
@@ -1781,6 +1787,9 @@
 		01B4D03A1C2937000091E19B /* Scale_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Scale_Pad@2x.png"; sourceTree = "<group>"; };
 		01B4D03B1C2937000091E19B /* Undo_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Undo_Pad.png; sourceTree = "<group>"; };
 		01B4D03C1C2937000091E19B /* Undo_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Undo_Pad@2x.png"; sourceTree = "<group>"; };
+		01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-Cloud-shader_Pad.png"; sourceTree = "<group>"; };
+		01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-shader_Pad.png"; sourceTree = "<group>"; };
+		01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toon-shader_Pad.png"; sourceTree = "<group>"; };
 		251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = FrameWorks/GoogleSignIn.bundle; sourceTree = "<group>"; };
 		251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = FrameWorks/GoogleSignIn.framework; sourceTree = "<group>"; };
 		251BF4541C2C191700A5D41D /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = FrameWorks/Crashlytics.framework; sourceTree = "<group>"; };
@@ -3233,6 +3242,17 @@
 			path = topview;
 			sourceTree = "<group>";
 		};
+		01E618881C2C145700DBBC00 /* renderingview */ = {
+			isa = PBXGroup;
+			children = (
+				01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */,
+				01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */,
+				01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */,
+			);
+			name = renderingview;
+			path = Resources/images/renderingview;
+			sourceTree = "<group>";
+		};
 		253F536F1C2020B0005AC97D /* AdMob */ = {
 			isa = PBXGroup;
 			children = (
@@ -4580,6 +4600,7 @@
 		C83D627218783A1500D285C4 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				01E618881C2C145700DBBC00 /* renderingview */,
 				3DBC85D41C2BC06600B512AB /* assetSelection */,
 				01B4CF921C29219A0091E19B /* editorViewController */,
 				3D04EAF01C25830F00C18E1A /* TextSelection */,
@@ -5341,6 +5362,7 @@
 				01B4D0671C2937000091E19B /* Rotate_Pad.png in Resources */,
 				624641CF19939BB700CE8547 /* Scene-topviewBg.png in Resources */,
 				62FA5F531990E9D4003B0893 /* feedback-img.png in Resources */,
+				01E618901C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */,
 				7FC524DD1B6F6F3600C5D26D /* Minimize-Full-screen.png in Resources */,
 				01B4CFEA1C29219A0091E19B /* Add-Frames.png in Resources */,
 				7F307CEA1B58FBF10065BBC1 /* like-fill@2x.png in Resources */,
@@ -5578,6 +5600,7 @@
 				7F31A7371AA4960300A6E7B1 /* cancelButton@3x.png in Resources */,
 				3D3F58FF1C27C12A00713C79 /* Mail2x.png in Resources */,
 				7FC900D71A0A01470051B941 /* Menu-phone@2x.png in Resources */,
+				01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */,
 				257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */,
 				E2497665196BE0190025D442 /* ObjCellView.xib in Resources */,
 				7F31A7511AA4960300A6E7B1 /* select-img-phone@3x.png in Resources */,
@@ -5617,6 +5640,7 @@
 				E21A894D1B08A5AA00435C87 /* clock@2x.png in Resources */,
 				7FC524D51B6F6F3600C5D26D /* Full-screen-phone.png in Resources */,
 				7F307CE91B58FBF10065BBC1 /* like-fill.png in Resources */,
+				01E6188C1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */,
 				627A5F8119ED438600CB545C /* last.png in Resources */,
 				7FC527631B6F96FF00C5D26D /* Mail-phone@3x.png in Resources */,
 				E2497658196BE0190025D442 /* AssetDetailsViewControllerPhone.xib in Resources */,
@@ -5876,6 +5900,7 @@
 				E20672151B049AA6006DD2F7 /* view-img.png in Resources */,
 				E20672161B049AA6006DD2F7 /* RenderingViewControllerPhone.xib in Resources */,
 				E20672171B049AA6006DD2F7 /* info-phone@2x.png in Resources */,
+				01E6188D1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */,
 				E20672191B049AA6006DD2F7 /* boneLimits45.json in Resources */,
 				E206721A1B049AA6006DD2F7 /* Stop-video-phone@3x.png in Resources */,
 				256ED8F21B1FEDED008ADEF8 /* Walkway Bold.ttf in Resources */,
@@ -5926,6 +5951,7 @@
 				E20672511B049AA6006DD2F7 /* new-img-phone@3x.png in Resources */,
 				E20672561B049AA6006DD2F7 /* right-align@3x.png in Resources */,
 				E20672571B049AA6006DD2F7 /* animate-img-phone.png in Resources */,
+				01E6188F1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */,
 				01B4D06C1C2937000091E19B /* Scale_Pad.png in Resources */,
 				E20672581B049AA6006DD2F7 /* frames.png in Resources */,
 				E206725A1B049AA6006DD2F7 /* render_image-phone@3x.png in Resources */,
@@ -6056,6 +6082,7 @@
 				E20672FE1B049AA6006DD2F7 /* helpimage6.png in Resources */,
 				3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				E20672FF1B049AA6006DD2F7 /* add-frame.png in Resources */,
+				01E618911C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */,
 				E20673021B049AA6006DD2F7 /* frames-phone.png in Resources */,
 				25E86EC61B44D10300BC48DC /* depthPassText.vsh in Resources */,
 				E20673051B049AA6006DD2F7 /* ScaleViewController.xib in Resources */,

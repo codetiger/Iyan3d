@@ -235,13 +235,20 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     panRecognizer.maximumNumberOfTouches = 2;
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     tapRecognizer.delegate = self;
+    UILongPressGestureRecognizer *longpressRecogniser = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGestures:)];
+    longpressRecogniser.minimumPressDuration = 1.0f;
+    longpressRecogniser.allowableMovement = 100.0f;
+    
+    
     if (![self.delegate isMetalSupportedDevice]) {
         [self.renderView addGestureRecognizer:panRecognizer];
         [self.renderView addGestureRecognizer:tapRecognizer];
+        [self.renderView addGestureRecognizer:longpressRecogniser];
     }
     else {
         [self.renderView addGestureRecognizer:panRecognizer];
         [self.renderView addGestureRecognizer:tapRecognizer];
+        [self.renderView addGestureRecognizer:longpressRecogniser];
     }
 }
 
@@ -340,10 +347,52 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
 }
 
+- (void)handleLongPressGestures:(UILongPressGestureRecognizer *)sender{
+    
+    if (sender.state == UIGestureRecognizerStateBegan)
+    {
+        _longPress=true;
+        
+        if (!_isPlaying && !_isPanned)
+        {
+            CGPoint position;
+            position = [sender locationInView:self.renderView];
+            _checkTapSelection = true;
+            _tapPosition = Vector2(position.x, position.y) * screenScale;
+            editorScene->isRTTCompleted = true;
+            
+        }
+        CGPoint position;
+        position = [sender locationInView:self.renderView];
+        _longPresPosition=CGRectMake(position.x, position.y, 1, 1);
+        
+        
+        
+    }
+
+}
+
 - (void) panOrPinchProgress
 {
     editorScene->moveMan->panProgress(_touchMovePosition[0], _touchMovePosition[1]);
     editorScene->updater->updateLightCamera();
+}
+
+
+-(void) showPopOver:(int) selectedNodeId{
+    if(_longPress){
+        if(editorScene->selectedNodeId != NOT_SELECTED){
+            if (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)
+            {
+                [self.delegate presentPopOver:_longPresPosition];
+                _longPress=false;
+            }
+        
+        }
+        _longPress=false;
+    }
+    
+    
 }
 
 @end

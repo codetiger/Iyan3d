@@ -67,6 +67,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *startButtonText;
 @property (weak, nonatomic) IBOutlet UIProgressView *renderingProgressBar;
 @property (weak, nonatomic) IBOutlet UILabel *renderingProgressLabel;
+@property (weak, nonatomic) IBOutlet UILabel *renderDesc;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *shareActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *cancelActivityIndicator;

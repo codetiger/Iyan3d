@@ -25,6 +25,7 @@
 
 - (bool) isMetalSupportedDevice;
 - (void) reloadFrames;
+- (void) presentPopOver:(CGRect )arect;
 
 @end
 
@@ -45,7 +46,9 @@
 @property (nonatomic) bool isPanned;
 @property (nonatomic) bool makePanOrPinch;
 @property (nonatomic) bool checkTapSelection;
+@property (nonatomic) bool longPress;
 @property (nonatomic) Vector2 tapPosition;
+@property (nonatomic) CGRect longPresPosition;
 @property (nonatomic) vector<Vector2> touchMovePosition;
 @property (nonatomic) bool checkCtrlSelection;
 - (void)setUpPaths;
@@ -55,10 +58,11 @@
 - (void)setupDepthBuffer:(UIView*)renderView;
 - (void)setupFrameBuffer:(SceneManager*)smgr;
 - (void)presentRenderBuffer;
-- (void)setUpCallBacks:(void*)scene;
-- (void)addCameraLight;
+- (void) setUpCallBacks:(void*)scene;
+- (void) addCameraLight;
+-(void) showPopOver:(int) selectedNodeId;
 - (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode;
-- (bool)removeNodeFromScene:(int)nodeIndex;
+- (bool) removeNodeFromScene:(int)nodeIndex;
 - (void)addGesturesToSceneView;
 - (void)panOrPinchProgress;
 

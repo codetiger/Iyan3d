@@ -71,13 +71,13 @@
         UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
         cell.backgroundColor = [UIColor clearColor];
         cell.layer.borderWidth = 1.0f;
-        cell.layer.borderColor = [UIColor grayColor].CGColor;
+        cell.layer.borderColor = [UIColor clearColor].CGColor;
 
     }
     UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
     cell.layer.borderWidth = 1.0f;
     cell.layer.borderColor = [UIColor whiteColor].CGColor;
-    
+    cell.layer.cornerRadius = 8.0;
     [self displayBasedOnSelection:[NSNumber numberWithInteger:indexPath.row]];
 
 }
@@ -85,15 +85,6 @@
 
 - (IBAction)categoryBtnFuction:(id)sender
 {
-   
-//        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-//                                                                 delegate:self
-//                                                        cancelButtonTitle:nil
-//                                                   destructiveButtonTitle:nil
-//                                                        otherButtonTitles:@"Trending",@"Top Rated", @"Featured",@"My Animation", nil];
-//        CGRect rect = [self.view convertRect:self.categoryBtn.frame fromView:self.categoryBtn.superview];
-//    
-//        [actionSheet showFromRect:rect inView:self.view animated:YES];
     UIAlertController * view=   [UIAlertController
                                  alertControllerWithTitle:@"Category"
                                  message:nil
@@ -198,39 +189,6 @@
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self deallocView];
     [self.view removeFromSuperview];
-}
-
-#pragma mark - ActionSheet Delegate Functions
-
-//-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    NSString *category= [actionSheet buttonTitleAtIndex:buttonIndex];
-//    if([category isEqualToString:@"Trending"])
-//    {
-//        animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
-//        [self.animationCollectionView reloadData];
-//    }
-//    else if([category isEqualToString:@"Top Rated"])
-//    {
-//        animationsItems = [cache GetAnimationList:0 fromTable:5 Search:@""];
-//        [self.categoryBtn setTitle:category forState:UIControlStateNormal];
-//        [self.animationCollectionView reloadData];
-//    }
-//    else if([category isEqualToString:@"Featured"])
-//    {
-//        animationsItems = [cache GetAnimationList:0 fromTable:6 Search:@""];
-//        [self.categoryBtn setTitle:category forState:UIControlStateNormal];
-//        [self.animationCollectionView reloadData];
-//    }
-//    else if([category isEqualToString:@"My Animation"])
-//    {
-//        animationsItems = [cache GetAnimationList:0 fromTable:7 Search:@""];
-//        [self.animationCollectionView reloadData];
-//    }
-//   
-//}
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-    
 }
 
 #pragma mark animations related data methods

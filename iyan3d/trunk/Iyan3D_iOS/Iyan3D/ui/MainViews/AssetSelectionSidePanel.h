@@ -14,7 +14,7 @@
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 - (void) loadNodeInScene:(AssetItem*)assetItem;
-
+- (void) removeTempNodeFromScene;
 @end
 
 @interface AssetSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate>{

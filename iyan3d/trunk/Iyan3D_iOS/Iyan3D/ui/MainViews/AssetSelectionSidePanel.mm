@@ -14,7 +14,8 @@
 #define RESTORING 11
 #define LOAD_NODE 22
 #define DOWNLOAD_NODE 33
-
+#define CLOSE_CURRENT_VIEW 10
+#define OBJFile 6
 
 @implementation AssetSelectionSidePanel
 
@@ -54,6 +55,7 @@
 #pragma Button Actions
 
 - (IBAction)cancelButtonAction:(id)sender {
+    [self.assetSelectionDelegate removeTempNodeFromScene];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
     [self.view removeFromSuperview];
@@ -61,7 +63,12 @@
 }
 
 - (IBAction)addToSceneButtonAction:(id)sender {
-    addToScenePressed = YES;
+     addToScenePressed = YES;
+    [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
+    [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
+    [self deallocMem];
+    [self.view removeFromSuperview];
+
 }
 
 #pragma mark CollectionView Delegate methods

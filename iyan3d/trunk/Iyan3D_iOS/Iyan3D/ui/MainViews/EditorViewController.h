@@ -21,12 +21,12 @@
 #import "AnimationSelectionSlider.h"
 #import "TextSelectionSidePanel.h"
 #import "AssetSelectionSidePanel.h"
+#import "RenderingViewController.h"
 #import "SGEditorScene.h"
 #import "RenderViewManager.h"
-
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,UIAlertViewDelegate, RenderViewManagerDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate>{
     int totalFrames;
-    NSMutableArray *tableData;
+    NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
     TextSelectionSidePanel *textSelectionSlider;
@@ -60,6 +60,7 @@
 @property (weak, nonatomic) IBOutlet UIView *leftView;
 @property (weak, nonatomic) IBOutlet UIView *rightView;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
+
 
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;

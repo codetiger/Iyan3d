@@ -37,7 +37,7 @@
 
 #define SHADER_DEFAULT 0
 #define SHADER_TOON 6
-#define SHADER_PHOTO 12
+#define SHADER_CLOUD 12
 
 enum constants {
     UPLOAD_ALERT_VIEW = 3,
@@ -77,7 +77,7 @@ enum constants {
     self.resolutionSegment.selectedSegmentIndex = resolutionType;
     self.renderingTypes.layer.cornerRadius = 5.0;
     self.renderingTypes.layer.borderWidth = 2.0f;
-    self.renderingTypes.layer.borderColor=[UIColor colorWithRed:67.0f/255.0f green:68.0f/255.0f blue:67.0f/255.0f alpha:1.0f].CGColor;
+    self.renderingTypes.layer.borderColor=[UIColor clearColor].CGColor;
     self.view.layer.borderWidth = 2.0f;
     self.view.layer.borderColor = [UIColor grayColor].CGColor;
     self.view.layer.cornerRadius = 5.0;
@@ -92,9 +92,11 @@ enum constants {
     shaderTypesDict = [[NSMutableDictionary alloc] init];
     [shaderArray addObject:[NSNumber numberWithInt:SHADER_DEFAULT]];
     [shaderArray addObject:[NSNumber numberWithInt:SHADER_TOON ]];
+    [shaderArray addObject:[NSNumber numberWithInt:SHADER_CLOUD ]];
     //[shaderArray addObject:[NSNumber numberWithInt:SHADER_PHOTO ]];
     [shaderTypesDict setObject:@"Normal Shader" forKey:[NSNumber numberWithInt:SHADER_DEFAULT]];
     [shaderTypesDict setObject:@"Toon Shader" forKey:[NSNumber numberWithInt:SHADER_TOON ]];
+    [shaderTypesDict setObject:@"Cloud Rendering" forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
     //[shaderTypesDict setObject:@"Photo Realistic" forKey:[NSNumber numberWithInt:SHADER_PHOTO ]];
     if([Utility IsPadDevice])
         [self.renderingTypes registerNib:[UINib nibWithNibName:@"ShaderCell" bundle:nil] forCellWithReuseIdentifier:@"TYPE"];
@@ -128,7 +130,7 @@ enum constants {
     [self.youtubeButton setHidden:true];
     if(renderingExportImage != RENDER_IMAGE){
         if([Utility IsPadDevice]){
-            _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(145,570, 240, 28)];
+            _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(35,515, 470, 28)];
             _trimControl.length = renderingEndFrame; // 200 seconds
             _trimControl.delegate = self;
             [self.view addSubview:_trimControl];
@@ -165,7 +167,7 @@ enum constants {
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     if([Utility IsPadDevice])
-        return UIEdgeInsetsMake(40, 50, 40, 50);
+        return UIEdgeInsetsMake(20, 20, 20, 20);
     else {
         if(iOSVersion >= 8.0 && SCREENWIDTH == 667)
         {
@@ -223,7 +225,7 @@ enum constants {
 }
 - (IBAction)startButtonAction:(id)sender
 {
-    if([shaderArray[tempSelectedIndex] intValue] == SHADER_PHOTO){
+    if([shaderArray[tempSelectedIndex] intValue] == SHADER_CLOUD){
         [self shaderPhotoAction];
         
     }
@@ -515,20 +517,28 @@ enum constants {
 {
     ShaderCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TYPE" forIndexPath:indexPath];
     cell.ShaderCellName.text = [NSString stringWithFormat:@"%@",[shaderTypesDict objectForKey:shaderArray[indexPath.row]]];
-    cell.layer.cornerRadius = 10.0;
     cell.layer.borderWidth = 1.0f;
-    cell.layer.borderColor = [UIColor grayColor].CGColor;
-    if ((int)indexPath.row == 0)
-        cell.ShaderImage.image =[UIImage imageNamed:@"normalShader.png"];
-    else if ((int)indexPath.row == 2)
-        cell.ShaderImage.image =[UIImage imageNamed:@"normalShader.png"];
-    else
-        cell.ShaderImage.image =[UIImage imageNamed:@"toonShadere.png"];
+    cell.layer.borderColor = [UIColor clearColor].CGColor;
+    if ((int)indexPath.row == 0){
+        cell.ShaderImage.image =[UIImage imageNamed:@"Normal-shader_Pad.png"];
+    }
+    else if ((int)indexPath.row == 2){
+        cell.ShaderImage.image =[UIImage imageNamed:@"Normal-Cloud-shader_Pad.png"];
+    }
+    else if ((int)indexPath.row == 1){
+        cell.ShaderImage.image =[UIImage imageNamed:@"Toon-shader_Pad.png"];
+    }
     
-    if(selectedIndex == (int)indexPath.row)
-        cell.backgroundColor = [UIColor grayColor];
-    else
-        cell.backgroundColor = [UIColor blackColor];
+    if(selectedIndex == (int)indexPath.row){
+        UIColor *borderColor = [UIColor purpleColor];
+        [cell.ShaderImage.layer setBorderColor:borderColor.CGColor];
+        [cell.ShaderImage.layer setBorderWidth:3.0];
+    }
+    else{
+        UIColor *borderColor = [UIColor clearColor];
+        [cell.ShaderImage.layer setBorderColor:borderColor.CGColor];
+        [cell.ShaderImage.layer setBorderWidth:2.0];
+    }
     return cell;
 }
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -537,20 +547,23 @@ enum constants {
         NSLog(@" Selcted index: %d",(int)indexPath.row);
         tempSelectedIndex = (int)indexPath.row;
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [self showUpgradeView:(int)indexPath.row];
+        [self.renderDesc setText:[NSString stringWithFormat:@"Render Toon Shader in your device!!!"]];
+        selectedIndex = (int)indexPath.row;
+        [self.renderingTypes reloadData];
     }
     else if([shaderArray[indexPath.row] intValue] == SHADER_DEFAULT){
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+        [self.renderDesc setText:[NSString stringWithFormat:@"Render Normal Shader in your device!!!"]];
         selectedIndex = (int)indexPath.row;
         [self.renderingTypes reloadData];
     }
-    else if ([shaderArray[indexPath.row] intValue] == SHADER_PHOTO){
+    else if ([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
         tempSelectedIndex = (int)indexPath.row;
         NSLog(@" Selcted index: %d",(int)indexPath.row);
         [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
-        //[self showUpgradeView:(int)indexPath.row];
+        [self showUpgradeView:(int)indexPath.row];
         
     }
 }
@@ -663,8 +676,8 @@ enum constants {
     [thread cancel];
     isCanceled = true;
     [self.delegate clearFolder:NSTemporaryDirectory()];
-    [self.delegate resumeRenderingAnimationScene];
     [self dismissViewControllerAnimated:YES completion:nil];
+    [self.delegate resumeRenderingAnimationScene];
 }
 - (void)uploadYouTubeVideo:(YouTubeUploadVideo *)uploadVideo
       didFinishWithResults:(GTLYouTubeVideo *)video {
