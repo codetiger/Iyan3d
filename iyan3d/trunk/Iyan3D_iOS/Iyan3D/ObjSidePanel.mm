@@ -12,8 +12,8 @@
 
 #define OBJ 0
 #define Texture 1
-#define IMPORT_OBJFILE 4
-#define CHANGE_TEXTURE 6
+#define IMPORT_OBJFILE 5
+#define CHANGE_TEXTURE 7
 
 @interface ObjSidePanel ()
 
@@ -48,7 +48,8 @@
     self.cancelBtn.layer.cornerRadius=8.0;
     [_colorWheelBtn setHidden:YES];
     indexPathOfOBJ =  (viewType == IMPORT_OBJFILE) ? -1 : 0;
-    [self addBtnAction:nil];
+    if(viewType != IMPORT_OBJFILE)
+        [self addBtnAction:nil];
     _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
 }
 

@@ -2105,6 +2105,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void) changeTextureForAsset{
+    selectedNodeId = editorScene->selectedNodeId;
     if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
         objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:CHANGE_TEXTURE];
@@ -3338,7 +3339,6 @@ void boneLimitsCallBack(){
 
 - (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp
 {
-    
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@.png",docDirPath,textureName];
