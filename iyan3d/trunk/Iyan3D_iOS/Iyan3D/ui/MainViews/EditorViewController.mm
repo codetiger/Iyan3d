@@ -36,7 +36,7 @@
 #define IMPORT_LIGHT 4
 #define IMPORT_OBJFILE 5
 #define IMPORT_ADDBONE 6
-#define IMPORT_ADDPARTICLE 7
+#define IMPORT_PARTICLE 7
 #define CHANGE_TEXTURE 7
 
 
@@ -127,6 +127,8 @@ BOOL missingAlertShown;
         constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString* cachesDir = [paths objectAtIndex:0];
+        NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* docDir = [docPaths objectAtIndex:0];
         constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
         isViewLoaded = false;
         lightCount = 1;
@@ -521,6 +523,7 @@ BOOL missingAlertShown;
 - (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType
 {
     assetAddType = actionType;
+    NSLog(@"Is Temp Asset : %d " , assetItem.isTempAsset);
     assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
 }
@@ -541,7 +544,6 @@ BOOL missingAlertShown;
 
 - (void) loadNode:(AssetItem*) asset
 {
-    NSLog(@"Asset Id : %d ", asset.assetId);
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] TextureName:(asset.textureName) Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!asset.isTempAsset) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -2239,17 +2241,17 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) importBtnDelegateAction:(int)indexValue{
     
     switch (indexValue) {
-        case IMPORT_ADDPARTICLE:
+        case IMPORT_PARTICLE:
         case IMPORT_MODELS:
             if([Utility IsPadDevice]){
                 [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : IMPORT_ADDPARTICLE];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES];
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }
             else{
                 [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : IMPORT_ADDPARTICLE];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES];
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }
@@ -2691,6 +2693,33 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
     NSString* documentsDirectory = [docPaths objectAtIndex:0];
     
     switch (nodeType) {
+        case NODE_PARTICLES: {
+            NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
+            NSString* file = [name stringByDeletingPathExtension];
+            if ([file intValue] >= 10000 && ([file intValue] < 20000)) {
+                NSString* particlePath = [NSString stringWithFormat:@"%@%d.json", cacheDirectory, [file intValue]];
+                if (![[NSFileManager defaultManager] fileExistsAtPath:particlePath]) {
+                    NSString* filePath = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [file intValue]];
+                    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", [file intValue]];
+                    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
+                        downloadFile(url, filePath);
+                      if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+                        if (!missingAlertShown) {
+                            [[AppHelper getAppHelper] missingAlertView];
+                            missingAlertShown = true;
+                        }
+                        return false;
+                    }
+                    else
+                        return true;
+                    return false;
+                }
+                else
+                    return true;
+            }
+
+            break;
+        }
         case NODE_SGM:
         case NODE_RIG: {
             //BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];

@@ -154,6 +154,8 @@
                 cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad.png"];
             if(indexPath.row==6)
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad.png"];
+            if(indexPath.row==7)
+                cell.imageView.image = [UIImage imageNamed:@"Particles.png"];
         }
     }
     else
@@ -180,7 +182,7 @@
             if(indexPath.row==6)
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
             if(indexPath.row==7)
-                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Particles_IPhone.png"];
 
         }
         if([clickedBtn isEqualToString:@"myObjectsBtn"]){

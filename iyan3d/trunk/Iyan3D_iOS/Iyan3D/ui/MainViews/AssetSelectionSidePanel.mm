@@ -19,7 +19,7 @@
 #define CLOSE_CURRENT_VIEW 10
 #define OBJFile 6
 #define IMPORT_MODELS 0
-#define IMPORT_ADDPARTICLE 7
+#define IMPORT_PARTICLE 13
 
 
 @implementation AssetSelectionSidePanel
@@ -31,13 +31,13 @@
         screenScale = [[UIScreen mainScreen] scale];
         cache = [CacheSystem cacheSystem];
         viewType = type;
-        assetArray = [cache GetAssetList:(viewType == IMPORT_MODELS) ? ALLMODELS : PARTICLES  Search:@""];
+        assetArray = [cache GetAssetList:(viewType == IMPORT_MODELS) ? ALLMODELS : IMPORT_PARTICLE  Search:@""];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        docDirPath = [srcDirPath objectAtIndex:0];        
-        downloadQueue = [[NSOperationQueue alloc] init];
+        docDirPath = [srcDirPath objectAtIndex:0];
+        downloadQueue = [[NSOperationQueue alloc]init];
         [downloadQueue setMaxConcurrentOperationCount:3];
-        assetDownloadQueue = [[NSOperationQueue alloc] init];
-        [assetDownloadQueue setMaxConcurrentOperationCount:1];        
+        assetDownloadQueue = [[NSOperationQueue alloc]init];
+        [assetDownloadQueue setMaxConcurrentOperationCount:1];
     }
     return self;
 }
@@ -70,21 +70,10 @@
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
-    [self deallocMem];    
+    [self deallocMem];
 }
 
 - (IBAction)addToSceneButtonAction:(id)sender {
-    if(viewType == IMPORT_ADDPARTICLE){
-        AssetItem *assetItem = [[AssetItem alloc] init];
-
-        assetItem.assetId = 0;
-        assetItem.type = 13;
-        if(!addToScenePressed)
-            assetItem.isTempAsset = true;
-        [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
-        return;
-    }
-
      addToScenePressed = YES;
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
@@ -149,6 +138,7 @@
         if (assetItem == nil)
             return;
         selectedAsset = assetItem.assetId;
+        NSLog(@"Selected Asset %d " , assetItem.assetId);
         [cache checkDownloadedAsset:assetItem.assetId];
         [self downloadAsset:assetItem ForActivity:LOAD_NODE isTempAsset:true];
     }
@@ -263,7 +253,6 @@
             [mylibrary setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
     }
-    
     [view addAction:allmodels];
     [view addAction:character];
     [view addAction:backgrounds];
@@ -291,8 +280,31 @@
     NSString *fileName, *url;
     NSNumber* returnId = [NSNumber numberWithInt:assetvalue.assetId];
     
-    if (assetvalue.type == CHARACTERS) {
-        
+    if(assetvalue.type == IMPORT_PARTICLE){
+        if(assetvalue.assetId >= 10000 && assetvalue.assetId <= 20000){
+            fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, assetvalue.assetId];
+            url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", assetvalue.assetId];
+            
+            NSLog(@"File Name : %@", fileName);
+            
+           if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]){
+                [self.assetSelectionDelegate showOrHideProgress:1];
+                [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadParticleJson:) priority:NSOperationQueuePriorityHigh];
+            }
+            else {
+                if (activity == LOAD_NODE){
+                    [self.assetSelectionDelegate showOrHideProgress:0];
+                    assetvalue.isTempAsset = isTempAsset;
+                    [_addToSceneBtn setEnabled:YES];
+                    [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
+                }
+                else{
+                    //[self updateUIForRestoringPurchase:assetvalue.assetId];
+                }
+            }
+        }
+    }
+    else if (assetvalue.type == CHARACTERS) {
         if (assetvalue.assetId >= 40000 && assetvalue.assetId < 50000) {
             fileName = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", docDirPath, assetvalue.assetId];
             if (![[NSFileManager defaultManager] fileExistsAtPath:fileName])
@@ -363,6 +375,25 @@
         else{
         }
     }
+    
+}
+
+- (void) downloadParticleJson:(DownloadTask*)task
+{
+    NSNumber* returnId = task.returnObj;
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [paths objectAtIndex:0];
+    NSString* fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [returnId intValue]];
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+        int assetId = [task.returnObj intValue];        
+        AssetItem *assetItem = [cache GetAsset:assetId];
+        if(!addToScenePressed)
+            assetItem.isTempAsset = true;
+        [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
+        [self.assetSelectionDelegate showOrHideProgress:0];
+    }
+
 }
 
 - (void)downloadTextureFileWithReturnId:(DownloadTask*)task

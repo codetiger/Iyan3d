@@ -166,7 +166,7 @@
 {
     jsonArray = [[NSArray alloc] init];
     
-    NSURL *urlForJson = [NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetail.json"];
+    NSURL *urlForJson = [NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetailv5.json"];
     NSURLRequest *request = [NSURLRequest requestWithURL:urlForJson];
     if([NSURLConnection connectionWithRequest:request delegate:self]) {
         NSData *rawData = [NSData dataWithContentsOfURL:urlForJson];
@@ -192,7 +192,7 @@
     NSString* urlString;
     if (viewType == (int)ASSET_SELECTION || viewType == (int)TEXT_VIEW) {
         selectorForTask = @selector(loadAllAssets:);
-        urlString = @"https://iyan3dapp.com/appapi/json/assetsDetail.json";
+        urlString = @"https://iyan3dapp.com/appapi/json/assetsDetailv5.json";
     }
     else if (viewType == (int)ALL_ANIMATION_VIEW) {
         selectorForTask = @selector(loadAllAnimations:);

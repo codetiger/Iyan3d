@@ -288,13 +288,14 @@ Json::Value SGNode::parseParticlesJson(int assetId)
     Json::Value particlesData;
     
     string jsonFileName = to_string(assetId) + ".json";
-    ifstream jsonFile( constants::BundlePath + "/" + jsonFileName);
+    ifstream jsonFile( constants::CachesStoragePath + "/" + jsonFileName);
     Logger::log(INFO, "Autorig joints data", "Bundlepath:"+constants::BundlePath);
     Json::Reader reader;
     if(!reader.parse(jsonFile, particlesData, false)){
         Logger::log(ERROR, "Unable to parse jointsData.json", "AutoRigHelper");
         return;
     }
+    jsonFile.close();
     return particlesData;
 }
 

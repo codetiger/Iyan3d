@@ -293,7 +293,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
             SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,"",name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
-                UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you choose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
                 return false;
             }
@@ -320,7 +320,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         case ASSET_PARTICLES: {
-            editorScene->loader->loadNode(NODE_PARTICLES, assetId, "");
+           SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId ,"",name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
+            if(particle)
+                particle->isTempNode = isTempNode;
+            if(!isTempNode){
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
+                [self.delegate updateAssetListInScenes];
+            }
         }
         default: {
             break;

@@ -397,9 +397,6 @@ enum assetType
     FONT = 50,
     MY_LIBRARY_TYPE = -1,
     MY_ANIMATIONS_LIBRARY_TYPE = -2,
-    PARTICLES = 7
-    
-    
 };
 
 enum Constants
