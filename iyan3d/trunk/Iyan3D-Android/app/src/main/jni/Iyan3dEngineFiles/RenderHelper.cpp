@@ -420,10 +420,8 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         renderingScene->nodes[i]->props.isSelected = false;
         renderingScene->nodes[i]->props.isVisible = renderingScene->nodes[i]->isTempNode ? false : true;
         renderingScene->nodes[i]->props.vertexColor = Vector3((i/255.0),1.0,1.0);
-        if(renderingScene->nodes[i]->getType() == NODE_RIG)
+        if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-        else if (renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
-            renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
         else
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         

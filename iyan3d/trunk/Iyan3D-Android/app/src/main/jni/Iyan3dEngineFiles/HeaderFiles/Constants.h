@@ -101,7 +101,6 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4", "vertexColorSkin.vert" , "commonL4.fsh"},
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5", "vertexColorSkin.vert" , "commonL5.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
-    {"SHADER_COMMON_L1","shader.vsh","commonL1.fsh"},
     {"SHADER_PARTICLES", "particles.vsh","particles.fsh"}
 };
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
@@ -136,7 +135,6 @@ const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4","Per_Vertex_Color_Skin","Common_Fragment_L4"},
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5","Per_Vertex_Color_Skin","Common_Fragment_L5"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
-    {"SHADER_COLOR_TEXT","Color_Skin_Vertex","Color_Fragment"},
     {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"}
 };
 
@@ -225,7 +223,6 @@ enum MATERIAL_TYPE
     SHADER_VERTEX_COLOR_SHADOW_SKIN_L4,
     SHADER_VERTEX_COLOR_SHADOW_SKIN_L5,
     SHADER_SHADOW_DEPTH_PASS_TEXT,
-    SHADER_COLOR_TEXT,
     SHADER_PARTICLES
 };
 enum ActionType

@@ -801,6 +801,7 @@ BOOL missingAlertShown;
         return;
     }
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(saveThumbnail) withObject:nil waitUntilDone:YES];
     [self loadSceneSelectionView];
 }
 
@@ -2471,8 +2472,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     std::string* outputFilePath = new std::string([filePath UTF8String]);
     editorScene->saveSceneData(outputFilePath);
     delete outputFilePath;
-    
-    [self performSelectorOnMainThread:@selector(saveThumbnail) withObject:nil waitUntilDone:YES];
 }
 
 - (void) myObjectsBtnDelegateAction:(int)indexValue{

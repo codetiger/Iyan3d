@@ -100,7 +100,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         Vector3 vertexColor = sgNode->props.isSelected ? Vector3(0.0,1.0,0.0) : sgNode->props.vertexColor;
         setVertexColorUniform(sgNode->node->material,vertexColor,SHADER_COLOR_vertexColor,smgr->getNodeIndexByID(sgNode->node->getID()));
         setNodeTransparency(sgNode,SHADER_COLOR_transparency);
-    }else if(matName == "SHADER_COLOR_SKIN" || matName == "SHADER_COLOR_TEXT"){
+    }else if(matName == "SHADER_COLOR_SKIN"){
         setModelViewProjMatrix(sgNode,SHADER_COLOR_SKIN_mvp);
         Vector3 vertexColor = sgNode->props.isSelected ? Vector3(0.0,1.0,0.0) : sgNode->props.vertexColor;
         setVertexColorUniform(sgNode->node->material,vertexColor,SHADER_COLOR_SKIN_vertexColor,smgr->getNodeIndexByID(sgNode->node->getID()));

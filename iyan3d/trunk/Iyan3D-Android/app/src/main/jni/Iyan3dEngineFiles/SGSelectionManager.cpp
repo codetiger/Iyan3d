@@ -369,10 +369,8 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     //currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
     currentSelectedNode->props.isSelected = true;
     //currentSelectedNode->props.isLighting = false;
-    if(currentSelectedNode->getType() == NODE_RIG)
+    if(currentSelectedNode->getType() == NODE_RIG || currentSelectedNode->getType() == NODE_TEXT_SKIN)
         currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-    else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
-        currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
     else
         currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     
@@ -435,10 +433,8 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     
     //selectionScene->selectedNode->props.prevMatName = selectionScene->selectedNode->node->material->name;
     
-    if(selectionScene->selectedNode->getType() == NODE_RIG)
+    if(selectionScene->selectedNode->getType() == NODE_RIG || selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
         selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-    else if (selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
-        selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_TEXT));
     else
         selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     
