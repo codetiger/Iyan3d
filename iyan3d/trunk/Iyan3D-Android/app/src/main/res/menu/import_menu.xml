@@ -1,0 +1,43 @@
+<menu xmlns:androclass="http://schemas.android.com/apk/res/android">
+
+    <item
+        androclass:id="@+id/models"
+        androclass:orderInCategory="0"
+        androclass:icon="@drawable/import_models"
+        androclass:title="@string/models" />
+    <item
+        androclass:id="@+id/images"
+        androclass:orderInCategory="1"
+        androclass:icon="@drawable/import_image"
+        androclass:title="@string/images"/>
+    <item
+        androclass:id="@+id/videos"
+        androclass:orderInCategory="2"
+        androclass:icon="@drawable/import_video"
+        androclass:title="@string/videos" />
+    <item
+        androclass:id="@+id/text"
+        androclass:orderInCategory="3"
+        androclass:icon="@drawable/import_text"
+        androclass:title="@string/text" />
+    <item
+        androclass:id="@+id/light"
+        androclass:orderInCategory="4"
+        androclass:icon="@drawable/import_light"
+        androclass:title="@string/light"/>
+    <item
+        androclass:id="@+id/objFile"
+        androclass:orderInCategory="5"
+        androclass:icon="@drawable/import_obj"
+        androclass:title="@string/objFile" />
+    <item
+        androclass:id="@+id/addBone"
+        androclass:orderInCategory="6"
+        androclass:icon="@drawable/add_bone"
+        androclass:title="@string/addBone" />
+    <item
+        androclass:id="@+id/particle"
+        androclass:orderInCategory="7"
+        androclass:icon="@drawable/import_particle"
+        androclass:title="@string/particle" />
+</menu>

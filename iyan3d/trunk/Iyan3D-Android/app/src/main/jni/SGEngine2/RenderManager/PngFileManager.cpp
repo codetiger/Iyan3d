@@ -154,3 +154,9 @@ void PNGFileManager::write_png_file(char *filename , uint8_t * inputData , int i
     Logger::log(INFO, "IYAN3D.cpp", "Png Write Success");
     fclose(fp);
 }
+
+uint8_t* PNGFileManager::getImageDataFromVideo(string fileName, int frame, int &width, int &height){
+    return NULL;
+}
+
+

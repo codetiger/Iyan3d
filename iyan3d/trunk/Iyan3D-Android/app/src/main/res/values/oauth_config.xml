@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-	<string name="oauth_auth_request_url"><!-- TODO --></string>
-    <string name="oauth_clientId"><!-- TODO --></string>
-    <string name="oauth_secret"><!-- TODO --></string>
-    <string name="oauth_redirect_uri"><!-- TODO --></string>
-</resources>

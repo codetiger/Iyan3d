@@ -1,0 +1,27 @@
+<menu xmlns:androclass="http://schemas.android.com/apk/res/android">
+
+    <item
+        androclass:id="@+id/front"
+        androclass:orderInCategory="0"
+        androclass:title="@string/front" />
+    <item
+        androclass:id="@+id/top"
+        androclass:orderInCategory="1"
+        androclass:title="@string/top"/>
+    <item
+        androclass:id="@+id/left"
+        androclass:orderInCategory="2"
+        androclass:title="@string/left" />
+    <item
+        androclass:id="@+id/back"
+        androclass:orderInCategory="3"
+        androclass:title="@string/back" />
+    <item
+        androclass:id="@+id/right"
+        androclass:orderInCategory="4"
+        androclass:title="@string/right"/>
+    <item
+        androclass:id="@+id/bottom"
+        androclass:orderInCategory="5"
+        androclass:title="@string/bottom" />
+</menu>

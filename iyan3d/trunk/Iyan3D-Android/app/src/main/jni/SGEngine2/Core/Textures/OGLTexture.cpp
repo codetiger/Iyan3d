@@ -51,7 +51,7 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
 
     if(!imageData)
         return false;
-    
+
 //    Logger::log(INFO, "OGLTEX LOADTEX", "width " + to_string(width) + " height " + to_string(height));
     glGenTextures(1, &OGLTextureName);
     glBindTexture(GL_TEXTURE_2D, OGLTextureName);
@@ -64,15 +64,20 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
 
 bool OGLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
 {
+
     textureName = videoFileName;
     texelFormat = format;
     this->texelType = texelType;
-    
-    unsigned char *imageData = getImageDataFromVideo(videoFileName, 0, width, height);
-    
+    unsigned char *imageData;
+    #ifdef ANDROID
+        imageData = PNGFileManager::getImageDataFromVideo(videoFileName, 0, width, height);
+    #else
+        imageData = getImageDataFromVideo(videoFileName, 0, width, height);
+    #endif
+
     if(!imageData)
         return false;
-    
+
     glGenTextures(1, &OGLTextureName);
     glBindTexture(GL_TEXTURE_2D, OGLTextureName);
     glTexImage2D(GL_TEXTURE_2D, 0,getOGLTextureFormat(format), width, height, 0, getOGLTextureFormat(format), getOGLTextureType(texelType), imageData);
@@ -85,14 +90,18 @@ bool OGLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
 
 void OGLTexture::updateTexture(string fileName, int frame)
 {
-    unsigned char *imageData = getImageDataFromVideo(fileName, frame, width, height);
+    unsigned char *imageData;
+    #ifdef ANDROID
+        imageData = PNGFileManager::getImageDataFromVideo(fileName, frame, width, height);
+    #else
+        imageData = getImageDataFromVideo(fileName, frame, width, height);
+    #endif
     if(!imageData)
         return false;
 
     glBindTexture(GL_TEXTURE_2D, OGLTextureName);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, getOGLTextureFormat(texelFormat), getOGLTextureType(texelType), imageData);
     free(imageData);
-
 }
 
 GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format){
@@ -109,7 +118,7 @@ GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format){
 }
 GLenum OGLTexture::getOGLTextureType(TEXTURE_DATA_TYPE type){
     GLenum oglType = GL_UNSIGNED_BYTE;
-    // switch
+// switch
     return oglType;
 }
 void OGLTexture::createRenderTargetTexture(string name, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type, int textureWidth, int textureHeight)
@@ -127,7 +136,7 @@ void OGLTexture::createRenderTargetTexture(string name, TEXTURE_DATA_FORMAT form
     glBindFramebuffer(GL_FRAMEBUFFER,rttFrameBuffer);
     createTexture(texelFormat, texelType, textureWidth, textureHeight, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,OGLTextureName,0);
-    
+
     glBindRenderbuffer(GL_RENDERBUFFER,rttDepthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES,width,height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,rttDepthBuffer);

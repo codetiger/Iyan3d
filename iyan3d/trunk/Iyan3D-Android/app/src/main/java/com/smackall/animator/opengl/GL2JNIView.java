@@ -6,7 +6,7 @@ import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import com.smackall.animator.common.Constant;
+import com.smackall.animator.Helper.Constants;
 
 import java.io.File;
 
@@ -288,9 +288,7 @@ public static boolean  tapdetected=false;
      public static boolean surfaceCreated = false;
         @Override
         public void onDrawFrame(GL10 gl) {
-            if(Constant.animationEditor.renderer) {
                 GL2JNILib.step();
-            }
         }
 
         @Override
@@ -303,53 +301,33 @@ public static boolean  tapdetected=false;
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             // Do nothing.
-            screenWidth = Constant.animationEditor.width;
-            screenHeight = Constant.animationEditor.height;
+            screenWidth = Constants.width;
+            screenHeight = Constants.height;
             Log.d("Iyan 3D ", "surface created Width: " + screenWidth + "Height: " + screenHeight);
             Log.d("Iyan 3D ", "Screen size: height: " + screenHeight);
-            GL2JNILib.init(screenWidth + Constant.getNavigationWidth(Constant.animationEditor.activity), screenHeight);
+            GL2JNILib.init(screenWidth , screenHeight);
             Log.d("Iyan 3D ", "surface Initialized");
             loadFromFile();
         }
 
         public  boolean loadFromFile(){
-            String filePath= Constant.localProjectDir+"/"+Constant.animationEditor.projectFileName+".sgb";
+            String filePath= "";
             System.out.println("Load File :" + filePath);
             File f = new File(filePath);
             if(f.exists()){
-                System.out.println("Load File exist");
                 if(f.length()==0){
                     return false;
                 }
 
                 GL2JNILib.loadFile(filePath);
 
-                Constant.animationEditor.activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Constant.animationEditor.gridViewHorizontally(0);
-                    }
-                });
-                System.out.println("Loading completed");
                 return true;
 
             }else{
                 System.out.println("Load File not exist");
-                //Constant.animationEditor.importedItems.add("Camera");//Select List
-                //Constant.animationEditor.importedItems.add("Light");//Select List
                 return false;
             }
         }
-    }
-
-    public static void callBackSurfaceRendered(boolean isRendered){
-        Renderer.surfaceCreated = isRendered;
-        if(isRendered)
-            Constant.animationEditor.showOrHideSaveProgress("sceneLoadingFinish");
-    }
-
-    public static boolean isSurfaceCreated(){
-        return Renderer.surfaceCreated;
     }
 }
 

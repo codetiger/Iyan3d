@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="smackall.animator"
+    package="com.smackall.animator"
     android:versionCode="8"
     android:versionName="4.5">
 
@@ -31,45 +31,19 @@
         android:required="true" />
 
     <application
-
-
-    android:name="com.smackall.animator.common.ApplicationTracking"
         android:allowBackup="true"
+        android:configChanges="orientation|keyboardHidden"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true"
         android:screenOrientation="sensorLandscape"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-        android:windowSoftInputMode="stateHidden" >
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.example.gcm" />
-            </intent-filter>
-        </receiver>
-        <receiver
-        android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true" >
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-            </intent-filter>
-        </receiver>
-        <service
-            android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false" />
-
+        android:supportsRtl="true"
+        android:windowSoftInputMode="adjustPan"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity
-            android:name="com.smackall.animator.SplashActivity"
+            android:name=".LoadingActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape" >
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,72 +51,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.smackall.animator.AnimationAssetsView.AnimationSelectionView"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensorLandscape" >
+            android:name=".SceneSelection"
+            android:label="@string/title_activity_scene_selection"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="com.smackall.animator.sceneSelectionView.SceneSelectionView"
-            android:screenOrientation="sensorLandscape" >
+            android:name=".EditorView"
+            android:label="@string/title_activity_editor_view"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name="com.smackall.animator.sceneSelectionView.SceneSelectionHelpView"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.AssetsViewController.AssetsViewController"
-            android:screenOrientation="sensorLandscape" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.AnimationEditorView.AnimationEditor"
-            android:screenOrientation="sensorLandscape" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.TextAssetsView.TextAssetsSelectionView"
-            android:screenOrientation="sensorLandscape" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.AnimationEditorView.ImportImage"
-            android:screenOrientation="sensorLandscape" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.ImportAndRig.ImportObjAndTexture"
-            android:screenOrientation="sensorLandscape"
-            android:label="@string/title_activity_import_obj_and_texture" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.ImportAndRig.RigModel"
-            android:screenOrientation="sensorLandscape"
-            android:label="@string/title_activity_rig_model" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.ImportAndRig.AutoRigHelp"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.InAppPurchase.PremiumUpgrade"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name="com.smackall.animator.common.DirectoryPicker"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="82cc1475b1d0de67c92e1f4a294db129b3dc410d" />
-
-        <activity
-            android:name="com.smackall.animator.AnimationEditorView.FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
-
-        <service android:enabled="true" android:name="com.smackall.animator.common.Services" />
     </application>
 </manifest>

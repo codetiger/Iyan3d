@@ -3,7 +3,7 @@
 **
 */
 
-#ifndef UBUNTU
+#ifdef IOS
 #include <cstring>
 #endif
 

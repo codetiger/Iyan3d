@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10"
+    android:background="#3c3f41"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/add_joint"
+            android:background="#f5595c60"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:tag="9"
+            android:drawableLeft="@drawable/add_joint"
+            android:text="   ADD JOINT"
+            android:textColor="#ffffff"
+            android:gravity="center|left" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" >
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/rig_move"
+            android:background="#f5595c60"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:tag="9"
+            android:drawableLeft="@drawable/move_btn"
+            android:text="   MOVE"
+            android:textColor="#ffffff"
+            android:gravity="center|left" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/rig_rotate"
+            android:background="#f5595c60"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:tag="0"
+            android:drawableLeft="@drawable/rotate_btn"
+            android:text="   ROTATE"
+            android:textColor="#ffffff"
+            android:gravity="center|left" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/rig_scale"
+            android:background="#f5595c60"
+            android:drawableLeft="@drawable/scale_btn"
+            android:tag="1"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:textColor="#ffffff"
+            android:text="   SCALE"
+            android:gravity="center|left" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:background="#f5595c60"
+        android:gravity="center">
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   MIRROR   "
+            android:id="@+id/rig_mirror"
+            android:checked="false" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -16,5 +16,6 @@ class PNGFileManager {
 public:
     static uint8_t *read_png_file(const char* file_name, int &width , int &height);
     static void write_png_file(char *filename , uint8_t * inputData , int width , int height);
+    static uint8_t* getImageDataFromVideo(std::string fileName, int frame,int &width, int &height);
 };
 #endif //IYAN3D_ANDROID_PNGFILEMANAGER_H
