@@ -15,6 +15,8 @@ attribute vec4 optionalData3;
 attribute vec4 optionalData4;
 
 uniform int isLighting;
+uniform float isVertexColored;
+uniform vec3 perVertexColor;
 uniform vec3 eyePos;
 uniform mat4 mvp,Model,lightViewProjection;
 uniform mat4 jointTransforms[161];
@@ -27,8 +29,12 @@ varying vec4 texCoordsBias,normal,eyeVec,vertexPosCam;
 
 void main()
 {
-    vertexColor = vec3(optionalData4.xyz);
-    vTexCoord = vec2(0.0);
+    
+    vertexColor = (int(isVertexColored) == 0) ? vec3(0.0) : perVertexColor;
+    vTexCoord = (int(isVertexColored) == 0) ? texCoord1 : vec2(0.0);
+
+//    vertexColor = vec3(optionalData4.xyz);
+//    vTexCoord = vec2(0.0);
     vec4 pos = vec4(0.0);
     vec4 nor = vec4(0.0);
     int jointId = int(optionalData1.x);

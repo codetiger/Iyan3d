@@ -36,7 +36,7 @@
 #define ASSET_CAMERA 7
 #define ASSET_LIGHT 8
 #define ASSET_IMAGE 9
-#define ASSET_TEXT 10
+#define ASSET_TEXT_RIG 10
 #define ASSET_ADDITIONAL_LIGHT 900
 
 #define OBJ_VERTEX_COUNT 8000
@@ -561,7 +561,7 @@ Vector2 touchPosition;
         isFileSaved = !(animationScene->changeAction = true);
         break;
     }
-    case ASSET_TEXT: {
+    case ASSET_TEXT_RIG: {
         [self showTipsViewForAction:OBJECT_IMPORTED];
         SGNode* textNode = animationScene->loadNode(NODE_TEXT, 0, name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String]);
         if (textNode == NULL) {
@@ -2751,7 +2751,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
     fontFilePath = [textDetails objectForKey:@"font"];
 
-    bool status = [self loadNodeInScene:ASSET_TEXT AssetId:0 AssetName:[self getwstring:[textDetails objectForKey:@"text"] ] Width:[[textDetails objectForKey:@"size"] intValue] Height:[[textDetails objectForKey:@"bevel"] intValue]];
+    bool status = [self loadNodeInScene:ASSET_TEXT_RIG AssetId:0 AssetName:[self getwstring:[textDetails objectForKey:@"text"] ] Width:[[textDetails objectForKey:@"size"] intValue] Height:[[textDetails objectForKey:@"bevel"] intValue]];
     if (!status)
         return;
 

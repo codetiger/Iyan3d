@@ -854,7 +854,9 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
                                    constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
                                    unsigned int vid [[ vertex_id ]],
-                                   constant JointData* Joint_Data [[ buffer(SHADER_PERVERTEXCOLOR_jointData) ]]
+                                   constant JointData* Joint_Data [[ buffer(SHADER_PERVERTEXCOLOR_jointData) ]],
+                                   constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                   constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                    )
 {
     ColorInOut out;
@@ -864,8 +866,14 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     float4 optionalData1 = vertex_array[vid].optionalData1;
     float4 optionalData2 = vertex_array[vid].optionalData2;
     out.transparency = transparency;
-    out.perVertexColor = vertex_array[vid].optionalData4;
+    //out.perVertexColor = vertex_array[vid].optionalData4;
     
+    
+    out.perVertexColor = (int(isVertexColored) == 0) ? float4(1.0) : float4(float3(vertColor[0].data),1.0);
+    float2 uv = (int(isVertexColored) == 0) ? vertex_array[vid].texCoord1 : float2(0.0,0.0);
+    out.uv.x = uv.x;
+    out.uv.y = uv.y;
+
     out.texture2UV = float2(0.0);
     out.vertexDepth = 0.0;
     

@@ -86,7 +86,7 @@ Vectoriser* TextMesh3d::generateVertices(FT_Face face, wchar_t ch, unsigned shor
         FT_Outline_Translate(&face->glyph->outline, -strength * 64.0 * 0.5, -strength * 64.0 * 0.5);
     }
     FT_Orientation f = FT_Outline_Get_Orientation(&face->glyph->outline);
-    printf("Orientation: %d\n", f);
+//    printf("Orientation: %d\n", f);
 
     Vectoriser *v = new Vectoriser(face->glyph->outline, bezierSteps, f==true);
     FT_Done_Glyph(glyph);

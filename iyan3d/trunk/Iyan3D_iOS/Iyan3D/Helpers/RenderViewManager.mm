@@ -22,7 +22,7 @@
 #define ASSET_CAMERA 7
 #define ASSET_LIGHT 8
 #define ASSET_IMAGE 9
-#define ASSET_TEXT 10
+#define ASSET_TEXT_RIG 10
 #define ASSET_ADDITIONAL_LIGHT 900
 #define ADD_OBJECT 100
 #define DELETE_OBJECT 200
@@ -276,7 +276,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             
             break;
         }
-        case ASSET_TEXT: {
+        case ASSET_TEXT_RIG: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
             float red = [[moreDetail objectForKey:@"red"]floatValue];
             float green = [[moreDetail objectForKey:@"green"]floatValue];

@@ -53,6 +53,16 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node = loadSGMandOBJ(assetId,objectType,smgr);
             break;
         }
+        case NODE_TEXT:{
+            textureName = texturePath;
+            props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
+            node = load3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
+            props.transparency = 1.0;
+            props.nodeSpecificFloat = height;
+            optionalFilePath = specificFilePath;
+            props.fontSize = width;
+            break;
+        }
         case NODE_RIG:{
             textureName = texturePath;
             node = loadSGR(assetId,objectType,smgr);
@@ -67,8 +77,9 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_TEXT_SKIN:{
             // 'width' here is font size and 'height' is bevel value
-            node = loadSkin3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
+            textureName = texturePath;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
+            node = loadSkin3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;
             optionalFilePath = specificFilePath;
@@ -172,6 +183,15 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_SHADOW_SKIN_L1));
     node->getMesh()->Commit();
     
+    string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
+    
+    if(checkFileExists(textureFileName)) {
+        props.perVertexColor = false;
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        node->setTexture(nodeTex,1);
+    } else
+        props.perVertexColor = true;
+    
     return node;
 }
 
@@ -218,11 +238,12 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     }
     
     Mesh *mesh = TextMesh3d::get3DTextMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
-    shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
-    node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-
+    
     if(mesh == NULL)
         return shared_ptr<Node>();
+
+    shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
+    node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     
     string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
     

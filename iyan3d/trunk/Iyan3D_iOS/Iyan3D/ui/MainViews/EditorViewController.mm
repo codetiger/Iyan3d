@@ -65,7 +65,7 @@
 #define ASSET_CAMERA 7
 #define ASSET_LIGHT 8
 #define ASSET_IMAGE 9
-#define ASSET_TEXT 10
+#define ASSET_TEXT_RIG 10
 #define ASSET_ADDITIONAL_LIGHT 900
 
 #define ADD_BUTTON_TAG 99
@@ -236,7 +236,7 @@ BOOL missingAlertShown;
     
     NSLog(@"Is Temp Node : %d", isTempNode);
 
-    [renderViewMan loadNodeInScene:ASSET_TEXT AssetId:assetId AssetName:assetName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void) importAdditionalLight{
@@ -1677,7 +1677,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-        [self load3DTex:ASSET_TEXT AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        [self load3DTex:ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
 }
 
@@ -1718,7 +1718,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-        [self load3DTex:ASSET_TEXT AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        [self load3DTex:ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
 }
 
