@@ -451,8 +451,6 @@
 		01D2F0A81C451820000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
 		01D5BC891C53505100C39659 /* TextMesh3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D5BC871C53505100C39659 /* TextMesh3d.cpp */; };
 		01D5BC8A1C53505100C39659 /* TextMesh3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D5BC871C53505100C39659 /* TextMesh3d.cpp */; };
-		01E6188C1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
-		01E6188D1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
 		01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
 		01E6188F1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
 		01E618901C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */; };
@@ -1303,6 +1301,10 @@
 		3D53489A1C3BF60200C6A437 /* LightProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D5348971C3BF60200C6A437 /* LightProperties.mm */; };
 		3D53489B1C3BF60200C6A437 /* LightProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D5348981C3BF60200C6A437 /* LightProperties.xib */; };
 		3D53489C1C3BF60200C6A437 /* LightProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D5348981C3BF60200C6A437 /* LightProperties.xib */; };
+		3D5605ED1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EB1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png */; };
+		3D5605EE1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EB1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png */; };
+		3D5605EF1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */; };
+		3D5605F01C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */; };
 		3D58CD471C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
 		3D58CD481C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
 		3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */; };
@@ -2857,7 +2859,6 @@
 		01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = FrameWorks/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		01D5BC871C53505100C39659 /* TextMesh3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextMesh3d.cpp; sourceTree = "<group>"; };
 		01D5BC881C53505100C39659 /* TextMesh3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMesh3d.h; sourceTree = "<group>"; };
-		01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-Cloud-shader_Pad.png"; sourceTree = "<group>"; };
 		01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-shader_Pad.png"; sourceTree = "<group>"; };
 		01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toon-shader_Pad.png"; sourceTree = "<group>"; };
 		01E9E7511C5F6204002FCA03 /* property-icon_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "property-icon_iphone.png"; sourceTree = "<group>"; };
@@ -3575,6 +3576,8 @@
 		3D5348961C3BF60200C6A437 /* LightProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightProperties.h; path = "ui/Popover Views/LightProperties.h"; sourceTree = "<group>"; };
 		3D5348971C3BF60200C6A437 /* LightProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LightProperties.mm; path = "ui/Popover Views/LightProperties.mm"; sourceTree = "<group>"; };
 		3D5348981C3BF60200C6A437 /* LightProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightProperties.xib; path = "ui/Popover Views/LightProperties.xib"; sourceTree = "<group>"; };
+		3D5605EB1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Photo-Realistic-shader_Pad.png"; sourceTree = "<group>"; };
+		3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Photo-Realistic-shader_Pad@2x.png"; sourceTree = "<group>"; };
 		3D58CD441C3D0D3D006371DE /* TextColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextColorPicker.h; path = "ui/Popover Views/TextColorPicker.h"; sourceTree = "<group>"; };
 		3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextColorPicker.mm; path = "ui/Popover Views/TextColorPicker.mm"; sourceTree = "<group>"; };
 		3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextColorPicker.xib; path = "ui/Popover Views/TextColorPicker.xib"; sourceTree = "<group>"; };
@@ -4785,7 +4788,8 @@
 		01E618881C2C145700DBBC00 /* renderingview */ = {
 			isa = PBXGroup;
 			children = (
-				01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */,
+				3D5605EB1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png */,
+				3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */,
 				01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */,
 				01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */,
 				01B3953B1C37AC54003955C6 /* Normal-shader_Pad@2x.png */,
@@ -7263,6 +7267,7 @@
 				256F6B951BF6246300154622 /* json_valueiterator.inl in Resources */,
 				01B4CF881C291EFD0091E19B /* AnimationSelectionSlider.xib in Resources */,
 				25EC6CD81C7F39DD002CF5D2 /* wm109.png in Resources */,
+				3D5605EF1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */,
 				7FC900D01A0A01470051B941 /* feedback-img-phone.png in Resources */,
 				25EC6C341C7F39DD002CF5D2 /* wm27.png in Resources */,
 				01B02CF11C61CDB500C9102A /* color_IPhone@3x.png in Resources */,
@@ -7671,6 +7676,7 @@
 				259EE1531BDE342800C99784 /* dummy.png in Resources */,
 				7FC901391A0A07860051B941 /* view-img@2x.png in Resources */,
 				7FC900F01A0A01470051B941 /* save-img-phone.png in Resources */,
+				3D5605ED1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png in Resources */,
 				25E86EC51B44D10300BC48DC /* depthPassText.vsh in Resources */,
 				01B4D03D1C2937000091E19B /* Animation_Pad.png in Resources */,
 				256F6F5A1BF6257C00154622 /* default in Resources */,
@@ -7839,7 +7845,6 @@
 				01B02CAC1C61CAB400C9102A /* Add-Frames_IPhone@3x.png in Resources */,
 				01F873141C3A6C4E009AA31E /* View_IPhone@2x.png in Resources */,
 				25EC6BAA1C7F066B002CF5D2 /* wm15.png in Resources */,
-				01E6188C1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */,
 				627A5F8119ED438600CB545C /* last.png in Resources */,
 				01F872EE1C3A6C4E009AA31E /* Import_IPhone@2x.png in Resources */,
 				7FC527631B6F96FF00C5D26D /* Mail-phone@3x.png in Resources */,
@@ -8171,6 +8176,7 @@
 				7FC527741B6F983D00C5D26D /* Rate@2x.png in Resources */,
 				7FC524EC1B6F8C0A00C5D26D /* Full-screen-phone.png in Resources */,
 				25EC6CD91C7F39DD002CF5D2 /* wm109.png in Resources */,
+				3D5605F01C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */,
 				7FC524ED1B6F8C0A00C5D26D /* Full-screen-phone@2x.png in Resources */,
 				25EC6C351C7F39DD002CF5D2 /* wm27.png in Resources */,
 				01B02CF21C61CDB500C9102A /* color_IPhone@3x.png in Resources */,
@@ -8293,7 +8299,6 @@
 				E20672151B049AA6006DD2F7 /* view-img.png in Resources */,
 				E20672161B049AA6006DD2F7 /* RenderingViewControllerPhone.xib in Resources */,
 				E20672171B049AA6006DD2F7 /* info-phone@2x.png in Resources */,
-				01E6188D1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */,
 				E20672191B049AA6006DD2F7 /* boneLimits45.json in Resources */,
 				01B02CD91C61CAB400C9102A /* MY-OBJECTS_IPhone@3x.png in Resources */,
 				25EC6C671C7F39DD002CF5D2 /* wm52.png in Resources */,
@@ -8580,6 +8585,7 @@
 				256ED8E21B1FEDED008ADEF8 /* ATClassicRoman.ttf in Resources */,
 				E20672DB1B049AA6006DD2F7 /* AutoRigHelp3.png in Resources */,
 				E20672DF1B049AA6006DD2F7 /* animate-img@2x.png in Resources */,
+				3D5605EE1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png in Resources */,
 				E20672E01B049AA6006DD2F7 /* redo-img@2x.png in Resources */,
 				E20672E11B049AA6006DD2F7 /* undo-img@2x.png in Resources */,
 				25EC6C331C7F39DD002CF5D2 /* wm26.png in Resources */,

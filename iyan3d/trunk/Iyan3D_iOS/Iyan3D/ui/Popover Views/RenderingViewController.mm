@@ -689,7 +689,7 @@
         cell.ShaderImage.image =[UIImage imageNamed:@"Normal-shader_Pad.png"];
     }
     else if ((int)indexPath.row == 2){
-        cell.ShaderImage.image =[UIImage imageNamed:@"Normal-Cloud-shader_Pad.png"];
+        cell.ShaderImage.image =[UIImage imageNamed:@"Photo-Realistic-shader_Pad.png"];
     }
     else if ((int)indexPath.row == 1){
         cell.ShaderImage.image =[UIImage imageNamed:@"Toon-shader_Pad.png"];
