@@ -46,11 +46,11 @@
     bool isFirstTimeAnimationApplyed;
     NSString *userid;
     int _assetId,selectedCell;
+    int ScreenWidth,ScreenHeight;
 }
 
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime;
-
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
 - (void)publishBtnaction;
 
 @property (weak, nonatomic) IBOutlet UIButton *publishBtn;

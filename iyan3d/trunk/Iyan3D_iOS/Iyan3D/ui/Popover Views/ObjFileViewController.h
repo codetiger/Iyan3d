@@ -28,6 +28,7 @@
 	int assetId;
     NSInteger viewType;
     BOOL objAvailable;
+    int ScreenWidth,ScreenHeight;
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *objFileList;
@@ -55,6 +56,5 @@
 -(void) storeOBJTextureinCachesDirectory:(NSString*)fileName assetId:(int)assetId;
 - (NSData*) convertAndScaleImage:(UIImage*)image size:(int)textureRes;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil callerId:(NSInteger) callerId objImported:(bool)value;
-
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil callerId:(NSInteger) callerid objImported:(bool)value ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
 @end

@@ -256,7 +256,6 @@
         }
         TextFrameCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
         cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
-
         [self load3dText];
     }
 }

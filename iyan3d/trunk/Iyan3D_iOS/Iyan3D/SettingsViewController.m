@@ -306,6 +306,11 @@
 
 - (IBAction)restoreAction:(id)sender
 {
+    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] &&  [[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"] length] <= 5){
+        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [signinAlert show];
+        return;
+    }
     [[AppHelper getAppHelper] addTransactionObserver];
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] restorePurchasedTransaction];

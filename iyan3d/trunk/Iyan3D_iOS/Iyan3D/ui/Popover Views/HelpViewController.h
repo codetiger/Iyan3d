@@ -34,6 +34,7 @@
     float buttonPosition;
     NSMutableArray *linkArray,*imageArray;
     UIActivityIndicatorView *activityIndicator;
+    int ScreenWidth, ScreenHeight;
 }
 
 @property (nonatomic, strong) NSMutableData *responseData;
@@ -48,7 +49,7 @@
 - (IBAction)changePage;
 - (IBAction)doneButtonAction:(id)sender;
 - (IBAction)moreInfoButtonAction:(id)sender;
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil CalledFrom:(NSInteger) callerId;
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil CalledFrom:(NSInteger) callerId ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
 - (void)setImageInfo:(NSString*)name;
 - (void)playButtonPressed:(id)sender;
 @end

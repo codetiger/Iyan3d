@@ -230,7 +230,7 @@
                     </connections>
                 </segmentedControl>
                 <view contentMode="center" id="KgH-cZ-Wef" userLabel="progressHolder">
-                    <rect key="frame" x="47" y="521" width="443" height="30"/>
+                    <rect key="frame" x="47" y="509" width="400" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </view>
             </subviews>

@@ -31,9 +31,12 @@
     int selectedAsset, modelCategoryTab;
     //BOOL addToScenePressed;
     int viewType;
+    int ScreenWidth, ScreenHeight;
+
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
+;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *assetsCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *modelCategory;

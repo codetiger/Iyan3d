@@ -21,8 +21,10 @@
 
 @synthesize scrollView, pageControl;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil CalledFrom:(NSInteger)callerId
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil CalledFrom:(NSInteger)callerId ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
+    ScreenWidth= screenWidth;
+    ScreenHeight = screenHeight;
     ValueType= callerId;
     currentPage = 0;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -34,7 +36,7 @@
     xOffset = 0;
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        if(SCREENWIDTH == MAX_RESOLUTION)
+        if(ScreenWidth == MAX_RESOLUTION)
         {
             playBtnWidth = 100;
             playBtnHeight = 101;
@@ -49,11 +51,11 @@
     }
     else
     {
-        if(SCREENWIDTH <= MIN_RESOLUTION) {
+        if(ScreenWidth <= MIN_RESOLUTION) {
             playBtnWidth = 60;
             playBtnHeight = 61;
             buttonPosition = 0.385;
-        } else if(SCREENWIDTH >= 768) {
+        } else if(ScreenWidth >= 768) {
             playBtnWidth = 60;
             playBtnHeight = 61;
             buttonPosition = 0.385;
@@ -67,6 +69,7 @@
         imageYOrigin = 10;
     }
     if (self) {
+       
         // Custom initialization
     }
     return self;
@@ -155,7 +158,7 @@
     if(addPage > 0) {
         if(UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
         {
-            if(SCREENWIDTH >= 768)
+            if(ScreenWidth >= 768)
                 xOffset = 30;
         }
 

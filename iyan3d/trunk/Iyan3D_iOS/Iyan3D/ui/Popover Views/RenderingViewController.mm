@@ -61,7 +61,7 @@
 @synthesize youtubeService;
 @synthesize videoFilePath;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -74,6 +74,8 @@
         resolutionType = resolution;
         shaderType = SHADER_DEFAULT;
         bgColor = Vector3(0.1,0.1,0.1);
+        ScreenWidth = screenWidth;
+        ScreenHeight = screenHeight;
     }
     return self;
 }
@@ -134,7 +136,7 @@
     [self.exportButton setHidden:true];
     [self.youtubeButton setHidden:true];
     if(renderingExportImage != RENDER_IMAGE){
-        
+        /*
         _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(_progressSub.frame.origin.x,_progressSub.frame.origin.y, _progressSub.frame.size.width, _progressSub.frame.size.height)];
         _trimControl.length = renderingEndFrame; // 200 seconds
         _trimControl.delegate = self;
@@ -186,11 +188,11 @@
     if([Utility IsPadDevice])
         return UIEdgeInsetsMake(20, 20, 20, 20);
     else {
-        if(iOSVersion >= 8.0 && SCREENWIDTH == 667)
+        if(iOSVersion >= 8.0 && ScreenWidth == 667)
         {
             return UIEdgeInsetsMake(12, 170, 25, 70);
         }
-        else if(iOSVersion >= 8.0 && SCREENWIDTH <= 640)
+        else if(iOSVersion >= 8.0 && ScreenWidth <= 640)
         {
             return UIEdgeInsetsMake(12, 90, 25, 75);
         }
@@ -280,8 +282,8 @@
              [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:[[AppHelper getAppHelper] userDefaultsForKey:@"username"] Email:[[AppHelper getAppHelper] userDefaultsForKey:@"email"] SignInType:[[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue]];
             }
             else{
-                UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this.!!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [userNameAlert show];
+                UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [signinAlert show];
                 [self.trimControl setHidden:NO];
             }
         }
@@ -313,9 +315,9 @@
 
 - (void) verifyCreditsAndRender:(NSNumber*)userCredits
 {
-    int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
+    int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2)+((_watermarkSwitch.isOn)) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
+    int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
     
     if([userCredits intValue] >= abs(credits)) {
         [_creditLable setHidden:YES];
@@ -335,9 +337,9 @@
         [_creditLable setHidden:YES];
     else {
         [_creditLable setHidden:NO];
-        int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
+        int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
         int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-        int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? ((int)(frames/2) + ((_watermarkSwitch.isOn) ? 0 : 50)): (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
+        int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
         _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
     }
 }
@@ -479,6 +481,15 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if(renderingExportImage != RENDER_IMAGE){
+        
+        _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(_progressSub.frame.origin.x,_progressSub.frame.origin.y, _progressSub.frame.size.width, _progressSub.frame.size.height)];
+        _trimControl.length = renderingEndFrame; // 200 seconds
+        _trimControl.delegate = self;
+        _trimControl.center = _progressSub.center;
+        [self.view addSubview:_trimControl];
+    }
+    
     [self removeSGFDFilesIfAny];
     self.screenName = @"RenderingView";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersBG) name:@"AppGoneBackground" object:nil];
@@ -486,6 +497,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesToRender) name:@"FileWriteCompleted" object:nil];
 
     isAppInBg = false;
+    [self updateCreditLable];
 }
 - (void) viewWillDisappear:(BOOL)animated
 {
@@ -595,7 +607,7 @@
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [shaderArray count];
+    return 2;
 }
 
 - (ShaderCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

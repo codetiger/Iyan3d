@@ -48,14 +48,13 @@
     }
     return self;
 }
-- (void)setImageInfo:(NSString*)assetId forView:(int)viewType OperationQueue:(NSOperationQueue*)q
+- (void)setImageInfo:(NSString*)assetId forView:(int)viewType OperationQueue:(NSOperationQueue*)q ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
     queue = q;
-
     float x = 0.0;
-    if (SCREENWIDTH == 1024)
+    if (screenWidth == 1024)
         x = 3.8;
-    else if (SCREENWIDTH <= 667)
+    else if (screenHeight <= 667)
         x = 2;
     else
         x = 3.2;

@@ -56,9 +56,10 @@
     int selectedIndex,tempSelectedIndex;
     BOOL cancelPressed;
     Vector3 bgColor;
+    int ScreenWidth,ScreenHeight;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution;
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
 @property (strong, nonatomic) RETrimControl *trimControl;
 @property (strong, nonatomic) NSString *sgbPath;
 @property (strong, nonatomic) NSString *projectName;

@@ -66,11 +66,13 @@
     NSTimer *playTimer;
     SettingsViewController *settingsVc;
     CADisplayLink* displayLink;
-    CGFloat screenHeight;
+    //CGFloat screenHeight;
     ScaleForAutoRigViewController *scaleAutoRig;
     Vector4 renderBgColor;
     NSDictionary *deviceNames;
     NSString *cachesDir , *docDir;
+    int ScreenWidth;
+    int ScreenHeight;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;

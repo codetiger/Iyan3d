@@ -27,8 +27,10 @@
     NSMutableData *myData;
 }
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil callerId:(NSInteger) callerid objImported:(bool)value
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil callerId:(NSInteger) callerid objImported:(bool)value ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
+    ScreenWidth = screenWidth;
+    ScreenHeight = screenHeight;
     valueType= callerid;
     objAvailable=value;
     objFileIndex = -1 ,textureFileIndex = -1; //default value
@@ -204,7 +206,7 @@
 - (IBAction) helpButtonAction:(id)sender
 {
     if([Utility IsPadDevice]) {
-        HelpViewController* morehelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil CalledFrom:COMES_FROM_OBJIMPORTER];
+        HelpViewController* morehelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil CalledFrom:COMES_FROM_OBJIMPORTER ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         morehelpView.delegate = self;
         morehelpView.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:morehelpView animated:YES completion:nil];
@@ -213,7 +215,7 @@
 		morehelpView.view.frame = rect;
 	}
     else{
-        HelpViewController* morehelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewControllerPhone" bundle:nil CalledFrom:COMES_FROM_OBJIMPORTER];
+        HelpViewController* morehelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewControllerPhone" bundle:nil CalledFrom:COMES_FROM_OBJIMPORTER ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         morehelpView.delegate = self;
         morehelpView.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:morehelpView animated:YES completion:nil];

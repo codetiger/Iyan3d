@@ -54,7 +54,7 @@
     [self.sceneView setHidden:YES];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"]) {
-        UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You have already upgraded to Premium. Please use 'Restore Purchase' in 'Settings' menu to verify your purchase." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You have already upgraded to Premium. Please Signin and use 'Restore Purchase' in 'Settings' menu to verify your purchase." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [infoAlert show];
     }
     
@@ -179,7 +179,7 @@
         [appDelegate.window setRootViewController:animationEditor];
     }
     else{
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }
@@ -209,7 +209,7 @@
     if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
-                      (screenHeight>320) ? @"SettingsViewControllerPhone2x" :
+                      (screenHeight>320) ? @"SettingsViewControllerPhone" :
                       @"SettingsViewControllerPhone" bundle:nil];
         [settingsVc.view setClipsToBounds:YES];
         settingsVc.delegate=self;
@@ -330,6 +330,82 @@
     }
     
     [self removeFromParentViewController];
+}
+
+- (IBAction)loginBtnAction:(id)sender {
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
+    {
+        if ([Utility IsPadDevice])
+        {
+            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
+            self.popoverController.popoverContentSize = CGSizeMake(305, 182);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [_loggedInVc.view setClipsToBounds:YES];
+            _loggedInVc.delegare=self;
+            self.popUpVc.delegate=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+        }
+        else
+        {
+            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
+            self.popoverController.popoverContentSize = CGSizeMake(230.0, 93);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            _loggedInVc.delegare=self;
+            [_loggedInVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+        }   
+        
+    }
+    else
+    {
+        if ([Utility IsPadDevice])
+        {
+            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
+            self.popoverController.popoverContentSize = CGSizeMake(302 , 240.0);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [loginVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            loginVc.delegare=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+            
+        }
+        else
+        {
+            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
+            self.popoverController.popoverContentSize = CGSizeMake(228.00, 274.0);
+            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            [loginVc.view setClipsToBounds:YES];
+            self.popUpVc.delegate=self;
+            loginVc.delegare=self;
+            self.popoverController.delegate =self;
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                                  animated:YES];
+        }
+    }
+
 }
 #pragma mark ScenePropertiesDelegate
 
@@ -481,6 +557,22 @@
     if (([UIScreen mainScreen].scale > 2.0)) return YES;
     return NO;
 }
+
+#pragma LogIn Delegates
+-(void)googleSigninDelegate{
+    isLoggedin= true;
+}
+-(void)dismisspopover{
+    [self.popoverController dismissPopoverAnimated:YES];
+
+}
+
+-(void)dismissView{
+    [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
+    [self.popoverController dismissPopoverAnimated:YES];
+
+}
+
 
 #pragma Dealloc Delegate
 

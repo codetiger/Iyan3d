@@ -149,7 +149,7 @@ BOOL missingAlertShown;
     [_rigCancelBtn setHidden:YES];
     [_rigAddToSceneBtn setHidden:YES];
     [self updateXYZValuesHide:YES X:0.0 Y:0.0 Z:0.0];
-    
+  
 //    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
@@ -157,8 +157,8 @@ BOOL missingAlertShown;
     if (iOSVersion >= 8.0)
         isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
 #endif
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    screenHeight = screenRect.size.height;
+//    CGRect screenRect = [[UIScreen mainScreen] bounds];
+//    screenHeight = screenRect.size.height;
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     if ([Utility IsPadDevice])
@@ -173,18 +173,8 @@ BOOL missingAlertShown;
     
     [self.framesCollectionView reloadData];
     [self.objectList reloadData];
-    [self initScene];
-    [self changeAllButtonBG];
-    [self setupEnableDisableControls];
-    [self createDisplayLink];
+
     [self undoRedoButtonState:DEACTIVATE_BOTH];
-    if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
-        [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
-        NSLog(@"Toolbar position : %@ ",[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]);
-    } else {
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
-        [self toolbarPosition:0];
-    }
     if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
         self.objectList.allowsMultipleSelection=YES;
     }
@@ -202,7 +192,25 @@ BOOL missingAlertShown;
     NSLog(@"Document Path : %@ ",documentsDirectory);
     [_center_progress stopAnimating];
     [_center_progress setHidden:YES];
-    if (editorScene->actionMan->actions.size() > 0)
+    
+    ScreenWidth = self.renderView.frame.size.width;
+    ScreenHeight = self.renderView.frame.size.height;
+    if(!editorScene){
+        [self initScene];
+        [self changeAllButtonBG];
+        [self setupEnableDisableControls];
+        [self createDisplayLink];
+        
+        if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
+            [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+            NSLog(@"Toolbar position : %@ ",[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]);
+        } else {
+            [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
+            [self toolbarPosition:0];
+        }
+    }
+    [self.framesCollectionView reloadData];
+    if (editorScene && editorScene->actionMan->actions.size() > 0)
         [self.undoBtn setEnabled:YES];
 }
 
@@ -213,27 +221,31 @@ BOOL missingAlertShown;
     renderViewMan = [[RenderViewManager alloc] init];
     renderViewMan.delegate = self;
     [renderViewMan setupLayer:_renderView];
-    
+
     if (isMetalSupported) {
-        [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
+        [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-        editorScene = new SGEditorScene(METAL, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+        editorScene = new SGEditorScene(METAL, smgr, ScreenWidth * screenScale, ScreenHeight * screenScale);
         [renderViewMan setUpPaths:smgr];
         editorScene->screenScale = screenScale;
     }
     else {
         [renderViewMan setupContext];
-        [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
+        [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-        editorScene = new SGEditorScene(OPENGLES2, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
-        NSLog(@"\nScreen Size From Native : %f %f " , self.view.frame.size.width,self.view.frame.size.height);
-        NSLog(@"\nScreen Size From Macro : %f %f " , SCREENWIDTH,SCREENHEIGHT);
+        editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale);
+        
+        NSLog(@"\nScreen Size %d x %d - %f x %f " , ScreenWidth,ScreenHeight,SCREENWIDTH,SCREENHEIGHT);
+        NSLog(@"\nScreen Size With Scale %f x %f " , ScreenWidth*screenScale,ScreenHeight*screenScale);
+        
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
+        
         [renderViewMan setupRenderBuffer];
         [renderViewMan setupFrameBuffer];
     }
+    
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
         editorScene->camPreviewScale=[[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]floatValue];
     }
@@ -676,13 +688,13 @@ BOOL missingAlertShown;
 
 - (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return editorScene->totalFrames;
+    return (editorScene) ? editorScene->totalFrames : 24;
 }
 
 - (FrameCellNew*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
     FrameCellNew* cell = [self.framesCollectionView dequeueReusableCellWithReuseIdentifier:@"FRAMECELL" forIndexPath:indexPath];
-    if (editorScene->isKeySetForFrame.find((int)indexPath.row) != editorScene->isKeySetForFrame.end() && (indexPath.row) == editorScene->currentFrame) {
+    if (editorScene &&  editorScene->isKeySetForFrame.find((int)indexPath.row) != editorScene->isKeySetForFrame.end() && (indexPath.row) == editorScene->currentFrame) {
         cell.backgroundColor = [UIColor blackColor];
         cell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
                                                  green:156.0f / 255.0f
@@ -691,7 +703,7 @@ BOOL missingAlertShown;
         .CGColor;
         cell.layer.borderWidth = 2.0f;
     }
-    else if (editorScene->isKeySetForFrame.find((int)indexPath.row) != editorScene->isKeySetForFrame.end()) {
+    else if (editorScene && editorScene->isKeySetForFrame.find((int)indexPath.row) != editorScene->isKeySetForFrame.end()) {
         cell.backgroundColor = [UIColor blackColor];
         cell.layer.borderColor = [UIColor blackColor].CGColor;
         cell.layer.borderWidth = 2.0f;
@@ -708,7 +720,7 @@ BOOL missingAlertShown;
         .CGColor;
         cell.layer.borderWidth = 2.0f;
     }
-    if ((indexPath.row) == editorScene->currentFrame) {
+    if (editorScene && (indexPath.row) == editorScene->currentFrame) {
         cell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
                                                  green:156.0f / 255.0f
                                                   blue:156.0f / 255.0f
@@ -768,18 +780,18 @@ BOOL missingAlertShown;
     }
     cell.textLabel.font=[cell.textLabel.font fontWithSize:13];
     cell.textLabel.text = [assetsInScenes objectAtIndex:indexPath.row];
-    if(editorScene->nodes.size() > indexPath.row){
-        if(editorScene->nodes[indexPath.row]->getType() == NODE_CAMERA)
+    if(editorScene && editorScene->nodes.size() > indexPath.row){
+        if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_CAMERA)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
-        else if(editorScene->nodes[indexPath.row]->getType() == NODE_LIGHT)
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_LIGHT)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-        else if(editorScene->nodes[indexPath.row]->getType() == NODE_ADDITIONAL_LIGHT)
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_ADDITIONAL_LIGHT)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-        else if(editorScene->nodes[indexPath.row]->getType() == NODE_TEXT_SKIN)
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_TEXT_SKIN)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
-        else if(editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
-        else if(editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
+        else if(editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
         else
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
@@ -1006,7 +1018,7 @@ BOOL missingAlertShown;
         {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(305, 525);
+            self.popoverController.popoverContentSize = CGSizeMake(305, 182);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             [_loggedInVc.view setClipsToBounds:YES];
@@ -1022,7 +1034,7 @@ BOOL missingAlertShown;
         {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
+            self.popoverController.popoverContentSize = CGSizeMake(230.0, 93);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             _loggedInVc.delegare=self;
@@ -1297,7 +1309,7 @@ BOOL missingAlertShown;
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = CGSizeMake(407 , 273);
+        self.popoverController.popoverContentSize = CGSizeMake(407 , 203);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -2064,7 +2076,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = CGSizeMake(407 , 273);
+        self.popoverController.popoverContentSize = CGSizeMake(407 , 203);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -2226,12 +2238,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         else{
             ANIMATION_TYPE animType = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) ? TEXT_ANIMATION : RIG_ANIMATION;
             if([Utility IsPadDevice]){
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:animType  EditorScene:editorScene FirstTime:YES];
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:animType  EditorScene:editorScene FirstTime:YES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
                 animationsliderVC.delegate = self;
                 [self showOrHideLeftView:YES withView:animationsliderVC.view];
             }
             else{
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:animType EditorScene:editorScene FirstTime:YES];
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:animType EditorScene:editorScene FirstTime:YES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
                 animationsliderVC.delegate = self;
                 [self showOrHideLeftView:YES withView:animationsliderVC.view];
             }
@@ -2265,13 +2277,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         case IMPORT_MODELS:
             if([Utility IsPadDevice]){
                 [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }
             else{
                 [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }
@@ -2388,7 +2400,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         if([Utility IsPadDevice]) {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType];
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
             renderingView.delegate = self;
             renderingView.projectName = currentScene.name;
             renderingView.sgbPath = [self getSGBPath];
@@ -2404,12 +2416,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             RenderingViewController* renderingView;
             
             renderingView = [[RenderingViewController alloc]initWithNibName:([self iPhone6Plus]) ? @"RenderingViewControllerPhone@2x" :
-                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType];
+                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
             renderingView.delegate = self;
             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             renderingView.projectName = currentScene.name;
             renderingView.sgbPath = [self getSGBPath];
-            if([Utility IsPadDevice] || screenHeight < 400)
+            if([Utility IsPadDevice] || ScreenHeight < 400)
                 renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             CATransition* transition1 = [CATransition animation];
             transition1.duration = 0.5;
@@ -2430,13 +2442,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.popoverController dismissPopoverAnimated:YES];
         RenderingViewController* renderingView;
         if ([Utility IsPadDevice])
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         else
-            renderingView = [[RenderingViewController alloc]initWithNibName:(screenHeight>320) ? @"RenderingViewControllerPhone@2x" :
-                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
+            renderingView = [[RenderingViewController alloc]initWithNibName:(ScreenHeight>320) ? @"RenderingViewControllerPhone@2x" :
+                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         renderingView.delegate = self;
         renderingView.projectName = currentScene.name;
-        if([Utility IsPadDevice] || screenHeight < 400)
+        if([Utility IsPadDevice] || ScreenHeight < 400)
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         CATransition* transition1 = [CATransition animation];
@@ -2485,11 +2497,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
-                      (screenHeight>320) ? @"SettingsViewControllerPhone2x" :
+                      ([self iPhone6Plus]) ? @"SettingsViewControllerPhone2x" :
                       @"SettingsViewControllerPhone" bundle:nil];
         [settingsVc.view setClipsToBounds:YES];
         settingsVc.delegate=self;
-        if([Utility IsPadDevice] || screenHeight < 400)
+        if([Utility IsPadDevice] || ScreenHeight < 400)
             settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:settingsVc animated:YES completion:nil];
         settingsVc.view.superview.backgroundColor = [UIColor clearColor];
@@ -3475,7 +3487,6 @@ void boneLimitsCallBack(){
     objVc = nil;
     currentScene = nil;
     settingsVc = nil;
-    screenHeight = nil;
 }
 
 @end

@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addSceneBtn" destination="g7e-JY-bEf" id="zM1-5k-HDY"/>
                 <outlet property="infoBtn" destination="fVt-o1-OKO" id="WKK-uI-qsC"/>
+                <outlet property="loginBtn" destination="zTv-CV-o50" id="hco-IV-cWj"/>
                 <outlet property="scenesCollectionView" destination="GtZ-Ek-nEF" id="4xu-p6-Mnr"/>
                 <outlet property="topBar" destination="wjS-eD-GYe" id="i4s-q4-jm4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -54,6 +55,14 @@
                                         <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="WB0-Ay-9aV"/>
                                     </connections>
                                 </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zTv-CV-o50">
+                                    <rect key="frame" x="920" y="17" width="44" height="35"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="Login-icon.png"/>
+                                    <connections>
+                                        <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="f5d-uM-EWN"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
@@ -85,6 +94,7 @@
     </objects>
     <resources>
         <image name="Info.png" width="22" height="22"/>
+        <image name="Login-icon.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>
     </resources>

@@ -24,10 +24,13 @@
 
 @implementation AssetSelectionSidePanel
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
+
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self){
+        ScreenHeight = screenHeight;
+        ScreenWidth = screenWidth;
         screenScale = [[UIScreen mainScreen] scale];
         cache = [CacheSystem cacheSystem];
         viewType = type;
@@ -107,7 +110,7 @@
         cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
        
         cell.assetName.text = assetItem.name;
-        [cell.assetImage setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:ASSET_SELECTION OperationQueue:downloadQueue];
+        [cell.assetImage setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:ASSET_SELECTION OperationQueue:downloadQueue ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         return cell;
     }
 }

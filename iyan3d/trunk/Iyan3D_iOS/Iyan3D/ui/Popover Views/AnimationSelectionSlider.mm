@@ -21,7 +21,7 @@
 
 @implementation AnimationSelectionSlider
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -34,6 +34,8 @@
         isFirstTimeAnimationApplyed = isFirstTime;
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         docDirPath = [srcDirPath objectAtIndex:0];
+        ScreenWidth =screenWidth;
+        ScreenHeight = screenHeight;
     }
     return self;
 }
@@ -90,7 +92,7 @@
     cell.assetNameLabel.text = assetItem.assetName;
     [cell.assetNameLabel adjustsFontSizeToFitWidth];
     cell.backgroundColor = [UIColor clearColor];
-    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:(animationCategoryTab == MY_ANIMATION) ? MY_ANIMATION_VIEW : ALL_ANIMATION_VIEW OperationQueue:downloadQueue];    
+    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:(animationCategoryTab == MY_ANIMATION) ? MY_ANIMATION_VIEW : ALL_ANIMATION_VIEW OperationQueue:downloadQueue ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
     
     cell.assetNameLabel.textColor = [UIColor whiteColor];
     cell.assetNameLabel.font=[UIFont fontWithName:@"Helvetica-Bold" size:11];

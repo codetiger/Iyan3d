@@ -22,9 +22,10 @@
 #import "EditorViewController.h"
 #import "WEPopoverController.h"
 #import "SettingsViewController.h"
+#import "LoggedInViewController.h"
 
 
-@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate>{
+@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -36,6 +37,10 @@
     int sceneToBeRenamed;
     CGFloat screenHeight;
     SettingsViewController *settingsVc;
+    LoginViewController *loginVc;
+    bool isLoggedin;
+    
+
 }
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;
@@ -51,13 +56,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *scenePreviewCloseBtn;
 @property (weak, nonatomic) IBOutlet UIButton *openScene;
 @property (weak, nonatomic) IBOutlet UIButton *infoBtn;
+@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *scenesCollectionView;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 @property (nonatomic, strong) WEPopoverController *popoverController;
+@property (nonatomic, strong) LoggedInViewController *loggedInVc;
 
 
 - (IBAction)openSceneAction:(id)sender;
+- (IBAction)loginBtnAction:(id)sender;
 
 @end
 
