@@ -113,11 +113,6 @@
                                 <action selector="publishBtnAction:" destination="-1" eventType="touchUpInside" id="olo-Pk-2YH"/>
                             </connections>
                         </button>
-                        <view hidden="YES" contentMode="scaleToFill" id="J91-Zq-MM8" userLabel="leftView">
-                            <rect key="frame" x="0.0" y="61" width="300" height="709"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -147,6 +142,11 @@
                         <action selector="rigAddToSceneAction:" destination="-1" eventType="touchUpInside" id="Q6J-mb-zLJ"/>
                     </connections>
                 </button>
+                <view hidden="YES" contentMode="scaleToFill" id="J91-Zq-MM8" userLabel="leftView">
+                    <rect key="frame" x="0.0" y="64" width="300" height="704"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
                 <view contentMode="scaleToFill" id="kC1-6X-WNk" userLabel="topView">
                     <rect key="frame" x="0.0" y="0.0" width="1024" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -440,11 +440,6 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.16078431372549018" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
-                <view hidden="YES" contentMode="scaleToFill" id="J91-Zq-MM8" userLabel="leftView">
-                    <rect key="frame" x="0.0" y="64" width="300" height="704"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
