@@ -51,8 +51,8 @@ void RenderHelper::drawGrid()
         return;
     
     Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
-        if(renderingScene->isMultipleSelection && renderingScene->multiNode) {
-            BoundingBox bb = renderingScene->multiNode->node->getBoundingBox();
+        if(renderingScene->isMultipleSelection && renderingScene->getParentNode()) {
+            BoundingBox bb = renderingScene->getParentNode()->getBoundingBox();
             for (int j = 0; j < 3; j++) {
                 smgr->draw3DLine(bb.getEdgeByIndex(j), bb.getEdgeByIndex(j + 1), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
                 //printf(" Edge 1 %f %f %f edge 2 %f %f %f ", bb.getEdgeByIndex(j).x, bb.getEdgeByIndex(j + 1))
@@ -311,7 +311,7 @@ void RenderHelper::changeCameraPreviewCoords(Vector2 touchPos)
 
 void RenderHelper::drawCameraPreview()
 {
-    if(!renderingScene || !smgr)
+    if(!renderingScene || !smgr || renderingScene->isMultipleSelection)
         return;
     
     setRenderCameraOrientation();

@@ -122,7 +122,6 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
-    multiNode = NULL;
     selectedJoint = NULL;
     jointSpheres.clear();
     tPoseJoints.clear();
@@ -346,6 +345,10 @@ SGJoint* SGEditorScene::getSelectedJoint()
     return NULL;    
 }
 
+shared_ptr<Node> SGEditorScene::getParentNode()
+{
+    return selectMan->getParentNode();
+}
 
 bool SGEditorScene::loadSceneData(std::string *filePath)
 {

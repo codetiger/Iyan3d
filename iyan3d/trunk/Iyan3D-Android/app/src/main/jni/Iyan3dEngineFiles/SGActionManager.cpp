@@ -81,12 +81,16 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
     if(!actionScene || !smgr || !actionScene->isNodeSelected)
         return false;
     
-    SGNode* selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+    SGNode* selectedNode = (actionScene->isMultipleSelection) ? NULL : actionScene->nodes[actionScene->selectedNodeId];
     
     bool success = false;
     switch(actionScene->controlType){
         case MOVE:{
-            if(actionScene->isJointSelected){
+            if(actionScene->isMultipleSelection && actionScene->getParentNode()) {
+                success = true;
+                actionScene->getParentNode()->setPosition(actionScene->getParentNode()->getPosition() + outputValue);
+                break;
+            } else if(actionScene->isJointSelected){
                 success = true;
                 moveJoint(outputValue);
             }else if(actionScene->isNodeSelected){

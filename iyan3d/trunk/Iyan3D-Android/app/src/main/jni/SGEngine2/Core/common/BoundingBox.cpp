@@ -47,6 +47,16 @@ Vector3 BoundingBox::getEdgeByIndex(u16 index)
 {
     return edges[index];
 }
+BoundingBox BoundingBox::transformBoundingBox(Mat4 absTransformation)
+{
+    BoundingBox bb;
+    bb = *this;
+    for(int i = 0; i < 8; i++) {
+        Vector4 newEdge = absTransformation * Vector4(bb.edges[i].x, bb.edges[i].y, bb.edges[i].z, 1.0);
+        bb.edges[i]= Vector3(newEdge.x, newEdge.y, newEdge.z);
+    }
+    return bb;
+}
 float BoundingBox::getZExtend()
 {
     return MaxEdge.z - MinEdge.z;
@@ -80,4 +90,9 @@ void BoundingBox::calculateEdges()
     edges[5] = Vector3(MinEdge.x + getXExtend(), MinEdge.y + getYExtend(), MinEdge.z);
     edges[6] = Vector3(MinEdge.x, MinEdge.y + getYExtend(), MinEdge.z);
     edges[7] = MinEdge;
+}
+
+bool BoundingBox::isValid()
+{
+    return (MaxEdge.x >= MinEdge.x && MaxEdge.y >= MinEdge.y && MaxEdge.z >= MinEdge.z);
 }

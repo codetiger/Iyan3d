@@ -18,6 +18,7 @@ public:
     EmptyNode();
     ~EmptyNode();
     void update();
+    void updateBoundingBox();
 };
 
 #endif /* defined(__SGEngine2__EmptyNode__) */

@@ -27,7 +27,9 @@ public:
     Vector3 getMinEdge();
     Vector3 getCenter();
     Vector3 getEdgeByIndex(unsigned short index);
+    BoundingBox transformBoundingBox(Mat4 absTransformation);
     void calculateEdges();
+    bool isValid();
     float getZExtend();
     float getXExtend();
     float getYExtend();

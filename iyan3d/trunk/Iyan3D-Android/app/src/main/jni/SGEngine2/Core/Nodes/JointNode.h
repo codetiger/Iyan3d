@@ -18,6 +18,7 @@ public:
     ~JointNode();
     
     void update();
+    void updateBoundingBox();
 };
 
 #endif /* defined(__SGEngine2__JointNode__) */

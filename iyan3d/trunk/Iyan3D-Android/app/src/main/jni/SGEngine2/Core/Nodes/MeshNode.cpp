@@ -34,28 +34,26 @@ void MeshNode::updateBoundingBox()
     if(!mesh)
         return;
     
-    if(Children->size()){
-        for(unsigned short i = 0; i < Children->size();i++){
-            if((*Children)[i])
-                (*Children)[i]->updateBoundingBox();
-        }
-    }
-    
     BoundingBox bb;
     BoundingBox meshBoundingBox = *this->mesh->getBoundingBox();
     
-    for (int i = 0; i < 8; i++) {
-        Vector3 edge = meshBoundingBox.getEdgeByIndex(i);
-        Vector4 newEdge = AbsoluteTransformation *  Vector4(edge.x, edge.y, edge.z, 1.0);
-        bb.addPointsToCalculateBoundingBox(Vector3(newEdge.x, newEdge.y, newEdge.z));
+    if(Children->size() <= 0) {
+        for (int i = 0; i < 8; i++) {
+            Vector3 edge = meshBoundingBox.getEdgeByIndex(i);
+            Vector4 newEdge = AbsoluteTransformation *  Vector4(edge.x, edge.y, edge.z, 1.0);
+            bb.addPointsToCalculateBoundingBox(Vector3(newEdge.x, newEdge.y, newEdge.z));
+        }
     }
-    
+
     if(Children->size()){
         for(unsigned short i = 0; i < Children->size();i++){
             if((*Children)[i]) {
-                for (int j = 0; j < 8; j++) {
-                    Vector3 edge = (*Children)[i]->getBoundingBox().getEdgeByIndex(j);
-                    bb.addPointsToCalculateBoundingBox(edge);
+                (*Children)[i]->updateBoundingBox();
+                if((*Children)[i]->getBoundingBox().isValid()) {
+                    for (int j = 0; j < 8; j++) {
+                        Vector3 edge = (*Children)[i]->getBoundingBox().getEdgeByIndex(j);
+                        bb.addPointsToCalculateBoundingBox(edge);
+                    }
                 }
             }
         }

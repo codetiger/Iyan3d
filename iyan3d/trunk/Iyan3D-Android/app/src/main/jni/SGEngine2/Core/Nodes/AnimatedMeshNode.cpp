@@ -46,7 +46,37 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, rig_type rigType)
         }
         jointNodes.push_back(node);
     }
+    
+    if(this->mesh) {
+        for(int i = 0; i < mesh->getVerticesCount(); i++) {
+            vertexDataHeavy *vData = mesh->getHeavyVertexByIndex(i);
+            if(vData) {
+                int jointId = vData->optionalData1.x - 1;
+                if(jointId > 0 && jointNodes[jointId])
+                    jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                if(rigType == CHARACTER_RIG) {
+                    jointId = vData->optionalData1.y - 1;
+                    if(jointId > 0 && jointNodes[jointId])
+                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                    jointId = vData->optionalData1.z - 1;
+                    if(jointId > 0 && jointNodes[jointId])
+                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                    jointId = vData->optionalData3.x - 1;
+                    if(jointId > 0 && jointNodes[jointId])
+                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                    jointId = vData->optionalData3.y - 1;
+                    if(jointId > 0 && jointNodes[jointId])
+                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                    jointId = vData->optionalData3.z - 1;
+                    if(jointId > 0 && jointNodes[jointId])
+                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                }
+            }
+        }
+    }
+
     for (int i = 0; i < jointNodes.size(); i++) {
+        jointNodes[i]->bBox.calculateEdges();
         shared_ptr<JointNode> node = jointNodes[i];
         if (i == 0)
             node->setParent(shared_from_this());
@@ -54,6 +84,7 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, rig_type rigType)
             unsigned short childIndex = (*(*SMesh->joints)[i]->childJoints)[j]->Index;
             node->Children->push_back(jointNodes[childIndex]);
         }
+        node->updateBoundingBox();
         //node.reset();
     }
     SMesh->recoverJointsFromMesh(jointNodes);
@@ -108,32 +139,22 @@ void AnimatedMeshNode::updateBoundingBox()
     if(!mesh)
         return;
     
-    if(Children->size()){
-        for(unsigned short i = 0; i < Children->size();i++){
-            if((*Children)[i])
-                (*Children)[i]->updateBoundingBox();
+    BoundingBox bb;
+    if(jointNodes.size()) {
+        for(unsigned short i = 0; i < jointNodes.size();i++){
+            if(jointNodes[i] && jointNodes[i]->getBoundingBox().isValid()) {
+                for (int j = 0; j < 8; j++) {
+                    Vector3 edge = jointNodes[i]->getBoundingBox().getEdgeByIndex(j);
+                    Mat4 JointVertexPull;
+                    SkinMesh *sMesh = (SkinMesh*)mesh;
+                    Mat4 abs = jointNodes[i]->getAbsoluteTransformation();
+                    JointVertexPull.setbyproduct(abs, (*sMesh->joints)[i]->GlobalInversedMatrix);
+                    Vector4 newEdge = JointVertexPull *  Vector4(edge.x, edge.y, edge.z, 1.0);
+                    bb.addPointsToCalculateBoundingBox(Vector3(newEdge.x, newEdge.y, newEdge.z));
+                }
+            }
         }
     }
-    
-    BoundingBox bb;
-    BoundingBox meshBoundingBox = *this->mesh->getBoundingBox();
-    
-    for (int i = 0; i < 8; i++) {
-        Vector3 edge = meshBoundingBox.getEdgeByIndex(i);
-        Vector4 newEdge = AbsoluteTransformation *  Vector4(edge.x, edge.y, edge.z, 1.0);
-        bb.addPointsToCalculateBoundingBox(Vector3(newEdge.x, newEdge.y, newEdge.z));
-    }
-    
-//    if(Children->size()){
-//        for(unsigned short i = 0; i < Children->size();i++){
-//            if((*Children)[i]) {
-//                for (int j = 0; j < 8; j++) {
-//                    Vector3 edge = (*Children)[i]->getBoundingBox().getEdgeByIndex(j);
-//                    bb.addPointsToCalculateBoundingBox(edge);
-//                }
-//            }
-//        }
-//    }
     bb.calculateEdges();
     bBox = bb;
 }

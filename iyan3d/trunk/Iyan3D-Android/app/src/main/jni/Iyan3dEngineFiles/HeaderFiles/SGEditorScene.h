@@ -87,7 +87,6 @@ public:
     
     /* Iyan3D Related classs objects */
     
-    SGNode *multiNode;
     SGNode *selectedNode;
     SGJoint *selectedJoint;
     SGNode* rotationCircle;
@@ -163,6 +162,7 @@ public:
     bool hasJointSelected();
     SGNode* getSelectedNode();
     SGJoint* getSelectedJoint();
+    shared_ptr<Node> getParentNode();
     
     Vector3 getSelectedNodeScale();
     bool checkNodeSize();

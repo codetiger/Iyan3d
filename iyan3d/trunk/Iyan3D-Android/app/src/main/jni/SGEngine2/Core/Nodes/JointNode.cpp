@@ -17,3 +17,9 @@ JointNode::~JointNode(){
 void JointNode::update(){
     
 }
+
+void JointNode::updateBoundingBox()
+{
+    if(Parent)
+        Parent->updateBoundingBox();
+}

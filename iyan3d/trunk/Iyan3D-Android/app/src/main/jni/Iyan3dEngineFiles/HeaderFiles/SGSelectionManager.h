@@ -30,6 +30,8 @@ public:
     bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
     bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
     void multipleSelections(int nodeId);
+    void unselectObjects();
+    shared_ptr<Node> getParentNode();
     void addSelectedChildren();
     void removeChildren();
     void highlightSelectedNode(int nodeId = -1);
