@@ -84,12 +84,10 @@ shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager 
             Logger::log(ERROR, "SGNode::loadNode ", "Unknow node type to load");
             break;
     }
-    
     if(node && node->getTextureCount() == 0) {
         Texture *nodeTex = smgr->loadTexture("Dummy Light",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE);
         node->setTexture(nodeTex,1);
     }
-    
     return node;
 }
 
@@ -120,14 +118,15 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, wstring text, int bezier
         fontColor = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z,1.0);
     }
     #ifdef IOS
-    pathForFont = FileHelper::getCachesDirectory() + fontPath;
+    pathForFont = FileHelper::getCachesDirectory();
     #elif ANDROID
-    pathForFont = constants::DocumentsStoragePath + "/fonts/"+fontPath;
+    pathForFont = constants::DocumentsStoragePath + "/fonts/";
     #endif
 
-if(FILE *file = fopen(pathForFont.c_str(), "r"))
-    fclose(file);
-else {
+    pathForFont += fontPath;
+    if(FILE *file = fopen(pathForFont.c_str(), "r"))
+    	fclose(file);
+    else {
         #ifdef IOS
             pathForFont = FileHelper::getDocumentsDirectory() + "Resources/Fonts/" + fontPath;
         #elif ANDROID
@@ -149,7 +148,6 @@ else {
         }
     }
 }
-    
     AnimatedMesh *mesh = Font2OBJ::getTextMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
     if(mesh == NULL)
         return shared_ptr<Node>();
@@ -159,11 +157,13 @@ else {
     for(int i = 0;i < node->getJointCount(); i++){
         node->getJointNode(i)->setID(i);
         if(!isSGJointsCreated){
+            printf("Jointnode Count %d joints count %d \n", node->getJointCount(), (int)joints.size());
             SGJoint *joint = new SGJoint();
             joint->jointNode = node->getJointNode(i);
             joints.push_back(joint);
         }
     }
+
     if(node->skinType == CPU_SKIN) {
         node->getMeshCache()->recalculateNormalsT();
         node->getMeshCache()->pivotToOrigin();
@@ -183,18 +183,17 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
             objLoader = new OBJMeshFileLoader();
     #ifdef IOS
     if (fileExt == ".sgm")
-        StoragePath = constants::CachesStoragePath;
+        StoragePath = constants::CachesStoragePath + "/";
     else if(fileExt == ".obj") {
-        StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Objs";
+        StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Objs/";
     }
     #endif
     #ifdef ANDROID
-    StoragePath = constants::DocumentsStoragePath + "/mesh";
-
+    StoragePath = constants::DocumentsStoragePath + "/mesh/";
     #endif
     
-    string meshPath = StoragePath + "/" +  to_string(assetId) + fileExt;
-    string textureFileName = StoragePath + "/" + to_string(assetId)+"-cm.png";
+    string meshPath = StoragePath + to_string(assetId) + fileExt;
+    string textureFileName = StoragePath + to_string(assetId)+"-cm.png";
     
     if(!checkFileExists(meshPath) || !checkFileExists(textureFileName))
         return shared_ptr<Node>();
@@ -229,17 +228,17 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
 
     #ifdef IOS
     if (assetId >= 40000 && assetId < 50000)
-        StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Rigs";
+        StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Rigs/";
     else
-        StoragePath = constants::CachesStoragePath;
+        StoragePath = constants::CachesStoragePath + "/";
     #endif
 
     #ifdef ANDROID
-    StoragePath = constants::DocumentsStoragePath + "/mesh";
+    StoragePath = constants::DocumentsStoragePath + "/mesh/";
     #endif
     
-    string meshPath = StoragePath + "/" + to_string(assetId) + ".sgr";
-    string textureFileName = StoragePath + "/" + to_string(assetId)+"-cm.png";
+    string meshPath = StoragePath + to_string(assetId) + ".sgr";
+    string textureFileName = StoragePath + to_string(assetId)+"-cm.png";
     if (!checkFileExists(meshPath) || !checkFileExists(textureFileName)) {
         return shared_ptr<Node>();
     }
@@ -524,25 +523,27 @@ void SGNode::setInitialKeyValues(int actionType)
                 KeyHelper::addKey(scaleKeys, lscaleKey);
             }
         }
-        
+
         for (int i = 0; i < jointCount; i++) {
             shared_ptr<JointNode> jointNode = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(i);
             SGRotationKey jointRotationKey;
             jointRotationKey.rotation = Quaternion(jointNode->getRotationInRadians());
             jointsInitialRotations.push_back(jointRotationKey.rotation);
-            if(joints[i]->positionKeys.size() <= 0) {
-                SGPositionKey jointPositionKey;
-                jointPositionKey.position = jointNode->getPosition();
-                 joints[i]->setPosition(jointPositionKey.position, 0);
-                KeyHelper::addKey(joints[i]->positionKeys, jointPositionKey);
+            if(i < joints.size()) {
+                if(joints[i]->positionKeys.size() <= 0) {
+                    SGPositionKey jointPositionKey;
+                    jointPositionKey.position = jointNode->getPosition();
+                     joints[i]->setPosition(jointPositionKey.position, 0);
+                    KeyHelper::addKey(joints[i]->positionKeys, jointPositionKey);
+                }
+                if(joints[i]->scaleKeys.size() <= 0) {
+                    SGScaleKey jointScaleKey;
+                    jointScaleKey.scale = Vector3(1.0);
+                    joints[i]->setScale(jointScaleKey.scale,0);
+                    KeyHelper::addKey(joints[i]->scaleKeys, jointScaleKey);
+                }
+                joints[i]->jointNode = jointNode;
             }
-            if(joints[i]->scaleKeys.size() <= 0) {
-                SGScaleKey jointScaleKey;
-                jointScaleKey.scale = Vector3(1.0);
-                joints[i]->setScale(jointScaleKey.scale,0);
-                KeyHelper::addKey(joints[i]->scaleKeys, jointScaleKey);
-            }
-            joints[i]->jointNode = jointNode;
         }
     }
 }
@@ -815,9 +816,6 @@ void SGNode::readData(ifstream *filePointer)
             
         } else
             name = nodeSpecificString;
-        
-        printf(" Name %s ", ConversionHelper::getStringForWString(name).c_str());
-        
     } else {
         
         string nodeSpecificString = FileHelper::readString(filePointer,sgbVersion);

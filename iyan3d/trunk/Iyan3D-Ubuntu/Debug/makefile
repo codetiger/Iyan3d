@@ -28,6 +28,7 @@ RM := rm -rf
 -include src/SGEngine2/Font/freeType/include/src/autofit/subdir.mk
 -include src/SGEngine2/Font/subdir.mk
 -include src/SGEngine2/Core/common/subdir.mk
+-include src/SGEngine2/Core/Textures/subdir.mk
 -include src/SGEngine2/Core/Nodes/subdir.mk
 -include src/SGEngine2/Core/Meshes/subdir.mk
 -include src/SGEngine2/Core/Material/subdir.mk

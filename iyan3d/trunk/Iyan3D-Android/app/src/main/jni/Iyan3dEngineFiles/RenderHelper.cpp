@@ -280,11 +280,13 @@ void RenderHelper::setRenderCameraOrientation()
     rotmat.setRotationRadians(Vector3(rot.x - 180.0,rot.y,rot.z) * DEGTORAD);
     rotmat.rotateVect(upReal);
     renderingScene->renderCamera->setUpVector(upReal);
+#ifndef UBUNTU
     float texWidth = (float)renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->width;
     float texHeight = renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->height;
     float aspectRatio = texWidth/ texHeight;
     renderingScene->renderCamera->setAspectRatio(aspectRatio);
     smgr->setActiveCamera(renderingScene->renderCamera);
+#endif
 }
 
 void RenderHelper::rttNodeJointSelection(Vector2 touchPosition)

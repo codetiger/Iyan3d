@@ -25,7 +25,6 @@ vector<Vector3> SGAnimationManager::storeTextInitialPositions(SGNode *sgnode)
         return jointPositions;
 
     int jointCount = (dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node))->getJointCount();
-    
     for (int i = 0; i < jointCount; i++) {
         jointPositions.push_back((dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node))->getJointNode(i)->getPosition());
     }

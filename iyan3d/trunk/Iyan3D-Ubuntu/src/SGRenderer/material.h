@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-struct Material
+struct SGRMaterial
 {
     Vec3fa emissionColor;
     Vec3fa diffuse;

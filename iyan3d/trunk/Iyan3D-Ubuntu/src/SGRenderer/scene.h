@@ -5,7 +5,7 @@
 
 struct Scene
 {
-	vector<Mesh*> meshes;
+	vector<SGRTMesh*> meshes;
 	Camera *cam;
 	RTCScene sgScene;
 	int imgWidth;
@@ -299,7 +299,7 @@ struct Scene
 		int nodeCount = readShort(data);
 
 		for (int i = 0; i < nodeCount; i++) {
-			Mesh* m = new Mesh(sgScene, data);
+			SGRTMesh* m = new SGRTMesh(sgScene, data);
 			meshes.push_back(m);
 		}
 		rtcCommit(sgScene);

@@ -70,6 +70,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             sgNode = NULL;
         tempNodes.push_back(sgNode);
     }
+
     for (int i = 0; i < tempNodes.size(); i++) {
         SGNode *sgNode = tempNodes[i];
         bool nodeLoaded = false;
@@ -168,11 +169,13 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
     currentScene->freezeRendering = true;
     SGNode *sgnode = new SGNode(type);
     sgnode->node = sgnode->loadNode(assetId,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
+
     if(!sgnode->node){
         delete sgnode;
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         return NULL;
     }
+
     if(sgnode->getType() == NODE_TEXT)
         currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgnode);
     sgnode->assetId = assetId;
@@ -183,8 +186,10 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
     if(type == NODE_CAMERA)
         ShaderManager::camPos = sgnode->node->getAbsolutePosition();
     else if (type == NODE_LIGHT){
+#ifndef UBUNTU
         currentScene->initLightCamera(sgnode->node->getPosition());
         addLight(sgnode);
+#endif
     }else if(type == NODE_IMAGE){
         sgnode->props.isLighting = false;
     } else if (type == NODE_RIG) {
@@ -201,7 +206,6 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
         sgnode->actionId = ++currentScene->actionObjectsSize;
     currentScene->nodes.push_back(sgnode);
-    
     sgnode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(sgnode,actionType);
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
@@ -218,14 +222,13 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
 
     Vector4 nodeSpecificColor = Vector4(sgNode->props.vertexColor.x,sgNode->props.vertexColor.y,sgNode->props.vertexColor.z,1.0);
     sgNode->node = sgNode->loadNode(sgNode->assetId,sgNode->getType(),smgr,sgNode->name,sgNode->props.fontSize,sgNode->props.nodeSpecificFloat,nodeSpecificColor,sgNode->optionalFilePath);
-    
     if(!sgNode->node){
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         return false;
     }
     if(sgNode->getType() == NODE_TEXT)
         currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgNode);
-    
+
     sgNode->setInitialKeyValues(actionType);
     sgNode->node->updateAbsoluteTransformation();
     sgNode->node->updateAbsoluteTransformationOfChildren();
@@ -238,16 +241,16 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
     sgNode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(sgNode,actionType);
     if(sgNode->getType() == NODE_LIGHT) {
+#ifndef UBUNTU
         currentScene->initLightCamera(sgNode->node->getPosition());
         addLight(sgNode);
+#endif
     } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT)
         addLight(sgNode);
     else if(sgNode->getType() == NODE_IMAGE && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
         sgNode->props.isLighting = false;
-    
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->updater->resetMaterialTypes(false);
-    
     return true;
 }
 

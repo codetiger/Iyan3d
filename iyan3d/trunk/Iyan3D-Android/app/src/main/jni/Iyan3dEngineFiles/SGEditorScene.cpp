@@ -23,13 +23,16 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
 
     initVariables(smgr, device);
+
+#ifndef UBUNTU
     initTextures();
-    
     jointSphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
     rotationCircle = SceneHelper::createCircle(smgr);
+    sceneControls = SceneHelper::initControls(smgr);
     BoneLimitsHelper::init();
     AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
-    sceneControls = SceneHelper::initControls(smgr);
+#endif
+
     renderCamera = SceneHelper::initRenderCamera(smgr, cameraFOV);
 }
 
@@ -251,22 +254,9 @@ int SGEditorScene::redo()
     return actionMan->redo();
 }
 
-vector<string> SGEditorScene::generateSGFDFiles(int startFrame , int endFrame)
+bool SGEditorScene::generateSGFDFile(int frame)
 {
-    vector<string> textureFileNames;
-    if(startFrame == endFrame) {
-        SGCloudRenderingHelper::writeFrameData(this, smgr, startFrame, "1.sgfd", textureFileNames);
-        return textureFileNames;
-    }
-    
-    for(int index = startFrame; index <= endFrame; index++) {
-        string outFileName = to_string(index+1 - startFrame) + ".sgfd";
-        if(index < totalFrames)
-            updater->setDataForFrame(index);
-        SGCloudRenderingHelper::writeFrameData(this, smgr, index, outFileName, textureFileNames);
-        
-    }
-    return textureFileNames;
+	return SGCloudRenderingHelper::writeFrameData(this, smgr, frame);
 }
 
 void SGEditorScene::setLightingOn()

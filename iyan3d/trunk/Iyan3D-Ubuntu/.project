@@ -681,6 +681,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Nodes/Node.h</locationURI>
 		</link>
 		<link>
+			<name>src/SGEngine2/Core/Textures/DummyTexture.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Textures/DummyTexture.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/SGEngine2/Core/Textures/DummyTexture.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Textures/DummyTexture.h</locationURI>
+		</link>
+		<link>
 			<name>src/SGEngine2/Core/Textures/Texture.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Core/Textures/Texture.h</locationURI>

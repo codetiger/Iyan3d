@@ -58,12 +58,15 @@ bool uploadFile(const char* url, const char* filePath) {
 		res = curl_easy_perform(curl);
 		if(res != CURLE_OK)
 			fprintf(stderr, "curl_easy_perform() failed: %s\n",
+
 		curl_easy_strerror(res));
 		curl_easy_cleanup(curl);
 		curl_formfree(formpost);
 		curl_slist_free_all (headerlist);
+
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 #endif

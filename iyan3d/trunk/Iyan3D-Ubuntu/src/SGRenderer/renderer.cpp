@@ -1,4 +1,5 @@
 #include "common.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 #define TILE_SIZE_X 8
 #define TILE_SIZE_Y 8
@@ -43,7 +44,7 @@ TaskDetails getTaskFromServer(string machineId) {
 	td.taskId = atoi(taskInfo.c_str());
 	if(x.size() == 4) {
 		td.taskId = atoi(x[0].c_str());
-		td.frameCount = atoi(x[1].c_str());
+		td.frame = atoi(x[1].c_str());
 		td.width = atoi(x[2].c_str());
 		td.height = atoi(x[3].c_str());
 	}
@@ -58,12 +59,10 @@ bool downloadTaskFiles(TaskDetails td) {
 	string fileName = "data/" + to_string(td.taskId) + "/" + to_string(td.taskId) + ".zip";
 	string url = "http://www.iyan3dapp.com/appapi/renderFiles/" + to_string(td.taskId) + ".zip";
 
-	return downloadFile(url.c_str(), fileName.c_str());
-}
-
-void updateProgressToServer(int taskId, int frame) {
-	string url = "http://www.iyan3dapp.com/appapi/updateprogress.php?taskid=" + to_string(taskId) + "&progress=" + to_string(frame);
-	downloadFile(url.c_str(), "taskid.txt");
+	if(file_exists(fileName)) {
+		return true;
+	} else
+		return downloadFile(url.c_str(), fileName.c_str());
 }
 
 bool unzipTaskFiles(TaskDetails td) {
@@ -120,35 +119,82 @@ bool renderFile(string fileName, TaskDetails td) {
 	}
 	delete scene;
 	rtcDeleteDevice(device);
+	return status;
 }
 
-bool uploadVideoToServer(TaskDetails td) {
-	bool res = uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId)).c_str(), (to_string(td.taskId) + ".mpg").c_str());
+bool uploadOutputToServer(TaskDetails td) {
+	return uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId)).c_str(), (to_string(td.taskId) + ".png").c_str());
+}
+
+bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::string folder) {
+	if(file_exists(filePath))
+		return true;
+
+	string commonFilePath = "../" + filePath;
+	if(!file_exists(commonFilePath)) {
+		string url = "http://www.iyan3dapp.com/appapi/" + folder + "/" + serverPath;
+		downloadFile(url.c_str(), commonFilePath.c_str());
+	}
+	file_copy(commonFilePath, filePath);
+
+	if(!file_exists(filePath))
+		return false;
+
+	return true;
+}
+
+bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType) {
+	if(nodeType == NODE_SGM) {
+		if(!checkAndDownloadFile(filePath + ".sgm", filePath + ".sgm", "mesh"))
+			return false;
+		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "meshtexture"))
+			return false;
+	} else if(nodeType == NODE_RIG) {
+		if(!checkAndDownloadFile(filePath + ".sgr", filePath + ".sgr", "mesh"))
+			return false;
+		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "meshtexture"))
+			return false;
+	} else if(nodeType == NODE_OBJ) {
+		if(!checkAndDownloadFile(filePath + ".obj", filePath + ".obj", ""))
+			return false;
+		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", ""))
+			return false;
+	} else if(nodeType == NODE_TEXT) {
+		if(!checkAndDownloadFile(filePath, filePath, "font"))
+			return false;
+	}
+
+	return true;
 }
 
 bool renderTask(TaskDetails td) {
 	if(downloadTaskFiles(td) && unzipTaskFiles(td)) {
+		printf("Creating SGFD Files\n");
+		constants::BundlePath = ".";
+		checkAndDownloadFile("camera.sgm", "camera.sgm", "mesh");
+		checkAndDownloadFile("light.sgm", "light.sgm", "mesh");
+		checkAndDownloadFile("sphere.sgm", "sphere.sgm", "mesh");
+
+		SceneManager *smgr = new SceneManager(td.width, td.height, 1.0, OPENGLES2, "", NULL);
+		SGEditorScene *scene = new SGEditorScene(OPENGLES2, smgr, td.width, td.height);
+		scene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
+
+		std::string filename = "index.sgb";
+		scene->loadSceneData(&filename);
+		scene->generateSGFDFile(td.frame);
+
 		printf("Starting Render for Task %d\n", td.taskId);
-		int frame = 1;
-		string fileName = to_string(frame);
 		struct stat buffer;   
 
-		while(stat((fileName + ".sgfd").c_str(), &buffer) == 0) {
-			printf("\nRendering Frame: %d\n", frame);
-			renderFile(fileName, td);
-			updateProgressToServer(td.taskId, frame);
-			frame++;
-			fileName = to_string(frame);
-		}
-
-		if(frame == 1) {
+		if(stat((to_string(td.frame) + ".sgfd").c_str(), &buffer) == 0) {
+			printf("\nRendering Frame: %d\n", td.frame);
+			renderFile(to_string(td.frame), td);
+		} else {
 			printf("No SGFD Files in the Zip Archive\n");
 			return false;
 		}
 
-		//video_encode(td.width, td.height, (to_string(td.taskId) + ".mpg").c_str());
-		//uploadVideoToServer(td);
-		//updateProgressToServer(td.taskId, frame);
+		uploadOutputToServer(td);
 		return true;
 	}
 	return false;
@@ -173,7 +219,7 @@ int main(int argc, char** argv)
 			printf("No Pending Tasks waiting for %d seconds\n", taskFetchFrequency);
 			sleep(taskFetchFrequency);
 		} else {
-			printf("Task Assigned: %d Frames: %d Width: %d Height: %d\n", td.taskId, td.frameCount, td.width, td.height);
+			printf("Task Assigned: %d Frames: %d Width: %d Height: %d\n", td.taskId, td.frame, td.width, td.height);
 			timespec ts;
 			clock_gettime(CLOCK_REALTIME, &ts);
 

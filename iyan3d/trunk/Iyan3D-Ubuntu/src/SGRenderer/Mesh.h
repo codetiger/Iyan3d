@@ -3,13 +3,13 @@
 
 #include "common.h"
 
-class Mesh 
+class SGRTMesh
 {
 public:
 	unsigned int id;
-	Material material;
+	SGRMaterial material;
 	
-	Texture* texture;
+	SGRTTexture* texture;
 	Vec3fa* uvs;
 	Vec3fa* normals;
 
@@ -18,7 +18,7 @@ public:
 
 	Vec3fa minPoint, maxPoint;
 
-	Mesh(RTCScene rtcScene, ifstream &data) {
+	SGRTMesh(RTCScene rtcScene, ifstream &data) {
 		center = Vec3fa(0.0f);
 		minPoint = Vec3fa(999.0f);
 		maxPoint = Vec3fa(-999.0f);
@@ -39,7 +39,7 @@ public:
 
 		const char *texFile = readString(data);
 		if(material.hasTexture) {
-			texture = new Texture(texFile);
+			texture = new SGRTTexture(texFile);
 		}
 		material.shininess = readFloat(data);
 		material.transparency = readFloat(data);
@@ -191,7 +191,7 @@ public:
 		return n;
 	}
 
-	~Mesh() {
+	~SGRTMesh() {
 		if(uvs)
 			free(uvs);
 		if(normals)

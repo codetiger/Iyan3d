@@ -13,11 +13,10 @@ SGCloudRenderingHelper::SGCloudRenderingHelper()
     
 }
 
-bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId, string fileName, vector<string> &textureFileNames)
+bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId)
 {
-    string outputFileName =  FileHelper::getDocumentsDirectory() + fileName;
+    string outputFileName =  FileHelper::getDocumentsDirectory() + to_string(frameId) + ".sgfd";
     ofstream frameFilePtr(outputFileName , ios::binary);
-    
     scene->renHelper->setRenderCameraOrientation();
     Vector3 camPos = scene->renderCamera->getAbsolutePosition();
     
@@ -37,23 +36,23 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
     FileHelper::writeFloat(&frameFilePtr, camRotation.y);
     FileHelper::writeFloat(&frameFilePtr, camRotation.z);
     
-    printf("rotation %f %f %f ", camRotation.x, camRotation.y, camRotation.z);
-    
+    printf("rotation %f %f %f\n", camRotation.x, camRotation.y, camRotation.z);
     FileHelper::writeFloat(&frameFilePtr, (scene->renderCamera->getFOVInRadians() * RADTODEG));  // Camera FOV
-    
+
     short nodesCount = (short)scene->nodes.size()-1;
     for (int i = 0; i < (int)scene->nodes.size(); i++) {
         if (!scene->nodes[i]->props.isVisible) {
             nodesCount--;
         }
     }
-    
+
     FileHelper::writeShort(&frameFilePtr, nodesCount); // Nodes Count
     
     for (int nodeId = 1; nodeId < (int)scene->nodes.size(); nodeId++) {
-        
+
         NODE_TYPE nodeType = scene->nodes[nodeId]->getType();
         SGNode *thisNode = scene->nodes[nodeId];
+
         if(thisNode->props.isVisible) {
             Vector4 vertColor;
             if(nodeType == NODE_TEXT)
@@ -85,17 +84,12 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             unsigned long lastSlashPos  = (scene->nodes[nodeId]->node->getActiveTexture()->textureName).find_last_of("\\/");
             string textureFileName;
             if(string::npos != lastSlashPos)
-            {
                 textureFileName = (scene->nodes[nodeId]->node->getActiveTexture()->textureName).substr( lastSlashPos + 1);
-            }
-            
-            if(nodeType != NODE_TEXT && nodeType != NODE_ADDITIONAL_LIGHT)
-                textureFileNames.push_back(textureFileName);
             
             FileHelper::writeString(&frameFilePtr, textureFileName); // Texture File Name with extension
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.shininess);
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.transparency);
-            
+
             SGCloudRenderingHelper *renderHelper = new SGCloudRenderingHelper();
             vector<TriangleData> trianglesData =   renderHelper->calculateTriangleDataForNode(thisNode);
             

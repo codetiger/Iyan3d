@@ -212,8 +212,10 @@ void Node::RemoveAllInstanceOfNode(){
     instanceCount = 0;
 }
 void Node::setMaterial(Material *mat,bool isTransparentMaterial){
+#ifndef UBUNTU
     this->material = mat;
     this->material->isTransparent = isTransparentMaterial;
+#endif
 }
 u16 Node::getBufferCount(){
     if(type == NODE_TYPE_MORPH || type== NODE_TYPE_MORPH_SKINNED)

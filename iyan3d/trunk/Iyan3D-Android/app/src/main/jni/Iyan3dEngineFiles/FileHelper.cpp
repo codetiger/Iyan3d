@@ -138,20 +138,26 @@ void FileHelper::writeWString(ofstream *file , std::wstring data)
 
 std::string FileHelper::getCachesDirectory()
 {
-   std::string home = getenv("HOME");
-    
-    std::string caches = "/Library/Caches/";
-    
-    std::string cachesPath = home + caches;
-    
-    return cachesPath;
+#ifdef UBUNTU
+	return "";
+#elif
+	std::string home = getenv("HOME");
+	std::string caches = "/Library/Caches/";
+	std::string cachesPath = home + caches;
+	return cachesPath;
+#endif
 }
- std::string FileHelper::getDocumentsDirectory()
+
+std::string FileHelper::getDocumentsDirectory()
 {
+#ifdef UBUNTU
+	return "";
+#elif
     std::string home = getenv("HOME");
     std::string documents = "/Documents/";
     std::string documentsPath = home + documents;
-    return  documentsPath;
+    return documentsPath;
+#endif
 }
 
 void FileHelper::setDocumentsDirectory(string documentsPath)

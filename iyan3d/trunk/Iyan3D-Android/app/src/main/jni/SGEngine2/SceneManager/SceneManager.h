@@ -24,7 +24,9 @@
 #include "../Core/Nodes/EmptyNode.h"
 #include "../Core/Meshes/SGCircleNode.h"
 
-
+#ifdef UBUNTU
+#include "../Core/Textures/DummyTexture.h"
+#endif
 
 class SceneManager {
 private:

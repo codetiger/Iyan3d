@@ -6,13 +6,13 @@
 
 using namespace std;
 
-struct Texture
+struct SGRTTexture
 {
 	unsigned char *pngData;
 	unsigned int width, height;
 	bool hasLoadedData;
 
-	Texture(const char* path) {
+	SGRTTexture(const char* path) {
 		hasLoadedData = false;
 		vector<unsigned char> image;
 		unsigned error = lodepng::decode(image, width, height, path);

@@ -43,6 +43,7 @@ src/SGEngine2/Font/freeType/include/src/base \
 src/SGEngine2/Font/freeType/include/src/autofit \
 src/SGEngine2/Font \
 src/SGEngine2/Core/common \
+src/SGEngine2/Core/Textures \
 src/SGEngine2/Core/Nodes \
 src/SGEngine2/Core/Meshes \
 src/SGEngine2/Core/Material \

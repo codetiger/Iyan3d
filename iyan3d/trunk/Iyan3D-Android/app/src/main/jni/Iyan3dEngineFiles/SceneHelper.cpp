@@ -15,10 +15,13 @@ float SceneHelper::screenHeight = 0.0;
 
 shared_ptr<CameraNode> SceneHelper::initViewCamera(SceneManager *smgr, Vector3& cameraTarget, float& cameraRadius)
 {
+#ifndef UBUNTU
     CameraViewHelper::readData();
+#endif
 
     shared_ptr<CameraNode> viewCamera = smgr->createCameraNode("NoUniformCallbackFunctions");
     smgr->setActiveCamera(viewCamera);
+
     viewCamera->setPosition(Vector3(VIEW_CAM_INIT_POS_X,VIEW_CAM_INIT_POS_Y,VIEW_CAM_INIT_POS_Z));
     viewCamera->updateAbsoluteTransformation();
     //TODO: viewCamera->setID(3);
@@ -28,6 +31,7 @@ shared_ptr<CameraNode> SceneHelper::initViewCamera(SceneManager *smgr, Vector3& 
     float aspectRatio = screenWidth/screenHeight;
     viewCamera->setAspectRatio(aspectRatio);
     cameraRadius = 20.0;
+
     //testPlane.setPositionAndNormal(Vector3(0.0,0.0,100.0),Vector3(0.0,1.0,0.0));
     return viewCamera;
 

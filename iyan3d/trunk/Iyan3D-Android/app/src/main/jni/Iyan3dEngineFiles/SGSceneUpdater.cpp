@@ -72,10 +72,12 @@ void SGSceneUpdater::setDataForFrame(int frame)
         }
         
     }
+#ifndef UBUNTU
     updateControlsOrientaion(updatingScene);
     updateLightCamera();
     if(lightChanged && !updatingScene->isPlaying)
         updateLightProperties(frame);
+#endif
 }
 
 void SGSceneUpdater::setKeysForFrame(int frame)
@@ -312,6 +314,7 @@ void SGSceneUpdater::updateLightProperties(int frameId)
 
 void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
 {
+#ifndef UBUNTU
     if(!updatingScene || !smgr)
         return;
 
@@ -385,7 +388,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
             }
         }
     }
-    
+#endif
 }
 
 void SGSceneUpdater::reloadKeyFrameMap()

@@ -63,7 +63,9 @@ void SceneManager::setDisplayResolution(int width,int height){
     displayHeight = height;
 }
 void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
+#ifndef UBUNTU
     renderMan->createVertexAndIndexBuffers(node,meshType);
+#endif
     nodes.push_back(node);
 }
 void SceneManager::RemoveNode(shared_ptr<Node> node){
@@ -197,7 +199,9 @@ void SceneManager::setActiveCamera(shared_ptr<Node> node){
         if(nodes[i]->type <= NODE_TYPE_CAMERA)
             (dynamic_pointer_cast<CameraNode>(nodes[i]))->setActive(false);
     }
+#ifndef UBUNTU
     renderMan->setActiveCamera(dynamic_pointer_cast<CameraNode>(node));
+#endif
 }
 shared_ptr<CameraNode> SceneManager::getActiveCamera(){
     return renderMan->getActiveCamera();
@@ -216,8 +220,12 @@ Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DA
     }
     #endif
 
+#ifdef UBUNTU
+    newTex = new DummyTexture();
+#endif
     newTex->loadTexture(textureName,filePath,format,type);
     textures.push_back(newTex);
+
     return newTex;
 }
 shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh,string callbackFuncName,MESH_TYPE meshType,int matIndex){
@@ -227,7 +235,8 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh,string callback
     node->mesh = mesh;
     node->needsVertexNormal = true;
     node->callbackFuncName = callbackFuncName;
-    node->mesh->Commit();
+    if(node->mesh)
+    	node->mesh->Commit();
     AddNode(node,meshType);
     return node;
 }
@@ -318,7 +327,10 @@ short SceneManager::LoadShaders(string materialName,string vShaderName,string fS
     return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName,isDepthPass);
 }
 Material* SceneManager::getMaterialByIndex(int index){
-    return (*mtlManger->materials)[index];
+	if(index < (int)(*mtlManger->materials).size())
+		return (*mtlManger->materials)[index];
+	else
+		return 0;
 }
 Material* SceneManager::getMaterialByName(string name){
     for(int i = 0 ; i < mtlManger->materials->size();i++){

@@ -59,7 +59,7 @@ struct TaskDetails {
     int taskId;
     int width;
     int height;
-    int frameCount;
+    int frame;
 };
 
 float readFloat(ifstream &dfile) {
@@ -199,6 +199,20 @@ Vec3fa sampleAroundNormal(Vec3fa n) {
     Vec3fa v = w.cross(u);
     return (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalize();
 }
+
+bool file_exists (const std::string& name) {
+	struct stat buffer;
+	return (stat (name.c_str(), &buffer) == 0);
+}
+
+bool file_copy (const std::string& source, const std::string& dest) {
+	std::ifstream  src(source, std::ios::binary);
+	std::ofstream  dst(dest,   std::ios::binary);
+	dst << src.rdbuf();
+
+	return true;
+}
+
 
 #include "texture.h"
 #include "camera.h"

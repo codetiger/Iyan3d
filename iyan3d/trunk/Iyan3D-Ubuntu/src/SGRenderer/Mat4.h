@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-class  Mat4
+class  SGRTMat4
 {
 public:
     float c[16];
 
-    Mat4()
+    SGRTMat4()
     {
         static const float IDENTITY_MATRIX[] = {
             1.0, 0.0, 0.0, 0.0,
@@ -21,11 +21,11 @@ public:
         };
         memcpy(c, IDENTITY_MATRIX, sizeof(float) * 16);
     }
-    Mat4(float* pMat)
+    SGRTMat4(float* pMat)
     {
         memcpy(c, pMat, sizeof(float) * 16);
     }
-    Mat4(const Vec3fa& axis_x, const Vec3fa& axis_y, const Vec3fa& axis_z, const Vec3fa& trans)
+    SGRTMat4(const Vec3fa& axis_x, const Vec3fa& axis_y, const Vec3fa& axis_z, const Vec3fa& trans)
     {
         c[0] = axis_x.x;
         c[1] = axis_x.y;
@@ -44,25 +44,25 @@ public:
         c[14] = trans.z;
         c[15] = 1.0f;
     }
-    ~Mat4()
+    ~SGRTMat4()
     {
     }
-    Mat4& operator=(const Mat4& m)
+    SGRTMat4& operator=(const SGRTMat4& m)
     {
         if (this != &m) {
             memcpy(c, m.c, sizeof(float) * 16);
         }
         return *this;
     }
-    bool operator==(const Mat4& m) const
+    bool operator==(const SGRTMat4& m) const
     {
         return memcmp(c, m.c, sizeof(float) * 16) == 0;
     }
-    Mat4& operator*=(const Mat4& m)
+    SGRTMat4& operator*=(const SGRTMat4& m)
     {
-        Mat4 m3;
-        Mat4 m2 = m;
-        Mat4 m1 = (*this);
+    	SGRTMat4 m3;
+    	SGRTMat4 m2 = m;
+    	SGRTMat4 m1 = (*this);
         (*this)[0] = m1[0] * m2[0] + m1[4] * m2[1] + m1[8] * m2[2] + m1[12] * m2[3];
         (*this)[1] = m1[1] * m2[0] + m1[5] * m2[1] + m1[9] * m2[2] + m1[13] * m2[3];
         (*this)[2] = m1[2] * m2[0] + m1[6] * m2[1] + m1[10] * m2[2] + m1[14] * m2[3];
@@ -89,7 +89,7 @@ public:
     Vec3fa operator*(const Vec3fa& v) const
     {
         Vec3fa result;
-        Mat4 ret = *this;
+        SGRTMat4 ret = *this;
 
         result.x = ret[0] * v.x + ret[4] * v.y + ret[8] * v.z;// + ret[12];
         result.y = ret[1] * v.x + ret[5] * v.y + ret[9] * v.z;// + ret[13];
@@ -98,9 +98,9 @@ public:
         return result;
     }
 
-    Mat4 operator*(const Mat4& m) const
+    SGRTMat4 operator*(const SGRTMat4& m) const
     {
-        Mat4 ret = *this;
+    	SGRTMat4 ret = *this;
         ret *= m;
         return ret;
     }
@@ -140,7 +140,7 @@ public:
         const int cos2[3] = { 10, 10, 5 };
         const int sin1[3] = { 9, 2, 4 };
         const int sin2[3] = { 6, 8, 1 };
-        Mat4 newMatrix;
+        SGRTMat4 newMatrix;
 
         newMatrix.c[cos1[axis]] = cos(angle);
         newMatrix.c[sin1[axis]] = -sin(angle);
@@ -175,7 +175,7 @@ public:
     }
     void scale(float x, float y, float z)
     {
-        Mat4 newMatrix;
+    	SGRTMat4 newMatrix;
 
         newMatrix.c[0] = x;
         newMatrix.c[5] = y;
@@ -331,7 +331,7 @@ public:
         return Vec3fa((*this)[12], (*this)[13], (*this)[14]);
     }
 
-      Mat4 setbyproduct(Mat4& other_a, Mat4& other_b)
+    SGRTMat4 setbyproduct(SGRTMat4& other_a, SGRTMat4& other_b)
     {
         float* m1 = other_a.pointer();
         float* m2 = other_b.pointer();

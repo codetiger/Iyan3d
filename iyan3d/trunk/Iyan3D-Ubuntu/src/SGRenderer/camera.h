@@ -7,7 +7,7 @@ struct Camera {
     Vec3fa position, direction;
     float fovDist, aspectRatio;
     double imgWidth, imgHeight;
-    Mat4 camMatrix;
+    SGRTMat4 camMatrix;
 
     Camera(Vec3fa pos, Vec3fa cRot, Vec3fa cDir, float cfov, int width, int height) {
         position = pos;
@@ -32,7 +32,7 @@ struct Camera {
 
     Vec3fa getRayDirection1(double x, double y) {
         Vec3fa delta = direction;
-	    Mat4 cM;
+        SGRTMat4 cM;
         Vec3fa angle = Vec3fa((y-0.5) * 180.0f, x * 360.0f, 0.0f);
         cM.setRotationRadians(angle * M_PI / 180.0f);
         cM.rotateVect(delta);

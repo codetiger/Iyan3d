@@ -40,7 +40,7 @@ class SGCloudRenderingHelper
 {
 public:
     SGCloudRenderingHelper();
-    static bool writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId, string fileName, vector<string> &textureFileNames);
+    static bool writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId);
     vector<TriangleData> calculateTriangleDataForNode(SGNode * sgNode);
     vertexData calculateFinalVertexData(shared_ptr<Node> node , void * vertex);
     void calculateJointTransforms(vertexDataHeavy *vertex , vector<Mat4> jointTransforms , Vector3 &position , Vector3 &normal);
