@@ -1401,10 +1401,17 @@ BOOL missingAlertShown;
         case ADD_ASSET_BACK: {
             int assetId = returnValue2;
             assetAddType = UNDO_ACTION;
-            if(assetId > 900 && assetId < 1000) {
+            if(assetId >= 900 && assetId <= 1000) {
                 int numberOfLight = assetId - 900;
                 [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
-            } else {
+            }
+            else if(assetId >= 10000 && assetId <= 20000){
+                AssetItem* assetObject = [cache GetAsset:assetId];
+                assetObject.isTempAsset = NO;
+                assetObject.type = ASSET_PARTICLES;
+                [self loadNodeInScene:assetObject ActionType:assetAddType];
+            }
+            else {
                 AssetItem* assetObject = [cache GetAsset:assetId];
                 assetObject.isTempAsset = NO;
                 [self loadNodeInScene:assetObject ActionType:assetAddType];

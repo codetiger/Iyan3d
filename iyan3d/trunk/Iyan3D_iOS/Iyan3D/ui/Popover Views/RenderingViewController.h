@@ -61,10 +61,8 @@
 @property (strong, nonatomic) NSString *projectName;
 @property (strong, nonatomic) NSString *videoFilePath;
 @property (weak, nonatomic) IBOutlet UILabel *transparentBgLabel;
-
 @property(nonatomic, weak) IBOutlet GADBannerView *bannerView;
 @property (weak, nonatomic) IBOutlet UIImageView *renderedImageView;
-
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
@@ -98,13 +96,11 @@
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 
-
 @property (weak, nonatomic) IBOutlet UISwitch *watermarkSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *backgroundColorLable;
 @property (weak, nonatomic) IBOutlet UIButton *colorPickerBtn;
 @property (weak, nonatomic) IBOutlet UILabel *transparentLable;
 @property (weak, nonatomic) IBOutlet UISwitch *transparentBackgroundbtn;
-
 
 - (IBAction)cameraResolutionChanged:(id)sender;
 - (IBAction)transparentBgValueChanged:(id)sender;

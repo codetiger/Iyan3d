@@ -325,7 +325,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 particle->isTempNode = isTempNode;
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
         }
@@ -345,7 +345,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         if(!isUndoOrRedo){
             if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT_SKIN || editorScene->nodes[nodeIndex]->getType() == NODE_TEXT || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, 0);
-            else if (editorScene->nodes[nodeIndex]->getType() == NODE_OBJ || editorScene->nodes[nodeIndex]->getType() == NODE_SGM || editorScene->nodes[nodeIndex]->getType() == NODE_RIG || editorScene->nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT)
+            else if (editorScene->nodes[nodeIndex]->getType() == NODE_OBJ || editorScene->nodes[nodeIndex]->getType() == NODE_SGM || editorScene->nodes[nodeIndex]->getType() == NODE_RIG || editorScene->nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT|| editorScene->nodes[nodeIndex]->getType() == NODE_PARTICLES)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
         }
         editorScene->loader->removeObject(nodeIndex);

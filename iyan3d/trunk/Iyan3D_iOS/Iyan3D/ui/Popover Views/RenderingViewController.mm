@@ -1079,5 +1079,6 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 }
 
 - (IBAction)transparentBgValueChanged:(id)sender {
+    
 }
 @end
