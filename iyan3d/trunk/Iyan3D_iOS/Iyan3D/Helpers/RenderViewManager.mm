@@ -37,6 +37,7 @@ SGEditorScene *editorScene;
     NSString* cachesDir = [paths objectAtIndex:0];
     constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
     touchCountTracker = 0;
+    lightCount = 1;
 }
 
 - (void)setupLayer:(UIView*)renderView
@@ -188,20 +189,19 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void) addCameraLight
 {
-    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil];
+    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION];
     [self.delegate updateAssetListInScenes:ASSET_CAMERA assetName:@"CAMERA" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
-    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil];
+    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION];
     [self.delegate updateAssetListInScenes:ASSET_LIGHT assetName:@"LIGHT" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
     
 }
 
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType
 {
     // TODO a lot to implement
    
     NSString *assetName = [NSString stringWithCString:ConversionHelper::getStringForWString(name).c_str()
                                                 encoding:[NSString defaultCStringEncoding]];    
-    ActionType assetAddType = IMPORT_ASSET_ACTION;
     
     if(editorScene) {
         editorScene->loader->removeTempNodeIfExists();
@@ -211,40 +211,41 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     
     switch (type) {
         case ASSET_CAMERA: {
-            editorScene->loader->loadNode(NODE_CAMERA, assetId, name, 0, 0, assetAddType);
+            editorScene->loader->loadNode(NODE_CAMERA, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
             break;
         }
         case ASSET_LIGHT: {
-            editorScene->loader->loadNode(NODE_LIGHT, assetId, name, 0, 0, assetAddType);
+            editorScene->loader->loadNode(NODE_LIGHT, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
             break;
         }
         case ASSET_BACKGROUNDS:
         case ASSET_ACCESSORIES: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, name, 0, 0, assetAddType);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
               [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
         case ASSET_RIGGED: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED_HUMAN];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, name, 0, 0, assetAddType);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                
-                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
         case ASSET_OBJ: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, name, 0, 0, assetAddType);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -255,10 +256,12 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_IMAGE: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0, name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0));
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0, name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
                 [self.delegate updateAssetListInScenes:ASSET_IMAGE assetName:[NSString stringWithFormat:@"IMAGE %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
@@ -286,7 +289,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             float alpha = [[moreDetail objectForKey:@"alpha"]floatValue];
             NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
-            SGNode* textNode = editorScene->loader->loadNode(NODE_TEXT, 0, name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String]);
+            SGNode* textNode = editorScene->loader->loadNode(NODE_TEXT, 0, name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
@@ -295,15 +298,20 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(textNode)
                 textNode->isTempNode = isTempNode;
             if(!isTempNode){
-                [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetName:[NSString stringWithFormat:@"TEXT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
+                [self.delegate updateAssetListInScenes:ASSET_TEXT assetName:[NSString stringWithFormat:@"TEXT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
             }
             break;
         }
         case ASSET_ADDITIONAL_LIGHT: {
             //TODO enum for max lights
             if(ShaderManager::lightPosition.size() < 5) {
-                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId , name, imgWidth , imgHeight , assetAddType , Vector4(1.0));
+                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId , name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
                 [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:[NSString stringWithFormat:@"LIGHT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                lightCount++;
             } else {
                 NSLog(@"Max lights 5");
             }            
@@ -316,10 +324,20 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     return true;
 }
 
-- (bool) removeNodeFromScene:(int)nodeIndex
+- (bool) removeNodeFromScene:(int)nodeIndex IsUndoOrRedo:(BOOL)isUndoOrRedo
 {
-    editorScene->loader->removeObject(nodeIndex);
-    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:(int)nodeIndex];
+    NSLog(@"Node Index %d ",nodeIndex);
+    if(editorScene->nodes.size()>nodeIndex){
+        editorScene->selectMan->selectObject(nodeIndex);
+        if(!isUndoOrRedo){
+            if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE)
+                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, 0);
+            else if (editorScene->nodes[nodeIndex]->getType() == NODE_OBJ || editorScene->nodes[nodeIndex]->getType() == NODE_SGM || editorScene->nodes[nodeIndex]->getType() == NODE_RIG || editorScene->nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT)
+                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
+        }
+        editorScene->loader->removeObject(nodeIndex);
+        [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:(int)nodeIndex];
+    }
 }
 
 - (void)addGesturesToSceneView
@@ -488,7 +506,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 -(void) showPopOver:(int) selectedNodeId{
     if(_longPress){
         if(editorScene->selectedNodeId != NOT_SELECTED){
-            if (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)
+            if (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT)
             {
                 [self.delegate presentPopOver:_longPresPosition];
                 _longPress=false;

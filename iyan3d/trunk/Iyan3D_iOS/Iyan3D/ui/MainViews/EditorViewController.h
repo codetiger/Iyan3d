@@ -56,7 +56,8 @@
     int IndexOfSelected;
     CacheSystem *cache;
     bool isViewLoaded , isPlaying;
-    int assetAddType , previousAction , lightCount;
+    int previousAction , lightCount;
+    ActionType assetAddType;
     NSString *imgSalt;
     NSTimer *playTimer;
     SettingsViewController *settingsVc;

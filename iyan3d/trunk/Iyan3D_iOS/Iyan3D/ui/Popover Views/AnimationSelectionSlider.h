@@ -22,9 +22,10 @@
 - (void) applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame;
 - (void) stopPlaying;
 - (void) removeTempAnimation;
-- (void) createDuplicateAssets;
+- (void) createDuplicateAssetsForAnimation;
 - (bool) removeNodeFromScene:(int)nodeIndex;
 - (void) updateAssetListInScenes :(int)nodeType assetName:(NSString*)assetName actionType:(int)action removeObjectAtIndex:(int)index;
+- (void) removeTempNodeFromScene;
 @end
 
 @interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>

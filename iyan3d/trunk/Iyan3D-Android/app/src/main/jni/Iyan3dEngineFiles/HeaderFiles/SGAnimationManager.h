@@ -31,7 +31,10 @@ public:
     void applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames);
     void applyTextAnimations(string filePath, SGNode *sgNode, int &totalFrames, int currentFrame , vector<Vector3> jointBasePositions, int &animFrames);
     bool removeAnimationForSelectedNodeAtFrame(int selectedFrame);
-    void removeAppliedAnimation(int startFrame, int endFrame);
+    void removeAppliedAnimation(int startFrame, int endFrame);    
+    bool storeAnimations(int assetId);
+    void storeSGRAnimations(string filePath , SGNode *sgNode , int totalFrames , vector<int>totalKeyFrames);
+    void storeTextAnimations(string filePath, SGNode *sgNode, int totalFrames , vector<Vector3> jointBasePositions, vector<int>totalKeyFrames);
 };
 
 #endif /* SGAnimationManager_h */

@@ -19,7 +19,7 @@
 @protocol AssetSelectionViewControllerPadDelegate
 
 - (void)resetContext;
-- (void)loadNodeInScene:(int)assetId;
+- (void)loadNodeInScene:(int)assetId AssetAddType:(int)assetImportType;
 - (int)getBoneCount;
 
 @end

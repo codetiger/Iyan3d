@@ -97,6 +97,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
     camPreviewScale = 1.0;
     previousDistance = Vector2(0.0, 0.0);
+    actionObjectsSize = 0;
 }
 
 void SGEditorScene::initTextures()

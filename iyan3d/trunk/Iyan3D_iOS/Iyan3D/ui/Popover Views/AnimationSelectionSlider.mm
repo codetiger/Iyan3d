@@ -27,6 +27,8 @@
         currentFrame = editorSceneLocal->currentFrame;
         totalFrame = editorSceneLocal->totalFrames;
         isFirstTimeAnimationApplyed = isFirstTime;
+        NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        docDirPath = [srcDirPath objectAtIndex:0];
     }
     return self;
 }
@@ -49,7 +51,7 @@
     }
     self.cancelBtn.layer.cornerRadius = 8.0f;
     self.addBtn.layer.cornerRadius = 8.0f;
-    [self.delegate createDuplicateAssets];
+    [self.delegate createDuplicateAssetsForAnimation];
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
 }
 
@@ -75,7 +77,7 @@
     cell.assetNameLabel.text = assetItem.assetName;
     [cell.assetNameLabel adjustsFontSizeToFitWidth];
     cell.backgroundColor = [UIColor clearColor];
-    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:5 OperationQueue:downloadQueue];
+    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:(animationCategoryTab == MY_ANIMATION) ? MY_ANIMATION_VIEW : ALL_ANIMATION_VIEW OperationQueue:downloadQueue];    
     
     cell.assetNameLabel.textColor = [UIColor whiteColor];
     cell.assetNameLabel.font=[UIFont fontWithName:@"Helvetica-Bold" size:11];
@@ -254,13 +256,15 @@
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString *fileName, *url;
     NSString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
-    if (tabValue == MY_ANIMATION) {
+    if (animationCategoryTab == MY_ANIMATION) {
         fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
             [self performSelectorOnMainThread:@selector(applyAnimation:) withObject:[NSNumber numberWithInt:assetItem.boneCount] waitUntilDone:NO];
+            NSLog(@"MY Animation Exits");
         }
         else {
             NSLog(@"File not exists");
+            NSLog(@"File Path : %@ ",fileName);
         }
     }
     else {
@@ -409,7 +413,7 @@
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
     editorSceneLocal->selectMan->selectObject(selectedNodeId);
-    [self.delegate createDuplicateAssets];
+    [self.delegate createDuplicateAssetsForAnimation];
     if(!isFirstTimeAnimationApplyed) {
         editorSceneLocal->currentFrame = currentFrame;
         editorSceneLocal->totalFrames = totalFrame;
@@ -421,7 +425,11 @@
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString *fileName;
     NSString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
-    fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
+    if(animationCategoryTab == MY_ANIMATION)
+        fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, selectedAssetId, extension];
+    else
+        fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
+
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         isFirstTimeAnimationApplyed = false;
         if(animationType == RIG_ANIMATION){

@@ -104,9 +104,9 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
         Logger::log(INFO , "SGScene diff ", "touch end");
+        moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
         moveScene->isControlSelected = false;
-        moveScene->actionMan->storeActionKeys(true);
     }
 }
 

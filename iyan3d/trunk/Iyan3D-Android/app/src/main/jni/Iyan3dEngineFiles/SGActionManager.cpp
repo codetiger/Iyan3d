@@ -17,6 +17,7 @@ SGActionManager::SGActionManager(SceneManager* smgr, void* scene)
     actionScene = (SGEditorScene*)scene;
     mirrorSwitchState = MIRROR_OFF;
     actions.clear();
+    currentAction = 0;
 }
 
 SGActionManager::~SGActionManager()
@@ -29,8 +30,8 @@ SGActionManager::~SGActionManager()
 }
 
 void SGActionManager::addAction(SGAction& action){
-    if(currentAction < 0)
-        currentAction = 0;
+    
+    removeActions();
     
     actions.push_back(action);
     while(actions.size() > MAXUNDO){
@@ -45,7 +46,6 @@ void SGActionManager::finalizeAndAddAction(SGAction& action)
     if(!actionScene || !smgr)
         return;
     
-    removeActions();
     if(action.actionType == ACTION_CHANGE_JOINT_KEYS|| action.actionType == ACTION_CHANGE_NODE_JOINT_KEYS|| action.actionType == ACTION_CHANGE_NODE_KEYS) {
         action.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
         if(action.actionType != ACTION_CHANGE_NODE_KEYS)
@@ -57,6 +57,7 @@ void SGActionManager::finalizeAndAddAction(SGAction& action)
 
 void SGActionManager::removeActions()
 {
+    
     if(!actionScene || !smgr)
         return;
 
@@ -232,7 +233,7 @@ void SGActionManager::storeActionKeys(bool finished)
         
         actionScene->updater->reloadKeyFrameMap();
         if(finished)
-            addAction(changeKeysAction);
+            finalizeAndAddAction(changeKeysAction);
     }
 }
 
@@ -391,8 +392,9 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.drop();
         assetAction.actionType = ACTION_NODE_ADDED;
         assetAction.frameId = assetId;
-        assetAction.objectIndex =  actionScene->actionObjectsSize + 1;
+        assetAction.objectIndex =  actionScene->actionObjectsSize;
         addAction(assetAction);
+
     } else if(actionType == ACTION_NODE_DELETED) {
         assetAction.drop();
         assetAction.actionType = ACTION_NODE_DELETED;
@@ -427,7 +429,6 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.frameId = actionScene->animMan->animStartFrame;
         assetAction.actionSpecificIntegers.push_back(actionScene->animMan->animTotalFrames);
         addAction(assetAction);
-        printf("Animation Action Added");
     }
 }
 
@@ -510,6 +511,7 @@ int SGActionManager::undo(int &returnValue2)
         return -1;
 
     int returnValue = DO_NOTHING;
+    
     SGAction &recentAction = actions[currentAction-1];
     int indexOfAction = 0;
     
@@ -631,17 +633,21 @@ int SGActionManager::redo()
             return DEACTIVATE_REDO;
     }
     
+
+    
     SGAction &recentAction = actions[currentAction];
     int indexOfAction = getObjectIndex(recentAction.objectIndex);
     
     SGNode* sgNode;
     if(indexOfAction < actionScene->nodes.size())
         sgNode = actionScene->nodes[indexOfAction];
+
     
     switch(recentAction.actionType){
-        case ACTION_CHANGE_NODE_KEYS:
+        case ACTION_CHANGE_NODE_KEYS:{
             sgNode->setKeyForFrame(recentAction.frameId, recentAction.keys[1]);
             actionScene->updater->reloadKeyFrameMap();
+        }
             break;
         case ACTION_CHANGE_JOINT_KEYS:{
             int jointsCnt = (int)sgNode->joints.size();
@@ -725,8 +731,8 @@ int SGActionManager::redo()
 }
 
 int SGActionManager::getObjectIndex(int actionIndex)
-{   
-    for(int i = 0; i < (int)actionScene->nodes.size(); i++) {
+{
+        for(int i = 0; i < (int)actionScene->nodes.size(); i++) {
         if(actionScene->nodes[i]->actionId == actionIndex) {
             return i;
         }

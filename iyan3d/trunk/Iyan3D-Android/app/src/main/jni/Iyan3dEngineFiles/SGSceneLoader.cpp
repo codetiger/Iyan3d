@@ -160,7 +160,7 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
     
 }
 
-SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath)
+SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath ,bool isTempNode)
 {
     if(!currentScene || !smgr)
         return NULL;
@@ -203,7 +203,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int
     //if (type >= NODE_LIGHT && type != NODE_ADDITIONAL_LIGHT)
     sgnode->node->setTexture(currentScene->shadowTexture,2);
     
-    if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
+    if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
     currentScene->nodes.push_back(sgnode);
     sgnode->node->setID(currentScene->assetIDCounter++);
@@ -215,7 +215,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int
     return sgnode;
 }
 
-bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
+bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 {
     if(!currentScene || !smgr)
         return false;
@@ -235,7 +235,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
     //if(sgNode->getType() >= NODE_LIGHT)
     sgNode->node->setTexture(currentScene->shadowTexture,2);
     sgNode->node->setVisible(true);
-    if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
+    if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgNode->actionId = ++currentScene->actionObjectsSize;
     currentScene->nodes.push_back(sgNode);
     sgNode->node->setID(currentScene->assetIDCounter++);
@@ -264,7 +264,6 @@ bool SGSceneLoader::loadNodeOnUndoORedo(SGAction action, int actionType)
     sgNode->props.vertexColor.y = action.actionSpecificFloats[1];
     sgNode->props.vertexColor.z = action.actionSpecificFloats[2];
     sgNode->props.nodeSpecificFloat = action.actionSpecificFloats[3];
-    
     sgNode->props.prevMatName = ConversionHelper::getStringForWString(action.actionSpecificStrings[0]);
     sgNode->optionalFilePath = ConversionHelper::getStringForWString(action.actionSpecificStrings[1]);
     sgNode->name = action.actionSpecificStrings[2];

@@ -70,6 +70,10 @@
 
 #define ADD_BUTTON_TAG 99
 
+#define UNDEFINED_OBJECT -1
+
+#define OK_BUTTON_INDEX 1
+#define CANCEL_BUTTON_INDEX 0
 
 BOOL missingAlertShown;
 
@@ -203,6 +207,7 @@ BOOL missingAlertShown;
     [textDetails setObject:[NSNumber numberWithFloat:colors.w] forKey:@"alpha"];
     [textDetails setObject:fontFileName forKey:@"fontFileName"];
     [textDetails setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
+    assetAddType = IMPORT_ASSET_ACTION;
     [self performSelectorOnMainThread:@selector(load3dTextOnMainThread:) withObject:textDetails waitUntilDone:YES];
 
 }
@@ -216,7 +221,7 @@ BOOL missingAlertShown;
     
     NSLog(@"Is Temp Node : %d", isTempNode);
 
-    [renderViewMan loadNodeInScene:ASSET_TEXT AssetId:assetId AssetName:assetName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails];
+    [renderViewMan loadNodeInScene:ASSET_TEXT AssetId:assetId AssetName:assetName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType];
 }
 
 - (void) importAdditionalLight{
@@ -233,33 +238,30 @@ BOOL missingAlertShown;
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
 {
-    [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] Width:20 Height:50 isTempNode:NO More:nil];
+    [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType];
 }
 
-- (void) loadNodeInScene:(AssetItem*)assetItem
+- (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType
 {
+    assetAddType = actionType;
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
     
 }
 
-
 - (void)loadNodeForImage:(NSMutableDictionary*)nsDict
 {
-    NSLog(@"Type : %@",[nsDict objectForKey:@"type"]);
     std::wstring saltedFileName = [self getwstring:[nsDict objectForKey:@"AssetName"]];
     int type = [[nsDict objectForKey:@"type"]intValue];
     int assetId = [[nsDict objectForKey:@"AssetId"]intValue];
     int imgWidth = [[nsDict objectForKey:@"Width"]intValue];
     int imgHeight = [[nsDict objectForKey:@"Height"]intValue];
     int isTempNode = [[nsDict objectForKey:@"isTempNode"]intValue];
-    
-    
-    [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:saltedFileName Width:imgWidth Height:imgHeight isTempNode:isTempNode More:nil];
+    [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:saltedFileName Width:imgWidth Height:imgHeight isTempNode:isTempNode More:nil ActionType:assetAddType];
 }
 
 - (void) loadNode:(AssetItem*) asset
 {
-    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset More:nil];
+    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType];
 }
 
 - (void)createDisplayLink
@@ -391,6 +393,7 @@ BOOL missingAlertShown;
                                                        alpha:1.0f].CGColor;
     todatasetCell2.layer.borderWidth = 2.0f;
     [self NormalHighLight];
+    editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = indexPath.row;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
     [self HighlightFrame];
@@ -430,7 +433,7 @@ BOOL missingAlertShown;
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [renderViewMan removeNodeFromScene:(int)indexPath.row];
+        [renderViewMan removeNodeFromScene:(int)indexPath.row IsUndoOrRedo:NO];
         [tableView reloadData];
     }
 }
@@ -453,8 +456,8 @@ BOOL missingAlertShown;
     return NO;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [self objectSelectionCompleted:(int)indexPath.row];
     
 }
@@ -732,6 +735,7 @@ BOOL missingAlertShown;
     [self NormalHighLight];
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
     [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = editorScene->totalFrames - 1;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
     [self HighlightFrame];
@@ -742,6 +746,7 @@ BOOL missingAlertShown;
     [self NormalHighLight];
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:0 inSection:0];
     [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = 0;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
     [self HighlightFrame];
@@ -872,62 +877,98 @@ BOOL missingAlertShown;
 
 - (IBAction)undoBtnAction:(id)sender
 {
-//    int returnValue2 = NOT_SELECTED;
-//    ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);
-//    switch (actionType) {
-//        case DO_NOTHING: {
-//            break;
-//        }
-//        case DELETE_ASSET: {
-//            int nodeIndex = returnValue2;
-//            if (nodeIndex < assetsInScenes.count) {
-//                [assetsInScenes removeObjectAtIndex:nodeIndex];
-//                editorScene->loader->removeObject(nodeIndex);
-//            }
-//            break;
-//        }
-//            
-//        case ADD_TEXT_IMAGE_BACK: {
-//            std::wstring name = editorScene->nodes[editorScene->nodes.size() - 1]->name;
-//            [assetsInScenes addObject:[self stringWithwstring:name]];
-//            break;
-//        }
-//        case ADD_ASSET_BACK: {
-//            int assetId = returnValue2;
-//            assetAddType = UNDO_ACTION;
-//            AssetItem* assetObject = [cache GetAsset:assetId];
-//            [self loadNodeInScene:assetObject];
-//            break;
-//        }
-//        case SWITCH_FRAME: {
-//            NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-//            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-//            [self HighlightFrame];
-//            [self.framesCollectionView reloadData];
-//            break;
-//        }
-//        case RELOAD_FRAMES: {
-//            [self.framesCollectionView reloadData];
-//            break;
-//        }
-//        case SWITCH_MIRROR:
-//            
-//            break;
-//        default: {
-//            break;
-//        }
-//    }
-//    
-//    if (editorScene->actionMan->actions.size() <= 0 || editorScene->actionMan->currentAction <= 0){
-//        
-//    }
-//    
-
+    int returnValue2 = NOT_SELECTED;
+    NSLog(@"Undo Return Value : %d",returnValue2);
+    ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);    
+    switch (actionType) {
+        case DO_NOTHING: {
+            break;
+        }
+        case DELETE_ASSET: {
+            int nodeIndex = returnValue2;
+            if (nodeIndex < assetsInScenes.count) {
+                [renderViewMan removeNodeFromScene:nodeIndex IsUndoOrRedo:YES];
+            }
+            break;
+        }
+        case ADD_TEXT_IMAGE_BACK: {
+            std::wstring name = editorScene->nodes[editorScene->nodes.size() - 1]->name;
+            [self updateAssetListInScenes:ASSET_TEXT assetName:[NSString stringWithFormat:@"TEXT %@",[self stringWithwstring:name]] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+            break;
+        }
+        case ADD_ASSET_BACK: {
+            int assetId = returnValue2;
+            assetAddType = UNDO_ACTION;
+            if(assetId > 900 && assetId < 1000) {
+                int numberOfLight = assetId - 900;
+                [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
+            } else {
+                AssetItem* assetObject = [cache GetAsset:assetId];
+                [self loadNodeInScene:assetObject ActionType:assetAddType];
+            }
+            break;
+        }
+        case SWITCH_FRAME: {
+            NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+            [self HighlightFrame];
+            [self.framesCollectionView reloadData];
+            break;
+        }
+        case RELOAD_FRAMES: {
+            [self.framesCollectionView reloadData];
+            break;
+        }
+        case SWITCH_MIRROR:
+            //self.mirrorSwitch.on = animationScene->getMirrorState();
+            break;
+        default: {
+            break;
+        }
+    }
 }
 
 - (IBAction)redoBtnAction:(id)sender
 {
-    NSLog(@"RedoBtn Clicked");
+    int returnValue = editorScene->redo();
+    
+    NSLog(@"Redo Return Value : %d ",returnValue);
+
+    if (returnValue == DO_NOTHING) {
+        //DO NOTHING
+    }
+    else if (returnValue == DELETE_ASSET) {
+        if (editorScene->selectedNodeId < assetsInScenes.count) {
+            NSLog(@"Seleced Node Id %d",editorScene->selectedNodeId);
+            [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:YES];
+        }
+    }
+    else if (returnValue == ADD_TEXT_IMAGE_BACK) {
+        std::wstring name = editorScene->nodes[editorScene->nodes.size() - 1]->name;
+        [self updateAssetListInScenes:ASSET_TEXT assetName:[NSString stringWithFormat:@"TEXT %@",[self stringWithwstring:name]] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+    }
+    else if (returnValue == SWITCH_MIRROR) {
+        //self.mirrorSwitch.on = animationScene->getMirrorState();
+    }
+    else {
+        if (returnValue != DEACTIVATE_UNDO && returnValue != DEACTIVATE_REDO && returnValue != DEACTIVATE_BOTH) {
+            //importPressed = NO;
+            assetAddType = REDO_ACTION;
+            int assetId = returnValue;
+            if(assetId > 900 && assetId < 1000) {
+                int numberOfLight = assetId - 900;
+                [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
+            } else {
+                AssetItem* assetObject = [cache GetAsset:assetId];
+                [self loadNodeInScene:assetObject ActionType:assetAddType];
+            }
+        }
+    }
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        [self HighlightFrame];
+        [self.framesCollectionView reloadData];
+
 }
 
 
@@ -1150,7 +1191,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                    style:UIAlertActionStyleDefault
                                    handler:^(UIAlertAction * action)
                                    {
-                                       [renderViewMan removeNodeFromScene:editorScene->selectedNodeId];                                       
+                                       [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
                                    }];
     if(editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT){
         UIAlertAction* duplicateButton = [UIAlertAction
@@ -1173,7 +1214,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 #pragma Duplicate Actions
 
-- (void) createDuplicateAssets{
+- (void) createDuplicateAssetsForAnimation {
     
     int selectedAssetId  = NOT_EXISTS;
     NODE_TYPE selectedNodeType = NODE_UNDEFINED;
@@ -1184,6 +1225,34 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
+        AssetItem *assetItem = [cache GetAsset:selectedAssetId];
+        [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
+        
+    }
+      else if(selectedNodeType == NODE_TEXT && selectedAssetId != NOT_EXISTS){
+        NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
+        NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
+                                                encoding:[NSString defaultCStringEncoding]];
+        Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
+        float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
+        int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
+        [self load3DTex:ASSET_TEXT AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+    }
+}
+
+
+- (void) createDuplicateAssets {
+    
+    int selectedAssetId  = NOT_EXISTS;
+    NODE_TYPE selectedNodeType = NODE_UNDEFINED;
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        selectedAssetId = editorScene->nodes[editorScene->selectedNodeId]->assetId;
+        selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
+    }
+    
+    if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
+    {
+        assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
 
@@ -1223,6 +1292,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         else if(nodeType == ASSET_IMAGE){
             NSString *name = [NSString stringWithFormat:@"Image : %@",assetName];
             [assetsInScenes addObject:name];
+        }
+        else if(nodeType == ASSET_TEXT){
+            [assetsInScenes addObject:assetName];
         }
         else{
             [assetsInScenes addObject:assetName];
@@ -1593,6 +1665,33 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     editorScene->saveThumbnail((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
+- (void)saveUserAnimation:(NSString*)assetName
+{
+    int assetId = ANIMATIONS_ID + [cache getNextAnimationAssetId];
+    int type = editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT ? 1 : 0;
+    
+    bool status = editorScene->animMan->storeAnimations(assetId);
+    
+    if (status) {
+        AnimationItem* animItem = [[AnimationItem alloc] init];
+        animItem.assetId = assetId;
+        animItem.assetName = assetName;
+        animItem.published = 0;
+        animItem.rating = 0;
+        animItem.boneCount = (int)editorScene->nodes[editorScene->selectedNodeId]->joints.size();
+        animItem.isViewerRated = 0;
+        animItem.type = type;
+        animItem.userId = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
+        animItem.userName = @"anonymous";
+        animItem.keywords = [NSString stringWithFormat:@" %@", animItem.assetName];
+        animItem.modifiedDate = @"";
+        [cache UpdateMyAnimation:animItem];
+    }
+    else {
+        NSLog(@"Error saving animation");
+    }
+}
+
 #pragma Download Missing Assets
 bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
 {
@@ -1789,6 +1888,42 @@ void downloadFile(NSString* url, NSString* fileName)
         [_center_progress setHidden:YES];
     }
 }
+
+#pragma mark -
+#pragma AlertView
+- (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+       alertView.delegate = nil;
+}
+- (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == ADD_BUTTON_TAG) {
+        NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+        
+        if (buttonIndex == CANCEL_BUTTON_INDEX) {
+        }
+        else if (buttonIndex == OK_BUTTON_INDEX) {
+            NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if ([name length] == 0) {
+                [self.view endEditing:YES];
+                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [errorAlert show];
+            }
+            else {
+                [self.view endEditing:YES];
+                if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [errorAlert show];
+                }
+                else {
+                    [self saveUserAnimation:[alertView textFieldAtIndex:0].text];
+                }
+            }
+        }
+    }
+
+}
+
 
 
 - (void)setupEnableDisableControls{

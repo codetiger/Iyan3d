@@ -363,3 +363,235 @@ void SGAnimationManager::removeAppliedAnimation(int startFrame, int endFrame)
     animScene->selectMan->unselectObject(animScene->selectedNodeId);
 }
 
+
+bool SGAnimationManager::storeAnimations(int assetId)
+{
+    NODE_TYPE currentType = animScene->nodes[animScene->selectedNodeId]->getType();
+    animScene->updater->setDataForFrame(animScene->currentFrame);
+    string extension = (currentType == NODE_RIG) ? ".sgra" : ".sgta";
+    
+#ifdef IOS
+    string filePath =  FileHelper::getDocumentsDirectory()+ "Resources/Animations/" + to_string(assetId) + extension;
+    string thumbnailPath = FileHelper::getDocumentsDirectory() + "Resources/Animations/" + to_string(assetId) + ".png";
+#elif ANDROID
+    string filePath =  constants::DocumentsStoragePath + "/animations/" + to_string(assetId) + extension;
+    string thumbnailPath = constants::DocumentsStoragePath + "/animations/" + to_string(assetId) + ".png";
+#endif
+    int oldResolution = animScene->cameraResolutionType;
+    
+    printf("Thumbnail Path %s",thumbnailPath.c_str());
+    
+    animScene->cameraResolutionType = 2;
+    animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true);
+    if(animScene->shaderMGR->deviceType == METAL)
+        animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true);
+    animScene->cameraResolutionType = oldResolution;
+    
+    vector<int> totalKeyFrames;
+    for (int frame = 0; frame < animScene->totalFrames; frame++) {
+        if(animScene->isKeySetForFrame.find(frame) != animScene->isKeySetForFrame.end())
+            totalKeyFrames.push_back(frame);
+    }
+    
+    if(currentType == NODE_RIG)
+        SGAnimationManager::storeSGRAnimations(filePath,animScene->nodes[animScene->selectedNodeId], animScene->totalFrames,totalKeyFrames);
+    else
+        SGAnimationManager::storeTextAnimations(filePath, animScene->nodes[animScene->selectedNodeId], animScene->totalFrames , animScene->textJointsBasePos[animScene->selectedNodeId],totalKeyFrames);
+    
+    if(FILE *file = fopen(filePath.c_str(), "r")) {
+        fclose(file);
+        return true;
+    }
+    return false;
+}
+
+void SGAnimationManager::storeSGRAnimations(string filePath , SGNode *sgNode , int totalFrames , vector<int>totalKeyFrames)
+{
+    //string filePath = FileHelper::getDocumentsDirectory() + "sample.sgra";
+    ofstream sgraFile(filePath,ios::out | ios::binary);
+    FileHelper::resetSeekPosition();
+    FileHelper::writeShort(&sgraFile, 1);
+    FileHelper::writeShort(&sgraFile, 0);
+    FileHelper::writeShort(&sgraFile, sgNode->joints.size());
+    FileHelper::writeShort(&sgraFile, totalFrames);
+    FileHelper::writeShort(&sgraFile, (short)totalKeyFrames.size());
+    short lastKeyFrameId = totalKeyFrames[totalKeyFrames.size()-1];
+    FileHelper::writeShort(&sgraFile, lastKeyFrameId);
+    
+    Vector3 nodeInitPos = Vector3(0.0);
+    int posCount = 0;
+    for(int i = 0; i < totalKeyFrames.size(); i++)
+    {
+        short frame = totalKeyFrames[i];
+        ActionKey nodeKey = sgNode->getKeyForFrame(frame);
+        short activeKeys = 0;
+        if(nodeKey.isPositionKey) activeKeys++;
+        if(nodeKey.isRotationKey) activeKeys++;
+        if(nodeKey.isScaleKey) activeKeys++;
+        
+        FileHelper::writeShort(&sgraFile, frame); // Frame Id
+        
+        FileHelper::writeShort(&sgraFile, activeKeys);
+        
+        if(nodeKey.isPositionKey) {
+            int type = 1;
+            
+            Vector3 offsetPos = Vector3();
+            FileHelper::writeShort(&sgraFile, type);
+            FileHelper::writeFloat(&sgraFile, (nodeKey.position.x - nodeInitPos.x));
+            FileHelper::writeFloat(&sgraFile, (nodeKey.position.y - nodeInitPos.y));
+            FileHelper::writeFloat(&sgraFile, (nodeKey.position.z - nodeInitPos.z));
+            if(posCount == 0) nodeInitPos = nodeKey.position;
+            posCount++;
+        }
+        if(nodeKey.isRotationKey) {
+            int type = 2;
+            FileHelper::writeShort(&sgraFile, type);
+            FileHelper::writeFloat(&sgraFile, nodeKey.rotation.x);
+            FileHelper::writeFloat(&sgraFile, nodeKey.rotation.y);
+            FileHelper::writeFloat(&sgraFile, nodeKey.rotation.z);
+            FileHelper::writeFloat(&sgraFile, nodeKey.rotation.w);
+        }
+        if(nodeKey.isScaleKey) {
+            int type = 3;
+            FileHelper::writeShort(&sgraFile, type);
+            FileHelper::writeFloat(&sgraFile, nodeKey.scale.x);
+            FileHelper::writeFloat(&sgraFile, nodeKey.scale.y);
+            FileHelper::writeFloat(&sgraFile, nodeKey.scale.z);
+        }
+        
+        for(int jointId = 1; jointId < sgNode->joints.size(); jointId++) {
+            
+            ActionKey frameKey = sgNode->joints[jointId]->getKeyForFrame(frame);
+            short activeKeys = 0;
+            if(frameKey.isPositionKey) activeKeys++;
+            if(frameKey.isRotationKey) activeKeys++;
+            if(frameKey.isScaleKey) activeKeys++;
+            
+            FileHelper::writeShort(&sgraFile, activeKeys);
+            
+            if(frameKey.isPositionKey) {
+                int type = 1;
+                FileHelper::writeShort(&sgraFile, type);
+                FileHelper::writeFloat(&sgraFile, frameKey.position.x);
+                FileHelper::writeFloat(&sgraFile, frameKey.position.y);
+                FileHelper::writeFloat(&sgraFile, frameKey.position.z);
+            }
+            if(frameKey.isRotationKey) {
+                int type = 2;
+                FileHelper::writeShort(&sgraFile, type);
+                FileHelper::writeFloat(&sgraFile, frameKey.rotation.x);
+                FileHelper::writeFloat(&sgraFile, frameKey.rotation.y);
+                FileHelper::writeFloat(&sgraFile, frameKey.rotation.z);
+                FileHelper::writeFloat(&sgraFile, frameKey.rotation.w);
+            }
+            if(frameKey.isScaleKey) {
+                int type = 3;
+                FileHelper::writeShort(&sgraFile, type);
+                FileHelper::writeFloat(&sgraFile, frameKey.scale.x);
+                FileHelper::writeFloat(&sgraFile, frameKey.scale.y);
+                FileHelper::writeFloat(&sgraFile, frameKey.scale.z);
+            }
+            
+        }
+    }
+    
+    sgraFile.close();
+}
+
+void SGAnimationManager::storeTextAnimations(string filePath, SGNode *sgNode, int totalFrames , vector<Vector3> jointBasePositions, vector<int>totalKeyFrames)
+{
+    ofstream sgtaFile(filePath,ios::out | ios::binary);
+    FileHelper::resetSeekPosition();
+    FileHelper::writeShort(&sgtaFile, 1);
+    FileHelper::writeShort(&sgtaFile, 1);
+    FileHelper::writeShort(&sgtaFile, sgNode->joints.size());
+    FileHelper::writeShort(&sgtaFile, totalFrames);
+    FileHelper::writeShort(&sgtaFile, (short)totalKeyFrames.size());
+    short lastKeyFrameId = totalKeyFrames[totalKeyFrames.size()-1];
+    FileHelper::writeShort(&sgtaFile, lastKeyFrameId);
+    
+    Vector3 nodeInitPos = Vector3(0.0);
+    int posCount = 0;
+    
+    for(int i = 0; i < totalKeyFrames.size(); i++)
+    {
+        short frame = totalKeyFrames[i];
+        ActionKey nodeKey = sgNode->getKeyForFrame(frame);
+        short activeKeys = 0;
+        if(nodeKey.isPositionKey) activeKeys++;
+        if(nodeKey.isRotationKey) activeKeys++;
+        if(nodeKey.isScaleKey) activeKeys++;
+        
+        FileHelper::writeShort(&sgtaFile, frame); // Frame Id
+        
+        FileHelper::writeShort(&sgtaFile, activeKeys);
+        
+        if(nodeKey.isPositionKey) {
+            int type = 1;
+            FileHelper::writeShort(&sgtaFile, type);
+            FileHelper::writeFloat(&sgtaFile, (nodeKey.position.x - nodeInitPos.x));
+            FileHelper::writeFloat(&sgtaFile, (nodeKey.position.y - nodeInitPos.y));
+            FileHelper::writeFloat(&sgtaFile, (nodeKey.position.z - nodeInitPos.z));
+            if(posCount == 0) nodeInitPos = nodeKey.position;
+            posCount++;
+        }
+        if(nodeKey.isRotationKey) {
+            int type = 2;
+            FileHelper::writeShort(&sgtaFile, type);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.rotation.x);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.rotation.y);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.rotation.z);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.rotation.w);
+        }
+        if(nodeKey.isScaleKey) {
+            int type = 3;
+            FileHelper::writeShort(&sgtaFile, type);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.scale.x);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.scale.y);
+            FileHelper::writeFloat(&sgtaFile, nodeKey.scale.z);
+        }
+        
+        for(int jointId = 1; jointId < sgNode->joints.size(); jointId++) {
+            
+            ActionKey frameKey = sgNode->joints[jointId]->getKeyForFrame(frame);
+            short activeKeys = 0;
+            if(frameKey.isPositionKey) activeKeys++;
+            if(frameKey.isRotationKey) activeKeys++;
+            if(frameKey.isScaleKey) activeKeys++;
+            
+            FileHelper::writeShort(&sgtaFile, activeKeys);
+            
+            if(frameKey.isPositionKey) {
+                int type = 1;
+                
+                Vector3 offsetPos = Vector3(frameKey.position.x-jointBasePositions[jointId].x,frameKey.position.y-jointBasePositions[jointId].y,frameKey.position.z-jointBasePositions[jointId].z);
+                
+                FileHelper::writeShort(&sgtaFile, type);
+                FileHelper::writeFloat(&sgtaFile, offsetPos.x);
+                FileHelper::writeFloat(&sgtaFile, offsetPos.y);
+                FileHelper::writeFloat(&sgtaFile, offsetPos.z);
+            }
+            if(frameKey.isRotationKey) {
+                int type = 2;
+                FileHelper::writeShort(&sgtaFile, type);
+                FileHelper::writeFloat(&sgtaFile, frameKey.rotation.x);
+                FileHelper::writeFloat(&sgtaFile, frameKey.rotation.y);
+                FileHelper::writeFloat(&sgtaFile, frameKey.rotation.z);
+                FileHelper::writeFloat(&sgtaFile, frameKey.rotation.w);
+            }
+            if(frameKey.isScaleKey) {
+                int type = 3;
+                FileHelper::writeShort(&sgtaFile, type);
+                FileHelper::writeFloat(&sgtaFile, frameKey.scale.x);
+                FileHelper::writeFloat(&sgtaFile, frameKey.scale.y);
+                FileHelper::writeFloat(&sgtaFile, frameKey.scale.z);
+            }
+            
+        }
+    }
+    
+    sgtaFile.close();
+}
+
+

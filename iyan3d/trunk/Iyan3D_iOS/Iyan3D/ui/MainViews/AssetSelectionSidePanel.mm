@@ -263,7 +263,7 @@
                 NSLog(@"Rig file not exists");
             else{
                 assetvalue.isTempAsset = isTempAsset;
-                [self.assetSelectionDelegate loadNodeInScene:assetvalue];
+                [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
             }
         }
         else {
@@ -279,7 +279,7 @@
                 if (activity == LOAD_NODE){
                     [self.assetSelectionDelegate showOrHideProgress:0];
                     assetvalue.isTempAsset = isTempAsset;
-                    [self.assetSelectionDelegate loadNodeInScene:assetvalue];
+                    [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
                 }
                 else{
                    //[self updateUIForRestoringPurchase:assetvalue.assetId];
@@ -299,7 +299,7 @@
             if (activity == LOAD_NODE){
                 [self.assetSelectionDelegate showOrHideProgress:0];
                 assetvalue.isTempAsset = isTempAsset;
-                [self.assetSelectionDelegate loadNodeInScene:assetvalue];
+                [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
             }
             else{
                 //[self updateUIForRestoringPurchase:assetvalue.assetId];
@@ -349,7 +349,7 @@
         AssetItem * assetItem = [cache GetAsset:assetId];
         if(!addToScenePressed)
             assetItem.isTempAsset = true;
-        [self.assetSelectionDelegate loadNodeInScene:assetItem];
+        [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
         [self.assetSelectionDelegate showOrHideProgress:0];
     }
     else {
@@ -371,7 +371,7 @@
     AssetItem *assetItem = [cache GetAsset:assetId];
     if(!addToScenePressed)
         assetItem.isTempAsset = true;
-    [self.assetSelectionDelegate loadNodeInScene:assetItem];
+    [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
     [self.assetSelectionDelegate showOrHideProgress:0];
     
 }

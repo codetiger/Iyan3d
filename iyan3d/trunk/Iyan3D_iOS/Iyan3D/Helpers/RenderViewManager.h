@@ -20,6 +20,7 @@
 #import <GameKit/GameKit.h>
 #import "RenderingView.h"
 #import "SceneManager.h"
+#import "Constants.h"
 
 @protocol RenderViewManagerDelegate
 
@@ -41,7 +42,8 @@
     GLuint _frameBuffer;
     float screenScale;
     SceneManager *smgr;
-    int touchCountTracker;
+    int touchCountTracker,lightCount;
+    
 }
 @property (strong, atomic) RenderingView *renderView;
 @property (strong, atomic) id <RenderViewManagerDelegate> delegate;
@@ -64,8 +66,8 @@
 - (void) setUpCallBacks:(void*)scene;
 - (void) addCameraLight;
 -(void) showPopOver:(int) selectedNodeId;
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail;
-- (bool) removeNodeFromScene:(int)nodeIndex;
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType;
+- (bool) removeNodeFromScene:(int)nodeIndex IsUndoOrRedo:(BOOL)isUndoOrRedo;
 - (void)addGesturesToSceneView;
 - (void)panOrPinchProgress;
 

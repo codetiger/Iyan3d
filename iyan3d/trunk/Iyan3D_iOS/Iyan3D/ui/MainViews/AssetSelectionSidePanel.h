@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "SmartImageView.h"
 #import "CacheSystem.h"
-
+#import "Constants.h"
 @protocol AssetSelectionDelegate
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
-- (void) loadNodeInScene:(AssetItem*)assetItem;
+- (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType;
 - (void) removeTempNodeFromScene;
 - (void) showOrHideProgress:(BOOL) value;
 

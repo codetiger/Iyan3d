@@ -110,6 +110,8 @@
         [self copyFontFilesFromDirectory:docDirPath ToDirectory:fontDirectoryPath withExtensions:fontExtensions];
         filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fontDirectoryPath error:Nil];
         fontListArray = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
+        fontArray = [[NSMutableArray alloc]initWithArray:fontListArray];
+
     }
 }
 
@@ -272,12 +274,28 @@
 }
 
 - (IBAction)fontStoreTapChangeAction:(id)sender {
-    //NSLog(@"Font Tap : %ld", _fontStoreTab.selectedSegmentIndex);
+    if ((int)self.fontTab.selectedSegmentIndex == MY_FONT) {
+            [self initializeFontListArray];
+            if ([fontArray count] != 0) {
+                if (![[AppHelper getAppHelper] userDefaultsForKey:@"My_Font_Array"])
+                    [[AppHelper getAppHelper] saveToUserDefaults:[fontArray objectAtIndex:0] withKey:@"My_Font_Array"];
+                [self.fontTab setSelectedSegmentIndex:MY_FONT];
+                tabValue = MY_FONT;
+                [self.collectionView reloadData];
+            }
+            else {
+                tabValue = MY_FONT;
+            }
+    }
+        else {
+            [self.fontTab setSelectedSegmentIndex:FONT_STORE];
+            tabValue = FONT_STORE;
+            [self.collectionView reloadData];
+        }
 }
 
 - (IBAction)colorPickerAction:(id)sender {
     //[_textSelectionDelegate textColorPicker:_colorWheelbtn];
-    
     _textColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
     _textColorProp.delegate = self;
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_textColorProp];
