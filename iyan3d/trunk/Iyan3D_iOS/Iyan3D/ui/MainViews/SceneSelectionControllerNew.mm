@@ -174,13 +174,11 @@
         [appDelegate.window setRootViewController:animationEditor];
     }
     else{
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }
-    
     [self removeFromParentViewController];
-    
 }
 
 - (IBAction)infoBtnAction:(id)sender
@@ -472,6 +470,11 @@
 }
 -(void)multiSelectUpdate:(BOOL)value{
     [[AppHelper getAppHelper] saveBoolUserDefaults:value withKey:@"multiSelectOption"];
+}
+
+-(BOOL)iPhone6Plus{
+    if (([UIScreen mainScreen].scale > 2.0)) return YES;
+    return NO;
 }
 
 #pragma Dealloc Delegate

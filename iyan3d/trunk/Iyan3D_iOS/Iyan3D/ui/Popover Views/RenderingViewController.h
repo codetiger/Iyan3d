@@ -106,6 +106,8 @@
 @property (weak, nonatomic) IBOutlet UISwitch *transparentBackgroundbtn;
 @property (weak, nonatomic) IBOutlet UILabel *creditLable;
 @property (weak, nonatomic) IBOutlet UILabel *resolutionType4;
+@property (weak, nonatomic) IBOutlet UIView *progressSub;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *checkCreditProgress;
 
 
 - (IBAction)cameraResolutionChanged:(id)sender;

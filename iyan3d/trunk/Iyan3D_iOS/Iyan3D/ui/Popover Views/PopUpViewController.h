@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 @protocol PopUpViewControllerDelegate
 - (void) animationBtnDelegateAction:(int)indexValue;
@@ -16,25 +17,26 @@
 - (void) infoBtnDelegateAction:(int)indexValue;
 - (void) addFrameBtnDelegateAction:(int)indexValue;
 - (void) myObjectsBtnDelegateAction:(int)indexValue;
--(void)highlightObjectList;
+- (void)highlightObjectList;
 - (void) loginBtnAction;
 - (void) propertiesBtnDelegate:(int)indexValue;
--(void) optionBtnDelegate:(int)indexValue;
+- (void) optionBtnDelegate:(int)indexValue;
+- (NODE_TYPE) getNodeType:(int)nodeId;
 @end
 
 @interface PopUpViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>{
      NSMutableArray *tableData;
     NSString *clickedBtn;
-    
 }
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;
 @property (weak, nonatomic) IBOutlet UITableView *popoverBtns;
 @property (weak, nonatomic) IBOutlet UIImageView *loginImage;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+
 - (IBAction)loginBtnAction:(id)sender;
 @property (weak, nonatomic) id <PopUpViewControllerDelegate> delegate;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil clickedButton:(NSString*)buttonValue;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil clickedButton:(NSString *)buttonValue;
 - (void *)updateDescelect:(NSIndexPath *)indexPath;
 - (void *)updateSelection:(NSIndexPath *)indexPath ScrollPosition:(int)scrolPosition;
 -(void *)allowMultipleSelection :(BOOL)isMultipleselectionEnabled;

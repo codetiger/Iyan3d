@@ -12,6 +12,7 @@
                 <outlet property="deleteBtn" destination="rX2-c1-0Az" id="sp0-kp-nQu"/>
                 <outlet property="faceNormalBtn" destination="xdA-1U-TG3" id="yaH-i0-dnR"/>
                 <outlet property="lightingSwitch" destination="azO-so-DyO" id="X8n-dF-Iw9"/>
+                <outlet property="mirrorBtn" destination="YBt-xE-ZrT" id="FXo-5H-uBB"/>
                 <outlet property="reflectionSlider" destination="SUi-sV-rwa" id="5He-rr-beQ"/>
                 <outlet property="refractionSlider" destination="T0K-D1-8Kc" id="x1B-a8-Vwz"/>
                 <outlet property="skinBtn" destination="MT7-Hm-3m1" id="hX4-Qa-0TN"/>
@@ -64,20 +65,19 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sr8-nc-TNF">
-                            <rect key="frame" x="332" y="231" width="51" height="31"/>
+                            <rect key="frame" x="238" y="231" width="51" height="31"/>
                             <connections>
                                 <action selector="visibleValueChanged:" destination="-1" eventType="valueChanged" id="Jcj-ax-av8"/>
                             </connections>
                         </switch>
-                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdA-1U-TG3">
-                            <rect key="frame" x="182" y="231" width="51" height="31"/>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YBt-xE-ZrT">
+                            <rect key="frame" x="334" y="231" width="51" height="31"/>
                             <connections>
-                                <action selector="faceNormalAction:" destination="-1" eventType="valueChanged" id="UKr-SY-nuu"/>
-                                <action selector="visibleValueChanged:" destination="-1" eventType="valueChanged" id="fVH-O4-obs"/>
+                                <action selector="mirrorBtnAction:" destination="-1" eventType="valueChanged" id="LfM-X2-pNB"/>
                             </connections>
                         </switch>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="FACE NORMALS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FWP-TK-fHh">
-                            <rect key="frame" x="154" y="210" width="106" height="21"/>
+                            <rect key="frame" x="102" y="210" width="106" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -136,10 +136,22 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="VISIBLITY" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sab-49-Hjo">
-                            <rect key="frame" x="324" y="210" width="64" height="21"/>
+                            <rect key="frame" x="230" y="210" width="64" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="olt-bO-PVX">
+                            <rect key="frame" x="333" y="210" width="51" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdA-1U-TG3">
+                            <rect key="frame" x="131" y="231" width="51" height="31"/>
+                            <connections>
+                                <action selector="faceNormalAction:" destination="-1" eventType="valueChanged" id="UKr-SY-nuu"/>
+                                <action selector="visibleValueChanged:" destination="-1" eventType="valueChanged" id="fVH-O4-obs"/>
+                            </connections>
+                        </switch>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

@@ -295,8 +295,8 @@
 		01B4BCB81C32904C00E09269 /* EditorViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4BCB61C32904C00E09269 /* EditorViewControllerPhone.xib */; };
 		01B4BCBA1C32A11A00E09269 /* FrameCellNewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4BCB91C32A11A00E09269 /* FrameCellNewPhone.xib */; };
 		01B4BCBB1C32A11A00E09269 /* FrameCellNewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4BCB91C32A11A00E09269 /* FrameCellNewPhone.xib */; };
-		01B4BCBF1C32A69900E09269 /* PopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4BCBD1C32A69900E09269 /* PopUpViewController.m */; };
-		01B4BCC01C32A69900E09269 /* PopUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B4BCBD1C32A69900E09269 /* PopUpViewController.m */; };
+		01B4BCBF1C32A69900E09269 /* PopUpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01B4BCBD1C32A69900E09269 /* PopUpViewController.mm */; };
+		01B4BCC01C32A69900E09269 /* PopUpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01B4BCBD1C32A69900E09269 /* PopUpViewController.mm */; };
 		01B4BCC11C32A69900E09269 /* PopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4BCBE1C32A69900E09269 /* PopUpViewController.xib */; };
 		01B4BCC21C32A69900E09269 /* PopUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B4BCBE1C32A69900E09269 /* PopUpViewController.xib */; };
 		01B4BD191C32C93B00E09269 /* Scale_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4BD031C32C93B00E09269 /* Scale_IPhone@2x.png */; };
@@ -1139,6 +1139,12 @@
 		3D71B0741C2930E30038C4BD /* AssetFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B0711C2930E30038C4BD /* AssetFrameCell.m */; };
 		3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
 		3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
+		3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
+		3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
+		3DAC8C3D1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */; };
+		3DAC8C3E1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */; };
+		3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
+		3DAC8C411C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
 		3DAEFFED1C6A27A1008AAD81 /* My-objects-Particles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */; };
 		3DAEFFEE1C6A27A1008AAD81 /* My-objects-Particles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */; };
 		3DAEFFF01C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */; };
@@ -1163,6 +1169,8 @@
 		3DC60FFF1C6B192D00A8D412 /* hq.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC60FF81C6B192D00A8D412 /* hq.png */; };
 		3DC610001C6B192D00A8D412 /* hq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC60FF91C6B192D00A8D412 /* hq@2x.png */; };
 		3DC610011C6B192D00A8D412 /* hq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC60FF91C6B192D00A8D412 /* hq@2x.png */; };
+		3DC610031C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */; };
+		3DC610041C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */; };
 		3DD47BF01C60A43500E7CCFD /* 60001.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEA1C60A43500E7CCFD /* 60001.sgm */; };
 		3DD47BF11C60A43500E7CCFD /* 60001.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEA1C60A43500E7CCFD /* 60001.sgm */; };
 		3DD47BF21C60A43500E7CCFD /* 60002.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEB1C60A43500E7CCFD /* 60002.sgm */; };
@@ -1587,8 +1595,8 @@
 		C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D7821876BE6100A45D71 /* UIKit.framework */; };
 		C885D7891876BE6100A45D71 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C885D7871876BE6100A45D71 /* InfoPlist.strings */; };
 		C885D78B1876BE6100A45D71 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C885D78A1876BE6100A45D71 /* main.m */; };
-		C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.m */; };
-		C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.m */; };
+		C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */; };
+		C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */; };
 		C8AA46EE1C227CED00C4AB53 /* SceneSelectionFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C8AA46EB1C227CED00C4AB53 /* SceneSelectionFrameCell.xib */; };
 		C8AA46EF1C227CED00C4AB53 /* SceneSelectionFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C8AA46EB1C227CED00C4AB53 /* SceneSelectionFrameCell.xib */; };
 		C8AA46F31C227D1000C4AB53 /* SceneSelectionControllerNew.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46F11C227D1000C4AB53 /* SceneSelectionControllerNew.mm */; };
@@ -2520,7 +2528,7 @@
 		01B4BCB61C32904C00E09269 /* EditorViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditorViewControllerPhone.xib; path = ui/MainViews/EditorViewControllerPhone.xib; sourceTree = "<group>"; };
 		01B4BCB91C32A11A00E09269 /* FrameCellNewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FrameCellNewPhone.xib; path = "ui/Popover Views/FrameCellNewPhone.xib"; sourceTree = "<group>"; };
 		01B4BCBC1C32A69900E09269 /* PopUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopUpViewController.h; path = "ui/Popover Views/PopUpViewController.h"; sourceTree = "<group>"; };
-		01B4BCBD1C32A69900E09269 /* PopUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopUpViewController.m; path = "ui/Popover Views/PopUpViewController.m"; sourceTree = "<group>"; };
+		01B4BCBD1C32A69900E09269 /* PopUpViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PopUpViewController.mm; path = "ui/Popover Views/PopUpViewController.mm"; sourceTree = "<group>"; };
 		01B4BCBE1C32A69900E09269 /* PopUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PopUpViewController.xib; path = "ui/Popover Views/PopUpViewController.xib"; sourceTree = "<group>"; };
 		01B4BD031C32C93B00E09269 /* Scale_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Scale_IPhone@2x.png"; sourceTree = "<group>"; };
 		01B4BD041C32C93B00E09269 /* Undo_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Undo_IPhone@2x.png"; sourceTree = "<group>"; };
@@ -3259,6 +3267,9 @@
 		3D71B0701C2930E30038C4BD /* AssetFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetFrameCell.h; path = "ui/Popover Views/AssetFrameCell.h"; sourceTree = "<group>"; };
 		3D71B0711C2930E30038C4BD /* AssetFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetFrameCell.m; path = "ui/Popover Views/AssetFrameCell.m"; sourceTree = "<group>"; };
 		3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetFrameCell.xib; path = "ui/Popover Views/AssetFrameCell.xib"; sourceTree = "<group>"; };
+		3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SceneSelectionControllerNewPhone@2x.xib"; sourceTree = "<group>"; };
+		3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LoadingViewControllerPhone@2x.xib"; path = "ui/MainViews/LoadingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
+		3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RenderingViewControllerPhone@2x.xib"; path = "ui/Popover Views/RenderingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAEFFEC1C6A27A1008AAD81 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
 		3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone.png"; sourceTree = "<group>"; };
 		3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone@3x.png"; sourceTree = "<group>"; };
@@ -3271,6 +3282,7 @@
 		3DC60FF71C6B192D00A8D412 /* hq-IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hq-IPhone@2x.png"; sourceTree = "<group>"; };
 		3DC60FF81C6B192D00A8D412 /* hq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hq.png; sourceTree = "<group>"; };
 		3DC60FF91C6B192D00A8D412 /* hq@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hq@2x.png"; sourceTree = "<group>"; };
+		3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "EditorViewControllerPhone@2x.xib"; path = "ui/MainViews/EditorViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DD47BEA1C60A43500E7CCFD /* 60001.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60001.sgm; sourceTree = "<group>"; };
 		3DD47BEB1C60A43500E7CCFD /* 60002.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60002.sgm; sourceTree = "<group>"; };
 		3DD47BEC1C60A43500E7CCFD /* 60003.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60003.sgm; sourceTree = "<group>"; };
@@ -3653,7 +3665,7 @@
 		C885D78A1876BE6100A45D71 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C885D78C1876BE6100A45D71 /* Iyan3D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Iyan3D-Prefix.pch"; sourceTree = "<group>"; };
 		C8AA46E91C227CED00C4AB53 /* SceneSelectionFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneSelectionFrameCell.h; path = "ui/Popover Views/SceneSelectionFrameCell.h"; sourceTree = "<group>"; };
-		C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SceneSelectionFrameCell.m; path = "ui/Popover Views/SceneSelectionFrameCell.m"; sourceTree = "<group>"; };
+		C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SceneSelectionFrameCell.mm; path = "ui/Popover Views/SceneSelectionFrameCell.mm"; sourceTree = "<group>"; };
 		C8AA46EB1C227CED00C4AB53 /* SceneSelectionFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SceneSelectionFrameCell.xib; path = "ui/Popover Views/SceneSelectionFrameCell.xib"; sourceTree = "<group>"; };
 		C8AA46F01C227D1000C4AB53 /* SceneSelectionControllerNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneSelectionControllerNew.h; path = ui/MainViews/SceneSelectionControllerNew.h; sourceTree = "<group>"; };
 		C8AA46F11C227D1000C4AB53 /* SceneSelectionControllerNew.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SceneSelectionControllerNew.mm; path = ui/MainViews/SceneSelectionControllerNew.mm; sourceTree = "<group>"; };
@@ -4502,8 +4514,8 @@
 				01F872C01C3A6C4E009AA31E /* Import-models_IPhone@2x.png */,
 				01F872C11C3A6C4E009AA31E /* Import-text_IPhone@2x.png */,
 				01F872C21C3A6C4E009AA31E /* Import_IPhone@2x.png */,
-				01F872C31C3A6C4E009AA31E /* Info_IPhone@2x.png */,
 				01F872C41C3A6C4E009AA31E /* Login-IPhone@2x.png */,
+				01F872C31C3A6C4E009AA31E /* Info_IPhone@2x.png */,
 				01F872C51C3A6C4E009AA31E /* Move_IPhone@2x.png */,
 				01F872C61C3A6C4E009AA31E /* My-objects-Camera_IPhone@2x.png */,
 				01F872C71C3A6C4E009AA31E /* My-objects-Image_IPhone@2x.png */,
@@ -5781,7 +5793,7 @@
 				25EFBEA51BE25CA700DB300C /* RenPro.h */,
 				25EFBEA61BE25CA700DB300C /* RenPro.m */,
 				C8AA46E91C227CED00C4AB53 /* SceneSelectionFrameCell.h */,
-				C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.m */,
+				C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */,
 				C8AA46EB1C227CED00C4AB53 /* SceneSelectionFrameCell.xib */,
 				01B6F3F21C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib */,
 				25EFBEA71BE25CA700DB300C /* RenPro.xib */,
@@ -5829,6 +5841,7 @@
 				E2497647196BE0190025D442 /* RenderingViewController.mm */,
 				257564BF1AE6E3D400B66113 /* RenderingViewController.xib */,
 				257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */,
+				3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */,
 				E249764A196BE0190025D442 /* ScaleForAutoRigViewController.h */,
 				E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */,
 				E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */,
@@ -5865,7 +5878,7 @@
 				3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */,
 				01B6C8BE1C3BBA0D0050D2F9 /* AssetFrameCellPhone.xib */,
 				01B4BCBC1C32A69900E09269 /* PopUpViewController.h */,
-				01B4BCBD1C32A69900E09269 /* PopUpViewController.m */,
+				01B4BCBD1C32A69900E09269 /* PopUpViewController.mm */,
 				01B4BCBE1C32A69900E09269 /* PopUpViewController.xib */,
 				01F8731C1C3A7500009AA31E /* PopUpViewControllerPhone.xib */,
 				0184EC771C3512BA006F0B57 /* LoginViewController.h */,
@@ -6169,6 +6182,7 @@
 				018501DB1C2BDA730090FA65 /* EditorViewController.mm */,
 				01B4D01F1C292CD50091E19B /* EditorViewController.xib */,
 				01B4BCB61C32904C00E09269 /* EditorViewControllerPhone.xib */,
+				3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */,
 				01B4CF6F1C291E3F0091E19B /* EditorViewController.h */,
 				62F4D2A5199C7ABA0052EF95 /* AnimationView.xib */,
 				3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */,
@@ -6180,6 +6194,7 @@
 				C8AA46F01C227D1000C4AB53 /* SceneSelectionControllerNew.h */,
 				C8AA46F11C227D1000C4AB53 /* SceneSelectionControllerNew.mm */,
 				C8AA46F21C227D1000C4AB53 /* SceneSelectionControllerNew.xib */,
+				3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */,
 				01B6F3EF1C3E5C700041D42F /* SceneSelectionControllerNewPhone.xib */,
 				E21A4EB81AC9795700AD61DD /* AutoRigViewController.xib */,
 				E21A4EB91AC9795700AD61DD /* AutoRigViewControllerPhone.xib */,
@@ -6194,6 +6209,7 @@
 				E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */,
 				E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */,
 				E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */,
+				3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */,
 				E249768C196BE0310025D442 /* SceneSelectionViewControllerPad.h */,
 				E249768D196BE0310025D442 /* SceneSelectionViewControllerPad.mm */,
 				E249768A196BE0310025D442 /* SceneSelectionControllerPad.xib */,
@@ -6730,6 +6746,7 @@
 				01ACD09B1C3CEEE70096AD14 /* Bevel_IPhone.png in Resources */,
 				7FC527621B6F96FF00C5D26D /* Mail-phone@2x.png in Resources */,
 				7FC900C51A0A01470051B941 /* add-frame-phone.png in Resources */,
+				3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCE1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
 				01B4D05D1C2937000091E19B /* My-objects-Text_Pad@2x.png in Resources */,
 				3D5F99241C4D04EB00DD47F5 /* Sphere@2x.png in Resources */,
@@ -7102,6 +7119,7 @@
 				7FC900E11A0A01470051B941 /* new-img-phone@2x.png in Resources */,
 				01B4D04F1C2937000091E19B /* My-objects-Camera_Pad.png in Resources */,
 				01B02CD61C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
+				3DAC8C3D1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */,
 				01F8727D1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
 				7FC9016B1A0A54850051B941 /* Stop-video-pad@2x.png in Resources */,
 				7F00878C1ADFC15400764DDE /* justify@2x.png in Resources */,
@@ -7395,6 +7413,7 @@
 				01B4D0471C2937000091E19B /* Import_Pad.png in Resources */,
 				0169C45D1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				7FC5276A1B6F96FF00C5D26D /* Rate@2x.png in Resources */,
+				3DC610031C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */,
 				7FC9015B1A0A54850051B941 /* CrossForMain-pad.png in Resources */,
 				25D671931C46353100BE685D /* controls1.sgm in Resources */,
 				7FC900DE1A0A01470051B941 /* move-last-phone.png in Resources */,
@@ -7428,6 +7447,7 @@
 				E249761D196BDD590025D442 /* vertexColor.vert in Resources */,
 				7FC901321A0A07860051B941 /* rotate-img@2x.png in Resources */,
 				7F31A74E1AA4960300A6E7B1 /* save-img-phone@3x.png in Resources */,
+				3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */,
 				01F872891C3A42EF009AA31E /* Next-frame_IPhone.png in Resources */,
 				3D5D0F461C633697006B987E /* Particle_IPhone@2x.png in Resources */,
 				25C90F451B3616B400D803DB /* bevel-on-phone.png in Resources */,
@@ -7511,6 +7531,7 @@
 				01ACD09C1C3CEEE70096AD14 /* Bevel_IPhone.png in Resources */,
 				7F7D5A391B8CA54B00E6BA86 /* googlelogin_Iphone.png in Resources */,
 				7F7D5A3A1B8CA54B00E6BA86 /* googlelogin_Iphone@2x.png in Resources */,
+				3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCF1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
 				256F6F591BF6257C00154622 /* darwin-iphone in Resources */,
 				3D5F99251C4D04EB00DD47F5 /* Sphere@2x.png in Resources */,
@@ -7883,6 +7904,7 @@
 				01F8727E1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
 				E20672C41B049AA6006DD2F7 /* controls2.sgm in Resources */,
 				01B02CD71C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
+				3DAC8C3E1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */,
 				255712321B2160D30052902C /* 1c8ccd62ec29cc2fb116ecc6892cbab2.sgb in Resources */,
 				E20672C51B049AA6006DD2F7 /* properties-img-phone@3x.png in Resources */,
 				E20672C61B049AA6006DD2F7 /* bonelimits.json in Resources */,
@@ -8176,6 +8198,7 @@
 				E20673B31B049AA6006DD2F7 /* bracket.png in Resources */,
 				0169C45E1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				256F6B941BF6246300154622 /* json_internalmap.inl in Resources */,
+				3DC610041C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */,
 				E20673B41B049AA6006DD2F7 /* youtubeUpload.png in Resources */,
 				25D671941C46353100BE685D /* controls1.sgm in Resources */,
 				E20673B51B049AA6006DD2F7 /* first-phone@2x.png in Resources */,
@@ -8209,6 +8232,7 @@
 				7F5012FD1B2C597E00669B71 /* randNoise.png in Resources */,
 				E20673C61B049AA6006DD2F7 /* rotate-img-phone@2x.png in Resources */,
 				E20673C71B049AA6006DD2F7 /* playing@2x.png in Resources */,
+				3DAC8C411C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */,
 				01F8728A1C3A42EF009AA31E /* Next-frame_IPhone.png in Resources */,
 				3D5D0F471C633697006B987E /* Particle_IPhone@2x.png in Resources */,
 				E20673C91B049AA6006DD2F7 /* scale-img@2x.png in Resources */,
@@ -8467,7 +8491,7 @@
 				256F6B971BF6246300154622 /* json_reader.cpp in Sources */,
 				256F6B991BF6246300154622 /* json_value.cpp in Sources */,
 				256F6D6E1BF624FB00154622 /* BoundingBox.cpp in Sources */,
-				C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */,
+				C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				256F6D881BF624FB00154622 /* OGLMaterial.cpp in Sources */,
 				E29C11B11A07CACC00626544 /* GTMOAuth2ViewControllerTouch.m in Sources */,
 				25730E671AFD3C7B0042F81A /* BitmapContextManipulator.m in Sources */,
@@ -8623,7 +8647,7 @@
 				3D58CD6E1C3D43C2006371DE /* WETouchableView.m in Sources */,
 				25895B781B4F056700E833F8 /* AnimationItem.m in Sources */,
 				01B4CF861C291EFD0091E19B /* AnimationSelectionSlider.mm in Sources */,
-				01B4BCBF1C32A69900E09269 /* PopUpViewController.m in Sources */,
+				01B4BCBF1C32A69900E09269 /* PopUpViewController.mm in Sources */,
 				E21C3D071A0758B6006964E5 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
 				E21C3CFE1A0758B6006964E5 /* GTLYouTubeLocalizedProperty.m in Sources */,
 				251BF4751C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
@@ -8708,7 +8732,7 @@
 				7F7D5A221B8C47F100E6BA86 /* DataPickerViewController.m in Sources */,
 				7F7D5A181B8C434200E6BA86 /* AuthInspectorViewController.m in Sources */,
 				7F35D9AA1B5F53770003F1CE /* AFAPIClient.m in Sources */,
-				01B4BCC01C32A69900E09269 /* PopUpViewController.m in Sources */,
+				01B4BCC01C32A69900E09269 /* PopUpViewController.mm in Sources */,
 				256F6E911BF624FB00154622 /* pngrutil.c in Sources */,
 				7F35D9AC1B5F53770003F1CE /* AFHTTPClient.m in Sources */,
 				7F35D9AE1B5F53770003F1CE /* AFHTTPRequestOperation.m in Sources */,
@@ -8924,7 +8948,7 @@
 				256F6EAF1BF624FB00154622 /* RenderingView.m in Sources */,
 				E206716C1B049AA6006DD2F7 /* GTLYouTubeVideoRecordingDetails.m in Sources */,
 				25F0C2631C2E912800C8EC85 /* SGAnimationManager.cpp in Sources */,
-				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */,
+				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */,
 				256F6EB91BF624FB00154622 /* Logger.cpp in Sources */,
 				E206716E1B049AA6006DD2F7 /* GTLYouTubeThumbnail.m in Sources */,

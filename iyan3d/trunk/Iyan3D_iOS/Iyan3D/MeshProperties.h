@@ -12,6 +12,7 @@
 -(void) deleteDelegateAction;
 -(void)cloneDelegateAction;
 -(void)changeSkinDelgate;
+- (void) switchMirror;
 @end
 
 @interface MeshProperties : UIViewController{
@@ -20,9 +21,10 @@
     bool isLightningValue;
     bool isVisibleValue;
     bool isFaceNormal;
+    int mirrorStatus;
     
 }
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil BrightnessValue:(float)brightness SpecularValue:(float)specular LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil BrightnessValue:(float)brightness SpecularValue:(float)specular LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState;
 
 @property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
 @property (weak, nonatomic) IBOutlet UISlider *specularSlider;
@@ -35,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 @property (weak, nonatomic) IBOutlet UIButton *skinBtn;
 @property (weak, nonatomic) IBOutlet UISwitch *faceNormalBtn;
+@property (weak, nonatomic) IBOutlet UISwitch *mirrorBtn;
 
 
 - (IBAction)brightnessValueChanged:(id)sender;
@@ -49,6 +52,7 @@
 - (IBAction)faceNormalAction:(id)sender;
 - (IBAction)reflectionHqBtnAction:(id)sender;
 - (IBAction)refractionHqBtnAction:(id)sender;
+- (IBAction)mirrorBtnAction:(id)sender;
 
 
 

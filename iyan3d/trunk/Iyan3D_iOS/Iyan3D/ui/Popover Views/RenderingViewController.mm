@@ -51,6 +51,10 @@
 #define CANCEL_BUTTON_INDEX  0
 #define OK_BUTTON_INDEX  1
 
+#define DONE 1
+#define START 0
+
+
 
 @implementation RenderingViewController
 
@@ -84,9 +88,9 @@
     selectedIndex = 0;
     isAppInBg = false;
     self.resolutionSegment.selectedSegmentIndex = resolutionType;
-    self.renderingTypes.layer.cornerRadius = 5.0;
-    self.renderingTypes.layer.borderWidth = 2.0f;
-    self.renderingTypes.layer.borderColor=[UIColor clearColor].CGColor;
+//    self.renderingTypes.layer.cornerRadius = 5.0;
+//    self.renderingTypes.layer.borderWidth = 2.0f;
+//    self.renderingTypes.layer.borderColor=[UIColor clearColor].CGColor;
     self.nextButton.layer.cornerRadius = 5.0;
     self.cancelButton.layer.cornerRadius = 5.0;
     [self.activityIndicatorView setHidden:false];
@@ -130,6 +134,15 @@
     [self.exportButton setHidden:true];
     [self.youtubeButton setHidden:true];
     if(renderingExportImage != RENDER_IMAGE){
+        
+        _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(_progressSub.frame.origin.x,_progressSub.frame.origin.y, _progressSub.frame.size.width, _progressSub.frame.size.height)];
+        _trimControl.length = renderingEndFrame; // 200 seconds
+        _trimControl.delegate = self;
+        _trimControl.center = _progressSub.center;
+        [self.view addSubview:_trimControl];
+        
+        
+        /*
         if([Utility IsPadDevice]){
             _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(35,515, 470, 28)];
             _trimControl.length = renderingEndFrame; // 200 seconds
@@ -156,7 +169,11 @@
             _trimControl.delegate = self;
             [self.view addSubview:_trimControl];
         }
+        
+        */
     }
+    _nextButton.tag = START;
+    [_checkCreditProgress setHidden:YES];
     [self updateCreditLable];
 }
 
@@ -240,7 +257,10 @@
 
 - (IBAction)startButtonAction:(id)sender
 {
-    if([shaderArray[tempSelectedIndex] intValue] == SHADER_CLOUD){
+    if(_nextButton.tag == DONE){
+        [self cancelButtonAction:nil];
+    }
+    else if([shaderArray[tempSelectedIndex] intValue] == SHADER_CLOUD){
         [self.delegate saveScene];
         [self shaderPhotoAction];
     }
@@ -254,9 +274,9 @@
             [self renderBeginFunction:0];
         }
          else if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
-             
-             //TODO Begin loading
-             
+             [_checkCreditProgress setHidden:NO];
+             [_checkCreditProgress startAnimating];
+             [_nextButton setHidden:YES];
              [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:[[AppHelper getAppHelper] userDefaultsForKey:@"username"] Email:[[AppHelper getAppHelper] userDefaultsForKey:@"email"] SignInType:[[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue]];
             }
             else{
@@ -276,18 +296,26 @@
 
 - (void) creditsUsed:(NSNotification*) notification
 {
-    // TODO End Loading
     NSDictionary* userInfo = notification.userInfo;
-    NSNumber* userCredits = userInfo[@"credits"];
-    NSLog(@"Credits Updated %@ ", userCredits);
-    [self performSelectorOnMainThread:@selector(verifyCreditsAndRender:) withObject:userCredits waitUntilDone:YES];
+    BOOL network = [userInfo[@"network"]boolValue];
+    [_checkCreditProgress stopAnimating];
+    [_checkCreditProgress setHidden:YES];
+    if(network) {
+        NSNumber* userCredits = userInfo[@"credits"];
+        NSLog(@"Credits Updated %@ ", userCredits);
+        [self performSelectorOnMainThread:@selector(verifyCreditsAndRender:) withObject:userCredits waitUntilDone:YES];
+    }
+    else{
+        [self.trimControl setHidden:NO];
+        [_nextButton setHidden:NO];
+    }
 }
 
 - (void) verifyCreditsAndRender:(NSNumber*)userCredits
 {
     int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
+    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2)+((_watermarkSwitch.isOn)) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
     
     if([userCredits intValue] >= abs(credits)) {
         [_creditLable setHidden:YES];
@@ -297,18 +325,18 @@
         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [userNameAlert show];
         [self.trimControl setHidden:NO];
+        [_nextButton setHidden:NO];
     }
 }
 
 - (void) updateCreditLable
 {
     [_creditLable setHidden:NO];
-         int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
+    int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
+    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? ((int)(frames/2) + ((_watermarkSwitch.isOn) ? 0 : 50)): (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
     _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
 }
-
 
 -(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths
 {
@@ -518,13 +546,39 @@
         [self.rateButtonText setEnabled:YES];
     }
     
-    [self.exportButton setHidden:false];
-    [self.exportButton setEnabled:true];
+    [self.exportButton setHidden:YES];
+    [self.exportButton setEnabled:NO];
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
+    [self renderFinishAction:renderingExportImage];
     if(resolutionType != TWO_HUNDRED_FOURTY_P || (resolutionType == TWO_HUNDRED_FOURTY_P && !_watermarkSwitch.isOn))
         [self saveDeductedCredits:[credits intValue]];
 }
+
+- (void) renderFinishAction:(int)renderingType
+{
+    NSString *tempDir = NSTemporaryDirectory();
+    if(renderingExportImage == RENDER_VIDEO){
+        NSString *filePath = [NSString stringWithFormat:@"%@/myMovie.mov", tempDir];
+        UISaveVideoAtPathToSavedPhotosAlbum(filePath,nil,nil,nil);
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Video was successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else {
+        NSString *filePath = [NSString stringWithFormat:@"%@r-%d.png", tempDir, renderingFrame - 1];
+        UIImage *image = [UIImage imageWithContentsOfFile:filePath];
+        UIImageWriteToSavedPhotosAlbum(image,nil,nil,nil);
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Image was successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    [_cancelButton setHidden:YES];
+    [_nextButton setHidden:NO];
+    [_nextButton setEnabled:YES];
+    [_youtubeButton setHidden:YES];
+    [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+    _nextButton.tag = DONE;
+}
+
 - (IBAction)youtubeButtonAction:(id)sender
 {
     if(sender != nil) {

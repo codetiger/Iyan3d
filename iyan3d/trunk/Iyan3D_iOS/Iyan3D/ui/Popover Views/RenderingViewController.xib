@@ -11,11 +11,13 @@
                 <outlet property="backgroundColorLable" destination="UIQ-pP-dd7" id="5g3-Ag-wdS"/>
                 <outlet property="cancelActivityIndicator" destination="nif-U0-BwV" id="T3H-Ag-uTc"/>
                 <outlet property="cancelButton" destination="BrA-Pe-0Ve" id="ojj-c7-nZ9"/>
+                <outlet property="checkCreditProgress" destination="2NW-u8-on1" id="QbA-RE-YWN"/>
                 <outlet property="colorPickerBtn" destination="8g0-ud-PUd" id="y0C-mw-5rB"/>
                 <outlet property="creditLable" destination="hLk-cO-cda" id="Yw6-OV-HId"/>
                 <outlet property="exportButton" destination="ZUU-pt-gvf" id="fmO-uG-1Cq"/>
                 <outlet property="makeVideoLoading" destination="chg-7r-BYf" id="wFs-ZV-FnW"/>
                 <outlet property="nextButton" destination="pdo-ld-rqe" id="fBG-Me-oIy"/>
+                <outlet property="progressSub" destination="KgH-cZ-Wef" id="oXQ-SR-vmB"/>
                 <outlet property="renderDesc" destination="q6U-Pr-Qfx" id="IYW-2y-xN5"/>
                 <outlet property="renderedImageView" destination="WL1-RT-tct" id="m3h-dQ-TZN"/>
                 <outlet property="renderingProgressBar" destination="dzw-IT-60p" id="pUG-Ah-J59"/>
@@ -107,11 +109,15 @@
                     <rect key="frame" x="370" y="546" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="2NW-u8-on1" userLabel="checkCreditProgress">
+                    <rect key="frame" x="395" y="549" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                </activityIndicatorView>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="nif-U0-BwV">
                     <rect key="frame" x="40" y="546" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" pagingEnabled="YES" showsVerticalScrollIndicator="NO" dataMode="none" id="MVH-u3-p41">
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" scrollEnabled="NO" pagingEnabled="YES" showsVerticalScrollIndicator="NO" dataMode="none" id="MVH-u3-p41">
                     <rect key="frame" x="47" y="294" width="400" height="160"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <inset key="scrollIndicatorInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -202,7 +208,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="hLk-cO-cda">
-                    <rect key="frame" x="153" y="559" width="183" height="21"/>
+                    <rect key="frame" x="153" y="540" width="183" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -223,6 +229,10 @@
                         <action selector="cameraResolutionChanged:" destination="-1" eventType="valueChanged" id="1Cj-MO-kuU"/>
                     </connections>
                 </segmentedControl>
+                <view contentMode="center" id="KgH-cZ-Wef" userLabel="progressHolder">
+                    <rect key="frame" x="47" y="521" width="443" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

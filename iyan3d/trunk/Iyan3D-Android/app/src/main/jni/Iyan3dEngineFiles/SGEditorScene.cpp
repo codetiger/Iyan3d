@@ -641,3 +641,23 @@ Vector3 SGEditorScene::getPivotPoint(bool initial)
         return getParentNode()->getAbsolutePosition();
     return Vector3(0.0);
 }
+
+void SGEditorScene::setMirrorState(MIRROR_SWITCH_STATE flag)
+{
+    actionMan->setMirrorState(flag);
+    if(isJointSelected)
+       selectMan->highlightJointSpheres();
+}
+
+bool SGEditorScene::switchMirrorState()
+{
+    SGAction action;
+    action.actionType = ACTION_CHANGE_MIRROR_STATE;
+    action.actionSpecificFlags.push_back(getMirrorState());
+    actionMan->addAction(action);
+    setMirrorState((MIRROR_SWITCH_STATE)!getMirrorState());
+    if(isJointSelected)
+      selectMan->highlightJointSpheres();
+    return getMirrorState();
+}
+

@@ -200,7 +200,9 @@ public:
     
     Vector3 getTransformValue();
     Vector3 getPivotPoint(bool initial);
-    
+    bool switchMirrorState();
+    void setMirrorState(MIRROR_SWITCH_STATE flag);
+
 };
 
 #endif /* SGEditorScene_h */

@@ -9,6 +9,7 @@
 #import "PopUpViewController.h"
 #import "Utility.h"
 #import <AppHelper.h>
+
 @implementation PopUpViewController
 
 
@@ -188,20 +189,40 @@
 
         }
         else if([clickedBtn isEqualToString:@"myObjectsBtn"]){
-            if([cell.textLabel.text isEqualToString:@"CAMERA"])
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
-            else if([cell.textLabel.text isEqualToString:@"LIGHT"])
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-            else if([cell.textLabel.text hasPrefix:@"Text"])
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
-            else if([cell.textLabel.text hasPrefix:@"Image"])
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
-            else if([cell.textLabel.text hasPrefix:@"Light"])
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-            else if([cell.textLabel.text containsString:@"particle"])
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles-Phone.png"];
-            else
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
+            
+            enum NODE_TYPE nodeType = [self.delegate getNodeType:indexPath.row];
+            
+                if(nodeType == NODE_CAMERA)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+                else if(nodeType == NODE_LIGHT)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+                else if(nodeType == NODE_ADDITIONAL_LIGHT)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+                else if(nodeType == NODE_TEXT_SKIN)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+                else if(nodeType == NODE_IMAGE)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+                else if(nodeType == NODE_PARTICLES)
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
+                else
+                    cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
+
+//
+//            
+//            if([cell.textLabel.text isEqualToString:@"CAMERA"])
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+//            else if([cell.textLabel.text isEqualToString:@"LIGHT"])
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+//            else if([cell.textLabel.text hasPrefix:@"Text"])
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+//            else if([cell.textLabel.text hasPrefix:@"Image"])
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+//            else if([cell.textLabel.text hasPrefix:@"Light"])
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+//            else if([cell.textLabel.text containsString:@"particle"])
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles-Phone.png"];
+//            else
+//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
 
         }
      }

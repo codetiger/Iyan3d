@@ -112,6 +112,10 @@
 #define SETTINGS 3
 #define CONTACT_US 4
 
+#define MIRROR_OFF 0
+#define MIRROR_ON 1
+#define MIRROR_DISABLE 2
+
 BOOL missingAlertShown;
 
 #pragma mark NativeMethods
@@ -145,11 +149,9 @@ BOOL missingAlertShown;
     [_rigCancelBtn setHidden:YES];
     [_rigAddToSceneBtn setHidden:YES];
     [self updateXYZValuesHide:YES X:0.0 Y:0.0 Z:0.0];
+    
 //    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-//
-
-
     
 #if !(TARGET_IPHONE_SIMULATOR)
     if (iOSVersion >= 8.0)
@@ -207,6 +209,7 @@ BOOL missingAlertShown;
 - (void)initScene
 {
     float screenScale = [[UIScreen mainScreen] scale];
+    NSLog(@"Screen Scale %f " , screenScale);
     renderViewMan = [[RenderViewManager alloc] init];
     renderViewMan.delegate = self;
     [renderViewMan setupLayer:_renderView];
@@ -223,6 +226,8 @@ BOOL missingAlertShown;
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(OPENGLES2, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+        NSLog(@"\nScreen Size From Native : %f %f " , self.view.frame.size.width,self.view.frame.size.height);
+        NSLog(@"\nScreen Size From Macro : %f %f " , SCREENWIDTH,SCREENHEIGHT);
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
@@ -311,7 +316,6 @@ BOOL missingAlertShown;
         [self.moveBtnAutorig setHidden:false];
         [self.rotateBtnAutorig setHidden:false];
         [self.myObjectsBtn setHidden:YES];
-        
         return;
     }
     else
@@ -587,7 +591,6 @@ BOOL missingAlertShown;
 }
 
 #pragma Touches Actions
-
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
@@ -949,10 +952,8 @@ BOOL missingAlertShown;
 
 - (IBAction)addFrames:(id)sender
 {
-    
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"addFrames"];
-    [_popUpVc.view setClipsToBounds:YES];
-    
+    [_popUpVc.view setClipsToBounds:YES];    
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.popoverContentSize = CGSizeMake(205.0, 130.0);
@@ -1284,7 +1285,6 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
-        
     }
     else
     {
@@ -1293,7 +1293,8 @@ BOOL missingAlertShown;
         bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
         bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
+        int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
+        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
         self.popoverController.popoverContentSize = CGSizeMake(407 , 273);
@@ -1634,7 +1635,8 @@ BOOL missingAlertShown;
                 [self.objectList deselectRowAtIndexPath:path animated:YES];
             }
             else{
-                [_popUpVc updateDescelect:path];
+                if(_popUpVc)
+                    [_popUpVc updateDescelect:path];
             }
             
         }
@@ -1651,7 +1653,8 @@ BOOL missingAlertShown;
             }
             else
             {
-                [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeId];
+                if(_popUpVc != nil)
+                    [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeId];
             }
             prevSelection=path;
         }
@@ -1663,7 +1666,8 @@ BOOL missingAlertShown;
                     [self.objectList deselectRowAtIndexPath:path animated:YES];
                 }
                 else{
-                    [_popUpVc updateDescelect:path];
+                    if(_popUpVc)
+                        [_popUpVc updateDescelect:path];
                 }
                 isSelected=NO;
                 
@@ -1681,7 +1685,8 @@ BOOL missingAlertShown;
             }
             else
             {
-                [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeIds[i]];
+                if(_popUpVc)
+                    [_popUpVc updateSelection:path ScrollPosition:editorScene->selectedNodeIds[i]];
             }
         }
         
@@ -1723,7 +1728,7 @@ BOOL missingAlertShown;
 
 - (void)applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame
 {
-    editorScene->animMan->copyKeysOfNode(originalId, editorScene->nodes.size()-1);
+    editorScene->animMan->copyKeysOfNode(originalId, (int)editorScene->nodes.size()-1);
     editorScene->nodes[originalId]->node->setVisible(false);
     editorScene->currentFrame = selectedFrame;
     editorScene->actionMan->switchFrame(selectedFrame);
@@ -2055,8 +2060,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
         bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
         bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
-//        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
+        int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
+        _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
         self.popoverController.popoverContentSize = CGSizeMake(407 , 273);
@@ -2397,12 +2402,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         } else {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType];
+            
+            renderingView = [[RenderingViewController alloc]initWithNibName:([self iPhone6Plus]) ? @"RenderingViewControllerPhone@2x" :
+                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType];
             renderingView.delegate = self;
             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             renderingView.projectName = currentScene.name;
             renderingView.sgbPath = [self getSGBPath];
-            renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+            if([Utility IsPadDevice] || screenHeight < 400)
+                renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             CATransition* transition1 = [CATransition animation];
             transition1.duration = 0.5;
             transition1.type = kCATransitionPush;
@@ -2424,10 +2432,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         if ([Utility IsPadDevice])
             renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
         else
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
+            renderingView = [[RenderingViewController alloc]initWithNibName:(screenHeight>320) ? @"RenderingViewControllerPhone@2x" :
+                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
         renderingView.delegate = self;
         renderingView.projectName = currentScene.name;
-        renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+        if([Utility IsPadDevice] || screenHeight < 400)
+            renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         CATransition* transition1 = [CATransition animation];
         transition1.duration = 0.5;
@@ -2798,6 +2808,11 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->actionMan->changeMeshProperty(brightness, specular, light, visible, false);
     }
     
+}
+
+- (void) switchMirror
+{
+    editorScene->switchMirrorState();
 }
 
 -(void) deleteDelegateAction
@@ -3416,6 +3431,21 @@ void boneLimitsCallBack(){
 {
     cameraResoultionType = changedResolutionType;
     [self cameraPropertyChanged:editorScene->cameraFOV Resolution:cameraResoultionType];
+}
+
+-(BOOL)iPhone6Plus{
+    if (([UIScreen mainScreen].scale > 2.0)) return YES;
+    return NO;
+}
+
+#pragma PopOver Delegates
+
+-(NODE_TYPE) getNodeType:(int)nodeId
+{
+    if(nodeId < editorScene->nodes.size()){
+        return editorScene->nodes[nodeId]->getType();
+    }
+    return NODE_TYPE(NODE_UNDEFINED);
 }
 
 - (void)dealloc

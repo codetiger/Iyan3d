@@ -69,7 +69,7 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     }
     else {
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:@"LoadingViewControllerPhone" bundle:nil];
+        loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:([self iPhone6Plus]) ? @"LoadingViewControllerPhone@2x" : @"LoadingViewControllerPhone" bundle:nil];
     }
     [self.window setRootViewController:loadingViewController];
     [self.window makeKeyAndVisible];
@@ -169,5 +169,9 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
 	return YES;
 }
 
+-(BOOL)iPhone6Plus{
+    if (([UIScreen mainScreen].scale > 2.0)) return YES;
+    return NO;
+}
 
 @end

@@ -285,8 +285,7 @@
             
             NSLog(@"File Name : %@", fileName);
             
-            
-//TODO           if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || ![[NSFileManager defaultManager] fileExistsAtPath:meshFileName] || ![[NSFileManager defaultManager] fileExistsAtPath:texFileName]) {
+//TODO if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || ![[NSFileManager defaultManager] fileExistsAtPath:meshFileName] || ![[NSFileManager defaultManager] fileExistsAtPath:texFileName]) {
 
            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
                 [self.assetSelectionDelegate showOrHideProgress:1];
@@ -318,10 +317,12 @@
         }
         else {
             fileName = [NSString stringWithFormat:@"%@/%d.sgr", cacheDirectory, assetvalue.assetId];
+            NSString* textureFile = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, assetvalue.assetId];
+
             NSLog(@"File Path : %@",fileName);
             url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgr", assetvalue.assetId];
             
-            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
+            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE || ![[NSFileManager defaultManager] fileExistsAtPath:textureFile]){
                 [self.assetSelectionDelegate showOrHideProgress:1];
                 [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
             }
@@ -341,6 +342,7 @@
     else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES) {
         
         fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
+        NSString* textureFile = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, assetvalue.assetId];
         url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
         
         if (assetvalue.assetId >= 20000 && assetvalue.assetId <= 30000) {
@@ -353,7 +355,7 @@
                 [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
             }
         }
-        else if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
+        else if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE || ![[NSFileManager defaultManager] fileExistsAtPath:textureFile]){
             [self.assetSelectionDelegate showOrHideProgress:1];
             [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
         }
@@ -374,9 +376,9 @@
         if (![[NSFileManager defaultManager] fileExistsAtPath:fileName])
             NSLog(@"Obj file not exists");
         else{
+            
         }
     }
-    
 }
 
 - (void) downloadParticleMesh:(DownloadTask*)task
@@ -445,9 +447,7 @@
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString* fileName = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, [returnId intValue]];
     NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%d.png", [returnId intValue]];
-    
     AssetItem *downloadingAsset = [cache GetAsset:[returnId intValue]];
-    
     if ([assetArray count] > 0  && downloadingAsset && [cache checkDownloadedAsset:downloadingAsset.assetId])
         [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(proceedToFileVerification:) priority:NSOperationQueuePriorityHigh];
     else

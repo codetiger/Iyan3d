@@ -8,13 +8,17 @@
 
 #import "MeshProperties.h"
 
+#define MIRROR_OFF 0
+#define MIRROR_ON 1
+#define MIRROR_DISABLE 2
+
 @interface MeshProperties ()
 
 @end
 
 @implementation MeshProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil BrightnessValue:(float)brightness SpecularValue:(float)specular LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil BrightnessValue:(float)brightness SpecularValue:(float)specular LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState {
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
@@ -23,6 +27,7 @@
         specularValue=specular;
         isLightningValue=lightningValue;
         isVisibleValue=isVisible;
+        mirrorStatus = mirrorState;
     }
     return self;
 }
@@ -34,7 +39,8 @@
     self.lightingSwitch.on=isLightningValue;
     self.visibleChanged.on=isVisibleValue;
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
-    // Do any additional setup after loading the view from its nib.
+    [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
+    [_mirrorBtn setOn:(mirrorStatus == MIRROR_DISABLE) ? NO : (mirrorStatus == MIRROR_ON) ? YES : NO  animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,5 +101,9 @@
 - (IBAction)refractionHqBtnAction:(id)sender {
     UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"PThis Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [closeAlert show];
+}
+
+- (IBAction)mirrorBtnAction:(id)sender {
+    [self.delegate switchMirror];
 }
 @end

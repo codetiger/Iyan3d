@@ -335,7 +335,7 @@
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     } else {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNewPhone" bundle:nil];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ?  @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     }
@@ -347,6 +347,11 @@
 -(void)changeProgressLabel:(NSString*)labelString
 {
     self.ProgessLabel.text = labelString;
+}
+
+-(BOOL)iPhone6Plus{
+    if (([UIScreen mainScreen].scale > 2.0)) return YES;
+    return NO;
 }
 
 - (void) deallocMemory

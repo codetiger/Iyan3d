@@ -185,7 +185,6 @@
             if(jsonData == nil) {
                 return;
             }
-            
             NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
             jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
             jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
@@ -786,12 +785,15 @@
             NSString *message = [dict objectForKey:@"message"];
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", nil]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:YES], @"network", nil]];
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
                                          UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
                                          [userNameAlert show];
+                                         
+                                         [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:NO], @"network", nil]];
+                                         
                                      }];
     [operation start];
 }
