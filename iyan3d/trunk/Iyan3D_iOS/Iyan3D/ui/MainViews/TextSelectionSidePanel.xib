@@ -16,6 +16,7 @@
                 <outlet property="fontStoreTab" destination="X3h-3Z-EP7" id="wPg-bu-Tk8"/>
                 <outlet property="fontTab" destination="X3h-3Z-EP7" id="Zpy-ye-qkS"/>
                 <outlet property="inputText" destination="CyO-w9-dd0" id="Y4K-HK-YZu"/>
+                <outlet property="noFontMessageLable" destination="WZA-PG-YhB" id="2zP-YN-X2R"/>
                 <outlet property="view" destination="D2q-EF-2et" id="T7L-vs-Kw9"/>
             </connections>
         </placeholder>
@@ -152,6 +153,13 @@
                         <action selector="fontStoreTapChangeAction:" destination="-1" eventType="valueChanged" id="Rm8-TG-DQQ"/>
                     </connections>
                 </segmentedControl>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Font files found.   Add .ttf or .otf Font files in  Document Directory." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WZA-PG-YhB">
+                    <rect key="frame" x="4" y="346" width="288" height="115"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <nil key="simulatedStatusBarMetrics"/>

@@ -24,6 +24,7 @@ public:
     bool loadSceneData(std::string *filePath);
     bool readScene(ifstream *filePointer);
     void readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
+    void restoreTexture(SGNode* meshObject,int actionType);
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
     bool removeSelectedObjects();
     bool removeTempNodeIfExists();

@@ -838,6 +838,7 @@ BOOL missingAlertShown;
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        editorScene->selectMan->unselectObjects();
         [renderViewMan removeNodeFromScene:(int)indexPath.row IsUndoOrRedo:NO];
         [self reloadFrames];
         [tableView reloadData];

@@ -345,14 +345,52 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
         }
        // meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
         meshObject->actionId = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].objectIndex;
-        currentScene->actionMan->currentAction--;
     }
     
     if(actionType == REDO_ACTION) {
         SGAction &deleteAction = currentScene->actionMan->actions[currentScene->actionMan->currentAction];
         //meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
         meshObject->actionId = deleteAction.objectIndex;
+        meshObject->actionId = currentScene->actionMan->actions[currentScene->actionMan->currentAction].objectIndex;
+    }
+    if(meshObject->getType() == NODE_SGM || meshObject->getType() == NODE_RIG)
+        restoreTexture(meshObject, actionType);
+    else if(actionType == UNDO_ACTION)
+        currentScene->actionMan->currentAction--;
+    else if(actionType == REDO_ACTION)
         currentScene->actionMan->currentAction++;
+}
+
+void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
+    
+    if(actionType == UNDO_ACTION){
+        meshObject->oriTextureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificStrings[1]);
+        meshObject->textureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificStrings[2]);
+        meshObject->props.oriVertexColor.x =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[0];
+        meshObject->props.oriVertexColor.y =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[1];
+        meshObject->props.oriVertexColor.z =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[2];
+        meshObject->props.vertexColor.x =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[3];
+        meshObject->props.vertexColor.y =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[4];
+        meshObject->props.vertexColor.z =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[5];
+        meshObject->props.perVertexColor =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFlags[0];
+        currentScene->actionMan->currentAction--;
+    }
+    if(actionType == REDO_ACTION) {
+        meshObject->oriTextureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificStrings[0]);
+        meshObject->textureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificStrings[1]);
+        meshObject->props.oriVertexColor.x =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFloats[0];
+        meshObject->props.oriVertexColor.y =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFloats[1];
+        meshObject->props.oriVertexColor.z =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFloats[2];
+        meshObject->props.vertexColor.x =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFloats[3];
+        meshObject->props.vertexColor.y =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFloats[4];
+        meshObject->props.vertexColor.z =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFloats[5];
+        meshObject->props.perVertexColor =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFlags[0];
+        currentScene->actionMan->currentAction++;
+    }
+    if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->props.perVertexColor){
+        currentScene->selectMan->selectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId), false);
+        currentScene->changeTexture(meshObject->textureName, meshObject->props.vertexColor, true, true);
+        currentScene->selectMan->unselectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId));
     }
 }
 

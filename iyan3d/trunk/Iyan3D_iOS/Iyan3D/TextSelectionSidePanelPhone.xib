@@ -15,6 +15,7 @@
                 <outlet property="colorWheelbtn" destination="fyl-eu-bU3" id="GQu-4J-yw7"/>
                 <outlet property="fontTab" destination="En3-oy-ObV" id="o97-q1-BUm"/>
                 <outlet property="inputText" destination="Mgu-M5-NDE" id="kQj-9s-7gU"/>
+                <outlet property="noFontMessageLable" destination="44d-4M-ayc" id="21I-v1-Er2"/>
                 <outlet property="view" destination="NWe-6l-AkU" id="ARx-ft-kZc"/>
             </connections>
         </placeholder>
@@ -89,6 +90,13 @@
                         <outlet property="delegate" destination="-1" id="MBh-xe-62j"/>
                     </connections>
                 </collectionView>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Font files found.   Add .ttf or .otf Font files in  Document Directory." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="44d-4M-ayc">
+                    <rect key="frame" x="8" y="159" width="194" height="71"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="tHe-ur-yd2">
                     <rect key="frame" x="68" y="115" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

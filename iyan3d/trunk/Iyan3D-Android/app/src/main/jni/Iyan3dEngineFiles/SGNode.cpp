@@ -191,6 +191,7 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
             }
         }
     }
+    
     AnimatedMesh *mesh = TextMesh3d::get3DTextAnimatedMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
     if(mesh == NULL)
         return shared_ptr<Node>();
@@ -377,7 +378,6 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
 
-    printf("Texture Name : %s " , textureFileName.c_str());
     if(textureName != "" && checkFileExists(textureFileName))
     {
         props.perVertexColor = false;

@@ -195,9 +195,11 @@
 - (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (tabValue == FONT_STORE) {
+        [_noFontMessageLable setHidden:YES];
         return [fontArray count];
     }
     else {
+        [_noFontMessageLable setHidden:(([fontListArray count]) > 0) ? YES : NO];
         return [fontListArray count];
     }
 }

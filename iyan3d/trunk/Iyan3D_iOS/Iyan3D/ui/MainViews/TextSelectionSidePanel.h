@@ -69,6 +69,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *boneSwitch;
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
 - (IBAction)cancelBtnAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *noFontMessageLable;
 
 @end
 

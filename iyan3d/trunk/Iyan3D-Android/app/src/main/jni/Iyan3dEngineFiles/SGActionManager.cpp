@@ -438,21 +438,38 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionType = ACTION_NODE_ADDED;
         assetAction.frameId = assetId;
         assetAction.objectIndex =  actionScene->actionObjectsSize;
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->oriTextureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->textureName));
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.oriVertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.oriVertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.oriVertexColor.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.vertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.vertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.vertexColor.z);
+        assetAction.actionSpecificFlags.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.perVertexColor);
         addAction(assetAction);
     } else if(actionType == ACTION_NODE_DELETED) {
         assetAction.drop();
         assetAction.actionType = ACTION_NODE_DELETED;
-        
         if(actionScene->selectedNodeIds.size() > 0 && (assetId < 2 || assetId > actionScene->nodes.size()))
             return;
         else if (actionScene->selectedNodeIds.size() <= 0 && (actionScene->selectedNodeId < 2 || actionScene->selectedNodeId > actionScene->nodes.size()))
-            return;
-        
+            return;        
         SGNode * selectedNode = actionScene->nodes[(actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId];
         assetAction.frameId = selectedNode->assetId;
         assetAction.objectIndex = selectedNode->actionId;
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(selectedNode->oriTextureName));
-        StoreDeleteObjectKeys((actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId);
+        int selectedNodeId = (actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId;
+        StoreDeleteObjectKeys(selectedNodeId);
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->oriTextureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->textureName));
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.oriVertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.oriVertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.oriVertexColor.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.z);
+        assetAction.actionSpecificFlags.push_back(actionScene->nodes[selectedNodeId]->props.perVertexColor);
         addAction(assetAction);
     } else if (actionType == ACTION_TEXT_IMAGE_DELETE|| actionType == ACTION_TEXT_IMAGE_ADD) {
         assetAction.drop();
