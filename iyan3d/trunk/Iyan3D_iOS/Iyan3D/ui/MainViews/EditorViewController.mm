@@ -1634,7 +1634,6 @@ BOOL missingAlertShown;
             }
         }
         
-        
     }
 }
 
@@ -1722,10 +1721,13 @@ BOOL missingAlertShown;
         editorScene->selectMan->unselectObjects();
     BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
     
-    if(showView)
+    if(showView){
+        subViewToAdd.frame = CGRectMake(0, 0, _leftView.frame.size.width, _leftView.frame.size.height);
         [self.leftView addSubview:subViewToAdd];
+    }
     
     [self.leftView setHidden:(!showView)];
+    
     CATransition *transition = [CATransition animation];
     transition.duration = 0.5;
     transition.type = kCATransitionPush;
@@ -1749,7 +1751,6 @@ BOOL missingAlertShown;
     }
     [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-    
     [self.rightView setHidden:showView];
     
 }
@@ -2102,7 +2103,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
         //   [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
-        editorScene->animMan->copyPropsOfNode(selectedNode, editorScene->nodes.size()-1);
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
     }
 }
 
@@ -2276,7 +2277,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             }
             break;
         case IMPORT_ADDBONE:{
-            NSLog(@"Bundle Path %s " , constants::BundlePath.c_str());
             [self.popoverController dismissPopoverAnimated:YES];
             NODE_TYPE selectedNodeType = NODE_UNDEFINED;
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
@@ -3023,12 +3023,13 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     CGRect frame = self.rightView.frame;
     frame.origin.x = (selctedIndex==1) ? 0 : self.view.frame.size.width-self.rightView.frame.size.width;
-    frame.origin.y = self.topView.frame.size.height; // new y coordinate
+    //frame.origin.y = self.topView.frame.size.height; // new y coordinate
     self.rightView.frame = frame;
     CGRect frame1 = self.leftView.frame;
-    frame1.origin.x = (selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : 0;
-    frame1.origin.y = self.topView.frame.size.height; // new y coordinate
+    frame1.origin.x = ((selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : 0);
+    //frame1.origin.y = (self.topView.frame.size.height); // new y coordinate
     self.leftView.frame = frame1;
+
     if(editorScene) {
         editorScene->topLeft = Vector2((selctedIndex==0) ? 0.0 : self.rightView.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
         editorScene->topRight = Vector2((selctedIndex==0) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;

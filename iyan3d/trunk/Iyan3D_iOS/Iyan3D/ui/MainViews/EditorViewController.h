@@ -74,6 +74,7 @@
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
 
+@property (weak, nonatomic) IBOutlet UIView *tempheight;
 
 @property (weak, nonatomic) IBOutlet RenderingView *renderView;
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
