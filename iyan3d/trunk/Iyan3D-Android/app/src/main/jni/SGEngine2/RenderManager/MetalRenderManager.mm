@@ -8,6 +8,8 @@
 
 #ifdef IOS
 
+#include "../Core/Nodes/ParticleManager.h"
+
 #import "MetalRenderManager.h"
 #import "../Core/Nodes/MTLNodeData.h"
 struct BufferState{
@@ -258,7 +260,10 @@ void MetalRenderManager::Render(shared_ptr<Node> node,int nodeIndex, int meshBuf
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
     
     MTLIndexType indexType = MTLIndexTypeUInt16;
-    drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex],node->instanceCount);
+    if (node->type == NODE_TYPE_PARTICLES) {
+        drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex], dynamic_pointer_cast<ParticleManager>(node)->getParticlesCount());
+    } else
+        drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex],node->instanceCount);
     //node.reset();
     //MTLNode.reset();
     

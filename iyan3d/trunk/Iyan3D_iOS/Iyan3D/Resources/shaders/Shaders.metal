@@ -41,6 +41,12 @@ typedef struct
     packed_float3 data;
 }float3Struct;
 
+typedef struct
+{
+    packed_float4 data;
+}float4Struct;
+
+
 typedef struct {
     float isLighting;
     float vertexDepth,shininess;
@@ -208,6 +214,71 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     return out;
 }
 
+#define SHADER_PARTICLE_vp 1
+#define SHADER_PARTICLE_sColor 2
+#define SHADER_PARTICLE_mColor 3
+#define SHADER_PARTICLE_eColor 4
+#define SHADER_PARTICLE_props 5
+#define SHADER_PARTICLE_positions 6
+#define SHADER_PARTICLE_rotMatrix 7
+#define SHADER_PARTICLE_texture1 8
+
+
+vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
+                                  constant matrix_float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
+                                  constant packed_half4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
+                                  constant packed_half4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
+                                  constant packed_half4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
+                                  constant packed_half4& props [[ buffer(SHADER_PARTICLE_props) ]],
+                                  constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
+                                  constant matrix_float4x4& rotMatrix [[ buffer(SHADER_PARTICLE_rotMatrix) ]],
+                                  unsigned int vid [[ vertex_id ]],
+                                  unsigned int iid [[instance_id]]
+                                  )
+{
+    float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
+    
+    ColorInOut out;
+    
+    float2 uv = vertex_array[vid].texCoord1;
+    out.uv.x = uv.x;
+    out.uv.y = uv.y;
+    
+    half percent = half(positions[iid].data[3])/props[0];
+    half phase = half(percent > 0.5);
+    
+    half4 s = mix(sColor, mColor, phase);
+    half4 e = mix(mColor, eColor, phase);
+    half age = mix(percent, half(percent - 0.5), phase) * 2.0;
+    out.perVertexColor = float4(mix(s, e, age));
+    half scale = props[1] + (props[2] * half(positions[iid].data[3]));
+    
+    matrix_float4x4 translation = matrix_float4x4(1);
+    translation[3][0] = positions[iid].data[0];
+    translation[3][1] = positions[iid].data[1];
+    translation[3][2] = positions[iid].data[2];
+    
+    matrix_float4x4 scaleMat = matrix_float4x4(1);
+    scaleMat[0][0] = scale;
+    scaleMat[1][1] = scale;
+    scaleMat[2][2] = scale;
+    
+    half live = half(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
+    translation = translation * float(live);
+    
+    matrix_float4x4 trans = translation * rotMatrix;
+    out.position = vp * trans * vertex_position_objectspace;
+    
+    return out;
+}
+
+fragment half4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
+{
+    half4 color = half4(in.perVertexColor);
+    constexpr sampler quad_sampler(address::repeat,filter::linear);
+    color[3] =  tex2D.sample(quad_sampler,in.uv)[0];
+    return color;
+}
 
 #define SHADER_COMMON_mvp 1
 #define SHADER_COMMON_transparency 2
@@ -225,7 +296,6 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 
-// Vertex shader function
 vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant matrix_float4x4& mvp [[ buffer(SHADER_COMMON_mvp) ]],
                                 constant float& transparency [[ buffer(SHADER_COMMON_transparency) ]],

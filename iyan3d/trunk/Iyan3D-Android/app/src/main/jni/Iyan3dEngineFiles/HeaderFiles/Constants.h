@@ -137,7 +137,7 @@ const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5","Per_Vertex_Color_Skin","Common_Fragment_L5"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
     {"SHADER_COLOR_TEXT","Color_Skin_Vertex","Color_Fragment"},
-    {"SHADER_PARTICLES", "Particles_Vertex","Particles_Fragment"}
+    {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"}
 };
 
 

@@ -152,7 +152,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_mvp);
     }else if (matName == "SHADER_PARTICLES") {
         setMVPForParticles(sgNode,0);
-        setTexturesUniforms(sgNode, 0);
+        setTexturesUniforms(sgNode, SHADER_PARTICLE_texture1);
     }
 }
 
@@ -276,7 +276,7 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex){
         textureValue = tex->OGLTextureName;
         smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()),tex,0);
     }else if(deviceType == METAL){
-        textureValue = 1;
+        textureValue =  1;
         smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
     }
 
@@ -357,16 +357,17 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
         posArray[i * 4 + 3] = position.w;
     }
     
-    smgr->setPropertyValue(sgNode->node->material,"props", particleProps, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material,"startColor", sColor, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material,"midColor", mColor, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material,"endColor", eColor, DATA_FLOAT_VEC4,  4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+#define SHADER_PARTICLE_rotMatrix 7
+
     
-    smgr->setPropertyValue(sgNode->node->material,"model", model.pointer(), DATA_FLOAT_MAT4,  16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material,"vp", viewProj.pointer(), DATA_FLOAT_MAT4,  16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material,"rotMatrix", rotMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"props", particleProps, DATA_FLOAT_VEC4,  4, false, SHADER_PARTICLE_props,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"startColor", sColor, DATA_FLOAT_VEC4,  4, false, SHADER_PARTICLE_sColor,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"midColor", mColor, DATA_FLOAT_VEC4,  4, false, SHADER_PARTICLE_mColor,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"endColor", eColor, DATA_FLOAT_VEC4,  4, false, SHADER_PARTICLE_eColor,smgr->getNodeIndexByID(sgNode->node->getID()));
     
-    smgr->setPropertyValue(sgNode->node->material,"positions", posArray, DATA_FLOAT_VEC4,  instanceCount * 4, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"vp", viewProj.pointer(), DATA_FLOAT_MAT4,  16, false, SHADER_PARTICLE_vp,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"rotMatrix", rotMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, SHADER_PARTICLE_rotMatrix,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"positions", posArray, DATA_FLOAT_VEC4,  instanceCount * 4, false, SHADER_PARTICLE_positions,smgr->getNodeIndexByID(sgNode->node->getID()));
     delete posArray;
     delete colors;
 

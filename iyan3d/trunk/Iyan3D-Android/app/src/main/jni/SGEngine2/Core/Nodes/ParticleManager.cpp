@@ -8,11 +8,8 @@
 
 #include "ParticleManager.h"
 
-ParticleManager::ParticleManager(int count) {
+ParticleManager::ParticleManager() {
     type = NODE_TYPE_PARTICLES;
-    maxParticleCount = count;
-    pool = new ParticlePool(count);
-    positions = (Vector4*)malloc(sizeof(Vector4) * count);
     startColor = Vector4(1.0,1.0,1.0,1.0);
     midColor = Vector4(1.0, 1.0, 0.0, 1.0);
     endColor = Vector4(1.0, 0.0, 0.0, 1.0);
@@ -25,6 +22,25 @@ ParticleManager::ParticleManager(int count) {
     maxLifeRandPercent = 10;
     startScale = 0.0 + getScale().x;
     deltaScale = 0.001;
+}
+
+void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale)
+{
+    maxParticleCount = count;
+    pool = new ParticlePool(count);
+    positions = (Vector4*)malloc(sizeof(Vector4) * count);
+    startColor = sColor;
+    midColor = mColor;
+    endColor = eColor;
+    this->hasGravity = hasGravity;
+    startVelocitySpreadAngle = startSpreadAngle;
+    startVelocityMagnitude = startMagnitude;
+    startVelocityMagnitudeRand = magnitudeRand;
+    this->emissionSpeed = emissionSpeed;
+    this->maxLife = maxLife;
+    this->maxLifeRandPercent = maxLifeRandPercent;
+    this->startScale = startScale + getScale().x;
+    this->deltaScale = deltaScale;
 }
 
 ParticleManager::~ParticleManager()

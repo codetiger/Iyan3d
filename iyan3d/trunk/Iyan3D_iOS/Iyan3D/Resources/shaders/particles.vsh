@@ -3,16 +3,14 @@
 attribute vec3 vertPosition;
 attribute vec2 texCoord1;
 
-uniform mat4 model;
 uniform mat4 vp;
+uniform mat4 rotMatrix;
 
 uniform vec4 startColor;
 uniform vec4 midColor;
 uniform vec4 endColor;
-
 uniform vec4 props;
 uniform vec4 positions[1000];
-uniform mat4 rotMatrix;
 
 varying vec4 color;
 varying vec2 vTexCoord;

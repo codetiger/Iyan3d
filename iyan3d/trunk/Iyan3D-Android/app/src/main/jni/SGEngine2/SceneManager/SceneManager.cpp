@@ -280,7 +280,7 @@ shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMe
 }
 shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh,string callBackFuncName,MESH_TYPE meshType,int matIndex)
 {
-    shared_ptr<ParticleManager> node = shared_ptr<ParticleManager>(new ParticleManager(1000));
+    shared_ptr<ParticleManager> node = make_shared<ParticleManager>();
     if(matIndex != NOT_EXISTS && mtlManger->materials->size())
         node->setMaterial(getMaterialByIndex(matIndex));
     node->mesh = mesh;

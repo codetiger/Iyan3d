@@ -12,6 +12,15 @@
 #ifndef Iyan3D_ShaderParamOrder_h
 #define Iyan3D_ShaderParamOrder_h
 
+#define SHADER_PARTICLE_vp 1
+#define SHADER_PARTICLE_sColor 2
+#define SHADER_PARTICLE_mColor 3
+#define SHADER_PARTICLE_eColor 4
+#define SHADER_PARTICLE_props 5
+#define SHADER_PARTICLE_positions 6
+#define SHADER_PARTICLE_rotMatrix 7
+#define SHADER_PARTICLE_texture1 8
+
 #define SHADER_COMMON_SKIN_mvp 1
 #define SHADER_COMMON_SKIN_transparency 2
 #define SHADER_COMMON_SKIN_world 3

@@ -41,9 +41,10 @@ public:
     Vector4 midColor;
     Vector4 endColor;
 
-    ParticleManager(int count);
+    ParticleManager();
     ~ParticleManager();
 
+    void setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale);
     virtual void update();
     void updateParticles();
     Vector4* getPositions();
