@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LoadingViewControllerPad.h"
 #import "GAI.h"
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> {
     LoadingViewControllerPad* loadingViewController;

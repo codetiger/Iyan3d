@@ -280,6 +280,7 @@ BOOL missingAlertShown;
         }
         if (renderViewMan.checkTapSelection) {
             editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
+            [self reloadFrames];
             renderViewMan.checkTapSelection = false;
             [renderViewMan showPopOver:editorScene->selectedNodeId];
         }
@@ -372,10 +373,45 @@ BOOL missingAlertShown;
 - (FrameCellNew*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
     FrameCellNew* cell = [self.framesCollectionView dequeueReusableCellWithReuseIdentifier:@"FRAMECELL" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f
-                                                   green:56.0f / 255.0f
-                                                    blue:57.0f / 255.0f
-                                                   alpha:1.0f];
+    if (editorScene->isKeySetForFrame.find((int)indexPath.row) != editorScene->isKeySetForFrame.end() && (indexPath.row) == editorScene->currentFrame) {
+        cell.backgroundColor = [UIColor blackColor];
+        cell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
+                                                 green:156.0f / 255.0f
+                                                  blue:156.0f / 255.0f
+                                                 alpha:1.0f]
+        .CGColor;
+        cell.layer.borderWidth = 2.0f;
+    }
+    else if (editorScene->isKeySetForFrame.find((int)indexPath.row) != editorScene->isKeySetForFrame.end()) {
+        cell.backgroundColor = [UIColor blackColor];
+        cell.layer.borderColor = [UIColor blackColor].CGColor;
+        cell.layer.borderWidth = 2.0f;
+    }
+    else {
+        cell.backgroundColor = [UIColor colorWithRed:61.0f / 255.0f
+                                               green:62.0f / 255.0f
+                                                blue:63.0f / 255.0f
+                                               alpha:1.0f];
+        cell.layer.borderColor = [UIColor colorWithRed:61.0f / 255.0f
+                                                 green:62.0f / 255.0f
+                                                  blue:63.0f / 255.0f
+                                                 alpha:1.0f]
+        .CGColor;
+        cell.layer.borderWidth = 2.0f;
+    }
+    if ((indexPath.row) == editorScene->currentFrame) {
+        cell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
+                                                 green:156.0f / 255.0f
+                                                  blue:156.0f / 255.0f
+                                                 alpha:1.0f]
+        .CGColor;
+        cell.layer.borderWidth = 2.0f;
+    }
+
+//    cell.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f
+//                                                   green:56.0f / 255.0f
+//                                                    blue:57.0f / 255.0f
+//                                                   alpha:1.0f];
     
     cell.layer.borderWidth = 0.0f;
     cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
@@ -471,6 +507,10 @@ BOOL missingAlertShown;
 #pragma mark - Button Actions
 
 - (IBAction)backToScenes:(id)sender {
+    if(editorScene->isPlaying){
+        [self stopPlaying];
+        return;
+    }
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
     [self loadSceneSelectionView];
 }
@@ -482,15 +522,16 @@ BOOL missingAlertShown;
 - (void) playAnimation{
     isPlaying = !isPlaying;
     editorScene->isPlaying = isPlaying;
-    
+    [self showOrHideRightView:YES];
     if (editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
         [self.framesCollectionView reloadData];
     }
     if (isPlaying) {
         //[self setInterfaceVisibility:YES];
-        
+        [self setupEnableDisableControlsPlayAnimation];
         [self.playBtn setImage:[UIImage imageNamed:@"Pause_Pad.png"] forState:UIControlStateNormal];
+        
         playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0f / 24.0f) target:self selector:@selector(playTimerTarget) userInfo:nil repeats:YES];
     }
     else {
@@ -517,13 +558,27 @@ BOOL missingAlertShown;
     editorScene->updater->setDataForFrame(editorScene->currentFrame);}
 
 - (void) stopPlaying{
+    NSLog(@"Stop playing");
+    [self.playBtn setImage:[UIImage imageNamed:@"Play_Pad.png"] forState:UIControlStateNormal];
+    if(_leftView.isHidden)
+        [self showOrHideRightView:NO];
     editorScene->setLightingOn();
+    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+    UICollectionViewCell* todatasetCell = [self.framesCollectionView cellForItemAtIndexPath:toPath];
+    todatasetCell.layer.borderColor = [UIColor colorWithRed:156.0f / 255.0f
+                                                      green:156.0f / 255.0f
+                                                       blue:156.0f / 255.0f
+                                                      alpha:1.0f]
+    .CGColor; // highlight selection
+    todatasetCell.layer.borderWidth = 2.0f;
+
     [playTimer invalidate];
     playTimer = nil;
     if (isPlaying) {
         isPlaying = false;
         editorScene->isPlaying = false;
     }
+    [self setupEnableDisableControlsPlayAnimation];
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
 }
 
@@ -595,15 +650,17 @@ BOOL missingAlertShown;
     }
 
 - (IBAction)loginBtnAction:(id)sender {
-    isLoggedin=NO;
-    if(isLoggedin){
-        if ([Utility IsPadDevice]){
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"]||[[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"] || [[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"] )
+    {
+        if ([Utility IsPadDevice])
+        {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
             self.popoverController.popoverContentSize = CGSizeMake(305, 525);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             [_loggedInVc.view setClipsToBounds:YES];
+            _loggedInVc.delegare=self;
             self.popUpVc.delegate=self;
             self.popoverController.delegate =self;
             [self.popoverController presentPopoverFromRect:_loginBtn.frame
@@ -611,12 +668,14 @@ BOOL missingAlertShown;
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:YES];
         }
-        else {
+        else
+        {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
             self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+            _loggedInVc.delegare=self;
             [_loggedInVc.view setClipsToBounds:YES];
             self.popUpVc.delegate=self;
             self.popoverController.delegate =self;
@@ -627,8 +686,10 @@ BOOL missingAlertShown;
         }
         
     }
-    else{
-        if ([Utility IsPadDevice]){
+    else
+    {
+        if ([Utility IsPadDevice])
+        {
             _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"loginBtn"];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
             self.popoverController.popoverContentSize = CGSizeMake(300, 360.0);
@@ -643,7 +704,8 @@ BOOL missingAlertShown;
                                                   animated:YES];
 
         }
-        else{
+        else
+        {
             _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewControllerPhone" bundle:nil clickedButton:@"loginBtn"];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
             self.popoverController.popoverContentSize = CGSizeMake(228.00, 274.0);
@@ -1082,6 +1144,16 @@ BOOL missingAlertShown;
     [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [self.leftView.layer addAnimation:transition forKey:nil];
     
+    CATransition* transition1 = [CATransition animation];
+    transition1.duration = 0.5;
+    transition1.type = kCATransitionPush;
+    transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+    
+    [self.rightView setHidden:showView];
+}
+- (void) showOrHideRightView:(BOOL)showView{
     CATransition* transition1 = [CATransition animation];
     transition1.duration = 0.5;
     transition1.type = kCATransitionPush;
@@ -1881,8 +1953,21 @@ void downloadFile(NSString* url, NSString* fileName)
     }
 }
 
+#pragma mark Login Delegate
+
+-(void)googleSigninDelegate{
+    isLoggedin= true;
+}
 
 
+#pragma mark LoggedinViewController Delegate
+
+-(void)dismissView{
+    NSLog(@"delegate called");
+    [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
+    [self.popoverController dismissPopoverAnimated:YES];
+    
+}
 
 #pragma Show Or Hide Progress
 
@@ -1930,9 +2015,23 @@ void downloadFile(NSString* url, NSString* fileName)
             }
         }
     }
-
 }
 
+- (void)setupEnableDisableControlsPlayAnimation{
+    if(editorScene->isPlaying){
+        [self.addFrameBtn setEnabled:false];
+        [self.loginBtn setEnabled:false];
+        [self.viewBtn setEnabled:false];
+        [self.infoBtn setEnabled:false];
+    }
+    else {
+        [self.lastFrameBtn setEnabled:true];
+        [self.addFrameBtn setEnabled:true];
+        [self.loginBtn setEnabled:true];
+        [self.viewBtn setEnabled:true];
+        [self.infoBtn setEnabled:true];
+    }
+}
 
 #pragma AutoRig Delegates
 

@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vj3-gW-d3o">
-                    <rect key="frame" x="0.0" y="653" width="300" height="60"/>
+                    <rect key="frame" x="0.0" y="650" width="300" height="60"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gba-ht-Eqv">
                             <rect key="frame" x="8" y="8" width="110" height="40"/>

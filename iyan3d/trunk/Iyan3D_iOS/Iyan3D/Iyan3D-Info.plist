@@ -99,6 +99,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.smackall.animator</string>
+				<string>fb1434740593485806</string>
 			</array>
 		</dict>
 		<dict>
@@ -126,8 +127,30 @@
 				<key>KitName</key>
 				<string>Crashlytics</string>
 			</dict>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>consumerKey</key>
+					<string>BrgMtotFIwnFpSdPdbmY3nPBO</string>
+					<key>consumerSecret</key>
+					<string>mFMTdOyrmzAOwOVCgdugKQuGkta0TQmpxHYKrDcVOZoTy5a7Ot</string>
+				</dict>
+				<key>KitName</key>
+				<string>Twitter</string>
+			</dict>
 		</array>
 	</dict>
+	<key>FacebookAppID</key>
+	<string>1434740593485806</string>
+	<key>FacebookDisplayName</key>
+	<string>Iyan 3D</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

@@ -331,6 +331,18 @@
 		01B6F3F41C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B6F3F21C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib */; };
 		01B6F3F61C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B6F3F51C3E94890041D42F /* SettingsViewControllerPhone.xib */; };
 		01B6F3F71C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B6F3F51C3E94890041D42F /* SettingsViewControllerPhone.xib */; };
+		01C2B77C1C462CF300384370 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77B1C462CF300384370 /* Accounts.framework */; };
+		01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
+		01C2B7941C46419300384370 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7911C46419300384370 /* TwitterKit.framework */; };
+		01C2B7951C46419300384370 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7911C46419300384370 /* TwitterKit.framework */; };
+		01C2B7961C46419300384370 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B7921C46419300384370 /* TwitterKitResources.bundle */; };
+		01C2B7971C46419300384370 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B7921C46419300384370 /* TwitterKitResources.bundle */; };
+		01C2B7981C46419300384370 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7931C46419300384370 /* TwitterCore.framework */; };
+		01C2B7991C46419300384370 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7931C46419300384370 /* TwitterCore.framework */; };
+		01C2B79B1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
+		01C2B79C1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
+		01C2B79D1C46553500384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
+		01C2B79E1C46554A00384370 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77B1C462CF300384370 /* Accounts.framework */; };
 		01CCD1C31C3F927D00565664 /* ObjSidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.m */; };
 		01CCD1C41C3F927D00565664 /* ObjSidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.m */; };
 		01CCD1C51C3F927D00565664 /* ObjSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */; };
@@ -343,6 +355,12 @@
 		01D2F09D1C44CDD9000E41C7 /* Pause_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0981C44CDD9000E41C7 /* Pause_Pad@2x.png */; };
 		01D2F09E1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0991C44CDD9000E41C7 /* Play_Pad@2x.png */; };
 		01D2F09F1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0991C44CDD9000E41C7 /* Play_Pad@2x.png */; };
+		01D2F0A31C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */; };
+		01D2F0A41C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */; };
+		01D2F0A51C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */; };
+		01D2F0A61C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */; };
+		01D2F0A71C45181F000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
+		01D2F0A81C451820000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
 		01E6188C1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
 		01E6188D1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
 		01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
@@ -2349,6 +2367,12 @@
 		01B6F3EF1C3E5C700041D42F /* SceneSelectionControllerNewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SceneSelectionControllerNewPhone.xib; sourceTree = "<group>"; };
 		01B6F3F21C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SceneSelectionFrameCellPhone.xib; sourceTree = "<group>"; };
 		01B6F3F51C3E94890041D42F /* SettingsViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewControllerPhone.xib; sourceTree = "<group>"; };
+		01C2B77B1C462CF300384370 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		01C2B77D1C462CFB00384370 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		01C2B7911C46419300384370 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterKit.framework; path = FrameWorks/TwitterKit.framework; sourceTree = "<group>"; };
+		01C2B7921C46419300384370 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = FrameWorks/TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
+		01C2B7931C46419300384370 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterCore.framework; path = FrameWorks/TwitterCore.framework; sourceTree = "<group>"; };
+		01C2B79A1C46543200384370 /* color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color@2x.png"; sourceTree = "<group>"; };
 		01CCD1C01C3F927D00565664 /* ObjSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjSidePanel.h; sourceTree = "<group>"; };
 		01CCD1C11C3F927D00565664 /* ObjSidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjSidePanel.m; sourceTree = "<group>"; };
 		01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjSidePanel.xib; sourceTree = "<group>"; };
@@ -2356,6 +2380,9 @@
 		01D2F0971C44CDD9000E41C7 /* Pause_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_Pad.png; sourceTree = "<group>"; };
 		01D2F0981C44CDD9000E41C7 /* Pause_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Pause_Pad@2x.png"; sourceTree = "<group>"; };
 		01D2F0991C44CDD9000E41C7 /* Play_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Play_Pad@2x.png"; sourceTree = "<group>"; };
+		01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = FrameWorks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = FrameWorks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = FrameWorks/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-Cloud-shader_Pad.png"; sourceTree = "<group>"; };
 		01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-shader_Pad.png"; sourceTree = "<group>"; };
 		01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toon-shader_Pad.png"; sourceTree = "<group>"; };
@@ -3798,14 +3825,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */,
+				01C2B77C1C462CF300384370 /* Accounts.framework in Frameworks */,
 				253F536D1C20209D005AC97D /* GoogleMobileAds.framework in Frameworks */,
 				25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */,
 				25F7C4651B682F7400C4183F /* libz.dylib in Frameworks */,
 				251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
 				251BF4661C2C1AD300A5D41D /* FreeType2_Sim.a in Frameworks */,
+				01D2F0A71C45181F000E41C7 /* FBSDKShareKit.framework in Frameworks */,
 				251BF46A1C2C1AD300A5D41D /* GoogleAnalytics.a in Frameworks */,
 				E262744419234C890036F8E3 /* GameKit.framework in Frameworks */,
 				E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */,
+				01C2B7941C46419300384370 /* TwitterKit.framework in Frameworks */,
 				E2A343B119F123F8000EF7C2 /* MobileCoreServices.framework in Frameworks */,
 				251BF4521C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */,
 				E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */,
@@ -3813,11 +3844,14 @@
 				251BF4581C2C191700A5D41D /* Fabric.framework in Frameworks */,
 				E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */,
 				251BF4681C2C1AD300A5D41D /* FreeType2.a in Frameworks */,
+				01D2F0A31C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */,
 				C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */,
 				C87EBFE218F3DAD800EB656E /* CoreData.framework in Frameworks */,
 				C87EBFE018F3CE1D00EB656E /* AdSupport.framework in Frameworks */,
 				C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */,
+				01D2F0A51C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */,
 				C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */,
+				01C2B7981C46419300384370 /* TwitterCore.framework in Frameworks */,
 				C831F1B21876E0AC00966179 /* Security.framework in Frameworks */,
 				C885D7811876BE6100A45D71 /* CoreGraphics.framework in Frameworks */,
 				C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */,
@@ -3829,20 +3863,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01C2B79E1C46554A00384370 /* Accounts.framework in Frameworks */,
+				01C2B79D1C46553500384370 /* Social.framework in Frameworks */,
 				251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */,
 				253F536E1C20209D005AC97D /* GoogleMobileAds.framework in Frameworks */,
 				7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */,
 				25F7C4661B682F8000C4183F /* libz.dylib in Frameworks */,
+				01D2F0A81C451820000E41C7 /* FBSDKShareKit.framework in Frameworks */,
 				251BF4531C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */,
 				251BF4671C2C1AD300A5D41D /* FreeType2_Sim.a in Frameworks */,
 				E20671FD1B049AA6006DD2F7 /* MobileCoreServices.framework in Frameworks */,
+				01D2F0A61C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */,
+				01C2B7991C46419300384370 /* TwitterCore.framework in Frameworks */,
 				E20671FE1B049AA6006DD2F7 /* libsqlite3.dylib in Frameworks */,
 				E20671FF1B049AA6006DD2F7 /* GameKit.framework in Frameworks */,
 				E20672001B049AA6006DD2F7 /* MessageUI.framework in Frameworks */,
 				251BF4571C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
 				E20672021B049AA6006DD2F7 /* OpenGLES.framework in Frameworks */,
 				E20672031B049AA6006DD2F7 /* SystemConfiguration.framework in Frameworks */,
+				01D2F0A41C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */,
 				251BF46B1C2C1AD300A5D41D /* GoogleAnalytics.a in Frameworks */,
+				01C2B7951C46419300384370 /* TwitterKit.framework in Frameworks */,
 				E20672051B049AA6006DD2F7 /* CoreData.framework in Frameworks */,
 				E20672061B049AA6006DD2F7 /* AdSupport.framework in Frameworks */,
 				E20672071B049AA6006DD2F7 /* StoreKit.framework in Frameworks */,
@@ -4922,6 +4963,7 @@
 				01ACD0991C3CEEE70096AD14 /* No-Bevel_IPhone.png */,
 				01ACD09A1C3CEEE70096AD14 /* No-Bevel_IPhone@2x.png */,
 				3D04EAF71C25883900C18E1A /* color.png */,
+				01C2B79A1C46543200384370 /* color@2x.png */,
 				3D04EAF11C25830F00C18E1A /* Bevel.png */,
 				3D04EAF21C25830F00C18E1A /* No-Bevel.png */,
 			);
@@ -5632,7 +5674,15 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01C2B77D1C462CFB00384370 /* Social.framework */,
+				01C2B77B1C462CF300384370 /* Accounts.framework */,
 				251BF4631C2C1AD300A5D41D /* FreeType2_Sim.a */,
+				01C2B7911C46419300384370 /* TwitterKit.framework */,
+				01C2B7921C46419300384370 /* TwitterKitResources.bundle */,
+				01C2B7931C46419300384370 /* TwitterCore.framework */,
+				01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */,
+				01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */,
+				01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */,
 				251BF4641C2C1AD300A5D41D /* FreeType2.a */,
 				251BF4651C2C1AD300A5D41D /* GoogleAnalytics.a */,
 				251BF4541C2C191700A5D41D /* Crashlytics.framework */,
@@ -6352,6 +6402,7 @@
 				7FC901331A0A07860051B941 /* save-img@2x.png in Resources */,
 				01AAE29B1C43DA7B00B194E0 /* Mail@2x.png in Resources */,
 				62FB867F1988D33A00AC7424 /* save-img.png in Resources */,
+				01C2B79B1C46543200384370 /* color@2x.png in Resources */,
 				7FC901691A0A54850051B941 /* Scene-topviewBg@2x.png in Resources */,
 				01F872811C3A42EF009AA31E /* My-objects-Light_IPhone.png in Resources */,
 				62044E3419920D8F0067E21E /* button-background.png in Resources */,
@@ -6497,6 +6548,7 @@
 				0169C46D1C33ED5A00132FF6 /* popoverArrowRight.png in Resources */,
 				7FC900FD1A0A01470051B941 /* view-img-phone@2x.png in Resources */,
 				7FC900D61A0A01470051B941 /* Menu-phone.png in Resources */,
+				01C2B7961C46419300384370 /* TwitterKitResources.bundle in Resources */,
 				7FC900F71A0A01470051B941 /* select-img-phone@2x.png in Resources */,
 				01F8728B1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
 				01F8727F1C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
@@ -7048,6 +7100,7 @@
 				7F307CF71B58FDBF0065BBC1 /* like-phone@3x.png in Resources */,
 				01AAE29C1C43DA7B00B194E0 /* Mail@2x.png in Resources */,
 				7F307CF81B58FDBF0065BBC1 /* like.png in Resources */,
+				01C2B79C1C46543200384370 /* color@2x.png in Resources */,
 				01F872821C3A42EF009AA31E /* My-objects-Light_IPhone.png in Resources */,
 				7F307CF91B58FDBF0065BBC1 /* like@2x.png in Resources */,
 				01F8732B1C3A78B4009AA31E /* Google_IPhone.png in Resources */,
@@ -7193,6 +7246,7 @@
 				E20672561B049AA6006DD2F7 /* right-align@3x.png in Resources */,
 				01F8728C1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
 				01F872801C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
+				01C2B7971C46419300384370 /* TwitterKitResources.bundle in Resources */,
 				E20672571B049AA6006DD2F7 /* animate-img-phone.png in Resources */,
 				01B394F51C37A282003955C6 /* Play_Pad.png in Resources */,
 				01B395081C37A42C003955C6 /* Import-models_Pad.png in Resources */,

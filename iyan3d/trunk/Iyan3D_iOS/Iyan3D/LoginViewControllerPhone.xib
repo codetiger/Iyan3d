@@ -8,6 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
                 <outlet property="cancelBtn" destination="O9p-wd-bV0" id="u5d-RI-voT"/>
+                <outlet property="facebookSignin" destination="j8h-QJ-Jin" id="r8v-Kn-UsQ"/>
+                <outlet property="googleSigninBtn" destination="Qkh-7C-86D" id="ogv-qU-LXb"/>
+                <outlet property="twitterSignin" destination="Lau-Fl-t5Q" id="Ref-v3-ks1"/>
                 <outlet property="view" destination="iN0-l3-epB" id="b9U-cg-xyU"/>
             </connections>
         </placeholder>
@@ -41,14 +44,23 @@
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lau-Fl-t5Q">
                     <rect key="frame" x="176" y="194" width="217" height="29"/>
                     <state key="normal" image="Twitter_IPhone.png"/>
+                    <connections>
+                        <action selector="twitterSigninAction:" destination="-1" eventType="touchUpInside" id="asI-dr-tFe"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8h-QJ-Jin">
                     <rect key="frame" x="176" y="145" width="217" height="29"/>
                     <state key="normal" image="Facebook_IPhone.png"/>
+                    <connections>
+                        <action selector="fbSigninAction:" destination="-1" eventType="touchUpInside" id="ehc-em-fYS"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qkh-7C-86D">
                     <rect key="frame" x="176" y="244" width="217" height="29"/>
                     <state key="normal" image="Google_IPhone.png"/>
+                    <connections>
+                        <action selector="googleSigninAction:" destination="-1" eventType="touchUpInside" id="NKh-O2-094"/>
+                    </connections>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iyan3d-sign-in_IPhone.png" translatesAutoresizingMaskIntoConstraints="NO" id="S96-zp-93i">
                     <rect key="frame" x="190" y="60" width="59" height="64"/>

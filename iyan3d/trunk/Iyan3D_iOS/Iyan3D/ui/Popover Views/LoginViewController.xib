@@ -7,7 +7,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
+                <outlet property="buttonView" destination="PRf-LA-p4O" id="iA2-rX-HLa"/>
                 <outlet property="cancelBtn" destination="F2f-Kn-4lG" id="GSC-O6-6nA"/>
+                <outlet property="facebookSignin" destination="XC8-5H-C4c" id="q1n-t4-XGk"/>
+                <outlet property="googleSigninBtn" destination="8UU-lq-KgC" id="vnI-39-dHm"/>
+                <outlet property="twitterSignin" destination="3hH-KI-AGn" id="XQA-MT-K5m"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -31,6 +35,37 @@
                     </subviews>
                     <color key="backgroundColor" red="0.78823529410000004" green="0.78823529410000004" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <view contentMode="scaleToFill" id="PRf-LA-p4O">
+                    <rect key="frame" x="60" y="134" width="400" height="300"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3hH-KI-AGn">
+                            <rect key="frame" x="56" y="129" width="303" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Twitter_Pad.png"/>
+                            <connections>
+                                <action selector="twitterSigninAction:" destination="-1" eventType="touchUpInside" id="Svw-qH-cVN"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8UU-lq-KgC">
+                            <rect key="frame" x="56" y="201" width="303" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Google_Pad.png"/>
+                            <connections>
+                                <action selector="googleSigninAction:" destination="-1" eventType="touchUpInside" id="URd-1n-NzR"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XC8-5H-C4c">
+                            <rect key="frame" x="56" y="59" width="303" height="43"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Facebook_Pad.png"/>
+                            <connections>
+                                <action selector="fbSigninAction:" destination="-1" eventType="touchUpInside" id="Tu6-2O-pbP"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iyan3d-text-sign-in_Pad.png" id="At3-hW-x7X">
                     <rect key="frame" x="245" y="115" width="163" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -39,21 +74,6 @@
                     <rect key="frame" x="135" y="85" width="84" height="91"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OwH-sF-uvp">
-                    <rect key="frame" x="118" y="263" width="303" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="Twitter_Pad.png"/>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XC8-5H-C4c">
-                    <rect key="frame" x="118" y="212" width="303" height="43"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="Facebook_Pad.png"/>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8UU-lq-KgC">
-                    <rect key="frame" x="118" y="313" width="303" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="Google_Pad.png"/>
-                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to enjoy more features" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xu5-c4-Bnj">
                     <rect key="frame" x="150" y="400" width="240" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

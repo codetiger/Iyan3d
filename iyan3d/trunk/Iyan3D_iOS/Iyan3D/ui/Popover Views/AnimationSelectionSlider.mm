@@ -8,11 +8,15 @@
 
 #import "AnimationSelectionSlider.h"
 #import "DownloadTask.h"
-
+#import "AFNetworking.h"
+#import "AFHTTPRequestOperation.h"
 #define TRENDING 4
 #define FEATURED 5
 #define TOP_RATED 6
 #define MY_ANIMATION 7
+#define USER_NAME_ALERT 100
+#define CANCEL_BUTTON 0
+#define OK_BUTTON 1
 
 @implementation AnimationSelectionSlider
 
@@ -42,6 +46,7 @@
     cache = [CacheSystem cacheSystem];
     animDownloadQueue = [[NSOperationQueue alloc] init];
     [animDownloadQueue setMaxConcurrentOperationCount:1];
+    userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
     [self getAnimationData];
     if([Utility IsPadDevice]){
         [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCell" bundle:nil]forCellWithReuseIdentifier:@"CELL"];
@@ -51,6 +56,7 @@
     }
     self.cancelBtn.layer.cornerRadius = 8.0f;
     self.addBtn.layer.cornerRadius = 8.0f;
+    [self.publishBtn setHidden:YES];
     [self.delegate createDuplicateAssetsForAnimation];
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
 }
@@ -124,6 +130,7 @@
                                         return;
                                     [self.categoryBtn setTitle: @"Trending" forState:UIControlStateNormal];
                                     animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
+                                    [self.publishBtn setHidden:YES];
                                     [self.animationCollectionView reloadData];
                                     animationCategoryTab = TRENDING;
                                     selectedAssetId=-1;
@@ -140,7 +147,7 @@
                                     animationsItems = [cache GetAnimationList:0 fromTable:6 Search:@""];
                                     [self.categoryBtn setTitle:@"Featured" forState:UIControlStateNormal];
                                     [self.animationCollectionView reloadData];
-
+                                    [self.publishBtn setHidden:YES];
                                     animationCategoryTab = FEATURED;
                                     selectedAssetId = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
@@ -158,6 +165,7 @@
                                       animationsItems = [cache GetAnimationList:0 fromTable:5 Search:@""];
                                       [self.categoryBtn setTitle:@"Top Rated" forState:UIControlStateNormal];
                                       [self.animationCollectionView reloadData];
+                                      [self.publishBtn setHidden:YES];
                                       animationCategoryTab = TOP_RATED;
                                       selectedAssetId = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
@@ -173,6 +181,7 @@
                                           return;
                                       [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
                                       animationsItems = [cache GetAnimationList:0 fromTable:7 Search:@""];
+                                      [self.publishBtn setHidden:NO];
                                       [self.animationCollectionView reloadData];
                                       animationCategoryTab = MY_ANIMATION;
                                       selectedAssetId = -1;
@@ -228,6 +237,24 @@
     [self deallocView];
 }
 
+- (IBAction)publishBtnaction:(id)sender
+{
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"] || [[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"]){
+        UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Display Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+        [userNameAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [[userNameAlert textFieldAtIndex:0] setPlaceholder:@"Enter Your Name Here"];
+        [[userNameAlert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
+        [userNameAlert setTag:USER_NAME_ALERT];
+        [userNameAlert show];
+        [[userNameAlert textFieldAtIndex:0] becomeFirstResponder];
+    }
+    else
+    {
+        UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Sign in with any of your accounts to publish the animation." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [userNameAlert show];
+    }
+}
+
 #pragma mark animations related data methods
 
 - (void)getAnimationData
@@ -245,8 +272,23 @@
     if ([animationsItems count] > [rowIndex intValue]) {
         AnimationItem* assetItem = animationsItems[[rowIndex intValue]];
         selectedAssetId = assetItem.assetId;
+        asset = assetItem;
+        selectedCell=assetItem.assetId;
         if (assetItem)
             [self downloadAnimation:assetItem];
+        if (animationCategoryTab == MY_ANIMATION) {
+            if (assetItem.published == 0) {
+                [self.publishBtn setHidden:NO];
+            }
+            else
+            {
+                [self.publishBtn setHidden:YES];
+            }
+        }
+        else {
+            [self.publishBtn setHidden:YES];
+        }
+
     }
 }
 
@@ -394,6 +436,152 @@
     [self.animationCollectionView reloadData];
 }
 
+#pragma mark Alertview Delegate
+
+#pragma DelegateFunctions
+
+- (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == USER_NAME_ALERT) {
+        NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+        
+        if (buttonIndex == OK_BUTTON) {
+            NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if ([name length] == 0) {
+                [self.view endEditing:YES];
+                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [errorAlert show];
+            }
+            else {
+                [self.view endEditing:YES];
+                if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [errorAlert show];
+                }
+                else {
+                    if ([[AppHelper getAppHelper] checkInternetConnected]) {
+                        [self.publishBtn setHidden:YES];
+                        [self.view setUserInteractionEnabled:NO];
+                        [self publishAssetWithUserName:[alertView textFieldAtIndex:0].text];
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+- (void)publishAssetWithUserName:(NSString*)userName{
+    
+    if ([asset.userId isEqualToString:@""])
+        asset.userId = userid;
+    
+    if (![userName isEqualToString:@""])
+        asset.userName = userName;
+    
+    if (![asset.userId isEqualToString:@""]) {
+        NSString* extension,*uniqueId,*email,*fbid,*fbname,*twitterId,*twitterName;
+        NSString* imgPathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirPath, selectedCell];
+        
+        if (animationType == 0)
+            extension = @".sgra";
+        else
+            extension = @".sgta";
+        
+        NSString* filePathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirPath, selectedCell, extension];
+        NSString* name = [NSString stringWithFormat:@"%@", asset.assetName];
+        NSString* keyword = [NSString stringWithFormat:@"%@", asset.keywords];
+        NSString* username = [NSString stringWithFormat:@"%@", asset.userName];
+        NSString* type = [NSString stringWithFormat:@"%d", animationType];
+            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"])
+                {
+                    uniqueId = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"googleUserId"]];
+                    email = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"googleEmail"]];
+                    
+                }
+            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"])
+                {
+                    fbid = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"facebookid"]];
+                   fbname = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"facebookname"]];
+
+                }
+            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"]){
+                twitterId = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"twitterid"]];
+                twitterName = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"twittername"]];
+            }
+        NSString* asset_id = [NSString stringWithFormat:@"%d", asset.assetId];
+        NSString* bonecountanim = [NSString stringWithFormat:@"%d", asset.boneCount];
+        NSData* animationFile = [NSData dataWithContentsOfFile:filePathLocation];
+        NSData* animationImgFile = [NSData dataWithContentsOfFile:imgPathLocation];
+        NSURL* url = [NSURL URLWithString:@"http://www.iyan3dapp.com/appapi/publish.php"];
+        NSString* postPath = @"http://www.iyan3dapp.com/appapi/publish.php";
+        AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+        NSMutableURLRequest* request = [httpClient multipartFormRequestWithMethod:@"POST"
+                                                                             path:postPath
+                                                                       parameters:nil
+                                                        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                                                            if (animationImgFile != nil)
+                                                                [formData appendPartWithFileData:animationImgFile name:@"animationImgFile" fileName:[NSString stringWithFormat:@"%d.png", selectedCell] mimeType:@"image/png"];
+                                                            if (animationFile != nil)
+                                                                [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", selectedCell, extension] mimeType:@"image/png"];
+                                                            [formData appendPartWithFormData:[userid dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
+                                                            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"])
+                                                            {
+                                                                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueId"];
+                                                                [formData appendPartWithFormData:[email dataUsingEncoding:NSUTF8StringEncoding] name:@"email"];
+                                                            }
+                                                            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"])
+                                                            {
+                                                                [formData appendPartWithFormData:[fbid dataUsingEncoding:NSUTF8StringEncoding] name:@"facebookid"];
+                                                                [formData appendPartWithFormData:[fbname dataUsingEncoding:NSUTF8StringEncoding] name:@"facebookname"];
+                                                            }
+                                                            else  if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"])
+                                                            {
+                                                                [formData appendPartWithFormData:[twitterId dataUsingEncoding:NSUTF8StringEncoding] name:@"twitterid"];
+                                                                [formData appendPartWithFormData:[twitterName dataUsingEncoding:NSUTF8StringEncoding] name:@"twittername"];
+                                                            }
+                                                            [formData appendPartWithFormData:[username dataUsingEncoding:NSUTF8StringEncoding] name:@"username"];
+                                                            [formData appendPartWithFormData:[name dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_name"];
+                                                            [formData appendPartWithFormData:[keyword dataUsingEncoding:NSUTF8StringEncoding] name:@"keyword"];
+                                                            [formData appendPartWithFormData:[bonecountanim dataUsingEncoding:NSUTF8StringEncoding] name:@"bonecount"];
+                                                            [formData appendPartWithFormData:[asset_id dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_id"];
+                                                            [formData appendPartWithFormData:[type dataUsingEncoding:NSUTF8StringEncoding] name:@"type"];
+                                                        }];
+        
+        AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        
+        __block BOOL complete = NO;
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
+            //ret = [self handle:data];
+            complete = YES;
+            asset.published = [[operation responseString] intValue];
+            NSLog(@"Publishid : %d",asset.published);
+            [cache UpdateMyAnimation:asset];
+            [self.view setUserInteractionEnabled:YES];
+            if ([animationsItems containsObject:asset]) {
+                int indexRow = (int)[animationsItems indexOfObject:asset];
+                [self displayBasedOnSelection:[NSNumber numberWithInt:indexRow]];
+                [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:YES];
+            }
+        } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
+            NSLog(@"Failure: %@", error);
+            [self.view setUserInteractionEnabled:YES];
+            [self.view endEditing:YES];
+            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to publish, Please check your network settings." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            [userNameAlert show];
+            complete = YES;
+        }];
+        [operation start];
+    }
+
+        
+}
+    
+- (void)reloadCollectionView
+{
+    [self.animationCollectionView reloadData];
+}
 #pragma mark OpenGl related Functions
 
 - (void)applyAnimationKeyToOriginalNode{

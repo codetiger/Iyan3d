@@ -16,8 +16,8 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <mach/machine.h>
-
 #import <Fabric/Fabric.h>
+#import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
 
 
@@ -39,7 +39,8 @@ static NSString * const kClient =
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     #if !(TARGET_IPHONE_SIMULATOR)
-    [Fabric with:@[[Crashlytics class]]];
+    [Fabric with:@[[Crashlytics class],[Twitter class]]];
+
     #endif
     [GIDSignIn sharedInstance].clientID = kClient;
 
@@ -146,8 +147,17 @@ static NSString * const kClient =
     
     if([ext isEqualToString:@"ttf"] || [ext isEqualToString:@"otf"])
         msg = [NSString stringWithFormat:@"To use your %@ font file, use 'Text' option in your Import Menu. You should have upgraded to the Premium version for using this feature.", [ext uppercaseString]];
+    else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"png"]|| [ext isEqualToString:@"jpeg"])
+    {
+         msg = [NSString stringWithFormat:@"To import your %@ file, use 'Import And Rig Models' button in Home Page", [ext uppercaseString]];
+    }
     else
-        msg = [NSString stringWithFormat:@"To import your %@ file, use 'Import And Rig Models' button in Home Page", [ext uppercaseString]];
+    {
+        return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                              openURL:url
+                                                    sourceApplication:sourceApplication
+                                                           annotation:annotation];
+    }
     
     [self.window endEditing:YES];
 	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -155,5 +165,6 @@ static NSString * const kClient =
 
 	return YES;
 }
+
 
 @end

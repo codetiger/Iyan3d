@@ -78,7 +78,6 @@ enum constants {
     self.renderingTypes.layer.cornerRadius = 5.0;
     self.renderingTypes.layer.borderWidth = 2.0f;
     self.renderingTypes.layer.borderColor=[UIColor clearColor].CGColor;
-    self.view.layer.cornerRadius = 5.0;
     self.nextButton.layer.cornerRadius = 5.0;
     self.cancelButton.layer.cornerRadius = 5.0;
     [self.activityIndicatorView setHidden:false];

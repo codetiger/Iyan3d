@@ -9,6 +9,9 @@
 #import "LoggedInViewController.h"
 #import "RenderTableViewCell.h"
 #include "Utility.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <TwitterKit/TwitterKit.h>
 @interface LoggedInViewController ()
 
 @end
@@ -17,12 +20,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [GIDSignIn sharedInstance].uiDelegate = self;
+    [GIDSignIn sharedInstance].delegate = self;
     renderData = @{@"In Progress" : @[@"My Scene 1", @"My Scene 2", @"My Scene 3",@"My Scene 4",@"My Scene 5"],
                    @"Completed" : @[@"My Scene 1", @"My Scene 2",@"My Scene 3",@"My Scene 4"]};
     [self.renderStatus registerClass:[RenderTableViewCell class] forCellReuseIdentifier:@"Cell"];
     renderSectionTitles = [[renderData allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     self.creditsView.layer.cornerRadius = 10;
     self.creditsView.layer.masksToBounds = YES;
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -100,6 +106,46 @@
     
     }
 
-- (IBAction)signOutBtn:(id)sender {
+- (IBAction)signOutBtn:(id)sender
+{
+    NSLog(@"Signout Clicked");
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"]){
+        [[GIDSignIn sharedInstance] disconnect];
+        [self reportAuthStatus];
+        [self.delegare dismissView];
+    }
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"]){
+        FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+        [loginManager logOut];
+        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"facebookauthentication"];
+        [self.delegare dismissView];
+    }
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"]){
+        [[Twitter sharedInstance]logOut];
+        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"twitterauthentication"];
+        [self.delegare dismissView];
+
+    }
+   
+    
+    
+}
+
+- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error {
+    // Perform any operations when the user disconnects from app here.
+    if(error){
+        NSLog(@"Error");
+    }
+    else {
+        NSLog(@"Success");
+         [self reportAuthStatus];
+    }
+   
+    
+}
+- (void)reportAuthStatus
+{
+   [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"googleAuthentication"];
+
 }
 @end

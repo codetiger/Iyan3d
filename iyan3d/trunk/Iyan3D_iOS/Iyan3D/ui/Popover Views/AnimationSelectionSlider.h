@@ -35,6 +35,7 @@
     CacheSystem *cache;
     NSOperationQueue *downloadQueue , *animDownloadQueue;
     NSArray *jsonUserArray;
+    AnimationItem* asset;
     int tabValue , previousTabValue;
     int selectedAssetId,animationCategoryTab;
     NSString* docDirPath;
@@ -42,11 +43,14 @@
     SGEditorScene *editorSceneLocal;
     int selectedNodeId, bonecount, currentFrame, totalFrame;
     bool isFirstTimeAnimationApplyed;
+    NSString *userid;
+    int _assetId,selectedCell;
 }
 
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime;
 
+@property (weak, nonatomic) IBOutlet UIButton *publishBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *downloadIndicator;
 @property (strong, nonatomic) id <SliderDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIButton *categoryBtn;
@@ -56,6 +60,7 @@
 - (IBAction)categoryBtnFuction:(id)sender;
 - (IBAction)addBtnFunction:(id)sender;
 - (IBAction)cancelBtnFunction:(id)sender;
+- (IBAction)publishBtnaction:(id)sender;
 @end
 
 #endif

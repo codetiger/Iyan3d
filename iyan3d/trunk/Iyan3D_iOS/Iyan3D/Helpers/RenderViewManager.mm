@@ -372,20 +372,23 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 //    isTapped = true;
     CGPoint position;
     position = [rec locationInView:self.renderView];
-
+    
     if(editorScene->renHelper->isMovingCameraPreview(Vector2(position.x, position.y) * screenScale)){
         editorScene->camPreviewScale = (editorScene->camPreviewScale == 1.0) ? 2.0 : 1.0;
         return;
     }
-    if (!_isPlaying && !_isPanned) {
+    if (!editorScene->isPlaying && !_isPanned) {
         _checkTapSelection = true;
         _tapPosition = Vector2(position.x, position.y) * screenScale;
         editorScene->isRTTCompleted = true;
-        [self.delegate reloadFrames];
 //        [self setupEnableDisableControls];
         
 //        if (editorScene->actions.size() > 0 && editorScene->currentAction > 0)
 //            [self.undoButton setEnabled:YES];
+    }
+    if(editorScene->isPlaying){
+        [self.delegate stopPlaying];
+        return;
     }
     editorScene->setLightingOn();
 }
