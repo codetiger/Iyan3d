@@ -16,9 +16,7 @@ struct SGRTTexture
 		hasLoadedData = false;
 		vector<unsigned char> image;
 		unsigned error = lodepng::decode(image, width, height, path);
-		if(error) {
-			printf("decoder error %d : %s : %s\n", error, lodepng_error_text(error), path);
-		} else {
+		if(!error) {
 			hasLoadedData = true;
 			pngData = new unsigned char[width * height * 4];
 			copy(image.begin(), image.end(), pngData);

@@ -86,7 +86,7 @@ std::wstring FileHelper::readWString(ifstream *file)
     if (stringSize <= 0)
         return L"";
     
-    wstring stringRead;
+    std::wstring stringRead;
     
     for (int i = 0; i < stringSize; i++) {
         stringRead += (wchar_t)readShort(file);

@@ -8,17 +8,17 @@
 
 #include "HeaderFiles/ConversionHelper.h"
 
-wstring ConversionHelper::getWStringForString(string inputString)
+std::wstring ConversionHelper::getWStringForString(string inputString)
 {
-    wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
-    wstring wideString = converter.from_bytes(inputString);
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
+    std::wstring wideString = converter.from_bytes(inputString);
     
     return wideString;
 }
 
-string ConversionHelper::getStringForWString(wstring inputWString)
+string ConversionHelper::getStringForWString(std::wstring inputWString)
 {
-    wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
     string narrowString = converter.to_bytes(inputWString);
     
     return narrowString;

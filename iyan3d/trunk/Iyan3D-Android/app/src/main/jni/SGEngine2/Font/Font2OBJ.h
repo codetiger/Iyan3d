@@ -33,5 +33,5 @@ public:
     static float AddCharacter(FT_Face face, wchar_t ch, unsigned short bezierSteps, float offset, float extrude,SkinMesh *animMesh, float bevelRadius, int bevelSegments);
     static float AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short bezierSteps, float offset, float extrude, SkinMesh* mesh, float bevelRadius, int bevelSegments);
     static float AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, float offset, float extrude, SkinMesh* mesh, float bevelRadius, int bevelSegments);
-    static AnimatedMesh* getTextMesh(wstring text, u16 beizerSteps, float extrude,int height,char* filepath,Vector4 color,DEVICE_TYPE device, float bevelRadius, int bevelSegments);
+    static AnimatedMesh* getTextMesh(std::wstring text, u16 beizerSteps, float extrude,int height,char* filepath,Vector4 color,DEVICE_TYPE device, float bevelRadius, int bevelSegments);
 };

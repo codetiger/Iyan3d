@@ -472,7 +472,7 @@ float Font2OBJ::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, f
     return offset + chSize;
 }
 
-AnimatedMesh* Font2OBJ::getTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filePath, Vector4 color, DEVICE_TYPE device, float bevelRadius, int bevelSegments){
+AnimatedMesh* Font2OBJ::getTextMesh(std::wstring text, u16 beizerSteps, float extrude, int height, char* filePath, Vector4 color, DEVICE_TYPE device, float bevelRadius, int bevelSegments){
 
     if (FT_Init_FreeType( &library )){
         printf("FT_Init_FreeType failed\n");

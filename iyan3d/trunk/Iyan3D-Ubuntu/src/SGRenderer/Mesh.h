@@ -49,17 +49,6 @@ public:
 		numberOfTriangles = readInt(data);
 
 		id = rtcNewTriangleMesh(rtcScene, RTC_GEOMETRY_STATIC, numberOfTriangles, numberOfTriangles * 3);
-		printf("ID: %d\n", id);
-		if(id == 7 || id == 8) {
-			material.reflection = 1.0f; // metal
-		} else if(id == 10) {
-			material.reflection = 0.5f; //blue
-		} else if(id == 11) {
-			material.reflection = 0.3f; //yellow
-		} else if(id == 9) {
-			material.reflection = 1.0f; //light green
-		}
-
 		uvs = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 		normals = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 

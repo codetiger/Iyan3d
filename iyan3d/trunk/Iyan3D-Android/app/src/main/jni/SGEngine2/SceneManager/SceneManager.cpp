@@ -223,7 +223,6 @@ Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DA
 #ifdef UBUNTU
     newTex = new DummyTexture();
 #endif
-    printf("Texture: %s\n", textureName.c_str());
     newTex->loadTexture(textureName,filePath,format,type);
     textures.push_back(newTex);
 

@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <algorithm>
+#include <locale>
 
 #include <curl/curl.h>
 #include <zip.h>
@@ -28,22 +29,16 @@
 
 using namespace std;
 
-int taskFetchFrequency = 5;
-
 int TILE_SIZE = 64;
-int MAX_RAY_DEPTH = 8;
 
-bool renderAOMapping = false;
-int samplesAO = 32;
-double minAOBrightness = 0.65f;
+bool isRenderMachine = false;
+int taskFetchFrequency = 2;
 
+int MAX_RAY_DEPTH = 6;
+int samplesAO = 0;
+double minAOBrightness = 0.5f;
 int antiAliasingSamples = 0;
-int randomSamples = 8;
-
-bool hasGlobalIllumination = true;
-double shadowDarkness = 0.25f;
-
-double testResolutionRatio = 1.0/1.0f;
+int randomSamples = 0;
 
 enum ImageFormat {
     ImageFormat_PPM,
@@ -60,6 +55,9 @@ struct TaskDetails {
     int width;
     int height;
     int frame;
+    int startFrame;
+    int endFrame;
+    bool isRenderTask;
 };
 
 float readFloat(ifstream &dfile) {
@@ -207,8 +205,16 @@ bool file_exists (const std::string& name) {
 
 bool file_copy (const std::string& source, const std::string& dest) {
 	std::ifstream  src(source, std::ios::binary);
-	std::ofstream  dst(dest,   std::ios::binary);
-	dst << src.rdbuf();
+	if(src) {
+		std::ofstream  dst(dest,   std::ios::binary);
+		if(dst) {
+			dst << src.rdbuf();
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
 
 	return true;
 }

@@ -137,7 +137,7 @@ struct Scene
 		}
 	
 		double ao = 1.0;
-		if(renderAOMapping) {
+		if(samplesAO > 0) {
 			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
 			ao = getAmbientOcclusion(cam->position, dir);
 		}
@@ -215,10 +215,8 @@ struct Scene
 				Vec3fa nd = sampleAroundNormal(nl);
 
 				Vec3fa recursiveRadiance = Vec3fa(0.0f);
-				if(hasGlobalIllumination) {
-					recursiveRadiance = getRadiance(point, nd, ++depth, 0);
-					recursiveRadiance = faceColor * recursiveRadiance;
-				}
+				recursiveRadiance = getRadiance(point, nd, ++depth, 0);
+				recursiveRadiance = faceColor * recursiveRadiance;
 
 				Vec3fa lightsContrib = faceColor * getLightContribution(ray, nl);
 				color = meshes[ray.geomID]->getEmissionColor() * E + lightsContrib + recursiveRadiance;
@@ -247,7 +245,7 @@ struct Scene
 				if(ray.geomID == meshes[i]->id) {
 					lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal) * distanceEffect;
 				} else {
-					lightsContrib = lightsContrib + Vec3fa(1.0f - shadowDarkness) * rayDir.dot(normal) * distanceEffect;
+					lightsContrib = lightsContrib + Vec3fa(1.0f - meshes[i]->material.shadowDarkness) * rayDir.dot(normal) * distanceEffect;
 				}
 			}
 		}
@@ -283,8 +281,8 @@ struct Scene
 	}
 
 	bool loadScene(const char* fileName, int width, int height) {
-		imgWidth = width * testResolutionRatio;
-		imgHeight = height * testResolutionRatio;
+		imgWidth = width;
+		imgHeight = height;
 
 		ifstream data(fileName, ios::binary);
 

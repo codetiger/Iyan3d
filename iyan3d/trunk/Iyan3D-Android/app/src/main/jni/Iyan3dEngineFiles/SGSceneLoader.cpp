@@ -160,7 +160,7 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
     
 }
 
-SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath)
+SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath)
 {
     if(!currentScene || !smgr)
         return NULL;

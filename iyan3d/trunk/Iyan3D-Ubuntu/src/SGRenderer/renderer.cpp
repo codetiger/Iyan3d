@@ -1,5 +1,6 @@
 #include "common.h"
 #include "HeaderFiles/SGEditorScene.h"
+#include "HeaderFiles/json_json.h"
 
 #define TILE_SIZE_X 8
 #define TILE_SIZE_Y 8
@@ -26,29 +27,73 @@ void error_handler(const RTCError code, const char* str)
 
 string getFileContent(const char* file) {
 	ifstream t(file);
-	t.seekg(0, std::ios::end);
-	size_t size = t.tellg();
-	std::string machineId(size, ' ');
-	t.seekg(0);
-	t.read(&machineId[0], size); 
-	return machineId;
+	if(t) {
+		t.seekg(0, std::ios::end);
+		size_t size = t.tellg();
+		std::string machineId(size, ' ');
+		t.seekg(0);
+		t.read(&machineId[0], size);
+		return machineId;
+	}
+	return "";
 }
 
-TaskDetails getTaskFromServer(string machineId) {
+TaskDetails getRenderTaskFromServer(string machineId) {
 	string url = "http://www.iyan3dapp.com/appapi/requesttask.php?machineid=" + machineId;
 	downloadFile(url.c_str(), "taskid.txt");
 	string taskInfo = getFileContent("taskid.txt");
 	TaskDetails td;
+	td.taskId = -1;
+	td.isRenderTask = true;
 	
-	std::vector<std::string> x = split(taskInfo, ',');
-	td.taskId = atoi(taskInfo.c_str());
-	if(x.size() == 4) {
-		td.taskId = atoi(x[0].c_str());
-		td.frame = atoi(x[1].c_str());
-		td.width = atoi(x[2].c_str());
-		td.height = atoi(x[3].c_str());
+	if(taskInfo.size() > 0) {
+		std::vector<std::string> x = split(taskInfo, ',');
+		td.taskId = atoi(taskInfo.c_str());
+		if(x.size() == 4) {
+			td.taskId = atoi(x[0].c_str());
+			td.frame = atoi(x[1].c_str());
+			td.width = atoi(x[2].c_str());
+			td.height = atoi(x[3].c_str());
+		}
 	}
 
+	return td;
+}
+
+TaskDetails getVideoTaskFromServer(string machineId) {
+	string url = "http://www.iyan3dapp.com/appapi/videotask.php?machineid=" + machineId;
+	downloadFile(url.c_str(), "taskid.txt");
+	string taskInfo = getFileContent("taskid.txt");
+	TaskDetails td;
+	td.taskId = -1;
+	td.isRenderTask = false;
+
+	if(taskInfo.size() > 0) {
+		std::vector<std::string> x = split(taskInfo, ',');
+		td.taskId = atoi(taskInfo.c_str());
+		if(x.size() == 5) {
+			td.taskId = atoi(x[0].c_str());
+			td.startFrame = atoi(x[1].c_str());
+			td.endFrame = atoi(x[1].c_str());
+			td.width = atoi(x[2].c_str());
+			td.height = atoi(x[3].c_str());
+		}
+	}
+
+	return td;
+}
+
+TaskDetails getTaskFromServer(string machineId) {
+	TaskDetails td;
+	if(isRenderMachine) {
+		td = getRenderTaskFromServer(machineId);
+		if(td.taskId <= 0)
+			td = getVideoTaskFromServer(machineId);
+	} else {
+		td = getVideoTaskFromServer(machineId);
+		if(td.taskId <= 0)
+			td = getRenderTaskFromServer(machineId);
+	}
 	return td;
 }
 
@@ -105,17 +150,17 @@ bool unzipTaskFiles(TaskDetails td) {
     return true;
 }
 
-bool renderFile(string fileName, TaskDetails td) {
+bool renderFile(TaskDetails td) {
 	RTCDevice device = rtcNewDevice(NULL);
 	rtcDeviceSetErrorFunction(device, error_handler);
 	_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 	_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
 	Scene *scene = new Scene(device);
-	bool status = scene->loadScene((fileName + ".sgfd").c_str(), td.width, td.height);
+	bool status = scene->loadScene((to_string(td.frame) + ".sgfd").c_str(), td.width, td.height);
 	if(status) {
 		scene->render();
-		scene->SaveToFile((fileName + "_render.png").c_str(), ImageFormat_PNG);
+		scene->SaveToFile((to_string(td.taskId) + "t" + to_string(td.frame) + "f_render.png").c_str(), ImageFormat_PNG);
 	}
 	delete scene;
 	rtcDeleteDevice(device);
@@ -123,7 +168,8 @@ bool renderFile(string fileName, TaskDetails td) {
 }
 
 bool uploadOutputToServer(TaskDetails td) {
-	return uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId)).c_str(), (to_string(td.taskId) + ".png").c_str());
+	string filename = to_string(td.taskId) + "t" + to_string(td.frame) + "f_render.png";
+	return uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId) + "&frame=" + to_string(td.frame)).c_str(), filename.c_str());
 }
 
 bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::string folder) {
@@ -169,70 +215,98 @@ bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType) {
 	return true;
 }
 
-bool renderTask(TaskDetails td) {
-	if(downloadTaskFiles(td) && unzipTaskFiles(td)) {
-		printf("Creating SGFD Files\n");
-		constants::BundlePath = ".";
-		checkAndDownloadFile("camera.sgm", "camera.sgm", "mesh");
-		checkAndDownloadFile("light.sgm", "light.sgm", "mesh");
-		checkAndDownloadFile("sphere.sgm", "sphere.sgm", "mesh");
-
-		SceneManager *smgr = new SceneManager(td.width, td.height, 1.0, OPENGLES2, "", NULL);
-		SGEditorScene *scene = new SGEditorScene(OPENGLES2, smgr, td.width, td.height);
-		scene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
-
-		std::string filename = "index.sgb";
-		scene->loadSceneData(&filename);
-		scene->generateSGFDFile(td.frame);
-
-		printf("Starting Render for Task %d\n", td.taskId);
-		struct stat buffer;   
-
-		if(stat((to_string(td.frame) + ".sgfd").c_str(), &buffer) == 0) {
-			printf("\nRendering Frame: %d\n", td.frame);
-			renderFile(to_string(td.frame), td);
-		} else {
-			printf("No SGFD Files in the Zip Archive\n");
-			return false;
-		}
-
-		uploadOutputToServer(td);
-		return true;
-	}
+bool videoTask(TaskDetails td) {
 	return false;
+}
+
+bool renderTask(TaskDetails td) {
+	if(!downloadTaskFiles(td))
+		return false;
+
+	if(!unzipTaskFiles(td))
+		return false;
+
+	printf("Creating SGFD Files\n");
+	constants::BundlePath = ".";
+	checkAndDownloadFile("camera.sgm", "camera.sgm", "/mesh");
+	checkAndDownloadFile("light.sgm", "light.sgm", "/mesh");
+	checkAndDownloadFile("sphere.sgm", "sphere.sgm", "/mesh");
+
+	SceneManager *smgr = new SceneManager(td.width, td.height, 1.0, OPENGLES2, "", NULL);
+	SGEditorScene *scene = new SGEditorScene(OPENGLES2, smgr, td.width, td.height);
+	scene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
+
+	std::string filename = "index.sgb";
+	scene->loadSceneData(&filename);
+	scene->generateSGFDFile(td.frame);
+
+	printf("Starting Render for Task %d\n", td.taskId);
+	struct stat buffer;
+
+	if(stat((to_string(td.frame) + ".sgfd").c_str(), &buffer) == 0) {
+		printf("Rendering Frame: %d\n", td.frame);
+		renderFile(td);
+	} else {
+		printf("No SGFD Files in the Zip Archive\n");
+		return false;
+	}
+
+	uploadOutputToServer(td);
+	return true;
 }
 
 int main(int argc, char** argv) 
 {
-	printf("Starting Renderer\n");
 	char cCurrentPath[FILENAME_MAX];
     getcwd(cCurrentPath, sizeof(cCurrentPath));
     cCurrentPath[sizeof(cCurrentPath) - 1] = '\0';
+    std::setlocale (LC_ALL, "");
 
-	string machineId = getFileContent("config.cfg");
-	printf("Working as Machine Id: %s\n", machineId.c_str());
+    string machineId;
+    Json::Value configData;
+    Json::Reader reader;
+    ifstream jsonFile("config.cfg");
+
+    if(reader.parse(jsonFile, configData)) {
+		machineId = configData["machineId"].asString();
+		isRenderMachine = configData["isRenderMachine"].asBool();
+		taskFetchFrequency = configData["taskFetchFrequency"].asInt();
+		MAX_RAY_DEPTH = configData["MAX_RAY_DEPTH"].asInt();
+		samplesAO = configData["samplesAO"].asInt();
+		minAOBrightness = configData["minAOBrightness"].asDouble();
+		antiAliasingSamples = configData["antiAliasingSamples"].asInt();
+		randomSamples = configData["randomSamples"].asInt();
+	}
+
+	printf("Working as Machine Id:%s isRenderMachine:%d taskFetchFrequency:%d MAX_RAY_DEPTH:%d samplesAO:%d minAOBrightness:%f antiAliasingSamples:%d randomSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, antiAliasingSamples, randomSamples);
 
 	do {
 		printf("Asking Server for new task\n");
 		chdir(cCurrentPath);
 		TaskDetails td = getTaskFromServer(machineId);
 
-		if(td.taskId <= 0) {
-			printf("No Pending Tasks waiting for %d seconds\n", taskFetchFrequency);
-			sleep(taskFetchFrequency);
-		} else {
-			printf("Task Assigned: %d Frames: %d Width: %d Height: %d\n", td.taskId, td.frame, td.width, td.height);
+		if(td.taskId > 0) {
+			printf("Task Assigned: %d Frame: %d Width: %d Height: %d\n\n", td.taskId, td.frame, td.width, td.height);
 			timespec ts;
 			clock_gettime(CLOCK_REALTIME, &ts);
 
-			if(renderTask(td)) {
+			bool result = false;
+			if(td.isRenderTask)
+				result = renderTask(td);
+			else
+				result = videoTask(td);
+
+			if(result) {
 				timespec te;
 				clock_gettime(CLOCK_REALTIME, &te);
 				double realtime = (te.tv_sec - ts.tv_sec) + (double)(te.tv_nsec - ts.tv_nsec) / (double)1000000000.0;
-				printf("\nTime taken: %.2fs\n", realtime);
+				printf("Time taken: %.2fs\n\n", realtime);
 			}
+		} else {
+			printf("No Pending Tasks waiting for %d seconds\n\n", taskFetchFrequency);
+			sleep(taskFetchFrequency);
 		}
-	} while(false);
+	} while(true);
 
 	return 0;
 }

@@ -27,7 +27,7 @@ SGNode::~SGNode(){
     clearSGJoints();
     node.reset();
 }
-shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager *smgr, wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
+shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager *smgr, std::wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
 {
     shared_ptr<Node> node;
     switch (objectType){
@@ -63,9 +63,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager 
         }
         case NODE_TEXT:{
             // 'width' here is font size and 'height' is bevel value
-            string dummy = ConversionHelper::getStringForWString(objectName);
-            wstring wdummy = ConversionHelper::getWStringForString(dummy);
-            node = load3DText(smgr, wdummy, 4, 4, width, specificFilePath, objSpecificColor, height * width / 1000.0f, 4);
+            node = load3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height * width / 1000.0f, 4);
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;
@@ -81,7 +79,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager 
             break;
         }
         default:
-            Logger::log(ERROR, "SGNode::loadNode ", "Unknow node type to load");
+            Logger::log(ERROR, "SGNode::loadNode ", "Unknown node type to load");
             break;
     }
     if(node && node->getTextureCount() == 0) {
@@ -107,7 +105,7 @@ shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance ,
     return lightNode;
 }
 
-shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
+shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
     if(bevelRadius == 0 || bevelSegments == 0)
         bevelSegments = 0;
 
@@ -791,11 +789,11 @@ void SGNode::readData(ifstream *filePointer)
     
     if(sgbVersion == SGB_VERSION) {
         
-        wstring nodeSpecificString = FileHelper::readWString(filePointer);
+    	std::wstring nodeSpecificString = FileHelper::readWString(filePointer);
         
         if (nodeSpecificString.find(L"$_@") != std::wstring::npos) {
             
-            vector<wstring> fontProperties;
+            vector<std::wstring> fontProperties;
             std::size_t separator = nodeSpecificString.find(L"$_@");
             for (int i = 0; i < 4; i++) {
                 
@@ -876,7 +874,7 @@ void SGNode::writeData(ofstream *filePointer)
     FileHelper::writeFloat(filePointer,props.brightness);
     FileHelper::writeFloat(filePointer,props.shininess);
     
-    wstring nodeSpecificString;
+    std::wstring nodeSpecificString;
     if(type == NODE_TEXT) {
         nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(props.fontSize) + L"$_@" + to_wstring(props.nodeSpecificFloat) + L"$_@";
     } else

@@ -20,8 +20,8 @@ using namespace std;
 class ConversionHelper
 {
 public:
-    static wstring getWStringForString(string inputString);
-    static string getStringForWString(wstring inputWString);
+    static std::wstring getWStringForString(string inputString);
+    static string getStringForWString(std::wstring inputWString);
 };
 
 #endif /* ConversionHelper_h */
