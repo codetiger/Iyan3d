@@ -858,6 +858,8 @@
 		25BBCB121C203D6A0039DA5C /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB101C203D6A0039DA5C /* Splash.png */; };
 		25BBCB131C203F1D0039DA5C /* Splash-6+1.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */; };
 		25BBCB141C203F200039DA5C /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB101C203D6A0039DA5C /* Splash.png */; };
+		25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */; };
+		25BC0FB11C4768FA00721B5E /* SGOBJManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */; };
 		25C90F451B3616B400D803DB /* bevel-on-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3D1B3616B400D803DB /* bevel-on-phone.png */; };
 		25C90F461B3616B400D803DB /* bevel-on-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3E1B3616B400D803DB /* bevel-on-phone@2x.png */; };
 		25C90F471B3616B400D803DB /* bevel-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3F1B3616B400D803DB /* bevel-on.png */; };
@@ -2898,6 +2900,8 @@
 		25B5B1671BE33EFB00AC2525 /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
 		25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Splash-6+1.png"; path = "Resources/imgs/Splash-6+1.png"; sourceTree = "<group>"; };
 		25BBCB101C203D6A0039DA5C /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/imgs/Splash.png; sourceTree = "<group>"; };
+		25BC0FAE1C47666F00721B5E /* SGOBJManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGOBJManager.h; sourceTree = "<group>"; };
+		25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGOBJManager.cpp; sourceTree = "<group>"; };
 		25C90F3D1B3616B400D803DB /* bevel-on-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on-phone.png"; path = "Resources/imgs/bevel-on-phone.png"; sourceTree = "<group>"; };
 		25C90F3E1B3616B400D803DB /* bevel-on-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on-phone@2x.png"; path = "Resources/imgs/bevel-on-phone@2x.png"; sourceTree = "<group>"; };
 		25C90F3F1B3616B400D803DB /* bevel-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on.png"; path = "Resources/imgs/bevel-on.png"; sourceTree = "<group>"; };
@@ -4296,6 +4300,7 @@
 				25F0C2691C2E931700C8EC85 /* SGSceneUpdater.cpp */,
 				25F0C26D1C2EB27800C8EC85 /* SGSceneWriter.cpp */,
 				25FCAB4C1C3003330051DBBA /* SGMovementManager.cpp */,
+				25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */,
 			);
 			name = Iyan3DEngineFiles;
 			path = "../../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles";
@@ -4355,6 +4360,7 @@
 				25F0C2681C2E930400C8EC85 /* SGSceneUpdater.h */,
 				25F0C26C1C2EB26500C8EC85 /* SGSceneWriter.h */,
 				25FCAB4B1C3003220051DBBA /* SGMovementManager.h */,
+				25BC0FAE1C47666F00721B5E /* SGOBJManager.h */,
 			);
 			path = HeaderFiles;
 			sourceTree = "<group>";
@@ -7948,6 +7954,7 @@
 				256F6EB81BF624FB00154622 /* Logger.cpp in Sources */,
 				C8E6173818C5DD7100BC5342 /* FPPopoverView.m in Sources */,
 				0184EC881C35406A006F0B57 /* RenderTableViewCell.m in Sources */,
+				25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */,
 				62FA5F6119A3132F00F137C8 /* HelpViewController.m in Sources */,
 				E21C3D351A0758B6006964E5 /* GTLYouTubeVideoStatus.m in Sources */,
 				256F6D981BF624FB00154622 /* AnimatedMeshNode.cpp in Sources */,
@@ -8330,6 +8337,7 @@
 				E20671561B049AA6006DD2F7 /* OSCommonImage.m in Sources */,
 				E20671571B049AA6006DD2F7 /* BitmapCropManipulator.m in Sources */,
 				E20671581B049AA6006DD2F7 /* GTLYouTubeVideoCategoryListResponse.m in Sources */,
+				25BC0FB11C4768FA00721B5E /* SGOBJManager.cpp in Sources */,
 				251BF4761C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
 				E20671591B049AA6006DD2F7 /* GTLUtilities.m in Sources */,
 				E206715A1B049AA6006DD2F7 /* GTLYouTubePlaylistPlayer.m in Sources */,

@@ -130,7 +130,7 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
     if (versionIdentifier == 0) {
         SSGMCountHeaderHighPoly counts;
         f.read((char*)&counts, sizeof(SSGMCountHeaderHighPoly));
-
+        
         SSGMVectHeader* verts = new SSGMVectHeader[counts.vertCount];
         for (int i = 0; i < counts.vertCount; i++)
             f.read((char*)&verts[i], sizeof(SSGMVectHeader));

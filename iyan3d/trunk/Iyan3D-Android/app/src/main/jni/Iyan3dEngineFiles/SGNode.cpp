@@ -47,6 +47,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager 
         }
         case NODE_OBJ:
         case NODE_SGM:{
+            props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             node = loadSGMandOBJ(assetId,objectType,smgr);
             break;
         }
@@ -192,18 +193,32 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     
     string meshPath = StoragePath + to_string(assetId) + fileExt;
     string textureFileName = StoragePath + to_string(assetId)+"-cm.png";
-    
-    if(!checkFileExists(meshPath) || !checkFileExists(textureFileName))
-        return shared_ptr<Node>();
+        
+        if(!checkFileExists(meshPath)) {
+            meshPath = FileHelper::getDocumentsDirectory() + to_string(assetId) + fileExt;
+            textureFileName = FileHelper::getDocumentsDirectory() + to_string(assetId)+"-cm.png";
+            if(!checkFileExists(meshPath))
+                return shared_ptr<Node>();
+        }
 
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
     
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
-    node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-    Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
-    node->setTexture(nodeTex,1);
-    
+
+        if(!checkFileExists(textureFileName))
+        {
+            node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+            for(int i = 0; i < mesh->getVerticesCount(); i++) {
+                vertexData *vData = mesh->getLiteVertexByIndex(i);
+                vData->optionalData1 = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z, 1.0);
+            }
+        } else {
+            node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+            Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+            node->setTexture(nodeTex,1);
+        }
+        mesh->Commit();
     if(objectType == NODE_OBJ && objLoader != NULL)
         delete objLoader;
     

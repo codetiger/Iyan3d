@@ -9,11 +9,11 @@
 #ifndef SGAutoRigSceneManager_h
 #define SGAutoRigSceneManager_h
 
-#include "SGNode.h"
-#include "Constants.h"
-#include "RigKey.h"
+#include "exportSGR.h"
 #include "AutoRigHelper.h"
 #include "AutoRigJointsDataHelper.h"
+#include "Constants.h"
+#include "SGNode.h"
 
 #define OBJ_BOUNDINGBOX_MAX_LIMIT 24.0
 #define RIG_BONE_SCALE_TEMP_FIX 0.85
@@ -46,7 +46,7 @@ public:
     AUTORIG_SCENE_MODE sceneMode;
     SKELETON_TYPE skeletonType;
     
-    SGNode* objSGNode;
+    SGNode* nodeToRig;
     SGNode* selectedNode;
     SGJoint* selectedJoint;
     std::map<int, SGNode*> envelopes;
@@ -56,7 +56,7 @@ public:
     SGAutoRigSceneManager(SceneManager* smgr, void *scene);
     
     void clearNodeSelections();
-    void objForRig(SGNode* sgNode);
+    void objForRig(SGNode* sgNode); // Pass the node to be rigged to this method
     void addNewJoint();
     void removeJoint();
     void exportSGR(std::string filePath);

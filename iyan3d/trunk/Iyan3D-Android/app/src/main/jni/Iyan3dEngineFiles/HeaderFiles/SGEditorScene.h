@@ -36,6 +36,7 @@
 #include "CameraViewHelper.h"
 #include "../../SGEngine2/Loaders/OBJMeshFileLoader.h"
 #include "SceneHelper.h"
+#include "SGAutoRigSceneManager.h"
 #include "RenderHelper.h"
 #include "SGActionManager.h"
 #include "SGMovementManager.h"
@@ -44,7 +45,7 @@
 #include "SGSceneLoader.h"
 #include "SGSceneWriter.h"
 #include "SGAnimationManager.h"
-#include "SGAutoRigSceneManager.h"
+#include "SGOBJManager.h"
 
 class SGEditorScene {
     
@@ -101,6 +102,7 @@ public:
     SGSceneWriter *writer;
     SGAnimationManager *animMan;
     SGAutoRigSceneManager *rigMan;
+    SGOBJManager *objMan;
     
     /* SGEngine class objects */
     
@@ -132,6 +134,7 @@ public:
     /* initializing methods */
     
     void initTextures();
+    void enterOrExitAutoRigMode(bool rigMode);
     void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType);
     void initLightCamera(Vector3 position);
     
@@ -182,6 +185,7 @@ public:
     void setLightingOff();
     void popLightProps();
     void clearLightProps();
+    
 };
 
 #endif /* SGEditorScene_h */

@@ -18,33 +18,34 @@
 #include <fstream>
 #endif
 
+struct SSGRVectHeader {
+    float vx, vy, vz, nx, ny, nz, s, t;
+};
+
+struct SSGMCountHeaderLowPoly {
+    u16 vertCount, indCount, colCount;
+};
+struct SSGMCountHeaderHighPoly {
+    unsigned int vertCount, indCount, colCount;
+};
+
+struct SSGMVectHeader {
+    float vx, vy, vz, nx, ny, nz;
+};
+struct SSGMUVHeader {
+    float s, t;
+};
+struct SSGMIndexHeaderLowPoly {
+    u_int16_t vtInd, colInd;
+};
+struct SSGMIndexHeaderHighPoly {
+    unsigned int vtInd, colInd;
+};
+struct SSGMColHeader {
+    unsigned char r, g, b;
+};
+
 class CSGRMeshFileLoader {
-    struct SSGRVectHeader {
-        float vx, vy, vz, nx, ny, nz, s, t;
-    };
-
-    struct SSGMCountHeaderLowPoly {
-        u16 vertCount, indCount, colCount;
-    };
-    struct SSGMCountHeaderHighPoly {
-        unsigned int vertCount, indCount, colCount;
-    };
-
-    struct SSGMVectHeader {
-        float vx, vy, vz, nx, ny, nz;
-    };
-    struct SSGMUVHeader {
-        float s, t;
-    };
-    struct SSGMIndexHeaderLowPoly {
-        u_int16_t vtInd, colInd;
-    };
-    struct SSGMIndexHeaderHighPoly {
-        unsigned int vtInd, colInd;
-    };
-    struct SSGMColHeader {
-        unsigned char r, g, b;
-    };
 
 public:
     static AnimatedMesh* LoadMesh(string filepath, DEVICE_TYPE device = OPENGLES2);

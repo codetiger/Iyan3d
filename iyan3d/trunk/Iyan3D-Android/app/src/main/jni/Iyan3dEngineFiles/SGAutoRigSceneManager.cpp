@@ -6,7 +6,6 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "exportSGR.h"
 #include "SGAutoRigSceneManager.h"
 #include "SGEditorScene.h"
 
@@ -17,7 +16,7 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
     this->smgr = smgr;
     rigScene = (SGEditorScene*)scene;
     sceneMode = RIG_MODE_OBJVIEW;
-    objSGNode = new SGNode(NODE_OBJ);
+    nodeToRig = new SGNode(NODE_OBJ);
     sgrSGNode = NULL;
     clearNodeSelections();
 }
@@ -30,8 +29,8 @@ SGAutoRigSceneManager::~SGAutoRigSceneManager()
         delete boneMesh;
     if(sphereMesh)
         delete sphereMesh;
-    if(objSGNode)
-        delete objSGNode;    
+    if(nodeToRig)
+        delete nodeToRig;    
 }
 
 void SGAutoRigSceneManager::clearNodeSelections()
@@ -39,9 +38,9 @@ void SGAutoRigSceneManager::clearNodeSelections()
     if(!rigScene || !smgr)
         return;
     
-    if(isNodeSelected){
-        rigScene->updater->updateControlsMaterial();
-    }
+//    if(isNodeSelected){
+//        rigScene->updater->updateControlsMaterial();
+//    }
     isNodeSelected = false;
     isSkeletonJointSelected = false;
     isNodeSelected = false;
@@ -52,16 +51,16 @@ void SGAutoRigSceneManager::clearNodeSelections()
     selectedJoint = NULL;
 }
 
-void SGAutoRigSceneManager:: objForRig(SGNode* sgNode)
+void SGAutoRigSceneManager::objForRig(SGNode* sgNode)
 {
     if(!rigScene || !smgr || !sgNode)
         return;
 
-    if(objSGNode->node){
-        smgr->RemoveNode(objSGNode->node);
+    if(nodeToRig->node){
+        smgr->RemoveNode(nodeToRig->node);
     }
-    objSGNode = sgNode;
-    shared_ptr<MeshNode> objNode = dynamic_pointer_cast<MeshNode>(objSGNode->node);
+    nodeToRig = sgNode;
+    shared_ptr<MeshNode> objNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
     // scale to fit all obj in same proportion-----
     float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();
@@ -74,10 +73,10 @@ void SGAutoRigSceneManager:: objForRig(SGNode* sgNode)
     //-----------
     
     objNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-    objSGNode->props.isLighting = true;
+    nodeToRig->props.isLighting = true;
     //objNode->setTexture(rigScene->shadowTexture,2);
     objNode->setID(OBJ_ID);
-    objSGNode->node->updateAbsoluteTransformation();
+    nodeToRig->node->updateAbsoluteTransformation();
 }
 
 bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
@@ -92,20 +91,20 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             
             if (rigKeys.size() > 0)
                 removeRigKeys();
-            if(objSGNode){
-                objSGNode->node->setVisible(true);
-                objSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-                objSGNode->props.transparency = 1.0;
-                objSGNode->props.isLighting = true;
+            if(nodeToRig){
+                nodeToRig->node->setVisible(true);
+                nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+                nodeToRig->props.transparency = 1.0;
+                nodeToRig->props.isLighting = true;
             }
             break;
         }
             
         case RIG_MODE_MOVE_JOINTS:{
-            if(objSGNode){
-                objSGNode->node->setVisible(true);
-                objSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-                objSGNode->props.transparency = 0.5;
+            if(nodeToRig){
+                nodeToRig->node->setVisible(true);
+                nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+                nodeToRig->props.transparency = 0.5;
             }
             rigScene->renHelper->setControlsVisibility(true);
             if(rigKeys.size()==0)
@@ -131,10 +130,10 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
         case RIG_MODE_EDIT_ENVELOPES:{
             envelopes.clear();
             selectedNodeId = NOT_SELECTED;
-            if(objSGNode){
-                objSGNode->node->setVisible(true);
-                objSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
-                objSGNode->props.transparency = 0.5;
+            if(nodeToRig){
+                nodeToRig->node->setVisible(true);
+                nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+                nodeToRig->props.transparency = 0.5;
             }
             if(rigKeys.size() > 0 && rigKeys[0].referenceNode)
                 rigScene->renHelper->setJointAndBonesVisibility(rigKeys, true);
@@ -156,8 +155,8 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
         case RIG_MODE_PREVIEW:{
             rigScene->renHelper->setControlsVisibility(true);
             rigScene->renHelper->setEnvelopVisibility(envelopes, false);
-            if(objSGNode){
-                objSGNode->node->setVisible(false);
+            if(nodeToRig){
+                nodeToRig->node->setVisible(false);
             }
             rigScene->renHelper->setJointAndBonesVisibility(rigKeys, false);
             if(animatedSGRPath.compare(" ") != 0){
@@ -176,7 +175,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->createSGJoints();
                     sgrSGNode->node->setID(SGR_ID);
                     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
-                    sgrSGNode->node->setTexture(objSGNode->node->getActiveTexture(),1);
+                    sgrSGNode->node->setTexture(nodeToRig->node->getActiveTexture(),1);
                     sgrSGNode->node->setTexture(rigScene->shadowTexture,2);
                     sgrSGNode->props.transparency = 1.0;
                     sgrSGNode->props.isLighting = true;
@@ -358,9 +357,9 @@ void SGAutoRigSceneManager::exportSGR(std::string filePath)
     if(!rigScene || !smgr || !rigScene->isRigMode)
         return;
 
-    AutoRigHelper::initWeights(dynamic_pointer_cast<MeshNode>(objSGNode->node),rigKeys,influencedVertices,influencedJoints);
+    AutoRigHelper::initWeights(dynamic_pointer_cast<MeshNode>(nodeToRig->node),rigKeys,influencedVertices,influencedJoints);
     animatedSGRPath = filePath;
-    exportSGR::createSGR(filePath,dynamic_pointer_cast<MeshNode>(objSGNode->node),rigKeys,influencedVertices,influencedJoints);
+    exportSGR::createSGR(filePath,dynamic_pointer_cast<MeshNode>(nodeToRig->node),rigKeys,influencedVertices,influencedJoints);
 }
 
 void SGAutoRigSceneManager::setEnvelopeUniforms(int nodeID,string matName)
@@ -373,7 +372,7 @@ void SGAutoRigSceneManager::objNodeCallBack(string materialName)
 {
     if(!rigScene || !smgr)
         return;
-    rigScene->shaderMGR->setUniforms(objSGNode,materialName);
+    rigScene->shaderMGR->setUniforms(nodeToRig,materialName);
 }
 
 void SGAutoRigSceneManager::boneNodeCallBack(int id,string materialName)
@@ -405,7 +404,7 @@ bool SGAutoRigSceneManager::isOBJTransparent(string materialName)
 {
     if(!rigScene || !smgr)
         return false;
-    return objSGNode->props.transparency < 1.0;
+    return nodeToRig->props.transparency < 1.0;
 }
 
 SGNode* SGAutoRigSceneManager::getRiggedNode()

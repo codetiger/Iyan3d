@@ -97,6 +97,10 @@ SGEditorScene::~SGEditorScene()
     if(objLoader)
         delete objLoader;
 }
+void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
+{
+    isRigMode = rigMode;
+}
 
 void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
 {
@@ -110,7 +114,9 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     actionMan = new SGActionManager(sceneMngr, this);
     writer = new SGSceneWriter(sceneMngr, this);
     animMan = new SGAnimationManager(sceneMngr, this);
-    
+    rigMan = new SGAutoRigSceneManager(sceneMngr, this);
+    objMan = new SGOBJManager(sceneMngr, this);
+
     isJointSelected = isNodeSelected = isControlSelected = false;
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
