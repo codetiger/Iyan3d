@@ -2144,10 +2144,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         else{
             [assetsInScenes addObject:name];
         }
-    }
-    
+    }    
     [self.objectList reloadData];
-    
 }
 
 
@@ -3105,14 +3103,28 @@ void downloadFile(NSString* url, NSString* fileName)
     }
     
     NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Sgm/White-texture":textureFileName];
-    texTo = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetIdReturn];
-    [fm copyItemAtPath:texFrom toPath:texTo error:nil];
+    
+    
+    std::string *texture = new std::string([textureFileName UTF8String]);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:texFrom]){
+        NSString* desFilePath;
+        if(isTempNode)
+            desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@.png",docDirPath,@"temp"];
+        else
+            desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetIdReturn];
+        [fm removeItemAtPath:texTo error:nil];
+        UIImage *image =[UIImage imageWithContentsOfFile:texFrom];
+        NSData *imageData = [self convertAndScaleImage:image size:-1];
+        [imageData writeToFile:desFilePath atomically:YES];
+        *texture = *new std::string([(isTempNode)?@"temp" : textureFileName UTF8String]);
+    }
     
     if (!isTempNode){
         NSString* sgmFrom = [NSString stringWithFormat:@"%@%@%d.sgm",docDirPath,@"/Resources/Sgm/",(indexPathOfOBJ < 6) ? assetId : 123456];
         NSString* sgmTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm",docDirPath,assetIdReturn];
         [fm copyItemAtPath:sgmFrom toPath:sgmTo error:nil];
     }
+    
     NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
     [dict setObject:assetName forKey:@"name"];
     [dict setObject:[NSNumber numberWithInt:(isTempNode) ? assetId : assetIdReturn] forKey:@"assetId"];
@@ -3121,7 +3133,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
     NSString *textureName;
     if(isTempNode)
-        textureName = textureFileName;
+        textureName = @"temp";
     else
         textureName = [NSString stringWithFormat:@"%d%@",assetIdReturn,@"-cm"];
     [dict setObject:[NSString stringWithFormat:@"%@",(isHaveTexture) ? textureName : @"-1"] forKey:@"textureName"];

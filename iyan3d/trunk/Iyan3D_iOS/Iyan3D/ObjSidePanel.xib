@@ -11,6 +11,7 @@
                 <outlet property="cancelBtn" destination="gba-ht-Eqv" id="wwy-7V-a3M"/>
                 <outlet property="collectionView" destination="iSK-at-mkm" id="F3R-5h-EnV"/>
                 <outlet property="colorWheelBtn" destination="iBb-rI-NfD" id="sNb-0v-KeF"/>
+                <outlet property="importBtn" destination="ndj-O3-yZu" id="Uxr-gm-asr"/>
                 <outlet property="importFilesCollectionView" destination="iSK-at-mkm" id="M4D-Sv-T4N"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="viewTitle" destination="Mf2-ah-2Iq" id="MTi-b6-KbI"/>
@@ -71,7 +72,7 @@
                     <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="iSK-at-mkm">
-                    <rect key="frame" x="0.0" y="47" width="300" height="600"/>
+                    <rect key="frame" x="0.0" y="47" width="300" height="552"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="7Lw-T1-7gU">
                         <size key="itemSize" width="72" height="80"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -83,6 +84,18 @@
                         <outlet property="delegate" destination="-1" id="mV0-v3-k6w"/>
                     </connections>
                 </collectionView>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndj-O3-yZu">
+                    <rect key="frame" x="180" y="607" width="110" height="40"/>
+                    <color key="backgroundColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="IMPORT">
+                        <color key="titleShadowColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="deviceRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="igW-HA-yPN"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>

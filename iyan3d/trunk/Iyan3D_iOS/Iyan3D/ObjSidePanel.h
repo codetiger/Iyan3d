@@ -23,7 +23,7 @@
 @end
 
 
-@interface ObjSidePanel : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate>
+@interface ObjSidePanel : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     int indexPathOfOBJ;
     NSString* textureFileName;
@@ -31,6 +31,7 @@
     Vector3 color;
     NSArray* basicShapes;
     int viewType;
+    UIPopoverController *popover;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;
@@ -44,9 +45,10 @@
 @property (nonatomic, strong) TextColorPicker *vertexColorProp;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
-
+@property (nonatomic, strong) UIImagePickerController *ipc;
 @property (weak, nonatomic) IBOutlet UIButton *colorWheelBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIButton *importBtn;
 
 - (IBAction)addBtnAction:(id)sender;
 - (IBAction)cancelBtnAction:(id)sender;

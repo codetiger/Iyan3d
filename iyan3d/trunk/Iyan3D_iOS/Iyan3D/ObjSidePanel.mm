@@ -8,6 +8,8 @@
 
 #import "ObjSidePanel.h"
 #import "ObjCellView.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
 
 
 #define OBJ 0
@@ -48,8 +50,12 @@
     self.cancelBtn.layer.cornerRadius=8.0;
     [_colorWheelBtn setHidden:YES];
     indexPathOfOBJ =  (viewType == IMPORT_OBJFILE) ? -1 : 0;
-    if(viewType != IMPORT_OBJFILE)
+    if(viewType != IMPORT_OBJFILE){
+        [_importBtn setHidden:NO];
         [self addBtnAction:nil];
+    }
+    else
+        [_importBtn setHidden:YES];
     _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
 }
 
@@ -108,6 +114,7 @@
             NSString* docDirPath = [srcDirPath objectAtIndex:0];
             NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row-1]];
             cell.assetNameLabel.text = filesList[indexPath.row-1];
+            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
             cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
         }
             return cell;
@@ -157,6 +164,20 @@
     else
         [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES];
 }
+
+- (IBAction)importBtnAction:(id)sender {
+    self.ipc= [[UIImagePickerController alloc] init];
+    self.ipc.delegate = self;
+    self.ipc.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    if(UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone)
+        [self presentViewController:_ipc animated:YES completion:nil];
+    else
+    {
+        popover=[[UIPopoverController alloc]initWithContentViewController:_ipc];
+        [popover presentPopoverFromRect:self.importBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+    }
+}
+
 
 - (IBAction)addBtnAction:(id)sender {
     if(indexPathOfOBJ == -1)
@@ -212,6 +233,30 @@
             [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES];
 
     }
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    
+    if(UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone) {
+        [picker dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [popover dismissPopoverAnimated:YES];
+    }
+    NSDate *now = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"hh:mm:ss";
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSString *date = [@"Texture_"stringByAppendingString:[dateFormatter stringFromDate:now]];
+    NSString *fileName = [date stringByAppendingString:@".png"];
+    UIImage* image=(UIImage*)[info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    NSData *pngData = UIImagePNGRepresentation(image);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:fileName]; //Add the file name
+    [pngData writeToFile:filePath atomically:YES]; //Write the file
+    _addBtn.tag = OBJ;
+    [self addBtnAction:nil];
 }
 
 
