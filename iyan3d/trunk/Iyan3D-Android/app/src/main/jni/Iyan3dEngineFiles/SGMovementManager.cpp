@@ -238,7 +238,7 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
         return false;
     
     Vector3 center;
-    if(moveScene->moveNodeId != NOT_EXISTS)
+    if(moveScene->moveNodeId != NOT_EXISTS && moveScene->moveNodeId == moveScene->selectedNodeId)
         center = moveScene->selectedNode->node->getAbsoluteTransformation().getTranslation();
     else
         return false;
@@ -281,7 +281,7 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
     
     SGNode* selectedNode;
     if(moveScene->moveNodeId != NOT_EXISTS && moveScene->selectedNodeId != NOT_EXISTS)
-        selectedNode = moveScene->nodes[moveScene->selectedNodeId];
+        selectedNode = moveScene->nodes[moveScene->moveNodeId];
     
     if(moveScene->moveNodeId != NOT_EXISTS) {
         selectedNode->setPosition(newPos , moveScene->currentFrame);
