@@ -747,11 +747,12 @@ BOOL missingAlertShown;
             cell.layer.borderWidth = 2.0f;
         }
     
-    if (_framesCollectionView.tag==FRAME_COUNT) {
-        cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
-    }
-    else if (_framesCollectionView.tag==FRAME_DURATION){
+    
+    if (_framesCollectionView.tag==FRAME_DURATION){
         cell.framesLabel.text = [NSString stringWithFormat:@"%.2fs", ((float)indexPath.row + 1) / 24];
+    }
+    else {
+        cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
     }
     
     cell.framesLabel.adjustsFontSizeToFitWidth = YES;
@@ -2535,7 +2536,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 [self presentViewControllerInCurrentView:renderingView];
             });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
-            
         } else {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
