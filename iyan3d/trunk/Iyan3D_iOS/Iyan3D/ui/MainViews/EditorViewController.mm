@@ -2386,7 +2386,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                     [self.moveLast setHidden:NO];
                     [self.moveFirst setHidden:NO];
                     [self.rigScreenLabel setHidden:NO];
-                    selectedNodeId = editorScene->selectedNodeId;
+                    selectedNodeId = editorScene->riggingNodeId = editorScene->selectedNodeId;
                     editorScene->enterOrExitAutoRigMode(true);
                     editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
                     editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));

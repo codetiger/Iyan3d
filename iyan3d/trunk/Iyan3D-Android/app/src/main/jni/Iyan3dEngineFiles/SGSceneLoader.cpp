@@ -401,10 +401,13 @@ bool SGSceneLoader::removeSelectedObjects()
 
 bool SGSceneLoader::removeTempNodeIfExists()
 {
-    if(!currentScene || !smgr || currentScene->nodes.size() < 3)
+    if(!currentScene || !smgr)
         return false;
     
-    for(int index = currentScene->nodes.size()-1; index > 0; index--)
+    if(currentScene->nodes.size() < 3)
+        return false;
+    
+    for(int index = (int)currentScene->nodes.size()-1; index > 0; index--)
     {
         if(currentScene->nodes[index]->isTempNode)
             removeObject(index);

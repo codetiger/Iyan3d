@@ -66,6 +66,7 @@ public:
     bool isMultipleSelection;
     bool isNodeSelected,isJointSelected,isControlSelected;
     int selectedJointId,selectedNodeId,selectedControlId,controlType;
+    int riggingNodeId;
     int moveNodeId;
     int totalFrames, cameraResolutionType;
     int currentFrame, previousFrame;

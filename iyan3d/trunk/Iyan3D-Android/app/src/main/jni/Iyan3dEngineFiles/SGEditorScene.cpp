@@ -114,12 +114,14 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
 {
     isRigMode = rigMode;
     if(rigMode){
+        riggingNodeId = selectedNodeId;
         rigMan = new SGAutoRigSceneManager(smgr,this);
         //setTransparencyForObjects();
         selectMan->unselectObject(selectedNodeId);
         clearSelections();
     }
     else{
+        riggingNodeId = NOT_EXISTS;
         delete rigMan;
         updater->resetMaterialTypes(false);
     }
@@ -143,7 +145,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     isMultipleSelection = false;
     isJointSelected = isNodeSelected = isControlSelected = false;
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
-    selectedNodeId = selectedJointId = NOT_EXISTS;
+    selectedNodeId = selectedJointId = riggingNodeId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
     jointSpheres.clear();
@@ -218,8 +220,7 @@ void SGEditorScene::renderAll()
         smgr->EndDisplay(); // draws all the rendering command
         
         moveMan->swipeToRotate();
-        if(!isRigMode)
-            setTransparencyForObjects();
+        setTransparencyForObjects();
     }
 }
 
@@ -230,7 +231,7 @@ void SGEditorScene::setTransparencyForObjects()
     
     if((nodes[nodes.size()-1]->isTempNode && !isPreviewMode) || isRigMode) {
         isPreviewMode = true;
-        int excludeNodeId = (isRigMode) ? selectedNodeId : (int)nodes.size()-1;
+        int excludeNodeId = (isRigMode) ? riggingNodeId : (int)nodes.size()-1;
         for(int index = 0; index < nodes.size(); index++) {
             if(index != excludeNodeId){
                 nodes[index]->props.transparency = 0.2;
