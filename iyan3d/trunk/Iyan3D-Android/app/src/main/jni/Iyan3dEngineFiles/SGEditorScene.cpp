@@ -184,9 +184,10 @@ void SGEditorScene::renderAll()
     
     if(displayPrepared) {
         rotationCircle->node->setVisible(false);
+        renHelper->drawGrid();
+
         smgr->Render();
         
-        renHelper->drawGrid();
         renHelper->drawCircle();
         renHelper->drawMoveAxisLine();
         renHelper->renderControls();

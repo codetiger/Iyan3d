@@ -107,8 +107,12 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             break;
         }
         case NODE_PARTICLES:{
-            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/60004.sgm",smgr->device);
+            Json::Value pData = parseParticlesJson(assetId);
+            string meshPath = constants::BundlePath + "/" + pData["Mesh"].asString();
+            printf(" \n Mesh name %s ", meshPath.c_str());
+            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
+            setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
             Texture *nodeTex = smgr->loadTexture("Particle Texture",constants::BundlePath + "/particleTexture.png",TEXTURE_RGBA8,TEXTURE_BYTE);
             node->setTexture(nodeTex, 1);
@@ -279,6 +283,33 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     return node;
 }
 
+Json::Value SGNode::parseParticlesJson(int assetId)
+{
+    Json::Value particlesData;
+    
+    string jsonFileName = to_string(assetId) + ".json";
+    ifstream jsonFile( constants::BundlePath + "/" + jsonFileName);
+    Logger::log(INFO, "Autorig joints data", "Bundlepath:"+constants::BundlePath);
+    Json::Reader reader;
+    if(!reader.parse(jsonFile, particlesData, false)){
+        Logger::log(ERROR, "Unable to parse jointsData.json", "AutoRigHelper");
+        return;
+    }
+    return particlesData;
+}
+
+void SGNode::setParticlesData(shared_ptr<Node> particleNode, Json::Value pData)
+{
+    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(particleNode);
+    Vector4 sColor = Vector4(pData["sColorX"].asDouble(), pData["sColorY"].asDouble(), pData["sColorZ"].asDouble(), 1.0);
+    Vector4 mColor = Vector4(pData["mColorX"].asDouble(), pData["mColorY"].asDouble(), pData["mColorZ"].asDouble(), 1.0);
+    Vector4 eColor = Vector4(pData["eColorX"].asDouble(), pData["eColorY"].asDouble(), pData["eColorZ"].asDouble(), 1.0);
+
+    printf(" Counnt %d gravity %d sAngle %f sMag %f magRand %f emSpeed %d maxLife %d perce %d scale %f delta %f ",pData["Count"].asInt(), pData["hasGravity"].asBool(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
+    
+    pNode->setDataFromJson(pData["Count"].asInt(), sColor, mColor, eColor, pData["hasGravity"].asBool(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
+    
+}
 
 shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr)
 {
