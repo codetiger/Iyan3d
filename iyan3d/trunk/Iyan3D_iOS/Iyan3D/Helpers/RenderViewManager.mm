@@ -365,16 +365,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     longpressRecogniser.minimumPressDuration = 1.0f;
     longpressRecogniser.allowableMovement = 100.0f;
     
-    if (![self.delegate isMetalSupportedDevice]) {
-        [self.renderView addGestureRecognizer:panRecognizer];
-        [self.renderView addGestureRecognizer:tapRecognizer];
-        [self.renderView addGestureRecognizer:longpressRecogniser];
-    }
-    else {
-        [self.renderView addGestureRecognizer:panRecognizer];
-        [self.renderView addGestureRecognizer:tapRecognizer];
-        [self.renderView addGestureRecognizer:longpressRecogniser];
-    }
+    [self.renderView addGestureRecognizer:tapRecognizer];
+    [self.renderView addGestureRecognizer:panRecognizer];
+    [self.renderView addGestureRecognizer:longpressRecogniser];
 }
 
 - (void)tapGesture:(UITapGestureRecognizer*)rec
@@ -404,7 +397,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void)panGesture:(UIPanGestureRecognizer*)rec
 {
-    // TODO add functions for two finger pan
     _isPanned = true;
     vector<Vector2> p(2);
     CGPoint velocity = (![self.delegate isMetalSupportedDevice]) ? [rec velocityInView:self.renderView] : [rec velocityInView:self.renderView];

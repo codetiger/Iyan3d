@@ -23,7 +23,7 @@ SGSelectionManager::~SGSelectionManager()
 
 void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelectEnabled, bool isDisplayPrepared)
 {
-    if(!selectionScene || !smgr)
+    if(!selectionScene || !smgr || selectionScene->isPreviewMode)
         return;
 
    

@@ -189,7 +189,7 @@ void SGEditorScene::renderAll()
         rotationCircle->node->setVisible(false);
         renHelper->drawGrid();
         
-        if(selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA)
+        if((selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA) || isPlaying)
             ShaderManager::isRendering = true;
         else
             ShaderManager::isRendering = false;
@@ -217,7 +217,7 @@ void SGEditorScene::setTransparencyForObjects()
     
     if((nodes[nodes.size()-1]->isTempNode && !isPreviewMode) || isRigMode) {
         isPreviewMode = true;
-        int excludeNodeId = (isRigMode) ? selectedNodeId : nodes.size()-1;
+        int excludeNodeId = (isRigMode) ? selectedNodeId : (int)nodes.size()-1;
         for(int index = 0; index < nodes.size(); index++) {
             if(index != excludeNodeId){
                 nodes[index]->props.transparency = 0.2;

@@ -91,15 +91,14 @@ void ParticleManager::updateParticles(bool isSelected)
         
         if(!isSelected) {
             positions[i] = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
-            if(i > 0)
-                p->isLive = false;
+            p->isLive = false;
         }
 
         if(p->isLive) {
             if(isSelected)
                 positions[i] = Vector4(p->position.x, p->position.y, p->position.z, p->age);
         } else {
-            positions[i] = Vector4(0.0, 0.0, 0.0, p->age);
+            positions[i] = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
         }
     }
 }

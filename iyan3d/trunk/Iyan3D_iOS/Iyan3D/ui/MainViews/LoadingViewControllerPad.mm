@@ -17,7 +17,8 @@
 #import "DownloadTask.h"
 
 #define INITIAL_PROGRESS 0.01f
-#define PROGRESS_INCREMENT 0.05f
+#define PROGRESS_INCREMENT 0.01f
+#define PROGRESS_SLEEP 0.1f
 #define PROGRESS_COMPLETED 1.0f
 #define JSON_DATA_DOWNLOADED 0.60f
 #define JSON_DECRYPTED 0.70f
@@ -33,7 +34,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         progress = INITIAL_PROGRESS;
-        maxProgress = INITIAL_PROGRESS;
+        maxProgress = INITIAL_PROGRESS + 0.3;
         NSString* dbName = @"iyan3d-2-0.db";
         NSString* projectFolder = @"Projects";
         NSArray* dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -236,7 +237,7 @@
         [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
     }
     else {
-        [NSThread sleepForTimeInterval:(PROGRESS_INCREMENT+0.05)];
+        [NSThread sleepForTimeInterval:(PROGRESS_SLEEP)];
         [self performSelectorInBackground:@selector(progressTimerSelector) withObject:nil];
     }
     [self performSelectorOnMainThread:@selector(setProgressStatus) withObject:nil waitUntilDone:NO];
@@ -254,9 +255,9 @@
     
     maxProgress = JSON_DATA_DOWNLOADED;
     maxProgress = JSON_DECRYPTED;
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]){
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
         [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
-    }else if([[[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"] isEqualToString:@"4.0"]){
+    } else if([[[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"] isEqualToString:@"4.0"]) {
         [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
     }
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {

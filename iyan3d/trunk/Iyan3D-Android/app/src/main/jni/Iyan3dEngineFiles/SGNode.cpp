@@ -24,6 +24,8 @@ SGNode::SGNode(NODE_TYPE type){
     props.perVertexColor = props.faceNormals = false;
     props.nodeSpecificFloat = 0.0;
     textureName = "";
+    props.reflection = 0.0;
+    props.refraction = 0.0;
 }
 SGNode::~SGNode(){
     clearSGJoints();

@@ -474,6 +474,13 @@ BOOL missingAlertShown;
     if([[NSFileManager defaultManager] fileExistsAtPath:videoPath]) {
         NSURL *videoURL = [NSURL fileURLWithPath:videoPath];
         AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+        double duration = [asset duration].value;
+        int videoFrames = (int)(duration/24.0);
+        int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
+        videoFrames = videoFrames - extraFrames;
+        printf(" \n duration %f frames %d ", duration, videoFrames);
+        editorScene->totalFrames = (editorScene->totalFrames < videoFrames) ? videoFrames : editorScene->totalFrames;
+        [self.framesCollectionView reloadData];
         AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
         gen.appliesPreferredTrackTransform = YES;
         NSError *err = NULL;
@@ -543,7 +550,6 @@ BOOL missingAlertShown;
                  [self changeAllButtonBG];
                  [self setupEnableDisableControls];
             }
-            
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
             [self highlightObjectList];
@@ -561,6 +567,12 @@ BOOL missingAlertShown;
 }
 
 #pragma Touches Actions
+
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return YES;
+}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {

@@ -130,8 +130,12 @@ void MTLTexture::updateTexture(string fileName, int frame)
     
     NSError *err = NULL;
     double duration = [asset duration].value;
-    
-    CMTime midpoint = CMTimeMake(frame, 24);
+    int videoFrames = (int)(duration/24.0);
+    int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
+    videoFrames = videoFrames - extraFrames;
+    int x = frame/ videoFrames;
+    int difference = frame  - (x * videoFrames);
+    CMTime midpoint = CMTimeMake(difference, 24);
     
     CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
     
@@ -159,6 +163,9 @@ void MTLTexture::updateTexture(string fileName, int frame)
                mipmapLevel:0
                  withBytes:CGBitmapContextGetData(spriteContext)
                bytesPerRow:4 * width];
+    
+    CGContextRelease(spriteContext);
+    CGImageRelease(imageRef);
     
 }
 

@@ -79,12 +79,13 @@ uint8_t* getImageDataFromVideo(string fileName, int frame, int &width, int &heig
 
         NSError *err = NULL;
         double duration = [asset duration].value;
+        int videoFrames = (int)(duration/24.0);
+        int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
+        videoFrames = videoFrames - extraFrames;
+        int x = frame/ videoFrames;
+        int difference = frame  - (x * videoFrames);
         
-        if(frame > duration/24.0) {
-            
-        }
-        
-        CMTime midpoint = CMTimeMake(frame, 24);
+        CMTime midpoint = CMTimeMake(difference, 24);
 
         CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
         
@@ -108,7 +109,7 @@ uint8_t* getImageDataFromVideo(string fileName, int frame, int &width, int &heig
         CGContextRef spriteContext = CGBitmapContextCreate(textureData, target, target, 8, target * 4, CGImageGetColorSpace(imageRef), kCGImageAlphaPremultipliedLast);
         CGContextDrawImage(spriteContext, CGRectMake(0, 0, target, target), imageRef);
         CGContextRelease(spriteContext);
-
+        CGImageRelease(imageRef);
         return textureData;
     } else {
         NSLog(@"Failed to load Video %@ ", videoFilePath);
