@@ -359,6 +359,7 @@ enum  IK_JOINT_LIST {
 };
 enum assetType
 {
+    ALLMODELS = 0,
     CHARACTERS = 1,
     BACKGROUNDS,
     ACCESSORIES,

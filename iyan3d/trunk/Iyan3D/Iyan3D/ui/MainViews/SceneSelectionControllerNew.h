@@ -17,10 +17,8 @@
 #import "HelpViewController.h"
 #import "AppHelper.h"
 #import "AnimationEditorViewControllerPad.h"
-#import "PremiumUpgardeVCViewController.h"
 #import "GAI.h"
 #import "SceneSelectionFrameCell.h"
-
 
 
 @interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate>{
@@ -30,8 +28,7 @@
     int currentSelectedScene;
     CGPoint cell_center;
     UITapGestureRecognizer *tapGesture;
-    NSDictionary *deviceNames;   
-
+    NSDictionary *deviceNames;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;
@@ -45,7 +42,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *sceneTitle;
 @property (weak, nonatomic) IBOutlet UILabel *sceneDate;
 @property (weak, nonatomic) IBOutlet UIButton *scenePreviewCloseBtn;
-
 @property (weak, nonatomic) IBOutlet UICollectionView *scenesCollectionView;
 
 @end

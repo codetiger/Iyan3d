@@ -34,13 +34,14 @@
     [self.sceneView setHidden:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+#pragma Button Actions
 
 - (IBAction)addSceneButtonAction:(id)sender {
     [self addNewScene];
@@ -149,6 +150,8 @@
                               encoding:NSUTF8StringEncoding];
 }
 
+#pragma CollectionView Delegates
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return [scenesArray count]+1;
 }
@@ -177,13 +180,21 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     SceneSelectionFrameCell *cell = (SceneSelectionFrameCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    
+    
     cell_center = [self.scenesCollectionView convertPoint:cell.center fromView:cell];
     cell_center = [self.view convertPoint:cell_center fromView:self.scenesCollectionView];
     if(indexPath.row == [scenesArray count])
         [self addNewScene];
     else
         [self showSceneEnteredView:indexPath];
+    
+    
+    
 }
+
+#pragma Scene Update Delegates
 
 - (void) addNewScene
 {
@@ -199,28 +210,6 @@
         [self.scenesCollectionView reloadData];
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:[scenesArray count]-1 inSection:0];
         [self.scenesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-    }
-}
-
-- (void) showSceneEnteredView:(NSIndexPath*)sceneIndex{
-    
-    [self.sceneView setHidden:NO];
-    [self popUpZoomIn];
-    currentSelectedScene = sceneIndex.row;
-    if(sceneIndex.row < [scenesArray count]) {
-        SceneItem* scenes = scenesArray[sceneIndex.row];
-    
-        _sceneTitle.text = scenes.name;
-        _sceneDate.text = scenes.createdDate;
-    
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
-        BOOL fileExit = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
-        if(fileExit)
-            _scenePreview.image = [UIImage imageWithContentsOfFile:originalFilePath];
-        else
-            _scenePreview.image = [UIImage imageNamed:@"bgImageforall.png"];
     }
 }
 
@@ -251,6 +240,38 @@
         }
     }
 }
+
+- (IBAction)titleChangeAction:(id)sender {
+    [self updateSceneDB];
+}
+
+
+#pragma Scene Preview Delegates
+
+- (void) showSceneEnteredView:(NSIndexPath*)sceneIndex{
+    
+    [self.sceneView setHidden:NO];
+    [self popUpZoomIn];
+    currentSelectedScene = sceneIndex.row;
+    if(sceneIndex.row < [scenesArray count]) {
+        SceneItem* scenes = scenesArray[sceneIndex.row];
+    
+        _sceneTitle.text = scenes.name;
+        _sceneDate.text = scenes.createdDate;
+    
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* documentsDirectory = [paths objectAtIndex:0];
+        NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
+        BOOL fileExit = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
+        if(fileExit)
+            _scenePreview.image = [UIImage imageWithContentsOfFile:originalFilePath];
+        else
+            _scenePreview.image = [UIImage imageNamed:@"bgImageforall.png"];
+    }
+}
+
+#pragma Keyboard handler Delegate
+
 
 - (void) closeKeyBoard {
     [self.view removeGestureRecognizer:tapGesture];
@@ -297,9 +318,7 @@
     
 }
 
-- (IBAction)titleChangeAction:(id)sender {
-    [self updateSceneDB];
-}
+#pragma View Animation Delegate
 
 - (void)popUpZoomIn {
     [_sceneView setHidden:NO];
@@ -327,6 +346,8 @@
 - (void) loadScene {
     [self removeFromParentViewController];
 }
+
+#pragma Dealloc Delegate
 
 - (void)dealloc {
     self.fileBeginsWith = nil;

@@ -8,7 +8,7 @@
 
 #import "LoadingViewControllerPad.h"
 #import "SceneSelectionViewControllerPad.h"
-#import "SceneSelectionControllerNew.h"
+#import "EditorViewController.h"
 #import "AppDelegate.h"
 #import "Utility.h"
 #import "Constants.h"
@@ -291,9 +291,9 @@
 {
     
     if([Utility IsPadDevice]){
-        SceneSelectionControllerNew* sceneSelection = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil];
+        EditorViewController* editorView = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelection];
+        [appDelegate.window setRootViewController:editorView];
     }
     /*
     if([Utility IsPadDevice]) {

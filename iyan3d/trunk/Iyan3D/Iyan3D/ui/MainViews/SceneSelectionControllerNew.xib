@@ -81,7 +81,7 @@
                         <outlet property="delegate" destination="-1" id="zSo-pW-Mks"/>
                     </connections>
                 </collectionView>
-                <view contentMode="scaleToFill" id="cew-sL-hQZ">
+                <view hidden="YES" contentMode="scaleToFill" id="cew-sL-hQZ">
                     <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>

@@ -13,7 +13,11 @@
 #import "TextFrameCell.h"
 #import <CoreText/CoreText.h>
 
+@protocol TextSelectionDelegate
 
+-(void) dismissAndHideView;
+
+@end
 
 @interface TextSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource>{
     
@@ -31,6 +35,7 @@
     float red,green,blue,alpha;
     NSString *fontFileName;
     int bevelRadius;
+    
 
 
     
@@ -40,6 +45,6 @@
 @property (weak, nonatomic) IBOutlet UISlider *bevelSlider;
 @property (weak, nonatomic) IBOutlet UITextField *inputText;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *fontStoreTab;
-
+@property (weak, nonatomic) id <TextSelectionDelegate> textSelectionDelegate;
 
 @end

@@ -127,7 +127,6 @@
         [self.editobjectBtn setTitle:@"Done" forState:UIControlStateNormal];
         [self.objectList setEditing:YES animated:YES];
     }
-    
 }
 
 - (IBAction)addFrames:(id)sender
@@ -236,6 +235,9 @@
 
 - (IBAction)redoBtnAction:(id)sender
 {
+
+   
+
 }
 
 
@@ -251,7 +253,6 @@
             switch ( buttonIndex )
             {
                 case 0:
-                   
                     NSLog(@"Images Clicked");
                     break;
                 case 1:
@@ -274,7 +275,6 @@
                     transition.subtype = kCATransitionFromLeft;
                     [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
                     [self.leftView.layer addAnimation:transition forKey:nil];
-
                     NSLog(@"Apply Animation Clicked");
                     break;
                 }
@@ -286,13 +286,23 @@
             break;
         case IMPORT_POPUP:
         {
-            switch ( buttonIndex )
+            switch (buttonIndex)
             {
-                case 0:
+                case 0:{
+                    assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
+                    assetSelectionSlider.assetSelectionDelegate = self;
+                    [self.leftView addSubview:assetSelectionSlider.view];
+                    [self.leftView setHidden:NO];
+                    CATransition *transition = [CATransition animation];
+                    transition.duration = 0.5;
+                    transition.type = kCATransitionPush;
+                    transition.subtype = kCATransitionFromLeft;
+                    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+                    [self.leftView.layer addAnimation:transition forKey:nil];
                     NSLog(@"Models Clicked");
                     break;
+                }
                 case 1:{
-                    
                     self.imagePicker = [[UIImagePickerController alloc] init];
                     self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
                     [self.imagePicker setNavigationBarHidden:NO];
@@ -314,14 +324,23 @@
                     transition.subtype = kCATransitionFromLeft;
                     [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
                     [self.leftView.layer addAnimation:transition forKey:nil];
-                    
-                    
                     NSLog(@"Images Clicked");
                     break;
                 }
-                case 2:
+                case 2:{
+                    textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
+                    textSelectionSlider.textSelectionDelegate = self;
+                    [self.leftView addSubview:textSelectionSlider.view];
+                    [self.leftView setHidden:NO];
+                    CATransition *transition = [CATransition animation];
+                    transition.duration = 0.5;
+                    transition.type = kCATransitionPush;
+                    transition.subtype = kCATransitionFromLeft;
+                    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+                    [self.leftView.layer addAnimation:transition forKey:nil];
                     NSLog(@"Text Clicked");
                     break;
+                }
                 case 3:
                     NSLog(@"Light Clicked");
                     break;
@@ -382,7 +401,6 @@
         }
             break;
     }
-    
 }
 
 #pragma mark - Other Delegate Functions

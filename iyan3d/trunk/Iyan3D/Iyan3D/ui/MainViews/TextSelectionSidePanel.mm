@@ -10,13 +10,17 @@
 #import "Constants.h"
 #import "DownloadTask.h"
 #import "Utility.h"
-#import "SceneSelectionControllerNew.h";
 
 #define CANCEL_PREMIUM_NOT_PURCHASE 50
 #define CANCEL_BUTTON_INDEX 0
 #define OK_BUTTON_ACTION 1
 #define FONT_STORE 0
 #define MY_FONT 1
+
+@interface TextSelectionSidePanel ()
+
+@end
+
 
 @implementation TextSelectionSidePanel
 
@@ -258,15 +262,18 @@
 }
 
 - (IBAction)cancelBtnAction:(id)sender {
-    
+    NSLog(@"Cancel Button");
+    [_textSelectionDelegate dismissAndHideView];
+    [self deallocMem];
 }
 
 - (IBAction)addToSceneBtnAction:(id)sender {
     
 }
 
-- (void)dealloc
+- (void)deallocMem
 {
+    NSLog(@"Dealloc");
     fontListArray = nil;
     docDirPath = nil;
     fontArray = nil;
@@ -280,6 +287,7 @@
     assetDownloadQueue = nil;
     [downloadQueue cancelAllOperations];
     downloadQueue = nil;
+    _textSelectionDelegate = nil;
 }
 
 @end

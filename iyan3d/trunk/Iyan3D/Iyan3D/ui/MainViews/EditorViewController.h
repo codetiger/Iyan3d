@@ -9,13 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "ImportImageNew.h"
 #import "AnimationSelectionSlider.h"
+#import "TextSelectionSidePanel.h"
+#import "AssetSelectionSidePanel.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, ImageImportNewDelgate,SliderDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,UIAlertViewDelegate>{
     int totalFrames;
-     NSMutableArray *tableData;
+    NSMutableArray *tableData;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
+    TextSelectionSidePanel *textSelectionSlider;
+    AssetSelectionSidePanel *assetSelectionSlider;
 }
+
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *framesCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *addFrameBtn;
