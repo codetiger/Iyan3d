@@ -589,9 +589,12 @@ BOOL missingAlertShown;
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
             [self highlightObjectList];
-            if(editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
+            if(editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
                 [_addJointBtn setHidden:(editorScene->rigMan->isSkeletonJointSelected)?NO:YES];
             }
+            if(editorScene && editorScene->isRigMode)
+                [self autoRigMirrorBtnHandler];
+            
             [renderViewMan showPopOver:editorScene->selectedNodeId];
         }
         if(renderViewMan.makePanOrPinch)
@@ -890,6 +893,7 @@ BOOL missingAlertShown;
         }
     }
     [_addJointBtn setHidden:YES];
+    [self autoRigMirrorBtnHandler];
 }
 
 - (void)exportSgr:(NSString*)pathStr
@@ -912,7 +916,7 @@ BOOL missingAlertShown;
     }
     [_rigAddToSceneBtn setHidden:YES];
     [_addJointBtn setHidden:YES];
-    
+    [self autoRigMirrorBtnHandler];
 }
 
 - (IBAction)rigCancelAction:(id)sender
@@ -922,6 +926,7 @@ BOOL missingAlertShown;
     [self setupEnableDisableControls];
     [self autoRigViewButtonHandler:YES];
     selectedNodeId = -1;
+    [self autoRigMirrorBtnHandler];
 }
 
 - (IBAction)rigAddToSceneAction:(id)sender
@@ -939,6 +944,7 @@ BOOL missingAlertShown;
     [self autoRigViewButtonHandler:YES];
     [self updateAssetListInScenes];
     selectedNodeId = -1;
+    [self autoRigMirrorBtnHandler];
 }
 
 
@@ -1229,6 +1235,11 @@ BOOL missingAlertShown;
                                               animated:YES];
         [_popUpVc UpdateObjectList:assetsInScenes];
     }
+}
+
+- (IBAction)autorigMirrorSwitchAction:(id)sender {
+    if(editorScene && editorScene->isRigMode)
+        editorScene->switchMirrorState();
 }
 
 
@@ -2363,6 +2374,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                     editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
                     [self setupEnableDisableControls];
                     [_rigCancelBtn setHidden:NO];
+                    [self autoRigMirrorBtnHandler];
                 }
             }
             else
@@ -2956,6 +2968,7 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->rigMan->skeletonType = SKELETON_OWN;
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
+       [self autoRigMirrorBtnHandler];
     }
    else if (alertView.tag == DATA_LOSS_ALERT) {
         if(buttonIndex == CANCEL_BUTTON_INDEX) {
@@ -2964,6 +2977,7 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
         }
     }
+    [self autoRigMirrorBtnHandler];
 }
 
 
@@ -3112,6 +3126,35 @@ void downloadFile(NSString* url, NSString* fileName)
 }
 
 #pragma AutoRig Delegates
+- (void) autoRigMirrorBtnHandler
+{
+    CGRect mirrorSwitchRight = _autoRigMirrorSwitch.frame;
+    CGRect mirrorLable = _autorigMirrorLable.frame;
+    CGRect cancelBtnRight = _rigCancelBtn.frame;
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue] == 1){
+        mirrorSwitchRight.origin.x = self.view.frame.size.width - (_autoRigMirrorSwitch.frame.size.width*1.5);
+        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
+        mirrorLable.origin.x = self.view.frame.size.width - _autoRigMirrorSwitch.frame.size.width - (_autorigMirrorLable.frame.size.width*1.5);
+        _autorigMirrorLable.frame = mirrorLable;
+        cancelBtnRight.origin.x = self.view.frame.size.width - (_rigCancelBtn.frame.size.width*1.5);
+        _rigCancelBtn.frame = cancelBtnRight;
+    }
+    else{
+        mirrorSwitchRight.origin.x = (_autoRigMirrorSwitch.frame.size.width*1.5);
+        _autoRigMirrorSwitch.frame = mirrorSwitchRight;
+        mirrorLable.origin.x = _autorigMirrorLable.frame.size.width*0.5;
+        _autorigMirrorLable.frame = mirrorLable;
+        cancelBtnRight.origin.x = (_rigCancelBtn.frame.size.width*1.5);
+        _rigCancelBtn.frame = cancelBtnRight;
+    }
+    
+    bool status = true;
+    if(editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)){
+        status = (editorScene->rigMan->isNodeSelected) ? false : true;
+    }
+    [_autorigMirrorLable setHidden:status];
+    [_autoRigMirrorSwitch setHidden:status];
+}
 
 - (void) autoRigViewButtonHandler:(bool)disable
 {

@@ -10,6 +10,8 @@
                 <outlet property="addFrameBtn" destination="euE-kx-9ry" id="QPc-Cg-jPZ"/>
                 <outlet property="addJointBtn" destination="fwg-e6-BF2" id="xz2-3o-ea1"/>
                 <outlet property="animationBtn" destination="xCo-ML-HQa" id="6qx-QH-suT"/>
+                <outlet property="autoRigMirrorSwitch" destination="0Qv-Ol-emA" id="K5s-GM-b1H"/>
+                <outlet property="autorigMirrorLable" destination="AIz-Zl-6VG" id="F81-lU-IXO"/>
                 <outlet property="backButton" destination="Pow-v7-nF2" id="oNj-Fi-K3x"/>
                 <outlet property="center_progress" destination="gib-cQ-h37" id="aOD-QL-gOg"/>
                 <outlet property="editobjectBtn" destination="cF5-Om-aXQ" id="Hz2-TZ-6oP"/>
@@ -63,7 +65,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GJx-oe-voh">
-                            <rect key="frame" x="377" y="692" width="40" height="40"/>
+                            <rect key="frame" x="377" y="694" width="40" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <state key="normal" image="move-first.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -73,7 +75,7 @@
                             </connections>
                         </button>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hqf-aQ-aK5">
-                            <rect key="frame" x="607" y="692" width="40" height="40"/>
+                            <rect key="frame" x="607" y="694" width="40" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <state key="normal" image="move-last.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -95,7 +97,7 @@
                             </connections>
                         </button>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IMPORT OBJ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h2z-Ga-oHa">
-                            <rect key="frame" x="424" y="695" width="175" height="39"/>
+                            <rect key="frame" x="424" y="694" width="175" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.42352944609999998" alpha="1" colorSpace="deviceRGB"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
@@ -156,6 +158,20 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="0Qv-Ol-emA" userLabel="mirrorSwitch">
+                            <rect key="frame" x="72" y="89" width="51" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <connections>
+                                <action selector="autorigMirrorSwitchAction:" destination="-1" eventType="valueChanged" id="bCp-oG-z4T"/>
+                            </connections>
+                        </switch>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mirror" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AIz-Zl-6VG" userLabel="MirrorLable">
+                            <rect key="frame" x="12" y="94" width="55" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -164,7 +180,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hQW-uY-VHV">
-                    <rect key="frame" x="38" y="701" width="100" height="35"/>
+                    <rect key="frame" x="38" y="696" width="100" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="Cancel">
@@ -175,7 +191,7 @@
                     </connections>
                 </button>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LIw-J1-TwZ">
-                    <rect key="frame" x="725" y="696" width="100" height="35"/>
+                    <rect key="frame" x="722" y="696" width="110" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="Add To Scene">
@@ -216,14 +232,6 @@
                             <state key="normal" title="Button" backgroundImage="Info.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="IrJ-B4-4b1"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="awG-hy-li5">
-                            <rect key="frame" x="801" y="24" width="31" height="36"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="Next-Frame.png"/>
-                            <connections>
-                                <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="Tx6-ke-ZS4"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="euE-kx-9ry">
@@ -273,6 +281,14 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="awG-hy-li5">
+                            <rect key="frame" x="801" y="24" width="31" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Next-Frame.png"/>
+                            <connections>
+                                <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="Tx6-ke-ZS4"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.61568627450980395" green="0.12549019607843137" blue="0.83137254901960778" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

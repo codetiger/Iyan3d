@@ -656,7 +656,7 @@ bool SGEditorScene::switchMirrorState()
     action.actionSpecificFlags.push_back(getMirrorState());
     actionMan->addAction(action);
     setMirrorState((MIRROR_SWITCH_STATE)!getMirrorState());
-    if(isJointSelected)
+    if(isJointSelected || (isRigMode && (rigMan->isSGRJointSelected || rigMan->isSkeletonJointSelected)))
       selectMan->highlightJointSpheres();
     return getMirrorState();
 }

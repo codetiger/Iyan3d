@@ -131,6 +131,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *xValue;
 @property (weak, nonatomic) IBOutlet UILabel *yValue;
 @property (weak, nonatomic) IBOutlet UILabel *zValue;
+@property (weak, nonatomic) IBOutlet UISwitch *autoRigMirrorSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *autorigMirrorLable;
+
 
 - (IBAction)moveLastAction:(id)sender;
 - (IBAction)moveFirstAction:(id)sender;
@@ -153,6 +156,7 @@
 - (IBAction)lastFrameBtnAction:(id)sender;
 - (IBAction)firstFrameBtnAction:(id)sender;
 - (IBAction)myObjectsBtnAction:(id)sender;
+- (IBAction)autorigMirrorSwitchAction:(id)sender;
 
 @end
 

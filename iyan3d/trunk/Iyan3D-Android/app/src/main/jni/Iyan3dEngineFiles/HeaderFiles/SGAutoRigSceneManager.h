@@ -92,6 +92,7 @@ public:
     float getSelectedJointScale();
     Vector3 getSelectedNodeScale();
     void changeNodeScale(Vector3 scale);
+    bool switchMirrorState();
 
 
 

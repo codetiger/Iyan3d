@@ -9,6 +9,8 @@
             <connections>
                 <outlet property="addFrameBtn" destination="w5e-Hu-oAW" id="ULL-KG-xTQ"/>
                 <outlet property="animationBtn" destination="58f-dD-DRm" id="xhC-4N-gIj"/>
+                <outlet property="autoRigMirrorSwitch" destination="Re7-TE-mzC" id="5HJ-IB-H9e"/>
+                <outlet property="autorigMirrorLable" destination="OT2-U5-ngG" id="PsV-DQ-cfm"/>
                 <outlet property="backButton" destination="G8Y-1j-55x" id="zHQ-v5-7Qe"/>
                 <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
                 <outlet property="firstFrameBtn" destination="tmF-dh-ZfO" id="iV5-ye-qB3"/>
@@ -110,6 +112,20 @@
                     </subviews>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mirror" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OT2-U5-ngG" userLabel="MirrorLable">
+                    <rect key="frame" x="10" y="59" width="55" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="Re7-TE-mzC" userLabel="mirrorSwitch">
+                    <rect key="frame" x="70" y="54" width="51" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="autorigMirrorSwitchAction:" destination="-1" eventType="valueChanged" id="vgJ-j5-2Pc"/>
+                    </connections>
+                </switch>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Y :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="j6T-aw-glK">
                     <rect key="frame" x="546" y="56" width="20" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>

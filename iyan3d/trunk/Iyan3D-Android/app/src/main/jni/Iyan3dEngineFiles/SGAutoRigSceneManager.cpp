@@ -593,3 +593,11 @@ void SGAutoRigSceneManager::changeNodeScale(Vector3 scale)
         }
     }
 }
+
+bool SGAutoRigSceneManager::switchMirrorState()
+{
+    rigScene->actionMan->setMirrorState((MIRROR_SWITCH_STATE)!rigScene->actionMan->getMirrorState());
+    if(isSkeletonJointSelected)
+           rigScene->selectMan->highlightJointSpheres();    
+    return rigScene->actionMan->getMirrorState();
+}
