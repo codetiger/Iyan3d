@@ -178,9 +178,9 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
         }
     }
     
-    if(touchMove)
+    if(touchMove && selectionScene->selectedNodeId == nodeId)
         selectionScene->moveNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS;
-    else {
+    else if(!touchMove) {
         selectionScene->moveNodeId = NOT_EXISTS;
         if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected && isMultipleSelectionEnabled)
             return multipleSelections(nodeId);

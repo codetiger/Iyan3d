@@ -22,4 +22,6 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)downloadOutput:(id)sender {
+}
 @end

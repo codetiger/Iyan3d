@@ -291,7 +291,7 @@ vector<string> SGEditorScene::getUserFileNames()
         SGNode *sgNode = nodes[index];
         NODE_TYPE nType = sgNode->getType();
         
-        if(sgNode->assetId >= 0 && sgNode->textureName.find(to_string(sgNode->assetId)) ==  string::npos)
+        if((sgNode->assetId > 0 && sgNode->textureName.find(to_string(sgNode->assetId)) ==  string::npos) || (sgNode->assetId == 0 && sgNode->textureName.length() > 0))
             userFileNames.push_back(sgNode->textureName + ".png");
         
         if(sgNode->assetId >= 40000 && sgNode->assetId < 50000 && sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos) {
@@ -663,15 +663,17 @@ Vector3 SGEditorScene::getSelectedNodeScale()
 
 Vector3 SGEditorScene::getTransformValue()
 {
-    if(!hasNodeSelected() || !isControlSelected)
+    if((!hasNodeSelected() || !isControlSelected) && selectedNodeIds.size() == 0)
         return Vector3(-999.0 ,-999.0, -999.0);
     
+    shared_ptr<Node> curNode = (selectedNodeIds.size() > 0) ? getParentNode() : getSelectedNode()->node;
+    
     if(controlType == MOVE)
-        return getSelectedNode()->node->getAbsolutePosition();
+        return curNode->getAbsolutePosition();
     else if (controlType == ROTATE)
-        return getSelectedNode()->node->getRotationInDegrees();
+        return curNode->getRotationInDegrees();
     else if (controlType == SCALE)
-        return getSelectedNode()->node->getScale();
+        return curNode->getScale();
     
     return Vector3(-999.0 ,-999.0, -999.0);
 }

@@ -1075,7 +1075,7 @@ BOOL missingAlertShown;
         {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(305, 182);
+            self.popoverController.popoverContentSize = CGSizeMake(305, 495);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
             [_loggedInVc.view setClipsToBounds:YES];
@@ -1783,8 +1783,10 @@ BOOL missingAlertShown;
     NSMutableArray *fileNamesToZip = [[NSMutableArray alloc] init];
     vector<string> textureFileNames = editorScene->getUserFileNames();
     
-    for(int i = 0; i < textureFileNames.size(); i++)
+    for(int i = 0; i < textureFileNames.size(); i++) {
+        NSLog(@"\n User File Name: %s ", textureFileNames[i].c_str());
         [fileNamesToZip addObject:[NSString stringWithCString:textureFileNames[i].c_str() encoding:NSUTF8StringEncoding]];
+    }
     
     return fileNamesToZip;
 }
@@ -2556,6 +2558,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                              @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         renderingView.delegate = self;
         renderingView.projectName = currentScene.name;
+        renderingView.sgbPath = [self getSGBPath];
         if([Utility IsPadDevice] || ScreenHeight < 400)
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);

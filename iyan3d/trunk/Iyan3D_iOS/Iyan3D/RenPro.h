@@ -9,10 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "GAI.h"
 #import "RenderCell.h"
+#import "DownloadTask.h"
 #include "CacheSystem.h"
+
+
 @interface RenPro : UIViewController <UITableViewDelegate,UITableViewDataSource>{
     CacheSystem *cache;
     NSMutableArray *nameArray1;
+    
+    NSOperationQueue *downloadQueue;
 }
 
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;

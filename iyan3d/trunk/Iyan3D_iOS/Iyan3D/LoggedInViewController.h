@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "DownloadTask.h"
 #import "AppHelper.h"
 
 @protocol LoggedinViewControllerDelegat
@@ -17,8 +18,13 @@
 @class GIDSignIn;
 
 @interface LoggedInViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate, AppHelperDelegate>{
-    NSDictionary *renderData;
+    
+    CacheSystem* cache;
+    NSMutableArray *renderData;
+    NSMutableArray *progressingTasks;
+    NSMutableArray *completedTask;
     NSArray *renderSectionTitles;
+    NSOperationQueue* downloadQueue;
     
 }
 - (IBAction)add500Credits:(id)sender;

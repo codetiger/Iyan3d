@@ -51,8 +51,10 @@
 - (int) getNextAutoRigAssetId;
 -(void) createRenderTaskTables;
 -(NSMutableArray *) getRenderTask;
+- (RenderItem *)getRenderTaskByTaskId:(int) taskId;
+- (RenderItem *)getRenderTaskByDate:(NSString*) dateTime;
 - (void) updateRenderTask:(int)taskId WithProgress:(int)progress;
 -(void) deleteRenderTaskData: (int)taskId;
--(void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName;
+-(void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName date:(NSString*) dateStr;
 
 @end

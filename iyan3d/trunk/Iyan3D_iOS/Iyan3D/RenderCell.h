@@ -16,6 +16,8 @@
 
 @property (weak, nonatomic) IBOutlet UIProgressView *renProgress;
 
+@property (weak, nonatomic) IBOutlet UIButton *downloadBtn;
 
+- (IBAction)downloadOutput:(id)sender;
 
 @end

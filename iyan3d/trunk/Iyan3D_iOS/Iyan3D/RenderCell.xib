@@ -23,15 +23,23 @@
                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="E1h-yO-uIj">
                         <rect key="frame" x="8" y="54" width="304" height="3"/>
                     </progressView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Frames:50/100" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n0f-Ag-fwq">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n0f-Ag-fwq">
                         <rect key="frame" x="8" y="25" width="304" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="geb-oI-ghm">
+                        <rect key="frame" x="217" y="8" width="84" height="30"/>
+                        <state key="normal" title="Download"/>
+                        <connections>
+                            <action selector="downloadOutput:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OPW-gn-lfP"/>
+                        </connections>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="downloadBtn" destination="geb-oI-ghm" id="6tj-nU-lcJ"/>
                 <outlet property="frameLabel" destination="n0f-Ag-fwq" id="C32-np-WXl"/>
                 <outlet property="nameLabel" destination="uGG-By-KYP" id="VQe-DJ-Qdt"/>
                 <outlet property="renProgress" destination="E1h-yO-uIj" id="5go-ZM-Mwh"/>

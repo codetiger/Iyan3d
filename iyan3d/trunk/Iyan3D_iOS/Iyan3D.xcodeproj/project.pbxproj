@@ -63,8 +63,8 @@
 		0184EC7B1C3512BA006F0B57 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0184EC781C3512BA006F0B57 /* LoginViewController.m */; };
 		0184EC7C1C3512BA006F0B57 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC791C3512BA006F0B57 /* LoginViewController.xib */; };
 		0184EC7D1C3512BA006F0B57 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC791C3512BA006F0B57 /* LoginViewController.xib */; };
-		0184EC811C352DCC006F0B57 /* LoggedInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0184EC7F1C352DCC006F0B57 /* LoggedInViewController.m */; };
-		0184EC821C352DCC006F0B57 /* LoggedInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0184EC7F1C352DCC006F0B57 /* LoggedInViewController.m */; };
+		0184EC811C352DCC006F0B57 /* LoggedInViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0184EC7F1C352DCC006F0B57 /* LoggedInViewController.mm */; };
+		0184EC821C352DCC006F0B57 /* LoggedInViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0184EC7F1C352DCC006F0B57 /* LoggedInViewController.mm */; };
 		0184EC831C352DCC006F0B57 /* LoggedInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC801C352DCC006F0B57 /* LoggedInViewController.xib */; };
 		0184EC841C352DCC006F0B57 /* LoggedInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC801C352DCC006F0B57 /* LoggedInViewController.xib */; };
 		0184EC881C35406A006F0B57 /* RenderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0184EC861C35406A006F0B57 /* RenderTableViewCell.m */; };
@@ -1010,8 +1010,8 @@
 		25EFBEAD1BE25CA700DB300C /* RenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA31BE25CA700DB300C /* RenderCell.m */; };
 		25EFBEAE1BE25CA700DB300C /* RenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA41BE25CA700DB300C /* RenderCell.xib */; };
 		25EFBEAF1BE25CA700DB300C /* RenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA41BE25CA700DB300C /* RenderCell.xib */; };
-		25EFBEB01BE25CA700DB300C /* RenPro.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA61BE25CA700DB300C /* RenPro.m */; };
-		25EFBEB11BE25CA700DB300C /* RenPro.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA61BE25CA700DB300C /* RenPro.m */; };
+		25EFBEB01BE25CA700DB300C /* RenPro.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA61BE25CA700DB300C /* RenPro.mm */; };
+		25EFBEB11BE25CA700DB300C /* RenPro.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA61BE25CA700DB300C /* RenPro.mm */; };
 		25EFBEB21BE25CA700DB300C /* RenPro.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA71BE25CA700DB300C /* RenPro.xib */; };
 		25EFBEB31BE25CA700DB300C /* RenPro.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA71BE25CA700DB300C /* RenPro.xib */; };
 		25EFBEB41BE25CA700DB300C /* RETrimControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA91BE25CA700DB300C /* RETrimControl.m */; };
@@ -2412,7 +2412,7 @@
 		0184EC781C3512BA006F0B57 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = "ui/Popover Views/LoginViewController.m"; sourceTree = "<group>"; };
 		0184EC791C3512BA006F0B57 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoginViewController.xib; path = "ui/Popover Views/LoginViewController.xib"; sourceTree = "<group>"; };
 		0184EC7E1C352DCC006F0B57 /* LoggedInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggedInViewController.h; sourceTree = "<group>"; };
-		0184EC7F1C352DCC006F0B57 /* LoggedInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoggedInViewController.m; sourceTree = "<group>"; };
+		0184EC7F1C352DCC006F0B57 /* LoggedInViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LoggedInViewController.mm; sourceTree = "<group>"; };
 		0184EC801C352DCC006F0B57 /* LoggedInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoggedInViewController.xib; sourceTree = "<group>"; };
 		0184EC851C35406A006F0B57 /* RenderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTableViewCell.h; sourceTree = "<group>"; };
 		0184EC861C35406A006F0B57 /* RenderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderTableViewCell.m; sourceTree = "<group>"; };
@@ -3171,7 +3171,7 @@
 		25EFBEA31BE25CA700DB300C /* RenderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderCell.m; sourceTree = "<group>"; };
 		25EFBEA41BE25CA700DB300C /* RenderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RenderCell.xib; sourceTree = "<group>"; };
 		25EFBEA51BE25CA700DB300C /* RenPro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenPro.h; sourceTree = "<group>"; };
-		25EFBEA61BE25CA700DB300C /* RenPro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenPro.m; sourceTree = "<group>"; };
+		25EFBEA61BE25CA700DB300C /* RenPro.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenPro.mm; sourceTree = "<group>"; };
 		25EFBEA71BE25CA700DB300C /* RenPro.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RenPro.xib; sourceTree = "<group>"; };
 		25EFBEA81BE25CA700DB300C /* RETrimControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RETrimControl.h; sourceTree = "<group>"; };
 		25EFBEA91BE25CA700DB300C /* RETrimControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RETrimControl.m; sourceTree = "<group>"; };
@@ -5781,7 +5781,7 @@
 				25EFBEA31BE25CA700DB300C /* RenderCell.m */,
 				25EFBEA41BE25CA700DB300C /* RenderCell.xib */,
 				25EFBEA51BE25CA700DB300C /* RenPro.h */,
-				25EFBEA61BE25CA700DB300C /* RenPro.m */,
+				25EFBEA61BE25CA700DB300C /* RenPro.mm */,
 				C8AA46E91C227CED00C4AB53 /* SceneSelectionFrameCell.h */,
 				C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */,
 				C8AA46EB1C227CED00C4AB53 /* SceneSelectionFrameCell.xib */,
@@ -5877,7 +5877,7 @@
 				01F8731F1C3A772A009AA31E /* LoginViewControllerPhone.xib */,
 				0184EC7E1C352DCC006F0B57 /* LoggedInViewController.h */,
 				01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */,
-				0184EC7F1C352DCC006F0B57 /* LoggedInViewController.m */,
+				0184EC7F1C352DCC006F0B57 /* LoggedInViewController.mm */,
 				0184EC801C352DCC006F0B57 /* LoggedInViewController.xib */,
 				0184EC851C35406A006F0B57 /* RenderTableViewCell.h */,
 				0184EC861C35406A006F0B57 /* RenderTableViewCell.m */,
@@ -8424,7 +8424,7 @@
 				E21C3D121A0758B6006964E5 /* GTLYouTubeSearchResult.m in Sources */,
 				3D58CD681C3D43C2006371DE /* WEPopoverController.m in Sources */,
 				256F6E861BF624FB00154622 /* pngmem.c in Sources */,
-				25EFBEB01BE25CA700DB300C /* RenPro.m in Sources */,
+				25EFBEB01BE25CA700DB300C /* RenPro.mm in Sources */,
 				3D58CD6A1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
 				E21C3D061A0758B6006964E5 /* GTLYouTubePlaylistItemListResponse.m in Sources */,
 				E249766C196BE0190025D442 /* RenderingViewController.mm in Sources */,
@@ -8621,7 +8621,7 @@
 				256F6D7E1BF624FB00154622 /* Vector3.cpp in Sources */,
 				256F6F6A1BF6257C00154622 /* priorityq.c in Sources */,
 				3D71B0731C2930E30038C4BD /* AssetFrameCell.m in Sources */,
-				0184EC811C352DCC006F0B57 /* LoggedInViewController.m in Sources */,
+				0184EC811C352DCC006F0B57 /* LoggedInViewController.mm in Sources */,
 				3D58CD6E1C3D43C2006371DE /* WETouchableView.m in Sources */,
 				25895B781B4F056700E833F8 /* AnimationItem.m in Sources */,
 				01B4CF861C291EFD0091E19B /* AnimationSelectionSlider.mm in Sources */,
@@ -8775,7 +8775,7 @@
 				E20670F21B049AA6006DD2F7 /* GTLYouTubeVideoListResponse.m in Sources */,
 				E20670F31B049AA6006DD2F7 /* GTLYouTubeLiveBroadcastListResponse.m in Sources */,
 				E20670F51B049AA6006DD2F7 /* GTLUploadParameters.m in Sources */,
-				25EFBEB11BE25CA700DB300C /* RenPro.m in Sources */,
+				25EFBEB11BE25CA700DB300C /* RenPro.mm in Sources */,
 				E20670F61B049AA6006DD2F7 /* GTLYouTubeAccessPolicy.m in Sources */,
 				256F6E831BF624FB00154622 /* pngerror.c in Sources */,
 				256F6B9A1BF6246300154622 /* json_value.cpp in Sources */,
@@ -8998,7 +8998,7 @@
 				E20671AF1B049AA6006DD2F7 /* GTMReadMonitorInputStream.m in Sources */,
 				256F6EB71BF624FB00154622 /* Helper.cpp in Sources */,
 				256F6D791BF624FB00154622 /* Plane3D.cpp in Sources */,
-				0184EC821C352DCC006F0B57 /* LoggedInViewController.m in Sources */,
+				0184EC821C352DCC006F0B57 /* LoggedInViewController.mm in Sources */,
 				256F6F5F1BF6257C00154622 /* dict.c in Sources */,
 				E20671B21B049AA6006DD2F7 /* CacheSystem.m in Sources */,
 				256F6B8A1BF6246300154622 /* BoneLimitsHelper.cpp in Sources */,

@@ -262,7 +262,7 @@
     if(_nextButton.tag == DONE){
         [self cancelButtonAction:nil];
     }
-    else if([shaderArray[tempSelectedIndex] intValue] == SHADER_CLOUD){
+    else if([shaderArray[selectedIndex] intValue] == SHADER_CLOUD){
         [self.delegate saveScene];
         [self shaderPhotoAction];
     }
@@ -351,6 +351,7 @@
     NSString *cacheDirPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *objDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Objs"];
     NSString *rigDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Rigs"];
+    NSString *texDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Textures"];
     
     NSFileManager * fm = [NSFileManager defaultManager];
     
@@ -360,6 +361,7 @@
         NSString *filePath1 = [NSString stringWithFormat:@"%@/%@",cacheDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath2 = [NSString stringWithFormat:@"%@/%@",objDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath3 = [NSString stringWithFormat:@"%@/%@",rigDirPath,[filePaths objectAtIndex:i]];
+        NSString *filePath4 = [NSString stringWithFormat:@"%@/%@",texDirPath,[filePaths objectAtIndex:i]];
         
         if([fm fileExistsAtPath:filePath1]) {
             if(![filtFilePaths containsObject:filePath1])
@@ -370,6 +372,9 @@
         } else if([fm fileExistsAtPath:filePath3]){
             if(![filtFilePaths containsObject:filePath3])
                 [filtFilePaths addObject:filePath3];
+        } else if([fm fileExistsAtPath:filePath4]){
+            if(![filtFilePaths containsObject:filePath4])
+                [filtFilePaths addObject:filePath4];
         }
     }    
     return filtFilePaths;
@@ -388,15 +393,18 @@
         [self.makeVideoLoading startAnimating];
         NSMutableArray *fileNames = [self.delegate getFileNamesToAttach];
         CGPoint camResolution = [self.delegate getCameraResolution];
-        NSLog(@"\n width %f height %f ",camResolution.x , camResolution.y);
-        NSString* zipfile = [docDirectory stringByAppendingPathComponent:@"test2.zip"] ;
+        NSString* zipfile = [docDirectory stringByAppendingPathComponent:@"index.zip"] ;
         
         NSMutableArray *userFiles = [self getFileteredFilePathsFrom:fileNames];
         ZipArchive* zip = [[ZipArchive alloc] init];
         BOOL ret = [zip CreateZipFile2:zipfile];
         
+        if([[NSFileManager defaultManager] fileExistsAtPath:self.sgbPath]) {
+            ret = [zip addFileToZip:self.sgbPath newname:@"index.sgb"];
+        }
         
         for(int i = 0; i < [userFiles count]; i++) {
+            NSLog(@"\n User File: %@", [userFiles objectAtIndex:i]);
             ret = [zip addFileToZip:[userFiles objectAtIndex:i] newname:[[userFiles objectAtIndex:i] lastPathComponent]];
         }
         
@@ -408,12 +416,16 @@
         
         
         NSString *userId= @"sankarsmackall";
-        NSString *totFrames = [NSString stringWithFormat:@"%d",((int)_trimControl.rightValue-(int)_trimControl.leftValue)+1];
+        int startFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.leftValue + 1);
+        int endFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.rightValue);
+        printf("\n Frame %d %d " , startFrame , endFrame);
+        NSString *sFrame = [NSString stringWithFormat:@"%d",startFrame];
+        NSString *eFrame = [NSString stringWithFormat:@"%d",endFrame];
+        
         NSString *resolutionWidth = [NSString stringWithFormat:@"%f",camResolution.x];
         NSString *resolutionHeight = [NSString stringWithFormat:@"%f",camResolution.y];
         
-        NSLog(@"Document Directory %@",docDirectory);
-        NSString *fileUrl= [docDirectory stringByAppendingString:@"/test2.zip"];
+        NSString *fileUrl= [docDirectory stringByAppendingString:@"/index.zip"];
         NSLog(@"File Url: %@",fileUrl);
         NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/rendertask.php"];
         NSString *postPath = @"https://www.iyan3dapp.com/appapi/rendertask.php";
@@ -431,7 +443,8 @@
                 
                 [formData appendPartWithFileData:dataZip  name:@"renderFile" fileName:[NSString stringWithFormat:@"test.zip"] mimeType:@"image/png"];
                 [formData appendPartWithFormData:[userId dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
-                [formData appendPartWithFormData:[totFrames dataUsingEncoding:NSUTF8StringEncoding] name:@"totalFrames"];
+                [formData appendPartWithFormData:[sFrame dataUsingEncoding:NSUTF8StringEncoding] name:@"startFrame"];
+                [formData appendPartWithFormData:[eFrame dataUsingEncoding:NSUTF8StringEncoding] name:@"endFrame"];
                 [formData appendPartWithFormData:[resolutionWidth dataUsingEncoding:NSUTF8StringEncoding] name:@"width"];
                 [formData appendPartWithFormData:[resolutionHeight dataUsingEncoding:NSUTF8StringEncoding] name:@"height"];
             }];
@@ -445,15 +458,15 @@
                 NSLog(@"publish Id %d",publishId);
                 
                 NSError *error = nil;
-                float estimatedTime=15.40;
                 for (NSString *sqliteFile in sgfdFiles)
                 {
                     [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:sqliteFile] error:&error];
                 }
-                [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:@"test.zip"] error:&error];
+                [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:@"index.zip"] error:&error];
                 
                 [self.makeVideoLoading setHidden:YES];
-                [cache addRenderTaskData:publishId estTime:estimatedTime proName:self.projectName];
+                NSString* dateStr = [NSString stringWithFormat:@"%@" ,[NSDate date]];
+                [cache addRenderTaskData:publishId estTime:renderingStartFrame+1 proName:self.projectName date:dateStr];
                 
             }
              
@@ -607,7 +620,7 @@
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 2;
+    return [shaderArray count];
 }
 
 - (ShaderCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -657,11 +670,16 @@
         [self.renderingTypes reloadData];
     }
     else if ([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
-        tempSelectedIndex = (int)indexPath.row;
+//        tempSelectedIndex = (int)indexPath.row;
+//        NSLog(@" Selcted index: %d",(int)indexPath.row);
+//        [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
+//        [self showUpgradeView:(int)indexPath.row];
+        shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
-        [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
-        [self showUpgradeView:(int)indexPath.row];
-        
+        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+        selectedIndex = (int)indexPath.row;
+        [self.renderingTypes reloadData];
+
     }
 }
 -(void)showUpgradeView:(int)selectedRowIndex

@@ -46,23 +46,29 @@
         renderItem = [renArray objectAtIndex:i];
         [self getRenderTaskProgress:renderItem.taskId];
     }
+    
+    downloadQueue = [[NSOperationQueue alloc] init];
 }
+
 
 - (void) updateUIForRenderTasks
 {
+    [nameArray removeAllObjects];
+    [frameArray removeAllObjects];
+    [progressArray removeAllObjects];
+    
     if(renArray.count>0){
-        NSLog(@"Array Contains Some data");
         for (int i = 0; i <[renArray count]; i++){
             renderItem = [renArray objectAtIndex:i];
             NSLog(@"Valuse %d",renderItem.taskId);
             NSString *renderTaskName = [NSString stringWithFormat:@"%@",renderItem.taskName];
-            NSLog(@" new Value: %@",renderTaskName );
+            NSLog(@" new Value: %@",renderTaskName);
             [nameArray addObject:renderTaskName];
             NSString *renderTaskId = [NSString stringWithFormat:@"Progress: %d",renderItem.taskProgress];
-            NSLog(@" new Value: %@",renderTaskId );
+            NSLog(@" new Value: %@",renderTaskId);
             [frameArray addObject:renderTaskId];
             [progressArray addObject:[NSNumber numberWithInt:renderItem.taskProgress]];
-            NSLog(@" Namearray Value: %@",nameArray[i] );
+            NSLog(@" Namearray Value: %@",nameArray[i]);
         }
     }
     [self.rennderTasksTable reloadData];
@@ -155,7 +161,18 @@
         
         cell.frameLabel.text = [frameArray objectAtIndex:indexPath.row];
         
-        [cell.renProgress setProgress:[[progressArray objectAtIndex:indexPath.row] intValue]];
+        int progressValue = [[progressArray objectAtIndex:indexPath.row] intValue];
+        [cell.renProgress setProgress:progressValue];
+        
+        if(progressValue < 100)
+            [cell.downloadBtn setHidden:YES];
+        else
+            [cell.downloadBtn setHidden:NO];
+        
+        RenderItem* r = [renArray objectAtIndex:indexPath.row];
+        
+        [cell.downloadBtn setTag:r.taskId];
+        [cell.downloadBtn addTarget:self action:@selector(downloadOutputVideo:) forControlEvents:UIControlEventTouchUpInside];
         
     }
     
@@ -172,6 +189,55 @@
                                   initWithTitle:[NSString stringWithFormat:@"%@ Selected", [nameArray objectAtIndex:indexPath.row]] message:[NSString stringWithFormat:@"Frames value %@",[frameArray objectAtIndex:indexPath.row]] delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles:nil];
     [selectedAlert show];
     
+}
+
+- (void) downloadOutputVideo:(id)sender
+{
+    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [docPaths objectAtIndex:0];
+
+    int taskId = (int)((UIButton*)sender).tag;
+    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/renderFiles/%d/%d.mp4",taskId, taskId];
+    NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.mp4", documentsDirectory, taskId];
+    
+    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(donwloadCompleted:) returnObject:[NSNumber numberWithInt:taskId] outputFilePath:outputFilePath andURL:url];
+    task.taskType = DOWNLOAD_AND_WRITE;
+    task.queuePriority = NSOperationQueuePriorityHigh;
+    [downloadQueue addOperation:task];
+
+}
+
+- (void) downloadImage:(int)taskId
+{
+    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [docPaths objectAtIndex:0];
+    
+    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/renderFiles/%d/%d.png",taskId, taskId];
+    NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.png", documentsDirectory, taskId];
+    
+    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(donwloadCompleted:) returnObject:[NSNumber numberWithInt:taskId] outputFilePath:outputFilePath andURL:url];
+    task.taskType = DOWNLOAD_AND_WRITE;
+    task.queuePriority = NSOperationQueuePriorityHigh;
+    [downloadQueue addOperation:task];
+    
+}
+
+    
+- (void) donwloadCompleted:(id)object
+{
+    DownloadTask* t = (DownloadTask*)object;
+    NSString* extension = [t.outputPath pathExtension];
+    int taskId = [t.returnObj intValue];
+    if ([extension isEqualToString:@"png"]) {
+        if([[NSFileManager defaultManager] fileExistsAtPath:t.outputPath]) {
+            UIImage *img = [UIImage imageWithContentsOfFile:t.outputPath];
+            UIImageWriteToSavedPhotosAlbum(img, self, nil,nil);
+        }
+    } else if ([extension isEqualToString:@"mp4"]) {
+        if(![[NSFileManager defaultManager] fileExistsAtPath:t.outputPath])
+            [self downloadImage:taskId];
+        UISaveVideoAtPathToSavedPhotosAlbum(t.outputPath, self,  nil, nil);
+    }
 }
 
 -(void) dealloc

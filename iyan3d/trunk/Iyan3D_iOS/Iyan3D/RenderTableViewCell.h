@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface RenderTableViewCell : UITableViewCell
-
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIButton *downloadBtn;
 @property (weak, nonatomic) IBOutlet UILabel *renderProgressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *renderlabel;
 @end

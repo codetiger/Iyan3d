@@ -228,8 +228,6 @@ void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float
     } else if (moveScene->moveNodeId != NOT_EXISTS && moveScene->controlType == MOVE) {
         moveObjectInPlane(curTouchPos, prevTouchPoints[0], true);
     }
-    
-    return;
 }
 
 bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoint, bool isSGJoint)

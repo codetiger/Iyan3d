@@ -273,7 +273,6 @@ void SGActionManager::storeActionKeysForMulti(bool finished)
                     actionScene->updater->updateLightProperties(actionScene->currentFrame);
             }
         }
-        actionScene->updater->reloadKeyFrameMap();
         if(finished)
             changeKeysAction.frameId = actionScene->currentFrame;
         addAction(changeKeysAction);

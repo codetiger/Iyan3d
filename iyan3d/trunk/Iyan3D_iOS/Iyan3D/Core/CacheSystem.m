@@ -99,16 +99,17 @@ static const NSString* FEATURED_INDEX = @"featuredindex";
 
 static const NSString* OBJ_IMPORTER_IAP = @"column1";
 
-static const NSString* RENDER_TASK_TABLE = @"render_task";
+static const NSString* RENDER_TASK_TABLE = @"render_task_version2";
 static const NSString* RENDER_TASK_PROJECT_NAME = @"project_name";
 static const NSString* RENDER_TASK_ID = @"task_id";
 static const NSString* RENDER_TASK_STATUS = @"task_status";
-static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
+static const NSString* RENDER_TASK_FRAMES = @"task_frames";
+static const NSString* RENDER_TASK_DATE = @"task_date";
 
 -(void) createRenderTaskTables{
     @synchronized (dbLock) {
         char *errMsg;
-        NSString* createRenderTaskTables = [NSString stringWithFormat:@"CREATE TABLE %@ (%@ TEXT, %@ INTEGER, %@ INTEGER, %@ INTEGER)", RENDER_TASK_TABLE,RENDER_TASK_PROJECT_NAME,RENDER_TASK_ID,RENDER_TASK_STATUS,RENDER_TASK_ESTIMATED_TIME];
+        NSString* createRenderTaskTables = [NSString stringWithFormat:@"CREATE TABLE %@ (%@ TEXT, %@ INTEGER, %@ INTEGER, %@ INTEGER, %@ TEXT)", RENDER_TASK_TABLE,RENDER_TASK_PROJECT_NAME,RENDER_TASK_ID,RENDER_TASK_STATUS,RENDER_TASK_FRAMES, RENDER_TASK_DATE];
         if(sqlite3_exec(_cacheSystem, [createRenderTaskTables UTF8String], NULL, NULL, &errMsg) != SQLITE_OK){
             NSLog(@" Error creating Render task table %s " , errMsg);
         }
@@ -117,11 +118,11 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
     }
 }
 
--(void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString *)projectName {
+-(void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString *)projectName date:(NSString*) dateStr {
     @synchronized (dbLock){
         sqlite3_stmt    *statement;
         int taskStatus=0;
-        NSString *querySQL = [NSString stringWithFormat:@"INSERT INTO %@ (%@ ,%@, %@, %@) VALUES (\"%@\",\"%d\", \"%d\", \"%f\")", RENDER_TASK_TABLE,RENDER_TASK_PROJECT_NAME, RENDER_TASK_ID, RENDER_TASK_STATUS, RENDER_TASK_ESTIMATED_TIME,projectName, taskId,taskStatus ,estimatedTime];
+        NSString *querySQL = [NSString stringWithFormat:@"INSERT INTO %@ (%@ ,%@, %@, %@, %@) VALUES (\"%@\",\"%d\", \"%d\", \"%f\", \"%@\")", RENDER_TASK_TABLE,RENDER_TASK_PROJECT_NAME, RENDER_TASK_ID, RENDER_TASK_STATUS, RENDER_TASK_FRAMES, RENDER_TASK_DATE, projectName, taskId,taskStatus ,estimatedTime, dateStr];
         NSLog(@"Successfully Inserted: Task id:%d Estimated time :%f , Project Name: %@",taskId,estimatedTime,projectName);
         sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
         if (sqlite3_step(statement) != SQLITE_DONE)
@@ -148,17 +149,17 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
     @synchronized (dbLock){
         NSMutableArray *array1=[[NSMutableArray alloc] init];
         
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@",RENDER_TASK_TABLE];
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY datetime(%@) DESC",RENDER_TASK_TABLE, RENDER_TASK_DATE];
         sqlite3_stmt *statement;
         if (sqlite3_prepare_v2(_cacheSystem, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
             NSLog(@"Success");
             while( sqlite3_step(statement) == SQLITE_ROW) {
-                NSLog(@"Database Values: %s",sqlite3_column_text(statement, 0));
                 RenderItem* a = [[RenderItem alloc] init];
-                a.taskName=[NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
-                a.taskId=sqlite3_column_int(statement, 1);
-                a.taskProgress=sqlite3_column_int(statement, 2);
-                a.taskTime=sqlite3_column_int(statement, 3);
+                a.taskName = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
+                a.taskId = sqlite3_column_int(statement, 1);
+                a.taskProgress = sqlite3_column_int(statement, 2);
+                a.taskFrames = sqlite3_column_int(statement, 3);
+                a.dateAdded = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
                 [array1 addObject:a];
                 NSLog(@"project name: %@",a.taskName);
             }
@@ -168,6 +169,50 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
         }
         sqlite3_finalize(statement);
         return array1;
+    }
+}
+
+- (RenderItem *)getRenderTaskByTaskId:(int) taskId {
+    @synchronized (dbLock){
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = %d",RENDER_TASK_TABLE, RENDER_TASK_ID, taskId];
+        sqlite3_stmt *statement;
+        if (sqlite3_prepare_v2(_cacheSystem, [query UTF8String], -1, &statement, NULL) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
+                RenderItem* a = [[RenderItem alloc] init];
+                a.taskName = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
+                a.taskId = sqlite3_column_int(statement, 1);
+                a.taskProgress = sqlite3_column_int(statement, 2);
+                a.taskFrames = sqlite3_column_int(statement, 3);
+                a.dateAdded = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
+                NSLog(@"project name: %@",a.taskName);
+            sqlite3_finalize(statement);
+            return a;
+        }else{
+            NSLog(@"Error");
+        }
+        sqlite3_finalize(statement);
+        return nil;
+    }
+}
+
+- (RenderItem *)getRenderTaskByDate:(NSString*) dateTime {
+    @synchronized (dbLock){
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = %@",RENDER_TASK_TABLE, RENDER_TASK_DATE, dateTime];
+        sqlite3_stmt *statement;
+        if (sqlite3_prepare_v2(_cacheSystem, [query UTF8String], -1, &statement, NULL) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
+            RenderItem* a = [[RenderItem alloc] init];
+            a.taskName = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
+            a.taskId = sqlite3_column_int(statement, 1);
+            a.taskProgress = sqlite3_column_int(statement, 2);
+            a.taskFrames = sqlite3_column_int(statement, 3);
+            a.dateAdded = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
+            NSLog(@"project name: %@",a.taskName);
+            sqlite3_finalize(statement);
+            return a;
+        }else{
+            NSLog(@"Error");
+        }
+        sqlite3_finalize(statement);
+        return nil;
     }
 }
 

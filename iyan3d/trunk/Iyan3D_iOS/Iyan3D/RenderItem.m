@@ -10,8 +10,11 @@
 
 @implementation RenderItem
 
+@synthesize dateAdded = _dateAdded;
+
 -(void) dealloc{
-    
+    _dateAdded = nil;
+    _taskName = nil;
 }
 
 
