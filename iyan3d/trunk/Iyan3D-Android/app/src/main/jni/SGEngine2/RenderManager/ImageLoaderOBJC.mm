@@ -89,8 +89,8 @@ uint8_t* getImageDataFromVideo(string fileName, int frame, int &width, int &heig
 
         CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
         
-        width = CGImageGetWidth(imageRef);
-        height = CGImageGetHeight(imageRef);
+        width = (int)CGImageGetWidth(imageRef);
+        height = (int)CGImageGetHeight(imageRef);
 
         float bigSide = (width >= height) ? width : height;
         float target = 0;
@@ -111,6 +111,8 @@ uint8_t* getImageDataFromVideo(string fileName, int frame, int &width, int &heig
         CGContextRelease(spriteContext);
         CGImageRelease(imageRef);
         return textureData;
+        asset = nil;
+        gen = nil;
     } else {
         NSLog(@"Failed to load Video %@ ", videoFilePath);
         return NULL;

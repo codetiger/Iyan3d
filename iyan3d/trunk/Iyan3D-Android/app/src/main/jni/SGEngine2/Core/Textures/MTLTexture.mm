@@ -77,8 +77,8 @@ bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
     
     CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
     
-    width = CGImageGetWidth(imageRef);
-    height = CGImageGetHeight(imageRef);
+    width = (int)CGImageGetWidth(imageRef);
+    height = (int)CGImageGetHeight(imageRef);
     
     printf("\n width %d ", width);
 
@@ -107,7 +107,11 @@ bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
                mipmapLevel:0
                  withBytes:CGBitmapContextGetData(spriteContext)
                bytesPerRow:4 * width];
-    
+    CGImageRelease(imageRef);
+    CGContextRelease(spriteContext);
+    delete textureData;
+    asset = nil;
+    gen = nil;
     return YES;
 }
 
@@ -139,8 +143,8 @@ void MTLTexture::updateTexture(string fileName, int frame)
     
     CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
     
-    width = CGImageGetWidth(imageRef);
-    height = CGImageGetHeight(imageRef);
+    width = (int)CGImageGetWidth(imageRef);
+    height = (int)CGImageGetHeight(imageRef);
     
     float bigSide = (width >= height) ? width : height;
     float target = 0;
@@ -166,7 +170,9 @@ void MTLTexture::updateTexture(string fileName, int frame)
     
     CGContextRelease(spriteContext);
     CGImageRelease(imageRef);
-    
+    delete textureData;
+    asset = nil;
+    gen = nil;    
 }
 
 int MTLTexture::getBytesPerRow(int width,TEXTURE_DATA_FORMAT format){
