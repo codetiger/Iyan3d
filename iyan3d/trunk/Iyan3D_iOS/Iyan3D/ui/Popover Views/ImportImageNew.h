@@ -11,7 +11,7 @@
 @protocol ImageImportNewDelgate
 -(void)pickedImageWithInfo:(NSDictionary*)info;
 -(void)loadingViewStatus:(BOOL)status;
--(void) dismissAndHideView;
+- (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 @end
 
 @interface ImportImageNew : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate>{

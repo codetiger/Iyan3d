@@ -12,7 +12,7 @@
 
 @protocol AssetSelectionDelegate
 
--(void) dismissAndHideView;
+- (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 
 @end
 

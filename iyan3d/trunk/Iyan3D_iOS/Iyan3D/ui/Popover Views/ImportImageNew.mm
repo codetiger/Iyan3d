@@ -35,7 +35,7 @@
 
 - (IBAction)cancelBtnAction:(id)sender
 {
-    [self.delegate dismissAndHideView];
+    [self.delegate showOrHideLeftView:NO withView:nil];
     [self.view removeFromSuperview];
 }
 

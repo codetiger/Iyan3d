@@ -17,6 +17,32 @@
 #define INFO_POPUP 4
 #define VIEW_POPUP 5
 
+#define EXPORT_IMAGE 0
+#define EXPORT_VIDEO 1
+
+#define APPLY_ANIMATION 0
+#define SAVE_ANIMATION 1
+
+#define IMPORT_MODELS 0
+#define IMPORT_IMAGES 1
+#define IMPORT_TEXT 2
+#define IMPORT_LIGHT 3
+#define IMPORT_OBJFILE 4
+#define IMPORT_ADDBONE 5
+
+#define ABOUT 0
+#define HELP 1
+#define TUTORIAL 2
+#define SETTINGS 3
+#define CONTACT_US 4
+
+#define VIEW_FRONT 0
+#define VIEW_TOP 1
+#define VIEW_LEFT 2
+#define VIEW_BACK 3
+#define VIEW_RIGHT 4
+#define VIEW_BOTTOM 5
+
     
 - (void)viewDidLoad
 {
@@ -171,8 +197,7 @@
                                                              delegate:self
                                                     cancelButtonTitle:nil
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"Apply Animation", @"Save Animation", nil];
-    
+                                                    otherButtonTitles:@"Apply Animation", @"Save Animation", nil];    
     
     CGRect rect = [self.view convertRect:self.animationBtn.frame fromView:self.animationBtn.superview];
     [actionSheet setTag: ANIMATION_POPUP];
@@ -229,37 +254,31 @@
 - (IBAction)optionsBtnAction:(id)sender
 {
     NSLog(@"Options Clicked");
-
 }
 
 - (IBAction)moveBtnAction:(id)sender
 {
     NSLog(@"Move Button Clicked");
-
 }
 
 - (IBAction)rotateBtnAction:(id)sender
 {
     NSLog(@"Rotate Button Clicked");
-
 }
 
 - (IBAction)scaleBtnAction:(id)sender
 {
     NSLog(@"Scale Button Clicked");
-
 }
 
 - (IBAction)undoBtnAction:(id)sender
 {
     NSLog(@"UndoBtn Clicked");
-
 }
 
 - (IBAction)redoBtnAction:(id)sender
 {
     NSLog(@"RedoBtn Clicked");
-
 }
 
 
@@ -274,11 +293,11 @@
         {
             switch ( buttonIndex )
             {
-                case 0:
+                case EXPORT_IMAGE:
                    
                     NSLog(@"Images Clicked");
                     break;
-                case 1:
+                case EXPORT_VIDEO:
                     NSLog(@"Videos Clicked");
                     break;
             }
@@ -288,29 +307,13 @@
         {
             switch ( buttonIndex )
             {
-                case 0:{
+                case APPLY_ANIMATION:{
                         animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil];
                         animationsliderVC.delegate = self;
-                        [self.leftView addSubview:animationsliderVC.view];
-                        [self.leftView setHidden:NO];
-                        CATransition *transition = [CATransition animation];
-                        transition.duration = 0.5;
-                        transition.type = kCATransitionPush;
-                        transition.subtype = kCATransitionFromLeft;
-                        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        self.leftView.layer.borderColor = [UIColor clearColor].CGColor;
-                        [self.leftView.layer addAnimation:transition forKey:nil];
-                        CATransition* transition1 = [CATransition animation];
-                        transition1.duration = 0.5;
-                        transition1.type = kCATransitionPush;
-                        transition1.subtype = kCATransitionFromLeft;
-                        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-                    
-                        [self.rightView setHidden:YES];
+                        [self showOrHideLeftView:YES withView:animationsliderVC.view];
                     break;
                 }
-                case 1:
+                case SAVE_ANIMATION:
                     NSLog(@"Save Animation Clicked");
                     break;
             }
@@ -320,92 +323,39 @@
         {
             switch ( buttonIndex )
             {
-                case 0:{
+                case IMPORT_MODELS:{
                     assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
                     assetSelectionSlider.assetSelectionDelegate = self;
-                    [self.leftView addSubview:assetSelectionSlider.view];
-                    [self.leftView setHidden:NO];
-                    CATransition *transition = [CATransition animation];
-                    transition.duration = 0.5;
-                    transition.type = kCATransitionPush;
-                    transition.subtype = kCATransitionFromLeft;
-                    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                    [self.leftView.layer addAnimation:transition forKey:nil];
-                    CATransition* transition1 = [CATransition animation];
-                    transition1.duration = 0.5;
-                    transition1.type = kCATransitionPush;
-                    transition1.subtype = kCATransitionFromLeft;
-                    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-                    
-                    [self.rightView setHidden:YES];
-                    NSLog(@"Models Clicked");
+                    [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
                     break;
                 }
-                case 1:{
+                case IMPORT_IMAGES:{
                         self.imagePicker = [[UIImagePickerController alloc] init];
                         self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
                         [self.imagePicker setNavigationBarHidden:YES];
                         [self.imagePicker setToolbarHidden:YES];
-                        
                         importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil];
-                        
                         [self.leftView addSubview:importImageViewVC.view];
                         [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-                        
                         self.imagePicker.delegate=importImageViewVC;
                         importImageViewVC.delegate = self;
-                        [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-                        
-                        [self.leftView setHidden:NO];
-                        CATransition *transition = [CATransition animation];
-                        transition.duration = 0.5;
-                        transition.type = kCATransitionPush;
-                        transition.subtype = kCATransitionFromLeft;
-                        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        [self.leftView.layer addAnimation:transition forKey:nil];
-                    
-                        CATransition* transition1 = [CATransition animation];
-                        transition1.duration = 0.5;
-                        transition1.type = kCATransitionPush;
-                        transition1.subtype = kCATransitionFromLeft;
-                        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-                    
-                        [self.rightView setHidden:YES];
+                        [self showOrHideLeftView:YES withView:importImageViewVC.view];
                     break;
                 }
-                case 2:
+                case IMPORT_TEXT:
                         {
                         textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
                         textSelectionSlider.textSelectionDelegate = self;
-                        [self.leftView addSubview:textSelectionSlider.view];
-                        [self.leftView setHidden:NO];
-                        CATransition *transition = [CATransition animation];
-                        transition.duration = 0.5;
-                        transition.type = kCATransitionPush;
-                        transition.subtype = kCATransitionFromLeft;
-                        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        [self.leftView.layer addAnimation:transition forKey:nil];
-                            
-                        CATransition* transition1 = [CATransition animation];
-                        transition1.duration = 0.5;
-                        transition1.type = kCATransitionPush;
-                        transition1.subtype = kCATransitionFromLeft;
-                        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-                            
-                        [self.rightView setHidden:YES];
-                        NSLog(@"Text Clicked");
+                        [self showOrHideLeftView:YES withView:textSelectionSlider.view];
                         break;
                         }
-                case 3:
+                case IMPORT_LIGHT:
                     NSLog(@"Light Clicked");
                     break;
-                case 4:
+                case IMPORT_OBJFILE:
                     NSLog(@"OBJ File Clicked");
                     break;
-                case 5:
+                case IMPORT_ADDBONE:
                     NSLog(@"Add Bone Clicked");
                     break;
             }
@@ -415,19 +365,19 @@
         {
             switch ( buttonIndex )
             {
-                case 0:
+                case ABOUT:
                     NSLog(@"About Clicked");
                     break;
-                case 1:
+                case HELP:
                     NSLog(@"Help Clicked");
                     break;
-                case 2:
+                case TUTORIAL:
                     NSLog(@"Tutorials Clicked");
                     break;
-                case 3:
+                case SETTINGS:
                     NSLog(@"Settings Clicked");
                     break;
-                case 4:
+                case CONTACT_US:
                     NSLog(@"Contact Us Clicked");
                     break;
             }
@@ -437,22 +387,22 @@
         {
             switch ( buttonIndex )
             {
-                case 0:
+                case VIEW_FRONT:
                     NSLog(@"Front View Clicked");
                     break;
-                case 1:
+                case VIEW_TOP:
                     NSLog(@"Top View Clicked");
                     break;
-                case 2:
+                case VIEW_LEFT:
                     NSLog(@"Left View Clicked");
                     break;
-                case 3:
+                case VIEW_BACK:
                     NSLog(@"Back View Clicked");
                     break;
-                case 4:
+                case VIEW_RIGHT:
                     NSLog(@"Right View Clicked");
                     break;
-                case 5:
+                case VIEW_BOTTOM:
                     NSLog(@"Bottom View Clicked");
                     break;
             }
@@ -464,24 +414,30 @@
 
 #pragma mark - Other Delegate Functions
 
--(void) dismissAndHideView
+- (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd
 {
-        CATransition* transition = [CATransition animation];
-        transition.duration = 0.5;
-        transition.type = kCATransitionPush;
-        transition.subtype = kCATransitionFromRight;
-        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.leftView.layer addAnimation:transition forKey:kCATransition];
-        [self.leftView setHidden:YES];
-        CATransition* transition1 = [CATransition animation];
-        transition1.duration = 0.5;
-        transition1.type = kCATransitionPush;
-        transition1.subtype = kCATransitionFromRight;
-        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-
-        [self.rightView setHidden:NO];
+    if(showView)
+        [self.leftView addSubview:subViewToAdd];
+    
+    [self.leftView setHidden:(!showView)];
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.5;
+    transition.type = kCATransitionPush;
+    transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [self.leftView.layer addAnimation:transition forKey:nil];
+    
+    CATransition* transition1 = [CATransition animation];
+    transition1.duration = 0.5;
+    transition1.type = kCATransitionPush;
+    transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+    
+    [self.rightView setHidden:showView];
 }
+
+
 
 -(void)pickedImageWithInfo:(NSDictionary*)info;
 {

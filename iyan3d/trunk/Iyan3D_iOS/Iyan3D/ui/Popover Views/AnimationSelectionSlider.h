@@ -14,7 +14,7 @@
 #import "AnimationSelectionCollectionViewCell.h"
 
 @protocol SliderDelegate
--(void) dismissAndHideView;
+- (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 @end
 
 @interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>

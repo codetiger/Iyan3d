@@ -263,7 +263,7 @@
 
 - (IBAction)cancelBtnAction:(id)sender {
     NSLog(@"Cancel Button");
-    [_textSelectionDelegate dismissAndHideView];
+    [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
     [self.view removeFromSuperview];
     

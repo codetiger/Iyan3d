@@ -53,7 +53,7 @@
 #pragma Button Actions
 
 - (IBAction)cancelButtonAction:(id)sender {
-    [self.assetSelectionDelegate dismissAndHideView];
+    [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
     [self.view removeFromSuperview];
     
