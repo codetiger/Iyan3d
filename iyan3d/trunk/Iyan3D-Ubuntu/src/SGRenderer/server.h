@@ -3,6 +3,7 @@
 #define SERVER_H_
 
 #include "common.h"
+#include <cstring>
 
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
 	size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
@@ -33,6 +34,12 @@ bool downloadFile(const char* url, const char* filePath) {
 		return true;
 	}
 	return false;
+}
+
+char* url_encode(const char* data) {
+	curl_global_init(CURL_GLOBAL_ALL);
+	CURL *curl = curl_easy_init();
+	return curl_easy_escape(curl, data, strlen(data));
 }
 
 bool uploadFile(const char* url, const char* filePath) {

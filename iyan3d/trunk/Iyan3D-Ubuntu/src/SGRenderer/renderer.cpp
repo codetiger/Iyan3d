@@ -132,7 +132,8 @@ bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::str
 
 	string commonFilePath = "../" + filePath;
 	if(!file_exists(commonFilePath)) {
-		string url = "http://www.iyan3dapp.com/appapi/" + folder + "/" + serverPath;
+		string url = "http://www.iyan3dapp.com/appapi" + folder + "/" + serverPath;
+		printf("Fetching Url: %s\n", url.c_str());
 		downloadFile(url.c_str(), commonFilePath.c_str());
 	}
 	file_copy(commonFilePath, filePath);
@@ -145,14 +146,14 @@ bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::str
 
 bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType) {
 	if(nodeType == NODE_SGM) {
-		if(!checkAndDownloadFile(filePath + ".sgm", filePath + ".sgm", "mesh"))
+		if(!checkAndDownloadFile(filePath + ".sgm", filePath + ".sgm", "/mesh"))
 			return false;
-		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "meshtexture"))
+		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
 			return false;
 	} else if(nodeType == NODE_RIG) {
-		if(!checkAndDownloadFile(filePath + ".sgr", filePath + ".sgr", "mesh"))
+		if(!checkAndDownloadFile(filePath + ".sgr", filePath + ".sgr", "/mesh"))
 			return false;
-		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "meshtexture"))
+		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
 			return false;
 	} else if(nodeType == NODE_OBJ) {
 		if(!checkAndDownloadFile(filePath + ".obj", filePath + ".obj", ""))
@@ -160,7 +161,8 @@ bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType) {
 		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", ""))
 			return false;
 	} else if(nodeType == NODE_TEXT) {
-		if(!checkAndDownloadFile(filePath, filePath, "font"))
+		string uefilename(url_encode(filePath.c_str()));
+		if(!checkAndDownloadFile(filePath, "findfont.php?name=" + uefilename, ""))
 			return false;
 	}
 

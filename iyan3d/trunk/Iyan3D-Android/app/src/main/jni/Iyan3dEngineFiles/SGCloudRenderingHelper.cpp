@@ -36,7 +36,6 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
     FileHelper::writeFloat(&frameFilePtr, camRotation.y);
     FileHelper::writeFloat(&frameFilePtr, camRotation.z);
     
-    printf("rotation %f %f %f\n", camRotation.x, camRotation.y, camRotation.z);
     FileHelper::writeFloat(&frameFilePtr, (scene->renderCamera->getFOVInRadians() * RADTODEG));  // Camera FOV
 
     short nodesCount = (short)scene->nodes.size()-1;
@@ -85,6 +84,8 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             string textureFileName;
             if(string::npos != lastSlashPos)
                 textureFileName = (scene->nodes[nodeId]->node->getActiveTexture()->textureName).substr( lastSlashPos + 1);
+            else
+            	textureFileName = scene->nodes[nodeId]->node->getActiveTexture()->textureName;
             
             FileHelper::writeString(&frameFilePtr, textureFileName); // Texture File Name with extension
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.shininess);

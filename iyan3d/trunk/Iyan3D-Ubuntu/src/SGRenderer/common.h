@@ -213,7 +213,6 @@ bool file_copy (const std::string& source, const std::string& dest) {
 	return true;
 }
 
-
 #include "texture.h"
 #include "camera.h"
 #include "material.h"
