@@ -27,7 +27,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A5d-Gl-y9U">
-                        <rect key="frame" x="170" y="1" width="62" height="30"/>
+                        <rect key="frame" x="151" y="1" width="81" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="Download"/>
                     </button>

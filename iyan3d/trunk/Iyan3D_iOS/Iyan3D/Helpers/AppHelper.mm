@@ -455,7 +455,7 @@
                 [[NSFileManager defaultManager] removeItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] error:nil];
         }
 
-        if ([presentCache checkOBJImporterPurchase]) {
+//        if ([presentCache checkOBJImporterPurchase]) {
 
             if (![[NSFileManager defaultManager] fileExistsAtPath:fontDirectoryPath])
                 [[NSFileManager defaultManager] createDirectoryAtPath:fontDirectoryPath withIntermediateDirectories:YES attributes:Nil error:Nil];
@@ -473,7 +473,7 @@
                 else
                     [[NSFileManager defaultManager] removeItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] error:nil];
             }
-        }
+        
     }
 }
 

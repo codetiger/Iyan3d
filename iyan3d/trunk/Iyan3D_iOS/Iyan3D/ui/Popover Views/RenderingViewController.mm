@@ -152,7 +152,6 @@
             [self.view addSubview:_trimControl];
         }
         else if(iOSVersion >= 8.0 && SCREENWIDTH == 667){
-            
             _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(210,335, 240, 28)];
             _trimControl.length = renderingEndFrame; // 200 seconds
             _trimControl.delegate = self;
@@ -262,17 +261,13 @@
     if(_nextButton.tag == DONE){
         [self cancelButtonAction:nil];
     }
-    else if([shaderArray[selectedIndex] intValue] == SHADER_CLOUD){
-        [self.delegate saveScene];
-        [self shaderPhotoAction];
-    }
     else{
         if(renderingExportImage != RENDER_IMAGE) {
             renderingFrame = _trimControl.leftValue;
             [self.trimControl setHidden:YES];
         }
             NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-        if(resolutionType == TWO_HUNDRED_FOURTY_P && _watermarkSwitch.isOn){
+        if(resolutionType == TWO_HUNDRED_FOURTY_P && _watermarkSwitch.isOn &&    ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)){
             [self renderBeginFunction:0];
         }
          else if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
@@ -315,13 +310,30 @@
 
 - (void) verifyCreditsAndRender:(NSNumber*)userCredits
 {
-    int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
+    int valueForRender = 0;
+    
+    
+    if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
+        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
+    else
+        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 5 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 3 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 2 : 1;   
+    
+    
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-    int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
+    int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
+    int creditsForFrames = frames * valueForRender;
+    int credits = (creditsForFrames + waterMarkCredit)  * -1;
+    credits *= ([shaderArray[selectedIndex] intValue] == SHADER_CLOUD) ? 2 : 1;
+   
     
     if([userCredits intValue] >= abs(credits)) {
         [_creditLable setHidden:YES];
-        [self renderBeginFunction:credits];
+        if(([shaderArray[selectedIndex] intValue] == SHADER_CLOUD)){
+            [self.delegate saveScene];
+            [self shaderPhotoAction:credits];
+        }
+        else
+            [self renderBeginFunction:credits];
     }
     else{
         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -333,13 +345,21 @@
 
 - (void) updateCreditLable
 {
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && [[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"])
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && [[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
         [_creditLable setHidden:YES];
     else {
         [_creditLable setHidden:NO];
-        int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
+        int valueForRender = 0;
+        if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
+            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 4 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 3 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
+        else
+            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 5 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 3 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 2 : 1;
+
         int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-        int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
+        int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
+        int creditsForFrames = frames * valueForRender;
+        int credits = (creditsForFrames + waterMarkCredit)  * -1;
+        credits *= ([shaderArray[selectedIndex] intValue] == SHADER_CLOUD) ? 2 : 1;
         _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
     }
 }
@@ -381,7 +401,7 @@
 }
 
 
--(void) shaderPhotoAction{
+-(void) shaderPhotoAction:(int)credits{
     
     NSFileManager  *manager = [NSFileManager defaultManager];
     NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -488,7 +508,7 @@
                 [_youtubeButton setHidden:YES];
                 [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
                 _nextButton.tag = DONE;
-                
+                [self saveDeductedCredits:credits];
             }
              
                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -709,8 +729,17 @@
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
         selectedIndex = (int)indexPath.row;
         [self.renderingTypes reloadData];
-
     }
+    
+    if([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
+        [_watermarkSwitch setOn:NO animated:YES];
+        [_watermarkSwitch setEnabled:NO];
+    }
+    else{
+        [_watermarkSwitch setEnabled:YES];
+        [_watermarkSwitch setOn:YES animated:YES];
+    }
+    [self updateCreditLable];
 }
 -(void)showUpgradeView:(int)selectedRowIndex
 {

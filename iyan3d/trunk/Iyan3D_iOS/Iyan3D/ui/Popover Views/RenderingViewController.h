@@ -120,6 +120,6 @@
 - (IBAction)exportButtonAction:(id)sender;
 - (IBAction)youtubeButtonAction:(id)sender;
 - (IBAction)startButtonAction:(id)sender;
-- (void) shaderPhotoAction;
+- (void) shaderPhotoAction:(int)credits;
 
 @end

@@ -42,8 +42,6 @@
                 <outlet property="rotateBtnAutorig" destination="vTn-2H-x7a" id="rAl-7x-mDU"/>
                 <outlet property="scaleBtn" destination="iUY-rU-QIk" id="Woe-eg-cgU"/>
                 <outlet property="scaleBtnAutorig" destination="8L9-7X-gH3" id="uZw-co-wtP"/>
-                <outlet property="sceneMirrorLable" destination="jl8-44-P9I" id="f1r-K1-3m1"/>
-                <outlet property="sceneMirrorSwitch" destination="aMt-d7-UIk" id="kuM-tR-zp4"/>
                 <outlet property="topView" destination="Cjt-no-Q40" id="M5k-oX-i34"/>
                 <outlet property="undoBtn" destination="eqQ-LU-buM" id="HJh-7o-ySd"/>
                 <outlet property="view" destination="iN0-l3-epB" id="FBl-yy-ocb"/>
@@ -181,9 +179,6 @@
                 <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="aMt-d7-UIk">
                     <rect key="frame" x="5" y="51" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <connections>
-                        <action selector="sceneMirrorAction:" destination="-1" eventType="valueChanged" id="Mus-dB-vAb"/>
-                    </connections>
                 </switch>
                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jl8-44-P9I">
                     <rect key="frame" x="62" y="56" width="59" height="21"/>

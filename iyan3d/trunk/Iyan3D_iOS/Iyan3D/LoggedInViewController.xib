@@ -81,28 +81,28 @@
                     </subviews>
                     <color key="backgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NT-QT-Yg3">
-                    <rect key="frame" x="164" y="14" width="140" height="30"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <state key="normal" title="Add 5000 Credits"/>
-                    <connections>
-                        <action selector="add500Credits:" destination="-1" eventType="touchUpInside" id="jhC-Vv-eTc"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5W-c5-7em">
-                    <rect key="frame" x="164" y="108" width="141" height="34"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5W-c5-7em">
+                    <rect key="frame" x="165" y="108" width="140" height="34"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <state key="normal" title="Add 50000 Credits"/>
                     <connections>
                         <action selector="add5KCredits:" destination="-1" eventType="touchUpInside" id="eEP-xP-rzv"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FG0-MY-6tR">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FG0-MY-6tR">
                     <rect key="frame" x="165" y="60" width="140" height="34"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <state key="normal" title="Add 20000 Credits"/>
                     <connections>
                         <action selector="add2KCredits:" destination="-1" eventType="touchUpInside" id="xdb-mu-YXE"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NT-QT-Yg3">
+                    <rect key="frame" x="165" y="14" width="132" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="Add 5000 Credits"/>
+                    <connections>
+                        <action selector="add500Credits:" destination="-1" eventType="touchUpInside" id="jhC-Vv-eTc"/>
                     </connections>
                 </button>
             </subviews>

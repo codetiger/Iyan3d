@@ -163,8 +163,8 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     }
     
     [self.window endEditing:YES];
-	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+//	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	//[message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 
 	return YES;
 }

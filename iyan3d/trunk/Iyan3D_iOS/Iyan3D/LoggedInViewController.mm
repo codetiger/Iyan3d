@@ -189,7 +189,7 @@
 
 - (RenderTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *renderCellStr = @"RenderTableViewCell";
+    NSString *renderCellStr = [Utility IsPadDevice] ? @"RenderTableViewCell" :  @"RenderTableViewPhone";
     RenderTableViewCell *cell = (RenderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:renderCellStr];
     if (cell == nil)
     {
