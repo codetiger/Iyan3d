@@ -372,6 +372,7 @@
     NSString *objDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Objs"];
     NSString *rigDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Rigs"];
     NSString *texDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Textures"];
+    NSString *sgmDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Sgm"];
     
     NSFileManager * fm = [NSFileManager defaultManager];
     
@@ -382,7 +383,9 @@
         NSString *filePath2 = [NSString stringWithFormat:@"%@/%@",objDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath3 = [NSString stringWithFormat:@"%@/%@",rigDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath4 = [NSString stringWithFormat:@"%@/%@",texDirPath,[filePaths objectAtIndex:i]];
-        NSString *filePath5 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
+        NSString *filePath5 = [NSString stringWithFormat:@"%@/%@", sgmDirPath, [filePaths objectAtIndex:i]];
+        NSString *filePath6 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
+        
         
         if([fm fileExistsAtPath:filePath1]) {
             if(![filtFilePaths containsObject:filePath1])
@@ -399,6 +402,9 @@
         } else if([fm fileExistsAtPath:filePath5]){
             if(![filtFilePaths containsObject:filePath5])
                 [filtFilePaths addObject:filePath5];
+        } else if([fm fileExistsAtPath:filePath6]){
+            if(![filtFilePaths containsObject:filePath6])
+                [filtFilePaths addObject:filePath6];
         }
     }    
     return filtFilePaths;
