@@ -1218,7 +1218,6 @@ BOOL missingAlertShown;
     if(!editorScene->isMultipleSelection)
     {
         NSIndexPath *path = [NSIndexPath indexPathForRow:editorScene->selectedNodeId inSection:0];
-        NSLog(@"Selected node id : %d",editorScene->selectedNodeId);
         if(editorScene->selectedNodeId!=-1)
         {
             isSelected=YES;
@@ -1235,7 +1234,6 @@ BOOL missingAlertShown;
         {
             if(isSelected)
             {
-                NSLog(@"Prev Selected node id : %d",prevSelection.row);
                 if([Utility IsPadDevice]){
                     [self.objectList deselectRowAtIndexPath:path animated:YES];
                 }
@@ -1252,7 +1250,6 @@ BOOL missingAlertShown;
     else
     {
         for(int i=0; i < editorScene->selectedNodeIds.size(); i++){
-            NSLog(@"Multi-Selected node ids : %d",editorScene->selectedNodeIds[i]);
             NSIndexPath *path = [NSIndexPath indexPathForRow:editorScene->selectedNodeIds[i] inSection:0];
             if([Utility IsPadDevice]){
                 [self.objectList selectRowAtIndexPath:path animated:YES scrollPosition:editorScene->selectedNodeIds[i]];
@@ -1532,6 +1529,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                    {
                                        [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
                                    }];
+    [view addAction:deleteButton];
     if(editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT){
         UIAlertAction* duplicateButton = [UIAlertAction
                                           actionWithTitle:@"Duplicate"
@@ -1543,7 +1541,16 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         [view addAction:duplicateButton];
     }
-    [view addAction:deleteButton];
+    if(editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE){
+        UIAlertAction* changeTexture = [UIAlertAction
+                                        actionWithTitle:@"Change Texture"
+                                        style:UIAlertActionStyleDefault
+                                        handler:^(UIAlertAction * action)
+                                        {
+                                            [self changeTextureForAsset];
+                                        }];
+        [view addAction:changeTexture];
+    }
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceRect = arect;
     popover.sourceView=self.renderView;
@@ -1618,6 +1625,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
         [self load3DTex:ASSET_TEXT AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
+}
+
+- (void) changeTextureForAsset{
+
+    NSLog(@"Select the texture:");
+    textureVc =[[ChangeTextureSidePanel alloc] initWithNibName:@"ChangeTextureSidePanel" bundle:Nil];
+    textureVc.textureDelegate=self;
+    [self showOrHideLeftView:YES withView:textureVc.view];
+
 }
 
 -(void) updateAssetListInScenes :(int)nodeType assetName:(NSString *)assetName actionType:(int)action removeObjectAtIndex:(int)index {

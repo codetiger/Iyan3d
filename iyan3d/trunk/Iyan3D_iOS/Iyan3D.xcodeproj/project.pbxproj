@@ -353,6 +353,10 @@
 		01CCD1C61C3F927D00565664 /* ObjSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */; };
 		01CCD1C81C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */; };
 		01CCD1C91C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */; };
+		01D1D8B21C5206FF00976195 /* ChangeTextureSidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D1D8B01C5206FF00976195 /* ChangeTextureSidePanel.m */; };
+		01D1D8B31C5206FF00976195 /* ChangeTextureSidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D1D8B01C5206FF00976195 /* ChangeTextureSidePanel.m */; };
+		01D1D8B41C5206FF00976195 /* ChangeTextureSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01D1D8B11C5206FF00976195 /* ChangeTextureSidePanel.xib */; };
+		01D1D8B51C5206FF00976195 /* ChangeTextureSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01D1D8B11C5206FF00976195 /* ChangeTextureSidePanel.xib */; };
 		01D2F09A1C44CDD9000E41C7 /* Pause_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0971C44CDD9000E41C7 /* Pause_Pad.png */; };
 		01D2F09B1C44CDD9000E41C7 /* Pause_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0971C44CDD9000E41C7 /* Pause_Pad.png */; };
 		01D2F09C1C44CDD9000E41C7 /* Pause_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0981C44CDD9000E41C7 /* Pause_Pad@2x.png */; };
@@ -2421,6 +2425,9 @@
 		01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjSidePanel.mm; sourceTree = "<group>"; };
 		01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjSidePanel.xib; sourceTree = "<group>"; };
 		01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjSidePanelPhone.xib; sourceTree = "<group>"; };
+		01D1D8AF1C5206FF00976195 /* ChangeTextureSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeTextureSidePanel.h; sourceTree = "<group>"; };
+		01D1D8B01C5206FF00976195 /* ChangeTextureSidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeTextureSidePanel.m; sourceTree = "<group>"; };
+		01D1D8B11C5206FF00976195 /* ChangeTextureSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangeTextureSidePanel.xib; sourceTree = "<group>"; };
 		01D2F0971C44CDD9000E41C7 /* Pause_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_Pad.png; sourceTree = "<group>"; };
 		01D2F0981C44CDD9000E41C7 /* Pause_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Pause_Pad@2x.png"; sourceTree = "<group>"; };
 		01D2F0991C44CDD9000E41C7 /* Play_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Play_Pad@2x.png"; sourceTree = "<group>"; };
@@ -5617,6 +5624,9 @@
 				01AAE2931C43C25000B194E0 /* MeshProperties.h */,
 				01AAE2941C43C25000B194E0 /* MeshProperties.m */,
 				01AAE2951C43C25000B194E0 /* MeshProperties.xib */,
+				01D1D8AF1C5206FF00976195 /* ChangeTextureSidePanel.h */,
+				01D1D8B01C5206FF00976195 /* ChangeTextureSidePanel.m */,
+				01D1D8B11C5206FF00976195 /* ChangeTextureSidePanel.xib */,
 			);
 			name = "Popover Views";
 			sourceTree = "<group>";
@@ -7104,6 +7114,7 @@
 				8AED29BB198A29AD004FC1E5 /* viewCameraModes.json in Resources */,
 				627A5F3E19ED342F00CB545C /* objfile.png in Resources */,
 				256F6F6C1BF6257C00154622 /* README in Resources */,
+				01D1D8B41C5206FF00976195 /* ChangeTextureSidePanel.xib in Resources */,
 				E2497670196BE0190025D442 /* ScaleForAutoRigViewController.xib in Resources */,
 				25EFBEB21BE25CA700DB300C /* RenPro.xib in Resources */,
 				7F0087881ADFC15400764DDE /* down-arrow-large-pad@3x.png in Resources */,
@@ -7822,6 +7833,7 @@
 				E20673E11B049AA6006DD2F7 /* iphoneband.png in Resources */,
 				256F6F811BF6257C00154622 /* README in Resources */,
 				E20673E21B049AA6006DD2F7 /* clone-img-phone@2x.png in Resources */,
+				01D1D8B51C5206FF00976195 /* ChangeTextureSidePanel.xib in Resources */,
 				E20673E31B049AA6006DD2F7 /* MenuReverse-phone.png in Resources */,
 				E20673E41B049AA6006DD2F7 /* scale-img-phone.png in Resources */,
 				E20673E51B049AA6006DD2F7 /* viewCameraModes.json in Resources */,
@@ -7958,6 +7970,7 @@
 				E21C3D1C1A0758B6006964E5 /* GTLYouTubeTokenPagination.m in Sources */,
 				E21C3CF71A0758B6006964E5 /* GTLYouTubeLiveBroadcastSnippet.m in Sources */,
 				256F6D9C1BF624FB00154622 /* APIData.cpp in Sources */,
+				01D1D8B21C5206FF00976195 /* ChangeTextureSidePanel.m in Sources */,
 				E21C3CE31A0758B6006964E5 /* GTLYouTubeContentRating.m in Sources */,
 				256F6DAC1BF624FB00154622 /* MTLNodeData.mm in Sources */,
 				7F7D5A1E1B8C473F00E6BA86 /* DataPickerViewController.m in Sources */,
@@ -8505,6 +8518,7 @@
 				25F0C2631C2E912800C8EC85 /* SGAnimationManager.cpp in Sources */,
 				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.m in Sources */,
 				256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */,
+				01D1D8B31C5206FF00976195 /* ChangeTextureSidePanel.m in Sources */,
 				256F6EB91BF624FB00154622 /* Logger.cpp in Sources */,
 				E206716E1B049AA6006DD2F7 /* GTLYouTubeThumbnail.m in Sources */,
 				E206716F1B049AA6006DD2F7 /* GTLRuntimeCommon.m in Sources */,

@@ -23,6 +23,7 @@
 #import "AnimationSelectionSlider.h"
 #import "TextSelectionSidePanel.h"
 #import "AssetSelectionSidePanel.h"
+#import "ChangeTextureSidePanel.h"
 #import "RenderingViewController.h"
 #import "SGEditorScene.h"
 #import "FPPopoverController.h"
@@ -38,11 +39,12 @@
 #import "MeshProperties.h"
 #import "ScaleForAutoRigViewController.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate,ChangeTextureDelegate>{
     int totalFrames;
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
+    ChangeTextureSidePanel *textureVc;
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
     LoginViewController *loginVc;
