@@ -220,7 +220,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
 #define SHADER_PARTICLE_eColor 4
 #define SHADER_PARTICLE_props 5
 #define SHADER_PARTICLE_positions 6
-#define SHADER_PARTICLE_rotMatrix 7
+#define SHADER_PARTICLE_rotations 7
 #define SHADER_PARTICLE_texture1 8
 
 
@@ -231,7 +231,7 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                   constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
                                   constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
                                   constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
-                                  constant matrix_float4x4& rotMatrix [[ buffer(SHADER_PARTICLE_rotMatrix) ]],
+                                  constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
                                   unsigned int vid [[ vertex_id ]],
                                   unsigned int iid [[instance_id]]
                                   )
@@ -254,10 +254,33 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float scale = float(props[1] + (props[2] * positions[iid].data[3]));
     
     matrix_float4x4 translation = matrix_float4x4(1);
-    translation[3][0] = positions[iid].data[0];
-    translation[3][1] = positions[iid].data[1];
-    translation[3][2] = positions[iid].data[2];
+    translation[3][0] = positions[iid].data[0] * scale;
+    translation[3][1] = positions[iid].data[1] * scale;
+    translation[3][2] = positions[iid].data[2] * scale;
     
+    matrix_float4x4 rotationMat = matrix_float4x4(1);
+    float cr = cos(rotations[iid].data[0]);
+    float sr = sin(rotations[iid].data[0]);
+    float cp = cos(rotations[iid].data[1]);
+    float sp = sin(rotations[iid].data[1]);
+    float cy = cos(rotations[iid].data[2]);
+    float sy = sin(rotations[iid].data[2]);
+    
+    rotationMat[0][0] = (cp * cy);
+    rotationMat[0][1] = (cp * sy);
+    rotationMat[0][2] = (-sp);
+    
+    float srsp = sr * sp;
+    float crsp = cr * sp;
+    
+    rotationMat[1][0] = (srsp * cy - cr * sy);
+    rotationMat[1][1] = (srsp * sy + cr * cy);
+    rotationMat[1][2] = (sr * cp);
+    
+    rotationMat[2][0] = (crsp * cy + sr * sy);
+    rotationMat[2][1] = (crsp * sy - sr * cy);
+    rotationMat[2][2] = (cr * cp);
+
     matrix_float4x4 scaleMat = matrix_float4x4(1);
     scaleMat[0][0] = scale;
     scaleMat[1][1] = scale;
@@ -266,7 +289,7 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
     translation = translation * live;
     
-    matrix_float4x4 trans = translation * rotMatrix;
+    matrix_float4x4 trans = translation * rotationMat * scaleMat;
     out.position = vp * trans * vertex_position_objectspace;
     
     return out;

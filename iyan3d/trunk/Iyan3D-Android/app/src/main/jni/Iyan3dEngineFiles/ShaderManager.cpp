@@ -314,13 +314,14 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     Mat4 viewProj = projMat * viewMat;
     shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
     pNode->sortParticles(smgr->getActiveCamera()->getPosition());
-    pNode->updateParticles(sgNode->props.isSelected || isRendering);
+    pNode->updateParticles((sgNode->props.isSelected || isRendering), smgr->getActiveCamera()->getPosition());
     int instanceCount = pNode->getParticlesCount();
     float *posArray = new float[instanceCount * 4];
+    float *rotArray = new float[instanceCount * 4];
     float *colors = new float[instanceCount * 4];
     
-    Mat4 rotMatrix = Mat4();
-    rotMatrix.setRotationRadians(pNode->particleRotation);
+//    Mat4 rotMatrix = Mat4();
+//    rotMatrix.setRotationRadians(pNode->particleRotation);
     Mat4 model = sgNode->node->getModelMatrix();
     
     float* particleProps = new float[4];
@@ -355,9 +356,14 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
         posArray[i * 4 + 1] = position.y;
         posArray[i * 4 + 2] = position.z;
         posArray[i * 4 + 3] = position.w;
+        
+        Vector4 rotation = pNode->getRotations()[i];
+        rotArray[i * 4 + 0] = rotation.x;
+        rotArray[i * 4 + 1] = rotation.y;
+        rotArray[i * 4 + 2] = rotation.z;
+        rotArray[i * 4 + 3] = rotation.w;
     }
     
-#define SHADER_PARTICLE_rotMatrix 7
 
     
     smgr->setPropertyValue(sgNode->node->material,"props", particleProps, DATA_FLOAT_VEC4,  4, false, SHADER_PARTICLE_props,smgr->getNodeIndexByID(sgNode->node->getID()));
@@ -366,9 +372,11 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     smgr->setPropertyValue(sgNode->node->material,"endColor", eColor, DATA_FLOAT_VEC4,  4, false, SHADER_PARTICLE_eColor,smgr->getNodeIndexByID(sgNode->node->getID()));
     
     smgr->setPropertyValue(sgNode->node->material,"vp", viewProj.pointer(), DATA_FLOAT_MAT4,  16, false, SHADER_PARTICLE_vp,smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material,"rotMatrix", rotMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, SHADER_PARTICLE_rotMatrix,smgr->getNodeIndexByID(sgNode->node->getID()));
     smgr->setPropertyValue(sgNode->node->material,"positions", posArray, DATA_FLOAT_VEC4,  instanceCount * 4, false, SHADER_PARTICLE_positions,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"rotations", rotArray, DATA_FLOAT_VEC4,  instanceCount * 4, false, SHADER_PARTICLE_rotations,smgr->getNodeIndexByID(sgNode->node->getID()));
+
     delete posArray;
+    delete rotArray;
     delete colors;
 
 }

@@ -13,7 +13,7 @@ ParticleManager::ParticleManager() {
     startColor = Vector4(1.0,1.0,1.0,1.0);
     midColor = Vector4(1.0, 1.0, 0.0, 1.0);
     endColor = Vector4(1.0, 0.0, 0.0, 1.0);
-    hasGravity = false;
+    gravity = 0.0;
     startVelocitySpreadAngle = 30.0;
     startVelocityMagnitude = 0.1f;
     startVelocityMagnitudeRand = 0.001f;
@@ -25,15 +25,16 @@ ParticleManager::ParticleManager() {
     isSelected = false;
 }
 
-void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, bool hasGravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale)
+void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, double gravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale)
 {
     maxParticleCount = count;
     pool = new ParticlePool(count);
     positions = (Vector4*)malloc(sizeof(Vector4) * count);
+    rotations = (Vector4*)malloc(sizeof(Vector4) * count);
     startColor = sColor;
     midColor = mColor;
     endColor = eColor;
-    this->hasGravity = hasGravity;
+    this->gravity = gravity;
     startVelocitySpreadAngle = startSpreadAngle;
     startVelocityMagnitude = startMagnitude;
     startVelocityMagnitudeRand = magnitudeRand;
@@ -68,21 +69,20 @@ void ParticleManager::update() {
     
     pool->resetIteration();
     Particle* p = pool->getNextLiveParticle();
-    while(p != NULL && isSelected) {
+    while(p != NULL) {
         p->age++;
         p->position += p->velocity;
         
         if(p->age > maxLife)
             p->isLive = false;
         
-        if(hasGravity)
-            p->velocity.y -= 0.001f;
+            p->velocity.y += gravity;
         
         p = pool->getNextLiveParticle();
     }
 }
 
-void ParticleManager::updateParticles(bool isSelected)
+void ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
 {
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
@@ -95,12 +95,36 @@ void ParticleManager::updateParticles(bool isSelected)
         }
 
         if(p->isLive) {
-            if(isSelected)
+            if(isSelected) {
                 positions[i] = Vector4(p->position.x, p->position.y, p->position.z, p->age);
+                Vector3 rotDir = (camPos - Vector3(positions[i].x, positions[i].y, positions[i].z)).normalize();
+                Quaternion rotQ;
+                rotQ = rotationBetweenVectors(rotDir, Vector3(0.0,1.0,0.0));
+                Vector3 rotEuler;rotQ.toEuler(rotEuler);
+                rotations[i] = Vector4(rotEuler.x, rotEuler.y, rotEuler.z, 0.0);
+            }
         } else {
             positions[i] = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
+            Vector3 rotDir = (camPos - Vector3(positions[i].x, positions[i].y, positions[i].z)).normalize();
+            Quaternion rotQ;
+            rotQ = rotationBetweenVectors(rotDir, Vector3(0.0,1.0,0.0));
+            Vector3 rotEuler;rotQ.toEuler(rotEuler);
+            rotations[i] = Vector4(rotEuler.x, rotEuler.y, rotEuler.z, 0.0);
         }
     }
+}
+
+Quaternion ParticleManager::rotationBetweenVectors(Vector3 targetDirection, Vector3 initialDirection)
+{
+    float dot = initialDirection.dotProduct(targetDirection);
+    Vector3 cross = initialDirection.crossProduct(targetDirection);
+    cross = cross.normalize();
+    dot = (dot < -1 || dot > 1) ? 0.0:dot;
+    float turnAngle = acos(dot);
+    Quaternion delta;
+    delta.fromAngleAxis(turnAngle, cross);
+    delta.normalize();
+    return delta;
 }
 
 void ParticleManager::sortParticles(Vector3 position) {
@@ -118,6 +142,11 @@ void ParticleManager::sortParticles(Vector3 position) {
 Vector4* ParticleManager::getPositions()
 {
     return positions;
+}
+
+Vector4* ParticleManager::getRotations()
+{
+    return rotations;
 }
 
 Vector4 ParticleManager::getParticleProps()
