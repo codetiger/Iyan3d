@@ -91,7 +91,6 @@
 
 - (AssetFrameCell*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
-    
     if ([assetArray count] > indexPath.row) {
         AssetItem* assetItem = assetArray[indexPath.row];
         AssetFrameCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];

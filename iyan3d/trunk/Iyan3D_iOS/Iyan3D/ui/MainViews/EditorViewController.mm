@@ -158,7 +158,6 @@ BOOL missingAlertShown;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
-    totalFrames = 24;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     if ([Utility IsPadDevice])
         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
@@ -517,7 +516,7 @@ BOOL missingAlertShown;
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
 {
-    [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] TextureName:(@"") Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] TextureName:(@"-1") Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType
@@ -645,7 +644,6 @@ BOOL missingAlertShown;
         return false;
     }
     
-    totalFrames = editorScene->totalFrames;
     [self.framesCollectionView reloadData];
     [self reloadSceneObjects];
     delete SGBFilePath;
@@ -670,7 +668,7 @@ BOOL missingAlertShown;
 
 - (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return totalFrames;
+    return editorScene->totalFrames;
 }
 
 - (FrameCellNew*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
@@ -903,12 +901,16 @@ BOOL missingAlertShown;
 
 - (IBAction)rigAddToSceneAction:(id)sender
 {
+    Vector3 vertexColor = Vector3(-1.0);
+    if(editorScene->rigMan->nodeToRig->props.perVertexColor){
+        vertexColor = editorScene->rigMan->nodeToRig->props.vertexColor;
+    }
     
+    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"] VertexColor:vertexColor];
     if(editorScene->rigMan->deallocAutoRig(YES)){
         editorScene->enterOrExitAutoRigMode(false);
         [self setupEnableDisableControls];
     }
-    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"]];
     [self autoRigViewButtonHandler:YES];
     [self updateAssetListInScenes];
     selectedNodeId = -1;
@@ -1153,7 +1155,7 @@ BOOL missingAlertShown;
 - (IBAction)lastFrameBtnAction:(id)sender
 {
     [self NormalHighLight];
-    NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->totalFrames-1 inSection:0];
     [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = editorScene->totalFrames - 1;
@@ -1704,14 +1706,11 @@ BOOL missingAlertShown;
     editorScene->actionMan->switchFrame(selectedFrame);
     std::string *filePathStr = new std::string([filePath UTF8String]);
     editorScene->animMan->applyAnimations(*filePathStr, editorScene->selectedNodeId);
-    totalFrames = editorScene->totalFrames;
     [_framesCollectionView reloadData];
     [self playAnimation];
-    
 }
 
 - (void) removeTempAnimation{
-    totalFrames = editorScene->totalFrames;
     [_framesCollectionView reloadData];
 }
 
@@ -2377,7 +2376,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
             renderingView.delegate = self;
             renderingView.projectName=@"Scene 1";  //FOR TESTING
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -2392,7 +2391,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
             renderingView.delegate = self;
              BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             renderingView.projectName=@"Scene 1";  //FOR TESTING
@@ -2416,9 +2415,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.popoverController dismissPopoverAnimated:YES];
         RenderingViewController* renderingView;
         if ([Utility IsPadDevice])
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
         else
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
         renderingView.delegate = self;
         renderingView.projectName=@"Scene 1";  //FOR TESTING
         renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -2441,137 +2440,50 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void) viewBtnDelegateAction:(int)indexValue{
-    if(indexValue==FRONT_VIEW){
+    CAMERA_VIEW_MODE cameraView = (indexValue == FRONT_VIEW) ? VIEW_FRONT : (indexValue == TOP_VIEW) ? (CAMERA_VIEW_MODE)VIEW_TOP : (indexValue == LEFT_VIEW) ? VIEW_LEFT : (indexValue == BACK_VIEW) ? VIEW_BACK : (indexValue == RIGHT_VIEW) ? VIEW_RIGHT :VIEW_BOTTOM;
         [self.popoverController dismissPopoverAnimated:YES];
-        editorScene->updater->changeCameraView(VIEW_FRONT);
-    }
-    else if(indexValue==TOP_VIEW){
-        [self.popoverController dismissPopoverAnimated:YES];
-        editorScene->updater->changeCameraView(VIEW_TOP);
-    }
-    else if(indexValue==LEFT_VIEW){
-        [self.popoverController dismissPopoverAnimated:YES];
-        editorScene->updater->changeCameraView(VIEW_LEFT);
-    }
-    else if(indexValue==BACK_VIEW){
-        [self.popoverController dismissPopoverAnimated:YES];
-        editorScene->updater->changeCameraView(VIEW_BACK);
-    }
-    else if(indexValue==RIGHT_VIEW){
-        [self.popoverController dismissPopoverAnimated:YES];
-        editorScene->updater->changeCameraView(VIEW_RIGHT);
-    }
-    else if(indexValue==BOTTOM_VIEW){
-        [self.popoverController dismissPopoverAnimated:YES];
-        editorScene->updater->changeCameraView(VIEW_BOTTOM);
-    }
-    
+        editorScene->updater->changeCameraView(cameraView);
 }
+
 - (void) addFrameBtnDelegateAction:(int)indexValue{
-    if(indexValue==ONE_FRAME){
+    int addCount = (indexValue == ONE_FRAME) ? 1 : (indexValue == TWENTY_FOUR_FRAMES) ? 24 : TWO_FOURTY_FRAMES;
         [self.popoverController dismissPopoverAnimated:YES];
-        totalFrames++;
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
+        editorScene->totalFrames += addCount;
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->totalFrames-1 inSection:0];
         [self.framesCollectionView reloadData];
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-    }
-    else if (indexValue==TWENTY_FOUR_FRAMES){
-        [self.popoverController dismissPopoverAnimated:YES];
-        totalFrames+=24;
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
-        [self.framesCollectionView reloadData];
-        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-    }
-    else if(indexValue==TWO_FOURTY_FRAMES){
-        [self.popoverController dismissPopoverAnimated:YES];
-        totalFrames+=240;
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:totalFrames-1 inSection:0];
-        [self.framesCollectionView reloadData];
-        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-    }
 }
+
 - (void) loginBtnAction{
-    
-    if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
-        loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+        loginVc = [[LoginViewController alloc] initWithNibName:([Utility IsPadDevice]) ? @"LoginViewController" : @"LoginViewControllerPhone"bundle:nil];
         [loginVc.view setClipsToBounds:YES];
         loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:loginVc animated:YES completion:nil];
         loginVc.view.superview.backgroundColor = [UIColor clearColor];
-        NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
-        
-    }
-    else{
-        [self.popoverController dismissPopoverAnimated:YES];
-        loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
-        [loginVc.view setClipsToBounds:YES];
-        loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [self presentViewController:loginVc animated:YES completion:nil];
-        loginVc.view.superview.backgroundColor = [UIColor clearColor];
-        NSLog(@"Frame Height :%f",loginVc.view.frame.size.height);
-    }
-    
 }
+
 - (void) infoBtnDelegateAction:(int)indexValue{
     
     if(indexValue==SETTINGS){
-        if([Utility IsPadDevice]){
-            [self.popoverController dismissPopoverAnimated:YES];
-            settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController"bundle:nil];
-            [settingsVc.view setClipsToBounds:YES];
-            settingsVc.delegate=self;
-            settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
-            [self presentViewController:settingsVc animated:YES completion:nil];
-            settingsVc.view.superview.backgroundColor = [UIColor clearColor];
-        }
-        else{
-            
-            NSLog(@"Screen Height %f",screenHeight);
-            if(screenHeight>320){
-                if(screenHeight<400)
-                {
-                    [self.popoverController dismissPopoverAnimated:YES];
-                    settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone2x"bundle:nil];
-                    settingsVc.delegate=self;
-                    [settingsVc.view setClipsToBounds:YES];
-                    settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
-                    [self presentViewController:settingsVc animated:YES completion:nil];
-                    settingsVc.view.superview.backgroundColor = [UIColor clearColor];
-                }
-                else
-                {
-                    [self.popoverController dismissPopoverAnimated:YES];
-                    settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone2x"bundle:nil];
-                    settingsVc.delegate=self;
-                    [settingsVc.view setClipsToBounds:YES];
-                    [self presentViewController:settingsVc animated:YES completion:nil];
-                    settingsVc.view.superview.backgroundColor = [UIColor clearColor];
-                    
-                }
-            }
-            else{
-                [self.popoverController dismissPopoverAnimated:YES];
-                settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone"bundle:nil];
-                [settingsVc.view setClipsToBounds:YES];
-                settingsVc.delegate=self;
-                settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
-                [self presentViewController:settingsVc animated:YES completion:nil];
-                settingsVc.view.superview.backgroundColor = [UIColor clearColor];
-            }
-            
-        }
-    }
-    if(indexValue==CONTACT_US){
         [self.popoverController dismissPopoverAnimated:YES];
-        
+        settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
+                      (screenHeight>320) ? ((screenHeight<400) ? @"SettingsViewControllerPhone2x" : @"SettingsViewControllerPhone2x") :
+                      @"SettingsViewControllerPhone" bundle:nil];
+        [settingsVc.view setClipsToBounds:YES];
+        settingsVc.delegate=self;
+        if([Utility IsPadDevice] || screenHeight < 400)
+            settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:settingsVc animated:YES completion:nil];
+        settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+    }
+    else if(indexValue==CONTACT_US){
+        [self.popoverController dismissPopoverAnimated:YES];
         NSString *currentDeviceName;
-        
         if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
             currentDeviceName = [deviceNames objectForKey:[self deviceName]];
         else
             currentDeviceName = @"Unknown Device";
-        
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
@@ -2585,9 +2497,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [alert show];
             return;
         }
-
     }
-    
 }
 
 
@@ -2908,16 +2818,9 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma Switch to SceneSelection
 - (void) loadSceneSelectionView
 {
-    if([Utility IsPadDevice]) {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil];
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelectionView];
-    } else {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNewPhone" bundle:nil];
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelectionView];
-    }
-    
+    SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([Utility IsPadDevice]) ? @"SceneSelectionControllerNew" : @"SceneSelectionControllerNewPhone" bundle:nil];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate.window setRootViewController:sceneSelectionView];
     [self performSelectorOnMainThread:@selector(removeSGEngine) withObject:nil waitUntilDone:YES];
     [self removeFromParentViewController];
 }
@@ -3021,19 +2924,10 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma mark SettingsViewControllerDelegate
 
 -(void)frameCountDisplayMode:(int)selctedIndex{
-    if(selctedIndex==FRAME_COUNT){
         NSLog(@"Frame Vount Display");
-        [self.framesCollectionView setTag:FRAME_COUNT];
+        [self.framesCollectionView setTag:(selctedIndex == FRAME_COUNT) ? FRAME_COUNT : FRAME_DURATION];
         [self.framesCollectionView reloadData];
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];
-    }
-    else
-    {
-        NSLog(@"Frame Durations Display");
-        [self.framesCollectionView setTag:FRAME_DURATION];
-        [self.framesCollectionView reloadData];
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];
-    }
 }
 
 -(void)cameraPreviewSize:(int)selctedIndex{
@@ -3212,7 +3106,7 @@ void downloadFile(NSString* url, NSString* fileName)
         assetIdReturn =  [self addSgmFileToCacheDirAndDatabase:assetName];
     }
     
-    NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Sgm/White-texture":textureFileName];
+    NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Textures/White-texture":textureFileName];
     
     
     std::string *texture = new std::string([textureFileName UTF8String]);
@@ -3275,7 +3169,7 @@ void downloadFile(NSString* url, NSString* fileName)
     return sgmAsset.assetId;
 }
 
--(int)addrigFileToCacheDirAndDatabase:(NSString*)texturemainFileNameRig
+-(int)addrigFileToCacheDirAndDatabase:(NSString*)texturemainFileNameRig VertexColor:(Vector3)vertexColor
 {
     NSString *tempDir = NSTemporaryDirectory();
     NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
@@ -3299,9 +3193,10 @@ void downloadFile(NSString* url, NSString* fileName)
     [self storeRigTextureinCachesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
     assetAddType = IMPORT_ASSET_ACTION;
     objAsset.isTempAsset = NO;
-    objAsset.textureName = [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"];
+    objAsset.textureName = (vertexColor == -1) ? [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"] : @"-1";
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
     editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size()-1);
+    editorScene->animMan->copyPropsOfNode(selectedNodeId, editorScene->nodes.size()-1);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
 }
 
@@ -3329,7 +3224,13 @@ void downloadFile(NSString* url, NSString* fileName)
         if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
             srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%@",docDirPath,fileName];
             if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
-                return;
+               srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@",docDirPath,fileName];
+                if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
+                    srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%@",docDirPath,fileName];
+                    if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
+                        srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/White-texture.png",docDirPath];
+                        if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
+                            return;
         }
     }
     

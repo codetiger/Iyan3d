@@ -36,8 +36,7 @@ private:
     std::map<int, vector<InfluencedObject> > influencedVertices;    //For each joint
     std::map<int, vector<InfluencedObject> > influencedJoints;      //For each vertex
     // TODO SGAction moveAction,_scaleAction,addJointAction;
-
-
+    
 public:
     
     bool isSkeletonJointSelected;

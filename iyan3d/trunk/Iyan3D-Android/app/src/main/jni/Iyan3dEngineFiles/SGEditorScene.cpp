@@ -507,17 +507,19 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
             textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Sgm/" + nodes[selectedNode]->textureName+".png";
             if(!nodes[selectedNode]->checkFileExists(textureFileName))
                 textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Textures/" + nodes[selectedNode]->textureName+".png";
+                if(!nodes[selectedNode]->checkFileExists(textureFileName))
+                    textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Rigs/" + nodes[selectedNode]->textureName+".png";
         }
 #endif
 #ifdef ANDROID
     StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
-    if(nodes[selectedNode]->textureName != "" && nodes[selectedNode]->checkFileExists(textureFileName)) {
+    if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
         nodes[selectedNode]->node->setTexture(nodeTex,1);
     } else {
-        nodes[selectedNode]->textureName = "";
+        nodes[selectedNode]->textureName = "-1";
         nodes[selectedNode]->props.vertexColor = nodes[selectedNode]->props.oriVertexColor;
         nodes[selectedNode]->props.perVertexColor = true;
     }

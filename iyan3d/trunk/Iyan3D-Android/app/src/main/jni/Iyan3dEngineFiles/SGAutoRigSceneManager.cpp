@@ -88,6 +88,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     if(nodeToRig->node){
         smgr->RemoveNode(nodeToRig->node);
     }
+    
     nodeToRig = (sgNode->getType() == NODE_RIG) ? getSGMNodeForRig(sgNode) : sgNode;
     sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
@@ -209,6 +210,8 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->node->setTexture(rigScene->shadowTexture,2);
                     sgrSGNode->props.transparency = 1.0;
                     sgrSGNode->props.isLighting = true;
+                    sgrSGNode->props.perVertexColor = nodeToRig->props.perVertexColor;
+                    sgrSGNode->props.vertexColor = nodeToRig->props.vertexColor;
                     sgrSGNode->node->setVisible(true);
                     printf("\n setscenemode - Vertices count %d ", dynamic_pointer_cast<MeshNode>(sgrSGNode->node)->getMesh()->getVerticesCount());
                 }

@@ -163,7 +163,7 @@
         
         NSString *whiteTexFrom = [[NSBundle mainBundle] pathForResource:@"White-texture" ofType:@"png"];
         NSString *fileName = @"White-texture.png";
-        NSString *whiteTexTo = [sgm stringByAppendingPathComponent:fileName];
+        NSString *whiteTexTo = [textures stringByAppendingPathComponent:fileName];
         if([fileManager fileExistsAtPath:whiteTexFrom]&& ![fileManager fileExistsAtPath:whiteTexTo]){
             [fileManager copyItemAtPath:whiteTexFrom toPath:whiteTexTo error:nil];
         }

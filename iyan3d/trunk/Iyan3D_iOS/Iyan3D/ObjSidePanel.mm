@@ -154,6 +154,7 @@
                                                     inView:self.view
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:NO];
+            textureFileName = @"-1";
         }
         else{
             haveTexture = YES;
