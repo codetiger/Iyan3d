@@ -396,7 +396,9 @@ enum assetType
     OBJ_FILE = 6,
     FONT = 50,
     MY_LIBRARY_TYPE = -1,
-    MY_ANIMATIONS_LIBRARY_TYPE = -2   
+    MY_ANIMATIONS_LIBRARY_TYPE = -2,
+    PARTICLES = 7
+    
     
 };
 

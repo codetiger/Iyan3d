@@ -61,7 +61,7 @@
     
     if([clickedBtnName isEqualToString:@"importBtn"]){
         [self allowMultipleSelection:NO];
-        tableData = [NSMutableArray arrayWithObjects:@"Models", @"Images",@"Videos", @"Text", @"Light", @"OBJ File", @"Add Bone",nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Models", @"Images",@"Videos", @"Text", @"Light", @"OBJ File", @"Add Bone",@"Particle Effects",nil];
     }
     else if([clickedBtnName isEqualToString:@"animationBtn"]){
         [self allowMultipleSelection:NO];
@@ -179,6 +179,9 @@
                 cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone.png"];
             if(indexPath.row==6)
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
+            if(indexPath.row==7)
+                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
+
         }
         if([clickedBtn isEqualToString:@"myObjectsBtn"]){
             if([cell.textLabel.text isEqualToString:@"CAMERA"])

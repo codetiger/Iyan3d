@@ -18,23 +18,26 @@
 #define DOWNLOAD_NODE 33
 #define CLOSE_CURRENT_VIEW 10
 #define OBJFile 6
+#define IMPORT_MODELS 0
+#define IMPORT_ADDPARTICLE 7
+
 
 @implementation AssetSelectionSidePanel
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self){
         screenScale = [[UIScreen mainScreen] scale];
         cache = [CacheSystem cacheSystem];
-        assetArray = [cache GetAssetList:ALLMODELS Search:@""];
-        
+        viewType = type;
+        assetArray = [cache GetAssetList:(viewType == IMPORT_MODELS) ? ALLMODELS : PARTICLES  Search:@""];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         docDirPath = [srcDirPath objectAtIndex:0];        
         downloadQueue = [[NSOperationQueue alloc] init];
         [downloadQueue setMaxConcurrentOperationCount:3];
         assetDownloadQueue = [[NSOperationQueue alloc] init];
-        [assetDownloadQueue setMaxConcurrentOperationCount:1];
+        [assetDownloadQueue setMaxConcurrentOperationCount:1];        
     }
     return self;
 }
@@ -52,8 +55,8 @@
     selectedAsset = -1;
     modelCategoryTab = 0;
     addToScenePressed = false;
-    [_addToSceneBtn setEnabled:NO];
-
+    [_addToSceneBtn setEnabled:YES];
+    [_modelCategory setHidden:(viewType == IMPORT_MODELS) ? NO : YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,6 +74,17 @@
 }
 
 - (IBAction)addToSceneButtonAction:(id)sender {
+    if(viewType == IMPORT_ADDPARTICLE){
+        AssetItem *assetItem = [[AssetItem alloc] init];
+
+        assetItem.assetId = 0;
+        assetItem.type = 13;
+        if(!addToScenePressed)
+            assetItem.isTempAsset = true;
+        [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
+        return;
+    }
+
      addToScenePressed = YES;
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];

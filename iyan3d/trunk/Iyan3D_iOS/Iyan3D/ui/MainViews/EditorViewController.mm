@@ -36,8 +36,8 @@
 #define IMPORT_LIGHT 4
 #define IMPORT_OBJFILE 5
 #define IMPORT_ADDBONE 6
+#define IMPORT_ADDPARTICLE 7
 #define CHANGE_TEXTURE 7
-
 
 #define ABOUT 0
 #define HELP 1
@@ -166,7 +166,6 @@ BOOL missingAlertShown;
     {
          self.objectList.allowsMultipleSelection=NO;
     }
-
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -180,8 +179,6 @@ BOOL missingAlertShown;
     if (editorScene->actionMan->actions.size() > 0)
         [self.undoBtn setEnabled:YES];
 }
-
-
 
 - (void)initScene
 {
@@ -547,7 +544,6 @@ BOOL missingAlertShown;
             }
             else{
                 bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
-                 NSLog(@"%f",editorScene->screenScale);
                 editorScene->selectMan->checkSelection(renderViewMan.tapPosition,isMultiSelectEnabled);
                  [self changeAllButtonBG];
                  [self setupEnableDisableControls];
@@ -563,8 +559,6 @@ BOOL missingAlertShown;
         }
         if(renderViewMan.makePanOrPinch)
             [renderViewMan panOrPinchProgress];
-        
-        
         editorScene->renderAll();
         if(!isMetalSupported)
             [renderViewMan presentRenderBuffer];
@@ -2222,16 +2216,17 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) importBtnDelegateAction:(int)indexValue{
     
     switch (indexValue) {
+        case IMPORT_ADDPARTICLE:
         case IMPORT_MODELS:
             if([Utility IsPadDevice]){
                 [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : IMPORT_ADDPARTICLE];
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }
             else{
                 [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil];
+                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : IMPORT_ADDPARTICLE];
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }

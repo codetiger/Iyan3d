@@ -198,6 +198,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 {
     // TODO a lot to implement
    
+    NSLog(@"Texture Name : %@ " , textureName);
     string textureNameStr = *new std::string([textureName UTF8String]);
     
     if(editorScene) {
@@ -371,8 +372,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void)tapGesture:(UITapGestureRecognizer*)rec
 {
-    
-    
 //    isTapped = true;
     CGPoint position;
     position = [rec locationInView:self.renderView];

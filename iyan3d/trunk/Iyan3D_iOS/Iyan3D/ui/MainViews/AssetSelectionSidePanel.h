@@ -19,6 +19,8 @@
 
 @end
 
+
+
 @interface AssetSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate>{
     CacheSystem* cache;
     AssetItem* asset;
@@ -28,7 +30,10 @@
     NSString* docDirPath;
     int selectedAsset, modelCategoryTab;
     BOOL addToScenePressed;
+    int viewType;
 }
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *assetsCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *modelCategory;
