@@ -95,6 +95,26 @@
 		01B4D0701C2937000091E19B /* Undo_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4D03B1C2937000091E19B /* Undo_Pad.png */; };
 		01B4D0711C2937000091E19B /* Undo_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4D03C1C2937000091E19B /* Undo_Pad@2x.png */; };
 		01B4D0721C2937000091E19B /* Undo_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B4D03C1C2937000091E19B /* Undo_Pad@2x.png */; };
+		251BF4501C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
+		251BF4511C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
+		251BF4521C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */; };
+		251BF4531C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */; };
+		251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4541C2C191700A5D41D /* Crashlytics.framework */; };
+		251BF4571C2C191700A5D41D /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4541C2C191700A5D41D /* Crashlytics.framework */; };
+		251BF4581C2C191700A5D41D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4551C2C191700A5D41D /* Fabric.framework */; };
+		251BF4661C2C1AD300A5D41D /* FreeType2_Sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4631C2C1AD300A5D41D /* FreeType2_Sim.a */; };
+		251BF4671C2C1AD300A5D41D /* FreeType2_Sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4631C2C1AD300A5D41D /* FreeType2_Sim.a */; };
+		251BF4681C2C1AD300A5D41D /* FreeType2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4641C2C1AD300A5D41D /* FreeType2.a */; };
+		251BF4691C2C1AD300A5D41D /* FreeType2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4641C2C1AD300A5D41D /* FreeType2.a */; };
+		251BF46A1C2C1AD300A5D41D /* GoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4651C2C1AD300A5D41D /* GoogleAnalytics.a */; };
+		251BF46B1C2C1AD300A5D41D /* GoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4651C2C1AD300A5D41D /* GoogleAnalytics.a */; };
+		251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4551C2C191700A5D41D /* Fabric.framework */; };
+		251BF4731C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */; };
+		251BF4741C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */; };
+		251BF4751C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */; };
+		251BF4761C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */; };
+		251BF4771C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */; };
+		251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */; };
 		253B52811BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
 		253B52821BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
 		253DE8441B545CCB00FE59FE /* PreviewHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 253DE8431B545CCB00FE59FE /* PreviewHelper.mm */; };
@@ -451,10 +471,6 @@
 		25E7611F1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E7611D1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib */; };
 		25E86EC51B44D10300BC48DC /* depthPassText.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 25E86EC41B44D10300BC48DC /* depthPassText.vsh */; };
 		25E86EC61B44D10300BC48DC /* depthPassText.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 25E86EC41B44D10300BC48DC /* depthPassText.vsh */; };
-		25EA8ED11BD8E7D6005DBA15 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25EA8ECF1BD8E7D6005DBA15 /* Fabric.framework */; };
-		25EA8ED21BD8E7D7005DBA15 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25EA8ECF1BD8E7D6005DBA15 /* Fabric.framework */; };
-		25EA8ED31BD8E7D7005DBA15 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25EA8ED01BD8E7D6005DBA15 /* Crashlytics.framework */; };
-		25EA8ED41BD8E7D7005DBA15 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25EA8ED01BD8E7D6005DBA15 /* Crashlytics.framework */; };
 		25EA8EDB1BD90506005DBA15 /* light_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA8ED61BD90506005DBA15 /* light_ipad.png */; };
 		25EA8EDC1BD90506005DBA15 /* light_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA8ED61BD90506005DBA15 /* light_ipad.png */; };
 		25EA8EDD1BD90506005DBA15 /* light_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EA8ED71BD90506005DBA15 /* light_ipad@2x.png */; };
@@ -486,12 +502,6 @@
 		25F7C4651B682F7400C4183F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F7C4641B682F7400C4183F /* libz.dylib */; };
 		25F7C4661B682F8000C4183F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F7C4641B682F7400C4183F /* libz.dylib */; };
 		25F7C4671B6863B600C4183F /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FD50C601B67ABB4004BE6C8 /* wheel.png */; };
-		25F98C281BA22D130098A9F9 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F98C271BA22D130098A9F9 /* libGoogleAnalyticsServices.a */; };
-		25F98C291BA22D130098A9F9 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F98C271BA22D130098A9F9 /* libGoogleAnalyticsServices.a */; };
-		25F98C2C1BA22D2F0098A9F9 /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F98C2A1BA22D2F0098A9F9 /* libFreetype2_sim.a */; };
-		25F98C2D1BA22D2F0098A9F9 /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F98C2A1BA22D2F0098A9F9 /* libFreetype2_sim.a */; };
-		25F98C2E1BA22D2F0098A9F9 /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F98C2B1BA22D2F0098A9F9 /* libFreetype2.a */; };
-		25F98C2F1BA22D2F0098A9F9 /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F98C2B1BA22D2F0098A9F9 /* libFreetype2.a */; };
 		3D04EAEB1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */; };
 		3D04EAEC1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */; };
 		3D04EAF31C25830F00C18E1A /* Bevel.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF11C25830F00C18E1A /* Bevel.png */; };
@@ -726,11 +736,6 @@
 		7F35D9BD1B5F53770003F1CE /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F19F6761B5E6C9F001A342C /* UIImageView+AFNetworking.m */; };
 		7F5012FC1B2C597E00669B71 /* randNoise.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F5012FB1B2C597E00669B71 /* randNoise.png */; };
 		7F5012FD1B2C597E00669B71 /* randNoise.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F5012FB1B2C597E00669B71 /* randNoise.png */; };
-		7F7D5A0C1B8C2DBD00E6BA86 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7F7D5A0A1B8C2DBD00E6BA86 /* GoogleSignIn.bundle */; };
-		7F7D5A0D1B8C2DBD00E6BA86 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A0B1B8C2DBD00E6BA86 /* GoogleSignIn.framework */; };
-		7F7D5A0E1B8C2FC700E6BA86 /* GoogleSignIn.bundle in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A0A1B8C2DBD00E6BA86 /* GoogleSignIn.bundle */; };
-		7F7D5A0F1B8C2FFA00E6BA86 /* GoogleSignIn.bundle in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A0A1B8C2DBD00E6BA86 /* GoogleSignIn.bundle */; };
-		7F7D5A101B8C2FFA00E6BA86 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A0B1B8C2DBD00E6BA86 /* GoogleSignIn.framework */; };
 		7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */; };
 		7F7D5A161B8C42B500E6BA86 /* AuthInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F7D5A151B8C42B500E6BA86 /* AuthInspectorViewController.m */; };
 		7F7D5A181B8C434200E6BA86 /* AuthInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F7D5A151B8C42B500E6BA86 /* AuthInspectorViewController.m */; };
@@ -1808,6 +1813,19 @@
 		01B4D03A1C2937000091E19B /* Scale_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Scale_Pad@2x.png"; sourceTree = "<group>"; };
 		01B4D03B1C2937000091E19B /* Undo_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Undo_Pad.png; sourceTree = "<group>"; };
 		01B4D03C1C2937000091E19B /* Undo_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Undo_Pad@2x.png"; sourceTree = "<group>"; };
+		251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = FrameWorks/GoogleSignIn.bundle; sourceTree = "<group>"; };
+		251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = FrameWorks/GoogleSignIn.framework; sourceTree = "<group>"; };
+		251BF4541C2C191700A5D41D /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = FrameWorks/Crashlytics.framework; sourceTree = "<group>"; };
+		251BF4551C2C191700A5D41D /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = FrameWorks/Fabric.framework; sourceTree = "<group>"; };
+		251BF4631C2C1AD300A5D41D /* FreeType2_Sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FreeType2_Sim.a; path = FrameWorks/FreeType2_Sim.a; sourceTree = "<group>"; };
+		251BF4641C2C1AD300A5D41D /* FreeType2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FreeType2.a; path = FrameWorks/FreeType2.a; sourceTree = "<group>"; };
+		251BF4651C2C1AD300A5D41D /* GoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = GoogleAnalytics.a; path = FrameWorks/GoogleAnalytics.a; sourceTree = "<group>"; };
+		251BF46D1C2C1D3900A5D41D /* RenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderHelper.h; sourceTree = "<group>"; };
+		251BF46E1C2C1D3900A5D41D /* SceneInitializeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneInitializeHelper.h; sourceTree = "<group>"; };
+		251BF46F1C2C1D3900A5D41D /* SGEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEditorScene.h; sourceTree = "<group>"; };
+		251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderHelper.cpp; sourceTree = "<group>"; };
+		251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInitializeHelper.cpp; sourceTree = "<group>"; };
+		251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGEditorScene.cpp; sourceTree = "<group>"; };
 		253B52801BDBBD9100E93208 /* commonL1.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL1.fsh; path = Resources/shaders/commonL1.fsh; sourceTree = "<group>"; };
 		253DE8421B545CCB00FE59FE /* PreviewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewHelper.h; sourceTree = "<group>"; };
 		253DE8431B545CCB00FE59FE /* PreviewHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewHelper.mm; sourceTree = "<group>"; };
@@ -2241,8 +2259,6 @@
 		25E7611C1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PremiumUpgardeVCViewController.m; path = "ui/Popover Views/PremiumUpgardeVCViewController.m"; sourceTree = "<group>"; };
 		25E7611D1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PremiumUpgardeVCViewController.xib; path = "ui/Popover Views/PremiumUpgardeVCViewController.xib"; sourceTree = "<group>"; };
 		25E86EC41B44D10300BC48DC /* depthPassText.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPassText.vsh; path = Resources/shaders/depthPassText.vsh; sourceTree = "<group>"; };
-		25EA8ECF1BD8E7D6005DBA15 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		25EA8ED01BD8E7D6005DBA15 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		25EA8ED61BD90506005DBA15 /* light_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light_ipad.png; path = Resources/imgs/light_ipad.png; sourceTree = "<group>"; };
 		25EA8ED71BD90506005DBA15 /* light_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "light_ipad@2x.png"; path = "Resources/imgs/light_ipad@2x.png"; sourceTree = "<group>"; };
 		25EA8ED81BD90506005DBA15 /* light_Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light_Phone.png; path = Resources/imgs/light_Phone.png; sourceTree = "<group>"; };
@@ -2273,9 +2289,6 @@
 		25F7C45F1B682CA700C4183F /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAITrackedViewController.h; path = 3rdParty/Analytics/GAITrackedViewController.h; sourceTree = "<group>"; };
 		25F7C4601B682CA700C4183F /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAITracker.h; path = 3rdParty/Analytics/GAITracker.h; sourceTree = "<group>"; };
 		25F7C4641B682F7400C4183F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		25F98C271BA22D130098A9F9 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalyticsServices.a; path = Iyan3D/3rdParty/Analytics/libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
-		25F98C2A1BA22D2F0098A9F9 /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFreetype2_sim.a; sourceTree = "<group>"; };
-		25F98C2B1BA22D2F0098A9F9 /* libFreetype2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFreetype2.a; sourceTree = "<group>"; };
 		3D04EAE61C2581BC00C18E1A /* TextSelectionSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSelectionSidePanel.h; path = ui/MainViews/TextSelectionSidePanel.h; sourceTree = "<group>"; };
 		3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextSelectionSidePanel.xib; path = ui/MainViews/TextSelectionSidePanel.xib; sourceTree = "<group>"; };
 		3D04EAF11C25830F00C18E1A /* Bevel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bevel.png; sourceTree = "<group>"; };
@@ -2490,8 +2503,6 @@
 		7F32A01B1AA1ACF7003FEFF9 /* playing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playing.png; path = Resources/imgs/playing.png; sourceTree = "<group>"; };
 		7F32A01C1AA1ACF7003FEFF9 /* playing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing@2x.png"; path = "Resources/imgs/playing@2x.png"; sourceTree = "<group>"; };
 		7F5012FB1B2C597E00669B71 /* randNoise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = randNoise.png; path = ../randNoise.png; sourceTree = "<group>"; };
-		7F7D5A0A1B8C2DBD00E6BA86 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
-		7F7D5A0B1B8C2DBD00E6BA86 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
 		7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		7F7D5A141B8C42B500E6BA86 /* AuthInspectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthInspectorViewController.h; path = "3rdParty/google authen/AuthInspectorViewController.h"; sourceTree = "<group>"; };
 		7F7D5A151B8C42B500E6BA86 /* AuthInspectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthInspectorViewController.m; path = "3rdParty/google authen/AuthInspectorViewController.m"; sourceTree = "<group>"; };
@@ -3122,29 +3133,28 @@
 			files = (
 				253F536D1C20209D005AC97D /* GoogleMobileAds.framework in Frameworks */,
 				25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */,
-				25F98C2E1BA22D2F0098A9F9 /* libFreetype2.a in Frameworks */,
 				25F7C4651B682F7400C4183F /* libz.dylib in Frameworks */,
+				251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
+				251BF4661C2C1AD300A5D41D /* FreeType2_Sim.a in Frameworks */,
+				251BF46A1C2C1AD300A5D41D /* GoogleAnalytics.a in Frameworks */,
 				E262744419234C890036F8E3 /* GameKit.framework in Frameworks */,
 				E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */,
 				E2A343B119F123F8000EF7C2 /* MobileCoreServices.framework in Frameworks */,
+				251BF4521C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */,
 				E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */,
 				62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */,
+				251BF4581C2C191700A5D41D /* Fabric.framework in Frameworks */,
 				E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */,
+				251BF4681C2C1AD300A5D41D /* FreeType2.a in Frameworks */,
 				C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */,
-				25EA8ED11BD8E7D6005DBA15 /* Fabric.framework in Frameworks */,
 				C87EBFE218F3DAD800EB656E /* CoreData.framework in Frameworks */,
 				C87EBFE018F3CE1D00EB656E /* AdSupport.framework in Frameworks */,
 				C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */,
-				7F7D5A0D1B8C2DBD00E6BA86 /* GoogleSignIn.framework in Frameworks */,
 				C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */,
 				C831F1B21876E0AC00966179 /* Security.framework in Frameworks */,
-				25F98C2C1BA22D2F0098A9F9 /* libFreetype2_sim.a in Frameworks */,
 				C885D7811876BE6100A45D71 /* CoreGraphics.framework in Frameworks */,
-				25F98C281BA22D130098A9F9 /* libGoogleAnalyticsServices.a in Frameworks */,
-				25EA8ED31BD8E7D7005DBA15 /* Crashlytics.framework in Frameworks */,
 				C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */,
 				C885D77F1876BE6100A45D71 /* Foundation.framework in Frameworks */,
-				7F7D5A0E1B8C2FC700E6BA86 /* GoogleSignIn.bundle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3152,28 +3162,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */,
 				253F536E1C20209D005AC97D /* GoogleMobileAds.framework in Frameworks */,
-				25EA8ED21BD8E7D7005DBA15 /* Fabric.framework in Frameworks */,
 				7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */,
 				25F7C4661B682F8000C4183F /* libz.dylib in Frameworks */,
-				25F98C2F1BA22D2F0098A9F9 /* libFreetype2.a in Frameworks */,
+				251BF4531C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */,
+				251BF4671C2C1AD300A5D41D /* FreeType2_Sim.a in Frameworks */,
 				E20671FD1B049AA6006DD2F7 /* MobileCoreServices.framework in Frameworks */,
-				25F98C291BA22D130098A9F9 /* libGoogleAnalyticsServices.a in Frameworks */,
 				E20671FE1B049AA6006DD2F7 /* libsqlite3.dylib in Frameworks */,
 				E20671FF1B049AA6006DD2F7 /* GameKit.framework in Frameworks */,
 				E20672001B049AA6006DD2F7 /* MessageUI.framework in Frameworks */,
-				25EA8ED41BD8E7D7005DBA15 /* Crashlytics.framework in Frameworks */,
+				251BF4571C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
 				E20672021B049AA6006DD2F7 /* OpenGLES.framework in Frameworks */,
 				E20672031B049AA6006DD2F7 /* SystemConfiguration.framework in Frameworks */,
+				251BF46B1C2C1AD300A5D41D /* GoogleAnalytics.a in Frameworks */,
 				E20672051B049AA6006DD2F7 /* CoreData.framework in Frameworks */,
 				E20672061B049AA6006DD2F7 /* AdSupport.framework in Frameworks */,
 				E20672071B049AA6006DD2F7 /* StoreKit.framework in Frameworks */,
 				E20672081B049AA6006DD2F7 /* CoreMotion.framework in Frameworks */,
 				E20672091B049AA6006DD2F7 /* Security.framework in Frameworks */,
-				25F98C2D1BA22D2F0098A9F9 /* libFreetype2_sim.a in Frameworks */,
+				251BF4691C2C1AD300A5D41D /* FreeType2.a in Frameworks */,
 				E206720A1B049AA6006DD2F7 /* CoreGraphics.framework in Frameworks */,
-				7F7D5A0F1B8C2FFA00E6BA86 /* GoogleSignIn.bundle in Frameworks */,
-				7F7D5A101B8C2FFA00E6BA86 /* GoogleSignIn.framework in Frameworks */,
 				E206720B1B049AA6006DD2F7 /* UIKit.framework in Frameworks */,
 				E206720D1B049AA6006DD2F7 /* Foundation.framework in Frameworks */,
 			);
@@ -3305,6 +3314,9 @@
 				256F6B7E1BF6246200154622 /* SGAutoRigScene.cpp */,
 				256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */,
 				256F6B801BF6246300154622 /* SGJoint.cpp */,
+				251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */,
+				251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */,
+				251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */,
 				256F6B811BF6246300154622 /* SGNode.cpp */,
 				256F6B821BF6246300154622 /* SGPreviewScene.cpp */,
 				256F6B831BF6246300154622 /* SGScene.cpp */,
@@ -3354,6 +3366,9 @@
 				256F6B701BF6246200154622 /* SGRotationKey.h */,
 				256F6B711BF6246200154622 /* SGScaleKey.h */,
 				256F6B721BF6246200154622 /* SGScene.h */,
+				251BF46D1C2C1D3900A5D41D /* RenderHelper.h */,
+				251BF46E1C2C1D3900A5D41D /* SceneInitializeHelper.h */,
+				251BF46F1C2C1D3900A5D41D /* SGEditorScene.h */,
 				256F6B731BF6246200154622 /* SGVisibilityKey.h */,
 				256F6B741BF6246200154622 /* ShaderManager.h */,
 				256F6B751BF6246200154622 /* ShaderParamOrder.h */,
@@ -4621,16 +4636,16 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				251BF4631C2C1AD300A5D41D /* FreeType2_Sim.a */,
+				251BF4641C2C1AD300A5D41D /* FreeType2.a */,
+				251BF4651C2C1AD300A5D41D /* GoogleAnalytics.a */,
+				251BF4541C2C191700A5D41D /* Crashlytics.framework */,
+				251BF4551C2C191700A5D41D /* Fabric.framework */,
+				251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */,
+				251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */,
 				253F536C1C20209D005AC97D /* GoogleMobileAds.framework */,
 				25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */,
-				25EA8ECF1BD8E7D6005DBA15 /* Fabric.framework */,
-				25EA8ED01BD8E7D6005DBA15 /* Crashlytics.framework */,
-				25F98C2A1BA22D2F0098A9F9 /* libFreetype2_sim.a */,
-				25F98C2B1BA22D2F0098A9F9 /* libFreetype2.a */,
-				25F98C271BA22D130098A9F9 /* libGoogleAnalyticsServices.a */,
 				7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */,
-				7F7D5A0A1B8C2DBD00E6BA86 /* GoogleSignIn.bundle */,
-				7F7D5A0B1B8C2DBD00E6BA86 /* GoogleSignIn.framework */,
 				25F7C4641B682F7400C4183F /* libz.dylib */,
 				E27E71C41AD27A8200B5DE77 /* Metal.framework */,
 				E2A343B019F123F8000EF7C2 /* MobileCoreServices.framework */,
@@ -5307,6 +5322,7 @@
 				7FDF550B1B736108006DC41F /* premium-phone.png in Resources */,
 				7FED9E841A8E0F780089869B /* AutoRigHelp4.png in Resources */,
 				7F31A7471AA4960300A6E7B1 /* play-video-phone@3x.png in Resources */,
+				251BF4501C2C190400A5D41D /* GoogleSignIn.bundle in Resources */,
 				7FC527671B6F96FF00C5D26D /* Rate-phone@2x.png in Resources */,
 				62FA5F511990E9D4003B0893 /* clone-img.png in Resources */,
 				01B4CFEC1C29219A0091E19B /* External-Render.png in Resources */,
@@ -5686,7 +5702,6 @@
 				8A9DE20E197FEFF10079727D /* mirrorJoints.json in Resources */,
 				3DBC85E31C2BC11B00B512AB /* selected_mark.png in Resources */,
 				6231CEE31B1484AE00DCD585 /* draw2dImage.vsh in Resources */,
-				7F7D5A0C1B8C2DBD00E6BA86 /* GoogleSignIn.bundle in Resources */,
 				7F31A73C1AA4960300A6E7B1 /* info-phone@3x.png in Resources */,
 				7FC900F11A0A01470051B941 /* save-img-phone@2x.png in Resources */,
 				256ED8DF1B1FEDED008ADEF8 /* Amatic SC Regular.ttf in Resources */,
@@ -5815,6 +5830,7 @@
 				25F7C4671B6863B600C4183F /* wheel.png in Resources */,
 				01B4D0461C2937000091E19B /* Export_Pad@2x.png in Resources */,
 				01B4CFF71C29219A0091E19B /* View.png in Resources */,
+				251BF4511C2C190400A5D41D /* GoogleSignIn.bundle in Resources */,
 				7F307CF01B58FDBF0065BBC1 /* like-fill-phone.png in Resources */,
 				7F307CF11B58FDBF0065BBC1 /* like-fill-phone@2x.png in Resources */,
 				7F307CF21B58FDBF0065BBC1 /* like-fill-phone@3x.png in Resources */,
@@ -6289,7 +6305,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa";
+			shellScript = "./FrameWorks/Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa";
 		};
 		25EA8ECE1BD8E773005DBA15 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6302,7 +6318,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa";
+			shellScript = "./FrameWorks/Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -6350,6 +6366,7 @@
 				256F6DB01BF624FB00154622 /* OGLNodeData.cpp in Sources */,
 				E21C3CBF1A0758B6006964E5 /* GTLYouTubeAccessPolicy.m in Sources */,
 				E24976A2196BE0310025D442 /* SceneSelectionViewControllerPad.mm in Sources */,
+				251BF4731C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */,
 				E2A343D319F1598A000EF7C2 /* VideoUploadViewController.m in Sources */,
 				256F6F6E1BF6257C00154622 /* render.c in Sources */,
 				E21C3D251A0758B6006964E5 /* GTLYouTubeVideoConversionPings.m in Sources */,
@@ -6599,6 +6616,7 @@
 				01B4CF861C291EFD0091E19B /* AnimationSelectionSlider.mm in Sources */,
 				E21C3D071A0758B6006964E5 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
 				E21C3CFE1A0758B6006964E5 /* GTLYouTubeLocalizedProperty.m in Sources */,
+				251BF4751C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */,
 				E211247D1AF20A0D00C23624 /* Shaders.metal in Sources */,
 				256F6BA91BF6246300154622 /* SGCloudRenderingHelper.cpp in Sources */,
 				256F6D801BF624FB00154622 /* Vector4.cpp in Sources */,
@@ -6618,6 +6636,7 @@
 				256F6E9E1BF624FB00154622 /* pngwutil.c in Sources */,
 				256F6E8E1BF624FB00154622 /* pngrtran.c in Sources */,
 				C8E6173918C5DD7100BC5342 /* FPTouchView.m in Sources */,
+				251BF4771C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */,
 				E21C3CDF1A0758B6006964E5 /* GTLYouTubeChannelStatistics.m in Sources */,
 				E21C3CD21A0758B6006964E5 /* GTLYouTubeChannelBannerResource.m in Sources */,
 				E21C3CFF1A0758B6006964E5 /* GTLYouTubeLocalizedString.m in Sources */,
@@ -6853,6 +6872,7 @@
 				E20671561B049AA6006DD2F7 /* OSCommonImage.m in Sources */,
 				E20671571B049AA6006DD2F7 /* BitmapCropManipulator.m in Sources */,
 				E20671581B049AA6006DD2F7 /* GTLYouTubeVideoCategoryListResponse.m in Sources */,
+				251BF4761C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */,
 				E20671591B049AA6006DD2F7 /* GTLUtilities.m in Sources */,
 				E206715A1B049AA6006DD2F7 /* GTLYouTubePlaylistPlayer.m in Sources */,
 				E206715C1B049AA6006DD2F7 /* AssetItem.m in Sources */,
@@ -6908,6 +6928,7 @@
 				E206718B1B049AA6006DD2F7 /* GTLYouTubeVideoTopicDetails.m in Sources */,
 				E206718D1B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsChannelItem.m in Sources */,
 				E206718E1B049AA6006DD2F7 /* GTLYouTubeVideoLiveStreamingDetails.m in Sources */,
+				251BF4741C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */,
 				256F6D9F1BF624FB00154622 /* CameraNode.cpp in Sources */,
 				256F6BA01BF6246300154622 /* MathHelper.cpp in Sources */,
 				E206718F1B049AA6006DD2F7 /* GTLYouTubeVideoSuggestions.m in Sources */,
@@ -6940,6 +6961,7 @@
 				E20671AC1B049AA6006DD2F7 /* Utils.m in Sources */,
 				256F6F751BF6257C00154622 /* tessmono.c in Sources */,
 				256F6D751BF624FB00154622 /* Line3D.cpp in Sources */,
+				251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */,
 				E20671AD1B049AA6006DD2F7 /* GTLYouTubeVideoFileDetailsAudioStream.m in Sources */,
 				E20671AE1B049AA6006DD2F7 /* GTLYouTubeChannelTopicDetails.m in Sources */,
 				01B4CF8B1C291EFD0091E19B /* FrameCellNew.mm in Sources */,
@@ -7147,6 +7169,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
@@ -7163,6 +7186,7 @@
 					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7187,6 +7211,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
@@ -7203,6 +7228,7 @@
 					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7224,6 +7250,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
@@ -7240,6 +7267,7 @@
 					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
 				PRODUCT_NAME = Iyan3Dcopy;
@@ -7261,6 +7289,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
@@ -7277,6 +7306,7 @@
 					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
+					"$(PROJECT_DIR)/FrameWorks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
 				PRODUCT_NAME = Iyan3Dcopy;

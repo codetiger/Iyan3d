@@ -10,11 +10,11 @@
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "F3B4D421-C9DB-43C5-B8B2-E77989E7307B",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "19668fbc-42bf-4728-acef-d3afb4f12ffe" : "iyan3d5.0\/"
+    "19668fbc-42bf-4728-acef-d3afb4f12ffe" : "iyan3d5\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Iyan3D",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iyan3d\/trunk\/Iyan3D\/Iyan3D.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iyan3d\/trunk\/Iyan3D_iOS\/Iyan3D.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/192.168.1.5\/iyan3d5.0",
