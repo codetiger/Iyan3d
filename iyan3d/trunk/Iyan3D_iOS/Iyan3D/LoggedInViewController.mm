@@ -186,7 +186,7 @@
     index = (indexPath.section == COMPLETED) ? index - (int)[progressingTasks count] : index;
     
     RenderItem* rItem;
-    if(indexPath.section == IN_PROGRESS) {
+    if(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) {
         rItem = (RenderItem*)[progressingTasks objectAtIndex:indexPath.row];
     } else {
         rItem = (RenderItem*)[completedTask objectAtIndex:indexPath.row];
