@@ -135,8 +135,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     // TODO a lot to implement
     ActionType assetAddType = IMPORT_ASSET_ACTION;
     
-    if(editorScene)
+    if(editorScene) {
         editorScene->loader->removeTempNodeIfExists();
+        if(isTempNode)
+            editorScene->isPreviewMode = false;
+    }
     
     switch (type) {
         case ASSET_CAMERA: {
@@ -342,7 +345,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
     }
     editorScene->updater->updateControlsOrientaion();
-    if (editorScene->actions.size() > 0 && editorScene->currentAction > 0 && !_isPlaying) {
+    if (editorScene->actionMan->actions.size() > 0 && editorScene->actionMan->currentAction > 0 && !_isPlaying) {
         //[self.undoButton setEnabled:YES];
     }
 }

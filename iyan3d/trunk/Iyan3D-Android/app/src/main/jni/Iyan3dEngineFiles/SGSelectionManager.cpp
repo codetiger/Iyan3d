@@ -52,7 +52,7 @@ void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
     }
     selectionScene->isRTTCompleted = true;
     
-    // TODO storeInitialKeyForUndo();
+    selectionScene->actionMan->storeActionKeys(false);
 }
 
 void SGSelectionManager::postNodeJointSelection()
@@ -66,7 +66,7 @@ void SGSelectionManager::postNodeJointSelection()
     
     if(selectionScene->selectedNodeId > 0) {
         if(currentSelectedNode->joints.size() != HUMAN_JOINTS_SIZE)
-            selectionScene->setMirrorState(MIRROR_OFF);
+            selectionScene->actionMan->setMirrorState(MIRROR_OFF);
     }
     
     if(selectionScene->isJointSelected && selectionScene->selectedJointId != NOT_SELECTED)

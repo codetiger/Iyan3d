@@ -13,12 +13,12 @@ SGCloudRenderingHelper::SGCloudRenderingHelper()
     
 }
 
-bool SGCloudRenderingHelper::writeFrameData(SGAnimationScene *scene , int frameId, string fileName, vector<string> &textureFileNames)
+bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId, string fileName, vector<string> &textureFileNames)
 {
     string outputFileName =  FileHelper::getDocumentsDirectory() + fileName;
     ofstream frameFilePtr(outputFileName , ios::binary);
     
-    scene->setRenderCameraOrientation();
+    scene->renHelper->setRenderCameraOrientation();
     Vector3 camPos = scene->renderCamera->getAbsolutePosition();
     
     FileHelper::writeFloat(&frameFilePtr, camPos.x);
@@ -134,7 +134,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGAnimationScene *scene , int frameI
     }
     
     frameFilePtr.close();
-    scene->smgr->setActiveCamera(scene->viewCamera);
+    smgr->setActiveCamera(scene->viewCamera);
 }
 
 vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode *sgNode)

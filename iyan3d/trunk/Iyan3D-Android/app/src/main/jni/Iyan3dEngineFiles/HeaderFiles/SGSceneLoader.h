@@ -9,6 +9,7 @@
 #ifndef SGSceneLoader_h
 #define SGSceneLoader_h
 
+#include "SGAction.h"
 #include "SGNode.h"
 #include "Constants.h"
 
@@ -33,6 +34,7 @@ public:
     
     SGNode* loadNode(NODE_TYPE type,int assetId, wstring imagePath = L" ",int imgWidth = 0,int imgHeight = 0,int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0),string fontFilePath = "");
     bool loadNode(SGNode *sgNode,int actionType);
+    bool loadNodeOnUndoORedo(SGAction action, int actionType);
     
     void addLight(SGNode *light);
     void performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType);

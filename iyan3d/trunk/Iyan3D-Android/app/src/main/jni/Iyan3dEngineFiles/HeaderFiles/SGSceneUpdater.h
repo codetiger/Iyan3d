@@ -23,6 +23,7 @@ public:
     ~SGSceneUpdater();
     
     void setDataForFrame(int frame);
+    void setKeysForFrame(int frame);
     void updateControlsMaterial();
     void updateControlsOrientaion(bool forRTT = false);
     void changeCameraView(CAMERA_VIEW_MODE mode);
@@ -31,6 +32,7 @@ public:
     void updateLightProperties(int frameId);
     void resetMaterialTypes(bool isToonShader);
     void reloadKeyFrameMap();
+    void setCameraProperty(float fov , int resolutionType);
 };
 
 #endif /* SGSceneUpdater_h */

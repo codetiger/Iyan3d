@@ -498,6 +498,8 @@
 		25F0C26F1C2EB27800C8EC85 /* SGSceneWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C26D1C2EB27800C8EC85 /* SGSceneWriter.cpp */; };
 		25F0C2701C2ECEBF00C8EC85 /* SGAnimationSceneHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B7D1BF6246200154622 /* SGAnimationSceneHelper.cpp */; };
 		25F0C2711C2ECEBF00C8EC85 /* SGAnimationSceneHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B7D1BF6246200154622 /* SGAnimationSceneHelper.cpp */; };
+		25F51F7D1C3291930021D3F5 /* SGCloudRenderingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */; };
+		25F51F7E1C3291940021D3F5 /* SGCloudRenderingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */; };
 		25F7C44E1B68093600C4183F /* deviceCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 25F7C44D1B68093600C4183F /* deviceCodes.json */; };
 		25F7C44F1B68093600C4183F /* deviceCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 25F7C44D1B68093600C4183F /* deviceCodes.json */; };
 		25F7C4651B682F7400C4183F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F7C4641B682F7400C4183F /* libz.dylib */; };
@@ -6440,6 +6442,7 @@
 				C8DF1FDC1C23E65600F689D6 /* SceneSelectionEnteredView.m in Sources */,
 				E21C3CD01A0758B6006964E5 /* GTLYouTubeChannel.m in Sources */,
 				256F6B9D1BF6246300154622 /* KeyHelper.cpp in Sources */,
+				25F51F7D1C3291930021D3F5 /* SGCloudRenderingHelper.cpp in Sources */,
 				E21C3D151A0758B6006964E5 /* GTLYouTubeSubscriptionContentDetails.m in Sources */,
 				E21C3CCA1A0758B6006964E5 /* GTLYouTubeActivityContentDetailsSocial.m in Sources */,
 				E21C3D341A0758B6006964E5 /* GTLYouTubeVideoStatistics.m in Sources */,
@@ -6771,6 +6774,7 @@
 				256F6DA91BF624FB00154622 /* MeshNode.cpp in Sources */,
 				25F0C26F1C2EB27800C8EC85 /* SGSceneWriter.cpp in Sources */,
 				256F6EB51BF624FB00154622 /* DownloadTask.mm in Sources */,
+				25F51F7E1C3291940021D3F5 /* SGCloudRenderingHelper.cpp in Sources */,
 				E20670FD1B049AA6006DD2F7 /* GTLYouTubeVideoAgeGating.m in Sources */,
 				E20670FE1B049AA6006DD2F7 /* ObjCellView.mm in Sources */,
 				E20670FF1B049AA6006DD2F7 /* GTLYouTubeLiveStreamSnippet.m in Sources */,

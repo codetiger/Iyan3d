@@ -7,6 +7,7 @@
 //
 
 #include "SGEditorScene.h"
+#include "SGCloudRenderingHelper.h"
 
 string constants::BundlePath = " ";
 string constants::CachesStoragePath = " ";
@@ -41,13 +42,13 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
 {
     cmgr = new CollisionManager();
     shaderMGR = new ShaderManager(sceneMngr, devType);
-
     renHelper = new RenderHelper(sceneMngr, this);
     selectMan = new SGSelectionManager(sceneMngr, this);
     updater = new SGSceneUpdater(sceneMngr, this);
     loader = new SGSceneLoader(sceneMngr, this);
     moveMan = new SGMovementManager(sceneMngr, this);
     actionMan = new SGActionManager(sceneMngr, this);
+    writer = new SGSceneWriter(sceneMngr, this);
     
     isJointSelected = isNodeSelected = isControlSelected = false;
     freezeRendering = isPlaying = isPreviewMode = false;
@@ -61,10 +62,9 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     selectedNode = NULL;
     controlsPlane = new Plane3D();
     objLoader = new OBJMeshFileLoader;
-    mirrorSwitchState = MIRROR_OFF;
     nodes.clear();
-    actions.clear();
     totalFrames = 24;
+    currentFrame = previousFrame = 0;
     cameraFOV = 72.0;
     cameraResolutionType = 0;
 }
@@ -119,13 +119,13 @@ void SGEditorScene::setTransparencyForObjects()
     if(!smgr && nodes.size() < 3)
         return;
     
-    if(nodes[nodes.size()-1]->isTempNode) {
+    if(nodes[nodes.size()-1]->isTempNode && !isPreviewMode) {
         isPreviewMode = true;
-        for(int index = 2; index < nodes.size()-1; index++)
+        for(int index = 0; index < nodes.size()-1; index++)
             nodes[index]->props.transparency = 0.2;
     } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
         isPreviewMode = false;
-        for(int index = 2; index < nodes.size(); index++) {
+        for(int index = 0; index < nodes.size(); index++) {
             if(nodes[index]->props.isVisible)
                 nodes[index]->props.transparency = 1.0;
         }
@@ -165,16 +165,10 @@ void SGEditorScene::getIKJointPosition()
     }
 }
 
-void SGEditorScene::setMirrorState(MIRROR_SWITCH_STATE flag)
-{
-    mirrorSwitchState = flag;
-    if(isJointSelected)
-        selectMan->highlightJointSpheres();
-}
 
 MIRROR_SWITCH_STATE SGEditorScene::getMirrorState()
 {
-    return mirrorSwitchState;
+    return actionMan->getMirrorState();
 }
 
 void SGEditorScene::initLightCamera(Vector3 position)
@@ -237,4 +231,39 @@ bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
     return (sceneControls[nodeID - CONTROLS_START_ID]->props.transparency < 1.0);
 }
 
+bool SGEditorScene::loadSceneData(std::string *filePath)
+{
+    return loader->loadSceneData(filePath);
+}
 
+void SGEditorScene::saveSceneData(std::string *filePath)
+{
+    writer->saveSceneData(filePath);
+}
+
+int SGEditorScene::undo(int &returnValue2)
+{
+    return actionMan->undo(returnValue2);
+}
+int SGEditorScene::redo()
+{
+    return actionMan->redo();
+}
+
+vector<string> SGEditorScene::generateSGFDFiles(int startFrame , int endFrame)
+{
+    vector<string> textureFileNames;
+    if(startFrame == endFrame) {
+        SGCloudRenderingHelper::writeFrameData(this, smgr, startFrame, "1.sgfd", textureFileNames);
+        return textureFileNames;
+    }
+    
+    for(int index = startFrame; index <= endFrame; index++) {
+        string outFileName = to_string(index+1 - startFrame) + ".sgfd";
+        if(index < totalFrames)
+            updater->setDataForFrame(index);
+        SGCloudRenderingHelper::writeFrameData(this, smgr, index, outFileName, textureFileNames);
+        
+    }
+    return textureFileNames;
+}

@@ -1026,9 +1026,9 @@ void SGAnimationScene::switchFrame(int frame)
         switchFrameAction.frameId = currentFrame;
         addAction(switchFrameAction);
     }
-
     setDataForFrame(frame);
 }
+
 void SGAnimationScene::touchEnd(Vector2 curTouchPos)
 {
     setLightingOn();

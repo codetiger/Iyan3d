@@ -9,5 +9,11 @@
 #ifndef SGAnimationManager_h
 #define SGAnimationManager_h
 
+#include "Constants.h"
+
+class SGAnimationManager
+{
+    
+};
 
 #endif /* SGAnimationManager_h */

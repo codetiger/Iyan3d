@@ -48,8 +48,6 @@ class SGEditorScene {
     
 private:
     
-    MIRROR_SWITCH_STATE mirrorSwitchState;
-    bool isPreviewMode;
     SceneManager *smgr;
 
     void setTransparencyForObjects();
@@ -60,11 +58,12 @@ public:
     
     /* cpp class objects */
     
+    bool isPreviewMode;
     bool freezeRendering , isPlaying, isRTTCompleted;
     bool isNodeSelected,isJointSelected,isControlSelected;
-    int selectedJointId,selectedNodeId,selectedControlId,controlType,currentAction;
+    int selectedJointId,selectedNodeId,selectedControlId,controlType;
     int totalFrames, cameraResolutionType;
-    int currentFrame;
+    int currentFrame, previousFrame;
     int actionObjectsSize;
     int assetIDCounter;
     
@@ -83,7 +82,6 @@ public:
     vector<SGNode*> sceneControls;
     vector<SGNode*> nodes;
     vector<SGNode*> jointSpheres;
-    vector<SGAction> actions;
     vector<TPoseJoint> tPoseJoints;
     ShaderManager *shaderMGR;
     RenderHelper *renHelper;
@@ -92,6 +90,7 @@ public:
     SGSceneLoader *loader;
     SGMovementManager *moveMan;
     SGActionManager *actionMan;
+    SGSceneWriter *writer;
     
     /* SGEngine class objects */
     
@@ -142,15 +141,22 @@ public:
     void setControlsUniforms(int nodeID,string matName);
     bool isControlsTransparent(int nodeID,string matName);
     
+    /* Read and Write */
+    
+    bool loadSceneData(std::string *filePath);
+    void saveSceneData(std::string *filePath);
+
     /* Other Methods */
     
+    int undo(int& returnValue2);
+    int redo();
     
     void getIKJointPosition();
     void findAndInsertInIKPositionMap(int jointId);
-    void setMirrorState(MIRROR_SWITCH_STATE flag);
     MIRROR_SWITCH_STATE getMirrorState();
     void clearSelections();
     Vector4 getCameraPreviewLayout();
+    vector<string> generateSGFDFiles(int startFrame , int endFrame);
 
 };
 

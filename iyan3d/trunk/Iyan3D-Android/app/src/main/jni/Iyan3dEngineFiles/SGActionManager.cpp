@@ -15,7 +15,49 @@ SGActionManager::SGActionManager(SceneManager* smgr, void* scene)
 {
     this->smgr = smgr;
     actionScene = (SGEditorScene*)scene;
+    mirrorSwitchState = MIRROR_OFF;
+    actions.clear();
 }
+
+void SGActionManager::addAction(SGAction& action){
+    if(currentAction < 0)
+        currentAction = 0;
+    
+    actions.push_back(action);
+    while(actions.size() > MAXUNDO){
+        actions.erase(actions.begin());
+        currentAction--;
+    }
+    currentAction++;
+}
+
+void SGActionManager::finalizeAndAddAction(SGAction& action)
+{
+    if(!actionScene || !smgr)
+        return false;
+    
+    removeActions();
+    if(action.actionType == ACTION_CHANGE_JOINT_KEYS|| action.actionType == ACTION_CHANGE_NODE_JOINT_KEYS|| action.actionType == ACTION_CHANGE_NODE_KEYS) {
+        action.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
+        if(action.actionType != ACTION_CHANGE_NODE_KEYS)
+            action.actionSpecificIntegers.push_back(actionScene->selectedJointId);
+        action.frameId = actionScene->currentFrame;
+    }
+    addAction(action);
+}
+
+void SGActionManager::removeActions()
+{
+    if(!actionScene || !smgr)
+        return false;
+
+    if(currentAction < 0)
+        currentAction = 0;
+    
+    while(actions.size()>currentAction)
+        actions.pop_back();
+}
+
 
 bool SGActionManager::isIKJoint(int jointId)
 {
@@ -142,4 +184,501 @@ void SGActionManager::rotateJoint(Vector3 outputValue)
         }
     }
     // TODO For CPU Skin update mesh cache
+}
+void SGActionManager::storeActionKeys(bool finished)
+{
+    if(!actionScene || !smgr || !actionScene->isNodeSelected)
+        return;
+
+    SGNode * selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+    if(actionScene->selectedControlId != NOT_SELECTED) {
+        actionScene->isControlSelected = true;
+        if(!finished)
+            changeKeysAction.drop();
+        changeKeysAction.objectIndex = selectedNode->actionId;
+        
+        if(!actionScene->isJointSelected){
+            changeKeysAction.actionType = ACTION_CHANGE_NODE_KEYS;
+            changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
+            if(finished) {
+                if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT)
+                    actionScene->updater->updateLightProperties(actionScene->currentFrame);
+            }
+        }
+        else if(actionScene->isJointSelected){
+            if(selectedNode->joints.size() >= HUMAN_JOINTS_SIZE && actionScene->selectedJointId == HIP) {
+                changeKeysAction.actionType = ACTION_CHANGE_NODE_JOINT_KEYS;
+                changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
+                for(unsigned long i=0; i<selectedNode->joints.size(); i++){
+                    changeKeysAction.keys.push_back(selectedNode->joints[i]->getKeyForFrame(actionScene->currentFrame));
+                }
+            }
+            else {
+                changeKeysAction.actionType = ACTION_CHANGE_JOINT_KEYS;
+                for(unsigned long i=0; i<selectedNode->joints.size(); i++){
+                    changeKeysAction.keys.push_back(selectedNode->joints[i]->getKeyForFrame(actionScene->currentFrame));
+                }
+            }
+        }
+        
+        actionScene->updater->reloadKeyFrameMap();
+        if(finished)
+            addAction(changeKeysAction);
+    }
+}
+
+
+void SGActionManager::switchFrame(int frame)
+{
+    if(!actionScene || !smgr)
+        return;
+
+    if(!actionScene->isPlaying) {
+        SGAction switchFrameAction;
+        switchFrameAction.actionType = ACTION_SWITCH_FRAME;
+        switchFrameAction.actionSpecificIntegers.push_back(actionScene->previousFrame);
+        switchFrameAction.frameId = actionScene->currentFrame;
+        addAction(switchFrameAction);
+    }
+    actionScene->updater->setDataForFrame(frame);
+}
+
+void SGActionManager::changeMeshProperty(float brightness, float specular, bool isLighting, bool isVisible, bool isChanged)
+{
+    if(!actionScene || !smgr || !actionScene->isNodeSelected)
+        return;
+    
+    SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+    
+    if(propertyAction.actionType == ACTION_EMPTY){
+        propertyAction.actionType = ACTION_CHANGE_PROPERTY_MESH;
+        propertyAction.objectIndex = selectedNode->actionId;
+        propertyAction.frameId = actionScene->currentFrame;
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.brightness);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.shininess);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->props.isLighting);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->props.isVisible);
+    }
+    
+    selectedNode->setShaderProperties(brightness, specular, isLighting, isVisible, actionScene->currentFrame);
+    if(isChanged){
+        propertyAction.actionSpecificFloats.push_back(brightness);
+        propertyAction.actionSpecificFloats.push_back(specular);
+        propertyAction.actionSpecificFlags.push_back(isLighting);
+        propertyAction.actionSpecificFlags.push_back(isVisible);
+        finalizeAndAddAction(propertyAction);
+        propertyAction.drop();
+    }
+    actionScene->updater->setDataForFrame(actionScene->currentFrame);
+}
+
+void SGActionManager::changeCameraProperty(float fov , int resolutionType, bool isChanged)
+{
+    if(!actionScene || !smgr || !actionScene->isNodeSelected)
+        return;
+
+    if(propertyAction.actionType == ACTION_EMPTY){
+        propertyAction.actionType = ACTION_CHANGE_PROPERTY_CAMERA;
+        propertyAction.actionSpecificFloats.push_back(actionScene->cameraFOV);
+        propertyAction.actionSpecificIntegers.push_back(actionScene->cameraResolutionType);
+    }
+    actionScene->updater->setCameraProperty(fov, resolutionType);
+    if(isChanged){
+        propertyAction.actionSpecificFloats.push_back(actionScene->cameraFOV);
+        propertyAction.actionSpecificIntegers.push_back(actionScene->cameraResolutionType);
+        finalizeAndAddAction(propertyAction);
+        propertyAction.drop();
+    }
+    
+}
+
+void SGActionManager::changeLightProperty(float red , float green, float blue, float shadow, bool isChanged)
+{
+    if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
+        return;
+
+    SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+    if(propertyAction.actionType == ACTION_EMPTY){
+        propertyAction.actionType = ACTION_CHANGE_PROPERTY_LIGHT;
+        propertyAction.actionSpecificFloats.push_back(ShaderManager::lightColor[0].x);
+        propertyAction.actionSpecificFloats.push_back(ShaderManager::lightColor[0].y);
+        propertyAction.actionSpecificFloats.push_back(ShaderManager::lightColor[0].z);
+        propertyAction.actionSpecificFloats.push_back(ShaderManager::shadowDensity);
+        
+        changeKeysAction.drop();
+        changeKeysAction.actionType = ACTION_CHANGE_NODE_KEYS;
+        changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
+    }
+    
+    if(selectedNode->getType() == NODE_LIGHT)
+        ShaderManager::shadowDensity = shadow;
+    else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
+        selectedNode->props.nodeSpecificFloat = (shadow + 0.001) * 300.0;
+    }
+    
+    //nodes[selectedNodeId]->props.vertexColor = Vector3(red,green,blue);
+    Quaternion lightPropKey = Quaternion(red,green,blue,selectedNode->props.nodeSpecificFloat);
+    Vector3 mainLightColor = Vector3(red,green,blue);
+    
+    if(selectedNode->getType() == NODE_LIGHT)
+        selectedNode->setScale(mainLightColor, actionScene->currentFrame);
+    else
+        selectedNode->setRotation(lightPropKey, actionScene->currentFrame);
+    
+    actionScene->updater->updateLightProperties(actionScene->currentFrame);
+    //    updateLightWithRender();
+}
+
+void SGActionManager::storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity)
+{
+    if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
+        return;
+    SGNode* selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+    changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
+    
+    propertyAction.actionSpecificFloats.push_back(red);
+    propertyAction.actionSpecificFloats.push_back(green);
+    propertyAction.actionSpecificFloats.push_back(blue);
+    propertyAction.actionSpecificFloats.push_back(shadowDensity);
+    finalizeAndAddAction(changeKeysAction);
+    changeKeysAction.drop();
+    propertyAction.drop();
+}
+
+void SGActionManager::setMirrorState(MIRROR_SWITCH_STATE flag)
+{
+    if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
+        return;
+
+    mirrorSwitchState = flag;
+    if(actionScene->isJointSelected)
+        actionScene->selectMan->highlightJointSpheres();
+}
+bool SGActionManager::switchMirrorState()
+{
+    if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
+        return false;
+
+    SGAction action;
+    action.actionType = ACTION_CHANGE_MIRROR_STATE;
+    action.actionSpecificFlags.push_back(mirrorSwitchState);
+    finalizeAndAddAction(action);
+    setMirrorState((MIRROR_SWITCH_STATE)!mirrorSwitchState);
+    return mirrorSwitchState;
+}
+
+MIRROR_SWITCH_STATE SGActionManager::getMirrorState()
+{
+    return mirrorSwitchState;
+}
+
+void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, string optionalFilePath)
+{
+    if(!actionScene || !smgr)
+        return;
+
+    if (actionType == ACTION_NODE_ADDED) {
+        assetAction.drop();
+        assetAction.actionType = ACTION_NODE_ADDED;
+        assetAction.frameId = assetId;
+        assetAction.objectIndex =  actionScene->actionObjectsSize + 1;
+        addAction(assetAction);
+    } else if(actionType == ACTION_NODE_DELETED) {
+        assetAction.drop();
+        assetAction.actionType = ACTION_NODE_DELETED;
+        SGNode * selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+        assetAction.frameId = selectedNode->assetId;
+        assetAction.objectIndex = selectedNode->actionId;
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(selectedNode->props.prevMatName));
+        StoreDeleteObjectKeys(actionScene->selectedNodeId);
+        addAction(assetAction);
+    } else if (actionType == ACTION_TEXT_IMAGE_DELETE|| actionType == ACTION_TEXT_IMAGE_ADD) {
+        assetAction.drop();
+        assetAction.actionType = actionType == ACTION_TEXT_IMAGE_DELETE?ACTION_TEXT_IMAGE_DELETE : ACTION_TEXT_IMAGE_ADD;
+        int indexOfAsset = actionType == ACTION_TEXT_IMAGE_DELETE ? actionScene->selectedNodeId : (int)actionScene->nodes.size()-1;
+        assetAction.objectIndex = actionScene->nodes[indexOfAsset]->actionId;
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->node->material->name));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->optionalFilePath));
+        assetAction.actionSpecificStrings.push_back(actionScene->nodes[indexOfAsset]->name);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.vertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.vertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.vertexColor.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->props.nodeSpecificFloat);
+        assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->getType());
+        assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->props.fontSize);
+        if(actionType == ACTION_TEXT_IMAGE_DELETE)
+            StoreDeleteObjectKeys(indexOfAsset);
+        addAction(assetAction);
+    } else if (actionType == ACTION_APPLY_ANIM) {
+        assetAction.drop();
+        assetAction.actionType = ACTION_APPLY_ANIM;
+        /* TODO store action for animations
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(animFilePath));
+        assetAction.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
+        assetAction.frameId = animStartFrame;
+        assetAction.actionSpecificIntegers.push_back(animTotalFrames);
+        addAction(assetAction);
+         */
+    }
+}
+
+void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
+{
+    if(!actionScene || !smgr)
+        return false;
+    
+    SGNode *sgNode = actionScene->nodes[nodeIndex];
+
+    if(sgNode->positionKeys.size())
+        assetAction.nodePositionKeys = sgNode->positionKeys;
+    if(sgNode->rotationKeys.size())
+        assetAction.nodeRotationKeys = sgNode->rotationKeys;
+    if(sgNode->scaleKeys.size())
+        assetAction.nodeSCaleKeys = sgNode->scaleKeys;
+    if(sgNode->visibilityKeys.size())
+        assetAction.nodeVisibilityKeys = sgNode->visibilityKeys;
+    for (int i = 0; i < (int)sgNode->joints.size(); i++) {
+        //assetAction.jointsRotationKeys[i] = nodes[nodeIndex]->joints[i]->rotationKeys;
+        assetAction.jointRotKeys[i] = sgNode->joints[i]->rotationKeys;
+        if(sgNode->getType() == NODE_TEXT){
+            assetAction.jointPosKeys[i] = sgNode->joints[i]->positionKeys;
+            assetAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
+        }
+    }
+}
+
+int SGActionManager::undo(int &returnValue2)
+{
+    if(!actionScene || !smgr)
+        return -1;
+
+    int returnValue = DO_NOTHING;
+    SGAction &recentAction = actions[currentAction-1];
+    int indexOfAction = 0;
+    
+    if(currentAction <= 0) {
+        currentAction = 0;
+        return (actions.size() > 0) ? DEACTIVATE_UNDO:DEACTIVATE_BOTH;
+    }
+    returnValue2 = indexOfAction = getObjectIndex(recentAction.objectIndex);
+    
+    switch(recentAction.actionType){
+        case ACTION_CHANGE_NODE_KEYS:
+            actionScene->nodes[indexOfAction]->setKeyForFrame(recentAction.frameId, recentAction.keys[0]);
+            actionScene->updater->reloadKeyFrameMap();
+            break;
+        case ACTION_CHANGE_JOINT_KEYS: {
+            for(int i = 0; i <(int)actionScene->nodes[indexOfAction]->joints.size(); i++){
+                actionScene->nodes[indexOfAction]->joints[i]->setKeyForFrame(recentAction.frameId, recentAction.keys[i]);
+            }
+            actionScene->updater->reloadKeyFrameMap();
+            break;
+            
+        }
+        case ACTION_CHANGE_NODE_JOINT_KEYS:{
+            actionScene->nodes[indexOfAction]->setKeyForFrame(recentAction.frameId, recentAction.keys[0]);
+            for(unsigned long i=0; i < actionScene->nodes[indexOfAction]->joints.size(); i++){
+                actionScene->nodes[indexOfAction]->joints[i]->setKeyForFrame(recentAction.frameId, recentAction.keys[i+1]);
+            }
+            actionScene->updater->reloadKeyFrameMap();
+            break;
+        }
+        case ACTION_SWITCH_FRAME:{
+            actionScene->currentFrame = recentAction.actionSpecificIntegers[0];
+            returnValue = SWITCH_FRAME;
+            break;
+        }
+        case ACTION_CHANGE_PROPERTY_MESH:{
+            actionScene->nodes[indexOfAction]->setShaderProperties(recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.frameId);
+            break;
+        }
+        case ACTION_CHANGE_PROPERTY_LIGHT: {
+            //TODO to do for all lights
+            ShaderManager::lightColor[0] = Vector3(recentAction.actionSpecificFloats[0],recentAction.actionSpecificFloats[1],recentAction.actionSpecificFloats[2]);
+            ShaderManager::shadowDensity = recentAction.actionSpecificFloats[3];
+            break;
+        }
+        case ACTION_CHANGE_PROPERTY_CAMERA:{
+            actionScene->updater->setCameraProperty(recentAction.actionSpecificFloats[0], recentAction.actionSpecificIntegers[0]);
+            break;
+        }
+        case ACTION_CHANGE_MIRROR_STATE:{
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            setMirrorState((MIRROR_SWITCH_STATE)(bool)recentAction.actionSpecificFlags[0]);
+            returnValue = SWITCH_MIRROR;
+            break;
+        }
+        case ACTION_NODE_ADDED: {
+            recentAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAction]->props.prevMatName));
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            returnValue = DELETE_ASSET;
+            break;
+        }
+        case ACTION_NODE_DELETED: {
+            returnValue = ADD_ASSET_BACK;
+            returnValue2 = recentAction.frameId;
+            break;
+        }
+        case ACTION_TEXT_IMAGE_ADD: {
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            returnValue = DELETE_ASSET;
+            break;
+        }
+        case ACTION_TEXT_IMAGE_DELETE: {
+            if(!actionScene->loader->loadNodeOnUndoORedo(recentAction, UNDO_ACTION)){
+                returnValue = DO_NOTHING;
+                break;
+            }
+            returnValue = ADD_TEXT_IMAGE_BACK;
+            break;
+        }
+        case ACTION_APPLY_ANIM: {
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            actionScene->selectedNodeId = indexOfAction;
+            actionScene->updater->reloadKeyFrameMap();
+            for (int i = recentAction.frameId; i < recentAction.actionSpecificIntegers[0]; i++) {
+                // TODO removeAnimationForSelectedNodeAtFrame(i);
+            }
+            actionScene->updater->reloadKeyFrameMap();
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            returnValue = RELOAD_FRAMES;
+            break;
+        }
+        default:
+            return DO_NOTHING;
+    }
+    if(recentAction.actionType != ACTION_NODE_DELETED && recentAction.actionType != ACTION_TEXT_IMAGE_DELETE)
+        currentAction--;
+    //currentFrame = recentAction.frameId;
+    
+    if(recentAction.actionType != ACTION_SWITCH_FRAME) {
+        actionScene->updater->setKeysForFrame(recentAction.frameId);
+        actionScene->updater->setKeysForFrame(recentAction.frameId);
+    }
+        // CPU SKIN update
+    
+    if(recentAction.actionType == ACTION_CHANGE_NODE_KEYS && (actionScene->nodes[indexOfAction]->getType() == NODE_LIGHT || actionScene->nodes[indexOfAction]->getType() == NODE_ADDITIONAL_LIGHT))
+        actionScene->updater->updateLightProperties(recentAction.frameId);
+    
+    return returnValue;
+
+}
+
+int SGActionManager::redo()
+{
+    if(!actionScene || !smgr)
+        return -1;
+
+    int returnValue = DO_NOTHING;
+    
+    if(currentAction == actions.size()) {
+        if(currentAction <= 0) {
+            currentAction = 0;
+            return DEACTIVATE_BOTH;
+        }
+        else
+            return DEACTIVATE_REDO;
+    }
+    
+    SGAction &recentAction = actions[currentAction];
+    int indexOfAction = getObjectIndex(recentAction.objectIndex);
+    
+    SGNode* sgNode;
+    if(indexOfAction < actionScene->nodes.size())
+        sgNode = actionScene->nodes[indexOfAction];
+    
+    switch(recentAction.actionType){
+        case ACTION_CHANGE_NODE_KEYS:
+            sgNode->setKeyForFrame(recentAction.frameId, recentAction.keys[1]);
+            actionScene->updater->reloadKeyFrameMap();
+            break;
+        case ACTION_CHANGE_JOINT_KEYS:{
+            int jointsCnt = (int)sgNode->joints.size();
+            for(unsigned long i=0; i < jointsCnt; i++){
+                sgNode->joints[i]->setKeyForFrame(recentAction.frameId, recentAction.keys[jointsCnt+i]);
+            }
+            actionScene->updater->reloadKeyFrameMap();
+            break;
+        }
+        case ACTION_CHANGE_NODE_JOINT_KEYS:{
+            int jointsCnt = (int)sgNode->joints.size();
+            sgNode->setKeyForFrame(recentAction.frameId, recentAction.keys[jointsCnt +1]);
+            for(unsigned long i=1; i <= sgNode->joints.size(); i++){
+                sgNode->joints[i-1]->setKeyForFrame(recentAction.frameId, recentAction.keys[jointsCnt+i+1]);
+            }
+            break;
+        }
+        case ACTION_SWITCH_FRAME:
+            actionScene->currentFrame = recentAction.frameId;
+            break;
+        case ACTION_CHANGE_PROPERTY_MESH:
+            sgNode->setShaderProperties(recentAction.actionSpecificFloats[2], recentAction.actionSpecificFloats[3], recentAction.actionSpecificFlags[2], recentAction.actionSpecificFlags[3], recentAction.frameId);
+            break;
+        case ACTION_CHANGE_PROPERTY_LIGHT:
+            ShaderManager::lightColor[0] = Vector3(recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5],recentAction.actionSpecificFloats[6]);
+            ShaderManager::shadowDensity = recentAction.actionSpecificFloats[7];
+            break;
+        case ACTION_CHANGE_PROPERTY_CAMERA:
+            actionScene->updater->setCameraProperty(recentAction.actionSpecificFloats[1], recentAction.actionSpecificIntegers[1]);
+            break;
+        case ACTION_CHANGE_MIRROR_STATE:
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            setMirrorState((MIRROR_SWITCH_STATE)!recentAction.actionSpecificFlags[0]);
+            returnValue = SWITCH_MIRROR;
+            break;
+        case ACTION_NODE_ADDED:
+        {
+            returnValue = recentAction.frameId;
+            break;
+        }
+        case ACTION_NODE_DELETED:
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            actionScene->selectedNodeId = indexOfAction;
+            returnValue = DELETE_ASSET;
+            break;
+        case ACTION_TEXT_IMAGE_ADD: {
+            if(!actionScene->loader->loadNodeOnUndoORedo(recentAction, REDO_ACTION)) {
+                returnValue = DO_NOTHING;
+                break;
+            }
+            returnValue = ADD_TEXT_IMAGE_BACK;
+            break;
+        }
+        case ACTION_TEXT_IMAGE_DELETE: {
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            actionScene->selectedNodeId = indexOfAction;
+            returnValue = DELETE_ASSET;
+            break;
+        }
+        case ACTION_APPLY_ANIM: {
+            actionScene->selectedNodeId = indexOfAction;
+            actionScene->updater->setDataForFrame(actionScene->currentFrame);
+//     TODO        applyAnimations(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]),selectedNodeId);
+            actionScene->updater->reloadKeyFrameMap();
+            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            break;
+        }
+        default:
+            return DO_NOTHING;
+    }
+    if(recentAction.actionType != ACTION_NODE_ADDED && recentAction.actionType != ACTION_TEXT_IMAGE_ADD)
+        currentAction++;
+    if(recentAction.actionType != ACTION_SWITCH_FRAME)
+        actionScene->updater->setKeysForFrame(actionScene->currentFrame);
+    actionScene->updater->updateControlsOrientaion();
+    
+    if(recentAction.actionType == ACTION_CHANGE_NODE_KEYS && (sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT))
+        actionScene->updater->updateLightProperties(recentAction.frameId);
+    
+    return returnValue;
+}
+
+int SGActionManager::getObjectIndex(int actionIndex)
+{
+    for(int i = 0; i < (int)actionScene->nodes.size(); i++) {
+        if(actionScene->nodes[i]->actionId == actionIndex) {
+            return i;
+        }
+    }
+    return 0;
 }

@@ -163,6 +163,8 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
 {
     if(!currentScene || !smgr)
         return;
+    
+    currentScene->selectMan->unselectObject(currentScene->selectedNodeId);
     currentScene->freezeRendering = true;
     SGNode *sgnode = new SGNode(type);
     sgnode->node = sgnode->loadNode(assetId,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
@@ -204,6 +206,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
     performUndoRedoOnNodeLoad(sgnode,actionType);
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->updater->resetMaterialTypes(false);
+    currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
     return sgnode;
 }
@@ -248,6 +251,28 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
     return true;
 }
 
+bool SGSceneLoader::loadNodeOnUndoORedo(SGAction action, int actionType)
+{
+    SGNode *sgNode = new SGNode(NODE_UNDEFINED);
+    sgNode->setType((NODE_TYPE)action.actionSpecificIntegers[0]);
+    sgNode->props.fontSize = action.actionSpecificIntegers[1];
+    //            node->props.shaderType = recentAction.actionSpecificIntegers[1];
+    sgNode->props.vertexColor.x = action.actionSpecificFloats[0];
+    sgNode->props.vertexColor.y = action.actionSpecificFloats[1];
+    sgNode->props.vertexColor.z = action.actionSpecificFloats[2];
+    sgNode->props.nodeSpecificFloat = action.actionSpecificFloats[3];
+    
+    sgNode->props.prevMatName = ConversionHelper::getStringForWString(action.actionSpecificStrings[0]);
+    sgNode->optionalFilePath = ConversionHelper::getStringForWString(action.actionSpecificStrings[1]);
+    sgNode->name = action.actionSpecificStrings[2];
+    
+    if(!loadNode(sgNode, actionType)) {
+        delete sgNode;
+        return false;
+    }
+    return true;
+}
+
 void SGSceneLoader::addLight(SGNode *light)
 {
     if(!currentScene || !smgr)
@@ -270,7 +295,7 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
 
     if(actionType == UNDO_ACTION) {
         int jointsCnt = (int)meshObject->joints.size();
-        SGAction &deleteAction = currentScene->actions[currentScene->currentAction-1];
+        SGAction &deleteAction = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1];
         if(deleteAction.nodePositionKeys.size())
             meshObject->positionKeys = deleteAction.nodePositionKeys;
         if(deleteAction.nodeRotationKeys.size())
@@ -292,15 +317,15 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
             }
         }
         meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
-        meshObject->actionId = currentScene->actions[currentScene->currentAction-1].objectIndex;
-        currentScene->currentAction--;
+        meshObject->actionId = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].objectIndex;
+        currentScene->actionMan->currentAction--;
     }
     
     if(actionType == REDO_ACTION) {
-        SGAction &deleteAction = currentScene->actions[currentScene->currentAction];
+        SGAction &deleteAction = currentScene->actionMan->actions[currentScene->actionMan->currentAction];
         meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
         meshObject->actionId = deleteAction.objectIndex;
-        currentScene->currentAction++;
+        currentScene->actionMan->currentAction++;
     }
 }
 

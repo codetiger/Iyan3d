@@ -78,6 +78,62 @@ void SGSceneUpdater::setDataForFrame(int frame)
         updateLightProperties(frame);
 }
 
+void SGSceneUpdater::setKeysForFrame(int frame)
+{
+    if(!updatingScene || !smgr)
+        return;
+
+    for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
+        SGNode *sgNode = updatingScene->nodes[i];
+        int posKeyindex = KeyHelper::getKeyIndex(sgNode->positionKeys, frame);
+        if(posKeyindex != -1){
+            sgNode->setPositionOnNode(sgNode->positionKeys[posKeyindex].position);
+        }
+        int rotKeyindex = KeyHelper::getKeyIndex(sgNode->rotationKeys, frame);
+        int scaleKeyindex = KeyHelper::getKeyIndex(sgNode->scaleKeys, frame);
+        if(sgNode->getType() != NODE_LIGHT && sgNode->getType() != NODE_ADDITIONAL_LIGHT) {
+            
+            if(rotKeyindex != -1){
+                sgNode->setRotationOnNode(sgNode->rotationKeys[rotKeyindex].rotation);
+            }
+            
+            if(scaleKeyindex != -1){
+                sgNode->setScaleOnNode(sgNode->scaleKeys[scaleKeyindex].scale);
+            }
+            
+            int visibilityKeyindex = KeyHelper::getKeyIndex(sgNode->visibilityKeys, frame);
+            if(visibilityKeyindex != -1){
+                sgNode->props.isVisible =  sgNode->visibilityKeys[visibilityKeyindex].visibility;
+            }
+        }
+        
+        for (int j = 0; j < sgNode->joints.size(); j++) {
+            SGJoint *joint = sgNode->joints[j];
+            
+            rotKeyindex = KeyHelper::getKeyIndex(joint->rotationKeys, frame);
+            if(rotKeyindex != -1){
+                joint->setRotationOnNode(joint->rotationKeys[rotKeyindex].rotation);
+            }
+            
+            if(sgNode->getType() == NODE_TEXT) {
+                
+                posKeyindex = KeyHelper::getKeyIndex(joint->positionKeys, frame);
+                if(posKeyindex != -1){
+                    joint->setPositionOnNode(joint->positionKeys[posKeyindex].position);
+                }
+                
+                scaleKeyindex = KeyHelper::getKeyIndex(joint->scaleKeys, frame);
+                if(scaleKeyindex != -1){
+                    joint->setScaleOnNode(joint->scaleKeys[scaleKeyindex].scale);
+                }
+            }
+        }
+    }
+    updateControlsOrientaion();
+    updateLightCamera();
+}
+
+
 void SGSceneUpdater::updateControlsMaterial()
 {
     if(!updatingScene || !smgr)
@@ -371,4 +427,14 @@ void SGSceneUpdater::reloadKeyFrameMap()
     else
         updatingScene->isKeySetForFrame.clear();
 }
+
+void SGSceneUpdater::setCameraProperty(float fov , int resolutionType)
+{
+    if(!updatingScene || !smgr)
+        return;
+    updatingScene->cameraFOV = fov;
+    updatingScene->cameraResolutionType = resolutionType;
+    updatingScene->renderCamera->setFOVInRadians(updatingScene->cameraFOV * PI / 180.0f);
+}
+
 
