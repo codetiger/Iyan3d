@@ -269,6 +269,31 @@ void OGLES2RenderManager::draw3DLine(Vector3 start,Vector3 end,Material *materia
   deleteAndUnbindBuffer(GL_ARRAY_BUFFER, 1, &_vertexBuffer);
   deleteAndUnbindBuffer(GL_ELEMENT_ARRAY_BUFFER, 1, &_indexBuffer);
 }
+
+void OGLES2RenderManager::draw3DLines(vector<Vector3> vPositions,Material *material)
+{
+    vector< vertexData > vertData;
+    vector< u16 > indices;
+
+    for(int i = 0; i < (int)vPositions.size(); i++) {
+        vertexData v;
+        v.vertPosition = vPositions[i];
+        vertData.push_back(v);
+        indices.push_back(i);
+    }
+    
+    u_int32_t _vertexBuffer = createAndBindBuffer(GL_ARRAY_BUFFER, (GLuint)((int)vPositions.size() *sizeof(vertexData)),&vertData[0], GL_STATIC_DRAW);
+    u_int32_t _indexBuffer = createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ((int)vPositions.size() * sizeof(unsigned short)) ,&indices[0], GL_STATIC_DRAW);
+    BindAttributes(material);
+    drawElements(GL_LINES, (int)vPositions.size(), GL_UNSIGNED_SHORT, 0, 0);
+    UnBindAttributes(material);
+    deleteAndUnbindBuffer(GL_ARRAY_BUFFER, 1, &_vertexBuffer);
+    deleteAndUnbindBuffer(GL_ELEMENT_ARRAY_BUFFER, 1, &_indexBuffer);
+    
+    vertData.clear();
+    indices.clear();
+}
+
 bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color){
 //    int maxUniformVectors;
 //    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxUniformVectors);

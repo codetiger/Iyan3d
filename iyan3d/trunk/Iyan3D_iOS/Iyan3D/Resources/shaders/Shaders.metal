@@ -254,9 +254,9 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float scale = float(props[1] + (props[2] * positions[iid].data[3]));
     
     matrix_float4x4 translation = matrix_float4x4(1);
-    translation[3][0] = positions[iid].data[0] * scale;
-    translation[3][1] = positions[iid].data[1] * scale;
-    translation[3][2] = positions[iid].data[2] * scale;
+    translation[3][0] = positions[iid].data[0];
+    translation[3][1] = positions[iid].data[1];
+    translation[3][2] = positions[iid].data[2];
     
     matrix_float4x4 rotationMat = matrix_float4x4(1);
     float cr = cos(rotations[iid].data[0]);
@@ -289,7 +289,7 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
     translation = translation * live;
     
-    matrix_float4x4 trans = translation * rotationMat * scaleMat;
+    matrix_float4x4 trans = translation * rotationMat;
     out.position = vp * trans * vertex_position_objectspace;
     
     return out;

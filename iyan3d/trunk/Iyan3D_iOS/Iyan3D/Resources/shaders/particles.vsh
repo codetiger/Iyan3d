@@ -29,9 +29,9 @@ void main() {
     float scale = props.y + (props.z * positions[gl_InstanceIDEXT].w);
     
     mat4 translation = mat4(1);
-    translation[3][0] = positions[gl_InstanceIDEXT].x * scale;
-    translation[3][1] = positions[gl_InstanceIDEXT].y * scale;
-    translation[3][2] = positions[gl_InstanceIDEXT].z * scale;
+    translation[3][0] = positions[gl_InstanceIDEXT].x;
+    translation[3][1] = positions[gl_InstanceIDEXT].y;
+    translation[3][2] = positions[gl_InstanceIDEXT].z;
 
     mat4 rotationMat = mat4(1);
     float cr = cos(rotations[gl_InstanceIDEXT].x);
@@ -64,6 +64,6 @@ void main() {
     float live = float(positions[gl_InstanceIDEXT].w > 0.0 && positions[gl_InstanceIDEXT].w <= float(props.x));
     translation = translation * live;
 
-    mat4 trans = translation * rotationMat * scaleMat;
-    gl_Position = vp * trans * vec4(vertPosition, 1.0);
+    mat4 model = translation * rotationMat;
+    gl_Position = vp * model * vec4(vertPosition, 1.0);
 }

@@ -84,6 +84,7 @@ public:
     bool RemoveMaterialByIndex(u16 index);
     bool RemoveMaterial(Material *mat);
     void draw3DLine(Vector3 start , Vector3 end , Vector3 color , Material *material,int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex);
+    void draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex);
     void draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT = false);
     Texture* createRenderTargetTexture(string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType,int width,int height);
     void setRenderTarget(Texture* renderTexture,bool clearBackBuffer = true,bool clearZBuffer = true,bool isDepthPass=false,Vector4 color = Vector4(255,255,255,255));

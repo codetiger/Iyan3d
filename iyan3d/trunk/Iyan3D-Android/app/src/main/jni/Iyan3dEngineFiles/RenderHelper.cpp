@@ -52,27 +52,39 @@ void RenderHelper::drawGrid()
 {
     if(!smgr)
         return;
-    
     Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
-        if(renderingScene->selectedNodeIds.size() > 0 && renderingScene->getParentNode()) {
-            BoundingBox bb = renderingScene->getParentNode()->getBoundingBox();
-            for (int j = 0; j < 3; j++) {
-                smgr->draw3DLine(bb.getEdgeByIndex(j), bb.getEdgeByIndex(j + 1), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-                //printf(" Edge 1 %f %f %f edge 2 %f %f %f ", bb.getEdgeByIndex(j).x, bb.getEdgeByIndex(j + 1))
-                smgr->draw3DLine(bb.getEdgeByIndex(j + 4), bb.getEdgeByIndex(j + 5), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-                smgr->draw3DLine(bb.getEdgeByIndex(j), bb.getEdgeByIndex(j + 5), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-            }
-            smgr->draw3DLine(bb.getEdgeByIndex(3), bb.getEdgeByIndex(0), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-            smgr->draw3DLine(bb.getEdgeByIndex(7), bb.getEdgeByIndex(4), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-            smgr->draw3DLine(bb.getEdgeByIndex(3), bb.getEdgeByIndex(4), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+    if(renderingScene->selectedNodeIds.size() > 0 && renderingScene->getParentNode()) {
+        vector<Vector3> vPosBB;
+        BoundingBox bb = renderingScene->getParentNode()->getBoundingBox();
+        for (int j = 0; j < 3; j++) {
+            vPosBB.push_back(bb.getEdgeByIndex(j));
+            vPosBB.push_back(bb.getEdgeByIndex(j + 1));
+            vPosBB.push_back(bb.getEdgeByIndex(j + 4));
+            vPosBB.push_back(bb.getEdgeByIndex(j + 5));
+            vPosBB.push_back(bb.getEdgeByIndex(j));
+            vPosBB.push_back(bb.getEdgeByIndex(j + 5));
         }
+        vPosBB.push_back(bb.getEdgeByIndex(3));
+        vPosBB.push_back(bb.getEdgeByIndex(0));
+        vPosBB.push_back(bb.getEdgeByIndex(7));
+        vPosBB.push_back(bb.getEdgeByIndex(4));
+        vPosBB.push_back(bb.getEdgeByIndex(3));
+        vPosBB.push_back(bb.getEdgeByIndex(4));
+        
+        smgr->draw3DLines(vPosBB, Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+    }
     
     int gridSize = 100;
     
+    vector<Vector3> vPositionsGrid;
     for (int i = -gridSize; i <= gridSize; i+= 5) {
-        smgr->draw3DLine(Vector3(i, 0, -gridSize), Vector3(i, 0, gridSize), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
-        smgr->draw3DLine(Vector3(-gridSize, 0, i), Vector3(gridSize, 0, i), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+        vPositionsGrid.push_back(Vector3(i, 0, -gridSize));
+        vPositionsGrid.push_back(Vector3(i, 0, gridSize));
+        vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
+        vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
     }
+    smgr->draw3DLines(vPositionsGrid, Vector3(0.6, 0.6, 1.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+    
     smgr->draw3DLine(Vector3(-gridSize, 0, 0), Vector3(gridSize, 0, 0), Vector3(1.0,0.2,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
     smgr->draw3DLine(Vector3(0, 0, -gridSize), Vector3(0, 0, gridSize), Vector3(0.2,1.0,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
 }

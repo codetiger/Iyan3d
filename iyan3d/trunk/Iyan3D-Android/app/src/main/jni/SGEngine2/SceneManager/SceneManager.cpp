@@ -341,6 +341,19 @@ void SceneManager::draw3DLine(Vector3 start , Vector3 end , Vector3 color , Mate
     renderMan->draw3DLine(start,end,material);
 }
 
+void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex)
+{
+    renderMan->useMaterialToRender(material);
+    float vertColor[3] = {color.x,color.y,color.z};
+    float transparency = 1.0;
+    getActiveCamera()->update();
+    Mat4 mat = getActiveCamera()->getProjectionMatrix() * getActiveCamera()->getViewMatrix();
+    setPropertyValue(material,"mvp",mat.pointer(),DATA_FLOAT_MAT4,16,false,mvpUniParamIndex);
+    setPropertyValue(material,"perVertexColor",&vertColor[0],DATA_FLOAT_VEC3,3,false,vertexColorUniParamIndex);
+    setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1,false,transparencyUniParamIndex);
+    renderMan->draw3DLines(vPositions, material);
+}
+
 void SceneManager::setPropertyValue(Material *material,string name,float* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex,int nodeIndex,Texture *tex,int userValue){
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS) nod = nodes[nodeIndex];

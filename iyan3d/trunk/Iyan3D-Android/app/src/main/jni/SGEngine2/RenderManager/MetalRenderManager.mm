@@ -161,6 +161,37 @@ void MetalRenderManager::draw3DLine(Vector3 start,Vector3 end,Material *material
     memcpy(indexBufferPointer,&indices[0],indexBufSize);
     drawPrimitives(MTLPrimitiveTypeLine,2,MTLIndexTypeUInt16,MTLBuffersMap[indexBufSize][bufIndex].buf,0);
 }
+
+void MetalRenderManager::draw3DLines(vector<Vector3> vPositions,Material *material)
+{
+    if(_currentDrawable == nil)
+        PrepareDisplay(0,0);
+    int vertBufSize = sizeof(vertexData) * (int)vPositions.size();
+    int indexBufSize = (int)vPositions.size() * sizeof(unsigned short);
+    vector<vertexData> vertDatas;
+    vector<u16> indices;
+    for(int i = 0; i < vPositions.size(); i++)
+    {
+        vertexData vData;
+        vData.vertPosition = vPositions[i];
+        vertDatas.push_back(vData);
+        indices.push_back(i);
+    }
+    
+    int bufIndex = getAvailableBfferWithSize(vertBufSize);
+    uint8_t *bufferPointer = (uint8_t*)[MTLBuffersMap[vertBufSize][bufIndex].buf contents];
+    memcpy(bufferPointer,&vertDatas[0],vertBufSize);
+    [this->RenderCMDBuffer setVertexBuffer:MTLBuffersMap[vertBufSize][bufIndex].buf offset:0 atIndex:0];
+    
+    bufIndex = getAvailableBfferWithSize(indexBufSize);
+    uint8_t *indexBufferPointer = (uint8_t *)[MTLBuffersMap[indexBufSize][bufIndex].buf contents];
+    memcpy(indexBufferPointer,&indices[0],indexBufSize);
+    drawPrimitives(MTLPrimitiveTypeLine, (int)vPositions.size(),MTLIndexTypeUInt16,MTLBuffersMap[indexBufSize][bufIndex].buf,0);
+    
+    vertDatas.clear();
+    indices.clear();    
+}
+
 void MetalRenderManager::clearDepthBuffer()
 {
     setUpDepthState(CompareFunctionLessEqual,true,false);
