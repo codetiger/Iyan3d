@@ -71,6 +71,9 @@
 {
     [super viewDidLoad];
     
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed) name:@"creditsupdate" object:nil];
+
     cancelPressed = NO;
     selectedIndex = 0;
     isAppInBg = false;
@@ -263,10 +266,14 @@
             }
         }else{
             [self renderBeginFunction];
+            NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+            if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
+                
+            }
             //if(resolutionType == FULL_HD) {
             //    int frames = (int)_trimControl.rightValue - (int)_trimControl.leftValue;
             //    int credits = (frames * 3) * -1;
-                
+            // int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
             //    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:@"FULLHD"];
           //  }
 
