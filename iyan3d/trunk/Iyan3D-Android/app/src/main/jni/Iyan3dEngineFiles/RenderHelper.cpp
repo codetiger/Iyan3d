@@ -157,10 +157,9 @@ void RenderHelper::renderControls()
     setControlsVisibility(renderingScene);
     smgr->clearDepthBuffer();
     int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
-    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE ;
+    int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
-        
         Vector3 ctrlToCam = (renderingScene->viewCamera->getPosition() - renderingScene->sceneControls[i]->node->getPosition()).normalize();
         float angle = fabs(ctrlToCam.dotProduct(SceneHelper::controlDirection(i%3)));
         float ctrlTransparency = (angle > 0.9) ? (0.95 - angle) * 20.0 : 1.0;

@@ -919,6 +919,7 @@ BOOL missingAlertShown;
 
 - (IBAction)scaleBtnAction:(id)sender
 {
+    
     if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
         
         editorScene->controlType = SCALE;
@@ -1508,13 +1509,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         if([Utility IsPadDevice]){
             [self.popoverController dismissPopoverAnimated:YES];
             objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil];
-            objVc.delegate=self;
+            objVc.objSlideDelegate=self;
             [self showOrHideLeftView:YES withView:objVc.view];
         }
         else{
             [self.popoverController dismissPopoverAnimated:YES];
             objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil];
-            objVc.delegate=self;
+            objVc.objSlideDelegate=self;
             [self showOrHideLeftView:YES withView:objVc.view];
         }
     }
@@ -2035,9 +2036,9 @@ void downloadFile(NSString* url, NSString* fileName)
 
 #pragma AutoRig Delegates
 
-- (void)importObj:(NSString*)objFileName TextureName:(NSString*)textureFileName
+- (void)importObjAndTexture:(NSString*)objFileName TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture
 {
-
+    NSLog(@"OBJ File Name %@ Texture Name %@ %f %f %f %hhd",objFileName,textureFileName,color.x,color.y,color.z,isHaveTexture);
 }
 
 
@@ -2069,7 +2070,7 @@ void downloadFile(NSString* url, NSString* fileName)
     settingsVc = nil;
     renderViewMan.delegate = nil;
     renderViewMan = nil;
-    objVc.delegate = nil;
+    objVc.objSlideDelegate = nil;
     objVc = nil;
     currentScene = nil;
     settingsVc = nil;

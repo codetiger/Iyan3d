@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addBtn" destination="uWq-xB-Yo7" id="dIi-MA-bNC"/>
                 <outlet property="cancelBtn" destination="ITe-RY-oV3" id="5mv-aa-ZhU"/>
+                <outlet property="colorWheelBtn" destination="xNc-sr-0jo" id="bTz-QE-6Ga"/>
                 <outlet property="importFilesCollectionView" destination="qL2-Qj-oF8" id="F08-U3-PEz"/>
                 <outlet property="view" destination="jz5-x0-bMx" id="AV0-HB-i2m"/>
                 <outlet property="viewTitle" destination="Ro7-d0-Bay" id="ZAm-GO-JEe"/>
@@ -19,20 +20,27 @@
             <rect key="frame" x="0.0" y="0.0" width="212" height="278"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yHe-Fa-upA">
-                    <rect key="frame" x="0.0" y="0.0" width="212" height="20"/>
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yHe-Fa-upA">
+                    <rect key="frame" x="0.0" y="0.0" width="212" height="33"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Import Obj" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ro7-d0-Bay">
-                            <rect key="frame" x="115" y="2" width="89" height="18"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Import Obj" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ro7-d0-Bay">
+                            <rect key="frame" x="11" y="2" width="89" height="18"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xNc-sr-0jo">
+                            <rect key="frame" x="173" y="6" width="23" height="23"/>
+                            <state key="normal" image="color.png"/>
+                            <connections>
+                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="wjB-NS-SH6"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <collectionView clipsSubviews="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="qL2-Qj-oF8">
-                    <rect key="frame" x="0.0" y="18" width="212" height="222"/>
+                <collectionView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="qL2-Qj-oF8">
+                    <rect key="frame" x="0.0" y="28" width="212" height="212"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="5" id="Jiq-1R-ss9">
                         <size key="itemSize" width="50" height="55"/>
@@ -94,4 +102,7 @@
             <point key="canvasLocation" x="480" y="200"/>
         </view>
     </objects>
+    <resources>
+        <image name="color.png" width="23" height="23"/>
+    </resources>
 </document>

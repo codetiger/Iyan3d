@@ -12,7 +12,7 @@
 #import "Constants.h"
 
 @protocol TextColorPickerDelegate
-- (void) changeTextColor:(Vector3)textColor dragFinish:(BOOL)isDragFinish;
+- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish;
 @end
 
 @interface TextColorPicker : UIViewController<GetPixelDemoDelegate>{
@@ -25,5 +25,6 @@
 @property (weak, nonatomic) IBOutlet UIView *colorPreview;
 @property (strong, nonatomic) GetPixelDemo *demoView;
 @property (strong, nonatomic) id <TextColorPickerDelegate> delegate;
+
 
 @end

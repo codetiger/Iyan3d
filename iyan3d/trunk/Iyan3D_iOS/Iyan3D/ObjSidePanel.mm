@@ -17,6 +17,16 @@
     NSArray *tempFiles;
 }
 
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        haveTexture = NO;
+        color = Vector3(1.0,1.0,1.0);
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
      [self.importFilesCollectionView registerNib:[UINib nibWithNibName:@"ObjCellView" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
@@ -28,8 +38,7 @@
     NSLog(@"Obj path: %@",docDirPath);
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
-    
-    
+    [_colorWheelBtn setHidden:YES];    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -89,11 +98,14 @@
     }
     else
     {
+        haveTexture = YES;
         textureFileName = [filesList objectAtIndex:indexPath.row];
     }
 }
 
 - (IBAction)addBtnAction:(id)sender {
+    if(!objFileName.length)
+        return;
     if([self.addBtn.titleLabel.text isEqualToString:@"NEXT"]){
         filesList=nil;
         NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
@@ -109,15 +121,40 @@
         [self.importFilesCollectionView reloadData];
         [self.addBtn setTitle:@"ADD TO SCENE" forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
+        [_colorWheelBtn setHidden:NO];
     }
     if([self.addBtn.titleLabel.text isEqualToString:@"ADD TO SCENE"]){
-        [self.delegate importObj:objFileName TextureName:textureFileName];
-        [self.delegate showOrHideLeftView:NO withView:nil];
+        [_objSlideDelegate importObjAndTexture:objFileName TextureName:textureFileName VertexColor:color haveTexture:haveTexture];
+        [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
         [self removeFromParentViewController];
     }
 }
+- (IBAction)colorPickerAction:(id)sender {
+    _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
+    _vertexColorProp.delegate = self;
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_vertexColorProp];
+    self.popoverController.popoverContentSize = CGSizeMake(200, 200);
+    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [_popUpVc.view setClipsToBounds:YES];
+    CGRect rect = _colorWheelBtn.frame;
+    rect = [self.view convertRect:rect fromView:_colorWheelBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:NO];
+
+}
+
+- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish
+{
+    haveTexture = NO;
+    color = vetexColor;
+}
+
+
 
 - (IBAction)cancelBtnAction:(id)sender {
-    [self.delegate showOrHideLeftView:NO withView:nil];
+    [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
 }
 @end

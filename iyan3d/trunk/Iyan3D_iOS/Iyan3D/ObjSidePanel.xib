@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addBtn" destination="hmZ-Gp-sTd" id="feS-s7-AHY"/>
                 <outlet property="cancelBtn" destination="gba-ht-Eqv" id="wwy-7V-a3M"/>
+                <outlet property="colorWheelBtn" destination="iBb-rI-NfD" id="sNb-0v-KeF"/>
                 <outlet property="importFilesCollectionView" destination="iSK-at-mkm" id="M4D-Sv-T4N"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="viewTitle" destination="Mf2-ah-2Iq" id="MTi-b6-KbI"/>
@@ -52,12 +53,19 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r2s-i7-ZQq">
                     <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Import Obj" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mf2-ah-2Iq">
-                            <rect key="frame" x="151" y="11" width="141" height="21"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Import Obj" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mf2-ah-2Iq">
+                            <rect key="frame" x="9" y="11" width="141" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBb-rI-NfD">
+                            <rect key="frame" x="258" y="9" width="29" height="23"/>
+                            <state key="normal" image="color.png"/>
+                            <connections>
+                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="KQB-1a-dJz"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -76,7 +84,11 @@
                 </collectionView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
+    <resources>
+        <image name="color.png" width="23" height="23"/>
+    </resources>
 </document>

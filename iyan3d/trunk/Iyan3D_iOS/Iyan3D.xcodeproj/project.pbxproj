@@ -343,8 +343,8 @@
 		01C2B79C1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
 		01C2B79D1C46553500384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
 		01C2B79E1C46554A00384370 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77B1C462CF300384370 /* Accounts.framework */; };
-		01CCD1C31C3F927D00565664 /* ObjSidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.m */; };
-		01CCD1C41C3F927D00565664 /* ObjSidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.m */; };
+		01CCD1C31C3F927D00565664 /* ObjSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */; };
+		01CCD1C41C3F927D00565664 /* ObjSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */; };
 		01CCD1C51C3F927D00565664 /* ObjSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */; };
 		01CCD1C61C3F927D00565664 /* ObjSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */; };
 		01CCD1C81C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */; };
@@ -2374,7 +2374,7 @@
 		01C2B7931C46419300384370 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterCore.framework; path = FrameWorks/TwitterCore.framework; sourceTree = "<group>"; };
 		01C2B79A1C46543200384370 /* color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color@2x.png"; sourceTree = "<group>"; };
 		01CCD1C01C3F927D00565664 /* ObjSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjSidePanel.h; sourceTree = "<group>"; };
-		01CCD1C11C3F927D00565664 /* ObjSidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjSidePanel.m; sourceTree = "<group>"; };
+		01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjSidePanel.mm; sourceTree = "<group>"; };
 		01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjSidePanel.xib; sourceTree = "<group>"; };
 		01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjSidePanelPhone.xib; sourceTree = "<group>"; };
 		01D2F0971C44CDD9000E41C7 /* Pause_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_Pad.png; sourceTree = "<group>"; };
@@ -5440,7 +5440,7 @@
 				E2497642196BE0190025D442 /* ObjFileViewController.h */,
 				E2497643196BE0190025D442 /* ObjFileViewController.mm */,
 				01CCD1C01C3F927D00565664 /* ObjSidePanel.h */,
-				01CCD1C11C3F927D00565664 /* ObjSidePanel.m */,
+				01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */,
 				01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */,
 				01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */,
 				E2497644196BE0190025D442 /* ObjFileViewController.xib */,
@@ -7869,7 +7869,7 @@
 				25F0C26A1C2E931700C8EC85 /* SGSceneUpdater.cpp in Sources */,
 				E29C10E61A075DBC00626544 /* GTLBatchResult.m in Sources */,
 				C8DF1FDC1C23E65600F689D6 /* SceneSelectionEnteredView.m in Sources */,
-				01CCD1C31C3F927D00565664 /* ObjSidePanel.m in Sources */,
+				01CCD1C31C3F927D00565664 /* ObjSidePanel.mm in Sources */,
 				E21C3CD01A0758B6006964E5 /* GTLYouTubeChannel.m in Sources */,
 				3D58CD641C3D43C2006371DE /* WEPopoverContainerViewProperties.m in Sources */,
 				256F6B9D1BF6246300154622 /* KeyHelper.cpp in Sources */,
@@ -8319,7 +8319,7 @@
 				E206714D1B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsPlaylistItem.m in Sources */,
 				E206714E1B049AA6006DD2F7 /* iCarousel.m in Sources */,
 				E20671501B049AA6006DD2F7 /* GTLYouTubeWatchSettings.m in Sources */,
-				01CCD1C41C3F927D00565664 /* ObjSidePanel.m in Sources */,
+				01CCD1C41C3F927D00565664 /* ObjSidePanel.mm in Sources */,
 				256F6F6F1BF6257C00154622 /* render.c in Sources */,
 				E20671511B049AA6006DD2F7 /* GTLYouTubePlaylistItemStatus.m in Sources */,
 				E20671521B049AA6006DD2F7 /* GTLYouTubeVideoProjectDetails.m in Sources */,

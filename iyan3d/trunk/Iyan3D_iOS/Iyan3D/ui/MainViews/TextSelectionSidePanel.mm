@@ -316,10 +316,10 @@
     [_textSelectionDelegate load3DTex:FONT AssetId:0 TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
 }
 
-- (void) changeTextColor:(Vector3)textColor dragFinish:(BOOL)isDragFinish{
-    red = textColor.x;
-    green = textColor.y;
-    blue = textColor.z;
+- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{
+    red = vetexColor.x;
+    green = vetexColor.y;
+    blue = vetexColor.z;
     [_collectionView reloadData];
     if(isDragFinish)
         [self load3dText];

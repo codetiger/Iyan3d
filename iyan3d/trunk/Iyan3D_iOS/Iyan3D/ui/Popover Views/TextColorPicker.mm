@@ -50,14 +50,14 @@
 {
     [self.colorPreview setBackgroundColor:[UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha]];
     color = Vector3(pixel.red ,pixel.green ,pixel.blue);
-    [_delegate changeTextColor:color dragFinish:NO];
+    [_delegate changeVertexColor:color dragFinish:NO];
 }
 
 - (void)pixelDemoTouchEnded:(BMPixel)pixel
 {
     [self.colorPreview setBackgroundColor:[UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha]];
     color = Vector3(pixel.red ,pixel.green ,pixel.blue);
-    [_delegate changeTextColor:color dragFinish:YES];
+    [_delegate changeVertexColor:color dragFinish:YES];
 }
 
 @end
