@@ -2786,7 +2786,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 #pragma Download Missing Assets
-bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
+bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType, bool hasTexture)
 {
     
     NSLog(@"File Name %s Node Type %d",fileName.c_str(),nodeType);

@@ -58,12 +58,12 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         
         if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ)
         {
-            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType());
+            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"));
         }
         else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
-            status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType());
+            status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"));
         } else if (sgNode->getType() == NODE_IMAGE) {
-            status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType());
+            status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor));
         }
         
         if(!status)
@@ -116,13 +116,13 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
         
         if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ)
         {
-            status = currentScene->downloadMissingAssetsCallBack(to_string(sgNode->assetId),sgNode->getType(), env, type);
+            status = currentScene->downloadMissingAssetsCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env, type);
         }
         else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
             
-            status = currentScene->downloadMissingAssetsCallBack(sgNode->optionalFilePath,sgNode->getType(),env,type);
+            status = currentScene->downloadMissingAssetsCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env,type);
         } else if (sgNode->getType() == NODE_IMAGE) {
-            status = currentScene->downloadMissingAssetsCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), env, type);
+            status = currentScene->downloadMissingAssetsCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor), env, type);
         }
         
         if(!status)

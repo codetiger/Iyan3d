@@ -338,7 +338,7 @@ void callBackAutoRigUndoRedoBtnState(JNIEnv *env, jclass type,  string str){
     env->CallStaticVoidMethod(type, mid,state);
 }
 
-void downloadMissingAssetsCallBack(string fileName, NODE_TYPE nodeType, JNIEnv *env, jclass type){
+void downloadMissingAssetsCallBack(string fileName, NODE_TYPE nodeType, bool hasTexture, JNIEnv *env, jclass type){
     jstring fileNameStr = env->NewStringUTF(fileName.c_str());
     jstring nodeTypeStr = env->NewStringUTF(to_string(nodeType).c_str());
     jmethodID mid = env->GetStaticMethodID(type, "downloadCallBack",

@@ -147,11 +147,11 @@ public:
     
     /* Call backs */
     #ifdef ANDROID
-        bool (*downloadMissingAssetsCallBack)(std::string filePath, NODE_TYPE nodeType, JNIEnv *env, jclass type);
+        bool (*downloadMissingAssetsCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture, JNIEnv *env, jclass type);
     #endif
     
     void (*fileWriteCallBack)();
-    bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType);
+    bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture);
     void shaderCallBackForNode(int nodeID,string matName);
     float getNodeTransparency(int nodeId);
     bool isNodeTransparent(int nodeId);

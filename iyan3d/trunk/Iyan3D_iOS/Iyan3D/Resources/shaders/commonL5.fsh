@@ -69,7 +69,6 @@ void main()
     if(shadowDist > 0.0) {
         float delta = 1.0/2048.0; // todo
         shadowValue = GetShadowValue(vec2(0.0, 0.0));
-        colorOfLight = colorOfLight + (vec4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         shadowValue += GetShadowValue(vec2(-delta, 0.0));
         shadowValue += GetShadowValue(vec2(delta, 0.0));
         shadowValue += GetShadowValue(vec2(0.0, -delta));
@@ -86,6 +85,7 @@ void main()
     if(lightingValue != 0.0){
         colorOfLight = vec4(0.0);
         getColorOfLight(0,specular,colorOfLight);
+        colorOfLight = colorOfLight + (vec4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         getColorOfLight(1,specular,colorOfLight);
         getColorOfLight(2,specular,colorOfLight);
         getColorOfLight(3,specular,colorOfLight);
