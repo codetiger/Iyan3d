@@ -14,7 +14,7 @@
 #import "WEPopoverContentViewController.h"
 #import "SceneSelectionControllerNew.h"
 #import "Constants.h"
-
+#import <sys/utsname.h>
 @implementation EditorViewController
 
 #define EXPORT_POPUP 1
@@ -333,6 +333,7 @@ BOOL missingAlertShown;
             [self.rotateBtn setEnabled:false];
             [self.optionsBtn setEnabled:true];
             [self.scaleBtn setEnabled:false];
+            [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
             return;
         }
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA){
@@ -340,6 +341,7 @@ BOOL missingAlertShown;
             [self.rotateBtn setEnabled:true];
             [self.optionsBtn setEnabled:true];
             [self.scaleBtn setEnabled:false];
+            [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
             return;
         }
         [self.moveBtn setEnabled:true];
@@ -540,7 +542,7 @@ BOOL missingAlertShown;
             }
             else{
                 bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
-                 NSLog(@"%d",isMultiSelectEnabled);
+                 NSLog(@"%f",editorScene->screenScale);
                 editorScene->selectMan->checkSelection(renderViewMan.tapPosition,isMultiSelectEnabled);
                  [self changeAllButtonBG];
                  [self setupEnableDisableControls];
@@ -1536,6 +1538,7 @@ BOOL missingAlertShown;
         editorScene->isPlaying = false;
     }
     [self setupEnableDisableControlsPlayAnimation];
+    [self setupEnableDisableControls];
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
 }
 
@@ -2198,6 +2201,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [closeAlert show];
         }
         else {
+            
             [self.view endEditing:YES];
             UIAlertView* addAnimAlert = [[UIAlertView alloc] initWithTitle:@"Save your Animation as template" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
             [addAnimAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
@@ -2357,12 +2361,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             RenderingViewController* renderingView;
             renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
             renderingView.delegate = self;
+             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
             renderingView.projectName=@"Scene 1";  //FOR TESTING
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             CATransition* transition1 = [CATransition animation];
             transition1.duration = 0.5;
             transition1.type = kCATransitionPush;
-            transition1.subtype = kCATransitionFromLeft;
+            transition1.subtype = (status) ? kCATransitionFromRight : kCATransitionFromLeft;;
             [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
             [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
             [self.rightView setHidden:YES];
@@ -2384,10 +2389,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         renderingView.delegate = self;
         renderingView.projectName=@"Scene 1";  //FOR TESTING
         renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
         CATransition* transition1 = [CATransition animation];
         transition1.duration = 0.5;
         transition1.type = kCATransitionPush;
-        transition1.subtype = kCATransitionFromLeft;
+        transition1.subtype = (status) ? kCATransitionFromRight : kCATransitionFromLeft;
         [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
         [self.rightView setHidden:YES];
@@ -2475,6 +2481,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
 }
 - (void) infoBtnDelegateAction:(int)indexValue{
+    
     if(indexValue==3){
         if([Utility IsPadDevice]){
             [self.popoverController dismissPopoverAnimated:YES];
@@ -2522,8 +2529,35 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             
         }
     }
+    if(indexValue==4){
+        [self.popoverController dismissPopoverAnimated:YES];
+        
+        NSString *currentDeviceName;
+        
+        if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
+            currentDeviceName = [deviceNames objectForKey:[self deviceName]];
+        else
+            currentDeviceName = @"Unknown Device";
+        
+        if ([MFMailComposeViewController canSendMail]) {
+            MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+            picker.mailComposeDelegate = self;
+            NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[self deviceName]],iOSVersion]];
+            [picker setToRecipients:usersTo];
+            [self presentModalViewController:picker animated:YES];
+        }else {
+            [self.view endEditing:YES];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Email account not configured." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+
+    }
     
 }
+
+
 
 -(void) optionBtnDelegate:(int)indexValue
 {
@@ -2554,6 +2588,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
     [self.popoverController dismissPopoverAnimated:YES];
+}
+
+-(NSString*) deviceName
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    
+    return [NSString stringWithCString:systemInfo.machine
+                              encoding:NSUTF8StringEncoding];
 }
 
 #pragma Save Delegates
@@ -2952,7 +2995,7 @@ void downloadFile(NSString* url, NSString* fileName)
         camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0){
             editorScene->camPreviewOrigin.x=0;
-            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
             editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
             
@@ -2960,7 +3003,7 @@ void downloadFile(NSString* url, NSString* fileName)
         if(editorScene->camPreviewScale==2.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=0.0000;
-            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
             
@@ -2972,22 +3015,22 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
-            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
         if(editorScene->camPreviewScale==2.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
-            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
     }
     
     if(selctedIndex==2){
         if(editorScene->camPreviewScale==1.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewOrigin.x=self.renderView.frame.size.width-self.rightView.frame.size.width-camPrevRatio;
-            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewOrigin.x=self.renderView.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale-camPrevRatio;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
             editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
             
@@ -2995,8 +3038,8 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         if(editorScene->camPreviewScale==2.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewOrigin.x=self.renderView.frame.size.width-self.rightView.frame.size.width;
-            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewOrigin.x=self.renderView.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
             NSLog(@"Camera preview orgin.x : %f",editorScene->camPreviewOrigin.x);
@@ -3009,15 +3052,15 @@ void downloadFile(NSString* url, NSString* fileName)
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
-            editorScene->camPreviewOrigin.x=self.view.frame.size.width-self.rightView.frame.size.width;
-            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+            editorScene->camPreviewOrigin.x=self.view.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
         if(editorScene->camPreviewScale==2.0){
             camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
-            editorScene->camPreviewOrigin.x=self.view.frame.size.width-self.rightView.frame.size.width;
-            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+            editorScene->camPreviewOrigin.x=self.view.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
     }
     

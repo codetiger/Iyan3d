@@ -9,7 +9,7 @@
 #import "ObjSidePanel.h"
 #import "ObjCellView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-
+#import <Utility.h>
 
 
 #define OBJ 0
@@ -167,20 +167,21 @@
 }
 
 - (IBAction)importBtnAction:(id)sender {
+
     self.ipc= [[UIImagePickerController alloc] init];
     self.ipc.delegate = self;
     self.ipc.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-    if(UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone)
-        [self presentViewController:_ipc animated:YES completion:nil];
-    else
-    {
-        popover=[[UIPopoverController alloc]initWithContentViewController:_ipc];
-        //[popover presentPopoverFromRect:self.importBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
-        [popover presentPopoverFromRect:[sender bounds]
-                            inView:sender
-          permittedArrowDirections:UIPopoverArrowDirectionAny
-                          animated:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:self.ipc];
+    if ([Utility IsPadDevice]) {
+      self.popoverController.popoverContentSize = CGSizeMake(400, 500);
     }
+    else{
+        self.popoverController.popoverContentSize = CGSizeMake(250.0, 180.0);
+    }
+    
+    CGRect rect = _importBtn.frame;
+    rect = [self.view convertRect:rect fromView:_importBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }
 
 

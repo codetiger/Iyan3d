@@ -11,6 +11,7 @@
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
 #import "Vector3.h"
+#import <FPPopoverController.h>
 
 @protocol ObjSliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
@@ -31,7 +32,7 @@
     Vector3 color;
     NSArray* basicShapes;
     int viewType;
-    UIPopoverController *popover;
+    FPPopoverController *popover;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;

@@ -51,6 +51,9 @@
             self.popoverBtns.allowsMultipleSelection=NO;
         }
     }
+    else {
+        self.popoverBtns.allowsMultipleSelection=NO;
+    }
     
 }
 
