@@ -412,10 +412,8 @@
 		3D04EAF61C25830F00C18E1A /* No-Bevel.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF21C25830F00C18E1A /* No-Bevel.png */; };
 		3D04EAF81C25883900C18E1A /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF71C25883900C18E1A /* color.png */; };
 		3D04EAF91C25883900C18E1A /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF71C25883900C18E1A /* color.png */; };
-		3D3F58FF1C27C12A00713C79 /* Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F58FE1C27C12A00713C79 /* Mail@2x.png */; };
-		3D3F59001C27C12A00713C79 /* Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F58FE1C27C12A00713C79 /* Mail@2x.png */; };
-		3D3F59021C27C47100713C79 /* Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59011C27C47100713C79 /* Mail@2x.png */; };
-		3D3F59031C27C47100713C79 /* Mail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59011C27C47100713C79 /* Mail@2x.png */; };
+		3D3F58FF1C27C12A00713C79 /* Mail2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F58FE1C27C12A00713C79 /* Mail2x.png */; };
+		3D3F59001C27C12A00713C79 /* Mail2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F58FE1C27C12A00713C79 /* Mail2x.png */; };
 		3D3F59131C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */; };
 		3D3F59141C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */; };
 		3D3F591A1C2801C600713C79 /* TextFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59181C2801C600713C79 /* TextFrameCell.m */; };
@@ -2128,8 +2126,7 @@
 		3D04EAF11C25830F00C18E1A /* Bevel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bevel.png; sourceTree = "<group>"; };
 		3D04EAF21C25830F00C18E1A /* No-Bevel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "No-Bevel.png"; sourceTree = "<group>"; };
 		3D04EAF71C25883900C18E1A /* color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = color.png; sourceTree = "<group>"; };
-		3D3F58FE1C27C12A00713C79 /* Mail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mail@2x.png"; sourceTree = "<group>"; };
-		3D3F59011C27C47100713C79 /* Mail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mail@2x.png"; sourceTree = "<group>"; };
+		3D3F58FE1C27C12A00713C79 /* Mail2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mail2x.png; sourceTree = "<group>"; };
 		3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextSelectionSidePanel.mm; path = ui/MainViews/TextSelectionSidePanel.mm; sourceTree = "<group>"; };
 		3D3F59171C2801C600713C79 /* TextFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFrameCell.h; path = "ui/Popover Views/TextFrameCell.h"; sourceTree = "<group>"; };
 		3D3F59181C2801C600713C79 /* TextFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFrameCell.m; path = "ui/Popover Views/TextFrameCell.m"; sourceTree = "<group>"; };
@@ -4444,12 +4441,11 @@
 		C8AA46F71C227D3600C4AB53 /* SceneSelection */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F59011C27C47100713C79 /* Mail@2x.png */,
 				C8DF1FE01C242DBD00F689D6 /* close.png */,
 				C8AA46F81C227D3600C4AB53 /* Clone.png */,
 				C8AA46F91C227D3600C4AB53 /* Delete.png */,
 				C8AA46FA1C227D3600C4AB53 /* Mail.png */,
-				3D3F58FE1C27C12A00713C79 /* Mail@2x.png */,
+				3D3F58FE1C27C12A00713C79 /* Mail2x.png */,
 				C8AA46FB1C227D3600C4AB53 /* New-scene.png */,
 				C8AA46FC1C227D3600C4AB53 /* New.png */,
 			);
@@ -5271,7 +5267,6 @@
 				25651D141B3C91570058706E /* helpStatements.json in Resources */,
 				7FC900FC1A0A01470051B941 /* view-img-phone.png in Resources */,
 				25C90F471B3616B400D803DB /* bevel-on.png in Resources */,
-				3D3F59021C27C47100713C79 /* Mail@2x.png in Resources */,
 				7F31A7391AA4960300A6E7B1 /* first-phone@3x.png in Resources */,
 				7F2104E31A7A0F13000E1C26 /* ipadband.png in Resources */,
 				E24974C0196BDC650025D442 /* controls1.sgm in Resources */,
@@ -5284,7 +5279,7 @@
 				7FC9016D1A0A54850051B941 /* Stop-video-phone@2x.png in Resources */,
 				7F22BB5E1AC54EAA006B44C6 /* up-arrow.png in Resources */,
 				7F31A7371AA4960300A6E7B1 /* cancelButton@3x.png in Resources */,
-				3D3F58FF1C27C12A00713C79 /* Mail@2x.png in Resources */,
+				3D3F58FF1C27C12A00713C79 /* Mail2x.png in Resources */,
 				7FC900D71A0A01470051B941 /* Menu-phone@2x.png in Resources */,
 				257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */,
 				E2497665196BE0190025D442 /* ObjCellView.xib in Resources */,
@@ -5524,7 +5519,7 @@
 				7F307CF91B58FDBF0065BBC1 /* like@2x.png in Resources */,
 				25C90F4D1B362D6D00D803DB /* bevel-on-phone.png in Resources */,
 				25C90F4E1B362D6E00D803DB /* bevel-on-phone@2x.png in Resources */,
-				3D3F59001C27C12A00713C79 /* Mail@2x.png in Resources */,
+				3D3F59001C27C12A00713C79 /* Mail2x.png in Resources */,
 				25C90F4F1B362D6E00D803DB /* bevel-on.png in Resources */,
 				25C90F501B362D6E00D803DB /* bevel-on@2x.png in Resources */,
 				25C90F511B362D6E00D803DB /* bevel-phone.png in Resources */,
@@ -5747,7 +5742,6 @@
 				E20673131B049AA6006DD2F7 /* rotate-img-phone.png in Resources */,
 				E20673141B049AA6006DD2F7 /* rotate-img-phone@3x.png in Resources */,
 				E20673151B049AA6006DD2F7 /* helpimage2.png in Resources */,
-				3D3F59031C27C47100713C79 /* Mail@2x.png in Resources */,
 				E20673161B049AA6006DD2F7 /* view-img@2x.png in Resources */,
 				C8E1799F1C20612E00C78C07 /* Images.xcassets in Resources */,
 				E20673171B049AA6006DD2F7 /* save-img-phone.png in Resources */,
