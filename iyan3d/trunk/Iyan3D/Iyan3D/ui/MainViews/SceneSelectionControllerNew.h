@@ -22,14 +22,19 @@
 #import "SceneSelectionFrameCell.h"
 
 
-@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource>{
+
+@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
     int currentSelectedScene;
     CGPoint cell_center;
+    UITapGestureRecognizer *tapGesture;
+    NSDictionary *deviceNames;   
+
 }
 
+@property (weak, nonatomic) IBOutlet UIView *topBar;
 @property (nonatomic, strong) NSString *fileBeginsWith;
 @property (weak, nonatomic) IBOutlet UIButton *cloneSceneBtn;
 @property (weak, nonatomic) IBOutlet UIButton *deleteSceneBtn;

@@ -10,6 +10,8 @@
 #import "SceneSelectionEnteredView.h"
 #import "AppDelegate.h"
 #import "Utility.h"
+#import <sys/utsname.h>
+
 
 @implementation SceneSelectionControllerNew
 
@@ -27,8 +29,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];
     [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     [self.sceneView setHidden:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,7 +43,6 @@
 }
 
 - (IBAction)addSceneButtonAction:(id)sender {
-    [self.view endEditing:YES];
     [self addNewScene];
 }
 
@@ -78,9 +84,10 @@
 }
 
 - (IBAction)deleteSceneButtonAction:(id)sender {
- 
+    
+    
+        [_sceneTitle resignFirstResponder];
         SceneItem* scene = scenesArray[currentSelectedScene];
-        
         [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:scene.name];
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* documentsDirectory = [paths objectAtIndex:0];
@@ -111,6 +118,35 @@
 - (IBAction)feedBackButtonAction:(id)sender {
     
     
+    NSString *currentDeviceName;
+    
+    if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
+        currentDeviceName = [deviceNames objectForKey:[self deviceName]];
+    else
+        currentDeviceName = @"Unknown Device";
+    
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+        picker.mailComposeDelegate = self;
+        NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
+        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[self deviceName]],iOSVersion]];
+        [picker setToRecipients:usersTo];
+        [self presentModalViewController:picker animated:YES];
+    }else {
+        [self.view endEditing:YES];
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Email account not configured." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+}
+
+-(NSString*) deviceName
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    
+    return [NSString stringWithCString:systemInfo.machine
+                              encoding:NSUTF8StringEncoding];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -125,8 +161,8 @@
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* documentsDirectory = [paths objectAtIndex:0];
         NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
-        BOOL fileExit = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
-    if(fileExit)
+        BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
+    if(fileExist)
         cell.image.image = [UIImage imageWithContentsOfFile:originalFilePath];
     else
         cell.image.image= [UIImage imageNamed:@"bgImageforall.png"];
@@ -151,21 +187,18 @@
 
 - (void) addNewScene
 {
-    NSString* sceneCount = [NSString stringWithFormat:@"%i", [scenesArray count]];
     SceneItem* scene = [[SceneItem alloc] init];
+    SceneItem *previousScene;
     if([scenesArray count] != 0)
-        scene = scenesArray[[scenesArray count]-1];
-    scene.name = [NSString stringWithFormat:@"MyScene%d", scene.sceneId];
+        previousScene = scenesArray[[scenesArray count]-1];
+    scene.name = [NSString stringWithFormat:@"MyScene %d", previousScene.sceneId+1];
     scene.createdDate = [dateFormatter stringFromDate:[NSDate date]];
-    
     
     if([cache AddScene:scene]) {
         scenesArray = [cache GetSceneList];
-        NSLog(@"Count%i" ,[scenesArray count]);
         [self.scenesCollectionView reloadData];
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:[scenesArray count]-1 inSection:0];
         [self.scenesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-        [self.scenesCollectionView reloadData];
     }
 }
 
@@ -174,22 +207,101 @@
     [self.sceneView setHidden:NO];
     [self popUpZoomIn];
     currentSelectedScene = sceneIndex.row;
-    SceneItem* scenes = scenesArray[sceneIndex.row];
+    if(sceneIndex.row < [scenesArray count]) {
+        SceneItem* scenes = scenesArray[sceneIndex.row];
     
-    _sceneTitle.text = scenes.name;
-    _sceneDate.text = scenes.createdDate;
+        _sceneTitle.text = scenes.name;
+        _sceneDate.text = scenes.createdDate;
     
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [paths objectAtIndex:0];
-    NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
-    BOOL fileExit = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
-    if(fileExit)
-        _scenePreview.image = [UIImage imageWithContentsOfFile:originalFilePath];
-    else
-        _scenePreview.image = [UIImage imageNamed:@"bgImageforall.png"];
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* documentsDirectory = [paths objectAtIndex:0];
+        NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
+        BOOL fileExit = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
+        if(fileExit)
+            _scenePreview.image = [UIImage imageWithContentsOfFile:originalFilePath];
+        else
+            _scenePreview.image = [UIImage imageNamed:@"bgImageforall.png"];
+    }
 }
 
-- (void)popUpZoomIn{
+-(void)updateSceneDB {
+    NSCharacterSet * set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+    NSString* name = [_sceneTitle.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if([name length] == 0) {
+        [self.view endEditing:YES];
+        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Scene name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [errorAlert show];
+    } else {
+        [self.view endEditing:YES];
+        if([name rangeOfCharacterFromSet:set].location != NSNotFound){
+            UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Scene Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [errorAlert show];
+        }
+        else{
+            if(currentSelectedScene < [scenesArray count]) {
+                SceneItem* scene = scenesArray[currentSelectedScene];
+                scene.name = _sceneTitle.text;
+                scene.createdDate = scene.createdDate;
+                scene.sceneFile = scene.sceneFile;
+                scene.sceneId = scene.sceneId;
+                [cache UpdateScene:scene];
+                scenesArray = [cache GetSceneList];
+                [self.scenesCollectionView reloadData];
+            }
+        }
+    }
+}
+
+- (void) closeKeyBoard {
+    [self.view removeGestureRecognizer:tapGesture];
+    [_sceneTitle resignFirstResponder];
+}
+
+- (void)keyboardWillShow:(NSNotification*)aNotification {
+    
+    tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeKeyBoard)];
+    
+    [self.view addGestureRecognizer:tapGesture];
+    
+    NSDictionary* keyboardInfo = [aNotification userInfo];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+
+    [UIView animateWithDuration:0.25 animations:^
+     {
+         CGRect newFrame = [self.view frame];
+         newFrame.origin.y -= keyboardFrameBeginRect.size.height; // tweak here to adjust the moving position
+         [self.view setFrame:newFrame];
+         
+     }completion:^(BOOL finished)
+     {
+         
+     }];
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+    NSDictionary* keyboardInfo = [aNotification userInfo];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+
+    [UIView animateWithDuration:0.25 animations:^
+     {
+         CGRect newFrame = [self.view frame];
+         newFrame.origin.y += keyboardFrameBeginRect.size.height; // tweak here to adjust the moving position
+         [self.view setFrame:newFrame];
+         
+     }completion:^(BOOL finished)
+     {
+         
+     }];
+    
+}
+
+- (IBAction)titleChangeAction:(id)sender {
+    [self updateSceneDB];
+}
+
+- (void)popUpZoomIn {
     [_sceneView setHidden:NO];
     _sceneView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
     _sceneView.center = cell_center;
@@ -202,17 +314,28 @@
                      }];
 }
 
-- (void)popZoomOut{
+- (void)popZoomOut {
     [UIView animateWithDuration:0.5
                      animations:^{
                          _sceneView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+                         _sceneView.center = cell_center;
                      } completion:^(BOOL finished) {
                          _sceneView.hidden = TRUE;
                      }];
 }
 
-- (void) loadScene{
+- (void) loadScene {
     [self removeFromParentViewController];
+}
+
+- (void)dealloc {
+    self.fileBeginsWith = nil;
+    cache = nil;
+    [scenesArray removeAllObjects];
+    scenesArray = nil;
+    dateFormatter = nil;
+    tapGesture = nil;
+    deviceNames = nil;
 }
 
 @end
