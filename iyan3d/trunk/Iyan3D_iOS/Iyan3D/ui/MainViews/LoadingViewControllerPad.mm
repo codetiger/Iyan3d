@@ -7,7 +7,6 @@
 //
 
 #import "LoadingViewControllerPad.h"
-#import "SceneSelectionViewControllerPad.h"
 #import "SceneSelectionControllerNew.h"
 #import "EditorViewController.h"
 #import "AppDelegate.h"

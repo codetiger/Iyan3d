@@ -15,7 +15,6 @@
 #import "UploadController.h"
 #import "Utils.h"
 #import "ShaderCell.h"
-#import "VideoUploadViewController.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "AFHTTPRequestOperation.h"
@@ -729,13 +728,10 @@
     }
     else if ([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
 //        tempSelectedIndex = (int)indexPath.row;
-//        NSLog(@" Selcted index: %d",(int)indexPath.row);
-//        [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
-//        [self showUpgradeView:(int)indexPath.row];
         [self.renderDesc setText:[NSString stringWithFormat:@"Render with High Quality in cloud."]];
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
-        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+        [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
         selectedIndex = (int)indexPath.row;
         [self.renderingTypes reloadData];
     }
@@ -752,34 +748,34 @@
     }
     [self updateCreditLable];
 }
--(void)showUpgradeView:(int)selectedRowIndex
-{
-    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"]){
-        if([Utility IsPadDevice]) {
-            upgradeView = [[PremiumUpgardeVCViewController alloc] initWithNibName:@"PremiumUpgardeVCViewController" bundle:nil];
-            upgradeView.delegate = self;
-            upgradeView.modalPresentationStyle = UIModalPresentationFormSheet;
-            [self presentViewController:upgradeView animated:YES completion:nil];
-            upgradeView.view.superview.backgroundColor = [UIColor clearColor];
-            upgradeView.view.layer.borderWidth = 2.0f;
-            upgradeView.view.layer.borderColor = [UIColor grayColor].CGColor;
-        }else{
-            upgradeView = [[PremiumUpgardeVCViewController alloc] initWithNibName:@"PremiumUpgradeViewControllerPhone" bundle:nil];
-            upgradeView.delegate = self;
-            upgradeView.modalPresentationStyle = UIModalPresentationFormSheet;
-            [self presentViewController:upgradeView animated:YES completion:nil];
-        }
-    }
-    else {
-        if(selectedRowIndex != -1) {
-        shaderType = [shaderArray[selectedRowIndex] intValue];
-        selectedIndex = selectedRowIndex;
-        [self.renderingTypes reloadData];
-        } else {
-            [self.watermarkSwitch setOn:NO];
-        }
-    }
-}
+//-(void)showUpgradeView:(int)selectedRowIndex
+//{
+//    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"]){
+//        if([Utility IsPadDevice]) {
+//            upgradeView = [[PremiumUpgardeVCViewController alloc] initWithNibName:@"PremiumUpgardeVCViewController" bundle:nil];
+//            upgradeView.delegate = self;
+//            upgradeView.modalPresentationStyle = UIModalPresentationFormSheet;
+//            [self presentViewController:upgradeView animated:YES completion:nil];
+//            upgradeView.view.superview.backgroundColor = [UIColor clearColor];
+//            upgradeView.view.layer.borderWidth = 2.0f;
+//            upgradeView.view.layer.borderColor = [UIColor grayColor].CGColor;
+//        }else{
+//            upgradeView = [[PremiumUpgardeVCViewController alloc] initWithNibName:@"PremiumUpgradeViewControllerPhone" bundle:nil];
+//            upgradeView.delegate = self;
+//            upgradeView.modalPresentationStyle = UIModalPresentationFormSheet;
+//            [self presentViewController:upgradeView animated:YES completion:nil];
+//        }
+//    }
+//    else {
+//        if(selectedRowIndex != -1) {
+//        shaderType = [shaderArray[selectedRowIndex] intValue];
+//        selectedIndex = selectedRowIndex;
+//        [self.renderingTypes reloadData];
+//        } else {
+//            [self.watermarkSwitch setOn:NO];
+//        }
+//    }
+//}
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {

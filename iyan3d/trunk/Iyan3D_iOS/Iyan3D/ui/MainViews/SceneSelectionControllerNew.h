@@ -16,7 +16,6 @@
 #import "Utility.h"
 #import "HelpViewController.h"
 #import "AppHelper.h"
-#import "AnimationEditorViewControllerPad.h"
 #import "GAI.h"
 #import "SceneSelectionFrameCell.h"
 #import "EditorViewController.h"

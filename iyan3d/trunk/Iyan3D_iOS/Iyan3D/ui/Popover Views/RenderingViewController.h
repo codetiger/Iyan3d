@@ -15,7 +15,6 @@
 #import "AppHelper.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "PremiumUpgardeVCViewController.h"
 #import "GAI.h"
 #import "CacheSystem.h"
 #import "RETrimControl.h"
@@ -40,7 +39,7 @@
 
 @class GADBannerView;
 
-@interface RenderingViewController : GAITrackedViewController<YouTubeUploadVideoDelegate ,RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,PremiumUpgardeVCViewControllerDelegate,TextColorPickerDelegate>
+@interface RenderingViewController : GAITrackedViewController<YouTubeUploadVideoDelegate ,RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate>
 {
     int renderingStartFrame, renderingEndFrame, renderingFrame , shaderType,finalFrame,publishId;
     bool isCanceled,isAppInBg;
@@ -54,7 +53,6 @@
     NSMutableArray *imagesArray, *shaderArray;
     NSMutableDictionary *shaderTypesDict;
     CacheSystem* cache;
-    PremiumUpgardeVCViewController* upgradeView;
     int selectedIndex,tempSelectedIndex;
     BOOL cancelPressed;
     Vector3 bgColor;
