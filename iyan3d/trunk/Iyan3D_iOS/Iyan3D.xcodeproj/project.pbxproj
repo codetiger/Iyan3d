@@ -111,10 +111,12 @@
 		251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4551C2C191700A5D41D /* Fabric.framework */; };
 		251BF4731C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */; };
 		251BF4741C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */; };
-		251BF4751C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */; };
-		251BF4761C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */; };
+		251BF4751C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneHelper.cpp */; };
+		251BF4761C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneHelper.cpp */; };
 		251BF4771C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */; };
 		251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */; };
+		251BF4821C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
+		251BF4831C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
 		253B52811BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
 		253B52821BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
 		253DE8441B545CCB00FE59FE /* PreviewHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 253DE8431B545CCB00FE59FE /* PreviewHelper.mm */; };
@@ -465,6 +467,8 @@
 		25CACF6A1B27D4DD0027F48C /* FontCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25CACF641B27C23C0027F48C /* FontCellView.xib */; };
 		25CACF6B1B27D4DD0027F48C /* FontCellViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25CACF661B27C2500027F48C /* FontCellViewPhone.xib */; };
 		25CACF6C1B27D5000027F48C /* FontCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 25CACF621B27C20F0027F48C /* FontCellView.m */; };
+		25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
+		25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
 		25E364491B38DDE10039A8C5 /* wheel2.png in Resources */ = {isa = PBXBuildFile; fileRef = 25E364481B38DDE10039A8C5 /* wheel2.png */; };
 		25E3644A1B38DDE10039A8C5 /* wheel2.png in Resources */ = {isa = PBXBuildFile; fileRef = 25E364481B38DDE10039A8C5 /* wheel2.png */; };
 		25E7611E1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E7611C1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m */; };
@@ -1821,11 +1825,13 @@
 		251BF4641C2C1AD300A5D41D /* FreeType2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FreeType2.a; path = FrameWorks/FreeType2.a; sourceTree = "<group>"; };
 		251BF4651C2C1AD300A5D41D /* GoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = GoogleAnalytics.a; path = FrameWorks/GoogleAnalytics.a; sourceTree = "<group>"; };
 		251BF46D1C2C1D3900A5D41D /* RenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderHelper.h; sourceTree = "<group>"; };
-		251BF46E1C2C1D3900A5D41D /* SceneInitializeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneInitializeHelper.h; sourceTree = "<group>"; };
+		251BF46E1C2C1D3900A5D41D /* SceneHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneHelper.h; sourceTree = "<group>"; };
 		251BF46F1C2C1D3900A5D41D /* SGEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEditorScene.h; sourceTree = "<group>"; };
 		251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderHelper.cpp; sourceTree = "<group>"; };
-		251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInitializeHelper.cpp; sourceTree = "<group>"; };
+		251BF4711C2C1D4A00A5D41D /* SceneHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneHelper.cpp; sourceTree = "<group>"; };
 		251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGEditorScene.cpp; sourceTree = "<group>"; };
+		251BF4801C2C20A300A5D41D /* RenderViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderViewManager.h; sourceTree = "<group>"; };
+		251BF4811C2C20A300A5D41D /* RenderViewManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderViewManager.mm; sourceTree = "<group>"; };
 		253B52801BDBBD9100E93208 /* commonL1.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL1.fsh; path = Resources/shaders/commonL1.fsh; sourceTree = "<group>"; };
 		253DE8421B545CCB00FE59FE /* PreviewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewHelper.h; sourceTree = "<group>"; };
 		253DE8431B545CCB00FE59FE /* PreviewHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewHelper.mm; sourceTree = "<group>"; };
@@ -2254,6 +2260,8 @@
 		25CACF621B27C20F0027F48C /* FontCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FontCellView.m; path = "ui/Popover Views/FontCellView.m"; sourceTree = "<group>"; };
 		25CACF641B27C23C0027F48C /* FontCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FontCellView.xib; path = "ui/Popover Views/FontCellView.xib"; sourceTree = "<group>"; };
 		25CACF661B27C2500027F48C /* FontCellViewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FontCellViewPhone.xib; path = "ui/Popover Views/FontCellViewPhone.xib"; sourceTree = "<group>"; };
+		25DAD21C1C2D48F00050BC88 /* SGSelectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSelectionManager.h; sourceTree = "<group>"; };
+		25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSelectionManager.cpp; sourceTree = "<group>"; };
 		25E364481B38DDE10039A8C5 /* wheel2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wheel2.png; path = ../wheel2.png; sourceTree = "<group>"; };
 		25E7611B1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PremiumUpgardeVCViewController.h; path = "ui/Popover Views/PremiumUpgardeVCViewController.h"; sourceTree = "<group>"; };
 		25E7611C1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PremiumUpgardeVCViewController.m; path = "ui/Popover Views/PremiumUpgardeVCViewController.m"; sourceTree = "<group>"; };
@@ -3266,6 +3274,8 @@
 		254F7DAB1A94CA34004D63A8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				251BF4801C2C20A300A5D41D /* RenderViewManager.h */,
+				251BF4811C2C20A300A5D41D /* RenderViewManager.mm */,
 				257106D41A95E928004716A5 /* Reachability */,
 				254F7DAF1A94CC52004D63A8 /* AppHelper.h */,
 				254F7DB01A94CC52004D63A8 /* AppHelper.mm */,
@@ -3315,12 +3325,13 @@
 				256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */,
 				256F6B801BF6246300154622 /* SGJoint.cpp */,
 				251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */,
-				251BF4711C2C1D4A00A5D41D /* SceneInitializeHelper.cpp */,
+				251BF4711C2C1D4A00A5D41D /* SceneHelper.cpp */,
 				251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */,
 				256F6B811BF6246300154622 /* SGNode.cpp */,
 				256F6B821BF6246300154622 /* SGPreviewScene.cpp */,
 				256F6B831BF6246300154622 /* SGScene.cpp */,
 				256F6B841BF6246300154622 /* ShaderManager.cpp */,
+				25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */,
 			);
 			name = Iyan3DEngineFiles;
 			path = "../../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles";
@@ -3367,11 +3378,12 @@
 				256F6B711BF6246200154622 /* SGScaleKey.h */,
 				256F6B721BF6246200154622 /* SGScene.h */,
 				251BF46D1C2C1D3900A5D41D /* RenderHelper.h */,
-				251BF46E1C2C1D3900A5D41D /* SceneInitializeHelper.h */,
+				251BF46E1C2C1D3900A5D41D /* SceneHelper.h */,
 				251BF46F1C2C1D3900A5D41D /* SGEditorScene.h */,
 				256F6B731BF6246200154622 /* SGVisibilityKey.h */,
 				256F6B741BF6246200154622 /* ShaderManager.h */,
 				256F6B751BF6246200154622 /* ShaderParamOrder.h */,
+				25DAD21C1C2D48F00050BC88 /* SGSelectionManager.h */,
 			);
 			path = HeaderFiles;
 			sourceTree = "<group>";
@@ -6370,6 +6382,7 @@
 				E2A343D319F1598A000EF7C2 /* VideoUploadViewController.m in Sources */,
 				256F6F6E1BF6257C00154622 /* render.c in Sources */,
 				E21C3D251A0758B6006964E5 /* GTLYouTubeVideoConversionPings.m in Sources */,
+				251BF4821C2C20A300A5D41D /* RenderViewManager.mm in Sources */,
 				25E7611E1AF2F5CC0019E364 /* PremiumUpgardeVCViewController.m in Sources */,
 				256F6F761BF6257C00154622 /* error.c in Sources */,
 				E21C3D041A0758B6006964E5 /* GTLYouTubePlaylistItem.m in Sources */,
@@ -6465,6 +6478,7 @@
 				018501DC1C2BDA730090FA65 /* EditorViewController.mm in Sources */,
 				7F30F5B51B576D8C00B311E3 /* NSString+NSHash.m in Sources */,
 				256F6DAE1BF624FB00154622 /* Node.cpp in Sources */,
+				25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */,
 				256F6B971BF6246300154622 /* json_reader.cpp in Sources */,
 				256F6B991BF6246300154622 /* json_value.cpp in Sources */,
 				256F6D6E1BF624FB00154622 /* BoundingBox.cpp in Sources */,
@@ -6616,7 +6630,7 @@
 				01B4CF861C291EFD0091E19B /* AnimationSelectionSlider.mm in Sources */,
 				E21C3D071A0758B6006964E5 /* GTLYouTubePlaylistItemSnippet.m in Sources */,
 				E21C3CFE1A0758B6006964E5 /* GTLYouTubeLocalizedProperty.m in Sources */,
-				251BF4751C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */,
+				251BF4751C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
 				E211247D1AF20A0D00C23624 /* Shaders.metal in Sources */,
 				256F6BA91BF6246300154622 /* SGCloudRenderingHelper.cpp in Sources */,
 				256F6D801BF624FB00154622 /* Vector4.cpp in Sources */,
@@ -6754,6 +6768,7 @@
 				E20670EF1B049AA6006DD2F7 /* GTLServiceYouTube.m in Sources */,
 				E20670F01B049AA6006DD2F7 /* SmartImageView.mm in Sources */,
 				E20670F11B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsPromotedItem.m in Sources */,
+				251BF4831C2C20A300A5D41D /* RenderViewManager.mm in Sources */,
 				256F6F651BF6257C00154622 /* mesh.c in Sources */,
 				E20670F21B049AA6006DD2F7 /* GTLYouTubeVideoListResponse.m in Sources */,
 				E20670F31B049AA6006DD2F7 /* GTLYouTubeLiveBroadcastListResponse.m in Sources */,
@@ -6872,7 +6887,7 @@
 				E20671561B049AA6006DD2F7 /* OSCommonImage.m in Sources */,
 				E20671571B049AA6006DD2F7 /* BitmapCropManipulator.m in Sources */,
 				E20671581B049AA6006DD2F7 /* GTLYouTubeVideoCategoryListResponse.m in Sources */,
-				251BF4761C2C1D4A00A5D41D /* SceneInitializeHelper.cpp in Sources */,
+				251BF4761C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
 				E20671591B049AA6006DD2F7 /* GTLUtilities.m in Sources */,
 				E206715A1B049AA6006DD2F7 /* GTLYouTubePlaylistPlayer.m in Sources */,
 				E206715C1B049AA6006DD2F7 /* AssetItem.m in Sources */,
@@ -6956,6 +6971,7 @@
 				E20671A91B049AA6006DD2F7 /* GTLBatchQuery.m in Sources */,
 				E20671AA1B049AA6006DD2F7 /* BitmapRotationManipulator.m in Sources */,
 				256F6D9B1BF624FB00154622 /* AnimatedMorphNode.cpp in Sources */,
+				25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */,
 				256F6BB41BF6246300154622 /* ShaderManager.cpp in Sources */,
 				E20671AB1B049AA6006DD2F7 /* GTLYouTubeVideoCategorySnippet.m in Sources */,
 				E20671AC1B049AA6006DD2F7 /* Utils.m in Sources */,

@@ -7,7 +7,6 @@
 //
 
 #include "SGEditorScene.h"
-#include "RenderHelper.h"
 
 SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight)
 {
@@ -37,7 +36,8 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     cmgr = new CollisionManager();
     shaderMGR = new ShaderManager(sceneMngr, devType);
 
-    isJointSelected = isNodeSelected = isControlSelected = false;
+    renHelper = new RenderHelper(sceneMngr);
+    isJointSelected = isNodeSelected = isControlSelected = freezeRendering = isPlaying = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
@@ -53,6 +53,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     actions.clear();
     totalFrames = 24;
     cameraFOV = 72.0;
+    cameraResolutionType = 0;
 }
 
 void SGEditorScene::initTextures()
@@ -74,27 +75,116 @@ void SGEditorScene::initTextures()
 
 void SGEditorScene::renderAll()
 {
-        bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false,
-                                                    Vector4(0, 0, 0, 255));
+    if(freezeRendering)
+        return;
+    
+    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false,
+                                                Vector4(0, 0, 0, 255));
+    
+    if(displayPrepared) {
         rotationCircle->node->setVisible(false);
         smgr->draw2DImage(bgTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth,  SceneHelper::screenHeight), true,
                           smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
-        smgr->Render();
+        //smgr->Render();
         
-        RenderHelper::drawGrid(smgr);
-//        drawCircle();
-//        DrawMoveAxisLine();
-//        renderControls();
-//        // rtt division atlast post and pre stage
-//        postRTTDrawCall();
-//        rttDrawCall();
+        renHelper->drawGrid();
+        renHelper->drawCircle(this);
+        renHelper->drawMoveAxisLine(this);
+        renHelper->renderControls(this);
+        //        // rtt division atlast post and pre stage
+        renHelper->postRTTDrawCall(this);
+        renHelper->rttDrawCall(this);
         smgr->EndDisplay(); // draws all the rendering command
         
-//        if(fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0) {
-//            swipeToRotate();
-//            updateLightCamera();
-//        }
-//        
-//        if(selectedNodeId != NOT_SELECTED)
-//            setTransparencyForIntrudingObjects();
+        //        if(fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0) {
+        //            swipeToRotate();
+        //            updateLightCamera();
+        //        }
+        //
+        //        if(selectedNodeId != NOT_SELECTED)
+        //            setTransparencyForIntrudingObjects();
+    }
 }
+
+Vector4 SGEditorScene::getCameraPreviewLayout()
+{
+    float camPrevWidth = (SceneHelper::screenWidth) * CAM_PREV_PERCENT;
+    float camPrevHeight = (SceneHelper::screenHeight) * CAM_PREV_PERCENT;
+    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / camPrevHeight;
+    
+    float originX = SceneHelper::screenWidth - camPrevWidth * CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE;
+    float originY = SceneHelper::screenHeight - camPrevHeight * CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE;
+    float endX = originX + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+    float endY = originY + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
+    return Vector4(originX,originY,endX,endY);
+}
+
+void SGEditorScene::findAndInsertInIKPositionMap(int jointId)
+{
+    shared_ptr<AnimatedMeshNode> rigNode = dynamic_pointer_cast<AnimatedMeshNode>(selectedNode->node);
+    if(ikJointsPositionMap.find(jointId) == ikJointsPositionMap.end())
+        ikJointsPositionMap.insert(pair<int,Vector3>(jointId,rigNode->getJointNode(jointId)->getAbsolutePosition()));
+    else
+        ikJointsPositionMap.find(jointId)->second = rigNode->getJointNode(jointId)->getAbsolutePosition();
+}
+
+void SGEditorScene::getIKJointPosition()
+{
+    shared_ptr<AnimatedMeshNode> rigNode = dynamic_pointer_cast<AnimatedMeshNode>(selectedNode->node);
+    if(rigNode) {
+        findAndInsertInIKPositionMap(LEG_RIGHT);
+        findAndInsertInIKPositionMap(LEG_LEFT);
+        findAndInsertInIKPositionMap(HAND_RIGHT);
+        findAndInsertInIKPositionMap(HAND_LEFT);
+    }
+}
+
+void SGEditorScene::setMirrorState(MIRROR_SWITCH_STATE flag)
+{
+    mirrorSwitchState = flag;
+    if(isJointSelected)
+        selectMan->highlightJointSpheres(this);
+}
+
+MIRROR_SWITCH_STATE SGEditorScene::getMirrorState()
+{
+    return mirrorSwitchState;
+}
+
+void SGEditorScene::reloadKeyFrameMap()
+{
+    if(selectedNodeId != NOT_SELECTED) {
+        SGNode *selectedMesh = nodes[selectedNodeId];
+        bool searchPos = true,searchRot = false,searchScale = false;
+        isKeySetForFrame.clear();
+        searchRot = (nodes[selectedNodeId]->getType() == NODE_LIGHT) ? false:true;
+        searchScale = (nodes[selectedNodeId]->getType() > NODE_LIGHT) ? true:false;
+        if(searchPos){
+            for(unsigned long i = 0; i < selectedMesh->positionKeys.size(); i++)
+                isKeySetForFrame.insert(pair<int,int>(selectedMesh->positionKeys[i].id,selectedMesh->positionKeys[i].id));
+        }
+        if(searchRot){
+            for(unsigned long i = 0; i < selectedMesh->rotationKeys.size(); i++)
+                isKeySetForFrame.insert(pair<int,int>(selectedMesh->rotationKeys[i].id,selectedMesh->rotationKeys[i].id));
+        }
+        if(searchScale){
+            for(unsigned long i = 0; i < selectedMesh->scaleKeys.size(); i++)
+                isKeySetForFrame.insert(pair<int,int>(selectedMesh->scaleKeys[i].id,selectedMesh->scaleKeys[i].id));
+        }
+        
+        for( unsigned long i = 0; i < selectedMesh->joints.size(); i++){
+            for(unsigned long j = 0; j < selectedMesh->joints[i]->rotationKeys.size(); j++) {
+                isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->rotationKeys[j].id,selectedMesh->joints[i]->rotationKeys[j].id));
+            }
+            if(selectedMesh->getType() == NODE_TEXT) {
+                for(unsigned long j = 0; j < selectedMesh->joints[i]->positionKeys.size(); j++)
+                    isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->positionKeys[j].id,selectedMesh->joints[i]->positionKeys[j].id));
+                for(unsigned long j = 0; j < selectedMesh->joints[i]->scaleKeys.size(); j++)
+                    isKeySetForFrame.insert(pair<int,int>(selectedMesh->joints[i]->scaleKeys[j].id,selectedMesh->joints[i]->scaleKeys[j].id));
+            }
+        }
+    }
+    else
+        isKeySetForFrame.clear();
+}
+

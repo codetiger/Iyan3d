@@ -23,6 +23,7 @@
                 <outlet property="optionsBtn" destination="kZM-y0-mYT" id="DkH-nx-7V3"/>
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
                 <outlet property="redoBtn" destination="WSd-xV-ijo" id="ug4-eC-5Ka"/>
+                <outlet property="renderView" destination="Irr-tp-tWS" id="ATu-Qm-GS4"/>
                 <outlet property="rightView" destination="RgQ-Eo-s8S" id="auz-s6-o1K"/>
                 <outlet property="rotateBtn" destination="kdb-Pl-f7f" id="Vdr-7W-QsP"/>
                 <outlet property="scaleBtn" destination="6N0-LM-Ula" id="i1O-dg-bRl"/>

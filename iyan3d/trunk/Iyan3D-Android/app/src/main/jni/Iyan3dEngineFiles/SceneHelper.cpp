@@ -7,7 +7,7 @@
 //
 
 
-#include "SceneInitializeHelper.h"
+#include "SceneHelper.h"
 #include "ShaderParamOrder.h"
 
 float SceneHelper::screenWidth = 0.0;
@@ -102,3 +102,13 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
     
     return sceneControls;
 }
+
+void SceneHelper::limitPixelCoordsWithinTextureRange(float texWidth,float texHeight,float &xCoord,float &yCoord)
+{
+    xCoord = (xCoord >= texWidth)?(texWidth-1.0):xCoord;
+    yCoord = (yCoord >= texHeight)?(texHeight-1.0):yCoord;
+    
+    xCoord = (xCoord < 0.0)? 0.0 : xCoord;
+    yCoord = (yCoord < 0.0) ? 0.0 : yCoord;
+}
+

@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#ifndef SceneInitializeHelper_h
-#define SceneInitializeHelper_h
+#ifndef SceneHelper_h
+#define SceneHelper_h
 
 #define TOTAL_CONTROLS 6
 
@@ -30,6 +30,7 @@ class SceneHelper
 
     static Vector3 planeFacingDirection(int controlType);
     static Vector3 controlDirection(int controlType);
+    static void limitPixelCoordsWithinTextureRange(float texWidth,float texHeight,float &xCoord,float &yCoord);
     
 };
 

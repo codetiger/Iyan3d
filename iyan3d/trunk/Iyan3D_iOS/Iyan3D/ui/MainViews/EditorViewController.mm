@@ -8,6 +8,7 @@
 
 #import "EditorViewController.h"
 #import "FrameCellNew.h"
+#import "AppDelegate.h"
 
 @implementation EditorViewController
 
@@ -47,11 +48,68 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    #if !(TARGET_IPHONE_SIMULATOR)
+        if (iOSVersion >= 8.0)
+            isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
+    #endif
+
+    constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
+
     totalFrames = 24;
     [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
     tableData = [NSMutableArray arrayWithObjects:@"Camera",@"Light",@"Fatman",@"Skeleton",@"Dragon",@"Smackall Boy",nil];
     
     [self.objectList reloadData];
+    
+    [self initScene];
+    [self createDisplayLink];
+}
+
+- (void)initScene
+{
+    float screenScale = [[UIScreen mainScreen] scale];
+    if (isMetalSupported) {
+        [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
+         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
+        editorScene = new SGEditorScene(METAL, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+    }
+    else {
+        
+        renderViewMan = [[RenderViewManager alloc] init];
+        
+        [renderViewMan setupLayer:_renderView];
+        [renderViewMan setupContext];
+        
+        [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:SCREENWIDTH ScreenHeight:SCREENHEIGHT ScreenScale:screenScale renderView:_renderView];
+        smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
+        editorScene = new SGEditorScene(OPENGLES2, smgr, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+        editorScene->screenScale = screenScale;
+        
+        [renderViewMan setupDepthBuffer:_renderView];
+        [renderViewMan setupRenderBuffer];
+        [renderViewMan setupFrameBuffer:smgr];
+    }
+//    smgr>ShaderCallBackForNode = &shaderCallBackForNode;
+//    smgr>isTransparentCallBack = &isTransparentCallBack;
+//    animationScene->notRespondingCallBack = &notRespondingCallBackAnimationScene;
+//    animationScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
+//    animationScene->fileWriteCallBack = &fileWriteCallBack;
+//    [self addGesturesToSceneView];
+}
+
+- (void)createDisplayLink
+{
+    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateRenderer)];
+    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+- (void) updateRenderer
+{
+    if(editorScene) {
+        editorScene->renderAll();
+        [renderViewMan presentRenderBuffer];
+    }
 }
 
 #pragma mark - Frames Collection View Deligates

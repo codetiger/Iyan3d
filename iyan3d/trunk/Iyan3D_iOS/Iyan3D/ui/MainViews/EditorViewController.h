@@ -9,11 +9,20 @@
 #ifndef EditorViewController_h
 #define EditorViewController_h
 
+#if !(TARGET_IPHONE_SIMULATOR)
+#import <QuartzCore/CAMetalLayer.h>
+#import <Metal/Metal.h>
+#endif
+
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
+#import "RenderingView.h"
 #import "ImportImageNew.h"
 #import "AnimationSelectionSlider.h"
 #import "TextSelectionSidePanel.h"
 #import "AssetSelectionSidePanel.h"
+#import "SGEditorScene.h"
+#import "RenderViewManager.h"
 
 @interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,UIAlertViewDelegate>{
     int totalFrames;
@@ -22,8 +31,13 @@
     AnimationSelectionSlider *animationsliderVC;
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
+    
+    bool isMetalSupported;
+    RenderViewManager *renderViewMan;
+    SceneManager *smgr;
+    SGEditorScene *editorScene;
 }
-
+@property (weak, nonatomic) IBOutlet RenderingView *renderView;
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *framesCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *addFrameBtn;

@@ -434,6 +434,8 @@ public:
     static string impotedImagesPathAndroid;
     static string DocumentsStoragePathRig;
     static float iOS_Version;
+    static Vector3 sgrJointDefaultColor;
+    static Vector3 selectionColor;
 };
 
 #endif

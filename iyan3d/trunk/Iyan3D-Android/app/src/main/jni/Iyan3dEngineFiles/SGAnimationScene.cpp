@@ -537,6 +537,7 @@ void SGAnimationScene::rttNodeJointSelection(Vector2 touchPosition)
     if(shaderMGR->deviceType == METAL)
         smgr->EndDisplay();
 }
+
 void SGAnimationScene::getNodeColorFromTouchTexture(){
     Vector2 touchPixel = nodeJointPickerTouchPosition;
     if(selectNodeOrJointInPixel(touchPixel))
