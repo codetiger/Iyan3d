@@ -31,7 +31,6 @@
     CacheSystem* cache;
     NSNumberFormatter * priceFormatter;
     BOOL processTransaction;
-    BOOL isTestPurchase;
     int transactionCount;
     NSMutableArray *restoreIdArr;
     NSString *fontDirPath;

@@ -37,7 +37,6 @@
 {
     cache = [CacheSystem cacheSystem];
     processTransaction = false;
-    isTestPurchase = false; //TODO to modify it to 'false'
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     restoreIdArr = [[NSMutableArray alloc] init];
 }
@@ -722,7 +721,7 @@
     NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
     
     NSString* receiptDataStr = (credits < 0) ? @"" : [receiptData base64EncodedStringWithOptions:0];
-    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/credits%@.php",(isTestPurchase) ? @"sb" : @""];
+    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/credits.php"];
     NSURL *url = [NSURL URLWithString:phpPath];
     NSString *postPath = phpPath;
     
@@ -812,7 +811,7 @@
     
     NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
     
-    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/restore%@.php",(isTestPurchase) ? @"sb" : @""];
+    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/restore.php"];
 
     NSURL *url = [NSURL URLWithString:phpPath];
     NSString *postPath = phpPath;
