@@ -41,7 +41,7 @@
 }
 
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *downloadIndicator;
 @property (strong, nonatomic) id <SliderDelegate> delegate;

@@ -1021,6 +1021,20 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 #pragma mark RenderManager Delegate
 
+- (void) setShaderTypeForRendering:(int)shaderType
+{
+    editorScene->updater->resetMaterialTypes((shaderType == 0) ? false : true);
+}
+
+- (void)renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark
+{   
+    editorScene->isExportingImages = true;
+    editorScene->updater->setDataForFrame(frame);
+    NSString* tempDir = NSTemporaryDirectory();
+    NSString* imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, frame];
+    editorScene->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark);
+}
+
 - (void) presentPopOver:(CGRect )arect{
     
     UIAlertController * view=   [UIAlertController
@@ -1136,12 +1150,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
         else{
             if([Utility IsPadDevice]){
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil EditorScene:editorScene FirstTime:YES];
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:(ANIMATION_TYPE)editorScene->nodes[editorScene->selectedNodeId]->getType()  EditorScene:editorScene FirstTime:YES];
                 animationsliderVC.delegate = self;
                 [self showOrHideLeftView:YES withView:animationsliderVC.view];
             }
             else{
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil EditorScene:editorScene FirstTime:YES];
+                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:(ANIMATION_TYPE)editorScene->nodes[editorScene->selectedNodeId]->getType() EditorScene:editorScene FirstTime:YES];
                 animationsliderVC.delegate = self;
                 [self showOrHideLeftView:YES withView:animationsliderVC.view];
             }
@@ -1442,7 +1456,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, currentScene.sceneFile];
-//    editorScene->saveSceneData((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
+    editorScene->saveThumbnail((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 #pragma Download Missing Assets

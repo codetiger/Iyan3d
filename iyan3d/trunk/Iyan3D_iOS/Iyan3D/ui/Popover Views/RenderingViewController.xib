@@ -8,8 +8,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RenderingViewController">
             <connections>
                 <outlet property="activityIndicatorView" destination="0N1-4Q-98X" id="mgg-M1-ykN"/>
+                <outlet property="backgroundColorLable" destination="UIQ-pP-dd7" id="5g3-Ag-wdS"/>
                 <outlet property="cancelActivityIndicator" destination="nif-U0-BwV" id="T3H-Ag-uTc"/>
                 <outlet property="cancelButton" destination="BrA-Pe-0Ve" id="ojj-c7-nZ9"/>
+                <outlet property="colorPickerBtn" destination="8g0-ud-PUd" id="y0C-mw-5rB"/>
                 <outlet property="exportButton" destination="ZUU-pt-gvf" id="fmO-uG-1Cq"/>
                 <outlet property="makeVideoLoading" destination="chg-7r-BYf" id="wFs-ZV-FnW"/>
                 <outlet property="nextButton" destination="pdo-ld-rqe" id="fBG-Me-oIy"/>
@@ -27,8 +29,10 @@
                 <outlet property="shaderStyle" destination="MVH-u3-p41" id="zuG-Tg-MoH"/>
                 <outlet property="shareActivityIndicator" destination="qZj-v7-ywE" id="Svx-Fb-Iek"/>
                 <outlet property="startButtonText" destination="pdo-ld-rqe" id="N6o-iw-Y81"/>
+                <outlet property="transparentBackgroundbtn" destination="gTf-Gy-xHP" id="1Nz-ST-4dN"/>
                 <outlet property="transparentBgLabel" destination="H7V-aZ-VyW" id="uHP-c4-xWH"/>
                 <outlet property="transparentBgSwitch" destination="gTf-Gy-xHP" id="tXm-er-vCj"/>
+                <outlet property="transparentLable" destination="H7V-aZ-VyW" id="uud-1w-zcU"/>
                 <outlet property="view" destination="2" id="3"/>
                 <outlet property="waterMarkLabel" destination="8K2-Nn-ge0" id="Rg5-Tg-Vcf"/>
                 <outlet property="watermarkSwitch" destination="7z9-il-Fpy" id="tdg-Ru-dOA"/>

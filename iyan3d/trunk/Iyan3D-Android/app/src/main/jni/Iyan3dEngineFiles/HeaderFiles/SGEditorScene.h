@@ -61,7 +61,7 @@ public:
     /* cpp class objects */
     
     bool isPreviewMode, isRigMode;
-    bool freezeRendering , isPlaying, isRTTCompleted;
+    bool freezeRendering , isPlaying;
     bool isNodeSelected,isJointSelected,isControlSelected;
     int selectedJointId,selectedNodeId,selectedControlId,controlType;
     int totalFrames, cameraResolutionType;
@@ -75,6 +75,11 @@ public:
 
     std::map<int,int> isKeySetForFrame;
     std::map<int,int>::iterator keyFramesIterator;
+    
+    /* sabish */
+    int renderingType;
+    bool isRTTCompleted,isExportingImages,isExporting1stTime;
+    int screenWidth, screenHeight;
     
     /* Iyan3D Related classs objects */
     
@@ -148,8 +153,13 @@ public:
     bool hasJointSelected();
     SGNode* getSelectedNode();
     SGJoint* getSelectedJoint();
-    Vector3 getSelectedNodeScale();
     
+    //sabish
+    Vector3 getSelectedNodeScale();
+    void renderAndSaveImage(char *imageName , int shaderType,bool isDisplayPrepared = false, bool removeWaterMark = false);
+    bool checkNodeSize();
+    void saveThumbnail(char* imagePath);
+
     /* Read and Write */
     
     bool loadSceneData(std::string *filePath);

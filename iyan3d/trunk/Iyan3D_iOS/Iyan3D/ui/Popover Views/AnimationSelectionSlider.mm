@@ -16,10 +16,11 @@
 
 @implementation AnimationSelectionSlider
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        animationType = type;
         editorSceneLocal = editorScene;
         selectedNodeId = editorSceneLocal->selectedNodeId;
         bonecount = editorSceneLocal->nodes[selectedNodeId]->joints.size();
@@ -205,8 +206,6 @@
 }
 
 - (IBAction)cancelBtnFunction:(id)sender {
-
-
     if(!isFirstTimeEntered){
         editorSceneLocal->selectMan->selectObject(selectedNodeId);
         editorSceneLocal->totalFrames = totalFrame;

@@ -211,18 +211,27 @@ enum constants {
         [self.waterMarkLabel setHidden:isHidden];
         [self.watermarkSwitch setHidden:isHidden];
         [self.shaderStyle setHidden:isHidden];
+        [self.renderDesc setHidden:isHidden];
+        [self.backgroundColorLable setHidden:isHidden];
+        [self.colorPickerBtn setHidden:isHidden];
+        [self.transparentLable setHidden:isHidden];
+        [self.transparentBackgroundbtn setHidden:isHidden];
     }
 }
+
 -(void) appEntersBG{
     isAppInBg = true;
 }
+
 -(void) appEntersFG{
     isAppInBg = false;
 }
+
 - (void) uploadFilesToRender
 {
     NSLog(@"Written");
 }
+
 - (IBAction)startButtonAction:(id)sender
 {
     if([shaderArray[tempSelectedIndex] intValue] == SHADER_CLOUD){
@@ -294,9 +303,7 @@ enum constants {
             if(![filtFilePaths containsObject:filePath3])
                 [filtFilePaths addObject:filePath3];
         }
-        
-    }
-    
+    }    
     return filtFilePaths;
 }
 

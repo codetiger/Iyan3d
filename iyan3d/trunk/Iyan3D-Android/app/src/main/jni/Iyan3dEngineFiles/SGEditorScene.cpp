@@ -21,6 +21,10 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     SceneHelper::screenHeight = screenHeight;
     this->smgr = smgr;
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
+    
+    //sabish
+    this->screenWidth = screenWidth;
+    this->screenHeight = screenHeight;
 
     initVariables(smgr, device);
 
@@ -55,7 +59,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     animMan = new SGAnimationManager(sceneMngr, this);
     
     isJointSelected = isNodeSelected = isControlSelected = false;
-    freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
+    freezeRendering = isPlaying = isPreviewMode = isRigMode,isExportingImages = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
@@ -71,6 +75,12 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     currentFrame = previousFrame = 0;
     cameraFOV = 72.0;
     cameraResolutionType = 0;
+    
+    //sabish
+    isExporting1stTime = true;
+    renderingType = SHADER_COMMON_L1;
+
+
 }
 
 void SGEditorScene::initTextures()
@@ -272,6 +282,125 @@ bool SGEditorScene::loadSceneData(std::string *filePath)
 void SGEditorScene::saveSceneData(std::string *filePath)
 {
     writer->saveSceneData(filePath);
+}
+
+bool SGEditorScene::checkNodeSize(){
+    if(nodes.size() < NODE_LIGHT + 1)
+        return false;
+    return true;
+}
+
+void SGEditorScene::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark)
+{
+    //    SGCloudRenderingHelper::writeFrameData(this, currentFrame);
+    //    return;
+    
+    if(!checkNodeSize())
+        return;
+    isExporting1stTime = false;
+    
+    if(smgr->device == OPENGLES2)
+        renHelper->rttShadowMap();
+    
+    bool displayPrepared = smgr->PrepareDisplay(renderingTextureMap[RESOLUTION[cameraResolutionType][0]]->width,renderingTextureMap[RESOLUTION[cameraResolutionType][0]]->height,false,true,false,Vector4(255,255,255,255));
+    if(!displayPrepared)
+        return;
+    renHelper->setRenderCameraOrientation();
+    renHelper->setControlsVisibility(false);
+    renHelper->setJointSpheresVisibility(false);
+    rotationCircle->node->setVisible(false);
+    
+    int selectedObjectId;
+    if(selectedNodeId != NOT_SELECTED) {
+        selectedObjectId = selectedNodeId;
+        selectMan->unselectObject(selectedNodeId);
+    }
+    
+    
+    vector<string> previousMaterialNames;
+    if(renderingType != shaderType)
+    {
+        updater->resetMaterialTypes(true);
+    }
+    
+    for(unsigned long i = 0; i < nodes.size(); i++){
+        if(!(nodes[i]->props.isVisible))
+            nodes[i]->node->setVisible(false);
+        if(nodes[i]->getType() == NODE_LIGHT || nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+            nodes[i]->node->setVisible(false);
+    }
+    
+    smgr->setRenderTarget(renderingTextureMap[RESOLUTION[cameraResolutionType][0]],true,true,false,Vector4(255,255,255,255));
+    smgr->draw2DImage(bgTexture,Vector2(0,0),Vector2(screenWidth,screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    
+    smgr->Render();
+    
+    if(!removeWaterMark)
+        smgr->draw2DImage(watermarkTexture,Vector2(0,0),Vector2(screenWidth,screenHeight),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    if(smgr->device == METAL)
+        renHelper->rttShadowMap();
+    
+    smgr->EndDisplay();
+    smgr->writeImageToFile(renderingTextureMap[RESOLUTION[cameraResolutionType][0]],imagePath,(shaderMGR->deviceType == OPENGLES2) ?FLIP_VERTICAL : NO_FLIP);
+    
+    smgr->setActiveCamera(viewCamera);
+    smgr->setRenderTarget(NULL,true,true,false,Vector4(255,255,255,255));
+    
+    
+    for(unsigned long i = 0; i < nodes.size(); i++){
+        if(!(nodes[i]->props.isVisible))
+            nodes[i]->node->setVisible(true);
+        if(nodes[i]->getType() == NODE_LIGHT || nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+            nodes[i]->node->setVisible(true);
+    }
+    
+    if(renderingType != shaderType)
+        updater->resetMaterialTypes(false);
+    
+    if(selectedObjectId != NOT_SELECTED)
+        selectMan->selectObject(selectedObjectId);
+}
+
+void SGEditorScene::saveThumbnail(char* targetPath)
+{
+    if(!checkNodeSize())
+        return;
+    
+    bool displayPrepared = smgr->PrepareDisplay(thumbnailTexture->width,thumbnailTexture->height,false,true,false,Vector4(255,255,255,255));
+    if(!displayPrepared)
+        return;
+    renHelper->setControlsVisibility(false);
+    renHelper->setJointSpheresVisibility(false);
+    rotationCircle->node->setVisible(false);
+    //jointSpheres.clear();
+    for(unsigned long i = NODE_CAMERA; i < nodes.size(); i++) {
+        if(!(nodes[i]->props.isVisible))
+            nodes[i]->node->setVisible(false);
+    }
+    
+   selectMan->unselectObject(selectedNodeId);
+    
+    smgr->setRenderTarget(thumbnailTexture,true,true,false,Vector4(255,255,255,255));
+    smgr->draw2DImage(bgTexture,Vector2(0,0),Vector2(screenWidth,screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    renHelper->drawGrid();
+    
+    smgr->Render();
+    smgr->EndDisplay();
+    smgr->writeImageToFile(thumbnailTexture, targetPath , (shaderMGR->deviceType == OPENGLES2) ? FLIP_VERTICAL : NO_FLIP);
+    
+    smgr->setRenderTarget(NULL,true,true,false,Vector4(255,255,255,255));
+    
+    for(unsigned long i = NODE_CAMERA; i < nodes.size(); i++) {
+        if(!(nodes[i]->props.isVisible))
+            nodes[i]->node->setVisible(true);
+    }
+    
+    if(selectedNodeId != NOT_SELECTED)
+        nodes[selectedNodeId]->props.isSelected = true;
+    
+    selectMan->selectObject(selectedNodeId);
+    renHelper->setControlsVisibility(true);
+    smgr->EndDisplay();
 }
 
 int SGEditorScene::undo(int &returnValue2)

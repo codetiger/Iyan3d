@@ -91,6 +91,10 @@
 @property (weak, nonatomic) id <RenderingViewControllerDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UISwitch *watermarkSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *backgroundColorLable;
+@property (weak, nonatomic) IBOutlet UIButton *colorPickerBtn;
+@property (weak, nonatomic) IBOutlet UILabel *transparentLable;
+@property (weak, nonatomic) IBOutlet UISwitch *transparentBackgroundbtn;
 
 - (IBAction)cameraResolutionChanged:(id)sender;
 - (IBAction)transparentBgValueChanged:(id)sender;
