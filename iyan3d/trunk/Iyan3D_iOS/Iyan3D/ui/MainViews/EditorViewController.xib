@@ -26,6 +26,7 @@
                 <outlet property="moveFirst" destination="GJx-oe-voh" id="aDk-Kf-Jtf"/>
                 <outlet property="moveLast" destination="hqf-aQ-aK5" id="q4T-bf-GhI"/>
                 <outlet property="objTableview" destination="0go-cP-r4u" id="hXs-EQ-Xed"/>
+                <outlet property="objectList" destination="Oe9-3f-sks" id="RZu-TM-stB"/>
                 <outlet property="optionsBtn" destination="kZM-y0-mYT" id="DkH-nx-7V3"/>
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
                 <outlet property="publishBtn" destination="cSH-2J-bnb" id="f3V-47-dK5"/>
