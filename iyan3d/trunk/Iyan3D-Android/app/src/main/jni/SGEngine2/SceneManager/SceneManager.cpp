@@ -296,7 +296,7 @@ void SceneManager::draw3DLine(Vector3 start , Vector3 end , Vector3 color , Mate
     getActiveCamera()->update();
     Mat4 mat = getActiveCamera()->getProjectionMatrix() * getActiveCamera()->getViewMatrix();
     setPropertyValue(material,"mvp",mat.pointer(),DATA_FLOAT_MAT4,16,false,mvpUniParamIndex);
-    setPropertyValue(material,"vertexColor",&vertColor[0],DATA_FLOAT_VEC3,3,false,vertexColorUniParamIndex);
+    setPropertyValue(material,"perVertexColor",&vertColor[0],DATA_FLOAT_VEC3,3,false,vertexColorUniParamIndex);
     setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1,false,transparencyUniParamIndex);
     renderMan->draw3DLine(start,end,material);
 }
