@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGAnimationManager.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGAnimationManager.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene* animScene;
 
@@ -19,12 +19,13 @@ SGAnimationManager::SGAnimationManager(SceneManager* smgr, void* scene)
 
 vector<Vector3> SGAnimationManager::storeTextInitialPositions(SGNode *sgnode)
 {
+    vector<Vector3> jointPositions;
+
     if(!animScene || !smgr)
-        return;
+        return jointPositions;
 
     int jointCount = (dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node))->getJointCount();
     
-    vector<Vector3> jointPositions;
     for (int i = 0; i < jointCount; i++) {
         jointPositions.push_back((dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node))->getJointNode(i)->getPosition());
     }
@@ -294,7 +295,7 @@ void SGAnimationManager::applyTextAnimations(string filePath, SGNode *sgNode, in
 bool SGAnimationManager::removeAnimationForSelectedNodeAtFrame(int selectedFrame)
 {
     if(!animScene || !smgr)
-        return;
+        return false;
 
     bool isKeySetForNode = true;
     if(animScene->selectedNodeId != NOT_SELECTED) {
