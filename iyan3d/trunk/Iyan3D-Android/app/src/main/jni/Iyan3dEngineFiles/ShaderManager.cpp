@@ -66,7 +66,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setVertexColorUniform(sgNode->node->material,sgNode->props.vertexColor,SHADER_COMMON_SKIN_VertexColor,smgr->getNodeIndexByID(sgNode->node->getID()));
         setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, false);
 
-        setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, true);
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, true);
         setJointTransform(sgNode, SHADER_PERVERTEXCOLOR_jointData, smgr);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);
