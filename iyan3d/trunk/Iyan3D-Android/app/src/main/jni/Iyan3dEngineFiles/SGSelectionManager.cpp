@@ -220,13 +220,6 @@ bool SGSelectionManager::multipleSelections(int nodeId)
             selectionScene->selectedNodeIds.push_back(selectionScene->selectedNodeId);
         selectionScene->selectedNodeIds.push_back(nodeId);
         removeChildren(getParentNode(), true);
-        if(parentNode)
-            smgr->RemoveNode(parentNode);
-        sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
-        parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
-        getParentNode()->setVisible(false);
-        getParentNode()->setID(PIVOT_ID);
-        getParentNode()->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         updateParentPosition();
         highlightSelectedNode(nodeId);
         selectionScene->renHelper->setJointSpheresVisibility(false);
@@ -237,8 +230,6 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         selectionScene->clearSelections();
     } else if(nodeId != 255 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) != selectionScene->selectedNodeIds.end()){
         removeChildren(getParentNode(),true);
-        if(parentNode)
-            smgr->RemoveNode(parentNode);
         for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
             if(selectionScene->selectedNodeIds[i] == nodeId)
                 selectionScene->selectedNodeIds.erase(selectionScene->selectedNodeIds.begin() + i);
@@ -249,12 +240,6 @@ bool SGSelectionManager::multipleSelections(int nodeId)
             return true;
         } else
             unselectObject(nodeId);
-        
-        sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
-        parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
-        getParentNode()->setVisible(false);
-        getParentNode()->setID(PIVOT_ID);
-        getParentNode()->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         updateParentPosition();
         selectionScene->clearSelections();
     }
@@ -263,9 +248,13 @@ bool SGSelectionManager::multipleSelections(int nodeId)
 
 void SGSelectionManager::updateParentPosition()
 {
-    if(!getParentNode())
-        return;
-    
+    if(parentNode)
+        smgr->RemoveNode(parentNode);
+    sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
+    parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
+    getParentNode()->setVisible(false);
+    getParentNode()->setID(PIVOT_ID);
+    getParentNode()->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     storeGlobalPositions();
     addSelectedChildren(getParentNode());
     static_pointer_cast<Node>(getParentNode())->updateBoundingBox();
