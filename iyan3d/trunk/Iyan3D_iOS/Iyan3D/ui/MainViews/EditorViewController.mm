@@ -486,18 +486,18 @@ BOOL missingAlertShown;
     }
     cell.textLabel.font=[cell.textLabel.font fontWithSize:13];
     cell.textLabel.text = [assetsInScenes objectAtIndex:indexPath.row];
-    if([cell.textLabel.text isEqualToString:@"CAMERA"])
-        cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
-    else if([cell.textLabel.text isEqualToString:@"LIGHT"])
-        cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-    else if([cell.textLabel.text hasPrefix:@"TEXT"])
-        cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
-    else if([cell.textLabel.text hasPrefix:@"IMAGE"])
-        cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
-    else if([cell.textLabel.text hasPrefix:@"LIGHT"])
-        cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-    else
-        cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
+    if(editorScene->nodes.size() > indexPath.row){
+        if(editorScene->nodes[indexPath.row]->getType() == NODE_CAMERA)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+        else if(editorScene->nodes[indexPath.row]->getType() == (NODE_LIGHT || NODE_ADDITIONAL_LIGHT))
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+        else if(editorScene->nodes[indexPath.row]->getType() == NODE_TEXT_SKIN)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+        else if(editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+        else
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
+    }
     return cell;
 }
 
@@ -627,7 +627,7 @@ BOOL missingAlertShown;
     }
     [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"]];
     [self autoRigViewButtonHandler:YES];
-    [self updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:selectedNodeId];
+    [self updateAssetListInScenes];
     selectedNodeId = -1;
 }
 
@@ -1077,7 +1077,7 @@ BOOL missingAlertShown;
         }
         case ADD_TEXT_IMAGE_BACK: {
             std::wstring name = editorScene->nodes[editorScene->nodes.size() - 1]->name;
-            [self updateAssetListInScenes:ASSET_TEXT assetName:[NSString stringWithFormat:@"TEXT %@",[self stringWithwstring:name]] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+            [self updateAssetListInScenes];
             break;
         }
         case ADD_ASSET_BACK: {
@@ -1111,34 +1111,45 @@ BOOL missingAlertShown;
             break;
         }
     }
+    [self updateAssetListInScenes];
 }
 
 - (void) undoMultiAssetDeleted:(int)size
 {
-    [self undoBtnAction:nil];
+    for (int i = 0; i < size; i++)
+            [self undoBtnAction:nil];
+    editorScene->actionMan->currentAction--;
+}
+
+- (void) redoMultiAssetDeleted:(int)size
+{
+    for (int i = 0; i < size; i++)
+        [self redoBtnAction:nil];
+    editorScene->actionMan->currentAction++;
 }
 
 - (IBAction)redoBtnAction:(id)sender
 {
     int returnValue = editorScene->redo();
     
-    NSLog(@"Redo Return Value : %d ",returnValue);
-
     if (returnValue == DO_NOTHING) {
         //DO NOTHING
     }
     else if (returnValue == DELETE_ASSET) {
         if (editorScene->selectedNodeId < assetsInScenes.count) {
-            NSLog(@"Seleced Node Id %d",editorScene->selectedNodeId);
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:YES];
         }
     }
     else if (returnValue == ADD_TEXT_IMAGE_BACK) {
         std::wstring name = editorScene->nodes[editorScene->nodes.size() - 1]->name;
-        [self updateAssetListInScenes:ASSET_TEXT assetName:[NSString stringWithFormat:@"TEXT %@",[self stringWithwstring:name]] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+        [self updateAssetListInScenes];
     }
     else if (returnValue == SWITCH_MIRROR) {
         //self.mirrorSwitch.on = animationScene->getMirrorState();
+    }
+    else if(returnValue == ACTION_MULTI_NODE_DELETED_BEFORE){
+        SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction-1];
+        [self redoMultiAssetDeleted:recentAction.objectIndex];
     }
     else {
         if (returnValue != DEACTIVATE_UNDO && returnValue != DEACTIVATE_REDO && returnValue != DEACTIVATE_BOTH) {
@@ -1159,6 +1170,8 @@ BOOL missingAlertShown;
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         [self HighlightFrame];
         [self.framesCollectionView reloadData];
+    [self updateAssetListInScenes];
+
 }
 
 
@@ -1600,6 +1613,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                            editorScene->loader->removeSelectedObjects();
                                         else
                                             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+                                       [self updateAssetListInScenes];
+
                                    }];
     [view addAction:deleteButton];
     if(editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT){
@@ -1609,6 +1624,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                           handler:^(UIAlertAction * action)
                                           {
                                               [self createDuplicateAssets];
+                                              [self updateAssetListInScenes];
                                           }];
         
         [view addAction:duplicateButton];
@@ -1708,29 +1724,33 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 }
 
--(void) updateAssetListInScenes :(int)nodeType assetName:(NSString *)assetName actionType:(int)action removeObjectAtIndex:(int)index {
-    if(action == ADD_OBJECT){
-        if(nodeType == ASSET_CAMERA){
-            [assetsInScenes addObject:@"CAMERA"];
-        }
-        else if(nodeType == ASSET_LIGHT){
-            [assetsInScenes addObject:@"LIGHT"];
-        }
-        else if(nodeType == ASSET_IMAGE){
-            NSString *name = [NSString stringWithFormat:@"Image : %@",assetName];
-            [assetsInScenes addObject:name];
-        }
-        else if(nodeType == ASSET_TEXT){
-            [assetsInScenes addObject:assetName];
-        }
-        else{
-            [assetsInScenes addObject:assetName];
-        }
+-(void) updateAssetListInScenes
+{
+    [assetsInScenes removeAllObjects];
+    for(int i = 0; i < editorScene->nodes.size(); i++){
+        NSString* name = [self stringWithwstring:editorScene->nodes[i]->name];
+            if(editorScene->nodes[i]->getType() == NODE_CAMERA){
+                [assetsInScenes addObject:@"CAMERA"];
+            }
+            else if(editorScene->nodes[i]->getType() == NODE_LIGHT){
+                [assetsInScenes addObject:@"LIGHT"];
+            }
+            else if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT){
+                [assetsInScenes addObject:name];
+            }
+            else if(editorScene->nodes[i]->getType() == NODE_IMAGE){
+                [assetsInScenes addObject:[NSString stringWithFormat:@"Image : %@",name]];
+            }
+            else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN){
+                [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
+            }
+            else{
+                [assetsInScenes addObject:name];
+            }        
     }
-    else if (action == REMOVE_OBJECT){
-        [assetsInScenes removeObjectAtIndex:index];
-    }
+
     [self.objectList reloadData];
+    
 }
 
 

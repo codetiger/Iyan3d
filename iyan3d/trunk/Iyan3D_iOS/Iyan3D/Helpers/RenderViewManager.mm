@@ -185,9 +185,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 - (void) addCameraLight
 {
     [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
-    [self.delegate updateAssetListInScenes:ASSET_CAMERA assetName:@"CAMERA" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+    [self.delegate updateAssetListInScenes];
     [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
-    [self.delegate updateAssetListInScenes:ASSET_LIGHT assetName:@"LIGHT" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+    [self.delegate updateAssetListInScenes];
     
 }
 
@@ -222,7 +222,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
-              [self.delegate updateAssetListInScenes:ASSET_BACKGROUNDS assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+              [self.delegate updateAssetListInScenes];
             }
             break;
         }
@@ -234,7 +234,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
-                [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                [self.delegate updateAssetListInScenes];
             }
             break;
         }
@@ -244,7 +244,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                [self.delegate updateAssetListInScenes:ASSET_OBJ assetName:assetName actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                [self.delegate updateAssetListInScenes];
                                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
             }
             break;
@@ -257,7 +257,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
-                [self.delegate updateAssetListInScenes:ASSET_IMAGE assetName:[NSString stringWithFormat:@"IMAGE %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                [self.delegate updateAssetListInScenes];
             }
             break;
         }
@@ -295,7 +295,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
-                [self.delegate updateAssetListInScenes:ASSET_TEXT assetName:[NSString stringWithFormat:@"TEXT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                [self.delegate updateAssetListInScenes];
             }
             break;
         }
@@ -305,7 +305,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId ,"",name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
-                [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:[NSString stringWithFormat:@"LIGHT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
+                [self.delegate updateAssetListInScenes];
                 lightCount++;
             } else {
                 NSLog(@"Max lights 5");
@@ -332,7 +332,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
         }
         editorScene->loader->removeObject(nodeIndex);
-        [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:(int)nodeIndex];
+        [self.delegate updateAssetListInScenes];
     }
 }
 

@@ -440,16 +440,21 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
     } else if(actionType == ACTION_NODE_DELETED) {
         assetAction.drop();
         assetAction.actionType = ACTION_NODE_DELETED;
-        SGNode * selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+        SGNode * selectedNode = actionScene->nodes[(actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId];
         assetAction.frameId = selectedNode->assetId;
         assetAction.objectIndex = selectedNode->actionId;
         //assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(selectedNode->props.prevMatName));
-        StoreDeleteObjectKeys(actionScene->selectedNodeId);
+        StoreDeleteObjectKeys((actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId);
         addAction(assetAction);
     } else if (actionType == ACTION_TEXT_IMAGE_DELETE|| actionType == ACTION_TEXT_IMAGE_ADD) {
         assetAction.drop();
         assetAction.actionType = actionType == ACTION_TEXT_IMAGE_DELETE?ACTION_TEXT_IMAGE_DELETE : ACTION_TEXT_IMAGE_ADD;
-        int indexOfAsset = actionType == ACTION_TEXT_IMAGE_DELETE ? actionScene->selectedNodeId : (int)actionScene->nodes.size()-1;
+        int indexOfAsset;
+        if(actionScene->selectedNodeIds.size() > 0){
+            indexOfAsset = (actionType == ACTION_TEXT_IMAGE_DELETE) ? ((actionScene->selectedNodeIds.size() > 0) ? assetId : actionScene->selectedNodeId ) : (int)actionScene->nodes.size();
+        }
+        else
+            indexOfAsset = actionType == ACTION_TEXT_IMAGE_DELETE ? actionScene->selectedNodeId : (int)actionScene->nodes.size()-1;
         assetAction.objectIndex = actionScene->nodes[indexOfAsset]->actionId;
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->node->material->name));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->optionalFilePath));
@@ -482,9 +487,15 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         StoreDeleteObjectKeys(actionScene->selectedNodeId);
         addAction(assetAction);
     }
-    else if(actionType == ACTION_MULTI_NODE_DELETED){
+    else if(actionType == ACTION_MULTI_NODE_DELETED_AFTER){
         assetAction.drop();
-        assetAction.actionType = ACTION_MULTI_NODE_DELETED;
+        assetAction.actionType = ACTION_MULTI_NODE_DELETED_AFTER;
+        assetAction.objectIndex = (int)actionScene->selectedNodeIds.size();
+        addAction(assetAction);
+    }
+    else if(actionType == ACTION_MULTI_NODE_DELETED_BEFORE){
+        assetAction.drop();
+        assetAction.actionType = ACTION_MULTI_NODE_DELETED_BEFORE;
         assetAction.objectIndex = (int)actionScene->selectedNodeIds.size();
         addAction(assetAction);
     }
@@ -672,7 +683,7 @@ int SGActionManager::undo(int &returnValue2)
             returnValue = RELOAD_FRAMES;
             break;
         }
-        case ACTION_MULTI_NODE_DELETED: {
+        case ACTION_MULTI_NODE_DELETED_AFTER: {
             returnValue = ADD_MULTI_ASSET_BACK;
             returnValue2 = recentAction.objectIndex;
             break;
@@ -739,6 +750,9 @@ int SGActionManager::redo()
                 }
             }
         }
+            break;
+        case ACTION_MULTI_NODE_DELETED_BEFORE:
+            returnValue = (int)ACTION_MULTI_NODE_DELETED_BEFORE;
             break;
         case ACTION_CHANGE_JOINT_KEYS:{
             int jointsCnt = (int)sgNode->joints.size();

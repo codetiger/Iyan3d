@@ -368,17 +368,22 @@ bool SGSceneLoader::removeSelectedObjects()
 {
     if(!currentScene || !smgr || !currentScene->allNodesRemovable())
         return false;
-    
+    vector<int> actionIds;
     currentScene->selectMan->removeChildren(currentScene->getParentNode());
-    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++)
+    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++){
         currentScene->selectMan->unselectObject(currentScene->selectedNodeIds[i]);
-    
-    for(int i =0; i < currentScene->selectedNodeIds.size(); i++){
-        currentScene->selectMan->selectObject(currentScene->selectedNodeIds[i]);
-        currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
-        removeObject(currentScene->selectedNodeIds[i]);
+        actionIds.push_back(currentScene->nodes[currentScene->selectedNodeIds[i]]->actionId);
     }
-    currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED, 0);
+    currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED_BEFORE, 0);
+    for(int i =0; i < actionIds.size(); i++){
+        int nodeId = currentScene->actionMan->getObjectIndex(actionIds[i]);
+        if(currentScene->nodes[nodeId]->getType() == NODE_TEXT_SKIN || currentScene->nodes[nodeId]->getType() == NODE_IMAGE)
+            currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, nodeId);
+        else if (currentScene->nodes[nodeId]->getType() == NODE_OBJ || currentScene->nodes[nodeId]->getType() == NODE_SGM || currentScene->nodes[nodeId]->getType() == NODE_RIG || currentScene->nodes[nodeId]->getType() == NODE_ADDITIONAL_LIGHT)
+            currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, nodeId);
+        removeObject(nodeId);
+    }    
+    currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED_AFTER, 0);
     
     if(currentScene->getParentNode()) {
         smgr->RemoveNode(currentScene->getParentNode());
@@ -386,6 +391,7 @@ bool SGSceneLoader::removeSelectedObjects()
     }
     currentScene->isMultipleSelection = false;
     currentScene->selectedNodeIds.clear();
+    actionIds.clear();
     currentScene->updater->resetMaterialTypes(false);
 
     return true;

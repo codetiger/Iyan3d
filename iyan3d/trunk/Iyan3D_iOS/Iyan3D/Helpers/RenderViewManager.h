@@ -28,7 +28,7 @@
 - (bool) isMetalSupportedDevice;
 - (void) reloadFrames;
 - (void) presentPopOver:(CGRect )arect;
-- (void) updateAssetListInScenes :(int)nodeType assetName:(NSString*)assetName actionType:(int)action removeObjectAtIndex:(int)index;
+- (void) updateAssetListInScenes;
 - (void) stopPlaying;
 
 @end

@@ -26,7 +26,6 @@ private:
     
     void rotateJoint(Vector3 outputValue);
     void StoreDeleteObjectKeys(int nodeIndex);
-    int getObjectIndex(int actionIndex);
 
 public:
     
@@ -39,7 +38,7 @@ public:
 
     SGActionManager(SceneManager* smgr, void* scene);
     ~SGActionManager();
-    
+    int getObjectIndex(int actionIndex);
     void addAction(SGAction& action);
     void finalizeAndAddAction(SGAction& action);
     void removeActions();

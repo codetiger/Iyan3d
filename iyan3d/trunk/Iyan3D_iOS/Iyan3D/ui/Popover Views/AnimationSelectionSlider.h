@@ -25,7 +25,7 @@
 - (void) removeTempAnimation;
 - (void) createDuplicateAssetsForAnimation;
 - (bool) removeNodeFromScene:(int)nodeIndex;
-- (void) updateAssetListInScenes :(int)nodeType assetName:(NSString*)assetName actionType:(int)action removeObjectAtIndex:(int)index;
+- (void) updateAssetListInScenes;
 - (void) removeTempNodeFromScene;
 @end
 

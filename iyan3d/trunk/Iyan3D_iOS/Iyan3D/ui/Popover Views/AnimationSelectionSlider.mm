@@ -226,7 +226,7 @@
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
-    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
+    [self.delegate updateAssetListInScenes];
     if(!isFirstTimeAnimationApplyed){
         editorSceneLocal->totalFrames = totalFrame;
         editorSceneLocal->currentFrame = currentFrame;
@@ -591,7 +591,7 @@
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->animMan->copyKeysOfNode(editorSceneLocal->nodes.size()-1, selectedNodeId);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
-    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
+    [self.delegate updateAssetListInScenes];
     editorSceneLocal->selectMan->selectObject(selectedNodeId);
     editorSceneLocal->actionMan->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
     editorSceneLocal->updater->setDataForFrame(currentFrame);
@@ -601,7 +601,7 @@
 {
     [_delegate stopPlaying];
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
-    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
+    [self.delegate updateAssetListInScenes];
     editorSceneLocal->selectMan->selectObject(selectedNodeId);
     [self.delegate createDuplicateAssetsForAnimation];
     if(!isFirstTimeAnimationApplyed) {
