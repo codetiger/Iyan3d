@@ -183,7 +183,6 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Clicked BTbn %@",clickedBtn);
     if([clickedBtn isEqualToString:@"importBtn"]){
         [self.delegate importBtnDelegateAction:(int)indexPath.row];
     }

@@ -159,7 +159,7 @@
     }
     else
         assetName = returnValue;
-    NSLog(@" Font array %lu ", (unsigned long)[fontArray count]);
+
     [self.collectionView reloadData];
     
 }

@@ -46,7 +46,7 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     if(!imageData)
         return false;
     
-    Logger::log(INFO, "OGLTEX LOADTEX", "width " + to_string(width) + " height " + to_string(height));
+//    Logger::log(INFO, "OGLTEX LOADTEX", "width " + to_string(width) + " height " + to_string(height));
     glGenTextures(1, &OGLTextureName);
     glBindTexture(GL_TEXTURE_2D, OGLTextureName);
     glTexImage2D(GL_TEXTURE_2D, 0,getOGLTextureFormat(format), width, height, 0, getOGLTextureFormat(format), getOGLTextureType(texelType), imageData);

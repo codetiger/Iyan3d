@@ -147,7 +147,7 @@
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     
-    NSLog(@" Cache %@ queue %@ delegate %@ font count %lu " , cache, queue , delegateObj , (unsigned long)[fontArr count]);
+//    NSLog(@" Cache %@ queue %@ delegate %@ font count %lu " , cache, queue , delegateObj , (unsigned long)[fontArr count]);
     for (int i = 0; i < [fontArr count]; i++) {
         AssetItem* asset = fontArr[i];
         AssetItem* assetItem = [cache GetAsset:asset.assetId];

@@ -110,6 +110,8 @@
                 return false;
         }
 
+     void Reverse();
+
         float minx, miny, maxx, maxy;
     private:
         /**

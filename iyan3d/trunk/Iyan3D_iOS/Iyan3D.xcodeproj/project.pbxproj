@@ -369,6 +369,8 @@
 		01D2F0A61C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */; };
 		01D2F0A71C45181F000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
 		01D2F0A81C451820000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
+		01D5BC891C53505100C39659 /* TextMesh3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D5BC871C53505100C39659 /* TextMesh3d.cpp */; };
+		01D5BC8A1C53505100C39659 /* TextMesh3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D5BC871C53505100C39659 /* TextMesh3d.cpp */; };
 		01E6188C1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
 		01E6188D1C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */; };
 		01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
@@ -763,8 +765,6 @@
 		256F6EB91BF624FB00154622 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D6A1BF624FB00154622 /* Logger.cpp */; };
 		256F6EBA1BF624FB00154622 /* Maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D6C1BF624FB00154622 /* Maths.cpp */; };
 		256F6EBB1BF624FB00154622 /* Maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D6C1BF624FB00154622 /* Maths.cpp */; };
-		256F6F4E1BF6257C00154622 /* Font2OBJ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6EBD1BF6257C00154622 /* Font2OBJ.cpp */; };
-		256F6F4F1BF6257C00154622 /* Font2OBJ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6EBD1BF6257C00154622 /* Font2OBJ.cpp */; };
 		256F6F501BF6257C00154622 /* Contour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6F1A1BF6257C00154622 /* Contour.cpp */; };
 		256F6F511BF6257C00154622 /* Contour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6F1A1BF6257C00154622 /* Contour.cpp */; };
 		256F6F521BF6257C00154622 /* FtglPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6F1C1BF6257C00154622 /* FtglPoint.cpp */; };
@@ -2434,6 +2434,8 @@
 		01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = FrameWorks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = FrameWorks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = FrameWorks/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		01D5BC871C53505100C39659 /* TextMesh3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextMesh3d.cpp; sourceTree = "<group>"; };
+		01D5BC881C53505100C39659 /* TextMesh3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMesh3d.h; sourceTree = "<group>"; };
 		01E618891C2C145700DBBC00 /* Normal-Cloud-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-Cloud-shader_Pad.png"; sourceTree = "<group>"; };
 		01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Normal-shader_Pad.png"; sourceTree = "<group>"; };
 		01E6188B1C2C145700DBBC00 /* Toon-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toon-shader_Pad.png"; sourceTree = "<group>"; };
@@ -4671,6 +4673,8 @@
 				256F6F191BF6257C00154622 /* ftgl */,
 				256F6F201BF6257C00154622 /* iGLU-1.0.0 */,
 				256F6F4B1BF6257C00154622 /* poly2tri */,
+				01D5BC871C53505100C39659 /* TextMesh3d.cpp */,
+				01D5BC881C53505100C39659 /* TextMesh3d.h */,
 			);
 			path = Font;
 			sourceTree = SOURCE_ROOT;
@@ -8073,8 +8077,8 @@
 				E21C3CD51A0758B6006964E5 /* GTLYouTubeChannelContentOwnerDetails.m in Sources */,
 				256F6F621BF6257C00154622 /* memalloc.c in Sources */,
 				E21C3D261A0758B6006964E5 /* GTLYouTubeVideoFileDetails.m in Sources */,
+				01D5BC891C53505100C39659 /* TextMesh3d.cpp in Sources */,
 				C8E6173718C5DD7100BC5342 /* FPPopoverController.m in Sources */,
-				256F6F4E1BF6257C00154622 /* Font2OBJ.cpp in Sources */,
 				E21C3CC11A0758B6006964E5 /* GTLYouTubeActivityContentDetails.m in Sources */,
 				E21C3CC71A0758B6006964E5 /* GTLYouTubeActivityContentDetailsPlaylistItem.m in Sources */,
 				C83D62631878107B00D285C4 /* iCarousel.m in Sources */,
@@ -8454,6 +8458,7 @@
 				E20671351B049AA6006DD2F7 /* GTLYouTubeActivityContentDetailsRecommendation.m in Sources */,
 				E20671371B049AA6006DD2F7 /* GTLYouTubeChannelListResponse.m in Sources */,
 				E206713A1B049AA6006DD2F7 /* GTLYouTube_Sources.m in Sources */,
+				01D5BC8A1C53505100C39659 /* TextMesh3d.cpp in Sources */,
 				E206713B1B049AA6006DD2F7 /* AppDelegate.mm in Sources */,
 				25B5B1691BE33EFB00AC2525 /* ioapi.c in Sources */,
 				E206713C1B049AA6006DD2F7 /* GTLNetworking_Sources.m in Sources */,
@@ -8498,7 +8503,6 @@
 				E206715D1B049AA6006DD2F7 /* GTLYouTubeChannelSnippet.m in Sources */,
 				E206715E1B049AA6006DD2F7 /* FPPopoverView.m in Sources */,
 				E20671601B049AA6006DD2F7 /* HelpViewController.m in Sources */,
-				256F6F4F1BF6257C00154622 /* Font2OBJ.cpp in Sources */,
 				E20671611B049AA6006DD2F7 /* GTLYouTubeVideoStatus.m in Sources */,
 				E20671621B049AA6006DD2F7 /* GTLYouTubeLiveStreamStatus.m in Sources */,
 				E20671631B049AA6006DD2F7 /* GetPixelDemo.m in Sources */,
