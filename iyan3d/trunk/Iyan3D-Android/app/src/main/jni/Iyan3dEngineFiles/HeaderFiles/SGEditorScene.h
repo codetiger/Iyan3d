@@ -43,6 +43,7 @@
 #include "SGSceneUpdater.h"
 #include "SGSceneLoader.h"
 #include "SGSceneWriter.h"
+#include "SGAnimationManager.h"
 
 class SGEditorScene {
     
@@ -91,6 +92,7 @@ public:
     SGMovementManager *moveMan;
     SGActionManager *actionMan;
     SGSceneWriter *writer;
+    SGAnimationManager *animMan;
     
     /* SGEngine class objects */
     
@@ -157,7 +159,10 @@ public:
     void clearSelections();
     Vector4 getCameraPreviewLayout();
     vector<string> generateSGFDFiles(int startFrame , int endFrame);
-
+    void setLightingOn();
+    void setLightingOff();
+    void popLightProps();
+    void clearLightProps();
 };
 
 #endif /* SGEditorScene_h */

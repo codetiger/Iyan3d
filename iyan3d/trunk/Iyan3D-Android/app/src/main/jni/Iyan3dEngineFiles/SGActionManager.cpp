@@ -19,6 +19,14 @@ SGActionManager::SGActionManager(SceneManager* smgr, void* scene)
     actions.clear();
 }
 
+SGActionManager::~SGActionManager()
+{
+    changeKeysAction.drop();
+    assetAction.drop();
+    propertyAction.drop();
+    actions.clear();
+}
+
 void SGActionManager::addAction(SGAction& action){
     if(currentAction < 0)
         currentAction = 0;
@@ -535,12 +543,7 @@ int SGActionManager::undo(int &returnValue2)
         case ACTION_APPLY_ANIM: {
             actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
             actionScene->selectedNodeId = indexOfAction;
-            actionScene->updater->reloadKeyFrameMap();
-            for (int i = recentAction.frameId; i < recentAction.actionSpecificIntegers[0]; i++) {
-                // TODO removeAnimationForSelectedNodeAtFrame(i);
-            }
-            actionScene->updater->reloadKeyFrameMap();
-            actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            actionScene->animMan->removeAppliedAnimation(recentAction.frameId, recentAction.actionSpecificIntegers[0]);
             returnValue = RELOAD_FRAMES;
             break;
         }
@@ -549,7 +552,6 @@ int SGActionManager::undo(int &returnValue2)
     }
     if(recentAction.actionType != ACTION_NODE_DELETED && recentAction.actionType != ACTION_TEXT_IMAGE_DELETE)
         currentAction--;
-    //currentFrame = recentAction.frameId;
     
     if(recentAction.actionType != ACTION_SWITCH_FRAME) {
         actionScene->updater->setKeysForFrame(recentAction.frameId);
@@ -653,7 +655,7 @@ int SGActionManager::redo()
         case ACTION_APPLY_ANIM: {
             actionScene->selectedNodeId = indexOfAction;
             actionScene->updater->setDataForFrame(actionScene->currentFrame);
-//     TODO        applyAnimations(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]),selectedNodeId);
+            actionScene->animMan->applyAnimations(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]), actionScene->selectedNodeId);
             actionScene->updater->reloadKeyFrameMap();
             actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
             break;

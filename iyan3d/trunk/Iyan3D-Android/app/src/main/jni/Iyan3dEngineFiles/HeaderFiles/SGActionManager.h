@@ -34,6 +34,7 @@ public:
     vector<SGAction> actions;
 
     SGActionManager(SceneManager* smgr, void* scene);
+    ~SGActionManager();
     
     void addAction(SGAction& action);
     void finalizeAndAddAction(SGAction& action);

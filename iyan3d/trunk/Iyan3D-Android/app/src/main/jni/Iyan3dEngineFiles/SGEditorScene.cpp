@@ -49,6 +49,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     moveMan = new SGMovementManager(sceneMngr, this);
     actionMan = new SGActionManager(sceneMngr, this);
     writer = new SGSceneWriter(sceneMngr, this);
+    animMan = new SGAnimationManager(sceneMngr, this);
     
     isJointSelected = isNodeSelected = isControlSelected = false;
     freezeRendering = isPlaying = isPreviewMode = false;
@@ -267,3 +268,30 @@ vector<string> SGEditorScene::generateSGFDFiles(int startFrame , int endFrame)
     }
     return textureFileNames;
 }
+
+void SGEditorScene::setLightingOn()
+{
+    ShaderManager::sceneLighting = true;
+}
+
+void SGEditorScene::setLightingOff()
+{
+    ShaderManager::sceneLighting = false;
+}
+
+void SGEditorScene::popLightProps()
+{
+    if(ShaderManager::lightPosition.size() > 1) {
+        ShaderManager::lightPosition.pop_back();
+        ShaderManager::lightColor.pop_back();
+        ShaderManager::lightFadeDistances.pop_back();
+    }
+    
+}
+
+void SGEditorScene::clearLightProps()
+{
+    while(ShaderManager::lightPosition.size() > 1)
+        popLightProps();
+}
+

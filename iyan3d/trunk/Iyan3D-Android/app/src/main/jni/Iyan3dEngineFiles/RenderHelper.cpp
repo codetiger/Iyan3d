@@ -226,8 +226,7 @@ void RenderHelper::rttDrawCall()
 
     if(renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)
         drawCameraPreview();
-    // TODO shadow map fix
-    //rttShadowMap(renderingScene);
+    rttShadowMap();
 }
 
 void RenderHelper::drawCameraPreview()

@@ -89,8 +89,7 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     if(!moveScene || !smgr)
         return;
 
-    // TODO add commented functions
-    //setLightingOn();
+    moveScene->setLightingOn();
     swipeTiming = 0;
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
@@ -232,11 +231,9 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
             if(!isSGJoint){
                 shared_ptr<Node> jointNode = moveScene->selectedNode->node;
                 MathHelper::getGlobalQuaternion((jointNode)).toEuler(nodeRot);
-                //jointNode.reset();
             }else{
                 shared_ptr<JointNode> jointNode = moveScene->selectedJoint->jointNode;
                 MathHelper::getGlobalQuaternion(jointNode).toEuler(nodeRot);
-                //jointNode.reset();
             }
             nodeRot = nodeRot * RADTODEG;
             Quaternion jointGlobalRot = MathHelper::RotateNodeInWorld(nodeRot, delta);

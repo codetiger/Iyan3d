@@ -34,7 +34,6 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
     selectionScene->isRTTCompleted = true;
     selectionScene->updater->updateControlsOrientaion();
     postNodeJointSelection();
-    // TODO setTransparencyForIntrudingObjects();
 }
 
 void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)

@@ -174,7 +174,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,wstring name,int imgw
         return NULL;
     }
     if(sgnode->getType() == NODE_TEXT)
-        currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = SGAnimationSceneHelper::storeTextInitialPositions(sgnode);
+        currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgnode);
     sgnode->assetId = assetId;
     sgnode->name = name;
     sgnode->setInitialKeyValues(actionType);
@@ -224,7 +224,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType)
         return false;
     }
     if(sgNode->getType() == NODE_TEXT)
-        currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = SGAnimationSceneHelper::storeTextInitialPositions(sgNode);
+        currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgNode);
     
     sgNode->setInitialKeyValues(actionType);
     sgNode->node->updateAbsoluteTransformation();
@@ -339,7 +339,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     
     SGNode * currentNode = currentScene->nodes[nodeIndex];
     if(currentNode->getType() == NODE_ADDITIONAL_LIGHT) {
-        //popLightProps();
+        currentScene->popLightProps();
         currentScene->updater->resetMaterialTypes(false);
     }
     
