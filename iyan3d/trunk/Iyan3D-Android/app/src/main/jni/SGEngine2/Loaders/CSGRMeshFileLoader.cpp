@@ -138,13 +138,13 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
         return 0;
     unsigned char versionIdentifier, hasUV;
     f.read((char*)&versionIdentifier, sizeof(unsigned char));
-    if (versionIdentifier == 0) { // newer version
+    if (versionIdentifier == 0 || versionIdentifier == 3) { // newer version
         f.read((char*)&hasUV, sizeof(unsigned char));
     }
     else {
         hasUV = versionIdentifier;
     }
-    if (versionIdentifier == 0) {
+    if (versionIdentifier == 0 || versionIdentifier == 3) {
         SSGMCountHeaderHighPoly counts;
         f.read((char*)&counts, sizeof(SSGMCountHeaderHighPoly));
         
