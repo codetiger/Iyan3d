@@ -280,7 +280,7 @@
         if(assetvalue.assetId >= 50000 && assetvalue.assetId <= 60000){
             fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, assetvalue.assetId];
             NSString* meshFileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
-            NSString* texFileName = [NSString stringWithFormat:@"%@/%d.png", cacheDirectory, assetvalue.assetId];
+            NSString* texFileName = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, assetvalue.assetId];
             url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", assetvalue.assetId];
             
             NSLog(@"File Name : %@", fileName);
@@ -392,11 +392,10 @@
         NSLog(@" \n Json : %@ ", jsonContent);
         
         NSString* meshFileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, [returnId intValue]];
-        NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.sgm", [returnId intValue]];
-
+        NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", [returnId intValue]];
+        NSLog(@" \n Particles mesh %@ ", url);
         [self addDownloadTaskWithFileName:meshFileName URL:url returnId:returnId andSelector:@selector(downloadParticleTexture:) priority:NSOperationQueuePriorityHigh];
         
-        [self proceedToFileVerification:task]; // TODO Remove this
 
     }
     
@@ -421,8 +420,8 @@
     NSString* meshFileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, [returnId intValue]];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:meshFileName]) {
-        NSString* texFileName = [NSString stringWithFormat:@"%@/%d.png", cacheDirectory, [returnId intValue]];
-        NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.png", [returnId intValue]];
+        NSString* texFileName = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, [returnId intValue]];
+        NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%d.png", [returnId intValue]];
         
         [self addDownloadTaskWithFileName:texFileName URL:url returnId:returnId andSelector:@selector(downloadParticleCompleted:) priority:NSOperationQueuePriorityHigh];
     }

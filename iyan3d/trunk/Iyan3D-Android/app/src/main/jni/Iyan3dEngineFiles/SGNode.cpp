@@ -111,7 +111,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         case NODE_PARTICLES:{
             Json::Value pData = parseParticlesJson(assetId);
             string meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
-            string texPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".png";
+            string texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
             printf(" \n Mesh name %s %s ", meshPath.c_str(), texPath.c_str());
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
