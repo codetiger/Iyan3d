@@ -1791,6 +1791,21 @@ BOOL missingAlertShown;
     return fileNamesToZip;
 }
 
+- (BOOL) canUploadToCloud
+{
+    if(editorScene) {
+        for(int i = 0; i < editorScene->nodes.size(); i++) {
+            if(editorScene->nodes[i]->getType() == NODE_VIDEO || editorScene->nodes[i]->getType() == NODE_PARTICLES) {
+                return false;
+                break;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+
 - (CGPoint) getCameraResolution
 {
     CGPoint resolution = CGPointMake(0.0, 0.0);

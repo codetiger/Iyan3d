@@ -28,6 +28,7 @@
 - (void) renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark;
 - (void) setShaderTypeForRendering:(int)shaderType;
 - (NSMutableArray*) getFileNamesToAttach;
+- (BOOL) canUploadToCloud;
 - (CGPoint) getCameraResolution;
 - (void) cameraResolutionChanged:(int)resolutinType;
 - (void) clearFolder:(NSString*)dirPath;

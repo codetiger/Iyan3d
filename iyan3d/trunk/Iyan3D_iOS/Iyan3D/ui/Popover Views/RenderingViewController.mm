@@ -392,6 +392,17 @@
         [self.makeVideoLoading setHidden:NO];
         [self.makeVideoLoading startAnimating];
         NSMutableArray *fileNames = [self.delegate getFileNamesToAttach];
+        if(![self.delegate canUploadToCloud]) {
+            UIAlertView *errAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Scene contains video/praticles which is currently not supported in cloud rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [errAlert show];
+            [_cancelButton setHidden:YES];
+            [_nextButton setHidden:NO];
+            [_nextButton setEnabled:YES];
+            [_youtubeButton setHidden:YES];
+            [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+            _nextButton.tag = DONE;
+            return;
+        }
         CGPoint camResolution = [self.delegate getCameraResolution];
         NSString* zipfile = [docDirectory stringByAppendingPathComponent:@"index.zip"] ;
         
@@ -468,9 +479,27 @@
                 NSString* dateStr = [NSString stringWithFormat:@"%@" ,[NSDate date]];
                 [cache addRenderTaskData:publishId estTime:renderingStartFrame+1 proName:self.projectName date:dateStr];
                 
+                UIAlertView *showAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Uploaded successfully. You can see the progress of your render in your profile view." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [showAlert show];
+
+                [_cancelButton setHidden:YES];
+                [_nextButton setHidden:NO];
+                [_nextButton setEnabled:YES];
+                [_youtubeButton setHidden:YES];
+                [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+                _nextButton.tag = DONE;
+                
             }
              
                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                 
+                                                 [_cancelButton setHidden:YES];
+                                                 [_nextButton setHidden:NO];
+                                                 [_nextButton setEnabled:YES];
+                                                 [_youtubeButton setHidden:YES];
+                                                 [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+                                                 _nextButton.tag = DONE;
+
                                                  NSLog(@"Failure: %@", error);
                                                  [self.view setUserInteractionEnabled:YES];
                                                  [self.makeVideoLoading setHidden:YES];
@@ -579,13 +608,14 @@
     [self.exportButton setEnabled:NO];
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
-    [self renderFinishAction:renderingExportImage];
+    [self performSelectorOnMainThread:@selector(renderFinishAction:) withObject:[NSNumber numberWithInt:renderingExportImage] waitUntilDone:NO];
     if(resolutionType != TWO_HUNDRED_FOURTY_P || (resolutionType == TWO_HUNDRED_FOURTY_P && !_watermarkSwitch.isOn))
         [self saveDeductedCredits:[credits intValue]];
 }
 
-- (void) renderFinishAction:(int)renderingType
+- (void) renderFinishAction:(NSNumber*)object
 {
+    int renderingType = [object intValue];
     NSString *tempDir = NSTemporaryDirectory();
     if(renderingExportImage == RENDER_VIDEO){
         NSString *filePath = [NSString stringWithFormat:@"%@/myMovie.mov", tempDir];
