@@ -4,6 +4,7 @@
 #include "Constants.h"
 
 #include <vector>
+#include "json_json.h"
 #include "../../SGEngine2/Utilities/Logger.h"
 #include <fstream>
 #include "KeyHelper.h"
@@ -55,6 +56,8 @@ public:
     shared_ptr<Node> load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments);
     shared_ptr<Node> loadSkin3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments);
     shared_ptr<Node> addAdittionalLight(SceneManager *smgr, float distance , Vector3 lightColor, float attenuation = 1.0);
+    Json::Value parseParticlesJson(int assetId);
+    void setParticlesData(shared_ptr<Node> node, Json::Value pData);
     shared_ptr<Node> loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr);
     shared_ptr<Node> loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr);
     shared_ptr<Node> loadImage(string imageName,SceneManager *smgr , float aspectRatio = 1.0);
