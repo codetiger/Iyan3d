@@ -1014,8 +1014,15 @@ BOOL missingAlertShown;
 - (IBAction)scaleBtnAction:(id)sender
 {
     if(self.rigScreenLabel.isHidden){
-        if((editorScene->hasNodeSelected() || editorScene->allObjectsScalable()) && ((editorScene->isRigMode) || (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT))){
-            
+        
+        bool status = false;
+        
+        if((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable()))
+            status = true;
+        else if(!(editorScene->selectedNodeIds.size() > 0) && (editorScene->isRigMode || (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)))
+                status = true;
+        
+        if(status){
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
         
