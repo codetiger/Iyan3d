@@ -41,7 +41,7 @@
 - (void)initializeColorWheel
 {
     UIImage* theImage = [UIImage imageNamed:@"wheel2.png"];
-    _demoView = [[GetPixelDemo alloc] initWithFrame:CGRectMake(0, 0, 240, 130) image:[ANImageBitmapRep imageBitmapRepWithImage:theImage]];
+    _demoView = [[GetPixelDemo alloc] initWithFrame:CGRectMake(0, 0, 240, ([Utility IsPadDevice]) ? 130 : 88 ) image:[ANImageBitmapRep imageBitmapRepWithImage:theImage]];
     _demoView.delegate = self;
     [self.colorPickerView addSubview:_demoView];
 }
@@ -83,6 +83,10 @@
 
 - (void)lightPropsEndAction{
     [_delegate changeLightProps:color Distance:_distance.value isStoredProperty:YES];
+}
+
+- (IBAction)deleteAction:(id)sender {
+    [self.delegate deleteObjectOrAnimation];
 }
 
 

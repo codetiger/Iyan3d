@@ -89,6 +89,11 @@ public:
     void updateEnvelopes();
     void initEnvelope(int jointId);
     bool deallocAutoRig(bool isCompleted);
+    float getSelectedJointScale();
+    Vector3 getSelectedNodeScale();
+    void changeNodeScale(Vector3 scale);
+
+
 
 };
 

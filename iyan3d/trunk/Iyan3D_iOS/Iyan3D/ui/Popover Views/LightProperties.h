@@ -10,11 +10,14 @@
 #import "GetPixelDemo.h"
 #import "Vector3.h"
 #import "Constants.h"
+#import "Utility.h"
+
 
 
 @protocol LightPropertiesDelegate
 
 - (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored;
+- (void) deleteObjectOrAnimation;
 @end
 
 @interface LightProperties : UIViewController<GetPixelDemoDelegate>

@@ -19,7 +19,7 @@
         [self setTableData:buttonValue];
         return self;
     }
-    return nil;    
+    return nil;
 }
 - (void)viewDidLoad {
     
@@ -30,7 +30,6 @@
             self.popoverBtns.hidden=YES;
             [self.loginBtn setHidden:NO];
             [self.loginImage setHidden:NO];
- 
         }
         else{
             [self.topBar setHidden:NO];
@@ -40,7 +39,6 @@
             UIImage *image = [UIImage imageNamed: @"Login-Icon_IPhone"];
             [self.loginImage setImage:image];
         }
-        
     }
     if ([clickedBtn isEqualToString:@"myObjectsBtn"]) {
         if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
@@ -53,6 +51,10 @@
     }
     else {
         self.popoverBtns.allowsMultipleSelection=NO;
+    }
+    
+    if([clickedBtn isEqualToString:@"importBtn"] && ![Utility IsPadDevice]){
+        _popoverBtns.rowHeight = 30;
     }
     
 }
@@ -166,7 +168,7 @@
             if(indexPath.row==1)
                 cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone.png"];
         }
-        if([clickedBtn isEqualToString:@"importBtn"]){
+        else if([clickedBtn isEqualToString:@"importBtn"]){
             if(indexPath.row==0)
                 cell.imageView.image = [UIImage imageNamed:@"Import-model_IPhone.png"];
             if(indexPath.row==1)
@@ -182,19 +184,19 @@
             if(indexPath.row==6)
                 cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone.png"];
             if(indexPath.row==7)
-                cell.imageView.image = [UIImage imageNamed:@"Particles_IPhone.png"];
+                cell.imageView.image = [UIImage imageNamed:@"Particle_IPhone.png"];
 
         }
-        if([clickedBtn isEqualToString:@"myObjectsBtn"]){
+        else if([clickedBtn isEqualToString:@"myObjectsBtn"]){
             if([cell.textLabel.text isEqualToString:@"CAMERA"])
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
             else if([cell.textLabel.text isEqualToString:@"LIGHT"])
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-            else if([cell.textLabel.text hasPrefix:@"TEXT"])
+            else if([cell.textLabel.text hasPrefix:@"Text"])
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
-            else if([cell.textLabel.text hasPrefix:@"IMAGE"])
+            else if([cell.textLabel.text hasPrefix:@"Image"])
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
-            else if([cell.textLabel.text hasPrefix:@"LIGHT"])
+            else if([cell.textLabel.text hasPrefix:@"Light"])
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
             else
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
@@ -212,7 +214,6 @@
         [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
     }
-   
     return cell;
 }
 

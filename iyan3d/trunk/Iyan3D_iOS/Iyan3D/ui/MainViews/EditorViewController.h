@@ -23,7 +23,6 @@
 #import "AnimationSelectionSlider.h"
 #import "TextSelectionSidePanel.h"
 #import "AssetSelectionSidePanel.h"
-#import "ChangeTextureSidePanel.h"
 #import "RenderingViewController.h"
 #import "SGEditorScene.h"
 #import "FPPopoverController.h"
@@ -40,11 +39,10 @@
 #import "ScaleForAutoRigViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate,ChangeTextureDelegate>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate>{
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
-    ChangeTextureSidePanel *textureVc;
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
     LoginViewController *loginVc;
@@ -146,7 +144,6 @@
 - (IBAction)lastFrameBtnAction:(id)sender;
 - (IBAction)firstFrameBtnAction:(id)sender;
 - (IBAction)myObjectsBtnAction:(id)sender;
-
 
 @end
 

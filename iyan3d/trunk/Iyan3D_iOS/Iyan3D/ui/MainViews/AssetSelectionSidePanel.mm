@@ -280,7 +280,7 @@
     NSNumber* returnId = [NSNumber numberWithInt:assetvalue.assetId];
     
     if(assetvalue.type == IMPORT_PARTICLE){
-        if(assetvalue.assetId >= 10000 && assetvalue.assetId <= 20000){
+        if(assetvalue.assetId >= 50000 && assetvalue.assetId <= 60000){
             fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, assetvalue.assetId];
             url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", assetvalue.assetId];
             

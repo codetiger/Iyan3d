@@ -32,7 +32,7 @@
 
 @end
 
-@interface TextSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,TextColorPickerDelegate>{
+@interface TextSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,TextColorPickerDelegate,UITextFieldDelegate>{
     
     NSArray *fontListArray;
     CacheSystem* cache;
@@ -48,6 +48,7 @@
     float red,green,blue,alpha;
     NSString *fontFileName;
     int bevelRadius;
+    bool withRig;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
@@ -62,6 +63,9 @@
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 @property (weak, nonatomic) IBOutlet UIButton *colorWheelbtn;
+@property (weak, nonatomic) IBOutlet UISwitch *boneSwitch;
+@property (strong, nonatomic) UITapGestureRecognizer *tap;
+
 
 @end
 

@@ -88,7 +88,8 @@
 #define OK_BUTTON_INDEX 1
 #define CANCEL_BUTTON_INDEX 0
 #define DELETE_OBJECT 200
-
+#define DELETE_BUTTON_OBJECT 1
+#define DELETE_BUTTON_OBJECT_ANIMATION 2
 
 #define CAMERA_PREVIEW_SMALL 0
 
@@ -105,7 +106,7 @@
 
 #define ONE_FRAME 0
 #define TWENTY_FOUR_FRAMES 1
-#define TWO_FOURTY_FRAMES 240
+#define TWO_FOURTY_FRAMES 2
 
 
 #define SETTINGS 3
@@ -420,9 +421,9 @@ BOOL missingAlertShown;
         editorScene->loader->removeTempNodeIfExists();
 }
 
-- (void) load3DTex:(int)type AssetId:(int)assetId TextureName:(NSString*)textureName TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors
-          FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode{
+- (void) load3DTex:(int)type AssetId:(int)assetId TextureName:(NSString*)textureName TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode{
     NSMutableDictionary *textDetails = [[NSMutableDictionary alloc] init];
+    [textDetails setObject:[NSNumber numberWithInt:type] forKey:@"type"];
     [textDetails setObject:[NSNumber numberWithInt:assetId] forKey:@"AssetId"];
     [textDetails setObject:textureName forKey:@"textureName"];
     [textDetails setObject:typedText forKey:@"typedText"];
@@ -439,6 +440,7 @@ BOOL missingAlertShown;
 }
 
 - (void) load3dTextOnMainThread:(NSMutableDictionary*)fontDetails{
+    int type = [[fontDetails objectForKey:@"type"]intValue];
     int assetId = [[fontDetails objectForKey:@"AssetId"]intValue];
     std::wstring assetName = [self getwstring:[fontDetails objectForKey:@"typedText"]];
     bool isTempNode = [[fontDetails objectForKey:@"isTempNode"]boolValue];
@@ -446,7 +448,7 @@ BOOL missingAlertShown;
     float bevalValue = [[fontDetails objectForKey:@"bevelRadius"]floatValue];
     NSString* textureName = [fontDetails objectForKey:@"textureName"];
     
-    [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName TextureName:textureName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:assetName TextureName:textureName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!isTempNode) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
     }
@@ -629,10 +631,6 @@ BOOL missingAlertShown;
     for (int i = 0; i < assetsCount; i++) {
         NSString* assetName = [self stringWithwstring:editorScene->nodes[i]->name];
     encoding:[NSString defaultCStringEncoding];
-        // if (editorScene->nodes[i]->getType() == NODE_TEXT_SKIN)
-        //     assetName = [NSString stringWithFormat:@"TEXT: %@", assetName];
-        // else if (editorScene->nodes[i]->getType() == NODE_IMAGE)
-        //    assetName = [NSString stringWithFormat:@"IMAGE: %@", assetName];
         [assetsInScenes addObject:assetName];
     }
     [self.objectList reloadData];
@@ -1218,10 +1216,10 @@ BOOL missingAlertShown;
             lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
         }
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _lightProp = [[LightProperties alloc] initWithNibName:@"LightProperties" bundle:nil LightColor:lightProps];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        self.popoverController.popoverContentSize = CGSizeMake(270, 300);
+        self.popoverController.popoverContentSize = CGSizeMake(270, 335);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -1240,7 +1238,7 @@ BOOL missingAlertShown;
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
-        self.popoverController.popoverContentSize = CGSizeMake(300 , 200);
+        self.popoverController.popoverContentSize = CGSizeMake(300 , 230);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_camProp.view setClipsToBounds:YES];
@@ -1295,10 +1293,8 @@ BOOL missingAlertShown;
 
 - (IBAction)scaleBtnAction:(id)sender
 {
-    if(self.rigScreenLabel.isHidden){
-        
+    if(!editorScene->isRigMode || (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS))){
         bool status = false;
-        
         if((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable())){
             status = true;
         }
@@ -1312,7 +1308,7 @@ BOOL missingAlertShown;
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
             editorScene->renHelper->setControlsVisibility(false);
-            Vector3 currentScale = editorScene->getSelectedNodeScale();
+            Vector3 currentScale = (editorScene->isRigMode) ? editorScene->rigMan->getSelectedNodeScale() : editorScene->getSelectedNodeScale();
             _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
             _scaleProps.delegate = self;
             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
@@ -1330,9 +1326,8 @@ BOOL missingAlertShown;
             [self changeAllButtonBG];
         }
     }
-    else{
-        //        float scale = autoRigObject->getSelectedJointScale();
-        float scale = 10.0;
+    else if(editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_EDIT_ENVELOPES) && editorScene->rigMan->isSkeletonJointSelected){
+        float scale = editorScene->rigMan->getSelectedJointScale();
         scaleAutoRig=[[ScaleForAutoRigViewController alloc] initWithNibName:@"ScaleForAutoRigViewController" bundle:nil updateScale:scale];
         scaleAutoRig.delegate = self;
         self.popoverController = [[WEPopoverController alloc]initWithContentViewController:scaleAutoRig];
@@ -1346,6 +1341,11 @@ BOOL missingAlertShown;
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:YES];
     }
+}
+
+- (void) changeSkeletonScale:(Vector3)scale
+{
+    editorScene->rigMan->changeNodeScale(scale);
 }
 
 - (IBAction)undoBtnAction:(id)sender
@@ -1725,10 +1725,14 @@ BOOL missingAlertShown;
 
 - (void)scalePropertyChanged:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
 {
-    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+    if(!editorScene->isRigMode && (editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size()))
         return;
-    editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
-    [_framesCollectionView reloadData];
+    if(editorScene->isRigMode && editorScene->rigMan->isNodeSelected)
+        [self changeSkeletonScale:Vector3(XValue,YValue,ZValue)];
+    else{
+        editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
+        [_framesCollectionView reloadData];
+    }
 }
 - (void)scaleValueForAction:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
 {
@@ -1946,6 +1950,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 -(void)showOptions :(CGRect)longPressposition{
+    /*
     if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
     {
 //        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
@@ -1962,7 +1967,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                               animated:YES];
         return;
     }
-    
+    */
     if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
     {
         Quaternion lightProps;
@@ -1973,10 +1978,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
         }
 //        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-        _lightProp = [[LightProperties alloc] initWithNibName:@"LightProperties" bundle:nil LightColor:lightProps];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        self.popoverController.popoverContentSize = CGSizeMake(270, 300);
+        self.popoverController.popoverContentSize = CGSizeMake(270, 335);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -1993,7 +1998,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
-        self.popoverController.popoverContentSize = CGSizeMake(300 , 200);
+        self.popoverController.popoverContentSize = CGSizeMake(300 , 230);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_camProp.view setClipsToBounds:YES];
@@ -2003,7 +2008,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                               animated:NO];
         
     }
-    else
+    else if(editorScene->isNodeSelected)
     {
         float brightnessValue = editorScene->nodes[editorScene->selectedNodeId]->props.brightness;
         float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
@@ -2022,7 +2027,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                               permittedArrowDirections:UIPopoverArrowDirectionAny
                                               animated:NO];
     }
-
 }
 
 #pragma Duplicate Actions
@@ -2480,6 +2484,24 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                               encoding:NSUTF8StringEncoding];
 }
 
+- (void) deleteObjectOrAnimation
+{
+    [self.popoverController dismissPopoverAnimated:YES];
+    UIAlertView* deleteAlert = nil;
+    if (editorScene->selectedNodeId <= NODE_LIGHT) {
+        [self.view endEditing:YES];
+        deleteAlert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete Animation in this Frame", nil];
+            [deleteAlert setTag:DELETE_BUTTON_OBJECT_ANIMATION];
+    }
+    else {
+        [self.view endEditing:YES];
+        deleteAlert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete Animation in this Frame", @"Delete Object", nil];
+            [deleteAlert setTag:DELETE_BUTTON_OBJECT];
+    }
+
+    [deleteAlert show];
+}
+
 #pragma Save Delegates
 
 - (void)saveAnimationData
@@ -2549,7 +2571,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
         case NODE_PARTICLES: {
             NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
             NSString* file = [name stringByDeletingPathExtension];
-            if ([file intValue] >= 10000 && ([file intValue] < 20000)) {
+            if ([file intValue] >= 50000 && ([file intValue] < 60000)) {
                 NSString* particlePath = [NSString stringWithFormat:@"%@%d.json", cacheDirectory, [file intValue]];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:particlePath]) {
                     NSString* filePath = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [file intValue]];
@@ -2697,6 +2719,19 @@ void downloadFile(NSString* url, NSString* fileName)
         [[AppHelper getAppHelper] writeDataToFile:data FileName:fileName];
 }
 
+- (void) removeAnimationFromCurrentFrame
+{
+    bool isKeySetForNode = editorScene->animMan->removeAnimationForSelectedNodeAtFrame(editorScene->currentFrame);
+    if (!isKeySetForNode) {
+        [self.view endEditing:YES];
+        UIAlertView* deleteAlert = [[UIAlertView alloc] initWithTitle:@"Info" message:@"There is no animation in this frame." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [deleteAlert setTag:UNDEFINED_OBJECT];
+        [deleteAlert show];
+    }
+    else
+        [self.framesCollectionView reloadData];
+}
+
 #pragma mark Camerasettings
 
 - (void)cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution{
@@ -2732,7 +2767,7 @@ void downloadFile(NSString* url, NSString* fileName)
         [self undoRedoButtonState:DEACTIVATE_BOTH];
     }
     else{
-        [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+        [self deleteObjectOrAnimation];
         [self undoRedoButtonState:DEACTIVATE_BOTH];
     }
     [self.popoverController dismissPopoverAnimated:YES];
@@ -2813,7 +2848,16 @@ void downloadFile(NSString* url, NSString* fileName)
 }
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == ADD_BUTTON_TAG) {
+    if(alertView.tag == DELETE_BUTTON_OBJECT){
+        if(buttonIndex == 1)
+            [self removeAnimationFromCurrentFrame];
+        else if(buttonIndex == 2)
+            [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+    }
+    else if(alertView.tag == DELETE_BUTTON_OBJECT_ANIMATION){
+        [self removeAnimationFromCurrentFrame];
+    }
+    else if (alertView.tag == ADD_BUTTON_TAG) {
         NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
         
         if (buttonIndex == CANCEL_BUTTON_INDEX) {
@@ -2837,7 +2881,7 @@ void downloadFile(NSString* url, NSString* fileName)
             }
         }
     }
-    if (alertView.tag == CHOOSE_RIGGING_METHOD) {
+   else if (alertView.tag == CHOOSE_RIGGING_METHOD) {
         if(buttonIndex == HUMAN_RIGGING) {
             editorScene->rigMan->skeletonType = SKELETON_HUMAN;
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
@@ -2846,7 +2890,7 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
     }
-    if (alertView.tag == DATA_LOSS_ALERT) {
+   else if (alertView.tag == DATA_LOSS_ALERT) {
         if(buttonIndex == CANCEL_BUTTON_INDEX) {
             
         } else if(buttonIndex == OK_BUTTON_INDEX) {

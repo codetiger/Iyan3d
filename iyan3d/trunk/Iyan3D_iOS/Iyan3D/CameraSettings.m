@@ -60,4 +60,10 @@
     [self.delegate cameraPropertyChanged:fovValueCamera Resolution:resolutionTypeCamera];
 }
 
+- (IBAction)deleteAction:(id)sender
+{
+    [self.delegate deleteObjectOrAnimation];
+}
+
+
 @end

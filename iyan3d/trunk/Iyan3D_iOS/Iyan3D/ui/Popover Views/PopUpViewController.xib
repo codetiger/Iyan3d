@@ -29,8 +29,8 @@
                         <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="hFw-pt-FOi"/>
                     </connections>
                 </button>
-                <tableView clipsSubviews="YES" contentMode="redraw" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" allowsMultipleSelection="YES" rowHeight="43" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YpO-8P-C6W">
-                    <rect key="frame" x="0.0" y="0.0" width="200" height="250"/>
+                <tableView contentMode="redraw" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" keyboardDismissMode="interactive" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="43" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YpO-8P-C6W">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="360"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="sectionIndexColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
@@ -46,7 +46,6 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="8" right="8"/>
             <point key="canvasLocation" x="443" y="298"/>
         </view>
     </objects>

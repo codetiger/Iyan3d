@@ -405,6 +405,8 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
             if(!checkFileExists(textureFileName))
                 textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+                if(!checkFileExists(textureFileName))
+                    textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         }
     }
     AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);

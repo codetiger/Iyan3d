@@ -16,7 +16,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="272" height="300"/>
+            <rect key="frame" x="0.0" y="0.0" width="272" height="343"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="ma8-4f-ncY" userLabel="colorPicker">
@@ -29,11 +29,21 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
-                        <action selector="shadowDarknessChange:" destination="-1" eventType="touchUpInside" id="eba-MQ-Ftt"/>
-                        <action selector="shadowDarknessChange:" destination="-1" eventType="valueChanged" id="vsw-SB-fX1"/>
-                        <action selector="shadowDarknessEnd:" destination="-1" eventType="touchUpOutside" id="YIg-eE-hwQ"/>
+                        <action selector="shadowDarknessChange:" destination="-1" eventType="valueChanged" id="9ev-gH-QEQ"/>
+                        <action selector="shadowDarknessEnd:" destination="-1" eventType="touchUpInside" id="2Qa-fm-DLu"/>
                     </connections>
                 </slider>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bPw-xj-2tm">
+                    <rect key="frame" x="60" y="296" width="150" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="  Delete Animation" image="popover-delete.png">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="deleteAction:" destination="-1" eventType="touchUpInside" id="vBg-R3-TF2"/>
+                    </connections>
+                </button>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" id="eFB-Oq-wSF">
                     <rect key="frame" x="18" y="264" width="237" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -71,7 +81,10 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="560" y="480"/>
+            <point key="canvasLocation" x="567" y="237.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="popover-delete.png" width="13" height="18"/>
+    </resources>
 </document>

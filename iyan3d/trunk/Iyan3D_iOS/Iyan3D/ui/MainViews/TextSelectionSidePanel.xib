@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addToScene" destination="3Qp-dd-cNo" id="tce-F9-LaW"/>
                 <outlet property="bevelSlider" destination="l6Y-Fo-bKR" id="5i4-DW-KGg"/>
+                <outlet property="boneSwitch" destination="axZ-uQ-2OO" id="px9-d0-HBw"/>
                 <outlet property="cancelBtn" destination="c9v-9A-XSr" id="43x-kw-hEK"/>
                 <outlet property="collectionView" destination="P2e-gr-fZj" id="Sz1-ag-nUf"/>
                 <outlet property="colorWheelbtn" destination="4to-JM-G7I" id="0Qw-jw-mg4"/>
@@ -52,19 +53,11 @@
                             <rect key="frame" x="24" y="53" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4to-JM-G7I">
-                            <rect key="frame" x="221" y="16" width="73" height="70"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="color.png"/>
-                            <connections>
-                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="0IQ-wq-Fhy"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" dataMode="none" id="P2e-gr-fZj">
-                    <rect key="frame" x="0.0" y="123" width="300" height="526"/>
+                    <rect key="frame" x="0.0" y="159" width="300" height="490"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="A3i-Jx-Dl5">
@@ -115,21 +108,50 @@
                     <rect key="frame" x="4" y="79" width="292" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="X3h-3Z-EP7">
-                            <rect key="frame" x="68" y="8" width="157" height="29"/>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="axZ-uQ-2OO">
+                            <rect key="frame" x="98" y="13" width="51" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="Font Store"/>
-                                <segment title="My Fonts"/>
-                            </segments>
-                            <color key="tintColor" red="0.51372549020000002" green="0.062745098040000002" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="fontStoreTapChangeAction:" destination="-1" eventType="valueChanged" id="Rm8-TG-DQQ"/>
+                                <action selector="boneSwitchAction:" destination="-1" eventType="valueChanged" id="dac-f7-O4D"/>
                             </connections>
-                        </segmentedControl>
+                        </switch>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With Bone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="veO-ZZ-Lbt">
+                            <rect key="frame" x="8" y="18" width="82" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4to-JM-G7I">
+                            <rect key="frame" x="247" y="13" width="37" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="color.png"/>
+                            <connections>
+                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="0IQ-wq-Fhy"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LiZ-Np-RE4">
+                            <rect key="frame" x="206" y="18" width="49" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="X3h-3Z-EP7">
+                    <rect key="frame" x="72" y="131" width="157" height="29"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <segments>
+                        <segment title="Font Store"/>
+                        <segment title="My Fonts"/>
+                    </segments>
+                    <color key="tintColor" red="0.51372549020000002" green="0.062745098040000002" blue="0.81176470590000005" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <action selector="fontStoreTapChangeAction:" destination="-1" eventType="valueChanged" id="Rm8-TG-DQQ"/>
+                    </connections>
+                </segmentedControl>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <nil key="simulatedStatusBarMetrics"/>

@@ -71,8 +71,8 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
 
 void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId){    
     animScene->nodes[toNodeId]->props = animScene->nodes[fromNodeId]->props;
-    animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
-    animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
+//    animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
+//    animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
     animScene->nodes[toNodeId]->props.perVertexColor = animScene->nodes[fromNodeId]->props.perVertexColor;
     animScene->nodes[toNodeId]->props.vertexColor = animScene->nodes[fromNodeId]->props.vertexColor;
 }

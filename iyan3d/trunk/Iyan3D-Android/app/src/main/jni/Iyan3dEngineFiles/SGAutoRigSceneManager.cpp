@@ -562,3 +562,34 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
     clearNodeSelections();
     return true;
 }
+
+float SGAutoRigSceneManager::getSelectedJointScale()
+{
+    if(sceneMode == RIG_MODE_EDIT_ENVELOPES && isNodeSelected && selectedNodeId>0){
+        return rigKeys[selectedNodeId].envelopeRadius;
+    }
+    return 1.0;
+}
+
+Vector3 SGAutoRigSceneManager::getSelectedNodeScale()
+{
+    if(sceneMode == RIG_MODE_MOVE_JOINTS && isNodeSelected)
+        return rigKeys[0].referenceNode->getNodeScale();
+    else if(sceneMode == RIG_MODE_PREVIEW && isNodeSelected)
+        return selectedNode->getNodeScale();
+    return Vector3(1.0);
+}
+
+void SGAutoRigSceneManager::changeNodeScale(Vector3 scale)
+{
+    if(isNodeSelected && !isSkeletonJointSelected) {
+        if(sceneMode == RIG_MODE_MOVE_JOINTS && selectedNodeId == 0){
+            selectedNode->setScaleOnNode(scale);
+            selectedNode->node->updateAbsoluteTransformationOfChildren();
+            rigScene->updater->updateSkeletonBones();
+        } else if (sceneMode == RIG_MODE_PREVIEW && isNodeSelected && !isSkeletonJointSelected) {
+            selectedNode->setScaleOnNode(scale);
+            selectedNode->node->updateAbsoluteTransformationOfChildren();
+        }
+    }
+}

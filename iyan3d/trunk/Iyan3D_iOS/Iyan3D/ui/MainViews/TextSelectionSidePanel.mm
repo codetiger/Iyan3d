@@ -16,6 +16,8 @@
 #define OK_BUTTON_ACTION 1
 #define FONT_STORE 0
 #define MY_FONT 1
+#define ASSET_TEXT_RIG 10
+#define ASSET_TEXT 11
 
 @interface TextSelectionSidePanel ()
 
@@ -35,6 +37,7 @@
         docDirPath = [srcDirPath objectAtIndex:0];
         tabValue = FONT_STORE;
         red = green = blue = alpha = 1;
+        withRig = true;
         
     }
     return self;
@@ -60,7 +63,13 @@
     self.cancelBtn.layer.cornerRadius=CORNER_RADIUS;
     self.addToScene.layer.cornerRadius=CORNER_RADIUS;
     self.bevelSlider.value = bevelRadius;
-    
+    _inputText.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [self load3dText];
+    return NO;
 }
 
 - (void)initializeFontListArray
@@ -105,6 +114,11 @@
     }
 }
 
+- (IBAction)boneSwitchAction:(id)sender {
+    withRig = (_boneSwitch.isOn) ? true : false;
+}
+
+
 - (void)showInternetError:(int)connectionError
 {
     if (connectionError != SLOW_INTERNET) {
@@ -136,6 +150,8 @@
 {
     fontArray = [cache GetAssetList:FONT Search:@""];
     [self.collectionView reloadData];
+    AssetItem* assetItem = fontArray[0];
+    fontFileName = assetItem.name;
 }
 
 - (void)loadFont:(NSString*)customFontPath withExtension:(NSString*)extension
@@ -240,7 +256,7 @@
 }
 
 - (IBAction)inputTextChangedAction:(id)sender {
-    [self load3dText];
+    //[self load3dText];
 }
 
 - (IBAction)bevalChangeAction:(id)sender {
@@ -278,7 +294,7 @@
     rect = [self.view convertRect:rect fromView:_colorWheelbtn.superview];
     [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                          permittedArrowDirections:UIPopoverArrowDirectionAny
                                           animated:NO];
 }
 
@@ -292,7 +308,7 @@
 - (IBAction)addToSceneBtnAction:(id)sender {
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
-    [_textSelectionDelegate load3DTex:FONT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
+    [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
     [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self deallocMem];
@@ -305,15 +321,14 @@
     [loadNodeAlert show];
         return;
     }
-    if(fontFileName.length == 0){
+   else if(fontFileName.length == 0){
     UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please Choose Font Style." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [loadNodeAlert show];
         return;
     }
-    
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
-    [_textSelectionDelegate load3DTex:FONT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
+    [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT  AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
 }
 
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{

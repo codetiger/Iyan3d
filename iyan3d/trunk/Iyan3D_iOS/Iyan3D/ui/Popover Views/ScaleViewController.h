@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "GAI.h"
-
 @protocol ScalePropertiesViewControllerDelegate
 - (void) scaleValueForAction:(float)XValue YValue:(float)YValue ZValue:(float)ZValue;
 - (void) scalePropertyChanged:(float)XValue YValue:(float)YValue ZValue:(float)ZValue;

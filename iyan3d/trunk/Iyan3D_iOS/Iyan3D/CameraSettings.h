@@ -10,6 +10,7 @@
 
 @protocol CameraSettingsDelegate
 - (void)cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution;
+- (void) deleteObjectOrAnimation;
 @end
 
 @interface CameraSettings : UIViewController{
@@ -25,4 +26,5 @@
 
 - (IBAction)resolutionValueChanged:(id)sender;
 - (IBAction)fovValueChanged:(id)sender;
+- (IBAction)deleteAction:(id)sender;
 @end
