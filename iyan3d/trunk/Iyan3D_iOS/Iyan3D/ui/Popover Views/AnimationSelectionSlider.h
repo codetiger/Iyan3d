@@ -14,13 +14,17 @@
 #import "Constants.h"
 #import "AnimationSelectionCollectionViewCell.h"
 #import "SGEditorScene.h"
+#import "Vector3.h"
 
 @protocol SliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 - (void) showOrHideProgress:(BOOL) value;
-- (void)applyAnimationToSelectedNode:(NSString*)filePath;
+- (void) applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame;
 - (void) stopPlaying;
 - (void) removeTempAnimation;
+- (void) createDuplicateAssets;
+- (bool) removeNodeFromScene:(int)nodeIndex;
+- (void) updateAssetListInScenes :(int)nodeType assetName:(NSString*)assetName actionType:(int)action removeObjectAtIndex:(int)index;
 @end
 
 @interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>

@@ -49,8 +49,8 @@
     }
     self.cancelBtn.layer.cornerRadius = 8.0f;
     self.addBtn.layer.cornerRadius = 8.0f;
-
-    
+    [self.delegate createDuplicateAssets];
+    editorSceneLocal->selectMan->unselectObject(selectedNodeId);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -204,14 +204,18 @@
 }
 
 - (IBAction)addBtnFunction:(id)sender {
+    [self applyAnimationKeyToOriginalNode];
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self.view removeFromSuperview];
     [self deallocView];
 }
 
 - (IBAction)cancelBtnFunction:(id)sender {
+    [_delegate stopPlaying];
+    editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
+    editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
+    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
     if(!isFirstTimeAnimationApplyed){
-        editorSceneLocal->selectMan->selectObject(selectedNodeId);
         editorSceneLocal->totalFrames = totalFrame;
         editorSceneLocal->currentFrame = currentFrame;
         editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
@@ -253,7 +257,7 @@
     if (tabValue == MY_ANIMATION) {
         fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-            [self applyAnimation:[NSNumber numberWithInt:assetItem.boneCount]];
+            [self performSelectorOnMainThread:@selector(applyAnimation:) withObject:[NSNumber numberWithInt:assetItem.boneCount] waitUntilDone:NO];
         }
         else {
             NSLog(@"File not exists");
@@ -263,7 +267,7 @@
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, assetItem.assetId, extension];
         if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
             if (assetItem)
-            [self applyAnimation:[NSNumber numberWithInt:assetItem.boneCount]];
+            [self performSelectorOnMainThread:@selector(applyAnimation:) withObject:[NSNumber numberWithInt:assetItem.boneCount] waitUntilDone:NO];
         }
         else {
             [self.delegate showOrHideProgress:1];
@@ -271,6 +275,7 @@
             [animDownloadQueue cancelAllOperations];
             //[self cancelOperations:animDownloadQueue];
             DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(applyAnimation:) returnObject:[NSNumber numberWithInt:assetItem.boneCount] outputFilePath:fileName andURL:url];
+            task.taskType = DOWNLOAD_AND_RETURN_OBJ;
             task.queuePriority = NSOperationQueuePriorityHigh;
             [animDownloadQueue addOperation:task];
         }
@@ -381,18 +386,31 @@
         animationJsonArray = [NSMutableArray arrayWithArray:allAnimations];
     if (animationJsonArray != nil && [animationJsonArray count] > 0)
         [self storeDataToLocalDB];
-    NSLog(@"Animation Type : %d",animationType);
     animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
     [self.animationCollectionView reloadData];
 }
 
 #pragma mark OpenGl related Functions
 
+- (void)applyAnimationKeyToOriginalNode{
+    [_delegate stopPlaying];
+    editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
+    editorSceneLocal->animMan->copyKeysOfNode(editorSceneLocal->nodes.size()-1, selectedNodeId);
+    editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
+    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
+    editorSceneLocal->selectMan->selectObject(selectedNodeId);
+    editorSceneLocal->actionMan->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
+    editorSceneLocal->updater->setDataForFrame(currentFrame);
+}
+
 - (void)applyAnimation:(id)returnValue
 {
     [_delegate stopPlaying];
-    if(!isFirstTimeAnimationApplyed){
-        editorSceneLocal->selectMan->selectObject(selectedNodeId);
+    editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
+    [self.delegate updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:200 removeObjectAtIndex:(int)editorSceneLocal->nodes.size()-1];
+    editorSceneLocal->selectMan->selectObject(selectedNodeId);
+    [self.delegate createDuplicateAssets];
+    if(!isFirstTimeAnimationApplyed) {
         editorSceneLocal->currentFrame = currentFrame;
         editorSceneLocal->totalFrames = totalFrame;
         editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
@@ -407,15 +425,16 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         isFirstTimeAnimationApplyed = false;
         if(animationType == RIG_ANIMATION){
-            if(animBoneCount == bonecount)
-                [self.delegate applyAnimationToSelectedNode:fileName];
+            if(animBoneCount == bonecount){
+                [self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
+            }
             else{
                 UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
             }
         }
         else
-            [self.delegate applyAnimationToSelectedNode:fileName];
+            [self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
     }
    [self.delegate showOrHideProgress:0];
 }

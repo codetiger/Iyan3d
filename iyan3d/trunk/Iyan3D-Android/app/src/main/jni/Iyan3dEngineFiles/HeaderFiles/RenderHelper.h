@@ -18,6 +18,9 @@ private:
     SceneManager *smgr;
     
 public:
+    int renderingType;
+    bool isExportingImages,isExporting1stTime;
+    
     RenderHelper(SceneManager *smgr, void *scene);
     ~RenderHelper();
     void drawGrid();
@@ -31,6 +34,7 @@ public:
     void setJointAndBonesVisibility(std::map<int, RigKey>& rigKeys, bool isVisible);
     void setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool isVisible);
     void drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId);
+    void renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark);
     
     void postRTTDrawCall();
     void rttDrawCall();

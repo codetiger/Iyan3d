@@ -186,6 +186,51 @@ void SGJoint::removeAnimationInCurrentFrame(int selectedFrame)
     if(keyIndex != -1 && scaleKeys[keyIndex].id == selectedFrame)
         scaleKeys.erase(scaleKeys.begin()+keyIndex);
 }
+
+Quaternion SGJoint::getRotation(int frameId)
+{
+    int keyIndex = KeyHelper::getKeyIndex(rotationKeys,frameId);
+    if(keyIndex == -1 || rotationKeys[keyIndex].id != frameId){
+        SGRotationKey rotationKey;
+        rotationKey.id = frameId;
+        return rotationKey.rotation;
+        
+    }
+    else
+        return rotationKeys[keyIndex].rotation;
+}
+Vector3 SGJoint::getPosition(int frameId){
+    int keyIndex = KeyHelper::getKeyIndex(positionKeys,frameId);
+    if(keyIndex == -1 || positionKeys[keyIndex].id != frameId){
+        SGPositionKey positionKey;
+        positionKey.id = frameId;
+       return  positionKey.position;
+    }
+    else
+       return positionKeys[keyIndex].position;
+}
+Vector3 SGJoint::getScale(int frameId){
+    int keyIndex = KeyHelper::getKeyIndex(scaleKeys,frameId);
+    if(keyIndex == -1 || scaleKeys[keyIndex].id != frameId){
+        SGScaleKey scaleKey;
+        scaleKey.id = frameId;
+       return scaleKey.scale;
+    }
+    else
+        return scaleKeys[keyIndex].scale;
+}
+
+Quaternion SGJoint::getRotationOnNode(int frameId)
+{
+    Quaternion r = Quaternion(jointNode->getRotationInRadians());
+    return r;
+}
+Vector3 SGJoint::getPositionOnNode(int frameId)
+{
+    return jointNode->getPosition();
+}
+
+
 SGJoint::~SGJoint()
 {
     positionKeys.clear();

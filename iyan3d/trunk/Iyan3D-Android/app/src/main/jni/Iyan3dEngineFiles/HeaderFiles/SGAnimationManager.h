@@ -27,6 +27,7 @@ public:
     
     vector<Vector3> storeTextInitialPositions(SGNode *sgnode);
     void applyAnimations(string filePath , int nodeIndex);
+    void copyKeysOfNode(int fromNodeId, int toNodeId);
     void applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames);
     void applyTextAnimations(string filePath, SGNode *sgNode, int &totalFrames, int currentFrame , vector<Vector3> jointBasePositions, int &animFrames);
     bool removeAnimationForSelectedNodeAtFrame(int selectedFrame);

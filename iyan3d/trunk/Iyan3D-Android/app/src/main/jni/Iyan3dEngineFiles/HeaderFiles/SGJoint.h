@@ -30,6 +30,12 @@ public:
     bool  setRotationOnNode(Quaternion rotation);
     bool  setPositionOnNode(Vector3 position);
     bool  setScaleOnNode(Vector3 scale);
+        
+    Quaternion getRotation(int frameId);
+    Vector3 getPosition(int frameId);
+    Vector3 getScale(int frameId);
+    Quaternion getRotationOnNode(int frameId);
+    Vector3 getPositionOnNode(int frameId);
     
     void  readData(ifstream * filePointer);
     void  writeData(ofstream * filePointer);

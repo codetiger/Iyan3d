@@ -33,6 +33,9 @@ RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
 {
     this->smgr = sceneMngr;
     renderingScene = (SGEditorScene*)scene;
+    isExportingImages = false;
+    isExporting1stTime = true;
+    renderingType = SHADER_COMMON_L1;
 }
 
 RenderHelper::~RenderHelper(){
@@ -445,6 +448,78 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
     }
     //childs.reset();
 }
+
+void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark)
+{
+    if(!renderingScene || !smgr || renderingScene->isRigMode)
+        return false;
+    
+    if(!renderingScene->checkNodeSize())
+        return;
+    isExporting1stTime = false;
+    
+    if(smgr->device == OPENGLES2)
+        rttShadowMap();
+    
+    bool displayPrepared = smgr->PrepareDisplay(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->width, renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->height,false,true,false,Vector4(255,255,255,255));
+    if(!displayPrepared)
+        return;
+    setRenderCameraOrientation();
+    setControlsVisibility(false);
+    setJointSpheresVisibility(false);
+    renderingScene->rotationCircle->node->setVisible(false);
+    
+    int selectedObjectId;
+    if(renderingScene->selectedNodeId != NOT_SELECTED) {
+        selectedObjectId = renderingScene->selectedNodeId;
+        renderingScene->selectMan->unselectObject(renderingScene->selectedNodeId);
+    }
+    
+    
+    vector<string> previousMaterialNames;
+    if(renderingType != shaderType)
+    {
+        renderingScene->updater->resetMaterialTypes(true);
+    }
+    
+    for(unsigned long i = 0; i < renderingScene->nodes.size(); i++){
+        if(!(renderingScene->nodes[i]->props.isVisible))
+            renderingScene->nodes[i]->node->setVisible(false);
+        if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+            renderingScene->nodes[i]->node->setVisible(false);
+    }
+    
+    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],true,true,false,Vector4(255,255,255,255));
+    smgr->draw2DImage(renderingScene->bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    
+    smgr->Render();
+    
+    if(!removeWaterMark)
+        smgr->draw2DImage(renderingScene->watermarkTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    if(smgr->device == METAL)
+        rttShadowMap();
+    
+    smgr->EndDisplay();
+    smgr->writeImageToFile(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],imagePath,(renderingScene->shaderMGR->deviceType == OPENGLES2) ?FLIP_VERTICAL : NO_FLIP);
+    
+    smgr->setActiveCamera(renderingScene->viewCamera);
+    smgr->setRenderTarget(NULL,true,true,false,Vector4(255,255,255,255));
+    
+    
+    for(unsigned long i = 0; i < renderingScene->nodes.size(); i++){
+        if(!(renderingScene->nodes[i]->props.isVisible))
+            renderingScene->nodes[i]->node->setVisible(true);
+        if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+            renderingScene->nodes[i]->node->setVisible(true);
+    }
+    
+    if(renderingType != shaderType)
+        renderingScene->updater->resetMaterialTypes(false);
+    
+    if(selectedObjectId != NOT_SELECTED)
+        renderingScene->selectMan->selectObject(selectedObjectId);
+}
+
 
 bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue)
 {

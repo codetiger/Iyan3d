@@ -427,6 +427,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.frameId = actionScene->animMan->animStartFrame;
         assetAction.actionSpecificIntegers.push_back(actionScene->animMan->animTotalFrames);
         addAction(assetAction);
+        printf("Animation Action Added");
     }
 }
 
@@ -493,10 +494,9 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
 
 void SGActionManager::removeDemoAnimation()
 {
-
     SGAction &recentAction = actions[currentAction-1];
-    
-        int indexOfAction = getObjectIndex(recentAction.objectIndex);
+    int objectIndex = recentAction.objectIndex;
+        int indexOfAction = getObjectIndex(objectIndex);
         actionScene->selectedNodeId = indexOfAction;
         actionScene->animMan->removeAppliedAnimation(recentAction.frameId, recentAction.actionSpecificIntegers[0]);
         actions.erase(actions.begin()+(currentAction-1));
@@ -725,7 +725,7 @@ int SGActionManager::redo()
 }
 
 int SGActionManager::getObjectIndex(int actionIndex)
-{
+{   
     for(int i = 0; i < (int)actionScene->nodes.size(); i++) {
         if(actionScene->nodes[i]->actionId == actionIndex) {
             return i;

@@ -76,10 +76,7 @@ public:
     std::map<int,int> isKeySetForFrame;
     std::map<int,int>::iterator keyFramesIterator;
     
-    /* sabish */
-    int renderingType;
-    bool isRTTCompleted,isExportingImages,isExporting1stTime;
-    int screenWidth, screenHeight;
+    bool isRTTCompleted;
     
     /* Iyan3D Related classs objects */
     
@@ -154,9 +151,7 @@ public:
     SGNode* getSelectedNode();
     SGJoint* getSelectedJoint();
     
-    //sabish
     Vector3 getSelectedNodeScale();
-    void renderAndSaveImage(char *imageName , int shaderType,bool isDisplayPrepared = false, bool removeWaterMark = false);
     bool checkNodeSize();
     void saveThumbnail(char* imagePath);
 

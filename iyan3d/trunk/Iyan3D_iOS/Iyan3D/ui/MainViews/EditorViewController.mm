@@ -339,10 +339,10 @@ BOOL missingAlertShown;
     for (int i = 0; i < assetsCount; i++) {
         NSString* assetName = [self stringWithwstring:editorScene->nodes[i]->name];
     encoding:[NSString defaultCStringEncoding];
-        if (editorScene->nodes[i]->getType() == NODE_TEXT)
-            assetName = [NSString stringWithFormat:@"TEXT: %@", assetName];
-        else if (editorScene->nodes[i]->getType() == NODE_IMAGE)
-            assetName = [NSString stringWithFormat:@"IMAGE: %@", assetName];
+       // if (editorScene->nodes[i]->getType() == NODE_TEXT)
+       //     assetName = [NSString stringWithFormat:@"TEXT: %@", assetName];
+       // else if (editorScene->nodes[i]->getType() == NODE_IMAGE)
+        //    assetName = [NSString stringWithFormat:@"IMAGE: %@", assetName];
         [assetsInScenes addObject:assetName];
     }
     [self.objectList reloadData];
@@ -842,20 +842,21 @@ BOOL missingAlertShown;
         editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w);
 }
 
-- (void)applyAnimationToSelectedNode:(NSString*)filePath
+- (void)applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame
 {
+    editorScene->animMan->copyKeysOfNode(originalId, editorScene->nodes.size()-1);
+    editorScene->nodes[originalId]->node->setVisible(false);
+    editorScene->currentFrame = selectedFrame;
+    editorScene->actionMan->switchFrame(selectedFrame);   
     std::string *filePathStr = new std::string([filePath UTF8String]);
     editorScene->animMan->applyAnimations(*filePathStr, editorScene->selectedNodeId);
-    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
     totalFrames = editorScene->totalFrames;
     [_framesCollectionView reloadData];
     [self playAnimation];
+    
 }
 
 - (void) removeTempAnimation{
-    //if(editorScene)
-        //editorScene->actionMan->removeDemoAnimation();
-    
     totalFrames = editorScene->totalFrames;
     [_framesCollectionView reloadData];
 }
@@ -1025,11 +1026,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void)renderFrame:(int)frame withType:(int)shaderType andRemoveWatermark:(bool)removeWatermark
 {   
-    editorScene->isExportingImages = true;
+    editorScene->renHelper->isExportingImages = true;
     editorScene->updater->setDataForFrame(frame);
     NSString* tempDir = NSTemporaryDirectory();
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, frame];
-    editorScene->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark);
+    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark);
 }
 
 - (void) presentPopOver:(CGRect )arect{
@@ -1106,11 +1107,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 -(void) updateAssetListInScenes :(int)nodeType assetName:(NSString *)assetName actionType:(int)action removeObjectAtIndex:(int)index {
-    if(action==ADD_OBJECT){
-        if(nodeType==7){
+    if(action == ADD_OBJECT){
+        if(nodeType == ASSET_CAMERA){
             [assetsInScenes addObject:@"CAMERA"];
         }
-        else if(nodeType==8){
+        else if(nodeType == ASSET_LIGHT){
             [assetsInScenes addObject:@"LIGHT"];
         }
         else if(nodeType == ASSET_IMAGE){
@@ -1121,7 +1122,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [assetsInScenes addObject:assetName];
         }
     }
-    else if (action==REMOVE_OBJECT){
+    else if (action == REMOVE_OBJECT){
         [assetsInScenes removeObjectAtIndex:index];
     }
     [self.objectList reloadData];

@@ -54,6 +54,12 @@
         }
         break;
     }
+    case DOWNLOAD_AND_RETURN_OBJ: {
+            [self downloadFile:_inputURL FileName:_outputPath];            
+            if (_delegate && selectorMethod != nil && ![self isCancelled])
+                [_delegate performSelectorOnMainThread:selectorMethod withObject:_returnObj waitUntilDone:NO];
+            break;
+        }
     default:
         break;
     }

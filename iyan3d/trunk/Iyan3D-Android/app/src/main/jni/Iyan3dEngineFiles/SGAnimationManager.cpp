@@ -40,7 +40,7 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
 {
     if(!animScene || !smgr)
         return;
-    
+        
     nodeIndex = (nodeIndex == -1) ? animScene->selectedNodeId : nodeIndex;
     animFilePath = filePath;
     animStartFrame = animScene->currentFrame;
@@ -55,6 +55,17 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
     }
     animScene->updater->setDataForFrame(animScene->currentFrame);
     animScene->updater->reloadKeyFrameMap();
+}
+
+void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
+{
+    animScene->selectMan->selectObject(toNodeId);
+    animScene->nodes[toNodeId]->positionKeys = animScene->nodes[fromNodeId]->positionKeys;
+    animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
+    animScene->nodes[toNodeId]->scaleKeys = animScene->nodes[fromNodeId]->scaleKeys;
+    
+    for (int i =0; i < animScene->nodes[toNodeId]->joints.size(); i++)
+        animScene->nodes[toNodeId]->joints[i]->rotationKeys = animScene->nodes[fromNodeId]->joints[i]->rotationKeys;
 }
 
 void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames)
