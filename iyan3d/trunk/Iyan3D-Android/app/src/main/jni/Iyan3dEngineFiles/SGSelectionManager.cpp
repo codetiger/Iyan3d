@@ -219,7 +219,7 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         if(std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), selectionScene->selectedNodeId) == selectionScene->selectedNodeIds.end() && selectionScene->selectedNodeId != NOT_EXISTS)
             selectionScene->selectedNodeIds.push_back(selectionScene->selectedNodeId);
         selectionScene->selectedNodeIds.push_back(nodeId);
-        removeChildren(getParentNode(), true);
+        removeChildren(getParentNode());
         updateParentPosition();
         highlightSelectedNode(nodeId);
         selectionScene->renHelper->setJointSpheresVisibility(false);
@@ -229,7 +229,7 @@ bool SGSelectionManager::multipleSelections(int nodeId)
         }
         selectionScene->clearSelections();
     } else if(nodeId != 255 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) != selectionScene->selectedNodeIds.end()){
-        removeChildren(getParentNode(),true);
+        removeChildren(getParentNode());
         for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
             if(selectionScene->selectedNodeIds[i] == nodeId)
                 selectionScene->selectedNodeIds.erase(selectionScene->selectedNodeIds.begin() + i);
@@ -270,7 +270,7 @@ void SGSelectionManager::unselectObjects()
 {    
     for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++)
         unselectObject(selectionScene->selectedNodeIds[i]);
-    removeChildren(getParentNode(), true);
+    removeChildren(getParentNode());
     if(parentNode) {
         smgr->RemoveNode(parentNode);
         parentNode.reset();

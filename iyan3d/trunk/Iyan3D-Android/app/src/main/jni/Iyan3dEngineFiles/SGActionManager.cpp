@@ -345,7 +345,7 @@ void SGActionManager::changeCameraProperty(float fov , int resolutionType, bool 
     
 }
 
-void SGActionManager::changeLightProperty(float red , float green, float blue, float shadow, bool isChanged)
+void SGActionManager::changeLightProperty(float red , float green, float blue, float shadow,float distance, bool isChanged)
 {
     if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
         return;
@@ -367,7 +367,8 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
         ShaderManager::shadowDensity = shadow;
     }
     else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
-        selectedNode->props.nodeSpecificFloat = (shadow + 0.001) * 300.0;
+        ShaderManager::shadowDensity = shadow;
+        selectedNode->props.nodeSpecificFloat = (distance + 0.001) * 300.0;
     }
     
     //nodes[selectedNodeId]->props.vertexColor = Vector3(red,green,blue);
@@ -383,7 +384,7 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     //    updateLightWithRender();
 }
 
-void SGActionManager::storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity)
+void SGActionManager::storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity,float distance)
 {
     if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
         return;

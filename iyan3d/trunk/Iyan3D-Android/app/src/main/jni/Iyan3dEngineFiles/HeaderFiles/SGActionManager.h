@@ -62,8 +62,8 @@ public:
     
     void changeMeshProperty(float refraction, float reflection, bool isLighting, bool isVisible, bool isChanged = false);
     void changeCameraProperty(float fov , int resolutionType, bool isChanged = false);
-    void changeLightProperty(float red , float green, float blue, float shadow, bool isChanged = false);
-    void storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity);
+    void changeLightProperty(float red , float green, float blue, float shadow,float distance, bool isChanged = false);
+    void storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity,float distance);
 
     /* Mirror Change action */
     

@@ -211,8 +211,10 @@ void RenderHelper::renderControls()
         
         int nodeIndex = smgr->getNodeIndexByID(renderingScene->sceneControls[i]->node->getID());
         
-        if(renderingScene->sceneControls[i]->props.isVisible && renderingScene->sceneControls[i]->props.transparency > 0.0)
-            smgr->RenderNode(nodeIndex,(i == controlStartIndex)?true:false);
+        if(renderingScene->sceneControls[i]->props.isVisible && renderingScene->sceneControls[i]->props.transparency > 0.0) {
+            if((renderingScene->isRigMode && renderingScene->rigMan->sceneMode != RIG_MODE_EDIT_ENVELOPES) || !renderingScene->isRigMode)
+                smgr->RenderNode(nodeIndex,(i == controlStartIndex)?true:false);
+        }
     }
 }
 

@@ -324,6 +324,11 @@ BOOL missingAlertShown;
 
 -(void)setupEnableDisableControls{
     
+//    if(editorScene && (editorScene->isJointSelected || (editorScene->isRigMode && (editorScene->rigMan->isSGRJointSelected || editorScene->rigMan->isSkeletonJointSelected))) &&
+//       editorScene->controlType == SCALE){
+//        editorScene->controlType = MOVE;
+//    }
+    
     if (editorScene->isRigMode){
         [self.moveBtn setHidden:true];
         [self.optionsBtn setHidden:true];
@@ -934,6 +939,7 @@ BOOL missingAlertShown;
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
     }
+    
     [self autoRigMirrorBtnHandler];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
 }
@@ -1329,7 +1335,7 @@ BOOL missingAlertShown;
             lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
         }
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType()];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         self.popoverController.popoverContentSize = CGSizeMake(270, 335);
@@ -1823,9 +1829,9 @@ BOOL missingAlertShown;
 - (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored{
     
     if(!isStored)
-        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w,true);
+        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w,distance,true);
     else if(isStored)
-        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w);
+        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w,distance);
 }
 
 - (void)applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame
@@ -2127,7 +2133,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
         }
 //        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType()];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         self.popoverController.popoverContentSize = CGSizeMake(270, 335);

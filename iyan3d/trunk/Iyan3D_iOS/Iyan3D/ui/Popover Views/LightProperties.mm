@@ -8,16 +8,18 @@
 
 #import "LightProperties.h"
 
+
 @interface LightProperties ()
 
 @end
 
 @implementation LightProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         color = currentLightColor;
+        light = lightType;
     }
     return self;
 }
@@ -27,7 +29,8 @@
     [super viewDidLoad];
     [self initializeColorWheel];
     [self.colorPreview setBackgroundColor:[UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0]];
-
+    [_distance setEnabled:(light == NODE_ADDITIONAL_LIGHT) ? YES : NO];
+    [_distance setValue:(light == NODE_ADDITIONAL_LIGHT) ? color.w : 1.0];
 }
 
 - (void)viewDidAppear:(BOOL)animated{

@@ -23,10 +23,10 @@
 @interface LightProperties : UIViewController<GetPixelDemoDelegate>
 {
     Quaternion color;
+    NODE_TYPE light;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)scene;
-
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType;
 @property (weak, nonatomic) IBOutlet UIView *colorPickerView;
 @property (strong, nonatomic) GetPixelDemo *demoView;
 @property (weak, nonatomic) IBOutlet UIView *colorPreview;

@@ -139,7 +139,7 @@ void SceneManager::Render(){
     }
     for (int i = 0;i < nodeIndex.size();i++){
         int nodeId = nodeIndex[i];
-        if(nodes[nodeId]->type <= NODE_TYPE_CAMERA || nodes[nodeId]->getVisible() == false)
+        if(nodes[nodeId]->type <= NODE_TYPE_CAMERA || nodes[nodeId]->getVisible() == false || (nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010))
             continue;
         RenderNode(nodeId);
     }
