@@ -273,9 +273,10 @@ void SGActionManager::storeActionKeysForMulti(bool finished)
                     actionScene->updater->updateLightProperties(actionScene->currentFrame);
             }
         }
-        if(finished)
+        if(finished){
             changeKeysAction.frameId = actionScene->currentFrame;
-        addAction(changeKeysAction);
+            addAction(changeKeysAction);
+        }
     }
 }
 
@@ -575,7 +576,8 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
         } else {
             scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->getKeyForFrame(actionScene->currentFrame));
         }
-        addAction(scaleAction);
+        if(actionScene->selectedNodeIds.size() <= 0)
+            addAction(scaleAction);
         scaleAction.drop();
     }
     if(actionScene->selectedNodeIds.size() > 0) {

@@ -402,7 +402,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
-                            <rect key="frame" x="494" y="19" width="30" height="26"/>
+                            <rect key="frame" x="500" y="19" width="30" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="View_IPhone.png"/>
                             <connections>
@@ -410,7 +410,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Diu-e1-yeL">
-                            <rect key="frame" x="464" y="19" width="30" height="26"/>
+                            <rect key="frame" x="470" y="19" width="30" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Login-IPhone.png"/>
                             <connections>
@@ -478,7 +478,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jnS-gW-EaC">
-                            <rect key="frame" x="524" y="19" width="30" height="26"/>
+                            <rect key="frame" x="530" y="19" width="30" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Info_IPhone.png"/>
                             <connections>
