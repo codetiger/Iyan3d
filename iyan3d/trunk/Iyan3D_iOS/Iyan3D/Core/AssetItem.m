@@ -19,5 +19,6 @@
 	_modifiedDate = nil;
 	_keywords = nil;
     _price = nil;
+    _isTempAsset = false;
 }
 @end

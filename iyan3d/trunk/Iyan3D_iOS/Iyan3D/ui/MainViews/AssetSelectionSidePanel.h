@@ -26,8 +26,7 @@
     float screenScale;
     NSString* docDirPath;
     int selectedAsset, modelCategoryTab;
-    
-
+    BOOL addToScenePressed;
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *assetsCollectionView;

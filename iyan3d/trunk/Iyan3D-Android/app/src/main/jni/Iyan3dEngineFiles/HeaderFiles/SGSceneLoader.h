@@ -24,6 +24,7 @@ public:
     bool readScene(ifstream *filePointer);
     void readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
+    bool removeTempNodeIfExists();
     
     #ifdef ANDROID
         bool loadSceneData(std::string *filePath, JNIEnv *env, jclass type);

@@ -44,6 +44,7 @@
     self.addToSceneBtn.layer.cornerRadius = 8.0f;
     selectedAsset = -1;
     modelCategoryTab = 0;
+    addToScenePressed = false;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,7 +61,7 @@
 }
 
 - (IBAction)addToSceneButtonAction:(id)sender {
-    
+    addToScenePressed = YES;
 }
 
 #pragma mark CollectionView Delegate methods
@@ -329,6 +330,8 @@
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         AssetItem * assetItem = [cache GetAsset:assetId];
+        if(!addToScenePressed)
+            assetItem.isTempAsset = true;
         [self.assetSelectionDelegate loadNodeInScene:assetItem];
     }
     else {
@@ -347,6 +350,8 @@
     int assetId = [task.returnObj intValue];
     
     AssetItem *assetItem = [cache GetAsset:assetId];
+    if(!addToScenePressed)
+        assetItem.isTempAsset = true;
     [self.assetSelectionDelegate loadNodeInScene:assetItem];
     
 }

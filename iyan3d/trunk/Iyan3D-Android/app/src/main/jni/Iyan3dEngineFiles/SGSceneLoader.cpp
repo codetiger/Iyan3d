@@ -336,4 +336,16 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     return true;
 }
 
+bool SGSceneLoader::removeTempNodeIfExists()
+{
+    if(!currentScene || !smgr || currentScene->nodes.size() < 3)
+        return false;
+    
+    for(int index = currentScene->nodes.size()-1; index > 0; index--)
+    {
+        if(currentScene->nodes[index]->isTempNode)
+            removeObject(index);
+    }
+    return true;
+}
 

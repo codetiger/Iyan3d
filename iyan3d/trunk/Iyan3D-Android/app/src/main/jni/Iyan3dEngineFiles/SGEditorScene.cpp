@@ -121,11 +121,11 @@ void SGEditorScene::setTransparencyForObjects()
     
     if(nodes[nodes.size()-1]->isTempNode) {
         isPreviewMode = true;
-        for(int index = 0; index < nodes.size()-1; index++)
-            nodes[index]->props.transparency = 0.3;
+        for(int index = 2; index < nodes.size()-1; index++)
+            nodes[index]->props.transparency = 0.2;
     } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
         isPreviewMode = false;
-        for(int index = 0; index < nodes.size(); index++) {
+        for(int index = 2; index < nodes.size(); index++) {
             if(nodes[index]->props.isVisible)
                 nodes[index]->props.transparency = 1.0;
         }

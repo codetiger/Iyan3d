@@ -135,6 +135,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     // TODO a lot to implement
     ActionType assetAddType = IMPORT_ASSET_ACTION;
     
+    if(editorScene)
+        editorScene->loader->removeTempNodeIfExists();
+    
     switch (type) {
         case ASSET_CAMERA: {
             editorScene->loader->loadNode(NODE_CAMERA, assetId, name, 0, 0, assetAddType);
