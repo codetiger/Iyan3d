@@ -71,6 +71,7 @@
     ScaleForAutoRigViewController *scaleAutoRig;
     Vector4 renderBgColor;
     NSDictionary *deviceNames;
+    NSString *cachesDir , *docDir;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
