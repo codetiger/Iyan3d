@@ -30,7 +30,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];
-    [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    if([Utility IsPadDevice]){
+        [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    }
+    else{
+        [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    }
     [self.sceneView setHidden:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -352,7 +357,7 @@
         [appDelegate.window setRootViewController:animationEditor];
     }
     else{
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditoViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
+            <connections>
+                <outlet property="addSceneBtn" destination="zEZ-Bi-FMZ" id="APQ-kd-bK9"/>
+                <outlet property="deleteSceneBtn" destination="KFd-um-XTy" id="kM1-U4-J8n"/>
+                <outlet property="mailBtn" destination="HGX-gP-doo" id="hjy-n0-Tax"/>
+                <outlet property="openScene" destination="PMj-yf-pmT" id="e28-C4-Afp"/>
+                <outlet property="sceneDate" destination="fBI-UN-Lm3" id="Rf1-zp-22E"/>
+                <outlet property="scenePreview" destination="N3K-yg-e2a" id="zOF-6m-z9U"/>
+                <outlet property="scenePreviewCloseBtn" destination="TH3-sW-IFp" id="tEe-Pp-Mvz"/>
+                <outlet property="sceneTitle" destination="Bbf-8g-tjd" id="cGj-n5-sJt"/>
+                <outlet property="sceneView" destination="qcu-3p-ATD" id="A9d-44-jxh"/>
+                <outlet property="scenesCollectionView" destination="pam-NN-pGu" id="Y2U-Db-C0v"/>
+                <outlet property="topBar" destination="MK3-w5-vlk" id="BJs-N0-tXM"/>
+                <outlet property="view" destination="T6f-Lk-f1s" id="dW5-Y4-87E"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="T6f-Lk-f1s">
+            <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bgImageforall.png" translatesAutoresizingMaskIntoConstraints="NO" id="yFf-0q-Jwp">
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                </imageView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jfw-UW-H0s">
+                    <rect key="frame" x="0.0" y="0.0" width="568" height="29"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MK3-w5-vlk">
+                            <rect key="frame" x="0.0" y="0.0" width="568" height="29"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zEZ-Bi-FMZ" userLabel="addBtn">
+                                    <rect key="frame" x="18" y="6" width="15" height="15"/>
+                                    <state key="normal" image="New.png"/>
+                                    <connections>
+                                        <action selector="addSceneButtonAction:" destination="-1" eventType="touchUpInside" id="oZE-R5-ZNh"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HGX-gP-doo" userLabel="mailBtn">
+                                    <rect key="frame" x="533" y="6" width="20" height="20"/>
+                                    <state key="normal" image="Mail.png"/>
+                                    <connections>
+                                        <action selector="feedBackButtonAction:" destination="-1" eventType="touchUpInside" id="jsi-xE-Tua"/>
+                                    </connections>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Scenes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Igw-JK-bzK">
+                                    <rect key="frame" x="267" y="3" width="78" height="33"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.53333333329999999" green="0.0" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="pam-NN-pGu" userLabel="SceneSelection Collection View">
+                    <rect key="frame" x="15" y="41" width="539" height="271"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="23" minimumInteritemSpacing="10" id="hO9-zT-1F7">
+                        <size key="itemSize" width="100" height="100"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="18" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="pqV-ii-Uou"/>
+                        <outlet property="delegate" destination="-1" id="Vum-rw-3Vg"/>
+                    </connections>
+                </collectionView>
+                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qcu-3p-ATD">
+                    <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f3x-bR-Fhr">
+                            <rect key="frame" x="0.0" y="282" width="568" height="38"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KFd-um-XTy" userLabel="deleteBtn">
+                                    <rect key="frame" x="276" y="0.0" width="34" height="30"/>
+                                    <state key="normal" image="Delete.png"/>
+                                    <connections>
+                                        <action selector="deleteSceneButtonAction:" destination="-1" eventType="touchUpInside" id="9E2-DN-hY5"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </view>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Title" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bbf-8g-tjd">
+                            <rect key="frame" x="157" y="233" width="254" height="29"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <action selector="titleChangeAction:" destination="-1" eventType="editingDidEnd" id="vrL-vJ-KyU"/>
+                            </connections>
+                        </textField>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBI-UN-Lm3">
+                            <rect key="frame" x="171" y="259" width="227" height="23"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N3K-yg-e2a" userLabel="thumbnail">
+                            <rect key="frame" x="147" y="41" width="275" height="193"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TH3-sW-IFp">
+                            <rect key="frame" x="8" y="8" width="55" height="55"/>
+                            <state key="normal" image="close.png"/>
+                            <connections>
+                                <action selector="scenePreviewClosebtn:" destination="-1" eventType="touchUpInside" id="Bye-Ux-B2q"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PMj-yf-pmT">
+                            <rect key="frame" x="229" y="204" width="111" height="30"/>
+                            <state key="normal" title="Open Scene"/>
+                            <connections>
+                                <action selector="openSceneAction:" destination="-1" eventType="touchUpInside" id="Imz-rF-g31"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <point key="canvasLocation" x="616" y="335"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Delete.png" width="16" height="22"/>
+        <image name="Mail.png" width="30" height="21"/>
+        <image name="New.png" width="21" height="21"/>
+        <image name="bgImageforall.png" width="1024" height="1024"/>
+        <image name="close.png" width="19" height="19"/>
+    </resources>
+</document>

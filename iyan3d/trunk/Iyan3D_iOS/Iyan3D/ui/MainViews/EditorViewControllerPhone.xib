@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorViewController">
@@ -31,30 +30,24 @@
             <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r4X-gk-zDO" userLabel="renderview" customClass="RenderingView">
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="r4X-gk-zDO" userLabel="renderview" customClass="RenderingView">
                     <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="r4X-gk-zDO" secondAttribute="height" multiplier="71:40" id="w65-Wa-6Qf"/>
-                    </constraints>
                 </view>
-                <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L0B-6d-c1X" userLabel="leftView">
-                    <rect key="frame" x="-2" y="46" width="212" height="278"/>
+                <view hidden="YES" contentMode="scaleToFill" id="L0B-6d-c1X" userLabel="leftView">
+                    <rect key="frame" x="0.0" y="43" width="212" height="278"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="L0B-6d-c1X" secondAttribute="height" multiplier="106:139" id="KvU-u5-eTj"/>
-                    </constraints>
                 </view>
-                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="85u-8e-wxJ" userLabel="rightView">
+                <view contentMode="scaleToFill" id="85u-8e-wxJ" userLabel="rightView">
                     <rect key="frame" x="459" y="42" width="110" height="280"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8E-u6-axF">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="w8E-u6-axF">
                             <rect key="frame" x="0.0" y="63" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="107" id="iiI-em-qac"/>
-                                <constraint firstAttribute="height" constant="25" id="w85-3K-iMi"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title=" EXPORT" image="EXPORT.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -63,13 +56,10 @@
                                 <action selector="exportAction:" destination="-1" eventType="touchUpInside" id="cpR-50-lf2"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOI-Vg-cWf">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hOI-Vg-cWf">
                             <rect key="frame" x="1" y="35" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="107" id="DVd-FY-XaC"/>
-                                <constraint firstAttribute="height" constant="25" id="ZCg-Zh-myX"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="MY OBJECTS" image="MY-OBJECTS_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -78,13 +68,10 @@
                                 <action selector="myObjectsBtnAction:" destination="-1" eventType="touchUpInside" id="vmF-1m-3ul"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aga-VX-vgX">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Aga-VX-vgX">
                             <rect key="frame" x="1" y="119" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="107" id="39S-F2-ojC"/>
-                                <constraint firstAttribute="height" constant="25" id="x61-uG-dTh"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title=" IMPORT" image="Import_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -93,89 +80,69 @@
                                 <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="oXw-sj-v1c"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vjP-Os-nSO">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vjP-Os-nSO">
                             <rect key="frame" x="1" y="147" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="25" id="oBy-1k-FzB"/>
-                                <constraint firstAttribute="width" constant="107" id="vfm-2x-tIu"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title=" OPTIONS" image="Options_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-px-hba">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6eX-px-hba">
                             <rect key="frame" x="1" y="175" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.49803921568627452" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="107" id="Lms-g8-WP3"/>
-                                <constraint firstAttribute="height" constant="25" id="ymE-tI-bjO"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="  MOVE" image="Move_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqQ-LU-buM">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eqQ-LU-buM">
                             <rect key="frame" x="1" y="255" width="48" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="25" id="1fg-BH-v6v"/>
-                                <constraint firstAttribute="width" constant="48" id="6vP-xF-rpY"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" image="Redo_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58E-D6-XBN">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="58E-D6-XBN">
                             <rect key="frame" x="60" y="255" width="48" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="48" id="YyC-Mm-3vN"/>
-                                <constraint firstAttribute="height" constant="25" id="sJZ-2t-kWO"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" image="Undo_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vf5-0G-U3P">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vf5-0G-U3P">
                             <rect key="frame" x="1" y="201" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="107" id="eCA-9i-b1B"/>
-                                <constraint firstAttribute="height" constant="25" id="rT2-VY-epz"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="  ROTATE" image="Rotate_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUY-rU-QIk">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iUY-rU-QIk">
                             <rect key="frame" x="1" y="227" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="25" id="Uuz-h7-Y1F"/>
-                                <constraint firstAttribute="width" constant="107" id="pfR-Go-EoN"/>
-                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="  SCALE" image="Scale_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qOP-cU-h2X">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qOP-cU-h2X">
                             <rect key="frame" x="1" y="7" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="25" id="1th-NB-pJc"/>
-                                <constraint firstAttribute="width" constant="107" id="iwN-J2-4yd"/>
-                            </constraints>
                             <state key="normal" image="Play_IPhone.png"/>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58f-dD-DRm">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="58f-dD-DRm">
                             <rect key="frame" x="0.0" y="91" width="107" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="ANIMATION" image="Animation_IPhone.png">
@@ -187,46 +154,31 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.1529411765" green="0.1529411765" blue="0.16078431369999999" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstItem="vf5-0G-U3P" firstAttribute="top" secondItem="6eX-px-hba" secondAttribute="bottom" constant="1" id="0lX-bn-m5Y"/>
-                        <constraint firstAttribute="trailing" secondItem="6eX-px-hba" secondAttribute="trailing" constant="2" id="5Yc-0P-Tv9"/>
-                        <constraint firstAttribute="bottom" secondItem="eqQ-LU-buM" secondAttribute="bottom" id="FQK-jZ-FG7"/>
-                        <constraint firstItem="iUY-rU-QIk" firstAttribute="top" secondItem="vf5-0G-U3P" secondAttribute="bottom" constant="1" id="HAS-VZ-HLc"/>
-                        <constraint firstAttribute="trailing" secondItem="iUY-rU-QIk" secondAttribute="trailing" constant="2" id="MrI-Gh-Th6"/>
-                        <constraint firstItem="hOI-Vg-cWf" firstAttribute="top" secondItem="qOP-cU-h2X" secondAttribute="bottom" constant="3" id="btv-Gb-Dqd"/>
-                        <constraint firstItem="iUY-rU-QIk" firstAttribute="top" secondItem="vf5-0G-U3P" secondAttribute="bottom" constant="1" id="hGH-uW-7lN"/>
-                        <constraint firstAttribute="trailing" secondItem="vf5-0G-U3P" secondAttribute="trailing" constant="2" id="i9g-Sj-TuY"/>
-                        <constraint firstItem="qOP-cU-h2X" firstAttribute="top" secondItem="85u-8e-wxJ" secondAttribute="top" constant="7" id="iF4-WI-TZl"/>
-                        <constraint firstItem="eqQ-LU-buM" firstAttribute="leading" secondItem="85u-8e-wxJ" secondAttribute="leading" constant="1" id="jNH-eb-Luk"/>
-                        <constraint firstAttribute="trailing" secondItem="58E-D6-XBN" secondAttribute="trailing" constant="2" id="lh0-4o-Lnb"/>
-                        <constraint firstItem="vf5-0G-U3P" firstAttribute="top" secondItem="6eX-px-hba" secondAttribute="bottom" constant="1" id="paI-eU-5xo"/>
-                        <constraint firstAttribute="trailing" secondItem="qOP-cU-h2X" secondAttribute="trailing" constant="2" id="qHk-gY-ycx"/>
-                        <constraint firstAttribute="bottom" secondItem="58E-D6-XBN" secondAttribute="bottom" id="zHz-AZ-iZJ"/>
-                    </constraints>
                 </view>
-                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cjt-no-Q40" userLabel="topView">
+                <view contentMode="scaleToFill" id="Cjt-no-Q40" userLabel="topView">
                     <rect key="frame" x="0.0" y="-3" width="568" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnS-gW-EaC">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jnS-gW-EaC">
                             <rect key="frame" x="535" y="22" width="18" height="18"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="18" id="BAO-Ny-vWa"/>
-                                <constraint firstAttribute="height" constant="18" id="ycB-mx-kkJ"/>
-                            </constraints>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="Info_IPhone.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="JNr-I9-ifr"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mqD-VX-gWA">
+                        <view contentMode="scaleToFill" id="mqD-VX-gWA">
                             <rect key="frame" x="-1" y="11" width="80" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Back_IPhone.png" translatesAutoresizingMaskIntoConstraints="NO" id="T2h-ug-OEW">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Back_IPhone.png" id="T2h-ug-OEW">
                                     <rect key="frame" x="8" y="10" width="11" height="19"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Scenes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iTY-Ih-jjQ">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scenes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iTY-Ih-jjQ">
                                     <rect key="frame" x="26" y="10" width="65" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="13"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -234,66 +186,52 @@
                             </subviews>
                             <color key="backgroundColor" red="0.61568627450000002" green="0.12549019610000001" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A5V-XI-dmt">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
                             <rect key="frame" x="501" y="22" width="18" height="18"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="18" id="CVU-Qi-PA1"/>
-                                <constraint firstAttribute="width" constant="18" id="cO4-Re-Wwx"/>
-                            </constraints>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Button" backgroundImage="View_IPhone.png"/>
                             <connections>
                                 <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="6Gl-Tv-Qd8"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Diu-e1-yeL">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Diu-e1-yeL">
                             <rect key="frame" x="467" y="22" width="18" height="18"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="18" id="GPc-eZ-TcX"/>
-                                <constraint firstAttribute="width" constant="18" id="vkL-5E-Plt"/>
-                            </constraints>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Button" backgroundImage="Login-IPhone.png"/>
                             <connections>
                                 <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="iPf-ly-6Zb"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="037-BU-8q5">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="037-BU-8q5">
                             <rect key="frame" x="417" y="19" width="20" height="27"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="27" id="6k7-Q8-YWz"/>
-                                <constraint firstAttribute="width" constant="20" id="efb-Ud-Cu3"/>
-                            </constraints>
                             <state key="normal" image="Next-frame_IPhone.png"/>
                             <connections>
                                 <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="XTe-RW-oz4"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5e-Hu-oAW">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="w5e-Hu-oAW">
                             <rect key="frame" x="437" y="19" width="20" height="27"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="20" id="Grg-Vj-Ocx"/>
-                                <constraint firstAttribute="height" constant="27" id="M6j-Fz-dbn"/>
-                            </constraints>
                             <state key="normal" image="Add-Frames_IPhone.png"/>
                             <connections>
                                 <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="DwN-7s-xcx"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tmF-dh-ZfO">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tmF-dh-ZfO">
                             <rect key="frame" x="82" y="19" width="20" height="27"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="27" id="4OC-UM-bcr"/>
-                                <constraint firstAttribute="width" constant="20" id="OHe-F2-2aY"/>
-                            </constraints>
                             <state key="normal" image="Previous-frame_IPhone.png"/>
                             <connections>
                                 <action selector="firstFrameBtnAction:" destination="-1" eventType="touchUpInside" id="5xP-I4-4aV"/>
                             </connections>
                         </button>
-                        <collectionView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Sij-qL-4rT">
+                        <collectionView clipsSubviews="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="Sij-qL-4rT">
                             <rect key="frame" x="102" y="19" width="315" height="27"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.4156863093" alpha="1" colorSpace="deviceRGB"/>
                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="uvS-2u-9PT">
                                 <size key="itemSize" width="20" height="27"/>
@@ -310,35 +248,9 @@
                     </subviews>
                     <color key="backgroundColor" red="0.61568627450000002" green="0.12549019610000001" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstItem="w5e-Hu-oAW" firstAttribute="leading" secondItem="037-BU-8q5" secondAttribute="trailing" id="94T-XK-hgE"/>
-                        <constraint firstItem="A5V-XI-dmt" firstAttribute="leading" secondItem="Diu-e1-yeL" secondAttribute="trailing" constant="16" id="BSs-5C-Ktq"/>
-                        <constraint firstItem="jnS-gW-EaC" firstAttribute="leading" secondItem="A5V-XI-dmt" secondAttribute="trailing" constant="16" id="UWR-hT-4Fc"/>
-                        <constraint firstItem="Sij-qL-4rT" firstAttribute="leading" secondItem="tmF-dh-ZfO" secondAttribute="trailing" id="aEy-Ie-MzM"/>
-                        <constraint firstItem="Sij-qL-4rT" firstAttribute="centerX" secondItem="Cjt-no-Q40" secondAttribute="centerX" constant="-24.5" id="nrL-Cb-u99"/>
-                        <constraint firstItem="Diu-e1-yeL" firstAttribute="leading" secondItem="w5e-Hu-oAW" secondAttribute="trailing" constant="10" id="pWA-ng-mMG"/>
-                        <constraint firstItem="Sij-qL-4rT" firstAttribute="centerY" secondItem="Cjt-no-Q40" secondAttribute="centerY" constant="8.5" id="sI9-gW-9a7"/>
-                        <constraint firstItem="037-BU-8q5" firstAttribute="leading" secondItem="Sij-qL-4rT" secondAttribute="trailing" id="spE-V9-nU3"/>
-                        <constraint firstAttribute="trailing" secondItem="jnS-gW-EaC" secondAttribute="trailing" constant="15" id="v6o-8F-Z6q"/>
-                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="r4X-gk-zDO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="5cP-MO-JaA"/>
-                <constraint firstAttribute="trailing" secondItem="r4X-gk-zDO" secondAttribute="trailing" id="60D-nO-jmj"/>
-                <constraint firstItem="85u-8e-wxJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="42" id="7VS-8g-VWr"/>
-                <constraint firstItem="L0B-6d-c1X" firstAttribute="top" secondItem="Cjt-no-Q40" secondAttribute="bottom" constant="1" id="HNB-mP-gWu"/>
-                <constraint firstItem="Cjt-no-Q40" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Jgf-P4-fLQ"/>
-                <constraint firstAttribute="trailing" secondItem="85u-8e-wxJ" secondAttribute="trailing" constant="-1" id="SZy-If-xmT"/>
-                <constraint firstAttribute="bottom" secondItem="85u-8e-wxJ" secondAttribute="bottom" constant="-2" id="bWx-cu-0RO"/>
-                <constraint firstItem="L0B-6d-c1X" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-2" id="l9i-6Z-DbS"/>
-                <constraint firstItem="Cjt-no-Q40" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="-3" id="otd-mY-wIL"/>
-                <constraint firstAttribute="bottom" secondItem="r4X-gk-zDO" secondAttribute="bottom" id="sBc-SK-yKK"/>
-                <constraint firstAttribute="trailing" secondItem="Cjt-no-Q40" secondAttribute="trailing" id="yBN-09-n8J"/>
-                <constraint firstItem="r4X-gk-zDO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yTz-lb-ts0"/>
-                <constraint firstAttribute="bottom" secondItem="L0B-6d-c1X" secondAttribute="bottom" constant="-4" id="ymQ-6B-Tya"/>
-            </constraints>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="562" y="293"/>

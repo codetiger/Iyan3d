@@ -95,10 +95,10 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sh0-H4-wQX">
-                    <rect key="frame" x="0.0" y="423" width="542" height="195"/>
+                    <rect key="frame" x="0.0" y="390" width="542" height="215"/>
                     <subviews>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jQJ-fQ-zxb">
-                            <rect key="frame" x="8" y="37" width="520" height="29"/>
+                            <rect key="frame" x="8" y="45" width="520" height="29"/>
                             <segments>
                                 <segment title="RIGHT BOTTOM"/>
                                 <segment title="RIGHT TOP"/>
@@ -111,43 +111,43 @@
                             </connections>
                         </segmentedControl>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="RENDER PREVIEW POSITION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qVf-SD-8Ri">
-                            <rect key="frame" x="159" y="-4" width="224" height="21"/>
+                            <rect key="frame" x="159" y="16" width="224" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="pRf-UT-BZD">
-                            <rect key="frame" x="28" y="81" width="90" height="63"/>
+                            <rect key="frame" x="28" y="99" width="90" height="63"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="VG2-oy-h6N">
-                            <rect key="frame" x="159" y="81" width="90" height="63"/>
+                            <rect key="frame" x="159" y="99" width="90" height="63"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Left-Bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="5bg-aT-8wg">
-                            <rect key="frame" x="290" y="81" width="90" height="63"/>
+                            <rect key="frame" x="290" y="99" width="90" height="63"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Left-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="jZB-4p-lN6">
-                            <rect key="frame" x="420" y="81" width="90" height="63"/>
+                            <rect key="frame" x="420" y="99" width="90" height="63"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4D0-Vv-p6d">
-                    <rect key="frame" x="0.0" y="228" width="542" height="195"/>
+                    <rect key="frame" x="0.0" y="219" width="542" height="172"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="FRAME COUNT DISPLAY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ON9-M2-3L7">
-                            <rect key="frame" x="175" y="6" width="192" height="21"/>
+                            <rect key="frame" x="175" y="7" width="192" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Frame-Count-Display_Frames.png" translatesAutoresizingMaskIntoConstraints="NO" id="4AM-Oh-6u7">
-                            <rect key="frame" x="14" y="97" width="246" height="40"/>
+                            <rect key="frame" x="14" y="101" width="246" height="40"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Frame-Count-Display_Duration.png" translatesAutoresizingMaskIntoConstraints="NO" id="pi2-nh-JrL">
-                            <rect key="frame" x="284" y="97" width="246" height="40"/>
+                            <rect key="frame" x="284" y="101" width="246" height="40"/>
                         </imageView>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="14a-cr-DF6">
-                            <rect key="frame" x="8" y="46" width="520" height="29"/>
+                            <rect key="frame" x="8" y="37" width="520" height="29"/>
                             <segments>
                                 <segment title="FRAMES"/>
                                 <segment title="DURATION"/>
@@ -164,7 +164,7 @@
                     <rect key="frame" x="0.0" y="575" width="542" height="43"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5SN-55-ANr">
-                            <rect key="frame" x="454" y="5" width="80" height="30"/>
+                            <rect key="frame" x="439" y="5" width="80" height="30"/>
                             <color key="backgroundColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Done">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -181,7 +181,7 @@
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="319" y="295"/>
+            <point key="canvasLocation" x="319" y="294.5"/>
         </view>
     </objects>
     <resources>

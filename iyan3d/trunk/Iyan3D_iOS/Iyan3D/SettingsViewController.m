@@ -7,7 +7,7 @@
 //
 
 #import "SettingsViewController.h"
-
+#import "Utility.h"
 @interface SettingsViewController ()
 
 @end
@@ -17,6 +17,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupImageTap];
+    if(![Utility IsPadDevice]){
+        [self.scrolView addSubview:_masterView];//if the contentView is not already inside your scrollview in your xib/StoryBoard doc
+        self.scrolView.contentSize = _masterView.frame.size; //sets ScrollView content size
+    }
     self.doneBtn.layer.cornerRadius=8.0f;
 }
 

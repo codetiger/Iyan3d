@@ -1190,7 +1190,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         else{
             [self.popoverController dismissPopoverAnimated:YES];
             assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil];
-            assetSelectionSlider.view.frame = CGRectMake(0, 0, self.leftView.frame.size.width, self.view.frame.size.height);
             assetSelectionSlider.assetSelectionDelegate = self;
             [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
         }
@@ -1237,8 +1236,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         else
         {
             [self.popoverController dismissPopoverAnimated:YES];
-            textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
+            textSelectionSlider = [[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanelPhone" bundle:Nil];
             textSelectionSlider.textSelectionDelegate = self;
+            textSelectionSlider.view.frame = self.leftView.frame;
             [self showOrHideLeftView:YES withView:textSelectionSlider.view];
         }
     }
@@ -1247,7 +1247,18 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self importAdditionalLight];
     }
     else if(indexValue==IMPORT_OBJFILE){
-        NSLog(@"OBJ Button");
+        if([Utility IsPadDevice]){
+            [self.popoverController dismissPopoverAnimated:YES];
+            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil];
+            objVc.delegate=self;
+            [self showOrHideLeftView:YES withView:objVc.view];
+        }
+        else{
+            [self.popoverController dismissPopoverAnimated:YES];
+            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil];
+            objVc.delegate=self;
+            [self showOrHideLeftView:YES withView:objVc.view];
+        }
     }
     else if(indexValue==5){
         NSLog(@"ADD BONE Button");
@@ -1275,8 +1286,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [self presentViewControllerInCurrentView:renderingView];
             });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
-            renderingView.view.layer.borderWidth = 2.0f;
-            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
         
         }
         else
@@ -1298,8 +1307,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 [self presentViewControllerInCurrentView:renderingView];
             });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
-            renderingView.view.layer.borderWidth = 2.0f;
-            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
         }
     
     }
@@ -1326,9 +1333,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         if ([Utility IsPadDevice]) {
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
-            renderingView.view.layer.borderWidth = 2.0f;
-            renderingView.view.layer.borderColor = [UIColor grayColor].CGColor;
-            
             NSLog(@"Videos Clicked");
         }
     }
@@ -1409,12 +1413,22 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 - (void) infoBtnDelegateAction:(int)indexValue{
     if(indexValue==3){
-        [self.popoverController dismissPopoverAnimated:YES];
-        settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController"bundle:nil];
-        [settingsVc.view setClipsToBounds:YES];
-        settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [self presentViewController:settingsVc animated:YES completion:nil];
-        settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+        if([Utility IsPadDevice]){
+            [self.popoverController dismissPopoverAnimated:YES];
+            settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController"bundle:nil];
+            [settingsVc.view setClipsToBounds:YES];
+            settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self presentViewController:settingsVc animated:YES completion:nil];
+            settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+        }
+        else{
+            [self.popoverController dismissPopoverAnimated:YES];
+            settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone"bundle:nil];
+            [settingsVc.view setClipsToBounds:YES];
+            settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self presentViewController:settingsVc animated:YES completion:nil];
+            settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+        }
     }
 
 }

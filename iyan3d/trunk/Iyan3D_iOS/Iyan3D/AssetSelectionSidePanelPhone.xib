@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -19,11 +19,13 @@
             <rect key="frame" x="0.0" y="0.0" width="212" height="278"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzA-T5-EJs">
+                <view contentMode="scaleToFill" id="UzA-T5-EJs">
                     <rect key="frame" x="0.0" y="0.0" width="212" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIe-QS-dnk">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bIe-QS-dnk">
                             <rect key="frame" x="133" y="0.0" width="95" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="All Models"/>
                             <connections>
@@ -32,14 +34,10 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="trailing" secondItem="bIe-QS-dnk" secondAttribute="trailing" id="4qO-CV-Dn3"/>
-                        <constraint firstItem="bIe-QS-dnk" firstAttribute="leading" secondItem="UzA-T5-EJs" secondAttribute="leading" constant="117" id="YoH-uC-Jjh"/>
-                        <constraint firstItem="bIe-QS-dnk" firstAttribute="top" secondItem="UzA-T5-EJs" secondAttribute="top" id="c5K-we-vzs"/>
-                    </constraints>
                 </view>
-                <collectionView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="5py-vs-tUs">
+                <collectionView clipsSubviews="YES" contentMode="scaleToFill" dataMode="none" id="5py-vs-tUs">
                     <rect key="frame" x="0.0" y="18" width="212" height="222"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="wPL-Y6-ZlP">
                         <size key="itemSize" width="50" height="70"/>
@@ -52,11 +50,13 @@
                         <outlet property="delegate" destination="-1" id="EDk-PQ-5xe"/>
                     </connections>
                 </collectionView>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h2T-Eh-N8T">
+                <view contentMode="scaleToFill" id="h2T-Eh-N8T">
                     <rect key="frame" x="-1" y="239" width="213" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gEY-l0-gwb">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gEY-l0-gwb">
                             <rect key="frame" x="8" y="7" width="80" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.15686274510000001" green="0.16078431369999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="CANCEL">
@@ -66,8 +66,9 @@
                                 <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="arW-QQ-Kvl"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gcn-GM-XYN">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gcn-GM-XYN">
                             <rect key="frame" x="125" y="7" width="80" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="ADD TO SCENE">
@@ -82,18 +83,6 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="UzA-T5-EJs" firstAttribute="leading" secondItem="5py-vs-tUs" secondAttribute="leading" id="2z9-lc-UhP"/>
-                <constraint firstItem="UzA-T5-EJs" firstAttribute="centerX" secondItem="h2T-Eh-N8T" secondAttribute="centerX" id="5uQ-1m-v9a"/>
-                <constraint firstAttribute="bottom" secondItem="h2T-Eh-N8T" secondAttribute="bottom" id="JST-dX-Goi"/>
-                <constraint firstAttribute="bottom" secondItem="UzA-T5-EJs" secondAttribute="bottom" constant="258" id="Rsj-1a-qnH"/>
-                <constraint firstItem="h2T-Eh-N8T" firstAttribute="top" secondItem="8HG-bM-qkJ" secondAttribute="top" constant="239" id="V0d-o0-GbE"/>
-                <constraint firstItem="UzA-T5-EJs" firstAttribute="trailing" secondItem="5py-vs-tUs" secondAttribute="trailing" id="guR-dc-Z6u"/>
-                <constraint firstItem="UzA-T5-EJs" firstAttribute="leading" secondItem="8HG-bM-qkJ" secondAttribute="leading" id="jKs-0v-4Nr"/>
-                <constraint firstItem="UzA-T5-EJs" firstAttribute="top" secondItem="8HG-bM-qkJ" secondAttribute="top" id="sbi-Br-jHC"/>
-                <constraint firstAttribute="trailing" secondItem="UzA-T5-EJs" secondAttribute="trailing" id="vba-yY-WC7"/>
-                <constraint firstItem="UzA-T5-EJs" firstAttribute="trailing" secondItem="h2T-Eh-N8T" secondAttribute="trailing" id="yiQ-Ve-gYd"/>
-            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="458" y="489"/>
