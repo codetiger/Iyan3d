@@ -38,7 +38,7 @@ void SGMovementManager::touchBegan(Vector2 curTouchPos)
 
 void SGMovementManager::swipeProgress(float angleX , float angleY)
 {
-    if(!moveScene || !smgr || moveScene->moveNodeId != NOT_EXISTS || moveScene->moveJointId != NOT_EXISTS)
+    if(!moveScene || !smgr || moveScene->moveNodeId != NOT_EXISTS)
         return;
     if(moveScene->isControlSelected || swipeTiming < 5) {
         swipeTiming++;
@@ -110,7 +110,6 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     moveScene->setLightingOn();
     swipeTiming = 0;
     moveScene->moveNodeId = NOT_EXISTS;
-    moveScene->moveJointId = NOT_EXISTS;
     
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
@@ -235,9 +234,7 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
         return false;
     
     Vector3 center;
-    if(moveScene->moveJointId != NOT_EXISTS)
-        center = moveScene->selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
-    else if(moveScene->moveNodeId != NOT_EXISTS)
+    if(moveScene->moveNodeId != NOT_EXISTS)
         center = moveScene->selectedNode->node->getAbsoluteTransformation().getTranslation();
     else
         return false;
@@ -282,10 +279,7 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
     if(moveScene->moveNodeId != NOT_EXISTS && moveScene->selectedNodeId != NOT_EXISTS)
         selectedNode = moveScene->nodes[moveScene->selectedNodeId];
     
-    if(moveScene->moveJointId != NOT_EXISTS) {
-        moveScene->actionMan->moveJoint(newPos, true);
-    }
-    else if(moveScene->moveNodeId != NOT_EXISTS) {
+    if(moveScene->moveNodeId != NOT_EXISTS) {
         selectedNode->setPosition(newPos , moveScene->currentFrame);
         selectedNode->setPositionOnNode(newPos);
     }

@@ -330,6 +330,10 @@ void RenderHelper::drawCameraPreview()
     if(!renderingScene || !smgr || renderingScene->selectedNodeIds.size() > 0)
         return;
     
+    bool isLightOn = ShaderManager::sceneLighting;
+    if(!isLightOn)
+        renderingScene->setLightingOn();
+    
     setRenderCameraOrientation();
     renderingScene->rotationCircle->node->setVisible(false);
     smgr->setRenderTarget(renderingScene->previewTexture,true,true,false,Vector4(0.1,0.1,0.1,1.0));
@@ -360,6 +364,9 @@ void RenderHelper::drawCameraPreview()
         
         if(!(renderingScene->nodes[i]->props.isVisible))
             renderingScene->nodes[i]->node->setVisible(true);
+        
+        if(!isLightOn)
+            renderingScene->setLightingOff();
     }
     
 }
@@ -555,6 +562,10 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     if(!renderingScene->checkNodeSize())
         return;
     isExporting1stTime = false;
+    
+    bool isLightOn = ShaderManager::sceneLighting;
+    if(!isLightOn)
+        renderingScene->setLightingOn();
     
     if(smgr->device == OPENGLES2)
         rttShadowMap();

@@ -585,6 +585,7 @@ BOOL missingAlertShown;
             [renderViewMan addCameraLight];
         }
     }
+    cameraResoultionType = editorScene->cameraResolutionType;
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
 }
 
@@ -2334,16 +2335,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
 }
 
-- (void) exportBtnDelegateAction:(int)indexValue{
-    if(indexValue==EXPORT_IMAGE){
+- (void) exportBtnDelegateAction:(int)indexValue {
+    if(indexValue==EXPORT_IMAGE) {
         renderBgColor = Vector4(0.1,0.1,0.1,1.0);
-        if([Utility IsPadDevice])
-        {
+        if([Utility IsPadDevice]) {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType];
             renderingView.delegate = self;
-            renderingView.projectName=@"Scene 1";  //FOR TESTING
+            renderingView.projectName = currentScene.name;
             renderingView.sgbPath = [self getSGBPath];
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             [self showOrHideRightView:YES];
@@ -2352,15 +2352,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             });
             renderingView.view.superview.backgroundColor = [UIColor clearColor];
             
-        }
-        else
-        {
+        } else {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType];
             renderingView.delegate = self;
-             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-            renderingView.projectName=@"Scene 1";  //FOR TESTING
+            BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+            renderingView.projectName = currentScene.name;
             renderingView.sgbPath = [self getSGBPath];
             renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
             CATransition* transition1 = [CATransition animation];
@@ -2382,11 +2380,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.popoverController dismissPopoverAnimated:YES];
         RenderingViewController* renderingView;
         if ([Utility IsPadDevice])
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
         else
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:0];  //FOR TESTING
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType];
         renderingView.delegate = self;
-        renderingView.projectName=@"Scene 1";  //FOR TESTING
+        renderingView.projectName = currentScene.name;
         renderingView.modalPresentationStyle = UIModalPresentationFormSheet;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         CATransition* transition1 = [CATransition animation];
@@ -3370,6 +3368,12 @@ void boneLimitsCallBack(){
 - (void) changeRenderingBgColor:(Vector3)vertexColor
 {
     renderBgColor = Vector4(vertexColor,1.0);
+}
+
+- (void)cameraResolutionChanged:(int)changedResolutionType
+{
+    cameraResoultionType = changedResolutionType;
+    [self cameraPropertyChanged:editorScene->cameraFOV Resolution:cameraResoultionType];
 }
 
 - (void)dealloc

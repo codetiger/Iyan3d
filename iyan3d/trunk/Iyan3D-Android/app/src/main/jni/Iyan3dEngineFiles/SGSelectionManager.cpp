@@ -189,10 +189,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
         if(!touchMove)
             highlightSelectedNode();
         if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN){
-            if(touchMove)
-                selectionScene->moveJointId = (jointId != 255) ? jointId : NOT_EXISTS;
-            else {
-                selectionScene->moveJointId = NOT_EXISTS;
+            if(!touchMove) {
                 selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId != 255) ? jointId : NOT_EXISTS) != NOT_EXISTS ? true:false;
             }
             if(selectionScene->isJointSelected && !touchMove) {
@@ -205,7 +202,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
         if(selectionScene->isJointSelected)
             highlightJointSpheres();
         return true;
-    } else if(selectionScene->moveJointId != NOT_EXISTS || selectionScene->moveNodeId != NOT_EXISTS)
+    } else if(selectionScene->moveNodeId != NOT_EXISTS)
         return true;
     else
         return false;
@@ -348,7 +345,7 @@ void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent, bool resetK
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent(shared_ptr<Node>());
         if(resetKeys) {
             selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setPosition(positions[i], selectionScene->currentFrame);
-            if(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->getType() != NODE_LIGHT) {
+            if(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->getType() != NODE_LIGHT && selectionScene->nodes[selectionScene->selectedNodeIds[i]]->getType() != NODE_ADDITIONAL_LIGHT) {
                 selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setRotation(rotations[i], selectionScene->currentFrame);
                 selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setScale(scales[i], selectionScene->currentFrame);
             }

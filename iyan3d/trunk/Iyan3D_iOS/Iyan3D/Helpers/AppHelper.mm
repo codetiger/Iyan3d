@@ -739,8 +739,9 @@
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
 
         }
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil];
+        
+        if(([receiptDataStr isEqualToString:@""] && status > 0) || receiptDataStr.length > 5)
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil];
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
