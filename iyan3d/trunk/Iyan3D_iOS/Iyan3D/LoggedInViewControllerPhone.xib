@@ -80,7 +80,7 @@
                     <rect key="frame" x="97" y="7" width="125" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <state key="normal" title="Add 500 Credits"/>
+                    <state key="normal" title="Add 5000 Credits"/>
                     <connections>
                         <action selector="add500Credits:" destination="-1" eventType="touchUpInside" id="8yB-bV-kB3"/>
                     </connections>
@@ -89,7 +89,7 @@
                     <rect key="frame" x="105" y="47" width="115" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <state key="normal" title="Add 5000 Credits"/>
+                    <state key="normal" title="Add 50000 Credits"/>
                     <connections>
                         <action selector="add5KCredits:" destination="-1" eventType="touchUpInside" id="oqK-8E-jdZ"/>
                     </connections>
@@ -98,7 +98,7 @@
                     <rect key="frame" x="105" y="27" width="109" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <state key="normal" title="Add 2000 Credits"/>
+                    <state key="normal" title="Add 20000 Credits"/>
                     <connections>
                         <action selector="add2KCredits:" destination="-1" eventType="touchUpInside" id="wBg-Az-WBv"/>
                     </connections>

@@ -84,7 +84,7 @@
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NT-QT-Yg3">
                     <rect key="frame" x="164" y="14" width="140" height="30"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <state key="normal" title="Add 500 Credits"/>
+                    <state key="normal" title="Add 5000 Credits"/>
                     <connections>
                         <action selector="add500Credits:" destination="-1" eventType="touchUpInside" id="jhC-Vv-eTc"/>
                     </connections>
@@ -92,7 +92,7 @@
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5W-c5-7em">
                     <rect key="frame" x="164" y="108" width="141" height="34"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <state key="normal" title="Add 5000 Credits"/>
+                    <state key="normal" title="Add 50000 Credits"/>
                     <connections>
                         <action selector="add5KCredits:" destination="-1" eventType="touchUpInside" id="eEP-xP-rzv"/>
                     </connections>
@@ -100,7 +100,7 @@
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FG0-MY-6tR">
                     <rect key="frame" x="165" y="60" width="140" height="34"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <state key="normal" title="Add 2000 Credits"/>
+                    <state key="normal" title="Add 20000 Credits"/>
                     <connections>
                         <action selector="add2KCredits:" destination="-1" eventType="touchUpInside" id="xdb-mu-YXE"/>
                     </connections>

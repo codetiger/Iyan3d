@@ -15,9 +15,9 @@
 #import "AFHTTPClient.h"
 
 
-#define FIVE_HUNDERED_CREDITS @"fivehundredcredits"
-#define TWO_THOUSAND_CREDITS @"twothousandcredits"
-#define FIVE_THOUSAND_CREDITS @"fivethousandcredits"
+#define FIVE_THOUSAND_CREDITS @"basicrecharge"
+#define TWENTY_THOUSAND_CREDITS @"mediumrecharge"
+#define FIFTY_THOUSAND_CREDITS @"megarecharge"
 
 @implementation AppHelper
 
@@ -594,15 +594,15 @@
             NSString *productId = transaction.payment.productIdentifier;
             NSLog(@"Purchased %@ ", transaction.payment.productIdentifier);
 
-            if ([productId isEqualToString:FIVE_HUNDERED_CREDITS]) {
+            if ([productId isEqualToString:FIVE_THOUSAND_CREDITS]) {
                 processTransaction = false;
                 [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:500]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            } else if ([productId isEqualToString:TWO_THOUSAND_CREDITS]) {
+            } else if ([productId isEqualToString:TWENTY_THOUSAND_CREDITS]) {
                 processTransaction = false;
                 [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:2000]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            } else if ([productId isEqualToString:FIVE_THOUSAND_CREDITS]) {
+            } else if ([productId isEqualToString:FIFTY_THOUSAND_CREDITS]) {
                 processTransaction = false;
                 [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:5000]];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];

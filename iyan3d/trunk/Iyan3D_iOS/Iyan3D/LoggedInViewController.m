@@ -23,9 +23,9 @@
 
 @implementation LoggedInViewController
 
-#define FIVE_HUNDERED_CREDITS @"500credits"
-#define TWO_THOUSAND_CREDITS @"2000credits"
-#define FIVE_THOUSAND_CREDITS @"5000credits"
+#define FIVE_THOUSAND_CREDITS @"basicrecharge"
+#define TWENTY_THOUSAND_CREDITS @"mediumrecharge"
+#define FIFTY_THOUSAND_CREDITS @"megarecharge"
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -173,21 +173,21 @@
 {
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
-    [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_HUNDERED_CREDITS];
+    [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_THOUSAND_CREDITS];
 }
 
 - (IBAction)add2KCredits:(id)sender
 {
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
-    [[AppHelper getAppHelper] callPaymentGateWayForProduct:TWO_THOUSAND_CREDITS];
+    [[AppHelper getAppHelper] callPaymentGateWayForProduct:TWENTY_THOUSAND_CREDITS];
 }
 
 - (IBAction)add5KCredits:(id)sender
 {
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
-    [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_THOUSAND_CREDITS];
+    [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIFTY_THOUSAND_CREDITS];
 }
 
 -(void)statusForOBJImport:(NSNumber*)status
