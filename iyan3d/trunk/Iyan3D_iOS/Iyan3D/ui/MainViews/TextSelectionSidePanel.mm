@@ -19,6 +19,8 @@
 #define ASSET_TEXT_RIG 10
 #define ASSET_TEXT 11
 
+#define DEFAULT_FONT_SIZE 16
+
 @interface TextSelectionSidePanel ()
 
 @end
@@ -333,7 +335,7 @@
     }
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;
-    [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT  AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:10 BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
+    [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT  AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:DEFAULT_FONT_SIZE BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:YES];
 }
 
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{

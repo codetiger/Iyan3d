@@ -501,6 +501,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 position = [sender locationInView:self.renderView];
                 _checkTapSelection = true;
                 _tapPosition = Vector2(position.x, position.y) * screenScale;
+                editorScene->setLightingOn();
                 editorScene->isRTTCompleted = true;
             }
             

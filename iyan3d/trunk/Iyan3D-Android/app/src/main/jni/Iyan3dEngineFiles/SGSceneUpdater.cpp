@@ -82,7 +82,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
 #ifndef UBUNTU
     updateControlsOrientaion(updatingScene);
     updateLightCamera();
-    if(lightChanged && !updatingScene->isPlaying)
+    if(lightChanged)
         updateLightProperties(frame);
 #endif
 }

@@ -62,7 +62,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             textureName = texturePath;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             props.oriVertexColor = props.vertexColor;
-            node = load3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
+            node = load3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;
             optionalFilePath = specificFilePath;
@@ -94,7 +94,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             // 'width' here is font size and 'height' is bevel value
             textureName = texturePath;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
-            node = loadSkin3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
+            node = loadSkin3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;
             optionalFilePath = specificFilePath;
@@ -110,13 +110,14 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_PARTICLES:{
             Json::Value pData = parseParticlesJson(assetId);
-            string meshPath = constants::BundlePath + "/" + pData["Mesh"].asString();
-            printf(" \n Mesh name %s ", meshPath.c_str());
+            string meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
+            string texPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".png";
+            printf(" \n Mesh name %s %s ", meshPath.c_str(), texPath.c_str());
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
             setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
-            Texture *nodeTex = smgr->loadTexture("Particle Texture",constants::BundlePath + "/particleTexture.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+            Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE);
             node->setTexture(nodeTex, 1);
             props.transparency = 0.7;
             break;
@@ -1066,7 +1067,7 @@ void SGNode::writeData(ofstream *filePointer)
     FileHelper::writeFloat(filePointer,props.shininess);
     
     std::wstring nodeSpecificString;
-    if(type == NODE_TEXT_SKIN) {
+    if(type == NODE_TEXT_SKIN || type == NODE_TEXT) {
         nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(props.fontSize) + L"$_@" + to_wstring(props.nodeSpecificFloat) + L"$_@";
     } else
         nodeSpecificString = name;

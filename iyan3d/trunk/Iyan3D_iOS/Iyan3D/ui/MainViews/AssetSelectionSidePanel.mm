@@ -285,9 +285,8 @@
             
             NSLog(@"File Name : %@", fileName);
             
-//TODO if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || ![[NSFileManager defaultManager] fileExistsAtPath:meshFileName] || ![[NSFileManager defaultManager] fileExistsAtPath:texFileName]) {
-
-           if (![[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || ![[NSFileManager defaultManager] fileExistsAtPath:meshFileName] || ![[NSFileManager defaultManager] fileExistsAtPath:texFileName]) {
+                
                 [self.assetSelectionDelegate showOrHideProgress:1];
                 [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadParticleMesh:) priority:NSOperationQueuePriorityHigh];
             }
