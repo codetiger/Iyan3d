@@ -14,7 +14,6 @@ SGSelectionManager::SGSelectionManager(SceneManager* sceneMngr, void* scene)
 {
     this->smgr = sceneMngr;
     selectionScene = (SGEditorScene*)scene;
-    sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
 }
 
 SGSelectionManager::~SGSelectionManager()
@@ -42,13 +41,16 @@ void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
     if(!selectionScene || !smgr || !selectionScene->isNodeSelected)
         return;
 
-    selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
-    if(selectionScene->shaderMGR->deviceType == METAL){
+    selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
+
+    if(selectionScene->selectedNodeIds.size() <= 0) {
         selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
-        getNodeColorFromTouchTexture(true);
+        if(selectionScene->shaderMGR->deviceType == METAL){
+            selectionScene->renHelper->rttNodeJointSelection(curTouchPos, true);
+            getNodeColorFromTouchTexture(true);
+        }
     }
     
-    selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
     selectionScene->updater->updateControlsOrientaion();
     
     selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
@@ -138,8 +140,9 @@ bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel, bool touch
     SceneHelper::limitPixelCoordsWithinTextureRange(selectionScene->touchTexture->width,selectionScene->touchTexture->height,xCoord,yCoord);
     Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),selectionScene->touchTexture);
     bool status = updateNodeSelectionFromColor(pixel, touchMove);
-    if(status)
+    if(status) {
         selectionScene->updater->reloadKeyFrameMap();
+    }
     return status;
 }
 
@@ -149,11 +152,12 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchM
         return false;
     
     int nodeId = (int) pixel.x,jointId = pixel.y;
+    
     if(nodeId != 255 && nodeId >= selectionScene->nodes.size()){
         Logger::log(ERROR, "SganimationSceneRTT","Wrong Color from RTT texture colorx:" + to_string(nodeId));
         return false;
-    } else if (nodeId == 255 && !touchMove) {
-        if(selectionScene->isMultipleSelection) {
+    } else if (nodeId == 255 && jointId == 255 && !touchMove) {
+        if(selectionScene->selectedNodeIds.size() > 0) {
             unselectObjects();
         } else {
             int prevSelectedNodeId = selectionScene->selectedNodeId;
@@ -165,13 +169,12 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel, bool touchM
         selectionScene->moveNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS;
     else {
         selectionScene->moveNodeId = NOT_EXISTS;
-        if(selectionScene->isNodeSelected && jointId == 255 && !selectionScene->isJointSelected)
+        if(selectionScene->isNodeSelected && jointId == 255 && !selectionScene->isJointSelected && nodeId != selectionScene->selectedNodeId)
             multipleSelections(nodeId);
         else
             selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
     }
-    
-    if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && !selectionScene->isMultipleSelection) {
+    if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && selectionScene->selectedNodeIds.size() <= 0) {
         if(!touchMove)
             highlightSelectedNode();
         if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT){
@@ -204,29 +207,48 @@ void SGSelectionManager::multipleSelections(int nodeId)
         if(std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), selectionScene->selectedNodeId) == selectionScene->selectedNodeIds.end())
             selectionScene->selectedNodeIds.push_back(selectionScene->selectedNodeId);
         selectionScene->selectedNodeIds.push_back(nodeId);
+        sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
         parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
-        parentNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         parentNode->setVisible(false);
-        addSelectedChildren();
-        parentNode->updateBoundingBox();
-        removeChildren();
-        //parentNode->setPosition(parentNode->getBoundingBox().getCenter());
-        addSelectedChildren();
+        parentNode->setID(PIVOT_ID);
+        parentNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        updateParentPosition();
         highlightSelectedNode(nodeId);
+        selectionScene->renHelper->setJointSpheresVisibility(false);
+        if(selectionScene->controlType == SCALE && !selectionScene->allObjectsScalable()) {
+            selectionScene->controlType = MOVE;
+            selectionScene->updater->updateControlsOrientaion();
+        }
     }
+}
+
+void SGSelectionManager::updateParentPosition()
+{
+    storeGlobalPositions();
+    addSelectedChildren(getParentNode());
+    parentNode->updateBoundingBox();
+    Vector3 pivot = selectionScene->getPivotPoint(true);
+    printf("\n pivot %f %f %f ", pivot.x, pivot.y, pivot.z);
+    parentNode->setPosition(pivot);
+    parentNode->updateAbsoluteTransformation();
+    storeRelativePositions();
+    parentNode->updateBoundingBox();
 }
 
 void SGSelectionManager::unselectObjects()
 {
-    if(!selectionScene->isMultipleSelection)
+    if(selectionScene->selectedNodeIds.size() <= 0)
         return;
     
     for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++)
         unselectObject(selectionScene->selectedNodeIds[i]);
-    removeChildren();
+    removeChildren(getParentNode());
+    smgr->RemoveNode(parentNode);
     parentNode.reset();
     selectionScene->isMultipleSelection = false;
     selectionScene->selectedNodeIds.clear();
+    globalPositions.clear();
+    relPositions.clear();
 }
 
 shared_ptr<Node> SGSelectionManager::getParentNode()
@@ -234,13 +256,33 @@ shared_ptr<Node> SGSelectionManager::getParentNode()
     return parentNode;
 }
 
-void SGSelectionManager::addSelectedChildren()
+void SGSelectionManager::storeGlobalPositions()
 {
+    globalPositions.clear();
     for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++)
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent(parentNode);
+    {
+        globalPositions.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsolutePosition());
+    }
 }
 
-void SGSelectionManager::removeChildren()
+void SGSelectionManager::storeRelativePositions()
+{
+    relPositions.clear();
+    for (int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
+        Mat4 parentGlobalMat = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getParent()->getAbsoluteTransformation();
+        Vector3 relativePos = MathHelper::getRelativePosition(parentGlobalMat, globalPositions[i]);
+        relPositions.push_back(relativePos);
+        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setPosition(relativePos);
+    }
+}
+
+void SGSelectionManager::addSelectedChildren(shared_ptr<Node> toParent)
+{
+    for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++)
+        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent((toParent) ? toParent : parentNode);
+}
+
+void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent)
 {
     vector<Vector3> positions;
     vector<Quaternion> rotations;
@@ -251,7 +293,11 @@ void SGSelectionManager::removeChildren()
         scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
     }
 
-    parentNode->detachAllChildren();
+    if(fromParent)
+        fromParent->detachAllChildren();
+    else
+        parentNode->detachAllChildren();
+    
     for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent(shared_ptr<Node>());
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setPosition(positions[i], selectionScene->currentFrame);
@@ -283,10 +329,12 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     selectionScene->selectedNode = currentSelectedNode;
     
     bool status = true;
-    if(currentSelectedNode->getType() == NODE_RIG)
-        status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
-    else if (currentSelectedNode->getType() == NODE_TEXT)
-        status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->props.fontSize/3.0);
+    if(selectionScene->selectedNodeIds.size() <= 0) {
+        if(currentSelectedNode->getType() == NODE_RIG)
+            status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
+        else if (currentSelectedNode->getType() == NODE_TEXT)
+            status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->props.fontSize/3.0);
+    }
     if(!status)
         unselectObject(selectionScene->selectedNodeId);
 }
@@ -296,7 +344,7 @@ void SGSelectionManager::highlightJointSpheres()
     if(!selectionScene || !smgr)
         return;
 
-    if(selectionScene->isNodeSelected  || selectionScene->isJointSelected) {
+    if((selectionScene->isNodeSelected  || selectionScene->isJointSelected) && selectionScene->selectedNodeIds.size() <= 0) {
         selectionScene->renHelper->setJointSpheresVisibility(true);
         for(int i = 0; i< selectionScene->jointSpheres.size(); i++)
             if(selectionScene->jointSpheres[i]){
@@ -307,6 +355,8 @@ void SGSelectionManager::highlightJointSpheres()
                     selectionScene->jointSpheres[i]->props.vertexColor = constants::sgrJointDefaultColor;
                 }
             }
+    } else {
+        selectionScene->renHelper->setJointSpheresVisibility(false);
     }
     selectionScene->updater->updateControlsOrientaion(selectionScene);
 }
@@ -366,7 +416,7 @@ void SGSelectionManager::unselectObject(int objectId)
     if(!selectionScene || !smgr)
         return;
 
-    if(objectId != selectionScene->selectedNodeId && !selectionScene->isMultipleSelection)
+    if(objectId != selectionScene->selectedNodeId && selectionScene->selectedNodeIds.size() <= 0)
         return;
     
     if(objectId >= 0 && objectId < selectionScene->nodes.size())

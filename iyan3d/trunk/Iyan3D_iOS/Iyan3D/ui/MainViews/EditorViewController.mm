@@ -957,6 +957,8 @@ BOOL missingAlertShown;
 - (IBAction)scaleBtnAction:(id)sender
 {
     if(self.rigScreenLabel.isHidden){
+        if(!editorScene->allObjectsScalable())
+            return;
         if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
             
             editorScene->controlType = SCALE;

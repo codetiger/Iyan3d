@@ -196,6 +196,7 @@ Mat4 Node::getModelMatrix(){
     return getAbsoluteTransformation();
 }
 void Node::FlagTransformationToChildren(){
+    updateAbsoluteTransformation();
     update();
     updateAbsoluteTransformationOfChildren();
     updateBoundingBox();
@@ -281,8 +282,9 @@ BoundingBox Node::getBoundingBox()
     return bBox;
 }
 
-bool Node::getVisible(){
-    return isVisible;
+bool Node::getVisible()
+{
+    return this->isVisible;
 }
 int Node::getTextureCount()
 {

@@ -51,7 +51,7 @@ void RenderHelper::drawGrid()
         return;
     
     Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
-        if(renderingScene->isMultipleSelection && renderingScene->getParentNode()) {
+        if(renderingScene->selectedNodeIds.size() > 0 && renderingScene->getParentNode()) {
             BoundingBox bb = renderingScene->getParentNode()->getBoundingBox();
             for (int j = 0; j < 3; j++) {
                 smgr->draw3DLine(bb.getEdgeByIndex(j), bb.getEdgeByIndex(j + 1), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
@@ -88,7 +88,9 @@ void RenderHelper::drawCircle()
             circleAxis = Vector3(0.0,1.0,1.0);
         }
         Vector3 nodePos = Vector3(0.0);
-        if(renderingScene->selectedJoint)
+        if(renderingScene->selectedNodeIds.size() > 0)
+            nodePos = renderingScene->getPivotPoint(false);
+        else if(renderingScene->selectedJoint)
             nodePos = renderingScene->selectedJoint->jointNode->getAbsolutePosition();
         else if(renderingScene->selectedNode)
             nodePos = renderingScene->selectedNode->node->getAbsolutePosition();
@@ -204,7 +206,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
     bool isNodeSelected = (renderingScene->isRigMode) ? renderingScene->rigMan->isNodeSelected : renderingScene->isNodeSelected;
     SGNode* selectedNode = (renderingScene->isRigMode) ? renderingScene->rigMan->selectedNode : renderingScene->selectedNode;
     
-    if(!renderingScene->isMultipleSelection && isNodeSelected && selectedNode->getType() == NODE_LIGHT)
+    if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT)
         renderingScene->controlType = MOVE;
     
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
@@ -311,7 +313,7 @@ void RenderHelper::changeCameraPreviewCoords(Vector2 touchPos)
 
 void RenderHelper::drawCameraPreview()
 {
-    if(!renderingScene || !smgr || renderingScene->isMultipleSelection)
+    if(!renderingScene || !smgr || renderingScene->selectedNodeIds.size() > 0)
         return;
     
     setRenderCameraOrientation();
@@ -412,7 +414,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
     }
     smgr->Render();
     // Draw Joints
-    if((selectedSGNode && !renderingScene->isMultipleSelection && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT) && !touchMove) || renderingScene->isJointSelected)
+    if((selectedSGNode && renderingScene->selectedNodeIds.size() <= 0 && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT) && !touchMove) || renderingScene->isJointSelected)
         drawJointsSpheresForRTT(true);
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
@@ -462,7 +464,7 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     if(!renderingScene || !smgr)
         return;
 
-    visibilityFlag = (renderingScene->selectedNodeId == NOT_EXISTS)?false:visibilityFlag;
+    visibilityFlag = (renderingScene->selectedNodeId == NOT_EXISTS || renderingScene->selectedNodeIds.size() > 0)?false:visibilityFlag;
     
     if (renderingScene->selectedNodeId != NOT_EXISTS && renderingScene->selectedNode)
         visibilityFlag = (renderingScene->selectedNode->getType() == NODE_RIG || renderingScene->selectedNode->getType() == NODE_TEXT) ? visibilityFlag : false;
@@ -472,6 +474,8 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     for(int i=1;i<renderingScene->jointSpheres.size();i++){
         if(renderingScene->selectedNodeId != NOT_EXISTS && renderingScene->selectedNode && (renderingScene->selectedNode->getType() == NODE_RIG || renderingScene->selectedNode->getType() == NODE_TEXT) && i < renderingScene->selectedNode->joints.size())
                 renderingScene->jointSpheres[i]->node->setVisible(visibilityFlag);
+        else if (renderingScene->selectedNodeIds.size() > 0)
+            renderingScene->jointSpheres[i]->node->setVisible(false);
         else
             renderingScene->jointSpheres[i]->node->setVisible(false);
     }
@@ -612,7 +616,7 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
         shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
         renderingScene->jointSpheres[i]->node->setParent(jointNode);
         if(bonesCount != renderingScene->tPoseJoints.size())
-            renderingScene->jointSpheres[i]->node->setScale((animNode->getScale() * scaleValue)/animNode->getScale());
+            renderingScene->jointSpheres[i]->node->setScale(scaleValue);
         else
             renderingScene->jointSpheres[i]->node->setScale(Vector3(renderingScene->tPoseJoints[i].sphereRadius/jointNode->getAbsoluteTransformation().getScale().x) * animNode->getScale());
     }
@@ -670,8 +674,10 @@ void RenderHelper::removeJointSpheres()
         return;
 
     for(int i = 0; i < renderingScene->jointSpheres.size();i++){
-        if(renderingScene->jointSpheres[i])
+        if(renderingScene->jointSpheres[i]) {
+            smgr->RemoveNode(renderingScene->jointSpheres[i]->node);
             delete renderingScene->jointSpheres[i];
+        }
     }
     renderingScene->jointSpheres.clear();
 }

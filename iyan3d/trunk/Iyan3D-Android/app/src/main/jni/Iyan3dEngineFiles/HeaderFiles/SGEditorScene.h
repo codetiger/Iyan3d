@@ -164,6 +164,7 @@ public:
     SGJoint* getSelectedJoint();
     shared_ptr<Node> getParentNode();
     
+    bool allObjectsScalable();
     Vector3 getSelectedNodeScale();
     bool checkNodeSize();
     void saveThumbnail(char* imagePath);
@@ -188,6 +189,8 @@ public:
     void setLightingOff();
     void popLightProps();
     void clearLightProps();
+    
+    Vector3 getPivotPoint(bool initial);
     
 };
 

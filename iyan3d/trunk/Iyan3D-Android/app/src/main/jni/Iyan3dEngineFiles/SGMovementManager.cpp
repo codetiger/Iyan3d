@@ -106,8 +106,11 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     
     moveScene->updater->updateControlsMaterial();
     if(moveScene->isControlSelected) {
-        if(moveScene->controlType == SCALE && moveScene->selectedNodeId != NOT_SELECTED)
+        if(moveScene->controlType == SCALE && moveScene->selectedNodeIds.size() > 0)
+            moveScene->actionMan->changeObjectScale(moveScene->getParentNode()->getScale(), true);
+        else if(moveScene->controlType == SCALE && moveScene->selectedNodeId != NOT_SELECTED)
             moveScene->actionMan->changeObjectScale(moveScene->nodes[moveScene->selectedNodeId]->getNodeScale(), true);
+        
         Logger::log(INFO , "SGScene diff ", "touch end");
         moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
@@ -323,7 +326,11 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         Quaternion delta = MathHelper::rotationBetweenVectors(parentToNewPos,parentToOldPos);
         
         Vector3 nodeRot;
-        if(moveScene->isJointSelected || !isSGJoint) {
+        if(moveScene->selectedNodeIds.size() > 0) {
+            moveScene->getParentNode()->updateAbsoluteTransformation();
+            nodeRot = moveScene->getParentNode()->getRotationInDegrees();
+            delta = MathHelper::RotateNodeInWorld(nodeRot, delta);
+        } else if(moveScene->isJointSelected || !isSGJoint) {
             if(!isSGJoint){
                 shared_ptr<Node> jointNode = moveScene->selectedNode->node;
                 MathHelper::getGlobalQuaternion((jointNode)).toEuler(nodeRot);

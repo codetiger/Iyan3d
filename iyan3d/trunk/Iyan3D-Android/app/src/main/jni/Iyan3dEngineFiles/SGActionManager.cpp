@@ -81,14 +81,15 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
     if(!actionScene || !smgr || !actionScene->isNodeSelected)
         return false;
     
-    SGNode* selectedNode = (actionScene->isMultipleSelection) ? NULL : actionScene->nodes[actionScene->selectedNodeId];
+    SGNode* selectedNode = (actionScene->selectedNodeIds.size() > 0) ? NULL : actionScene->nodes[actionScene->selectedNodeId];
     
     bool success = false;
     switch(actionScene->controlType){
         case MOVE:{
-            if(actionScene->isMultipleSelection && actionScene->getParentNode()) {
+            if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
                 success = true;
                 actionScene->getParentNode()->setPosition(actionScene->getParentNode()->getPosition() + outputValue);
+                actionScene->getParentNode()->updateAbsoluteTransformation();
                 break;
             } else if(actionScene->isJointSelected){
                 success = true;
@@ -103,7 +104,14 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
         }
         case ROTATE:{
             outputValue*=RADTODEG;
-            if(actionScene->isJointSelected){
+            if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
+                success = true;
+                Quaternion r = Quaternion(outputValue * DEGTORAD);
+                actionScene->getParentNode()->setRotationInDegrees(MathHelper::getEulerRotation(r));
+                    Vector3 posn = actionScene->getParentNode()->getPosition();
+                    printf("\n Position %f %f %f ", posn.x, posn.y, posn.z);
+                break;
+            } else if(actionScene->isJointSelected){
                 success = true;
                 rotateJoint(outputValue);
              }else if(actionScene->isNodeSelected){
@@ -468,10 +476,11 @@ void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
 
 void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
 {
-    if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT) || !actionScene->isNodeSelected) return;
+    if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT) || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0)) return;
     
     if(actionScene->actionMan->scaleAction.actionType == ACTION_EMPTY){
-        if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
+        if(actionScene->selectedNodeIds.size() > 0) {
+        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
             scaleAction.actionType = ACTION_CHANGE_JOINT_KEYS;
             scaleAction.objectIndex =actionScene->nodes[actionScene->selectedNodeId]->actionId;
             for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
@@ -483,7 +492,8 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
         }
     }
     if(isChanged){
-        if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
+        if(actionScene->selectedNodeIds.size() > 0) {
+        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT) {
             for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
                 scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->joints[i]->getKeyForFrame(actionScene->currentFrame));
         } else {
@@ -492,12 +502,18 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
         addAction(scaleAction);
         scaleAction.drop();
     }
-    if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT){
+    if(actionScene->selectedNodeIds.size() > 0) {
+        Vector3 pScale = actionScene->getParentNode()->getScale();
+        printf(" Scale %f %f %f ", pScale.x, pScale.y, pScale.z);
+        actionScene->getParentNode()->setScale(scale);
+        actionScene->getParentNode()->updateAbsoluteTransformation();
+    } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT){
         actionScene->nodes[actionScene->selectedNodeId]->joints[actionScene->selectedJointId]->setScale(scale, actionScene->currentFrame);
     } else {
         actionScene->nodes[actionScene->selectedNodeId]->setScale(scale, actionScene->currentFrame);
     }
-    actionScene->updater->setDataForFrame(actionScene->currentFrame);
+    if(actionScene->selectedNodeIds.size() <= 0)
+        actionScene->updater->setDataForFrame(actionScene->currentFrame);
     actionScene->updater->reloadKeyFrameMap();
     actionScene->updater->updateControlsOrientaion();
 }

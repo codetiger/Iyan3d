@@ -73,12 +73,12 @@ private:
     shared_ptr< vector< shared_ptr<InstanceNode> > > instancedNodes;
     int id,textureCount;
     bool isMetalSupported();
+    bool isVisible;
     
 protected:
     Mat4 AbsoluteTransformation;
     Vector3 position,scale,rotation;
     Texture* textures[MAX_TEXTURE_PER_NODE];
-    bool isVisible;
     
 public:
     BoundingBox bBox;

@@ -33,6 +33,7 @@
 #define OBJ_ID 512
 #define SGM_ID 2048
 #define SGR_ID 1024
+#define PIVOT_ID 128
 #define BONE_START_ID 100000
 #define JOINT_START_ID 200000
 #define ENVELOPE_START_ID 300000

@@ -16,6 +16,8 @@ class SGSelectionManager
 private:
     SceneManager *smgr;
     shared_ptr<MeshNode> parentNode;
+    vector<Vector3> globalPositions;
+    vector<Vector3> relPositions;
     Mesh* sphereMesh;
     
 public:    
@@ -30,10 +32,13 @@ public:
     bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
     bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
     void multipleSelections(int nodeId);
+    void updateParentPosition();
     void unselectObjects();
     shared_ptr<Node> getParentNode();
-    void addSelectedChildren();
-    void removeChildren();
+    void storeGlobalPositions();
+    void storeRelativePositions();
+    void addSelectedChildren(shared_ptr<Node> toParent);
+    void removeChildren(shared_ptr<Node> fromParent);
     void highlightSelectedNode(int nodeId = -1);
     void highlightJointSpheres();
     void selectObject(int objectId);

@@ -177,6 +177,7 @@ void SGEditorScene::renderAll()
         rotationCircle->node->setVisible(false);
         smgr->draw2DImage(bgTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth,  SceneHelper::screenHeight), true,
                           smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        
         smgr->Render();
         
         renHelper->drawGrid();
@@ -449,8 +450,21 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
+bool SGEditorScene::allObjectsScalable()
+{
+    bool status = true;
+    for(int i = 0; i < selectedNodeIds.size(); i++) {
+        NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
+        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT)
+            status = false;
+    }
+    return status;
+}
+
 Vector3 SGEditorScene::getSelectedNodeScale()
 {
+    if(selectedNodeIds.size() > 0)
+        return getParentNode()->getScale();
     if(isNodeSelected) {
         if(isJointSelected && selectedNode->getType() == NODE_TEXT)
             return selectedNode->joints[selectedJointId]->jointNode->getScale();
@@ -461,3 +475,11 @@ Vector3 SGEditorScene::getSelectedNodeScale()
     return Vector3(1.0);
 }
 
+Vector3 SGEditorScene::getPivotPoint(bool initial)
+{
+    if(getParentNode() && initial)
+        return getParentNode()->getBoundingBox().getCenter();
+    else if (getParentNode())
+        return getParentNode()->getAbsolutePosition();
+    return Vector3(0.0);
+}

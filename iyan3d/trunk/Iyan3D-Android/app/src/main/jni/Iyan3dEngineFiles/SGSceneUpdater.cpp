@@ -170,8 +170,8 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     Vector3 nodePos;
-    if(updatingScene->isMultipleSelection && updatingScene->getParentNode())
-        nodePos = updatingScene->getParentNode()->getBoundingBox().getCenter();
+    if(updatingScene->selectedNodeIds.size() > 0 && updatingScene->getParentNode())
+        nodePos = updatingScene->getPivotPoint(false);
     else if(isJointSelected && selectedJoint)
         nodePos = selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
     else if( isNodeSelected && selectedNode)
@@ -411,7 +411,7 @@ void SGSceneUpdater::reloadKeyFrameMap()
     if(!updatingScene || !smgr)
         return;
 
-    if(updatingScene->selectedNodeId != NOT_SELECTED) {
+    if(updatingScene->selectedNodeId != NOT_SELECTED && updatingScene->selectedNodeIds.size() <= 0) {
         SGNode *selectedMesh = updatingScene->nodes[updatingScene->selectedNodeId];
         bool searchPos = true,searchRot = false,searchScale = false;
         updatingScene->isKeySetForFrame.clear();
@@ -523,3 +523,4 @@ void SGSceneUpdater::updateSkeletonBones()
     for(int i=0;i < updatingScene->tPoseJoints.size();i++)
         updateSkeletonBone(rigKeys, updatingScene->tPoseJoints[i].id);
 }
+
