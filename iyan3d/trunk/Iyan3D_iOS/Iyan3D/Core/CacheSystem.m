@@ -9,10 +9,14 @@
 #import "CacheSystem.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "Utility.h"
+#import <objc/runtime.h>
 #define MYANIMATION_TABLE 7
 #define MYANIMATION_DOWNLOAD 4
 #define MYANIMATION_RATING 6
 #define MYANIMATION_FEATURED 5
+#define MYANIMATION_RECENT 8
+#define MYANIMATION_ALL 9
+
 
 @implementation CacheSystem
 
@@ -381,6 +385,8 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", MY_ANIMATIONS_TABLE, ASSET_TYPE, type];
         } else if(tableType == MYANIMATION_FEATURED) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", ALL_ANIMATIONS_TABLE, ASSET_TYPE, type];
+        } else if(tableType == MYANIMATION_RECENT) {
+            querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", ALL_ANIMATIONS_TABLE, ASSET_TYPE, type];
         }
         if([keyword length]>0) {
             switch (tableType) {
@@ -410,6 +416,10 @@ static const NSString* RENDER_TASK_ESTIMATED_TIME = @"estimated_time";
                 case MYANIMATION_FEATURED:
                     querySQL = [querySQL stringByAppendingFormat:@" ORDER BY %@ DESC LIMIT 50", FEATURED_INDEX];
                     break;
+                case MYANIMATION_RECENT:{
+                    querySQL = [querySQL stringByAppendingFormat:@" ORDER BY datetime(%@) DESC LIMIT 50", ASSET_DATE];
+                    break;
+                }
                 default:
                     break;
             }

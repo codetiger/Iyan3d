@@ -20,6 +20,7 @@
                 <outlet property="renderPreviewSize" destination="e25-6y-BA7" id="x7L-bI-s9D"/>
                 <outlet property="renderPreviewSizeLarge" destination="ebI-72-4f7" id="oHh-8m-WQX"/>
                 <outlet property="renderPreviewSizeSmall" destination="7gq-4y-bKk" id="Zzf-uk-vhx"/>
+                <outlet property="restoreBtn" destination="NjZ-i4-GH8" id="pFX-5O-fGH"/>
                 <outlet property="toolbarLeft" destination="g1W-5r-V1M" id="KoI-iP-ziy"/>
                 <outlet property="toolbarPosition" destination="iqs-KB-BFa" id="tUX-LN-BMr"/>
                 <outlet property="toolbarRight" destination="khQ-a8-MvM" id="z6P-ew-MV5"/>
@@ -128,6 +129,18 @@
                                 <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="sJc-hp-o3p"/>
                             </connections>
                         </switch>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjZ-i4-GH8">
+                            <rect key="frame" x="5" y="101" width="115" height="30"/>
+                            <color key="backgroundColor" red="0.00024560625339999998" green="0.63386878189999996" blue="0.10996116240000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                            <state key="normal" title="RESTORE PURCHASE">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="dEQ-h8-vk8"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

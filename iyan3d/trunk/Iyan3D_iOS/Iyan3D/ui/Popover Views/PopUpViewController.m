@@ -198,6 +198,8 @@
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
             else if([cell.textLabel.text hasPrefix:@"Light"])
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+            else if([cell.textLabel.text containsString:@"particle"])
+                cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles-Phone.png"];
             else
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
 
@@ -245,11 +247,9 @@
     else if([clickedBtn isEqualToString:@"optionsBtn"]){
         [self.delegate optionBtnDelegate:(int)indexPath.row];
     }
-
     else {
         
     }
-    
 }
 - (IBAction)loginBtnAction:(id)sender {
     [self.delegate loginBtnAction];

@@ -20,6 +20,9 @@
 #define TOOLBAR_RIGHT 0
 #define TOOLBAR_LEFT 1
 
+#define SCENE_SELECTION 0
+#define EDITOR_VIEW_CONTROL 1
+
 
 
 
@@ -28,6 +31,15 @@
 @end
 
 @implementation SettingsViewController
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -31,10 +31,14 @@
 #define FULL_HD_GIF_RANGE 100
 #define HD_GIF_RANGE 200
 #define DVD_GIF_RANGE 300
-#define FULL_HD 0
-#define HD 1
-#define DVD 2
-#define VCD 3
+
+
+#define THOUSAND_EIGHTY_P 0
+#define SEVEN_HUNDRED_TWENTY_P 1
+#define FOUR_HUNDRED_EIGHTY_P 2
+#define THREE_HUNDRED_SIXTY_P 3
+#define TWO_HUNDRED_FOURTY_P 4
+
 
 #define SHADER_DEFAULT 0
 #define SHADER_TOON 6
@@ -246,26 +250,26 @@
             [self.trimControl setHidden:YES];
         }
             NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-        if(resolutionType == VCD && _watermarkSwitch.isOn){
+        if(resolutionType == TWO_HUNDRED_FOURTY_P && _watermarkSwitch.isOn){
             [self renderBeginFunction:0];
         }
          else if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
-                int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 0;
+             int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
                 int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-                int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
+             int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
                 int userCredits = [[[AppHelper getAppHelper] userDefaultsForKey:@"credits"] intValue];
                 if(userCredits >= abs(credits)){
                     [_creditLable setHidden:YES];
                     [self renderBeginFunction:credits];                    
                 }
                 else{
-                    UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@%d%@",@"Please Recharge Your credits. you Need more ",abs(credits)-userCredits,@" credits. Thank You." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [userNameAlert show];
                     [self.trimControl setHidden:NO];
                 }
             }
             else{
-                UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this. Thank you.  !!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to use this.!!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [userNameAlert show];
                 [self.trimControl setHidden:NO];
             }
@@ -274,7 +278,7 @@
 
 - (void) saveDeductedCredits:(int)credits
 {
-    NSString *videoType = (resolutionType == FULL_HD) ? @"FULLHD" : (resolutionType == HD) ? @"HD" : (resolutionType == DVD) ? @"DVD" : @"DVD";
+    NSString *videoType = (resolutionType == THOUSAND_EIGHTY_P) ? @"1080P" : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? @"720P" : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? @"480P" : (resolutionType == THREE_HUNDRED_SIXTY_P) ? @"360P" : @"240P";
     [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
 }
 
@@ -287,12 +291,10 @@
 - (void) updateCreditLable
 {
     [_creditLable setHidden:NO];
-    int valueForRender = (resolutionType == FULL_HD) ? 3 : (resolutionType == HD) ? 2 : (resolutionType == DVD) ? 1 : 0;
+         int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
     int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-
-        int credits = ((frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50))  * -1;
+    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? (int)(frames/2) : (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
     _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
-    
 }
 
 
@@ -508,7 +510,7 @@
     [self.exportButton setEnabled:true];
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
-    if(resolutionType != VCD || (resolutionType == VCD && !_watermarkSwitch.isOn))
+    if(resolutionType != TWO_HUNDRED_FOURTY_P || (resolutionType == TWO_HUNDRED_FOURTY_P && !_watermarkSwitch.isOn))
         [self saveDeductedCredits:[credits intValue]];
 }
 - (IBAction)youtubeButtonAction:(id)sender
@@ -790,16 +792,19 @@
     [self.resolutionSegment setEnabled:false];
     [self.startButtonText setEnabled:false];
     resolutionType = (int)self.resolutionSegment.selectedSegmentIndex;
-    if(resolutionType == 0) {
+    if(resolutionType == THOUSAND_EIGHTY_P) {
         cameraResolutionWidth = 1920.0f;
         cameraResolutionHeight = 1080.0f;
-    } else if(resolutionType == 1) {
+    } else if(resolutionType == SEVEN_HUNDRED_TWENTY_P) {
         cameraResolutionWidth = 1280.0f;
         cameraResolutionHeight = 720.0f;
-    } else if(resolutionType == 2) {
-        cameraResolutionWidth = 720.0f;
+    } else if(resolutionType == FOUR_HUNDRED_EIGHTY_P) {
+        cameraResolutionWidth = 848.0f;
         cameraResolutionHeight = 480.0f;
-    } else{
+    } else if(resolutionType == THREE_HUNDRED_SIXTY_P){
+        cameraResolutionWidth = 640.0f;
+        cameraResolutionHeight = 360.0f;
+    } else {
         cameraResolutionWidth = 352.0f;
         cameraResolutionHeight = 240.0f;
     }

@@ -14,6 +14,7 @@
 #define FEATURED 5
 #define TOP_RATED 6
 #define MY_ANIMATION 7
+#define RECENT 8
 #define USER_NAME_ALERT 100
 #define CANCEL_BUTTON 0
 #define OK_BUTTON 1
@@ -27,16 +28,12 @@
         animationType = type;
         editorSceneLocal = editorScene;
         selectedNodeId = editorSceneLocal->selectedNodeId;
-        bonecount = editorSceneLocal->nodes[selectedNodeId]->joints.size();
+        bonecount = (int)editorSceneLocal->nodes[selectedNodeId]->joints.size();
         currentFrame = editorSceneLocal->currentFrame;
         totalFrame = editorSceneLocal->totalFrames;
         isFirstTimeAnimationApplyed = isFirstTime;
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         docDirPath = [srcDirPath objectAtIndex:0];
-
-        
-      
-
     }
     return self;
 }
@@ -59,9 +56,8 @@
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(false);
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
     cache = [CacheSystem cacheSystem];
-    animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
-    [self.animationCollectionView reloadData];
-    
+    animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
+    [self.animationCollectionView reloadData];    
     downloadQueue = [[NSOperationQueue alloc] init];
     [downloadQueue setMaxConcurrentOperationCount:3];
     [self.downloadIndicator setHidden:NO];
@@ -140,7 +136,7 @@
                                     if(animationCategoryTab == TRENDING)
                                         return;
                                     [self.categoryBtn setTitle: @"Trending" forState:UIControlStateNormal];
-                                    animationsItems = [cache GetAnimationList:0 fromTable:4 Search:@""];
+                                    animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
                                     [self.delegate myAnimation:YES];
                                     [self.animationCollectionView reloadData];
                                     animationCategoryTab = TRENDING;
@@ -155,7 +151,7 @@
                                 {
                                     if(animationCategoryTab == FEATURED)
                                         return;
-                                    animationsItems = [cache GetAnimationList:0 fromTable:6 Search:@""];
+                                    animationsItems = [cache GetAnimationList:animationType fromTable:6 Search:@""];
                                     [self.categoryBtn setTitle:@"Featured" forState:UIControlStateNormal];
                                     [self.animationCollectionView reloadData];
                                     [self.delegate myAnimation:YES];
@@ -173,7 +169,7 @@
                                       if(animationCategoryTab == TOP_RATED)
                                           return;
                                       [self.categoryBtn setTitle: @"Top Rated" forState:UIControlStateNormal];
-                                      animationsItems = [cache GetAnimationList:0 fromTable:5 Search:@""];
+                                      animationsItems = [cache GetAnimationList:animationType fromTable:5 Search:@""];
                                       [self.categoryBtn setTitle:@"Top Rated" forState:UIControlStateNormal];
                                       [self.animationCollectionView reloadData];
                                       [self.delegate myAnimation:YES];
@@ -182,6 +178,23 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       
                                   }];
+    UIAlertAction* recent = [UIAlertAction
+                               actionWithTitle:@"Recent"
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction * action)
+                               {
+                                   if(animationCategoryTab == RECENT)
+                                       return;
+                                   [self.categoryBtn setTitle: @"Recent" forState:UIControlStateNormal];
+                                   animationsItems = [cache GetAnimationList:animationType fromTable:8 Search:@""];
+                                   [self.categoryBtn setTitle:@"Recent" forState:UIControlStateNormal];
+                                   [self.animationCollectionView reloadData];
+                                   [self.delegate myAnimation:YES];
+                                   animationCategoryTab = RECENT;
+                                   selectedAssetId = -1;
+                                   [view dismissViewControllerAnimated:YES completion:nil];
+                                   
+                               }];
     
     UIAlertAction* myanimation = [UIAlertAction
                                   actionWithTitle:@"My Animations"
@@ -191,7 +204,7 @@
                                       if(animationCategoryTab == MY_ANIMATION)
                                           return;
                                       [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
-                                      animationsItems = [cache GetAnimationList:0 fromTable:7 Search:@""];
+                                      animationsItems = [cache GetAnimationList:animationType fromTable:7 Search:@""];
                                       [self.delegate myAnimation:YES];
                                       [self.animationCollectionView reloadData];
                                       animationCategoryTab = MY_ANIMATION;
@@ -209,6 +222,9 @@
         case FEATURED:
             [featured setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
+        case RECENT:
+            [recent setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
+            break;
         case MY_ANIMATION:
             [myanimation setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
@@ -217,6 +233,7 @@
     [view addAction:trending];
     [view addAction:toprated];
     [view addAction:featured];
+    [view addAction:recent];
     [view addAction:myanimation];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceView = self.categoryBtn;
@@ -365,7 +382,7 @@
     [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AnimationUpdate"];
 }
 
-- (void)proceedToFileVerification:(id)object
+- (BOOL)proceedToFileVerification:(id)object
 {
     NSString* filePath;
     if([object isKindOfClass:[DownloadTask class]])
@@ -388,11 +405,13 @@
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSLog(@"Download Completed");
+        return true;
     }
     else {
         [self.view endEditing:YES];
         UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+        return false;
     }
 }
 
@@ -584,6 +603,7 @@
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->animMan->copyKeysOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId);
+    editorSceneLocal->animMan->copyPropsOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes];
     editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
@@ -640,6 +660,7 @@
     self.delegate=nil;
     animationJsonArray = nil;
     animationsItems = nil;
+    [animDownloadQueue cancelAllOperations];
     animDownloadQueue = nil;
     jsonUserArray = nil;
     docDirPath = nil;

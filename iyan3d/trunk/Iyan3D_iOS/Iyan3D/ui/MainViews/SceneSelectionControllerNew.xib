@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
             <connections>
                 <outlet property="addSceneBtn" destination="g7e-JY-bEf" id="zM1-5k-HDY"/>
-                <outlet property="mailBtn" destination="vFR-si-8pK" id="2rz-Mz-kam"/>
+                <outlet property="infoBtn" destination="fVt-o1-OKO" id="WKK-uI-qsC"/>
                 <outlet property="scenesCollectionView" destination="GtZ-Ek-nEF" id="4xu-p6-Mnr"/>
                 <outlet property="topBar" destination="wjS-eD-GYe" id="i4s-q4-jm4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -46,12 +46,12 @@
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vFR-si-8pK" userLabel="mailBtn">
-                                    <rect key="frame" x="976" y="21" width="40" height="30"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fVt-o1-OKO">
+                                    <rect key="frame" x="972" y="18" width="44" height="33"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="Mail.png"/>
+                                    <state key="normal" image="Info.png"/>
                                     <connections>
-                                        <action selector="feedBackButtonAction:" destination="-1" eventType="touchUpInside" id="8Yf-ZW-ABF"/>
+                                        <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="WB0-Ay-9aV"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -84,7 +84,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Mail.png" width="30" height="21"/>
+        <image name="Info.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>
     </resources>

@@ -86,4 +86,14 @@
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
     [self.delegate meshPropertyChanged:brightnessValue Specular:specularValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
 }
+
+- (IBAction)reflectionHqBtnAction:(id)sender {
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"PThis Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [closeAlert show];   
+}
+
+- (IBAction)refractionHqBtnAction:(id)sender {
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"PThis Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [closeAlert show];
+}
 @end

@@ -10,10 +10,20 @@
 #import "SceneSelectionControllerNew.h"
 #import "SceneSelectionEnteredView.h"
 #import "SceneItem.h"
+#import <sys/utsname.h>
+
 
 #define SCENE_NAME_ALERT 0
 #define CANCEL 0
 #define OK 1
+
+#define SETTINGS 3
+#define CONTACT_US 4
+
+#define CAMERA_PREVIEW_SMALL 0
+
+#define FRAME_COUNT 0
+#define FRAME_DURATION 1
 
 
 @implementation SceneSelectionControllerNew
@@ -32,6 +42,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    screenHeight = screenRect.size.height;
     deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];
     if([Utility IsPadDevice]){
         [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
@@ -169,6 +181,70 @@
     
     [self removeFromParentViewController];
     
+}
+
+- (IBAction)infoBtnAction:(id)sender
+{
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 213.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _infoBtn.frame;
+    rect = [self.view convertRect:rect fromView:_infoBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:YES];
+}
+
+
+- (void) infoBtnDelegateAction:(int)indexValue{
+    
+    if(indexValue==SETTINGS){
+        [self.popoverController dismissPopoverAnimated:YES];
+        settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
+                      (screenHeight>320) ? @"SettingsViewControllerPhone2x" :
+                      @"SettingsViewControllerPhone" bundle:nil];
+        [settingsVc.view setClipsToBounds:YES];
+        settingsVc.delegate=self;
+        if([Utility IsPadDevice] || screenHeight < 400)
+            settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:settingsVc animated:YES completion:nil];
+        settingsVc.view.superview.backgroundColor = [UIColor clearColor];
+    }
+    else if(indexValue==CONTACT_US){
+        [self.popoverController dismissPopoverAnimated:YES];
+        NSString *currentDeviceName;
+        if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
+            currentDeviceName = [deviceNames objectForKey:[self deviceName]];
+        else
+            currentDeviceName = @"Unknown Device";
+        if ([MFMailComposeViewController canSendMail]) {
+            MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+            picker.mailComposeDelegate = self;
+            NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[self deviceName]],iOSVersion]];
+            [picker setToRecipients:usersTo];
+            [self presentModalViewController:picker animated:YES];
+        }else {
+            [self.view endEditing:YES];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Email account not configured." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+    }
+}
+
+-(NSString*) deviceName
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    
+    return [NSString stringWithCString:systemInfo.machine
+                              encoding:NSUTF8StringEncoding];
 }
 
 -(void)updateSceneDB {
@@ -368,6 +444,34 @@
         }
     }
     [alertView resignFirstResponder];
+}
+
+#pragma Settings Delegates
+
+-(void)frameCountDisplayMode:(int)selctedIndex{
+    int tag = (selctedIndex == FRAME_COUNT) ? FRAME_COUNT : FRAME_DURATION;
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:tag] withKey:@"indicationType"];
+}
+-(void)cameraPreviewSize:(int)selctedIndex{
+    if(selctedIndex==CAMERA_PREVIEW_SMALL)
+    {
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:1.0] withKey:@"cameraPreviewSize"];
+    }
+    else
+    {
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:2.0] withKey:@"cameraPreviewSize"];
+    }
+}
+-(void)cameraPreviewPosition:(int)selctedIndex{
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"cameraPreviewPosition"];
+
+}
+-(void)toolbarPosition:(int)selctedIndex{
+    [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
+
+}
+-(void)multiSelectUpdate:(BOOL)value{
+    [[AppHelper getAppHelper] saveBoolUserDefaults:value withKey:@"multiSelectOption"];
 }
 
 #pragma Dealloc Delegate

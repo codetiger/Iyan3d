@@ -20,9 +20,11 @@
 #import "GAI.h"
 #import "SceneSelectionFrameCell.h"
 #import "EditorViewController.h"
+#import "WEPopoverController.h"
+#import "SettingsViewController.h"
 
 
-@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate>{
+@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -32,6 +34,8 @@
     NSDictionary *deviceNames;
     SceneSelectionFrameCell *cell;
     int sceneToBeRenamed;
+    CGFloat screenHeight;
+    SettingsViewController *settingsVc;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;
@@ -46,8 +50,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *sceneDate;
 @property (weak, nonatomic) IBOutlet UIButton *scenePreviewCloseBtn;
 @property (weak, nonatomic) IBOutlet UIButton *openScene;
+@property (weak, nonatomic) IBOutlet UIButton *infoBtn;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *scenesCollectionView;
+@property (nonatomic, strong) PopUpViewController *popUpVc;
+@property (nonatomic, strong) WEPopoverController *popoverController;
+
+
 - (IBAction)openSceneAction:(id)sender;
 
 @end

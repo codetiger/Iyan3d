@@ -47,6 +47,10 @@
 - (IBAction)deleteBtnAction:(id)sender;
 - (IBAction)skinBtnAction:(id)sender;
 - (IBAction)faceNormalAction:(id)sender;
+- (IBAction)reflectionHqBtnAction:(id)sender;
+- (IBAction)refractionHqBtnAction:(id)sender;
+
+
 
 
 @end

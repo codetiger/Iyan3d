@@ -55,7 +55,7 @@
     selectedAsset = -1;
     modelCategoryTab = 0;
     //addToScenePressed = false;
-    [_addToSceneBtn setEnabled:YES];
+    [_addToSceneBtn setEnabled:NO];
     [_modelCategory setHidden:(viewType == IMPORT_MODELS) ? NO : YES];
 }
 
@@ -381,6 +381,8 @@
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString* fileName = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [returnId intValue]];
 
+    [self proceedToFileVerification:task];
+   /*
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         int assetId = [task.returnObj intValue];        
         AssetItem *assetItem = [cache GetAsset:assetId];
@@ -389,6 +391,7 @@
         [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
         [self.assetSelectionDelegate showOrHideProgress:0];
     }
+    */
 
 }
 
@@ -424,12 +427,13 @@
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         AssetItem * assetItem = [cache GetAsset:assetId];
-        //if(!addToScenePressed)
-            assetItem.isTempAsset = true;
+        assetItem.isTempAsset = true;
         [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
         [self.assetSelectionDelegate showOrHideProgress:0];
+        [_addToSceneBtn setEnabled:YES];
     }
     else {
+        [_addToSceneBtn setEnabled:NO];
         [self.assetSelectionDelegate showOrHideProgress:0];
         [self.view endEditing:YES];
         UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -439,19 +443,9 @@
 
 - (void)downloadCompleted:(DownloadTask*)task
 {
-    
     if([task isCancelled])
         return;
-    
-    int assetId = [task.returnObj intValue];
-    
-    AssetItem *assetItem = [cache GetAsset:assetId];
-    //if(!addToScenePressed)
-        assetItem.isTempAsset = true;
-    [self.assetSelectionDelegate loadNodeInScene:assetItem ActionType:IMPORT_ASSET_ACTION];
-    [self.assetSelectionDelegate showOrHideProgress:0];
-    [_addToSceneBtn setEnabled:YES];
-    
+    [self proceedToFileVerification:task];
 }
 
 

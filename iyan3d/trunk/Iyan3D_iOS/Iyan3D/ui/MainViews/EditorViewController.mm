@@ -723,7 +723,7 @@ BOOL missingAlertShown;
     todatasetCell2.layer.borderWidth = 2.0f;
     [self NormalHighLight];
     editorScene->previousFrame = editorScene->currentFrame;
-    editorScene->currentFrame = indexPath.row;
+    editorScene->currentFrame = (int)indexPath.row;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
     [self HighlightFrame];
     [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -757,7 +757,7 @@ BOOL missingAlertShown;
         else if(editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
         else if(editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
-            cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+            cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
         else
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
     }
@@ -1276,7 +1276,7 @@ BOOL missingAlertShown;
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = CGSizeMake(380 , 273);
+        self.popoverController.popoverContentSize = CGSizeMake(407 , 273);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -2039,7 +2039,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = CGSizeMake(380 , 273);
+        self.popoverController.popoverContentSize = CGSizeMake(407 , 273);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -2455,7 +2455,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
-                      (screenHeight>320) ? ((screenHeight<400) ? @"SettingsViewControllerPhone2x" : @"SettingsViewControllerPhone2x") :
+                      (screenHeight>320) ? @"SettingsViewControllerPhone2x" :
                       @"SettingsViewControllerPhone" bundle:nil];
         [settingsVc.view setClipsToBounds:YES];
         settingsVc.delegate=self;

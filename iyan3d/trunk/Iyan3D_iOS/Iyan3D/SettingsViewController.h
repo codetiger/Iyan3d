@@ -24,6 +24,8 @@
 @interface SettingsViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate, AppHelperDelegate>{
     UIScrollView *myScrollView;
 }
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil;
 @property (weak, nonatomic) IBOutlet UIButton *restoreBtn;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toolbarPosition;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *renderPreviewSize;
