@@ -76,14 +76,14 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             FileHelper::writeFloat(&frameFilePtr, vertColor.x); // Diffusion Color r
             FileHelper::writeFloat(&frameFilePtr, vertColor.y); // Diffusion Color g
             FileHelper::writeFloat(&frameFilePtr, vertColor.z); // Diffusion Color b
-            FileHelper::writeBool(&frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "") ? false : true); // Has Texture
+            FileHelper::writeBool(&frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true); // Has Texture
             
             unsigned long lastSlashPos  = (thisNode->textureName).find_last_of("\\/");
             string textureFileName;
             if(string::npos != lastSlashPos)
-                textureFileName = (thisNode->textureName).substr( lastSlashPos + 1);
+                textureFileName = (thisNode->textureName).substr( lastSlashPos + 1) + ".png";
             else
-            	textureFileName = thisNode->textureName;
+            	textureFileName = thisNode->textureName + ".png";
             
             FileHelper::writeString(&frameFilePtr, textureFileName); // Texture File Name with extension
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.reflection);
