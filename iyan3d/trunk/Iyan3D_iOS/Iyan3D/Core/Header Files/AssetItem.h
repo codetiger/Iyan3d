@@ -21,5 +21,6 @@
 @property (atomic, copy) NSString* keywords;
 @property (atomic, copy) NSString* price;
 @property (atomic, assign) bool isTempAsset;
+@property (atomic, copy) NSString* textureName;
 
 @end

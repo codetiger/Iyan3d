@@ -185,19 +185,18 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void) addCameraLight
 {
-    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
+    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") TextureName:(@"") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
     [self.delegate updateAssetListInScenes];
-    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
+    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") TextureName:(@"") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
     [self.delegate updateAssetListInScenes];
     
 }
 
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name TextureName:(NSString*)textureName Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
 {
     // TODO a lot to implement
    
-    NSString *assetName = [NSString stringWithCString:ConversionHelper::getStringForWString(name).c_str()
-                                                encoding:[NSString defaultCStringEncoding]];    
+    string textureNameStr = *new std::string([textureName UTF8String]);
     
     if(editorScene) {
         editorScene->loader->removeTempNodeIfExists();
@@ -217,7 +216,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_BACKGROUNDS:
         case ASSET_ACCESSORIES: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId,to_string(assetId)+"-cm" ,name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId,textureNameStr ,name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -229,7 +228,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_RIGGED: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED_HUMAN];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId,to_string(assetId)+"-cm",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId,textureNameStr,name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){

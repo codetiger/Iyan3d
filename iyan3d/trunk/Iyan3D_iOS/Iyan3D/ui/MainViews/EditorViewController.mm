@@ -211,7 +211,7 @@ BOOL missingAlertShown;
 
 - (void) load3DTex:(int)type AssetId:(int)assetId TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors
           FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode{
-
+    
     NSMutableDictionary *textDetails = [[NSMutableDictionary alloc] init];
     [textDetails setObject:[NSNumber numberWithInt:assetId] forKey:@"AssetId"];
     [textDetails setObject:typedText forKey:@"typedText"];
@@ -235,9 +235,7 @@ BOOL missingAlertShown;
     int fontSize = [[fontDetails objectForKey:@"fontSize"]intValue];
     float bevalValue = [[fontDetails objectForKey:@"bevelRadius"]floatValue];
     
-    NSLog(@"Is Temp Node : %d", isTempNode);
-
-    [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:ASSET_TEXT AssetId:assetId AssetName:assetName TextureName:(@"") Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void) importAdditionalLight{
@@ -254,12 +252,13 @@ BOOL missingAlertShown;
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
 {
-    [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] TextureName:(@"") Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType
 {
     assetAddType = actionType;
+    assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
     
 }
@@ -272,13 +271,13 @@ BOOL missingAlertShown;
     int imgWidth = [[nsDict objectForKey:@"Width"]intValue];
     int imgHeight = [[nsDict objectForKey:@"Height"]intValue];
     int isTempNode = [[nsDict objectForKey:@"isTempNode"]intValue];
-    [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:saltedFileName Width:imgWidth Height:imgHeight isTempNode:isTempNode More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:saltedFileName TextureName:(@"") Width:imgWidth Height:imgHeight isTempNode:isTempNode More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void) loadNode:(AssetItem*) asset
 {
     NSLog(@"Asset Id : %d ", asset.assetId);
-    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] TextureName:(asset.textureName) Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void)createDisplayLink
@@ -1668,6 +1667,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
+        assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
         
     }
@@ -1697,6 +1697,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     {
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
+        assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
 
     }
@@ -1895,6 +1896,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
     }
     else if(indexValue==IMPORT_ADDBONE){
+        NSLog(@"Bundle Path %s " , constants::BundlePath.c_str());
         [self.popoverController dismissPopoverAnimated:YES];
         NODE_TYPE selectedNodeType = NODE_UNDEFINED;
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
@@ -2617,9 +2619,10 @@ void downloadFile(NSString* url, NSString* fileName)
     NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
     NSFileManager* fm = [[NSFileManager alloc]init];
     std::string *objStr = NULL;
-    std::string *textureStr = new std::string([(!isHaveTexture) ? @"-1" : textureFileName UTF8String]);
+    std::string *textureStr = new std::string([(!isHaveTexture) ? @"White-texture" : textureFileName UTF8String]);
     NSString* assetName = (indexPathOfOBJ < 6 ) ? [basicShapes objectAtIndex:indexPathOfOBJ] : [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
     int assetId = (!isTempNode) ? -1 : 123456;
+    int assetIdReturn = 0;
     NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
     if(indexPathOfOBJ < 6){//Total Basic Shapes 6
         assetId = [[basicShapesId objectAtIndex:indexPathOfOBJ]intValue];
@@ -2628,33 +2631,35 @@ void downloadFile(NSString* url, NSString* fileName)
         objStr = new std::string([[[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension] UTF8String]);
         editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 123456,!isHaveTexture,color);
     }
-    if(indexPathOfOBJ > 5 && !isTempNode)
-        assetId =  [self addSgmFileToCacheDirAndDatabase:assetName];
-    if(assetId < 0)
-        return;
+    
     NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetId];
     [fm removeItemAtPath:texTo error:nil];
-    if(isHaveTexture){
-        if(assetId < 0 && !isTempNode)
-            assetId =  [self addSgmFileToCacheDirAndDatabase:assetName];
-        NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,textureFileName];
-        NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetId];
-        [fm copyItemAtPath:texFrom toPath:texTo error:nil];
+    
+    if(!isTempNode){
+        assetIdReturn =  [self addSgmFileToCacheDirAndDatabase:assetName];
     }
-    if (indexPathOfOBJ > 5 && !isTempNode){
-        NSString* sgmFrom = [NSString stringWithFormat:@"%@%@/%d.sgm",docDirPath,@"/Resources/Sgm/",123456];
-        NSString* sgmTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm",docDirPath,assetId];
-        [fm moveItemAtPath:sgmFrom toPath:sgmTo error:nil];
+  
+    NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Sgm/White-texture":textureFileName];
+    texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetIdReturn];
+    [fm copyItemAtPath:texFrom toPath:texTo error:nil];
+    
+    if (!isTempNode){
+        NSString* sgmFrom = [NSString stringWithFormat:@"%@%@%d.sgm",docDirPath,@"/Resources/Sgm/",(indexPathOfOBJ < 6) ? assetId : 123456];
+        NSString* sgmTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm",docDirPath,assetIdReturn];
+        [fm copyItemAtPath:sgmFrom toPath:sgmTo error:nil];
     }
     NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
     [dict setObject:assetName forKey:@"name"];
-    [dict setObject:[NSNumber numberWithInt:assetId] forKey:@"assetId"];
+    [dict setObject:[NSNumber numberWithInt:(isTempNode) ? assetId : assetIdReturn] forKey:@"assetId"];
     [dict setObject:[NSNumber numberWithFloat:color.x] forKey:@"x"];
     [dict setObject:[NSNumber numberWithFloat:color.y] forKey:@"y"];
     [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
-    NSString *textureName = [NSString stringWithCString:textureStr->c_str()
-                                                encoding:[NSString defaultCStringEncoding]];
-    [dict setObject:[NSString stringWithFormat:@"%@",textureName] forKey:@"textureName"];
+    NSString *textureName;
+    if(isTempNode)
+       textureName = textureFileName;
+    else
+       textureName = [NSString stringWithFormat:@"%d%@",assetIdReturn,@"-cm"];
+    [dict setObject:[NSString stringWithFormat:@"%@",(isHaveTexture) ? textureName : @"-1"] forKey:@"textureName"];
     [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
 }
@@ -2706,6 +2711,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [self storeRigTextureinCachesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
     assetAddType = IMPORT_ASSET_ACTION;
     objAsset.isTempAsset = NO;
+    objAsset.textureName = [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"];
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
     editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size()-1);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
@@ -2798,11 +2804,10 @@ void downloadFile(NSString* url, NSString* fileName)
     Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue],[[dict objectForKey:@"y"]floatValue],[[dict objectForKey:@"z"]floatValue],1.0);
     int assetId = [[dict objectForKey:@"assetId"]intValue];
     wstring assetName = [self getwstring:[dict objectForKey:@"name"]];
-    string textureName = *new std::string([[dict objectForKey:@"textureName"] UTF8String]);
     BOOL isTempNode = [[dict objectForKey:@"isTempNode"]boolValue];
-
-    [renderViewMan loadNodeInScene:NODE_SGM AssetId:assetId AssetName:assetName Width:0 Height:0 isTempNode:isTempNode More:dict ActionType:IMPORT_ASSET_ACTION VertexColor:color];
     
+    [renderViewMan loadNodeInScene:NODE_SGM AssetId:assetId AssetName:assetName TextureName:([dict objectForKey:@"textureName"]) Width:0 Height:0 isTempNode:isTempNode More:dict ActionType:IMPORT_ASSET_ACTION VertexColor:color];
+   
     if(!isTempNode){
         if(assetId >= 20000 && assetId <= 30000){
             NSMutableArray* nodes = [[NSMutableArray alloc]init];
@@ -2823,7 +2828,7 @@ void downloadFile(NSString* url, NSString* fileName)
             [nodes removeAllObjects];
             nodes = nil;
         }
-    }
+    }    
 }
 
 void boneLimitsCallBack(){

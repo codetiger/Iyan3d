@@ -280,23 +280,24 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     string meshPath = StoragePath + to_string(assetId) + fileExt;
     string textureFileName = StoragePath + textureName+".png";
     
-    printf("Texture Name : %s",(textureName).c_str());
     if(!checkFileExists(meshPath)) {
         meshPath = FileHelper::getDocumentsDirectory() + to_string(assetId) + fileExt;
-        textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
         if(!checkFileExists(meshPath)){
             meshPath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId) + fileExt;
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
         }
         if(!checkFileExists(meshPath))
             return shared_ptr<Node>();
     }
+    if(!checkFileExists(textureFileName))
+        textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
+        if(!checkFileExists(textureFileName))
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
     
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
     
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
-
+    
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
 
     if(textureName != "" && checkFileExists(textureFileName))

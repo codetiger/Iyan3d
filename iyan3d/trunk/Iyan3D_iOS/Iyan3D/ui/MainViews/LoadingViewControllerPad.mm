@@ -142,8 +142,7 @@
          PLANE = 60004
          SPHERE = 60005
          TORUS = 60006
-         */
-        
+         */        
         for(int i = 0; i < basicShapes.count; i++){
             NSString *mesh = [[NSBundle mainBundle] pathForResource:[basicShapes objectAtIndex:i] ofType:@"sgm"];
             NSString *fileName = [NSString stringWithFormat:@"%@.sgm",[basicShapes objectAtIndex:i]];
@@ -151,6 +150,13 @@
             if([fileManager fileExistsAtPath:mesh]&& ![fileManager fileExistsAtPath:sgmFile]){
                 [fileManager copyItemAtPath:mesh toPath:sgmFile error:nil];
             }
+        }
+        
+        NSString *whiteTexFrom = [[NSBundle mainBundle] pathForResource:@"White-texture" ofType:@"png"];
+        NSString *fileName = @"White-texture.png";
+        NSString *whiteTexTo = [sgm stringByAppendingPathComponent:fileName];
+        if([fileManager fileExistsAtPath:whiteTexFrom]&& ![fileManager fileExistsAtPath:whiteTexTo]){
+            [fileManager copyItemAtPath:whiteTexFrom toPath:whiteTexTo error:nil];
         }
         
         NSString *resourcePath3 = [[NSBundle mainBundle] pathForResource:@"32553-cm" ofType:@"png"];
