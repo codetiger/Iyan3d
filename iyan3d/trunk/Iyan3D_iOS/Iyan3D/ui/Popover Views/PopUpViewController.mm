@@ -57,8 +57,13 @@
     if([clickedBtn isEqualToString:@"importBtn"] && ![Utility IsPadDevice]){
         _popoverBtns.rowHeight = 30;
     }
-    
 }
+
+- (void)viewDidAppear:(BOOL)animated{
+    NSLog(@"\nTable Size %f X %f",_popoverBtns.frame.size.width,_popoverBtns.frame.size.height);
+}
+
+
 
 - (void) setTableData:(NSString *)clickedBtnName{
     

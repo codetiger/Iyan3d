@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorViewController">
             <connections>
                 <outlet property="addFrameBtn" destination="w5e-Hu-oAW" id="ULL-KG-xTQ"/>
+                <outlet property="addJointBtn" destination="c36-dI-7tp" id="iML-TD-flJ"/>
                 <outlet property="animationBtn" destination="58f-dD-DRm" id="xhC-4N-gIj"/>
                 <outlet property="autoRigMirrorSwitch" destination="Re7-TE-mzC" id="5HJ-IB-H9e"/>
                 <outlet property="autorigMirrorLable" destination="OT2-U5-ngG" id="PsV-DQ-cfm"/>
@@ -61,8 +62,8 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LIQ-ou-vmF">
-                            <rect key="frame" x="26" y="359" width="100" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <rect key="frame" x="142" y="360" width="100" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549018" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Cancel">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -72,8 +73,8 @@
                             </connections>
                         </button>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="tas-gG-dDx">
-                            <rect key="frame" x="526" y="359" width="98" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                            <rect key="frame" x="500" y="360" width="98" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Add To Scene">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -83,8 +84,8 @@
                             </connections>
                         </button>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ppu-Mk-vaf">
-                            <rect key="frame" x="428" y="358" width="25" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="428" y="360" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="move-last.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -94,7 +95,7 @@
                         </button>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IMPORT OBJ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Imw-FQ-ihq">
                             <rect key="frame" x="319" y="360" width="100" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.42352944609999998" alpha="1" colorSpace="deviceRGB"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -102,7 +103,7 @@
                         </label>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="D8h-yp-xgX">
                             <rect key="frame" x="284" y="360" width="25" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="move-first.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -112,11 +113,23 @@
                         </button>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="ebG-GY-iXz" userLabel="center_progress">
                             <rect key="frame" x="358" y="197" width="20" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="c36-dI-7tp">
+                    <rect key="frame" x="308" y="52" width="120" height="35"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                    <state key="normal" title="   ADD JOINT" image="add-frame.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="addJoinAction:" destination="-1" eventType="touchUpInside" id="TGX-Fj-v6W"/>
+                    </connections>
+                </button>
                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mirror" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OT2-U5-ngG" userLabel="MirrorLable">
                     <rect key="frame" x="10" y="59" width="55" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -472,6 +485,7 @@
         <image name="Scale_Pad.png" width="42" height="29"/>
         <image name="Undo_IPhone.png" width="17" height="20"/>
         <image name="View_IPhone.png" width="19" height="19"/>
+        <image name="add-frame.png" width="18" height="18"/>
         <image name="move-first.png" width="40" height="40"/>
         <image name="move-last.png" width="40" height="40"/>
     </resources>
