@@ -66,6 +66,7 @@
 #define ASSET_LIGHT 8
 #define ASSET_IMAGE 9
 #define ASSET_TEXT_RIG 10
+#define ASSET_TEXT 11
 #define ASSET_ADDITIONAL_LIGHT 900
 
 #define ADD_BUTTON_TAG 99
@@ -1670,14 +1671,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
         
     }
-      else if(selectedNodeType == NODE_TEXT_SKIN && selectedAssetId != NOT_EXISTS){
+      else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
         Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-        [self load3DTex:ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+          
+          [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
 }
 
@@ -1711,14 +1713,14 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
         [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
     }
-    else if(selectedNodeType == NODE_TEXT_SKIN && selectedAssetId != NOT_EXISTS){
+    else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                     encoding:[NSString defaultCStringEncoding]];
         Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-        [self load3DTex:ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
 }
 
@@ -1897,12 +1899,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NODE_TYPE selectedNodeType = NODE_UNDEFINED;
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
             selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
-            if(selectedNodeType!=NODE_SGM){
-                UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones can be added only for SGM nodes." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            
+            if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT) {
+                UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones cannot be added to this model." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [error show];
             }
-            else if (selectedNodeType!= NODE_CAMERA && selectedNodeType != NODE_LIGHT && selectedNodeType != NODE_ADDITIONAL_LIGHT)
-            {
+            else {
                 [self.addJointBtn setHidden:YES];
                 [self.moveLast setHidden:NO];
                 [self.moveFirst setHidden:NO];
@@ -2233,6 +2235,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
                     return true;
             break;
         }
+        case NODE_TEXT:
         case NODE_TEXT_SKIN: {
             AssetItem* assetObj = [[CacheSystem cacheSystem] GetAssetByName:[NSString stringWithUTF8String:fileName.c_str()]];
             BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:assetObj.assetId];

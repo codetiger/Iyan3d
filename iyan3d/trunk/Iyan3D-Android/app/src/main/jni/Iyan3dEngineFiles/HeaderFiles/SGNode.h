@@ -28,7 +28,6 @@ class SGNode{
 private:
     NODE_TYPE type;
     
-    bool checkFileExists(std::string fileName);
 
 public:
     bool isRigged;
@@ -50,6 +49,7 @@ public:
     
     SGNode(NODE_TYPE type);
     ~SGNode();
+    bool checkFileExists(std::string fileName);
     void setSkinningData(SkinMesh *mesh);
     shared_ptr<Node> loadNode(int assetId,std::string texturePath,NODE_TYPE objectType,SceneManager *smgr, std::wstring imagePath,int width,int height,Vector4 textColor, string &filePath);
     shared_ptr<Node> load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments);

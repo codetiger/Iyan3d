@@ -464,6 +464,26 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
+void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor)
+{
+    if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
+        return;
+    
+    string texturePath = constants::BundlePath + "/" + textureFileName;
+    
+    if(textureFileName != "" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
+        nodes[selectedNodeId]->props.perVertexColor = false;
+        Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
+        nodes[selectedNodeId]->node->setTexture(nodeTex,1);
+        nodes[selectedNodeId]->textureName = textureFileName;
+    } else {
+        nodes[selectedNodeId]->textureName = "";
+        nodes[selectedNodeId]->props.vertexColor = vertexColor;
+        nodes[selectedNodeId]->props.perVertexColor = true;
+    }
+
+}
+
 bool SGEditorScene::isNodeInSelection(SGNode *sgNode)
 {
     bool status = false;

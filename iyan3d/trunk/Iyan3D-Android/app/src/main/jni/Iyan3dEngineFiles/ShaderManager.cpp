@@ -63,6 +63,9 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
     if(matName == "SHADER_SHADOW_1ST_PASS"){
         
     } else if(matName.find("SHADER_VERTEX_COLOR_SHADOW_SKIN") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN_TOON") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN") !=  string::npos) {
+        setVertexColorUniform(sgNode->node->material,sgNode->props.vertexColor,SHADER_COMMON_SKIN_VertexColor,smgr->getNodeIndexByID(sgNode->node->getID()));
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, false);
+
         setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, true);
         setJointTransform(sgNode, SHADER_PERVERTEXCOLOR_jointData, smgr);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);

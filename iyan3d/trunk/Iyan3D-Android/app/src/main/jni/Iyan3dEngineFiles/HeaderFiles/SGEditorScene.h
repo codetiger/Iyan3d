@@ -166,6 +166,7 @@ public:
     SGJoint* getSelectedJoint();
     shared_ptr<Node> getParentNode();
     
+    void changeTexture(string texturePath, Vector3 vertexColor);
     bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();
     bool allNodesRemovable();

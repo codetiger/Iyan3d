@@ -21,6 +21,7 @@ SGNode::SGNode(NODE_TYPE type){
     props.brightness = 1.0;
     props.shininess = 0.0;
     props.fontSize = 20;
+    props.perVertexColor = false;
     props.nodeSpecificFloat = 0.0;
     textureName = "";
 }
@@ -185,7 +186,7 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     
     string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
     
-    if(checkFileExists(textureFileName)) {
+    if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
         node->setTexture(nodeTex,1);
@@ -247,7 +248,7 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     
     string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
     
-    if(checkFileExists(textureFileName)) {
+    if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
         node->setTexture(nodeTex,1);
@@ -298,7 +299,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
 
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
 
-    if(checkFileExists(textureFileName))
+    if(textureName != "" && checkFileExists(textureFileName))
     {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -355,7 +356,7 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1),true);
     
-    if(checkFileExists(textureFileName)) {
+    if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
         node->setTexture(nodeTex,1);

@@ -61,7 +61,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         {
             status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType());
         }
-        else if (sgNode->getType() == NODE_TEXT_SKIN) {
+        else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
             status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType());
         } else if (sgNode->getType() == NODE_IMAGE) {
             status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType());
@@ -119,7 +119,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
         {
             status = currentScene->downloadMissingAssetsCallBack(to_string(sgNode->assetId),sgNode->getType(), env, type);
         }
-        else if (sgNode->getType() == NODE_TEXT_SKIN) {
+        else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
             
             status = currentScene->downloadMissingAssetsCallBack(sgNode->optionalFilePath,sgNode->getType(),env,type);
         } else if (sgNode->getType() == NODE_IMAGE) {
@@ -377,7 +377,7 @@ bool SGSceneLoader::removeSelectedObjects()
     currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED_BEFORE, 0);
     for(int i =0; i < actionIds.size(); i++){
         int nodeId = currentScene->actionMan->getObjectIndex(actionIds[i]);
-        if(currentScene->nodes[nodeId]->getType() == NODE_TEXT_SKIN || currentScene->nodes[nodeId]->getType() == NODE_IMAGE)
+        if(currentScene->nodes[nodeId]->getType() == NODE_TEXT_SKIN || currentScene->nodes[nodeId]->getType() == NODE_TEXT || currentScene->nodes[nodeId]->getType() == NODE_IMAGE)
             currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, nodeId);
         else if (currentScene->nodes[nodeId]->getType() == NODE_OBJ || currentScene->nodes[nodeId]->getType() == NODE_SGM || currentScene->nodes[nodeId]->getType() == NODE_RIG || currentScene->nodes[nodeId]->getType() == NODE_ADDITIONAL_LIGHT)
             currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, nodeId);

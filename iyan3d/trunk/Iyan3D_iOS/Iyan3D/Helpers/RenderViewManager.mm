@@ -23,6 +23,7 @@
 #define ASSET_LIGHT 8
 #define ASSET_IMAGE 9
 #define ASSET_TEXT_RIG 10
+#define ASSET_TEXT 11
 #define ASSET_ADDITIONAL_LIGHT 900
 #define ADD_OBJECT 100
 #define DELETE_OBJECT 200
@@ -276,6 +277,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             
             break;
         }
+        case ASSET_TEXT:
         case ASSET_TEXT_RIG: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
             float red = [[moreDetail objectForKey:@"red"]floatValue];
@@ -284,7 +286,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             float alpha = [[moreDetail objectForKey:@"alpha"]floatValue];
             NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
-            SGNode* textNode = editorScene->loader->loadNode(NODE_TEXT_SKIN, 0,"",name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
+            NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
+            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,"",name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
@@ -326,7 +329,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->selectMan->multipleSelections(nodeIndex);
         editorScene->selectedNodeId = nodeIndex;
         if(!isUndoOrRedo){
-            if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT_SKIN || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE)
+            if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT_SKIN || editorScene->nodes[nodeIndex]->getType() == NODE_TEXT || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, 0);
             else if (editorScene->nodes[nodeIndex]->getType() == NODE_OBJ || editorScene->nodes[nodeIndex]->getType() == NODE_SGM || editorScene->nodes[nodeIndex]->getType() == NODE_RIG || editorScene->nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);

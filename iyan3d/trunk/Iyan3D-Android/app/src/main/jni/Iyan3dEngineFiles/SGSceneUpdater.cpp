@@ -381,7 +381,8 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     case NODE_LIGHT:
                     case NODE_OBJ:
                     case NODE_SGM:
-                    case NODE_IMAGE: {
+                    case NODE_IMAGE:
+                    case NODE_TEXT:{
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
                         break;
                     }
