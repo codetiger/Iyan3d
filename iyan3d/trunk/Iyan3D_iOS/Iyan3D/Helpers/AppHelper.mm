@@ -821,6 +821,13 @@
         NSLog(@"Request Successfull");
         NSLog(@"response %@",[operation responseString]);
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        int status = [[dict objectForKey:@"result"] intValue];
+        if(status > 0) {
+        } else {
+            NSString *message = [dict objectForKey:@"message"];
+            [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
+        }
+
     }
      
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {

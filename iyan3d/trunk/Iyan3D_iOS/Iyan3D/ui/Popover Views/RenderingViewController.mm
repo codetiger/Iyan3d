@@ -331,11 +331,15 @@
 
 - (void) updateCreditLable
 {
-    [_creditLable setHidden:NO];
-    int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
-    int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-    int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? ((int)(frames/2) + ((_watermarkSwitch.isOn) ? 0 : 50)): (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
-    _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && [[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"])
+        [_creditLable setHidden:YES];
+    else {
+        [_creditLable setHidden:NO];
+        int valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 3 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 2 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 1 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 0.5 : 0;
+        int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
+        int credits = (((resolutionType == THREE_HUNDRED_SIXTY_P ) ? ((int)(frames/2) + ((_watermarkSwitch.isOn) ? 0 : 50)): (frames * valueForRender) + ((_watermarkSwitch.isOn) ? 0 : 50)))  * -1;
+        _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
+    }
 }
 
 -(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths

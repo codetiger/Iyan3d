@@ -53,6 +53,11 @@
     }
     [self.sceneView setHidden:YES];
     
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"]) {
+        UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You have already upgraded to Premium. Please use 'Restore Purchase' in 'Settings' menu to verify your purchase." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [infoAlert show];
+    }
+    
     /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   

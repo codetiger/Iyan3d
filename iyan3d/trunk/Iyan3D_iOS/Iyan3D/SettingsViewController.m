@@ -320,11 +320,20 @@
             if ([[restoreIds objectAtIndex:i] isEqual:@"objimport"]) {
                 CacheSystem* cacheSystem = [CacheSystem cacheSystem];
                 [cacheSystem addOBJImporterColumn];
-                [[AppHelper getAppHelper] saveBoolUserDefaults:[cacheSystem checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
-                
+                [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
+                [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"hasRestored"];
                 [[AppHelper getAppHelper] verifyRestorePurchase];
                 [AppHelper getAppHelper].delegate = nil;
+                break;
+            } else {
+                [[AppHelper getAppHelper] saveBoolUserDefaults:false withKey:@"premiumUnlocked"];
+                [[AppHelper getAppHelper] saveBoolUserDefaults:false withKey:@"hasRestored"];
             }
+        }
+        
+        if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] || ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"]) {
+            UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"There seems to be a problem with your purchase. Please make sure that you have upgraded to Premium with the current account." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [infoAlert show];
         }
 
     }
