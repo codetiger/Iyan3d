@@ -67,7 +67,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_TEXT_SKIN:{
             // 'width' here is font size and 'height' is bevel value
-            node = load3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
+            node = loadSkin3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;
@@ -109,7 +109,7 @@ shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance ,
     return lightNode;
 }
 
-shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
+shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
     if(bevelRadius == 0 || bevelSegments == 0)
         bevelSegments = 0;
     
@@ -175,6 +175,68 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     return node;
 }
 
+shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
+    if(bevelRadius == 0 || bevelSegments == 0)
+        bevelSegments = 0;
+    
+    string pathForFont;
+    if(fontPath == "") {
+        width = 3;
+        fontPath = DEFAULT_FONT_FILE;
+        fontColor = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z,1.0);
+    }
+#ifdef IOS
+    pathForFont = FileHelper::getCachesDirectory();
+#elif ANDROID
+    pathForFont = constants::DocumentsStoragePath + "/fonts/";
+#endif
+    
+    pathForFont += fontPath;
+    if(FILE *file = fopen(pathForFont.c_str(), "r"))
+        fclose(file);
+    else {
+#ifdef IOS
+        pathForFont = FileHelper::getDocumentsDirectory() + "Resources/Fonts/" + fontPath;
+#elif ANDROID
+        pathForFont = constants::DocumentsStoragePath + "/fonts/userFonts/"+fontPath;
+#endif
+        if(FILE *file = fopen(pathForFont.c_str(), "r"))
+            fclose(file);
+        else {
+#ifdef IOS
+            pathForFont = FileHelper::getDocumentsDirectory() + "Resources/Fonts/" + fontPath;
+#elif ANDROID
+            pathForFont = constants::DocumentsStoragePath + "/fonts/userFonts/"+fontPath;
+#endif
+            if(FILE *file = fopen(pathForFont.c_str(), "r"))
+                fclose(file);
+            else {
+                printf("File not exists at %s ",pathForFont.c_str());
+                return shared_ptr<Node>();
+            }
+        }
+    }
+    
+    Mesh *mesh = TextMesh3d::get3DTextMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
+    shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
+    node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+
+    if(mesh == NULL)
+        return shared_ptr<Node>();
+    
+    string textureFileName = FileHelper::getDocumentsDirectory() + textureName + ".png";
+    
+    if(checkFileExists(textureFileName)) {
+        props.perVertexColor = false;
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        node->setTexture(nodeTex,1);
+    } else
+        props.perVertexColor = true;
+
+    return node;
+}
+
+
 shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr)
 {
     string StoragePath;
@@ -211,38 +273,20 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
     
-    if(!checkFileExists(textureFileName))
-    {
-        props.perVertexColor = true;
-        
-        if(props.vertexColor == Vector3(-1,-1,-1)){
-            Vector4 optionalData1 = mesh->getLiteVertexByIndex(0)->optionalData1;
-            props.vertexColor = Vector3(optionalData1.x,optionalData1.y,optionalData1.z);
-        }
-        else{
-            for(int i = 0; i < mesh->getVerticesCount(); i++) {
-                Vector4 *optionalData1 = &(mesh->getLiteVertexByIndex(i)->optionalData1);
-                (*optionalData1) = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z, 1.0);
-            }
-        }
-    } else
-        props.perVertexColor = false;
-    
-    mesh->Commit();
-    
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
-    
-    if(props.perVertexColor)
-        node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
-    else {
-        node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+
+    node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+
+    if(checkFileExists(textureFileName))
+    {
+        props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
         node->setTexture(nodeTex,1);
-    }
+    } else
+        props.perVertexColor = true;
     
     if(objectType == NODE_OBJ && objLoader != NULL)
         delete objLoader;
-    
     return node;
 }
 
@@ -294,9 +338,9 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
         node->setTexture(nodeTex,1);
-    } else {
+    } else
         props.perVertexColor = true;
-    }
+    
     return node;
 }
 void SGNode::setSkinningData(SkinMesh *mesh){

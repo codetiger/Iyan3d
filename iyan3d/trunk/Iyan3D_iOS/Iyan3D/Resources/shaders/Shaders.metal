@@ -236,7 +236,9 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant float& shininess [[ buffer(SHADER_COMMON_shininess) ]],
                                 constant packed_float3& eyePos [[ buffer(SHADER_COMMON_eyePos) ]],
                                 constant float& shadowDarkness [[ buffer(SHADER_COMMON_shadowDarkness) ]],
-                                unsigned int vid [[ vertex_id ]]
+                                unsigned int vid [[ vertex_id ]],
+                                constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                 )
 {
     float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
@@ -246,7 +248,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.vertexPosCam = vertex_position_cameraspace;
     out.transparency = transparency;
     out.position = mvp * vertex_position_objectspace;
-    float2 uv = vertex_array[vid].texCoord1;
+    float2 uv = (int(isVertexColored) == 0) ? vertex_array[vid].texCoord1 : float2(0.0,0.0);
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     //Shadow Coords Calculation -----------
@@ -255,7 +257,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
     out.vertexDepth = texCoords.z;
-    out.perVertexColor = float4(1.0);
+    out.perVertexColor = (int(isVertexColored) == 0) ? float4(1.0) : float4(float3(vertColor[0].data),1.0);
     //----------
     
     // Lighting Calculation-----------

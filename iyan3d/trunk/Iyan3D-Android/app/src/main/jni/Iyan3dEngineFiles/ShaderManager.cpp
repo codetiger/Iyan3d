@@ -122,7 +122,10 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setLightViewProjMatrix(sgNode,SHADER_COMMON_SKIN_lightViewProjMatrix);
         setViewMatrix(sgNode,SHADER_COMMON_SKIN_ViewMatrix);
     }else if(matName.find("SHADER_COMMON") !=  string::npos || matName.find("SHADER_TOON") !=  string::npos){
-        setIsVertexColored(sgNode, false , SHADER_COMMON_isVertexColored, true);
+        setVertexColorUniform(sgNode->node->material,sgNode->props.vertexColor,SHADER_COMMON_SKIN_VertexColor,smgr->getNodeIndexByID(sgNode->node->getID()));
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, false);
+
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, true);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode,SHADER_COMMON_mvp);
         setModelMatrix(sgNode, SHADER_COMMON_world);

@@ -12,7 +12,9 @@ attribute vec3 vertNormal;
 attribute vec2 texCoord1;
 
 uniform int isLighting;
+uniform float isVertexColored;
 uniform vec3 eyePos;
+uniform vec3 perVertexColor;
 uniform mat4 mvp,Model,lightViewProjection;
 
 varying float shadowDist,lightingValue;
@@ -23,7 +25,9 @@ varying vec4 texCoordsBias,normal,eyeVec , vertexPosCam;
 
 void main()
 {
-    vertexColor = vec3(0.0);
+    vertexColor = (int(isVertexColored) == 0) ? vec3(0.0) : perVertexColor;
+    vTexCoord = (int(isVertexColored) == 0) ? texCoord1 : vec2(0.0);
+    
     lightingValue = float(isLighting);
     vec4 vertex_position_cameraspace = Model * vec4(vertPosition, 1.0);
     vertexPosCam = vertex_position_cameraspace;
@@ -40,15 +44,14 @@ void main()
     //--------------
     
     //Lighting Calculation-------
-    if(isLighting == 1){
+    if(isLighting == 1) {
         vec4 eye_position_cameraspace = vec4(vec3(eyePos),1.0);
         normal = normalize(Model * vec4(vertNormal, 0.0));
         eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-    }else{
+    }else {
         shadowDist = 0.0;
     }
     //-----------
-    vTexCoord = texCoord1;
     gl_Position = (mvp) * vec4(vec3(vertPosition),1.0);
 }
 

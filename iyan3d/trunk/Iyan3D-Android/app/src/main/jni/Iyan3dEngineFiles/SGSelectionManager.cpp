@@ -329,8 +329,10 @@ void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent, bool resetK
             selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->updateAbsoluteTransformation();
             positions.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsolutePosition());
             Vector3 delta = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getRotationInDegree();
-            rotations.push_back(Quaternion(delta * DEGTORAD));
-            scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
+            if(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->getType() != NODE_LIGHT) {
+                rotations.push_back(Quaternion(delta * DEGTORAD));
+                scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
+            }
         }
     }
 
@@ -343,8 +345,10 @@ void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent, bool resetK
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setParent(shared_ptr<Node>());
         if(resetKeys) {
             selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setPosition(positions[i], selectionScene->currentFrame);
-            selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setRotation(rotations[i], selectionScene->currentFrame);
-            selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setScale(scales[i], selectionScene->currentFrame);
+            if(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->getType() != NODE_LIGHT) {
+                selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setRotation(rotations[i], selectionScene->currentFrame);
+                selectionScene->nodes[selectionScene->selectedNodeIds[i]]->setScale(scales[i], selectionScene->currentFrame);
+            }
         }
     }
     if(selectionScene->selectedNodeIds.size())

@@ -372,11 +372,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
         SGNode *sgNode = updatingScene->nodes[index];
         if((updatingScene->selectedNodeId == index || std::find(updatingScene->selectedNodeIds.begin(), updatingScene->selectedNodeIds.end(), index) != updatingScene->selectedNodeIds.end())&& !updatingScene->isRigMode) {
             //DO NOTHING
-        }
-        else if((sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ) && sgNode->props.perVertexColor){
-            sgNode->node->setMaterial(smgr->getMaterialByIndex(vertexColorType));
-        }
-        else {
+        } else {
                 switch (sgNode->getType()) {
                     case NODE_CAMERA: {
                         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
