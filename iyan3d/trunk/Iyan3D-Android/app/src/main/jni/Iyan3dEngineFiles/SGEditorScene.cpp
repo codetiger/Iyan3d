@@ -256,6 +256,7 @@ int SGEditorScene::redo()
 
 bool SGEditorScene::generateSGFDFile(int frame)
 {
+	updater->setDataForFrame(frame);
 	return SGCloudRenderingHelper::writeFrameData(this, smgr, frame);
 }
 

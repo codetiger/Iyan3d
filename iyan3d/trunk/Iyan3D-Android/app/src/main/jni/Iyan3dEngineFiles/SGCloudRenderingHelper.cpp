@@ -74,7 +74,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             FileHelper::writeFloat(&frameFilePtr, lightColor.x); //Emission Color r
             FileHelper::writeFloat(&frameFilePtr, lightColor.y); //Emission Color g
             FileHelper::writeFloat(&frameFilePtr, lightColor.z); //Emission Color b
-            FileHelper::writeFloat(&frameFilePtr, 20.0); //Emission Radius
+            FileHelper::writeFloat(&frameFilePtr, 0.5); //Emission Radius
             FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT) ? vertColor.x : 1.0); // Diffusion Color r
             FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT) ? vertColor.y : 1.0); // Diffusion Color g
             FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_TEXT) ? vertColor.z : 1.0); // Diffusion Color b

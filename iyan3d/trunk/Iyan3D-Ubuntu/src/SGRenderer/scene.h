@@ -242,11 +242,8 @@ struct Scene
 
 				double distanceEffect = 1.0f - point.distance(lightPoint) / (meshes[i]->material.emission * 999.0f);
 
-				if(ray.geomID == meshes[i]->id) {
+				if(ray.geomID == meshes[i]->id)
 					lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal) * distanceEffect;
-				} else {
-					lightsContrib = lightsContrib + Vec3fa(1.0f - meshes[i]->material.shadowDarkness) * rayDir.dot(normal) * distanceEffect;
-				}
 			}
 		}
 

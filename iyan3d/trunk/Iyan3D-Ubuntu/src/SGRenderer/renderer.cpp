@@ -74,9 +74,9 @@ TaskDetails getVideoTaskFromServer(string machineId) {
 		if(x.size() == 5) {
 			td.taskId = atoi(x[0].c_str());
 			td.startFrame = atoi(x[1].c_str());
-			td.endFrame = atoi(x[1].c_str());
-			td.width = atoi(x[2].c_str());
-			td.height = atoi(x[3].c_str());
+			td.endFrame = atoi(x[2].c_str());
+			td.width = atoi(x[3].c_str());
+			td.height = atoi(x[4].c_str());
 		}
 	}
 
@@ -215,8 +215,54 @@ bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType) {
 	return true;
 }
 
+bool downloadVideoTaskFiles(TaskDetails td) {
+	mkpath("data/", 0755);
+	mkpath("data/video/", 0755);
+	mkpath("data/video/" + to_string(td.taskId), 0755);
+	printf("Downloading Video Task Files\n");
+
+	printf("Start: %d End: %d\n", td.startFrame, td.endFrame);
+	for(int i = td.startFrame; i <= td.endFrame; i++) {
+		printf("Downloading Frame: %d\n", i);
+		string fileName = "data/video/" + to_string(td.taskId) + "/" + to_string(td.taskId) + "t" + to_string(i) + "f_render.png";
+		string url = "http://www.iyan3dapp.com/appapi/renderFiles/"  + to_string(td.taskId) + "/" + to_string(td.taskId) + "t" + to_string(i) + "f_render.png";
+		if(!file_exists(fileName))
+			if(!downloadFile(url.c_str(), fileName.c_str()))
+				return false;
+	}
+	return true;
+}
+
+string exec(const char* cmd) {
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) return "ERROR";
+    char buffer[128];
+    std::string result = "";
+    while (!feof(pipe.get())) {
+        if (fgets(buffer, 128, pipe.get()) != NULL)
+            result += buffer;
+    }
+    return result;
+}
+
+bool uploadVideoToServer(TaskDetails td) {
+	string filename = to_string(td.taskId) + ".mp4";
+	return uploadFile(("http://www.iyan3dapp.com/appapi/finishtask.php?taskid=" + to_string(td.taskId) + "&frame=0").c_str(), filename.c_str());
+}
+
 bool videoTask(TaskDetails td) {
-	return false;
+	if(!downloadVideoTaskFiles(td))
+		return false;
+
+	printf("Creating Video File\n");
+
+	chdir(("data/video/" + to_string(td.taskId)).c_str());
+
+	string cmd = "convert -delay 1 " + to_string(td.taskId) + "t*f_render.png " + to_string(td.taskId) + ".mp4";
+	exec(cmd.c_str());
+
+	uploadVideoToServer(td);
+	return true;
 }
 
 bool renderTask(TaskDetails td) {
