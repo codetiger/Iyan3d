@@ -39,8 +39,6 @@
 #define IMPORT_PARTICLE 7
 #define CHANGE_TEXTURE 7
 
-
-
 #define ABOUT 0
 #define HELP 1
 #define TUTORIAL 2
@@ -107,7 +105,7 @@
 
 #define ONE_FRAME 0
 #define TWENTY_FOUR_FRAMES 1
-#define TWO_FOURTY_FRAMES 2
+#define TWO_FOURTY_FRAMES 240
 
 
 #define SETTINGS 3
@@ -126,9 +124,9 @@ BOOL missingAlertShown;
         cache = [CacheSystem cacheSystem];
         constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString* cachesDir = [paths objectAtIndex:0];
+        cachesDir = [paths objectAtIndex:0];
         NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* docDir = [docPaths objectAtIndex:0];
+        docDir = [docPaths objectAtIndex:0];
         constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
         isViewLoaded = false;
         lightCount = 1;
@@ -250,48 +248,19 @@ BOOL missingAlertShown;
 }
 
 - (void)changeAllButtonBG{
-    if(editorScene->isNodeSelected)
+    UIColor *selectedColor = [UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1];
+    UIColor *unSelectedColor = [UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1];
+    if(editorScene->isNodeSelected || editorScene->selectedNodeIds.size()>0)
     {
-        if(editorScene->controlType==MOVE){
-            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
-            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            
-        }
-        if(editorScene->controlType==ROTATE){
-            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
-            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        }
-        if(editorScene->controlType==SCALE){
-            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
-            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        }
-    }
-    else if (editorScene->selectedNodeIds.size()>0)
-    {
-        if(editorScene->controlType==MOVE){
-            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
-            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        }
-        if(editorScene->controlType==ROTATE){
-            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
-            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        }
-        if(editorScene->controlType==SCALE){
-            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
-            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        }
+        [_moveBtn setBackgroundColor:(editorScene->controlType==MOVE) ? selectedColor : unSelectedColor];
+        [_rotateBtn setBackgroundColor:(editorScene->controlType==ROTATE) ? selectedColor : unSelectedColor];
+        [_scaleBtn setBackgroundColor:(editorScene->controlType==SCALE) ? selectedColor : unSelectedColor];
     }
     else
     {
-        [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
-        [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+        [self.moveBtn setBackgroundColor:unSelectedColor];
+        [self.rotateBtn setBackgroundColor:unSelectedColor];
+        [self.scaleBtn setBackgroundColor:unSelectedColor];
     }
 }
 
@@ -522,7 +491,6 @@ BOOL missingAlertShown;
 - (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType
 {
     assetAddType = actionType;
-    NSLog(@"Is Temp Asset : %d " , assetItem.isTempAsset);
     assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
 }
@@ -1108,7 +1076,7 @@ BOOL missingAlertShown;
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+    self.popoverController.popoverContentSize = CGSizeMake(205.0, 345.0);
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
     CGRect rect = _importBtn.frame;
@@ -1951,32 +1919,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                            
                                        }];
         [view addAction:deleteButton];
-        
-//        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->selectedNodeId!=-1){
-//            UIAlertAction* duplicateButton = [UIAlertAction
-//                                              actionWithTitle:@"Duplicate"
-//                                              style:UIAlertActionStyleDefault
-//                                              handler:^(UIAlertAction * action)
-//                                              {
-//                                                  [self createDuplicateAssets];
-//                                                  [self updateAssetListInScenes];
-//                                              }];
-//            
-//            [view addAction:duplicateButton];
-//        }
-//        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE && editorScene->selectedNodeId!=-1){
-//            UIAlertAction* changeTexture = [UIAlertAction
-//                                            actionWithTitle:@"Change Texture"
-//                                            style:UIAlertActionStyleDefault
-//                                            handler:^(UIAlertAction * action)
-//                                            {
-//                                                [self changeTextureForAsset];
-//                                            }];
-//            [view addAction:changeTexture];
-//        }
-
-    
-    
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceRect = arect;
     popover.sourceView=self.renderView;
@@ -2505,32 +2447,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 -(void) optionBtnDelegate:(int)indexValue
 {
-    editorScene->nodes[0]->setPosition(editorScene->viewCamera->getPosition(), editorScene->currentFrame);
-    
-    
-    /*
-
-    Vector3 nodeRot = editorScene->viewCamera->getViewMatrix().getRotationInDegree();
-    Vector3 initDir = (editorScene->viewCamera->getTarget() - editorScene->nodes[0]->getNodePosition()).normalize();
-    Vector3 targetDir = (editorScene->viewCamera->getTarget() - editorScene->viewCamera->getPosition()).normalize();
-    Quaternion rotQ = MathHelper::rotationBetweenVectors(targetDir, initDir);
-    rotQ = MathHelper::RotateNodeInWorld(nodeRot, rotQ);
-    Vector3 rotation = MathHelper::toEuler(rotQ);
-    rotation *= -1;
-    
-    editorScene->nodes[0]->setRotation(Quaternion(rotation * DEGTORAD), editorScene->currentFrame);
-    editorScene->nodes[0]->setRotationOnNode(rotQ);
-     Vector3 camera = editorScene->nodes[0]->getNodePosition();
-     Vector3 viewCamera = editorScene->viewCamera->getPosition();
-     Vector3 rotDir = (viewCamera - camera).normalize();
-     Quaternion rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(1.0,1.0,1.0));
-     editorScene->nodes[0]->setRotation(rotQ, editorScene->currentFrame);
-     */
-    NSLog(@"\nCamera Rotation : %f %f %f ",editorScene->viewCamera->getViewMatrix().getRotationInDegree().x,
-          editorScene->viewCamera->getRotationInRadians().x,
-          editorScene->viewCamera->getTarget().x);
-    
-    editorScene->updater->setDataForFrame(editorScene->currentFrame);
     [self.popoverController dismissPopoverAnimated:YES];
 }
 
