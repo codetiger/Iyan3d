@@ -40,7 +40,6 @@ SGEditorScene *editorScene;
     NSString* cachesDir = [paths objectAtIndex:0];
     constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
     touchCountTracker = 0;
-    lightCount = 1;
     smgr = sceneMngr;
 }
 
@@ -319,10 +318,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             //TODO enum for max lights
             if(ShaderManager::lightPosition.size() < 5) {
                 editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId ,"",name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId , "Light"+ to_string(assetId-ASSET_ADDITIONAL_LIGHT));
+
+                }
                 [self.delegate updateAssetListInScenes];
-                lightCount++;
             } else {
                 NSLog(@"Max lights 5");
             }            

@@ -79,13 +79,14 @@
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+    cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+
     if(_addBtn.tag == OBJ)
     {
         if(indexPath.row > basicShapes.count-1){
             NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
             if([extension isEqualToString:@"obj"]){
-                ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
                 cell.layer.borderColor = [UIColor grayColor].CGColor;
                 cell.assetImageView.image =[UIImage imageNamed:@"objfile.png"];
@@ -94,7 +95,6 @@
             }
         }
         else{
-            ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
             cell.assetNameLabel.text = [basicShapes objectAtIndex:indexPath.row];
             cell.layer.borderColor = [UIColor grayColor].CGColor;
             NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
@@ -106,7 +106,6 @@
     }
     else
     {
-        ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
         cell.layer.borderColor = [UIColor grayColor].CGColor;
         cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
         
@@ -208,7 +207,6 @@
         [_colorWheelBtn setHidden:NO];
     }
    else if(self.addBtn.tag == Texture){
-       [self.objSlideDelegate showOrHideProgress:1];
        if(viewType == IMPORT_OBJFILE)
            [self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
        else

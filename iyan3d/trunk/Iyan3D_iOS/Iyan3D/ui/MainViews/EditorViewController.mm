@@ -221,6 +221,16 @@ BOOL missingAlertShown;
     [self.framesCollectionView reloadData];
     if (editorScene && editorScene->actionMan->actions.size() > 0)
         [self.undoBtn setEnabled:YES];
+    
+    
+    if(editorScene && ShaderManager::lightPosition.size() < 5){
+        int lightId = 0;
+        for(int i = 0 ; i < editorScene->nodes.size(); i++){
+                if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+                    lightId = MAX(editorScene->nodes[i]->assetId,lightId);
+        }
+        lightCount += lightId-((lightId != 0) ? 900 : 0);
+    }
 }
 
  - (void)viewWillDisappear:(BOOL)animated
@@ -1479,8 +1489,8 @@ BOOL missingAlertShown;
                                                     inView:self.view
                                   permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                                   animated:NO];
-            [self changeAllButtonBG];
         }
+        [self changeAllButtonBG];
     }
     else if(editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_EDIT_ENVELOPES) && editorScene->rigMan->isSkeletonJointSelected){
         float scale = editorScene->rigMan->getSelectedJointScale();
@@ -3343,7 +3353,6 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode
 {
-
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -3565,6 +3574,7 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if(!isTempNode){
         if(!isHaveTexture){
+            selectedNodeId = (int)editorScene->nodes.size()-1;
             editorScene->selectMan->selectObject((int)editorScene->nodes.size()-1,false);
             [self changeTexture:@"0-cm" VertexColor:Vector3(1.0) IsTemp:YES]; // for White Texture Thumbnail
             editorScene->selectMan->unselectObject((int)editorScene->nodes.size()-1);

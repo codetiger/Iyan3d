@@ -506,6 +506,7 @@
                 }
                 else {
                     if ([[AppHelper getAppHelper] checkInternetConnected]) {
+                        [self.delegate showOrHideProgress:1];
                         [self.publishBtn setHidden:YES];
                         [self.view setUserInteractionEnabled:NO];
                         [self publishAssetWithUserName:[alertView textFieldAtIndex:0].text];
@@ -595,6 +596,7 @@
                 [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:YES];
                 [_publishBtn setHidden:YES];
             }
+                                    [self.delegate showOrHideProgress:0];
         } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
             NSLog(@"Failure: %@", error);
             [self.view setUserInteractionEnabled:YES];
@@ -603,6 +605,7 @@
             [userNameAlert show];
             complete = YES;
             [_publishBtn setHidden:NO];
+                                    [self.delegate showOrHideProgress:0];
         }];
         [operation start];
     }

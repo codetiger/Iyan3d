@@ -569,12 +569,14 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
         NSMutableArray *array = [[NSMutableArray alloc] init];
         NSString *querySQL = @"";
         
-        if(type > 1) {
+        if(type > 2) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_TYPE, type];
         } else if(type == -1) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@, %@ WHERE %@.%@ <= 6 AND %@.%@ != 4 AND %@.%@ = %@.%@", TABLE_ASSET_INFO, TABLE_DOWNLOADED_ASSET_INFO, TABLE_ASSET_INFO, ASSET_TYPE,TABLE_ASSET_INFO, ASSET_TYPE, TABLE_ASSET_INFO, ASSET_ID, TABLE_DOWNLOADED_ASSET_INFO, DOWNLOADED_ASSET_ID];
         } else if(type == -2) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@, %@ WHERE %@.%@ = 4 AND %@.%@ = %@.%@", TABLE_ASSET_INFO, TABLE_DOWNLOADED_ASSET_INFO, TABLE_ASSET_INFO, ASSET_TYPE, TABLE_ASSET_INFO, ASSET_ID, TABLE_DOWNLOADED_ASSET_INFO, DOWNLOADED_ASSET_ID];
+        } else if(type == 2) {
+            querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d AND %@ > 30000", TABLE_ASSET_INFO, ASSET_TYPE, type,ASSET_ID];
         } else if(type == 1) {
             querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d AND %@ < 40000", TABLE_ASSET_INFO, ASSET_TYPE, type, ASSET_ID];
         }else if(type == 0){

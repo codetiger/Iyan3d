@@ -352,7 +352,7 @@
             }
         }
     }
-    else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES) {
+    else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES || assetvalue.type == OBJ_FILE) {
         
         fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
         NSString* textureFile = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, assetvalue.assetId];
