@@ -265,22 +265,7 @@
     {
         [self.toolbarPosition setSelectedSegmentIndex:0];
     }
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==1)
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:1];
-    }
-    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==2)
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:2];
-    }
-    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==3)
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:3];
-    }
-    else
-    {
-        [self.renderPreviewPosition setSelectedSegmentIndex:0];
-    }
+
     if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
         [self.multiSelectSwitch setOn:YES];
     }
