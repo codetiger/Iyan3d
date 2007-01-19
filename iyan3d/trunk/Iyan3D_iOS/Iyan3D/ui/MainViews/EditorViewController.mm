@@ -2106,6 +2106,8 @@ void downloadFile(NSString* url, NSString* fileName)
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
 {
+    
+    
     NSArray* directoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectoryPath = [directoryPath objectAtIndex:0];
     NSDate *currDate = [NSDate date];
