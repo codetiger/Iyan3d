@@ -34,7 +34,7 @@ public:
         bool readScene(ifstream *filePointer, JNIEnv *env, jclass type);
     #endif
     
-    SGNode* loadNode(NODE_TYPE type,int assetId, std::wstring imagePath = L" ",int imgWidth = 0,int imgHeight = 0,int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0),string fontFilePath = "",bool isTempNode = false);
+    SGNode* loadNode(NODE_TYPE type,int assetId,string textureName ,std::wstring imagePath = L" ",int imgWidth = 0,int imgHeight = 0,int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0),string fontFilePath = "",bool isTempNode = false);
     bool loadNode(SGNode *sgNode,int actionType,bool isTempNode = false);
     bool loadNodeOnUndoORedo(SGAction action, int actionType);
     

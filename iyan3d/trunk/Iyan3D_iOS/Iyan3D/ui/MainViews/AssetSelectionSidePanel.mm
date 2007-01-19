@@ -308,10 +308,20 @@
         }
     }
     else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES) {
+        
         fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
         url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
         
-        if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
+        if (assetvalue.assetId >= 20000 && assetvalue.assetId <= 30000) {
+            fileName = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", docDirPath, assetvalue.assetId];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:fileName])
+                NSLog(@"Rig file not exists");
+            else{
+                assetvalue.isTempAsset = isTempAsset;
+                [self.assetSelectionDelegate loadNodeInScene:assetvalue ActionType:IMPORT_ASSET_ACTION];
+            }
+        }
+        else if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
             [self.assetSelectionDelegate showOrHideProgress:1];
             [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadTextureFileWithReturnId:) priority:NSOperationQueuePriorityHigh];
         }

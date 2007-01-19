@@ -147,6 +147,8 @@
             textureFileName = [[filesList objectAtIndex:indexPath.row]stringByDeletingPathExtension];
         }
     }
+    
+    [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
 }
 
 - (IBAction)addBtnAction:(id)sender {
@@ -166,7 +168,7 @@
         [_colorWheelBtn setHidden:NO];
     }
    else if(self.addBtn.tag == Texture){
-        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture];
+        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
         [self removeFromParentViewController];
     }
@@ -191,7 +193,10 @@
 {
     haveTexture = NO;
     color = vetexColor;
-    [self.collectionView reloadData];
+    if([filesList count] == 0)
+        [self.importFilesCollectionView reloadData];
+    if(isDragFinish)
+        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
 }
 
 

@@ -21,6 +21,7 @@
 #import "RenderingView.h"
 #import "SceneManager.h"
 #import "Constants.h"
+#import "Vector3.h"
 
 @protocol RenderViewManagerDelegate
 
@@ -66,7 +67,7 @@
 - (void) setUpCallBacks:(void*)scene;
 - (void) addCameraLight;
 -(void) showPopOver:(int) selectedNodeId;
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType;
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor;
 - (bool) removeNodeFromScene:(int)nodeIndex IsUndoOrRedo:(BOOL)isUndoOrRedo;
 - (void)addGesturesToSceneView;
 - (void)panOrPinchProgress;

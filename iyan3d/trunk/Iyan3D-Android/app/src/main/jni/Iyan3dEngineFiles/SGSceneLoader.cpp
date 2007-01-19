@@ -54,6 +54,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     for(int i = 0;i < nodeCount;i++){
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
         sgNode->readData(filePointer);
+        printf("SGNode Read Data Finished");
         bool status = true;
         
         if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ)
@@ -80,7 +81,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         if(!nodeLoaded)
             delete sgNode;
     }
-    
+ 
     return true;
 }
 
@@ -160,7 +161,7 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
     
 }
 
-SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath ,bool isTempNode)
+SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,std::wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath ,bool isTempNode)
 {
     if(!currentScene || !smgr)
         return NULL;
@@ -168,7 +169,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,std::wstring name,int
     currentScene->selectMan->unselectObject(currentScene->selectedNodeId);
     currentScene->freezeRendering = true;
     SGNode *sgnode = new SGNode(type);
-    sgnode->node = sgnode->loadNode(assetId,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
+    sgnode->node = sgnode->loadNode(assetId,textureName,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
 
     if(!sgnode->node){
         delete sgnode;
@@ -221,7 +222,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
         return false;
 
     Vector4 nodeSpecificColor = Vector4(sgNode->props.vertexColor.x,sgNode->props.vertexColor.y,sgNode->props.vertexColor.z,1.0);
-    sgNode->node = sgNode->loadNode(sgNode->assetId,sgNode->getType(),smgr,sgNode->name,sgNode->props.fontSize,sgNode->props.nodeSpecificFloat,nodeSpecificColor,sgNode->optionalFilePath);
+    sgNode->node = sgNode->loadNode(sgNode->assetId,sgNode->textureName,sgNode->getType(),smgr,sgNode->name,sgNode->props.fontSize,sgNode->props.nodeSpecificFloat,nodeSpecificColor,sgNode->optionalFilePath);
     if(!sgNode->node){
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         return false;

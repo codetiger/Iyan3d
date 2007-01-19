@@ -22,12 +22,13 @@ SGNode::SGNode(NODE_TYPE type){
     props.shininess = 0.0;
     props.fontSize = 20;
     props.nodeSpecificFloat = 0.0;
+    textureName = "";
 }
 SGNode::~SGNode(){
     clearSGJoints();
     node.reset();
 }
-shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager *smgr, std::wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
+shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE objectType,SceneManager *smgr, std::wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
 {
     shared_ptr<Node> node;
     switch (objectType){
@@ -47,11 +48,13 @@ shared_ptr<Node> SGNode::loadNode(int assetId,NODE_TYPE objectType,SceneManager 
         }
         case NODE_OBJ:
         case NODE_SGM:{
+            textureName = texturePath;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             node = loadSGMandOBJ(assetId,objectType,smgr);
             break;
         }
         case NODE_RIG:{
+            textureName = texturePath;
             node = loadSGR(assetId,objectType,smgr);
             isMirrorEnabled = joints.size() == HUMAN_JOINTS_SIZE ? true : false;
             break;
@@ -192,14 +195,15 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     #endif
     
     string meshPath = StoragePath + to_string(assetId) + fileExt;
-    string textureFileName = StoragePath + to_string(assetId)+"-cm.png";
+        string textureFileName = StoragePath + textureName+".png";
         
+        printf("Texture Name : %s",(textureName).c_str());
         if(!checkFileExists(meshPath)) {
             meshPath = FileHelper::getDocumentsDirectory() + to_string(assetId) + fileExt;
-            textureFileName = FileHelper::getDocumentsDirectory() + to_string(assetId)+"-cm.png";
+            textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
             if(!checkFileExists(meshPath)){
                 meshPath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId) + fileExt;
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId)+"-cm.png";
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
             }
             if(!checkFileExists(meshPath))
                 return shared_ptr<Node>();
@@ -211,9 +215,16 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
         if(!checkFileExists(textureFileName))
         {
             props.perVertexColor = true;
-            for(int i = 0; i < mesh->getVerticesCount(); i++) {
-                Vector4 *optionalData1 = &(mesh->getLiteVertexByIndex(i)->optionalData1);
-                (*optionalData1) = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z, 1.0);
+            
+            if(props.vertexColor == Vector3(-1,-1,-1)){
+                Vector4 optionalData1 = mesh->getLiteVertexByIndex(0)->optionalData1;
+                props.vertexColor = Vector3(optionalData1.x,optionalData1.y,optionalData1.z);
+            }
+            else{
+                for(int i = 0; i < mesh->getVerticesCount(); i++) {
+                    Vector4 *optionalData1 = &(mesh->getLiteVertexByIndex(i)->optionalData1);
+                    (*optionalData1) = Vector4(props.vertexColor.x, props.vertexColor.y, props.vertexColor.z, 1.0);
+                }
             }
         } else
             props.perVertexColor = false;
@@ -262,7 +273,7 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
     #endif
     
     string meshPath = StoragePath + to_string(assetId) + ".sgr";
-    string textureFileName = StoragePath + to_string(assetId)+"-cm.png";
+    string textureFileName = StoragePath + textureName+".png";
     if (!checkFileExists(meshPath) || !checkFileExists(textureFileName)) {
         return shared_ptr<Node>();
     }
@@ -808,13 +819,15 @@ void SGNode::readData(ifstream *filePointer)
     joints.clear();
     assetId = FileHelper::readInt(filePointer);
     int sgbVersion = FileHelper::readInt(filePointer);
+    if(sgbVersion == SGB_VERSION)
+        textureName = FileHelper::readString(filePointer,sgbVersion);
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     isRigged = FileHelper::readBool(filePointer);
     props.isLighting = FileHelper::readBool(filePointer);
     props.brightness = FileHelper::readFloat(filePointer);
     props.shininess = FileHelper::readFloat(filePointer);
     
-    if(sgbVersion == SGB_VERSION) {
+    if(sgbVersion > SGB_VERSION_1) {
         
     	std::wstring nodeSpecificString = FileHelper::readWString(filePointer);
         
@@ -895,6 +908,7 @@ void SGNode::writeData(ofstream *filePointer)
 {
     FileHelper::writeInt(filePointer,assetId);
     FileHelper::writeInt(filePointer,SGB_VERSION); // New sgb version because of changing the format
+    FileHelper::writeString(filePointer, textureName);
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeBool(filePointer,isRigged);
     FileHelper::writeBool(filePointer,props.isLighting);

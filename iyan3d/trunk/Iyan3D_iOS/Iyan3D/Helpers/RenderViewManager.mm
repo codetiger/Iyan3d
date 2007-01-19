@@ -189,14 +189,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void) addCameraLight
 {
-    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION];
+    [self loadNodeInScene:ASSET_CAMERA AssetId:0 AssetName:ConversionHelper::getWStringForString("CAMERA") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
     [self.delegate updateAssetListInScenes:ASSET_CAMERA assetName:@"CAMERA" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
-    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION];
+    [self loadNodeInScene:ASSET_LIGHT AssetId:0 AssetName:ConversionHelper::getWStringForString("LIGHT") Width:0 Height:0 isTempNode:false More:nil ActionType:IMPORT_ASSET_ACTION VertexColor:Vector4(0)];
     [self.delegate updateAssetListInScenes:ASSET_LIGHT assetName:@"LIGHT" actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];
     
 }
 
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType
+- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
 {
     // TODO a lot to implement
    
@@ -213,17 +213,17 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     
     switch (type) {
         case ASSET_CAMERA: {
-            editorScene->loader->loadNode(NODE_CAMERA, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
+            editorScene->loader->loadNode(NODE_CAMERA,assetId ,"",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             break;
         }
         case ASSET_LIGHT: {
-            editorScene->loader->loadNode(NODE_LIGHT, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
+            editorScene->loader->loadNode(NODE_LIGHT, assetId,"",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             break;
         }
         case ASSET_BACKGROUNDS:
         case ASSET_ACCESSORIES: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId,to_string(assetId)+"-cm" ,name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -235,7 +235,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_RIGGED: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED_HUMAN];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId,to_string(assetId)+"-cm",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -247,7 +247,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_OBJ: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, name, 0, 0, assetAddType,Vector4(0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId,"",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -258,7 +258,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_IMAGE: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0, name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_IMAGE, 0,"",name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -291,7 +291,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             float alpha = [[moreDetail objectForKey:@"alpha"]floatValue];
             NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
-            SGNode* textNode = editorScene->loader->loadNode(NODE_TEXT, 0, name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
+            SGNode* textNode = editorScene->loader->loadNode(NODE_TEXT, 0,"",name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
@@ -309,7 +309,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_ADDITIONAL_LIGHT: {
             //TODO enum for max lights
             if(ShaderManager::lightPosition.size() < 5) {
-                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId , name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
+                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId ,"",name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
                 [self.delegate updateAssetListInScenes:ASSET_RIGGED assetName:[NSString stringWithFormat:@"LIGHT %@",assetName] actionType:(int)ADD_OBJECT removeObjectAtIndex:(int)UNDEFINED_OBJECT];

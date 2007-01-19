@@ -37,9 +37,24 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
         return false;
     }
     
+    if(isVertexColor) {
+        unsigned int vertCount = objMes->getVerticesCount();
+        for (unsigned int i = 0; i < vertCount; i++) {
+            Vector4 *optionalData1 = &(objMes->getLiteVertexByIndex(i)->optionalData1);
+            (*optionalData1) = Vector4(vColor.x, vColor.y, vColor.z,1.0);
+        }
+        objMes->Commit();
+    }
+
     shared_ptr<MeshNode> objNode = smgr->createNodeFromMesh(objMes,"ObjUniforms");
     objSGNode->node = objNode;
     
+    if(!isVertexColor) {
+        string texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
+        Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
+        objNode->setTexture(nodeTex,1);
+        objNode->setTexture(objScene->shadowTexture,2);
+    }
     // scale to fit all obj in same proportion-----
     float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();
     float extendY = objNode->getMesh()->getBoundingBox()->getYExtend();
@@ -52,20 +67,6 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     
     objNode->setMaterial(smgr->getMaterialByIndex((isVertexColor) ? SHADER_VERTEX_COLOR_L1 : SHADER_COMMON_L1));
     objSGNode->props.isLighting = true;
-    if(!isVertexColor) {
-        string texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
-        Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
-        objNode->setTexture(nodeTex,1);
-        objNode->setTexture(objScene->shadowTexture,2);
-    } else {
-        Mesh *objMesh = objNode->mesh;
-        unsigned int vertCount = objMesh->getVerticesCount();
-        for (unsigned int i = 0; i < vertCount; i++) {
-            vertexData *vData = objMesh->getLiteVertexByIndex(i);
-            vData->optionalData1 = Vector4(vColor.x, vColor.y, vColor.z,0.0);
-        }
-        objMes->Commit();
-    }
     
     objNode->setID(OBJ_ID);
     objSGNode->node->updateAbsoluteTransformation();
@@ -79,7 +80,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
 
 bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
 {
-    string outputPath = FileHelper::getDocumentsDirectory() + filePath + ".sgm";
+    string outputPath = FileHelper::getDocumentsDirectory()+"/Resources/Sgm/"+filePath + ".sgm";
     ofstream f(outputPath , ios::binary);
     
     unsigned char versionIdentifier = (hasUV) ? UV_MAPPED : VERTEX_COLORED;
@@ -117,9 +118,9 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
     else {
         for (int i = 0; i < counts.colCount; i++) {
             vertexData * vData = objMesh->getLiteVertexByIndex(i);
-            col[i].r = vData->optionalData1.x;
-            col[i].g = vData->optionalData1.y;
-            col[i].b = vData->optionalData1.z;
+            col[i].r = vData->optionalData1.x*255;
+            col[i].g = vData->optionalData1.y*255;
+            col[i].b = vData->optionalData1.z*255;
             f.write((char*)&col[i], sizeof(SSGMColHeader));
         }
     }
