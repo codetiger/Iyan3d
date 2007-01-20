@@ -317,7 +317,7 @@
         }
         else {
             [self.delegate showOrHideProgress:1];
-            url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
+            url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
             [animDownloadQueue cancelAllOperations];
             //[self cancelOperations:animDownloadQueue];
             DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(applyAnimation:) returnObject:[NSNumber numberWithInt:assetItem.boneCount] outputFilePath:fileName andURL:url];
@@ -514,8 +514,8 @@
         NSString* bonecountanim = [NSString stringWithFormat:@"%d", asset.boneCount];
         NSData* animationFile = [NSData dataWithContentsOfFile:filePathLocation];
         NSData* animationImgFile = [NSData dataWithContentsOfFile:imgPathLocation];
-        NSURL* url = [NSURL URLWithString:@"http://www.iyan3dapp.com/appapi/publish.php"];
-        NSString* postPath = @"http://www.iyan3dapp.com/appapi/publish.php";
+        NSURL* url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/publish.php"];
+        NSString* postPath = @"https://www.iyan3dapp.com/appapi/publish.php";
         AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
         NSMutableURLRequest* request = [httpClient multipartFormRequestWithMethod:@"POST"
                                                                              path:postPath

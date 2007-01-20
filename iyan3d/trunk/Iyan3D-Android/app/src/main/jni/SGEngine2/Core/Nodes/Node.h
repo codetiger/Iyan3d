@@ -73,6 +73,7 @@ private:
     shared_ptr< vector< shared_ptr<InstanceNode> > > instancedNodes;
     int id,textureCount;
     bool isMetalSupported();
+    
 protected:
     Mat4 AbsoluteTransformation;
     Vector3 position,scale,rotation;
@@ -80,8 +81,9 @@ protected:
     bool isVisible;
     
 public:
+    BoundingBox bBox;
     skin_type skinType;
-    bool needsVertexPosition,needsVertexNormal,needsVertexColor,needsUV1,needsUV2,needsUV3,updateTransformation,shouldUpdateMesh;
+    bool needsVertexPosition, needsVertexNormal, needsVertexColor, needsUV1, needsUV2, needsUV3, shouldUpdateMesh;
     bool needsIndexBuf;
     DRAW_MODE drawMode;
     u16 activeTextureIndex;
@@ -115,6 +117,7 @@ public:
     void setMaterial(Material* mat,bool isTransparentMaterial = false);
     void setID(int id);
     
+    virtual void updateBoundingBox();
     void updateAbsoluteTransformation(bool updateFromRoot = false);
     void updateAbsoluteTransformationOfChildren();
     void updateRelativeTransformation();
@@ -122,6 +125,7 @@ public:
     void detachAllChildren();
     
     bool CreateNodeInstance(u16 instanceCount);
+    BoundingBox getBoundingBox();
     bool getVisible();
     int getID();
     int getTextureCount();

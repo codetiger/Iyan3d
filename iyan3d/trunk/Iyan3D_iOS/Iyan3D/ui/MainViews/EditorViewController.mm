@@ -1160,6 +1160,11 @@ BOOL missingAlertShown;
 
 #pragma mark - Rendering ViewController Delegates
 
+- (void) saveScene
+{
+    [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
+}
+
 - (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored{
     
     if(!isStored)
@@ -1991,11 +1996,11 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
             }
                 // TODO for sgr in documents directory
                 NSString* filePath = [NSString stringWithFormat:@"%@/%s.%@", cacheDirectory, fileName.c_str(), extension];
-                NSString* url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%s.%@", fileName.c_str(), extension];
+                NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%s.%@", fileName.c_str(), extension];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
                     downloadFile(url, filePath);
                 NSString* texfilePath = [NSString stringWithFormat:@"%@/%s-cm.png", cacheDirectory, fileName.c_str()];
-                NSString* texurl = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/meshtexture/%s.png", fileName.c_str()];
+                NSString* texurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%s.png", fileName.c_str()];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath])
                     downloadFile(texurl, texfilePath);
                 
@@ -2019,7 +2024,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType)
             NSString* docFilePath = [NSString stringWithFormat:@"%@/Resources/Fonts/%s", documentsDirectory, fileName.c_str()];
             if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
                 if (![[NSFileManager defaultManager] fileExistsAtPath:docFilePath]) {
-                    NSString* url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/font/%d.%@", assetObj.assetId, extension];
+                    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/font/%d.%@", assetObj.assetId, extension];
                     if ([assetObj.iap isEqualToString:@"0"] || assetPurchaseStatus)
                         downloadFile(url, filePath);
                     

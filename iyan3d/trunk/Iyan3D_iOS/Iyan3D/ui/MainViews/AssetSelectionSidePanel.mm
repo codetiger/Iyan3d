@@ -289,7 +289,7 @@
         else {
             fileName = [NSString stringWithFormat:@"%@/%d.sgr", cacheDirectory, assetvalue.assetId];
             NSLog(@"File Path : %@",fileName);
-            url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%d.sgr", assetvalue.assetId];
+            url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgr", assetvalue.assetId];
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:fileName] || activity == DOWNLOAD_NODE){
                 [self.assetSelectionDelegate showOrHideProgress:1];
@@ -310,7 +310,7 @@
     else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES) {
         
         fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
-        url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
+        url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
         
         if (assetvalue.assetId >= 20000 && assetvalue.assetId <= 30000) {
             fileName = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", docDirPath, assetvalue.assetId];
@@ -351,7 +351,7 @@
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString* fileName = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, [returnId intValue]];
-    NSString* url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/meshtexture/%d.png", [returnId intValue]];
+    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%d.png", [returnId intValue]];
     
     AssetItem *downloadingAsset = [cache GetAsset:[returnId intValue]];
     

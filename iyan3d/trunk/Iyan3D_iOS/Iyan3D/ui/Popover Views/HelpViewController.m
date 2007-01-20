@@ -103,7 +103,7 @@
 
 -(void) getVideoHelpURL:(NSNumber*) urlId
 {
-    NSString *videoUrl =[NSString stringWithFormat:@"http://www.smackall.com/app/anim3/videolink.php?viewFrom=%@",urlId];
+    NSString *videoUrl =[NSString stringWithFormat:@"https://www.smackall.com/app/anim3/videolink.php?viewFrom=%@",urlId];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:videoUrl]];
     dispatch_async(dispatch_get_main_queue(), ^{
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -237,7 +237,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheDirectory = [paths objectAtIndex:0];
     NSString* fileName = [NSString stringWithFormat:@"%@/%@", cacheDirectory, nameImage];
-    NSString* url = [NSString stringWithFormat:@"http://www.smackall.com/app/anim/videohelp/%@",nameImage];
+    NSString* url = [NSString stringWithFormat:@"https://www.smackall.com/app/anim/videohelp/%@",nameImage];
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
     UIImage* image = [UIImage imageWithData:data];
     [UIImagePNGRepresentation(image) writeToFile:fileName options:NSAtomicWrite error:nil];
@@ -300,7 +300,7 @@
 }
 - (IBAction) moreInfoButtonAction:(id)sender
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.smackall.com/iyan3d/"]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.smackall.com/iyan3d/"]];
 }
 
 -(void) dealloc

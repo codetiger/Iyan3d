@@ -166,6 +166,7 @@ void Mesh::Commit() {
         indicesDataCopy.clear();
         indicesDataMap.clear();
     }
+    BBox.calculateEdges();
 }
 
 void Mesh::clearVerticesArray()

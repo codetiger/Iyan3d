@@ -15,7 +15,10 @@ class SGSelectionManager
 {
 private:
     SceneManager *smgr;
-public:
+    shared_ptr<MeshNode> parentNode;
+    Mesh* sphereMesh;
+    
+public:    
     SGSelectionManager(SceneManager* smgr, void* scene);
     ~SGSelectionManager();
         
@@ -26,7 +29,10 @@ public:
     void getNodeColorFromTouchTexture(bool touchMove = false);
     bool selectNodeOrJointInPixel(Vector2 touchPixel, bool touchMove = false);
     bool updateNodeSelectionFromColor(Vector3 pixel, bool touchMove = false);
-    void highlightSelectedNode();
+    void multipleSelections(int nodeId);
+    void addSelectedChildren();
+    void removeChildren();
+    void highlightSelectedNode(int nodeId = -1);
     void highlightJointSpheres();
     void selectObject(int objectId);
     void unselectObject(int objectId);

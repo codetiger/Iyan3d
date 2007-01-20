@@ -10,7 +10,7 @@
 #import "AFNetworking.h"
 #import "AFJSONRequestOperation.h"
 //#import "Defines.h"
-#define BaseUrl @"http://iyan3dapp.com/appapi/"
+#define BaseUrl @"https://iyan3dapp.com/appapi/"
 @implementation AFAPIClient
 
 + (AFAPIClient *)sharedClient {

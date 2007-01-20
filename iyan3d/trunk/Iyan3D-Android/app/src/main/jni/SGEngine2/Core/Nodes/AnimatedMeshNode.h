@@ -38,7 +38,8 @@ public:
     void updatePartOfMeshCache(rig_type rigType , int jointId = 0);
     void getAllPaintedVertices(SkinMesh *skinMesh , vector<int> &paintedVertices , int jointId);
     void setMesh(AnimatedMesh *mesh , rig_type rigType = NO_RIG);
-    virtual void update();
+    void updateBoundingBox();
+    void update();
     virtual short getActiveMeshIndex(int index);
     virtual Mesh* getMeshByIndex(int index);
     shared_ptr<JointNode> getJointNode(int jointId);

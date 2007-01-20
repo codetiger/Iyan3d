@@ -75,4 +75,3 @@ short MorphNode::getActiveMeshIndex(int index){
     return ActiveMeshes[index];
 }
 
-

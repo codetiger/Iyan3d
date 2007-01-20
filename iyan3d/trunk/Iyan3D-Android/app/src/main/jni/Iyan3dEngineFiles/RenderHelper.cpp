@@ -51,6 +51,19 @@ void RenderHelper::drawGrid()
         return;
     
     Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
+        if(renderingScene->isMultipleSelection && renderingScene->multiNode) {
+            BoundingBox bb = renderingScene->multiNode->node->getBoundingBox();
+            for (int j = 0; j < 3; j++) {
+                smgr->draw3DLine(bb.getEdgeByIndex(j), bb.getEdgeByIndex(j + 1), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+                //printf(" Edge 1 %f %f %f edge 2 %f %f %f ", bb.getEdgeByIndex(j).x, bb.getEdgeByIndex(j + 1))
+                smgr->draw3DLine(bb.getEdgeByIndex(j + 4), bb.getEdgeByIndex(j + 5), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+                smgr->draw3DLine(bb.getEdgeByIndex(j), bb.getEdgeByIndex(j + 5), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+            }
+            smgr->draw3DLine(bb.getEdgeByIndex(3), bb.getEdgeByIndex(0), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+            smgr->draw3DLine(bb.getEdgeByIndex(7), bb.getEdgeByIndex(4), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+            smgr->draw3DLine(bb.getEdgeByIndex(3), bb.getEdgeByIndex(4), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+        }
+    
     for (int i = -20; i <= 20; i+= 5) {
         smgr->draw3DLine(Vector3(i, 0, -20), Vector3(i, 0, 20), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
         smgr->draw3DLine(Vector3(-20, 0, i), Vector3(20, 0, i), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
@@ -191,7 +204,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
     bool isNodeSelected = (renderingScene->isRigMode) ? renderingScene->rigMan->isNodeSelected : renderingScene->isNodeSelected;
     SGNode* selectedNode = (renderingScene->isRigMode) ? renderingScene->rigMan->selectedNode : renderingScene->selectedNode;
     
-    if(isNodeSelected && selectedNode->getType() == NODE_LIGHT)
+    if(!renderingScene->isMultipleSelection && isNodeSelected && selectedNode->getType() == NODE_LIGHT)
         renderingScene->controlType = MOVE;
     
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
@@ -399,7 +412,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool touchMove)
     }
     smgr->Render();
     // Draw Joints
-    if((selectedSGNode && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT) && !touchMove) || renderingScene->isJointSelected)
+    if((selectedSGNode && !renderingScene->isMultipleSelection && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT) && !touchMove) || renderingScene->isJointSelected)
         drawJointsSpheresForRTT(true);
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {

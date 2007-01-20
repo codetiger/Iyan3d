@@ -170,7 +170,9 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     Vector3 nodePos;
-    if(isJointSelected && selectedJoint)
+    if(updatingScene->isMultipleSelection && updatingScene->multiNode)
+        nodePos = updatingScene->multiNode->node->getBoundingBox().getCenter();
+    else if(isJointSelected && selectedJoint)
         nodePos = selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
     else if( isNodeSelected && selectedNode)
         nodePos = selectedNode->node->getAbsoluteTransformation().getTranslation();

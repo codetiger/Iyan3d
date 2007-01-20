@@ -63,6 +63,7 @@ public:
     
     bool isPreviewMode, isRigMode;
     bool freezeRendering , isPlaying;
+    bool isMultipleSelection;
     bool isNodeSelected,isJointSelected,isControlSelected;
     int selectedJointId,selectedNodeId,selectedControlId,controlType;
     int moveNodeId, moveJointId;
@@ -78,6 +79,7 @@ public:
     float topLimit;
     float rightLimit;
 
+    vector<int> selectedNodeIds;
     std::map<int,int> isKeySetForFrame;
     std::map<int,int>::iterator keyFramesIterator;
     
@@ -85,6 +87,7 @@ public:
     
     /* Iyan3D Related classs objects */
     
+    SGNode *multiNode;
     SGNode *selectedNode;
     SGJoint *selectedJoint;
     SGNode* rotationCircle;

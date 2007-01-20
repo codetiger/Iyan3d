@@ -442,6 +442,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     return;
                 _makePanOrPinch = false;
                 editorScene->moveMan->panBegan(p[0] * screenScale, p[1] * screenScale);
+                touchCountTracker = touchCount;
             }
             switch (touchCount) {
                 case 1: {

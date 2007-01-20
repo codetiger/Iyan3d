@@ -7,8 +7,8 @@
 //
 
 #include "CSGRMeshFileLoader.h"
-#include "SGOBJManager.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGOBJManager.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene* objScene;
 

@@ -70,8 +70,8 @@
 
 - (void) getRenderTaskProgress:(int)taskId
 {
-    NSURL* url = [NSURL URLWithString:@"http://www.iyan3dapp.com/appapi/checkprogress.php"];
-    NSString* postPath = @"http://www.iyan3dapp.com/appapi/checkprogress.php";
+    NSURL* url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/checkprogress.php"];
+    NSString* postPath = @"https://www.iyan3dapp.com/appapi/checkprogress.php";
     
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",taskId], @"taskid", nil]];

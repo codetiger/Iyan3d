@@ -9,8 +9,8 @@
 #include "BoundingBox.h"
 BoundingBox::BoundingBox()
 {
-    MaxEdge = Vector3(1, 1, 1);
-    MinEdge = Vector3(-1, -1, -1);
+    MaxEdge = Vector3(-999.0);
+    MinEdge = Vector3(999.0);
 }
 BoundingBox::~BoundingBox()
 {

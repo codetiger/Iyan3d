@@ -171,7 +171,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
     [self dismissViewControllerAnimated:TRUE completion:Nil];
 }
 - (IBAction)moreInfoButtonAction:(id)sender{
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.iyan3dapp.com/features-in-the-premium-version/"]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/features-in-the-premium-version/"]];
 }
 -(void)loadingViewStatus:(BOOL)status
 {

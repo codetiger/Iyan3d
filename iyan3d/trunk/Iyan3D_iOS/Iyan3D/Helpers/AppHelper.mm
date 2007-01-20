@@ -154,7 +154,7 @@
         NSString *fileName, *url;
         if (assetItem.type == FONT) {
             fileName = [NSString stringWithFormat:@"%@/%@", cacheDirectory, assetItem.name];
-            url = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/font/%d.%@", assetItem.assetId, [assetItem.name pathExtension]];
+            url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/font/%d.%@", assetItem.assetId, [assetItem.name pathExtension]];
             DownloadTask *task = [[DownloadTask alloc] initWithDelegateObject:delegateObj selectorMethod:selectorMethod returnObject:assetItem.name outputFilePath:fileName andURL:url];
             task.queuePriority = NSOperationQueuePriorityHigh;
             [queue addOperation:task];
@@ -166,7 +166,7 @@
 {
     jsonArray = [[NSArray alloc] init];
     
-    NSURL *urlForJson = [NSURL URLWithString:@"http://iyan3dapp.com/appapi/json/assetsDetail.json"];
+    NSURL *urlForJson = [NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetail.json"];
     NSURLRequest *request = [NSURLRequest requestWithURL:urlForJson];
     if([NSURLConnection connectionWithRequest:request delegate:self]) {
         NSData *rawData = [NSData dataWithContentsOfURL:urlForJson];
@@ -192,11 +192,11 @@
     NSString* urlString;
     if (viewType == (int)ASSET_SELECTION || viewType == (int)TEXT_VIEW) {
         selectorForTask = @selector(loadAllAssets:);
-        urlString = @"http://iyan3dapp.com/appapi/json/assetsDetail.json";
+        urlString = @"https://iyan3dapp.com/appapi/json/assetsDetail.json";
     }
     else if (viewType == (int)ALL_ANIMATION_VIEW) {
         selectorForTask = @selector(loadAllAnimations:);
-        urlString = @"http://iyan3dapp.com/appapi/json/animationDetail.json";
+        urlString = @"https://iyan3dapp.com/appapi/json/animationDetail.json";
     }
 
     DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:selectorForTask returnObject:nil outputFilePath:@"" andURL:urlString];

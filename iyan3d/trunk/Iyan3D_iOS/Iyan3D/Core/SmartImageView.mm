@@ -121,7 +121,7 @@
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString* assetCellImagePath = [NSString stringWithFormat:@"%@/%@.png", cacheDirectory, assetId];
-    NSString* imageUrl128 = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/animationImage/%@.png", assetId];
+    NSString* imageUrl128 = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/animationImage/%@.png", assetId];
 
     DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(reLoadImage:) returnObject:assetId outputFilePath:assetCellImagePath andURL:imageUrl128];
     task.queuePriority = NSOperationQueuePriorityNormal;
@@ -134,7 +134,7 @@
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     NSString* assetCellImagePath = [NSString stringWithFormat:@"%@/%@.png", cacheDirectory, assetId];
-    NSString* imageUrl128 = [NSString stringWithFormat:@"http://iyan3dapp.com/appapi/128images/%@.png", assetId];
+    NSString* imageUrl128 = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/128images/%@.png", assetId];
 
     DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(reLoadImage:) returnObject:assetId outputFilePath:assetCellImagePath andURL:imageUrl128];
     task.queuePriority = NSOperationQueuePriorityNormal;

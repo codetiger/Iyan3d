@@ -238,6 +238,26 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
     Vector3 oldPos;
     Vector3 newPos;
     getOldAndNewPosInWorld(prevTouchPoint, curPoint, oldPos, newPos);
+    
+    if(moveScene->controlType == SCALE) {
+        Vector3 diff = oldPos - newPos;
+        if(diff.getLength() > 1.0f) {
+            diff = diff.normalize() * 1.0f;
+        }
+        
+        float maxDiff = MAX(fabs(diff.x), MAX(fabs(diff.y), fabs(diff.z)));
+        float finalValue = 0.0;
+        if(fabs(diff.x) == maxDiff)
+            finalValue = diff.x;
+        else if (fabs(diff.y) == maxDiff)
+            finalValue = diff.y;
+        else if(fabs(diff.z) == maxDiff)
+            finalValue = diff.z;
+        if(finalValue >= 0.1)
+            moveScene->actionMan->changeObjectScale(finalValue, false);
+        return true;
+    }
+    
     SGNode* selectedNode;
     if(moveScene->moveNodeId != NOT_EXISTS && moveScene->selectedNodeId != NOT_EXISTS)
         selectedNode = moveScene->nodes[moveScene->selectedNodeId];

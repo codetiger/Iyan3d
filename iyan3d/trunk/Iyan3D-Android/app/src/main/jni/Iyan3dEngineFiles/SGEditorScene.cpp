@@ -117,10 +117,12 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     rigMan = new SGAutoRigSceneManager(sceneMngr, this);
     objMan = new SGOBJManager(sceneMngr, this);
 
+    isMultipleSelection = false;
     isJointSelected = isNodeSelected = isControlSelected = false;
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
     selectedNodeId = selectedJointId = NOT_EXISTS;
     selectedNode = NULL;
+    multiNode = NULL;
     selectedJoint = NULL;
     jointSpheres.clear();
     tPoseJoints.clear();

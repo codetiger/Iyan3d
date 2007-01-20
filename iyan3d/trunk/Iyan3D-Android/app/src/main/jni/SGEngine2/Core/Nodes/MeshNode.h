@@ -25,6 +25,7 @@ public:
     virtual void update();
     virtual short getActiveMeshIndex(int index);
     virtual Mesh* getMeshByIndex(int index);
+    void updateBoundingBox();
 };
 
 #endif /* defined(__SGEngine2__MeshNode__) */

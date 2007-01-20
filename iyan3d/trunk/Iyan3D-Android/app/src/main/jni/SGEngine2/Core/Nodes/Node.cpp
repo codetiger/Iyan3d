@@ -28,7 +28,6 @@ Node::Node() {
     Children = make_shared< vector< shared_ptr<Node> > >();
     this->instancedNodes = make_shared< vector< shared_ptr<InstanceNode> > >();
     textureCount = instanceCount = 0;
-    updateTransformation = false;
     isVisible = true;
     #ifdef ANDROID
     nodeData = make_shared<OGLNodeData>();
@@ -136,14 +135,40 @@ Vector3 Node::getAbsolutePosition()
 {
     return getAbsoluteTransformation().getTranslation();
 }
+
+void Node::updateBoundingBox()
+{
+    if(Children->size()){
+        for(unsigned short i = 0; i < Children->size();i++){
+            if((*Children)[i])
+                (*Children)[i]->updateBoundingBox();
+        }
+    }
+    
+    BoundingBox bb;
+    
+    if(Children->size()){
+        for(unsigned short i = 0; i < Children->size();i++){
+            if((*Children)[i]) {
+                for (int j = 0; j < 8; j++) {
+                    Vector3 edge = (*Children)[i]->getBoundingBox().getEdgeByIndex(j);
+                    bb.addPointsToCalculateBoundingBox(edge);
+                }
+            }
+        }
+    }
+    bb.calculateEdges();
+    bBox = bb;
+}
+
 void Node::updateAbsoluteTransformation(bool updateFromRoot){
     if(Parent){
         AbsoluteTransformation = Parent->getAbsoluteTransformation() * getRelativeTransformation();
-      //  updateTransformation = false;
     }else {
         AbsoluteTransformation = getRelativeTransformation();
     }
 }
+
 void Node::updateAbsoluteTransformationOfChildren(){
     updateAbsoluteTransformation();
     if(Children->size()){
@@ -154,12 +179,13 @@ void Node::updateAbsoluteTransformationOfChildren(){
     }
 }
 Mat4 Node::getAbsoluteTransformation(){
-//    if(updateTransformation)
-        updateAbsoluteTransformation();
+    updateAbsoluteTransformation();
     return AbsoluteTransformation;
 }
+
 void Node::updateRelativeTransformation(){
-  }
+}
+
 Mat4 Node::getRelativeTransformation(){
     Mat4 localMat;
     localMat.translate(position);
@@ -173,9 +199,9 @@ Mat4 Node::getModelMatrix(){
     return getAbsoluteTransformation();
 }
 void Node::FlagTransformationToChildren(){
-    updateTransformation = true;
-    if(Children->size())
-        return (*Children)[0]->FlagTransformationToChildren();
+    update();
+    updateAbsoluteTransformationOfChildren();
+    updateBoundingBox();
     return;
 }
 Texture* Node::getTextureByIndex(u16 textureIndex){
@@ -252,6 +278,12 @@ void Node::setVisible(bool isVisible)
 {
     this->isVisible = isVisible;
 }
+
+BoundingBox Node::getBoundingBox()
+{
+    return bBox;
+}
+
 bool Node::getVisible(){
     return isVisible;
 }
