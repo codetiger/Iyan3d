@@ -56,7 +56,7 @@ public:
     SGAutoRigSceneManager(SceneManager* smgr, void *scene);
     
     void clearNodeSelections();
-    void objForRig(SGNode* sgNode); // Pass the node to be rigged to this method
+    void sgmForRig(SGNode* sgNode); // Pass the node to be rigged to this method
     void addNewJoint();
     void removeJoint();
     void exportSGR(std::string filePath);
