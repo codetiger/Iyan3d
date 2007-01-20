@@ -31,6 +31,7 @@
 
 #define CIRCLE_NODE_ID 511
 #define OBJ_ID 512
+#define SGM_ID 2048
 #define SGR_ID 1024
 #define BONE_START_ID 100000
 #define JOINT_START_ID 200000
