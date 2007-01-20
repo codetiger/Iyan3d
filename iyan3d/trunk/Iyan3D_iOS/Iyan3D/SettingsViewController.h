@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SettingsViewControllerDelegate
+-(void)frameCountDisplayMode:(int)selctedIndex;
+-(void)cameraPreviewSize:(int)selctedIndex;
+-(void)cameraPreviewPosition:(int)selctedIndex;
+-(void)toolbarPosition:(int)selctedIndex;
+@end
+
 @interface SettingsViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate>{
     UIScrollView *myScrollView;
 }
@@ -19,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *toolbarRight;
 @property (strong, nonatomic) IBOutlet UIView *masterView;
 @property (weak, nonatomic) IBOutlet UIButton *doneBtn;
+@property (weak, nonatomic) id <SettingsViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIImageView *toolbarLeft;
 @property (weak, nonatomic) IBOutlet UIImageView *renderPreviewSizeSmall;
 @property (weak, nonatomic) IBOutlet UIImageView *renderPreviewSizeLarge;

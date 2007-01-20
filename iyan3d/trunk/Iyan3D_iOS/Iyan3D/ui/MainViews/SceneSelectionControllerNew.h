@@ -22,7 +22,7 @@
 #import "EditorViewController.h"
 
 
-@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate>{
+@interface SceneSelectionControllerNew : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -30,6 +30,8 @@
     CGPoint cell_center;
     UITapGestureRecognizer *tapGesture;
     NSDictionary *deviceNames;
+    SceneSelectionFrameCell *cell;
+    int sceneToBeRenamed;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;

@@ -72,6 +72,10 @@
 
 #define UNDEFINED_OBJECT -1
 
+#define CHOOSE_RIGGING_METHOD 8
+#define OWN_RIGGING 1
+#define HUMAN_RIGGING 2
+
 #define OK_BUTTON_INDEX 1
 #define CANCEL_BUTTON_INDEX 0
 
@@ -120,8 +124,16 @@ BOOL missingAlertShown;
          [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNewPhone" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
 
     assetsInScenes = [NSMutableArray array];
-    
-    [self.objectList reloadData];    
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"])
+        [self.framesCollectionView setTag:[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"] longValue]];
+    else
+        [self.framesCollectionView setTag:1];
+
+    [self.framesCollectionView reloadData];
+    if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
+        [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+    }
+    [self.objectList reloadData];
     [self initScene];
     [self createDisplayLink];
 }
@@ -169,6 +181,9 @@ BOOL missingAlertShown;
             editorScene->topLimit = 48.0 * editorScene->screenScale;
             editorScene->rightLimit = self.leftView.frame.size.width * editorScene->screenScale;//110.0;
         }
+    }
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
+        editorScene->camPreviewScale=[[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]floatValue];
     }
     missingAlertShown = false;
     [renderViewMan setUpPaths];
@@ -228,6 +243,7 @@ BOOL missingAlertShown;
 - (void) importAdditionalLight{
     if(ShaderManager::lightPosition.size() < 5) {
         assetAddType = IMPORT_ASSET_ACTION;
+        //editorScene->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
         [self addLightToScene:[NSString stringWithFormat:@"Light%d",lightCount] assetId:ASSET_ADDITIONAL_LIGHT + lightCount ];
         lightCount++;
     } else {
@@ -413,7 +429,13 @@ BOOL missingAlertShown;
 //                                                   alpha:1.0f];
     
     cell.layer.borderWidth = 0.0f;
-    cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
+    if (_framesCollectionView.tag==1) {
+      cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
+    }
+    else if (_framesCollectionView.tag==2){
+        cell.framesLabel.text = [NSString stringWithFormat:@"%.2fs", ((float)indexPath.row + 1) / 24];
+    }
+    
     cell.framesLabel.adjustsFontSizeToFitWidth = YES;
     cell.framesLabel.minimumFontSize = 3.0;
     return cell;
@@ -602,6 +624,22 @@ BOOL missingAlertShown;
 }
 
 
+- (IBAction)moveLastAction:(id)sender {
+    [self.moveLast setTag:self.moveLast.tag+1];
+    if(_moveLast.tag==2){
+        UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
+        [closeAlert setTag:CHOOSE_RIGGING_METHOD];
+        [closeAlert show];
+    }
+    
+}
+
+- (IBAction)moveFirstAction:(id)sender {
+}
+
+- (IBAction)addJoinAction:(id)sender {
+}
+
 - (IBAction)editFunction:(id)sender
 {
     if([self.objectList isEditing]) {
@@ -632,21 +670,37 @@ BOOL missingAlertShown;
 
 - (IBAction)exportAction:(id)sender
 {
-
-     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    [_popUpVc.view setClipsToBounds:YES];
-    self.popUpVc.delegate=self;
-    self.popoverController.delegate =self;
-    CGRect rect = _exportBtn.frame;
-    rect = [self.view convertRect:rect fromView:_exportBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popUpVc.delegate=self;
+        self.popoverController.delegate =self;
+        CGRect rect = _exportBtn.frame;
+        rect = [self.view convertRect:rect fromView:_exportBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                          permittedArrowDirections:UIPopoverArrowDirectionLeft
                                           animated:YES];
     }
+    else{
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popUpVc.delegate=self;
+        self.popoverController.delegate =self;
+        CGRect rect = _exportBtn.frame;
+        rect = [self.view convertRect:rect fromView:_exportBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:YES];
+    }
+}
 
 - (IBAction)loginBtnAction:(id)sender {
     if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"googleAuthentication"]||[[AppHelper getAppHelper] userDefaultsBoolForKey:@"facebookauthentication"] || [[AppHelper getAppHelper] userDefaultsBoolForKey:@"twitterauthentication"] )
@@ -689,13 +743,14 @@ BOOL missingAlertShown;
     {
         if ([Utility IsPadDevice])
         {
-            _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"loginBtn"];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-            self.popoverController.popoverContentSize = CGSizeMake(300, 360.0);
+            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
+            self.popoverController.popoverContentSize = CGSizeMake(302 , 240.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [_popUpVc.view setClipsToBounds:YES];
+            [loginVc.view setClipsToBounds:YES];
             self.popUpVc.delegate=self;
+            loginVc.delegare=self;
             self.popoverController.delegate =self;
             [self.popoverController presentPopoverFromRect:_loginBtn.frame
                                                     inView:self.view
@@ -705,13 +760,14 @@ BOOL missingAlertShown;
         }
         else
         {
-            _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewControllerPhone" bundle:nil clickedButton:@"loginBtn"];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
             self.popoverController.popoverContentSize = CGSizeMake(228.00, 274.0);
             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [_popUpVc.view setClipsToBounds:YES];
+            [loginVc.view setClipsToBounds:YES];
             self.popUpVc.delegate=self;
+            loginVc.delegare=self;
             self.popoverController.delegate =self;
             [self.popoverController presentPopoverFromRect:_loginBtn.frame
                                                     inView:self.view
@@ -725,38 +781,73 @@ BOOL missingAlertShown;
 
 - (IBAction)animationBtnAction:(id)sender
 {
-
-    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
-    [_popUpVc.view setClipsToBounds:YES];
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.delegate =self;
-    self.popUpVc.delegate=self;
-    CGRect rect = _animationBtn.frame;
-    rect = [self.view convertRect:rect fromView:_animationBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _animationBtn.frame;
+        rect = [self.view convertRect:rect fromView:_animationBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                              permittedArrowDirections:UIPopoverArrowDirectionLeft
                                           animated:YES];
+    }
+    else{
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _animationBtn.frame;
+        rect = [self.view convertRect:rect fromView:_animationBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:YES];
+
+        
+    }
 }
 
 - (IBAction)importBtnAction:(id)sender
 {
-
-    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
-    [_popUpVc.view setClipsToBounds:YES];
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
-    self.popoverController.delegate =self;
-    self.popUpVc.delegate=self;
-    CGRect rect = _importBtn.frame;
-    rect = [self.view convertRect:rect fromView:_importBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _importBtn.frame;
+        rect = [self.view convertRect:rect fromView:_importBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                          permittedArrowDirections:UIPopoverArrowDirectionLeft
                                           animated:YES];
+    }
+    else{
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _importBtn.frame;
+        rect = [self.view convertRect:rect fromView:_importBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:YES];
+
+    }
 }
 - (IBAction)infoBtnAction:(id)sender
 {
@@ -815,19 +906,37 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)myObjectsBtnAction:(id)sender {
-    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"myObjectsBtn"];
-    [_popUpVc.view setClipsToBounds:YES];
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
-    self.popoverController.delegate =self;
-    self.popUpVc.delegate=self;
-    CGRect rect = _myObjectsBtn.frame;
-    rect = [self.view convertRect:rect fromView:_myObjectsBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"myObjectsBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _myObjectsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_myObjectsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionRight
+                          permittedArrowDirections:UIPopoverArrowDirectionLeft
                                           animated:YES];
+    }
+    else
+    {
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"myObjectsBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 260.0);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _myObjectsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_myObjectsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                                              animated:YES];
+    }
 }
 
 
@@ -924,7 +1033,7 @@ BOOL missingAlertShown;
         editorScene->controlType = SCALE;
         editorScene->updater->updateControlsOrientaion();
 
-        
+        /*
         
         editorScene->renHelper->setControlsVisibility(false);
         Vector3 currentScale = editorScene->getSelectedNodeScale();
@@ -941,7 +1050,7 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:NO];
-        
+         */
     }
 }
 
@@ -1133,35 +1242,71 @@ BOOL missingAlertShown;
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd
 {
-    if(showView)
-        [self.leftView addSubview:subViewToAdd];
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+        if(showView)
+            [self.leftView addSubview:subViewToAdd];
     
-    [self.leftView setHidden:(!showView)];
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.5;
-    transition.type = kCATransitionPush;
-    transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-    [self.leftView.layer addAnimation:transition forKey:nil];
+        [self.leftView setHidden:(!showView)];
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.5;
+        transition.type = kCATransitionPush;
+        transition.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.leftView.layer addAnimation:transition forKey:nil];
     
-    CATransition* transition1 = [CATransition animation];
-    transition1.duration = 0.5;
-    transition1.type = kCATransitionPush;
-    transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+        CATransition* transition1 = [CATransition animation];
+        transition1.duration = 0.5;
+        transition1.type = kCATransitionPush;
+        transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
     
-    [self.rightView setHidden:showView];
+        [self.rightView setHidden:showView];
+    }
+    else
+    {
+        if(showView)
+            [self.leftView addSubview:subViewToAdd];
+        
+        [self.leftView setHidden:(!showView)];
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.5;
+        transition.type = kCATransitionPush;
+        transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.leftView.layer addAnimation:transition forKey:nil];
+        
+        CATransition* transition1 = [CATransition animation];
+        transition1.duration = 0.5;
+        transition1.type = kCATransitionPush;
+        transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+        
+        [self.rightView setHidden:showView];
+    }
 }
 - (void) showOrHideRightView:(BOOL)showView{
-    CATransition* transition1 = [CATransition animation];
-    transition1.duration = 0.5;
-    transition1.type = kCATransitionPush;
-    transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-    [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-    [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
+        CATransition* transition1 = [CATransition animation];
+        transition1.duration = 0.5;
+        transition1.type = kCATransitionPush;
+        transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
     
-    [self.rightView setHidden:showView];
+        [self.rightView setHidden:showView];
+    }
+    else{
+        CATransition* transition1 = [CATransition animation];
+        transition1.duration = 0.5;
+        transition1.type = kCATransitionPush;
+        transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
+        
+        [self.rightView setHidden:showView];
+    }
 }
 
 -(void)pickedImageWithInfo:(NSDictionary*)info type:(BOOL)isTempNode;
@@ -1518,8 +1663,33 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [self showOrHideLeftView:YES withView:objVc.view];
         }
     }
-    else if(indexValue==5){
+    else if(indexValue==IMPORT_ADDBONE){
+        [self.popoverController dismissPopoverAnimated:YES];
         NSLog(@"ADD BONE Button");
+        NODE_TYPE selectedNodeType = NODE_UNDEFINED;
+        if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+            selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
+            if(selectedNodeType!=NODE_RIG){
+                UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones can be added only for SGM nodes." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [error show];
+            }
+            else if (selectedNodeType!= NODE_CAMERA && selectedNodeType != NODE_LIGHT && selectedNodeType != NODE_ADDITIONAL_LIGHT)
+            {
+                
+                [self.addJointBtn setHidden:NO];
+                [self.moveLast setHidden:NO];
+                [self.moveFirst setHidden:NO];
+                [self.rigScreenLabel setHidden:NO];
+            }
+            
+
+        }
+        else
+        {
+            UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Select any Node to add Bone" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [error show];
+        }
+        
     }
 }
 
@@ -1675,6 +1845,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             [self.popoverController dismissPopoverAnimated:YES];
             settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController"bundle:nil];
             [settingsVc.view setClipsToBounds:YES];
+            settingsVc.delegate=self;
             settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
             [self presentViewController:settingsVc animated:YES completion:nil];
             settingsVc.view.superview.backgroundColor = [UIColor clearColor];
@@ -1687,6 +1858,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 {
                     [self.popoverController dismissPopoverAnimated:YES];
                     settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone2x"bundle:nil];
+                    settingsVc.delegate=self;
                     [settingsVc.view setClipsToBounds:YES];
                     settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
                     [self presentViewController:settingsVc animated:YES completion:nil];
@@ -1696,6 +1868,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 {
                     [self.popoverController dismissPopoverAnimated:YES];
                     settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone2x"bundle:nil];
+                    settingsVc.delegate=self;
                     [settingsVc.view setClipsToBounds:YES];
                     [self presentViewController:settingsVc animated:YES completion:nil];
                     settingsVc.view.superview.backgroundColor = [UIColor clearColor];
@@ -1706,6 +1879,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 [self.popoverController dismissPopoverAnimated:YES];
                 settingsVc = [[SettingsViewController alloc]initWithNibName:@"SettingsViewControllerPhone"bundle:nil];
                 [settingsVc.view setClipsToBounds:YES];
+                settingsVc.delegate=self;
                 settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
                 [self presentViewController:settingsVc animated:YES completion:nil];
                 settingsVc.view.superview.backgroundColor = [UIColor clearColor];
@@ -2027,7 +2201,154 @@ void downloadFile(NSString* url, NSString* fileName)
             }
         }
     }
+    if (alertView.tag == CHOOSE_RIGGING_METHOD) {
+        if(buttonIndex == HUMAN_RIGGING) {
+           
+        }else if(buttonIndex == OWN_RIGGING) {
+            
+        }
+        
+    }
 }
+
+
+#pragma mark SettingsViewControllerDelegate
+
+-(void)frameCountDisplayMode:(int)selctedIndex{
+    if(selctedIndex==0){
+        NSLog(@"Frame Vount Display");
+        [self.framesCollectionView setTag:1];
+        [self.framesCollectionView reloadData];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];
+    }
+    else
+    {
+        NSLog(@"Frame Durations Display");
+        [self.framesCollectionView setTag:2];
+        [self.framesCollectionView reloadData];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithLong:self.framesCollectionView.tag] withKey:@"indicationType"];
+    }
+}
+
+-(void)cameraPreviewSize:(int)selctedIndex{
+    if(selctedIndex==0)
+    {
+        editorScene->camPreviewScale=1.0;
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:editorScene->camPreviewScale] withKey:@"cameraPreviewSize"];
+    }
+    else
+    {
+        editorScene->camPreviewScale=2.0;
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:editorScene->camPreviewScale] withKey:@"cameraPreviewSize"];
+    }
+}
+
+-(void)cameraPreviewPosition:(int)selctedIndex{
+    NSLog(@"Camera preview Origin: X Value: %f Y Value: %f ",self.renderView.bounds.size.width,self.renderView.bounds.size.height);
+    float camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+    if(selctedIndex==0){
+        camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+        if(editorScene->camPreviewScale==1.0){
+            editorScene->camPreviewOrigin.x=0;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            
+        }
+        if(editorScene->camPreviewScale==2.0){
+            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewOrigin.x=0.0000;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            
+        }
+    }
+    if(selctedIndex==1){
+        camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+        if(editorScene->camPreviewScale==1.0){
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewOrigin.x=0.0000;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+        }
+        if(editorScene->camPreviewScale==2.0){
+            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewOrigin.x=0.0000;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+        }
+    }
+
+    if(selctedIndex==2){
+        if(editorScene->camPreviewScale==1.0){
+            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewOrigin.x=self.renderView.frame.size.width-self.rightView.frame.size.width-camPrevRatio;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            
+            
+        }
+        if(editorScene->camPreviewScale==2.0){
+            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewOrigin.x=self.renderView.frame.size.width-self.rightView.frame.size.width;
+            editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height-camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            NSLog(@"Camera preview orgin.x : %f",editorScene->camPreviewOrigin.x);
+            
+        }
+    }
+    if(selctedIndex==3){
+        
+        if(editorScene->camPreviewScale==1.0){
+            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewOrigin.x=self.view.frame.size.width-self.rightView.frame.size.width;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+        }
+        if(editorScene->camPreviewScale==2.0){
+            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewOrigin.x=self.view.frame.size.width-self.rightView.frame.size.width;
+            editorScene->camPreviewOrigin.y=self.topView.frame.size.height;
+        }
+    }
+
+       [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"cameraPreviewPosition"];
+}
+-(void)toolbarPosition:(int)selctedIndex{
+    
+    if(selctedIndex==1){
+        CGRect frame = self.rightView.frame;
+        frame.origin.x = 0;
+        frame.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
+        self.rightView.frame = frame;
+        CGRect frame1 = self.leftView.frame;
+        frame1.origin.x = self.view.layer.bounds.size.width-self.leftView.layer.bounds.size.width;
+        frame1.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
+        self.leftView.frame = frame1;
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
+    }
+    else{
+        NSLog(@"Toolbar");
+        CGRect frame = self.rightView.frame;
+        frame.origin.x = self.view.layer.bounds.size.width-self.rightView.frame.size.width;
+        frame.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
+        self.rightView.frame = frame;
+        CGRect frame1 = self.leftView.frame;
+        frame1.origin.x = 0;
+        frame1.origin.y = self.topView.layer.bounds.size.height; // new y coordinate
+        self.leftView.frame = frame1;
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
+    }
+    
+}
+
 
 - (void)setupEnableDisableControlsPlayAnimation{
     if(editorScene->isPlaying){

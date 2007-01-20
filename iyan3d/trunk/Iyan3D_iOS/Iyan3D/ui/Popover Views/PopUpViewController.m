@@ -65,6 +65,9 @@
     else if([clickedBtnName isEqualToString:@"myObjectsBtn"]){
         tableData = [NSArray arrayWithObjects:@"Camera", @"Light", nil];
     }
+    else if([clickedBtnName isEqualToString:@"propertiesBtn"]){
+        tableData = [NSArray arrayWithObjects:@"Duplicate", @"Delete",@"Rename", nil];
+    }
     else if([clickedBtnName isEqualToString:@"loginBtn"]){
         self.popoverBtns.hidden=YES;
         [self.loginBtn setHidden:NO];
@@ -193,6 +196,10 @@
     else if([clickedBtn isEqualToString:@"myObjectsBtn"]){
         [self.delegate myObjectsBtnDelegateAction:(int)indexPath.row];
     }
+    else if([clickedBtn isEqualToString:@"propertiesBtn"]){
+        [self.delegate propertiesBtnDelegate:(int)indexPath.row];
+    }
+
     else {
         
     }

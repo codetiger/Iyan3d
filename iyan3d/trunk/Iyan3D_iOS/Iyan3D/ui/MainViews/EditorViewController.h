@@ -37,7 +37,7 @@
 #import "CameraSettings.h"
 #import "MeshProperties.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat>{
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate>{
     int totalFrames;
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
@@ -91,6 +91,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *firstFrameBtn;
 @property (weak, nonatomic) IBOutlet UIView *leftView;
 @property (weak, nonatomic) IBOutlet UIView *rightView;
+@property (weak, nonatomic) IBOutlet UIView *topView;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) FPPopoverController* popOverView;
 @property (nonatomic, strong) WEPopoverController *popoverController;
@@ -101,8 +102,15 @@
 @property (nonatomic, strong) CameraSettings *camProp;
 @property (nonatomic, strong) MeshProperties *meshProp;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UIButton *moveFirst;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *center_progress;
+@property (weak, nonatomic) IBOutlet UILabel *rigScreenLabel;
+@property (weak, nonatomic) IBOutlet UIButton *moveLast;
+@property (weak, nonatomic) IBOutlet UIButton *addJointBtn;
+- (IBAction)moveLastAction:(id)sender;
 
+- (IBAction)moveFirstAction:(id)sender;
+- (IBAction)addJoinAction:(id)sender;
 
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;

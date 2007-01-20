@@ -64,7 +64,7 @@
                     <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" id="P2e-gr-fZj">
-                    <rect key="frame" x="0.0" y="123" width="300" height="507"/>
+                    <rect key="frame" x="0.0" y="123" width="300" height="526"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="A3i-Jx-Dl5">
@@ -96,7 +96,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3Qp-dd-cNo">
-                            <rect key="frame" x="182" y="8" width="110" height="40"/>
+                            <rect key="frame" x="180" y="8" width="110" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -109,7 +109,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.050980392156862744" green="0.050980392156862744" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.058823529411764705" green="0.058823529411764705" blue="0.058823529411764705" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="oUJ-b4-Nqv">
                     <rect key="frame" x="4" y="79" width="292" height="44"/>
@@ -140,6 +140,6 @@
     <resources>
         <image name="Bevel.png" width="44" height="44"/>
         <image name="No-Bevel.png" width="44" height="44"/>
-        <image name="color.png" width="47" height="47"/>
+        <image name="color.png" width="23" height="23"/>
     </resources>
 </document>

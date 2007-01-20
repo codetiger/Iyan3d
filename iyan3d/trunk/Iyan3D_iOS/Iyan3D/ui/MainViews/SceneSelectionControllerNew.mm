@@ -38,6 +38,7 @@
     }
     [self.sceneView setHidden:YES];
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];    
 }
@@ -162,7 +163,8 @@
 }
 
 - (SceneSelectionFrameCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SceneSelectionFrameCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+   cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
+    cell.delegate=self;
     if(indexPath.row < [scenesArray count]){
         SceneItem* scenes = scenesArray[indexPath.row];
         cell.name.text = [NSString stringWithFormat:@"%@",scenes.name];
@@ -170,6 +172,8 @@
         NSString* documentsDirectory = [paths objectAtIndex:0];
         NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
+        cell.propertiesBtn.hidden=NO;
+        cell.SelectedindexValue= indexPath.row;
     if(fileExist)
         cell.image.image = [UIImage imageWithContentsOfFile:originalFilePath];
     else
@@ -177,23 +181,25 @@
     }
     else{
         cell.name.text = @"";
+        cell.SelectedindexValue= indexPath.row;
+        cell.propertiesBtn.hidden=YES;
         cell.image.image = [UIImage imageNamed:@"New-scene.png"];
     }
-    
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    SceneSelectionFrameCell *cell = (SceneSelectionFrameCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    cell = (SceneSelectionFrameCell*)[collectionView cellForItemAtIndexPath:indexPath];
     
     
     
     cell_center = [self.scenesCollectionView convertPoint:cell.center fromView:cell];
     cell_center = [self.view convertPoint:cell_center fromView:self.scenesCollectionView];
+    
     if(indexPath.row == [scenesArray count])
         [self addNewScene];
     else
-        [self showSceneEnteredView:indexPath];
+        [self openSCene:indexPath.row];
     
     
     
@@ -216,6 +222,24 @@
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:[scenesArray count]-1 inSection:0];
         [self.scenesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
     }
+}
+
+-(void)openSCene: (int)selectedScene{
+    SceneItem *scene = scenesArray[selectedScene];
+    [[AppHelper getAppHelper] resetAppHelper];
+    if([Utility IsPadDevice]){
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil SceneItem:scene selectedindex:selectedScene];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate.window setRootViewController:animationEditor];
+    }
+    else{
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate.window setRootViewController:animationEditor];
+    }
+    
+    [self removeFromParentViewController];
+    
 }
 
 -(void)updateSceneDB {
@@ -364,6 +388,126 @@
     
     [self removeFromParentViewController];
 }
+#pragma mark ScenePropertiesDelegate
+
+-(void)duplicateScene:(int) indexValue{
+    
+    if([scenesArray count] <= 0)
+        return;
+    NSString* sceneCount = [NSString stringWithFormat:@"%lu", (unsigned long)[scenesArray count]];
+    SceneItem* scene = [[SceneItem alloc] init];
+    scene.name = [NSString stringWithFormat:@"%s%@", "MyScene", sceneCount];
+    scene.createdDate = [dateFormatter stringFromDate:[NSDate date]];
+    
+    if(![cache AddScene:scene]) {
+        [self.view endEditing:YES];
+        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Duplicate Scene Name" message:@"Another Scene with the same name already exists. Please provide a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [errorAlert show];
+    } else {
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* documentsDirectory = [paths objectAtIndex:0];
+        NSString *originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
+        NSString *newFilePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
+        [[NSFileManager defaultManager] copyItemAtPath:originalFilePath toPath:newFilePath error:nil];
+        originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
+        newFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
+        [[NSFileManager defaultManager] copyItemAtPath:originalFilePath toPath:newFilePath error:nil];
+        
+        scenesArray = [cache GetSceneList];
+        NSLog(@"Count%i" ,[scenesArray count]);
+        [self.scenesCollectionView reloadData];
+        NSIndexPath* toPath = [NSIndexPath indexPathForItem:[scenesArray count]-1 inSection:0];
+        [self.scenesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+        [self.scenesCollectionView reloadData];
+        
+    }
+    
+
+}
+
+-(void)deleteScene:(int)indexValue
+{
+    NSLog(@"Delete Delegate %ld",indexValue);
+    [_sceneTitle resignFirstResponder];
+    SceneItem* scene = scenesArray[indexValue];
+    [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:scene.name];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [NSString stringWithFormat:@"%@/Projects/%@.sgb", documentsDirectory, scene.sceneFile];
+    self.fileBeginsWith=scene.sceneFile;
+    NSArray* cachepath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [cachepath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager]     contentsOfDirectoryAtPath:cacheDirectory error:nil];
+    NSArray *jpgFiles = [dirFiles filteredArrayUsingPredicate:
+                         [NSPredicate predicateWithFormat:@"self BEGINSWITH[cd] %@",self.fileBeginsWith]];
+    for (int i=0; i<[jpgFiles count]; i++) {
+        NSString *filePath1 = [NSString stringWithFormat:@"%@/%@-%d.png", cacheDirectory,self.fileBeginsWith,i];
+        [[NSFileManager defaultManager] removeItemAtPath:filePath1 error:nil];
+    }
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    filePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scene.sceneFile];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    
+    [cache DeleteScene:scene];
+    [scenesArray removeObjectAtIndex:indexValue];
+    [self.scenesCollectionView reloadData];
+
+}
+
+-(void)renameScene:(int)indexValue
+{
+    [self.view endEditing:YES];
+    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Scene" message:@"Please enter a new Scene name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    sceneToBeRenamed=indexValue;
+    [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    [[renameScene textFieldAtIndex:0] setPlaceholder:@"Scene Name"];
+    [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
+    [renameScene setTag:0];
+    [renameScene show];
+//    [[renameScene textFieldAtIndex:0] becomeFirstResponder];
+    [self updateSceneDB];
+}
+
+#pragma AlertView
+- (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==0) {
+        NSLog(@"Index : %ld",(long)buttonIndex);
+        NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+        
+        if (buttonIndex == 0) {
+        }
+        else if (buttonIndex == 1) {
+            NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if ([name length] == 0) {
+                [self.view endEditing:YES];
+                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Scene name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [errorAlert show];
+            }
+            else
+            {
+                if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [errorAlert show];
+                }
+                else
+                {
+                    SceneItem* scene = scenesArray[sceneToBeRenamed];
+                    scene.name = name;
+                    scene.createdDate = scene.createdDate;
+                    scene.sceneFile = scene.sceneFile;
+                    scene.sceneId = scene.sceneId;
+                    [cache UpdateScene:scene];
+                    scenesArray = [cache GetSceneList];
+                    [self.scenesCollectionView reloadData];
+                    
+                }
+            }
+        }
+
+    }
+}
+
 #pragma Dealloc Delegate
 
 - (void)dealloc {

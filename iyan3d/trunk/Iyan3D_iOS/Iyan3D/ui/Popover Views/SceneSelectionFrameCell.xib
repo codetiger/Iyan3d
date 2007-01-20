@@ -25,6 +25,15 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nxG-tF-ruR">
+                        <rect key="frame" x="160" y="0.0" width="40" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="property-icon.png"/>
+                        <connections>
+                            <action selector="propertiesAction:" destination="-1" eventType="touchUpInside" id="7Zi-9y-fV6"/>
+                            <action selector="propertiesAction:" destination="Rfu-0C-76h" eventType="touchUpInside" id="COQ-Sp-yvV"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
@@ -32,11 +41,13 @@
             <connections>
                 <outlet property="image" destination="oVz-BA-cwT" id="DYq-Nt-5lg"/>
                 <outlet property="name" destination="8EX-Cy-KCW" id="M9L-tb-FV4"/>
+                <outlet property="propertiesBtn" destination="nxG-tF-ruR" id="aTe-mM-i2h"/>
             </connections>
             <point key="canvasLocation" x="474" y="525"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="New-scene.png" width="431" height="376"/>
+        <image name="property-icon.png" width="40" height="40"/>
     </resources>
 </document>

@@ -8,6 +8,7 @@
 
 #import "SettingsViewController.h"
 #import "Utility.h"
+#import <AppHelper.h>
 @interface SettingsViewController ()
 
 @end
@@ -17,11 +18,54 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupImageTap];
-    if(![Utility IsPadDevice]){
-        [self.scrolView addSubview:_masterView];//if the contentView is not already inside your scrollview in your xib/StoryBoard doc
-        self.scrolView.contentSize = _masterView.frame.size; //sets ScrollView content size
-    }
     self.doneBtn.layer.cornerRadius=8.0f;
+    int framesIndicatorValue= (int)[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]longValue];
+    float cameraPreviewSize= [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewSize"]floatValue];
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
+        if(framesIndicatorValue==2)
+        {
+            [self.frameCountDisplay setSelectedSegmentIndex:1];
+        }
+        else
+        {
+            
+        }
+        
+    }
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]){
+        if(cameraPreviewSize==2.0){
+            [self.renderPreviewSize setSelectedSegmentIndex:1];
+        }
+        else{
+            
+        }
+    }
+    NSLog(@"Toolpar : %ld",(long)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]);
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1)
+    {
+        [self.toolbarPosition setSelectedSegmentIndex:1];
+    }
+    else
+    {
+        [self.toolbarPosition setSelectedSegmentIndex:0];
+    }
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==1)
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:1];
+    }
+    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==2)
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:2];
+    }
+    else if([[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]integerValue]==3)
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:3];
+    }
+    else
+    {
+        [self.renderPreviewPosition setSelectedSegmentIndex:0];
+    }
+
 }
 
 
@@ -101,15 +145,23 @@
 */
 
 - (IBAction)toolBarPositionChanged:(id)sender {
+    NSLog(@"Tool Bar position Changed");
+    [self.delegate toolbarPosition:(int)self.toolbarPosition.selectedSegmentIndex];
 }
 
 - (IBAction)renderPreviewSizeChanged:(id)sender {
+    NSLog(@"Render preview size Changed");
+    [self.delegate cameraPreviewSize:(int)self.renderPreviewSize.selectedSegmentIndex];
 }
 
 - (IBAction)frameCountDisplayType:(id)sender {
+    NSLog(@"frame display type Changed");
+    [self.delegate frameCountDisplayMode:(int)self.frameCountDisplay.selectedSegmentIndex];
 }
 
 - (IBAction)previewpositionChanged:(id)sender {
+    NSLog(@"Preview position Changed");
+    [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
 }
 
 - (IBAction)doneBtnAction:(id)sender {
@@ -119,6 +171,7 @@
 - (void)toolbarLeftTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.toolbarPosition.selectedSegmentIndex==0){
         self.toolbarPosition.selectedSegmentIndex=1;
+        [self.delegate toolbarPosition:(int)self.toolbarPosition.selectedSegmentIndex];
     }
     else{
         
@@ -131,6 +184,7 @@
     }
     else{
         self.toolbarPosition.selectedSegmentIndex=0;
+        [self.delegate toolbarPosition:(int)self.toolbarPosition.selectedSegmentIndex];
     }
     
 }
@@ -140,12 +194,14 @@
     }
     else{
         self.renderPreviewSize.selectedSegmentIndex=0;
+        [self.delegate cameraPreviewSize:(int)self.renderPreviewSize.selectedSegmentIndex];
     }
     
 }
 - (void)renderPreviewSizeLargeTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewSize.selectedSegmentIndex==0){
         self.renderPreviewSize.selectedSegmentIndex=1;
+        [self.delegate cameraPreviewSize:(int)self.renderPreviewSize.selectedSegmentIndex];
     }
     else{
         
@@ -155,6 +211,7 @@
 - (void)framesDisplayDurationTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.frameCountDisplay.selectedSegmentIndex==0){
         self.frameCountDisplay.selectedSegmentIndex=1;
+        [self.delegate frameCountDisplayMode:(int)self.frameCountDisplay.selectedSegmentIndex];
     }
     else{
         
@@ -167,12 +224,14 @@
     }
     else{
         self.frameCountDisplay.selectedSegmentIndex=0;
+        [self.delegate frameCountDisplayMode:(int)self.frameCountDisplay.selectedSegmentIndex];
     }
     
 }
 - (void)previewPositionRightBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=0){
          self.renderPreviewPosition.selectedSegmentIndex=0;
+        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
     }
     else{
        
@@ -182,6 +241,7 @@
 - (void)previewPositionRightTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=1){
         self.renderPreviewPosition.selectedSegmentIndex=1;
+        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
     }
     else{
         
@@ -191,6 +251,7 @@
 - (void)previewPositionLeftBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=2){
         self.renderPreviewPosition.selectedSegmentIndex=2;
+        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
     }
     else{
         
@@ -200,10 +261,13 @@
 - (void)previewPositionLeftTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
     if(self.renderPreviewPosition.selectedSegmentIndex!=3){
         self.renderPreviewPosition.selectedSegmentIndex=3;
+        [self.delegate cameraPreviewPosition:(int)self.renderPreviewPosition.selectedSegmentIndex];
     }
     else{
         
     }
     
 }
+
+
 @end

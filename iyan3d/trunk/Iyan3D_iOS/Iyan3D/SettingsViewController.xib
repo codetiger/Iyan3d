@@ -100,10 +100,10 @@
                         <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jQJ-fQ-zxb">
                             <rect key="frame" x="8" y="45" width="520" height="29"/>
                             <segments>
-                                <segment title="RIGHT BOTTOM"/>
-                                <segment title="RIGHT TOP"/>
                                 <segment title="LEFT BOTTOM"/>
                                 <segment title="LEFT TOP"/>
+                                <segment title="RIGHT BOTTOM"/>
+                                <segment title="RIGHT TOP"/>
                             </segments>
                             <color key="tintColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -116,16 +116,16 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="pRf-UT-BZD">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Left-Bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="pRf-UT-BZD">
                             <rect key="frame" x="28" y="99" width="90" height="63"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="VG2-oy-h6N">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Left-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="VG2-oy-h6N">
                             <rect key="frame" x="159" y="99" width="90" height="63"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Left-Bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="5bg-aT-8wg">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="5bg-aT-8wg">
                             <rect key="frame" x="290" y="99" width="90" height="63"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Left-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="jZB-4p-lN6">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Render-Preview-position_Right-Top.png" translatesAutoresizingMaskIntoConstraints="NO" id="jZB-4p-lN6">
                             <rect key="frame" x="420" y="99" width="90" height="63"/>
                         </imageView>
                     </subviews>

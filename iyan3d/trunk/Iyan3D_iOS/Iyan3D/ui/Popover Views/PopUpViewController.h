@@ -17,6 +17,8 @@
 - (void) addFrameBtnDelegateAction:(int)indexValue;
 - (void) myObjectsBtnDelegateAction:(int)indexValue;
 - (void) loginBtnAction;
+- (void) propertiesBtnDelegate:(int)indexValue;
+
 @end
 
 @interface PopUpViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>{

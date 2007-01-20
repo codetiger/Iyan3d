@@ -7,10 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WEPopoverController.h"
+#import "PopUpViewController.h"
+@protocol ScenePropertiesDelegate
+-(void)duplicateScene:(int)indexValue;
+-(void)deleteScene:(int)indexValue;
+-(void)renameScene:(int)indexValue;
+@end
 
-@interface SceneSelectionFrameCell : UICollectionViewCell
+@interface SceneSelectionFrameCell : UICollectionViewCell <PopUpViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UILabel *name;
+@property  NSInteger SelectedindexValue;
+@property (weak, nonatomic) IBOutlet UIButton *propertiesBtn;
+@property (nonatomic, strong) WEPopoverController *popoverController;
+@property (nonatomic, strong) PopUpViewController *popUpVc;
+@property (weak, nonatomic) id <ScenePropertiesDelegate> delegate;
+- (IBAction)propertiesAction:(id)sender;
 
 @end
