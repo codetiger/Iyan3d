@@ -1027,30 +1027,48 @@ BOOL missingAlertShown;
 
 - (IBAction)scaleBtnAction:(id)sender
 {
-    
-    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
-        
-        editorScene->controlType = SCALE;
-        editorScene->updater->updateControlsOrientaion();
-
-        /*
-        
-        editorScene->renHelper->setControlsVisibility(false);
-        Vector3 currentScale = editorScene->getSelectedNodeScale();
-        _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
-        _scaleProps.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
-        self.popoverController.popoverContentSize = CGSizeMake(270, 177);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    if(self.rigScreenLabel.isHidden){
+        if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)){
+            
+            editorScene->controlType = SCALE;
+            editorScene->updater->updateControlsOrientaion();
+            
+            /*
+             
+             editorScene->renHelper->setControlsVisibility(false);
+             Vector3 currentScale = editorScene->getSelectedNodeScale();
+             _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
+             _scaleProps.delegate = self;
+             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
+             self.popoverController.popoverContentSize = CGSizeMake(270, 177);
+             self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+             self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+             [_popUpVc.view setClipsToBounds:YES];
+             CGRect rect = _scaleBtn.frame;
+             rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
+             [self.popoverController presentPopoverFromRect:rect
+             inView:self.view
+             permittedArrowDirections:UIPopoverArrowDirectionRight
+             animated:NO];
+             */
+        }
+  
+    }
+    else{
+//        float scale = autoRigObject->getSelectedJointScale();
+        float scale = 10.0;
+        scaleAutoRig=[[ScaleForAutoRigViewController alloc] initWithNibName:@"ScaleForAutoRigViewController" bundle:nil updateScale:scale];
+        scaleAutoRig.delegate = self;
+        self.popoverController = [[WEPopoverController alloc]initWithContentViewController:scaleAutoRig];
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController.popoverContentSize = CGSizeMake(390, 100.0);
+        self.popoverController.delegate =self;
         CGRect rect = _scaleBtn.frame;
         rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
-                                              animated:NO];
-         */
+                                              animated:YES];
     }
 }
 
@@ -1674,7 +1692,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NODE_TYPE selectedNodeType = NODE_UNDEFINED;
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
             selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
-            if(selectedNodeType!=NODE_RIG){
+            if(selectedNodeType!=NODE_SGM){
                 UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones can be added only for SGM nodes." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [error show];
             }
@@ -2502,6 +2520,16 @@ void downloadFile(NSString* url, NSString* fileName)
             nodes = nil;
         }
     }
+}
+
+#pragma mark Autorig ScaleView Delegate
+
+- (void) scalePropertyChangedInRigView:(float)scaleValue{
+    NSLog(@"Scale vale %2f",scaleValue);
+}
+
+- (void) scaleValueForAction:(float)scaleValue{
+    
 }
 
 - (void)setupEnableDisableControls{
