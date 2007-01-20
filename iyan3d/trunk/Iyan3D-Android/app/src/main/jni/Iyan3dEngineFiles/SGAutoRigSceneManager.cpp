@@ -16,7 +16,7 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
     this->smgr = smgr;
     rigScene = (SGEditorScene*)scene;
     sceneMode = RIG_MODE_OBJVIEW;
-    nodeToRig = new SGNode(NODE_OBJ);
+    nodeToRig = new SGNode(NODE_SGM);
     sgrSGNode = NULL;
     clearNodeSelections();
 }
@@ -51,7 +51,7 @@ void SGAutoRigSceneManager::clearNodeSelections()
     selectedJoint = NULL;
 }
 
-void SGAutoRigSceneManager::objForRig(SGNode* sgNode)
+void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
 {
     if(!rigScene || !smgr || !sgNode)
         return;
@@ -60,22 +60,22 @@ void SGAutoRigSceneManager::objForRig(SGNode* sgNode)
         smgr->RemoveNode(nodeToRig->node);
     }
     nodeToRig = sgNode;
-    shared_ptr<MeshNode> objNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
+    shared_ptr<MeshNode> sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
     // scale to fit all obj in same proportion-----
-    float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();
-    float extendY = objNode->getMesh()->getBoundingBox()->getYExtend();
-    float extendZ = objNode->getMesh()->getBoundingBox()->getZExtend();
+    float extendX = sgmNode->getMesh()->getBoundingBox()->getXExtend();
+    float extendY = sgmNode->getMesh()->getBoundingBox()->getYExtend();
+    float extendZ = sgmNode->getMesh()->getBoundingBox()->getZExtend();
     float max = ((extendX >= extendY) ? extendX:extendY);
     max = ((max >= extendZ) ? max:extendZ);
     float scaleRatio = (max / OBJ_BOUNDINGBOX_MAX_LIMIT);
-    objNode->setScale(Vector3(1.0/scaleRatio));
+    sgmNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
     
-    objNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+    sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     nodeToRig->props.isLighting = true;
     //objNode->setTexture(rigScene->shadowTexture,2);
-    objNode->setID(OBJ_ID);
+    sgmNode->setID(SGM_ID);
     nodeToRig->node->updateAbsoluteTransformation();
 }
 
