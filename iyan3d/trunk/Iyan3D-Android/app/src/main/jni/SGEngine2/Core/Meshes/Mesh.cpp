@@ -313,7 +313,7 @@ void Mesh::removeDoublesInHeavyMesh(bool usePos,bool useTcoords,bool useNormals)
     tempVerticesDataHeavy = verticesDataDup;
 }
 
-void Mesh::pivotToOrigin()
+void Mesh::fixOrientation()
 {
 //    float dif = BBox.getXExtend()/2.0;
     const u32 vtxcnt = getVerticesCount();
@@ -324,6 +324,19 @@ void Mesh::pivotToOrigin()
             getLiteVertexByIndex(i)->vertPosition = Vector3(-pos.x, pos.y, pos.z);
         else
             getHeavyVertexByIndex(i)->vertPosition = Vector3(-pos.x, pos.y, pos.z);
+    }
+}
+
+void Mesh::moveVertices(Vector3 offset)
+{
+    const u32 vtxcnt = getVerticesCount();
+    for (int i = 0; i!= vtxcnt;i++) {
+        Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
+        
+        if (meshType == MESH_TYPE_LITE)
+            getLiteVertexByIndex(i)->vertPosition = Vector3(pos.x, pos.y, pos.z) + offset;
+        else
+            getHeavyVertexByIndex(i)->vertPosition = Vector3(pos.x, pos.y, pos.z) + offset;
     }
 }
 

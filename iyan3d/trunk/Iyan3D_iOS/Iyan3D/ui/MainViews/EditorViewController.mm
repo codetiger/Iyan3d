@@ -90,6 +90,7 @@
 #define DELETE_OBJECT 200
 #define DELETE_BUTTON_OBJECT 1
 #define DELETE_BUTTON_OBJECT_ANIMATION 2
+#define SGR_WARNING 512
 
 #define CAMERA_PREVIEW_SMALL 0
 
@@ -885,11 +886,16 @@ BOOL missingAlertShown;
 - (IBAction)moveLastAction:(id)sender {
     if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW){
         if(editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW){
-            UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
-            [closeAlert setTag:CHOOSE_RIGGING_METHOD];
-            [closeAlert show];
-        }
-        else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW){
+            
+            if(editorScene->rigMan->rigNodeType == NODE_RIG) {
+                editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+            } else {
+                UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
+                [closeAlert setTag:CHOOSE_RIGGING_METHOD];
+                [closeAlert show];
+            }
+            
+        } else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW){
             //[[UIApplication sharedApplication] beginIgnoringInteractionEvents];
             [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
             NSString *tempDir = NSTemporaryDirectory();
@@ -899,9 +905,7 @@ BOOL missingAlertShown;
             [_rigAddToSceneBtn setHidden:NO];
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
             [_addJointBtn setHidden:YES];
-        }
-        else
-        {
+        } else {
             [_rigAddToSceneBtn setHidden:YES];
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
@@ -2382,23 +2386,16 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
                 selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
                 
-                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
+                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && selectedNodeType != NODE_RIG) {
                     UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones cannot be added to this model." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     [error show];
-                }
-                else {
-                    [self.addJointBtn setHidden:YES];
-                    [self.moveLast setHidden:NO];
-                    [self.moveFirst setHidden:NO];
-                    [self.rigScreenLabel setHidden:NO];
-                    selectedNodeId = editorScene->riggingNodeId = editorScene->selectedNodeId;
-                    editorScene->enterOrExitAutoRigMode(true);
-                    editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
-                    editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
-                    editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
-                    [self setupEnableDisableControls];
-                    [_rigCancelBtn setHidden:NO];
-                    [self autoRigMirrorBtnHandler];
+                } else if(selectedNodeType == NODE_RIG && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
+                    UIAlertView* warning = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"This model was rigged using the previous version. Some of the envelope information might be missing. Do you want to continue?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES",nil];
+                    [warning setTag:SGR_WARNING];
+                    [warning show];
+                    
+                } else {
+                    [self beginRigging];
                 }
             }
             else
@@ -2428,6 +2425,22 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         default:
             break;
     }
+}
+
+- (void) beginRigging
+{
+    [self.addJointBtn setHidden:YES];
+    [self.moveLast setHidden:NO];
+    [self.moveFirst setHidden:NO];
+    [self.rigScreenLabel setHidden:NO];
+    selectedNodeId = editorScene->riggingNodeId = editorScene->selectedNodeId;
+    editorScene->enterOrExitAutoRigMode(true);
+    editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
+    editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
+    editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
+    [self setupEnableDisableControls];
+    [_rigCancelBtn setHidden:NO];
+    [self autoRigMirrorBtnHandler];
 }
 
 - (void) exportBtnDelegateAction:(int)indexValue {
@@ -2956,11 +2969,9 @@ void downloadFile(NSString* url, NSString* fileName)
             [self removeAnimationFromCurrentFrame];
         else if(buttonIndex == 2)
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
-    }
-    else if(alertView.tag == DELETE_BUTTON_OBJECT_ANIMATION){
+    } else if(alertView.tag == DELETE_BUTTON_OBJECT_ANIMATION){
         [self removeAnimationFromCurrentFrame];
-    }
-    else if (alertView.tag == ADD_BUTTON_TAG) {
+    } else if (alertView.tag == ADD_BUTTON_TAG) {
         NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
         
         if (buttonIndex == CANCEL_BUTTON_INDEX) {
@@ -2983,8 +2994,7 @@ void downloadFile(NSString* url, NSString* fileName)
                 }
             }
         }
-    }
-   else if (alertView.tag == CHOOSE_RIGGING_METHOD) {
+    } else if (alertView.tag == CHOOSE_RIGGING_METHOD) {
         if(buttonIndex == HUMAN_RIGGING) {
             editorScene->rigMan->skeletonType = SKELETON_HUMAN;
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
@@ -2993,12 +3003,15 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
        [self autoRigMirrorBtnHandler];
-    }
-   else if (alertView.tag == DATA_LOSS_ALERT) {
+    } else if (alertView.tag == DATA_LOSS_ALERT) {
         if(buttonIndex == CANCEL_BUTTON_INDEX) {
             
         } else if(buttonIndex == OK_BUTTON_INDEX) {
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
+        }
+    } else if (alertView.tag == SGR_WARNING) {
+        if(buttonIndex == OK_BUTTON_INDEX) {
+            [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:NO];
         }
     }
     [self autoRigMirrorBtnHandler];

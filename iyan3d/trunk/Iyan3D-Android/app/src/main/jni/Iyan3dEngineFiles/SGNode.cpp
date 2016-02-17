@@ -207,7 +207,7 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     
     if(node->skinType == CPU_SKIN) {
         node->getMeshCache()->recalculateNormalsT();
-        node->getMeshCache()->pivotToOrigin();
+        node->getMeshCache()->fixOrientation();
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_SHADOW_SKIN_L1));
     node->getMesh()->Commit();

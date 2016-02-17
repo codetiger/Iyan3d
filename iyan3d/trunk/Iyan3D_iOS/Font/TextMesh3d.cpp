@@ -376,6 +376,7 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
     
     mesh = new SkinMesh();
     Joint* rootBone = mesh->addJoint(NULL);
+    
     mesh->finalize();
     double offset = 0, prevOffset = 0;
     vertexColor = color;
@@ -420,6 +421,8 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
     }
     mesh->finalize();
     rootBone->LocalAnimatedMatrix[12] = offset / 2;
+    rootBone->LocalAnimatedMatrix[13] = -height/2;
+    rootBone->LocalAnimatedMatrix[14] = extrude/2;
 
     FT_Done_Face(face);
     FT_Done_FreeType(library);
@@ -427,7 +430,7 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
     if(mesh->getVerticesCount() <= 0)
         return NULL;
 
-    mesh->pivotToOrigin();
+    mesh->fixOrientation();
     mesh->recalculateNormalsT(true);
     mesh->generateUV();
 
@@ -500,7 +503,8 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         m->addToIndicesArray(in);
     }
     m->generateUV();
-    m->pivotToOrigin();
+    m->fixOrientation();
+    m->moveVertices(Vector3(offset / 2, -height/2, extrude/2));
     m->recalculateNormalsT(true);
     m->Commit();
 

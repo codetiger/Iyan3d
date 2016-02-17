@@ -19,6 +19,7 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
     sceneMode = RIG_MODE_OBJVIEW;
     nodeToRig = new SGNode(NODE_SGM);
     sgrSGNode = NULL;
+    rigNodeType = NODE_SGM;
     clearNodeSelections();
 }
 
@@ -87,8 +88,8 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     if(nodeToRig->node){
         smgr->RemoveNode(nodeToRig->node);
     }
-    
-    nodeToRig = (sgNode->getType() == NODE_RIG) ? getSGMNodeForRig(sgNode) : sgNode;
+    rigNodeType = sgNode->getType();
+    nodeToRig = (rigNodeType == NODE_RIG) ? getSGMNodeForRig(sgNode) : sgNode;
     sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
     // scale to fit all obj in same proportion-----
@@ -98,12 +99,13 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     float max = ((extendX >= extendY) ? extendX:extendY);
     max = ((max >= extendZ) ? max:extendZ);
     scaleRatio = (max / OBJ_BOUNDINGBOX_MAX_LIMIT);
-    sgmNode->setScale(Vector3(1.0/scaleRatio));
+    if(rigNodeType != NODE_RIG)
+        sgmNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
     
     sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     nodeToRig->props.isLighting = true;
-    //objNode->setTexture(rigScene->shadowTexture,2);
+    nodeToRig->node->setTexture(rigScene->shadowTexture,2);
     sgmNode->setID(SGM_ID);
     nodeToRig->node->updateAbsoluteTransformation();
 }

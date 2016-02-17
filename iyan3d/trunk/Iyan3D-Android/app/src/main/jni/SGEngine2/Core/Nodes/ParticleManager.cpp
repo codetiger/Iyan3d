@@ -164,7 +164,7 @@ Vector4* ParticleManager::getRotations()
 
 Vector4 ParticleManager::getParticleProps()
 {
-    return Vector4(maxLife, startScale + getScale().x, deltaScale, 1.0);
+    return Vector4(maxLife, getScale().x, deltaScale, 1.0);
 }
 
 int ParticleManager::getParticlesCount()

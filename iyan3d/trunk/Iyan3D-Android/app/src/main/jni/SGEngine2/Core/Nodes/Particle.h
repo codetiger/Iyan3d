@@ -10,6 +10,7 @@ public:
     int age;
     
     Vector3 position;
+    Vector3 initialPos;
     Vector3 velocity;
     
     double distance;

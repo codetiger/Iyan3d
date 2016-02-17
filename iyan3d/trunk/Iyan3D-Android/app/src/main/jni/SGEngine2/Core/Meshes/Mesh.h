@@ -85,7 +85,8 @@ public:
     void generateUV();
     void recalculateNormalsT(bool smooth = true);
     void removeDoubles();
-    void pivotToOrigin();
+    void fixOrientation();
+    void moveVertices(Vector3 offset);
     vertexData* getLiteVertexByIndex(unsigned int index);
     vertexDataHeavy* getHeavyVertexByIndex(unsigned int index);
     vector<vertexData> getLiteVerticesArray(int index);

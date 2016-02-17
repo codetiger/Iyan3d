@@ -217,7 +217,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
             switch(i%3) {
                 case 0:
                     //rot.y = (180.0 - (rot.y * RADTODEG)) * DEGTORAD;
-                    delta = Vector3(-ctrlDistanceFromNode, 0, 0);
+                    delta = Vector3(ctrlDistanceFromNode, 0, 0);
                     break;
                 case 1:
                     delta = Vector3(0, ctrlDistanceFromNode, 0);
@@ -229,8 +229,9 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
             Mat4 rotMat;
             rotMat.setRotationRadians(rot);
             rotMat.rotateVect(delta);
+            Quaternion finalRotation = MathHelper::RotateNodeInWorld(currentControl->node->getRotationInDegrees(), Quaternion(rot));
             
-            currentControl->node->setRotationInRadians(rot);
+            currentControl->node->setRotationInRadians(MathHelper::toEuler(finalRotation));
             currentControl->node->setPosition(Vector3(nodePos) + delta);
         }
         

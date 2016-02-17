@@ -46,6 +46,7 @@ public:
     float scaleRatio;
     AUTORIG_SCENE_MODE sceneMode;
     SKELETON_TYPE skeletonType;
+    NODE_TYPE rigNodeType;
     
     SGNode* nodeToRig;
     SGNode* selectedNode;
