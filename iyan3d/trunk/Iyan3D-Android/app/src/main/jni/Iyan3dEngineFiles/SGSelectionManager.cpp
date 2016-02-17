@@ -421,8 +421,10 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != objectId) || selectionScene->selectedNodeIds.size() > 0) && !selectionScene->isJointSelected &&isMultiSelectionEnabled) {
         multipleSelections(objectId);
         return;
-    } else
+    } else{
+        printf("\nSelected Node id : %d " , selectionScene->selectedNodeId);
         unselectObject(selectionScene->selectedNodeId);
+    }
     
     if(objectId < 0 || objectId >= selectionScene->nodes.size() || objectId == selectionScene->selectedNodeId)
         return;
@@ -486,7 +488,7 @@ void SGSelectionManager::unselectObject(int objectId)
             selectionScene->nodes[objectId]->props.perVertexColor = true;
     }
     selectionScene->clearSelections();
-    selectionScene->updater->updateControlsOrientaion(selectionScene);
+    selectionScene->updater->updateControlsOrientaion();
     selectionScene->updater->reloadKeyFrameMap();
 }
 

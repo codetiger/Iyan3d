@@ -248,9 +248,15 @@
 
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    if(fontArray != NULL && fontArray.count != 0 && fontArray.count > indexPath.row){
-        AssetItem* assetItem = fontArray[indexPath.row];
-        fontFileName = assetItem.name;
+    [self.textSelectionDelegate showOrHideProgress:1];
+    if(tabValue == MY_FONT || (fontArray != NULL && fontArray.count != 0 && fontArray.count > indexPath.row)){
+        if(tabValue == FONT_STORE){
+            AssetItem* assetItem = fontArray[indexPath.row];
+            fontFileName = assetItem.name;
+        }
+        else
+            fontFileName = [fontListArray objectAtIndex:indexPath.row];
+        NSLog(@"Font File Name : %@ " , fontFileName);
         NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
         for (int i = 0; i < [indexPathArr count]; i++) {
             NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
@@ -324,11 +330,13 @@
     [_inputText resignFirstResponder];
     [_textSelectionDelegate removeTempNodeFromScene];
     [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
+    [self.textSelectionDelegate showOrHideProgress:0];
     [self deallocMem];
     [self.view removeFromSuperview];    
 }
 
 - (IBAction)addToSceneBtnAction:(id)sender {
+    [self.textSelectionDelegate showOrHideProgress:1];
     isCanceled = true;
     Vector4 color = Vector4(red,green,blue,1.0);
     float bevelValue = _bevelSlider.value;

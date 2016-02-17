@@ -125,6 +125,7 @@
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.objSlideDelegate showOrHideProgress:1];
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
     for (int i = 0; i < [indexPathArr count]; i++)
     {
@@ -204,6 +205,7 @@
         [_colorWheelBtn setHidden:NO];
     }
    else if(self.addBtn.tag == Texture){
+       [self.objSlideDelegate showOrHideProgress:1];
        if(viewType == IMPORT_OBJFILE)
            [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
        else
@@ -235,11 +237,12 @@
     color = vetexColor;
     [self.importFilesCollectionView reloadData];
     if(isDragFinish){
-        if(viewType == IMPORT_OBJFILE)
+        [self.objSlideDelegate showOrHideProgress:1];
+        if(viewType == IMPORT_OBJFILE){
         [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
+        }
         else
             [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES];
-
     }
 }
 

@@ -295,6 +295,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you choose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [loadNodeAlert show];
+                if(editorScene && editorScene->loader)
+                    editorScene->loader->removeTempNodeIfExists();
                 return false;
             }
             if(textNode)
@@ -333,6 +335,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
     }
+    [self.delegate showOrHideProgress:0];
     return true;
 }
 

@@ -149,6 +149,9 @@ BOOL missingAlertShown;
     [_rigCancelBtn setHidden:YES];
     [_rigAddToSceneBtn setHidden:YES];
     [self updateXYZValuesHide:YES X:0.0 Y:0.0 Z:0.0];
+    self.rigAddToSceneBtn.layer.cornerRadius = CORNER_RADIUS;
+    self.rigCancelBtn.layer.cornerRadius = CORNER_RADIUS;
+    self.publishBtn.layer.cornerRadius = CORNER_RADIUS;
   
 //    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -236,7 +239,6 @@ BOOL missingAlertShown;
 - (void)initScene
 {
     float screenScale = [[UIScreen mainScreen] scale];
-    NSLog(@"Screen Scale %f " , screenScale);
     renderViewMan = [[RenderViewManager alloc] init];
     renderViewMan.delegate = self;
     [renderViewMan setupLayer:_renderView];
@@ -253,10 +255,6 @@ BOOL missingAlertShown;
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale);
-        
-        NSLog(@"\nScreen Size %d x %d - %f x %f " , ScreenWidth,ScreenHeight,SCREENWIDTH,SCREENHEIGHT);
-        NSLog(@"\nScreen Size With Scale %f x %f " , ScreenWidth*screenScale,ScreenHeight*screenScale);
-        
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
@@ -750,11 +748,6 @@ BOOL missingAlertShown;
         cell.layer.borderWidth = 2.0f;
     }
     
-    //    cell.backgroundColor = [UIColor colorWithRed:55.0f / 255.0f
-    //                                                   green:56.0f / 255.0f
-    //                                                    blue:57.0f / 255.0f
-    //                                                   alpha:1.0f];
-    
     cell.layer.borderWidth = 0.0f;
     if (_framesCollectionView.tag==FRAME_COUNT) {
         cell.framesLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row + 1];
@@ -898,13 +891,14 @@ BOOL missingAlertShown;
         }
         else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW){
             //[[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+            [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
             NSString *tempDir = NSTemporaryDirectory();
             NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
             string path = (char*)[sgrFilePath cStringUsingEncoding:NSUTF8StringEncoding];
-            NSLog(@"Temp Path %s ",path.c_str());
-            [self performSelectorOnMainThread:@selector(exportSgr:) withObject:sgrFilePath waitUntilDone:YES];
+            [self exportSgr:sgrFilePath];
             [_rigAddToSceneBtn setHidden:NO];
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+            [_addJointBtn setHidden:YES];
         }
         else
         {
@@ -912,15 +906,26 @@ BOOL missingAlertShown;
             editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
         }
     }
-    [_addJointBtn setHidden:YES];
     [self autoRigMirrorBtnHandler];
+    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+}
+
+- (void) showLoadingActivity
+{
+    [_center_progress setHidden:NO];
+    [_center_progress startAnimating];
+}
+
+- (void) hideLoadingActivity
+{
+    [_center_progress stopAnimating];
+    [_center_progress setHidden:YES];
 }
 
 - (void)exportSgr:(NSString*)pathStr
 {
     string path = (char*)[pathStr cStringUsingEncoding:NSUTF8StringEncoding];
     editorScene->rigMan->exportSGR(path);
-    
 }
 
 - (IBAction)moveFirstAction:(id)sender {
@@ -2927,7 +2932,7 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma Show Or Hide Progress
 
 -(void) showOrHideProgress:(BOOL) value{
-    NSLog(@"Value %d ",value);
+    
     if(value == SHOW_PROGRESS){
         [_center_progress setHidden:NO];
         [_center_progress startAnimating];
@@ -3173,6 +3178,26 @@ void downloadFile(NSString* url, NSString* fileName)
     }
     [_autorigMirrorLable setHidden:status];
     [_autoRigMirrorSwitch setHidden:status];
+    
+    if(editorScene && editorScene->isRigMode){
+        switch (editorScene->rigMan->sceneMode) {
+            case RIG_MODE_OBJVIEW:
+                _rigScreenLabel.text = @"IMPORT OBJ";
+                break;
+            case RIG_MODE_MOVE_JOINTS:
+                _rigScreenLabel.text = @"ATTACH SKELETON";
+                break;
+            case RIG_MODE_EDIT_ENVELOPES:
+                _rigScreenLabel.text = @"ADJUST ENVELOP";
+                break;
+            case RIG_MODE_PREVIEW:{
+                _rigScreenLabel.text = @"PREVIEW";
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 - (void) autoRigViewButtonHandler:(bool)disable
@@ -3214,9 +3239,7 @@ void downloadFile(NSString* url, NSString* fileName)
         assetIdReturn =  [self addSgmFileToCacheDirAndDatabase:assetName];
     }
     
-    NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Textures/White-texture":textureFileName];
-    
-    
+    NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Textures/White-texture":textureFileName];    
     std::string *texture = new std::string([textureFileName UTF8String]);
     if ([[NSFileManager defaultManager] fileExistsAtPath:texFrom]){
         NSString* desFilePath;
@@ -3252,6 +3275,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     [dict setObject:[NSNumber numberWithBool:isHaveTexture] forKey:@"isHaveTexture"];
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
+    [self showOrHideProgress:HIDE_PROGRESS];
 }
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
@@ -3487,6 +3511,7 @@ void boneLimitsCallBack(){
         editorScene->selectMan->unselectObject(selectedNodeId);
         editorScene->setLightingOn();
     }
+    [self showOrHideProgress:HIDE_PROGRESS];
 }
 
 - (void) removeTempTextureAndVertex

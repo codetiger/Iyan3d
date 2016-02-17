@@ -91,7 +91,7 @@
     }
     else if([clickedBtnName isEqualToString:@"propertiesBtn"]){
         [self allowMultipleSelection:NO];
-        tableData = [NSMutableArray arrayWithObjects:@"Duplicate", @"Delete",@"Rename", nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", nil];
     }
     else if([clickedBtnName isEqualToString:@"optionsBtn"]){
         [self allowMultipleSelection:NO];

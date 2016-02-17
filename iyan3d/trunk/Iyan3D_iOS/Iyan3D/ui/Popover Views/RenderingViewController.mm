@@ -771,8 +771,9 @@
     [thread cancel];
     isCanceled = true;
     [self.delegate clearFolder:NSTemporaryDirectory()];
-    [self dismissViewControllerAnimated:YES completion:nil];
     [self.delegate resumeRenderingAnimationScene];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self deallocMem];
 }
 
 - (IBAction)colorPickerAction:(id)sender {
@@ -1174,7 +1175,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     }
 }
 
-- (void) dealloc
+- (void) deallocMem
 {
     thread = nil;
     [self.delegate freezeEditorRender:NO];

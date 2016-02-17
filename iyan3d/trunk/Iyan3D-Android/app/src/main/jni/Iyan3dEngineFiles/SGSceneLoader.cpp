@@ -173,6 +173,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     if(!sgnode->node){
         delete sgnode;
         Logger::log(INFO,"SGANimationScene","Node not loaded");
+        currentScene->freezeRendering = false;
         return NULL;
     }
     if(sgnode->getType() == NODE_PARTICLES && isTempNode)

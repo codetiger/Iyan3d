@@ -182,7 +182,7 @@
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hQW-uY-VHV">
                     <rect key="frame" x="38" y="696" width="100" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549018" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="Cancel">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -227,9 +227,9 @@
                             </connections>
                         </collectionView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="G1U-ai-hxF">
-                            <rect key="frame" x="973" y="33" width="39" height="22"/>
+                            <rect key="frame" x="983" y="33" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="Info.png"/>
+                            <state key="normal" backgroundImage="info-icon.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="IrJ-B4-4b1"/>
                             </connections>
@@ -240,14 +240,6 @@
                             <state key="normal" image="Add-Frames.png"/>
                             <connections>
                                 <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="hqU-7U-POi"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wLO-9c-KMj">
-                            <rect key="frame" x="932" y="33" width="22" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Button" backgroundImage="View.png"/>
-                            <connections>
-                                <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="vwX-Dj-z9m"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="q9T-TD-6di">
@@ -287,6 +279,14 @@
                             <state key="normal" image="Next-Frame.png"/>
                             <connections>
                                 <action selector="lastFrameBtnAction:" destination="-1" eventType="touchUpInside" id="Tx6-ke-ZS4"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wLO-9c-KMj">
+                            <rect key="frame" x="932" y="33" width="22" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Button" backgroundImage="View.png"/>
+                            <connections>
+                                <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="vwX-Dj-z9m"/>
                             </connections>
                         </button>
                     </subviews>
@@ -512,7 +512,6 @@
         <image name="Back.png" width="14" height="23"/>
         <image name="Export_Pad.png" width="42" height="29"/>
         <image name="Import_Pad.png" width="42" height="29"/>
-        <image name="Info.png" width="22" height="22"/>
         <image name="Login-icon.png" width="22" height="22"/>
         <image name="Move_Pad.png" width="42" height="29"/>
         <image name="Next-Frame.png" width="31" height="36"/>
@@ -525,6 +524,7 @@
         <image name="Undo_Pad.png" width="26" height="40"/>
         <image name="View.png" width="22" height="22"/>
         <image name="add-frame.png" width="18" height="18"/>
+        <image name="info-icon.png" width="22" height="22"/>
         <image name="move-first.png" width="40" height="40"/>
         <image name="move-last.png" width="40" height="40"/>
     </resources>

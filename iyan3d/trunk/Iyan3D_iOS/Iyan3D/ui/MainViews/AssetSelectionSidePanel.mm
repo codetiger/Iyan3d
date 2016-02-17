@@ -79,10 +79,10 @@
 
 - (IBAction)addToSceneButtonAction:(id)sender {
      //addToScenePressed = YES;
+    [self.assetSelectionDelegate showOrHideProgress:1];
     [self cancelOperations:downloadQueue];
     [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
-    [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
     [self deallocMem];
 }
@@ -116,6 +116,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [self.assetSelectionDelegate showOrHideProgress:1];
         [_addToSceneBtn setEnabled:NO];
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
    
@@ -154,6 +155,8 @@
 
 - (IBAction)categoryBtnFuction:(id)sender
 {
+    
+    
     UIAlertController * view=   [UIAlertController
                                  alertControllerWithTitle:@"Category"
                                  message:nil
@@ -174,7 +177,8 @@
                                     modelCategoryTab = ALLMODELS;
                                     selectedAsset = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                    
+                                    [self.assetSelectionDelegate removeTempNodeFromScene];
+                                    [_addToSceneBtn setEnabled:NO];                                    
                                 }];
     UIAlertAction* character = [UIAlertAction
                                 actionWithTitle:@"Character"
@@ -189,7 +193,8 @@
                                     modelCategoryTab = CHARACTERS;
                                     selectedAsset = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                    
+                                    [self.assetSelectionDelegate removeTempNodeFromScene];
+                                    [_addToSceneBtn setEnabled:NO];
                                 }];
     UIAlertAction* backgrounds = [UIAlertAction
                                   actionWithTitle:@"Backgrounds"
@@ -204,6 +209,8 @@
                                       modelCategoryTab = BACKGROUNDS;
                                       selectedAsset = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
+                                      [self.assetSelectionDelegate removeTempNodeFromScene];
+                                      [_addToSceneBtn setEnabled:NO];
                                   }];
     UIAlertAction* accessories = [UIAlertAction
                                   actionWithTitle:@"Accessories"
@@ -218,7 +225,8 @@
                                       modelCategoryTab = ACCESSORIES;
                                       selectedAsset = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
-                                      
+                                      [self.assetSelectionDelegate removeTempNodeFromScene];
+                                      [_addToSceneBtn setEnabled:NO];
                                   }];
     UIAlertAction* mylibrary = [UIAlertAction
                                   actionWithTitle:@"My Library"
@@ -233,7 +241,8 @@
                                       modelCategoryTab = MY_LIBRARY_TYPE;
                                       selectedAsset = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
-                                      
+                                      [self.assetSelectionDelegate removeTempNodeFromScene];
+                                      [_addToSceneBtn setEnabled:NO];
                                   }];
     switch (modelCategoryTab) {
         case ALLMODELS:

@@ -29,6 +29,7 @@
           FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode;
 - (void) removeTempNodeFromScene;
 - (void) textColorPicker:(UIView*)colorPickerButton;
+- (void) showOrHideProgress:(BOOL) value;
 
 @end
 

@@ -107,6 +107,7 @@
 
 - (void)collectionView:(UICollectionView*)collectionView didSelectItemAtIndexPath:(NSIndexPath*)indexPath
 {
+    [self.delegate showOrHideProgress:1];
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
     for (int i = 0; i < [indexPathArr count]; i++) {
         NSIndexPath* indexPath = [indexPathArr objectAtIndex:i];
@@ -120,7 +121,6 @@
     cell.layer.borderColor = [UIColor whiteColor].CGColor;
     cell.layer.cornerRadius = 8.0;
     [self displayBasedOnSelection:[NSNumber numberWithInteger:indexPath.row]];
-
 }
 #pragma mark Button actions
 
@@ -253,6 +253,7 @@
 }
 
 - (IBAction)cancelBtnFunction:(id)sender {
+    [self.delegate showOrHideProgress:0];
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
@@ -616,16 +617,7 @@
 - (void)applyAnimation:(id)returnValue
 {
     [_delegate stopPlaying];
-    editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
-    [self.delegate updateAssetListInScenes];
-    editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
-    [self.delegate createDuplicateAssetsForAnimation];
-    if(!isFirstTimeAnimationApplyed) {
-        editorSceneLocal->currentFrame = currentFrame;
-        editorSceneLocal->totalFrames = totalFrame;
-        editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
-        [self.delegate removeTempAnimation];
-    }
+    
     int animBoneCount = [returnValue intValue];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
@@ -636,6 +628,23 @@
     else
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
 
+    if(animBoneCount != bonecount){
+        UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+        [self.delegate showOrHideProgress:0];
+        return;
+    }
+    
+    editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
+    [self.delegate updateAssetListInScenes];
+    editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
+    [self.delegate createDuplicateAssetsForAnimation];
+    if(!isFirstTimeAnimationApplyed) {
+        editorSceneLocal->currentFrame = currentFrame;
+        editorSceneLocal->totalFrames = totalFrame;
+        editorSceneLocal->actionMan->switchFrame(editorSceneLocal->currentFrame);
+        [self.delegate removeTempAnimation];
+    }
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         isFirstTimeAnimationApplyed = false;
         if(animationType == RIG_ANIMATION){
