@@ -63,7 +63,7 @@
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LIQ-ou-vmF">
                             <rect key="frame" x="26" y="359" width="100" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549018" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Cancel">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
