@@ -121,10 +121,10 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
         
         Logger::log(INFO , "SGScene diff ", "touch end");
         
-        if(moveScene->selectedNodeIds.size() > 0){
+        if(moveScene->selectedNodeIds.size() > 0 && moveScene->controlType != SCALE){
             moveScene->actionMan->storeActionKeysForMulti(true);
         }
-        else
+        else if(moveScene->controlType != SCALE)
             moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
         moveScene->isControlSelected = false;

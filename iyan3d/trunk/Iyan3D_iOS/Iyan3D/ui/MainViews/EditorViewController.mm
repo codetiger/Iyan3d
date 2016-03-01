@@ -336,7 +336,7 @@ BOOL missingAlertShown;
 
 -(void)setupEnableDisableControls{
     [self sceneMirrorUIPositionChanger];
-    bool sceneMirrorState = !(editorScene && !editorScene->isRigMode && editorScene->hasNodeSelected() && editorScene->getSelectedNode()->joints.size() == HUMAN_JOINTS_SIZE);
+    bool sceneMirrorState = !(editorScene && !editorScene->isRigMode && editorScene->getSelectedNode() && editorScene->getSelectedNode()->joints.size() == HUMAN_JOINTS_SIZE);
     NSLog(@"Scene Mirror State : %d " , sceneMirrorState);
     [_sceneMirrorLable setHidden:sceneMirrorState];
     [_sceneMirrorSwitch setHidden:sceneMirrorState];
@@ -676,10 +676,12 @@ BOOL missingAlertShown;
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    editorScene->setLightingOn();
-    
-    if(editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_PREVIEW)){
-        [_addJointBtn setEnabled:(editorScene->rigMan->isSGRJointSelected)?NO:YES];
+    if(editorScene) {
+        editorScene->setLightingOn();
+        
+        if(editorScene->isRigMode && editorScene->rigMan && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_PREVIEW)){
+            [_addJointBtn setEnabled:(editorScene->rigMan->isSGRJointSelected)?NO:YES];
+        }
     }
 }
 
@@ -693,6 +695,7 @@ BOOL missingAlertShown;
         }
     }
     cameraResoultionType = editorScene->cameraResolutionType;
+    editorScene->updater->setCameraProperty(editorScene->cameraFOV, editorScene->cameraResolutionType);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
 }
 
@@ -1012,6 +1015,11 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)rigCancelAction:(id)sender
+{
+    [self performSelectorOnMainThread:@selector(deallocateAutoRig) withObject:nil waitUntilDone:YES];
+}
+
+- (void) deallocateAutoRig
 {
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     editorScene->rigMan->deallocAutoRig(NO);
@@ -1474,12 +1482,7 @@ BOOL missingAlertShown;
         else
             status = false;
         
-        if(status && editorScene->selectedNodeIds.size() > 0){
-            editorScene->controlType = SCALE;
-            editorScene->updater->updateControlsOrientaion();
-            editorScene->renHelper->setControlsVisibility(false);
-        }
-        else if(status){
+        if(status){
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
             editorScene->renHelper->setControlsVisibility(false);
@@ -1926,7 +1929,7 @@ BOOL missingAlertShown;
 
 - (void)scalePropertyChanged:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
 {
-    if(!editorScene->isRigMode && (editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size()))
+    if(!editorScene->isRigMode && (editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())  && editorScene->selectedNodeIds.size() <= 0)
         return;
     if(editorScene->isRigMode && editorScene->rigMan->isNodeSelected)
         [self changeSkeletonScale:Vector3(XValue,YValue,ZValue)];
@@ -1937,7 +1940,7 @@ BOOL missingAlertShown;
 }
 - (void)scaleValueForAction:(float)XValue YValue:(float)YValue ZValue:(float)ZValue
 {
-    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+    if((editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size()) && editorScene->selectedNodeIds.size() <= 0)
         return;
     editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), true);
     [_framesCollectionView reloadData];

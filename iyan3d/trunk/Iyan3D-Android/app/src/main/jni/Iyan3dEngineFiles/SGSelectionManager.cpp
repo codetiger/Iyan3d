@@ -64,9 +64,9 @@ bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos, bool isMultiSel
 //    }
     selectionScene->isRTTCompleted = true;
     
-    if(selectionScene->selectedNodeIds.size() > 0)
+    if(selectionScene->selectedNodeIds.size() > 0 && selectionScene->controlType != SCALE)
         selectionScene->actionMan->storeActionKeysForMulti(false);
-    else
+    else if(selectionScene->controlType != SCALE)
         selectionScene->actionMan->storeActionKeys(false);
 
     return status;

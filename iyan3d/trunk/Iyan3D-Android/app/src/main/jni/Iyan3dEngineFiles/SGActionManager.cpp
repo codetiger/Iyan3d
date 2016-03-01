@@ -218,9 +218,9 @@ void SGActionManager::storeActionKeys(bool finished)
         return;
     
     SGNode * selectedNode = actionScene->nodes[actionScene->selectedNodeId];
-    if(actionScene->selectedControlId != NOT_SELECTED || actionScene->moveNodeId != NOT_EXISTS) {
-        actionScene->isControlSelected = (actionScene->moveNodeId != NOT_EXISTS) ? false : true;
-        if(!finished)
+    if(actionScene->selectedControlId != NOT_SELECTED || actionScene->moveNodeId != NOT_EXISTS || actionScene->controlType == SCALE) {
+        actionScene->isControlSelected = (actionScene->moveNodeId != NOT_EXISTS || actionScene->selectedControlId == NOT_SELECTED) ? false : true;
+        if(!finished && actionScene->controlType != SCALE)
             changeKeysAction.drop();
         changeKeysAction.objectIndex = selectedNode->actionId;
         
@@ -249,8 +249,10 @@ void SGActionManager::storeActionKeys(bool finished)
         }
         
         actionScene->updater->reloadKeyFrameMap();
-        if(finished)
+        if(finished) {
             finalizeAndAddAction(changeKeysAction);
+            changeKeysAction.drop();
+        }
     }
 }
 
@@ -258,9 +260,9 @@ void SGActionManager::storeActionKeysForMulti(bool finished)
 {
     if(!actionScene || !smgr || !(actionScene->selectedNodeIds.size() > 0))
         return;
-    if(actionScene->selectedControlId != NOT_SELECTED) {
-        actionScene->isControlSelected = true;
-        if(!finished)
+    if(actionScene->selectedControlId != NOT_SELECTED || actionScene->controlType == SCALE) {
+        actionScene->isControlSelected = (actionScene->selectedControlId == NOT_SELECTED) ? false : true;
+        if(!finished && actionScene->controlType != SCALE)
             changeKeysAction.drop();
         changeKeysAction.actionType = ACTION_CHANGE_MULTI_NODE_KEYS;
         SGNode * selectedNode;
@@ -276,6 +278,7 @@ void SGActionManager::storeActionKeysForMulti(bool finished)
         if(finished){
             changeKeysAction.frameId = actionScene->currentFrame;
             addAction(changeKeysAction);
+            changeKeysAction.drop();
         }
     }
 }
@@ -572,31 +575,13 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
 {
     if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT_SKIN) || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0)) return;
     
-    if(actionScene->actionMan->scaleAction.actionType == ACTION_EMPTY){
-        if(actionScene->selectedNodeIds.size() > 0) {
-        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) {
-            scaleAction.actionType = ACTION_CHANGE_JOINT_KEYS;
-            scaleAction.objectIndex =actionScene->nodes[actionScene->selectedNodeId]->actionId;
-            for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
-                scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->joints[i]->getKeyForFrame(actionScene->currentFrame));
-        } else {
-            scaleAction.actionType = ACTION_CHANGE_NODE_KEYS;
-            scaleAction.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
-            scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->getKeyForFrame(actionScene->currentFrame));
-        }
+    if(changeKeysAction.actionType == ACTION_EMPTY) {
+        if(actionScene->selectedNodeIds.size() > 0)
+            storeActionKeysForMulti(false);
+        else
+            storeActionKeys(false);
     }
-    if(isChanged){
-        if(actionScene->selectedNodeIds.size() > 0) {
-        } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) {
-            for (int i = 0; i < actionScene->nodes[actionScene->selectedNodeId]->joints.size(); i++)
-                scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->joints[i]->getKeyForFrame(actionScene->currentFrame));
-        } else {
-            scaleAction.keys.push_back(actionScene->nodes[actionScene->selectedNodeId]->getKeyForFrame(actionScene->currentFrame));
-        }
-        if(actionScene->selectedNodeIds.size() <= 0)
-            addAction(scaleAction);
-        scaleAction.drop();
-    }
+    
     if(actionScene->selectedNodeIds.size() > 0) {
         Vector3 pScale = actionScene->getParentNode()->getScale();
         actionScene->getParentNode()->setScale(scale);
@@ -606,6 +591,17 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
     } else {
         actionScene->nodes[actionScene->selectedNodeId]->setScale(scale, actionScene->currentFrame);
     }
+    
+    if(isChanged) {
+        if(actionScene->selectedNodeIds.size() > 0) {
+            actionScene->selectMan->removeChildren(actionScene->getParentNode(), true);
+            actionScene->selectMan->updateParentPosition();
+            storeActionKeysForMulti(true);
+        } else {
+            storeActionKeys(true);
+        }
+    }
+    
     if(actionScene->selectedNodeIds.size() <= 0)
         actionScene->updater->setDataForFrame(actionScene->currentFrame);
     actionScene->updater->reloadKeyFrameMap();
@@ -629,6 +625,10 @@ int SGActionManager::undo(int &returnValue2)
     if(!actionScene || !smgr)
         return -1;
 
+
+    if(actionScene->selectedNodeIds.size() > 0)
+        actionScene->selectMan->unselectObjects();
+    
     int returnValue = DO_NOTHING;
     
     SGAction &recentAction = actions[currentAction-1];
@@ -761,6 +761,9 @@ int SGActionManager::redo()
 {
     if(!actionScene || !smgr)
         return -1;
+
+    if(actionScene->selectedNodeIds.size() > 0)
+        actionScene->selectMan->unselectObjects();
 
     int returnValue = DO_NOTHING;
     

@@ -159,6 +159,14 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
         }
             
         case RIG_MODE_EDIT_ENVELOPES:{
+            for(std::map<int, SGNode *>::iterator it = envelopes.begin(); it!=envelopes.end(); it++)
+            {
+                if (it->second) {
+                    if(it->second->node)
+                        smgr->RemoveNode(it->second->node);
+                    delete it->second;
+                }
+            }
             envelopes.clear();
             selectedNodeId = NOT_SELECTED;
             if(nodeToRig){

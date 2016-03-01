@@ -770,8 +770,11 @@ void RenderHelper::rttShadowMap()
     if(!renderingScene || !smgr)
         return;
     
-    bool isRotationCircleVisible = renderingScene->rotationCircle->node->getVisible();
-    renderingScene->rotationCircle->node->setVisible(false);
+    bool isRotationCircleVisible = false;
+    if(renderingScene->rotationCircle && renderingScene->rotationCircle->node) {
+        isRotationCircleVisible = renderingScene->rotationCircle->node->getVisible();
+        renderingScene->rotationCircle->node->setVisible(false);
+    }
     setControlsVisibility(false);
     ShaderManager::isRenderingDepthPass = true;
     smgr->setActiveCamera(renderingScene->lightCamera);
@@ -816,7 +819,8 @@ void RenderHelper::rttShadowMap()
     
     smgr->setActiveCamera(renderingScene->viewCamera);
     smgr->setRenderTarget(NULL,true,true,true,Vector4(255,255,255,255));
-    renderingScene->rotationCircle->node->setVisible(isRotationCircleVisible);
+    if(renderingScene->rotationCircle && renderingScene->rotationCircle->node)
+        renderingScene->rotationCircle->node->setVisible(isRotationCircleVisible);
     ShaderManager::isRenderingDepthPass = false;
 }
 

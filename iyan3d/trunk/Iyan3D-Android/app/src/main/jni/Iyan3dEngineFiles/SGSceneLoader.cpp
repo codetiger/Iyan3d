@@ -482,7 +482,7 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
     std::map<int, RigKey>& rigKeys = currentScene->rigMan->rigKeys;
 
     SGNode *envelopeSgNod = (envelopes.find(jointId) == envelopes.end()) ? NULL:envelopes[jointId];
-    if(jointId<=1) return;  //skipping envelope between hip and it's parent.
+    if(jointId<=1 || !rigKeys[jointId].referenceNode || !rigKeys[jointId].referenceNode->node) return;  //skipping envelope between hip and it's parent.
     int parentId = rigKeys[jointId].parentId;
     
     if(envelopeSgNod == NULL){
