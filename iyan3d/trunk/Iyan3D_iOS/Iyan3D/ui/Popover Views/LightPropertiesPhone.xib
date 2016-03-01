@@ -9,7 +9,9 @@
             <connections>
                 <outlet property="colorPickerView" destination="nvx-Ak-5gR" id="YiA-HM-3LW"/>
                 <outlet property="colorPreview" destination="kR6-UB-2FV" id="2QI-YT-fni"/>
+                <outlet property="deleteBtn" destination="bEP-7a-O5w" id="l1A-9T-uzx"/>
                 <outlet property="distance" destination="9zw-Zz-Zbk" id="0eg-mB-lfc"/>
+                <outlet property="distanceLable" destination="HGZ-0v-Cof" id="pbv-N3-G4g"/>
                 <outlet property="shadowDarkness" destination="ilJ-2a-xmi" id="U5Q-v9-X16"/>
                 <outlet property="view" destination="iN0-l3-epB" id="P1n-Ij-CTX"/>
             </connections>
@@ -58,8 +60,8 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bEP-7a-O5w">
-                    <rect key="frame" x="61" y="229" width="150" height="36"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bEP-7a-O5w">
+                    <rect key="frame" x="8" y="229" width="256" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <state key="normal" title="  Delete Animation" image="popover-delete.png">

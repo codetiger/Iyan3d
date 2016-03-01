@@ -179,7 +179,7 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
     @synchronized (dbLock){
         NSMutableArray *array1=[[NSMutableArray alloc] init];
         
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY datetime(%@) DESC",RENDER_TASK_TABLE, RENDER_TASK_DATE];
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY %@ DESC", RENDER_TASK_TABLE, RENDER_TASK_ID];
         sqlite3_stmt *statement;
         if (sqlite3_prepare_v2(_cacheSystem, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
             NSLog(@"Success");

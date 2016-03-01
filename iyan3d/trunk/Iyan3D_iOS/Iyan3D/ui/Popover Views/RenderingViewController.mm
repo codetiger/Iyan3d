@@ -93,9 +93,6 @@
     selectedIndex = 0;
     isAppInBg = false;
     self.resolutionSegment.selectedSegmentIndex = resolutionType;
-//    self.renderingTypes.layer.cornerRadius = 5.0;
-//    self.renderingTypes.layer.borderWidth = 2.0f;
-//    self.renderingTypes.layer.borderColor=[UIColor clearColor].CGColor;
     self.nextButton.layer.cornerRadius = 5.0;
     self.cancelButton.layer.cornerRadius = 5.0;
     [self.activityIndicatorView setHidden:false];
@@ -360,7 +357,7 @@
         int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
         int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
         int creditsForFrames = frames * valueForRender;
-        int credits = (creditsForFrames + waterMarkCredit)  * -1;
+        int credits = (creditsForFrames + waterMarkCredit);
         _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
     }
 }
@@ -509,7 +506,11 @@
                 [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:@"index.zip"] error:&error];
                 
                 [self.makeVideoLoading setHidden:YES];
-                NSString* dateStr = [NSString stringWithFormat:@"%@" ,[NSDate date]];
+                
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSString* dateStr = [dateFormat stringFromDate:[NSDate date]];
+
                 [cache addRenderTaskData:publishId estTime:renderingStartFrame+1 proName:self.projectName date:dateStr];
                 
                 UIAlertView *showAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Uploaded successfully. You can see the progress of your render in your profile view." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -522,7 +523,6 @@
                 [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
                 _nextButton.tag = DONE;
             }
-             
                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                  
                                                  [_cancelButton setHidden:YES];
@@ -546,12 +546,7 @@
         [alertView show];
     }
 }
-- (void) viewWillAppear:(BOOL)animated
-{
-    if([Utility IsPadDevice]) {
-        [self.view.layer setMasksToBounds:YES];
-    }
-}
+
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -692,14 +687,15 @@
     cell.layer.borderWidth = 1.0f;
     cell.layer.borderColor = [UIColor clearColor].CGColor;
     if ((int)indexPath.row == 0){
-        cell.ShaderImage.image =[UIImage imageNamed:@"Normal-shader_Pad.png"];
-    }
-    else if ((int)indexPath.row == 2){
-        cell.ShaderImage.image =[UIImage imageNamed:@"Photo-Realistic-shader_Pad.png"];
+        cell.ShaderImage.image =[UIImage imageNamed:@"render1.png"];
     }
     else if ((int)indexPath.row == 1){
-        cell.ShaderImage.image =[UIImage imageNamed:@"Toon-shader_Pad.png"];
+        cell.ShaderImage.image =[UIImage imageNamed:@"render2.png"];
     }
+    else if ((int)indexPath.row == 2){
+        cell.ShaderImage.image =[UIImage imageNamed:@"render3.png"];
+    }
+    
     
     if(selectedIndex == (int)indexPath.row){
         UIColor *borderColor = [UIColor purpleColor];
@@ -1225,10 +1221,6 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
         [self.shareActivityIndicator stopAnimating];
         [self.shareActivityIndicator setHidden:true];
         [self.exportButton setHidden:false];
-        if([Utility IsPadDevice]) {
-            //[self.view.layer setCornerRadius:20.0f];
-            [self.view.layer setMasksToBounds:YES];
-        }
     }];
     
     [self presentViewController:controller animated:YES completion:nil];

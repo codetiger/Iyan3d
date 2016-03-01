@@ -362,6 +362,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         editorScene->loader->removeObject(nodeIndex);
         [self.delegate updateAssetListInScenes];
+        [self.delegate showOrHideProgress:0];
     }
 }
 

@@ -23,7 +23,7 @@
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"propertiesBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 128.0);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popUpVc.delegate=self;
     CGRect rect = _propertiesBtn.frame;

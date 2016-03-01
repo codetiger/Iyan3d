@@ -133,6 +133,7 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
         updater->resetMaterialTypes(false);
         AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
     }
+    updater->setDataForFrame(currentFrame);
 }
 
 void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)

@@ -35,5 +35,7 @@
 @property (strong, nonatomic) id <LightPropertiesDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UISlider *shadowDarkness;
 @property (weak, nonatomic) IBOutlet UISlider *distance;
+@property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLable;
 
 @end

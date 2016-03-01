@@ -36,11 +36,15 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="aVv-PL-VaL">
+                        <rect key="frame" x="242" y="13" width="20" height="20"/>
+                    </activityIndicatorView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="dateLabel" destination="NIN-cH-CQg" id="XX5-Fb-4C7"/>
                 <outlet property="downloadBtn" destination="iRV-AZ-lYI" id="Ot9-ou-Mp7"/>
+                <outlet property="downloadProgress" destination="aVv-PL-VaL" id="ovZ-gM-9ox"/>
                 <outlet property="renderProgressLabel" destination="34u-Os-mMx" id="67U-a6-jWQ"/>
                 <outlet property="renderlabel" destination="LFG-o1-lfq" id="gHw-Gl-Lqp"/>
             </connections>

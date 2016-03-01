@@ -25,6 +25,7 @@
     NSMutableArray *completedTask;
     NSArray *renderSectionTitles;
     NSOperationQueue* downloadQueue;
+    int downloadCompletedTaskIds;
     
 }
 - (IBAction)add500Credits:(id)sender;

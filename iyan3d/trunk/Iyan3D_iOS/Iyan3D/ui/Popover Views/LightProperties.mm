@@ -33,6 +33,13 @@
     [_distance setEnabled:(light == NODE_ADDITIONAL_LIGHT) ? YES : NO];
     [_distance setValue:(light == NODE_ADDITIONAL_LIGHT) ? previousDistance : 1.0];
     [_shadowDarkness setValue:color.w];
+    if(light == NODE_LIGHT){
+        CGRect frame = _deleteBtn.frame;
+        frame.origin.y = _distance.frame.origin.y + ((_distanceLable.frame.origin.y - _distance.frame.origin.y)/2);
+        _deleteBtn.frame = frame;
+        [_distance setHidden:YES];
+        [_distanceLable setHidden:YES];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated{

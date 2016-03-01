@@ -9,7 +9,9 @@
             <connections>
                 <outlet property="colorPickerView" destination="ma8-4f-ncY" id="Znd-bH-IMe"/>
                 <outlet property="colorPreview" destination="nMv-LC-OYa" id="eEZ-5T-QNL"/>
+                <outlet property="deleteBtn" destination="bPw-xj-2tm" id="YjG-Iv-N0O"/>
                 <outlet property="distance" destination="eFB-Oq-wSF" id="Nff-eS-Q5z"/>
+                <outlet property="distanceLable" destination="SE1-So-eDY" id="b6x-02-W8X"/>
                 <outlet property="shadowDarkness" destination="qAH-Zm-rtF" id="W3U-ld-2R6"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -32,8 +34,8 @@
                         <action selector="shadowDarknessEnd:" destination="-1" eventType="touchUpInside" id="2Qa-fm-DLu"/>
                     </connections>
                 </slider>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bPw-xj-2tm">
-                    <rect key="frame" x="60" y="296" width="150" height="36"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bPw-xj-2tm">
+                    <rect key="frame" x="8" y="296" width="256" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <state key="normal" title="  Delete Animation" image="popover-delete.png">

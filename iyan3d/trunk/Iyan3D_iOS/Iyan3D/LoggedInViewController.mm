@@ -43,6 +43,7 @@
         completedTask = [[NSMutableArray alloc] init];
         progressingTasks = [[NSMutableArray alloc] init];
         [self updateTableViewData];
+        downloadCompletedTaskIds = 0;
     }
     return self;
 }
@@ -219,17 +220,34 @@
     [cell.downloadBtn setHidden:(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0)];
     
     [cell.downloadBtn setTag:rItem.taskId];
-    [cell.downloadBtn addTarget:self action:@selector(downloadOutputVideo:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if(downloadCompletedTaskIds == rItem.taskId){
+        [cell.downloadProgress stopAnimating];
+        [cell.downloadProgress setHidden:YES];
+        [cell.downloadBtn setHidden:NO];
+    }
+    
+
+    //[cell.downloadBtn addTarget:self action:@selector(downloadOutputVideo:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
 
-- (void) downloadOutputVideo:(id)sender
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    RenderTableViewCell *cell = [self.renderStatus cellForRowAtIndexPath:indexPath];
+    [cell.downloadProgress setHidden:NO];
+    [cell.downloadProgress startAnimating];
+    [cell.downloadBtn setHidden:YES];
+    [self downloadOutputVideo:cell.downloadBtn.tag];
+}
+
+- (void) downloadOutputVideo:(int)taskId
 {
     NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [docPaths objectAtIndex:0];
     
-    int taskId = (int)((UIButton*)sender).tag;
+    //int taskId = (int)((UIButton*)sender).tag;
     NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/renderFiles/%d/%d.mp4",taskId, taskId];
     NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.mp4", documentsDirectory, taskId];
     
@@ -237,7 +255,6 @@
     task.taskType = DOWNLOAD_AND_WRITE;
     task.queuePriority = NSOperationQueuePriorityHigh;
     [downloadQueue addOperation:task];
-    
 }
 
 - (void) downloadImage:(int)taskId frames:(int)frames
@@ -256,7 +273,6 @@
     [downloadQueue addOperation:task];
     
 }
-
 
 - (void) donwloadCompleted:(id)object
 {
@@ -279,6 +295,8 @@
             UISaveVideoAtPathToSavedPhotosAlbum(t.outputPath, self,  @selector(video:didFinishSavingWithError:contextInfo:), nil);
         }
     }
+    downloadCompletedTaskIds = taskId;
+    [_renderStatus reloadData];
 }
 
  - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo

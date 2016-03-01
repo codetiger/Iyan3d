@@ -9,6 +9,7 @@
 #import "PopUpViewController.h"
 #import "Utility.h"
 #import <AppHelper.h>
+#import "TableViewCell.h"
 
 @implementation PopUpViewController
 
@@ -42,6 +43,7 @@
         }
     }
     if ([clickedBtn isEqualToString:@"myObjectsBtn"]) {
+        _popoverBtns.alwaysBounceVertical = YES;
         if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
             self.popoverBtns.allowsMultipleSelection=YES;
         }
@@ -51,6 +53,7 @@
         }
     }
     else {
+            _popoverBtns.alwaysBounceVertical = NO;
         self.popoverBtns.allowsMultipleSelection=NO;
     }
 }
@@ -134,20 +137,18 @@
     }
     
     cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
+    cell.textLabel.textColor = [UIColor blackColor];
+    [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
     if ([Utility IsPadDevice]){
         if([clickedBtn isEqualToString:@"exportBtn"]){
-            cell.textLabel.textColor = [UIColor blackColor];
-            [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            
             if(indexPath.row==0)
                 cell.imageView.image = [UIImage imageNamed:@"Export-image_Pad"];
             if(indexPath.row==1)
                 cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad"];
         }
         if([clickedBtn isEqualToString:@"importBtn"]){
-            cell.textLabel.textColor = [UIColor blackColor];
-            [cell.textLabel setFont:[UIFont systemFontOfSize:18]];
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
             if(indexPath.row==0)
                 cell.imageView.image = [UIImage imageNamed:@"Import-model_Pad"];
             if(indexPath.row==1)
@@ -219,19 +220,19 @@
 //
 //            
 //            if([cell.textLabel.text isEqualToString:@"CAMERA"])
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
 //            else if([cell.textLabel.text isEqualToString:@"LIGHT"])
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
 //            else if([cell.textLabel.text hasPrefix:@"Text"])
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
 //            else if([cell.textLabel.text hasPrefix:@"Image"])
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
 //            else if([cell.textLabel.text hasPrefix:@"Light"])
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
 //            else if([cell.textLabel.text containsString:@"particle"])
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles-Phone.png"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Particles-Phone.png"];
 //            else
-//                cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
+//                cell.image.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
 
         }
      }

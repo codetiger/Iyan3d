@@ -223,7 +223,7 @@ BOOL missingAlertShown;
         [self.undoBtn setEnabled:YES];
     
     
-    if(editorScene && ShaderManager::lightPosition.size() < 5){
+    if(editorScene){
         int lightId = 0;
         for(int i = 0 ; i < editorScene->nodes.size(); i++){
                 if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
@@ -285,6 +285,7 @@ BOOL missingAlertShown;
     editorScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     [renderViewMan addGesturesToSceneView];
     [self performSelectorOnMainThread:@selector(loadScene) withObject:nil waitUntilDone:YES];
+
 }
 
 - (bool) isMetalSupportedDevice
@@ -530,6 +531,7 @@ BOOL missingAlertShown;
 }
 
 - (void) load3dTextOnMainThread:(NSMutableDictionary*)fontDetails{
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     int type = [[fontDetails objectForKey:@"type"]intValue];
     int assetId = [[fontDetails objectForKey:@"AssetId"]intValue];
     std::wstring assetName = [self getwstring:[fontDetails objectForKey:@"typedText"]];
@@ -584,6 +586,7 @@ BOOL missingAlertShown;
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
 {
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] TextureName:(@"-1") Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
@@ -596,6 +599,7 @@ BOOL missingAlertShown;
 
 - (void)loadNodeForImage:(NSMutableDictionary*)nsDict
 {
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     std::wstring saltedFileName = [self getwstring:[nsDict objectForKey:@"AssetName"]];
     int type = [[nsDict objectForKey:@"type"]intValue];
     int assetId = [[nsDict objectForKey:@"AssetId"]intValue];
@@ -610,7 +614,7 @@ BOOL missingAlertShown;
 
 - (void) loadNode:(AssetItem*) asset
 {
-    NSLog(@"Texture Name : %@ ",asset.textureName);
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] TextureName:(asset.textureName) Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!asset.isTempAsset) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -849,6 +853,7 @@ BOOL missingAlertShown;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         editorScene->selectMan->unselectObjects();
+        [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
         [renderViewMan removeNodeFromScene:(int)indexPath.row IsUndoOrRedo:NO];
         [self reloadFrames];
         [tableView reloadData];
@@ -922,7 +927,7 @@ BOOL missingAlertShown;
    
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
-    if(editorScene->isPlaying){
+    if(editorScene && editorScene->isPlaying){
         [self stopPlaying];
         return;
     }
@@ -1008,12 +1013,14 @@ BOOL missingAlertShown;
 
 - (IBAction)rigCancelAction:(id)sender
 {
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     editorScene->rigMan->deallocAutoRig(NO);
     editorScene->enterOrExitAutoRigMode(false);
     [self setupEnableDisableControls];
     [self autoRigViewButtonHandler:YES];
     selectedNodeId = -1;
     [self autoRigMirrorBtnHandler];
+    [self hideLoadingActivity];
 }
 
 - (IBAction)rigAddToSceneAction:(id)sender
@@ -1062,7 +1069,7 @@ BOOL missingAlertShown;
     [_popUpVc.view setClipsToBounds:YES];    
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = CGSizeMake(205.0, 130.0);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
     [self.popoverController presentPopoverFromRect:_addFrameBtn.frame
@@ -1076,7 +1083,7 @@ BOOL missingAlertShown;
     if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT){
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 39*2);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_popUpVc.view setClipsToBounds:YES];
         self.popUpVc.delegate=self;
@@ -1091,7 +1098,7 @@ BOOL missingAlertShown;
     else{
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"exportBtn"];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 39*2);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_popUpVc.view setClipsToBounds:YES];
         self.popUpVc.delegate=self;
@@ -1185,7 +1192,7 @@ BOOL missingAlertShown;
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 39*2);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         self.popoverController.delegate =self;
         self.popUpVc.delegate=self;
@@ -1200,7 +1207,7 @@ BOOL missingAlertShown;
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.popoverContentSize = CGSizeMake(204.0, 85.0);
+        self.popoverController.popoverContentSize = CGSizeMake(204.0, 39*2);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         self.popoverController.delegate =self;
         self.popUpVc.delegate=self;
@@ -1220,7 +1227,7 @@ BOOL missingAlertShown;
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 320) : CGSizeMake(205.0, 320);
+    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*8) : CGSizeMake(205.0, 39*8);
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
     CGRect rect = _importBtn.frame;
@@ -1236,7 +1243,7 @@ BOOL missingAlertShown;
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 213.0);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*5);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -1254,7 +1261,7 @@ BOOL missingAlertShown;
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"viewBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(182.0, 265.0);
+    self.popoverController.popoverContentSize = CGSizeMake(182.0, 39*6);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -1373,7 +1380,10 @@ BOOL missingAlertShown;
         _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType() Distance:distance];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        self.popoverController.popoverContentSize = CGSizeMake(270, ([Utility IsPadDevice]) ? 335 : 265);
+        int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;
+        if(![Utility IsPadDevice])
+            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 265;
+        self.popoverController.popoverContentSize = CGSizeMake(270, height);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -1526,6 +1536,7 @@ BOOL missingAlertShown;
         case DELETE_ASSET: {
             int nodeIndex = returnValue2;
             if (nodeIndex < assetsInScenes.count) {
+                [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
                 [renderViewMan removeNodeFromScene:nodeIndex IsUndoOrRedo:YES];
                 [self reloadFrames];
             }
@@ -1607,6 +1618,7 @@ BOOL missingAlertShown;
     }
     else if (returnValue == DELETE_ASSET) {
         if (editorScene->selectedNodeId < assetsInScenes.count) {
+            [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:YES];
             [self reloadFrames];
         }
@@ -2183,7 +2195,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType() Distance:distance];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        self.popoverController.popoverContentSize = CGSizeMake(270,  ([Utility IsPadDevice]) ? 335 : 265);
+        int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;
+        if(![Utility IsPadDevice])
+            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 265;
+        self.popoverController.popoverContentSize = CGSizeMake(270,  height);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -3100,6 +3115,7 @@ void downloadFile(NSString* url, NSString* fileName)
             [self reloadFrames];
         }
         else if(buttonIndex == 2){
+            [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
             [self reloadFrames];
         }

@@ -30,7 +30,7 @@
                     </connections>
                 </button>
                 <tableView contentMode="redraw" fixedFrame="YES" keyboardDismissMode="interactive" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="39" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="YpO-8P-C6W">
-                    <rect key="frame" x="0.0" y="0.0" width="200" height="320"/>
+                    <rect key="frame" x="-12" y="0.0" width="212" height="320"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="sectionIndexColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
