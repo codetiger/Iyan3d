@@ -174,6 +174,7 @@
         [cell.downloadBtn setTag:r.taskId];
         [cell.downloadBtn addTarget:self action:@selector(downloadOutputVideo:) forControlEvents:UIControlEventTouchUpInside];
         
+        
     }
     
     return cell;
@@ -183,6 +184,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 {
+    
     
     UIAlertView *selectedAlert = [[UIAlertView alloc]
                                   
