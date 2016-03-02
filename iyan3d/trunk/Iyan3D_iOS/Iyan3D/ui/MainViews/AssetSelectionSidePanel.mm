@@ -71,11 +71,12 @@
 #pragma Button Actions
 
 - (IBAction)cancelButtonAction:(id)sender {
+    [self.assetSelectionDelegate showOrHideProgress:1];
     [self cancelOperations:downloadQueue];
     [self.assetSelectionDelegate removeTempNodeFromScene];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
-    [self.assetSelectionDelegate showOrHideProgress:0];
     [self.view removeFromSuperview];
+    [self.assetSelectionDelegate showOrHideProgress:0];
     [self.assetSelectionDelegate deallocSubViews];
     [self deallocMem];
 }

@@ -510,6 +510,7 @@ BOOL missingAlertShown;
 {
     if(editorScene && editorScene->loader)
         editorScene->loader->removeTempNodeIfExists();
+    [self hideLoadingActivity];
 }
 
 - (void) load3DTex:(int)type AssetId:(int)assetId TextureName:(NSString*)textureName TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode{
@@ -2139,6 +2140,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction * action)
                                        {
+                                           [self showOrHideProgress:SHOW_PROGRESS];
                                            if(editorScene->selectedNodeIds.size() > 0){
                                                editorScene->loader->removeSelectedObjects();
                                                [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -2149,7 +2151,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                                [self reloadFrames];
                                            }
                                            [self updateAssetListInScenes];
-                                           
+                                           [self showOrHideProgress:HIDE_PROGRESS];
                                        }];
         [view addAction:deleteButton];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
@@ -2573,6 +2575,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) beginRigging
 {
+    [self showOrHideProgress:SHOW_PROGRESS];
     [self.addJointBtn setHidden:NO];
     [self.addJointBtn setEnabled:NO];
     [self.moveLast setHidden:NO];
@@ -2587,6 +2590,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     [_rigCancelBtn setHidden:NO];
     [self autoRigMirrorBtnHandler];
     [self moveLastAction:nil];
+    [self showOrHideProgress:HIDE_PROGRESS];
 }
 
 - (void) exportBtnDelegateAction:(int)indexValue {
@@ -3095,12 +3099,10 @@ void downloadFile(NSString* url, NSString* fileName)
 -(void) showOrHideProgress:(BOOL) value{
     
     if(value == SHOW_PROGRESS){
-        [_center_progress setHidden:NO];
-        [_center_progress startAnimating];
+        [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     }
     else if(value == HIDE_PROGRESS){
-        [_center_progress stopAnimating];
-        [_center_progress setHidden:YES];
+        [self hideLoadingActivity];
     }
 }
 

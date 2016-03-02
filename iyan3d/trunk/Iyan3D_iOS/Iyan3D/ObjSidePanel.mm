@@ -81,6 +81,7 @@
 {
     ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
     cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
+    cell.assetImageView.backgroundColor = [UIColor clearColor];
 
     if(_addBtn.tag == OBJ)
     {
@@ -90,7 +91,6 @@
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
                 cell.layer.borderColor = [UIColor grayColor].CGColor;
                 cell.assetImageView.image =[UIImage imageNamed:@"objfile.png"];
-                cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
                 return cell;
             }
         }
@@ -100,17 +100,13 @@
             NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
             cell.assetImageView.image =[UIImage imageNamed:imageName];
             NSLog(@"\nImage Name : %@",imageName);
-            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
             return cell;
         }
     }
     else
     {
-        cell.layer.borderColor = [UIColor grayColor].CGColor;
-        cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-        
         if(indexPath.row == 0){
-            cell.assetNameLabel.text = @"Pick Color";
+            cell.assetNameLabel.text = @"Pick Color";           
             cell.assetImageView.backgroundColor = [UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0];
             cell.assetImageView.image = NULL;
         }
@@ -119,7 +115,6 @@
             NSString* docDirPath = [srcDirPath objectAtIndex:0];
             NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row-1]];
             cell.assetNameLabel.text = filesList[indexPath.row-1];
-            cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
             cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
         }
             return cell;
