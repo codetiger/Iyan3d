@@ -230,6 +230,7 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                   constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
                                   constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
                                   constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
+                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
                                   unsigned int vid [[ vertex_id ]],
                                   unsigned int iid [[instance_id]]
                                   )
@@ -248,7 +249,7 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float4 s = mix(sColor, mColor, phase);
     float4 e = mix(mColor, eColor, phase);
     float age = mix(percent, float(percent - 0.5), phase) * 2.0;
-    out.perVertexColor = float4(mix(s, e, age));
+    out.perVertexColor = (int(isVertexColored) == 0) ? float4(mix(s, e, age)) : float4(sColor);
     float scale = float(props[1] + (props[2] * positions[iid].data[3]));
     
     matrix_float4x4 translation = matrix_float4x4(1);
@@ -293,6 +294,79 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     return out;
 }
 
+vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0) ]],
+                                  constant matrix_float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
+                                  constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
+                                  constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
+                                  constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
+                                  constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
+                                  constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
+                                  constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
+                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                  unsigned int vid [[ vertex_id ]],
+                                  unsigned int iid [[instance_id]]
+                                  )
+{
+    float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
+    
+    ColorInOut out;
+    
+    float2 uv = vertex_array[vid].texCoord1;
+    out.uv.x = uv.x;
+    out.uv.y = uv.y;
+    
+    float percent = (positions[iid].data[3]/props[0]);
+    float phase = (percent > 0.5);
+    
+    float4 s = mix(sColor, mColor, phase);
+    float4 e = mix(mColor, eColor, phase);
+    float age = mix(percent, float(percent - 0.5), phase) * 2.0;
+    out.perVertexColor = (int(isVertexColored) == 0) ? float4(mix(s, e, age)) : float4(sColor);
+    float scale = float(props[1] + (props[2] * positions[iid].data[3]));
+    
+    matrix_float4x4 translation = matrix_float4x4(1);
+    translation[3][0] = positions[iid].data[0];
+    translation[3][1] = positions[iid].data[1];
+    translation[3][2] = positions[iid].data[2];
+    
+    matrix_float4x4 rotationMat = matrix_float4x4(1);
+    float cr = cos(rotations[iid].data[0]);
+    float sr = sin(rotations[iid].data[0]);
+    float cp = cos(rotations[iid].data[1]);
+    float sp = sin(rotations[iid].data[1]);
+    float cy = cos(rotations[iid].data[2]);
+    float sy = sin(rotations[iid].data[2]);
+    
+    rotationMat[0][0] = (cp * cy);
+    rotationMat[0][1] = (cp * sy);
+    rotationMat[0][2] = (-sp);
+    
+    float srsp = sr * sp;
+    float crsp = cr * sp;
+    
+    rotationMat[1][0] = (srsp * cy - cr * sy);
+    rotationMat[1][1] = (srsp * sy + cr * cy);
+    rotationMat[1][2] = (sr * cp);
+    
+    rotationMat[2][0] = (crsp * cy + sr * sy);
+    rotationMat[2][1] = (crsp * sy - sr * cy);
+    rotationMat[2][2] = (cr * cp);
+    
+    matrix_float4x4 scaleMat = matrix_float4x4(1);
+    scaleMat[0][0] = scale;
+    scaleMat[1][1] = scale;
+    scaleMat[2][2] = scale;
+    
+    float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
+    translation = translation * live;
+    
+    matrix_float4x4 model = translation * rotationMat;
+    out.position = vp * model * vertex_position_objectspace;
+    
+    return out;
+}
+
+
 fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
 {
     float4 color = in.perVertexColor;
@@ -300,6 +374,13 @@ fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  t
     color[3] =  tex2D.sample(quad_sampler,in.uv)[0];
     return color;
 }
+
+fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
+{
+    float4 color = in.perVertexColor;
+    return color;
+}
+
 
 #define SHADER_COMMON_mvp 1
 #define SHADER_COMMON_transparency 2

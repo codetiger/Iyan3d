@@ -245,7 +245,7 @@ void Node::RemoveAllInstanceOfNode(){
 }
 void Node::setMaterial(Material *mat,bool isTransparentMaterial){
 #ifndef UBUNTU
-    if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES")
+    if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
         return;
     this->material = mat;
     this->material->isTransparent = isTransparentMaterial;

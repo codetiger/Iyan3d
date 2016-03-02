@@ -50,14 +50,7 @@ SGEditorScene::~SGEditorScene()
             delete nodes[i];
     }
     nodes.clear();   
-    
-    if (renderCamera)
-        renderCamera.reset();
-    if(viewCamera)
-        viewCamera.reset();
-    if(lightCamera)
-        lightCamera.reset();
-    
+        
     if(ikJointsPositionMap.size())
         ikJointsPositionMap.clear();
     
@@ -81,10 +74,10 @@ SGEditorScene::~SGEditorScene()
         sceneControls.clear();
     }
     
+    if(rotationCircle)
+        delete rotationCircle;
     if(controlsPlane)
         delete controlsPlane;
-    if(smgr)
-        delete smgr;
     if(shaderMGR)
         delete shaderMGR;
     if(renHelper)
@@ -105,10 +98,10 @@ SGEditorScene::~SGEditorScene()
         delete animMan;
     if(objMan)
         delete objMan;
-    if(rotationCircle)
-        delete rotationCircle;
     if(cmgr)
         delete cmgr;
+    if(smgr)
+        delete smgr;
 }
 void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
 {
@@ -218,7 +211,7 @@ void SGEditorScene::renderAll()
         else
             ShaderManager::isRendering = false;
         
-        smgr->Render();
+        smgr->Render(false);
         
         renHelper->drawCircle();
         renHelper->drawMoveAxisLine();
@@ -472,7 +465,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     smgr->draw2DImage(bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     renHelper->drawGrid();
     
-    smgr->Render();
+    smgr->Render(false);
     smgr->EndDisplay();
     smgr->writeImageToFile(thumbnailTexture, targetPath , (shaderMGR->deviceType == OPENGLES2) ? FLIP_VERTICAL : NO_FLIP);
     

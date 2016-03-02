@@ -14,7 +14,8 @@
 MTLMaterial::MTLMaterial(){
     
 }
-MTLMaterial::~MTLMaterial(){
+MTLMaterial::~MTLMaterial()
+{
     uniforms.clear();
 }
 void MTLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex,u16 count,uint32_t location,int nodeIndex,short renderTargetIndex){

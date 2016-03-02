@@ -126,7 +126,8 @@ bool SceneManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool c
     renderTargetIndex++;
     return renderMan->PrepareDisplay(width,height,clearColorBuf,clearDepthBuf,isDepthPass,color);
 }
-void SceneManager::Render(){
+void SceneManager::Render(bool isRTT)
+{
     vector<int> nodeIndex;
     for (int i = 0;i < nodes.size();i++){
         if(nodes[i]->type <= NODE_TYPE_CAMERA || nodes[i]->getVisible() == false)
@@ -135,13 +136,13 @@ void SceneManager::Render(){
             nodeIndex.push_back(i);
             continue;
         }
-        RenderNode(i);
+        RenderNode(isRTT, i);
     }
     for (int i = 0;i < nodeIndex.size();i++){
         int nodeId = nodeIndex[i];
         if(nodes[nodeId]->type <= NODE_TYPE_CAMERA || nodes[nodeId]->getVisible() == false || (nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010))
             continue;
-        RenderNode(nodeId);
+        RenderNode(isRTT, nodeId);
     }
     nodeIndex.clear();
 }
@@ -153,7 +154,7 @@ void SceneManager::EndDisplay()
 void SceneManager::clearDepthBuffer(){
     renderMan->setUpDepthState(CompareFunctionLessEqual,false,true); // ToDo change in depthstate for each render, may need
 }
-void SceneManager::RenderNode(int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTION func,bool changeDepthState)
+void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTION func,bool changeDepthState)
 {
     if(!nodes[index])
         return;
@@ -174,7 +175,7 @@ void SceneManager::RenderNode(int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTI
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, index))
             return;
         ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
-        renderMan->Render(nodes[index],index,meshBufferIndex);
+        renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
     }
 }
 void SceneManager::setDepthTest(bool enable){

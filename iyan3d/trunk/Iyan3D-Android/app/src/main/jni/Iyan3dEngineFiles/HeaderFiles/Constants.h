@@ -18,7 +18,7 @@
 #define OBJ_IMPORT_IAP @"objimport"
 #define VIEWCAMERA_ZOOM_START 1.89
 #define CONTROLS_DEFAULT_DISTANCE 7.0
-#define TOTAL_MATERIALS 31
+#define TOTAL_MATERIALS 32
 #define SELECTION_COLOR_R 0.0
 #define SELECTION_COLOR_G 1.0
 #define SELECTION_COLOR_B 0.0
@@ -102,7 +102,8 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4", "vertexColorSkin.vert" , "commonL4.fsh"},
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5", "vertexColorSkin.vert" , "commonL5.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
-    {"SHADER_PARTICLES", "particles.vsh","particles.fsh"}
+    {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
+    {"SHADER_PARTICLES_RTT", "particles.vsh","particles.fsh"}
 };
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
 {
@@ -136,7 +137,8 @@ const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4","Per_Vertex_Color_Skin","Common_Fragment_L4"},
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5","Per_Vertex_Color_Skin","Common_Fragment_L5"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
-    {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"}
+    {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"},
+    {"SHADER_PARTICLES_RTT", "Particle_Vertex_RTT","Particle_Fragment_RTT"}
 };
 
 
@@ -224,7 +226,8 @@ enum MATERIAL_TYPE
     SHADER_VERTEX_COLOR_SHADOW_SKIN_L4,
     SHADER_VERTEX_COLOR_SHADOW_SKIN_L5,
     SHADER_SHADOW_DEPTH_PASS_TEXT,
-    SHADER_PARTICLES
+    SHADER_PARTICLES,
+    SHADER_PARTICLES_RTT
 };
 enum ActionType
 {

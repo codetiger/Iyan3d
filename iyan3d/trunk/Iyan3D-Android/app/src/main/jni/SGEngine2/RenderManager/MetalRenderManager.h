@@ -76,7 +76,7 @@ public:
     
     void Initialize();
     bool PrepareNode(shared_ptr<Node> node,int meshBufferIndex,int nodeIndex = 0);
-    void Render(shared_ptr<Node> node,int nodeIndex = 0, int meshBufferIndex = 0);
+    void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);
     void drawPrimitives(MTLPrimitiveType primitiveType,unsigned int count,MTLIndexType type,id <MTLBuffer> indexBuf, GLsizei instanceCount);
     void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragment , int userValue = 0);
     void BindUniform(DATA_TYPE type,id<MTLBuffer> buf,void* value,int count,int parameterIndex,id<MTLTexture> tex,string matName,int nodeIndex, bool isFragmentData);

@@ -929,10 +929,13 @@ BOOL missingAlertShown;
 
 - (IBAction)backToScenes:(id)sender {
    
+    if(editorScene)
+        editorScene->freezeRendering = true;
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
     if(editorScene && editorScene->isPlaying){
         [self stopPlaying];
+        editorScene->freezeRendering = false;
         return;
     }
     if(editorScene)
@@ -1900,6 +1903,7 @@ BOOL missingAlertShown;
     editorScene->animMan->applyAnimations(*filePathStr, editorScene->selectedNodeId);
     [_framesCollectionView reloadData];
     [self playAnimation];
+    delete filePathStr;
 }
 
 - (void) removeTempAnimation{
@@ -3395,6 +3399,7 @@ void downloadFile(NSString* url, NSString* fileName)
     else{
         objStr = new std::string([[[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension] UTF8String]);
         editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 123456,!isHaveTexture,color);
+        delete objStr;
     }
     
     NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetId];
@@ -3416,7 +3421,7 @@ void downloadFile(NSString* url, NSString* fileName)
         UIImage *image =[UIImage imageWithContentsOfFile:texFrom];
         NSData *imageData = [self convertAndScaleImage:image size:-1];
         [imageData writeToFile:desFilePath atomically:YES];
-        *texture = *new std::string([(isTempNode)?@"temp" : textureFileName UTF8String]);
+        *texture = std::string([(isTempNode)?@"temp" : textureFileName UTF8String]);
     }
     
     if (!isTempNode){
@@ -3441,6 +3446,8 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSNumber numberWithBool:isHaveTexture] forKey:@"isHaveTexture"];
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    delete textureStr;
+    delete texture;
 }
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
@@ -3678,6 +3685,7 @@ void boneLimitsCallBack(){
         editorScene->setLightingOn();
     }
     [self showOrHideProgress:HIDE_PROGRESS];
+    delete texture;
 }
 
 - (void) removeTempTextureAndVertex

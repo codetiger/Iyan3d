@@ -47,7 +47,7 @@ public:
     void Initialize();
     bool PrepareNode(shared_ptr<Node> node, int meshBufferIndex, int nodeIndex = 0);
     void endDisplay();
-    void Render(shared_ptr<Node> node,int nodeIndex = 0, int meshBufferIndex = 0);
+    void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);
     void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount);
     void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragment , int userValue = 0);
     void (*NodePropertyCallBack)(shared_ptr<Node> node);

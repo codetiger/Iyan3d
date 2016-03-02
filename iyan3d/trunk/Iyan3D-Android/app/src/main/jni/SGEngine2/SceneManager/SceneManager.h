@@ -53,8 +53,8 @@ public:
     void RemoveAllTextures();
     void RemoveTexture(Texture *texture);
     void RemoveAllNodes();
-    void Render();
-    void RenderNode(int index,bool clearDepthBuffer = false,METAL_DEPTH_FUNCTION func = CompareFunctionLessEqual,bool changeDepthState = false);
+    void Render(bool isRTT);
+    void RenderNode(bool isRTT, int index,bool clearDepthBuffer = false,METAL_DEPTH_FUNCTION func = CompareFunctionLessEqual,bool changeDepthState = false);
     void setDisplayResolution(int width,int height);
     void setActiveCamera(shared_ptr<Node> node);
     void setDepthTest(bool enable);

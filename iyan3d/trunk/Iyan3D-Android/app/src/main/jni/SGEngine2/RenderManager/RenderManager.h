@@ -42,7 +42,7 @@ public:
     }
     virtual void Initialize() = 0;
     virtual bool PrepareNode(shared_ptr<Node> node,int meshBufferIndex,int nodeIndex = 0) = 0;
-    virtual void Render(shared_ptr<Node> node,int nodeIndex = 0, int meshBufferIndex = 0) = 0;
+    virtual void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0) = 0;
     virtual void setActiveCamera(shared_ptr<CameraNode> camera) = 0;
     virtual shared_ptr<CameraNode> getActiveCamera() = 0;
     virtual void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragmentData, int userValue = 0) = 0;

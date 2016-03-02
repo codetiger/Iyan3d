@@ -146,7 +146,8 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setJointTransform(sgNode,SHADER_DEPTH_PASS_SKIN_jointdata,smgr);
     }else if(matName == "SHADER_SHADOW_DEPTH_PASS"){
         setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_mvp);
-    }else if (matName == "SHADER_PARTICLES") {
+    }else if (matName.find("SHADER_PARTICLES") !=  string::npos) {
+        setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, false);
         setMVPForParticles(sgNode,0);
         setTexturesUniforms(sgNode, SHADER_PARTICLE_texture1);
     }
@@ -311,7 +312,6 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     int instanceCount = pNode->getParticlesCount();
     float *posArray = new float[instanceCount * 4];
     float *rotArray = new float[instanceCount * 4];
-    float *colors = new float[instanceCount * 4];
     
 //    Mat4 rotMatrix = Mat4();
 //    rotMatrix.setRotationRadians(pNode->particleRotation);
@@ -325,11 +325,14 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     particleProps[3] = props.w;
     
     float* sColor = new float[4];
-    sColor[0] = pNode->startColor.x;
-    sColor[1] = pNode->startColor.y;
-    sColor[2] = pNode->startColor.z;
-    sColor[3] = pNode->startColor.w;
-    
+    Vector3 vColor = sgNode->props.vertexColor;
+    sColor[0] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.x : pNode->startColor.x;
+    sColor[1] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.y : pNode->startColor.y;
+    sColor[2] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.z : pNode->startColor.z;
+    sColor[3] = (sgNode->props.perVertexColor) ? 1.0 : pNode->startColor.w;
+    if(sgNode->props.perVertexColor)
+        printf("\n Partciles vColor %f %f %f ", sColor[0], sColor[1], sColor[2]);
+
     float* mColor = new float[4];
     mColor[0] = pNode->midColor.x;
     mColor[1] = pNode->midColor.y;
@@ -370,8 +373,10 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
 
     delete posArray;
     delete rotArray;
-    delete colors;
-
+    delete particleProps;
+    delete sColor;
+    delete mColor;
+    delete eColor;
 }
 
 void ShaderManager::setViewProjMatrix(SGNode *sgNode,u16 paramIndex){

@@ -5,6 +5,7 @@ attribute vec2 texCoord1;
 
 uniform mat4 vp;
 
+uniform float isVertexColored;
 uniform vec4 startColor;
 uniform vec4 midColor;
 uniform vec4 endColor;
@@ -25,7 +26,11 @@ void main() {
     vec4 s = mix(startColor, midColor, phase);
     vec4 e = mix(midColor, endColor, phase);
     float age = mix(percent, percent - 0.5, phase) * 2.0;
-    color = mix(s, e, age);
+    
+    color = startColor;
+    if(int(isVertexColored) == 0)
+        color = mix(s, e, age);
+
     float scale = props.y + (props.z * positions[gl_InstanceIDEXT].w);
     
     mat4 translation = mat4(1);

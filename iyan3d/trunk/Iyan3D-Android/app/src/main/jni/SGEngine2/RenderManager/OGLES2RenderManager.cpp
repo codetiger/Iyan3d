@@ -75,7 +75,7 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
 void OGLES2RenderManager::endDisplay(){
     
 }
-void OGLES2RenderManager::Render(shared_ptr<Node> node,int nodeIndex, int meshBufferIndex){
+void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex){
     glDepthFunc(GL_LEQUAL);
     if(!node || node->type <= NODE_TYPE_CAMERA)
         return;
@@ -100,11 +100,13 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node,int nodeIndex, int meshBu
     if(node->instanceCount)
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, node->instanceCount + 1);
     else if (node->type == NODE_TYPE_PARTICLES) {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        if(!isRTT)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, dynamic_pointer_cast<ParticleManager>(node)->getParticlesCount());
 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        if(!isRTT)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     } else
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, 0);
     

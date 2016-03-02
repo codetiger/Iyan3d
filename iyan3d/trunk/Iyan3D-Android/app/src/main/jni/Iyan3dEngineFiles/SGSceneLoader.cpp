@@ -243,10 +243,12 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     if(!currentScene || !smgr)
         return false;
 
+    currentScene->freezeRendering = true;
     Vector4 nodeSpecificColor = Vector4(sgNode->props.vertexColor.x,sgNode->props.vertexColor.y,sgNode->props.vertexColor.z,1.0);
     sgNode->node = sgNode->loadNode(sgNode->assetId,sgNode->textureName,sgNode->getType(),smgr,sgNode->name,sgNode->props.fontSize,sgNode->props.nodeSpecificFloat,nodeSpecificColor,sgNode->optionalFilePath);
     if(!sgNode->node){
         Logger::log(INFO,"SGANimationScene","Node not loaded");
+        currentScene->freezeRendering = false;
         return false;
     }
     if(sgNode->getType() == NODE_TEXT_SKIN)
@@ -274,6 +276,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
         sgNode->props.isLighting = false;
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->updater->resetMaterialTypes(false);
+    currentScene->freezeRendering = false;
     return true;
 }
 

@@ -273,7 +273,7 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
     //node.reset();
      return true;
 }
-void MetalRenderManager::Render(shared_ptr<Node> node,int nodeIndex, int meshBufferIndex){
+void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex){
     if(node->type <= NODE_TYPE_CAMERA)
         return;
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
