@@ -892,7 +892,7 @@
     rect = [self.view convertRect:rect fromView:_colorPickerBtn.superview];
     [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                          permittedArrowDirections:([Utility IsPadDevice]) ? UIPopoverArrowDirectionUp : UIPopoverArrowDirectionRight
                                           animated:NO];
 
 }
