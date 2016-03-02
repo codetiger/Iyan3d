@@ -1281,8 +1281,8 @@
 		25FCAB4E1C3003330051DBBA /* SGMovementManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25FCAB4C1C3003330051DBBA /* SGMovementManager.cpp */; };
 		3D04EAEB1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */; };
 		3D04EAEC1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */; };
-		3D04EAF31C25830F00C18E1A /* Bevel.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF11C25830F00C18E1A /* Bevel.png */; };
-		3D04EAF41C25830F00C18E1A /* Bevel.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF11C25830F00C18E1A /* Bevel.png */; };
+		3D04EAF31C25830F00C18E1A /* Bevel-pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF11C25830F00C18E1A /* Bevel-pad.png */; };
+		3D04EAF41C25830F00C18E1A /* Bevel-pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF11C25830F00C18E1A /* Bevel-pad.png */; };
 		3D04EAF51C25830F00C18E1A /* No-Bevel.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF21C25830F00C18E1A /* No-Bevel.png */; };
 		3D04EAF61C25830F00C18E1A /* No-Bevel.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF21C25830F00C18E1A /* No-Bevel.png */; };
 		3D04EAF81C25883900C18E1A /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF71C25883900C18E1A /* color.png */; };
@@ -3574,7 +3574,7 @@
 		25FCAB4C1C3003330051DBBA /* SGMovementManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGMovementManager.cpp; sourceTree = "<group>"; };
 		3D04EAE61C2581BC00C18E1A /* TextSelectionSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSelectionSidePanel.h; path = ui/MainViews/TextSelectionSidePanel.h; sourceTree = "<group>"; };
 		3D04EAE81C2581BC00C18E1A /* TextSelectionSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextSelectionSidePanel.xib; path = ui/MainViews/TextSelectionSidePanel.xib; sourceTree = "<group>"; };
-		3D04EAF11C25830F00C18E1A /* Bevel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bevel.png; sourceTree = "<group>"; };
+		3D04EAF11C25830F00C18E1A /* Bevel-pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bevel-pad.png"; sourceTree = "<group>"; };
 		3D04EAF21C25830F00C18E1A /* No-Bevel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "No-Bevel.png"; sourceTree = "<group>"; };
 		3D04EAF71C25883900C18E1A /* color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = color.png; sourceTree = "<group>"; };
 		3D2696AF1C660343004FC023 /* LightPropertiesPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightPropertiesPhone.xib; path = "ui/Popover Views/LightPropertiesPhone.xib"; sourceTree = "<group>"; };
@@ -5815,7 +5815,7 @@
 				01ACD09A1C3CEEE70096AD14 /* No-Bevel_IPhone@2x.png */,
 				3D04EAF71C25883900C18E1A /* color.png */,
 				01C2B79A1C46543200384370 /* color@2x.png */,
-				3D04EAF11C25830F00C18E1A /* Bevel.png */,
+				3D04EAF11C25830F00C18E1A /* Bevel-pad.png */,
 				3D04EAF21C25830F00C18E1A /* No-Bevel.png */,
 			);
 			name = TextSelection;
@@ -7497,7 +7497,7 @@
 				25EC6C781C7F39DD002CF5D2 /* wm61.png in Resources */,
 				01ACD0951C3CE93D0096AD14 /* TextSelectionSidePanelPhone.xib in Resources */,
 				01F872851C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
-				3D04EAF31C25830F00C18E1A /* Bevel.png in Resources */,
+				3D04EAF31C25830F00C18E1A /* Bevel-pad.png in Resources */,
 				25EC6CD61C7F39DD002CF5D2 /* wm108.png in Resources */,
 				01ACD1041C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */,
 				62FB86791988D33A00AC7424 /* play-video.png in Resources */,
@@ -8999,7 +8999,7 @@
 				01ACD0C51C3D1AAA0096AD14 /* Render-Preview-position_Left-Top.png in Resources */,
 				E20673E81B049AA6006DD2F7 /* ScaleForAutoRigViewController.xib in Resources */,
 				E20673EB1B049AA6006DD2F7 /* down-arrow-large-pad@3x.png in Resources */,
-				3D04EAF41C25830F00C18E1A /* Bevel.png in Resources */,
+				3D04EAF41C25830F00C18E1A /* Bevel-pad.png in Resources */,
 				01B394F31C37A282003955C6 /* Pause_Pad.png in Resources */,
 				3D5D0F4A1C6336A4006B987E /* Particle_IPhone@3x.png in Resources */,
 				01F872FD1C3A6C4E009AA31E /* My-objects-Models_IPhone@2x.png in Resources */,

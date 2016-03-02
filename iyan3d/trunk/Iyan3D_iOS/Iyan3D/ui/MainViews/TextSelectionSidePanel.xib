@@ -46,7 +46,7 @@
                                 <action selector="bevalChangeAction:" destination="-1" eventType="valueChanged" id="q1C-Y1-FKq"/>
                             </connections>
                         </slider>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bevel.png" id="GFK-bm-BLM">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bevel-pad.png" id="GFK-bm-BLM">
                             <rect key="frame" x="251" y="55" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -168,7 +168,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Bevel.png" width="44" height="44"/>
+        <image name="Bevel-pad.png" width="44" height="44"/>
         <image name="No-Bevel.png" width="44" height="44"/>
         <image name="color.png" width="23" height="23"/>
     </resources>
