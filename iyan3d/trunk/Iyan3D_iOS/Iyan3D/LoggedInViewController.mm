@@ -234,13 +234,13 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(indexPath.section == IN_PROGRESS) return;
+    if(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) return;
     RenderTableViewCell *cell = [self.renderStatus cellForRowAtIndexPath:indexPath];
     [cell.downloadProgress setHidden:NO];
     [cell.downloadProgress startAnimating];
     [cell.downloadBtn setHidden:YES];
     if(downloadCompletedTaskIds != cell.downloadBtn.tag)
-        [self downloadOutputVideo:cell.downloadBtn.tag];
+        [self downloadOutputVideo:(int)cell.downloadBtn.tag];
 }
 
 - (void) downloadOutputVideo:(int)taskId

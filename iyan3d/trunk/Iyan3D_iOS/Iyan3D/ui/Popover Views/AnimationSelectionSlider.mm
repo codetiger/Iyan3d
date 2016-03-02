@@ -246,6 +246,7 @@
 
 - (IBAction)addBtnFunction:(id)sender {
     [self applyAnimationKeyToOriginalNode];
+    [self.delegate myAnimation:YES];
     [self.delegate showOrHideLeftView:NO withView:nil];
     editorSceneLocal->loader->removeTempNodeIfExists();
     [self.view removeFromSuperview];
