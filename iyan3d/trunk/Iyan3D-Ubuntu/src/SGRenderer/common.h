@@ -37,7 +37,6 @@ int taskFetchFrequency = 2;
 int MAX_RAY_DEPTH = 6;
 int samplesAO = 0;
 double minAOBrightness = 0.5f;
-int antiAliasingSamples = 0;
 int randomSamples = 0;
 
 enum ImageFormat {

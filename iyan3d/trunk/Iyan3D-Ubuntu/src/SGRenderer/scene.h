@@ -111,22 +111,6 @@ struct Scene
 	void renderPixel(int x, int y) {
 		Vec3fa color = Vec3fa(0.0f);
 
-		if(antiAliasingSamples > 0) {
-			for (int xa = -antiAliasingSamples/2; xa < antiAliasingSamples/2; ++xa) {
-				for (int ya = -antiAliasingSamples/2; ya < antiAliasingSamples/2; ++ya) {
-					double xdelta = xa/(double)antiAliasingSamples;
-					double ydelta = ya/(double)antiAliasingSamples;
-
-					Vec3fa dir = cam->getRayDirection((x + xdelta)/(double)imgWidth, (y + ydelta)/(double)imgHeight);
-					color = color + getRadiance(cam->position, dir, 0);
-				}
-			}
-			color = color / (double)(antiAliasingSamples * antiAliasingSamples);
-		} else {
-			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
-			color = color + getRadiance(cam->position, dir, 0);
-		}
-
 		if(randomSamples > 0) {
 			for (int i = 0; i < randomSamples; ++i) {
 				double r1 = 2 * GetRandomValue();
@@ -137,6 +121,9 @@ struct Scene
 				color = color + getRadiance(cam->position, dir, 0);
 			}
 			color = color / (double)randomSamples;
+		} else {
+			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
+			color = color + getRadiance(cam->position, dir, 0);
 		}
 	
 		double ao = 1.0;
@@ -155,10 +142,9 @@ struct Scene
 
 	double getAmbientOcclusion(Vec3fa point, Vec3fa dir) {
 		RTCRay ray = getIntersection(sgScene, point, dir);
-		Vec3fa color = Vec3fa(0.0f);
 
 		if (ray.geomID != RTC_INVALID_GEOMETRY_ID && (int)ray.geomID < (int)meshes.size()) {
-			Vec3fa n = Vec3fa(ray.Ng[0], ray.Ng[1], ray.Ng[2]);
+			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
 			n = n.normalize();
 			Vec3fa hitPoint = getHitPoint(ray);
 
@@ -169,6 +155,38 @@ struct Scene
 				if(ray.geomID == 0)
 					hitCount++;
 			}
+
+			/*
+			int hitCount = 0;
+			for (int i = 0; i < samplesAO; i+=4) {
+				RTCRay4 ray4;
+				memset(&ray4,0,sizeof(ray4));
+				for (int j = 0; j < 4; i++) {
+					Vec3fa nd = sampleAroundNormal(n);
+					ray4.orgx[j] = hitPoint.x;
+					ray4.orgy[j] = hitPoint.y;
+					ray4.orgz[j] = hitPoint.z;
+
+				    ray4.dirx[j] = nd.x;
+				    ray4.diry[j] = nd.y;
+				    ray4.dirz[j] = nd.z;
+
+				    ray4.tnear[j] = 0.001f;
+				    ray4.tfar[j] = 7.5f;
+				    ray4.geomID[j] = RTC_INVALID_GEOMETRY_ID;
+				    ray4.primID[j] = RTC_INVALID_GEOMETRY_ID;
+				    ray4.mask[j] = -1;
+				    ray4.time[j] = 0;
+				}
+
+				__attribute ((aligned(16))) int valid[4] = { -1,-1,-1,-1 };
+			    rtcOccluded4(valid, sgScene, ray4);
+
+				for (int j = 0; j < 4; i++)
+					if(ray4.geomID[j] == 0)
+						hitCount++;
+			}
+			*/
 
 			double ambience = 1.0f - (hitCount/(double)samplesAO);
 			return (minAOBrightness + ambience * (1.0f - minAOBrightness));
@@ -195,14 +213,11 @@ struct Scene
 			if(depth > MAX_RAY_DEPTH || !p) {
 				if(GetRandomValue() < p)
 					faceColor = faceColor * (1 / p);
-				return meshes[ray.geomID]->getEmissionColor() * E;
+
+				return faceColor;//meshes[ray.geomID]->getEmissionColor() * E;
 			}
 
-			Vec3fa n;
-			if(meshes[ray.geomID]->material.hasFaceNormals)
-				n = Vec3fa(ray.Ng[0], ray.Ng[1], ray.Ng[2]);
-			else
-				n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
+			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
 			n = n.normalize();
 
 			if(refraction > 0.0) {
@@ -221,7 +236,8 @@ struct Scene
 				recursiveRadiance = getRadiance(point, nd, ++depth, 0);
 				recursiveRadiance = faceColor * recursiveRadiance;
 
-				Vec3fa lightsContrib = faceColor * getLightContribution(ray, nl);
+				Vec3fa lightsContrib = Vec3fa(0.0f);
+				lightsContrib = faceColor * getLightContribution(ray, nl);
 				color = meshes[ray.geomID]->getEmissionColor() * E + lightsContrib + recursiveRadiance;
 
 				if(reflection > 0.0)
@@ -243,7 +259,7 @@ struct Scene
 				Vec3fa rayDir = (lightPoint - point).normalize();
 				RTCRay ray = getIntersection(sgScene, point, rayDir);
 
-				double distanceEffect = 1.0f - point.distance(lightPoint) / (meshes[i]->material.emission * 999.0f);
+				double distanceEffect = 1.0 - ray.tfar / (meshes[i]->material.emission * 999.0);
 
 				if(ray.geomID == meshes[i]->id)
 					lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal) * distanceEffect;

@@ -40,7 +40,7 @@ string getFileContent(const char* file) {
 
 TaskDetails getRenderTaskFromServer(string machineId) {
 	string url = "https://www.iyan3dapp.com/appapi/requesttask.php?machineid=" + machineId;
-	downloadFile(url.c_str(), "taskid.txt");
+//	downloadFile(url.c_str(), "taskid.txt");
 	string taskInfo = getFileContent("taskid.txt");
 	TaskDetails td;
 	td.taskId = -1;
@@ -320,11 +320,10 @@ int main(int argc, char** argv)
 		MAX_RAY_DEPTH = configData["MAX_RAY_DEPTH"].asInt();
 		samplesAO = configData["samplesAO"].asInt();
 		minAOBrightness = configData["minAOBrightness"].asDouble();
-		antiAliasingSamples = configData["antiAliasingSamples"].asInt();
 		randomSamples = configData["randomSamples"].asInt();
 	}
 
-	printf("Working as Machine Id:%s\nisRenderMachine:%d\ntaskFetchFrequency:%d\nMAX_RAY_DEPTH:%d\nsamplesAO:%d\nminAOBrightness:%f\nantiAliasingSamples:%d\nrandomSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, antiAliasingSamples, randomSamples);
+	printf("Working as Machine Id:%s\nisRenderMachine:%d\ntaskFetchFrequency:%d\nMAX_RAY_DEPTH:%d\nsamplesAO:%d\nminAOBrightness:%f\nrandomSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, randomSamples);
 
 	do {
 		printf("Asking Server for new task\n");

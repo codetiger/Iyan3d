@@ -42,7 +42,6 @@ public:
 		material.reflection = readFloat(data);
 		material.refraction = readFloat(data);
 		material.transparency = readFloat(data);
-		material.hasFaceNormals = false;
 		numberOfTriangles = readInt(data);
 
 		id = rtcNewTriangleMesh(rtcScene, RTC_GEOMETRY_STATIC, numberOfTriangles, numberOfTriangles * 3);
@@ -176,13 +175,7 @@ public:
 		Vec3fa nb = getNormal(index * 3 + 1);
 		Vec3fa nc = getNormal(index * 3 + 2);
 
-		Vec3fa n;
-		if(material.hasFaceNormals) {
-			n = (na + nb + nc).normalize();
-		} else {
-			n = na + (nb - na) * u + (nc - na) * v;
-		}
-		return n;
+		return (na + (nb - na) * u + (nc - na) * v);
 	}
 
 	~SGRTMesh() {
