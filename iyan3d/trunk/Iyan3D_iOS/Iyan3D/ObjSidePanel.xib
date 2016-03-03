@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ObjSidePanel">
             <connections>
+                <outlet property="ObjInfoLable" destination="Fdi-lf-3Z4" id="JmS-se-gvR"/>
                 <outlet property="addBtn" destination="hmZ-Gp-sTd" id="feS-s7-AHY"/>
                 <outlet property="cancelBtn" destination="gba-ht-Eqv" id="wwy-7V-a3M"/>
                 <outlet property="collectionView" destination="iSK-at-mkm" id="F3R-5h-EnV"/>
@@ -81,7 +82,7 @@
                                 <action selector="addBtnAction:" destination="-1" eventType="touchUpInside" id="x9X-r3-1x7"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrB-Fh-jSo">
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrB-Fh-jSo">
                             <rect key="frame" x="8" y="8" width="282" height="35"/>
                             <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -92,6 +93,12 @@
                                 <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="GK5-N3-5fT"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Copy OBJ files in Document Directory." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdi-lf-3Z4">
+                            <rect key="frame" x="8" y="8" width="282" height="35"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>

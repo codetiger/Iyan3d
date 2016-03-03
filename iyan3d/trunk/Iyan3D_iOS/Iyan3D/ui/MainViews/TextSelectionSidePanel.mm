@@ -159,9 +159,11 @@
 {
     fontArray = [cache GetAssetList:FONT Search:@""];
     [self.collectionView reloadData];
-    AssetItem* assetItem = fontArray[0];
-    fontFileName = assetItem.name;
-    [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
+    if([fontArray count] > 0){
+        AssetItem* assetItem = fontArray[0];
+        fontFileName = assetItem.name;
+        [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
+    }
 }
 
 - (void)loadFont:(NSString*)customFontPath withExtension:(NSString*)extension
@@ -308,7 +310,7 @@
 - (IBAction)fontStoreTapChangeAction:(id)sender {
     if ((int)self.fontTab.selectedSegmentIndex == MY_FONT) {
             [self initializeFontListArray];
-            if ([fontArray count] != 0) {
+            if ([fontArray count] > 0) {
                 [self.fontTab setSelectedSegmentIndex:MY_FONT];
                 tabValue = MY_FONT;
                 [self.collectionView reloadData];

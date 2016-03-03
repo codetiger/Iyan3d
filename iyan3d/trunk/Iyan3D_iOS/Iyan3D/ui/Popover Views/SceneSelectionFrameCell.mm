@@ -30,7 +30,7 @@
     rect = [self convertRect:rect fromView:_propertiesBtn.superview];
     [self.popoverController presentPopoverFromRect:rect
                                             inView:self
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                          permittedArrowDirections:UIPopoverArrowDirectionAny
                                           animated:YES];
 
 }

@@ -52,11 +52,14 @@
     [_colorWheelBtn setHidden:YES];
     indexPathOfOBJ =  (viewType == IMPORT_OBJFILE) ? -1 : 0;
     if(viewType != IMPORT_OBJFILE){
+        [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
         [self addBtnAction:nil];
     }
-    else
+    else{
         [_importBtn setHidden:YES];
+        [_ObjInfoLable setHidden:NO];
+    }
     
     _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
     if(viewType == CHANGE_TEXTURE) {
@@ -85,6 +88,7 @@
 
     if(_addBtn.tag == OBJ)
     {
+        _ObjInfoLable.text = @"Add OBJ files in Document Directory.";
         if(indexPath.row > basicShapes.count-1){
             NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
             if([extension isEqualToString:@"obj"]){
@@ -105,6 +109,7 @@
     }
     else
     {
+        _ObjInfoLable.text = @"Add Texture files in Document Directory.";
         if(indexPath.row == 0){
             cell.assetNameLabel.text = @"Pick Color";           
             cell.assetImageView.backgroundColor = [UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0];

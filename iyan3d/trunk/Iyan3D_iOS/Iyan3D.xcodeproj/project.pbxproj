@@ -1401,6 +1401,8 @@
 		3DBC85EF1C2BCBEC00B512AB /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85ED1C2BCBEC00B512AB /* close@2x.png */; };
 		3DBC85F41C2BCCD000B512AB /* selected_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */; };
 		3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */; };
+		3DC114771C872DD000F09177 /* EditorViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC114761C872DD000F09177 /* EditorViewControllerPhone@2x.xib */; };
+		3DC114781C872DD000F09177 /* EditorViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC114761C872DD000F09177 /* EditorViewControllerPhone@2x.xib */; };
 		3DC311C41C85BCF000D716F2 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC311C21C85BCF000D716F2 /* TableViewCell.m */; };
 		3DC311C51C85BCF000D716F2 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC311C21C85BCF000D716F2 /* TableViewCell.m */; };
 		3DC311C61C85BCF000D716F2 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC311C31C85BCF000D716F2 /* TableViewCell.xib */; };
@@ -1419,8 +1421,6 @@
 		3DC60FFF1C6B192D00A8D412 /* hq.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC60FF81C6B192D00A8D412 /* hq.png */; };
 		3DC610001C6B192D00A8D412 /* hq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC60FF91C6B192D00A8D412 /* hq@2x.png */; };
 		3DC610011C6B192D00A8D412 /* hq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC60FF91C6B192D00A8D412 /* hq@2x.png */; };
-		3DC610031C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */; };
-		3DC610041C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */; };
 		3DD47BF01C60A43500E7CCFD /* 60001.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEA1C60A43500E7CCFD /* 60001.sgm */; };
 		3DD47BF11C60A43500E7CCFD /* 60001.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEA1C60A43500E7CCFD /* 60001.sgm */; };
 		3DD47BF21C60A43500E7CCFD /* 60002.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 3DD47BEB1C60A43500E7CCFD /* 60002.sgm */; };
@@ -3649,6 +3649,7 @@
 		3DBC85EA1C2BCBE400B512AB /* New@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "New@2x.png"; sourceTree = "<group>"; };
 		3DBC85ED1C2BCBEC00B512AB /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		3DBC85F31C2BCCD000B512AB /* selected_mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_mark@2x.png"; sourceTree = "<group>"; };
+		3DC114761C872DD000F09177 /* EditorViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "EditorViewControllerPhone@2x.xib"; path = "ui/MainViews/EditorViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DC311C11C85BCF000D716F2 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableViewCell.h; path = "ui/Popover Views/TableViewCell.h"; sourceTree = "<group>"; };
 		3DC311C21C85BCF000D716F2 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableViewCell.m; path = "ui/Popover Views/TableViewCell.m"; sourceTree = "<group>"; };
 		3DC311C31C85BCF000D716F2 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TableViewCell.xib; path = "ui/Popover Views/TableViewCell.xib"; sourceTree = "<group>"; };
@@ -3659,7 +3660,6 @@
 		3DC60FF71C6B192D00A8D412 /* hq-IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hq-IPhone@2x.png"; sourceTree = "<group>"; };
 		3DC60FF81C6B192D00A8D412 /* hq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hq.png; sourceTree = "<group>"; };
 		3DC60FF91C6B192D00A8D412 /* hq@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hq@2x.png"; sourceTree = "<group>"; };
-		3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "EditorViewControllerPhone@2x.xib"; path = "ui/MainViews/EditorViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DD47BEA1C60A43500E7CCFD /* 60001.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60001.sgm; sourceTree = "<group>"; };
 		3DD47BEB1C60A43500E7CCFD /* 60002.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60002.sgm; sourceTree = "<group>"; };
 		3DD47BEC1C60A43500E7CCFD /* 60003.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; path = 60003.sgm; sourceTree = "<group>"; };
@@ -6684,7 +6684,7 @@
 				018501DB1C2BDA730090FA65 /* EditorViewController.mm */,
 				01B4D01F1C292CD50091E19B /* EditorViewController.xib */,
 				01B4BCB61C32904C00E09269 /* EditorViewControllerPhone.xib */,
-				3DC610021C6B617200A8D412 /* EditorViewControllerPhone@2x.xib */,
+				3DC114761C872DD000F09177 /* EditorViewControllerPhone@2x.xib */,
 				01B4CF6F1C291E3F0091E19B /* EditorViewController.h */,
 				3D71B0691C2930BE0038C4BD /* AssetSelectionSidePanel.h */,
 				3D71B06A1C2930BE0038C4BD /* AssetSelectionSidePanel.mm */,
@@ -7288,6 +7288,7 @@
 				7F7D5A381B8C91D100E6BA86 /* googlelogout_Pad@2x.png in Resources */,
 				256F6B951BF6246300154622 /* json_valueiterator.inl in Resources */,
 				01B4CF881C291EFD0091E19B /* AnimationSelectionSlider.xib in Resources */,
+				3DC114771C872DD000F09177 /* EditorViewControllerPhone@2x.xib in Resources */,
 				25EC6CD81C7F39DD002CF5D2 /* wm109.png in Resources */,
 				3D5605EF1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */,
 				7FC900D01A0A01470051B941 /* feedback-img-phone.png in Resources */,
@@ -8009,7 +8010,6 @@
 				01B4D0471C2937000091E19B /* Import_Pad.png in Resources */,
 				0169C45D1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				7FC5276A1B6F96FF00C5D26D /* Rate@2x.png in Resources */,
-				3DC610031C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */,
 				7FC9015B1A0A54850051B941 /* CrossForMain-pad.png in Resources */,
 				25D671931C46353100BE685D /* controls1.sgm in Resources */,
 				7FC900DE1A0A01470051B941 /* move-last-phone.png in Resources */,
@@ -8201,6 +8201,7 @@
 				7FC527731B6F983D00C5D26D /* Rate.png in Resources */,
 				7FC527741B6F983D00C5D26D /* Rate@2x.png in Resources */,
 				7FC524EC1B6F8C0A00C5D26D /* Full-screen-phone.png in Resources */,
+				3DC114781C872DD000F09177 /* EditorViewControllerPhone@2x.xib in Resources */,
 				25EC6CD91C7F39DD002CF5D2 /* wm109.png in Resources */,
 				3D5605F01C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */,
 				7FC524ED1B6F8C0A00C5D26D /* Full-screen-phone@2x.png in Resources */,
@@ -8922,7 +8923,6 @@
 				E20673B31B049AA6006DD2F7 /* bracket.png in Resources */,
 				0169C45E1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				256F6B941BF6246300154622 /* json_internalmap.inl in Resources */,
-				3DC610041C6B617200A8D412 /* EditorViewControllerPhone@2x.xib in Resources */,
 				E20673B41B049AA6006DD2F7 /* youtubeUpload.png in Resources */,
 				25D671941C46353100BE685D /* controls1.sgm in Resources */,
 				E20673B51B049AA6006DD2F7 /* first-phone@2x.png in Resources */,

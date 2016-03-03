@@ -743,10 +743,12 @@
     if([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
         [_watermarkSwitch setOn:NO animated:YES];
         [_watermarkSwitch setEnabled:NO];
+        [_colorPickerBtn setEnabled:NO];
     }
     else{
         [_watermarkSwitch setEnabled:YES];
         [_watermarkSwitch setOn:YES animated:YES];
+        [_colorPickerBtn setEnabled:YES];
     }
     [self updateCreditLable];
 }
@@ -785,6 +787,13 @@
         case SIGNIN_ALERT_VIEW:
             if(buttonIndex == CANCEL_BUTTON_INDEX){
                 [self dismissViewControllerAnimated:NO completion:^{
+                    cancelPressed = YES;
+                    [self.cancelActivityIndicator setHidden:false];
+                    [self.cancelActivityIndicator startAnimating];
+                    [thread cancel];
+                    isCanceled = true;
+                    [self.delegate clearFolder:NSTemporaryDirectory()];
+                    [self.delegate resumeRenderingAnimationScene];
                     [_delegate loginBtnAction:nil];
                     [self deallocMem];
                 }];

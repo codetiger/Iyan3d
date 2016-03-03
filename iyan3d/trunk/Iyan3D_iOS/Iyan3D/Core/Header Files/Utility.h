@@ -12,7 +12,7 @@
 
 #import "CacheSystem.h"
 
-#define CORNER_RADIUS 8.0
+#define CORNER_RADIUS 4.0
 
 @interface Utility : NSObject {
     CacheSystem* cache;

@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ObjSidePanel">
             <connections>
+                <outlet property="ObjInfoLable" destination="3Kz-sk-m30" id="xQw-o4-sLG"/>
                 <outlet property="addBtn" destination="uWq-xB-Yo7" id="dIi-MA-bNC"/>
                 <outlet property="cancelBtn" destination="ITe-RY-oV3" id="5mv-aa-ZhU"/>
                 <outlet property="collectionView" destination="qL2-Qj-oF8" id="0Dw-tD-LaK"/>
@@ -87,7 +88,7 @@
                                 <action selector="addBtnAction:" destination="-1" eventType="touchUpInside" id="PjP-Yb-3Xg"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="47o-Es-se8">
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="47o-Es-se8">
                             <rect key="frame" x="18" y="8" width="174" height="20"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -99,6 +100,13 @@
                                 <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="gOO-6g-69j"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copy OBJ files in Document Directory." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3Kz-sk-m30">
+                            <rect key="frame" x="19" y="6" width="174" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>

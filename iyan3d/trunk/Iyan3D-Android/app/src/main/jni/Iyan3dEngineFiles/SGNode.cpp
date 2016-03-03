@@ -991,6 +991,8 @@ void SGNode::readData(ifstream *filePointer)
     int sgbVersion = FileHelper::readInt(filePointer);
     if(sgbVersion == SGB_VERSION)
         textureName = FileHelper::readString(filePointer,sgbVersion);
+    else
+        textureName = to_string(assetId)+"-cm";
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     isRigged = FileHelper::readBool(filePointer);
     props.isLighting = FileHelper::readBool(filePointer);

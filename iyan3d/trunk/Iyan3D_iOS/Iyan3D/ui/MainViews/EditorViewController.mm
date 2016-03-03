@@ -39,11 +39,10 @@
 #define IMPORT_PARTICLE 7
 #define CHANGE_TEXTURE 7
 
-#define ABOUT 0
-#define HELP 1
-#define TUTORIAL 2
-#define SETTINGS 3
-#define CONTACT_US 4
+
+#define TUTORIAL 0
+#define SETTINGS 1
+#define CONTACT_US 2
 
 #define FRONT_VIEW 0
 #define TOP_VIEW 1
@@ -108,10 +107,6 @@
 #define ONE_FRAME 0
 #define TWENTY_FOUR_FRAMES 1
 #define TWO_FOURTY_FRAMES 2
-
-
-#define SETTINGS 3
-#define CONTACT_US 4
 
 #define MIRROR_OFF 0
 #define MIRROR_ON 1
@@ -931,8 +926,6 @@ BOOL missingAlertShown;
    
     if(editorScene)
         editorScene->freezeRendering = true;
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
-    [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
     if(editorScene && editorScene->isPlaying){
         [self stopPlaying];
         editorScene->freezeRendering = false;
@@ -940,6 +933,8 @@ BOOL missingAlertShown;
     }
     if(editorScene)
         editorScene->isPreviewMode = false;
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(saveThumbnail) withObject:nil waitUntilDone:YES];
     [self loadSceneSelectionView];
@@ -1055,6 +1050,7 @@ BOOL missingAlertShown;
     [self autoRigViewButtonHandler:YES];
     selectedNodeId = -1;
     [self autoRigMirrorBtnHandler];
+    [self highlightObjectList];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
 }
 
@@ -1258,7 +1254,7 @@ BOOL missingAlertShown;
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*5);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -1564,11 +1560,11 @@ BOOL missingAlertShown;
         case ADD_ASSET_BACK: {
             int assetId = returnValue2;
             assetAddType = UNDO_ACTION;
-            if(assetId >= 900 && assetId <= 1000) {
+            if(assetId >= 900 && assetId < 1000) {
                 int numberOfLight = assetId - 900;
                 [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
             }
-            else if(assetId >= 10000 && assetId <= 20000){
+            else if(assetId >= 10000 && assetId < 20000){
                 AssetItem* assetObject = [cache GetAsset:assetId];
                 assetObject.isTempAsset = NO;
                 assetObject.type = ASSET_PARTICLES;
@@ -1815,6 +1811,10 @@ BOOL missingAlertShown;
     }
     else
     {
+        for(int i = 0; i < editorScene->selectedNodeIds.size(); i++){
+            NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+            [self.objectList deselectRowAtIndexPath:path animated:YES];
+        }
         for(int i=0; i < editorScene->selectedNodeIds.size(); i++){
             NSIndexPath *path = [NSIndexPath indexPathForRow:editorScene->selectedNodeIds[i] inSection:0];
             if([Utility IsPadDevice]){
@@ -2704,7 +2704,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) infoBtnDelegateAction:(int)indexValue{
     
-    if(indexValue==SETTINGS){
+    if(indexValue == TUTORIAL){
+        [self.popoverController dismissPopoverAnimated:YES];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/tutorial-videos/"]];
+    }
+    else if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
                       ([self iPhone6Plus]) ? @"SettingsViewControllerPhone2x" :
@@ -2885,7 +2889,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType, bool
                 else
                     return true;
             }
-            if (([file intValue] >= 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
+            if (([file intValue] > 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
                 NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", documentsDirectory, [file intValue]];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
                     if (!missingAlertShown) {
@@ -3064,9 +3068,16 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma Switch to SceneSelection
 - (void) loadSceneSelectionView
 {
-    SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([Utility IsPadDevice]) ? @"SceneSelectionControllerNew" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:NO];
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate.window setRootViewController:sceneSelectionView];
+    
+    if([Utility IsPadDevice]) {
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:NO];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate.window setRootViewController:sceneSelectionView];
+    } else {
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ?  @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:NO];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate.window setRootViewController:sceneSelectionView];
+    }
     [self performSelectorOnMainThread:@selector(removeSGEngine) withObject:nil waitUntilDone:YES];
     [self removeFromParentViewController];
 }

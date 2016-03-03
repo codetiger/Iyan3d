@@ -137,6 +137,7 @@
                                 {
                                     if(animationCategoryTab == TRENDING)
                                         return;
+                                    [_delegate showOrHideProgress:1];
                                     [self.categoryBtn setTitle: @"Trending" forState:UIControlStateNormal];
                                     animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
                                     [self.delegate myAnimation:YES];
@@ -144,7 +145,7 @@
                                     animationCategoryTab = TRENDING;
                                     selectedAssetId=-1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                    
+                                    [_delegate showOrHideProgress:0];
                                 }];
     UIAlertAction* featured = [UIAlertAction
                                 actionWithTitle:@"Featured"
@@ -153,6 +154,7 @@
                                 {
                                     if(animationCategoryTab == FEATURED)
                                         return;
+                                    [_delegate showOrHideProgress:1];
                                     animationsItems = [cache GetAnimationList:animationType fromTable:6 Search:@""];
                                     [self.categoryBtn setTitle:@"Featured" forState:UIControlStateNormal];
                                     [self.animationCollectionView reloadData];
@@ -160,6 +162,7 @@
                                     animationCategoryTab = FEATURED;
                                     selectedAssetId = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
+                                    [_delegate showOrHideProgress:0];
                                     
                                 }];
     
@@ -170,6 +173,7 @@
                                   {
                                       if(animationCategoryTab == TOP_RATED)
                                           return;
+                                      [_delegate showOrHideProgress:1];
                                       [self.categoryBtn setTitle: @"Top Rated" forState:UIControlStateNormal];
                                       animationsItems = [cache GetAnimationList:animationType fromTable:5 Search:@""];
                                       [self.categoryBtn setTitle:@"Top Rated" forState:UIControlStateNormal];
@@ -178,6 +182,7 @@
                                       animationCategoryTab = TOP_RATED;
                                       selectedAssetId = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
+                                      [_delegate showOrHideProgress:0];
                                       
                                   }];
     UIAlertAction* recent = [UIAlertAction
@@ -187,6 +192,7 @@
                                {
                                    if(animationCategoryTab == RECENT)
                                        return;
+                                   [_delegate showOrHideProgress:1];
                                    [self.categoryBtn setTitle: @"Recent" forState:UIControlStateNormal];
                                    animationsItems = [cache GetAnimationList:animationType fromTable:8 Search:@""];
                                    [self.categoryBtn setTitle:@"Recent" forState:UIControlStateNormal];
@@ -195,6 +201,7 @@
                                    animationCategoryTab = RECENT;
                                    selectedAssetId = -1;
                                    [view dismissViewControllerAnimated:YES completion:nil];
+                                   [_delegate showOrHideProgress:0];
                                    
                                }];
     
@@ -205,6 +212,7 @@
                                   {
                                       if(animationCategoryTab == MY_ANIMATION)
                                           return;
+                                      [_delegate showOrHideProgress:1];
                                       [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
                                       animationsItems = [cache GetAnimationList:animationType fromTable:7 Search:@""];
                                       [self.delegate myAnimation:YES];
@@ -212,7 +220,7 @@
                                       animationCategoryTab = MY_ANIMATION;
                                       selectedAssetId = -1;
                                       [view dismissViewControllerAnimated:YES completion:nil];
-                                      
+                                      [_delegate showOrHideProgress:0];
                                   }];
     switch (animationCategoryTab) {
         case TRENDING:

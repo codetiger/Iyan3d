@@ -171,6 +171,7 @@
                                 {
                                     if(modelCategoryTab == ALLMODELS)
                                         return;
+                                    [_assetSelectionDelegate showOrHideProgress:1];
                                     [_modelCategory setTitle: @"All Models" forState:UIControlStateNormal];
                                     assetArray = [cache GetAssetList:ALLMODELS Search:@""];
                                     [_assetsCollectionView reloadData];
@@ -178,7 +179,8 @@
                                     selectedAsset = -1;
                                     [view dismissViewControllerAnimated:YES completion:nil];
                                     [self.assetSelectionDelegate removeTempNodeFromScene];
-                                    [_addToSceneBtn setEnabled:NO];                                    
+                                    [_addToSceneBtn setEnabled:NO];
+                                    [_assetSelectionDelegate showOrHideProgress:0];
                                 }];
     UIAlertAction* character = [UIAlertAction
                                 actionWithTitle:@"Character"
@@ -187,6 +189,7 @@
                                 {
                                     if(modelCategoryTab == CHARACTERS)
                                         return;
+                                    [_assetSelectionDelegate showOrHideProgress:1];
                                     [_modelCategory setTitle: @"Characters" forState:UIControlStateNormal];
                                     assetArray = [cache GetAssetList:CHARACTERS Search:@""];
                                     [_assetsCollectionView reloadData];
@@ -195,6 +198,7 @@
                                     [view dismissViewControllerAnimated:YES completion:nil];
                                     [self.assetSelectionDelegate removeTempNodeFromScene];
                                     [_addToSceneBtn setEnabled:NO];
+                                    [_assetSelectionDelegate showOrHideProgress:0];
                                 }];
     UIAlertAction* backgrounds = [UIAlertAction
                                   actionWithTitle:@"Backgrounds"
@@ -203,6 +207,7 @@
                                   {
                                       if(modelCategoryTab == BACKGROUNDS)
                                           return;
+                                      [_assetSelectionDelegate showOrHideProgress:1];
                                       [_modelCategory setTitle: @"Backgrounds" forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:BACKGROUNDS Search:@""];
                                       [_assetsCollectionView reloadData];
@@ -211,6 +216,7 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       [self.assetSelectionDelegate removeTempNodeFromScene];
                                       [_addToSceneBtn setEnabled:NO];
+                                      [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
     UIAlertAction* accessories = [UIAlertAction
                                   actionWithTitle:@"Accessories"
@@ -219,6 +225,7 @@
                                   {
                                       if(modelCategoryTab == ACCESSORIES)
                                           return;
+                                      [_assetSelectionDelegate showOrHideProgress:1];
                                       [_modelCategory setTitle: @"Accessories" forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:ACCESSORIES Search:@""];
                                       [_assetsCollectionView reloadData];
@@ -227,6 +234,7 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       [self.assetSelectionDelegate removeTempNodeFromScene];
                                       [_addToSceneBtn setEnabled:NO];
+                                      [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
     UIAlertAction* minecraft = [UIAlertAction
                                   actionWithTitle:@"Minecraft"
@@ -235,6 +243,7 @@
                                   {
                                       if(modelCategoryTab == MINECRAFT)
                                           return;
+                                      [_assetSelectionDelegate showOrHideProgress:1];
                                       [_modelCategory setTitle: @"Minecraft" forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:MINECRAFT Search:@""];
                                       [_assetsCollectionView reloadData];
@@ -243,6 +252,7 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       [self.assetSelectionDelegate removeTempNodeFromScene];
                                       [_addToSceneBtn setEnabled:NO];
+                                      [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
     UIAlertAction* fnaf = [UIAlertAction
                                   actionWithTitle:@"FNAF"
@@ -251,6 +261,7 @@
                                   {
                                       if(modelCategoryTab == FNAF)
                                           return;
+                                      [_assetSelectionDelegate showOrHideProgress:1];
                                       [_modelCategory setTitle: @"FNAF" forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:FNAF Search:@""];
                                       [_assetsCollectionView reloadData];
@@ -259,6 +270,7 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       [self.assetSelectionDelegate removeTempNodeFromScene];
                                       [_addToSceneBtn setEnabled:NO];
+                                      [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
     UIAlertAction* mylibrary = [UIAlertAction
                                   actionWithTitle:@"My Library"
@@ -267,6 +279,7 @@
                                   {
                                       if(modelCategoryTab == MY_LIBRARY_TYPE)
                                           return;
+                                      [_assetSelectionDelegate showOrHideProgress:1];
                                       [_modelCategory setTitle: @"My Library" forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:MY_LIBRARY_TYPE Search:@""];
                                       [_assetsCollectionView reloadData];
@@ -275,6 +288,7 @@
                                       [view dismissViewControllerAnimated:YES completion:nil];
                                       [self.assetSelectionDelegate removeTempNodeFromScene];
                                       [_addToSceneBtn setEnabled:NO];
+                                      [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
     switch (modelCategoryTab) {
         case ALLMODELS:

@@ -17,8 +17,9 @@
 #define CANCEL 0
 #define OK 1
 
-#define SETTINGS 3
-#define CONTACT_US 4
+#define TUTORIAL 0
+#define SETTINGS 1
+#define CONTACT_US 2
 
 #define CAMERA_PREVIEW_SMALL 0
 
@@ -51,6 +52,7 @@
         [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
     else{
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
     [self.sceneView setHidden:YES];
@@ -65,6 +67,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   
      */
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -184,7 +187,7 @@
         [appDelegate.window setRootViewController:animationEditor];
     }
     else{
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }
@@ -196,7 +199,7 @@
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*5);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -204,14 +207,18 @@
     rect = [self.view convertRect:rect fromView:_infoBtn.superview];
     [self.popoverController presentPopoverFromRect:rect
                                             inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                          permittedArrowDirections:UIPopoverArrowDirectionAny
                                           animated:YES];
 }
 
 
 - (void) infoBtnDelegateAction:(int)indexValue{
     
-    if(indexValue==SETTINGS){
+    if(indexValue == TUTORIAL){
+        [self.popoverController dismissPopoverAnimated:YES];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/tutorial-videos/"]];
+    }
+    else if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
                       ([self iPhone6Plus]) ? @"SettingsViewControllerPhone2x" :
@@ -343,7 +350,7 @@
         [appDelegate.window setRootViewController:animationEditor];
     }
     else{
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
+        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }
@@ -383,7 +390,7 @@
             self.popoverController.delegate =self;
             [self.popoverController presentPopoverFromRect:_loginBtn.frame
                                                     inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                  permittedArrowDirections:UIPopoverArrowDirectionAny
                                                   animated:YES];
         }   
         
@@ -420,7 +427,7 @@
             self.popoverController.delegate =self;
             [self.popoverController presentPopoverFromRect:_loginBtn.frame
                                                     inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
+                                  permittedArrowDirections:UIPopoverArrowDirectionAny
                                                   animated:YES];
         }
     }

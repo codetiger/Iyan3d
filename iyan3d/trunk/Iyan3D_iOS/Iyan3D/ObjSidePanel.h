@@ -51,6 +51,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *colorWheelBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *importBtn;
+@property (weak, nonatomic) IBOutlet UILabel *ObjInfoLable;
+
 
 - (IBAction)addBtnAction:(id)sender;
 - (IBAction)cancelBtnAction:(id)sender;
