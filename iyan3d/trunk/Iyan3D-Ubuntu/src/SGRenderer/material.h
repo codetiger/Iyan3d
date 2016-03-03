@@ -9,7 +9,7 @@ struct SGRMaterial
     Vec3fa diffuse;
     float emission, transparency, reflection, refraction;
 	float shadowDarkness;
-    bool hasTexture;
+    bool hasTexture, hasLighting;
 };
 
 #endif

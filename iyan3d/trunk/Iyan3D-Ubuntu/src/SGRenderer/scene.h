@@ -147,6 +147,8 @@ struct Scene
 			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
 			n = n.normalize();
 			Vec3fa hitPoint = getHitPoint(ray);
+			if(!meshes[ray.geomID]->material.hasLighting)
+				return 1.0;
 
 			int hitCount = 0;
 			for (int i = 0; i < samplesAO; ++i) {
@@ -203,6 +205,10 @@ struct Scene
 			Vec3fa uv = meshes[ray.geomID]->getInterpolatedUV(ray.primID, ray.u, ray.v);
 			Vec3fa faceColor = meshes[ray.geomID]->getColor(uv.x, uv.y);
 			color = faceColor;
+
+			if(!meshes[ray.geomID]->material.hasLighting)
+				return color;
+
 			double refraction = meshes[ray.geomID]->material.refraction;
 			double reflection = meshes[ray.geomID]->material.reflection;
 

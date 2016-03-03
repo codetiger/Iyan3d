@@ -42,6 +42,8 @@ public:
 		material.reflection = readFloat(data);
 		material.refraction = readFloat(data);
 		material.transparency = readFloat(data);
+		material.hasLighting = readBool(data);
+
 		numberOfTriangles = readInt(data);
 
 		id = rtcNewTriangleMesh(rtcScene, RTC_GEOMETRY_STATIC, numberOfTriangles, numberOfTriangles * 3);

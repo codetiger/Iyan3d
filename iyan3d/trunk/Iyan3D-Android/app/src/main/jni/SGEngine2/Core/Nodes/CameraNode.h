@@ -10,7 +10,7 @@
 #define __SGEngine2__CameraNode__
 
 #include "../common/common.h"
-#include "Node.h"
+#include "../Nodes/Node.h"
 #include "../common/Frustum.h"
 class CameraNode : public Node {
 
