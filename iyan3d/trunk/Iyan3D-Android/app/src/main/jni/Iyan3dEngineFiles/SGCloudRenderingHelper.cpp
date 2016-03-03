@@ -89,6 +89,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.reflection);
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.refraction);
             FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.transparency);
+            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.isLighting); // node lighting
 
             SGCloudRenderingHelper *renderHelper = new SGCloudRenderingHelper();
             vector<TriangleData> trianglesData =   renderHelper->calculateTriangleDataForNode(thisNode);
