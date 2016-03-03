@@ -112,7 +112,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     if(rigNodeType != NODE_RIG)
         sgmNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
-    
+    sgmNode->setPosition(Vector3(0.0));
     sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     nodeToRig->props.isLighting = true;
     nodeToRig->node->setTexture(rigScene->shadowTexture,2);
