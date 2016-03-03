@@ -27,6 +27,8 @@ enum SKELETON_TYPE{
 class SGAutoRigSceneManager
 {
 private:
+    
+    int actualNodeId;
     std::string animatedSGRPath;
     shared_ptr<AnimatedMeshNode> animNode;
     SkinMesh* sMesh;

@@ -21,6 +21,7 @@ private:
     SGAction changeKeysAction;
     SGAction propertyAction;
     SGAction assetAction;
+    Vector3 startScale;
     MIRROR_SWITCH_STATE mirrorSwitchState;
     void rotateJoint(Vector3 outputValue);
     void StoreDeleteObjectKeys(int nodeIndex);

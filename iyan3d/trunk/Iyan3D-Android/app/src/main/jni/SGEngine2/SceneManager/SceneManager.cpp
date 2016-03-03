@@ -69,7 +69,8 @@ void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #endif
     nodes.push_back(node);
 }
-void SceneManager::RemoveNode(shared_ptr<Node> node){
+void SceneManager::RemoveNode(shared_ptr<Node> node)
+{
     int sameNodeIdcount = 0;
     for(int i = 0;i < nodes.size();i++){
         if(nodes[i]->getID() == node->getID()){

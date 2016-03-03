@@ -17,10 +17,20 @@ SGAutoRigSceneManager::SGAutoRigSceneManager(SceneManager* smgr, void *scene)
     this->smgr = smgr;
     rigScene = (SGEditorScene*)scene;
     sceneMode = RIG_MODE_OBJVIEW;
-    nodeToRig = new SGNode(NODE_SGM);
+    nodeToRig = NULL;
     sgrSGNode = NULL;
+    boneMesh = NULL;
+    sphereMesh = NULL;
+    animNode = shared_ptr<AnimatedMeshNode>();
+    sgmNode = shared_ptr<MeshNode>();
+    sMesh = NULL;
     rigNodeType = NODE_SGM;
+    animatedSGRPath = "";
     clearNodeSelections();
+    sceneMode = RIG_MODE_OBJVIEW;
+    actualNodeId = NOT_EXISTS;
+    envelopes.clear();
+    rigKeys.clear();
 }
 
 SGAutoRigSceneManager::~SGAutoRigSceneManager()
@@ -84,10 +94,11 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     if(!rigScene || !smgr || !sgNode)
         return;
 
-    if(nodeToRig->node){
+    if(nodeToRig && nodeToRig->node){
         smgr->RemoveNode(nodeToRig->node);
     }
     rigNodeType = sgNode->getType();
+    actualNodeId = sgNode->node->getID();
     nodeToRig = (rigNodeType == NODE_RIG) ? getSGMNodeForRig(sgNode) : sgNode;
     sgmNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
 
@@ -551,8 +562,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
         }
         nodeToRig->props.transparency = 1.0;
         nodeToRig->node->setVisible(true);
-    }
-    if(isCompleted){
+    }else if(isCompleted){
         if(animNode) {
             smgr->RemoveNode(animNode);
         }
@@ -582,10 +592,21 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             delete it->second;
         }
     }
-    envelopes.clear();
+    nodeToRig->node->setID(actualNodeId);
     removeRigKeys();
+    boneMesh = NULL;
+    sphereMesh = NULL;
     sceneMode = RIG_MODE_OBJVIEW;
-    clearNodeSelections();
+    rigNodeType = NODE_SGM;
+    animatedSGRPath = "";
+    nodeToRig = NULL;
+    sgrSGNode = NULL;
+    animNode.reset();
+    sgmNode.reset();
+    envelopes.clear();
+    rigKeys.clear();
+    sMesh = NULL;
+
     return true;
 }
 

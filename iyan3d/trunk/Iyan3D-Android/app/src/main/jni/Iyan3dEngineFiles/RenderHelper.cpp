@@ -94,7 +94,7 @@ void RenderHelper::drawCircle()
     if(!renderingScene || !smgr)
         return;
     
-    if(renderingScene->controlType == ROTATE && renderingScene->selectedControlId != NOT_SELECTED && renderingScene->selectedNode) {
+    if(renderingScene->controlType == ROTATE && renderingScene->selectedControlId != NOT_SELECTED && (renderingScene->selectedNode || renderingScene->getParentNode())) {
         Vector3 circleRotation = Vector3(90.0,0.0,0.0);
         Vector3 circleAxis = Vector3(1.0,0.0,1.0);
         if(renderingScene->selectedControlId == Y_ROTATE){

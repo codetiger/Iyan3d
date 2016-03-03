@@ -248,20 +248,26 @@ bool SGSelectionManager::multipleSelections(int nodeId)
 
 void SGSelectionManager::updateParentPosition()
 {
-    if(parentNode)
+    Vector3 prevScale = Vector3(1.0);
+    if(parentNode) {
+        prevScale = parentNode->getScale();
         smgr->RemoveNode(parentNode);
+    }
     sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
     parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
     getParentNode()->setVisible(false);
     getParentNode()->setID(PIVOT_ID);
     getParentNode()->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     storeGlobalPositions();
+    vector < Vector3 > scaleValues = getGlobalScaleValues();
     addSelectedChildren(getParentNode());
     static_pointer_cast<Node>(getParentNode())->updateBoundingBox();
     Vector3 pivot = selectionScene->getPivotPoint(true);
     getParentNode()->setPosition(pivot);
+    getParentNode()->setScale(prevScale);
     getParentNode()->updateAbsoluteTransformation();
     storeRelativePositions();
+    restoreRelativeScales(scaleValues);
     static_pointer_cast<Node>(getParentNode())->updateBoundingBox();
     selectionScene->updater->updateControlsOrientaion();
 }
@@ -296,6 +302,17 @@ void SGSelectionManager::storeGlobalPositions()
     }
 }
 
+vector<Vector3> SGSelectionManager::getGlobalScaleValues()
+{
+    vector< Vector3 > globalScales;
+    for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++)
+    {
+        globalScales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
+    }
+    return globalScales;
+}
+
+
 void SGSelectionManager::storeRelativePositions()
 {
     relPositions.clear();
@@ -304,6 +321,15 @@ void SGSelectionManager::storeRelativePositions()
         Vector3 relativePos = MathHelper::getRelativePosition(parentGlobalMat, globalPositions[i]);
         relPositions.push_back(relativePos);
         selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setPosition(relativePos);
+    }
+}
+
+void SGSelectionManager::restoreRelativeScales(vector< Vector3 > scales)
+{
+    for (int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
+        Mat4 parentGlobalMat = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getParent()->getAbsoluteTransformation();
+        Vector3 relativeScale = MathHelper::getRelativeScale(parentGlobalMat, scales[i]);
+        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setScale(relativeScale);
     }
 }
 

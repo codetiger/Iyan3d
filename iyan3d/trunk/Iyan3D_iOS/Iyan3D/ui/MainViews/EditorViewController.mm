@@ -955,7 +955,7 @@ BOOL missingAlertShown;
         if(editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW){
             
             if(editorScene->rigMan->rigNodeType == NODE_RIG) {
-                editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+                [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
             } else {
                 UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
                 [closeAlert setTag:CHOOSE_RIGGING_METHOD];
@@ -970,18 +970,24 @@ BOOL missingAlertShown;
             string path = (char*)[sgrFilePath cStringUsingEncoding:NSUTF8StringEncoding];
             [self exportSgr:sgrFilePath];
             [_rigAddToSceneBtn setHidden:NO];
-            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
             [_addJointBtn setEnabled:NO];
         }
         else
         {
             [_rigAddToSceneBtn setHidden:YES];
-            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
         }
     }
     
     [self autoRigMirrorBtnHandler];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+}
+
+- (void) switchAutoRigSceneMode:(NSNumber*)number
+{
+    if(editorScene && editorScene->rigMan)
+        editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+[number intValue]));
 }
 
 - (void) showLoadingActivity
@@ -1010,7 +1016,7 @@ BOOL missingAlertShown;
             [dataLossAlert setTag:DATA_LOSS_ALERT];
             [dataLossAlert show];
         } else {
-            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
+            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:-1] waitUntilDone:YES];
         }
     }
     [_rigAddToSceneBtn setHidden:YES];
@@ -1025,31 +1031,28 @@ BOOL missingAlertShown;
 
 - (void) deallocateAutoRig
 {
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
-    editorScene->rigMan->deallocAutoRig(NO);
-    editorScene->enterOrExitAutoRigMode(false);
-    [self setupEnableDisableControls];
-    [self autoRigViewButtonHandler:YES];
-    selectedNodeId = -1;
-    [self autoRigMirrorBtnHandler];
-    [self hideLoadingActivity];
+    [self performSelectorOnMainThread:@selector(deallocateAutoRigOnMainThread:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:YES];
 }
 
 - (IBAction)rigAddToSceneAction:(id)sender
 {
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     Vector3 vertexColor = Vector3(-1.0);
     if(editorScene->rigMan->nodeToRig->props.perVertexColor){
         vertexColor = editorScene->rigMan->nodeToRig->props.vertexColor;
     }
     
     [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"] VertexColor:vertexColor];
-    if(editorScene->rigMan->deallocAutoRig(YES)){
+    [self performSelectorOnMainThread:@selector(deallocateAutoRigOnMainThread:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+}
+
+- (void) deallocateAutoRigOnMainThread:(NSNumber*) object
+{
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    if(editorScene->rigMan->deallocAutoRig([object boolValue])) {
         editorScene->enterOrExitAutoRigMode(false);
         [self setupEnableDisableControls];
     }
     [self autoRigViewButtonHandler:YES];
-    [self updateAssetListInScenes];
     selectedNodeId = -1;
     [self autoRigMirrorBtnHandler];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
@@ -2545,7 +2548,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                     [warning show];
                     
                 } else {
-                    [self beginRigging];
+                    [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:YES];
                 }
             }
             else
@@ -3114,6 +3117,11 @@ void downloadFile(NSString* url, NSString* fileName)
 #pragma AlertView
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    if (alertView.tag == SGR_WARNING) {
+        if(buttonIndex == OK_BUTTON_INDEX) {
+            [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:NO];
+        }
+    }
     alertView.delegate = nil;
 }
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -3157,24 +3165,21 @@ void downloadFile(NSString* url, NSString* fileName)
     } else if (alertView.tag == CHOOSE_RIGGING_METHOD) {
         if(buttonIndex == HUMAN_RIGGING) {
             editorScene->rigMan->skeletonType = SKELETON_HUMAN;
-            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
         }else if(buttonIndex == OWN_RIGGING) {
             editorScene->rigMan->skeletonType = SKELETON_OWN;
-            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode+1));
+            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
         }
        [self autoRigMirrorBtnHandler];
     } else if (alertView.tag == DATA_LOSS_ALERT) {
         if(buttonIndex == CANCEL_BUTTON_INDEX) {
             
         } else if(buttonIndex == OK_BUTTON_INDEX) {
-            editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1));
+            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:-1] waitUntilDone:YES];
             [self moveLastAction:nil];
         }
-    } else if (alertView.tag == SGR_WARNING) {
-        if(buttonIndex == OK_BUTTON_INDEX) {
-            [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:NO];
-        }
     }
+    
     if(editorScene && editorScene->isRigMode)
         [self autoRigMirrorBtnHandler];
 }

@@ -75,6 +75,16 @@ Vector3 MathHelper::getRelativePosition(Mat4 &originTransformation,Vector3 targe
     Mat4 targetLocalTrans = originInvTrans * targetGlobalTrans;
     return targetLocalTrans.getTranslation();
 }
+Vector3 MathHelper::getRelativeScale(Mat4 &originTransformation,Vector3 targetGlobalScale)
+{
+    Mat4 targetGlobalTrans;
+    Mat4 originInvTrans = originTransformation;
+    targetGlobalTrans.scale(targetGlobalScale);
+    originInvTrans.invert();
+    Mat4 targetLocalTrans = originInvTrans * targetGlobalTrans;
+    return targetLocalTrans.getScale();
+}
+
 Vector3 MathHelper::getRelativeParentRotation(shared_ptr<JointNode> moveNode, Vector3 targetGlobalPosition)
 {
     shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(moveNode->Parent);

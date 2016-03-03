@@ -18,6 +18,7 @@ public:
     static Quaternion irrGetLocalQuaternion(shared_ptr<Node> bone, Quaternion q);
     static Vector3 getEulerRotation(Quaternion rotation);
     static Vector3 getRelativePosition(Mat4 &originTransformation,Vector3 targetGlobalPosition);
+    static Vector3 getRelativeScale(Mat4 &originTransformation,Vector3 targetGlobalPosition);
     static Vector3 getRelativeParentRotation(shared_ptr<JointNode> moveNode, Vector3 targetGlobalPosition);
     static void copyVector4ToPointer(float * pointer , Vector4 value);
     static void copyVector3ToPointer(float * pointer , Vector3 value);

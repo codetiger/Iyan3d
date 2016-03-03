@@ -36,7 +36,9 @@ public:
     void unselectObjects();
     shared_ptr<Node> getParentNode();
     void storeGlobalPositions();
+    vector<Vector3> getGlobalScaleValues();
     void storeRelativePositions();
+    void restoreRelativeScales(vector< Vector3 > scales);
     void addSelectedChildren(shared_ptr<Node> toParent);
     void removeChildren(shared_ptr<Node> fromParent, bool resetKeys = false);
     void highlightSelectedNode(int nodeId = -1);
