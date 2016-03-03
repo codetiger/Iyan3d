@@ -314,7 +314,7 @@ shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices,int radi
 }
 
 shared_ptr<LightNode> SceneManager::createLightNode(Mesh *mesh, string callBackFuncName) {
-    shared_ptr<LightNode> light = make_shared<LightNode>();
+    shared_ptr<LightNode> light(new LightNode());
     light->callbackFuncName = callBackFuncName;
     light->mesh = mesh;
     light->mesh->Commit();

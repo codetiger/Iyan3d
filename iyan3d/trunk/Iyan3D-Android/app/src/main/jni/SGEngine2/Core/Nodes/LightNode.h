@@ -10,7 +10,7 @@
 #define __SGEngine2__LightNode__
 
 #include "../common/common.h"
-#include "MeshNode.h"
+#include "../Nodes/MeshNode.h"
 
 typedef enum {
     LIGHT_TYPE_POINT,

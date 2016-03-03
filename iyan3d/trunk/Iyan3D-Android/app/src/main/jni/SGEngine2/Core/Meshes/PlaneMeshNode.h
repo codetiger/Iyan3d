@@ -10,9 +10,7 @@
 #define __SGEngine2__PlaneMeshNode__
 
 #include "../common/common.h"
-
 #include "../Nodes/MeshNode.h"
-#include "../../Loaders/CSGRMeshFileLoader.h"
 
 class PlaneMeshNode : public MeshNode {
     
