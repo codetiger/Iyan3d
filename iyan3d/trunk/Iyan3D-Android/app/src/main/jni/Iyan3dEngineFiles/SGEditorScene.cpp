@@ -567,7 +567,10 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
 }
 
 void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
-{    
+{
+    if(selectedNode == NOT_EXISTS)
+        return;
+    
     string StoragePath;
 #ifdef IOS
     StoragePath = constants::CachesStoragePath + "/";

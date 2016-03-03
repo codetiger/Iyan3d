@@ -428,6 +428,8 @@ shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
             if(!checkFileExists(textureFileName))
                 textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
+                if(!checkFileExists(textureFileName))
+                    textureFileName = constants::CachesStoragePath + "/"+textureName+".png";
         }
     }
     

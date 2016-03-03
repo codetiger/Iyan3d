@@ -212,7 +212,7 @@
        else
            [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
-        [self removeFromParentViewController];
+       [self.objSlideDelegate deallocSubViews];
     }
 }
 
