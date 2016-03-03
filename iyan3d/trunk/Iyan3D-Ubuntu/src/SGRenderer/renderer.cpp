@@ -190,21 +190,21 @@ bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::str
 	return true;
 }
 
-bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType) {
+bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType, bool hasTexture) {
 	if(nodeType == NODE_SGM) {
 		if(!checkAndDownloadFile(filePath + ".sgm", filePath + ".sgm", "/mesh"))
 			return false;
-		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
+		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
 			return false;
 	} else if(nodeType == NODE_RIG) {
 		if(!checkAndDownloadFile(filePath + ".sgr", filePath + ".sgr", "/mesh"))
 			return false;
-		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
+		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
 			return false;
 	} else if(nodeType == NODE_OBJ) {
 		if(!checkAndDownloadFile(filePath + ".obj", filePath + ".obj", ""))
 			return false;
-		if(!checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", ""))
+		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", ""))
 			return false;
 	} else if(nodeType == NODE_TEXT) {
 		string uefilename(url_encode(filePath.c_str()));
