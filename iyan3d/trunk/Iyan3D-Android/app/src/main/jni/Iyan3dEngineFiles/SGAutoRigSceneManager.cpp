@@ -562,6 +562,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
         }
         nodeToRig->props.transparency = 1.0;
         nodeToRig->node->setVisible(true);
+        nodeToRig->node->setID(actualNodeId);
     }else if(isCompleted){
         if(animNode) {
             smgr->RemoveNode(animNode);
@@ -592,7 +593,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             delete it->second;
         }
     }
-    nodeToRig->node->setID(actualNodeId);
+
     removeRigKeys();
     boneMesh = NULL;
     sphereMesh = NULL;

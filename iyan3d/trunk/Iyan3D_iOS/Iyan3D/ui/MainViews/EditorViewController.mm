@@ -1037,6 +1037,7 @@ BOOL missingAlertShown;
     }
     
     [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"] VertexColor:vertexColor];
+    
     [self performSelectorOnMainThread:@selector(deallocateAutoRigOnMainThread:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
 }
 
@@ -2889,7 +2890,7 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType, bool
                 else
                     return true;
             }
-            if (([file intValue] > 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
+            if (([file intValue] >= 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
                 NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", documentsDirectory, [file intValue]];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
                     if (!missingAlertShown) {
@@ -3120,7 +3121,7 @@ void downloadFile(NSString* url, NSString* fileName)
         [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     }
     else if(value == HIDE_PROGRESS){
-        [self hideLoadingActivity];
+        [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
     }
 }
 
