@@ -38,7 +38,6 @@ int MAX_RAY_DEPTH = 6;
 int samplesAO = 0;
 double minAOBrightness = 0.5f;
 int randomSamples = 0;
-int antiAliasingSamples = 0;
 
 enum ImageFormat {
     ImageFormat_PPM,
