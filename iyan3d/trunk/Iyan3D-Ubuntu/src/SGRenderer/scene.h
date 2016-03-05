@@ -111,90 +111,41 @@ struct Scene
 	void renderPixel(int x, int y) {
 		Vec3fa color = Vec3fa(0.0f);
 
-		if(randomSamples > 0) {
-			for (int i = 0; i < randomSamples; ++i) {
-				double r1 = 2 * GetRandomValue();
-				double r2 = 2 * GetRandomValue();
-				double dx = r1 < 1 ? sqrt(r1)-1 : 1-sqrt(2-r1);
-				double dy = r2 < 1 ? sqrt(r2)-1 : 1-sqrt(2-r2);
-				Vec3fa dir = cam->getRayDirection((x + dx)/(double)imgWidth, (y + dy)/(double)imgHeight);
-				color = color + getRadiance(cam->position, dir, 0);
+		if(antiAliasingSamples > 0) {
+			for (int xa = -antiAliasingSamples/2; xa < antiAliasingSamples/2; ++xa) {
+				for (int ya = -antiAliasingSamples/2; ya < antiAliasingSamples/2; ++ya) {
+					double xdelta = xa/(double)antiAliasingSamples;
+					double ydelta = ya/(double)antiAliasingSamples;
+
+					Vec3fa dir = cam->getRayDirection((x + xdelta)/(double)imgWidth, (y + ydelta)/(double)imgHeight);
+					color = color + getRadiance(cam->position, dir, 0);
+				}
 			}
-			color = color / (double)randomSamples;
+			color = color / (double)(antiAliasingSamples * antiAliasingSamples);
 		} else {
 			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
 			color = color + getRadiance(cam->position, dir, 0);
 		}
-	
-		double ao = 1.0;
-		if(samplesAO > 0) {
-			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
-			ao = getAmbientOcclusion(cam->position, dir);
-		}
 
 		int pi = (((imgHeight - y - 1) * imgWidth) + x) * 4;
-		pixels[pi + 0] = (255.0f * clip(color.x, 0.0f, 1.0f) * ao);
-		pixels[pi + 1] = (255.0f * clip(color.y, 0.0f, 1.0f) * ao);
-		pixels[pi + 2] = (255.0f * clip(color.z, 0.0f, 1.0f) * ao);
+		pixels[pi + 0] = 255.0f * clip(color.x, 0.0f, 1.0f);
+		pixels[pi + 1] = 255.0f * clip(color.y, 0.0f, 1.0f);
+		pixels[pi + 2] = 255.0f * clip(color.z, 0.0f, 1.0f);
 		pixels[pi + 3] = 255;
 		progress = (y * imgWidth + x) / (1.0f * imgWidth * imgHeight);
 	}
 
-	double getAmbientOcclusion(Vec3fa point, Vec3fa dir) {
-		RTCRay ray = getIntersection(sgScene, point, dir);
-
-		if (ray.geomID != RTC_INVALID_GEOMETRY_ID && (int)ray.geomID < (int)meshes.size()) {
-			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
-			n = n.normalize();
-			Vec3fa hitPoint = getHitPoint(ray);
-			if(!meshes[ray.geomID]->material.hasLighting)
-				return 1.0;
-
-			int hitCount = 0;
-			for (int i = 0; i < samplesAO; ++i) {
-				Vec3fa nd = sampleAroundNormal(n);
-				RTCRay ray = getOcclusion(sgScene, hitPoint, nd, 7.5f);
-				if(ray.geomID == 0)
-					hitCount++;
-			}
-
-			/*
-			int hitCount = 0;
-			for (int i = 0; i < samplesAO; i+=4) {
-				RTCRay4 ray4;
-				memset(&ray4,0,sizeof(ray4));
-				for (int j = 0; j < 4; i++) {
-					Vec3fa nd = sampleAroundNormal(n);
-					ray4.orgx[j] = hitPoint.x;
-					ray4.orgy[j] = hitPoint.y;
-					ray4.orgz[j] = hitPoint.z;
-
-				    ray4.dirx[j] = nd.x;
-				    ray4.diry[j] = nd.y;
-				    ray4.dirz[j] = nd.z;
-
-				    ray4.tnear[j] = 0.001f;
-				    ray4.tfar[j] = 7.5f;
-				    ray4.geomID[j] = RTC_INVALID_GEOMETRY_ID;
-				    ray4.primID[j] = RTC_INVALID_GEOMETRY_ID;
-				    ray4.mask[j] = -1;
-				    ray4.time[j] = 0;
-				}
-
-				__attribute ((aligned(16))) int valid[4] = { -1,-1,-1,-1 };
-			    rtcOccluded4(valid, sgScene, ray4);
-
-				for (int j = 0; j < 4; i++)
-					if(ray4.geomID[j] == 0)
-						hitCount++;
-			}
-			*/
-
-			double ambience = 1.0f - (hitCount/(double)samplesAO);
-			return (minAOBrightness + ambience * (1.0f - minAOBrightness));
+	double getAmbientOcclusion(Vec3fa point, Vec3fa n) {
+		int hitCount = 0;
+		for (int i = 0; i < samplesAO; ++i) {
+			Vec3fa nd = sampleAroundNormal(n);
+			RTCRay ray = getOcclusion(sgScene, point, nd, 7.5f);
+			if(ray.geomID == 0)
+				hitCount++;
 		}
 
-		return 0;
+		double ambience = 1.0f - (hitCount/(double)samplesAO);
+		return (minAOBrightness + ambience * (1.0f - minAOBrightness));
 	}
 
 	Vec3fa getRadiance(Vec3fa point, Vec3fa dir, int depth, int E = 1) {
@@ -213,14 +164,18 @@ struct Scene
 			double reflection = meshes[ray.geomID]->material.reflection;
 
 			double p = (faceColor.x > faceColor.y && faceColor.x > faceColor.z) ? faceColor.x : (faceColor.y > faceColor.z ? faceColor.y : faceColor.z);
-			if(reflection > 0.0 || refraction > 0.0)
-				p = 1.0f;
 
 			if(depth > MAX_RAY_DEPTH || !p) {
+				if(reflection > 0.0 || refraction > 0.0)
+					p = 1.0f;
+
 				if(GetRandomValue() < p)
 					faceColor = faceColor * (1 / p);
 
-				return faceColor;//meshes[ray.geomID]->getEmissionColor() * E;
+				if(reflection > 0.0 || refraction > 0.0)
+					return meshes[ray.geomID]->getEmissionColor() * E;
+				else
+					return faceColor;
 			}
 
 			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
@@ -231,27 +186,34 @@ struct Scene
 				Vec3fa reflectionResult;
 				
 				if(reflection > 0.0)
-					reflectionResult = getReflection(getHitPoint(ray), n, dir, ++depth);
+					reflectionResult = getReflection(getHitPoint(ray), n, dir, depth + 1);
 
 				color = color * (1 - (reflection+refraction)) + (reflectionResult*reflection + refractionResult*refraction);
 			} else if(meshes[ray.geomID]->material.emission == 0.0) {
 				Vec3fa nl = n.dot(dir) < 0 ? n : n * -1.0f;
-				Vec3fa nd = sampleAroundNormal(nl);
-
 				Vec3fa recursiveRadiance = Vec3fa(0.0f);
-				recursiveRadiance = getRadiance(point, nd, ++depth, 0);
-				recursiveRadiance = faceColor * recursiveRadiance;
-
 				Vec3fa lightsContrib = Vec3fa(0.0f);
-				lightsContrib = faceColor * getLightContribution(ray, nl);
+
+				double samples = randomSamples / (double)antiAliasingSamples;
+				for (int i = 0; i < samples; ++i) {
+					Vec3fa nd = sampleAroundNormal(nl);
+					recursiveRadiance = recursiveRadiance + faceColor * getRadiance(point, nd, MAX_RAY_DEPTH + 1, 0);
+					lightsContrib = lightsContrib + faceColor * getLightContribution(ray, nl);
+				}
+				recursiveRadiance = recursiveRadiance / samples;
+				lightsContrib = lightsContrib / samples;
+
 				color = meshes[ray.geomID]->getEmissionColor() * E + lightsContrib + recursiveRadiance;
 
 				if(reflection > 0.0)
-					color = color * (1.0f - reflection) + getReflection(getHitPoint(ray), n, dir, ++depth) * reflection;
+					color = color * (1.0f - reflection) + getReflection(getHitPoint(ray), n, dir, depth + 1) * reflection;
 
 				color = clip(color, 0.0, 1.0);
 			}
+			double ao = getAmbientOcclusion(getHitPoint(ray), n);
+			color = color * ao;
 		}
+
 		return color;
 	}
 
@@ -294,12 +256,12 @@ struct Scene
 		double cos2t = 1 - refractiveIndexRatio * refractiveIndexRatio * (1 - cosI * cosI);
 
 		if (cos2t < 0)
-			return getRadiance(point, dir * -1.0f, ++depth);
+			return getRadiance(point, dir * -1.0f, depth + 1);
 
 		Vec3fa refractedDirection = dir * refractiveIndexRatio - normal * (into ? 1 : -1) * (cosI * refractiveIndexRatio + sqrt(cos2t));
 		refractedDirection = refractedDirection.normalize();
 
-		return getRadiance(point, refractedDirection, ++depth);
+		return getRadiance(point, refractedDirection, depth + 1);
 	}
 
 	bool loadScene(const char* fileName, int width, int height) {

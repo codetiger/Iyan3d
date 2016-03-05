@@ -321,9 +321,10 @@ int main(int argc, char** argv)
 		samplesAO = configData["samplesAO"].asInt();
 		minAOBrightness = configData["minAOBrightness"].asDouble();
 		randomSamples = configData["randomSamples"].asInt();
+		antiAliasingSamples = configData["antiAliasingSamples"].asInt();
 	}
 
-	printf("Working as Machine Id:%s\nisRenderMachine:%d\ntaskFetchFrequency:%d\nMAX_RAY_DEPTH:%d\nsamplesAO:%d\nminAOBrightness:%f\nrandomSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, randomSamples);
+	printf("Working as Machine Id:%s\nisRenderMachine:%d\ntaskFetchFrequency:%d\nMAX_RAY_DEPTH:%d\nsamplesAO:%d\nminAOBrightness:%f\nrandomSamples:%d\nantiAliasingSamples:%d\n\n", machineId.c_str(), isRenderMachine, taskFetchFrequency, MAX_RAY_DEPTH, samplesAO, minAOBrightness, randomSamples, antiAliasingSamples);
 
 	do {
 		printf("Asking Server for new task\n");
