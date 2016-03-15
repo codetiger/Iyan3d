@@ -24,7 +24,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.screenName = @"EnvelopeScaleView";
+    self.screenName = @"EnvelopeScaleView iOS";
     self.scaleSlider.minimumValue = 0.1;
     [self updateScale:scale];
     self.scaleValue.text = [NSString stringWithFormat:@"%0.2f",scale];

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
@@ -25,7 +26,7 @@
 @end
 
 
-@interface ObjSidePanel : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface ObjSidePanel : GAITrackedViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     int indexPathOfOBJ;
     NSString* textureFileName;

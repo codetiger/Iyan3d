@@ -139,6 +139,7 @@ BOOL missingAlertShown;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.screenName = @"EditorView iOS";
     isSelected=NO;
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
@@ -1966,7 +1967,7 @@ BOOL missingAlertShown;
         subViewToAdd.frame = CGRectMake(0, 0, _leftView.frame.size.width, _leftView.frame.size.height);
         [self.leftView addSubview:subViewToAdd];
     }
-    
+
     [self.leftView setHidden:(!showView)];
     
     CATransition *transition = [CATransition animation];

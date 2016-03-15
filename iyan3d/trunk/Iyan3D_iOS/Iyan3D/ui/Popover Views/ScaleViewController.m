@@ -31,6 +31,7 @@ float previousX = 0 , previousY = 0, previousZ = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.screenName = @"ScaleView iOS";
     self.xSlider.minimumValue = self.ySlider.minimumValue = self.zSlider.minimumValue = 0.2;
     
     [self setScaleValueLabelsWithXScale:currentXValue YScale:currentYValue ZScale:currentZValue];
@@ -42,7 +43,6 @@ float previousX = 0 , previousY = 0, previousZ = 0;
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.screenName = @"ScaleView";
     [self.xSlider setTag:2];
     [self.ySlider setTag:3];
     [self.zSlider setTag:4];

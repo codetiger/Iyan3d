@@ -43,6 +43,7 @@
 {
     int renderingStartFrame, renderingEndFrame, renderingFrame , shaderType,finalFrame,publishId;
     bool isCanceled,isAppInBg;
+    BOOL resAlertShown;
 	int renderingExportImage;
     NSThread* thread;
     int resolutionType;

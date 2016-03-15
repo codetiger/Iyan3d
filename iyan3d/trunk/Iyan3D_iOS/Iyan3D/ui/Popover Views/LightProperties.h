@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 #import "GetPixelDemo.h"
 #import "Vector3.h"
 #import "Constants.h"
@@ -20,7 +21,7 @@
 - (void) deleteObjectOrAnimation;
 @end
 
-@interface LightProperties : UIViewController<GetPixelDemoDelegate>
+@interface LightProperties : GAITrackedViewController<GetPixelDemoDelegate>
 {
     Quaternion color;
     NODE_TYPE light;

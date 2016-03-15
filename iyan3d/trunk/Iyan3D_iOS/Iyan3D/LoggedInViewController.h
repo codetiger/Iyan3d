@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "DownloadTask.h"
 #import "AppHelper.h"
@@ -17,7 +18,7 @@
 
 @class GIDSignIn;
 
-@interface LoggedInViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate, AppHelperDelegate>{
+@interface LoggedInViewController : GAITrackedViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate, AppHelperDelegate>{
     
     CacheSystem* cache;
     NSMutableArray *renderData;

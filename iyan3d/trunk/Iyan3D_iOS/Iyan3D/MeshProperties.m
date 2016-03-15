@@ -35,6 +35,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.screenName = @"MeshProperties iOS";
+    
     [self.refractionSlider setValue:refractionValue];
     [self.reflectionSlider setValue:reflectionValue];
     self.lightingSwitch.on=isLightningValue;

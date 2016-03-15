@@ -50,7 +50,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.screenName = @"CreditsView iOS";
     [self.creditsLoading setHidden:NO];
     [self.creditsLoading startAnimating];
     [self.creditsLoading setHidesWhenStopped:YES];

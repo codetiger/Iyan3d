@@ -26,6 +26,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+//    self.screenName = [NSString stringWithFormat:@"%@View iOS", clickedBtn];
     if([clickedBtn isEqualToString:@"loginBtn"]){
         if ([Utility IsPadDevice]){
             [self.topBar setHidden:NO];

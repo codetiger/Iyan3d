@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
+
 @protocol MeshPropertiesDelegate
 - (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible FaceNormal:(BOOL)isHaveFaceNormal;
 -(void) deleteDelegateAction;
@@ -15,7 +17,7 @@
 - (void) switchMirror;
 @end
 
-@interface MeshProperties : UIViewController{
+@interface MeshProperties : GAITrackedViewController{
     float refractionValue;
     float reflectionValue;
     bool isLightningValue,isHaveLightOption;

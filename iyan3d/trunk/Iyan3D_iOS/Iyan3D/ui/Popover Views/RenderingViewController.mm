@@ -84,11 +84,11 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.screenName = @"RenderingView iOS";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed:) name:@"creditsupdate" object:nil];
 
-    cancelPressed = NO;
+    cancelPressed = resAlertShown = NO;
     selectedIndex = 0;
     isAppInBg = false;
     self.resolutionSegment.selectedSegmentIndex = resolutionType;
@@ -559,7 +559,6 @@
     }
     
     [self removeSGFDFilesIfAny];
-    self.screenName = @"RenderingView";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersBG) name:@"AppGoneBackground" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersFG) name:@"applicationDidBecomeActive" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesToRender) name:@"FileWriteCompleted" object:nil];
@@ -728,6 +727,12 @@
     }
     else if ([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
 //        tempSelectedIndex = (int)indexPath.row;
+        if(!resAlertShown) {
+            UIAlertView *resolutionAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please try 240p or 360p resolution which are much cheaper so that you can preview the scene before final renders." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [resolutionAlert show];
+            resAlertShown = YES;
+        }
+        self.resolutionSegment.selectedSegmentIndex = TWO_HUNDRED_FOURTY_P;
         [self.renderDesc setText:[NSString stringWithFormat:@"Render with High Quality in cloud."]];
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);

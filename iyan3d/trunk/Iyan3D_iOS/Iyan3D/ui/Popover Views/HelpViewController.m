@@ -77,6 +77,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.screenName = @"HelpView iOS";
+
     if([Utility IsPadDevice]){
         self.view.layer.borderWidth = 2.0f;
         self.view.layer.borderColor = [UIColor grayColor].CGColor;
@@ -118,7 +120,6 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.screenName = @"HelpView";
 }
 - (void) viewWillAppear:(BOOL)animated
 {

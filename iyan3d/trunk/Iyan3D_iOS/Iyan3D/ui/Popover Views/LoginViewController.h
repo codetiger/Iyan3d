@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "AppHelper.h"
 @protocol LoginViewControllerDelegate
@@ -18,7 +19,7 @@
 @class GIDSignInButton;
 
 
-@interface LoginViewController : UIViewController<GIDSignInDelegate, GIDSignInUIDelegate,AppHelperDelegate>{
+@interface LoginViewController : GAITrackedViewController<GIDSignInDelegate, GIDSignInUIDelegate,AppHelperDelegate>{
     
 }
 @property (weak, nonatomic) IBOutlet UIView *buttonView;

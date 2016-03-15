@@ -10,6 +10,7 @@
 #define AnimationSelectionSlider_h
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 #import "AppHelper.h"
 #import "Constants.h"
 #import "AnimationSelectionCollectionViewCell.h"
@@ -32,7 +33,7 @@
 
 @end
 
-@interface AnimationSelectionSlider : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>
+@interface AnimationSelectionSlider : GAITrackedViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>
 {
     NSMutableArray *animationJsonArray;
     NSMutableArray* animationsItems;

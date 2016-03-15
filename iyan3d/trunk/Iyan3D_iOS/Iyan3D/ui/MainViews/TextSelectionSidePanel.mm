@@ -48,7 +48,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.screenName = @"TextSelection iOS";
     fontArray = [cache GetAssetList:FONT Search:@""];
     typedText = [NSString stringWithFormat:@"Text"];
     cache = [CacheSystem cacheSystem];

@@ -28,6 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.screenName = @"CameraProperties iOS";
     _fovLabel.text = [NSString stringWithFormat:@"%g", fovValueCamera];
     [_fovSlider setValue:fovValueCamera];
     _resolutionBtn.selectedSegmentIndex=resolutionTypeCamera;

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
@@ -18,7 +19,7 @@
 - (void) removeTempNodeFromScene;
 @end
 
-@interface ImportImageNew : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
+@interface ImportImageNew : GAITrackedViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
     NSDictionary* imageInfo;
     
     int viewType;

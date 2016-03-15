@@ -49,6 +49,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.screenName = @"AssetSelection iOS";
+    
     if([Utility IsPadDevice]){
        [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }

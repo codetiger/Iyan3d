@@ -200,7 +200,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.screenName = @"LoadingView";
+    self.screenName = @"LoadingView iOS";
     
     [cache OpenDatabase];
     [cache createTablesForPrice];

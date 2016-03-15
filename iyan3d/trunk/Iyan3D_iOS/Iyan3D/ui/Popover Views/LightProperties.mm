@@ -28,6 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.screenName = @"LightProperties iOS";
     [self initializeColorWheel];
     [self.colorPreview setBackgroundColor:[UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0]];
     [_distance setEnabled:(light == NODE_ADDITIONAL_LIGHT) ? YES : NO];

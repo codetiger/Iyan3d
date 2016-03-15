@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 
 @protocol CameraSettingsDelegate
 - (void)cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution;
 - (void) deleteObjectOrAnimation;
 @end
 
-@interface CameraSettings : UIViewController{
+@interface CameraSettings : GAITrackedViewController{
     float fovValueCamera;
     NSInteger resolutionTypeCamera;
 }

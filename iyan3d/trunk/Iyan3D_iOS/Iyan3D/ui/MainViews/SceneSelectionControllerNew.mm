@@ -45,6 +45,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.screenName = @"SceneSelectionView iOS";
+    
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
     deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];

@@ -10,6 +10,8 @@
 #import "SmartImageView.h"
 #import "CacheSystem.h"
 #import "Constants.h"
+#import "GAI.h"
+
 @protocol AssetSelectionDelegate
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
@@ -22,7 +24,7 @@
 
 
 
-@interface AssetSelectionSidePanel : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate>{
+@interface AssetSelectionSidePanel : GAITrackedViewController<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate>{
     CacheSystem* cache;
     AssetItem* asset;
     NSMutableArray* assetArray;

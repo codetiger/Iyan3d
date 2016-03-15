@@ -28,6 +28,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.screenName = @"ImportImage iOS";
+    
     [self.addBtn setEnabled:NO];
     self.cancelBtn.layer.cornerRadius = 8.0f;
     self.addBtn.layer.cornerRadius = 8.0f;
