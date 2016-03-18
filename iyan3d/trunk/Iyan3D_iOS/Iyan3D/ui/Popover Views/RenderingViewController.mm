@@ -87,7 +87,7 @@
     self.screenName = @"RenderingView iOS";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed:) name:@"creditsupdate" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifiedUsage:) name:@"creditsused" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifiedUsage) name:@"creditsused" object:nil];
     
     cancelPressed = resAlertShown = NO;
     selectedIndex = 0;
@@ -308,7 +308,7 @@
     }
 }
 
-- (void) verifiedUsage:(NSNotification*) notification
+- (void) verifiedUsage
 {
     if(renderingExportImage == RENDER_VIDEO) {
         [self performSelectorOnMainThread:@selector(doMakeVideoUIUpdate) withObject:nil waitUntilDone:YES];
@@ -653,8 +653,15 @@
     [self.delegate setShaderTypeForRendering:SHADER_DEFAULT];
     if(isCanceled)
         return;
+    if(renderingExportImage == RENDER_VIDEO) {
+        [self.makeVideoLoading setHidden:NO];
+        [self.makeVideoLoading startAnimating];
+    }
+    
     if(resolutionType != TWO_HUNDRED_FOURTY_P || (resolutionType == TWO_HUNDRED_FOURTY_P && !_watermarkSwitch.isOn))
         [self saveDeductedCredits:[credits intValue]];
+    else
+        [self verifiedUsage];
 }
 
 - (void) renderFinishAction:(NSNumber*)object
