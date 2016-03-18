@@ -195,6 +195,8 @@
     if(indexPathOfOBJ == -1)
         return;
     if(self.addBtn.tag == OBJ){
+        [_ObjInfoLable setHidden:YES];
+        [_importBtn setHidden:NO];
         filesList=nil;
         NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

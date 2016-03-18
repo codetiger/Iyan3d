@@ -101,7 +101,7 @@ bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
 
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
     texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
-    if(!texture)
+    if(!texture || !textureData || !spriteContext)
         return NO;
     [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
                mipmapLevel:0

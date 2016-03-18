@@ -85,7 +85,8 @@ SGEditorScene *editorScene;
 }
 - (void)presentRenderBuffer
 {
-    [_context presentRenderbuffer:_colorRenderBuffer];
+    if(_context)
+        [_context presentRenderbuffer:_colorRenderBuffer];
 }
 
 - (void) setUpCallBacks:(void *)scene

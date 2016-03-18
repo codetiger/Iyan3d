@@ -66,8 +66,10 @@ void SGJoint::setRotation(Quaternion rotation, int frameId)
         rotationKey.rotation = rotation;
         KeyHelper::addKey(rotationKeys, rotationKey);
     }
-    else
-        rotationKeys[keyIndex].rotation = rotation;
+    else {
+        if(keyIndex < rotationKeys.size())
+            rotationKeys[keyIndex].rotation = rotation;
+    }
 }
 bool SGJoint::setRotationOnNode(Quaternion rotation)
 {
@@ -90,8 +92,10 @@ void SGJoint::setPosition(Vector3 position , int frameId)
         positionKey.position = position;
         KeyHelper::addKey(positionKeys, positionKey);
     }
-    else
-        positionKeys[keyIndex].position = position;
+    else {
+        if(keyIndex < positionKeys.size())
+            positionKeys[keyIndex].position = position;
+    }
 }
 bool SGJoint::setPositionOnNode(Vector3 position)
 {
@@ -110,8 +114,10 @@ void SGJoint::setScale(Vector3 scale, int frameId)
         scaleKey.scale = scale;
         KeyHelper::addKey(scaleKeys, scaleKey);
     }
-    else
-        scaleKeys[keyIndex].scale = scale;
+    else {
+        if(keyIndex < scaleKeys.size())
+            scaleKeys[keyIndex].scale = scale;
+    }
 }
 bool SGJoint::setScaleOnNode(Vector3 scale)
 {
@@ -125,19 +131,19 @@ ActionKey SGJoint::getKeyForFrame(int frameId)
 {
     ActionKey key;
     int index = KeyHelper::getKeyIndex(rotationKeys, frameId);
-    if(index!=-1 && rotationKeys[index].id == frameId){
+    if(index!=-1 && index < rotationKeys.size() && rotationKeys[index].id == frameId){
         key.rotation = rotationKeys[index].rotation;
         key.isRotationKey = true;
     }
     
     index = KeyHelper::getKeyIndex(positionKeys, frameId);
-    if(index!=-1 &&  positionKeys[index].id == frameId){
+    if(index!=-1 && index < positionKeys.size() && positionKeys[index].id == frameId){
         key.position = positionKeys[index].position;
         key.isPositionKey = true;
     }
     
     index = KeyHelper::getKeyIndex(scaleKeys, frameId);
-    if(index!=-1 &&  scaleKeys[index].id == frameId){
+    if(index!=-1 && index < scaleKeys.size() && scaleKeys[index].id == frameId){
         key.scale = scaleKeys[index].scale;
         key.isScaleKey = true;
     }
@@ -147,7 +153,7 @@ ActionKey SGJoint::getKeyForFrame(int frameId)
 void SGJoint::setKeyForFrame(int frameId, ActionKey& key)
 {
     int index = KeyHelper::getKeyIndex(rotationKeys, frameId);
-    if(index!=-1  && rotationKeys[index].id == frameId){
+    if(index!=-1  && index < rotationKeys.size() && rotationKeys[index].id == frameId){
         rotationKeys.erase(rotationKeys.begin()+index);
     }
     if(key.isRotationKey){
@@ -156,7 +162,7 @@ void SGJoint::setKeyForFrame(int frameId, ActionKey& key)
     
     if(positionKeys.size()) {
         index = KeyHelper::getKeyIndex(positionKeys, frameId);
-        if(index!=-1 && positionKeys[index].id == frameId){
+        if(index!=-1 && index < positionKeys.size() && positionKeys[index].id == frameId){
             positionKeys.erase(positionKeys.begin()+index);
         }
     }
@@ -165,7 +171,7 @@ void SGJoint::setKeyForFrame(int frameId, ActionKey& key)
     
     if(scaleKeys.size()) {
         index = KeyHelper::getKeyIndex(scaleKeys, frameId);
-        if(index!=-1 && scaleKeys[index].id == frameId){
+        if(index!=-1 && index < scaleKeys.size() && scaleKeys[index].id == frameId){
             scaleKeys.erase(scaleKeys.begin()+index);
         }
     }
@@ -175,15 +181,15 @@ void SGJoint::setKeyForFrame(int frameId, ActionKey& key)
 void SGJoint::removeAnimationInCurrentFrame(int selectedFrame)
 {
     int keyIndex = KeyHelper::getKeyIndex(positionKeys, selectedFrame);
-    if(keyIndex != -1 && positionKeys[keyIndex].id == selectedFrame)
+    if(keyIndex != -1 && keyIndex < positionKeys.size() && positionKeys[keyIndex].id == selectedFrame)
         positionKeys.erase(positionKeys.begin()+keyIndex);
     
     keyIndex = KeyHelper::getKeyIndex(rotationKeys, selectedFrame);
-    if(keyIndex != -1 && rotationKeys[keyIndex].id == selectedFrame)
+    if(keyIndex != -1 && keyIndex < rotationKeys.size() && rotationKeys[keyIndex].id == selectedFrame)
         rotationKeys.erase(rotationKeys.begin()+keyIndex);
     
     keyIndex = KeyHelper::getKeyIndex(scaleKeys, selectedFrame);
-    if(keyIndex != -1 && scaleKeys[keyIndex].id == selectedFrame)
+    if(keyIndex != -1 && keyIndex < scaleKeys.size() && scaleKeys[keyIndex].id == selectedFrame)
         scaleKeys.erase(scaleKeys.begin()+keyIndex);
 }
 
@@ -196,8 +202,12 @@ Quaternion SGJoint::getRotation(int frameId)
         return rotationKey.rotation;
         
     }
-    else
-        return rotationKeys[keyIndex].rotation;
+    else {
+        if(keyIndex < rotationKeys.size())
+            return rotationKeys[keyIndex].rotation;
+        else
+            return rotationKeys[0].rotation;
+    }
 }
 Vector3 SGJoint::getPosition(int frameId){
     int keyIndex = KeyHelper::getKeyIndex(positionKeys,frameId);

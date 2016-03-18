@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AssetSelectionSidePanel">
             <connections>
                 <outlet property="addToSceneBtn" destination="VYm-aD-dU0" id="nB6-dZ-l7k"/>
+                <outlet property="assetLoading" destination="idS-XO-APK" id="EuY-d3-Bm0"/>
                 <outlet property="assetsCollectionView" destination="AVs-uF-lkn" id="myN-vR-9IP"/>
                 <outlet property="cancelBtn" destination="87a-NJ-bmX" id="yzF-in-n4x"/>
                 <outlet property="modelCategory" destination="hiU-h1-J3E" id="CcL-0d-8tG"/>
@@ -82,6 +83,10 @@
                     </subviews>
                     <color key="backgroundColor" red="0.058823529411764705" green="0.058823529411764705" blue="0.058823529411764705" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="idS-XO-APK">
+                    <rect key="frame" x="132" y="328" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>

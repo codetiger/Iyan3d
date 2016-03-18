@@ -400,7 +400,10 @@ void MetalRenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIn
     id<MTLTexture> tex = NULL;
     if(MTLMat->uniforms[uIndex].type == DATA_TEXTURE_2D || MTLMat->uniforms[uIndex].type == DATA_TEXTURE_CUBE){
         int textureIndex = ((int*)MTLMat->uniforms[uIndex].values)[0];
-        tex = ((MTLTexture*)node->getTextureByIndex(textureIndex))->texture;
+        if((MTLTexture*)node->getTextureByIndex(textureIndex) != NULL)
+            tex = ((MTLTexture*)node->getTextureByIndex(textureIndex))->texture;
+        else
+            tex = ((MTLTexture*)node->getTextureByIndex(1))->texture;
     }
     BindUniform(MTLMat->uniforms[uIndex].type,MTLMat->uniforms[uIndex].buf,MTLMat->uniforms[uIndex].values,MTLMat->uniforms[uIndex].count,MTLMat->uniforms[uIndex].parameterIndex,tex,MTLMat->uniforms[uIndex].name,MTLMat->uniforms[uIndex].nodeIndex , isFragmentData);
     //node.reset();

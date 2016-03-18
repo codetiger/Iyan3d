@@ -157,8 +157,10 @@ void RenderHelper::drawMoveAxisLine()
     
     if(renderingScene->controlType == MOVE && renderingScene->selectedControlId != NOT_SELECTED && renderingScene->selectedNodeId != NOT_SELECTED){
         Vector3 nodePos = renderingScene->nodes[renderingScene->selectedNodeId]->node->getAbsolutePosition();
-        if(renderingScene->selectedJointId != NOT_SELECTED)
-            nodePos = (dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node))->getJointNode(renderingScene->selectedJointId)->getAbsolutePosition();
+        if(renderingScene->selectedJointId != NOT_SELECTED) {
+            if((dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node))->getJointNode(renderingScene->selectedJointId))
+                nodePos = (dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node))->getJointNode(renderingScene->selectedJointId)->getAbsolutePosition();
+        }
         drawMoveControlLine(nodePos);
     }
 }
@@ -567,16 +569,15 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
     
     std::map<int, RigKey>& rigKeys = renderingScene->rigMan->rigKeys;
     
-    shared_ptr< vector< shared_ptr<Node> > > childs = rigKeys[jointId].referenceNode->node->Children;
-    int childCount = (int)childs->size();
-    for(int i = 0; i < childCount;i++){
-        shared_ptr<MeshNode> childReference = dynamic_pointer_cast<MeshNode>((*childs)[i]);
-        if(childReference && (childReference->getID() >= REFERENCE_NODE_START_ID && childReference->getID() <= REFERENCE_NODE_START_ID + rigKeys.size()))
-            renderingScene->loader->initEnvelope(envelopes, childReference->getID() - REFERENCE_NODE_START_ID);
-        
-        //childReference.reset();
+    if(rigKeys[jointId].referenceNode && rigKeys[jointId].referenceNode->node) {
+        shared_ptr< vector< shared_ptr<Node> > > childs = rigKeys[jointId].referenceNode->node->Children;
+        int childCount = (int)childs->size();
+        for(int i = 0; i < childCount;i++){
+            shared_ptr<MeshNode> childReference = dynamic_pointer_cast<MeshNode>((*childs)[i]);
+            if(childReference && (childReference->getID() >= REFERENCE_NODE_START_ID && childReference->getID() <= REFERENCE_NODE_START_ID + rigKeys.size()))
+                renderingScene->loader->initEnvelope(envelopes, childReference->getID() - REFERENCE_NODE_START_ID);
+        }
     }
-    //childs.reset();
 }
 
 void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, int frame, Vector4 bgColor)

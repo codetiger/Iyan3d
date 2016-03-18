@@ -68,7 +68,6 @@
     //CGFloat screenHeight;
     ScaleForAutoRigViewController *scaleAutoRig;
     Vector4 renderBgColor;
-    NSDictionary *deviceNames;
     NSString *cachesDir , *docDir;
     int ScreenWidth;
     int ScreenHeight;

@@ -79,6 +79,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_IMAGE:{
             float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
+            textureName = ConversionHelper::getStringForWString(objectName);
             props.vertexColor = Vector3(objSpecificColor.x,objSpecificColor.y,objSpecificColor.z);
             node = loadImage(ConversionHelper::getStringForWString(objectName) + ".png", smgr , aspectRatio);
             break;
@@ -559,8 +560,10 @@ void SGNode::setPosition(Vector3 position, int frameId)
         positionKey.position = position;
         KeyHelper::addKey(positionKeys, positionKey);
     }
-    else
-        positionKeys[keyIndex].position = position;
+    else {
+        if(keyIndex < positionKeys.size())
+            positionKeys[keyIndex].position = position;
+    }
 }
 void SGNode::setRotation(Quaternion rotation, int frameId)
 {
@@ -571,8 +574,10 @@ void SGNode::setRotation(Quaternion rotation, int frameId)
         rotationKey.rotation = rotation;
         KeyHelper::addKey(rotationKeys, rotationKey);
     }
-    else
-        rotationKeys[keyIndex].rotation = rotation;
+    else {
+        if(keyIndex < rotationKeys.size())
+            rotationKeys[keyIndex].rotation = rotation;
+    }
 }
 void SGNode::setScale(Vector3 scale, int frameId)
 {
@@ -583,8 +588,10 @@ void SGNode::setScale(Vector3 scale, int frameId)
         scaleKey.scale = scale;
         KeyHelper::addKey(scaleKeys,scaleKey);
     }
-    else
-        scaleKeys[keyIndex].scale = scale;
+    else {
+        if(keyIndex < scaleKeys.size())
+            scaleKeys[keyIndex].scale = scale;
+    }
 }
 void SGNode::setVisibility(bool isVisible, int frameId)
 {
@@ -595,8 +602,10 @@ void SGNode::setVisibility(bool isVisible, int frameId)
         visibilityKey.visibility = isVisible;
         KeyHelper::addKey(visibilityKeys, visibilityKey);
     }
-    else
-        visibilityKeys[keyIndex].visibility = isVisible;
+    else {
+        if(keyIndex < visibilityKeys.size())
+            visibilityKeys[keyIndex].visibility = isVisible;
+    }
 }
 void SGNode::setPositionOnNode(Vector3 position)
 {
@@ -760,19 +769,19 @@ void SGNode::setKeyForFrame(int frameId, ActionKey& key){
     int index;
     if(positionKeys.size()) {
         index = KeyHelper::getKeyIndex(positionKeys, frameId);
-        if(index!=-1 && positionKeys[index].id == frameId){
+        if(index!=-1 && index < positionKeys.size() && positionKeys[index].id == frameId){
             positionKeys.erase(positionKeys.begin()+index);
         }
     }
     if(rotationKeys.size()) {
         index = KeyHelper::getKeyIndex(rotationKeys, frameId);
-        if(index!=-1 && rotationKeys[index].id == frameId){
+        if(index!=-1 &&  index < rotationKeys.size() && rotationKeys[index].id == frameId){
             rotationKeys.erase(rotationKeys.begin()+index);
         }
     }
     if(scaleKeys.size()) {
         index = KeyHelper::getKeyIndex(scaleKeys, frameId);
-        if(index!=-1 && scaleKeys[index].id == frameId){
+        if(index!=-1 && index < scaleKeys.size() && scaleKeys[index].id == frameId){
             scaleKeys.erase(scaleKeys.begin()+index);
         }
     }
@@ -803,19 +812,19 @@ Quaternion SGNode::GetLocalQuaternion(int boneIndex, Quaternion q)
 ActionKey SGNode::getKeyForFrame(int frameId){
     ActionKey key;
     int index = KeyHelper::getKeyIndex(positionKeys, frameId);
-    if(index!=-1 &&  positionKeys[index].id == frameId){
+    if(index!=-1 && index < positionKeys.size() &&  positionKeys[index].id == frameId){
         key.position = positionKeys[index].position;
         key.isPositionKey = true;
     }
     
     index = KeyHelper::getKeyIndex(rotationKeys, frameId);
-    if(index!=-1 && rotationKeys[index].id == frameId){
+    if(index!=-1 && index < rotationKeys.size() && rotationKeys[index].id == frameId){
         key.rotation = rotationKeys[index].rotation;
         key.isRotationKey = true;
     }
     
     index = KeyHelper::getKeyIndex(scaleKeys, frameId);
-    if(index!=-1 && scaleKeys[index].id == frameId){
+    if(index!=-1 && index < scaleKeys.size() && scaleKeys[index].id == frameId){
         key.scale = scaleKeys[index].scale;
         key.isScaleKey = true;
     }
@@ -1013,7 +1022,7 @@ void SGNode::readData(ifstream *filePointer)
                 
                 separator = nodeSpecificString.find(L"$_@");
                 fontProperties.push_back(nodeSpecificString.substr(0,separator));
-                if(separator >= nodeSpecificString.size() ||  separator == std::wstring::npos)
+                if(separator+3 >= nodeSpecificString.length() ||  separator == std::wstring::npos)
                     break;
                 nodeSpecificString = nodeSpecificString.substr(separator+3,nodeSpecificString.size()-1);
                 
@@ -1039,7 +1048,7 @@ void SGNode::readData(ifstream *filePointer)
                 
                 separator = nodeSpecificString.find("$_@");
                 fontProperties.push_back(nodeSpecificString.substr(0,separator));
-                if(separator >= nodeSpecificString.size() ||  separator == std::string::npos)
+                if(separator+3 >= nodeSpecificString.length() ||  separator == std::string::npos)
                     break;
                 nodeSpecificString = nodeSpecificString.substr(separator+3,nodeSpecificString.size()-1);
                 

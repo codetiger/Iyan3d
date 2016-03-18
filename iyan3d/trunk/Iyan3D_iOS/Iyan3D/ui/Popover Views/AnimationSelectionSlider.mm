@@ -250,7 +250,8 @@
     popover.sourceView = self.categoryBtn;
     
     popover.permittedArrowDirections = UIPopoverArrowDirectionUp;
-    [self presentViewController:view animated:YES completion:nil];
+    if(view != nil)
+        [self presentViewController:view animated:YES completion:nil];
 }
 
 - (IBAction)addBtnFunction:(id)sender {
@@ -664,6 +665,8 @@
         [self.delegate showOrHideProgress:0];
         return;
     }
+    if(!editorSceneLocal || !editorSceneLocal->loader)
+        return;
     
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes];

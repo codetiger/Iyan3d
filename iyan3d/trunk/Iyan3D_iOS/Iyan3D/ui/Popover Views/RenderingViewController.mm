@@ -87,7 +87,8 @@
     self.screenName = @"RenderingView iOS";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed:) name:@"creditsupdate" object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifiedUsage:) name:@"creditsused" object:nil];
+    
     cancelPressed = resAlertShown = NO;
     selectedIndex = 0;
     isAppInBg = false;
@@ -294,13 +295,12 @@
 - (void) creditsUsed:(NSNotification*) notification
 {
     NSDictionary* userInfo = notification.userInfo;
+    NSLog(@" \n userinfo %@ ", userInfo);
     BOOL network = [userInfo[@"network"]boolValue];
     [_checkCreditProgress stopAnimating];
     [_checkCreditProgress setHidden:YES];
     if(network) {
-        NSNumber* userCredits = userInfo[@"credits"];
-        NSLog(@"Credits Updated %@ ", userCredits);
-        [self performSelectorOnMainThread:@selector(verifyCreditsAndRender:) withObject:userCredits waitUntilDone:YES];
+        [self performSelectorOnMainThread:@selector(verifyCreditsAndRender:) withObject:userInfo waitUntilDone:YES];
     }
     else{
         [self.trimControl setHidden:NO];
@@ -308,10 +308,32 @@
     }
 }
 
-- (void) verifyCreditsAndRender:(NSNumber*)userCredits
+- (void) verifiedUsage:(NSNotification*) notification
+{
+    if(renderingExportImage == RENDER_VIDEO) {
+        [self performSelectorOnMainThread:@selector(doMakeVideoUIUpdate) withObject:nil waitUntilDone:YES];
+        
+        [self MakeVideo];
+        [self.makeVideoLoading stopAnimating];
+        [self.makeVideoLoading setHidden:YES];
+        [self.youtubeButton setHidden:false];
+        [self.youtubeButton setEnabled:true];
+        [self.rateButtonImage setEnabled:YES];
+        [self.rateButtonText setEnabled:YES];
+    }
+    
+    [self.exportButton setHidden:YES];
+    [self.exportButton setEnabled:NO];
+    [self.renderingProgressLabel setHidden:YES];
+    [self.renderingProgressBar setHidden:YES];
+    [self performSelectorOnMainThread:@selector(renderFinishAction:) withObject:[NSNumber numberWithInt:renderingExportImage] waitUntilDone:NO];
+}
+
+- (void) verifyCreditsAndRender:(NSDictionary*)userInfo
 {
     int valueForRender = 0;
-    
+    NSNumber* userCredits = userInfo[@"credits"];
+    BOOL premium = [userInfo[@"premium"] boolValue];
     
     if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
         valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 8 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
@@ -331,8 +353,18 @@
         }
         else
             [self renderBeginFunction:credits];
-    }
-    else{
+    } else if (premium) {
+        if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) {
+            [_creditLable setHidden:YES];
+            [self renderBeginFunction:credits];
+        }  else{
+            UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [notEnoughCredit show];
+            [notEnoughCredit setTag:CREDITS_VIEW];
+            [self.trimControl setHidden:NO];
+            [_nextButton setHidden:NO];
+        }
+    } else{
         UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [notEnoughCredit show];
         [notEnoughCredit setTag:CREDITS_VIEW];
@@ -453,7 +485,9 @@
         NSLog(@"The file has been zipped");
         
         
+        NSString *osId = @"1";
         NSString *uniqueId= [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+        NSString *deviceToken = [[AppHelper getAppHelper] userDefaultsForKey:@"deviceToken"];
         int startFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.leftValue + 1);
         int endFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.rightValue);
         printf("\n Frame %d %d " , startFrame , endFrame);
@@ -487,6 +521,8 @@
                 [formData appendPartWithFormData:[resolutionWidth dataUsingEncoding:NSUTF8StringEncoding] name:@"width"];
                 [formData appendPartWithFormData:[resolutionHeight dataUsingEncoding:NSUTF8StringEncoding] name:@"height"];
                 [formData appendPartWithFormData:[creditsStr dataUsingEncoding:NSUTF8StringEncoding] name:@"credits"];
+                [formData appendPartWithFormData:[deviceToken dataUsingEncoding:NSUTF8StringEncoding] name:@"pushid"];
+                [formData appendPartWithFormData:[osId dataUsingEncoding:NSUTF8StringEncoding] name:@"os"];
             }];
             NSLog(@"Request initiated");
             
@@ -617,23 +653,6 @@
     [self.delegate setShaderTypeForRendering:SHADER_DEFAULT];
     if(isCanceled)
         return;
-    if(renderingExportImage == RENDER_VIDEO) {
-        [self performSelectorOnMainThread:@selector(doMakeVideoUIUpdate) withObject:nil waitUntilDone:YES];
-        
-        [self MakeVideo];
-        [self.makeVideoLoading stopAnimating];
-        [self.makeVideoLoading setHidden:YES];
-        [self.youtubeButton setHidden:false];
-        [self.youtubeButton setEnabled:true];
-        [self.rateButtonImage setEnabled:YES];
-        [self.rateButtonText setEnabled:YES];
-    }
-    
-    [self.exportButton setHidden:YES];
-    [self.exportButton setEnabled:NO];
-    [self.renderingProgressLabel setHidden:YES];
-    [self.renderingProgressBar setHidden:YES];
-    [self performSelectorOnMainThread:@selector(renderFinishAction:) withObject:[NSNumber numberWithInt:renderingExportImage] waitUntilDone:NO];
     if(resolutionType != TWO_HUNDRED_FOURTY_P || (resolutionType == TWO_HUNDRED_FOURTY_P && !_watermarkSwitch.isOn))
         [self saveDeductedCredits:[credits intValue]];
 }
@@ -643,9 +662,11 @@
     int renderingType = [object intValue];
     NSString *tempDir = NSTemporaryDirectory();
     if(renderingExportImage == RENDER_VIDEO){
+        if(self.videoFilePath == nil || [self.videoFilePath isEqualToString:@""])
+            return;
         NSString *filePath = [NSString stringWithFormat:@"%@/myMovie.mov", tempDir];
         UISaveVideoAtPathToSavedPhotosAlbum(filePath,nil,nil,nil);
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Video was successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Video successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [alert show];
     }
     else {
@@ -675,7 +696,7 @@
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return (renderingExportImage == RENDER_IMAGE) ? [shaderArray count] : 2;
+    return [shaderArray count];
 }
 
 - (ShaderCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -733,6 +754,7 @@
             resAlertShown = YES;
         }
         self.resolutionSegment.selectedSegmentIndex = TWO_HUNDRED_FOURTY_P;
+        [self cameraResolutionChanged:nil];
         [self.renderDesc setText:[NSString stringWithFormat:@"Render with High Quality in cloud."]];
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
@@ -1066,6 +1088,9 @@
     NSFileManager *fileMgr = [[NSFileManager alloc] init];
     [fileMgr removeItemAtPath:self.videoFilePath error:&error];
     
+    if(self.videoFilePath == nil || [self.videoFilePath isEqualToString:@""])
+        return;
+    
     AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:self.videoFilePath] fileType:AVFileTypeQuickTimeMovie error:&error];
     NSLog(@" Video Error %@ ", error.localizedDescription);
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264, AVVideoCodecKey, [NSNumber numberWithInt:cameraResolutionWidth], AVVideoWidthKey, [NSNumber numberWithInt:cameraResolutionHeight], AVVideoHeightKey, nil];
@@ -1294,7 +1319,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     self.authController = nil;
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsupdate" object:nil];
-
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];
 }
 
 - (IBAction)transparentBgValueChanged:(id)sender {

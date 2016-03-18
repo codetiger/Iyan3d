@@ -175,7 +175,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     if((isJointSelected || (updatingScene->isRigMode && updatingScene->rigMan->isSkeletonJointSelected)) && updatingScene->controlType == SCALE)
         updatingScene->controlType = MOVE;
     
-    if((!isNodeSelected && updatingScene->selectedNodeIds.size() <= 0))
+    if((!isNodeSelected || !selectedNode) && (!isJointSelected || !selectedJoint) && updatingScene->selectedNodeIds.size() <= 0)
         return;
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;

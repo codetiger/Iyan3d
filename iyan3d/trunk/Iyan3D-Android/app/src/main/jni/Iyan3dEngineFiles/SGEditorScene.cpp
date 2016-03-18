@@ -158,6 +158,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     controlsPlane = new Plane3D();
     nodes.clear();
     totalFrames = 24;
+    assetIDCounter = 0;
     currentFrame = previousFrame = 0;
     cameraFOV = 72.0;
     cameraResolutionType = 0;
@@ -299,6 +300,8 @@ vector<string> SGEditorScene::getUserFileNames()
             userFileNames.push_back(sgNode->optionalFilePath);
         } else if (sgNode->assetId >= 60001 && sgNode->assetId < 60007)
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
+        else if (sgNode->getType() == NODE_IMAGE)
+            userFileNames.push_back(sgNode->textureName + ".png");
     }
     return userFileNames;
 }

@@ -193,6 +193,7 @@ BOOL missingAlertShown;
     [_center_progress setHidden:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersBG) name:@"AppGoneBackground" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openLoggedInView) name:@"renderCompleted" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersFG) name:@"applicationDidBecomeActive" object:nil];
     
     ScreenWidth = self.renderView.frame.size.width;
@@ -233,6 +234,12 @@ BOOL missingAlertShown;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AppGoneBackground" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"applicationDidBecomeActive" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
+}
+
+- (void) openLoggedInView
+{
+    [self loginBtnAction:nil];
 }
 
 - (void) appEntersBG
@@ -988,8 +995,10 @@ BOOL missingAlertShown;
 
 - (void) showLoadingActivity
 {
-    [_center_progress setHidden:NO];
-    [_center_progress startAnimating];
+    if(_center_progress != nil) {
+        [_center_progress setHidden:NO];
+        [_center_progress startAnimating];
+    }
 }
 
 - (void) hideLoadingActivity
@@ -1289,7 +1298,10 @@ BOOL missingAlertShown;
 {
     [self NormalHighLight];
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->totalFrames-1 inSection:0];
-    [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    if(toPath.row < [self collectionView:self.framesCollectionView numberOfItemsInSection:0])
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    else
+        return;
     editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = editorScene->totalFrames - 1;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
@@ -1300,7 +1312,10 @@ BOOL missingAlertShown;
 {
     [self NormalHighLight];
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:0 inSection:0];
-    [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    if(toPath.row < [self collectionView:self.framesCollectionView numberOfItemsInSection:0])
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    else
+        return;
     editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = 0;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
@@ -1581,7 +1596,8 @@ BOOL missingAlertShown;
         }
         case SWITCH_FRAME: {
             NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+            if(toPath.row < [self collectionView:self.framesCollectionView numberOfItemsInSection:0])
+                [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
             [self HighlightFrame];
             [self.framesCollectionView reloadData];
             break;
@@ -1661,7 +1677,8 @@ BOOL missingAlertShown;
         [self undoRedoButtonState:DEACTIVATE_REDO];
     
     NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-    [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    if(toPath.row > 0 && (int)toPath.row < editorScene->totalFrames && toPath.row < [self collectionView:self.framesCollectionView numberOfItemsInSection:0])
+        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     [self HighlightFrame];
     [self updateAssetListInScenes];
     [self.framesCollectionView reloadData];
@@ -1697,7 +1714,8 @@ BOOL missingAlertShown;
         [self NormalHighLight];
         editorScene->currentFrame++;
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
-        [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        if(toPath.row < [self collectionView:self.framesCollectionView numberOfItemsInSection:0])
+            [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         [self HighlightFrame];
         editorScene->setLightingOff();
         editorScene->actionMan->switchFrame((float)editorScene->currentFrame);
@@ -1784,8 +1802,9 @@ BOOL missingAlertShown;
         if(editorScene->selectedNodeId!=-1)
         {
             isSelected=YES;
-            if([Utility IsPadDevice]){
-                [self.objectList selectRowAtIndexPath:path animated:YES scrollPosition:editorScene->selectedNodeId];
+            if([Utility IsPadDevice]) {
+                if(path.row < [self tableView:self.objectList numberOfRowsInSection:0])
+                    [self.objectList selectRowAtIndexPath:path animated:YES scrollPosition:editorScene->selectedNodeId];
             }
             else
             {
@@ -1797,8 +1816,9 @@ BOOL missingAlertShown;
         {
             if(isSelected)
             {
-                if([Utility IsPadDevice]){
-                    [self.objectList deselectRowAtIndexPath:path animated:YES];
+                if([Utility IsPadDevice]) {
+                    if(path.row < [self tableView:self.objectList numberOfRowsInSection:0])
+                        [self.objectList deselectRowAtIndexPath:path animated:YES];
                 }
                 else{
                     if(_popUpVc)
@@ -2285,6 +2305,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         selectedNode = editorScene->selectedNodeId;
     }
     
+    assetAddType = IMPORT_ASSET_ACTION;
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
@@ -2692,6 +2713,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->totalFrames += addCount;
         NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->totalFrames-1 inSection:0];
         [self.framesCollectionView reloadData];
+    if(toPath.row < [self collectionView:self.framesCollectionView numberOfItemsInSection:0])
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 }
 
@@ -2724,16 +2746,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     else if(indexValue==CONTACT_US){
         [self.popoverController dismissPopoverAnimated:YES];
-        NSString *currentDeviceName;
-        if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
-            currentDeviceName = [deviceNames objectForKey:[self deviceName]];
-        else
-            currentDeviceName = @"Unknown Device";
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
             NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[self deviceName]],iOSVersion]];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)", [self deviceName],iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
         }else {
@@ -2847,16 +2864,24 @@ bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType, bool
     
     switch (nodeType) {
         case NODE_PARTICLES: {
-            NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
-            NSString* file = [name stringByDeletingPathExtension];
-            if ([file intValue] >= 50000 && ([file intValue] < 60000)) {
-                NSString* particlePath = [NSString stringWithFormat:@"%@%d.json", cacheDirectory, [file intValue]];
+            NSString* assetIdStr = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
+            if ([assetIdStr intValue] >= 50000 && ([assetIdStr intValue] < 60000)) {
+                NSString* particlePath = [NSString stringWithFormat:@"%@%d.json", cacheDirectory, [assetIdStr intValue]];
                 if (![[NSFileManager defaultManager] fileExistsAtPath:particlePath]) {
-                    NSString* filePath = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [file intValue]];
-                    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", [file intValue]];
+                    NSString* filePath = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [assetIdStr intValue]];
+                    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", [assetIdStr intValue]];
                     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
                         downloadFile(url, filePath);
-                      if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+                    NSString* meshfilePath = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, [assetIdStr intValue]];
+                    NSString* meshurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", [assetIdStr intValue]];
+                    if (![[NSFileManager defaultManager] fileExistsAtPath:meshfilePath])
+                        downloadFile(meshurl, meshfilePath);
+                    NSString* texfilePath = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, [assetIdStr intValue]];
+                    NSString* texurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%d.png", [assetIdStr intValue]];
+                    if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath])
+                        downloadFile(texurl, texfilePath);
+                    
+                      if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath]) {
                         if (!missingAlertShown) {
                             [[AppHelper getAppHelper] missingAlertView];
                             missingAlertShown = true;
@@ -3788,7 +3813,6 @@ void boneLimitsCallBack(){
     objVc = nil;
     scaleAutoRig.delegate = nil;
     scaleAutoRig = nil;
-    deviceNames = nil;
     self.imagePicker.delegate = nil;
     self.imagePicker = nil;
     self.popoverController.delegate = nil;

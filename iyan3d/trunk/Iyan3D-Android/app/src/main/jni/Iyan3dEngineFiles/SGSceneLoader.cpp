@@ -63,6 +63,8 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"));
         } else if (sgNode->getType() == NODE_IMAGE) {
             status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor));
+        } else if (sgNode->getType() == NODE_PARTICLES) {
+            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true);
         }
         
         if(!status)
@@ -122,6 +124,8 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
             status = currentScene->downloadMissingAssetsCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env,type);
         } else if (sgNode->getType() == NODE_IMAGE) {
             status = currentScene->downloadMissingAssetsCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor), env, type);
+        }  else if (sgNode->getType() == NODE_PARTICLES) {
+            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true);
         }
         
         if(!status)
@@ -264,6 +268,9 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     currentScene->nodes.push_back(sgNode);
     sgNode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(sgNode,actionType);
+    
+    if(sgNode->getType() == NODE_CAMERA)
+        ShaderManager::camPos = sgNode->node->getAbsolutePosition();
     if(sgNode->getType() == NODE_LIGHT) {
 #ifndef UBUNTU
         currentScene->initLightCamera(sgNode->node->getPosition());
@@ -278,6 +285,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->updater->resetMaterialTypes(false);
+    currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
     return true;
 }

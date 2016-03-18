@@ -249,8 +249,8 @@
     }
     else
         jsonAnimationArray = nil;
-
-    [self.delegate setAnimationData:jsonAnimationArray];
+    if(self.delegate != nil)
+        [self.delegate setAnimationData:jsonAnimationArray];
 }
 - (void)setAssetsDetails
 {
@@ -554,8 +554,10 @@
         }
     }
     }
-    if([restoreIdArr count] == 0)
-        [self.delegate transactionCancelled];
+    if([restoreIdArr count] == 0) {
+        if(self.delegate != nil)
+            [self.delegate transactionCancelled];
+    }
     [self removeTransactionObserver];
 }
 
@@ -573,13 +575,15 @@
                                             otherButtonTitles:nil];
     [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
-    [self.delegate transactionCancelled];
+    if(self.delegate != nil)
+        [self.delegate transactionCancelled];
     [self performSelectorInBackground:@selector(transactionCancelled) withObject:nil];
 }
 
 - (void)statusForRestorePurchase:(NSNumber*)object
 {
-    [self.delegate statusForRestorePurchase:object];
+    if(self.delegate != nil)
+        [self.delegate statusForRestorePurchase:object];
 }
 
 - (void)paymentQueue:(SKPaymentQueue*)queue updatedTransactions:(NSArray*)transactions
@@ -658,15 +662,18 @@
 
 - (void)transactionCancelled
 {
-    [self.delegate transactionCancelled];
+    if(self.delegate != nil)
+        [self.delegate transactionCancelled];
 }
 - (void)statusForOBJImport:(NSNumber*)status
 {
-    [self.delegate statusForOBJImport:status];
+    if(self.delegate != nil)
+        [self.delegate statusForOBJImport:status];
 }
 - (void)premiumUnlocked
 {
-    [self.delegate premiumUnlocked];
+    if(self.delegate != nil)
+        [self.delegate premiumUnlocked];
 }
 
 - (void)parseHelpJson
@@ -726,7 +733,6 @@
     NSURL *url = [NSURL URLWithString:phpPath];
     NSString *postPath = phpPath;
     
-    NSLog(@" \n Num of Credits %d ", credits);
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSLog(@" \n unique id %@ Deduct credits %d ", uniqueId, credits);
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", usageType, @"usagetype", [NSString stringWithFormat:@"%d", credits], @"credits", receiptDataStr, @"receiptdata", nil]];
@@ -737,20 +743,21 @@
         
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         int status = [[dict objectForKey:@"result"] intValue];
+        NSString* result = [dict objectForKey:@"result"];
         NSLog(@" \n Dictonary %@ ", dict);
+        
         if(status > 0) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsused" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result,@"result",nil]];
         } else {
             NSString *message = [dict objectForKey:@"message"];
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
 
         }
         
-        if(([receiptDataStr isEqualToString:@""] && status > 0) || receiptDataStr.length > 5)
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsused" object:nil];
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So unable to complete the operation." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
                                          [userNameAlert show];
                                      }];
     [operation start];
@@ -770,11 +777,7 @@
     
     NSString* deviceId = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
     NSString* osVersion = [UIDevice currentDevice].systemVersion;
-    NSDictionary* deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];
-    NSString* hwversion = @"Unknown";
-    if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]]) {
-        hwversion = [deviceNames objectForKey:[self deviceName]];
-    }
+    NSString* hwversion = [self deviceName];
     
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", name, @"username", email, @"email", hwversion, @"hwversion", osVersion, @"osversion", deviceId, @"deviceid", [NSString stringWithFormat:@"%d",type], @"signintype", nil]];
@@ -783,7 +786,9 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSLog(@" Login : %@ ", dict);
         int status = [[dict objectForKey:@"result"] intValue];
+        BOOL premium = [[dict objectForKey:@"premium"] boolValue];
         if(status > 0) {
             credits = [[dict objectForKey:@"credits"] intValue];
             [self saveToUserDefaults:[NSNumber numberWithInt:credits] withKey:@"credits"];
@@ -791,7 +796,7 @@
             NSString *message = [dict objectForKey:@"message"];
             [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:YES], @"network", nil]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:YES], @"network", [NSNumber numberWithBool:premium], @"premium", nil]];
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);

@@ -232,6 +232,39 @@ didSignInForUser:(GIDGoogleUser *)user
     [GIDSignIn sharedInstance].allowsSignInWithWebView = sender.on;
 }
 
+#pragma mark - AppHelperDelegates
+
+-(void)loadingViewStatus:(BOOL)status
+{
+    
+}
+-(void)statusForOBJImport:(NSNumber*)object
+{
+    
+}
+-(void)premiumUnlocked
+{
+    
+}
+-(void)addRestoreId:(NSString*)productIdentifier
+{
+    
+}
+-(void)statusForRestorePurchase:(NSNumber *)object
+{
+    
+}
+-(void)transactionCancelled
+{
+    
+}
+-(void)setAnimationData:(NSArray*)allAnimations
+{
+    
+}
+
+#pragma mark - dealloc
+
 -(void)deallocMem{
     [GIDSignIn sharedInstance].uiDelegate = nil;
     [GIDSignIn sharedInstance].delegate = nil;

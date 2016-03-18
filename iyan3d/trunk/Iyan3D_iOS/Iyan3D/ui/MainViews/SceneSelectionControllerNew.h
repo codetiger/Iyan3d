@@ -30,7 +30,6 @@
     NSDateFormatter *dateFormatter;
     int currentSelectedScene;
     CGPoint cell_center;
-    NSDictionary *deviceNames;
     int sceneToBeRenamed;
     CGFloat screenHeight;
     SettingsViewController *settingsVc;

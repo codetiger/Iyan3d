@@ -368,5 +368,25 @@
     [_restorePurchaseProgress setHidden:YES];
 }
 
+-(void)loadingViewStatus:(BOOL)status
+{
+    
+}
+-(void)statusForOBJImport:(NSNumber*)object
+{
+    
+}
+-(void)premiumUnlocked
+{
+    
+}
+-(void)addRestoreId:(NSString*)productIdentifier
+{
+    
+}
+-(void)setAnimationData:(NSArray*)allAnimations
+{
+    
+}
 
 @end

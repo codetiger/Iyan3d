@@ -49,7 +49,6 @@
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
-    deviceNames = [[AppHelper getAppHelper] parseJsonFileWithName:@"deviceCodes"];
     if([Utility IsPadDevice]){
         [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
@@ -75,11 +74,28 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"openrenderTasks"]) {
+        [self openLoggedInView];
+        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"openrenderTasks"];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openLoggedInView) name:@"renderCompleted" object:nil];
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void) openLoggedInView
+{
+    [self loginBtnAction:nil];
 }
 
 #pragma Button Actions
@@ -94,18 +110,11 @@
 
 - (IBAction)feedBackButtonAction:(id)sender {
     
-    NSString *currentDeviceName;
-    
-    if(deviceNames != nil && [deviceNames objectForKey:[[AppHelper getAppHelper] deviceName]])
-        currentDeviceName = [deviceNames objectForKey:[[AppHelper getAppHelper] deviceName]];
-    else
-        currentDeviceName = @"Unknown Device";
-    
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         picker.mailComposeDelegate = self;
         NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[[AppHelper getAppHelper] deviceName]],iOSVersion]];
+        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)", [self deviceName],iOSVersion]];
         [picker setToRecipients:usersTo];
         [self presentModalViewController:picker animated:YES];
     }else {
@@ -234,16 +243,11 @@
     }
     else if(indexValue==CONTACT_US){
         [self.popoverController dismissPopoverAnimated:YES];
-        NSString *currentDeviceName;
-        if(deviceNames != nil && [deviceNames objectForKey:[self deviceName]])
-            currentDeviceName = [deviceNames objectForKey:[self deviceName]];
-        else
-            currentDeviceName = @"Unknown Device";
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
             NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)",[deviceNames objectForKey:[self deviceName]],iOSVersion]];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)", [self deviceName],iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
         }else {
@@ -610,7 +614,6 @@
     [scenesArray removeAllObjects];
     scenesArray = nil;
     dateFormatter = nil;
-    deviceNames = nil;
     settingsVc = nil;
     loginVc = nil;
     self.popUpVc = nil;

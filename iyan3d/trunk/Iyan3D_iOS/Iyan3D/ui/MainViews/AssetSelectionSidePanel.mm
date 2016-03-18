@@ -66,6 +66,41 @@
     [_modelCategory setHidden:(viewType == IMPORT_MODELS) ? NO : YES];
 }
 
+ - (void)viewDidAppear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseCame) name:@"AssetsSet" object:nil];
+    
+    if(assetArray == nil || [assetArray count] == 0) {
+        [self.assetLoading setHidden:NO];
+        [self.assetLoading setHidesWhenStopped:YES];
+        [self.assetLoading startAnimating];
+        [self performSelectorInBackground:@selector(downloadAssetsData) withObject:nil];
+    } else
+        [self.assetLoading setHidden:YES];
+}
+
+- (void) downloadAssetsData
+{
+    [[AppHelper getAppHelper] downloadJsonData:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AssetsSet" object:nil];
+}
+
+- (void) responseCame
+{
+    [self performSelectorOnMainThread:@selector(reloadAssetsView) withObject:nil waitUntilDone:NO];
+}
+
+- (void) reloadAssetsView
+{
+    assetArray = [cache GetAssetList:(viewType == IMPORT_MODELS) ? ALLMODELS : IMPORT_PARTICLE  Search:@""];
+    [self.assetLoading setHidden:YES];
+    [self.assetsCollectionView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

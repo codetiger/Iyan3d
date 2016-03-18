@@ -439,4 +439,27 @@
     [AppHelper getAppHelper].delegate = nil;
 }
 
+-(void)loadingViewStatus:(BOOL)status
+{
+    
+}
+
+-(void)premiumUnlocked
+{
+    
+}
+-(void)addRestoreId:(NSString*)productIdentifier
+{
+    
+}
+-(void)statusForRestorePurchase:(NSNumber *)object
+{
+    
+}
+-(void)setAnimationData:(NSArray*)allAnimations
+{
+    
+}
+
+
 @end
