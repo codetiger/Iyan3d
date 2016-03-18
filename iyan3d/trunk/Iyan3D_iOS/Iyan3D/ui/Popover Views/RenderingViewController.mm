@@ -758,7 +758,7 @@
         [self.renderDesc setText:[NSString stringWithFormat:@"Render with High Quality in cloud."]];
         shaderType = [shaderArray[indexPath.row] intValue];
         NSLog(@" Selcted index: %d",(int)indexPath.row);
-        [self.nextButton setTitle:@"Publish" forState:UIControlStateNormal];
+        [self.nextButton setTitle:@"Upload" forState:UIControlStateNormal];
         selectedIndex = (int)indexPath.row;
         [self.renderingTypes reloadData];
     }
