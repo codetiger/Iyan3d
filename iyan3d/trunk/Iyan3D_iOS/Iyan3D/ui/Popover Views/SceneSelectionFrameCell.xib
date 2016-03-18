@@ -30,7 +30,6 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <state key="normal" image="property-icon.png"/>
                         <connections>
-                            <action selector="propertiesAction:" destination="-1" eventType="touchUpInside" id="7Zi-9y-fV6"/>
                             <action selector="propertiesAction:" destination="Rfu-0C-76h" eventType="touchUpInside" id="COQ-Sp-yvV"/>
                         </connections>
                     </button>

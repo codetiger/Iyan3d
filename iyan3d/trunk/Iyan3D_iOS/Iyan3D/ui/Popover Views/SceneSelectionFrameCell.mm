@@ -50,4 +50,50 @@
         [self.popoverController dismissPopoverAnimated:YES];
     }
 }
+
+- (void) animationBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void) importBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void) exportBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void) viewBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void) infoBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void) addFrameBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void) myObjectsBtnDelegateAction:(int)indexValue
+{
+    
+}
+- (void)highlightObjectList
+{
+    
+}
+- (void) loginBtnAction
+{
+    
+}
+- (void) optionBtnDelegate:(int)indexValue
+{
+    
+}
+- (NODE_TYPE) getNodeType:(int)nodeId
+{
+    
+}
+
 @end
