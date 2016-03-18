@@ -213,22 +213,17 @@
         return nil;
     
     cell.renderlabel.text = rItem.taskName;
-    [cell.renderProgressLabel setHidden:(indexPath.section == COMPLETED || (progressingTasks != nil && [progressingTasks count] == 0))];
     NSString* progressStr = (rItem.taskProgress > 0) ? [NSString stringWithFormat:@"%d%%",rItem.taskProgress] : @"In Queue";
+    progressStr = (indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) ? progressStr : @"Download";
     cell.renderProgressLabel.text = progressStr;
     cell.dateLabel.text = rItem.dateAdded;
-    [cell.downloadBtn setHidden:(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0)];
-    
-    [cell.downloadBtn setTag:rItem.taskId];
+    [cell.renderProgressLabel setTag:rItem.taskId];
     
     if(downloadCompletedTaskIds == rItem.taskId){
         [cell.downloadProgress stopAnimating];
         [cell.downloadProgress setHidden:YES];
-        [cell.downloadBtn setHidden:NO];
+        cell.renderProgressLabel.text = @"Download";
     }
-    
-
-    //[cell.downloadBtn addTarget:self action:@selector(downloadOutputVideo:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
@@ -238,9 +233,8 @@
     RenderTableViewCell *cell = [self.renderStatus cellForRowAtIndexPath:indexPath];
     [cell.downloadProgress setHidden:NO];
     [cell.downloadProgress startAnimating];
-    [cell.downloadBtn setHidden:YES];
-    if(downloadCompletedTaskIds != cell.downloadBtn.tag)
-        [self downloadOutputVideo:(int)cell.downloadBtn.tag];
+    if(downloadCompletedTaskIds != cell.renderProgressLabel.tag)
+        [self downloadOutputVideo:(int)cell.renderProgressLabel.tag];
 }
 
 - (void) downloadOutputVideo:(int)taskId

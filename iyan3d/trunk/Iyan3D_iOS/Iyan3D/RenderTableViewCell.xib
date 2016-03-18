@@ -26,10 +26,6 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iRV-AZ-lYI">
-                        <rect key="frame" x="213" y="8" width="79" height="30"/>
-                        <state key="normal" title="Download"/>
-                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIN-cH-CQg">
                         <rect key="frame" x="8" y="22" width="197" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -43,7 +39,6 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="dateLabel" destination="NIN-cH-CQg" id="XX5-Fb-4C7"/>
-                <outlet property="downloadBtn" destination="iRV-AZ-lYI" id="Ot9-ou-Mp7"/>
                 <outlet property="downloadProgress" destination="aVv-PL-VaL" id="ovZ-gM-9ox"/>
                 <outlet property="renderProgressLabel" destination="34u-Os-mMx" id="67U-a6-jWQ"/>
                 <outlet property="renderlabel" destination="LFG-o1-lfq" id="gHw-Gl-Lqp"/>
