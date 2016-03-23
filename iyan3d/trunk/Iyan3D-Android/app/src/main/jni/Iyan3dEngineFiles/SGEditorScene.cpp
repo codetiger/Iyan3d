@@ -289,12 +289,14 @@ vector<string> SGEditorScene::getUserFileNames()
         if((sgNode->assetId > 0 && sgNode->textureName.find(to_string(sgNode->assetId)) ==  string::npos) || (sgNode->assetId == 0 && sgNode->textureName.length() > 0))
             userFileNames.push_back(sgNode->textureName + ".png");
         
-        if(sgNode->assetId >= 40000 && sgNode->assetId < 50000 && sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos) {
+        if(sgNode->assetId >= 40000 && sgNode->assetId < 50000) {
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgr");
-            userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
-        } else if (sgNode->assetId >= 20000 && sgNode->assetId < 30000 && (sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos || sgNode->textureName == "-1" || sgNode->textureName == "" || sgNode->props.perVertexColor)) {
+            if(sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos)
+                userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
+        } else if (sgNode->assetId >= 20000 && sgNode->assetId < 30000) {
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
-            if(!sgNode->props.perVertexColor)
+            userFileNames.push_back(to_string(sgNode->assetId) + ".obj");
+            if(sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos)
                 userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
         } else if ((nType == NODE_TEXT || nType == NODE_TEXT_SKIN) && (sgNode->assetId < 10000 || sgNode->assetId > 20000)) {
             userFileNames.push_back(sgNode->optionalFilePath);

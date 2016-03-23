@@ -239,7 +239,8 @@ BOOL missingAlertShown;
 
 - (void) openLoggedInView
 {
-    [self loginBtnAction:nil];
+    if(editorScene && !editorScene->freezeRendering)
+        [self performSelectorOnMainThread:@selector(loginBtnAction:) withObject:nil waitUntilDone:YES];
 }
 
 - (void) appEntersBG

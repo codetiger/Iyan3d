@@ -95,7 +95,7 @@
 
 - (void) openLoggedInView
 {
-    [self loginBtnAction:nil];
+    [self performSelectorOnMainThread:@selector(loginBtnAction:) withObject:nil waitUntilDone:YES];
 }
 
 #pragma Button Actions
