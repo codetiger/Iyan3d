@@ -167,3 +167,14 @@ void FileHelper::setDocumentsDirectory(string documentsPath)
 char * FileHelper::getCharacterPointer(std::string &str){
     return strcpy((char*)malloc(str.length()+1), str.c_str());
 }
+
+ bool FileHelper::checkFileExists(std::string fileName)
+ {
+     if(FILE *file = fopen(fileName.c_str(), "r"))
+     {
+         fclose(file);
+         return true;
+     }else {
+         return false;
+     }
+ }

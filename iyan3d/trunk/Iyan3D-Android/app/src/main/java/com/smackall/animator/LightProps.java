@@ -1,5 +1,6 @@
 package com.smackall.animator;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.opengl.GL2JNILib;
 
 /**
  * Created by Sabish.M on 11/3/16.
@@ -28,7 +30,8 @@ public class LightProps implements View.OnTouchListener,SeekBar.OnSeekBarChangeL
     private Context mContext;
     LinearLayout colorPreview;
     Bitmap bitmap;
-
+    int touchedRGB;
+    private Dialog dialog;
     public LightProps(Context mContext)
     {
         this.mContext = mContext;
@@ -41,7 +44,7 @@ public class LightProps implements View.OnTouchListener,SeekBar.OnSeekBarChangeL
         light_prop.setContentView(R.layout.light_props);
         light_prop.setCancelable(false);
         light_prop.setCanceledOnTouchOutside(true);
-        light_prop.getWindow().setLayout(Constants.width / 3, (int) (Constants.height/1.5));
+        light_prop.getWindow().setLayout(Constants.width / 3, (int) (Constants.height / 1.5));
         Window window = light_prop.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity= Gravity.TOP | Gravity.START;
@@ -60,6 +63,7 @@ public class LightProps implements View.OnTouchListener,SeekBar.OnSeekBarChangeL
         ImageView color_picker = (ImageView)light_prop.findViewById(R.id.color_picker);
         bitmap = ((BitmapDrawable)color_picker.getDrawable()).getBitmap();
         initViews(light_prop);
+        dialog = light_prop;
         light_prop.show();
     }
 
@@ -70,6 +74,11 @@ public class LightProps implements View.OnTouchListener,SeekBar.OnSeekBarChangeL
         ((SeekBar)light_prop.findViewById(R.id.shadow_darkness)).setOnSeekBarChangeListener(this);
         ((SeekBar)light_prop.findViewById(R.id.distance)).setOnSeekBarChangeListener(this);
         ((Button)light_prop.findViewById(R.id.delete_animation)).setOnClickListener(this);
+
+        float distance = (float) ((GL2JNILib.nodeSpecificFloat()/300.0)-0.001);
+        colorPreview.setBackgroundColor(Color.argb(255,(int) GL2JNILib.lightx() * 255, (int) GL2JNILib.lighty() * 255, (int) GL2JNILib.lightz() * 255));
+        ((SeekBar)light_prop.findViewById(R.id.distance)).setProgress((int) (distance * 100));
+        ((SeekBar)light_prop.findViewById(R.id.shadow_darkness)).setProgress((int) (GL2JNILib.shadowDensity()*100));
     }
 
     @Override
@@ -93,11 +102,11 @@ public class LightProps implements View.OnTouchListener,SeekBar.OnSeekBarChangeL
         } else if (y > (bitmap.getHeight() - 1)) {
             y = (bitmap.getHeight() - 1);
         }
-        int touchedRGB = bitmap.getPixel(x, y);
-        int red = Color.red(touchedRGB);
-        int green = Color.green(touchedRGB);
-        int blue = Color.blue(touchedRGB);
+        touchedRGB = bitmap.getPixel(x, y);
         colorPreview.setBackgroundColor(touchedRGB);
+        update(false);
+        if(event.getAction() == MotionEvent.ACTION_UP)
+            update(true);
         return true;
     }
 
@@ -113,11 +122,22 @@ public class LightProps implements View.OnTouchListener,SeekBar.OnSeekBarChangeL
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        update(true);
     }
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == R.id.delete_animation) {
+            ((EditorView) ((Activity) mContext)).delete.showDelete();
+            this.dialog.dismiss();
+        }
+    }
 
+    private void update(boolean storeAction)
+    {
+        int red = Color.red(touchedRGB);
+        int green = Color.green(touchedRGB);
+        int blue = Color.blue(touchedRGB);
+        GL2JNILib.changeLightProperty(red/255.0f,green/255.0f,blue/255.0f,((SeekBar)dialog.findViewById(R.id.shadow_darkness)).getProgress()/100.0f,((SeekBar)dialog.findViewById(R.id.distance)).getProgress()/100.0f,storeAction);
     }
 }

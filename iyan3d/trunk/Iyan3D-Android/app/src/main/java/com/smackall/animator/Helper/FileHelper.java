@@ -12,11 +12,15 @@
 package com.smackall.animator.Helper;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -54,11 +58,6 @@ public class FileHelper {
         }
     }
 
-    /*
-     * Enabled aggressive block sorting
-     * Enabled unnecessary exception pruning
-     * Enabled aggressive exception aggregation
-     */
     public static boolean copy(String string2, String string3) {
         File file = new File(string2);
         File file2 = new File(string3);
@@ -118,7 +117,7 @@ public class FileHelper {
     }
 
     public static String getFileNameFromPath(String path){
-        return path.substring(path.lastIndexOf("/"), path.length());
+        return path.substring(path.lastIndexOf("/")+1, path.length());
     }
 
     public static String getFileWithoutExt(File file) {
@@ -216,6 +215,89 @@ public class FileHelper {
                 copy(files[i].getAbsoluteFile(), file);
                 files[i].getAbsoluteFile().delete();
             }
+        }
+    }
+
+    public static void copyAssetsDirToLocal(Context context) {
+        AssetManager assetManager = context.getAssets();
+
+        String[] assets = null;
+        try {
+            assets = assetManager.list("");
+        } catch (IOException e) {
+
+        }
+
+        if (assets != null) for (String filename : assets) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+                in = assetManager.open(filename);
+                File outFile = new File(PathManager.DefaultAssetsDir+"/", filename);
+                out = new FileOutputStream(outFile);
+                copyFile(in, out);
+
+            } catch(IOException e) {
+
+            }
+            finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        // NOOP
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e) {
+                        // NOOP
+                    }
+                }
+
+            }
+        }
+    }
+    private static void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
+    }
+
+    public static void copySingleAssetFile(Context context, String filename, String md5Filename,String ext,String filePath) {
+        AssetManager assetManager = context.getAssets();
+        String filePathStr = null;
+        if(filePath == null) {
+            filePathStr = PathManager.LocalScenesFolder;
+        }
+        else {
+            filePathStr = filePath;
+        }
+        File fileDir = new File(filePathStr);
+        if(!fileDir.exists())
+            fileDir.mkdir();
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(filename);
+            String newFileName = filePathStr+"/"+md5Filename+ext;
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
         }
     }
 }

@@ -424,6 +424,75 @@ public class DatabaseHelper {
         return null;
     }
 
+    public int getNextAnimationAssetId()
+    {
+        String querySQL = "SELECT * FROM "+ANIM_TABLE_MYANIMASSETS;
+        List<AnimDB> animList = new ArrayList<AnimDB>();
+        SQLiteDatabase animDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+
+        Cursor c = animDb.rawQuery(querySQL, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    AnimDB anim = new AnimDB();
+                    anim.setID(Integer.parseInt(c.getString(0)));
+                    animList.add(anim);
+                } while (c.moveToNext());
+            }
+        } catch (Exception e) {
+            if (c != null)
+                c.close();
+            if (animDb.isOpen())
+                animDb.close();
+        }
+
+        if(c!= null)
+            c.close();
+        if (animDb.isOpen())
+            animDb.close();
+
+        return (animList.size() > 0) ? animList.get(animList.size() - 1).getID() : 1;
+    }
+
+    public List<AnimDB> getAllMyAnimation(int type)
+    {
+        String querySQL = "SELECT * FROM "+ANIM_TABLE_MYANIMASSETS+" WHERE "+ANIM_KEY_TYPE+" = "+type;
+        List<AnimDB> animList = new ArrayList<AnimDB>();
+        SQLiteDatabase animDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        Cursor c = animDb.rawQuery(querySQL, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    AnimDB anim = new AnimDB();
+                    anim.setID(Integer.parseInt(c.getString(0)));
+                    anim.setAssetsId(c.getInt(1));
+                    anim.setAnimName(c.getString(2));
+                    anim.setKeyword(c.getString(3));
+                    anim.setUserid(c.getString(4));
+                    anim.setUserName(c.getString(5));
+                    anim.setAnimType(c.getInt(6));
+                    anim.setBonecount(c.getInt(7));
+                    anim.setFeaturedindex(c.getInt(8));
+                    anim.setUploaded(c.getString(9));
+                    anim.setDownloads(c.getInt(10));
+                    anim.setRating(c.getInt(11));
+                    anim.setPublishedId(c.getInt(12));
+                    animList.add(anim);
+                } while (c.moveToNext());
+            }
+        } catch (Exception e) {
+            if (c != null)
+                c.close();
+            if (animDb.isOpen())
+                animDb.close();
+        }
+        if(c!= null)
+            c.close();
+        if (animDb.isOpen())
+            animDb.close();
+        return animList;
+    }
+
     public List<AnimDB> getAllMyAnimation(int tableType,int type,String keyWord) {
         String querySQL = "";
         if(tableType == Constants.MYANIMATION_DOWNLOAD) {
@@ -834,10 +903,45 @@ public class DatabaseHelper {
         return count;
     }
 
-    public List<AssetsDB> getSingleModelDetail(String columnName, String keyWord) {
+    public List<AssetsDB> getMyModelWithAssetId(int assetId) {
         List<AssetsDB> assetsList = new ArrayList<AssetsDB>();
         SQLiteDatabase assetsDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        Cursor c = assetsDb.rawQuery("SELECT  * FROM " + ASSET_TABLE_ASSETS + " WHERE " + columnName + " LIKE " + "'" + keyWord + "'", null);
+        Cursor c = assetsDb.rawQuery("SELECT  * FROM " + ASSET_TABLE_MY_ASSETS + " WHERE " + ASSET_KEY_ASSETSID + " = " + assetId , null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    AssetsDB assets = new AssetsDB();
+                    assets.setID(Integer.parseInt(c.getString(0)));
+                    assets.setAssetName(c.getString(1));
+                    assets.setIap(c.getInt(2));
+                    assets.setAssetsId(c.getInt(3));
+                    assets.setType(c.getInt(4));
+                    assets.setNbones(c.getInt(5));
+                    assets.setKeywords(c.getString(6));
+                    assets.setHash(c.getString(7));
+                    assets.setDateTime(c.getString(8));
+                    assetsList.add(assets);
+                } while (c.moveToNext());
+            }
+        } catch (Exception e) {
+            if (c != null)
+                c.close();
+            if (assetsDb.isOpen())
+                assetsDb.close();
+            return null;
+        }
+        if (c != null)
+            c.close();
+        if (assetsDb.isOpen())
+            assetsDb.close();
+        return assetsList;
+    }
+
+
+    public List<AssetsDB> getModelWithAssetId(int assetId) {
+        List<AssetsDB> assetsList = new ArrayList<AssetsDB>();
+        SQLiteDatabase assetsDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        Cursor c = assetsDb.rawQuery("SELECT  * FROM " + ASSET_TABLE_ASSETS + " WHERE " + ASSET_KEY_ASSETSID + " = " + assetId , null);
         try {
             if (c.moveToFirst()) {
                 do {

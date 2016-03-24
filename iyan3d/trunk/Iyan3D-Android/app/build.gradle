@@ -18,8 +18,11 @@ repositories {
 }
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId 'com.smackall.animator'
         minSdkVersion 14
@@ -59,6 +62,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+        debug {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+        }
     }
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn ndkBuild
@@ -71,8 +76,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/jcodec-0.1.9.jar')
-    compile files('libs/jcodec-0.1.6-3-sources.jar')
-    compile files('libs/jcodec-javase-0.1.9.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }

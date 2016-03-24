@@ -170,8 +170,8 @@ PQhandle pqInsert( PriorityQ *pq, PQkey keyNew )
 
     /* If the heap overflows, double its size. */
     pq->max <<= 1;
-    pq->nodes = (PQnode *)memRealloc( pq->nodes,
-				     (size_t)
+    pq->nodes = (PQnode *)memRealloc( pq->nodes, 
+				     (size_t) 
 				     ((pq->max + 1) * sizeof( pq->nodes[0] )));
     if (pq->nodes == NULL) {
        pq->nodes = saveNodes;	/* restore ptr to free upon return */
@@ -179,7 +179,7 @@ PQhandle pqInsert( PriorityQ *pq, PQkey keyNew )
     }
     pq->handles = (PQhandleElem *)memRealloc( pq->handles,
 			                     (size_t)
-			                      ((pq->max + 1) *
+			                      ((pq->max + 1) * 
 					       sizeof( pq->handles[0] )));
     if (pq->handles == NULL) {
        pq->handles = saveHandles; /* restore ptr to free upon return */

@@ -6,19 +6,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.SeekBar;
+import android.widget.Switch;
 
 import com.smackall.animator.Adapters.TextSelectionAdapter;
 import com.smackall.animator.DownloadManager.AddToDownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManager;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.TextDB;
+import com.smackall.animator.Helper.UIHelper;
 
 /**
  * Created by Sabish.M on 7/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class TextSelection implements View.OnClickListener {
+
+public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChangeListener {
 
     private Context mContext;
     private DatabaseHelper db;
@@ -26,6 +32,9 @@ public class TextSelection implements View.OnClickListener {
     private AddToDownloadManager addToDownloadManager;
     private DownloadManager downloadManager;
     ViewGroup insertPoint;
+    View v;
+    public TextDB textDB = new TextDB();
+
     public TextSelection(Context context,DatabaseHelper db,AddToDownloadManager addToDownloadManager,DownloadManager downloadManager){
         this.mContext = context;
         this.db = db;
@@ -47,7 +56,7 @@ public class TextSelection implements View.OnClickListener {
         insertPoint.setVisibility(View.VISIBLE);
         insertPoint.removeAllViews();
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.text_view,insertPoint,false);
+        v = vi.inflate(R.layout.text_view,insertPoint,false);
         insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 
         initViews(v);
@@ -60,7 +69,8 @@ public class TextSelection implements View.OnClickListener {
         ((Button)v.findViewById(R.id.cancel_textView)).setOnClickListener(this);
         ((Button)v.findViewById(R.id.add_text_btn)).setOnClickListener(this);
         ((Button)v.findViewById(R.id.color_picker_btn)).setOnClickListener(this);
-
+        ((Button)v.findViewById(R.id.withBone)).setOnClickListener(this);
+        ((SeekBar)v.findViewById(R.id.bevalSlider)).setOnSeekBarChangeListener(this);
     }
 
     private void initTextGrid(GridView gridView)
@@ -70,16 +80,20 @@ public class TextSelection implements View.OnClickListener {
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
+        textSelectionAdapter.downloadFonts();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.color_picker_btn:
-                ((EditorView)((Activity)mContext)).colorPicker.showColorPicker(v,null);
+                ((EditorView)((Activity)mContext)).colorPicker.showColorPicker(v,null,Constants.TEXT_VIEW);
                 break;
             case R.id.cancel_textView:
             case R.id.add_text_btn:
+                textDB.setTempNode((v.getId() == R.id.cancel_textView));
+                importText();
+                ((EditorView)((Activity)mContext)).renderManager.removeTempNode();
                 downloadManager.cancelAll();
                 insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
@@ -87,6 +101,34 @@ public class TextSelection implements View.OnClickListener {
                 db = null;
                 textSelectionAdapter = null;
                 break;
+            case R.id.withBone:
+                importText();
+                break;
         }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        textDB.setTempNode(true);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+       importText();
+    }
+
+    public void importText(){
+        if(textDB.getFilePath().equals("-1")){ UIHelper.informDialog(mContext, "Please Choose Font Style."); return;}
+        textDB.setAssetAddType(Constants.IMPORT_ASSET_ACTION);
+        textDB.setAssetName(((EditText) v.findViewById(R.id.inputText)).getText().toString());
+        textDB.setBevalValue(((SeekBar) v.findViewById(R.id.bevalSlider)).getProgress());
+        textDB.setFontSize(10);
+        textDB.setTextureName("-1");
+        textDB.setTypeOfNode(((Switch) v.findViewById(R.id.withBone)).isChecked() ? Constants.ASSET_TEXT_RIG : Constants.ASSET_TEXT);
+        ((EditorView)((Activity)mContext)).renderManager.importText(textDB);
     }
 }

@@ -34,8 +34,10 @@
 ** $Header: /home/krh/git/sync/mesa-cvs-repo/Mesa/src/glu/sgi/libtess/tessmono.c,v 1.1 2001/03/17 00:25:41 brianp Exp $
 */
 
+#include "gluos.h"
 #include <stdlib.h>
 #include "geom.h"
+#include "mesh.h"
 #include "tessmono.h"
 #include <assert.h>
 

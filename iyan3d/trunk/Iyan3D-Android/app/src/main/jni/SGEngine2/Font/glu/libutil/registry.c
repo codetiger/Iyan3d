@@ -28,10 +28,11 @@
  * Silicon Graphics, Inc.
  */
 
-#include "../include/gluos.h"
-#include "../include/glu.h"
+#include "gluos.h"
+#include "glu.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static const GLubyte versionString[] = "1.3";
 static const GLubyte extensionString[] = "";

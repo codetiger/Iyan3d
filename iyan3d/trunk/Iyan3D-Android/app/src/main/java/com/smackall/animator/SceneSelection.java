@@ -51,6 +51,7 @@ public class SceneSelection extends AppCompatActivity {
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
         List<SceneDB> sceneDBs = db.getAllScenes();
         String sceneName = (sceneDBs.size() <= 0) ? "My Scene " + 1 : "My Scene " + Integer.toString(sceneDBs.get(db.getSceneCount() - 1).getID() + 1);
+        FileHelper.copySingleAssetFile(SceneSelection.this, "Stay Hungry Stay Foolish.png", FileHelper.md5(sceneName), ".png", null);
         db.addNewScene(new SceneDB(sceneName, FileHelper.md5(sceneName), date));
         this.sceneAdapter.sceneDBs = db.getAllScenes();
         this.sceneAdapter.notifyDataSetChanged();
@@ -138,10 +139,6 @@ public class SceneSelection extends AppCompatActivity {
     public void loadScene(int position){
         Intent editorScene = new Intent(SceneSelection.this,EditorView.class);
         editorScene.putExtra("scenePosition", position);
-        editorScene.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        editorScene.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        editorScene.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        editorScene.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(editorScene);
         dealloc();
     }

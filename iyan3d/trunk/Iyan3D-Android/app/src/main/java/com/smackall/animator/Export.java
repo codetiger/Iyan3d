@@ -41,7 +41,7 @@ public class Export implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.color_picket_btn:
-                ((EditorView)((Activity)mContext)).colorPicker.showColorPicker(v,null);
+                ((EditorView)((Activity)mContext)).colorPicker.showColorPicker(v,null,Constants.RENDERING_VIEW);
                 break;
         }
     }

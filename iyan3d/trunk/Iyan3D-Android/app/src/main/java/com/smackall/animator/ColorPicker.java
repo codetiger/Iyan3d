@@ -1,5 +1,6 @@
 package com.smackall.animator;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,14 +26,16 @@ public class ColorPicker implements View.OnTouchListener {
     Context mContext;
     LinearLayout colorPreview;
     Bitmap bitmap;
+    private int ViewType;
 
     public ColorPicker(Context mContext)
     {
         this.mContext = mContext;
     }
 
-    public void showColorPicker(View v,MotionEvent event)
+    public void showColorPicker(View v,MotionEvent event,int ViewType)
     {
+        this.ViewType = ViewType;
         Dialog color_prop = new Dialog(mContext);
         color_prop.requestWindowFeature(Window.FEATURE_NO_TITLE);
         color_prop.setContentView(R.layout.color_picker);
@@ -93,6 +96,33 @@ public class ColorPicker implements View.OnTouchListener {
         int green = Color.green(touchedRGB);
         int blue = Color.blue(touchedRGB);
         colorPreview.setBackgroundColor(touchedRGB);
+        if(ViewType == Constants.TEXT_VIEW){
+            ((EditorView)((Activity)mContext)).textSelection.textDB.setRed(red/255.0f);
+            ((EditorView)((Activity)mContext)).textSelection.textDB.setGreen(green / 255.0f);
+            ((EditorView)((Activity)mContext)).textSelection.textDB.setBlue(blue / 255.0f);
+            ((EditorView)((Activity)mContext)).textSelection.textDB.setTempNode(true);
+            if(event.getAction() == MotionEvent.ACTION_UP)
+                ((EditorView)((Activity)mContext)).textSelection.importText();
+        }
+        else if(ViewType == Constants.TEXTURE_MODE){
+            ((EditorView)((Activity)mContext)).objSelection.objSelectionAdapter.assetsDB.setx(red / 255.0f);
+            ((EditorView)((Activity)mContext)).objSelection.objSelectionAdapter.assetsDB.setY(green / 255.0f);
+            ((EditorView)((Activity)mContext)).objSelection.objSelectionAdapter.assetsDB.setZ(blue / 255.0f);
+            ((EditorView)((Activity)mContext)).objSelection.objSelectionAdapter.assetsDB.setTexture("-1");
+            if(event.getAction() == MotionEvent.ACTION_UP)
+                ((EditorView)((Activity)mContext)).objSelection.objSelectionAdapter.importOBJ();
+        }
+        else if(ViewType == Constants.CHANGE_TEXTURE_MODE){
+            ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setx(red/255.0f);
+            ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setY(green / 255.0f);
+            ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setZ(blue / 255.0f);
+            ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setTexture("-1");
+            ((EditorView)((Activity)mContext)).textureSelection.changeTextureAdapter.notifyDataSetChanged();
+            ((EditorView) ((Activity) mContext)).textureSelection.assetsDB.setIsTempNode(true);
+            if(event.getAction() == MotionEvent.ACTION_UP)
+                ((EditorView)((Activity)mContext)).textureSelection.changeTexture();
+        }
+
         return true;
     }
 }

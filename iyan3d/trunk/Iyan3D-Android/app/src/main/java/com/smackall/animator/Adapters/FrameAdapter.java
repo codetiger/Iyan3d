@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.smackall.animator.EditorView;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.R;
+import com.smackall.animator.opengl.GL2JNILib;
 
 
 /**
@@ -21,7 +22,6 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameViewHolder> {
 
     private Context mContext;
     private ImageView referenceImage;
-    private int currentFrame = 0;
 
     public FrameAdapter(Context context,ImageView referenceImage) {
         this.mContext = context;
@@ -33,14 +33,13 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameViewHolder> {
         View view = LayoutInflater.from(mContext).inflate(R.layout.editorscene_frames, parent, false);
         view.getLayoutParams().width = this.referenceImage.getWidth();
         view.getLayoutParams().height = this.referenceImage.getHeight();
-        FrameViewHolder viewHolder = new FrameViewHolder(mContext, view);
-        return viewHolder;
+        return new FrameViewHolder(mContext, view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(FrameViewHolder viewHolder, final int position) {
-        viewHolder.view.setBackgroundResource((currentFrame == position) ?  R.drawable.border_grid_frames_pressed : R.drawable.border_grid_frames_non_pressed);
+        viewHolder.view.setBackgroundResource((GL2JNILib.currentFrame() == position) ?  R.drawable.border_grid_frames_pressed : R.drawable.border_grid_frames_non_pressed);
         if(((EditorView)((Activity)(mContext))).sharedPreferenceManager.getInt(mContext,"frameType") == Constants.FRAME_COUNT)
             viewHolder.tvName.setText(String.valueOf(position+1));
         else {
@@ -51,8 +50,14 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameViewHolder> {
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentFrame == position) return;
-                currentFrame = position;
+                ((EditorView)(Activity)mContext).glView.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (GL2JNILib.currentFrame() == position) return;
+                        GL2JNILib.setCurrentFrame(position);
+                        GL2JNILib.switchFrame();
+                    }
+                });
                 notifyDataSetChanged();
             }
         });
@@ -60,6 +65,6 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameViewHolder> {
 
     @Override
     public int getItemCount() {
-        return ((EditorView)((Activity)mContext)).totalFrames;
+        return GL2JNILib.totalFrame();
     }
 }

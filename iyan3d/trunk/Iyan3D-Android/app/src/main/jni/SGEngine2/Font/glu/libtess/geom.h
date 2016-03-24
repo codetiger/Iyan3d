@@ -36,7 +36,6 @@
 #define __geom_h_
 
 #include "mesh.h"
-#include "../include/glu.h"
 
 #ifdef NO_BRANCH_CONDITIONS
 /* MIPS architecture has special instructions to evaluate boolean

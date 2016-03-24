@@ -15,6 +15,54 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/publishFrame"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:gravity="bottom">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="00dp"
+                android:layout_weight="0.15"
+                android:gravity="center_vertical|right"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:weightSum="4.5"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="PUBLISh"
+                            android:id="@+id/publish"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/autorig_bottom_tool"
         android:visibility="gone">
 
@@ -312,8 +360,14 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.8"
                 android:weightSum="1"
-                android:gravity="bottom">
+                android:gravity="center">
 
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loading_progress"
+                    android:indeterminate="false"
+                    android:visibility="invisible"/>
             </LinearLayout>
 
             <LinearLayout
@@ -340,9 +394,9 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="0.65"
                     android:tag=""
-                    android:gravity="right"
                     android:weightSum="1"
-                    android:id="@+id/rightView" />
+                    android:id="@+id/rightView"
+                    android:gravity="right"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -1,5 +1,6 @@
 package com.smackall.animator.DownloadManager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,8 @@ import android.net.Uri;
 import com.smackall.animator.Adapters.AnimationSelectionAdapter;
 import com.smackall.animator.Adapters.AssetSelectionAdapter;
 import com.smackall.animator.Adapters.TextSelectionAdapter;
+import com.smackall.animator.EditorView;
+import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
@@ -57,10 +60,11 @@ public class AddToDownloadManager {
         @Override
         public void onDownloadComplete(int id){
             switch (Constants.VIEW_TYPE) {
+                case Constants.PARTICLE_VIEW:
                 case Constants.ASSET_VIEW: {
                     try {
                         if(assetSelectionAdapter == null) break;
-                        if (assetSelectionAdapter.meshDownloadId != id && assetSelectionAdapter.textureDownloadId != id) {
+                        if (assetSelectionAdapter.meshDownloadId != id && assetSelectionAdapter.textureDownloadId != id && Constants.VIEW_TYPE == Constants.ASSET_VIEW) {
                             String fileName = assetSelectionAdapter.downloadingAssets.get(id).toString();
                             File moveFrom = new File(PathManager.LocalCacheFolder+"/" + fileName + ".png");
                             File moveTo = new File(PathManager.LocalThumbnailFolder+"/" + fileName + ".png");
@@ -68,7 +72,21 @@ public class AddToDownloadManager {
                             assetSelectionAdapter.notifyDataSetChanged();
                             break;
                         }
-
+                        else if(assetSelectionAdapter.meshDownloadId == id && Constants.VIEW_TYPE == Constants.ASSET_VIEW){
+                            String ext = (assetSelectionAdapter.assetsDBs.get(assetSelectionAdapter.selectedAsset).getType() == 1) ? ".sgr" : ".sgm";
+                            String fileName =Integer.toString(assetSelectionAdapter.assetsDBs.get(assetSelectionAdapter.selectedAsset).getAssetsId());
+                            File moveFrom = new File(PathManager.LocalCacheFolder+"/" + fileName + ext);
+                            File moveTo = new File(PathManager.LocalMeshFolder+"/" + fileName+ext);
+                            FileHelper.move(moveFrom,moveTo);
+                            importAsset();
+                        }
+                        else if(Constants.VIEW_TYPE == Constants.ASSET_VIEW){
+                            String fileName =Integer.toString(assetSelectionAdapter.assetsDBs.get(assetSelectionAdapter.selectedAsset).getAssetsId());
+                            File moveFrom = new File(PathManager.LocalCacheFolder+"/" + fileName + "-cm.png");
+                            File moveTo = new File(PathManager.LocalMeshFolder+"/" + fileName+"-cm.png");
+                            FileHelper.move(moveFrom,moveTo);
+                            importAsset();
+                        }
                     }
                     catch (NullPointerException | IndexOutOfBoundsException | ClassCastException ignored){
                         ignored.printStackTrace();
@@ -85,6 +103,14 @@ public class AddToDownloadManager {
                             FileHelper.move(moveFrom,moveTo);
                             animationSelectionAdapter.notifyDataSetChanged();
                             break;
+                        }
+                        else{
+                            int animId = animationSelectionAdapter.animDBs.get(animationSelectionAdapter.selectedId).getAnimAssetId();
+                            String ext = ( animationSelectionAdapter.animDBs.get(animationSelectionAdapter.selectedId).getAnimType() == 0) ? ".sgra" : ".sgta";
+                            File moveFrom = new File(PathManager.LocalCacheFolder+"/"+animId+ext);
+                            File moveTo = new File(PathManager.LocalAnimationFolder+"/"+animId+ext);
+                            FileHelper.move(moveFrom,moveTo);
+                            animationSelectionAdapter.importAnimation(animationSelectionAdapter.selectedId);
                         }
                     }
                     catch (NullPointerException | IndexOutOfBoundsException | ClassCastException ignored){
@@ -158,6 +184,20 @@ public class AddToDownloadManager {
         }
         finally {
             return filePath;
+        }
+    }
+
+    private void importAsset()
+    {
+        AssetsDB assetsDB = assetSelectionAdapter.assetsDBs.get(assetSelectionAdapter.selectedAsset);
+        String ext = (assetsDB.getType() == 1) ? ".sgr" : ".sgm";
+        String mesh = PathManager.LocalMeshFolder+"/"+assetsDB.getAssetsId() + ext;
+        String texture = PathManager.LocalMeshFolder+"/"+assetsDB.getAssetsId() + "-cm.png";
+        if(FileHelper.checkValidFilePath(mesh) && FileHelper.checkValidFilePath(texture)){
+            ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
+            assetsDB.setTexture(assetsDB.getAssetsId() + "-cm");
+            assetsDB.setIsTempNode(true);
+            ((EditorView)(Activity)mContext).renderManager.importAssets(assetsDB,false);
         }
     }
 }

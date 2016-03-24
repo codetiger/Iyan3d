@@ -28,10 +28,11 @@
  * Silicon Graphics, Inc.
  */
 
-#include "../include/gluos.h"
+#include "gluos.h"
 #include "gluint.h"
-#include "../include/glu.h"
+#include "glu.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 struct token_string
@@ -45,8 +46,8 @@ static const struct token_string Errors[] = {
    { GL_INVALID_ENUM, "invalid enumerant" },
    { GL_INVALID_VALUE, "invalid value" },
    { GL_INVALID_OPERATION, "invalid operation" },
-//   { GL_STACK_OVERFLOW, "stack overflow" },
-//   { GL_STACK_UNDERFLOW, "stack underflow" },
+   { GL_STACK_OVERFLOW, "stack overflow" },
+   { GL_STACK_UNDERFLOW, "stack underflow" },
    { GL_OUT_OF_MEMORY, "out of memory" },
    /*{ GL_TABLE_TOO_LARGE, "table too large" },*/
 #ifdef GL_EXT_framebuffer_object

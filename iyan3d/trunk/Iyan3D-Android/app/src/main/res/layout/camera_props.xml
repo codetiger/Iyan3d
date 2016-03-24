@@ -63,7 +63,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/field_of_view"
-                        android:indeterminate="false" />
+                        android:indeterminate="false"
+                        android:max="180"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -210,7 +211,7 @@
             android:layout_height="wrap_content"
             android:text="   Delete Animation"
             android:drawableLeft="@drawable/delete_btn"
-            android:id="@+id/button2"
+            android:id="@+id/delete"
             android:layout_gravity="center_horizontal"
             android:gravity="center" />
     </LinearLayout>

@@ -41,7 +41,8 @@ public:
     static std::string getCachesDirectory();
     static std::string getDocumentsDirectory();
     static void setDocumentsDirectory(string documentPath);
-    
+    static bool checkFileExists(std::string fileName);
+
     static char * getCharacterPointer(std::string &str);
 };
 

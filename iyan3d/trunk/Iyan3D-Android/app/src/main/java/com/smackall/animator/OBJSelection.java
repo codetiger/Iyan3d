@@ -10,13 +10,14 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.smackall.animator.Adapters.OBJSelectionAdapter;
+import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Sabish.M on 8/3/16.
@@ -47,37 +48,45 @@ public class OBJSelection {
         insertPoint.setVisibility(View.VISIBLE);
         insertPoint.removeAllViews();
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.obj_view,insertPoint,false);
-        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        final TextView infoLable = (TextView)v.findViewById(R.id.info_lable);
-        final GridView gridView = (GridView)v.findViewById(R.id.obj_grid);
+        final View objView = vi.inflate(R.layout.obj_view,insertPoint,false);
+        insertPoint.addView(objView, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        final TextView infoLable = (TextView)objView.findViewById(R.id.info_lable);
+        ((Button)objView.findViewById(R.id.import_btn)).setVisibility(View.GONE);
+        final GridView gridView = (GridView)objView.findViewById(R.id.obj_grid);
         gridView.setTag(ViewMode);
         infoLable.setText((gridView.getTag() == Constants.OBJ_MODE) ? "Add OBJ files in SD-Card/Iyan3D foler." : "Add Texture files in SD-Card/Iyan3D folder.");
         initAssetGrid(gridView);
-        Button cancel = (Button)v.findViewById(R.id.cancel_obj);
+        Button cancel = (Button)objView.findViewById(R.id.cancel_obj);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((EditorView) ((Activity) mContext)).renderManager.removeTempNode();
                 insertPoint.removeAllViews();
-                ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
+                ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
                 mContext = null;
                 db = null;
                 objSelectionAdapter = null;
             }
         });
-        v.findViewById(R.id.next_obj).setOnClickListener(new View.OnClickListener() {
+        objView.findViewById(R.id.import_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(gridView.getTag() == Constants.OBJ_MODE) {
+                ((EditorView)((Activity)mContext)).imageManager.getImageFromStorage(Constants.IMPORT_OBJ);
+            }
+        });
+        objView.findViewById(R.id.next_obj).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gridView.getTag() == Constants.OBJ_MODE) {
                     gridView.setTag(Constants.TEXTURE_MODE);
-                    ((Button)v).setText("Add To Scene");
+                    ((Button) v).setText("Add To Scene");
                     objSelectionAdapter.files = null;
-                    objSelectionAdapter.files = getFileList(gridView);
                     objSelectionAdapter.notifyDataSetChanged();
-                    infoLable.setText((gridView.getTag() == Constants.OBJ_MODE) ? "Add OBJ files in SD-Card/Iyan3D foler." : "Add Texture files in SD-Card/Iyan3D folder.");
-                }
-                else {
+                    ((TextView)objView.findViewById(R.id.info_lable)).setVisibility(View.GONE);
+                    ((Button)objView.findViewById(R.id.import_btn)).setVisibility(View.VISIBLE);
+                } else {
+                    addSgmToDatabase();
                     insertPoint.removeAllViews();
                     ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
                     mContext = null;
@@ -91,28 +100,43 @@ public class OBJSelection {
     private void initAssetGrid(GridView gridView)
     {
         objSelectionAdapter = new OBJSelectionAdapter(mContext,gridView);
-        objSelectionAdapter.files = getFileList(gridView);
         gridView.setAdapter(objSelectionAdapter);
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
     }
 
-    private File[] getFileList(final GridView gridView)
-    {
-        FileHelper.getObjAndTextureFromCommonIyan3dPath(mContext, (int) gridView.getTag());
-        final String userFolder = ((int) gridView.getTag() == Constants.OBJ_MODE) ? PathManager.LocalUserMeshFolder+"/" : PathManager.LocalUserMeshFolder+"/";
-        final File f = new File(userFolder);
-        FilenameFilter filenameFilter = new FilenameFilter() {
+    public void notifyDataChanged(){
+        ((Activity)mContext).runOnUiThread(new Runnable() {
             @Override
-            public boolean accept(File dir, String filename) {
-                if(filename.toLowerCase().endsWith(((int) gridView.getTag() == Constants.OBJ_MODE) ?"obj" : "png"))
-                    return true;
-                else
-                    return false;
+            public void run() {
+                objSelectionAdapter.notifyDataSetChanged();
             }
-        };
-        File files[] = f.listFiles(filenameFilter);
-        return files;
+        });
+    }
+
+    private void addSgmToDatabase()
+    {
+        AssetsDB assetsDB = objSelectionAdapter.assetsDB;
+        String fileName = assetsDB.getAssetName();
+        String textureName = (assetsDB.getTexture().equals("-1")) ? "white_texture" : assetsDB.getTexture();
+        int assetId = 20000 + ((db.getMYModelAssetCount() == 0) ? 1 : db.getAllMyModelDetail().get(db.getMYModelAssetCount()-1).getID());
+        String sgmFrom = (assetsDB.getAssetsId() == 123456) ? PathManager.LocalMeshFolder+"/123456.sgm" : PathManager.DefaultAssetsDir+"/"+assetsDB.getAssetsId()+".sgm";
+        System.out.println("Sgm Path " + sgmFrom);
+        if(!FileHelper.checkValidFilePath(sgmFrom)) System.out.println("File Not Exits");
+        String sgmTo = PathManager.LocalMeshFolder+"/"+ assetId+".sgm";
+        String textureFrom = (textureName.equals("white_texture") ? PathManager.DefaultAssetsDir+"/"+textureName+".png" : PathManager.LocalImportedImageFolder+"/"+textureName+".png");
+        String textureTo = PathManager.LocalMeshFolder+"/"+assetId+"-cm.png";
+        FileHelper.copy(sgmFrom, sgmTo);
+        FileHelper.copy(textureFrom, textureTo);
+        ((EditorView)((Activity)mContext)).imageManager.makeThumbnail(textureTo, Integer.toString(assetId));
+        assetsDB.setAssetsId(assetId);
+        assetsDB.setDateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        assetsDB.setNbones(0);
+        assetsDB.setHash(FileHelper.md5(fileName));
+        assetsDB.setType(Constants.NODE_SGM);
+        db.addNewMyModelAssets(assetsDB);
+        assetsDB.setIsTempNode(false);
+        ((EditorView)((Activity)mContext)).renderManager.importAssets(assetsDB,false);
     }
 }

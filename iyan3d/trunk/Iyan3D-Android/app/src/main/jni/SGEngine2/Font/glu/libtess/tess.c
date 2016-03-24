@@ -32,11 +32,13 @@
 **
 */
 
-#include "../include/gluos.h"
+#include "gluos.h"
 #include <stddef.h>
+#include <assert.h>
 #include <setjmp.h>
 #include "memalloc.h"
 #include "tess.h"
+#include "mesh.h"
 #include "normal.h"
 #include "sweep.h"
 #include "tessmono.h"

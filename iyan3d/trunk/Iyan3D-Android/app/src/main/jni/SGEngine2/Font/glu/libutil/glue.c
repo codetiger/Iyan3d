@@ -28,6 +28,7 @@
  * Silicon Graphics, Inc.
  */
 
+#include <stdlib.h>
 #include "gluint.h"
 
 /*

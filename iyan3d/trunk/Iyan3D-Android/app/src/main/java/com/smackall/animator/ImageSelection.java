@@ -2,8 +2,6 @@ package com.smackall.animator;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.GridView;
 
 import com.smackall.animator.Adapters.ImageSelectionAdapter;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.ImageDB;
 
 /**
  * Created by Sabish.M on 7/3/16.
@@ -20,19 +19,13 @@ import com.smackall.animator.Helper.Constants;
 public class ImageSelection {
 
     private Context mContext;
-    private Cursor cursor;
-    private int columnIndex;
     private ImageSelectionAdapter imageSelectionAdapter;
     ViewGroup insertPoint;
+    public ImageDB imageDB = new ImageDB();
+
+
     public ImageSelection(Context context){
         this.mContext = context;
-        String[] projection = {MediaStore.Images.Thumbnails._ID};
-        cursor =((Activity)this.mContext).managedQuery(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,
-                projection, // Which columns to return
-                null,       // Return all rows
-                null,
-                MediaStore.Images.Thumbnails.IMAGE_ID);
-        columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
     }
 
     public void showImageSelection()
@@ -50,37 +43,54 @@ public class ImageSelection {
         insertPoint.removeAllViews();
 
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.asset_view,insertPoint,false);
+        View v = vi.inflate(R.layout.image_selection,insertPoint,false);
         insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        GridView gridView = (GridView)v.findViewById(R.id.asset_grid);
+        GridView gridView = (GridView)v.findViewById(R.id.image_grid);
         initImagesGrid(gridView);
-        Button cancel = (Button)v.findViewById(R.id.cancel_assetView);
+        Button cancel = (Button)v.findViewById(R.id.cancel_image);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 insertPoint.removeAllViews();
+                ((EditorView) ((Activity) mContext)).renderManager.removeTempNode();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
                 mContext = null;
                 imageSelectionAdapter = null;
             }
         });
-        v.findViewById(R.id.add_asset_btn).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.add_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imageDB.setTempNode(false);
+                importImage();
                 insertPoint.removeAllViews();
                 ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
                 mContext = null;
                 imageSelectionAdapter = null;
             }
         });
+        v.findViewById(R.id.import_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((EditorView)((Activity)mContext)).imageManager.getImageFromStorage(Constants.IMPORT_IMAGES);
+            }
+        });
     }
 
     private void initImagesGrid(GridView gridView)
     {
-        imageSelectionAdapter = new ImageSelectionAdapter(mContext,cursor,columnIndex);
+        imageSelectionAdapter = new ImageSelectionAdapter(mContext,gridView);
         gridView.setAdapter(imageSelectionAdapter);
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
+    }
+
+    public void notifyDataChanged(){
+        imageSelectionAdapter.notifyDataSetChanged();
+    }
+
+    public void importImage(){
+        ((EditorView)((Activity)mContext)).renderManager.importImage(imageDB);
     }
 }

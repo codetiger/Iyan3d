@@ -1,5 +1,6 @@
 package com.smackall.animator;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.opengl.GL2JNILib;
 
 /**
  * Created by Sabish.M on 12/3/16.
@@ -20,10 +22,13 @@ import com.smackall.animator.Helper.Constants;
 public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChangeListener{
 
     private Context mContext;
+    private EditorView editorView;
+    private Dialog dialog;
 
     public MeshProps(Context mContext)
     {
         this.mContext = mContext;
+        editorView = ((EditorView)(Activity)mContext);
     }
 
     public void showMeshProps(View v,MotionEvent event)
@@ -51,7 +56,8 @@ public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChang
         window.setAttributes(wlp);
 
         initViews(mesh_prop);
-        setDefaultValues(mesh_prop,50,10,true,false,false);
+        setDefaultValues(mesh_prop);
+        this.dialog = mesh_prop;
         mesh_prop.show();
     }
 
@@ -65,43 +71,51 @@ public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChang
         ((Switch)mesh_prop.findViewById(R.id.light)).setOnClickListener(this);
         ((Switch)mesh_prop.findViewById(R.id.visiblity)).setOnClickListener(this);
         ((Switch)mesh_prop.findViewById(R.id.mirror)).setOnClickListener(this);
+        boolean mirror = (GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_RIG && GL2JNILib.jointSize(GL2JNILib.getSelectedNodeId()) == Constants.HUMAN_JOINTS_SIZE);
+        ((Switch)mesh_prop.findViewById(R.id.mirror)).setEnabled(mirror);
     }
 
-    private void setDefaultValues(Dialog mesh_prop,int glassy,int reflection,boolean light, boolean visiblity, boolean mirror)
+    private void setDefaultValues(Dialog mesh_prop)
     {
-        ((SeekBar)mesh_prop.findViewById(R.id.glassy_bar)).setProgress(glassy);
-        ((SeekBar)mesh_prop.findViewById(R.id.reflection_bar)).setProgress(reflection);
-        ((Switch)mesh_prop.findViewById(R.id.light)).setChecked(light);
-        ((Switch) mesh_prop.findViewById(R.id.visiblity)).setChecked(visiblity);
-        ((Switch)mesh_prop.findViewById(R.id.mirror)).setChecked(mirror);
+        ((SeekBar)mesh_prop.findViewById(R.id.glassy_bar)).setProgress((int) (GL2JNILib.reflectionValue() * 10));
+        ((SeekBar)mesh_prop.findViewById(R.id.reflection_bar)).setProgress((int) (GL2JNILib.refractionValue() * 10));
+        ((Switch)mesh_prop.findViewById(R.id.light)).setChecked(GL2JNILib.isLightning());
+        ((Switch) mesh_prop.findViewById(R.id.visiblity)).setChecked(GL2JNILib.isVisible());
+        if(((Switch)mesh_prop.findViewById(R.id.mirror)).isEnabled())
+            ((Switch)mesh_prop.findViewById(R.id.mirror)).setChecked(GL2JNILib.mirrorState());
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.delete_btn:
+                this.dialog.dismiss();
+                editorView.delete.showDelete();
+                dealloc();
                 break;
             case R.id.clone_btn:
+                ((EditorView)((Activity)mContext)).renderManager.createDuplicate();
+                dealloc();
                 break;
             case R.id.skin_btn:
+                ((EditorView)((Activity)mContext)).textureSelection.showChangeTexture();
+                dealloc();
                 break;
             case R.id.light:
+                update(true);
                 break;
             case R.id.visiblity:
+                update(true);
                 break;
             case R.id.mirror:
+                GL2JNILib.switchMirror();
                 break;
         }
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        switch (seekBar.getId()){
-            case R.id.glassy_bar:
-                break;
-            case R.id.reflection_bar:
-                break;
-        }
+       update(false);
     }
 
     @Override
@@ -116,11 +130,21 @@ public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChang
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        switch (seekBar.getId()){
-            case R.id.glassy_bar:
-                break;
-            case R.id.reflection_bar:
-                break;
-        }
+        update(true);
+    }
+
+    private void dealloc()
+    {
+        this.dialog.dismiss();
+        this.dialog = null;
+    }
+
+    private void update(boolean storeAction)
+    {
+        float refraction = ((SeekBar)dialog.findViewById(R.id.glassy_bar)).getProgress()/100.0f;
+        float reflection = ((SeekBar)dialog.findViewById(R.id.reflection_bar)).getProgress()/100.0f;
+        boolean light = ((Switch)dialog.findViewById(R.id.light)).isChecked();
+        boolean visible = ((Switch)dialog.findViewById(R.id.visiblity)).isChecked();
+        GL2JNILib.changeMeshProperty(refraction,reflection,light,visible,storeAction);
     }
 }

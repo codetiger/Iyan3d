@@ -35,7 +35,16 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
 {
     SGNode* objSGNode = new SGNode(NODE_OBJ);
     int objLoadStatus = 0;
-    string finalPath = FileHelper::getDocumentsDirectory() + objPath + ".obj";
+    string finalPath="";
+
+#ifdef ANDROID
+    finalPath = constants::DocumentsStoragePath+"/mesh/usermesh/"+objPath+".obj";
+#else
+    finalPath = FileHelper::getDocumentsDirectory() + objPath + ".obj";
+#endif
+
+    Logger::log(INFO,"OBJMANAGER",objPath + " " + textureName + " " + to_string(assetId) + " ");
+
     Mesh *objMes = objLoader->createMesh(finalPath, objLoadStatus, objScene->shaderMGR->deviceType);
     if(objMes == NULL) {
         printf(" Obj path %s ", finalPath.c_str());
@@ -54,9 +63,17 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
 
     shared_ptr<MeshNode> objNode = smgr->createNodeFromMesh(objMes,"ObjUniforms");
     objSGNode->node = objNode;
-    
+
     if(!isVertexColor) {
-        string texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
+        string texturePath = "";
+
+#ifdef ANDROID
+        texturePath = constants::DocumentsStoragePath+ "/importedImages/"+textureName+".png";
+        if(!FileHelper::checkFileExists(texturePath))
+            texturePath = constants::BundlePath+"/white_texture.png";
+#else
+        texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
+#endif
         Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
         objNode->setTexture(nodeTex,1);
         objNode->setTexture(objScene->shadowTexture,2);
@@ -86,7 +103,12 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
 
 bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
 {
-    string outputPath = FileHelper::getDocumentsDirectory()+"/Resources/Sgm/"+filePath + ".sgm";
+    string outputPath = "";
+#ifdef ANDROID
+    outputPath = constants::DocumentsStoragePath+"/mesh/"+filePath+".sgm";
+#else
+    outputPath = FileHelper::getDocumentsDirectory()+"/Resources/Sgm/"+filePath + ".sgm";
+#endif
     ofstream f(outputPath , ios::binary);
     
     unsigned char versionIdentifier = (hasUV) ? UV_MAPPED : VERTEX_COLORED;

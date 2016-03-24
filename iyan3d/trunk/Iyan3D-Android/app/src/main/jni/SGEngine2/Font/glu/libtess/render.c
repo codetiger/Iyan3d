@@ -34,6 +34,8 @@
 ** $Header: /home/krh/git/sync/mesa-cvs-repo/Mesa/src/glu/sgi/libtess/render.c,v 1.1 2001/03/17 00:25:41 brianp Exp $
 */
 
+#include "gluos.h"
+#include <assert.h>
 #include <stddef.h>
 #include "mesh.h"
 #include "tess.h"

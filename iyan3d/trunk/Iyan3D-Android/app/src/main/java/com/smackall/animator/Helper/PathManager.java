@@ -19,6 +19,7 @@ public class PathManager {
     public static String LocalScenesFolder = "";
     public static String LocalImportAndExport = "";
     public static String LocalUserFontFolder = "";
+    public static String LocalUserVideoFolder = "";
     public static String DefaultAssetsDir = "";
     public static String DefaultDatabaseDirectory = "";
     public static String Iyan3DDatabse = "";
@@ -50,6 +51,8 @@ public class PathManager {
         FileHelper.mkDir(LocalScenesFolder);
         LocalImportAndExport = String.valueOf((Environment.getExternalStorageDirectory() + "/iyan3d"));
         FileHelper.mkDir(LocalImportAndExport);
+        LocalUserVideoFolder = String.valueOf((activity.getExternalFilesDir(null) +"/video"));
+        FileHelper.mkDir(LocalUserVideoFolder);
         DefaultDatabaseDirectory = DefaultFilesDir + "/databases";
         FileHelper.mkDir(DefaultDatabaseDirectory);
         DefaultAssetsDir = DefaultFilesDir + "/assets";

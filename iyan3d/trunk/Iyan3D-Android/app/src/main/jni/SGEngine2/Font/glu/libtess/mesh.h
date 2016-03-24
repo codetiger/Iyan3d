@@ -37,7 +37,7 @@
 #ifndef __mesh_h_
 #define __mesh_h_
 
-#include "../include/glu.h"
+#include "glu.h"
 
 typedef struct GLUmesh GLUmesh; 
 

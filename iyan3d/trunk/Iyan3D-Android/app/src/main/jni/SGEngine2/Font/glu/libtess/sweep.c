@@ -32,6 +32,8 @@
 **
 */
 
+#include "gluos.h"
+#include <assert.h>
 #include <stddef.h>
 #include <setjmp.h>		/* longjmp */
 #include <limits.h>		/* LONG_MAX */
@@ -39,6 +41,9 @@
 #include "mesh.h"
 #include "geom.h"
 #include "tess.h"
+#include "dict.h"
+#include "priorityq.h"
+#include "memalloc.h"
 #include "sweep.h"
 
 #define TRUE 1

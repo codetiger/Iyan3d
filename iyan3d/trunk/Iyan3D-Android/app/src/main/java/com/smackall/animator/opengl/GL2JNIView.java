@@ -1,12 +1,14 @@
 package com.smackall.animator.opengl;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
+import com.smackall.animator.EditorView;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.PathManager;
 
 import java.io.File;
 
@@ -18,14 +20,15 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 public class GL2JNIView extends GLSurfaceView  {
-    public static int screenWidth , screenHeight;
-    private static String TAG = "GL2JNIView";
     private static final boolean DEBUG = false;
     public static  boolean fileLoad=false;
-public static boolean  tapdetected=false;
+    public static boolean  tapdetected=false;
+
     Renderer renderer;
+    static Context mContext;
     public GL2JNIView(Context context) {
         super(context);
+        mContext = context;
         init(false, 0, 0);
     }
 
@@ -59,8 +62,7 @@ public static boolean  tapdetected=false;
         setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 24, 0));
 
         /* Set the renderer responsible for frame rendering */
-        renderer = new Renderer();
-        Renderer.surfaceCreated = false;
+        renderer = new Renderer(mContext);
         setRenderer(renderer);
         //setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
@@ -70,7 +72,6 @@ public static boolean  tapdetected=false;
     private static class ContextFactory implements EGLContextFactory {
         private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
         public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
-            Log.w(TAG, "creating OpenGL ES 2.0 context");
             checkEglError("Before eglCreateContext", egl);
             int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
             EGLContext context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
@@ -86,7 +87,7 @@ public static boolean  tapdetected=false;
     private static void checkEglError(String prompt, EGL10 egl) {
         int error;
         while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-            Log.e(TAG, String.format("%s: EGL error: 0x%x", prompt, error));
+
         }
     }
 
@@ -182,9 +183,7 @@ public static boolean  tapdetected=false;
         private void printConfigs(EGL10 egl, EGLDisplay display,
                                   EGLConfig[] configs) {
             int numConfigs = configs.length;
-            Log.w(TAG, String.format("%d configurations", numConfigs));
             for (int i = 0; i < numConfigs; i++) {
-                Log.w(TAG, String.format("Configuration %d:\n", i));
                 printConfig(egl, display, configs[i]);
             }
         }
@@ -266,7 +265,6 @@ public static boolean  tapdetected=false;
                 int attribute = attributes[i];
                 String name = names[i];
                 if ( egl.eglGetConfigAttrib(display, config, attribute, value)) {
-                    Log.w(TAG, String.format("  %s: %d\n", name, value[0]));
                 } else {
                     // Log.w(TAG, String.format("  %s: failed\n", name));
                     while (egl.eglGetError() != EGL10.EGL_SUCCESS);
@@ -285,49 +283,57 @@ public static boolean  tapdetected=false;
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {
-     public static boolean surfaceCreated = false;
+        private Context mContext;
+
+        public Renderer(Context mContext){
+            this.mContext = mContext;
+        }
         @Override
         public void onDrawFrame(GL10 gl) {
-                GL2JNILib.step();
+            if(!((EditorView)((Activity)mContext)).renderingPaused) {
+                ((EditorView)((Activity)mContext)).renderManager.renderAll();
+            }
+            else
+                System.out.println("Rendering Stoped");
         }
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            Log.d("Iyan 3D ", "surface changed Width:" + width + "Height: " + height);
-            screenWidth = width;
-            screenHeight = height;
+
         }
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            // Do nothing.
-            screenWidth = Constants.width;
-            screenHeight = Constants.height;
-            Log.d("Iyan 3D ", "surface created Width: " + screenWidth + "Height: " + screenHeight);
-            Log.d("Iyan 3D ", "Screen size: height: " + screenHeight);
-            GL2JNILib.init(screenWidth , screenHeight);
-            Log.d("Iyan 3D ", "surface Initialized");
+            GL2JNILib.init(Constants.width , Constants.height);
             loadFromFile();
         }
 
         public  boolean loadFromFile(){
-            String filePath= "";
-            System.out.println("Load File :" + filePath);
+            String filePath= PathManager.LocalProjectFolder+"/"+((EditorView)((Activity)mContext)).projectName+".sgb";
             File f = new File(filePath);
             if(f.exists()){
                 if(f.length()==0){
                     return false;
                 }
-
                 GL2JNILib.loadFile(filePath);
-
                 return true;
-
             }else{
                 System.out.println("Load File not exist");
                 return false;
             }
         }
+
+    }
+
+    public static void callBackSurfaceRendered(){
+        ((EditorView)((Activity)mContext)).showOrHideLoading(Constants.HIDE);
+        ((EditorView)((Activity)mContext)).isDisplayPrepared = true;
+        ((EditorView)((Activity)mContext)).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((EditorView)((Activity)mContext)).frameAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
 

@@ -195,14 +195,16 @@ void SGEditorScene::initTextures()
 
 void SGEditorScene::renderAll()
 {
+
     if(freezeRendering) {
         ShaderManager::isRendering = true;
         return;
     }
-    
+
+
     bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false,
                                                 Vector4(0.1, 0.1, 0.1, 1.0));
-    
+
     if(displayPrepared) {
         rotationCircle->node->setVisible(false);
         renHelper->drawGrid();
@@ -213,7 +215,7 @@ void SGEditorScene::renderAll()
             ShaderManager::isRendering = false;
         
         smgr->Render(false);
-        
+
         renHelper->drawCircle();
         renHelper->drawMoveAxisLine();
         renHelper->renderControls();
@@ -221,9 +223,10 @@ void SGEditorScene::renderAll()
         renHelper->postRTTDrawCall();
         renHelper->rttDrawCall();
         smgr->EndDisplay(); // draws all the rendering command
-        
+
         moveMan->swipeToRotate();
         setTransparencyForObjects();
+
     }
 }
 
@@ -534,20 +537,29 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
 {
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
-    
-    string texturePath = FileHelper::getDocumentsDirectory() + "Resources/Textures/" + textureFileName+".png";
-    if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-        texturePath = FileHelper::getCachesDirectory()+textureFileName+".png";
+
+    Logger::log(INFO,"SGEDITOR","Change Texture Called ");
+
+    string texturePath = "";
+    #ifdef IOS
+        texturePath = FileHelper::getDocumentsDirectory() + "Resources/Textures/" + textureFileName+".png";
         if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-            texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureFileName+".png";
+            texturePath = FileHelper::getCachesDirectory()+textureFileName+".png";
             if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-                texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureFileName+".png";
-                if(!nodes[selectedNodeId]->checkFileExists(texturePath))
-                    texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureFileName+".png";
+                texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureFileName+".png";
+                if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
+                    texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureFileName+".png";
+                    if(!nodes[selectedNodeId]->checkFileExists(texturePath))
+                        texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureFileName+".png";
+                }
             }
         }
-    }
-    
+    #else
+        texturePath = constants::DocumentsStoragePath+"/importedImages/"+textureFileName+".png";
+    #endif
+
+    Logger::log(INFO,"SGEDITOR","Texture Path " + texturePath);
+
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -584,6 +596,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
     StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
     string textureFileName = StoragePath + nodes[selectedNode]->textureName+".png";
+    #ifdef IOS
 	if(!nodes[selectedNode]->checkFileExists(textureFileName)){
 		textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Sgm/" + nodes[selectedNode]->textureName+".png";
 		if(!nodes[selectedNode]->checkFileExists(textureFileName))
@@ -591,6 +604,11 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
 			if(!nodes[selectedNode]->checkFileExists(textureFileName))
 				textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Rigs/" + nodes[selectedNode]->textureName+".png";
 	}
+	#endif
+    #ifdef ANDROID
+        if(!nodes[selectedNode]->checkFileExists(textureFileName))
+            textureFileName = constants::DocumentsStoragePath+"/importedImages/"+nodes[selectedNode]->textureName+".png";
+    #endif
 
     if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->props.perVertexColor = false;
@@ -710,4 +728,3 @@ bool SGEditorScene::switchMirrorState()
       selectMan->highlightJointSpheres();
     return getMirrorState();
 }
-

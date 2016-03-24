@@ -1,5 +1,6 @@
 package com.smackall.animator;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -7,12 +8,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.SharedPreferenceManager;
+import com.smackall.animator.opengl.GL2JNILib;
 
 /**
  * Created by Sabish.M on 12/3/16.
@@ -23,6 +26,7 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
     private Context mContext;
     private SharedPreferenceManager sp;
     private TextView fov_lable;
+    private Dialog dialog;
 
     public CameraProps(Context mContext,SharedPreferenceManager sp)
     {
@@ -53,7 +57,7 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
             wlp.y = location[1];
         }
         window.setAttributes(wlp);
-
+        dialog = camera_prop;
         initViews(camera_prop);
         camera_prop.show();
     }
@@ -65,6 +69,7 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
         ((RadioButton)camera_prop.findViewById(R.id.FOUR_EIGHTY)).setOnClickListener(this);
         ((RadioButton)camera_prop.findViewById(R.id.THREE_SIXTY)).setOnClickListener(this);
         ((RadioButton)camera_prop.findViewById(R.id.TWO_FOURTY)).setOnClickListener(this);
+        ((Button)camera_prop.findViewById(R.id.delete)).setOnClickListener(this);
         ((SeekBar)camera_prop.findViewById(R.id.field_of_view)).setOnSeekBarChangeListener(this);
         fov_lable = ((TextView)camera_prop.findViewById(R.id.fov_text));
         setDefaultValues(camera_prop);
@@ -72,8 +77,9 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
 
     private void setDefaultValues(Dialog camera_prop)
     {
-        int cameraResolution = sp.getInt(mContext,"cameraResolution");
-        ((RadioButton)camera_prop.findViewById(R.id.THOUSAND_EIGHTY)).setChecked((cameraResolution == Constants.THOUSAND_EIGHTY));
+        int cameraResolution = GL2JNILib.resolutionType();
+        ((SeekBar)camera_prop.findViewById(R.id.field_of_view)).setProgress((int) (GL2JNILib.cameraFov()));
+        ((RadioButton) camera_prop.findViewById(R.id.THOUSAND_EIGHTY)).setChecked((cameraResolution == Constants.THOUSAND_EIGHTY));
         ((RadioButton)camera_prop.findViewById(R.id.SEVEN_TWENTY)).setChecked((cameraResolution == Constants.SEVEN_TWENTY));
         ((RadioButton)camera_prop.findViewById(R.id.FOUR_EIGHTY)).setChecked((cameraResolution == Constants.FOUR_EIGHTY));
         ((RadioButton)camera_prop.findViewById(R.id.THREE_SIXTY)).setChecked((cameraResolution == Constants.THREE_SIXTY));
@@ -82,21 +88,36 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == R.id.delete){
+            ((EditorView)((Activity)mContext)).delete.showDelete();
+            this.dialog.dismiss();
+        }
+        else
         switch (Integer.parseInt(v.getTag().toString())){
             case Constants.THOUSAND_EIGHTY:
-               sp.setData(mContext,"cameraResolution",Constants.THOUSAND_EIGHTY);
+               sp.setData(mContext, "cameraResolution", Constants.THOUSAND_EIGHTY);
+                if(GL2JNILib.resolutionType() != Constants.THOUSAND_EIGHTY)
+                update(true);
                 break;
             case Constants.SEVEN_TWENTY:
-                sp.setData(mContext,"cameraResolution",Constants.SEVEN_TWENTY);
+                sp.setData(mContext, "cameraResolution", Constants.SEVEN_TWENTY);
+                if(GL2JNILib.resolutionType() != Constants.SEVEN_TWENTY)
+                update(true);
                 break;
             case Constants.FOUR_EIGHTY:
-                sp.setData(mContext,"cameraResolution",Constants.FOUR_EIGHTY);
+                sp.setData(mContext, "cameraResolution", Constants.FOUR_EIGHTY);
+                if(GL2JNILib.resolutionType() != Constants.FOUR_EIGHTY)
+                update(true);
                 break;
             case Constants.THREE_SIXTY:
-                sp.setData(mContext,"cameraResolution",Constants.THREE_SIXTY);
+                sp.setData(mContext, "cameraResolution", Constants.THREE_SIXTY);
+                if(GL2JNILib.resolutionType() != Constants.THREE_SIXTY)
+                update(true);
                 break;
             case Constants.TWO_FOURTY:
-                sp.setData(mContext,"cameraResolution",Constants.TWO_FOURTY);
+                sp.setData(mContext, "cameraResolution", Constants.TWO_FOURTY);
+                if(GL2JNILib.resolutionType() != Constants.TWO_FOURTY)
+                update(true);
                 break;
         }
     }
@@ -104,6 +125,7 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         fov_lable.setText(Integer.toString(progress));
+        update(false);
     }
 
     @Override
@@ -113,6 +135,10 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        update(true);
+    }
 
+    private void update(boolean storeAction){
+        ((EditorView)((Activity)mContext)).renderManager.cameraProperty(((SeekBar)dialog.findViewById(R.id.field_of_view)).getProgress(),sp.getInt(mContext, "cameraResolution"),storeAction);
     }
 }

@@ -2,6 +2,7 @@ package com.smackall.animator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
+import android.widget.ProgressBar;
 
 import com.smackall.animator.Adapters.FrameAdapter;
 import com.smackall.animator.Adapters.ObjectListAdapter;
@@ -28,46 +29,78 @@ import com.smackall.animator.DownloadManager.DownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManagerClass;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.Delete;
 import com.smackall.animator.Helper.DownloadHelper;
+import com.smackall.animator.Helper.ImageManager;
+import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.Helper.PopUpManager;
+import com.smackall.animator.Helper.RenderManager;
 import com.smackall.animator.Helper.SceneDB;
 import com.smackall.animator.Helper.SharedPreferenceManager;
+import com.smackall.animator.Helper.TouchControl;
+import com.smackall.animator.Helper.UIHelper;
+import com.smackall.animator.Helper.VideoManager;
+import com.smackall.animator.opengl.GL2JNILib;
+import com.smackall.animator.opengl.GL2JNIView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+/**
+ * Created by Sabish.M on 08/3/16.
+ * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
+ */
 
 public class EditorView extends AppCompatActivity implements View.OnClickListener{
 
-    DatabaseHelper db = new DatabaseHelper();
+    public  DatabaseHelper db = new DatabaseHelper();
     InfoPopUp infoPopUp = new InfoPopUp();
     private AddToDownloadManager addToDownloadManager = new AddToDownloadManager();
     private DownloadManager downloadManager = new DownloadManagerClass();
     public SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager();
+    ListPopupWindow listView;
 
-    DownloadHelper downloadHelper;
-    AssetSelection assetSelection;
-    TextSelection textSelection;
-    AnimationSelection animationSelection;
-    ImageSelection imageSelection;
-    OBJSelection objSelection;
-    FrameAdapter frameAdapter;
-    Settings settings;
-    ObjectListAdapter objectListAdapter;
-    LightProps lightProps;
-    CameraProps cameraProps;
-    MeshProps meshProps;
-    ColorPicker colorPicker;
-    Scale scale;
-    EnvelopScale envelopScale;
-    Play play;
-    Login login;
-    Export export;
-    CloudRenderingProgress cloudRenderingProgress;
+    public GLSurfaceView glView;
+
+    public DownloadHelper downloadHelper;
+    public AssetSelection assetSelection;
+    public TextSelection textSelection;
+    public AnimationSelection animationSelection;
+    public ImageSelection imageSelection;
+    public OBJSelection objSelection;
+    public FrameAdapter frameAdapter;
+    public Settings settings;
+    public ObjectListAdapter objectListAdapter;
+    public LightProps lightProps;
+    public CameraProps cameraProps;
+    public MeshProps meshProps;
+    public ColorPicker colorPicker;
+    public Scale scale;
+    public EnvelopScale envelopScale;
+    public Play play;
+    public Login login;
+    public Export export;
+    public CloudRenderingProgress cloudRenderingProgress;
+    public RenderManager renderManager;
+    public PopUpManager popUpManager;
+    public ImageManager imageManager;
+    public AdditionalLight additionalLight;
+    public TextureSelection textureSelection;
+    public VideoManager videoManager;
+    public VideoSelection videoSelection;
+    public Rig rig;
+    public Delete delete;
+    public Save save;
+    public Publish publish;
 
     ImageView referenceImg;
     boolean isActivityStartFirstTime = true;
-    public int totalFrames = 500;
-    public int objectCount = 24;
+    public String projectName;
+    public boolean renderingPaused = false;
+    public boolean isDisplayPrepared = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +110,10 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         Bundle bundle = getIntent().getExtras();
         int position = bundle.getInt("scenePosition");
         List<SceneDB> sceneDBs = db.getAllScenes();
+        projectName = sceneDBs.get(position).getImage();
+        showOrHideLoading(Constants.SHOW);
         initViews();
         swapViews();
-
-
-        findViewById(R.id.glView).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
-            }
-        });
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -97,6 +123,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
             isActivityStartFirstTime = false;
             referenceImg = (ImageView) findViewById(R.id.last_frame_img);
             initFrameGrid();
+            renderManager.cameraPosition();
         }
     }
 
@@ -127,7 +154,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         assetSelection = new AssetSelection(this,this.db,addToDownloadManager,downloadManager);
         textSelection = new TextSelection(this,this.db,addToDownloadManager,downloadManager);
         imageSelection = new ImageSelection(this);
-        animationSelection = new AnimationSelection(this,this.db,addToDownloadManager,downloadManager);
+        animationSelection = new AnimationSelection(this,this.db,addToDownloadManager,downloadManager,sharedPreferenceManager);
         objSelection = new OBJSelection(EditorView.this,db);
         settings = new Settings(EditorView.this,sharedPreferenceManager);
         play = new Play(EditorView.this,(RecyclerView) findViewById(R.id.frames));
@@ -140,12 +167,35 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         login = new Login(EditorView.this);
         cloudRenderingProgress = new CloudRenderingProgress(EditorView.this);
         export = new Export(EditorView.this);
+        new TouchControl(EditorView.this);
+        popUpManager = new PopUpManager(EditorView.this);
+        renderManager = new RenderManager(EditorView.this,sharedPreferenceManager);
+        additionalLight = new AdditionalLight(EditorView.this);
+        listView = new ListPopupWindow(EditorView.this);
+        objectListAdapter = new ObjectListAdapter(EditorView.this,listView.getListView(),0,this.sharedPreferenceManager.getInt(EditorView.this,"multiSelect"));
+        imageManager = new ImageManager(EditorView.this);
+        textureSelection = new TextureSelection(EditorView.this);
+        videoManager = new VideoManager(EditorView.this);
+        videoSelection = new VideoSelection(EditorView.this);
+        delete = new Delete(EditorView.this);
+        save = new Save(EditorView.this,db);
+        rig = new Rig(EditorView.this,sharedPreferenceManager,db);
+        publish = new Publish(EditorView.this);
+        new GL2JNILib().setGl2JNIView(EditorView.this);
+        GL2JNILib.setAssetspath(PathManager.DefaultAssetsDir, PathManager.LocalDataFolder, PathManager.LocalImportedImageFolder);
+        glView = new GL2JNIView(EditorView.this);
+        FrameLayout.LayoutParams glParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        ((FrameLayout)findViewById(R.id.glView)).addView(glView, glParams);
+        renderManager.glView = glView;
     }
 
-    public void goToFirstOrLastFrame(View view)
+    public void goToFirstOrLastFrame(final View view)
     {
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.frames);
-        recyclerView.scrollToPosition((view.getTag().equals("firstFrame")) ? 0 : totalFrames - 1);
+        recyclerView.scrollToPosition((view.getTag().equals("firstFrame")) ? 0 : GL2JNILib.totalFrame() - 1);
+        final int frame = (view.getTag().equals("firstFrame")) ? 0 : GL2JNILib.totalFrame() - 1;
+        renderManager.setCurrentFrame(frame);
+        frameAdapter.notifyDataSetChanged();
     }
 
     public void openInfoPopUp(View v)
@@ -155,7 +205,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
 
     public void showLogin(View v)
     {
-        cloudRenderingProgress.showCloudRenderingProgress(v,null);
+        cloudRenderingProgress.showCloudRenderingProgress(v, null);
     }
     public void addFramePopUpMenu(View v)
     {
@@ -165,17 +215,17 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getOrder()) {
                     case Constants.ONE_FRAME:
-                        totalFrames += Constants.ONE_FRAME;
+                        GL2JNILib.addFrame(Constants.ONE_FRAME);
                         break;
                     case Constants.TWENTY_FOUR_FRAME:
-                        totalFrames += Constants.TWENTY_FOUR_FRAME;
+                        GL2JNILib.addFrame(Constants.TWENTY_FOUR_FRAME);
                         break;
                     case Constants.TWO_FORTY_FRAME:
-                        totalFrames += Constants.TWO_FORTY_FRAME;
+                        GL2JNILib.addFrame(Constants.TWO_FORTY_FRAME);
                         break;
                 }
                 frameAdapter.notifyDataSetChanged();
-                goToFirstOrLastFrame(((LinearLayout)findViewById(R.id.lastFrameBtn)));
+                goToFirstOrLastFrame(((LinearLayout) findViewById(R.id.lastFrameBtn)));
                 return true;
             }
         });
@@ -188,29 +238,17 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         popup.getMenuInflater().inflate(R.menu.view_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getOrder()) {
-                    case Constants.FRONT_VIEW:
-                        break;
-                    case Constants.TOP_VIEW:
-                        break;
-                    case Constants.LEFT_VIEW:
-                        break;
-                    case Constants.BACK_VIEW:
-                        break;
-                    case Constants.RIGHT_VIEW:
-                        break;
-                    case Constants.BOTTOM_VIEW:
-                        break;
-                }
+                renderManager.cameraView(item.getOrder());
                 return true;
             }
         });
         popup.show();
     }
 
-    private void addRightView()
+    public void addRightView()
     {
         ((FrameLayout)findViewById(R.id.autorig_bottom_tool)).setVisibility(View.GONE);
+        ((FrameLayout)findViewById(R.id.publishFrame)).setVisibility(View.GONE);
         ViewGroup insertPointParent = (sharedPreferenceManager.getInt(EditorView.this,"toolbarPosition") == 1 ) ? (ViewGroup)((ViewGroup) findViewById(R.id.rightView)).getParent()
                 : (ViewGroup)((ViewGroup) findViewById(R.id.leftView)).getParent();
         ViewGroup insertPoint = null;
@@ -236,42 +274,9 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         v.findViewById(R.id.move_btn).setOnClickListener(EditorView.this);
         v.findViewById(R.id.rotate_btn).setOnClickListener(EditorView.this);
         v.findViewById(R.id.scale_btn).setOnClickListener(EditorView.this);
+        System.out.println("Insert Point Width " + insertPoint.getWidth());
     }
 
-    private void addRigToolBar()
-    {
-        ((FrameLayout)findViewById(R.id.autorig_bottom_tool)).setVisibility(View.VISIBLE);
-        if(sharedPreferenceManager.getInt(EditorView.this,"toolbarPosition") == 1 )
-            ((LinearLayout)((ViewGroup)((FrameLayout)findViewById(R.id.autorig_bottom_tool)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.CENTER | Gravity.LEFT);
-        else
-            ((LinearLayout)((ViewGroup)((FrameLayout)findViewById(R.id.autorig_bottom_tool)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.CENTER | Gravity.RIGHT);
-
-        ViewGroup insertPointParent = (sharedPreferenceManager.getInt(EditorView.this,"toolbarPosition") == 1 ) ? (ViewGroup)((ViewGroup) findViewById(R.id.rightView)).getParent()
-                : (ViewGroup)((ViewGroup) findViewById(R.id.leftView)).getParent();
-        ViewGroup insertPoint = null;
-        for(int i = 0; i < insertPointParent.getChildCount(); i++){
-            if(insertPointParent.getChildAt(i).getTag() != null && insertPointParent.getChildAt(i).getTag().toString().equals("-1")) {
-                insertPoint = (ViewGroup) insertPointParent.getChildAt(i);
-                continue;
-            }
-            insertPointParent.getChildAt(i).setVisibility(View.GONE);
-        }
-        if(insertPoint == null) return;
-        insertPoint.setVisibility(View.VISIBLE);
-        insertPoint.removeAllViews();
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.rig_toolbar,insertPoint,false);
-        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        v.findViewById(R.id.add_joint).setOnClickListener(EditorView.this);
-        v.findViewById(R.id.rig_move).setOnClickListener(EditorView.this);
-        v.findViewById(R.id.rig_rotate).setOnClickListener(EditorView.this);
-        v.findViewById(R.id.rig_scale).setOnClickListener(EditorView.this);
-        v.findViewById(R.id.rig_mirror).setOnClickListener(EditorView.this);
-        findViewById(R.id.rig_cancel).setOnClickListener(EditorView.this);
-        findViewById(R.id.rig_pre_scene).setOnClickListener(EditorView.this);
-        findViewById(R.id.rig_next_scene).setOnClickListener(EditorView.this);
-        findViewById(R.id.rig_add_to_scene).setOnClickListener(EditorView.this);
-    }
 
     @Override
     public void onClick(View v) {
@@ -279,7 +284,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
             case R.id.play_btn:
                 if(play == null)
                     play = new Play(EditorView.this,(RecyclerView)findViewById(R.id.frames));
-                play.play(0,frameAdapter.getItemCount());
+                play.play(false);
                 break;
             case R.id.my_object_btn:
                 initSceneObjectList(v);
@@ -291,45 +296,29 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                 showAnimationPopUp(v);
                 break;
             case R.id.option_btn:
-                lightProps.showLightProps(v,null);
+                popUpManager.initPopUpManager(GL2JNILib.getSelectedNodeId(),v,null);
                 break;
             case R.id.export_btn:
                 showExportPopUp(v);
                 break;
             case R.id.move_btn:
-                addRigToolBar();
+                renderManager.setMove();
                 break;
             case R.id.rotate_btn:
+                renderManager.setRotate();
                 break;
             case R.id.scale_btn:
-                break;
-            case R.id.add_joint:
-                break;
-            case R.id.rig_move:
-                break;
-            case R.id.rig_rotate:
-                break;
-            case R.id.rig_scale:
-                scale.showScale(v,null,1.0f,5.0f,100.0f);
-                break;
-            case R.id.rig_mirror:
-                break;
-            case R.id.rig_cancel:
-                addRightView();
-                break;
-            case R.id.rig_pre_scene:
-                break;
-            case R.id.rig_next_scene:
-                break;
-            case R.id.rig_add_to_scene:
+                if(GL2JNILib.scale())
+                    scale.showScale(v,null,GL2JNILib.scaleValueX(),GL2JNILib.scaleValueY(),GL2JNILib.scaleValueZ());
                 break;
         }
     }
 
     private void initSceneObjectList(View v)
     {
-        ListPopupWindow listView = new ListPopupWindow(EditorView.this);
-        objectListAdapter = new ObjectListAdapter(EditorView.this,listView.getListView(),objectCount,this.sharedPreferenceManager.getInt(EditorView.this,"multiSelect"));
+        objectListAdapter.listView = listView.getListView();
+        objectListAdapter.objectCount = GL2JNILib.getNodeCount();
+        objectListAdapter.isMultiSelectEnable = (this.sharedPreferenceManager.getInt(EditorView.this,"multiSelect") == 1);
         listView.setAdapter(objectListAdapter);
         listView.setAnchorView(v);
         listView.show();
@@ -339,10 +328,19 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         objectListAdapter.removeSelection();
     }
 
-    public void deleteNodeAtPosition(int position){
-        objectCount--;
-        objectListAdapter.objectCount = objectCount;
-        objectListAdapter.notifyDataSetChanged();
+    public void reloadMyObjectList()
+    {
+        objectListAdapter.objectCount = GL2JNILib.getNodeCount();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                objectListAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void deleteNodeAtPosition(int position,boolean isUndoRedo){
+        renderManager.removeObject(position, isUndoRedo);
     }
 
     public void showImportPopUpMenu(View v)
@@ -383,6 +381,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                         imageSelection.showImageSelection();
                         break;
                     case Constants.IMPORT_VIDEOS:
+                        videoSelection.showVideoSelection();
                         break;
                     case Constants.IMPORT_TEXT:
                         if (textSelection == null)
@@ -391,6 +390,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                         textSelection.showTextSelection();
                         break;
                     case Constants.IMPORT_LIGHT:
+                        additionalLight.addLight();
                         break;
                     case Constants.IMPORT_OBJ:
                         if (objSelection == null)
@@ -398,7 +398,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                         objSelection.showObjSelection(Constants.OBJ_MODE);
                         break;
                     case Constants.IMPORT_ADD_BONE:
-                        addRigToolBar();
+                        rig.rig();
                         break;
                     case Constants.IMPORT_PARTICLE:
                         if (assetSelection == null)
@@ -422,11 +422,18 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                 switch (item.getOrder()) {
                     case Constants.APPLY_ANIMATION:
                         if (animationSelection == null)
-                            animationSelection = new AnimationSelection(EditorView.this, db,addToDownloadManager,downloadManager);
+                            animationSelection = new AnimationSelection(EditorView.this, db,addToDownloadManager,downloadManager,sharedPreferenceManager);
                         Constants.VIEW_TYPE = Constants.ANIMATION_VIEW;
                         animationSelection.showAnimationSelection();
                         break;
                     case Constants.SAVE_ANIMATION:
+                        if (GL2JNILib.getSelectedNodeId() <= 1 ||
+                                (!(GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_RIG) &&
+                        !(GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_TEXT_SKIN)) ||
+                        GL2JNILib.isJointSelected())
+                            UIHelper.informDialog(EditorView.this,"Please select a text or character to save the animation as a template.");
+                        else
+                            save.enterNameForAnimation();
                         break;
                 }
                 return true;
@@ -455,63 +462,96 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         popup.show();
     }
 
-    public void showOrHideToolbarView(int hideOrShow)
+    public void showOrHideToolbarView(final int hideOrShow)
     {
-        View rightView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ?  (ViewGroup)findViewById(R.id.rightView).getParent() : (ViewGroup)findViewById(R.id.leftView).getParent();
-        View leftView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ?  (ViewGroup)findViewById(R.id.leftView).getParent() : (ViewGroup)findViewById(R.id.rightView).getParent();
+        View rightView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.rightView).getParent() : (ViewGroup) findViewById(R.id.leftView).getParent();
+        View leftView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.leftView).getParent() : (ViewGroup) findViewById(R.id.rightView).getParent();
 
         float rightValue = 0.0f;
         float leftValue = 0.0f;
 
-        if(hideOrShow == Constants.HIDE) {
-            rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? rightView.getWidth() : rightView.getWidth()*-1;
+        if (hideOrShow == Constants.HIDE) {
+            rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? rightView.getWidth() : rightView.getWidth() * -1;
             leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? 0 : 0;
-        } else{
+        } else {
             rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? 0 : 0;
-            leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? leftView.getWidth()*-1 : leftView.getWidth();
+            leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? leftView.getWidth() * -1 : leftView.getWidth();
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
             rightView.animate().translationX(rightValue);
             leftView.animate().translationX(leftValue);
         }
-        if(hideOrShow == Constants.SHOW)
+        if (hideOrShow == Constants.SHOW)
             dellocAllSubViews();
     }
 
-    public void swapViews()
+    public void showOrHideLoading(final int hideOrShow)
     {
-        View leftView = (sharedPreferenceManager.getInt(EditorView.this,"toolbarPosition") == 1 ) ? (ViewGroup) findViewById(R.id.leftView).getParent()
+        EditorView.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Loading View Hidded  " + hideOrShow);
+                ((ProgressBar) findViewById(R.id.loading_progress)).setVisibility((hideOrShow == Constants.SHOW) ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
+    }
+
+    public void swapViews() {
+        final View leftView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.leftView).getParent()
                 : (ViewGroup) findViewById(R.id.rightView).getParent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-            leftView.animate().translationX((sharedPreferenceManager.getInt(EditorView.this,"toolbarPosition") == 1 ) ? -leftView.getWidth() : leftView.getWidth());
-        }
-        ViewGroup insertPoint = null;
-        for(int i = 0; i < ((ViewGroup)leftView).getChildCount(); i++){
-            if(((ViewGroup)leftView).getChildAt(i).getTag() != null && ((ViewGroup)leftView).getChildAt(i).getTag().toString().equals("-1")) {
-                insertPoint = (ViewGroup) ((ViewGroup)leftView).getChildAt(i);
-                continue;
+            leftView.animate().translationX((sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? -leftView.getWidth() : leftView.getWidth());
+            ViewGroup insertPoint = null;
+            for (int i = 0; i < ((ViewGroup) leftView).getChildCount(); i++) {
+                if (((ViewGroup) leftView).getChildAt(i).getTag() != null && ((ViewGroup) leftView).getChildAt(i).getTag().toString().equals("-1")) {
+                    insertPoint = (ViewGroup) ((ViewGroup) leftView).getChildAt(i);
+                    continue;
+                }
+                ((ViewGroup) leftView).getChildAt(i).setVisibility(View.GONE);
             }
-            ((ViewGroup)leftView).getChildAt(i).setVisibility(View.GONE);
+            if (insertPoint != null)
+                insertPoint.removeAllViews();
+            showOrHideToolbarView(Constants.SHOW);
+            addRightView();
         }
-        if(insertPoint != null)
-            insertPoint.removeAllViews();
-        showOrHideToolbarView(Constants.SHOW);
-        addRightView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == Constants.IMAGE_IMPORT_RESPONSE)
+            imageManager.startActivityForResult(data,requestCode,resultCode);
+        else if(requestCode == Constants.OBJ_IMPORT_RESPONSE){
+
+        }
+        else if(requestCode == Constants.VIDEO_IMPORT_RESPONSE){
+            videoManager.startActivityForResult(data,requestCode,resultCode);
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        showOrHideLoading(Constants.SHOW);
+        GL2JNILib.save(projectName);
+        renderingPaused = true;
+        glView.onPause();
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                GL2JNILib.dealloc();
+                glView.setWillNotDraw(true);
+                Intent i = new Intent(EditorView.this, SceneSelection.class);
+                startActivity(i);
+                finish();
+                timer.cancel();
+            }
+        }, 500);
         dellocAllSubViews();
         dealloc();
-        Intent i = new Intent(EditorView.this,SceneSelection.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(i);
-        finish();
     }
 
     private void dellocAllSubViews()

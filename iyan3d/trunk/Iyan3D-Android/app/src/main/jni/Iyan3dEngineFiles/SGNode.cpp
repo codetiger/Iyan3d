@@ -112,8 +112,15 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_PARTICLES:{
             Json::Value pData = parseParticlesJson(assetId);
-            string meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
-            string texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
+            string meshPath = "";
+            string texPath = "";
+#ifndef ANDROID
+            meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
+            texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
+#elif ANDROID
+            meshPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + ".sgm";
+            texPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + "-cm.png";
+#endif
             printf(" \n Mesh name %s %s ", meshPath.c_str(), texPath.c_str());
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
@@ -214,8 +221,9 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_SHADOW_SKIN_L1));
     node->getMesh()->Commit();
-    
-    string textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
+    string textureFileName = "";
+#ifndef ANDROID
+    textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
     if(!checkFileExists(textureFileName)){
         textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
         if(!checkFileExists(textureFileName)){
@@ -224,7 +232,8 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
                 textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         }
     }
-    
+#endif
+
     printf("Texture File Path : %s " , textureFileName.c_str());
     
     if(textureName != "" && checkFileExists(textureFileName)) {
@@ -286,8 +295,9 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
 
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-    
-    string textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
+    string textureFileName = "";
+#ifndef ANDROID
+    textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
     if(!checkFileExists(textureFileName)){
         textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
         if(!checkFileExists(textureFileName)){
@@ -296,6 +306,7 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
                 textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         }
     }
+#endif
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -309,9 +320,18 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
 Json::Value SGNode::parseParticlesJson(int assetId)
 {
     Json::Value particlesData;
-    
+    string jsonPath = "";
     string jsonFileName = to_string(assetId) + ".json";
-    ifstream jsonFile( constants::CachesStoragePath + "/" + jsonFileName);
+
+#ifndef ANDROID
+         jsonPath = constants::CachesStoragePath + "/" + jsonFileName;
+#elif ANDROID
+        jsonPath = constants::DocumentsStoragePath + "/mesh/"+jsonFileName;
+#endif
+
+    Logger::log(INFO,"SGNODE","Particle Path " + jsonPath);
+
+    ifstream jsonFile(jsonPath);
     Logger::log(INFO, "Autorig joints data", "Bundlepath:"+constants::BundlePath);
     Json::Reader reader;
     if(!reader.parse(jsonFile, particlesData, false)){
@@ -357,20 +377,30 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     string textureFileName = StoragePath + textureName+".png";
     
     if(!checkFileExists(meshPath)) {
+#ifdef IOS
         meshPath = FileHelper::getDocumentsDirectory() + to_string(assetId) + fileExt;
         if(!checkFileExists(meshPath)){
             meshPath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId) + fileExt;
         }
+#else
+            meshPath = constants::BundlePath+"/"+to_string(assetId)+fileExt;
+#endif
         if(!checkFileExists(meshPath))
             return shared_ptr<Node>();
     }
     if(!checkFileExists(textureFileName)){
+        #ifdef IOS
         textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
         if(!checkFileExists(textureFileName))
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
         if(!checkFileExists(textureFileName))
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
-    }
+        #elif ANDROID
+            textureFileName = constants::BundlePath+"/"+textureName+".png";
+            if(!checkFileExists(textureFileName))
+                textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
+        #endif
+}
 
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
@@ -404,17 +434,17 @@ bool SGNode::checkFileExists(std::string fileName)
 }
 
 shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr){
-    string StoragePath;
-    
+string StoragePath;
+
 #ifdef IOS
-    if (assetId >= 40000 && assetId < 50000)
-        StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Rigs/";
-    else
-        StoragePath = constants::CachesStoragePath + "/";
+if (assetId >= 40000 && assetId < 50000)
+StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Rigs/";
+else
+StoragePath = constants::CachesStoragePath + "/";
 #endif
-    
+
 #ifdef ANDROID
-    StoragePath = constants::DocumentsStoragePath + "/mesh/";
+StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
     
     string meshPath = StoragePath + to_string(assetId) + ".sgr";
@@ -511,13 +541,13 @@ void SGNode::setSkinningData(SkinMesh *mesh){
     }
 }
 shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float aspectRatio){
-    char* textureFileName = new char[256];
-    
+char* textureFileName = new char[256];
+
 #ifdef ANDROID
-    string path = constants::DocumentsStoragePath+ "/importedImages/"+textureName;
-    textureFileName=(path).c_str();
+string path = constants::DocumentsStoragePath+ "/importedImages/"+textureName;
+textureFileName=(path).c_str();
 #else
-    sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
+sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
 #endif
     Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
     Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));

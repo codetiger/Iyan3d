@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import com.smackall.animator.Adapters.AssetSelectionAdapter;
 import com.smackall.animator.DownloadManager.AddToDownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManager;
+import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
 
@@ -75,6 +76,11 @@ public class AssetSelection {
                 category.setSelection(position);
                 assetSelectionAdapter.assetsDBs.clear();
                 assetSelectionAdapter.assetsDBs = db.getAllModelDetail((Constants.VIEW_TYPE == Constants.PARTICLE_VIEW) ? PARTICLE : modelType[position]);
+                if((Constants.VIEW_TYPE != Constants.PARTICLE_VIEW) && modelType[position] == -1){
+                    if(assetSelectionAdapter.assetsDBs != null && assetSelectionAdapter.assetsDBs.size() > 0)
+                    assetSelectionAdapter.assetsDBs.clear();
+                    assetSelectionAdapter.assetsDBs = db.getAllMyModelDetail();
+                }
                 assetSelectionAdapter.notifyDataSetChanged();
             }
 
@@ -88,8 +94,9 @@ public class AssetSelection {
             @Override
             public void onClick(View v) {
                 downloadManager.cancelAll();
-                insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
+                insertPoint.removeAllViews();
+                ((EditorView)((Activity)mContext)).renderManager.removeTempNode();
                 mContext = null;
                 db = null;
                 assetSelectionAdapter = null;
@@ -101,6 +108,10 @@ public class AssetSelection {
                 downloadManager.cancelAll();
                 insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
+                AssetsDB assetsDBs = assetSelectionAdapter.assetsDBs.get(assetSelectionAdapter.selectedAsset);
+                assetsDBs.setIsTempNode(false);
+                assetsDBs.setTexture(assetsDBs.getAssetsId() + "-cm");
+                ((EditorView)(Activity)mContext).renderManager.importAssets(assetsDBs,false);
                 mContext = null;
                 db = null;
                 assetSelectionAdapter = null;
@@ -116,5 +127,6 @@ public class AssetSelection {
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
+        assetSelectionAdapter.downloadThumbnail();
     }
 }

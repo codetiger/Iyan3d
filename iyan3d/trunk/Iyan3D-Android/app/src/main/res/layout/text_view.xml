@@ -27,7 +27,7 @@
             <EditText
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/editText"
+                android:id="@+id/inputText"
                 android:layout_weight="1"
                 android:hint="Enter Text"
                 android:background="#ffffff" />
@@ -65,7 +65,7 @@
                 <SeekBar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/seekBar"
+                    android:id="@+id/bevalSlider"
                     android:layout_gravity="center_horizontal"
                     android:indeterminate="false" />
             </LinearLayout>
@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="With Bone  "
-                    android:id="@+id/switch1"
+                    android:id="@+id/withBone"
                     android:checked="false"
                     android:textColor="#ffffff" />
             </LinearLayout>

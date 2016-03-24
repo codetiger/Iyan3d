@@ -226,10 +226,9 @@ void RenderHelper::setControlsVisibility(bool isVisible)
         return;
     bool isNodeSelected = renderingScene->hasNodeSelected();
     SGNode* selectedNode = renderingScene->getSelectedNode();
-    
+
     if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT)
         renderingScene->controlType = MOVE;
-    
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
     if((isNodeSelected || renderingScene->selectedNodeIds.size() > 0) && isVisible){
         if(renderingScene->controlType == MOVE){
@@ -253,6 +252,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
         if(renderingScene->isControlSelected && isVisible)
             isVisible = (i == renderingScene->selectedControlId) ? true : false;
         renderingScene->sceneControls[i]->node->setVisible(isVisible);
+
     }
 }
 
@@ -312,14 +312,15 @@ void RenderHelper::postRTTDrawCall()
     }
 }
 
-void RenderHelper::rttDrawCall()
-{
-    if(!renderingScene)
+void RenderHelper::rttDrawCall() {
+    if (!renderingScene)
         return;
 
-    if(renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)
+
+    if (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying) {
         drawCameraPreview();
-    if(!renderingScene->isRigMode)
+    }
+    if (!renderingScene->isRigMode)
         rttShadowMap();
 }
 

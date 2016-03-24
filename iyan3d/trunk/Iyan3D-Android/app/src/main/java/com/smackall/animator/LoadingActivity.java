@@ -7,19 +7,16 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.DownloadHelper;
+import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.FullScreen;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import io.fabric.sdk.android.Fabric;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -30,7 +27,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+        //Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
@@ -56,6 +53,7 @@ public class LoadingActivity extends AppCompatActivity {
         animationJsonDownload = new DownloadHelper();
 
         PathManager.initPaths(this);
+        FileHelper.copyAssetsDirToLocal(this);
         db.createDataBase();
         assetJsonDownload.jsonParse("https://iyan3dapp.com/appapi/json/assetsDetailv5.json", db, this, sp, Constants.ASSET_JSON);
         animationJsonDownload.jsonParse("https://iyan3dapp.com/appapi/json/animationDetail.json", db, this, sp, Constants.ANIMATION_JSON);

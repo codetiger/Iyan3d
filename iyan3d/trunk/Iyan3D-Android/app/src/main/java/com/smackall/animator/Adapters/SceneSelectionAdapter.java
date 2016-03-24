@@ -2,6 +2,7 @@ package com.smackall.animator.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.SceneDB;
 import com.smackall.animator.R;
 import com.smackall.animator.SceneSelection;
@@ -40,7 +42,6 @@ public class SceneSelectionAdapter extends BaseAdapter {
         this.db = db;
         this.gridView = gridView;
         this.sceneDBs = this.db.getAllScenes();
-
     }
 
     @Override
@@ -76,13 +77,15 @@ public class SceneSelectionAdapter extends BaseAdapter {
         ImageView imageView = (ImageView)grid.findViewById(R.id.imagepart);
         TextView textView = (TextView)grid.findViewById(R.id.textpart);
         ImageView sceneProps = (ImageView)grid.findViewById(R.id.scene_props_btn);
-        imageView.setImageResource(R.drawable.new_scene_grid);
         textView.setText((sceneDBs.size() == position) ? "" : sceneDBs.get(position).getName());
-
-        if((sceneDBs.size() == position))
+        if((sceneDBs.size() == position)) {
+            imageView.setImageResource(R.drawable.new_scene_grid);
             sceneProps.setVisibility(View.INVISIBLE);
-        else
+        }
+        else {
+            imageView.setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalScenesFolder + "/" + sceneDBs.get(position).getImage() + ".png"));
             sceneProps.setVisibility(View.VISIBLE);
+        }
 
             grid.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -207,7 +207,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     } else if (type == NODE_ADDITIONAL_LIGHT) {
         addLight(sgnode);
     }
-    
+
     //if (type >= NODE_LIGHT && type != NODE_ADDITIONAL_LIGHT)
     sgnode->node->setTexture(currentScene->shadowTexture,2);
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
@@ -476,16 +476,19 @@ bool SGSceneLoader::removeSelectedObjects()
 
 bool SGSceneLoader::removeTempNodeIfExists()
 {
+
     if(!currentScene || !smgr)
         return false;
-    
+
+
     if(currentScene->nodes.size() < 3)
         return false;
     
     for(int index = (int)currentScene->nodes.size()-1; index > 0; index--)
     {
-        if(currentScene->nodes[index]->isTempNode)
+        if(currentScene->nodes[index]->isTempNode) {
             removeObject(index);
+        }
     }
     return true;
 }

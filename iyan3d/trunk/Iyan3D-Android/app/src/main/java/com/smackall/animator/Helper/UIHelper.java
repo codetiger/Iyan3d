@@ -1,5 +1,6 @@
 package com.smackall.animator.Helper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,31 +13,28 @@ import android.view.WindowManager;
  */
 public class UIHelper {
 
-    public static void informDialog(final Context context, String msg){
-
-        AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
-        informDialog
-                .setMessage(msg)
-                .setCancelable(false)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-        informDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+    public static void informDialog(final Context context, final String msg){
+        ((Activity)context).runOnUiThread(new Runnable() {
             @Override
-            public void onCancel(DialogInterface dialog) {
+            public void run() {
 
+                AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
+                informDialog
+                        .setMessage(msg)
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                informDialog.create();
+                try {
+                    informDialog.show();
+                } catch (WindowManager.BadTokenException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        informDialog.create();
-        try {
-            informDialog.show();
-        }
-        catch (WindowManager.BadTokenException e){
-            e.printStackTrace();
-        }
     }
 
     public static int getScreenCategory(Context context){

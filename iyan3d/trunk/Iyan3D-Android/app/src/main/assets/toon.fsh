@@ -10,13 +10,14 @@ precision highp float;
 uniform sampler2D texture1;
 uniform sampler2D depthTexture;
 
-uniform  float transparency,shadowDarkness;
-uniform float brightness, shininess;
+uniform  float transparency,shadowDarkness, isVertexColored;
+uniform float reflection;
 uniform  float shadowTextureSize;
 uniform float numberOfLights;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
 
+varying vec3 vertexColor;
 varying float shadowDist,lightingValue;
 varying vec2 vTexCoord;
 varying vec4 texCoordsBias,normal,eyeVec , vertexPosCam;
@@ -36,7 +37,6 @@ float GetShadowValue(in vec2 offset) {
 void main()
 {
     float maxSpecular = 30.0;
-    lowp vec4 textureColor = texture2D(texture1,vTexCoord.xy);
     
     // shadow Calculation ------
     float shadowValue = 0.0;
@@ -53,7 +53,12 @@ void main()
     
     // Lighting calculation-----
     
-    vec4 diffuse_color = vec4(textureColor),specular = vec4(0.0);
+    lowp vec4 diffuse_color = vec4(vec3(vertexColor),1.0);
+    
+    if(int(isVertexColored) == 0)
+        diffuse_color = texture2D(texture1,vTexCoord.xy);
+
+    vec4 specular = vec4(0.0);
     vec4 toonColor = diffuse_color;
     if(lightingValue != 0.0){
      
@@ -64,12 +69,12 @@ void main()
         vec4 normal = normalize(normal);
         vec4 eyeVec = normalize(eyeVec);
         float n_dot_l = clamp(dot(normal,lightDir),0.0,1.0);
-        vec4 diffuse = vec4(vec3(brightness * n_dot_l),1.0);
-        diffuse_color = diffuse * vec4(textureColor);
+        vec4 diffuse = vec4(vec3(n_dot_l),1.0);
+        diffuse_color = diffuse * vec4(diffuse_color);
         
-        vec4 reflection = -lightDir + 2.0 * n_dot_l * normal;
-        float e_dot_r =  clamp(dot(eyeVec,reflection),0.0,1.0);
-        specular = vec4(shininess * pow(e_dot_r,maxSpecular));
+        vec4 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
+        float e_dot_r =  clamp(dot(eyeVec,reflectValue),0.0,1.0);
+        specular = vec4(reflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = vec4(0.0);
@@ -91,5 +96,5 @@ void main()
     finalColor = finalColor + (vec4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     
     gl_FragColor.xyz = finalColor.xyz;
-    gl_FragColor.a = textureColor.a * transparency;
+    gl_FragColor.a = diffuse_color.a * transparency;
 }

@@ -70,6 +70,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
             @Override
             public void onClick(View v) {
                 ((EditorView)((Activity)mContext)).swapViews();
+                ((EditorView)((Activity)mContext)).renderManager.cameraPosition();
                 dialog.dismiss();
             }
         });

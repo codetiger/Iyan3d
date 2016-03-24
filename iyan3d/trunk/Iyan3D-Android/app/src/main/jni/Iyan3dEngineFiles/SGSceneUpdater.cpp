@@ -31,7 +31,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
 {
     if(!updatingScene || !smgr)
         return;
-    
+
     bool lightChanged = false;
     
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
@@ -40,12 +40,12 @@ void SGSceneUpdater::setDataForFrame(int frame)
             Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(1);
             nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
         }
-        
+
         Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, updatingScene->nodes[i]->positionKeys);
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame, updatingScene->nodes[i]->rotationKeys,true);
         Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frame, updatingScene->nodes[i]->scaleKeys);
         int visibilityKeyindex = KeyHelper::getKeyIndex(updatingScene->nodes[i]->visibilityKeys, frame);
-        
+
         SGNode* sgNode = updatingScene->nodes[i];
         
         if(visibilityKeyindex != -1){
@@ -77,7 +77,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 changed = joint->setScaleOnNode(jointScale);
             }
         }
-        
+
     }
 #ifndef UBUNTU
     updateControlsOrientaion(updatingScene);
@@ -171,10 +171,10 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     bool isJointSelected = updatingScene->hasJointSelected();
     SGNode* selectedNode = updatingScene->getSelectedNode();
     SGJoint* selectedJoint = updatingScene->getSelectedJoint();
-    
+
     if((isJointSelected || (updatingScene->isRigMode && updatingScene->rigMan->isSkeletonJointSelected)) && updatingScene->controlType == SCALE)
         updatingScene->controlType = MOVE;
-    
+
     if((!isNodeSelected || !selectedNode) && (!isJointSelected || !selectedJoint) && updatingScene->selectedNodeIds.size() <= 0)
         return;
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
@@ -189,7 +189,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     
     float distanceFromCamera = nodePos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
     float ctrlScale = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_SCALE);
-    
+
     ctrlScale = forRTT ? (ctrlScale * 1.5) : ctrlScale * 1.3;
     
     float ctrlDistanceFromNode = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_DISTANCE_FROM_NODE);
@@ -233,7 +233,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
             rotMat.setRotationRadians(rot);
             rotMat.rotateVect(delta);
             Quaternion finalRotation = MathHelper::RotateNodeInWorld(currentControl->node->getRotationInDegrees(), Quaternion(rot));
-            
+
             currentControl->node->setRotationInRadians(MathHelper::toEuler(finalRotation));
             currentControl->node->setPosition(Vector3(nodePos) + delta);
         }

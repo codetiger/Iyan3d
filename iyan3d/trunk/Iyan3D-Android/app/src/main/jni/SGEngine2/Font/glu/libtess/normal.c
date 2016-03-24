@@ -32,9 +32,12 @@
 **
 */
 
+#include "gluos.h"
 #include "mesh.h"
 #include "tess.h"
 #include "normal.h"
+#include <math.h>
+#include <assert.h>
 
 #define TRUE 1
 #define FALSE 0

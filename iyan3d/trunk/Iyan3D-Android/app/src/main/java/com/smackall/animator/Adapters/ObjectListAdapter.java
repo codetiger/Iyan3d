@@ -19,8 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.smackall.animator.EditorView;
+import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.SimpleGestureFilter;
 import com.smackall.animator.R;
+import com.smackall.animator.opengl.GL2JNILib;
 
 
 /**
@@ -36,7 +38,7 @@ public class ObjectListAdapter extends BaseAdapter implements SimpleGestureFilte
     public int objectCount = 0;
     private SparseBooleanArray mSelectedIds;
     private SparseBooleanArray mEditedIds;
-    private boolean isMultiSelectEnable;
+    public boolean isMultiSelectEnable;
     private int selectedPosition = -1;
 
     public ObjectListAdapter(Context context,ListView listView,int objectCount,int isMultiSelectEnable) {
@@ -74,16 +76,13 @@ public class ObjectListAdapter extends BaseAdapter implements SimpleGestureFilte
         } else {
             grid = (View) convertView;
         }
+        ((ViewGroup) ((ViewGroup) grid).getChildAt(2)).setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
 
+        if(GL2JNILib.isNodeSelected(position))
+            ((ViewGroup) ((ViewGroup) grid).getChildAt(2)).setBackgroundColor(ContextCompat.getColor(mContext,R.color.selectList));
         if(isMultiSelectEnable && mSelectedIds.size() > 1) {
-            ((ViewGroup) ((ViewGroup) grid).getChildAt(2)).setBackgroundColor(ContextCompat.getColor(mContext, (mSelectedIds.get(position, false)) ? R.color.selectList : R.color.white));
-//            if(mSelectedIds.get(position, false))
-//                ((ViewGroup)grid).getChildAt(2).setX(((ViewGroup)((ViewGroup)grid).getChildAt(1)).getChildAt(1).getWidth()*-1);
-//            else
-//                ((ViewGroup)grid).getChildAt(2).setX(0);
         }
         else {
-            ((ViewGroup) ((ViewGroup) grid).getChildAt(2)).setBackgroundColor(ContextCompat.getColor(mContext, (selectedPosition == position) ? R.color.selectList : R.color.white));
             if(selectedPosition == position && mEditedIds.get(position,false))
                 ((ViewGroup)grid).getChildAt(2).setX(((ViewGroup)((ViewGroup)grid).getChildAt(1)).getChildAt(1).getWidth()*-1);
             else
@@ -92,8 +91,34 @@ public class ObjectListAdapter extends BaseAdapter implements SimpleGestureFilte
         TextView object_lable = (TextView) grid.findViewById(R.id.object_lable);
         ImageView object_img = (ImageView) grid.findViewById(R.id.object_img);
         ImageView delete_btn = (ImageView) grid.findViewById(R.id.delete_btn);
-        object_img.setImageResource(R.drawable.import_models);
-        object_lable.setText("Sample " + String.valueOf(position));
+
+        switch (GL2JNILib.getNodeType(position)){
+            case Constants.NODE_VIDEO:
+            case Constants.NODE_CAMERA:
+                object_img.setImageResource(R.drawable.my_object_camera);
+                break;
+            case Constants.NODE_ADDITIONAL_LIGHT:
+            case Constants.NODE_LIGHT:
+                object_img.setImageResource(R.drawable.my_object_light);
+                break;
+            case Constants.NODE_RIG:
+            case Constants.NODE_SGM:
+            case Constants.NODE_OBJ:
+                object_img.setImageResource(R.drawable.my_object_model);
+                break;
+            case Constants.NODE_IMAGE:
+                object_img.setImageResource(R.drawable.my_object_image);
+                break;
+            case Constants.NODE_PARTICLES:
+                object_img.setImageResource(R.drawable.my_object_particle);
+                break;
+            case Constants.NODE_TEXT_SKIN:
+            case Constants.NODE_TEXT:
+                    object_img.setImageResource(R.drawable.my_object_text);
+                    break;
+        }
+
+        object_lable.setText(GL2JNILib.getNodeName(position));
         ((ViewGroup)grid).getChildAt(2).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -107,7 +132,8 @@ public class ObjectListAdapter extends BaseAdapter implements SimpleGestureFilte
                 mEditedIds.clear();
                 mSelectedIds.clear();
                 selectedPosition = -1;
-                ((EditorView) ((Activity) mContext)).deleteNodeAtPosition(position);
+                ((EditorView) ((Activity) mContext)).deleteNodeAtPosition(position,true);
+                notifyDataSetChanged();
             }
         });
         return grid;
@@ -167,8 +193,8 @@ public class ObjectListAdapter extends BaseAdapter implements SimpleGestureFilte
             toggleSelection(position);
 
         selectedPosition = position;
+        ((EditorView)((Activity)mContext)).renderManager.selectObject(position);
         notifyDataSetChanged();
-
     }
 
     @Override
