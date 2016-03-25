@@ -151,7 +151,7 @@ public:
     #endif
     
     void (*fileWriteCallBack)();
-    bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture);
+    bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture, string textureName);
     void shaderCallBackForNode(int nodeID,string matName);
     float getNodeTransparency(int nodeId);
     bool isNodeTransparent(int nodeId);
