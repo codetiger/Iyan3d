@@ -111,6 +111,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             break;
         }
         case NODE_PARTICLES:{
+            textureName = to_string(assetId) + "-cm";
             Json::Value pData = parseParticlesJson(assetId);
             string meshPath = "";
             string texPath = "";
@@ -332,7 +333,6 @@ Json::Value SGNode::parseParticlesJson(int assetId)
     Logger::log(INFO,"SGNODE","Particle Path " + jsonPath);
 
     ifstream jsonFile(jsonPath);
-    Logger::log(INFO, "Autorig joints data", "Bundlepath:"+constants::BundlePath);
     Json::Reader reader;
     if(!reader.parse(jsonFile, particlesData, false)){
         Logger::log(ERROR, "Unable to parse jointsData.json", "AutoRigHelper");

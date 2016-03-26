@@ -42,7 +42,9 @@ public:
     SGCloudRenderingHelper();
     static bool writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId);
     vector<TriangleData> calculateTriangleDataForNode(SGNode * sgNode);
+    vector<TriangleData> calculateTriangleDataForParticleNode(SGNode *sgNode);
     vertexData calculateFinalVertexData(shared_ptr<Node> node , void * vertex);
+    vertexData calculateFinalVertexDataForParticle(shared_ptr<Node> node , void * vertex, int index);
     void calculateJointTransforms(vertexDataHeavy *vertex , vector<Mat4> jointTransforms , Vector3 &position , Vector3 &normal);
     void copyMat(float* pointer,Mat4& mat);
 };

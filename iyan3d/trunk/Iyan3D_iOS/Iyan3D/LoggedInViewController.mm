@@ -12,6 +12,7 @@
 #import <TwitterKit/TwitterKit.h>
 #import "AFNetworking.h"
 #import "AFHTTPRequestOperation.h"
+#import "AFHTTPClient.h"
 
 #import "LoggedInViewController.h"
 #import "RenderTableViewCell.h"
@@ -23,6 +24,12 @@
 
 #define IN_PROGRESS 0
 #define COMPLETED 1
+
+#define DOWNLOAD_FILE 0
+#define GET_FILE_TYPE 1
+
+#define DEFAULT_OR_IMAGE 0
+#define VIDEO_FILE 1
 
 @interface LoggedInViewController ()
 
@@ -108,9 +115,7 @@
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
         //ret = [self handle:data];
         complete = YES;
-        NSLog(@" \n resp str %@ , resp object %@ ", [operation responseString], responseObject);
         int progress = [[operation responseString] intValue];
-        printf(" \n Task ID %d Progress %d \n", taskId, progress);
         if(progress != -1)
             [cache updateRenderTask:taskId WithProgress:progress];
         else
@@ -233,8 +238,58 @@
     RenderTableViewCell *cell = [self.renderStatus cellForRowAtIndexPath:indexPath];
     [cell.downloadProgress setHidden:NO];
     [cell.downloadProgress startAnimating];
-    if(downloadCompletedTaskIds != cell.renderProgressLabel.tag)
-        [self downloadOutputVideo:(int)cell.renderProgressLabel.tag];
+    if(downloadCompletedTaskIds != cell.renderProgressLabel.tag) {
+        [self downloadAndSaveFile:(int)cell.renderProgressLabel.tag WithAction:GET_FILE_TYPE AndType:DEFAULT_OR_IMAGE];
+//        [self downloadOutputVideo:(int)cell.renderProgressLabel.tag];
+    }
+}
+
+- (void) downloadAndSaveFile:(int) taskId WithAction:(int)action AndType:(int) type
+{
+    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/download.php"];
+    NSString *postPath = @"https://www.iyan3dapp.com/appapi/download.php";
+    
+    NSString* taskIdStr = [NSString stringWithFormat:@"%d",taskId];
+    NSString* hashFormatStr = [NSString stringWithFormat:@"%d-%@",taskId, [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]];
+    NSString* uHashStr = [Utility getMD5ForString:hashFormatStr];
+    
+    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:taskIdStr, @"taskid", uHashStr, @"uhash", [NSString stringWithFormat:@"%d", action], @"action", nil]];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if(action == GET_FILE_TYPE)
+            [self downloadAndSaveFile:taskId WithAction:DOWNLOAD_FILE AndType:[[operation responseString] intValue]];
+        else {
+            NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString* documentsDirectory = [docPaths objectAtIndex:0];
+
+            NSString *extension = (type == VIDEO_FILE) ? @".mp4" : @".png";
+            NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.%@", documentsDirectory, taskId, extension];
+            
+            NSData *fileData = [operation responseData];
+            [fileData writeToFile:outputFilePath atomically:YES];
+            
+            if([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
+                if(type == VIDEO_FILE)
+                    UISaveVideoAtPathToSavedPhotosAlbum(outputFilePath, self,  @selector(video:didFinishSavingWithError:contextInfo:), nil);
+                else {
+                    UIImage *img = [UIImage imageWithContentsOfFile:outputFilePath];
+                    UIImageWriteToSavedPhotosAlbum(img, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                }
+                    
+            }
+            downloadCompletedTaskIds = taskId;
+            
+        }
+    }
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Failure: %@", error.localizedDescription);
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Cannot download file. Check your net connection." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                                         [userNameAlert show];
+                                     }];
+    [operation start];
 }
 
 - (void) downloadOutputVideo:(int)taskId
@@ -260,7 +315,6 @@
     NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/renderFiles/%d/%d.png", taskId, taskId];
     NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.png", documentsDirectory, taskId];
     
-    NSLog(@" \n URL %@ ", url);
     NSLog(@" \n path %@ ", outputFilePath);
     DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(donwloadCompleted:) returnObject:[NSNumber numberWithInt:taskId] outputFilePath:outputFilePath andURL:url];
     task.taskType = DOWNLOAD_AND_WRITE;

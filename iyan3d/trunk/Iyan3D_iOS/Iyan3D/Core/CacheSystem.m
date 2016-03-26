@@ -116,7 +116,6 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
     NSString *querySQL = [NSString stringWithFormat:@"SELECT %@ FROM %@", ASSET_GROUP, TABLE_ASSET_INFO];
     if(sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         columnAdded = YES;
-        NSLog(@" \n GROUP column exits");
     } else {
         NSString *updateSQL = [NSString stringWithFormat: @"ALTER TABLE %@ ADD COLUMN %@ INTEGER", TABLE_ASSET_INFO, ASSET_GROUP];
         const char *update_stmt = [updateSQL UTF8String];
@@ -182,7 +181,6 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
         NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY %@ DESC", RENDER_TASK_TABLE, RENDER_TASK_ID];
         sqlite3_stmt *statement;
         if (sqlite3_prepare_v2(_cacheSystem, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-            NSLog(@"Success");
             while( sqlite3_step(statement) == SQLITE_ROW) {
                 RenderItem* a = [[RenderItem alloc] init];
                 a.taskName = [NSString stringWithFormat:@"%s",sqlite3_column_text(statement, 0)];
@@ -191,7 +189,6 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
                 a.taskFrames = sqlite3_column_int(statement, 3);
                 a.dateAdded = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
                 [array1 addObject:a];
-                NSLog(@"project name: %@",a.taskName);
             }
             
         }else{
@@ -213,7 +210,6 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
                 a.taskProgress = sqlite3_column_int(statement, 2);
                 a.taskFrames = sqlite3_column_int(statement, 3);
                 a.dateAdded = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
-                NSLog(@"project name: %@",a.taskName);
             sqlite3_finalize(statement);
             return a;
         }else{
@@ -235,7 +231,6 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
             a.taskProgress = sqlite3_column_int(statement, 2);
             a.taskFrames = sqlite3_column_int(statement, 3);
             a.dateAdded = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
-            NSLog(@"project name: %@",a.taskName);
             sqlite3_finalize(statement);
             return a;
         }else{

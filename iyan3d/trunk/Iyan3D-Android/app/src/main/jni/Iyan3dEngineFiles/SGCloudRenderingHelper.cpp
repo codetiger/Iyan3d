@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Smackall Games. All rights reserved.
 //
 
+#include "ParticleManager.h"
 #include "HeaderFiles/SGCloudRenderingHelper.h"
 
 SGCloudRenderingHelper::SGCloudRenderingHelper()
@@ -92,6 +93,14 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             FileHelper::writeBool(&frameFilePtr, scene->nodes[nodeId]->props.isLighting); // node lighting
 
             SGCloudRenderingHelper *renderHelper = new SGCloudRenderingHelper();
+            if(thisNode->getType() == NODE_PARTICLES) {
+                shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(thisNode->node);
+                for(int i = 0; i < frameId; i++) {
+                    pNode->update();
+                    pNode->sortParticles(smgr->getActiveCamera()->getPosition());
+                    pNode->updateParticles(true, smgr->getActiveCamera()->getPosition());
+                }
+            }
             vector<TriangleData> trianglesData =   renderHelper->calculateTriangleDataForNode(thisNode);
             
             FileHelper::writeInt(&frameFilePtr, (int)trianglesData.size());
@@ -179,6 +188,9 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode
             trianglesData.push_back(tData);
         }
     }
+    else if (sgNode->getType() == NODE_PARTICLES) {
+        trianglesData = calculateTriangleDataForParticleNode(sgNode);
+    }
     else {
         unsigned int verticesCount = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh()->getVerticesCount();
         Mesh * currentMesh = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh();
@@ -213,6 +225,45 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode
         }
     }
     
+    return trianglesData;
+}
+
+vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForParticleNode(SGNode *sgNode)
+{
+    vector<TriangleData> trianglesData;
+    vector<unsigned int> highPolyIndices;
+
+    unsigned int verticesCount = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh()->getVerticesCount();
+    Mesh * currentMesh = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh();
+    
+    unsigned int indicesCount = currentMesh->getTotalIndicesCount();
+    highPolyIndices = currentMesh->getTotalIndicesArray();
+    
+    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
+    
+    highPolyIndices = currentMesh->getTotalIndicesArray();
+    
+    for(int index = 0; index < pNode->getParticlesCount(); index++) {
+        vector<vertexData> allverticesData;
+        for (unsigned int i = 0; i < verticesCount; i++) {
+            vertexData *currentVertex = currentMesh->getLiteVertexByIndex(i);
+            allverticesData.push_back(calculateFinalVertexDataForParticle(sgNode->node, currentVertex, index));
+        }
+        for(unsigned int i = 0; i < indicesCount; i+=3) {
+            TriangleData tData;
+            tData.Pos1 = allverticesData[highPolyIndices[i]].vertPosition;
+            tData.Pos2 = allverticesData[highPolyIndices[i+1]].vertPosition;
+            tData.Pos3 = allverticesData[highPolyIndices[i+2]].vertPosition;
+            tData.Normal1 = allverticesData[highPolyIndices[i]].vertNormal;
+            tData.Normal2 = allverticesData[highPolyIndices[i+1]].vertNormal;
+            tData.Normal3 = allverticesData[highPolyIndices[i+2]].vertNormal;
+            tData.UV1 = allverticesData[highPolyIndices[i]].texCoord1;
+            tData.UV2 = allverticesData[highPolyIndices[i+1]].texCoord1;
+            tData.UV3 = allverticesData[highPolyIndices[i+2]].texCoord1;
+            trianglesData.push_back(tData);
+        }
+        allverticesData.clear();
+    }
     return trianglesData;
 }
 
@@ -262,6 +313,61 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexData(shared_ptr<Node> nod
         return finalVertData;
     }
 }
+
+vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_ptr<Node> node , void * vertex, int index)
+{
+    vertexData finalVertData;
+
+    finalVertData.vertPosition = ((vertexData*)vertex)->vertPosition;
+    finalVertData.vertNormal = ((vertexData*)vertex)->vertNormal;
+    finalVertData.texCoord1 = ((vertexData*)vertex)->texCoord1;
+    
+    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(node);
+    Vector4* positions = pNode->getPositions();
+    Vector4* rotations = pNode->getRotations();
+    //TODO To Modfiy the for loop and send particle index to this func
+        Vector4 props = pNode->getParticleProps();
+        Mat4 translation = Mat4();
+        translation[12] = positions[index].x;
+        translation[13] = positions[index].y;
+        translation[14] = positions[index].z;
+        
+        Mat4 rotationMat = Mat4();
+        float cr = cos(rotations[index].x);
+        float sr = sin(rotations[index].x);
+        float cp = cos(rotations[index].y);
+        float sp = sin(rotations[index].y);
+        float cy = cos(rotations[index].z);
+        float sy = sin(rotations[index].z);
+        
+        rotationMat[0] = (cp * cy);
+        rotationMat[1] = (cp * sy);
+        rotationMat[2] = (-sp);
+        
+        float srsp = sr * sp;
+        float crsp = cr * sp;
+        
+        rotationMat[4] = (srsp * cy - cr * sy);
+        rotationMat[5] = (srsp * sy + cr * cy);
+        rotationMat[6] = (sr * cp);
+        
+        rotationMat[8] = (crsp * cy + sr * sy);
+        rotationMat[9] = (crsp * sy - sr * cy);
+        rotationMat[10] = (cr * cp);
+        
+        float live = float(positions[index].w > 0.0 && positions[index].w <= float(props.x));
+        if(live <= 0.0) {
+            for(int i = 0; i < 16; i ++)
+                translation[i] = 0;
+        }
+        Mat4 pModel = translation * rotationMat;
+        
+        Vector4 vPos = pModel * Vector4(finalVertData.vertPosition , 1.0);
+        finalVertData.vertPosition = Vector3(vPos.x, vPos.y, vPos.z);
+
+    return finalVertData;
+}
+
 
 void SGCloudRenderingHelper::calculateJointTransforms(vertexDataHeavy *vertex , vector<Mat4> jointTransforms , Vector3 &vertPosition, Vector3 &vertNormal)
 {

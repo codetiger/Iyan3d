@@ -307,6 +307,11 @@ vector<string> SGEditorScene::getUserFileNames()
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
         else if (sgNode->getType() == NODE_IMAGE)
             userFileNames.push_back(sgNode->textureName + ".png");
+        else if (sgNode->getType() == NODE_PARTICLES) {
+            userFileNames.push_back(to_string(sgNode->assetId) + ".json");
+            userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
+            userFileNames.push_back(sgNode->textureName + ".png");
+        }
     }
     return userFileNames;
 }
