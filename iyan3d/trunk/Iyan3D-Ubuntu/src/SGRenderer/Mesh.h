@@ -44,9 +44,13 @@ public:
 		material.transparency = readFloat(data);
 		material.hasLighting = readBool(data);
 
+		material.reflectionSharpness = 0.0;
+
 		numberOfTriangles = readInt(data);
 
 		id = rtcNewTriangleMesh(rtcScene, RTC_GEOMETRY_STATIC, numberOfTriangles, numberOfTriangles * 3);
+		rtcSetIntersectionFilterFunction(rtcScene, id, (RTCFilterFunc)&FilterFunc);
+		rtcSetUserData(rtcScene, id, this);
 		uvs = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 		normals = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 
@@ -148,7 +152,7 @@ public:
 	}
 
 	Vec3fa getEmissionColor() {
-		return material.emissionColor;//* 200.0f;
+		return material.emissionColor;
 	}
 
 	Vec3fa getColor(double u, double v) {
@@ -161,6 +165,16 @@ public:
 			color = material.diffuse;
 
 		return color;
+	}
+
+	double getAlpha(double u, double v) {
+		double a = 0.0;
+		if(material.hasTexture)
+			a = texture->getAlphaAt(u, v);
+		else
+			a = 1.0;
+
+		return a;
 	}
 
 	Vec3fa getInterpolatedUV(int index, double u, double v) {

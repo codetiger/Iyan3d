@@ -155,11 +155,13 @@ bool renderFile(TaskDetails td) {
 	rtcDeviceSetErrorFunction(device, error_handler);
 	_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 	_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+	rtcDeviceGetParameter1i(device, RTC_CONFIG_BACKFACE_CULLING);
 
 	Scene *scene = new Scene(device);
 	bool status = scene->loadScene((to_string(td.frame) + ".sgfd").c_str(), td.width, td.height);
 	if(status) {
 		scene->render();
+		printf(" \n Saving File...");
 		scene->SaveToFile((convert2String(td.taskId) + "t" + convert2String(td.frame) + "f_render.png").c_str(), ImageFormat_PNG);
 	}
 	delete scene;
@@ -190,22 +192,28 @@ bool checkAndDownloadFile(std::string filePath, std::string serverPath, std::str
 	return true;
 }
 
-bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType, bool hasTexture) {
+bool downloadMissingAssetCallBack(std::string filePath, NODE_TYPE nodeType, bool hasTexture, std::string textureName) {
 	if(nodeType == NODE_SGM) {
 		if(!checkAndDownloadFile(filePath + ".sgm", filePath + ".sgm", "/mesh"))
 			return false;
-		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
-			return false;
+		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture")) {
+			if(!checkAndDownloadFile(textureName + ".png", textureName + ".png", "/meshtexture"))
+				return false;
+		}
 	} else if(nodeType == NODE_RIG) {
 		if(!checkAndDownloadFile(filePath + ".sgr", filePath + ".sgr", "/mesh"))
 			return false;
-		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture"))
-			return false;
+		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture")) {
+			if(!checkAndDownloadFile(textureName + ".png", textureName + ".png", "/meshtexture"))
+				return false;
+		}
 	} else if(nodeType == NODE_OBJ) {
 		if(!checkAndDownloadFile(filePath + ".obj", filePath + ".obj", ""))
 			return false;
-		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", ""))
-			return false;
+		if(hasTexture && !checkAndDownloadFile(filePath + "-cm.png", filePath + ".png", "/meshtexture")) {
+			if(!checkAndDownloadFile(textureName + ".png", textureName + ".png", "/meshtexture"))
+				return false;
+		}
 	} else if(nodeType == NODE_TEXT) {
 		string uefilename(url_encode(filePath.c_str()));
 		if(!checkAndDownloadFile(filePath, "findfont.php?name=" + uefilename, ""))

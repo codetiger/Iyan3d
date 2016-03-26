@@ -44,7 +44,9 @@ enum ImageFormat {
     ImageFormat_PNG
 };
 
-struct Vertex   { float x, y, z, a; };
+#define ALIGN(...) __attribute__((aligned(__VA_ARGS__)))
+
+ALIGN(16) struct Vertex   { float x, y, z, a; };
 struct Triangle { unsigned int v0, v1, v2; };
 struct UV { float u, v; };
 struct Normal { float x, y, z; };
@@ -161,7 +163,7 @@ RTCRay getIntersection(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0
     return ray;
 }
 
-RTCRay getOcclusion(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f) {
+RTCRay getOcclusion(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f, int mask = 0xFFFFFFFF) {
     RTCRay ray;
     ray.org[0] = o.x;
     ray.org[1] = o.y;
@@ -175,7 +177,7 @@ RTCRay getOcclusion(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f) 
     ray.tfar = depth;
     ray.geomID = RTC_INVALID_GEOMETRY_ID;
     ray.primID = RTC_INVALID_GEOMETRY_ID;
-    ray.mask = -1;
+    ray.mask = mask;
     ray.time = 0;
 
     rtcOccluded(scene, ray);
@@ -195,6 +197,16 @@ Vec3fa sampleAroundNormal(Vec3fa n) {
     Vec3fa u = ((fabs(w.x) > .1 ? Vec3fa(0, 1, 0) : Vec3fa(1, 0, 0)).cross(w)).normalize();
     Vec3fa v = w.cross(u);
     return (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalize();
+}
+
+Vec3fa randomizeDirection(Vec3fa dir, double magnitude) {
+	SGRTMat4 camMatrix;
+    Vec3fa angle = Vec3fa(GetRandomValue() - 0.5, GetRandomValue() - 0.5, 0.0f) * magnitude * 60.0;
+    camMatrix.setRotationRadians(angle * M_PI / 180.0f);
+
+    Vec3fa d = dir;
+    camMatrix.rotateVect(d);
+    return d;
 }
 
 bool file_exists (const std::string& name) {
@@ -229,7 +241,19 @@ string convert2String(int i) {
 #include "texture.h"
 #include "camera.h"
 #include "material.h"
+
+void FilterFunc(void* userPtr, RTCRay& ray);
+
 #include "Mesh.h"
+
+void FilterFunc(void* userPtr, RTCRay& ray) {
+	SGRTMesh *mesh = (SGRTMesh*)userPtr;
+	Vec3fa uv = mesh->getInterpolatedUV(ray.primID, ray.u, ray.v);
+	double alpha = mesh->getAlpha(uv.x, uv.y);
+	if(alpha == 0.0)
+		ray.geomID = RTC_INVALID_GEOMETRY_ID;
+}
+
 #include "scene.h"
 
 #include "videoencoder.h"

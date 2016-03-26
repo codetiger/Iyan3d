@@ -1093,9 +1093,7 @@ void SGNode::readData(ifstream *filePointer)
             
         } else
             name = ConversionHelper::getWStringForString(nodeSpecificString);//wstring(nodeSpecificString.begin(), nodeSpecificString.end());
-        
-        printf(" Name %s ", ConversionHelper::getStringForWString(name).c_str());
-    }
+         }
     
     props.textColor.x = FileHelper::readFloat(filePointer);
     props.textColor.y = FileHelper::readFloat(filePointer);

@@ -10,6 +10,7 @@ struct SGRMaterial
     float emission, transparency, reflection, refraction;
 	float shadowDarkness;
     bool hasTexture, hasLighting;
+    float reflectionSharpness;
 };
 
 #endif

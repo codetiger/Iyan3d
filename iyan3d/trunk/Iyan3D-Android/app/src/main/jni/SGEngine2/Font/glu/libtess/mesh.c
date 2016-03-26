@@ -34,7 +34,7 @@
 ** $Header: /home/krh/git/sync/mesa-cvs-repo/Mesa/src/glu/sgi/libtess/mesh.c,v 1.1 2001/03/17 00:25:41 brianp Exp $
 */
 
-#include "gluos.h"
+#include "../include/gluos.h"
 #include <stddef.h>
 #include <assert.h>
 #include "mesh.h"

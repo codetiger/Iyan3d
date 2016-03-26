@@ -28,9 +28,9 @@
  * Silicon Graphics, Inc.
  */
 
-#include "gluos.h"
+#include "../include/gluos.h"
 #include "gluint.h"
-#include "glu.h"
+#include "../include/glu.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -13,13 +13,20 @@ struct Scene
 	vector<Tile> tiles;
 	double progress;
 	unsigned char *pixels;
+	double dofNear, dofFar;
 
 	Scene(RTCDevice rtcDevice) {
 		srand(time(0));
+		dofNear = 0.0;
+		dofFar = 5000.0;
 		sgScene = rtcDeviceNewScene(rtcDevice, RTC_SCENE_STATIC, RTC_INTERSECT1);
+
 		if(!sgScene) {
 			printf("Error: Failed initializing RTCScene\n");
 		}
+
+		dofNear = 15.0;
+		dofFar = 35.0;
 	}
 
 	~Scene() {
@@ -81,7 +88,7 @@ struct Scene
 		if(imgFormat == ImageFormat_PPM) {
 			FILE* file = fopen(imagePath, "wb");
 			if (!file) 
-				printf("cannot open file\n");
+				printf("cannot ope		n file\n");
 
 			fprintf(file,"P6\n%i %i\n255\n", imgWidth, imgHeight);
 
@@ -110,6 +117,13 @@ struct Scene
 	
 	void renderPixel(int x, int y) {
 		Vec3fa color = Vec3fa(0.0f);
+		double distance = 0;
+
+		double ao = 1.0;
+		if(samplesAO > 0) {
+			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
+			ao = getAmbientOcclusion(cam->position, dir, distance);
+		}
 
 		if(randomSamples > 0) {
 			for (int i = 0; i < randomSamples; ++i) {
@@ -118,18 +132,21 @@ struct Scene
 				double dx = r1 < 1 ? sqrt(r1)-1 : 1-sqrt(2-r1);
 				double dy = r2 < 1 ? sqrt(r2)-1 : 1-sqrt(2-r2);
 				Vec3fa dir = cam->getRayDirection((x + dx)/(double)imgWidth, (y + dy)/(double)imgHeight);
-				color = color + getRadiance(cam->position, dir, 0);
+
+				double focalDist = dofNear + (dofFar - dofNear) / 2.0;
+				if(distance > dofNear && distance < dofFar) {
+					color = color + getRadiance(cam->position, dir, 0);
+				} else {
+					Vec3fa focalPoint = cam->position + dir * focalDist;
+					double blurMagnitude = (distance > focalDist ? distance - dofFar : dofNear - distance)/ focalDist;
+					Vec3fa camPosition = cam->position + Vec3fa(GetRandomValue(), GetRandomValue(), GetRandomValue()) * blurMagnitude;
+					color = color + getRadiance(camPosition, focalPoint - camPosition, 0);
+				}
 			}
 			color = color / (double)randomSamples;
 		} else {
 			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
 			color = color + getRadiance(cam->position, dir, 0);
-		}
-	
-		double ao = 1.0;
-		if(samplesAO > 0) {
-			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
-			ao = getAmbientOcclusion(cam->position, dir);
 		}
 
 		int pi = (((imgHeight - y - 1) * imgWidth) + x) * 4;
@@ -140,8 +157,9 @@ struct Scene
 		progress = (y * imgWidth + x) / (1.0f * imgWidth * imgHeight);
 	}
 
-	double getAmbientOcclusion(Vec3fa point, Vec3fa dir) {
-		RTCRay ray = getIntersection(sgScene, point, dir);
+	double getAmbientOcclusion(Vec3fa point, Vec3fa dir, double &distance) {
+		RTCRay ray = getIntersection(sgScene, point, dir, 5000.0, 0xFFFF0000);
+		distance = ray.tfar;
 
 		if (ray.geomID != RTC_INVALID_GEOMETRY_ID && (int)ray.geomID < (int)meshes.size()) {
 			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
@@ -198,7 +216,7 @@ struct Scene
 	}
 
 	Vec3fa getRadiance(Vec3fa point, Vec3fa dir, int depth, int E = 1) {
-		RTCRay ray = getIntersection(sgScene, point, dir, 0xFFFF0000);
+		RTCRay ray = getIntersection(sgScene, point, dir, 5000.0f, 0xFFFF0000);
 		Vec3fa color = Vec3fa(0.0f);
 
 		if (ray.geomID != RTC_INVALID_GEOMETRY_ID && (int)ray.geomID < (int)meshes.size()) {
@@ -206,50 +224,50 @@ struct Scene
 			Vec3fa faceColor = meshes[ray.geomID]->getColor(uv.x, uv.y);
 			color = faceColor;
 
-			if(!meshes[ray.geomID]->material.hasLighting)
-				return color;
+			double alpha = meshes[ray.geomID]->getAlpha(uv.x, uv.y);
+			if(alpha < 1.0) {
+				Vec3fa backColor = getRadiance(getHitPoint(ray), dir, depth);
+				if(alpha == 0.0)
+					return backColor;
+
+				faceColor = faceColor * alpha + backColor * (1.0 - alpha);
+			}
+
+			if(!meshes[ray.geomID]->material.hasLighting || depth++ > MAX_RAY_DEPTH)
+				return meshes[ray.geomID]->getEmissionColor();
 
 			double refraction = meshes[ray.geomID]->material.refraction;
 			double reflection = meshes[ray.geomID]->material.reflection;
 
 			double p = (faceColor.x > faceColor.y && faceColor.x > faceColor.z) ? faceColor.x : (faceColor.y > faceColor.z ? faceColor.y : faceColor.z);
 			if(reflection > 0.0 || refraction > 0.0)
-				p = 1.0f;
+				p = 1.0;
 
-			if(depth > MAX_RAY_DEPTH || !p) {
-				if(GetRandomValue() < p)
-					faceColor = faceColor * (1 / p);
-
-				return faceColor;//meshes[ray.geomID]->getEmissionColor() * E;
-			}
+			if(!p && GetRandomValue() < p)
+				faceColor = faceColor * (1.0 / p);
 
 			Vec3fa n = meshes[ray.geomID]->getInterpolatedNormal(ray.primID, ray.u, ray.v);
 			n = n.normalize();
 
-			if(refraction > 0.0) {
-				Vec3fa refractionResult = getRefraction(getHitPoint(ray), n, dir, depth);
-				Vec3fa reflectionResult;
-				
-				if(reflection > 0.0)
-					reflectionResult = getReflection(getHitPoint(ray), n, dir, ++depth);
-
-				color = color * (1 - (reflection+refraction)) + (reflectionResult*reflection + refractionResult*refraction);
-			} else if(meshes[ray.geomID]->material.emission == 0.0) {
+			if(meshes[ray.geomID]->material.emission == 0.0 && reflection != 1.0 && refraction != 1.0) {
 				Vec3fa nl = n.dot(dir) < 0 ? n : n * -1.0f;
 				Vec3fa nd = sampleAroundNormal(nl);
 
 				Vec3fa recursiveRadiance = Vec3fa(0.0f);
-				recursiveRadiance = getRadiance(point, nd, ++depth, 0);
-				recursiveRadiance = faceColor * recursiveRadiance;
+				recursiveRadiance = getRadiance(point, nd, depth, 0);
 
 				Vec3fa lightsContrib = Vec3fa(0.0f);
-				lightsContrib = faceColor * getLightContribution(ray, nl);
-				color = meshes[ray.geomID]->getEmissionColor() * E + lightsContrib + recursiveRadiance;
+				lightsContrib = getLightContribution(ray, nl);
 
-				if(reflection > 0.0)
-					color = color * (1.0f - reflection) + getReflection(getHitPoint(ray), n, dir, ++depth) * reflection;
+				color = meshes[ray.geomID]->getEmissionColor() * E + faceColor * (lightsContrib + recursiveRadiance);
+			}
 
-				color = clip(color, 0.0, 1.0);
+			if(reflection > 0.0) {
+				color = meshes[ray.geomID]->getEmissionColor() + (color * (1.0 - reflection) + getReflection(getHitPoint(ray), n, dir, meshes[ray.geomID]->material.reflectionSharpness, depth) * reflection);
+			}
+
+			if(refraction > 0.0) {
+				color = meshes[ray.geomID]->getEmissionColor() + (color * (1.0 - refraction) + getRefraction(getHitPoint(ray), n, dir, meshes[ray.geomID]->material.reflectionSharpness, depth) * refraction);
 			}
 		}
 		return color;
@@ -275,15 +293,16 @@ struct Scene
 		return lightsContrib;
 	}
 
-	Vec3fa getReflection(Vec3fa point, Vec3fa normal, Vec3fa dir, int depth) {
+	Vec3fa getReflection(Vec3fa point, Vec3fa normal, Vec3fa dir, double reflectionSharpness, int depth) {
 		Vec3fa rayDir = dir - normal * 2.0f * normal.dot(dir);
+		rayDir = randomizeDirection(rayDir, (1.0 - reflectionSharpness));
 		Vec3fa reflectionColor = Vec3fa(0.0f);
 
 		reflectionColor = getRadiance(point, rayDir, depth);
 	    return reflectionColor;
 	}
 
-	Vec3fa getRefraction(Vec3fa point, Vec3fa normal, Vec3fa dir, int depth) {
+	Vec3fa getRefraction(Vec3fa point, Vec3fa normal, Vec3fa dir, double reflectionSharpnes, int depth) {
 		Vec3fa nl = normal.dot(dir) < 0 ? normal : normal * -1.0;
 		double into = normal.dot(nl);
 
@@ -294,12 +313,32 @@ struct Scene
 		double cos2t = 1 - refractiveIndexRatio * refractiveIndexRatio * (1 - cosI * cosI);
 
 		if (cos2t < 0)
-			return getRadiance(point, dir * -1.0f, ++depth);
+			return getReflection(point, normal, dir, reflectionSharpnes, depth);
 
 		Vec3fa refractedDirection = dir * refractiveIndexRatio - normal * (into ? 1 : -1) * (cosI * refractiveIndexRatio + sqrt(cos2t));
 		refractedDirection = refractedDirection.normalize();
 
-		return getRadiance(point, refractedDirection, ++depth);
+		double a = refractiveIndexGlass - refractiveIndexAir;
+		double b = refractiveIndexGlass + refractiveIndexAir;
+		double R0 = a * a / (b * b);
+		double c = 1 - (into ? -cosI : refractedDirection.dot(normal));
+		double Re = R0 + (1 - R0) * c * c * c * c * c;
+		double Tr = 1 - Re;
+		double P =.25 + .5 * Re;
+		double RP = Re / P;
+		double TP = Tr / (1 - P);
+
+		Vec3fa reflectionColor = getReflection(point, normal, dir, reflectionSharpnes, depth);
+		Vec3fa refractionColor = getRadiance(point, refractedDirection, depth);
+
+		if(depth > 2) {
+			if(GetRandomValue() < P)
+				return reflectionColor * RP;
+			else
+				return refractionColor * TP;
+		} else {
+			return reflectionColor * Re + refractionColor * Tr;
+		}
 	}
 
 	bool loadScene(const char* fileName, int width, int height) {

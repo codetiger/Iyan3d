@@ -116,10 +116,6 @@
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.2116215343" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1706299577" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-									<listOptionValue builtIn="false" value="ENABLE_ISPC_SUPPORT"/>
-									<listOptionValue builtIn="false" value="BUILD_ISPC_DEVICE"/>
-									<listOptionValue builtIn="false" value="RTCORE_RAY_PACKETS"/>
-									<listOptionValue builtIn="false" value="RTCORE_ENABLE_RAY_MASK"/>
 									<listOptionValue builtIn="false" value="UBUNTU"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1451265309" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
@@ -144,7 +140,6 @@
 								<option id="gnu.c.compiler.option.dialect.std.990737840" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.197344030" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UBUNTU"/>
-									<listOptionValue builtIn="false" value="RTCORE_ENABLE_RAY_MASK"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.259722791" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/SGEngine2/Utilities"/>

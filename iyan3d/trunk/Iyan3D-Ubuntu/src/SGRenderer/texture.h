@@ -61,15 +61,47 @@ struct SGRTTexture
 	Vec3fa readImageColor(int x, int y) {
 		int cSize = 4;
 		int index = y * width * cSize + x * cSize;
-		double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+		double r = 0.0, g = 0.0, b = 0.0;
 		if(index > 0 && index + 3 < width * height * 4)
         {
 			r = (double)pngData[index + 0] / 255.0;
 			g = (double)pngData[index + 1] / 255.0;
 			b = (double)pngData[index + 2] / 255.0;
-			a = (double)pngData[index + 3] / 255.0;   //Not used right now
         }
 		return Vec3fa(r, g, b);
+	}
+
+	double getAlphaAt(double u, double v) {
+		if(!hasLoadedData) {
+			return 0.0;
+		}
+		while(u < 0.0 || u > 1.0) {
+			if(u < 0.0)
+				u = -u;
+			if(u > 1.0)
+				u = 1.0 - u;
+		}
+
+		while(v < 0.0 || v > 1.0) {
+			if(v < 0.0)
+				v = -v;
+			if(v > 1.0)
+				v = 1.0 - v;
+		}
+
+		u = u * width - 0.5;
+		v = v * height - 0.5;
+
+		return readImageAlpha(u, v);
+	}
+
+	double readImageAlpha(int x, int y) {
+		int cSize = 4;
+		int index = y * width * cSize + x * cSize;
+		double a = 0.0;
+		if(index > 0 && index + 3 < width * height * 4)
+			a = (double)pngData[index + 3] / 255.0;
+		return a;
 	}
 };
 

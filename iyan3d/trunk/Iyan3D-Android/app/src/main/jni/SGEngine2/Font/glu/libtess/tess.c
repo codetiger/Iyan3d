@@ -32,7 +32,7 @@
 **
 */
 
-#include "gluos.h"
+#include "../include/gluos.h"
 #include <stddef.h>
 #include <assert.h>
 #include <setjmp.h>

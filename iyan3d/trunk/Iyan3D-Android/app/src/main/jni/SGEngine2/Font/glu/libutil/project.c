@@ -28,10 +28,10 @@
  * Silicon Graphics, Inc.
  */
 
-#include "gluos.h"
+#include "../include/gluos.h"
 #include <math.h>
 #include <GLES/gl.h>
-#include "glu.h"
+#include "../include/glu.h"
 #include "gluint.h"
 
 /*
