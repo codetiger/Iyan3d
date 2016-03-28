@@ -33,7 +33,7 @@ private:
         else if(keys[mid].id > id)
             return getKeyIndex(keys, id, start, mid-1);
         else {
-            if(mid == keys.size()-1 || keys[mid+1].id > id)
+            if(mid == (int)keys.size()-1 || keys[mid+1].id > id)
                 return mid;
             return getKeyIndex(keys,id,mid+1,end);
         }
@@ -78,7 +78,7 @@ public:
         if(keys[keyIndex].id == frame)                //Frame exist. No need of interpolation
             return keys[keyIndex].getValue();
         
-        if(keyIndex+1 == keys.size())               //Interpolation is not possible. Should return the last frame's value.
+        if(keyIndex+1 == (int)keys.size())               //Interpolation is not possible. Should return the last frame's value.
             return keys[keys.size()-1].getValue();
         
         //Interpolate

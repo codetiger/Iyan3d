@@ -76,8 +76,8 @@ bool SGJoint::setRotationOnNode(Quaternion rotation)
     Vector3 eulerRotation;
     rotation.toEuler(eulerRotation);
     eulerRotation = eulerRotation * RADTODEG;
-    if(jointNode->getRotationInDegrees() == eulerRotation)
-        return false;
+//    if(jointNode->getRotationInDegrees() == eulerRotation)
+//        return false;
     
     jointNode->setRotationInDegrees(eulerRotation);
     jointNode->updateAbsoluteTransformationOfChildren();

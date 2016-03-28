@@ -24,9 +24,6 @@ struct Scene
 		if(!sgScene) {
 			printf("Error: Failed initializing RTCScene\n");
 		}
-
-		dofNear = 15.0;
-		dofFar = 35.0;
 	}
 
 	~Scene() {
@@ -234,7 +231,7 @@ struct Scene
 			}
 
 			if(!meshes[ray.geomID]->material.hasLighting || depth++ > MAX_RAY_DEPTH)
-				return meshes[ray.geomID]->getEmissionColor();
+				return (alpha < 1.0) ? meshes[ray.geomID]->material.diffuse * faceColor : meshes[ray.geomID]->material.diffuse;
 
 			double refraction = meshes[ray.geomID]->material.refraction;
 			double reflection = meshes[ray.geomID]->material.reflection;

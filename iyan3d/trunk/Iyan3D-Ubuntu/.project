@@ -96,11 +96,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationManager.cpp</locationURI>
 		</link>
 		<link>
-			<name>src/Iyan3dEngineFiles/SGAnimationSceneHelper.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationSceneHelper.cpp</locationURI>
-		</link>
-		<link>
 			<name>src/Iyan3dEngineFiles/SGAutoRigSceneManager.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAutoRigSceneManager.cpp</locationURI>

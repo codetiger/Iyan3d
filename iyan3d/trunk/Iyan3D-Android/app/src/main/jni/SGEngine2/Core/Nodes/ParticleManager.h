@@ -2,8 +2,8 @@
 #ifndef __SGEngine2__ParticleManager_h__
 #define __SGEngine2__ParticleManager_h__
 
-#include "ParticlePool.h"
-#include "MeshNode.h"
+#include "../Nodes/ParticlePool.h"
+#include "../Nodes/MeshNode.h"
 
 enum EmitterType
 {

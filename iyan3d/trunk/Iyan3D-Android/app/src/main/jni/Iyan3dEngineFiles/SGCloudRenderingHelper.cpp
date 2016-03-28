@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Smackall Games. All rights reserved.
 //
 
-#include "ParticleManager.h"
+#include "../SGEngine2/Core/Nodes/ParticleManager.h"
 #include "HeaderFiles/SGCloudRenderingHelper.h"
 
 SGCloudRenderingHelper::SGCloudRenderingHelper()
 {
-    
+
 }
 
 bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId)
@@ -43,102 +43,135 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
     for (int i = 0; i < (int)scene->nodes.size(); i++) {
         if (!scene->nodes[i]->props.isVisible) {
             nodesCount--;
+        } else if(scene->nodes[i]->props.isVisible && scene->nodes[i]->getType() == NODE_PARTICLES) {
+        	shared_ptr< ParticleManager > pNode = dynamic_pointer_cast<ParticleManager>(scene->nodes[i]->node);
+        	for(int i = 1; i < pNode->getParticlesCount(); i++)
+        		nodesCount++;
         }
     }
 
     FileHelper::writeShort(&frameFilePtr, nodesCount); // Nodes Count
     
     for (int nodeId = 1; nodeId < (int)scene->nodes.size(); nodeId++) {
-
-        NODE_TYPE nodeType = scene->nodes[nodeId]->getType();
-        SGNode *thisNode = scene->nodes[nodeId];
-
-        if(thisNode->props.isVisible) {
-            Vector3 vertColor = thisNode->props.vertexColor;
-            
-            Quaternion lightProp;
-            if(nodeType == NODE_ADDITIONAL_LIGHT) {
-                lightProp = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys, true);
-                FileHelper::writeFloat(&frameFilePtr, lightProp.w/DEFAULT_FADE_DISTANCE); // Emission
-            } else
-                FileHelper::writeFloat(&frameFilePtr, (nodeType == NODE_LIGHT) ? 1.0 : 0.0); // Emission
-            
-            Vector3 lightColor;
-            if(nodeType == NODE_ADDITIONAL_LIGHT) {
-                lightColor = Vector3(lightProp.x,lightProp.y,lightProp.z);
-            } else {
-                lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frameId, scene->nodes[nodeId]->scaleKeys);
+        SGCloudRenderingHelper *renderHelper = new SGCloudRenderingHelper();
+        if(scene->nodes[nodeId]->getType() == NODE_PARTICLES) {
+        	shared_ptr< ParticleManager > pNode = dynamic_pointer_cast<ParticleManager>(scene->nodes[nodeId]->node);
+            for(int i = 0; i < 48; i++) {
+                pNode->update();
+                pNode->sortParticles(scene->renderCamera->getAbsolutePosition());
+                pNode->updateParticles(true, scene->renderCamera->getAbsolutePosition());
             }
-            
-            FileHelper::writeFloat(&frameFilePtr, lightColor.x); //Emission Color r
-            FileHelper::writeFloat(&frameFilePtr, lightColor.y); //Emission Color g
-            FileHelper::writeFloat(&frameFilePtr, lightColor.z); //Emission Color b
-            FileHelper::writeFloat(&frameFilePtr, 0.5); //Emission Radius
-            FileHelper::writeFloat(&frameFilePtr, vertColor.x); // Diffusion Color r
-            FileHelper::writeFloat(&frameFilePtr, vertColor.y); // Diffusion Color g
-            FileHelper::writeFloat(&frameFilePtr, vertColor.z); // Diffusion Color b
-            FileHelper::writeBool(&frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true); // Has Texture
-            
-            unsigned long lastSlashPos  = (thisNode->textureName).find_last_of("\\/");
-            string textureFileName;
-            if(string::npos != lastSlashPos)
-                textureFileName = (thisNode->textureName).substr( lastSlashPos + 1) + ".png";
-            else
-            	textureFileName = thisNode->textureName + ".png";
-            
-            FileHelper::writeString(&frameFilePtr, textureFileName); // Texture File Name with extension
-            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.reflection);
-            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.refraction);
-            FileHelper::writeFloat(&frameFilePtr, scene->nodes[nodeId]->props.transparency);
-            FileHelper::writeBool(&frameFilePtr, scene->nodes[nodeId]->props.isLighting); // node lighting
 
-            SGCloudRenderingHelper *renderHelper = new SGCloudRenderingHelper();
-            if(thisNode->getType() == NODE_PARTICLES) {
-                shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(thisNode->node);
-                for(int i = 0; i < frameId; i++) {
-                    pNode->update();
-                    pNode->sortParticles(smgr->getActiveCamera()->getPosition());
-                    pNode->updateParticles(true, smgr->getActiveCamera()->getPosition());
-                }
-            }
-            vector<TriangleData> trianglesData =   renderHelper->calculateTriangleDataForNode(thisNode);
-            
-            FileHelper::writeInt(&frameFilePtr, (int)trianglesData.size());
-            
-            for (int index = 0; index < trianglesData.size(); index++) {
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos1.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos1.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos1.z);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos2.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos2.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos2.z);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos3.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos3.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Pos3.z);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal1.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal1.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal1.z);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal2.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal2.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal2.z);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal3.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal3.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].Normal3.z);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].UV1.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].UV1.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].UV2.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].UV2.y);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].UV3.x);
-                FileHelper::writeFloat(&frameFilePtr, trianglesData[index].UV3.y);
-            }
-            
-            if(renderHelper)
-                delete renderHelper;
-        }
-    }
-    
+            Vector4* positions = pNode->getPositions();
+            Vector4 props = pNode->getParticleProps();
+    	    Vector4 sColor = pNode->startColor;
+    	    Vector4 mColor = pNode->midColor;
+    	    Vector4 eColor = pNode->endColor;
+
+        	for(int i = 0; i < pNode->getParticlesCount(); i++) {
+        	    float percent = positions[i].w/float(props.x);
+        	    float phase = float(percent > 0.5);
+
+
+        	    Vector4 s =  sColor * (1 - phase) + mColor * phase;
+        	    Vector4 e = mColor * (1 - phase) + eColor * phase;
+        	    float age = (percent * (1 - phase) + (percent - 0.5) * phase) * 2.0;
+
+        	    Vector4 color = s * (1 - age) + e * age;
+
+        		renderHelper->writeNodeData(scene, nodeId, frameId, &frameFilePtr, i, color);
+        	}
+        } else
+        	renderHelper->writeNodeData(scene, nodeId, frameId, &frameFilePtr);
+
+        if(renderHelper)
+            delete renderHelper;
+     }
+
     frameFilePtr.close();
     smgr->setActiveCamera(scene->viewCamera);
+    return true;
+}
+
+void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int frameId, ofstream *frameFilePtr, int particleIndex, Vector4 pColor)
+{
+    NODE_TYPE nodeType = scene->nodes[nodeId]->getType();
+     SGNode *thisNode = scene->nodes[nodeId];
+
+     if(thisNode->props.isVisible) {
+         Vector3 vertColor = thisNode->props.vertexColor;
+
+         Quaternion lightProp;
+         if(nodeType == NODE_ADDITIONAL_LIGHT) {
+             lightProp = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys, true);
+             FileHelper::writeFloat(frameFilePtr, lightProp.w/DEFAULT_FADE_DISTANCE); // Emission
+         } else
+             FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_LIGHT) ? 1.0 : 0.0); // Emission
+
+         Vector3 lightColor;
+         if(nodeType == NODE_ADDITIONAL_LIGHT) {
+             lightColor = Vector3(lightProp.x,lightProp.y,lightProp.z);
+         } else {
+             lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frameId, scene->nodes[nodeId]->scaleKeys);
+         }
+
+         FileHelper::writeFloat(frameFilePtr, lightColor.x); //Emission Color r
+         FileHelper::writeFloat(frameFilePtr, lightColor.y); //Emission Color g
+         FileHelper::writeFloat(frameFilePtr, lightColor.z); //Emission Color b
+         FileHelper::writeFloat(frameFilePtr, 0.5); //Emission Radius
+         FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_PARTICLES) ? pColor.x : vertColor.x); // Diffusion Color r
+         FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_PARTICLES) ? pColor.y : vertColor.y); // Diffusion Color g
+         FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_PARTICLES) ? pColor.z : vertColor.z); // Diffusion Color b
+         FileHelper::writeBool(frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true); // Has Texture
+
+         unsigned long lastSlashPos  = (thisNode->textureName).find_last_of("\\/");
+         string textureFileName;
+         if(string::npos != lastSlashPos)
+             textureFileName = (thisNode->textureName).substr( lastSlashPos + 1) + ".png";
+         else
+         	textureFileName = thisNode->textureName + ".png";
+
+         FileHelper::writeString(frameFilePtr, textureFileName); // Texture File Name with extension
+         FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->props.reflection);
+         FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->props.refraction);
+         FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->props.transparency);
+         FileHelper::writeBool(frameFilePtr, (nodeType == NODE_PARTICLES) ? false : scene->nodes[nodeId]->props.isLighting); // node lighting
+
+         vector<TriangleData> trianglesData;
+         if(nodeType == NODE_PARTICLES)
+        	 trianglesData = calculateTriangleDataForParticleNode(thisNode, particleIndex);
+         else
+        	 trianglesData = calculateTriangleDataForNode(thisNode);
+
+         FileHelper::writeInt(frameFilePtr, (int)trianglesData.size());
+
+         for (int index = 0; index < (int)trianglesData.size(); index++) {
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos1.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos1.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos1.z);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos2.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos2.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos2.z);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos3.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos3.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Pos3.z);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal1.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal1.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal1.z);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal2.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal2.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal2.z);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal3.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal3.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].Normal3.z);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].UV1.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].UV1.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].UV2.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].UV2.y);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].UV3.x);
+             FileHelper::writeFloat(frameFilePtr, trianglesData[index].UV3.y);
+         }
+     }
 }
 
 vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode *sgNode)
@@ -187,11 +220,7 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode
             tData.UV3 = allverticesData[highPolyIndices[i+2]].texCoord1;
             trianglesData.push_back(tData);
         }
-    }
-    else if (sgNode->getType() == NODE_PARTICLES) {
-        trianglesData = calculateTriangleDataForParticleNode(sgNode);
-    }
-    else {
+    } else {
         unsigned int verticesCount = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh()->getVerticesCount();
         Mesh * currentMesh = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh();
         
@@ -228,7 +257,7 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForNode(SGNode
     return trianglesData;
 }
 
-vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForParticleNode(SGNode *sgNode)
+vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForParticleNode(SGNode *sgNode, int index)
 {
     vector<TriangleData> trianglesData;
     vector<unsigned int> highPolyIndices;
@@ -239,15 +268,17 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForParticleNod
     unsigned int indicesCount = currentMesh->getTotalIndicesCount();
     highPolyIndices = currentMesh->getTotalIndicesArray();
     
-    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
+    shared_ptr< ParticleManager > pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
     
     highPolyIndices = currentMesh->getTotalIndicesArray();
     
-    for(int index = 0; index < pNode->getParticlesCount(); index++) {
+    Vector4* positions = pNode->getPositions();
+    Vector4* rotations = pNode->getRotations();
+
         vector<vertexData> allverticesData;
         for (unsigned int i = 0; i < verticesCount; i++) {
             vertexData *currentVertex = currentMesh->getLiteVertexByIndex(i);
-            allverticesData.push_back(calculateFinalVertexDataForParticle(sgNode->node, currentVertex, index));
+            allverticesData.push_back(calculateFinalVertexDataForParticle(sgNode->node, currentVertex, index, positions[index], rotations[index]));
         }
         for(unsigned int i = 0; i < indicesCount; i+=3) {
             TriangleData tData;
@@ -262,9 +293,10 @@ vector<TriangleData> SGCloudRenderingHelper::calculateTriangleDataForParticleNod
             tData.UV3 = allverticesData[highPolyIndices[i+2]].texCoord1;
             trianglesData.push_back(tData);
         }
+        printf("\n Particles %d updated ", index);
         allverticesData.clear();
-    }
-    return trianglesData;
+
+        return trianglesData;
 }
 
 vertexData SGCloudRenderingHelper::calculateFinalVertexData(shared_ptr<Node> node , void * vertex)
@@ -281,7 +313,7 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexData(shared_ptr<Node> nod
         
         SkinMesh *sMesh = (SkinMesh*)mesh;
         vector<Mat4> jointTransforms;
-        for(int i = 0; i < sMesh->joints->size(); ++i){
+        for(int i = 0; i < (int)sMesh->joints->size(); ++i){
             Mat4 JointVertexPull;
             JointVertexPull.setbyproduct((*sMesh->joints)[i]->GlobalAnimatedMatrix,(*sMesh->joints)[i]->GlobalInversedMatrix);
             jointTransforms.push_back(JointVertexPull);
@@ -314,7 +346,7 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexData(shared_ptr<Node> nod
     }
 }
 
-vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_ptr<Node> node , void * vertex, int index)
+vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_ptr<Node> node , void * vertex, int index, Vector4 position, Vector4 rotation)
 {
     vertexData finalVertData;
 
@@ -323,22 +355,19 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_pt
     finalVertData.texCoord1 = ((vertexData*)vertex)->texCoord1;
     
     shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(node);
-    Vector4* positions = pNode->getPositions();
-    Vector4* rotations = pNode->getRotations();
-    //TODO To Modfiy the for loop and send particle index to this func
-        Vector4 props = pNode->getParticleProps();
+    Vector4 props = pNode->getParticleProps();
         Mat4 translation = Mat4();
-        translation[12] = positions[index].x;
-        translation[13] = positions[index].y;
-        translation[14] = positions[index].z;
+        translation[12] = position.x;
+        translation[13] = position.y;
+        translation[14] = position.z;
         
         Mat4 rotationMat = Mat4();
-        float cr = cos(rotations[index].x);
-        float sr = sin(rotations[index].x);
-        float cp = cos(rotations[index].y);
-        float sp = sin(rotations[index].y);
-        float cy = cos(rotations[index].z);
-        float sy = sin(rotations[index].z);
+        float cr = cos(rotation.x);
+        float sr = sin(rotation.x);
+        float cp = cos(rotation.y);
+        float sp = sin(rotation.y);
+        float cy = cos(rotation.z);
+        float sy = sin(rotation.z);
         
         rotationMat[0] = (cp * cy);
         rotationMat[1] = (cp * sy);
@@ -355,7 +384,7 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_pt
         rotationMat[9] = (crsp * sy - sr * cy);
         rotationMat[10] = (cr * cp);
         
-        float live = float(positions[index].w > 0.0 && positions[index].w <= float(props.x));
+        float live = float(position.w > 0.0 && position.w <= float(props.x));
         if(live <= 0.0) {
             for(int i = 0; i < 16; i ++)
                 translation[i] = 0;

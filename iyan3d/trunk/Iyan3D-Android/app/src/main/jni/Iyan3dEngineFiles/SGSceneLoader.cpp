@@ -210,6 +210,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
 
     //if (type >= NODE_LIGHT && type != NODE_ADDITIONAL_LIGHT)
     sgnode->node->setTexture(currentScene->shadowTexture,2);
+
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
     currentScene->nodes.push_back(sgnode);
@@ -221,6 +222,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->updater->resetMaterialTypes(false);
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
+
     return sgnode;
 }
 
@@ -268,7 +270,6 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     currentScene->nodes.push_back(sgNode);
     sgNode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(sgNode,actionType);
-    
     if(sgNode->getType() == NODE_CAMERA)
         ShaderManager::camPos = sgNode->node->getAbsolutePosition();
     if(sgNode->getType() == NODE_LIGHT) {

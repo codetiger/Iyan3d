@@ -6,7 +6,7 @@
 //  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
-#include "ParticlePool.h"
+#include "../Nodes/ParticlePool.h"
 #include <algorithm>
 
 ParticlePool::ParticlePool(int count) {

@@ -101,18 +101,18 @@ void TextMesh3d::AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short b
     curCharIndex = FT_Get_Char_Index( face, ch );
     if(FT_Load_Glyph( face, curCharIndex, FT_LOAD_DEFAULT )){
         Logger::log(INFO,"Font2Obj","FT_Load_Glyph failed");
-        return -10000.0;
+        return;
     }
     
     FT_Glyph glyph;
     if(FT_Get_Glyph( face->glyph, &glyph )){
         Logger::log(INFO,"Font2Obj","FT_Load_Glyph failed");
-        return -10000.0;
+        return;
     }
     
     if(glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
         Logger::log(INFO,"Font2Obj","Invalid Glyph Format");
-        return -10000.0;
+        return;
     }
     
     short nCountour = 0;
@@ -268,18 +268,18 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
     curCharIndex = FT_Get_Char_Index( face, ch );
     if(FT_Load_Glyph( face, curCharIndex, FT_LOAD_DEFAULT )){
         Logger::log(INFO,"Font2Obj","FT_Load_Glyph failed");
-        return -10000.0;
+        return;
     }
     
     FT_Glyph glyph;
     if(FT_Get_Glyph( face->glyph, &glyph )){
         Logger::log(INFO,"Font2Obj","FT_Load_Glyph failed");
-        return -10000.0;
+        return;
     }
     
     if(glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
         Logger::log(INFO,"Font2Obj","Invalid Glyph Format");
-        return -10000.0;
+        return;
     }
     
     short nCountour = 0;

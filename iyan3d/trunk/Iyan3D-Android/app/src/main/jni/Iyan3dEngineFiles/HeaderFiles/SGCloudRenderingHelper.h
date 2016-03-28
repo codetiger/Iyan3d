@@ -41,10 +41,11 @@ class SGCloudRenderingHelper
 public:
     SGCloudRenderingHelper();
     static bool writeFrameData(SGEditorScene *scene , SceneManager *smgr, int frameId);
+    void writeNodeData(SGEditorScene *scene, int nodeId, int frameId, ofstream *frameFilePtr, int particleIndex = 0, Vector4 pColor = Vector4(1.0));
     vector<TriangleData> calculateTriangleDataForNode(SGNode * sgNode);
-    vector<TriangleData> calculateTriangleDataForParticleNode(SGNode *sgNode);
+    vector<TriangleData> calculateTriangleDataForParticleNode(SGNode *sgNode, int index);
     vertexData calculateFinalVertexData(shared_ptr<Node> node , void * vertex);
-    vertexData calculateFinalVertexDataForParticle(shared_ptr<Node> node , void * vertex, int index);
+    vertexData calculateFinalVertexDataForParticle(shared_ptr<Node> node , void * vertex, int index, Vector4 position, Vector4 rotation);
     void calculateJointTransforms(vertexDataHeavy *vertex , vector<Mat4> jointTransforms , Vector3 &position , Vector3 &normal);
     void copyMat(float* pointer,Mat4& mat);
 };

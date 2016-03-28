@@ -2,7 +2,7 @@
 #ifndef __SGEngine2__ParticlePool_h__
 #define __SGEngine2__ParticlePool_h__
 
-#include "Particle.h"
+#include "../Nodes/Particle.h"
 
 class ParticlePool {
 	vector< Particle* > particles;

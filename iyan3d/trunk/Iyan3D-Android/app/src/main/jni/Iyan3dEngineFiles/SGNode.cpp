@@ -115,14 +115,16 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             Json::Value pData = parseParticlesJson(assetId);
             string meshPath = "";
             string texPath = "";
-#ifndef ANDROID
+#ifdef IOS
             meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
             texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
 #elif ANDROID
             meshPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + ".sgm";
             texPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + "-cm.png";
+#else
+            meshPath = to_string(assetId) + ".sgm";
+            texPath = to_string(assetId) + "-cm.png";
 #endif
-            printf(" \n Mesh name %s %s ", meshPath.c_str(), texPath.c_str());
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
             setParticlesData(node, pData);
@@ -321,10 +323,10 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
 Json::Value SGNode::parseParticlesJson(int assetId)
 {
     Json::Value particlesData;
-    string jsonPath = "";
     string jsonFileName = to_string(assetId) + ".json";
+    string jsonPath = jsonFileName;
 
-#ifndef ANDROID
+#ifdef IOS
          jsonPath = constants::CachesStoragePath + "/" + jsonFileName;
 #elif ANDROID
         jsonPath = constants::DocumentsStoragePath + "/mesh/"+jsonFileName;
@@ -348,11 +350,11 @@ void SGNode::setParticlesData(shared_ptr<Node> particleNode, Json::Value pData)
     Vector4 sColor = Vector4(pData["sColorX"].asDouble(), pData["sColorY"].asDouble(), pData["sColorZ"].asDouble(), 1.0);
     Vector4 mColor = Vector4(pData["mColorX"].asDouble(), pData["mColorY"].asDouble(), pData["mColorZ"].asDouble(), 1.0);
     Vector4 eColor = Vector4(pData["eColorX"].asDouble(), pData["eColorY"].asDouble(), pData["eColorZ"].asDouble(), 1.0);
-
-    printf(" Counnt %d gravity %d sAngle %f sMag %f magRand %f emSpeed %d maxLife %d perce %d scale %f delta %f ",pData["Count"].asInt(), pData["hasGravity"].asBool(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
     
     pNode->setDataFromJson(pData["Count"].asInt(), sColor, mColor, eColor, pData["Gravity"].asDouble(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
     
+    printf(" Counnt %d gravity %d sAngle %f sMag %f magRand %f emSpeed %d maxLife %d perce %d scale %f delta %f ",pData["Count"].asInt(), pData["Gravity"].asBool(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
+
 }
 
 shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr)

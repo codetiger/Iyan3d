@@ -44,7 +44,7 @@ public:
 		material.transparency = readFloat(data);
 		material.hasLighting = readBool(data);
 
-		material.reflectionSharpness = 0.0;
+		material.reflectionSharpness = 1.0;
 
 		numberOfTriangles = readInt(data);
 
