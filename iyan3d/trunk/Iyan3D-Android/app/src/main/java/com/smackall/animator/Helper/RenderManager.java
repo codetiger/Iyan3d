@@ -104,6 +104,12 @@ public class RenderManager {
             @Override
             public void run() {
                 GL2JNILib.tapEnd(event.getX(), event.getY());
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((EditorView) ((Activity) mContext)).frameAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }
@@ -130,6 +136,12 @@ public class RenderManager {
                             ((EditorView) ((Activity) mContext)).popUpManager.initPopUpManager(GL2JNILib.getSelectedNodeId(),null, event);
                         }
                     });
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((EditorView)((Activity)mContext)).frameAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }
@@ -148,7 +160,7 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.importAsset(assetsDB.getType(), assetsDB.getAssetsId(), assetsDB.getAssetName(), assetsDB.getTexture(), 0, 0, assetsDB.getIsTempNode(),assetsDB.getX(),assetsDB.getY(),assetsDB.getZ() ,Constants.IMPORT_ASSET_ACTION);
+                GL2JNILib.importAsset(assetsDB.getType(), assetsDB.getAssetsId(), assetsDB.getAssetName(), assetsDB.getTexture(), 0, 0, assetsDB.getIsTempNode(),assetsDB.getX(),assetsDB.getY(),assetsDB.getZ() ,assetsDB.getActionType());
                 ((EditorView)((Activity)mContext)).showOrHideLoading(Constants.HIDE);
                 wait = false;
             }
@@ -160,7 +172,7 @@ public class RenderManager {
             @Override
             public void run() {
                 GL2JNILib.loadText(textDB.getRed(), textDB.getGreen(), textDB.getBlue(), textDB.getTypeOfNode(), textDB.getTextureName(), textDB.getAssetName()
-                        , textDB.getFontSize(), textDB.getBevalValue(), textDB.getAssetAddType(), textDB.getFilePath(), textDB.getTempNode());
+                        , textDB.getFontSize(), textDB.getBevalValue(), textDB.getActionType(), textDB.getFilePath(), textDB.getTempNode());
             }
         });
     }
@@ -169,16 +181,16 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.importImageOrVideo(imageDB.getNodeType(), imageDB.getName(), imageDB.getWidth(), imageDB.getHeight(), imageDB.getAssetAddType(), imageDB.getIsTempNode());
+                GL2JNILib.importImageOrVideo(imageDB.getNodeType(), imageDB.getName(), imageDB.getWidth(), imageDB.getHeight(), imageDB.getActionType(), imageDB.getIsTempNode());
             }
         });
     }
 
-    public void importLight(final int lightId){
+    public void importLight(final int lightId, final int action){
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.importAdditionalLight(lightId);
+                GL2JNILib.importAdditionalLight(lightId,action);
             }
         });
     }

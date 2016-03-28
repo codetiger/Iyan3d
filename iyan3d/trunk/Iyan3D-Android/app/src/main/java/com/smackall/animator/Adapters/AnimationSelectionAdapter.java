@@ -126,7 +126,8 @@ public class AnimationSelectionAdapter extends BaseAdapter {
         }
         else{
             ((EditorView)((Activity)mContext)).animationSelection.applyAnimation(position);
-            if((((EditorView)((Activity)mContext)).animationSelection.animationType[((EditorView)((Activity)mContext)).animationSelection.category.getSelectedItemPosition()]) == 7)
+            if((((EditorView)((Activity)mContext)).animationSelection.animationType[((EditorView)((Activity)mContext)).animationSelection.category.getSelectedItemPosition()]) == 7
+                    && animDBs.get(position).getpublishedId() <= 0)
                 showOrHidePublish(position);
             else
                 ((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).setVisibility(View.GONE);
@@ -153,9 +154,9 @@ public class AnimationSelectionAdapter extends BaseAdapter {
     {
         ((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).setVisibility(View.VISIBLE);
         if(sp.getInt(((Activity)mContext),"toolbarPosition") == 1 )
-            ((LinearLayout)((ViewGroup)((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.CENTER | Gravity.LEFT);
+            ((LinearLayout)((ViewGroup)((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.RIGHT);
         else
-            ((LinearLayout)((ViewGroup)((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.CENTER | Gravity.RIGHT);
+            ((LinearLayout)((ViewGroup)((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.LEFT);
 
         ((Button)((Activity)mContext).findViewById(R.id.publish)).setOnClickListener(new View.OnClickListener() {
             @Override

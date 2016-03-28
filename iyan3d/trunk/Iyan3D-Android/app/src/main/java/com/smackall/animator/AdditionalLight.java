@@ -28,6 +28,6 @@ public class AdditionalLight {
         }
         lightCount += lightId - ((lightId != 0) ? 900 : 0);
 
-        ((EditorView)(Activity)mContext).renderManager.importLight(lightCount);
+        ((EditorView)(Activity)mContext).renderManager.importLight(lightCount,Constants.IMPORT_ASSET_ACTION);
     }
 }

@@ -59,6 +59,7 @@ public class TextureSelection {
             @Override
             public void onClick(View v) {
                 assetsDB.setIsTempNode(false);
+                changeTexture();
                 insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
                 changeTextureAdapter = null;

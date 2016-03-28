@@ -17,6 +17,7 @@ public class TextDB {
     int assetAddType;
     String filePath = "-1";
     boolean isTempNode = true;
+    int actionType = Constants.ACTION_TEXT_IMAGE_ADD;
 
     public TextDB(){
 
@@ -69,6 +70,7 @@ public class TextDB {
     public void setTempNode(boolean isTempNode){
         this.isTempNode = isTempNode;
     }
+    public void setActionType(int actionType){this.actionType = actionType;}
 
     public float getRed(){
         return this.red;
@@ -103,5 +105,6 @@ public class TextDB {
     public boolean getTempNode(){
         return this.isTempNode;
     }
+    public int getActionType(){return this.actionType;}
 
 }

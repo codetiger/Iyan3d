@@ -40,11 +40,18 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameViewHolder> {
     @Override
     public void onBindViewHolder(FrameViewHolder viewHolder, final int position) {
         viewHolder.view.setBackgroundResource((GL2JNILib.currentFrame() == position) ?  R.drawable.border_grid_frames_pressed : R.drawable.border_grid_frames_non_pressed);
-        if(((EditorView)((Activity)(mContext))).sharedPreferenceManager.getInt(mContext,"frameType") == Constants.FRAME_COUNT)
-            viewHolder.tvName.setText(String.valueOf(position+1));
+        if(GL2JNILib.editorScene() && GL2JNILib.hasNodeSelected()) {
+            if (GL2JNILib.isHaveKey(position) && (GL2JNILib.currentFrame() == position))
+                viewHolder.view.setBackgroundResource(R.drawable.key_pressed);
+            else if (GL2JNILib.isHaveKey(position))
+                viewHolder.view.setBackgroundResource(R.drawable.key_nonpressed);
+        }
+
+        if(((EditorView)((Activity)(mContext))).sharedPreferenceManager.getInt(mContext, "frameType") == Constants.FRAME_COUNT)
+            viewHolder.tvName.setText(String.valueOf(position + 1));
         else {
             float value = (float) ((position+1)/24.0);
-            viewHolder.tvName.setText(String.format("%.2f", value )+"s");
+            viewHolder.tvName.setText(String.format("%.2f", value) + "s");
         }
 
         viewHolder.view.setOnClickListener(new View.OnClickListener() {

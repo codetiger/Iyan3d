@@ -122,6 +122,10 @@ public class ColorPicker implements View.OnTouchListener {
             if(event.getAction() == MotionEvent.ACTION_UP)
                 ((EditorView)((Activity)mContext)).textureSelection.changeTexture();
         }
+        else if(ViewType == Constants.RENDERING_VIEW){
+            if(event.getAction() == MotionEvent.ACTION_UP)
+                ((EditorView)((Activity)mContext)).export.updateColor(red/255.0f,green/255.0f,blue/255.0f);
+        }
 
         return true;
     }

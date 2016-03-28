@@ -1,5 +1,10 @@
 package com.smackall.animator.Helper;
 
+import android.content.Context;
+
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Created by Sabish.M on 4/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
@@ -89,10 +94,6 @@ public class Constants {
     public final static int TEXTURE_MODE = 1;
     public final static int CHANGE_TEXTURE_MODE = 3;
 
-    public final static int UNDO_ACTION = 1;
-    public final static int REDO_ACTION = 2;
-    public final static int IMPORT_ASSET_ACTION = 3;
-
     public final static int NODE_CAMERA = 0;
     public final static int NODE_LIGHT = 1;
     public final static int NODE_SGM = 2;
@@ -124,6 +125,61 @@ public class Constants {
     public final static int OWN_RIGGING = 0;
     public final static int HUMAN_RIGGING = 1;
 
+    public final static int NOT_SELECTED = -1;
+
+    public final static int DO_NOTHING = 0;
+    public final static int DELETE_ASSET = 1;
+    public final static int ADD_ASSET_BACK = 2;
+    public final static int DEACTIVATE_UNDO = 3;
+    public final static int DEACTIVATE_REDO = 4;
+    public final static int DEACTIVATE_BOTH = 5;
+    public final static int ACTIVATE_BOTH = 6;
+    public final static int ADD_TEXT_IMAGE_BACK = 7;
+    public final static int SWITCH_FRAME = 8;
+    public final static int RELOAD_FRAMES = 9;
+    public final static int SWITCH_MIRROR = 10;
+    public final static int ADD_MULTI_ASSET_BACK = 11;
+
+    public final static int ACTION_EMPTY = -1;
+    public final static int ACTION_CHANGE_MIRROR_STATE = 0;
+    public final static int ACTION_CHANGE_NODE_KEYS = 1;
+    public final static int ACTION_CHANGE_JOINT_KEYS = 2;
+    public final static int ACTION_SWITCH_FRAME = 3;
+    public final static int ACTION_CHANGE_PROPERTY_MESH = 4;
+    public final static int ACTION_CHANGE_PROPERTY_LIGHT = 5;
+    public final static int ACTION_CHANGE_PROPERTY_CAMERA = 6;
+    public final static int ACTION_CHANGE_NODE_JOINT_KEYS = 7;
+    public final static int ACTION_CHANGE_MULTI_NODE_KEYS = 8;
+    public final static int ACTION_SWITCH_MODE = 9;
+    public final static int ACTION_CHANGE_SKELETON_KEYS = 10;
+    public final static int ACTION_CHANGE_ENVELOPE_SCALE = 11;
+    public final static int ACTION_CHANGE_SGR_KEYS = 12;
+    public final static int ACTION_NODE_ADDED = 13;
+    public final static int ACTION_MULTI_NODE_ADDED = 14;
+    public final static int ACTION_NODE_DELETED = 15;
+    public final static int ACTION_MULTI_NODE_DELETED_AFTER = 16;
+    public final static int ACTION_MULTI_NODE_DELETED_BEFORE = 17;
+    public final static int ACTION_TEXT_IMAGE_ADD = 18;
+    public final static int ACTION_TEXT_IMAGE_DELETE = 19;
+    public final static int ACTION_APPLY_ANIM = 20;
+    public final static int ACTION_ADD_JOINT = 21;
+    public final static int ACTION_ADD_BONE = 22;
+    public final static int ACTION_SGR_CREATED = 23;
+    public final static int ACTION_TEXTURE_CHANGE = 24;
+    public final static int IMPORT_ASSET_ACTION = 25;
+    public final static int UNDO_ACTION = 26;
+    public final static int REDO_ACTION = 27;
+    public final static int UNDO_REDO_ACTION = 28;
+    public final static int OPEN_SAVED_FILE = 29;
+    public final static int OTHER_ACTION = 30;
+
+    public final static int NORMAL_SHADER = 0;
+    public final static int TOON_SHADER = 1;
+    public final static int CLOUD = 2;
+
+    public static String deviceUniqueId = "";
+
+
     public final static String urlForMesh = "https://iyan3dapp.com/appapi/mesh/";
     public final static String urlForTexture = "https://iyan3dapp.com/appapi/meshtexture/";
     public final static String urlMeshThumbnail =  "https://www.iyan3dapp.com/appapi/128images/";
@@ -131,4 +187,30 @@ public class Constants {
     public final static String urlAnimationThumbnail = "https://iyan3dapp.com/appapi/animationImage/";
     public final static String urlForParticle = "https://iyan3dapp.com/appapi/particles/";
     public final static String urlForAnimation = "http://iyan3dapp.com/appapi/animationFile/";
+
+    public static boolean isPremium(Context mContext) {
+        File key = new File("data/data/"+mContext.getPackageName()+"/shared_prefs/key");
+        try {
+            if(!key.exists()) {
+                return  false;
+            }
+            else if (KeyMaker.readFromKeyFile(mContext) == null) {
+                return false;
+            }
+            else {
+                try {
+                    if (KeyMaker.readFromKeyFile(mContext).equals(FileHelper.md5(deviceUniqueId + FileHelper.md5("Iyan3dPremium" + 1)))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

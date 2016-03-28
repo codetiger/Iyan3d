@@ -304,25 +304,19 @@ public class GL2JNIView extends GLSurfaceView  {
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            GL2JNILib.init(Constants.width , Constants.height);
+            GL2JNILib.init(Constants.width, Constants.height);
             loadFromFile();
         }
 
-        public  boolean loadFromFile(){
-            String filePath= PathManager.LocalProjectFolder+"/"+((EditorView)((Activity)mContext)).projectName+".sgb";
+        public  void loadFromFile(){
+            String filePath= PathManager.LocalProjectFolder+"/"+((EditorView)(Activity)mContext).projectName+".sgb";
             File f = new File(filePath);
             if(f.exists()){
-                if(f.length()==0){
-                    return false;
-                }
-                GL2JNILib.loadFile(filePath);
-                return true;
+                GL2JNILib.loadScene(((EditorView)(Activity)mContext).missingAssetHandler, filePath);
             }else{
-                System.out.println("Load File not exist");
-                return false;
+                GL2JNILib.loadScene(((EditorView)(Activity)mContext).missingAssetHandler, "init");
             }
         }
-
     }
 
     public static void callBackSurfaceRendered(){

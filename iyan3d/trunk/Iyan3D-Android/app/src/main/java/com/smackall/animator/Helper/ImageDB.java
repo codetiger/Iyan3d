@@ -12,6 +12,7 @@ public class ImageDB {
     int height;
     int assetAddType;
     boolean isTempNode;
+    int actionType = Constants.ACTION_TEXT_IMAGE_ADD;
 
    public ImageDB(){
 
@@ -44,6 +45,8 @@ public class ImageDB {
     public void setTempNode(boolean isTempNode){
         this.isTempNode = isTempNode;
     }
+    public void setActionType(int actionType){this.actionType = actionType;}
+
     public int getNodeType(){
         return this.nodeType;
     }
@@ -62,4 +65,5 @@ public class ImageDB {
     public boolean getIsTempNode(){
        return this.isTempNode;
     }
+    public int getActionType(){return this.actionType;}
 }

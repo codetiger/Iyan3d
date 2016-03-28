@@ -3,7 +3,6 @@ package com.smackall.animator;
 import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,6 +31,7 @@ import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.Delete;
 import com.smackall.animator.Helper.DownloadHelper;
 import com.smackall.animator.Helper.ImageManager;
+import com.smackall.animator.Helper.MissingAssetHandler;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.PopUpManager;
 import com.smackall.animator.Helper.RenderManager;
@@ -95,6 +95,8 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     public Delete delete;
     public Save save;
     public Publish publish;
+    public MissingAssetHandler missingAssetHandler;
+    public UndoRedo undoRedo;
 
     ImageView referenceImg;
     boolean isActivityStartFirstTime = true;
@@ -166,7 +168,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         envelopScale = new EnvelopScale(EditorView.this);
         login = new Login(EditorView.this);
         cloudRenderingProgress = new CloudRenderingProgress(EditorView.this);
-        export = new Export(EditorView.this);
+        export = new Export(EditorView.this,sharedPreferenceManager);
         new TouchControl(EditorView.this);
         popUpManager = new PopUpManager(EditorView.this);
         renderManager = new RenderManager(EditorView.this,sharedPreferenceManager);
@@ -181,6 +183,8 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         save = new Save(EditorView.this,db);
         rig = new Rig(EditorView.this,sharedPreferenceManager,db);
         publish = new Publish(EditorView.this);
+        missingAssetHandler = new MissingAssetHandler(EditorView.this);
+        undoRedo = new UndoRedo(EditorView.this,db);
         new GL2JNILib().setGl2JNIView(EditorView.this);
         GL2JNILib.setAssetspath(PathManager.DefaultAssetsDir, PathManager.LocalDataFolder, PathManager.LocalImportedImageFolder);
         glView = new GL2JNIView(EditorView.this);
@@ -188,6 +192,8 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         ((FrameLayout)findViewById(R.id.glView)).addView(glView, glParams);
         renderManager.glView = glView;
     }
+
+
 
     public void goToFirstOrLastFrame(final View view)
     {
@@ -274,7 +280,9 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         v.findViewById(R.id.move_btn).setOnClickListener(EditorView.this);
         v.findViewById(R.id.rotate_btn).setOnClickListener(EditorView.this);
         v.findViewById(R.id.scale_btn).setOnClickListener(EditorView.this);
-        System.out.println("Insert Point Width " + insertPoint.getWidth());
+        v.findViewById(R.id.undo).setOnClickListener(EditorView.this);
+        v.findViewById(R.id.redo).setOnClickListener(EditorView.this);
+
     }
 
 
@@ -310,6 +318,22 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
             case R.id.scale_btn:
                 if(GL2JNILib.scale())
                     scale.showScale(v,null,GL2JNILib.scaleValueX(),GL2JNILib.scaleValueY(),GL2JNILib.scaleValueZ());
+                break;
+            case R.id.undo:
+                glView.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        GL2JNILib.undo(undoRedo);
+                    }
+                });
+                break;
+            case R.id.redo:
+                glView.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        GL2JNILib.redo(undoRedo);
+                    }
+                });
                 break;
         }
     }
@@ -429,8 +453,8 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                     case Constants.SAVE_ANIMATION:
                         if (GL2JNILib.getSelectedNodeId() <= 1 ||
                                 (!(GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_RIG) &&
-                        !(GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_TEXT_SKIN)) ||
-                        GL2JNILib.isJointSelected())
+                                        !(GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_TEXT_SKIN)) ||
+                                GL2JNILib.isJointSelected())
                             UIHelper.informDialog(EditorView.this,"Please select a text or character to save the animation as a template.");
                         else
                             save.enterNameForAnimation();
@@ -464,24 +488,54 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
 
     public void showOrHideToolbarView(final int hideOrShow)
     {
-        View rightView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.rightView).getParent() : (ViewGroup) findViewById(R.id.leftView).getParent();
-        View leftView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.leftView).getParent() : (ViewGroup) findViewById(R.id.rightView).getParent();
+//        View rightView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.rightView).getParent() : (ViewGroup) findViewById(R.id.leftView).getParent();
+//        View leftView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.leftView).getParent() : (ViewGroup) findViewById(R.id.rightView).getParent();//
 
-        float rightValue = 0.0f;
-        float leftValue = 0.0f;
+        System.out.println("Called " + hideOrShow);
 
-        if (hideOrShow == Constants.HIDE) {
-            rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? rightView.getWidth() : rightView.getWidth() * -1;
-            leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? 0 : 0;
-        } else {
-            rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? 0 : 0;
-            leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? leftView.getWidth() * -1 : leftView.getWidth();
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(hideOrShow == Constants.SHOW) {
+                    if ((sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 0)) {
+                        ((ViewGroup) findViewById(R.id.leftView).getParent()).setVisibility(View.VISIBLE);
+                        ((ViewGroup) findViewById(R.id.rightView).getParent()).setVisibility(View.INVISIBLE);
+                    }
+                    else
+                    {
+                        ((ViewGroup) findViewById(R.id.leftView).getParent()).setVisibility(View.INVISIBLE);
+                        ((ViewGroup) findViewById(R.id.rightView).getParent()).setVisibility(View.VISIBLE);
+                    }
+                }
+                else if(hideOrShow == Constants.HIDE){
+                    if ((sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 0)) {
+                        ((ViewGroup) findViewById(R.id.leftView).getParent()).setVisibility(View.INVISIBLE);
+                        ((ViewGroup) findViewById(R.id.rightView).getParent()).setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        ((ViewGroup) findViewById(R.id.leftView).getParent()).setVisibility(View.VISIBLE);
+                        ((ViewGroup) findViewById(R.id.rightView).getParent()).setVisibility(View.INVISIBLE);
+                    }
+                }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-            rightView.animate().translationX(rightValue);
-            leftView.animate().translationX(leftValue);
-        }
+            }
+        });
+
+//        float rightValue = 0.0f;
+//        float leftValue = 0.0f;
+//
+//        if (hideOrShow == Constants.HIDE) {
+//            rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? rightView.getWidth() : rightView.getWidth() * -1;
+//            leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? 0 : 0;
+//        } else {
+//            rightValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? 0 : 0;
+//            leftValue = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? leftView.getWidth() * -1 : leftView.getWidth();
+//        }
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+//            rightView.animate().translationX(rightValue);
+//            leftView.animate().translationX(leftValue);
+//        }
         if (hideOrShow == Constants.SHOW)
             dellocAllSubViews();
     }
@@ -500,21 +554,19 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     public void swapViews() {
         final View leftView = (sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? (ViewGroup) findViewById(R.id.leftView).getParent()
                 : (ViewGroup) findViewById(R.id.rightView).getParent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-            leftView.animate().translationX((sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? -leftView.getWidth() : leftView.getWidth());
-            ViewGroup insertPoint = null;
-            for (int i = 0; i < ((ViewGroup) leftView).getChildCount(); i++) {
-                if (((ViewGroup) leftView).getChildAt(i).getTag() != null && ((ViewGroup) leftView).getChildAt(i).getTag().toString().equals("-1")) {
-                    insertPoint = (ViewGroup) ((ViewGroup) leftView).getChildAt(i);
-                    continue;
-                }
-                ((ViewGroup) leftView).getChildAt(i).setVisibility(View.GONE);
+        //leftView.animate().translationX((sharedPreferenceManager.getInt(EditorView.this, "toolbarPosition") == 1) ? -leftView.getWidth() : leftView.getWidth());
+        ViewGroup insertPoint = null;
+        for (int i = 0; i < ((ViewGroup) leftView).getChildCount(); i++) {
+            if (((ViewGroup) leftView).getChildAt(i).getTag() != null && ((ViewGroup) leftView).getChildAt(i).getTag().toString().equals("-1")) {
+                insertPoint = (ViewGroup) ((ViewGroup) leftView).getChildAt(i);
+                continue;
             }
-            if (insertPoint != null)
-                insertPoint.removeAllViews();
-            showOrHideToolbarView(Constants.SHOW);
-            addRightView();
+            ((ViewGroup) leftView).getChildAt(i).setVisibility(View.GONE);
         }
+        if (insertPoint != null)
+            insertPoint.removeAllViews();
+        showOrHideToolbarView(Constants.SHOW);
+        addRightView();
     }
 
     @Override

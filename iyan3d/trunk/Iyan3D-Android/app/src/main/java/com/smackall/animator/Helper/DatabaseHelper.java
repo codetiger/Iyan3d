@@ -603,6 +603,28 @@ public class DatabaseHelper {
         return 0;
     }
 
+    public int updateMyAnimationDetails(AnimDB animDB) {
+        SQLiteDatabase animDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        ContentValues values = new ContentValues();
+        values.put(ANIM_KEY_ASSETSID, animDB.getAnimAssetId());
+        values.put(ANIM_KEY_ANIM_NAME, animDB.getAnimName());
+        values.put(ANIM_KEY_KEYWORD, animDB.getKeyword());
+        values.put(ANIM_KEY_USERID, animDB.getUserid());
+        values.put(ANIM_KEY_USERNAME, animDB.getUserName());
+        values.put(ANIM_KEY_TYPE, animDB.getAnimType());
+        values.put(ANIM_KEY_BONECOUNT, animDB.getBonecount());
+        values.put(ANIM_KEY_FEATUREDINDEX, animDB.getFeaturedindex());
+        values.put(ANIM_KEY_UPLOADEDTIME, animDB.getUploaded());
+        values.put(ANIM_KEY_DOWNLOADS, animDB.getDownloads());
+        values.put(ANIM_KEY_RATING, animDB.getRating());
+        values.put(ANIM_PUBLISH_ID,animDB.getpublishedId());
+        animDb.update(ANIM_TABLE_MYANIMASSETS, values, ANIM_KEY_ASSETSID + " = ?", new String[]{String.valueOf(animDB.getAnimAssetId())});
+        if (animDb.isOpen())
+            animDb.close();
+        values = null;
+        return 0;
+    }
+
     public int getAnimationCount() {
         String countQuery = "SELECT  * FROM " + ANIM_TABLE_ANIMASSETS;
         SQLiteDatabase animDB = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);

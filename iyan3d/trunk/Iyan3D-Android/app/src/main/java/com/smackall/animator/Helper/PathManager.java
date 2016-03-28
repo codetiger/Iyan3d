@@ -23,6 +23,7 @@ public class PathManager {
     public static String DefaultAssetsDir = "";
     public static String DefaultDatabaseDirectory = "";
     public static String Iyan3DDatabse = "";
+    public static String RenderPath = "";
 
     public static void initPaths(Activity activity) {
         DefaultFilesDir = String.valueOf(activity.getFilesDir());
@@ -51,6 +52,8 @@ public class PathManager {
         FileHelper.mkDir(LocalScenesFolder);
         LocalImportAndExport = String.valueOf((Environment.getExternalStorageDirectory() + "/iyan3d"));
         FileHelper.mkDir(LocalImportAndExport);
+        RenderPath = LocalImportAndExport+"/"+"Render";
+        FileHelper.mkDir(RenderPath);
         LocalUserVideoFolder = String.valueOf((activity.getExternalFilesDir(null) +"/video"));
         FileHelper.mkDir(LocalUserVideoFolder);
         DefaultDatabaseDirectory = DefaultFilesDir + "/databases";

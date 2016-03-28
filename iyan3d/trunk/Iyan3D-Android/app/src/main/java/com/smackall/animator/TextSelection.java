@@ -123,7 +123,6 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
 
     public void importText(){
         if(textDB.getFilePath().equals("-1")){ UIHelper.informDialog(mContext, "Please Choose Font Style."); return;}
-        textDB.setAssetAddType(Constants.IMPORT_ASSET_ACTION);
         textDB.setAssetName(((EditText) v.findViewById(R.id.inputText)).getText().toString());
         textDB.setBevalValue(((SeekBar) v.findViewById(R.id.bevalSlider)).getProgress());
         textDB.setFontSize(10);

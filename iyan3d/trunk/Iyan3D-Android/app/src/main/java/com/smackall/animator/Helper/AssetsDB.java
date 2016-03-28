@@ -19,6 +19,7 @@ public class AssetsDB {
     float x = -1.0f;
     float y = -1.0f;
     float z = -1.0f;
+    int actionType = Constants.IMPORT_ASSET_ACTION;
 
 
     public AssetsDB() {
@@ -119,6 +120,7 @@ public class AssetsDB {
     public void setZ(float z){
         this.z = z;
     }
+    public void setActionType(int actionType){this.actionType = actionType;}
     public String getTexture(){
         return this.texture;
     }
@@ -168,5 +170,6 @@ public class AssetsDB {
     public float getZ(){
         return this.z;
     }
+    public int getActionType(){return this.actionType;}
 }
 

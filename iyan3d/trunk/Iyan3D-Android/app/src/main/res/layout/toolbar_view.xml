@@ -234,7 +234,7 @@
             <ImageButton
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/imageButton3"
+                android:id="@+id/undo"
                 android:background="#f5595c60"
                 android:src="@drawable/redo_btn"
                 android:tag="8" />
@@ -250,7 +250,7 @@
             <ImageButton
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/imageButton11"
+                android:id="@+id/redo"
                 android:background="#f5595c60"
                 android:src="@drawable/undo_btn"
                 android:tag="7" />

@@ -1,21 +1,24 @@
 package com.smackall.animator;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 
+import com.smackall.animator.Helper.AnimDB;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.Helper.UIHelper;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -44,13 +47,14 @@ public class Publish {
     private class PublishAnimation extends AsyncTask<String,String,String> {
         HttpClient httpclient;
         HttpPost httppost;
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
         String response;
         Context mContext;
         int position;
+        ProgressDialog asyncDialog;
         public PublishAnimation(Context context,int position){
             this.mContext = context;
             this.position = position;
+            asyncDialog = new ProgressDialog(context);
         }
 
         @Override
@@ -58,58 +62,71 @@ public class Publish {
             try {
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("https://www.iyan3dapp.com/appapi/publish.php");
-                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
-                String anim = Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId());
+                org.apache.http.entity.mime.MultipartEntity builder = new org.apache.http.entity.mime.MultipartEntity();
+                String ext =(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimType() == 0) ? ".sgra" : ".sgta";
+                String anim = PathManager.LocalAnimationFolder+"/"+ Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId())+ext;
                 String img = PathManager.LocalThumbnailFolder+"/"+((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId()+".png";
 
-                if(FileHelper.checkValidFilePath(anim)){
+                if(FileHelper.checkValidFilePath(anim) && FileHelper.checkValidFilePath(img)){
                     File animationFile= new File(anim);
-                    FileBody fb = new FileBody(animationFile);
-                    builder.addPart("animationFile", fb);
+                    FileBody animation = new FileBody(animationFile);
+                    builder.addPart("animationFile", animation);
+                    File animationimgFile= new File(img);
+                    FileBody thumbnail = new FileBody(animationimgFile);
+                    builder.addPart("animationImgFile", thumbnail);
                 } else {
                     Log.e("Error", "File Not Found");
-                }
-                if(FileHelper.checkValidFilePath(img)){
-                    File animationimgFile= new File(img);
-                    FileBody fb = new FileBody(animationimgFile);
-                    builder.addPart("animationImgFile", fb);
-                }
-                else {
-                    Log.e("Error", "File Not Found");
+                    asyncDialog.dismiss();
+                    UIHelper.informDialog(mContext,"Something Wrong.. Try again.");
+                    return null;
                 }
 
-                builder.addTextBody("userid", "anonymous");
-                builder.addTextBody("uniqueId", "sadhsa454as547d8w7w94da4d5");
-                builder.addTextBody("email", "anonymous@mail.com");
-                builder.addTextBody("username", "anonymous");
-                builder.addTextBody("asset_name","Testing");
-                builder.addTextBody("keyword","Testing");
-                builder.addTextBody("bonecount", Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getBonecount()));
-                builder.addTextBody("asset_id", Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId()));
-                builder.addTextBody("type", Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimType()));
-
-                HttpEntity yourEntity = builder.build();
-                httppost.setEntity(yourEntity);
-
-                response = httpclient.execute(httppost,responseHandler);
-
+                builder.addPart("userid", new StringBody("anonymous"));
+                builder.addPart("uniqueId", new StringBody("sadhsa454as547d8w7w94da4d5"));
+                builder.addPart("email", new StringBody("anonymous@mail.com"));
+                builder.addPart("username", new StringBody("anonymous"));
+                builder.addPart("asset_name",new StringBody("Testing"));
+                builder.addPart("keyword",new StringBody("Testing"));
+                builder.addPart("bonecount", new StringBody(Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getBonecount())));
+                builder.addPart("asset_id", new StringBody(Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId())));
+                builder.addPart("type", new StringBody(Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimType())));
+                httppost.setEntity(builder);
+                ResponseHandler<String> handler = new BasicResponseHandler();
+                response = httpclient.execute(httppost,handler);
             } catch (IOException e) {
                 e.printStackTrace();
+                asyncDialog.dismiss();
+                UIHelper.informDialog(mContext, "Something Wrong.. Try again.");
+                return null;
             }
             return response;
         }
 
         @Override
         protected void onPreExecute() {
+            asyncDialog.setMessage("Animation Publish progress..Please wait..");
+            asyncDialog.show();
             super.onPreExecute();
         }
 
         @Override
         protected void onPostExecute(String s) {
-            System.out.println("Response : " + s);
+            int id = 0;
+            updateDataBase((s != null) ? Integer.parseInt(s) : id , position);
+            asyncDialog.dismiss();
             super.onPostExecute(s);
+        }
+    }
+
+    private void updateDataBase(int id , int position)
+    {
+        if(id > 0){
+            AnimDB animDB = ((EditorView)((Activity)mContext)).animationSelection.animationSelectionAdapter.animDBs.get(0);
+            animDB.setPublishedId(id);
+            ((EditorView)((Activity)mContext)).db.updateMyAnimationDetails(animDB);
+            UIHelper.informDialog(mContext, "Animation Published Successfully.");
+            ((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).setVisibility(View.GONE);
+            ((EditorView)((Activity)mContext)).animationSelection.animationSelectionAdapter.notifyDataSetChanged();
         }
     }
 }

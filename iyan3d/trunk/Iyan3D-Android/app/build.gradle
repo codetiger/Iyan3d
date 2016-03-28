@@ -12,6 +12,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -22,6 +23,7 @@ android {
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId 'com.smackall.animator'
         minSdkVersion 14
@@ -75,7 +77,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/jcodec-0.1.9.jar')
-    compile files('libs/httpmime-4.3.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
@@ -84,6 +85,8 @@ dependencies {
     }
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile files('libs/httpmime-4.2.1.jar')
 }
 
 crashlytics {

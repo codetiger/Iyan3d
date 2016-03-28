@@ -2,6 +2,7 @@ package com.smackall.animator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -12,6 +13,7 @@ import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.DownloadHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.FullScreen;
+import com.smackall.animator.Helper.KeyMaker;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 
@@ -33,6 +35,8 @@ public class LoadingActivity extends AppCompatActivity {
             return;
         }
         setContentView(R.layout.activity_loading);
+        Constants.deviceUniqueId = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
         loadProgressBar();
         init();
     }
@@ -54,6 +58,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         PathManager.initPaths(this);
         FileHelper.copyAssetsDirToLocal(this);
+        KeyMaker.makeKey(this);
         db.createDataBase();
         assetJsonDownload.jsonParse("https://iyan3dapp.com/appapi/json/assetsDetailv5.json", db, this, sp, Constants.ASSET_JSON);
         animationJsonDownload.jsonParse("https://iyan3dapp.com/appapi/json/animationDetail.json", db, this, sp, Constants.ANIMATION_JSON);

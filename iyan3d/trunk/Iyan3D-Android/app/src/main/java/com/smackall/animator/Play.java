@@ -46,17 +46,18 @@ public class Play {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ((Activity) mContext).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
                             if (!GL2JNILib.isPlaying()) {
                                 if(!isPreview)
                                     ((EditorView) (Activity) mContext).showOrHideToolbarView(Constants.SHOW);
                                 cancel();
-                            } else
-                                highLightFrame(GL2JNILib.currentFrame());
-                        }
-                    });
+                            } else {
+                                ((Activity)mContext).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        highLightFrame(GL2JNILib.currentFrame());
+                                    }
+                                });
+                            }
             }
         }, 0, 1000/24);
     }

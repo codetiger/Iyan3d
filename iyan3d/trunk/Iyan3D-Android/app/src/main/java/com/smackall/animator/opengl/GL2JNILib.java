@@ -2,8 +2,11 @@ package com.smackall.animator.opengl;
 
 import android.content.Context;
 
+import com.smackall.animator.Export;
+import com.smackall.animator.Helper.MissingAssetHandler;
 import com.smackall.animator.Rig;
 import com.smackall.animator.Save;
+import com.smackall.animator.UndoRedo;
 
 public class GL2JNILib {
 
@@ -26,6 +29,7 @@ public class GL2JNILib {
 
     public static native void init(int width, int height);
     public static native void step();
+    public static native void loadScene(MissingAssetHandler missingAssetHandler,String filepath);
     public static native void swipe(float velocityX, float velocityY);
     public static native void panBegin(float cordX1, float cordY1,float cordX2, float cordY2);
     public static native void panProgress(float cordX1, float cordY1,float cordX2, float cordY2);
@@ -85,7 +89,7 @@ public class GL2JNILib {
     public static native void cameraPropertyChanged(int fov,int resolution,boolean storeAction);
     public static native boolean loadText(float red,float green,float blue,int typeOfNode,String textureName,String assetName,int fontSize,int bevalValue,int assetAddType,String filePath,boolean isTempNode);
     public static native boolean importImageOrVideo(int nodeType,String name,int width,int height,int assetAddType,boolean isTempNode);
-    public static native void importAdditionalLight(int lightCount);
+    public static native void importAdditionalLight(int lightCount,int action);
     public static native int lightCount();
     public static native void saveAsSGM(String FileName,String textureName,int assetId,boolean haveTexture,float x,float y,float z);
     public static native void changeTexture(int selectedNodeId,String textureName,float x,float y,float z,boolean isTemp);
@@ -119,6 +123,16 @@ public class GL2JNILib {
     public static native boolean deleteAnimation();
     public static native boolean saveAnimation(Save save,int assetId,String name,int type);
     public static native boolean isJointSelected();
+    public static native boolean isHaveKey(int currentFrame);
+    public static native boolean hasNodeSelected();
+    public static native boolean editorScene();
+    public static native int undo(UndoRedo undoRedo);
+    public static native int redo(UndoRedo undoRedo);
+    public static native void decreaseCurrentAction();
+    public static native int objectIndex();
+    public static native void increaseCurrentAction();
+    public static native void renderFrame(Export export,int frame,int shader,boolean isImage,boolean waterMark, float x, float y, float z);
+
 
     public static void callBackIsDisplayPrepared(){
         GL2JNIView.callBackSurfaceRendered();
