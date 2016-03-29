@@ -439,6 +439,12 @@
     }
 
 }
+
+- (void) showOrHideProgress:(BOOL) value
+{
+    
+}
+
 #pragma mark ScenePropertiesDelegate
 
 -(void)duplicateScene:(int) indexValue{

@@ -13,7 +13,8 @@
 #import "AppHelper.h"
 
 @protocol LoggedinViewControllerDelegat
--(void)dismissView;
+- (void)dismissView;
+- (void) showOrHideProgress:(BOOL) value;
 @end
 
 @class GIDSignIn;

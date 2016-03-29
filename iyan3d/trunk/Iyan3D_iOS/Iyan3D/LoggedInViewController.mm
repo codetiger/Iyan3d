@@ -238,9 +238,10 @@
     RenderTableViewCell *cell = [self.renderStatus cellForRowAtIndexPath:indexPath];
     [cell.downloadProgress setHidden:NO];
     [cell.downloadProgress startAnimating];
+    [self.delegare showOrHideProgress:YES];
+    [_renderStatus setUserInteractionEnabled:NO];
     if(downloadCompletedTaskIds != cell.renderProgressLabel.tag) {
         [self downloadAndSaveFile:(int)cell.renderProgressLabel.tag WithAction:GET_FILE_TYPE AndType:DEFAULT_OR_IMAGE];
-//        [self downloadOutputVideo:(int)cell.renderProgressLabel.tag];
     }
 }
 
@@ -281,71 +282,17 @@
                     
             }
             downloadCompletedTaskIds = taskId;
-            
         }
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
                                          UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Cannot download file. Check your net connection." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                                          [userNameAlert show];
+                                         downloadCompletedTaskIds = taskId;
+                                         [_renderStatus setUserInteractionEnabled:YES];
+                                         [_renderStatus reloadData];
                                      }];
     [operation start];
-}
-
-- (void) downloadOutputVideo:(int)taskId
-{
-    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [docPaths objectAtIndex:0];
-    
-    //int taskId = (int)((UIButton*)sender).tag;
-    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/renderFiles/%d/%d.mp4",taskId, taskId];
-    NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.mp4", documentsDirectory, taskId];
-    
-    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(donwloadCompleted:) returnObject:[NSNumber numberWithInt:taskId] outputFilePath:outputFilePath andURL:url];
-    task.taskType = DOWNLOAD_AND_WRITE;
-    task.queuePriority = NSOperationQueuePriorityHigh;
-    [downloadQueue addOperation:task];
-}
-
-- (void) downloadImage:(int)taskId frames:(int)frames
-{
-    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [docPaths objectAtIndex:0];
-    
-    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/renderFiles/%d/%d.png", taskId, taskId];
-    NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.png", documentsDirectory, taskId];
-    
-    NSLog(@" \n path %@ ", outputFilePath);
-    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(donwloadCompleted:) returnObject:[NSNumber numberWithInt:taskId] outputFilePath:outputFilePath andURL:url];
-    task.taskType = DOWNLOAD_AND_WRITE;
-    task.queuePriority = NSOperationQueuePriorityHigh;
-    [downloadQueue addOperation:task];
-    
-}
-
-- (void) donwloadCompleted:(id)object
-{
-    DownloadTask* t = (DownloadTask*)object;
-    NSString* extension = [t.outputPath pathExtension];
-    int taskId = [t.returnObj intValue];
-    RenderItem *r = [cache getRenderTaskByTaskId:taskId];
-    if ([extension isEqualToString:@"png"]) {
-        NSLog(@" \n output %@ ", t.outputPath);
-        if([[NSFileManager defaultManager] fileExistsAtPath:t.outputPath]) {
-            UIImage *img = [UIImage imageWithContentsOfFile:t.outputPath];
-            UIImageWriteToSavedPhotosAlbum(img, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-        } else {
-            [self showCompletionAlert:[NSNumber numberWithBool:NO]];
-        }
-    } else if ([extension isEqualToString:@"mp4"]) {
-        if(![[NSFileManager defaultManager] fileExistsAtPath:t.outputPath])
-            [self downloadImage:taskId frames:r.taskFrames];
-        else {
-            UISaveVideoAtPathToSavedPhotosAlbum(t.outputPath, self,  @selector(video:didFinishSavingWithError:contextInfo:), nil);
-        }
-    }
-    downloadCompletedTaskIds = taskId;
-    [_renderStatus reloadData];
 }
 
  - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
@@ -354,6 +301,9 @@
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
     else
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:NO];
+    [self.delegare showOrHideProgress:NO];
+    [_renderStatus setUserInteractionEnabled:YES];
+    [_renderStatus reloadData];
 }
 
  - (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
@@ -362,6 +312,9 @@
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
     else
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:NO];
+    [self.delegare showOrHideProgress:NO];
+    [_renderStatus setUserInteractionEnabled:YES];
+    [_renderStatus reloadData];
 
 }
 

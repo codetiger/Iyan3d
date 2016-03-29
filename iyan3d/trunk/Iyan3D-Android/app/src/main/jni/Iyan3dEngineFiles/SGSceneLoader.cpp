@@ -150,8 +150,24 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
 {
     if(!currentScene || !smgr)
         return;
+    int sgbVersion = FileHelper::readInt(filePointer);
+    if(sgbVersion == SGB_VERSION_CURRENT) {
+        FileHelper::readInt(filePointer); // dofNear
+        FileHelper::readInt(filePointer); // dofFar
+        FileHelper::readInt(filePointer); // Empty Data for future use
+        FileHelper::readInt(filePointer);
+        FileHelper::readInt(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readString(filePointer);
+        FileHelper::readString(filePointer);
+        FileHelper::readString(filePointer);
+        currentScene->totalFrames = FileHelper::readInt(filePointer);
+    } else
+        currentScene->totalFrames = sgbVersion;
 
-    currentScene->totalFrames = FileHelper::readInt(filePointer);
     Vector3 lightColor;
     lightColor.x = FileHelper::readFloat(filePointer);
     lightColor.y = FileHelper::readFloat(filePointer);

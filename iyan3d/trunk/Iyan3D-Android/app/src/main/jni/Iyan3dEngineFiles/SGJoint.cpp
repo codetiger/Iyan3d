@@ -43,7 +43,7 @@ void SGJoint::writeData(ofstream * filePointer)
     // Junk values written are not neccassary, but they are provided because files should be written in the same old format.
     
     FileHelper::writeInt(filePointer, -1);
-    FileHelper::writeInt(filePointer, SGB_VERSION);
+    FileHelper::writeInt(filePointer, SGB_VERSION_CURRENT);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeBool(filePointer , false);
     FileHelper::writeBool(filePointer, false);

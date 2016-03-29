@@ -1032,7 +1032,21 @@ void SGNode::readData(ifstream *filePointer)
     joints.clear();
     assetId = FileHelper::readInt(filePointer);
     int sgbVersion = FileHelper::readInt(filePointer);
-    if(sgbVersion == SGB_VERSION)
+    if(sgbVersion == SGB_VERSION_CURRENT) { // Empty Data for future use
+        FileHelper::readInt(filePointer);
+        FileHelper::readInt(filePointer);
+        FileHelper::readInt(filePointer);
+        FileHelper::readInt(filePointer);
+        FileHelper::readInt(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readString(filePointer);
+        FileHelper::readString(filePointer);
+        FileHelper::readString(filePointer);
+    }
+    if(sgbVersion >= SGB_VERSION_2)
         textureName = FileHelper::readString(filePointer,sgbVersion);
     else
         textureName = to_string(assetId)+"-cm";
@@ -1120,7 +1134,19 @@ void SGNode::readData(ifstream *filePointer)
 void SGNode::writeData(ofstream *filePointer)
 {
     FileHelper::writeInt(filePointer,assetId);
-    FileHelper::writeInt(filePointer,SGB_VERSION); // New sgb version because of changing the format
+    FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
+    FileHelper::writeInt(filePointer, 0); // Empty Data for future use
+    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeString(filePointer, "");
+    FileHelper::writeString(filePointer, "");
+    FileHelper::writeString(filePointer, "");
     FileHelper::writeString(filePointer, textureName);
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeBool(filePointer,isRigged);
