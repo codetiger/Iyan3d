@@ -24,13 +24,18 @@ struct properties{
     Vector3 vertexColor,oriVertexColor;
     Vector3 textColor;
     std::string prevMatName;
+    
+    bool isPhysicsEnabled;
+    double weight;
+    double forceMagnitude;
+    Vector3 forceDirection;
+    bool isSoft;
 };
 
 class SGNode{
 private:
     NODE_TYPE type;
     
-
 public:
     bool isRigged;
     bool isMirrorEnabled;
