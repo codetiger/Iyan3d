@@ -24,6 +24,13 @@ SGNode::SGNode(NODE_TYPE type){
     textureName = "";
     props.reflection = 0.0;
     props.refraction = 0.0;
+    
+    props.isPhysicsEnabled = false;
+    props.weight = 0.0;
+    props.forceMagnitude = 0.0;
+    props.forceDirection = Vector3(0.0);
+    props.isSoft = false;
+
 }
 SGNode::~SGNode(){
     clearSGJoints();
@@ -406,7 +413,6 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
 
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
-    
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
     
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
@@ -1033,18 +1039,23 @@ void SGNode::readData(ifstream *filePointer)
     assetId = FileHelper::readInt(filePointer);
     int sgbVersion = FileHelper::readInt(filePointer);
     if(sgbVersion == SGB_VERSION_CURRENT) { // Empty Data for future use
+        props.isPhysicsEnabled = FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
-        FileHelper::readInt(filePointer);
+        props.weight = FileHelper::readFloat(filePointer);
+        props.forceMagnitude = FileHelper::readFloat(filePointer);
+        props.forceDirection.x = FileHelper::readFloat(filePointer);
+        props.forceDirection.y = FileHelper::readFloat(filePointer);
+        props.forceDirection.z = FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
-        FileHelper::readString(filePointer);
-        FileHelper::readString(filePointer);
-        FileHelper::readString(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
     }
     if(sgbVersion >= SGB_VERSION_2)
         textureName = FileHelper::readString(filePointer,sgbVersion);
@@ -1135,18 +1146,23 @@ void SGNode::writeData(ofstream *filePointer)
 {
     FileHelper::writeInt(filePointer,assetId);
     FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
-    FileHelper::writeInt(filePointer, 0); // Empty Data for future use
+    FileHelper::writeInt(filePointer, props.isPhysicsEnabled);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeFloat(filePointer, props.weight);
+    FileHelper::writeFloat(filePointer, props.forceMagnitude);
+    FileHelper::writeFloat(filePointer, props.forceDirection.x);
+    FileHelper::writeFloat(filePointer, props.forceDirection.y);
+    FileHelper::writeFloat(filePointer, props.forceDirection.z);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeString(filePointer, "");
-    FileHelper::writeString(filePointer, "");
-    FileHelper::writeString(filePointer, "");
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeString(filePointer, textureName);
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeBool(filePointer,isRigged);

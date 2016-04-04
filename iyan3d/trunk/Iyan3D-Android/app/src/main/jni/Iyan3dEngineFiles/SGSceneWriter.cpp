@@ -57,9 +57,8 @@ void SGSceneWriter::writeGlobalInfo(ofstream *filePointer)
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeString(filePointer, "");
-    FileHelper::writeString(filePointer, "");
-    FileHelper::writeString(filePointer, "");
+    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeInt(filePointer, writingScene->totalFrames);
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].x);
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].y);

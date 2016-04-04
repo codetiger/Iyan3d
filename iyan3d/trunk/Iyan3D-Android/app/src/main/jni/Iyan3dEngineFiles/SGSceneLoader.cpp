@@ -161,9 +161,8 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
-        FileHelper::readString(filePointer);
-        FileHelper::readString(filePointer);
-        FileHelper::readString(filePointer);
+        FileHelper::readFloat(filePointer);
+        FileHelper::readFloat(filePointer);
         currentScene->totalFrames = FileHelper::readInt(filePointer);
     } else
         currentScene->totalFrames = sgbVersion;
