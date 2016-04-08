@@ -45,8 +45,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
             nodesCount--;
         } else if(scene->nodes[i]->props.isVisible && scene->nodes[i]->getType() == NODE_PARTICLES) {
         	shared_ptr< ParticleManager > pNode = dynamic_pointer_cast<ParticleManager>(scene->nodes[i]->node);
-        	for(int i = 1; i < pNode->getParticlesCount(); i++)
-        		nodesCount++;
+			nodesCount += pNode->getParticlesCount() - 1;
         }
     }
 
@@ -90,6 +89,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
 
     frameFilePtr.close();
     smgr->setActiveCamera(scene->viewCamera);
+
     return true;
 }
 
@@ -119,10 +119,17 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
          FileHelper::writeFloat(frameFilePtr, lightColor.y); //Emission Color g
          FileHelper::writeFloat(frameFilePtr, lightColor.z); //Emission Color b
          FileHelper::writeFloat(frameFilePtr, 0.5); //Emission Radius
-         FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_PARTICLES) ? pColor.x : vertColor.x); // Diffusion Color r
-         FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_PARTICLES) ? pColor.y : vertColor.y); // Diffusion Color g
-         FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_PARTICLES) ? pColor.z : vertColor.z); // Diffusion Color b
-         FileHelper::writeBool(frameFilePtr, (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true); // Has Texture
+         if(nodeType == NODE_PARTICLES) {
+             FileHelper::writeFloat(frameFilePtr, pColor.x); // Diffusion Color r
+             FileHelper::writeFloat(frameFilePtr, pColor.y); // Diffusion Color g
+             FileHelper::writeFloat(frameFilePtr, pColor.z); // Diffusion Color b
+         } else {
+             FileHelper::writeFloat(frameFilePtr, vertColor.x); // Diffusion Color r
+             FileHelper::writeFloat(frameFilePtr, vertColor.y); // Diffusion Color g
+             FileHelper::writeFloat(frameFilePtr, vertColor.z); // Diffusion Color b
+         }
+         bool hasTexture = (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true;
+         FileHelper::writeBool(frameFilePtr, hasTexture); // Has Texture
 
          unsigned long lastSlashPos  = (thisNode->textureName).find_last_of("\\/");
          string textureFileName;

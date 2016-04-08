@@ -40,7 +40,8 @@ string getFileContent(const char* file) {
 
 TaskDetails getRenderTaskFromServer(string machineId) {
 	string url = "https://www.iyan3dapp.com/appapi/requesttask.php?machineid=" + machineId;
-	downloadFile(url.c_str(), "taskid.txt");
+	if(!runInDeveloperMode)
+		downloadFile(url.c_str(), "taskid.txt");
 	string taskInfo = getFileContent("taskid.txt");
 	TaskDetails td;
 	td.taskId = -1;
@@ -62,7 +63,8 @@ TaskDetails getRenderTaskFromServer(string machineId) {
 
 TaskDetails getVideoTaskFromServer(string machineId) {
 	string url = "https://www.iyan3dapp.com/appapi/videotask.php?machineid=" + machineId;
-	downloadFile(url.c_str(), "taskid.txt");
+	if(!runInDeveloperMode)
+		downloadFile(url.c_str(), "taskid.txt");
 	string taskInfo = getFileContent("taskid.txt");
 	TaskDetails td;
 	td.taskId = -1;
@@ -305,7 +307,8 @@ bool renderTask(TaskDetails td) {
 		return false;
 	}
 
-	uploadOutputToServer(td);
+	if(!runInDeveloperMode)
+		uploadOutputToServer(td);
 	return true;
 }
 
@@ -353,13 +356,13 @@ int main(int argc, char** argv)
 				timespec te;
 				clock_gettime(CLOCK_REALTIME, &te);
 				double realtime = (te.tv_sec - ts.tv_sec) + (double)(te.tv_nsec - ts.tv_nsec) / (double)1000000000.0;
-				printf("Time taken: %.2fs\n\n", realtime);
+				printf("Time taken: %.2fs Ray Intersections: %d Ray Occlusions: %d\n\n", realtime, debug_ray_intersections, debug_ray_occlusions);
 			}
 		} else {
 			printf("No Pending Tasks waiting for %d seconds\n\n", taskFetchFrequency);
 			sleep(taskFetchFrequency);
 		}
-	} while(true);
+	} while(!runInDeveloperMode);
 
 	return 0;
 }

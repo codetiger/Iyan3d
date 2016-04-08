@@ -49,7 +49,8 @@ public:
 		numberOfTriangles = readInt(data);
 
 		id = rtcNewTriangleMesh(rtcScene, RTC_GEOMETRY_STATIC, numberOfTriangles, numberOfTriangles * 3);
-		rtcSetIntersectionFilterFunction(rtcScene, id, (RTCFilterFunc)&FilterFunc);
+		rtcSetIntersectionFilterFunction(rtcScene, id, (RTCFilterFunc)&intersectFilterFunction);
+		rtcSetOcclusionFilterFunction(rtcScene, id, (RTCFilterFunc)&occludeFilterFunction);
 		rtcSetUserData(rtcScene, id, this);
 		uvs = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 		normals = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));

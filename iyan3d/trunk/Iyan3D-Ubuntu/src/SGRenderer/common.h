@@ -39,6 +39,11 @@ int samplesAO = 0;
 double minAOBrightness = 0.5f;
 int randomSamples = 0;
 
+long debug_ray_intersections = 0;
+long debug_ray_occlusions = 0;
+
+bool runInDeveloperMode = false;
+
 enum ImageFormat {
     ImageFormat_PPM,
     ImageFormat_PNG
@@ -143,6 +148,7 @@ double GetRandomValue() {
 }
 
 RTCRay getIntersection(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f, int mask = 0xFFFFFFFF) {
+	debug_ray_intersections++;
     RTCRay ray;
     ray.org[0] = o.x;
     ray.org[1] = o.y;
@@ -164,6 +170,7 @@ RTCRay getIntersection(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0
 }
 
 RTCRay getOcclusion(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f, int mask = 0xFFFFFFFF) {
+	debug_ray_occlusions++;
     RTCRay ray;
     ray.org[0] = o.x;
     ray.org[1] = o.y;
@@ -188,15 +195,51 @@ Vec3fa getHitPoint(RTCRay ray) {
     return Vec3fa(ray.org[0], ray.org[1], ray.org[2]) + Vec3fa(ray.dir[0], ray.dir[1], ray.dir[2]) * ray.tfar;
 }
 
-Vec3fa sampleAroundNormal(Vec3fa n) {
-    double r1 = 2 * M_PI * GetRandomValue();
-    double r2 = GetRandomValue();
-    double r2s = sqrt(r2);
+#define MPI 3.14159265
+#define M2PI 6.28318531
+
+float fastSin(float x) {
+	if (x < -MPI)
+	    x += M2PI;
+	else if (x >  MPI)
+	    x -= M2PI;
+
+	float sin = 0;
+	if (x < 0)
+	    sin = 1.27323954 * x + .405284735 * x * x;
+	else
+	    sin = 1.27323954 * x - 0.405284735 * x * x;
+	return sin;
+}
+
+float fastCos(float x) {
+	x += 1.57079632;
+	if (x >  MPI)
+	    x -= M2PI;
+
+	float cos = 0;
+	if (x < 0)
+		cos = 1.27323954 * x + .405284735 * x * x;
+	else
+		cos = 1.27323954 * x - 0.405284735 * x * x;
+	return cos;
+}
+
+Vec3fa cosineSampleAroundNormal(double r1, double r2, Vec3fa n) {
+	double phi = 2 * M_PI * r1;
+	double cosTheta = sqrt(1.0 - r2);
+	double sinTheta = sqrt(1.0 - cosTheta * cosTheta);
+
+	Vec3fa d = Vec3fa(fastCos(phi) * sinTheta, fastSin(phi) * sinTheta, cosTheta);
 
     Vec3fa w = n;
     Vec3fa u = ((fabs(w.x) > .1 ? Vec3fa(0, 1, 0) : Vec3fa(1, 0, 0)).cross(w)).normalize();
     Vec3fa v = w.cross(u);
-    return (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalize();
+    return (u * d.x + v * d.y + w * d.z).normalize();
+}
+
+Vec3fa sampleAroundNormal(Vec3fa n) {
+	return cosineSampleAroundNormal(GetRandomValue(), GetRandomValue(), n);
 }
 
 Vec3fa randomizeDirection(Vec3fa dir, double magnitude) {
@@ -238,19 +281,137 @@ string convert2String(int i) {
 	return r;
 }
 
+void gaussionBlur (double *sourceData, double *destData, int width, int height, int radius) {
+    double rs = ceil(radius * 2.57);
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            double val = 0, wsum = 0;
+            for(int iy = i - rs; iy < i + rs + 1; iy++) {
+                for(int ix = j - rs; ix < j + rs + 1; ix++) {
+                    int x = min(width - 1, max(0, ix));
+                    int y = min(height - 1, max(0, iy));
+                    int dsq = (ix - j) * (ix - j) + (iy - i) * (iy - i);
+                    double wght = exp( -dsq / (2 * radius * radius) ) / (M_PI * 2 * radius * radius);
+                    val += sourceData[y*width+x] * wght;
+                    wsum += wght;
+                }
+            }
+            destData[i*width+j] = val/wsum;
+        }
+    }
+}
+
+vector<int> boxesForGauss(double sigma, int n) {
+    double wIdeal = sqrt(( 12 * sigma * sigma / n) + 1);  // Ideal averaging filter width
+    int wl = floor(wIdeal);
+    if(wl % 2 == 0)
+    	wl--;
+
+    int wu = wl + 2;
+
+    double mIdeal = (12 * sigma * sigma - n * wl * wl - 4 * n * wl - 3 * n) / (-4 * wl - 4);
+    int m = round(mIdeal);
+
+    vector<int> sizes;
+    for(int i = 0; i < n; i++)
+    	sizes.push_back(i < m ? wl : wu);
+    return sizes;
+}
+
+void boxBlurH_4 (double *sourceData, double *destData, int width, int height, int radius) {
+    double iarr = 1.0 / (radius + radius + 1);
+    for(int i=0; i<height; i++) {
+        int ti = i * width, li = ti, ri = ti+radius;
+        double fv = sourceData[ti], lv = sourceData[ti+width-1], val = (radius+1)*fv;
+        for(int j=0; j<radius; j++)
+        	val += sourceData[ti+j];
+
+        for(int j=0; j<=radius; j++) {
+        	val += sourceData[ri++] - fv;
+        	destData[ti++] = round(val*iarr);
+        }
+
+        for(int j=radius+1; j<width-radius; j++) {
+        	val += sourceData[ri++] - sourceData[li++];
+        	destData[ti++] = round(val*iarr);
+        }
+
+        for(int j=width-radius; j<width  ; j++) {
+        	val += lv - sourceData[li++];
+        	destData[ti++] = round(val*iarr);
+        }
+    }
+}
+
+void boxBlurT_4 (double *sourceData, double *destData, int width, int height, int radius) {
+    double iarr = 1.0 / (radius + radius + 1);
+    for(int i = 0; i < width; i++) {
+        int ti = i, li = ti, ri = ti + radius * width;
+        double fv = sourceData[ti], lv = sourceData[ti+width*(height-1)], val = (radius+1)*fv;
+
+        for(int j=0; j<radius; j++)
+        	val += sourceData[ti+j*width];
+
+        for(int j=0; j<=radius; j++) {
+        	val += sourceData[ri] - fv;
+        	destData[ti] = round(val*iarr);
+        	ri+=width; ti+=width;
+        }
+
+        for(int j=radius+1; j<height-radius; j++) {
+        	val += sourceData[ri] - sourceData[li];
+        	destData[ti] = round(val*iarr);
+        	li += width;
+        	ri += width;
+        	ti += width;
+        }
+
+        for(int j=height-radius; j<height; j++) {
+        	val += lv - sourceData[li];
+        	destData[ti] = round(val*iarr);
+        	li+=width;
+        	ti+=width;
+        }
+    }
+}
+
+void boxBlur_4 (double *sourceData, double *destData, int width, int height, int radius) {
+    for(int i = 0; i < width*height; i++)
+    	destData[i] = sourceData[i];
+
+    boxBlurH_4(destData, sourceData, width, height, radius);
+    boxBlurT_4(sourceData, destData, width, height, radius);
+}
+
+void gaussionBlur_fast(double *sourceData, double *destData, int width, int height, int radius) {
+	vector<int> bxs = boxesForGauss(radius, 3);
+    boxBlur_4 (sourceData, destData, width, height, (bxs[0]-1)/2);
+    boxBlur_4 (destData, sourceData, width, height, (bxs[1]-1)/2);
+    boxBlur_4 (sourceData, destData, width, height, (bxs[2]-1)/2);
+}
+
 #include "texture.h"
 #include "camera.h"
 #include "material.h"
 
-void FilterFunc(void* userPtr, RTCRay& ray);
+void intersectFilterFunction(void* userPtr, RTCRay& ray);
+void occludeFilterFunction(void* userPtr, RTCRay& ray);
 
 #include "Mesh.h"
 
-void FilterFunc(void* userPtr, RTCRay& ray) {
+void intersectFilterFunction(void* userPtr, RTCRay& ray) {
 	SGRTMesh *mesh = (SGRTMesh*)userPtr;
 	Vec3fa uv = mesh->getInterpolatedUV(ray.primID, ray.u, ray.v);
 	double alpha = mesh->getAlpha(uv.x, uv.y);
 	if(alpha == 0.0)
+		ray.geomID = RTC_INVALID_GEOMETRY_ID;
+}
+
+void occludeFilterFunction(void* userPtr, RTCRay& ray) {
+	SGRTMesh *mesh = (SGRTMesh*)userPtr;
+	Vec3fa uv = mesh->getInterpolatedUV(ray.primID, ray.u, ray.v);
+	double alpha = mesh->getAlpha(uv.x, uv.y);
+	if(alpha < 1.0)
 		ray.geomID = RTC_INVALID_GEOMETRY_ID;
 }
 

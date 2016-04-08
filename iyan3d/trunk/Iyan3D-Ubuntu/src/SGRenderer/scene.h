@@ -13,6 +13,7 @@ struct Scene
 	vector<Tile> tiles;
 	double progress;
 	unsigned char *pixels;
+	double *aoMap;
 	double dofNear, dofFar;
 
 	Scene(RTCDevice rtcDevice) {
@@ -51,6 +52,7 @@ struct Scene
 	void render() {
 		progress = 0;
 		pixels = (unsigned char*)malloc(imgWidth * imgHeight * 4 * sizeof(unsigned char));
+		aoMap = (double*)malloc(imgWidth * imgHeight * sizeof(double));
 
 		for (int y = 0; y < imgHeight; y += TILE_SIZE) {
 			for (int x = 0; x < imgWidth; x += TILE_SIZE) {
@@ -82,6 +84,21 @@ struct Scene
 	}
 
 	void SaveToFile(const char* imagePath, ImageFormat imgFormat) {
+		double* tmpAOMap = (double*)malloc(imgWidth * imgHeight * sizeof(double));
+		memcpy(tmpAOMap, aoMap, imgWidth * imgHeight * sizeof(double));
+		gaussionBlur(tmpAOMap, aoMap, imgWidth, imgHeight, 3);
+		free(tmpAOMap);
+
+		for (size_t y = 0; y < imgHeight; y++) {
+			for (size_t x = 0; x < imgWidth; x++) {
+				int pi = ((y * imgWidth) + x) * 4;
+				double ao = aoMap[((y * imgWidth) + x)];
+				pixels[pi + 0] *= ao;
+				pixels[pi + 1] *= ao;
+				pixels[pi + 2] *= ao;
+			}
+		}
+
 		if(imgFormat == ImageFormat_PPM) {
 			FILE* file = fopen(imagePath, "wb");
 			if (!file) 
@@ -113,13 +130,14 @@ struct Scene
 	}
 	
 	void renderPixel(int x, int y) {
-		Vec3fa color = Vec3fa(0.0f);
+		Vec3fa color = Vec3fa(1.0f);
 		double distance = 0;
 
 		double ao = 1.0;
 		if(samplesAO > 0) {
 			Vec3fa dir = cam->getRayDirection(x/(double)imgWidth, y/(double)imgHeight);
 			ao = getAmbientOcclusion(cam->position, dir, distance);
+			aoMap[(((imgHeight - y - 1) * imgWidth) + x)] = ao;
 		}
 
 		if(randomSamples > 0) {
@@ -147,10 +165,11 @@ struct Scene
 		}
 
 		int pi = (((imgHeight - y - 1) * imgWidth) + x) * 4;
-		pixels[pi + 0] = (255.0f * clip(color.x, 0.0f, 1.0f) * ao);
-		pixels[pi + 1] = (255.0f * clip(color.y, 0.0f, 1.0f) * ao);
-		pixels[pi + 2] = (255.0f * clip(color.z, 0.0f, 1.0f) * ao);
+		pixels[pi + 0] = 255.0f * clip(color.x, 0.0f, 1.0f);
+		pixels[pi + 1] = 255.0f * clip(color.y, 0.0f, 1.0f);
+		pixels[pi + 2] = 255.0f * clip(color.z, 0.0f, 1.0f);
 		pixels[pi + 3] = 255;
+
 		progress = (y * imgWidth + x) / (1.0f * imgWidth * imgHeight);
 	}
 
@@ -173,38 +192,6 @@ struct Scene
 					hitCount++;
 			}
 
-			/*
-			int hitCount = 0;
-			for (int i = 0; i < samplesAO; i+=4) {
-				RTCRay4 ray4;
-				memset(&ray4,0,sizeof(ray4));
-				for (int j = 0; j < 4; i++) {
-					Vec3fa nd = sampleAroundNormal(n);
-					ray4.orgx[j] = hitPoint.x;
-					ray4.orgy[j] = hitPoint.y;
-					ray4.orgz[j] = hitPoint.z;
-
-				    ray4.dirx[j] = nd.x;
-				    ray4.diry[j] = nd.y;
-				    ray4.dirz[j] = nd.z;
-
-				    ray4.tnear[j] = 0.001f;
-				    ray4.tfar[j] = 7.5f;
-				    ray4.geomID[j] = RTC_INVALID_GEOMETRY_ID;
-				    ray4.primID[j] = RTC_INVALID_GEOMETRY_ID;
-				    ray4.mask[j] = -1;
-				    ray4.time[j] = 0;
-				}
-
-				__attribute ((aligned(16))) int valid[4] = { -1,-1,-1,-1 };
-			    rtcOccluded4(valid, sgScene, ray4);
-
-				for (int j = 0; j < 4; i++)
-					if(ray4.geomID[j] == 0)
-						hitCount++;
-			}
-			*/
-
 			double ambience = 1.0f - (hitCount/(double)samplesAO);
 			return (minAOBrightness + ambience * (1.0f - minAOBrightness));
 		}
@@ -221,17 +208,19 @@ struct Scene
 			Vec3fa faceColor = meshes[ray.geomID]->getColor(uv.x, uv.y);
 			color = faceColor;
 
+			Vec3fa backColor = Vec3fa(0.0);
 			double alpha = meshes[ray.geomID]->getAlpha(uv.x, uv.y);
 			if(alpha < 1.0) {
-				Vec3fa backColor = getRadiance(getHitPoint(ray), dir, depth);
-				if(alpha == 0.0)
-					return backColor;
-
+				backColor = getRadiance(getHitPoint(ray), dir, depth);
 				faceColor = faceColor * alpha + backColor * (1.0 - alpha);
 			}
 
-			if(!meshes[ray.geomID]->material.hasLighting || depth++ > MAX_RAY_DEPTH)
-				return (alpha < 1.0) ? meshes[ray.geomID]->material.diffuse * faceColor : meshes[ray.geomID]->material.diffuse;
+			if(!meshes[ray.geomID]->material.hasLighting || ++depth > MAX_RAY_DEPTH) {
+				if(alpha < 1.0) {
+					return (meshes[ray.geomID]->material.diffuse * alpha + backColor) * E;
+				} else
+					return meshes[ray.geomID]->material.diffuse;
+			}
 
 			double refraction = meshes[ray.geomID]->material.refraction;
 			double reflection = meshes[ray.geomID]->material.reflection;
@@ -247,11 +236,12 @@ struct Scene
 			n = n.normalize();
 
 			if(meshes[ray.geomID]->material.emission == 0.0 && reflection != 1.0 && refraction != 1.0) {
-				Vec3fa nl = n.dot(dir) < 0 ? n : n * -1.0f;
+				Vec3fa nl = n.dot(dir) < 0.0 ? n : n * -1.0;
 				Vec3fa nd = sampleAroundNormal(nl);
 
 				Vec3fa recursiveRadiance = Vec3fa(0.0f);
-				recursiveRadiance = getRadiance(point, nd, depth, 0);
+				if(depth <= 3 || reflection > 0 || refraction > 0)
+					recursiveRadiance = getRadiance(point, nd, depth+1, 0);
 
 				Vec3fa lightsContrib = Vec3fa(0.0f);
 				lightsContrib = getLightContribution(ray, nl);
@@ -278,11 +268,12 @@ struct Scene
 			if(meshes[i]->material.emission > 0.0) {
 				Vec3fa lightPoint = meshes[i]->getRandomPointInMesh();
 				Vec3fa rayDir = (lightPoint - point).normalize();
-				RTCRay ray = getIntersection(sgScene, point, rayDir);
+				double dist = lightPoint.distance(point);
+				RTCRay ray = getOcclusion(sgScene, point, rayDir, dist, 0xFFFF0000);
 
 				double distanceEffect = 1.0 - ray.tfar / (meshes[i]->material.emission * 999.0);
 
-				if(ray.geomID == meshes[i]->id)
+				if(ray.geomID != 0)
 					lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal) * distanceEffect;
 			}
 		}
@@ -325,17 +316,19 @@ struct Scene
 		double RP = Re / P;
 		double TP = Tr / (1 - P);
 
-		Vec3fa reflectionColor = getReflection(point, normal, dir, reflectionSharpnes, depth);
+//		Vec3fa reflectionColor = getReflection(point, normal, dir, reflectionSharpnes, depth);
 		Vec3fa refractionColor = getRadiance(point, refractedDirection, depth);
 
-		if(depth > 2) {
-			if(GetRandomValue() < P)
-				return reflectionColor * RP;
-			else
-				return refractionColor * TP;
-		} else {
-			return reflectionColor * Re + refractionColor * Tr;
-		}
+//		if(depth > 2) {
+//			if(GetRandomValue() < P)
+//				return reflectionColor * RP;
+//			else
+//				return refractionColor * TP;
+//		} else {
+//			return reflectionColor * Re + refractionColor * Tr;
+//		}
+
+		return refractionColor * Tr;
 	}
 
 	bool loadScene(const char* fileName, int width, int height) {
