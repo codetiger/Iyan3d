@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController">
@@ -12,14 +12,6 @@
                 <outlet property="framesDisplayCount" destination="0mj-C5-4vP" id="0iO-bV-qJr"/>
                 <outlet property="framesDisplayDuration" destination="b9h-ak-AHa" id="Rxl-RU-8zc"/>
                 <outlet property="multiSelectSwitch" destination="c9W-Bx-TQb" id="kLA-4q-A6K"/>
-                <outlet property="previewPositionLeftBottom" destination="lfS-Ij-M9L" id="v6l-g3-Fa7"/>
-                <outlet property="previewPositionLeftTop" destination="wIP-cI-3Ss" id="X8c-wG-Dru"/>
-                <outlet property="previewPositionRightBottom" destination="m5d-mx-Kfl" id="OeB-Vn-dY6"/>
-                <outlet property="previewPositionRightTop" destination="rGj-ef-zLk" id="8OW-Nq-Ib6"/>
-                <outlet property="renderPreviewPosition" destination="BOl-oz-TCu" id="len-li-G1B"/>
-                <outlet property="renderPreviewSize" destination="e25-6y-BA7" id="x7L-bI-s9D"/>
-                <outlet property="renderPreviewSizeLarge" destination="ebI-72-4f7" id="oHh-8m-WQX"/>
-                <outlet property="renderPreviewSizeSmall" destination="7gq-4y-bKk" id="Zzf-uk-vhx"/>
                 <outlet property="restoreBtn" destination="NjZ-i4-GH8" id="pFX-5O-fGH"/>
                 <outlet property="restorePurchaseProgress" destination="e08-WE-edF" id="Qeg-gq-Myh"/>
                 <outlet property="toolbarLeft" destination="g1W-5r-V1M" id="KoI-iP-ziy"/>
@@ -48,32 +40,78 @@
                     <color key="backgroundColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="FJI-4i-ShP">
-                    <rect key="frame" x="0.0" y="163" width="736" height="106"/>
+                    <rect key="frame" x="0.0" y="163" width="736" height="184"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Frame-Count-Display_Frames.png" id="0mj-C5-4vP">
-                            <rect key="frame" x="115" y="67" width="246" height="39"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Frame-Count-Display_Duration.png" id="b9h-ak-AHa">
-                            <rect key="frame" x="375" y="67" width="246" height="39"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="7w5-0u-Qkb">
-                            <rect key="frame" x="108" y="30" width="520" height="29"/>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="iqs-KB-BFa">
+                            <rect key="frame" x="31" y="20" width="245" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="FRAMES"/>
-                                <segment title="DURATION"/>
+                                <segment title="RIGHT"/>
+                                <segment title="LEFT"/>
                             </segments>
-                            <color key="tintColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" red="0.51372549020000002" green="0.0" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="frameCountDisplayType:" destination="-1" eventType="valueChanged" id="aFr-Ar-DOv"/>
+                                <action selector="toolBarPositionChanged:" destination="-1" eventType="valueChanged" id="pzN-6D-xLA"/>
                             </connections>
                         </segmentedControl>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FRAME COUNT DISPLAY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Yk-5j-0eS">
-                            <rect key="frame" x="293" y="9" width="157" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOOLBAR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NGS-wu-atl">
+                            <rect key="frame" x="121" y="0.0" width="65" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tool-Bar_Right.png" id="khQ-a8-MvM">
+                            <rect key="frame" x="45" y="58" width="91" height="63"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tool-Bar_Left.png" id="g1W-5r-V1M">
+                            <rect key="frame" x="168" y="58" width="91" height="63"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="c9W-Bx-TQb">
+                            <rect key="frame" x="121" y="135" width="51" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <connections>
+                                <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="sJc-hp-o3p"/>
+                            </connections>
+                        </switch>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3D WORKSPACE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="M3C-rp-Uye">
+                            <rect key="frame" x="506" y="0.0" width="108" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quality" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mfM-j2-uir">
+                            <rect key="frame" x="449" y="30" width="61" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K7V-4d-ysP">
+                            <rect key="frame" x="592" y="30" width="55" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="FKr-tr-dWH">
+                            <rect key="frame" x="529" y="25" width="51" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </switch>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This setting does not affect Rendering quality" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Md4-d0-P17">
+                            <rect key="frame" x="413" y="55" width="283" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MultiSelect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NbO-lJ-RJP">
+                            <rect key="frame" x="31" y="140" width="74" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -82,23 +120,11 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="6fp-yJ-UNC">
-                    <rect key="frame" x="0.0" y="269" width="736" height="145"/>
+                    <rect key="frame" x="0.0" y="355" width="736" height="59"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Render-Preview-position_Left-Bottom.png" id="m5d-mx-Kfl">
-                            <rect key="frame" x="128" y="66" width="90" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Render-Preview-position_Right-Bottom.png" id="lfS-Ij-M9L">
-                            <rect key="frame" x="387" y="66" width="90" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Render-Preview-position_Right-Top.png" id="wIP-cI-3Ss">
-                            <rect key="frame" x="517" y="66" width="90" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lWK-oj-IWM">
-                            <rect key="frame" x="643" y="101" width="80" height="30"/>
+                            <rect key="frame" x="643" y="15" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Done">
@@ -108,47 +134,8 @@
                                 <action selector="doneBtnAction:" destination="-1" eventType="touchUpInside" id="7a5-eg-vFL"/>
                             </connections>
                         </button>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="BOl-oz-TCu">
-                            <rect key="frame" x="108" y="28" width="520" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="LEFT BOTTOM"/>
-                                <segment title="LEFT TOP"/>
-                                <segment title="RIGHT BOTTOM"/>
-                                <segment title="RIGHT TOP"/>
-                            </segments>
-                            <color key="tintColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="previewpositionChanged:" destination="-1" eventType="valueChanged" id="ltm-LK-SM2"/>
-                            </connections>
-                        </segmentedControl>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RENDER PREVIEW POSITION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hml-Ix-o8P">
-                            <rect key="frame" x="289" y="7" width="183" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Render-Preview-position_Left-Top.png" id="rGj-ef-zLk">
-                            <rect key="frame" x="258" y="66" width="90" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MultiSelect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NbO-lJ-RJP">
-                            <rect key="frame" x="643" y="7" width="74" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="c9W-Bx-TQb">
-                            <rect key="frame" x="656" y="28" width="51" height="31"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <connections>
-                                <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="sJc-hp-o3p"/>
-                            </connections>
-                        </switch>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NjZ-i4-GH8">
-                            <rect key="frame" x="5" y="101" width="115" height="30"/>
+                            <rect key="frame" x="5" y="15" width="115" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.00024560625339999998" green="0.63386878189999996" blue="0.10996116240000001" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
@@ -161,7 +148,7 @@
                             </connections>
                         </button>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="e08-WE-edF">
-                            <rect key="frame" x="52" y="106" width="20" height="20"/>
+                            <rect key="frame" x="52" y="20" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                     </subviews>
@@ -171,60 +158,33 @@
                     <rect key="frame" x="0.0" y="43" width="736" height="121"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="iqs-KB-BFa">
-                            <rect key="frame" x="63" y="20" width="245" height="29"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Frame-Count-Display_Frames.png" id="0mj-C5-4vP">
+                            <rect key="frame" x="115" y="66" width="246" height="39"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Frame-Count-Display_Duration.png" id="b9h-ak-AHa">
+                            <rect key="frame" x="375" y="66" width="246" height="39"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="7w5-0u-Qkb">
+                            <rect key="frame" x="108" y="29" width="520" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="RIGHT"/>
-                                <segment title="LEFT"/>
-                            </segments>
-                            <color key="tintColor" red="0.51372549020000002" green="0.0" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="toolBarPositionChanged:" destination="-1" eventType="valueChanged" id="pzN-6D-xLA"/>
-                            </connections>
-                        </segmentedControl>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="e25-6y-BA7">
-                            <rect key="frame" x="429" y="20" width="245" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="SMALL"/>
-                                <segment title="LARGE"/>
+                                <segment title="FRAMES"/>
+                                <segment title="DURATION"/>
                             </segments>
                             <color key="tintColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="renderPreviewSizeChanged:" destination="-1" eventType="valueChanged" id="vW2-US-ypn"/>
+                                <action selector="frameCountDisplayType:" destination="-1" eventType="valueChanged" id="aFr-Ar-DOv"/>
                             </connections>
                         </segmentedControl>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOOLBAR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NGS-wu-atl">
-                            <rect key="frame" x="153" y="0.0" width="65" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FRAME COUNT DISPLAY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Yk-5j-0eS">
+                            <rect key="frame" x="293" y="8" width="157" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RENDER PREVIEW SIZE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cJC-Ci-lsU">
-                            <rect key="frame" x="481" y="0.0" width="151" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tool-Bar_Right.png" id="khQ-a8-MvM">
-                            <rect key="frame" x="77" y="58" width="91" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tool-Bar_Left.png" id="g1W-5r-V1M">
-                            <rect key="frame" x="200" y="58" width="91" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Render-Preview-size_Small.png" id="7gq-4y-bKk">
-                            <rect key="frame" x="445" y="58" width="91" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Render-Preview-size_Large.png" id="ebI-72-4f7">
-                            <rect key="frame" x="568" y="58" width="91" height="63"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -238,12 +198,6 @@
     <resources>
         <image name="Frame-Count-Display_Duration.png" width="246" height="40"/>
         <image name="Frame-Count-Display_Frames.png" width="246" height="40"/>
-        <image name="Render-Preview-position_Left-Bottom.png" width="90" height="63"/>
-        <image name="Render-Preview-position_Left-Top.png" width="91" height="63"/>
-        <image name="Render-Preview-position_Right-Bottom.png" width="91" height="63"/>
-        <image name="Render-Preview-position_Right-Top.png" width="90" height="63"/>
-        <image name="Render-Preview-size_Large.png" width="177" height="122"/>
-        <image name="Render-Preview-size_Small.png" width="178" height="122"/>
         <image name="Tool-Bar_Left.png" width="91" height="63"/>
         <image name="Tool-Bar_Right.png" width="91" height="63"/>
     </resources>
