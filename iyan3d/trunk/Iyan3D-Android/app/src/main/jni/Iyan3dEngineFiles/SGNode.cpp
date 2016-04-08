@@ -529,8 +529,9 @@ void SGNode::setSkinningData(SkinMesh *mesh){
             }else if((*optionalData3).w == 0.0f){
                 (*optionalData3).w = j + 1;
                 (*optionalData4).w = weight;
-            }else
-                Logger::log(INFO, "SGNODE:SetSkinningData()", "More joints affecting a vertex");
+            }
+//            else
+//                Logger::log(INFO, "SGNODE:SetSkinningData()", "More joints affecting a vertex");
         }
     }
     // equalize the weights sum to 1.0

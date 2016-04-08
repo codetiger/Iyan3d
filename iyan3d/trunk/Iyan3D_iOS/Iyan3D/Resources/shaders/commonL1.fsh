@@ -59,7 +59,7 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
 void main()
 {
     
-    lowp vec4 diffuse_color = vec4(vec3(vertexColor),1.0);
+    lowp vec4 diffuse_color = vec4(vertexColor,1.0);
     
     if(int(isVertexColored) == 0)
         diffuse_color = texture2D(texture1,vTexCoord.xy);

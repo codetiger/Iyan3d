@@ -158,7 +158,7 @@ void RenderHelper::drawMoveAxisLine()
     if(renderingScene->controlType == MOVE && renderingScene->selectedControlId != NOT_SELECTED && renderingScene->selectedNodeId != NOT_SELECTED){
         Vector3 nodePos = renderingScene->nodes[renderingScene->selectedNodeId]->node->getAbsolutePosition();
         if(renderingScene->selectedJointId != NOT_SELECTED) {
-            if((dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node))->getJointNode(renderingScene->selectedJointId))
+            if(dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node) &&(dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node))->getJointNode(renderingScene->selectedJointId))
                 nodePos = (dynamic_pointer_cast<AnimatedMeshNode>(renderingScene->nodes[renderingScene->selectedNodeId]->node))->getJointNode(renderingScene->selectedJointId)->getAbsolutePosition();
         }
         drawMoveControlLine(nodePos);
@@ -320,8 +320,11 @@ void RenderHelper::rttDrawCall() {
     if (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying) {
         drawCameraPreview();
     }
-    if (!renderingScene->isRigMode)
+    if (!renderingScene->isRigMode && !renderingScene->shadowsOff) {
+        ShaderManager::shadowsOff = false;
         rttShadowMap();
+    } else
+        ShaderManager::shadowsOff = true;
 }
 
 bool RenderHelper::isMovingCameraPreview(Vector2 curTouchPos)

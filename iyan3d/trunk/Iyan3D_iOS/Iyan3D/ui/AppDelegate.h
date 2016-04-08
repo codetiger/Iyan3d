@@ -10,8 +10,10 @@
 #import "LoadingViewControllerPad.h"
 #import "GAI.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <DropboxSDK/DropboxSDK.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate> {
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, DBSessionDelegate, DBNetworkRequestDelegate> {
     LoadingViewControllerPad* loadingViewController;
 }
 

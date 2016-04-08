@@ -261,7 +261,7 @@ Mesh* AnimatedMeshNode::getMeshByIndex(int index)
 
 shared_ptr<JointNode> AnimatedMeshNode::getJointNode(int jointId)
 {
-    if(jointNodes.size() > jointId)
+    if(jointNodes.size() > jointId && jointId >= 0)
         return jointNodes[jointId];
     else
         return shared_ptr<JointNode>();

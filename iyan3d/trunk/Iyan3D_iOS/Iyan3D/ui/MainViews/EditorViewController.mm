@@ -256,7 +256,7 @@ BOOL missingAlertShown;
 
 - (void)initScene
 {
-    float screenScale = [[UIScreen mainScreen] scale];
+    float screenScale = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"] ? 1.0 : [[UIScreen mainScreen] scale];
     renderViewMan = [[RenderViewManager alloc] init];
     renderViewMan.delegate = self;
     [renderViewMan setupLayer:_renderView];
@@ -638,6 +638,8 @@ BOOL missingAlertShown;
         return;
     
     if(editorScene) {
+        editorScene->shadowsOff = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"] ? true : false;
+
         if (editorScene && renderViewMan.checkCtrlSelection) {
             bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
             editorScene->selectMan->checkCtrlSelection(renderViewMan.touchMovePosition[0], isMultiSelectEnabled);
@@ -935,17 +937,24 @@ BOOL missingAlertShown;
    
     if(editorScene)
         editorScene->freezeRendering = true;
-    if(editorScene && editorScene->isPlaying){
+    if(editorScene && editorScene->isPlaying) {
         [self stopPlaying];
         editorScene->freezeRendering = false;
         return;
-    }
+            }
+
     if(editorScene)
         editorScene->isPreviewMode = false;
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
-    [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
-    [self performSelectorOnMainThread:@selector(saveThumbnail) withObject:nil waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(saveAndExit) withObject:nil waitUntilDone:YES];
+}
+
+- (void) saveAndExit
+{
+    [self saveAnimationData];
+    NSString* thumbPath = [self saveThumbnail];
+    [renderViewMan createi3dFileWithThumb:thumbPath];
     [self loadSceneSelectionView];
 }
 
@@ -1870,17 +1879,9 @@ BOOL missingAlertShown;
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
 }
 
-- (NSMutableArray*) getFileNamesToAttach
+- (NSMutableArray*) getFileNamesToAttach:(bool) forBackUp
 {
-    NSMutableArray *fileNamesToZip = [[NSMutableArray alloc] init];
-    vector<string> textureFileNames = editorScene->getUserFileNames();
-    
-    for(int i = 0; i < textureFileNames.size(); i++) {
-        NSLog(@"\n User File Name: %s ", textureFileNames[i].c_str());
-        [fileNamesToZip addObject:[NSString stringWithCString:textureFileNames[i].c_str() encoding:NSUTF8StringEncoding]];
-    }
-    
-    return fileNamesToZip;
+    return [renderViewMan getFileNamesFromScene:forBackUp];
 }
 
 - (BOOL) canUploadToCloud
@@ -2816,12 +2817,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     [self objectSelectionCompleted:indexValue];
 }
 
-- (void)saveThumbnail
+- (NSString*) saveThumbnail
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, currentScene.sceneFile];
     editorScene->saveThumbnail((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding]);
+    return imageFilePath;
 }
 
 - (void)saveUserAnimation:(NSString*)assetName

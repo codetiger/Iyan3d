@@ -6,6 +6,7 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
+#import "ZipArchive.h"
 #import "RenderViewManager.h"
 #import "Logger.h"
 #import <OpenGLES/ES2/glext.h>
@@ -46,7 +47,7 @@ SGEditorScene *editorScene;
 - (void)setupLayer:(UIView*)renderView
 {
     _renderView = (RenderingView*)renderView;
-    screenScale = [[UIScreen mainScreen] scale];
+    screenScale = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"] ? 1.0 : [[UIScreen mainScreen] scale];
     if(![self.delegate isMetalSupportedDevice]) {
         _eaglLayer = (CAEAGLLayer*)renderView.layer;
         _eaglLayer.opaque = YES;
@@ -68,12 +69,14 @@ SGEditorScene *editorScene;
     glGenRenderbuffers(1, &_colorRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+    [self check_gl_error];
 }
 - (void)setupDepthBuffer:(UIView*)renderView
 {
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, renderView.frame.size.width * screenScale, renderView.frame.size.height * screenScale);
+    [self check_gl_error];
 }
 - (void)setupFrameBuffer
 {
@@ -82,6 +85,27 @@ SGEditorScene *editorScene;
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
     smgr->setFrameBufferObjects(_frameBuffer, _colorRenderBuffer, _depthRenderBuffer);
+    [self check_gl_error];
+}
+
+-(void) check_gl_error
+{
+    GLenum err (glGetError());
+    
+    while(err!=GL_NO_ERROR) {
+        string error;
+        
+        switch(err) {
+            case GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;
+            case GL_INVALID_ENUM:           error="INVALID_ENUM";           break;
+            case GL_INVALID_VALUE:          error="INVALID_VALUE";          break;
+            case GL_OUT_OF_MEMORY:          error="OUT_OF_MEMORY";          break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
+        }
+        
+        cerr << "GL_" << error.c_str() <<endl;
+        err=glGetError();
+    }
 }
 - (void)presentRenderBuffer
 {
@@ -427,28 +451,31 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     }
     switch (rec.state) {
         case UIGestureRecognizerStateBegan: {
-            editorScene->setLightingOff();
-            touchCountTracker = (int)touchCount;
-            editorScene->moveMan->touchBegan(p[0] * screenScale);
-            switch (touchCount) {
-                case 1: {
-                    if(!editorScene->renHelper->isMovingPreview) {
-                    _checkCtrlSelection = true;
-                    _touchMovePosition.clear();
-                    _touchMovePosition.push_back(p[0] * screenScale);
-                    editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
+            if(editorScene) {
+                editorScene->shadowsOff = true;
+                editorScene->setLightingOff();
+                touchCountTracker = (int)touchCount;
+                editorScene->moveMan->touchBegan(p[0] * screenScale);
+                switch (touchCount) {
+                    case 1: {
+                        if(!editorScene->renHelper->isMovingPreview) {
+                            _checkCtrlSelection = true;
+                            _touchMovePosition.clear();
+                            _touchMovePosition.push_back(p[0] * screenScale);
+                            editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
+                        }
+                        break;
                     }
-                    break;
+                    case 2: {
+                        editorScene->moveMan->panBegan(p[0] * screenScale, p[1] * screenScale);
+                        editorScene->updater->updateLightCamera();
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                case 2: {
-                    editorScene->moveMan->panBegan(p[0] * screenScale, p[1] * screenScale);
-                    editorScene->updater->updateLightCamera();
-                    break;
-                }
-                default:
-                    break;
+                break;
             }
-            break;
         }
         case UIGestureRecognizerStateChanged: {
             if (touchCountTracker != touchCount) {
@@ -483,6 +510,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         default: {
             _makePanOrPinch = false;
             _isPanned = false;
+            editorScene->shadowsOff = false;
             editorScene->moveMan->touchEnd(p[0] * screenScale);
             [self.delegate reloadFrames];
             break;
@@ -541,6 +569,104 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         [self.delegate showOptions:_longPresPosition];
         _longPress=false;
     }
+}
+
+#pragma i3d file creation methods
+
+-(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths
+{
+    NSMutableArray * filtFilePaths = [[NSMutableArray alloc] init];
+    NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *cacheDirPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *objDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Objs"];
+    NSString *rigDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Rigs"];
+    NSString *texDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Textures"];
+    NSString *sgmDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Sgm"];
+    NSString *vidDirPath = [docDirPath stringByAppendingPathComponent:@"Resources/Videos"];
+    
+    NSFileManager * fm = [NSFileManager defaultManager];
+    
+    for(int i = 0; i < [filePaths count]; i++) {
+        if([[filePaths objectAtIndex:i] isEqualToString:@""])
+            continue;
+        NSString *filePath1 = [NSString stringWithFormat:@"%@/%@",cacheDirPath,[filePaths objectAtIndex:i]];
+        NSString *filePath2 = [NSString stringWithFormat:@"%@/%@",objDirPath,[filePaths objectAtIndex:i]];
+        NSString *filePath3 = [NSString stringWithFormat:@"%@/%@",rigDirPath,[filePaths objectAtIndex:i]];
+        NSString *filePath4 = [NSString stringWithFormat:@"%@/%@",texDirPath,[filePaths objectAtIndex:i]];
+        NSString *filePath5 = [NSString stringWithFormat:@"%@/%@", sgmDirPath, [filePaths objectAtIndex:i]];
+        NSString *filePath6 = [NSString stringWithFormat:@"%@/%@", vidDirPath, [filePaths objectAtIndex:i]];
+        NSString *filePath7 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
+        
+        
+        if([fm fileExistsAtPath:filePath1]) {
+            if(![filtFilePaths containsObject:filePath1])
+                [filtFilePaths addObject:filePath1];
+        } else if([fm fileExistsAtPath:filePath2]){
+            if(![filtFilePaths containsObject:filePath2])
+                [filtFilePaths addObject:filePath2];
+        } else if([fm fileExistsAtPath:filePath3]){
+            if(![filtFilePaths containsObject:filePath3])
+                [filtFilePaths addObject:filePath3];
+        } else if([fm fileExistsAtPath:filePath4]){
+            if(![filtFilePaths containsObject:filePath4])
+                [filtFilePaths addObject:filePath4];
+        } else if([fm fileExistsAtPath:filePath5]){
+            if(![filtFilePaths containsObject:filePath5])
+                [filtFilePaths addObject:filePath5];
+        } else if([fm fileExistsAtPath:filePath6]){
+            if(![filtFilePaths containsObject:filePath6])
+                [filtFilePaths addObject:filePath6];
+        } else if([fm fileExistsAtPath:filePath7]){
+            if(![filtFilePaths containsObject:filePath7])
+                [filtFilePaths addObject:filePath7];
+        }
+    }
+    return filtFilePaths;
+}
+
+- (NSMutableArray*) getFileNamesFromScene:(bool) forBackup
+{
+    if(!editorScene)
+        return nil;
+    
+    NSMutableArray *fileNamesToZip = [[NSMutableArray alloc] init];
+    vector<string> textureFileNames = editorScene->getUserFileNames(forBackup);
+    
+    for(int i = 0; i < textureFileNames.size(); i++) {
+        [fileNamesToZip addObject:[NSString stringWithCString:textureFileNames[i].c_str() encoding:NSUTF8StringEncoding]];
+    }
+
+    return fileNamesToZip;
+}
+
+- (void) createi3dFileWithThumb:(NSString*) thumbPath
+{
+//    CGPoint camResolution = [self.delegate getCameraResolution];
+    NSMutableArray* fileNames = [self getFileNamesFromScene:true];
+    NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString* sgbFilePath = [self.delegate getSGBPath];
+    NSString* sgbName = [[sgbFilePath lastPathComponent] stringByDeletingPathExtension];
+
+    NSString* zipfile = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Projects/%@.i3d", sgbName]];
+    NSMutableArray *userFiles = [self getFileteredFilePathsFrom:fileNames];
+    [userFiles addObject:thumbPath];
+    ZipArchive* zip = [[ZipArchive alloc] init];
+    BOOL ret = [zip CreateZipFile2:zipfile];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:sgbFilePath]) {
+        ret = [zip addFileToZip:sgbFilePath newname:[sgbFilePath lastPathComponent]];
+    }
+    
+    for(int i = 0; i < [userFiles count]; i++) {
+        NSLog(@"\n User File: %@", [userFiles objectAtIndex:i]);
+        ret = [zip addFileToZip:[userFiles objectAtIndex:i] newname:[[userFiles objectAtIndex:i] lastPathComponent]];
+    }
+    
+    if( ![zip CloseZipFile2] )
+    {
+        zipfile = @"";
+    }
+    NSLog(@"The file has been created");
 }
 
 @end

@@ -34,6 +34,7 @@
 - (void)undoRedoButtonState:(int)state;
 - (void)showOptions :(CGRect)longPressposition;
 - (void) showOrHideProgress:(BOOL) value;
+- (NSString*) getSGBPath;
 
 @end
 
@@ -74,6 +75,10 @@
 - (bool) removeNodeFromScene:(int)nodeIndex IsUndoOrRedo:(BOOL)isUndoOrRedo;
 - (void)addGesturesToSceneView;
 - (void)panOrPinchProgress;
+
+- (NSMutableArray*) getFileNamesFromScene:(bool) forBackup;
+- (void) createi3dFileWithThumb:(NSString*) thumbPath;
+-(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths;
 
 @end
 

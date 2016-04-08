@@ -20,6 +20,7 @@ class ShaderManager{
 public:
     Mat4 ortho2d_oc(float left,float right,float bottom,float top,float near,float far);
     static bool isRenderingDepthPass,isRendering , sceneLighting;
+    static bool shadowsOff;
     static float shadowDensity,shadowTextureSize;
     static Vector3 camPos;
     static vector<Vector3> lightPosition,lightColor;

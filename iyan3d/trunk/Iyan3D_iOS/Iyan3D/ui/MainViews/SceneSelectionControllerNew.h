@@ -13,6 +13,8 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import <DropboxSDK/DropboxSDK.h>
+
 #import "Utility.h"
 #import "HelpViewController.h"
 #import "AppHelper.h"
@@ -24,7 +26,7 @@
 #import "LoggedInViewController.h"
 
 
-@interface SceneSelectionControllerNew : GAITrackedViewController<UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate>{
+@interface SceneSelectionControllerNew : GAITrackedViewController< DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -34,6 +36,8 @@
     CGFloat screenHeight;
     SettingsViewController *settingsVc;
     LoginViewController *loginVc;
+    DBRestClient *restClient;
+    
     bool isLoggedin;
     bool isFirstTime;
 }
@@ -54,6 +58,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *openScene;
 @property (weak, nonatomic) IBOutlet UIButton *infoBtn;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *centerLoading;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *scenesCollectionView;
 @property (nonatomic, strong) PopUpViewController *popUpVc;

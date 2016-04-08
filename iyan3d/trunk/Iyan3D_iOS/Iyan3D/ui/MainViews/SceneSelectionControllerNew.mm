@@ -6,11 +6,13 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
+
 #import "AppDelegate.h"
 #import "SceneSelectionControllerNew.h"
 #import "SceneSelectionEnteredView.h"
 #import "SceneItem.h"
 #import <sys/utsname.h>
+#import "ZipArchive.h"
 
 
 #define SCENE_NAME_ALERT 0
@@ -75,13 +77,44 @@
 {
     [super viewDidAppear:animated];
     
+    restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+    restClient.delegate = self;
+
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"openrenderTasks"]) {
         [self openLoggedInView];
         [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"openrenderTasks"];
     }
+    [self.centerLoading setHidden:YES];
     
+    [self checkAndOpeni3d];    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openLoggedInView) name:@"renderCompleted" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkAndOpeni3d) name:@"i3dopen" object:nil];
+
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
+}
+
+- (void) checkAndOpeni3d
+{
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"i3dopen"]) {
+        NSString* i3dPath = [[AppHelper getAppHelper] userDefaultsForKey:@"i3dpath"];
+        [self showLoading];
+        [self performSelectorInBackground:@selector(unzipAndRestoreScenei3d:) withObject:i3dPath];
+        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"i3dopen"];
+    }
+}
+
+- (void) showLoading
+{
+    [self.centerLoading setHidden:NO];
+    [self.centerLoading startAnimating];
+}
+
+- (void)hideLoading
+{
+    [self.centerLoading stopAnimating];
+    [self.centerLoading setHidden:YES];
+    scenesArray = [cache GetSceneList];
+    [self.scenesCollectionView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -96,6 +129,86 @@
 - (void) openLoggedInView
 {
     [self performSelectorOnMainThread:@selector(loginBtnAction:) withObject:nil waitUntilDone:YES];
+}
+
+- (void) unzipAndRestoreScenei3d:(NSString*) filePath
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString* projectsDir = [NSString stringWithFormat:@"%@/Projects", documentsDirectory];
+    NSString *unzipPath = [NSString stringWithFormat:@"%@/Unzip",documentsDirectory];
+
+    ZipArchive *zip = [[ZipArchive alloc] init];
+    if([zip UnzipOpenFile:filePath]) {
+        if([zip UnzipFileTo:unzipPath overWrite:YES]) {
+            [fm removeItemAtPath:filePath error:nil];
+            NSLog(@" Unzipped files to directory %@ ", unzipPath);
+            NSString *sceneFile = [cache insertImportedScene];
+    
+            NSArray * filesArr = [fm contentsOfDirectoryAtPath:unzipPath error:nil];
+            NSArray *sgbArr = [filesArr filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.sgb'"]];
+            NSString* oldSgbPath = [NSString stringWithFormat:@"%@/%@", unzipPath, [sgbArr objectAtIndex:0]];
+            NSString* oldSgbName = [[oldSgbPath lastPathComponent] stringByDeletingPathExtension];
+            NSString* newsgbPath = [NSString stringWithFormat:@"%@/%@.sgb", projectsDir, sceneFile];
+            NSString* oldThumbPath = [NSString stringWithFormat:@"%@/%@.png", unzipPath, oldSgbName];
+            NSString* newThumbPath = [NSString stringWithFormat:@"%@/%@.png", projectsDir, sceneFile];
+            
+            [fm moveItemAtPath:oldSgbPath toPath:newsgbPath error:nil];
+            [fm moveItemAtPath:oldThumbPath toPath:newThumbPath error:nil];
+            
+            filesArr = [fm contentsOfDirectoryAtPath:unzipPath error:nil];
+            [self moveFilesToRespectiveDirs:filesArr];
+        }
+    }
+    [zip UnzipCloseFile];
+    [fm removeItemAtPath:filePath error:nil];
+    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
+}
+
+- (void) moveFilesToRespectiveDirs:(NSArray*) filePaths
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSArray* cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString* cachesDir = [cachePaths objectAtIndex:0];
+    NSString *unzipPath = [NSString stringWithFormat:@"%@/Unzip",documentsDirectory];
+
+    for(NSString * f in filePaths) {
+        NSString* fPath = [NSString stringWithFormat:@"%@/%@", unzipPath, f];
+        NSString* extension = [fPath pathExtension];
+        NSString* fileName = [fPath lastPathComponent];
+        NSString* destPath= @"";
+        
+        if([extension isEqualToString:@"sgm"])
+            destPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%@",documentsDirectory, fileName];
+        else if ([extension isEqualToString:@"png"]) {
+            destPath = [NSString stringWithFormat:@"%@/%@", cachesDir, fileName];
+            [fm copyItemAtPath:fPath toPath:destPath error:nil];
+            destPath = [NSString stringWithFormat:@"%@/Resources/Textures/%@",documentsDirectory, fileName];
+        }
+        else if ([extension isEqualToString:@"obj"])
+            destPath = [NSString stringWithFormat:@"%@/Resources/Objs/%@",documentsDirectory, fileName];
+        else if ([extension isEqualToString:@"MOV"])
+            destPath = [NSString stringWithFormat:@"%@/Resources/Videos/%@",documentsDirectory, fileName];
+        else if ([extension isEqualToString:@"sgr"])
+            destPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%@",documentsDirectory, fileName];
+        else if ([extension isEqualToString:@"png"])
+            destPath = [NSString stringWithFormat:@"%@/Resources/Textures/%@",documentsDirectory, fileName];
+        else if ([extension isEqualToString:@"ttf"] || [extension isEqualToString:@"otf"])
+            destPath = [NSString stringWithFormat:@"%@/Resources/Fonts/%@",documentsDirectory, fileName];
+        else
+            destPath = [NSString stringWithFormat:@"%@/%@",documentsDirectory, fileName];
+        
+        if(![fm fileExistsAtPath:[destPath stringByDeletingLastPathComponent]])
+            [fm createDirectoryAtPath:[destPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSError *error;
+        [fm moveItemAtPath:fPath toPath:destPath error:&error];
+        if(error)
+            NSLog(@" Error moving resource %@ %@", fPath, error.localizedDescription);
+    }
 }
 
 #pragma Button Actions
@@ -191,6 +304,7 @@
 
 -(void)openSCene: (int)selectedScene{
     SceneItem *scene = scenesArray[selectedScene];
+    NSLog(@" Scene File Name %@ ", scene.sceneFile);
     [[AppHelper getAppHelper] resetAppHelper];
     if([Utility IsPadDevice]){
         EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil SceneItem:scene selectedindex:selectedScene];
@@ -526,6 +640,68 @@
     [[renameScene textFieldAtIndex:0] becomeFirstResponder];
 }
 
+-(void)shareScene:(int)indexValue
+{
+    if (![[DBSession sharedSession] isLinked]) {
+        [[DBSession sharedSession] linkFromController:self];
+    } else {
+        SceneItem * scene = scenesArray[indexValue];
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* documentsDirectory = [paths objectAtIndex:0];
+        NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
+        if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath]) {
+            [self.view setUserInteractionEnabled:NO];
+            [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:YES];
+            NSString *destDir = @"/";
+            [restClient uploadFile:[i3dPath lastPathComponent] toPath:destDir withParentRev:nil fromPath:i3dPath];
+            NSLog(@" i3d Path %@ ", i3dPath);
+        }
+    }
+}
+
+-(bool) Isi3dExists:(int)indexValue
+{
+    SceneItem * scene = scenesArray[indexValue];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
+    if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath])
+        return true;
+    return false;
+
+}
+
+- (void)restClient:(DBRestClient*)client uploadProgress:(CGFloat)progress
+{
+    NSLog(@" Upload Progress %f ", (float)progress);
+}
+
+- (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath from:(NSString*)srcPath
+          metadata:(DBMetadata*)metadata
+{
+    NSLog(@" \n Dest PAth %@ ", destPath);
+    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
+    [self.view setUserInteractionEnabled:YES];
+    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"File successfully saved to DropBox. You can find it in your DropBox account 'Apps/Iyan3D'." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+}
+
+- (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error
+{
+    NSLog(@" Error Uploading %@ ", error.localizedDescription);
+    [self.view setUserInteractionEnabled:YES];
+    [[[UIAlertView alloc] initWithTitle:@"Failure" message:@"Error uploading file. Please check your internet connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+}
+
+- (void)restClient:(DBRestClient*)client loadAccountInfoFailedWithError:(NSError*)error
+{
+    NSLog(@" Error acc %@ ", error.localizedDescription);
+}
+
+- (void)restClient:(DBRestClient*)client loadThumbnailFailedWithError:(NSError*)error
+{
+    NSLog(@" Error thumb %@ ", error.localizedDescription);
+}
+
 #pragma AlertView
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -615,6 +791,8 @@
 
 - (void)dealloc
 {
+    restClient.delegate = nil;
+    restClient = nil;
     self.fileBeginsWith = nil;
     cache = nil;
     [scenesArray removeAllObjects];

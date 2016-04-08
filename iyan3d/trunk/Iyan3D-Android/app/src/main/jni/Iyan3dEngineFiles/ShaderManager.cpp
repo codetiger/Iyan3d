@@ -13,6 +13,7 @@
 #endif
 
 bool ShaderManager::isRenderingDepthPass = false;
+bool ShaderManager::shadowsOff = false;
 bool ShaderManager::isRendering = false;
 bool ShaderManager::sceneLighting = true;
 float ShaderManager::shadowDensity = 0.0, ShaderManager::shadowTextureSize = 2048.0;
@@ -219,7 +220,8 @@ void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
     smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex){
-    smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &shadowDensity, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    float finalShadow = shadowsOff ? 0.0 : shadowDensity;
+    smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &finalShadow, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
 void ShaderManager::setReflectionValue(SGNode *sgNode,int paramIndex){
@@ -231,28 +233,29 @@ void ShaderManager::setLightPos(SGNode *sgNode,int paramIndex){
     float *lightPos = new float[3];
     lightPos[0] = lightPosition[0].x;    lightPos[1] = lightPosition[0].y;    lightPos[2] = lightPosition[0].z;
     smgr->setPropertyValue(sgNode->node->material, "lightPos", lightPos, DATA_FLOAT_VEC3, 3, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    delete lightPos;
+    delete[] lightPos;
     }
 }
 void ShaderManager::setEyePos(SGNode *sgNode,int paramIndex){
     float *campos = new float[3];
     campos[0] = camPos.x;    campos[1] = camPos.y;    campos[2] = camPos.z;
     smgr->setPropertyValue(sgNode->node->material, "eyePos", campos, DATA_FLOAT_VEC3, 3, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    delete campos;
+    delete[] campos;
 }
 void ShaderManager::setLightColor(SGNode *sgNode,int paramIndex){
     if(lightColor.size()) {
     float *lightCol = new float[3];
     lightCol[0] = lightColor[0].x;   lightCol[1] = lightColor[0].y;    lightCol[2] = lightColor[0].z;
     smgr->setPropertyValue(sgNode->node->material, "lightColor", lightCol, DATA_FLOAT_VEC3, 3, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    delete lightCol;
+    delete[] lightCol;
     }
 }
 void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex){
     Mat4 lightViewProjMatrix = lighCamProjMatrix;
     lightViewProjMatrix *= lighCamViewMatrix;
+    Mat4 lvp = lightViewProjMatrix * sgNode->node->getModelMatrix();
     
-    smgr->setPropertyValue(sgNode->node->material, "lightViewProjection", lightViewProjMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "lvp", lightViewProjMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 void ShaderManager::setVertexColorUniform(Material *material , Vector3 color,int paramIndex,int nodeIndex)
 {

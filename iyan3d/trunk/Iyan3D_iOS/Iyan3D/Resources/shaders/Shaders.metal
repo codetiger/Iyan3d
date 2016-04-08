@@ -95,7 +95,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
                                      constant float& reflection [[ buffer(SHADER_COMMON_SKIN_reflection) ]],
                                      constant float& shadowDarkness [[ buffer(SHADER_COMMON_SKIN_shadowDarkness) ]],
                                      constant packed_float3& eyePos [[ buffer(SHADER_COMMON_SKIN_eyePos) ]],
-                                     constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
+                                     constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
                                      unsigned int vid [[ vertex_id ]],
                                      constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
                                      constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
@@ -188,7 +188,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     
     
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = lvp * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -402,7 +402,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant matrix_float4x4& mvp [[ buffer(SHADER_COMMON_mvp) ]],
                                 constant float& transparency [[ buffer(SHADER_COMMON_transparency) ]],
                                 constant matrix_float4x4& world [[ buffer(SHADER_COMMON_world) ]],
-                                constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
+                                constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
                                 constant int& isLighting [[ buffer(SHADER_COMMON_isLighting) ]],
                                 constant float& reflection [[ buffer(SHADER_COMMON_reflection) ]],
                                 constant packed_float3& eyePos [[ buffer(SHADER_COMMON_eyePos) ]],
@@ -423,7 +423,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = lvp * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -981,7 +981,7 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
                                    constant int& isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
                                    constant float& reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
-                                   constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
+                                   constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
                                    unsigned int vid [[ vertex_id ]]
                                    )
@@ -999,7 +999,7 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
     out.vertexDepth = 0.0;
     
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = lvp * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -1029,7 +1029,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
                                    constant int& isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
                                    constant float& reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
-                                   constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
+                                   constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
                                    unsigned int vid [[ vertex_id ]],
                                    constant JointData* Joint_Data [[ buffer(SHADER_PERVERTEXCOLOR_jointData) ]],
@@ -1076,7 +1076,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     out.position = mvp * vertex_position_objectspace;
 
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = lvp * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically

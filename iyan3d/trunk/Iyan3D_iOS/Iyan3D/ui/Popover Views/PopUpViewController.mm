@@ -102,6 +102,10 @@
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", nil];
     }
+    else if([clickedBtnName isEqualToString:@"propertiesBtn1"]){
+        [self allowMultipleSelection:NO];
+        tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", @"Backup", nil];
+    }
     else if([clickedBtnName isEqualToString:@"optionsBtn"]){
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Move Camera", nil];
@@ -273,7 +277,7 @@
     else if([clickedBtn isEqualToString:@"myObjectsBtn"]){
         [self.delegate myObjectsBtnDelegateAction:(int)indexPath.row];
     }
-    else if([clickedBtn isEqualToString:@"propertiesBtn"]){
+    else if([clickedBtn isEqualToString:@"propertiesBtn"] || [clickedBtn isEqualToString:@"propertiesBtn1"]){
         [self.delegate propertiesBtnDelegate:(int)indexPath.row];
     }
     else if([clickedBtn isEqualToString:@"optionsBtn"]){

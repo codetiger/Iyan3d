@@ -19,6 +19,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
+    printf(" \n Width %f %f ", SceneHelper::screenWidth, SceneHelper::screenHeight);
     this->smgr = smgr;
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
     
@@ -145,7 +146,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
 
     camPreviewOrigin = camPreviewEnd = Vector2(0.0, 0.0);
     isMultipleSelection = false;
-    isJointSelected = isNodeSelected = isControlSelected = false;
+    isJointSelected = isNodeSelected = isControlSelected = shadowsOff = false;
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
     selectedNodeId = selectedJointId = riggingNodeId = NOT_EXISTS;
     selectedNode = NULL;
@@ -282,7 +283,7 @@ void SGEditorScene::findAndInsertInIKPositionMap(int jointId)
         ikJointsPositionMap.find(jointId)->second = rigNode->getJointNode(jointId)->getAbsolutePosition();
 }
 
-vector<string> SGEditorScene::getUserFileNames()
+vector<string> SGEditorScene::getUserFileNames(bool forBackup)
 {
     vector<string> userFileNames;
     for(int index = 0; index < nodes.size(); index++) {
@@ -311,6 +312,8 @@ vector<string> SGEditorScene::getUserFileNames()
             userFileNames.push_back(to_string(sgNode->assetId) + ".json");
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
             userFileNames.push_back(sgNode->textureName + ".png");
+        } else if (sgNode->getType() == NODE_VIDEO && forBackup) {
+            userFileNames.push_back(ConversionHelper::getStringForWString(sgNode->name));
         }
     }
     return userFileNames;

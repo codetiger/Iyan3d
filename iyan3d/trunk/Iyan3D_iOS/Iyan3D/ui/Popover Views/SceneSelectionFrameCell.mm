@@ -20,10 +20,15 @@
 }
 
 - (IBAction)propertiesAction:(id)sender {
-    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"propertiesBtn"];
+    NSString* clickedBtn = @"propertiesBtn";
+    bool isi3dFileExists = [self.delegate Isi3dExists:_SelectedindexValue];
+    if(isi3dFileExists)
+        clickedBtn = @"propertiesBtn1";
+    
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:clickedBtn];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, (isi3dFileExists) ? 39*4 : 39*3);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popUpVc.delegate=self;
     CGRect rect = _propertiesBtn.frame;
@@ -38,15 +43,18 @@
 - (void) propertiesBtnDelegate:(int)indexValue{
     if(indexValue==0){
         NSLog(@"Duplicate Delegate %ld",(long)_SelectedindexValue);
-        [self.delegate duplicateScene:_SelectedindexValue];
+        [self.delegate duplicateScene:(int)_SelectedindexValue];
         [self.popoverController dismissPopoverAnimated:YES];
     }
     else if(indexValue==1){
-        [self.delegate deleteScene:_SelectedindexValue];
+        [self.delegate deleteScene:(int)_SelectedindexValue];
         [self.popoverController dismissPopoverAnimated:YES];
     }
     else if(indexValue==2){
-        [self.delegate renameScene:_SelectedindexValue];
+        [self.delegate renameScene:(int)_SelectedindexValue];
+        [self.popoverController dismissPopoverAnimated:YES];
+    } else if (indexValue == 3) {
+        [self.delegate shareScene:(int)_SelectedindexValue];
         [self.popoverController dismissPopoverAnimated:YES];
     }
 }

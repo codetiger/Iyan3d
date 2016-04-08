@@ -107,6 +107,37 @@ static const NSString* RENDER_TASK_STATUS = @"task_status";
 static const NSString* RENDER_TASK_FRAMES = @"task_frames";
 static const NSString* RENDER_TASK_DATE = @"task_date";
 
+-(NSString*) insertImportedScene
+{
+    @synchronized (dbLock) {
+        NSDateFormatter *dateFormatter=[[NSDateFormatter alloc]init];
+        
+        static const NSString* TABLE_SCENE_INFO = @"scene_info";
+        static const NSString* SCENE_NAME = @"scene_name";
+        static const NSString* SCENE_DATE = @"scene_date";
+        static const NSString* SCENE_FILE = @"scene_file";
+        
+        NSString *currentDateString = @"2015-06-04T21:38:22";
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        NSDate *currentDate = [dateFormatter dateFromString:currentDateString];
+        
+        NSMutableArray *scenes = [self GetSceneList];
+        NSString * sceneName = [NSString stringWithFormat:@"MyScene%d", [scenes count]+1];
+        
+        NSString* salt = [NSString stringWithFormat:@"%@:SG:%@", sceneName, currentDate];
+        NSString* sceneFile = [Utility getMD5ForString:salt];
+
+        sqlite3_stmt    *statement;
+        NSString* insertSceneTable = [NSString stringWithFormat: @"INSERT INTO %@ (%@, %@, %@) VALUES (\"%@\", \"%@\", \"%@\")", TABLE_SCENE_INFO, SCENE_NAME, SCENE_DATE, SCENE_FILE, sceneName, currentDate, sceneFile];
+        sqlite3_prepare_v2(_cacheSystem, [insertSceneTable UTF8String], -1, &statement, NULL);
+        if (sqlite3_step(statement) != SQLITE_DONE)
+            NSLog(@"Failed Inserting Scene %s", sqlite3_errmsg(_cacheSystem));
+        sqlite3_finalize(statement);
+        return sceneFile;
+    }
+}
+
+
 -(BOOL) checkAndCreateGroupColumnInAssetsTable
 {
     BOOL columnAdded = NO;

@@ -61,6 +61,7 @@ void SGMovementManager::swipeToRotate()
 
     if((fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0)) {
         
+        moveScene->shadowsOff = true;
         Vector3 camTarget = moveScene->viewCamera->getTarget();
         Vector3 camForward = (camTarget - moveScene->viewCamera->getPosition()).normalize();
         Vector3 camRight = (camForward.crossProduct(moveScene->viewCamera->getUpVector())).normalize();
@@ -95,7 +96,8 @@ void SGMovementManager::swipeToRotate()
             yAcceleration = 0.0f;
         
         moveScene->updater->updateLightCamera();
-    }
+    } else
+        moveScene->shadowsOff = false;
     
 }
 

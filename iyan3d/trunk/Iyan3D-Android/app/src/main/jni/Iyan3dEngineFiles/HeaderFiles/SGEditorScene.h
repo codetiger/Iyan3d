@@ -61,7 +61,7 @@ public:
     
     /* cpp class objects */
     
-    bool isPreviewMode, isRigMode;
+    bool isPreviewMode, isRigMode, shadowsOff;
     bool freezeRendering , isPlaying;
     bool isMultipleSelection;
     bool isNodeSelected,isJointSelected,isControlSelected;
@@ -186,7 +186,7 @@ public:
     int undo(int& returnValue2);
     int redo();
     
-    vector<string> getUserFileNames();
+    vector<string> getUserFileNames(bool forBackup);
     void getIKJointPosition();
     void findAndInsertInIKPositionMap(int jointId);
     MIRROR_SWITCH_STATE getMirrorState();

@@ -18,7 +18,7 @@ uniform int isLighting;
 uniform float isVertexColored;
 uniform vec3 eyePos;
 uniform vec3 perVertexColor;
-uniform mat4 mvp,Model,lightViewProjection;
+uniform mat4 mvp,Model,lvp;
 uniform mat4 jointTransforms[57];
 
 
@@ -30,8 +30,8 @@ varying vec4 texCoordsBias,normal,eyeVec , vertexPosCam;
 
 void main()
 {
-    vertexColor = (int(isVertexColored) == 0) ? vec3(0.0) : perVertexColor;
-    vTexCoord = (int(isVertexColored) == 0) ? texCoord1 : vec2(0.0);
+    vertexColor = mix(vec3(0.0), perVertexColor, isVertexColored);
+    vTexCoord = mix(texCoord1, vec2(0.0), isVertexColored);
     
     vec4 pos = vec4(0.0);
     vec4 nor = vec4(0.0);
@@ -97,25 +97,26 @@ void main()
     lightingValue = float(isLighting);
     vec4 vertex_position_cameraspace = Model * pos;
     vertexPosCam = vertex_position_cameraspace;
-    //Shadow calculation-------
-    vec4 vertexLightCoord = (lightViewProjection * Model) * pos;
-    if(vertexLightCoord.w > 0.0) {
-        shadowDist = (vertexLightCoord.z) / 5000.0;
-        shadowDist += 0.000000009;
-    }else
-        shadowDist = 0.0;
-    vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
-    texCoordsBias = (texCoords / 2.0) + 0.5;
-    //--------------
     
-    //Lighting Calculation-------
-    if(isLighting == 1){
+    if(isLighting == 1) {
+        vec4 vertexLightCoord = lvp * pos;
+        vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
+        texCoordsBias = (texCoords / 2.0) + 0.5;
+        
+        if(vertexLightCoord.w > 0.0) {
+            shadowDist = (vertexLightCoord.z) / 5000.0;
+            shadowDist += 0.00000009;
+        }
         vec4 eye_position_cameraspace = vec4(vec3(eyePos),1.0);
         normal = normalize(Model * normalize(nor));
         eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-    }else{
+    } else {
         shadowDist = 0.0;
+        texCoordsBias = vec4(0.0);
+        normal = vec4(0.0);
+        eyeVec = vec4(0.0);
     }
+
     //-----------
     gl_Position = (mvp) * pos;
 }

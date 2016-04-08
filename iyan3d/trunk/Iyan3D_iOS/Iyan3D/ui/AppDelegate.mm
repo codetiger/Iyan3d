@@ -11,6 +11,7 @@
 #include "SGEngineCommon.h"
 #include "SGEngineOGL.h"
 #include "SGEngineMTL.h"
+#include <SafariServices/SafariServices.h>
 #include <GoogleSignIn/GoogleSignIn.h>
 #include "Utility.h"
 #include <sys/types.h>
@@ -51,8 +52,10 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
 #if !(TARGET_IPHONE_SIMULATOR)
     [Fabric with:@[[Crashlytics class], [Twitter class]]];
 #else
-    [Fabric with:@[[Twitter class]]];
+   [Fabric with:@[[Twitter class]]];
 #endif
+    
+    [self setUpDropBox];
     
     [GIDSignIn sharedInstance].clientID = kClient;
 
@@ -88,16 +91,62 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
         NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         if (dictionary != nil)
         {
-            NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
-            
-            if (standardUserDefaults) {
-                [standardUserDefaults setBool:YES forKey:@"openrenderTasks"];
-                [standardUserDefaults synchronize];
-            }
+            [self saveBoolToUserDefaultsWith:YES AndKey:@"openrenderTasks"];
         }
     }
     
     return YES;
+}
+
+-(void) saveBoolToUserDefaultsWith:(BOOL)value AndKey:(NSString*) key
+{
+    NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (standardUserDefaults) {
+        [standardUserDefaults setBool:value forKey:key];
+        [standardUserDefaults synchronize];
+    }
+}
+
+-(void) saveToUserDefaultsWithValue:(id)value AndKey:(NSString*)key
+{
+    NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (standardUserDefaults) {
+        [standardUserDefaults setObject:value forKey:key];
+        [standardUserDefaults synchronize];
+    }
+}
+
+- (void) setUpDropBox
+{
+    NSString* appKey = @"9crd2qv94ebj7i6";
+    NSString* appSecret = @"iv95w28ddsmzf0u";
+    NSString *root = kDBRootAppFolder;
+    
+    DBSession* session =
+    [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
+    session.delegate = self;
+    [DBSession setSharedSession:session];
+    
+    [DBRequest setNetworkRequestDelegate:self];
+}
+
+- (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId
+{
+    [[[UIAlertView alloc]
+       initWithTitle:@"Error" message:@"Failed Linking Dropbox" delegate:self
+       cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+}
+
+- (void)networkRequestStarted
+{
+    
+}
+
+- (void)networkRequestStopped
+{
+
 }
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
@@ -200,21 +249,43 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
 - (void)applicationWillTerminate:(UIApplication *)application {
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
-	NSString* ext = [[url absoluteString] pathExtension];
+    NSString* ext = [[url absoluteString] pathExtension];
     NSString* msg;
+    
     
     if([ext isEqualToString:@"ttf"] || [ext isEqualToString:@"otf"])
         msg = [NSString stringWithFormat:@"To use your %@ font file, use 'Text' option in your Import Menu. You should have upgraded to the Premium version for using this feature.", [ext uppercaseString]];
-    else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"png"]|| [ext isEqualToString:@"jpeg"])
-    {
-         msg = [NSString stringWithFormat:@"To import your %@ file, use 'Import And Rig Models' button in Home Page", [ext uppercaseString]];
+    else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"png"]|| [ext isEqualToString:@"jpeg"]) {
+        msg = [NSString stringWithFormat:@"To import your %@ file, use 'Import And Rig Models' button in Home Page", [ext uppercaseString]];
     }
-    else
-    {
+    else if ([ext isEqualToString:@"i3d"]) {
+        if(![self.window.rootViewController isKindOfClass:[LoadingViewControllerPad class]]) {
+            
+        }
+        if([[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
+            [self saveBoolToUserDefaultsWith:YES AndKey:@"i3dopen"];
+            [self saveToUserDefaultsWithValue:url.path AndKey:@"i3dpath"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"i3dopen" object:nil];
+        }
+    }
+    else if ([[url absoluteString] containsString:@"google"]) {
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:sourceApplication
+                                          annotation:annotation];
+    }
+    else if ([[url absoluteString] containsString:@"fb"]) {
         return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                               openURL:url
                                                     sourceApplication:sourceApplication
                                                            annotation:annotation];
+    }
+    else {
+       
+        if ([[DBSession sharedSession] handleOpenURL:url]) {
+            [[[UIAlertView alloc] initWithTitle:@"Information" message:@"App successfully linked to DropBox. You can now backup your scene by pressing 'BackUp' in scene options." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            return YES;
+        }
+
     }
     
     [self.window endEditing:YES];

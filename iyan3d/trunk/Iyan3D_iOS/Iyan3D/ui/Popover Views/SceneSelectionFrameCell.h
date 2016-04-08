@@ -13,6 +13,8 @@
 -(void)duplicateScene:(int)indexValue;
 -(void)deleteScene:(int)indexValue;
 -(void)renameScene:(int)indexValue;
+-(void)shareScene:(int)indexValue;
+-(bool) Isi3dExists:(int)indexValue;
 @end
 
 @interface SceneSelectionFrameCell : UICollectionViewCell <PopUpViewControllerDelegate>

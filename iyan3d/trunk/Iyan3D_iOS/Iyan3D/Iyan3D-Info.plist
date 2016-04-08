@@ -10,6 +10,20 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeIconFiles</key>
+			<array>
+				<string>i3dfile</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>i3d File</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.smackall.i3d</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>OTF font</string>
@@ -94,6 +108,14 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>db-9crd2qv94ebj7i6</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>com.smackall.animator</string>
 			<key>CFBundleURLSchemes</key>
@@ -146,6 +168,8 @@
 	<string>Iyan 3D</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>dbapi-8-emm</string>
+		<string>dbapi-2</string>
 		<string>fbapi</string>
 		<string>fb-messenger-api</string>
 		<string>fbauth2</string>
@@ -175,6 +199,27 @@
 	<false/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Iyan 3D Project File</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.smackall.i3d</string>
+			<key>UTTypeSize320IconFile</key>
+			<string>i3dfile</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>i3dfile</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>i3d</string>
+				</array>
+			</dict>
+		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>

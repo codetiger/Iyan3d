@@ -50,9 +50,14 @@
     [self readUserSettings];
     [_restorePurchaseProgress setHidden:YES];
     
+    if(self.speedSwitch != nil)
+        [self.speedSwitch setOn:[[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"]];
 }
 
-
+- (void) viewDidAppear:(BOOL)animated
+{
+    [self.speedSwitch setOn:[[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"]];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -307,6 +312,12 @@
         [self.multiSelectSwitch setOn:NO];
     }
 
+}
+
+- (IBAction)qualityOrSpeed:(id)sender {
+    UIAlertView *displayAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please re-open the scene to apply the change." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [displayAlert show];
+    [[AppHelper getAppHelper] saveBoolUserDefaults:self.speedSwitch.isOn withKey:@"ScreenScaleDisable"];
 }
 
 - (IBAction)restoreAction:(id)sender

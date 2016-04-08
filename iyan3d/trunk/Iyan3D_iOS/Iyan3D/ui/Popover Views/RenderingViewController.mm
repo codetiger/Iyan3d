@@ -12,8 +12,6 @@
 #import "QuartzCore/QuartzCore.h"
 #import "Utility.h"
 #import "ZipArchive.h"
-#import "UploadController.h"
-#import "Utils.h"
 #import "ShaderCell.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
@@ -59,9 +57,6 @@
 
 
 @implementation RenderingViewController
-
-@synthesize youtubeService;
-@synthesize videoFilePath;
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
@@ -450,7 +445,7 @@
         [self.nextButton setHidden:YES];
         [self.makeVideoLoading setHidden:NO];
         [self.makeVideoLoading startAnimating];
-        NSMutableArray *fileNames = [self.delegate getFileNamesToAttach];
+        NSMutableArray *fileNames = [self.delegate getFileNamesToAttach:false];
         if(![self.delegate canUploadToCloud]) {
             UIAlertView *errAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Scene contains video/praticles which is currently not supported in HQ rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [errAlert show];
@@ -488,6 +483,9 @@
         NSString *osId = @"1";
         NSString *uniqueId= [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
         NSString *deviceToken = [[AppHelper getAppHelper] userDefaultsForKey:@"deviceToken"];
+        if([deviceToken length] < 3)
+            deviceToken = @"unknown";
+        
         int startFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.leftValue + 1);
         int endFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.rightValue);
         printf("\n Frame %d %d " , startFrame , endFrame);
@@ -504,7 +502,7 @@
         NSString *postPath = @"https://www.iyan3dapp.com/appapi/rendertask.php";
         NSData *dataZip = [NSData dataWithContentsOfFile:fileUrl];
         //NSLog(@"%@ Data Items:", dataZip);
-        if(dataZip==NULL){
+        if(dataZip == nil){
             UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure" message:@"The Requested Data doest not exist!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
             [userNameAlert show];
             [self.nextButton setHidden:NO];
@@ -835,67 +833,6 @@
     }
 }
 
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    self.youtubeService = [[GTLServiceYouTube alloc] init];
-    self.youtubeService.authorizer =
-    [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:kKeychainItemName
-                                                          clientID:kClientID
-                                                      clientSecret:kClientSecret];
-    
-    self.uploadVideo = [[YouTubeUploadVideo alloc] init];
-    self.uploadVideo.delegate = self;
-    
-    
-    switch(alertView.tag)
-    {
-        case YOUTUBE_BUTTON_TAG:
-        {
-            if (buttonIndex == OK_BUTTON_INDEX) {
-                if([[AppHelper getAppHelper] userDefaultsForKey:@"YouTube_Login"]) {
-                    [self.view endEditing:YES];
-                    logoutAlert = [[UIAlertView alloc]initWithTitle:@"YouTube" message:[NSString stringWithFormat:@"Logged in as %@",[[AppHelper getAppHelper]userDefaultsForKey:@"YouTube_Login"]] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout",@"OK", nil];
-                    [logoutAlert setTag:UPLOAD_ALERT_VIEW];
-                    [logoutAlert show];
-                }
-                else {
-                    [self createAuthController];
-                }
-            }
-        }
-        case UPLOAD_ALERT_VIEW:
-        {
-            if(buttonIndex == UPLOAD_BUTTON_INDEX) {
-                NSData *fileData = [NSData dataWithContentsOfFile:self.videoFilePath];
-                NSString *title = @"Iyan3D";
-                NSString *description = @"I made this animation video using Iyan3D app, It's amazing";
-                
-                if ([title isEqualToString:@""]) {
-                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                    [dateFormat setDateFormat:@"'Direct Lite Uploaded File ('EEEE MMMM d, YYYY h:mm a, zzz')"];
-                    title = [dateFormat stringFromDate:[NSDate date]];
-                }
-                if ([description isEqualToString:@""]) {
-                    description = @"Uploaded from YouTube Direct Lite iOS";
-                }
-                
-                [self.uploadVideo uploadYouTubeVideoWithService:self.youtubeService fileData:fileData title:title description:description];
-                
-            } else if (buttonIndex == LOGOUT_BUTTON_INDEX) {
-                [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:@"YouTube_Login"];
-                [self alertView:uploadSceneAlert clickedButtonAtIndex:CANCEL_BUTTON_INDEX];
-            }
-        }
-    }
-}
-- (BOOL)isAuthorized {
-    if([[AppHelper getAppHelper] userDefaultsForKey:@"YouTube_Login"]) {
-        return [((GTMOAuth2Authentication *)self.youtubeService.authorizer) canAuthorize];
-    }
-    else
-        return NO;
-}
 - (IBAction)cameraResolutionChanged:(id)sender {
     resolutionType = (int)self.resolutionSegment.selectedSegmentIndex;
     [self.delegate cameraResolutionChanged:resolutionType];
@@ -936,32 +873,6 @@
 
 }
 
-
-- (void)uploadYouTubeVideo:(YouTubeUploadVideo *)uploadVideo
-      didFinishWithResults:(GTLYouTubeVideo *)video {
-    
-    NSString *postString = [NSString stringWithFormat:@"id=%@",video.identifier];
-    NSData *postData = [postString dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.smackall.com/app/anim3/youtube.php"]]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Current-Type"];
-    [request setHTTPBody:postData];
-    NSURLConnection *conn = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    [conn start];
-    if(conn)
-    {
-    
-    }
-    else
-    {
-        NSLog(@"Connection failed");
-    }
-    
-}
-
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData*)data
 {
 
@@ -977,40 +888,6 @@
 
 }
 
-- (void)createAuthController
-{
-    _authController = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:kGTLAuthScopeYouTube
-                                                                 clientID:kClientID
-                                                             clientSecret:kClientSecret
-                                                         keychainItemName:kKeychainItemName
-                                                                 delegate:self
-                                                         finishedSelector:@selector(viewController:finishedWithAuth:error:)];
-    
-    // Optional: display some html briefly before the sign-in page loads
-    NSString *html = @"<html><body bgcolor=silver><div align=center>Loading sign-in page...</div></body></html>";
-    _authController.initialHTMLString = html;
-    
-    [self presentModalViewController:_authController animated:YES];
-    
-    //return authController;
-}
-- (void)viewController:(GTMOAuth2ViewControllerTouch *)viewController
-      finishedWithAuth:(GTMOAuth2Authentication *)authResult
-                 error:(NSError *)error {
-    if (error != nil) {
-        [Utils showAlert:@"Authentication Error" message:error.localizedDescription];
-        self.youtubeService.authorizer = nil;
-    } else {
-        self.youtubeService.authorizer = authResult;
-        [self uploadToYouTube:[authResult userEmail]];
-        [_authController dismissViewControllerAnimated:YES completion:Nil];
-    }
-}
--(void) uploadToYouTube:(NSString*)userEmail
-{
-    [[AppHelper getAppHelper] saveToUserDefaults:userEmail withKey:@"YouTube_Login"];
-    [self alertView:logoutAlert clickedButtonAtIndex:UPLOAD_BUTTON_INDEX];
-}
 - (void) renderBeginFunction:(int)credits
 {
     [self beginViewHideAndShow:false];
@@ -1320,10 +1197,6 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 {
     thread = nil;
     [self.delegate freezeEditorRender:NO];
-    self.videoFilePath = nil;
-    self.youtubeService = nil;
-    self.uploadVideo = nil;
-    self.authController = nil;
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsupdate" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];

@@ -7,11 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GTLYouTube.h"
-#import "VideoData.h"
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "YouTubeUploadVideo.h"
-#import "GTMOAuth2ViewControllerTouch.h"
 #import "AppHelper.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
@@ -26,7 +22,7 @@
 - (void) freezeEditorRender:(BOOL) freeze;
 - (void) renderFrame:(int)frame withType:(int)shaderType isImage:(bool)isImage andRemoveWatermark:(bool)removeWatermark;
 - (void) setShaderTypeForRendering:(int)shaderType;
-- (NSMutableArray*) getFileNamesToAttach;
+- (NSMutableArray*) getFileNamesToAttach:(bool) forBackUp;
 - (BOOL) canUploadToCloud;
 - (CGPoint) getCameraResolution;
 - (void) cameraResolutionChanged:(int)resolutinType;
@@ -39,7 +35,7 @@
 
 @class GADBannerView;
 
-@interface RenderingViewController : GAITrackedViewController<YouTubeUploadVideoDelegate ,RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate>
+@interface RenderingViewController : GAITrackedViewController<RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate>
 {
     int renderingStartFrame, renderingEndFrame, renderingFrame , shaderType,finalFrame,publishId;
     bool isCanceled,isAppInBg;
@@ -93,9 +89,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *renderingTypes;
 @property (weak, nonatomic) IBOutlet UILabel *waterMarkLabel;
 
-@property (nonatomic, retain) GTLServiceYouTube *youtubeService;
-@property(nonatomic, strong) YouTubeUploadVideo *uploadVideo;
-@property(nonatomic, strong) GTMOAuth2ViewControllerTouch *authController;
 @property (weak, nonatomic) id <RenderingViewControllerDelegate> delegate;
 @property (nonatomic, strong) TextColorPicker *bgColorProp;
 @property (nonatomic, strong) WEPopoverController *popoverController;
