@@ -219,7 +219,7 @@ struct Scene
 				if(alpha < 1.0) {
 					return (meshes[ray.geomID]->material.diffuse * alpha + backColor) * E;
 				} else
-					return meshes[ray.geomID]->material.diffuse;
+					return faceColor;
 			}
 
 			double refraction = meshes[ray.geomID]->material.refraction;
