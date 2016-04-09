@@ -648,6 +648,11 @@
     [[renameScene textFieldAtIndex:0] becomeFirstResponder];
 }
 
+-(void)setSelectedSceneIndex:(int)index
+{
+    selectedSceneIndex = index;
+}
+
 -(void)shareScene:(NSNumber*)value
 {
     

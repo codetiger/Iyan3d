@@ -408,7 +408,8 @@
         NSString *filePath3 = [NSString stringWithFormat:@"%@/%@",rigDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath4 = [NSString stringWithFormat:@"%@/%@",texDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath5 = [NSString stringWithFormat:@"%@/%@", sgmDirPath, [filePaths objectAtIndex:i]];
-        NSString *filePath6 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
+        NSString *filePath6 = [NSString stringWithFormat:@"%@/%@", docDirPath, [filePaths objectAtIndex:i]];
+        NSString *filePath7 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
         
     
         if([fm fileExistsAtPath:filePath1]) {
@@ -429,6 +430,9 @@
         } else if([fm fileExistsAtPath:filePath6]){
             if(![filtFilePaths containsObject:filePath6])
                 [filtFilePaths addObject:filePath6];
+        } else if([fm fileExistsAtPath:filePath7]){
+            if(![filtFilePaths containsObject:filePath7])
+                [filtFilePaths addObject:filePath7];
         }
     }    
     return filtFilePaths;

@@ -302,7 +302,7 @@ vector<string> SGEditorScene::getUserFileNames(bool forBackup)
             userFileNames.push_back(to_string(sgNode->assetId) + ".obj");
             if(sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos)
                 userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
-        } else if ((nType == NODE_TEXT || nType == NODE_TEXT_SKIN) && (sgNode->assetId < 10000 || sgNode->assetId > 20000)) {
+        } else if ((nType == NODE_TEXT || nType == NODE_TEXT_SKIN)) {
             userFileNames.push_back(sgNode->optionalFilePath);
         } else if (sgNode->assetId >= 60001 && sgNode->assetId < 60007)
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");

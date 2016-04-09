@@ -595,7 +595,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         NSString *filePath4 = [NSString stringWithFormat:@"%@/%@",texDirPath,[filePaths objectAtIndex:i]];
         NSString *filePath5 = [NSString stringWithFormat:@"%@/%@", sgmDirPath, [filePaths objectAtIndex:i]];
         NSString *filePath6 = [NSString stringWithFormat:@"%@/%@", vidDirPath, [filePaths objectAtIndex:i]];
-        NSString *filePath7 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
+        NSString *filePath7 = [NSString stringWithFormat:@"%@/%@", docDirPath, [filePaths objectAtIndex:i]];
+        NSString *filePath8 = [NSString stringWithFormat:@"%s/%@",constants::BundlePath.c_str(), [filePaths objectAtIndex:i]];
         
         
         if([fm fileExistsAtPath:filePath1]) {
@@ -619,6 +620,9 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         } else if([fm fileExistsAtPath:filePath7]){
             if(![filtFilePaths containsObject:filePath7])
                 [filtFilePaths addObject:filePath7];
+        } else if([fm fileExistsAtPath:filePath8]){
+            if(![filtFilePaths containsObject:filePath8])
+                [filtFilePaths addObject:filePath8];
         }
     }
     return filtFilePaths;

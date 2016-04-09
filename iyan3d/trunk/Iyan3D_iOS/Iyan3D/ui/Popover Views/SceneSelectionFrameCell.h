@@ -14,6 +14,7 @@
 -(void)deleteScene:(int)indexValue;
 -(void)renameScene:(int)indexValue;
 -(void)shareScene:(NSNumber*)indexValue;
+-(void)setSelectedSceneIndex:(int)index;
 -(bool) Isi3dExists:(int)indexValue;
 @end
 
