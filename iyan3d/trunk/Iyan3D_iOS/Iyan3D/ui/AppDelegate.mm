@@ -282,7 +282,9 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     else {
        
         if ([[DBSession sharedSession] handleOpenURL:url]) {
-            [[[UIAlertView alloc] initWithTitle:@"Information" message:@"App successfully linked to DropBox. You can now backup your scene by pressing 'BackUp' in scene options." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            if([[DBSession sharedSession] isLinked]) {
+                [[[UIAlertView alloc] initWithTitle:@"Information" message:@"App successfully linked to DropBox. You can now backup your scene by pressing 'BackUp' in scene options." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            }
             return YES;
         }
 
