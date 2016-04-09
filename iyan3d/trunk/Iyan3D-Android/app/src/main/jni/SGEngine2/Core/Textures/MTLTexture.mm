@@ -162,6 +162,9 @@ void MTLTexture::updateTexture(string fileName, int frame)
     CGContextRef spriteContext = CGBitmapContextCreate(textureData, target, target, 8, target * 4, CGImageGetColorSpace(imageRef), kCGImageAlphaPremultipliedLast);
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, target, target), imageRef);
     
+    if(!textureData || !spriteContext)
+        return;
+    
     [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
                mipmapLevel:0
                  withBytes:CGBitmapContextGetData(spriteContext)

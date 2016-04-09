@@ -16,6 +16,7 @@
 
 
 #define SCENE_NAME_ALERT 0
+#define LOGOUT_ALERT 1
 #define CANCEL 0
 #define OK 1
 
@@ -66,6 +67,8 @@
         [infoAlert show];
     }
     
+    isFirstTimeUser = false;
+    
     /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   
@@ -86,7 +89,8 @@
     }
     [self.centerLoading setHidden:YES];
     
-    [self checkAndOpeni3d];    
+    [self checkAndOpeni3d];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shareScene:) name:@"DBlinked" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openLoggedInView) name:@"renderCompleted" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkAndOpeni3d) name:@"i3dopen" object:nil];
 
@@ -119,6 +123,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DBlinked" object:nil];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"i3dopen" object:nil];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
 }
 
@@ -640,21 +648,23 @@
     [[renameScene textFieldAtIndex:0] becomeFirstResponder];
 }
 
--(void)shareScene:(int)indexValue
+-(void)shareScene:(NSNumber*)value
 {
+    
     if (![[DBSession sharedSession] isLinked]) {
+        int indexValue = [value intValue];
+        selectedSceneIndex = indexValue;
+        isFirstTimeUser = true;
         [[DBSession sharedSession] linkFromController:self];
     } else {
-        SceneItem * scene = scenesArray[indexValue];
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
-        if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath]) {
-            [self.view setUserInteractionEnabled:NO];
-            [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:YES];
-            NSString *destDir = @"/";
-            [restClient uploadFile:[i3dPath lastPathComponent] toPath:destDir withParentRev:nil fromPath:i3dPath];
-            NSLog(@" i3d Path %@ ", i3dPath);
+        if(isFirstTimeUser)
+        {
+            isFirstTimeUser = false;
+            [self uploadSceneToDropBox];
+        } else {
+         UIAlertView *logoutAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You are already logged in with DropBox. Do You wish to continue with the same account or logout?" delegate:self cancelButtonTitle:@"Logout" otherButtonTitles:@"Continue", nil];
+        [logoutAlert setTag:LOGOUT_ALERT];
+        [logoutAlert show];
         }
     }
 }
@@ -688,6 +698,7 @@
 - (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error
 {
     NSLog(@" Error Uploading %@ ", error.localizedDescription);
+    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
     [self.view setUserInteractionEnabled:YES];
     [[[UIAlertView alloc] initWithTitle:@"Failure" message:@"Error uploading file. Please check your internet connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
 }
@@ -706,6 +717,7 @@
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag==SCENE_NAME_ALERT) {
+        
         NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
         
         if (buttonIndex == CANCEL) {
@@ -738,13 +750,37 @@
             }
         }
         [alertView resignFirstResponder];
-    }
-    else if (alertView.tag == RESTORE_PURCHASH_ALERT){
+        
+    } else if (alertView.tag == LOGOUT_ALERT) {
+        if (buttonIndex == CANCEL) {
+            [[DBSession sharedSession] unlinkAll];
+            [self shareScene:[NSNumber numberWithInt:selectedSceneIndex]];
+        } else if (buttonIndex == OK) {
+            [self uploadSceneToDropBox];
+        }
+        
+    } else if (alertView.tag == RESTORE_PURCHASH_ALERT){
+        
         if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
             [self infoBtnDelegateAction:SETTINGS];
         }
         else
             [self loginBtnAction:nil];
+        
+    }
+}
+
+- (void) uploadSceneToDropBox
+{
+    SceneItem * scene = scenesArray[selectedSceneIndex];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
+    if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath]) {
+        [self.view setUserInteractionEnabled:NO];
+        [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:YES];
+        NSString *destDir = @"/";
+        [restClient uploadFile:[i3dPath lastPathComponent] toPath:destDir withParentRev:nil fromPath:i3dPath];
     }
 }
 

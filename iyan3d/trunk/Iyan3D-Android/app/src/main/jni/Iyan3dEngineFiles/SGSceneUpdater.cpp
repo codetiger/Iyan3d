@@ -183,9 +183,9 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     if(updatingScene->selectedNodeIds.size() > 0 && updatingScene->getParentNode())
         nodePos = updatingScene->getPivotPoint(false);
     else if(isJointSelected && selectedJoint)
-        nodePos = selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
-    else if( isNodeSelected && selectedNode)
-        nodePos = selectedNode->node->getAbsoluteTransformation().getTranslation();
+        nodePos = (selectedJoint->jointNode) ? selectedJoint->jointNode->getAbsoluteTransformation().getTranslation() : Vector3(0.0);
+    else if(isNodeSelected && selectedNode)
+        nodePos = (selectedNode->node) ? selectedNode->node->getAbsoluteTransformation().getTranslation() : Vector3(0.0);
     
     float distanceFromCamera = nodePos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
     float ctrlScale = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_SCALE);

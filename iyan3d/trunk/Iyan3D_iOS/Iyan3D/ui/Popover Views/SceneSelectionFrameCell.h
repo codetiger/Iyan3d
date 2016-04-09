@@ -13,7 +13,7 @@
 -(void)duplicateScene:(int)indexValue;
 -(void)deleteScene:(int)indexValue;
 -(void)renameScene:(int)indexValue;
--(void)shareScene:(int)indexValue;
+-(void)shareScene:(NSNumber*)indexValue;
 -(bool) Isi3dExists:(int)indexValue;
 @end
 

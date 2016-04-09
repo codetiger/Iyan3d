@@ -13,7 +13,7 @@
 #import <DropboxSDK/DropboxSDK.h>
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, DBSessionDelegate, DBNetworkRequestDelegate> {
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate, DBSessionDelegate, DBNetworkRequestDelegate> {
     LoadingViewControllerPad* loadingViewController;
 }
 

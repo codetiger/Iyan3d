@@ -54,7 +54,7 @@
         [self.delegate renameScene:(int)_SelectedindexValue];
         [self.popoverController dismissPopoverAnimated:YES];
     } else if (indexValue == 3) {
-        [self.delegate shareScene:(int)_SelectedindexValue];
+        [self.delegate shareScene:[NSNumber numberWithInt:(int)_SelectedindexValue]];
         [self.popoverController dismissPopoverAnimated:YES];
     }
 }

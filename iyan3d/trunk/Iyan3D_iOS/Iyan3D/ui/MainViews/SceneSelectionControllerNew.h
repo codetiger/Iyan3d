@@ -40,6 +40,8 @@
     
     bool isLoggedin;
     bool isFirstTime;
+    int selectedSceneIndex;
+    bool isFirstTimeUser;
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil IsFirstTimeOpen:(BOOL)value;

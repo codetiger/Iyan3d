@@ -21,6 +21,7 @@
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
 
+#define DB_ALERT 0
 
 SceneManager *scenemgr;
 @interface AppDelegate ()
@@ -283,7 +284,10 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
        
         if ([[DBSession sharedSession] handleOpenURL:url]) {
             if([[DBSession sharedSession] isLinked]) {
-                [[[UIAlertView alloc] initWithTitle:@"Information" message:@"App successfully linked to DropBox. You can now backup your scene by pressing 'BackUp' in scene options." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"DBlinked" object:nil];
+//                UIAlertView *dbAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"App successfully linked to DropBox. You can now backup your scene by pressing 'BackUp' in scene options." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//                [dbAlert setTag:DB_ALERT];
+//                [dbAlert show];
             }
             return YES;
         }
@@ -295,6 +299,18 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
 	//[message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 
 	return YES;
+}
+
+ - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case DB_ALERT:
+            
+            break;
+        default:
+            break;
+    }
+    
 }
 
 -(BOOL)iPhone6Plus{

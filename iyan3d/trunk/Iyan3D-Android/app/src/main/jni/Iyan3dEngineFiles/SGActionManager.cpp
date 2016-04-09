@@ -940,9 +940,11 @@ bool SGActionManager::changeSkeletonPosition(Vector3 outputValue)
             if(mirrorJointId != -1){
                 {
                     shared_ptr<Node> mirrorNode = rigKeys[mirrorJointId].referenceNode->node;
-                    mirrorNode->setPosition(selectedNode->node->getPosition() * Vector3(-1.0,1.0,1.0));
-                    mirrorNode->updateAbsoluteTransformation();
-                    actionScene->updater->updateSkeletonBone(rigKeys, mirrorJointId);
+                    if(selectedNode && selectedNode->node && mirrorNode) {
+                        mirrorNode->setPosition(selectedNode->node->getPosition() * Vector3(-1.0,1.0,1.0));
+                        mirrorNode->updateAbsoluteTransformation();
+                        actionScene->updater->updateSkeletonBone(rigKeys, mirrorJointId);
+                    }
                 }
             }
         }
