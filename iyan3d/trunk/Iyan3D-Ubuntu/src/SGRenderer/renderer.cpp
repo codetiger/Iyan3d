@@ -163,7 +163,6 @@ bool renderFile(TaskDetails td) {
 	bool status = scene->loadScene((to_string(td.frame) + ".sgfd").c_str(), td.width, td.height);
 	if(status) {
 		scene->render();
-		printf(" \n Saving File...");
 		scene->SaveToFile((convert2String(td.taskId) + "t" + convert2String(td.frame) + "f_render.png").c_str(), ImageFormat_PNG);
 	}
 	delete scene;

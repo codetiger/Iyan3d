@@ -102,7 +102,7 @@ struct Scene
 		if(imgFormat == ImageFormat_PPM) {
 			FILE* file = fopen(imagePath, "wb");
 			if (!file) 
-				printf("cannot ope		n file\n");
+				printf("cannot open file\n");
 
 			fprintf(file,"P6\n%i %i\n255\n", imgWidth, imgHeight);
 
@@ -130,7 +130,7 @@ struct Scene
 	}
 	
 	void renderPixel(int x, int y) {
-		Vec3fa color = Vec3fa(1.0f);
+		Vec3fa color = Vec3fa(0.0f);
 		double distance = 0;
 
 		double ao = 1.0;
@@ -215,11 +215,15 @@ struct Scene
 				faceColor = faceColor * alpha + backColor * (1.0 - alpha);
 			}
 
-			if(!meshes[ray.geomID]->material.hasLighting || ++depth > MAX_RAY_DEPTH) {
+			if(++depth > MAX_RAY_DEPTH)
+				return meshes[ray.geomID]->material.diffuse;
+
+			if(!meshes[ray.geomID]->material.hasLighting) {
 				if(alpha < 1.0) {
 					return (meshes[ray.geomID]->material.diffuse * alpha + backColor) * E;
-				} else
+				} else {
 					return faceColor;
+				}
 			}
 
 			double refraction = meshes[ray.geomID]->material.refraction;
