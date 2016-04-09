@@ -594,6 +594,9 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     isExporting1stTime = false;
     
     bool isLightOn = ShaderManager::sceneLighting;
+    bool isShadowsOff = renderingScene->shadowsOff;
+    ShaderManager::shadowsOff = renderingScene->shadowsOff = false;
+    
     if(!isLightOn)
         renderingScene->setLightingOn();
     
@@ -667,6 +670,8 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
+    
+    ShaderManager::shadowsOff = renderingScene->shadowsOff = isShadowsOff;
     
     if(renderingType != shaderType)
         renderingScene->updater->resetMaterialTypes(false);
