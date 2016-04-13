@@ -263,7 +263,7 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
     if(node->type <= NODE_TYPE_CAMERA)
         return false;
     
-    if(node->type == NODE_TYPE_SKINNED && node->shouldUpdateMesh) {
+    if(node->shouldUpdateMesh) {
         createVertexAndIndexBuffers(node , MESH_TYPE_LITE, false);
         node->shouldUpdateMesh = false;
     }
@@ -300,7 +300,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
     //MTLNode.reset();
     
 }
-bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color){
+bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color) {
     if(!isCmdBufferCommited) // Temporary try for perfection
         endDisplay();
     isCmdBufferCommited = false;
@@ -545,7 +545,7 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
     
     if(MTLNode->VertexBuffers != nil && [MTLNode->VertexBuffers count] > 0) {
-        
+        [MTLNode->VertexBuffers removeAllObjects];
     } else if(MTLNode->VertexBuffers == nil)
         MTLNode->VertexBuffers = [[NSMutableArray alloc] init];
     
@@ -605,9 +605,13 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
                 nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
                 meshType = MESH_TYPE_LITE;
             }
-        } else
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
-        
+        } else {
+            if(node->shouldUpdateMesh && (dynamic_pointer_cast<MeshNode>(node))->meshCache)
+                nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+            else
+                nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+        }
+    
         id<MTLBuffer> buf;
     
     if([MTLNode->VertexBuffers count] >= meshBufferIndex+1){

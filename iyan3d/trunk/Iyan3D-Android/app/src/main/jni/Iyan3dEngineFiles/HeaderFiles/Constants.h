@@ -41,6 +41,7 @@
 #define REFERENCE_NODE_START_ID 400000
 #define JOINT_SPHERES_START_ID 500000
 #define CONTROLS_START_ID 600000
+#define FORCE_INDICATOR_ID 700000
 #define LIGHT_STARTING_ID 900
 
 #define DEFAULT_FONT_FILE "Hemi Head bd.ttf"
@@ -459,6 +460,17 @@ enum BASIC_SHAPES{
     PLANE,
     SPHERE,
     TORUS
+};
+
+enum PHYSICS_TYPE
+{
+    STATIC = 1,
+    LIGHT,
+    MEDIUM,
+    HEAVY,
+    CLOTH,
+    BALLOON,
+    JELLY
 };
 
 class constants{

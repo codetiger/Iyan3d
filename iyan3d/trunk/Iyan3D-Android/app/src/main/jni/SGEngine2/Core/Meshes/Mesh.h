@@ -91,6 +91,8 @@ public:
     vertexDataHeavy* getHeavyVertexByIndex(unsigned int index);
     vector<vertexData> getLiteVerticesArray(int index);
     vector<vertexDataHeavy> getHeavyVerticesArray(int index);
+    vector<vertexData> getTotalLiteVerticesArray();
+    vector<vertexDataHeavy> getTotalHeavyVerticesArray();
     unsigned short* getIndicesArray(int index);
     unsigned int * getHighPolyIndicesArray();
     unsigned int getIndicesCount(int index);

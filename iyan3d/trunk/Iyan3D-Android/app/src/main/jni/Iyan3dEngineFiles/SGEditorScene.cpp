@@ -30,6 +30,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     rotationCircle = SceneHelper::createCircle(smgr);
     sceneControls.clear();
     sceneControls = SceneHelper::initControls(smgr);
+    directionIndicator = SceneHelper::initIndicatorNode(smgr);
     BoneLimitsHelper::init();
     AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
 #endif
@@ -74,7 +75,8 @@ SGEditorScene::~SGEditorScene()
         }
         sceneControls.clear();
     }
-    
+    if(directionIndicator)
+        delete directionIndicator;
     if(rotationCircle)
         delete rotationCircle;
     if(controlsPlane)
@@ -99,11 +101,14 @@ SGEditorScene::~SGEditorScene()
         delete animMan;
     if(objMan)
         delete objMan;
+    if(physicsHelper)
+        delete physicsHelper;
     if(cmgr)
         delete cmgr;
     if(smgr)
         delete smgr;
 }
+
 void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
 {
     isRigMode = rigMode;
@@ -143,6 +148,8 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
     writer = new SGSceneWriter(sceneMngr, this);
     animMan = new SGAnimationManager(sceneMngr, this);
     objMan = new SGOBJManager(sceneMngr, this);
+    physicsHelper = new PhysicsHelper(this);
+
 
     camPreviewOrigin = camPreviewEnd = Vector2(0.0, 0.0);
     isMultipleSelection = false;
@@ -229,6 +236,31 @@ void SGEditorScene::renderAll()
         setTransparencyForObjects();
 
     }
+}
+
+void SGEditorScene::setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType)
+{
+    if(physicsHelper)
+        physicsHelper->calculateAndSetPropsOfObject(sgNode, pType);
+}
+
+void SGEditorScene::syncSceneWithPhysicsWorld()
+{
+    if(physicsHelper)
+        physicsHelper->syncPhysicsWorld();
+}
+
+void SGEditorScene::updatePhysics(int frame)
+{
+    physicsHelper->updatePhysicsUpToFrame(frame);
+}
+
+void SGEditorScene::enableDirectionIndicator()
+{
+    directionIndicator->node->setVisible(true);
+    directionIndicator->node->setPosition(nodes[selectedNodeId]->getNodePosition());
+    directionIndicator->assetId = selectedNodeId;
+    controlType = ROTATE;
 }
 
 void SGEditorScene::setTransparencyForObjects()
@@ -403,10 +435,15 @@ bool SGEditorScene::isJointTransparent(int nodeID,string matName)
 }
 void SGEditorScene::setControlsUniforms(int nodeID,string matName)
 {
-    shaderMGR->setUniforms(sceneControls[nodeID - CONTROLS_START_ID],matName);
+    if(nodeID == FORCE_INDICATOR_ID)
+        shaderMGR->setUniforms(directionIndicator, matName);
+    else
+        shaderMGR->setUniforms(sceneControls[nodeID - CONTROLS_START_ID],matName);
 }
 bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 {
+    if(nodeID == FORCE_INDICATOR_ID)
+        return false;
     return true;//(sceneControls[nodeID - CONTROLS_START_ID]->props.transparency < 1.0);
 }
 

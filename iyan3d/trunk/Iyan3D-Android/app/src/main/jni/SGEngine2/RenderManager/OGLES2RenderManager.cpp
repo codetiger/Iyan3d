@@ -38,7 +38,7 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
     if(node->type <= NODE_TYPE_CAMERA)
         return false;
     
-    if(node->type == NODE_TYPE_SKINNED && node->shouldUpdateMesh) {
+    if(node->shouldUpdateMesh) {
         createVertexAndIndexBuffers(node , MESH_TYPE_LITE , false);
         node->shouldUpdateMesh = false;
     }

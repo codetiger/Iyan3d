@@ -115,8 +115,12 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
              }else if(actionScene->isNodeSelected){
                 success = true;
                 Quaternion r = Quaternion(outputValue * DEGTORAD);
-                selectedNode->setRotation(r, actionScene->currentFrame);
-                selectedNode->setRotationOnNode(r);
+                 if(actionScene->directionIndicator->node->getVisible())
+                     actionScene->directionIndicator->setRotationOnNode(r);
+                 else {
+                     selectedNode->setRotation(r, actionScene->currentFrame);
+                     selectedNode->setRotationOnNode(r);
+                 }
                 break;
             }
             break;
@@ -295,6 +299,7 @@ void SGActionManager::switchFrame(int frame)
         switchFrameAction.frameId = actionScene->currentFrame;
         addAction(switchFrameAction);
     }
+    actionScene->updatePhysics(frame);
     actionScene->selectMan->removeChildren(actionScene->getParentNode());
     actionScene->updater->setDataForFrame(frame);
     actionScene->selectMan->updateParentPosition();

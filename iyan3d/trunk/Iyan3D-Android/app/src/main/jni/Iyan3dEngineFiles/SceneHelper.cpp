@@ -109,6 +109,32 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
     return sceneControls;
 }
 
+SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
+{
+    SGNode *sgNode = new SGNode(NODE_SGM);
+    Mesh *indMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/indicator.sgm",smgr->device);
+    if(indMesh == NULL){
+        Logger::log(ERROR,"SGScene", "Indicator Mesh Not Loaded");
+    }
+    shared_ptr<MeshNode> indNode = smgr->createNodeFromMesh(indMesh,"setCtrlUniforms");
+    if(!indNode){
+        Logger::log(ERROR,"SGScene", "Unable to create Indicator node");
+    }
+    sgNode->node = indNode;
+    sgNode->props.isLighting = false;
+    sgNode->props.vertexColor = Vector3(1.0, 1.0, 0.3);
+    sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    sgNode->node->setID(FORCE_INDICATOR_ID);
+    
+    Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+    sgNode->node->setTexture(nodeTex,1);
+    sgNode->node->setTexture(nodeTex,2);
+    sgNode->node->setScale(Vector3(0.5,2.0,0.5));
+    sgNode->node->setVisible(false);
+
+    return sgNode;
+}
+
 void SceneHelper::limitPixelCoordsWithinTextureRange(float texWidth,float texHeight,float &xCoord,float &yCoord)
 {
     xCoord = (xCoord >= texWidth)?(texWidth-1.0):xCoord;

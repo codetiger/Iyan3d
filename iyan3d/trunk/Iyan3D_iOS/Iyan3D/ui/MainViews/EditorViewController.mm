@@ -959,9 +959,11 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)playButtonAction:(id)sender {
-    [self playAnimation];
+    [_center_progress setHidden:NO];
+    [_center_progress startAnimating];
+    [self performSelectorOnMainThread:@selector(playAnimation) withObject:nil waitUntilDone:NO];
+    [_center_progress setHidden:YES];
 }
-
 
 - (IBAction)moveLastAction:(id)sender {
     if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW){
@@ -1328,8 +1330,15 @@ BOOL missingAlertShown;
         return;
     editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = 0;
-    editorScene->actionMan->switchFrame(editorScene->currentFrame);
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self switchToFrame:editorScene->currentFrame];
     [self HighlightFrame];
+}
+
+- (void) switchToFrame:(int)frame
+{
+    editorScene->actionMan->switchFrame(editorScene->currentFrame);
+    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
 }
 
 - (IBAction)myObjectsBtnAction:(id)sender {
@@ -1460,16 +1469,13 @@ BOOL missingAlertShown;
             if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES)
                 isVideoOrImageOrParticle = true;
         }
-        float refractionValue = editorScene->nodes[editorScene->selectedNodeId]->props.refraction;
-        float reflectionValue = editorScene->nodes[editorScene->selectedNodeId]->props.reflection;
-        bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
-        bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
+        
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil RefractionValue:refractionValue ReflectionValue:reflectionValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state LightState:(nodeType == NODE_PARTICLES) ? NO : YES];
+        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] AndMirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(407 , 203);
+        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 320);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -1728,7 +1734,7 @@ BOOL missingAlertShown;
             [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         [self HighlightFrame];
         editorScene->setLightingOff();
-        editorScene->actionMan->switchFrame((float)editorScene->currentFrame);
+        [self performSelectorOnMainThread:@selector(switchFrame) withObject:nil waitUntilDone:NO];
     }
     else if (editorScene->currentFrame + 1 >= editorScene->totalFrames) {
         [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
@@ -1737,6 +1743,12 @@ BOOL missingAlertShown;
         [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
     }
 
+}
+
+ - (void) switchFrame
+{
+    if(editorScene)
+        editorScene->actionMan->switchFrame((float)editorScene->currentFrame);
 }
 
 - (void) stopPlaying{
@@ -2275,15 +2287,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO)
                 isVideoOrImageOrParticle = true;
         }
-        float refractionValue = editorScene->nodes[editorScene->selectedNodeId]->props.refraction;
-        float reflectionValue = editorScene->nodes[editorScene->selectedNodeId]->props.reflection;
-        bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
-        bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil RefractionValue:refractionValue ReflectionValue:reflectionValue LightningValue:isLightningValue Visibility:isVisibleValue MirrorState:state LightState:(nodeType == NODE_PARTICLES) ? NO : YES];
+        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] AndMirrorState:state];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize =(isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(407 , 203);
+        self.popoverController.popoverContentSize =(isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 320);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -3068,6 +3076,57 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) switchMirror
 {
     editorScene->switchMirrorState();
+}
+
+- (void) setPhysics:(bool)status
+{
+    [self performSelectorOnMainThread:@selector(enablePhysics:) withObject:[NSNumber numberWithBool:status] waitUntilDone:NO];
+}
+
+
+- (void) enablePhysics:(NSNumber*)object
+{
+    bool status = [object boolValue];
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->nodes[editorScene->selectedNodeId]->props.isPhysicsEnabled = status;
+        if(!status) {
+            [self showLoadingActivity];
+            [self syncSceneWithPhysicsWorld];
+        }
+    }
+}
+
+- (void) setPhysicsType:(int)type;
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->setPropsOfObject(editorScene->nodes[editorScene->selectedNodeId], (PHYSICS_TYPE)type);
+        [self showLoadingActivity];
+        [self syncSceneWithPhysicsWorld];
+    }
+    
+}
+
+- (void) velocityChanged:(double)vel
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->nodes[editorScene->selectedNodeId]->props.forceMagnitude = vel;
+        [self showLoadingActivity];
+        [self syncSceneWithPhysicsWorld];
+    }
+}
+
+- (void) setDirection
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]->props.isPhysicsEnabled) {
+        editorScene->enableDirectionIndicator();
+    }
+}
+
+- (void) syncSceneWithPhysicsWorld
+{
+    if(editorScene)
+        editorScene->syncSceneWithPhysicsWorld();
+    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
 }
 
 -(void) deleteDelegateAction

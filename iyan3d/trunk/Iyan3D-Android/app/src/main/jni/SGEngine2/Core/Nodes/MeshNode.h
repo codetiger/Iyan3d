@@ -18,7 +18,8 @@ class MeshNode : public Node {
     
 public:
     Mesh *mesh;
-    
+    Mesh *meshCache;
+
     MeshNode();
     virtual ~MeshNode();
     virtual Mesh* getMesh();

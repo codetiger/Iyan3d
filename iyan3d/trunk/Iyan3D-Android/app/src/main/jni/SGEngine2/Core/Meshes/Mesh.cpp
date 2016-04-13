@@ -231,6 +231,16 @@ vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int index)
     return meshBufferVerticesDataHeavy[index];
 }
 
+vector<vertexData> Mesh::getTotalLiteVerticesArray()
+{
+    return tempVerticesData;
+}
+
+vector<vertexDataHeavy> Mesh::getTotalHeavyVerticesArray()
+{
+    return tempVerticesDataHeavy;
+}
+
 unsigned int Mesh::getVerticesCountInMeshBuffer(int index){
     if(meshType == MESH_TYPE_HEAVY)
         return (unsigned int)meshBufferVerticesDataHeavy[index].size();

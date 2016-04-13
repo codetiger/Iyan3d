@@ -47,6 +47,10 @@
 #include "SGAnimationManager.h"
 #include "SGOBJManager.h"
 
+
+#include "PhysicsHelper.h"
+
+
 class SGEditorScene {
     
 private:
@@ -61,7 +65,7 @@ public:
     
     /* cpp class objects */
     
-    bool isPreviewMode, isRigMode, shadowsOff;
+    bool isPreviewMode, isRigMode , shadowsOff, shouldRecalculatePhysics;
     bool freezeRendering , isPlaying;
     bool isMultipleSelection;
     bool isNodeSelected,isJointSelected,isControlSelected;
@@ -93,6 +97,7 @@ public:
     SGNode *selectedNode;
     SGJoint *selectedJoint;
     SGNode* rotationCircle;
+    SGNode* directionIndicator;
     vector<SGNode*> sceneControls;
     vector<SGNode*> nodes;
     vector<SGNode*> jointSpheres;
@@ -108,6 +113,7 @@ public:
     SGAnimationManager *animMan;
     SGAutoRigSceneManager *rigMan;
     SGOBJManager *objMan;
+    PhysicsHelper * physicsHelper;
     
     /* SGEngine class objects */
     
@@ -202,6 +208,11 @@ public:
     Vector3 getPivotPoint(bool initial);
     bool switchMirrorState();
     void setMirrorState(MIRROR_SWITCH_STATE flag);
+    
+    void updatePhysics(int frame);
+    void enableDirectionIndicator();
+    void setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType);
+    void syncSceneWithPhysicsWorld();
 
 };
 

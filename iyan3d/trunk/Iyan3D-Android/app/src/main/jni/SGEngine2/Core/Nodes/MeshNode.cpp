@@ -9,11 +9,14 @@
 #include "MeshNode.h"
 
 MeshNode::MeshNode() {
+    this->meshCache = NULL;
     type = NODE_TYPE_MESH;
 }
 MeshNode::~MeshNode() {
     if(mesh && mesh->getVerticesCount())
         delete mesh;
+    if(this->meshCache && this->meshCache->getVerticesCount())
+        delete this->meshCache;
     mesh = NULL;
 }
 Mesh* MeshNode::getMesh(){

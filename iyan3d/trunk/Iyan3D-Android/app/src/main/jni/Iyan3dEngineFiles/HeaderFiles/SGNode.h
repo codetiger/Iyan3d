@@ -30,6 +30,7 @@ struct properties{
     double forceMagnitude;
     Vector3 forceDirection;
     bool isSoft;
+    PHYSICS_TYPE physicsType;
 };
 
 class SGNode{

@@ -30,6 +30,7 @@ SGNode::SGNode(NODE_TYPE type){
     props.forceMagnitude = 0.0;
     props.forceDirection = Vector3(0.0);
     props.isSoft = false;
+    props.physicsType = STATIC;
 
 }
 SGNode::~SGNode(){
@@ -1041,7 +1042,7 @@ void SGNode::readData(ifstream *filePointer)
     int sgbVersion = FileHelper::readInt(filePointer);
     if(sgbVersion == SGB_VERSION_CURRENT) { // Empty Data for future use
         props.isPhysicsEnabled = FileHelper::readInt(filePointer);
-        FileHelper::readInt(filePointer);
+        props.physicsType = (PHYSICS_TYPE)FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
@@ -1148,7 +1149,7 @@ void SGNode::writeData(ofstream *filePointer)
     FileHelper::writeInt(filePointer,assetId);
     FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
     FileHelper::writeInt(filePointer, props.isPhysicsEnabled);
-    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeInt(filePointer, (int)props.physicsType);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeInt(filePointer, 0);

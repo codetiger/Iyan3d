@@ -12,23 +12,35 @@
 #define MIRROR_ON 1
 #define MIRROR_DISABLE 2
 
+#define NONE 0
+#define STATIC 1
+#define LIGHT 2
+#define MEDIUM 3
+#define HEAVY 4
+#define CLOTH 5
+#define BALLOON 6
+#define JELLY 7
+
+
 @interface MeshProperties ()
 
 @end
 
 @implementation MeshProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil RefractionValue:(float)refraction ReflectionValue:(float)reflection LightningValue:(BOOL)lightningValue Visibility:(BOOL)isVisible MirrorState:(int)mirrorState LightState:(BOOL)ishaveLighting {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil  WithProps:(SGNode*) sgNode AndMirrorState:(BOOL)mirror {
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        refractionValue=refraction;
-        reflectionValue=reflection;
-        isLightningValue=lightningValue;
-        isVisibleValue=isVisible;
-        mirrorStatus = mirrorState;
-        isHaveLightOption = ishaveLighting;
+        refractionValue = sgNode->props.refraction;
+        reflectionValue = sgNode->props.reflection;
+        isLightningValue = sgNode->props.isLighting;
+        isVisibleValue = sgNode->props.isVisible;
+        mirrorStatus = mirror;
+        isHaveLightOption = sgNode->props.isLighting;
+        physicsType = (sgNode->props.isPhysicsEnabled) ? sgNode->props.physicsType : NONE;
+        velocity = sgNode->props.forceMagnitude;
     }
     return self;
 }
@@ -45,7 +57,10 @@
     [_lightingSwitch setEnabled:isHaveLightOption];
     [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
     [_mirrorBtn setOn:(mirrorStatus == MIRROR_DISABLE) ? NO : (mirrorStatus == MIRROR_ON) ? YES : NO  animated:YES];
-}
+    
+    [self.physicsSegment setSelectedSegmentIndex:physicsType];
+    [self.velocitySlider setValue:velocity];
+    }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -104,4 +119,23 @@
 - (IBAction)mirrorBtnAction:(id)sender {
     [self.delegate switchMirror];
 }
+
+- (IBAction)velocityValueChanged:(id)sender {
+    [self.delegate velocityChanged:self.velocitySlider.value];
+}
+
+- (IBAction)setDirection:(id)sender {
+    [self.delegate setDirection];
+}
+
+- (IBAction)physicsSegmentChanged:(id)sender {
+    
+    if(self.physicsSegment.selectedSegmentIndex == NONE)
+        [self.delegate setPhysics:false];
+    else {
+        [self.delegate setPhysics:true];
+        [self.delegate setPhysicsType:(int)self.physicsSegment.selectedSegmentIndex];
+    }
+}
+
 @end

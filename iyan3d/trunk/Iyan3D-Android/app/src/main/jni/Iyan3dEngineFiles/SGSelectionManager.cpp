@@ -503,6 +503,8 @@ void SGSelectionManager::unselectObject(int objectId)
             selectionScene->nodes[objectId]->props.perVertexColor = true;
     }
     selectionScene->clearSelections();
+    if(selectionScene->directionIndicator->node->getVisible() && selectionScene->directionIndicator->assetId != selectionScene->selectedNodeId)
+        selectionScene->directionIndicator->node->setVisible(false);
     selectionScene->updater->updateControlsOrientaion();
     selectionScene->updater->reloadKeyFrameMap();
 }

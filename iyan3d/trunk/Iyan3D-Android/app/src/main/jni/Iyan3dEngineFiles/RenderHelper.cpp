@@ -796,6 +796,8 @@ void RenderHelper::rttShadowMap()
         renderingScene->rotationCircle->node->setVisible(false);
     }
     setControlsVisibility(false);
+    bool indState = renderingScene->directionIndicator->node->getVisible();
+    renderingScene->directionIndicator->node->setVisible(false);
     ShaderManager::isRenderingDepthPass = true;
     smgr->setActiveCamera(renderingScene->lightCamera);
     smgr->setRenderTarget(renderingScene->shadowTexture,true,true,true,Vector4(255,255,255,255));
@@ -826,6 +828,7 @@ void RenderHelper::rttShadowMap()
     }
     smgr->Render(false);
     setJointSpheresVisibility(true); // Unhide joints
+    renderingScene->directionIndicator->node->setVisible(indState);
     renderingScene->nodes[NODE_CAMERA]->node->setVisible(true);// Unhide camera
     renderingScene->nodes[NODE_LIGHT]->node->setVisible(true);// Unhide light
     for(unsigned long i = 2;i < renderingScene->nodes.size();i++){// set previous shaders

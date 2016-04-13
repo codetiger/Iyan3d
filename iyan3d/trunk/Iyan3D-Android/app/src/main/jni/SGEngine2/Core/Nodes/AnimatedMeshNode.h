@@ -23,7 +23,6 @@ typedef enum {
 class AnimatedMeshNode: public MeshNode {
 private:
     vector< shared_ptr<JointNode> > jointNodes;
-    Mesh *meshCache;
     
 public:
     unsigned short totalFrames;

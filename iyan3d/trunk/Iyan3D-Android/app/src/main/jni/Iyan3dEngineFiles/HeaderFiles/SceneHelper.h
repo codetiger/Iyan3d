@@ -27,6 +27,7 @@ class SceneHelper
     static shared_ptr<CameraNode> initRenderCamera(SceneManager *smgr, float cameraFOV);
     static SGNode* createCircle(SceneManager *smgr);
     static vector<SGNode*> initControls(SceneManager *smgr);
+    static SGNode* initIndicatorNode(SceneManager *smgr);
 
     static Vector3 planeFacingDirection(int controlType);
     static Vector3 controlDirection(int controlType);

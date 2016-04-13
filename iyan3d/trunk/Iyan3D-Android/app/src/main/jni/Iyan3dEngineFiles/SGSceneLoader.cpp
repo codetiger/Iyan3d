@@ -71,6 +71,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             sgNode = NULL;
         tempNodes.push_back(sgNode);
     }
+    currentScene->syncSceneWithPhysicsWorld();
 
     for (int i = 0; i < tempNodes.size(); i++) {
         SGNode *sgNode = tempNodes[i];

@@ -125,8 +125,15 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
         
         if(moveScene->selectedNodeIds.size() > 0 && moveScene->controlType != SCALE){
             moveScene->actionMan->storeActionKeysForMulti(true);
-        }
-        else if(moveScene->controlType != SCALE)
+        } else if (moveScene->controlType == ROTATE && moveScene->directionIndicator->node->getVisible()) {
+            Vector3 forceRot = moveScene->directionIndicator->node->getRotationInDegrees() * DEGTORAD;
+            Vector3 direction = Vector3(0.0, 1.0, 0.0);
+            Mat4 rotMatrix;
+            rotMatrix.setRotationRadians(forceRot);
+            rotMatrix.rotateVect(direction);
+            moveScene->nodes[moveScene->selectedNodeId]->props.forceDirection = direction;
+            moveScene->syncSceneWithPhysicsWorld();
+        } else if(moveScene->controlType != SCALE)
             moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
         moveScene->isControlSelected = false;
@@ -366,7 +373,7 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         }
         else if(moveScene->getSelectedNode()){
             moveScene->getSelectedNode()->node->updateAbsoluteTransformation();
-            nodeRot = moveScene->getSelectedNode()->node->getRotationInDegrees();
+            nodeRot = (moveScene->directionIndicator->node->getVisible()) ? moveScene->directionIndicator->node->getRotationInDegrees() :moveScene->getSelectedNode()->node->getRotationInDegrees();
             delta =  MathHelper::RotateNodeInWorld(nodeRot,delta);
         }
         delta.toEuler(outputValue);
