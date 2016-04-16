@@ -129,7 +129,7 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
         
         
         for(int i = previousFrame; i <= frame; i++) {
-            world->stepSimulation(1.0/24.0, 1, 1.0/24.0);
+            world->stepSimulation(1.0/24.0, 8, 1.0/24.0);
         }
         
         if(frame > 0) {
