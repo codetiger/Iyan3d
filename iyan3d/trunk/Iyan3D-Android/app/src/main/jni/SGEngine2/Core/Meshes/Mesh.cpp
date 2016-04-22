@@ -286,6 +286,16 @@ int Mesh::getMeshBufferCount()
     return (int)meshBufferIndices.size();
 }
 
+void Mesh::clearVertices()
+{
+    tempVerticesData.clear();
+}
+
+void Mesh::clearIndices()
+{
+    tempIndicesData.clear();
+}
+
 void Mesh::removeDoublesInHeavyMesh(bool usePos,bool useTcoords,bool useNormals){
     
     //This method should only be used for 3D Text

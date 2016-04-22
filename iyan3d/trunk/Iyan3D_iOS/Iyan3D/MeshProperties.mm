@@ -41,6 +41,8 @@
         isHaveLightOption = sgNode->props.isLighting;
         physicsType = (sgNode->props.isPhysicsEnabled) ? sgNode->props.physicsType : NONE;
         velocity = sgNode->props.forceMagnitude;
+        
+        canApplyPhysics = (sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ || sgNode->getType() == NODE_TEXT);
     }
     return self;
 }
@@ -54,12 +56,17 @@
     self.lightingSwitch.on=isLightningValue;
     self.visibleChanged.on=isVisibleValue;
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
-    [_lightingSwitch setEnabled:isHaveLightOption];
+    //[_lightingSwitch setEnabled:isHaveLightOption];
     [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
     [_mirrorBtn setOn:(mirrorStatus == MIRROR_DISABLE) ? NO : (mirrorStatus == MIRROR_ON) ? YES : NO  animated:YES];
     
     [self.physicsSegment setSelectedSegmentIndex:physicsType];
     [self.velocitySlider setValue:velocity];
+    if(!canApplyPhysics) {
+        [self.physicsSegment setEnabled:NO];
+        [self.velocitySlider setEnabled:NO];
+        [self.directionBtn setEnabled:NO];
+    }
     }
 
 - (void)didReceiveMemoryWarning {

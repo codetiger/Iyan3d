@@ -96,6 +96,8 @@ public:
     void updateVertexBuffer(int nodeIndex);
     void clearDepthBuffer();
     void writeImageToFile(Texture *texture , char* filePath, IMAGE_FLIP flipType = NO_FLIP);
+    
+    void updateVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE);
 };
 
 #endif /* defined(__SGEngine2__SceneManager__) */

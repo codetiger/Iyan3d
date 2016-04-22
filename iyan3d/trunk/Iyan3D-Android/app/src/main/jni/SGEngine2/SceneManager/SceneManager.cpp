@@ -69,6 +69,19 @@ void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #endif
     nodes.push_back(node);
 }
+
+void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType)
+{
+#ifndef UBUNTU
+    renderMan->createVertexAndIndexBuffers(node,meshType, true);
+    if(device == OPENGLES2 && node->type == NODE_TYPE_PARTICLES) {
+        for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->meshCache->getMeshBufferCount(); i++)
+            ((OGLES2RenderManager*)renderMan)->bindBufferAndAttributes(node, i);
+    }
+#endif
+
+}
+
 void SceneManager::RemoveNode(shared_ptr<Node> node)
 {
     int sameNodeIdcount = 0;

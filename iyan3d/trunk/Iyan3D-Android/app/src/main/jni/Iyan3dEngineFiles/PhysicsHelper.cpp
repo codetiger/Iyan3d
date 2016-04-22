@@ -129,7 +129,7 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
         
         
         for(int i = previousFrame; i <= frame; i++) {
-            world->stepSimulation(1.0/24.0, 8, 1.0/24.0);
+            world->stepSimulation(1.0/24.0, 10.0, 1.0/60.0);
         }
         
         if(frame > 0) {
@@ -183,6 +183,7 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
                 vc.vertPosition.z = node->m_x.z();
             }
             dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->addVertex(&vc);
+            dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->addToIndicesArray(i);
         }
     } else {
         
@@ -216,6 +217,7 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode) {
     btConvexHullShape* shape = getShapeForNode(node);
     shape->setLocalScaling(btVector3(key.scale.x, key.scale.y, key.scale.z));
     shape->calculateLocalInertia(bodyMass, bodyInertia);
+    shape->setMargin(0);
 
     btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
     bodyCI.m_restitution = 0.6f;

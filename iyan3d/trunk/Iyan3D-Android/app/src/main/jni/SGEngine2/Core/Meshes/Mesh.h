@@ -101,6 +101,8 @@ public:
     unsigned int getVerticesCountInMeshBuffer(int index);
     unsigned int getVerticesCount();
     int getMeshBufferCount();
+    void clearVertices();
+    void clearIndices();
     BoundingBox* getBoundingBox();
     Vector3 getAngleWeight(Vector3& v1,Vector3& v2,Vector3& v3);
     void removeDoubles(bool usePos,bool useTcoords,bool useNormals);

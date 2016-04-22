@@ -16,11 +16,12 @@
 
 
 // Functio Name Should be Shader Material Name With Parameter of the Node Index in SMGR.
+
 class ShaderManager{
 public:
     Mat4 ortho2d_oc(float left,float right,float bottom,float top,float near,float far);
     static bool isRenderingDepthPass,isRendering , sceneLighting;
-    static bool shadowsOff;
+    static bool shadowsOff, lightChanged;
     static float shadowDensity,shadowTextureSize;
     static Vector3 camPos;
     static vector<Vector3> lightPosition,lightColor;
@@ -44,7 +45,7 @@ public:
     void setModelViewProjMatrix(SGNode *node,u16 paramIndex);
     void setMVPForParticles(SGNode *node, u16 paramIndex);
     void setViewProjMatrix(SGNode *node,u16 paramIndex);
-    void setVertexColorUniform(Material *material , Vector3 color,int paramIndex,int nodeIndex);
+    void setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex);
     void setNodeLighting(SGNode *sgNode,int paramIndex);
     void setViewProjMatrix(Material *material);
     void setSceneDataUniforms(SGNode *node,u16 paramIndex);
@@ -60,11 +61,8 @@ public:
     void setLightViewProjMatrix(SGNode *sgNode,int paramIndex);
     void setShadowDakness(SGNode *node,int paramIndex);
     void setReflectionValue(SGNode *node,int paramIndex);
-    void setLightPos(SGNode *sgNode,int paramIndex);
     void setLightsPosition(SGNode *sgNode , float *lightPositions , int paramIndex);
-    void setLightEndDistance(SGNode *sgNode , float *fadeDistances , int paramIndex);
     void setLightsColors(SGNode *sgNode, float *lightColors, int paramIndex);
     void setEyePos(SGNode *sgNode,int paramIndex);
-    void setLightColor(SGNode *sgNode,int paramIndex);
 };
 #endif /* defined(__FatMan__ShaderManager__) */

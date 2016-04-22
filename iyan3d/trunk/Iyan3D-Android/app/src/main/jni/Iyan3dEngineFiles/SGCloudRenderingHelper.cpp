@@ -57,7 +57,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
         	shared_ptr< ParticleManager > pNode = dynamic_pointer_cast<ParticleManager>(scene->nodes[nodeId]->node);
             for(int i = 0; i < 48; i++) {
                 pNode->update();
-                pNode->sortParticles(scene->renderCamera->getAbsolutePosition());
+//                pNode->sortParticles(scene->renderCamera->getAbsolutePosition());
                 pNode->updateParticles(true, scene->renderCamera->getAbsolutePosition());
             }
 

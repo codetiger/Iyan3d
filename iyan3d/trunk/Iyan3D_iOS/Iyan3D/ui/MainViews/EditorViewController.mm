@@ -961,6 +961,8 @@ BOOL missingAlertShown;
 - (IBAction)playButtonAction:(id)sender {
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
+    if(editorScene && editorScene->currentFrame == 0)
+        [self syncSceneWithPhysicsWorld];
     [self performSelectorOnMainThread:@selector(playAnimation) withObject:nil waitUntilDone:NO];
     [_center_progress setHidden:YES];
 }

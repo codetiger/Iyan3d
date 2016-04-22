@@ -73,7 +73,7 @@ public:
     id <MTLTexture> renderingTexture;
     MetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale);
     ~MetalRenderManager();
-    
+   
     void Initialize();
     bool PrepareNode(shared_ptr<Node> node,int meshBufferIndex,int nodeIndex = 0);
     void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);

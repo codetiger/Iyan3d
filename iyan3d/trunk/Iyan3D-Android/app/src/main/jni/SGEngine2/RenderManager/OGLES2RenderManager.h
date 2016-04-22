@@ -35,7 +35,7 @@ private:
     u_int32_t updateBuffer(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage , u_int32_t _bufferToBind);
     GLenum getOGLDrawMode(DRAW_MODE mode);
 public:
-    
+   
     int c;
     float screenWidth,screenHeight,screenScale;
     GLuint frameBuffer;
@@ -44,8 +44,22 @@ public:
     
     OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale);
     ~OGLES2RenderManager();
+    
+    Vector4 clearColor;
+    GLenum depthState;
+    GLenum dFactor;
+    int viewportWidth, viewportHeight;
+    bool isDepthTestEnabled;
+
+    void changeDepthState(GLenum lDepthState);
+    void changeViewport(int width, int height);
+    void changeDepthTest(bool enable);
+    void changeBlendFunc(GLenum lDfactor);
+    void changeClearColor(Vector4 lClearColor);
+    
     void Initialize();
     bool PrepareNode(shared_ptr<Node> node, int meshBufferIndex, int nodeIndex = 0);
+    void bindBufferAndAttributes(shared_ptr<Node> node, int meshBufferIndex);
     void endDisplay();
     void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);
     void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount);

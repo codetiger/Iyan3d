@@ -183,11 +183,11 @@ float Vector3::dotProduct(Vector3 other)
     return x * other.x + y * other.y + z * other.z;
 }
 
-float Vector3::getLength()
+double Vector3::getLength()
 {
     return sqrtf(x * x + y * y + z * z);
 }
-float Vector3::getDistanceFrom(Vector3 other)
+double Vector3::getDistanceFrom(Vector3 other)
 {
     return Vector3(x - other.x, y - other.y, z - other.z).getLength();
 }

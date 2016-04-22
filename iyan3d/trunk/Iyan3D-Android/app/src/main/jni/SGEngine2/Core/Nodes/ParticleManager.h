@@ -48,7 +48,7 @@ public:
     
     void setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, double gravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale);
     virtual void update();
-    void updateParticles(bool isSelected, Vector3 camPos);
+    bool updateParticles(bool isSelected, Vector3 camPos);
     Quaternion rotationBetweenVectors(Vector3 targetDirection, Vector3 initialDirection);
     Vector4* getPositions();
     Vector4* getRotations();

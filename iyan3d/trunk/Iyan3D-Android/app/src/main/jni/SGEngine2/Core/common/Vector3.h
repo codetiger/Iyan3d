@@ -63,8 +63,8 @@ public:
     Vector3 normalize();
     Vector3 crossProduct(Vector3 p);
     float dotProduct(Vector3 other);
-    float getLength();
-    float getDistanceFrom(Vector3 other);
+    double getLength();
+    double getDistanceFrom(Vector3 other);
     Vector3 rotationToDirection(const Vector3& forwards = Vector3(0, 0, 1));
 };
 

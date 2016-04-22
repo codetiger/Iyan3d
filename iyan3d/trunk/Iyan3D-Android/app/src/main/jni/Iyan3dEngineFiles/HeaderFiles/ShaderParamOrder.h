@@ -20,6 +20,7 @@
 #define SHADER_PARTICLE_positions 6
 #define SHADER_PARTICLE_rotations 7
 #define SHADER_PARTICLE_texture1 8
+#define SHADER_PARTICLE_world 9
 
 #define SHADER_COMMON_SKIN_mvp 1
 #define SHADER_COMMON_SKIN_transparency 2

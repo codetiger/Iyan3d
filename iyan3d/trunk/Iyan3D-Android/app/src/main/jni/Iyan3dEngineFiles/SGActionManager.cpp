@@ -359,6 +359,8 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
         return;
     
+    ShaderManager::lightChanged = true;
+    
     SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     if(propertyAction.actionType == ACTION_EMPTY){
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_LIGHT;

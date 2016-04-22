@@ -287,14 +287,33 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
-    } else
-        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+    } else {
+        if(node->shouldUpdateMesh && (dynamic_pointer_cast<MeshNode>(node))->meshCache)
+            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+        else
+            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+    }
+
     
     MTLIndexType indexType = MTLIndexTypeUInt16;
+    unsigned int indicesCount = nodeMes->getIndicesCount(meshBufferIndex);
+    id<MTLBuffer> buf = [MTLNode->indexBuffers objectAtIndex:meshBufferIndex];
     if (node->type == NODE_TYPE_PARTICLES) {
-        drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex], dynamic_pointer_cast<ParticleManager>(node)->getParticlesCount());
+        MTLDepthStencilDescriptor *depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
+        depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
+        depthStateDesc.depthWriteEnabled = NO;
+        _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+        [RenderCMDBuffer setDepthStencilState:_depthState];
+        
+        drawPrimitives(getMTLDrawMode(DRAW_MODE_POINTS), indicesCount,indexType, buf, node->instanceCount);
+        
+        depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
+        depthStateDesc.depthWriteEnabled = YES;
+        _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+        [RenderCMDBuffer setDepthStencilState:_depthState];
+
     } else
-        drawPrimitives(getMTLDrawMode(node->drawMode),nodeMes->getIndicesCount(meshBufferIndex),indexType,MTLNode->indexBuffers[meshBufferIndex],node->instanceCount);
+        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf,node->instanceCount);
     
     //node.reset();
     //MTLNode.reset();
@@ -551,6 +570,8 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
     
     if(MTLNode->indexBuffers == nil)
         MTLNode->indexBuffers = [[NSMutableArray alloc] init];
+    else if(updateBothBuffers)
+        [MTLNode->indexBuffers removeAllObjects];
     
     Mesh *nodeMes;
     if(node->type == NODE_TYPE_MORPH)
@@ -564,17 +585,21 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
             meshType = MESH_TYPE_LITE;
         }
-    } else
-        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+    } else {
+        if(node->shouldUpdateMesh && (dynamic_pointer_cast<MeshNode>(node))->meshCache)
+            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+        else
+            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+    }
 
     for (int i = 0; i < nodeMes->getMeshBufferCount(); i++) {
         createVertexBuffer(node,i,meshType);
         
         if(updateBothBuffers) {
-            [MTLNode->indexBuffers addObject:[device newBufferWithBytes:nodeMes->getIndicesArray(i) length:nodeMes->getIndicesCount(i) * sizeof(unsigned short) options:MTLResourceOptionCPUCacheModeDefault]];
+            unsigned int length = nodeMes->getIndicesCount(i) * sizeof(unsigned short);
+            [MTLNode->indexBuffers addObject:[device newBufferWithBytes:nodeMes->getIndicesArray(i) length:length options:MTLResourceOptionCPUCacheModeDefault]];
         }
     }
-
 }
 void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBufferIndex, MESH_TYPE meshType)
 {

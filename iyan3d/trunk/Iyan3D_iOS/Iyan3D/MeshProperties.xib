@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="cloneBtn" destination="vZr-9C-v5A" id="o6F-PU-Gc7"/>
                 <outlet property="deleteBtn" destination="rX2-c1-0Az" id="sp0-kp-nQu"/>
+                <outlet property="directionBtn" destination="k9j-st-tbS" id="qbJ-jU-tNa"/>
                 <outlet property="lightingSwitch" destination="azO-so-DyO" id="X8n-dF-Iw9"/>
                 <outlet property="mirrorBtn" destination="YBt-xE-ZrT" id="FXo-5H-uBB"/>
                 <outlet property="physicsSegment" destination="opT-ge-IeQ" id="kXb-UI-wDK"/>
@@ -132,9 +133,9 @@
                                 <segment title="Light"/>
                                 <segment title="Medium"/>
                                 <segment title="Heavy"/>
-                                <segment title="Cloth"/>
-                                <segment title="Balloon"/>
-                                <segment title="Jelly"/>
+                                <segment title="Cloth" enabled="NO"/>
+                                <segment title="Balloon" enabled="NO"/>
+                                <segment title="Jelly" enabled="NO"/>
                             </segments>
                             <connections>
                                 <action selector="physicsSegmentChanged:" destination="-1" eventType="valueChanged" id="O0f-0t-agc"/>

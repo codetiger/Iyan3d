@@ -23,6 +23,7 @@ ParticleManager::ParticleManager() {
     startScale = 0.0 + getScale().x;
     deltaScale = 0.001;
     isSelected = false;
+    drawMode = DRAW_MODE_POINTS;
 }
 
 void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor, Vector4 eColor, double gravity, float startSpreadAngle, float startMagnitude, float magnitudeRand, int emissionSpeed, int maxLife, int maxLifeRandPercent, float startScale, float deltaScale)
@@ -47,6 +48,8 @@ void ParticleManager::setDataFromJson(int count, Vector4 sColor, Vector4 mColor,
 
 ParticleManager::~ParticleManager()
 {
+    this->shouldUpdateMesh = false;
+    
     if(pool) {
         delete pool;
         pool = NULL;
@@ -65,7 +68,7 @@ ParticleManager::~ParticleManager()
 
 void ParticleManager::update() {
     
-    for (int i = 0; i < emissionSpeed; ++i) {
+    for (int i = 0; i < emissionSpeed/2; ++i) {
         Particle *p = pool->reuseDeadParticle();
         if(p) {
             p->isLive = true;
@@ -93,38 +96,56 @@ void ParticleManager::update() {
         
         p = pool->getNextLiveParticle();
     }
+    
 }
 
-void ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
+bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
 {
+    bool meshCacheCreated = false;
+    
+    if(this->meshCache == NULL) {
+        this->meshCache = new Mesh();
+    } else
+        meshCacheCreated = true;
+    
+    this->meshCache->clearVertices();
+    if(!meshCacheCreated)
+        this->meshCache->clearIndices();
+    
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
         this->isSelected = isSelected;
         Vector3 nodePos = getAbsoluteTransformation().getTranslation();
         
+        vertexData *v = new vertexData();
+        
+        Vector4 finalPos;
         if(!isSelected) {
-            positions[i] = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
+            finalPos = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
             p->isLive = false;
         }
-
+        
         if(p->isLive) {
-            if(isSelected) {
-                positions[i] = Vector4(p->position.x, p->position.y, p->position.z, p->age);
-                Vector3 rotDir = (camPos - Vector3(positions[i].x, positions[i].y, positions[i].z)).normalize();
-                Quaternion rotQ;
-                rotQ = rotationBetweenVectors(rotDir, Vector3(0.0,1.0,0.0));
-                Vector3 rotEuler;rotQ.toEuler(rotEuler);
-                rotations[i] = Vector4(rotEuler.x, rotEuler.y, rotEuler.z, 0.0);
-            }
-        } else {
-            positions[i] = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
-            Vector3 rotDir = (camPos - Vector3(positions[i].x, positions[i].y, positions[i].z)).normalize();
-            Quaternion rotQ;
-            rotQ = rotationBetweenVectors(rotDir, Vector3(0.0,1.0,0.0));
-            Vector3 rotEuler;rotQ.toEuler(rotEuler);
-            rotations[i] = Vector4(rotEuler.x, rotEuler.y, rotEuler.z, 0.0);
-        }
+            if(isSelected)
+                finalPos = Vector4(p->position.x, p->position.y, p->position.z, p->age);
+        } else
+            finalPos = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
+        
+        v->vertPosition = Vector3(finalPos.x, finalPos.y, finalPos.z);
+        v->vertNormal.x = finalPos.w;
+        v->vertNormal.y = finalPos.w;
+        v->vertNormal.z = finalPos.w;
+        this->meshCache->addVertex(v);
+        if(!meshCacheCreated)
+            this->meshCache->addToIndicesArray(i);
+        
+        delete v;
     }
+    
+    this->meshCache->Commit();
+    this->shouldUpdateMesh = true;
+    
+    return meshCacheCreated;
 }
 
 Quaternion ParticleManager::rotationBetweenVectors(Vector3 targetDirection, Vector3 initialDirection)

@@ -30,7 +30,7 @@
     float refractionValue;
     float reflectionValue;
     bool isLightningValue,isHaveLightOption;
-    bool isVisibleValue;
+    bool isVisibleValue, canApplyPhysics;
     bool isFaceNormal;
     int mirrorStatus;
     int physicsType;
@@ -52,6 +52,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *velocitySlider;
 @property (weak, nonatomic) IBOutlet UILabel *velocityLbl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *physicsSegment;
+@property (weak, nonatomic) IBOutlet UIButton *directionBtn;
 
 
 - (IBAction)refractionValueChanged:(id)sender;

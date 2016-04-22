@@ -31,7 +31,6 @@ SGNode::SGNode(NODE_TYPE type){
     props.forceDirection = Vector3(0.0);
     props.isSoft = false;
     props.physicsType = STATIC;
-
 }
 SGNode::~SGNode(){
     clearSGJoints();
@@ -649,6 +648,9 @@ void SGNode::setVisibility(bool isVisible, int frameId)
 }
 void SGNode::setPositionOnNode(Vector3 position)
 {
+    if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
+        ShaderManager::lightChanged = true;
+    
     node->setPosition(position);
     node->updateAbsoluteTransformation();
     
