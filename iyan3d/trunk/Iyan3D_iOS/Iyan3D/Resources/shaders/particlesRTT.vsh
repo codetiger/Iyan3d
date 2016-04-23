@@ -21,8 +21,10 @@ void main() {
     float phase = float(percent > 0.5);
     
     vec4 sColor = vec4(startColor.x, startColor.y, startColor.z, 1.0);
-    vec4 s = mix(sColor, midColor, phase);
-    vec4 e = mix(midColor, endColor, phase);
+    vec4 mColor = vec4(midColor.x, midColor.y, midColor.z, 1.0);
+    
+    vec4 s = mix(sColor, mColor, phase);
+    vec4 e = mix(mColor, endColor, phase);
     float age = mix(percent, percent - 0.5, phase) * 2.0;
     
     color = startColor;

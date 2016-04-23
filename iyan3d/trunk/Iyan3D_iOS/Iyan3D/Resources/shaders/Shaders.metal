@@ -247,9 +247,10 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float phase = (percent > 0.5);
     
     float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
+    float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
 
-    float4 s = mix(startColor, mColor, phase);
-    float4 e = mix(mColor, eColor, phase);
+    float4 s = mix(startColor, midColor, phase);
+    float4 e = mix(midColor, eColor, phase);
     float age = mix(percent, float(percent - 0.5), phase) * 2.0;
     
     out.perVertexColor = (int(isVertexColored) == 0) ? float4(mix(s, e, age)) : float4(sColor);
@@ -260,7 +261,8 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     float dist = sqrt(temp.x * temp.x + temp.y * temp.y + temp.z * temp.z);
 
     out.position = vp * in_position;
-    out.pointSize = (64.0 * sColor[3] * live) * (100.0/dist);
+    
+    out.pointSize = (64.0 * sColor[3]/mColor[3] * live) * (100.0/dist);
     
     return out;
 }
@@ -287,9 +289,10 @@ vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0)
     float phase = (percent > 0.5);
     
     float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
+    float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
     
     float4 s = mix(startColor, mColor, phase);
-    float4 e = mix(mColor, eColor, phase);
+    float4 e = mix(midColor, eColor, phase);
     float age = mix(percent, float(percent - 0.5), phase) * 2.0;
     
     out.perVertexColor = (int(isVertexColored) == 0) ? float4(mix(s, e, age)) : float4(sColor);

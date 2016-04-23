@@ -402,6 +402,9 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     
     Vector2 viewport = smgr->getViewPort();
     float viewRatio = viewport.x/2048.0;
+    
+    float fovRatio = (smgr->getActiveCamera()->getFOVInRadians() * 180.0f/PI)/35.0;
+    
     float* sColor = new float[4];
     Vector3 vColor = sgNode->props.vertexColor;
     sColor[0] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.x : pNode->startColor.x;
@@ -413,7 +416,7 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     mColor[0] = pNode->midColor.x;
     mColor[1] = pNode->midColor.y;
     mColor[2] = pNode->midColor.z;
-    mColor[3] = pNode->midColor.w;
+    mColor[3] = fovRatio;
 
     float* eColor = new float[4];
     eColor[0] = pNode->endColor.x;
