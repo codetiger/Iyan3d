@@ -3308,6 +3308,8 @@
 		25B5B1651BE33EFB00AC2525 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		25B5B1661BE33EFB00AC2525 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		25B5B1671BE33EFB00AC2525 /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
+		25BA85E61CCB3E5600E68A58 /* btBulletCollisionCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btBulletCollisionCommon.h; path = bullet3/src/btBulletCollisionCommon.h; sourceTree = "<group>"; };
+		25BA85E71CCB3E5600E68A58 /* btBulletDynamicsCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btBulletDynamicsCommon.h; path = bullet3/src/btBulletDynamicsCommon.h; sourceTree = "<group>"; };
 		25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Splash-6+1.png"; path = "Resources/imgs/Splash-6+1.png"; sourceTree = "<group>"; };
 		25BBCB101C203D6A0039DA5C /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/imgs/Splash.png; sourceTree = "<group>"; };
 		25BC0FAE1C47666F00721B5E /* SGOBJManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGOBJManager.h; sourceTree = "<group>"; };
@@ -5591,6 +5593,8 @@
 		25DE0E741CAA8C390076F669 /* BulletPhysics */ = {
 			isa = PBXGroup;
 			children = (
+				25BA85E61CCB3E5600E68A58 /* btBulletCollisionCommon.h */,
+				25BA85E71CCB3E5600E68A58 /* btBulletDynamicsCommon.h */,
 				25DE11231CAA91310076F669 /* BulletSoftBody */,
 				25DE0ED91CAA8D6D0076F669 /* BulletCollision */,
 				25DE0FC21CAA8D6D0076F669 /* BulletDynamics */,
