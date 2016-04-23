@@ -3121,7 +3121,9 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]->props.isPhysicsEnabled) {
         editorScene->enableDirectionIndicator();
+        editorScene->updater->updateControlsOrientaion();
     }
+    [_popoverController dismissPopoverAnimated:YES];
 }
 
 - (void) syncSceneWithPhysicsWorld

@@ -39,11 +39,9 @@ void OGLES2RenderManager::Initialize(){
     glEnable(GL_BLEND);
 }
 
-void OGLES2RenderManager::changeDepthState(GLenum lDepthState) {
-    if(lDepthState != depthState) {
-        depthState = lDepthState;
-        glDepthFunc(depthState);
-    }
+Vector2 OGLES2RenderManager::getViewPort()
+{
+    return Vector2(viewportWidth, viewportHeight);
 }
 
 void OGLES2RenderManager::changeViewport(int width, int height) {
@@ -51,23 +49,6 @@ void OGLES2RenderManager::changeViewport(int width, int height) {
         viewportHeight = height;
         viewportWidth = width;
         glViewport(0, 0, viewportWidth, viewportHeight);
-    }
-}
-
-void OGLES2RenderManager::changeDepthTest(bool enable) {
-    if(isDepthTestEnabled != enable) {
-        isDepthTestEnabled = enable;
-        if(isDepthTestEnabled)
-            glEnable(GL_DEPTH_TEST);
-        else
-            glDisable(GL_DEPTH_TEST);
-    }
-}
-
-void OGLES2RenderManager::changeBlendFunc(GLenum lDfactor) {
-    if(dFactor != lDfactor) {
-        dFactor = lDfactor;
-        glBlendFunc(GL_SRC_ALPHA, dFactor);
     }
 }
 
@@ -128,7 +109,7 @@ void OGLES2RenderManager::endDisplay(){
 }
 
 void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex){
-    changeDepthState(GL_LEQUAL);
+    glDepthFunc(GL_LEQUAL);
     if(!node || node->type <= NODE_TYPE_CAMERA)
         return;
     Mesh *nodeMes;
@@ -155,17 +136,19 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     if(node->instanceCount)
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, node->instanceCount + 1);
     else if (node->type == NODE_TYPE_PARTICLES) {
-        if(!isRTT)
+        if(!isRTT) {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-        glDepthMask(GL_FALSE);
+            glDepthMask(GL_FALSE);
+        }
         unsigned int indicesSize = nodeMes->getIndicesCount(meshBufferIndex);
         shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
         if(nodeMes)
             drawElements(getOGLDrawMode(DRAW_MODE_POINTS),(GLsizei)indicesSize,indicesDataType, 0, 0);
 
-        glDepthMask(GL_TRUE);
-        if(!isRTT)
+        if(!isRTT) {
+            glDepthMask(GL_TRUE);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
     } else
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, 0);
     
@@ -278,7 +261,7 @@ void OGLES2RenderManager::clearDepthBuffer()
 }
 void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
-  changeDepthState(GL_ALWAYS);
+  glDepthFunc(GL_ALWAYS);
   // to flip horizontally for opengl textures
   Vector2 bottomRight = Helper::screenToOpenglCoords(originCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
   Vector2 upperLeft = Helper::screenToOpenglCoords(endCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
@@ -362,17 +345,17 @@ bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
     glEnable(GL_BLEND);
-    changeBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     changeClearColor(color);
-    
+
     GLbitfield mask = 0;
     if(clearColorBuf)
         mask |= GL_COLOR_BUFFER_BIT;
     if(clearDepthBuf)
         mask |= GL_DEPTH_BUFFER_BIT;
     glClear(mask);
-    changeDepthTest(true);
-    changeDepthState(GL_LEQUAL);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     return true;
 }
 
@@ -472,9 +455,9 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
         return;
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     
-    if(updateBothBuffers)
-        OGLNode->IndexBufLocations.clear();
-    OGLNode->vertexBufLocations.clear();
+//    if(updateBothBuffers)
+//        OGLNode->IndexBufLocations.clear();
+//    OGLNode->vertexBufLocations.clear();
     
     u16 meshBufferCount = 1;
     if(node->type == NODE_TYPE_MORPH)
@@ -490,8 +473,15 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
     
     for(int i = 0; i < meshBufferCount;i++) {
         createVertexBuffer(node,i,meshType);
-        if(updateBothBuffers)
-            OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,i));
+        if(updateBothBuffers) {
+            if(OGLNode->IndexBufLocations.size() > i) {
+                size_t indexCount =  (dynamic_pointer_cast<MeshNode>(node))->meshCache->getIndicesCount(i);
+                GLsizeiptr size = sizeof(unsigned short) * indexCount;
+                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  (dynamic_pointer_cast<MeshNode>(node))->meshCache->getIndicesArray(i), GL_STATIC_DRAW, OGLNode->IndexBufLocations[i]);
+                std::replace(OGLNode->IndexBufLocations.begin(), OGLNode->IndexBufLocations.end(), OGLNode->IndexBufLocations[i], indexBuf);
+            } else
+                OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,i));
+        }
     }
 }
 
@@ -519,14 +509,20 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuf
   unsigned int vertexBufLoc = 0;
     
     //TODO: implement functionality for CPU_SKIN type
-    
+    shared_ptr<OGLNodeData> nData = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     if(meshType == MESH_TYPE_LITE){
-        vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW);
+        if(nData->vertexBufLocations.size() > meshBufferIndex) {
+            vertexBufLoc = updateBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW, nData->vertexBufLocations[meshBufferIndex]);
+            std::replace(nData->vertexBufLocations.begin(), nData->vertexBufLocations.end(), nData->vertexBufLocations[meshBufferIndex], vertexBufLoc);
+        } else {
+            vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW);
+            nData->vertexBufLocations.push_back(vertexBufLoc);
+        }
     }else{
         vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getHeavyVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW);
+        nData->vertexBufLocations.push_back(vertexBufLoc);
     }
     
-        (dynamic_pointer_cast<OGLNodeData>(node->nodeData))->vertexBufLocations.push_back(vertexBufLoc);
 
 }
 
@@ -550,9 +546,12 @@ u_int32_t OGLES2RenderManager::bindIndexBuffer(shared_ptr<Node> node, int meshBu
 
     size_t indexCount =  nodeMes->getIndicesCount(meshBufferIndex);
     GLsizeiptr size;
-    
+    shared_ptr<OGLNodeData> nData = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     size = sizeof(unsigned short) * indexCount;
-    return createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER , size , nodeMes->getIndicesArray(meshBufferIndex) , GL_STATIC_DRAW);
+    if(nData->IndexBufLocations.size() > meshBufferIndex)
+        return updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size, nodeMes->getIndicesArray(meshBufferIndex), GL_STATIC_DRAW, nData->IndexBufLocations[meshBufferIndex]);
+    else
+        return createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER , size , nodeMes->getIndicesArray(meshBufferIndex) , GL_STATIC_DRAW);
 }
 
 u_int32_t OGLES2RenderManager::createAndBindBuffer(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage)

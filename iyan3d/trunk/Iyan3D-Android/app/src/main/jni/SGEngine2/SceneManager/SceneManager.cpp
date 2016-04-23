@@ -48,6 +48,13 @@ SceneManager::~SceneManager(){
         delete renderMan;
 }
 
+Vector2 SceneManager::getViewPort()
+{
+    if(renderMan)
+        return renderMan->getViewPort();
+    return Vector2(0.0, 0.0);
+}
+
 void SceneManager::RemoveAllTextures()
 {
     for(int i = 0; i < textures.size(); i++){
@@ -342,6 +349,7 @@ void SceneManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endC
     int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
     setPropertyValue(material,"texture1",&textureValue,DATA_TEXTURE_2D,1,true,0,NOT_EXISTS,texture);
     renderMan->draw2DImage(texture,originCoord,endCoord,isBGImage,material,isRTT);
+    
 }
 void SceneManager::draw3DLine(Vector3 start , Vector3 end , Vector3 color , Material *material,int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex)
 {

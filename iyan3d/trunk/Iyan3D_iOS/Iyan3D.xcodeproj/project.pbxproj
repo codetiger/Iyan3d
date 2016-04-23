@@ -945,6 +945,8 @@
 		25B5B16F1BE33EFB00AC2525 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 25B5B1641BE33EFB00AC2525 /* zip.c */; };
 		25B5B1701BE33EFB00AC2525 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25B5B1671BE33EFB00AC2525 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		25B5B1711BE33EFB00AC2525 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25B5B1671BE33EFB00AC2525 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		25BA85E91CCB81F500E68A58 /* particlesRTT.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */; };
+		25BA85EA1CCB81F500E68A58 /* particlesRTT.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */; };
 		25BBCB111C203D6A0039DA5C /* Splash-6+1.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */; };
 		25BBCB121C203D6A0039DA5C /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB101C203D6A0039DA5C /* Splash.png */; };
 		25BBCB131C203F1D0039DA5C /* Splash-6+1.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */; };
@@ -3310,6 +3312,7 @@
 		25B5B1671BE33EFB00AC2525 /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
 		25BA85E61CCB3E5600E68A58 /* btBulletCollisionCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btBulletCollisionCommon.h; path = bullet3/src/btBulletCollisionCommon.h; sourceTree = "<group>"; };
 		25BA85E71CCB3E5600E68A58 /* btBulletDynamicsCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btBulletDynamicsCommon.h; path = bullet3/src/btBulletDynamicsCommon.h; sourceTree = "<group>"; };
+		25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = particlesRTT.vsh; path = Resources/shaders/particlesRTT.vsh; sourceTree = "<group>"; };
 		25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Splash-6+1.png"; path = "Resources/imgs/Splash-6+1.png"; sourceTree = "<group>"; };
 		25BBCB101C203D6A0039DA5C /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/imgs/Splash.png; sourceTree = "<group>"; };
 		25BC0FAE1C47666F00721B5E /* SGOBJManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGOBJManager.h; sourceTree = "<group>"; };
@@ -6846,6 +6849,7 @@
 		C82EA4BD187EAACE00A8468A /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */,
 				259EE1461BDE081200C99784 /* commonL2.fsh */,
 				259EE1471BDE081200C99784 /* commonL3.fsh */,
 				259EE1481BDE081200C99784 /* commonL4.fsh */,
@@ -7238,6 +7242,7 @@
 				7FC527621B6F96FF00C5D26D /* Mail-phone@2x.png in Resources */,
 				25EC6CD21C7F39DD002CF5D2 /* wm106.png in Resources */,
 				7FC900C51A0A01470051B941 /* add-frame-phone.png in Resources */,
+				25BA85E91CCB81F500E68A58 /* particlesRTT.vsh in Resources */,
 				25EC6C5C1C7F39DD002CF5D2 /* wm47.png in Resources */,
 				3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCE1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
@@ -8143,6 +8148,7 @@
 				7F7D5A391B8CA54B00E6BA86 /* googlelogin_Iphone.png in Resources */,
 				25EC6CD31C7F39DD002CF5D2 /* wm106.png in Resources */,
 				7F7D5A3A1B8CA54B00E6BA86 /* googlelogin_Iphone@2x.png in Resources */,
+				25BA85EA1CCB81F500E68A58 /* particlesRTT.vsh in Resources */,
 				25EC6C5D1C7F39DD002CF5D2 /* wm47.png in Resources */,
 				3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCF1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,

@@ -49,6 +49,8 @@ public:
     SceneManager(float width,float height,float screenScale,DEVICE_TYPE type,string bundlePath,void *renderView = NULL);
     ~SceneManager();
     void initRenderManager(DEVICE_TYPE type);
+    
+    Vector2 getViewPort();
     void RemoveNode(shared_ptr<Node> node);
     void RemoveAllTextures();
     void RemoveTexture(Texture *texture);

@@ -16,6 +16,7 @@ varying vec4 color;
 
 void main() {
     
+    
     float percent = vertNormal.x/float(props.x);
     float phase = float(percent > 0.5);
     
@@ -26,7 +27,7 @@ void main() {
     
     color = startColor;
     if(int(isVertexColored) == 0)
-        color = mix(s, e, age);    
+        color = mix(s, e, age);
     
     float live = float(vertNormal.x > 0.0 && vertNormal.x <= float(props.x));
     
@@ -34,5 +35,5 @@ void main() {
     float dist = sqrt(temp.x * temp.x + temp.y * temp.y + temp.z * temp.z);
     
     gl_Position = vp * vec4(vertPosition, 1.0);
-    gl_PointSize = (64.0 * startColor.w * live) * (100.0/dist);
+    gl_PointSize = (8.0 * live) * (100.0/dist);
 }

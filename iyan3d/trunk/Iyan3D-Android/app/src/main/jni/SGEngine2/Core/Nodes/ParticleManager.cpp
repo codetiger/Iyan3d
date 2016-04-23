@@ -68,6 +68,11 @@ ParticleManager::~ParticleManager()
 
 void ParticleManager::update() {
     
+    
+}
+
+bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
+{
     for (int i = 0; i < emissionSpeed/2; ++i) {
         Particle *p = pool->reuseDeadParticle();
         if(p) {
@@ -92,15 +97,11 @@ void ParticleManager::update() {
         if(p->age > maxLife)
             p->isLive = false;
         
-            p->velocity.y += gravity;
+        p->velocity.y += gravity;
         
         p = pool->getNextLiveParticle();
     }
-    
-}
 
-bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
-{
     bool meshCacheCreated = false;
     
     if(this->meshCache == NULL) {

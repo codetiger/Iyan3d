@@ -259,6 +259,18 @@ void MetalRenderManager::useMaterialToRender(Material *mat)
         PrepareDisplay(0,0,true,true,false,Vector4(1.0,1.0,1.0,1.0));
     [RenderCMDBuffer setRenderPipelineState:((MTLMaterial*)mat)->PipelineState];
 }
+
+Vector2 MetalRenderManager::getViewPort()
+{
+    return Vector2(viewportWidth, viewportHeight);
+}
+
+void MetalRenderManager::changeViewport(int width, int height)
+{
+    viewportWidth = width;
+    viewportHeight = height;
+}
+
 bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, int nodeIndex){
     if(node->type <= NODE_TYPE_CAMERA)
         return false;
@@ -299,18 +311,23 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
     unsigned int indicesCount = nodeMes->getIndicesCount(meshBufferIndex);
     id<MTLBuffer> buf = [MTLNode->indexBuffers objectAtIndex:meshBufferIndex];
     if (node->type == NODE_TYPE_PARTICLES) {
-        MTLDepthStencilDescriptor *depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
-        depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
-        depthStateDesc.depthWriteEnabled = NO;
-        _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
-        [RenderCMDBuffer setDepthStencilState:_depthState];
+        MTLDepthStencilDescriptor *depthStateDesc;
+        if(!isRTT) {
+            depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
+            depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
+            depthStateDesc.depthWriteEnabled = NO;
+            _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+            [RenderCMDBuffer setDepthStencilState:_depthState];
+        }
         
         drawPrimitives(getMTLDrawMode(DRAW_MODE_POINTS), indicesCount,indexType, buf, node->instanceCount);
         
-        depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
-        depthStateDesc.depthWriteEnabled = YES;
-        _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
-        [RenderCMDBuffer setDepthStencilState:_depthState];
+        if(!isRTT) {
+            depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
+            depthStateDesc.depthWriteEnabled = YES;
+            _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+            [RenderCMDBuffer setDepthStencilState:_depthState];
+        }
 
     } else
         drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf,node->instanceCount);
@@ -323,6 +340,7 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
     if(!isCmdBufferCommited) // Temporary try for perfection
         endDisplay();
     isCmdBufferCommited = false;
+    changeViewport(width, height);
     CMDBuffer = [_commandQueue commandBuffer];
     drawable = currentDrawable();
     if(drawable == nil)
@@ -499,7 +517,7 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
     
     if(renderTexture){
         endEncoding();
-        
+        changeViewport(renderTexture->width, renderTexture->height);
         _renderPassDescriptor = nil;
         _renderPassDescriptor = [MTLRenderPassDescriptor new];
         int sampleCount = 1,colorTextureType = MTLTextureType2D;

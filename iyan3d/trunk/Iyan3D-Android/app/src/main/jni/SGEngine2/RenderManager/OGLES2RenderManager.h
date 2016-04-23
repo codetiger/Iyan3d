@@ -48,13 +48,10 @@ public:
     Vector4 clearColor;
     GLenum depthState;
     GLenum dFactor;
-    int viewportWidth, viewportHeight;
     bool isDepthTestEnabled;
 
-    void changeDepthState(GLenum lDepthState);
+    Vector2 getViewPort();
     void changeViewport(int width, int height);
-    void changeDepthTest(bool enable);
-    void changeBlendFunc(GLenum lDfactor);
     void changeClearColor(Vector4 lClearColor);
     
     void Initialize();

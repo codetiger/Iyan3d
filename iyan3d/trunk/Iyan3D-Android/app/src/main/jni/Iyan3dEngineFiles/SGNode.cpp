@@ -1219,23 +1219,16 @@ void SGNode::createSGJoints()
     }
 }
 void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame) {
-    if(type != NODE_PARTICLES && type != NODE_LIGHT)
+    if(type != NODE_LIGHT)
         return;
     Vector3 lightPos = node->getAbsolutePosition();
     Vector3 camPos = viewCamera->getPosition();
     Vector3 rotDir = (camPos - lightPos).normalize();
     Quaternion rotQ;
-    if(type == NODE_PARTICLES)
-        rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,1.0,0.0));
-    else
-        rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,0.0,1.0));
+    rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,0.0,1.0));
 
-    if(type != NODE_PARTICLES)
-        setRotation(rotQ, currentFrame);
+    setRotation(rotQ, currentFrame);
     Vector3 rotEuler;rotQ.toEuler(rotEuler);
 
-    if(type == NODE_PARTICLES)
-        dynamic_pointer_cast<ParticleManager>(node)->setParticleRotation(rotEuler);
-    else
-        node->setRotationInDegrees(rotEuler * RADTODEG);
+    node->setRotationInDegrees(rotEuler * RADTODEG);
 }

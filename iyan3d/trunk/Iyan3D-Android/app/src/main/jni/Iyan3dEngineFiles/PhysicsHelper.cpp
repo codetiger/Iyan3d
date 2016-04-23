@@ -84,6 +84,7 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, PHYSICS_TYPE pT
         default:
             break;
     }
+    sgNode->node->updateBoundingBox();
     BoundingBox b = sgNode->node->getBoundingBox();
     double volume = b.getXExtend() * b.getYExtend() * b.getZExtend();
     sgNode->props.weight = volume * density;
@@ -225,7 +226,7 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode) {
     
     btRigidBody *body = new btRigidBody(bodyCI);
     body->setUserPointer((void*)sgNode);
-    body->setLinearFactor(btVector3(1,1,0));
+    body->setLinearFactor(btVector3(1,1,1));
     if(sgNode->props.forceMagnitude > 0.0) {
         Vector3 v = sgNode->props.forceDirection * sgNode->props.forceMagnitude;
         btVector3 velocity = btVector3(v.x, v.y, v.z);

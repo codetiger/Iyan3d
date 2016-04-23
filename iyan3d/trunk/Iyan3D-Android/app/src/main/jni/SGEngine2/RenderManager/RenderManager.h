@@ -40,8 +40,13 @@ public:
     virtual ~RenderManager(){
         
     }
-        
+    
+    int viewportWidth, viewportHeight;
+    
     virtual void Initialize() = 0;
+    
+    virtual Vector2 getViewPort() = 0;
+    virtual void changeViewport(int width, int height) = 0;
     virtual bool PrepareNode(shared_ptr<Node> node,int meshBufferIndex,int nodeIndex = 0) = 0;
     virtual void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0) = 0;
     virtual void setActiveCamera(shared_ptr<CameraNode> camera) = 0;

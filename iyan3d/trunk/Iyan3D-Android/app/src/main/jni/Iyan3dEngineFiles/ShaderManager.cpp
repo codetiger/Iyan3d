@@ -28,6 +28,7 @@ float prevShadow = -1.0;
 float lightsCount = -1.0;
 Vector3 prevCamPos = Vector3(-9999.0);
 
+bool ShaderManager::renderingPreview = false;
 bool ShaderManager::isRenderingDepthPass = false;
 bool ShaderManager::shadowsOff = false;
 bool ShaderManager::lightChanged = true;
@@ -377,7 +378,11 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
     shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
     //pNode->sortParticles(smgr->getActiveCamera()->getPosition());
-    bool meshCacheCreated = pNode->updateParticles((sgNode->props.isSelected || isRendering), smgr->getActiveCamera()->getPosition());
+    
+    bool meshCacheCreated = false;
+    if(!renderingPreview) {
+        meshCacheCreated = pNode->updateParticles((sgNode->props.isSelected || isRendering), smgr->getActiveCamera()->getPosition());
+    }
     if(!meshCacheCreated) {
         pNode->shouldUpdateMesh = true;
         smgr->updateVertexAndIndexBuffers(sgNode->node, MESH_TYPE_LITE);
@@ -386,21 +391,23 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     Mat4 model = sgNode->node->getModelMatrix();
     Mat4 vp = projMat * viewMat;
 
-    float distanceFromCam = smgr->getActiveCamera()->getPosition().getDistanceFrom(pNode->getAbsolutePosition());
+    Vector3 camPos = smgr->getActiveCamera()->getAbsolutePosition();
     
     float* particleProps = new float[4];
     Vector4 props = pNode->getParticleProps();
     particleProps[0] = props.x;
-    particleProps[1] = props.y;
-    particleProps[2] = props.z;
-    particleProps[3] = distanceFromCam;
+    particleProps[1] = camPos.x;
+    particleProps[2] = camPos.y;
+    particleProps[3] = camPos.z;
     
+    Vector2 viewport = smgr->getViewPort();
+    float viewRatio = viewport.x/2048.0;
     float* sColor = new float[4];
     Vector3 vColor = sgNode->props.vertexColor;
     sColor[0] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.x : pNode->startColor.x;
     sColor[1] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.y : pNode->startColor.y;
     sColor[2] = (sgNode->props.perVertexColor) ? sgNode->props.vertexColor.z : pNode->startColor.z;
-    sColor[3] = (sgNode->props.perVertexColor) ? 1.0 : pNode->startColor.w;
+    sColor[3] = viewRatio;
 
     float* mColor = new float[4];
     mColor[0] = pNode->midColor.x;

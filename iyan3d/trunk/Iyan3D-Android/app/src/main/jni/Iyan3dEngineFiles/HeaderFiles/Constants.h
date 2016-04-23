@@ -105,7 +105,7 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5", "vertexColorSkin.vert" , "commonL5.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
     {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
-    {"SHADER_PARTICLES_RTT", "particles.vsh","particles.fsh"}
+    {"SHADER_PARTICLES_RTT", "particlesRTT.vsh","particles.fsh"}
 };
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
 {

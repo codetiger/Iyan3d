@@ -308,7 +308,7 @@ void RenderHelper::postRTTDrawCall()
     if(renderingScene->previewTexture && (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)) {
         movePreviewToCorner();
         Vector4 previewLayout = renderingScene->getCameraPreviewLayout();
-        smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x,previewLayout.y),Vector2(previewLayout.z,previewLayout.w), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
+        smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x, previewLayout.y),Vector2(previewLayout.z, previewLayout.w), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
     }
 }
 
@@ -350,6 +350,7 @@ void RenderHelper::drawCameraPreview()
     if(!renderingScene || !smgr || renderingScene->selectedNodeIds.size() > 0)
         return;
     
+    ShaderManager::renderingPreview = true;
     bool isLightOn = ShaderManager::sceneLighting;
     if(!isLightOn)
         renderingScene->setLightingOn();
@@ -361,8 +362,6 @@ void RenderHelper::drawCameraPreview()
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
-        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
 
         if(!(renderingScene->nodes[i]->props.isVisible))
             renderingScene->nodes[i]->node->setVisible(false);
@@ -379,8 +378,6 @@ void RenderHelper::drawCameraPreview()
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
-        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
         
         if(!(renderingScene->nodes[i]->props.isVisible))
             renderingScene->nodes[i]->node->setVisible(true);
@@ -388,6 +385,7 @@ void RenderHelper::drawCameraPreview()
         if(!isLightOn)
             renderingScene->setLightingOff();
     }
+    ShaderManager::renderingPreview = false;
     
 }
 
