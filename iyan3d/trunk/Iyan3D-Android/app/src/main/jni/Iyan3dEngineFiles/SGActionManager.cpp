@@ -107,7 +107,7 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
             if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
                 success = true;
                 Quaternion r = Quaternion(outputValue * DEGTORAD);
-                actionScene->getParentNode()->setRotationInDegrees(MathHelper::getEulerRotation(r));
+                actionScene->getParentNode()->setRotationInDegrees(MathHelper::getEulerRotation(r), true);
                 break;
             } else if(actionScene->isJointSelected){
                 success = true;
@@ -119,7 +119,7 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
                      actionScene->directionIndicator->setRotationOnNode(r);
                  else {
                      selectedNode->setRotation(r, actionScene->currentFrame);
-                     selectedNode->setRotationOnNode(r);
+                     selectedNode->setRotationOnNode(r, true);
                  }
                 break;
             }
@@ -183,7 +183,7 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
         Vector3 jointPos = selectedJoint->jointNode->getAbsoluteTransformation().getTranslation();
         Quaternion rot = Quaternion(MathHelper::getRelativeParentRotation(selectedJoint->jointNode,(jointPos + outputValue)) * DEGTORAD);
         selectedNode->joints[parent->getID()]->setRotation(rot, actionScene->currentFrame);
-        selectedNode->joints[parent->getID()]->setRotationOnNode(rot);
+        selectedNode->joints[parent->getID()]->setRotationOnNode(rot, true);
         
         if(actionScene->getMirrorState() == MIRROR_ON){
             int mirrorJointId = BoneLimitsHelper::getMirrorJointId(actionScene->selectedJointId);
@@ -192,7 +192,7 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
                 shared_ptr<JointNode> mirrorNode = (dynamic_pointer_cast<AnimatedMeshNode>(selectedNode->node))->getJointNode(mirrorJointId);
                 rot = Quaternion(selectedNode->joints[selectedJoint->jointNode->getParent()->getID()]->jointNode->getRotationInDegrees()*Vector3(1.0,-1.0,-1.0)*DEGTORAD);
                 selectedNode->joints[mirrorNode->getParent()->getID()]->setRotation(rot,actionScene->currentFrame);
-                selectedNode->joints[mirrorNode->getParent()->getID()]->setRotationOnNode(rot);
+                selectedNode->joints[mirrorNode->getParent()->getID()]->setRotationOnNode(rot, true);
             }
         }
     }
@@ -205,13 +205,13 @@ void SGActionManager::rotateJoint(Vector3 outputValue)
     SGJoint * selectedJoint = actionScene->selectedJoint;
 
     selectedJoint->setRotation(Quaternion(outputValue*DEGTORAD), actionScene->currentFrame);
-    selectedJoint->setRotationOnNode(Quaternion(outputValue*DEGTORAD));
+    selectedJoint->setRotationOnNode(Quaternion(outputValue*DEGTORAD), true);
     if(actionScene->getMirrorState() == MIRROR_ON){
         int mirrorJointId = BoneLimitsHelper::getMirrorJointId(actionScene->selectedJointId);
         if(mirrorJointId != -1) {
             Quaternion rot = Quaternion(outputValue*Vector3(1.0,-1.0,-1.0)*DEGTORAD);
             selectedNode->joints[mirrorJointId]->setRotation(rot, actionScene->currentFrame);
-            selectedNode->joints[mirrorJointId]->setRotationOnNode(rot);
+            selectedNode->joints[mirrorJointId]->setRotationOnNode(rot, true);
         }
     }
     // TODO For CPU Skin update mesh cache

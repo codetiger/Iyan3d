@@ -101,10 +101,10 @@ public:
     virtual ~Node();
     virtual void update() = 0;
     bool operator==(shared_ptr<Node> n);
-    void setRotationInRadians(Vector3 rotation);
-    void setRotationInDegrees(Vector3 rotation);
-    void setPosition(Vector3 position);
-    void setScale(Vector3 scale);
+    void setRotationInRadians(Vector3 rotation, bool updateBB = false);
+    void setRotationInDegrees(Vector3 rotation, bool updateBB = false);
+    void setPosition(Vector3 position, bool updateBB = false);
+    void setScale(Vector3 scale, bool updateBB = false);
     void setParent(shared_ptr<Node> parent);
     void setVisible(bool isVisible);
     Vector3 getAbsolutePosition();

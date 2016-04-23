@@ -71,15 +71,13 @@ void SGJoint::setRotation(Quaternion rotation, int frameId)
             rotationKeys[keyIndex].rotation = rotation;
     }
 }
-bool SGJoint::setRotationOnNode(Quaternion rotation)
+bool SGJoint::setRotationOnNode(Quaternion rotation, bool updateBB)
 {
     Vector3 eulerRotation;
     rotation.toEuler(eulerRotation);
     eulerRotation = eulerRotation * RADTODEG;
-//    if(jointNode->getRotationInDegrees() == eulerRotation)
-//        return false;
     
-    jointNode->setRotationInDegrees(eulerRotation);
+    jointNode->setRotationInDegrees(eulerRotation, updateBB);
     jointNode->updateAbsoluteTransformationOfChildren();
     return true;
 }

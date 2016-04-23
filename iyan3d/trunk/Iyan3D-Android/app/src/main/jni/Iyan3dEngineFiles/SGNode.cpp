@@ -646,12 +646,12 @@ void SGNode::setVisibility(bool isVisible, int frameId)
             visibilityKeys[keyIndex].visibility = isVisible;
     }
 }
-void SGNode::setPositionOnNode(Vector3 position)
+void SGNode::setPositionOnNode(Vector3 position, bool updateBB)
 {
     if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
         ShaderManager::lightChanged = true;
     
-    node->setPosition(position);
+    node->setPosition(position, updateBB);
     node->updateAbsoluteTransformation();
     
     if(type == NODE_RIG || type == NODE_TEXT_SKIN) {
@@ -660,17 +660,17 @@ void SGNode::setPositionOnNode(Vector3 position)
             rootJointNode->updateAbsoluteTransformationOfChildren();
     }
 }
-void SGNode::setRotationOnNode(Quaternion rotation)
+void SGNode::setRotationOnNode(Quaternion rotation, bool updateBB)
 {
-    node->setRotationInDegrees(MathHelper::getEulerRotation(rotation));
+    node->setRotationInDegrees(MathHelper::getEulerRotation(rotation), updateBB);
     node->updateAbsoluteTransformation();
     
     if(type == NODE_RIG || type == NODE_TEXT_SKIN)
         (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(0)->updateAbsoluteTransformationOfChildren();
 }
-void SGNode::setScaleOnNode(Vector3 scale)
+void SGNode::setScaleOnNode(Vector3 scale, bool updateBB)
 {
-    node->setScale(scale);
+    node->setScale(scale, updateBB);
     node->updateAbsoluteTransformation();
     
     if(type == NODE_RIG || type == NODE_TEXT_SKIN)
@@ -947,9 +947,9 @@ void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,
         global = global * delta;
         Quaternion local = global * MathHelper::getGlobalQuaternion(dynamic_pointer_cast<JointNode>(parent->getParent())).makeInverse();
         ;
-        parent->setRotationInDegrees(MathHelper::getEulerRotation(local));
+        parent->setRotationInDegrees(MathHelper::getEulerRotation(local), true);
         joints[parent->getID()]->setRotation(local,currentFrame);
-        joints[parent->getID()]->setRotationOnNode(local);
+        joints[parent->getID()]->setRotationOnNode(local, true);
         parent->updateAbsoluteTransformation();
         parent->updateAbsoluteTransformationOfChildren();
     }
@@ -987,9 +987,9 @@ void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame
             while(1){
                 Quaternion delta = Quaternion(Vector3(angleX,0.0,0.0) * DEGTORAD);
                 Quaternion local = delta * Quaternion(grandParent->getRotationInRadians());
-                grandParent->setRotationInDegrees(MathHelper::getEulerRotation(local));
+                grandParent->setRotationInDegrees(MathHelper::getEulerRotation(local), true);
                 joints[grandParent->getID()]->setRotation(local,currentFrame);
-                joints[grandParent->getID()]->setRotationOnNode(local);
+                joints[grandParent->getID()]->setRotationOnNode(local, true);
                 grandParent->updateAbsoluteTransformation();
                 grandParent->updateAbsoluteTransformationOfChildren();
                 parentTargetLength = target.getDistanceFrom(parent->getAbsolutePosition());

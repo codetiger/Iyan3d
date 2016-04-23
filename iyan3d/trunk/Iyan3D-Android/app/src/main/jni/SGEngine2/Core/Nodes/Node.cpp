@@ -111,21 +111,25 @@ void Node::setTexture(Texture *texture,int textureIndex){
         textureCount++;
     textures[textureIndex-1] = texture;
 }
-void Node::setRotationInDegrees(Vector3 rotation){
+void Node::setRotationInDegrees(Vector3 rotation, bool updateBB){
     this->rotation = Vector3(rotation.x * (PI/180.0),rotation.y * (PI/180.0),rotation.z * (PI/180.0));
-    FlagTransformationToChildren();
+    if(updateBB)
+        FlagTransformationToChildren();
 }
-void Node::setRotationInRadians(Vector3 rotation){
+void Node::setRotationInRadians(Vector3 rotation, bool updateBB){
     this->rotation = rotation;
-    FlagTransformationToChildren();
+    if(updateBB)
+        FlagTransformationToChildren();
 }
-void Node::setPosition(Vector3 position){
+void Node::setPosition(Vector3 position, bool updateBB){
     this->position = position;
-    FlagTransformationToChildren();
+    if(updateBB)
+        FlagTransformationToChildren();
 }
-void Node::setScale(Vector3 scale){
+void Node::setScale(Vector3 scale, bool updateBB){
     this->scale = scale;
-    FlagTransformationToChildren();
+    if(updateBB)
+        FlagTransformationToChildren();
 }
 Vector3 Node::getRotationInRadians(){
     return rotation;

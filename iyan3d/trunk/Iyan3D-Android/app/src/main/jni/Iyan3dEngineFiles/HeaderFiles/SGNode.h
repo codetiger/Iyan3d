@@ -82,9 +82,9 @@ public:
     void setScale(Vector3 scale, int frameId);
     void setVisibility(bool isVisible, int frameId);
 
-    void setPositionOnNode(Vector3 position);
-    void setRotationOnNode(Quaternion rotation);
-    void setScaleOnNode(Vector3 scale);
+    void setPositionOnNode(Vector3 position, bool updateBB = false);
+    void setRotationOnNode(Quaternion rotation, bool updateBB = false);
+    void setScaleOnNode(Vector3 scale, bool updateBB = false);
     void setVisibilityOnNode(bool visibility);
     void setInitialKeyValues(int actionType);
     void CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,int currentFrame);
