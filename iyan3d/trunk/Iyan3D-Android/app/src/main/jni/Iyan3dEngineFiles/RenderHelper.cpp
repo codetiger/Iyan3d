@@ -617,6 +617,9 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     setControlsVisibility(false);
     setJointSpheresVisibility(false);
     renderingScene->rotationCircle->node->setVisible(false);
+    renderingScene->greenGrid->node->setVisible(false);
+    renderingScene->blueGrid->node->setVisible(false);
+    renderingScene->redGrid->node->setVisible(false);
     
     int selectedObjectId;
     if(renderingScene->selectedNodeId != NOT_SELECTED) {
@@ -678,6 +681,10 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
     
+    renderingScene->greenGrid->node->setVisible(true);
+    renderingScene->blueGrid->node->setVisible(true);
+    renderingScene->redGrid->node->setVisible(true);
+
     ShaderManager::shadowsOff = isShadowsOff;
     
     if(renderingType != shaderType)
