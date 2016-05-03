@@ -271,7 +271,7 @@ void MetalRenderManager::changeViewport(int width, int height)
     viewportHeight = height;
 }
 
-bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, int nodeIndex){
+bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex){
     if(node->type <= NODE_TYPE_CAMERA)
         return false;
     
@@ -299,12 +299,8 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
-    } else {
-        if(node->shouldUpdateMesh && (dynamic_pointer_cast<MeshNode>(node))->meshCache)
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
-        else
+    } else
             nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
-    }
 
     
     MTLIndexType indexType = MTLIndexTypeUInt16;
@@ -603,12 +599,8 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
             meshType = MESH_TYPE_LITE;
         }
-    } else {
-        if(node->shouldUpdateMesh && (dynamic_pointer_cast<MeshNode>(node))->meshCache)
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
-        else
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
-    }
+    } else
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
 
     for (int i = 0; i < nodeMes->getMeshBufferCount(); i++) {
         createVertexBuffer(node,i,meshType);
@@ -648,12 +640,8 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
                 nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
                 meshType = MESH_TYPE_LITE;
             }
-        } else {
-            if(node->shouldUpdateMesh && (dynamic_pointer_cast<MeshNode>(node))->meshCache)
-                nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
-            else
-                nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
-        }
+        } else
+            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
     
         id<MTLBuffer> buf;
     

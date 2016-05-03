@@ -72,7 +72,8 @@ void SceneManager::setDisplayResolution(int width,int height){
 
 void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #ifndef UBUNTU
-    renderMan->createVertexAndIndexBuffers(node,meshType);
+    if(device == METAL)
+        renderMan->createVertexAndIndexBuffers(node,meshType);
 #endif
     nodes.push_back(node);
 }
@@ -80,10 +81,11 @@ void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType)
 {
 #ifndef UBUNTU
-    renderMan->createVertexAndIndexBuffers(node,meshType, true);
+    if(device == METAL)
+        renderMan->createVertexAndIndexBuffers(node,meshType, true);
     if(device == OPENGLES2 && node->type == NODE_TYPE_PARTICLES) {
-        for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->meshCache->getMeshBufferCount(); i++)
-            ((OGLES2RenderManager*)renderMan)->bindBufferAndAttributes(node, i);
+        for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount(); i++)
+            ((OGLES2RenderManager*)renderMan)->updateVAO(node, true, false, i);
     }
 #endif
 
@@ -192,8 +194,11 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
     nodes[index]->update();
     Mesh* meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh();
     
+    if(nodes[index]->drawMode == DRAW_MODE_LINES && isRTT)
+        return;
+    
     for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {
-        if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, index))
+        if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index))
             return;
         ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
         renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
@@ -286,6 +291,7 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh,string callback
     node->callbackFuncName = callbackFuncName;
     if(node->mesh)
     	node->mesh->Commit();
+    node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
 }
@@ -296,6 +302,7 @@ shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMe
     node->needsUV1 = true;
     node->callbackFuncName = callbackFuncName;
     node->mesh->Commit();
+    node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
 }
@@ -309,6 +316,7 @@ shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh,str
     node->callbackFuncName = callBackFuncName;
     if(node->mesh)
         node->mesh->Commit();
+    node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
 }

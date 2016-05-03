@@ -21,6 +21,7 @@
 class MTLNodeData:public APIData{
 
 public:
+    bool VAOCreated;
     NSMutableArray *indexBuffers;
     NSMutableArray *VertexBuffers;
     MTLNodeData();

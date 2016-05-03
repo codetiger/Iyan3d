@@ -11,8 +11,13 @@
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
-#import "Vector3.h"
 #import <FPPopoverController.h>
+
+#ifdef OPTIMGLKM
+#import "Vector3GLK.h"
+#else
+#import "Vector3.h"
+#endif
 
 @protocol ObjSliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;

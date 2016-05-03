@@ -21,6 +21,8 @@ MTLNodeData::~MTLNodeData(){
         [indexBuffers removeAllObjects];
         indexBuffers = nil;
     }
+    
+    VAOCreated = false;
 }
 shared_ptr<void> initMetalNodeData(){
     return make_shared<MTLNodeData>();

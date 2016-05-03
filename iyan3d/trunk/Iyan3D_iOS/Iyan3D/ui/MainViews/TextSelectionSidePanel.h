@@ -15,12 +15,17 @@
 #import "AppHelper.h"
 #import "GetPixelDemo.h"
 #import "TextFrameCell.h"
-#import "Vector3.h"
 #import <CoreText/CoreText.h>
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
 #import "GAI.h"
+
+#ifdef OPTIMGLKM
+#import "Vector3GLK.h"
+#else
+#import "Vector3.h"
+#endif
 
 
 @protocol TextSelectionDelegate

@@ -12,21 +12,21 @@
 #include "../opengl.h"
 #endif
 
-std::map< string, float > transparencies;
-std::map< string, float >::iterator transIt;
-
-std::map< string, float > reflections;
-std::map< string, float >::iterator reflectIt;
-
-std::map< string, float > isVColored;
-std::map< string, float >::iterator isVColorIt;
-
-std::map< string, int > nodesLighting;
-std::map< string, int >::iterator lightingIt;
-
-float prevShadow = -1.0;
-float lightsCount = -1.0;
-Vector3 prevCamPos = Vector3(-9999.0);
+//std::map< string, float > transparencies;
+//std::map< string, float >::iterator transIt;
+//
+//std::map< string, float > reflections;
+//std::map< string, float >::iterator reflectIt;
+//
+//std::map< string, float > isVColored;
+//std::map< string, float >::iterator isVColorIt;
+//
+//std::map< string, int > nodesLighting;
+//std::map< string, int >::iterator lightingIt;
+//
+//float prevShadow = -1.0;
+//float lightsCount = -1.0;
+//Vector3 prevCamPos = Vector3(-9999.0);
 
 bool ShaderManager::renderingPreview = false;
 bool ShaderManager::isRenderingDepthPass = false;
@@ -45,13 +45,13 @@ string ShaderManager::BundlePath = " ";
 DEVICE_TYPE ShaderManager::deviceType = OPENGLES2;
 
 ShaderManager::~ShaderManager(){
-    transparencies.clear();
-    reflections.clear();
-    isVColored.clear();
-    nodesLighting.clear();
-    prevShadow = -1.0;
-    lightsCount = -1.0;
-    prevCamPos = Vector3(-9999.0);
+//    transparencies.clear();
+//    reflections.clear();
+//    isVColored.clear();
+//    nodesLighting.clear();
+//    prevShadow = -1.0;
+//    lightsCount = -1.0;
+//    prevCamPos = Vector3(-9999.0);
 }
 
 ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType){
@@ -182,33 +182,33 @@ void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramInde
 {
     float isVertexColored = (status) ? 1.0 : 0.0;
     
-    Material* material = sgNode->node->material;
-    isVColorIt = isVColored.find(material->name);
-    if(smgr->device == METAL) {
+//    Material* material = sgNode->node->material;
+//    isVColorIt = isVColored.find(material->name);
+//    if(smgr->device == METAL || material->name == "SHADER_COLOR") {
+//        smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,isFragmentData,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+//    } else if(isVColorIt == isVColored.end()) {
+//        isVColored.insert(std::pair<string, int>(material->name, isVertexColored));
+//        smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,isFragmentData,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+//    } else if (isVColorIt->second != isVertexColored) {
+//        isVColorIt->second = isVertexColored;
         smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,isFragmentData,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    } else if(isVColorIt == isVColored.end()) {
-        isVColored.insert(std::pair<string, int>(material->name, isVertexColored));
-        smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,isFragmentData,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    } else if (isVColorIt->second != isVertexColored) {
-        isVColorIt->second = isVertexColored;
-        smgr->setPropertyValue(sgNode->node->material, "isVertexColored", &isVertexColored, DATA_FLOAT,1,isFragmentData,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    }
+//    }
 }
 
 void ShaderManager::setNumberOfLights(SGNode *sgNode, int paramIndex)
 {
     //TODO num of lights global variable
     float lights = (float)ShaderManager::lightPosition.size();
-    if(lightsCount != lights || smgr->device == METAL) {
-        lightsCount = lights;
+//    if(lightsCount != lights || smgr->device == METAL || sgNode->node->material->name == "SHADER_COLOR") {
+//        lightsCount = lights;
         smgr->setPropertyValue(sgNode->node->material, "numberOfLights", &lights, DATA_FLOAT,1,true,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    }
+//    }
 }
 
 void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2)
 {
-    if(smgr->device == METAL || sgNode->isTempNode ||(sgNode->props.isLighting && lightChanged)) {
-        
+//    if(smgr->device == METAL || sgNode->isTempNode ||(sgNode->props.isLighting && lightChanged) || sgNode->node->material->name == "SHADER_COLOR") {
+    
         int lightsCount = (int)ShaderManager::lightPosition.size();
         float * lightPositions = new float[lightsCount * 3];
         float *lightColors = new float[lightsCount * 3];
@@ -227,7 +227,7 @@ void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int pa
         smgr->setPropertyValue(sgNode->node->material, "fadeEndDistance", fadeEndDistance, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightFadeDistance,smgr->getNodeIndexByID(sgNode->node->getID()));
         lightChanged = false;
         delete [] fadeEndDistance;
-    }
+//    }
 }
 
 void ShaderManager::setLightsPosition(SGNode *sgNode, float *lightPositions, int paramIndex)
@@ -250,61 +250,61 @@ void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
     lighting = (ShaderManager::sceneLighting) ? lighting : 0;
     
     Material* material = sgNode->node->material;
-    lightingIt = nodesLighting.find(material->name);
-    if(smgr->device == METAL) {
+//    lightingIt = nodesLighting.find(material->name);
+//    if(smgr->device == METAL || sgNode->node->material->name == "SHADER_COLOR") {
+//        smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+//    } else if(lightingIt == nodesLighting.end()) {
+//        nodesLighting.insert(std::pair<string, int>(material->name, lighting));
+//        smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+//    } else if (lightingIt->second != lighting) {
+//        lightingIt->second = lighting;
         smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    } else if(lightingIt == nodesLighting.end()) {
-        nodesLighting.insert(std::pair<string, int>(material->name, lighting));
-        smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    } else if (lightingIt->second != lighting) {
-        lightingIt->second = lighting;
-        smgr->setPropertyValue(sgNode->node->material, "isLighting", &lighting, DATA_INTEGER,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    }
+//    }
 
 }
 void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex){
     float finalShadow = shadowsOff ? 0.0 : shadowDensity;
-    if(prevShadow != finalShadow || smgr->device == METAL) {
-        prevShadow = finalShadow;
+//    if(prevShadow != finalShadow || smgr->device == METAL || sgNode->node->material->name == "SHADER_COLOR") {
+//        prevShadow = finalShadow;
         smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &finalShadow, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    }
+//    }
 }
 
 void ShaderManager::setReflectionValue(SGNode *sgNode,int paramIndex){
     float value = sgNode->props.reflection;
     
-    Material* material = sgNode->node->material;
-    reflectIt = reflections.find(material->name);
-    if(smgr->device == METAL) {
+//    Material* material = sgNode->node->material;
+//    reflectIt = reflections.find(material->name);
+//    if(smgr->device == METAL || sgNode->node->material->name == "SHADER_COLOR") {
+//        smgr->setPropertyValue(sgNode->node->material, "reflection", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+//    } else if(reflectIt == reflections.end()) {
+//        reflections.insert(std::pair<string, int>(material->name, value));
+//        smgr->setPropertyValue(sgNode->node->material, "reflection", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+//    } else if (reflectIt->second != value) {
+//        reflectIt->second = value;
         smgr->setPropertyValue(sgNode->node->material, "reflection", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    } else if(reflectIt == reflections.end()) {
-        reflections.insert(std::pair<string, int>(material->name, value));
-        smgr->setPropertyValue(sgNode->node->material, "reflection", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    } else if (reflectIt->second != value) {
-        reflectIt->second = value;
-        smgr->setPropertyValue(sgNode->node->material, "reflection", &value, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    }
+//    }
 
 }
 
 void ShaderManager::setEyePos(SGNode *sgNode,int paramIndex) {
-    if(smgr->device == METAL || prevCamPos.x != camPos.x || prevCamPos.y != camPos.y || prevCamPos.z != camPos.z) {
-        prevCamPos = camPos;
+//    if(smgr->device == METAL || prevCamPos.x != camPos.x || prevCamPos.y != camPos.y || prevCamPos.z != camPos.z || sgNode->node->material->name == "SHADER_COLOR") {
+//        prevCamPos = camPos;
         float *campos = new float[3];
         campos[0] = camPos.x;    campos[1] = camPos.y;    campos[2] = camPos.z;
         smgr->setPropertyValue(sgNode->node->material, "eyePos", campos, DATA_FLOAT_VEC3, 3, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
         delete[] campos;
-    }
+//    }
 }
 
 void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex){
-    if(smgr->device == METAL || sgNode->props.isLighting) {
+//    if(smgr->device == METAL || sgNode->props.isLighting || sgNode->node->material->name == "SHADER_COLOR") {
         Mat4 lightViewProjMatrix = lighCamProjMatrix;
         lightViewProjMatrix *= lighCamViewMatrix;
         Mat4 lvp = lightViewProjMatrix * sgNode->node->getModelMatrix();
         
         smgr->setPropertyValue(sgNode->node->material, "lvp", lightViewProjMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-    }
+//    }
 }
 
 void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex)
@@ -320,7 +320,7 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int par
 
 void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
 {
-    if(deviceType == METAL || !sgNode->props.perVertexColor) {
+//    if(deviceType == METAL || !sgNode->props.perVertexColor || sgNode->node->material->name == "SHADER_COLOR") {
         int textureValue = 0;
         if(deviceType == OPENGLES2){
             OGLTexture* tex = (OGLTexture*)sgNode->node->getTextureByIndex(1);
@@ -343,7 +343,7 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
                 smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, SHADER_COMMON_texture2,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
             }
         }
-    }
+//    }
 }
 
 void ShaderManager::setNodeTransparency(SGNode *sgNode,u16 paramIndex){
@@ -351,17 +351,6 @@ void ShaderManager::setNodeTransparency(SGNode *sgNode,u16 paramIndex){
     transparency = sgNode->props.isVisible ? transparency : NODE_SELECTION_TRANSPARENCY;
     Material * material = sgNode->node->material;
     smgr->setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-
-//    transIt = transparencies.find(material->name);
-//    if(deviceType == METAL) {
-//        smgr->setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-//    } else if(transIt == transparencies.end()) {
-//        transparencies.insert(std::pair<string, float>(material->name, transparency));
-//        smgr->setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-//    } else if (transIt->second != transparency) {
-//        transIt->second = transparency;
-//        smgr->setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-//    }
 }
 void ShaderManager::setSceneDataUniforms(SGNode *node,u16 paramIndex){
     
@@ -369,7 +358,13 @@ void ShaderManager::setSceneDataUniforms(SGNode *node,u16 paramIndex){
 void ShaderManager::setModelViewProjMatrix(SGNode *sgNode,u16 paramIndex){
         Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
         Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
-        Mat4 mvp = projMat * viewMat * sgNode->node->getModelMatrix();
+    
+    Mat4 mvp;
+    if(sgNode->node->drawMode == DRAW_MODE_LINES)
+        mvp = projMat * viewMat;
+    else
+        mvp = projMat * viewMat * sgNode->node->getModelMatrix();
+    
         smgr->setPropertyValue(sgNode->node->material,"mvp",mvp.pointer(),DATA_FLOAT_MAT4,16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)

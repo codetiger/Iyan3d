@@ -638,7 +638,7 @@ BOOL missingAlertShown;
         return;
     
     if(editorScene) {
-        editorScene->shadowsOff = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"] ? true : false;
+        ShaderManager::shadowsOff = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"] ? true : false;
 
         if (editorScene && renderViewMan.checkCtrlSelection) {
             bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
@@ -684,8 +684,6 @@ BOOL missingAlertShown;
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     if(editorScene) {
-        editorScene->setLightingOn();
-        
         if(editorScene->isRigMode && editorScene->rigMan && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_PREVIEW)){
             [_addJointBtn setEnabled:(editorScene->rigMan->isSGRJointSelected)?NO:YES];
         }
@@ -1583,6 +1581,7 @@ BOOL missingAlertShown;
             }
             break;
         }
+        case DELETE_MULTI_ASSET:
         case ADD_MULTI_ASSET_BACK:{
             [self undoMultiAssetDeleted:returnValue2];
             break;
@@ -1672,7 +1671,7 @@ BOOL missingAlertShown;
     else if (returnValue == SWITCH_MIRROR) {
         //self.mirrorSwitch.on = animationScene->getMirrorState();
     }
-    else if(returnValue == ACTION_MULTI_NODE_DELETED_BEFORE){
+    else if(returnValue == ACTION_MULTI_NODE_DELETED_BEFORE || returnValue == (int)ADD_MULTI_ASSET_BACK){
         SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction-1];
         [self redoMultiAssetDeleted:recentAction.objectIndex];
     }
@@ -1927,6 +1926,9 @@ BOOL missingAlertShown;
 
 
 - (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored{
+    
+    if(editorScene)
+        editorScene->shadowsOff = false;
     
     if(!isStored)
         editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w,distance,true);
@@ -2346,20 +2348,47 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     int selectedAssetId  = NOT_EXISTS;
     int selectedNode = NOT_EXISTS;
     NODE_TYPE selectedNodeType = NODE_UNDEFINED;
-    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+    
+    if(editorScene && editorScene->selectedNodeIds.size() > 0) {
+        editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_ADDED, 0);
+        vector< int > addedNodeIds;
+        vector< int > fromNodeIds(editorScene->selectedNodeIds);
+        
+        for(int i = 0; i < fromNodeIds.size(); i++) {
+            selectedAssetId = editorScene->nodes[fromNodeIds[i]]->assetId;
+            selectedNodeType = editorScene->nodes[fromNodeIds[i]]->getType();
+            selectedNode = fromNodeIds[i];
+            [self cloneSelectedAssetWithId:selectedAssetId NodeType:selectedNodeType AndSelNodeId:selectedNode];
+            addedNodeIds.push_back(editorScene->nodes.size() - 1);
+        }
+        
+        editorScene->selectMan->unselectObjects();
+        for(int i = 0; i < addedNodeIds.size(); i++) {
+            editorScene->selectMan->selectObject(addedNodeIds[i], true);
+        }
+        editorScene->updater->updateControlsOrientaion();
+        editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_ADDED, 0);
+        
+    } else if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         selectedAssetId = editorScene->nodes[editorScene->selectedNodeId]->assetId;
         selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
         selectedNode = editorScene->selectedNodeId;
+        
+        [self cloneSelectedAssetWithId:selectedAssetId NodeType:selectedNodeType AndSelNodeId:selectedNode];
+        editorScene->selectMan->selectObject(editorScene->nodes.size()-1 , false);
+        editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
-    
+}
+
+- (void) cloneSelectedAssetWithId:(int) selectedAssetId NodeType:(int) selectedNodeType AndSelNodeId:(int)selectedNode
+{
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS)
     {
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
-        [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
-        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
+        [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNode];
     }
     else if((selectedNodeType == NODE_IMAGE || selectedNodeType == NODE_VIDEO) && selectedAssetId != NOT_EXISTS){
         NSString* fileName = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
@@ -2373,8 +2402,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
         assetAddType = IMPORT_ASSET_ACTION;
-        [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
-        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
+        [self loadCloneNodeWithType:selectedNodeType WithObject:imageDetails nodeId:selectedNode];
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
@@ -2387,6 +2415,17 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
         editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
     }
+}
+
+- (void) loadCloneNodeWithType:(int) selectedNodeType WithObject:(id) object nodeId:(int) selectedNode
+{
+    
+if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ || selectedNodeType == NODE_PARTICLES) {
+    [self loadNode:(AssetItem *)object];
+   } else if(selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) {
+       [self loadNodeForImage:(NSMutableDictionary *)object];
+   }
+    editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
 }
 
 - (void) changeTextureForAsset{

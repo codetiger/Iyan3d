@@ -698,6 +698,10 @@
 		251BF4831C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
 		253B52811BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
 		253B52821BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
+		2544C2711CCE1A4A009A3620 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2544C2701CCE1A4A009A3620 /* GLKit.framework */; };
+		2544C2721CCE1A56009A3620 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2544C2701CCE1A4A009A3620 /* GLKit.framework */; };
+		2544C2751CCE2CF8009A3620 /* Mat4GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2544C2731CCE2CF8009A3620 /* Mat4GLK.cpp */; };
+		2544C2761CCE2CF8009A3620 /* Mat4GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2544C2731CCE2CF8009A3620 /* Mat4GLK.cpp */; };
 		254BA1A51B08377100F248A6 /* Iyan3Dcopy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */; };
 		254F7DB11A94CC52004D63A8 /* AppHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 254F7DB01A94CC52004D63A8 /* AppHelper.mm */; };
 		25641C9E1B0524250067A4F4 /* watermark.png in Resources */ = {isa = PBXBuildFile; fileRef = 25641C9D1B0524250067A4F4 /* watermark.png */; };
@@ -981,6 +985,14 @@
 		25D6719B1C46930900BE685D /* controls8.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671961C46930900BE685D /* controls8.sgm */; };
 		25D6719C1C46930900BE685D /* controls9.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671971C46930900BE685D /* controls9.sgm */; };
 		25D6719D1C46930900BE685D /* controls9.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 25D671971C46930900BE685D /* controls9.sgm */; };
+		25D96E591CCF2F0F00A5AEED /* Vector2GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E571CCF2F0F00A5AEED /* Vector2GLK.cpp */; };
+		25D96E5A1CCF2F0F00A5AEED /* Vector2GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E571CCF2F0F00A5AEED /* Vector2GLK.cpp */; };
+		25D96E5E1CCF3D5E00A5AEED /* Vector3GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E5C1CCF3D5E00A5AEED /* Vector3GLK.cpp */; };
+		25D96E5F1CCF3D5E00A5AEED /* Vector3GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E5C1CCF3D5E00A5AEED /* Vector3GLK.cpp */; };
+		25D96E621CCF43E600A5AEED /* Vector4GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E601CCF43E600A5AEED /* Vector4GLK.cpp */; };
+		25D96E631CCF43E600A5AEED /* Vector4GLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E601CCF43E600A5AEED /* Vector4GLK.cpp */; };
+		25D96E661CCF7B9900A5AEED /* QuaternionGLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E641CCF7B9900A5AEED /* QuaternionGLK.cpp */; };
+		25D96E671CCF7B9900A5AEED /* QuaternionGLK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E641CCF7B9900A5AEED /* QuaternionGLK.cpp */; };
 		25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
 		25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
 		25DE0E9D1CAA8C980076F669 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E771CAA8C980076F669 /* btAlignedAllocator.cpp */; };
@@ -3054,6 +3066,9 @@
 		253B52801BDBBD9100E93208 /* commonL1.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL1.fsh; path = Resources/shaders/commonL1.fsh; sourceTree = "<group>"; };
 		253DE8421B545CCB00FE59FE /* PreviewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewHelper.h; sourceTree = "<group>"; };
 		253DE8431B545CCB00FE59FE /* PreviewHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewHelper.mm; sourceTree = "<group>"; };
+		2544C2701CCE1A4A009A3620 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		2544C2731CCE2CF8009A3620 /* Mat4GLK.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mat4GLK.cpp; sourceTree = "<group>"; };
+		2544C2741CCE2CF8009A3620 /* Mat4GLK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mat4GLK.h; sourceTree = "<group>"; };
 		254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Iyan3Dcopy-Info.plist"; sourceTree = SOURCE_ROOT; };
 		254F7DAF1A94CC52004D63A8 /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
 		254F7DB01A94CC52004D63A8 /* AppHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppHelper.mm; sourceTree = "<group>"; };
@@ -3332,6 +3347,14 @@
 		25D671951C46930900BE685D /* controls7.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls7.sgm; path = Resources/mesh/controls7.sgm; sourceTree = "<group>"; };
 		25D671961C46930900BE685D /* controls8.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls8.sgm; path = Resources/mesh/controls8.sgm; sourceTree = "<group>"; };
 		25D671971C46930900BE685D /* controls9.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = controls9.sgm; path = Resources/mesh/controls9.sgm; sourceTree = "<group>"; };
+		25D96E571CCF2F0F00A5AEED /* Vector2GLK.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2GLK.cpp; sourceTree = "<group>"; };
+		25D96E581CCF2F0F00A5AEED /* Vector2GLK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector2GLK.h; sourceTree = "<group>"; };
+		25D96E5C1CCF3D5E00A5AEED /* Vector3GLK.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector3GLK.cpp; sourceTree = "<group>"; };
+		25D96E5D1CCF3D5E00A5AEED /* Vector3GLK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector3GLK.h; sourceTree = "<group>"; };
+		25D96E601CCF43E600A5AEED /* Vector4GLK.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector4GLK.cpp; sourceTree = "<group>"; };
+		25D96E611CCF43E600A5AEED /* Vector4GLK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector4GLK.h; sourceTree = "<group>"; };
+		25D96E641CCF7B9900A5AEED /* QuaternionGLK.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QuaternionGLK.cpp; sourceTree = "<group>"; };
+		25D96E651CCF7B9900A5AEED /* QuaternionGLK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuaternionGLK.h; sourceTree = "<group>"; };
 		25DAD21C1C2D48F00050BC88 /* SGSelectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSelectionManager.h; sourceTree = "<group>"; };
 		25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSelectionManager.cpp; sourceTree = "<group>"; };
 		25DE0E761CAA8C980076F669 /* btAabbUtil2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btAabbUtil2.h; sourceTree = "<group>"; };
@@ -4429,6 +4452,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2544C2711CCE1A4A009A3620 /* GLKit.framework in Frameworks */,
 				2512BFD51CB24581006E19A3 /* SafariServices.framework in Frameworks */,
 				01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */,
 				2593C41E1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
@@ -4468,6 +4492,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2544C2721CCE1A56009A3620 /* GLKit.framework in Frameworks */,
 				2512BFD81CB247AE006E19A3 /* libz.tbd in Frameworks */,
 				2512BFD61CB2458C006E19A3 /* SafariServices.framework in Frameworks */,
 				2593C41F1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
@@ -5303,6 +5328,7 @@
 		256F6BB71BF624FB00154622 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				25D96E5B1CCF30BE00A5AEED /* GLKM */,
 				256F6BB81BF624FB00154622 /* BoundingBox.cpp */,
 				256F6BB91BF624FB00154622 /* BoundingBox.h */,
 				256F6BBA1BF624FB00154622 /* CollisionManager.cpp */,
@@ -5591,6 +5617,23 @@
 				25B5B1651BE33EFB00AC2525 /* zip.h */,
 			);
 			path = minizip;
+			sourceTree = "<group>";
+		};
+		25D96E5B1CCF30BE00A5AEED /* GLKM */ = {
+			isa = PBXGroup;
+			children = (
+				25D96E601CCF43E600A5AEED /* Vector4GLK.cpp */,
+				25D96E611CCF43E600A5AEED /* Vector4GLK.h */,
+				25D96E5C1CCF3D5E00A5AEED /* Vector3GLK.cpp */,
+				25D96E5D1CCF3D5E00A5AEED /* Vector3GLK.h */,
+				25D96E571CCF2F0F00A5AEED /* Vector2GLK.cpp */,
+				25D96E581CCF2F0F00A5AEED /* Vector2GLK.h */,
+				2544C2731CCE2CF8009A3620 /* Mat4GLK.cpp */,
+				2544C2741CCE2CF8009A3620 /* Mat4GLK.h */,
+				25D96E641CCF7B9900A5AEED /* QuaternionGLK.cpp */,
+				25D96E651CCF7B9900A5AEED /* QuaternionGLK.h */,
+			);
+			name = GLKM;
 			sourceTree = "<group>";
 		};
 		25DE0E741CAA8C390076F669 /* BulletPhysics */ = {
@@ -6984,6 +7027,7 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2544C2701CCE1A4A009A3620 /* GLKit.framework */,
 				250991671CB672410054CA73 /* DropboxSDK.framework */,
 				2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */,
 				2593C41B1CB27A2300703DDE /* libFreetype2.a */,
@@ -9105,6 +9149,7 @@
 				25DE10431CAA8D6D0076F669 /* btCompoundCollisionAlgorithm.cpp in Sources */,
 				2516DC091C5F52FD0034145D /* ParticleManager.cpp in Sources */,
 				25DE109D1CAA8D6D0076F669 /* btStridingMeshInterface.cpp in Sources */,
+				25D96E5E1CCF3D5E00A5AEED /* Vector3GLK.cpp in Sources */,
 				256F6D7A1BF624FB00154622 /* Quaternion.cpp in Sources */,
 				25EFBEB41BE25CA700DB300C /* RETrimControl.m in Sources */,
 				25DE10771CAA8D6D0076F669 /* btConvex2dShape.cpp in Sources */,
@@ -9160,6 +9205,7 @@
 				25DE11031CAA8D6D0076F669 /* btDiscreteDynamicsWorld.cpp in Sources */,
 				25DE10D51CAA8D6D0076F669 /* btPolyhedralContactClipping.cpp in Sources */,
 				25DE10751CAA8D6D0076F669 /* btConeShape.cpp in Sources */,
+				25D96E591CCF2F0F00A5AEED /* Vector2GLK.cpp in Sources */,
 				7F19F6791B5E6C9F001A342C /* AFHTTPRequestOperation.m in Sources */,
 				25DE10F11CAA8D6D0076F669 /* btHinge2Constraint.cpp in Sources */,
 				251424921C9698F90012CA68 /* Makefile in Sources */,
@@ -9198,6 +9244,7 @@
 				25B5B16E1BE33EFB00AC2525 /* zip.c in Sources */,
 				25F0C2661C2E916100C8EC85 /* SGActionManager.cpp in Sources */,
 				25DE10691CAA8D6D0076F669 /* btBoxShape.cpp in Sources */,
+				2544C2751CCE2CF8009A3620 /* Mat4GLK.cpp in Sources */,
 				251424681C9698F90012CA68 /* Vectoriser.cpp in Sources */,
 				7F19F67F1B5E6C9F001A342C /* AFXMLRequestOperation.m in Sources */,
 				25DE113D1CAA91310076F669 /* btSoftBody.cpp in Sources */,
@@ -9217,6 +9264,7 @@
 				7F30F5B51B576D8C00B311E3 /* NSString+NSHash.m in Sources */,
 				256F6DAE1BF624FB00154622 /* Node.cpp in Sources */,
 				25DE103F1CAA8D6D0076F669 /* btCollisionWorld.cpp in Sources */,
+				25D96E661CCF7B9900A5AEED /* QuaternionGLK.cpp in Sources */,
 				25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */,
 				256F6B971BF6246300154622 /* json_reader.cpp in Sources */,
 				251424781C9698F90012CA68 /* mesh.c in Sources */,
@@ -9426,6 +9474,7 @@
 				3D71B06C1C2930BE0038C4BD /* AssetSelectionSidePanel.mm in Sources */,
 				251424761C9698F90012CA68 /* memalloc.c in Sources */,
 				256F6D701BF624FB00154622 /* CollisionManager.cpp in Sources */,
+				25D96E621CCF43E600A5AEED /* Vector4GLK.cpp in Sources */,
 				25B5B1701BE33EFB00AC2525 /* ZipArchive.mm in Sources */,
 				25DE10C51CAA8D6D0076F669 /* btContinuousConvexCollision.cpp in Sources */,
 				25DE111B1CAA8D6D0076F669 /* btMLCPSolver.cpp in Sources */,
@@ -9472,6 +9521,7 @@
 				7F35D9B71B5F53770003F1CE /* AFPropertyListRequestOperation.m in Sources */,
 				7F35D9B91B5F53770003F1CE /* AFURLConnectionOperation.m in Sources */,
 				256F6EBB1BF624FB00154622 /* Maths.cpp in Sources */,
+				25D96E5F1CCF3D5E00A5AEED /* Vector3GLK.cpp in Sources */,
 				7F35D9BB1B5F53770003F1CE /* AFXMLRequestOperation.m in Sources */,
 				7F35D9BD1B5F53770003F1CE /* UIImageView+AFNetworking.m in Sources */,
 				7F30F5B71B576DB900B311E3 /* Base64.m in Sources */,
@@ -9497,6 +9547,7 @@
 				251424731C9698F90012CA68 /* dict.c in Sources */,
 				25DE10BC1CAA8D6D0076F669 /* btTriangleShapeEx.cpp in Sources */,
 				E20670E31B049AA6006DD2F7 /* ScaleForAutoRigViewController.m in Sources */,
+				25D96E5A1CCF2F0F00A5AEED /* Vector2GLK.cpp in Sources */,
 				256F6D7B1BF624FB00154622 /* Quaternion.cpp in Sources */,
 				25DE110A1CAA8D6D0076F669 /* btMultiBody.cpp in Sources */,
 				3D3F59141C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */,
@@ -9506,6 +9557,7 @@
 				25DE0EA41CAA8C980076F669 /* btGeometryUtil.cpp in Sources */,
 				25DE10941CAA8D6D0076F669 /* btPolyhedralConvexShape.cpp in Sources */,
 				25DE10B21CAA8D6D0076F669 /* btGenericPoolAllocator.cpp in Sources */,
+				25D96E631CCF43E600A5AEED /* Vector4GLK.cpp in Sources */,
 				25EFBEAD1BE25CA700DB300C /* RenderCell.m in Sources */,
 				25DE10521CAA8D6D0076F669 /* btEmptyCollisionAlgorithm.cpp in Sources */,
 				256F6D7D1BF624FB00154622 /* Vector2.cpp in Sources */,
@@ -9563,6 +9615,7 @@
 				3D71B0741C2930E30038C4BD /* AssetFrameCell.m in Sources */,
 				C8AA46F41C227D1000C4AB53 /* SceneSelectionControllerNew.mm in Sources */,
 				E20671161B049AA6006DD2F7 /* NSImage+ANImageBitmapRep.m in Sources */,
+				25D96E671CCF7B9900A5AEED /* QuaternionGLK.cpp in Sources */,
 				25DE10401CAA8D6D0076F669 /* btCollisionWorld.cpp in Sources */,
 				251424891C9698F90012CA68 /* tessmono.c in Sources */,
 				256F6DA11BF624FB00154622 /* EmptyNode.cpp in Sources */,
@@ -9648,6 +9701,7 @@
 				25F0C2631C2E912800C8EC85 /* SGAnimationManager.cpp in Sources */,
 				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */,
+				2544C2761CCE2CF8009A3620 /* Mat4GLK.cpp in Sources */,
 				256F6EB91BF624FB00154622 /* Logger.cpp in Sources */,
 				25DE11221CAA8D6D0076F669 /* btWheelInfo.cpp in Sources */,
 				25DE0EA01CAA8C980076F669 /* btConvexHull.cpp in Sources */,
@@ -9830,7 +9884,10 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = fast;
-				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IOS=1",
+					"OPTIMGLKM=1",
+				);
 				GCC_STRICT_ALIASING = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -9880,7 +9937,10 @@
 				ENABLE_NS_ASSERTIONS = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_OPTIMIZATION_LEVEL = fast;
-				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IOS=1",
+					"OPTIMGLKM=1",
+				);
 				GCC_STRICT_ALIASING = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -9924,10 +9984,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"IOS=1",
-					"DEBUG=1",
-				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -9963,10 +10019,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"IOS=1",
-					"DEBUG=1",
-				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -10001,10 +10053,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"IOS=1",
-					"DEBUG=1",
-				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3Dcopy-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -10039,10 +10087,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"IOS=1",
-					"DEBUG=1",
-				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3Dcopy-Info.plist";
 				LIBRARY_SEARCH_PATHS = (

@@ -128,8 +128,7 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
             syncPhysicsWorld();
         }
         
-        
-        for(int i = previousFrame; i <= frame; i++) {
+        for(int i = previousFrame+1; i <= frame; i++) {
             world->stepSimulation(1.0/24.0, 10.0, 1.0/60.0);
         }
         

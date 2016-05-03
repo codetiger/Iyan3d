@@ -1,17 +1,19 @@
 //
-//  Mat4.h
-//  SGEngine2
+//  Mat4GLK.hpp
+//  Iyan3D
 //
-//  Created by Harishankar on 13/11/14.
-//  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
+//  Created by Karthik on 25/04/16.
+//  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
-#ifndef __SGEngine2__Mat4__
-#define __SGEngine2__Mat4__
+#ifdef OPTIMGLKM
 
-#ifndef OPTIMGLKM
+#ifndef Mat4GLK_h
+#define Mat4GLK_h
 
-#include "Vector4.h"
+#include "Vector4GLK.h"
+#include <GLKit/GLKMath.h>
+
 
 #ifdef ANDROID
 #include "Utilities/Maths.h"
@@ -22,25 +24,28 @@
 #include <string.h>
 #endif
 
-class Mat4 {
 
+
+class Mat4 {
+    
 public:
-    float c[16]; // Matrix components, in column-major order
+    GLKMatrix4 matrix;
     Mat4();
     Mat4(float* pMat);
     Mat4(const Vector3& axis_x, const Vector3& axis_y, const Vector3& axis_z, const Vector3& trans);
     ~Mat4();
-
+    
     Mat4& operator=(const Mat4& m);
     bool operator==(const Mat4& m) const;
     Mat4& operator*=(const Mat4& m);
     Mat4 operator*(const Mat4& m) const;
     Vector4 operator*(const Vector4& v) const;
-
+    
     float& operator[](unsigned i);
     float operator[](unsigned i) const;
-
+    
     void perspective(float fov, float aspect, float nearz, float farz);
+    void ortho(float left, float right, float top, float bottom, float nearz, float farz);
     void translate(float x, float y, float z);
     void translate(const Vector3& v);
     void scale(float x, float y, float z);
@@ -49,6 +54,7 @@ public:
     void copyMatTo(float *pointer);
     //    void rotate(const Quaternion &q);
     void setRotationRadians(Vector3 rotation);
+    void bias();
     bool invert();
     void transpose();
     float* pointer();
@@ -62,6 +68,6 @@ public:
     void rotateVect(Vector3& vect) const;
 };
 
-#endif
+#endif /* Mat4GLK_hpp */
 
-#endif /* defined(__SGEngine2__Mat4__) */
+#endif

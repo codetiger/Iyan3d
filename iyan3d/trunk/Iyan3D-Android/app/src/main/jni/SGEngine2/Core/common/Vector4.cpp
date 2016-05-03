@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
+#ifndef OPTIMGLKM
+
 #include "Vector4.h"
 
 Vector4::Vector4()
@@ -171,3 +173,5 @@ float Vector4::operator[](unsigned i) const
         return w;
     }
 }
+
+#endif

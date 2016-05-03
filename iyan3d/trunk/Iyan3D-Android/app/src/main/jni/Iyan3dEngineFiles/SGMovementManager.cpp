@@ -19,6 +19,7 @@ SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene)
     this->smgr = smgr;
     moveScene = (SGEditorScene*)scene;
     swipeTiming = 0;
+    isPan = false;
     xAcceleration = yAcceleration = 0.0;
 }
 
@@ -40,7 +41,7 @@ void SGMovementManager::swipeProgress(float angleX , float angleY)
 {
     if(!moveScene || !smgr || moveScene->moveNodeId != NOT_EXISTS)
         return;
-    if(moveScene->isControlSelected || swipeTiming < 5) {
+    if(moveScene->isControlSelected || swipeTiming < 3) {
         swipeTiming++;
         return;
     }
@@ -49,8 +50,6 @@ void SGMovementManager::swipeProgress(float angleX , float angleY)
     
     xAcceleration = (xAcceleration > 300.0) ? 300.0 : (xAcceleration < -300.0 ? -300.0 : xAcceleration) ;
     yAcceleration = (yAcceleration > 200.0) ? 200.0 : (yAcceleration < -200.0 ? -200.0 : yAcceleration) ;
-    
-    Vector3 rotation = moveScene->viewCamera->getViewMatrix().getRotationInDegree();
 
 }
 
@@ -61,7 +60,7 @@ void SGMovementManager::swipeToRotate()
 
     if((fabs(xAcceleration) > 0.0 || fabs(yAcceleration) > 0.0)) {
         
-        moveScene->shadowsOff = true;
+        ShaderManager::shadowsOff = true;
         Vector3 camTarget = moveScene->viewCamera->getTarget();
         Vector3 camForward = (camTarget - moveScene->viewCamera->getPosition()).normalize();
         Vector3 camRight = (camForward.crossProduct(moveScene->viewCamera->getUpVector())).normalize();
@@ -97,7 +96,10 @@ void SGMovementManager::swipeToRotate()
         
         moveScene->updater->updateLightCamera();
     } else
-        moveScene->shadowsOff = false;
+        ShaderManager::shadowsOff = false;
+    
+    if(!isPan && !moveScene->isPlaying && swipeTiming == 0 && (fabs(xAcceleration) == 0.0 && fabs(yAcceleration) == 0.0))
+        moveScene->setLightingOn();
     
 }
 
@@ -106,9 +108,12 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
     if(!moveScene || !smgr)
         return;
 
+    moveScene->shadowsOff = false;
+    isPan = false;
     moveScene->renHelper->cameraPreviewMoveDist = Vector2(0.0, 0.0);
     moveScene->renHelper->isMovingPreview = false;
-    moveScene->setLightingOn();
+    if((fabs(xAcceleration) == 0.0 && fabs(yAcceleration) == 0.0))
+        moveScene->setLightingOn();
     swipeTiming = 0;
     
     moveScene->updater->updateControlsMaterial();
@@ -150,7 +155,8 @@ void SGMovementManager::panBegan(Vector2 touch1, Vector2 touch2)
 {
     if(!moveScene || !smgr)
         return;
-
+    
+    isPan = true;
     prevTouchPoints[0] = touch1; prevTouchPoints[1] = touch2;
     previousTarget = moveScene->cameraTarget;
     previousRadius = moveScene->cameraRadius;
@@ -332,6 +338,7 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         outputValue.x = ((moveScene->selectedControlId == X_MOVE || moveScene->selectedControlId == X_SCALE) ? 1.0 : 0.0) * delta.x;
         outputValue.y = ((moveScene->selectedControlId == Y_MOVE || moveScene->selectedControlId == Y_SCALE) ? 1.0 : 0.0) * delta.y;
         outputValue.z = ((moveScene->selectedControlId == Z_MOVE || moveScene->selectedControlId == Z_SCALE) ? 1.0 : 0.0) * delta.z;
+        
         return true;
     }
     else if(moveScene->controlType == ROTATE){
@@ -349,7 +356,7 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         Vector3 parentToOldPos = (oldPos - center).normalize();
         
         Quaternion delta = MathHelper::rotationBetweenVectors(parentToNewPos,parentToOldPos);
-        
+
         Vector3 nodeRot;
         if(moveScene->selectedNodeIds.size() > 0) {
             moveScene->getParentNode()->updateAbsoluteTransformation();
@@ -377,7 +384,6 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
             delta =  MathHelper::RotateNodeInWorld(nodeRot,delta);
         }
         delta.toEuler(outputValue);
-        
         return true;
     }
     return false;

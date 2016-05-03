@@ -41,6 +41,7 @@ public:
     GLuint frameBuffer;
     GLuint colorBuffer;
     GLuint depthBuffer;
+    std::map< shared_ptr<Node>, u_int32_t > shaderPrograms;
     
     OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale);
     ~OGLES2RenderManager();
@@ -55,8 +56,8 @@ public:
     void changeClearColor(Vector4 lClearColor);
     
     void Initialize();
-    bool PrepareNode(shared_ptr<Node> node, int meshBufferIndex, int nodeIndex = 0);
-    void bindBufferAndAttributes(shared_ptr<Node> node, int meshBufferIndex);
+    bool PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex = 0);
+    void bindBufferAndAttributes(shared_ptr<Node> node, int meshBufferIndex, MESH_TYPE meshType);
     void endDisplay();
     void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);
     void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount);
@@ -80,7 +81,12 @@ public:
     Vector4 getPixelColor(Vector2 touchPos,Texture* texture);
     void setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth = true,bool setToRenderBuffer = false);
     void createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE , bool updateBothBuffers = true);
+    void handleVAO(shared_ptr<Node> node, int type, short meshBufferIndex = 0,MESH_TYPE meshType = MESH_TYPE_LITE);
     void createVertexBuffer(shared_ptr<Node> node,short meshBufferIndex = 0,MESH_TYPE meshType = MESH_TYPE_LITE);
+    
+    void createVAO(shared_ptr<Node> node, short meshBufferIndex = 0);
+    void updateVAO(shared_ptr<Node> node, bool updateIndices, bool updateAttr, short meshBufferIndex = 0);
+
 };
 
 #endif /* defined(__SGEngine2__OGLES2RenderManager__) */

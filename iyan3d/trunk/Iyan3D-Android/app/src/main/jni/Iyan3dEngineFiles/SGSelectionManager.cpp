@@ -263,8 +263,8 @@ void SGSelectionManager::updateParentPosition()
     addSelectedChildren(getParentNode());
     static_pointer_cast<Node>(getParentNode())->updateBoundingBox();
     Vector3 pivot = selectionScene->getPivotPoint(true);
-    getParentNode()->setPosition(pivot);
-    getParentNode()->setScale(prevScale);
+    getParentNode()->setPosition(pivot, true);
+    getParentNode()->setScale(prevScale, true);
     getParentNode()->updateAbsoluteTransformation();
     storeRelativePositions();
     restoreRelativeScales(scaleValues);
@@ -320,7 +320,7 @@ void SGSelectionManager::storeRelativePositions()
         Mat4 parentGlobalMat = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getParent()->getAbsoluteTransformation();
         Vector3 relativePos = MathHelper::getRelativePosition(parentGlobalMat, globalPositions[i]);
         relPositions.push_back(relativePos);
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setPosition(relativePos);
+        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setPosition(relativePos, true);
     }
 }
 
@@ -329,7 +329,7 @@ void SGSelectionManager::restoreRelativeScales(vector< Vector3 > scales)
     for (int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
         Mat4 parentGlobalMat = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getParent()->getAbsoluteTransformation();
         Vector3 relativeScale = MathHelper::getRelativeScale(parentGlobalMat, scales[i]);
-        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setScale(relativeScale);
+        selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->setScale(relativeScale, true);
     }
 }
 

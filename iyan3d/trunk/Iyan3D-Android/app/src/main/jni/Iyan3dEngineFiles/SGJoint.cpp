@@ -95,11 +95,11 @@ void SGJoint::setPosition(Vector3 position , int frameId)
             positionKeys[keyIndex].position = position;
     }
 }
-bool SGJoint::setPositionOnNode(Vector3 position)
+bool SGJoint::setPositionOnNode(Vector3 position, bool updateBB)
 {
     if(jointNode->getPosition() == position)
         return false;
-    jointNode->setPosition(position);
+    jointNode->setPosition(position, updateBB);
     jointNode->updateAbsoluteTransformation();
     return true;
 }
@@ -117,11 +117,11 @@ void SGJoint::setScale(Vector3 scale, int frameId)
             scaleKeys[keyIndex].scale = scale;
     }
 }
-bool SGJoint::setScaleOnNode(Vector3 scale)
+bool SGJoint::setScaleOnNode(Vector3 scale, bool updateBB)
 {
     if(jointNode->getScale() == scale)
         return false;
-    jointNode->setScale(scale);
+    jointNode->setScale(scale, updateBB);
     jointNode->updateAbsoluteTransformation();
     return true;
 }

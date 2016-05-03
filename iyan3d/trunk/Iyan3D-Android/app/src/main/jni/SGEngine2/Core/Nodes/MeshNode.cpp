@@ -20,6 +20,8 @@ MeshNode::~MeshNode() {
     mesh = NULL;
 }
 Mesh* MeshNode::getMesh(){
+    if(shouldUpdateMesh && meshCache)
+        return this->meshCache;
     return this->mesh;
 }
 void MeshNode::update(){

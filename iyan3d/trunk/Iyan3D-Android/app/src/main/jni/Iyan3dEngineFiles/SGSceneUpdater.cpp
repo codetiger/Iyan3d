@@ -34,6 +34,8 @@ void SGSceneUpdater::setDataForFrame(int frame)
 
     bool lightChanged = false;
     
+    updatingScene->shadowsOff = ShaderManager::shadowsOff;
+    
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
 
         if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
@@ -51,7 +53,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
         if(visibilityKeyindex != -1){
            sgNode->props.isVisible = sgNode->visibilityKeys[visibilityKeyindex].visibility;
         }
-        sgNode->setPositionOnNode(position);
+        sgNode->setPositionOnNode(position, !updatingScene->isPlaying);
         if(sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
             if(sgNode->rotationKeys.size() > 0 && rotation.w >= 10.0) {
                 sgNode->props.vertexColor = Vector3(rotation.x,rotation.y,rotation.z);
@@ -63,18 +65,18 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 lightChanged = true;
             }
         } else {
-            sgNode->setRotationOnNode(rotation);
-            sgNode->setScaleOnNode(scale);
+            sgNode->setRotationOnNode(rotation, !updatingScene->isPlaying);
+            sgNode->setScaleOnNode(scale, !updatingScene->isPlaying);
         }
         for (int j = 0; j < sgNode->joints.size(); j++) {
             SGJoint *joint = sgNode->joints[j];
             Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame,joint->rotationKeys,true);
-            bool changed = joint->setRotationOnNode(rotation);
+            bool changed = joint->setRotationOnNode(rotation, !updatingScene->isPlaying);
             if(updatingScene->nodes[i]->getType() == NODE_TEXT_SKIN) {
                 Vector3 jointPosition = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, joint->positionKeys);
-                changed = joint->setPositionOnNode(jointPosition);
+                changed = joint->setPositionOnNode(jointPosition, !updatingScene->isPlaying);
                 Vector3 jointScale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frame, joint->scaleKeys);
-                changed = joint->setScaleOnNode(jointScale);
+                changed = joint->setScaleOnNode(jointScale, !updatingScene->isPlaying);
             }
         }
 

@@ -97,6 +97,9 @@ public:
     SGNode *selectedNode;
     SGJoint *selectedJoint;
     SGNode* rotationCircle;
+    SGNode* greenGrid;
+    SGNode* blueGrid;
+    SGNode* redGrid;
     SGNode* directionIndicator;
     vector<SGNode*> sceneControls;
     vector<SGNode*> nodes;
@@ -163,6 +166,7 @@ public:
     bool isNodeTransparent(int nodeId);
     void setJointsUniforms(int nodeID,string matName);
     void setRotationCircleUniforms(int nodeID,string matName);
+    void setGridLinesUniforms(int nodeId, int rgb, string matName);
     bool isJointTransparent(int nodeID,string matName);
     void setControlsUniforms(int nodeID,string matName);
     bool isControlsTransparent(int nodeID,string matName);
@@ -178,6 +182,7 @@ public:
     bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();
     bool allNodesRemovable();
+    bool allNodesClonable();
     Vector3 getSelectedNodeScale();
     bool checkNodeSize();
     void saveThumbnail(char* imagePath);

@@ -1,10 +1,17 @@
+//
+//  QuaternionGLK.hpp
+//  Iyan3D
+//
+//  Created by Karthik on 26/04/16.
+//  Copyright © 2016 Smackall Games. All rights reserved.
+//
 
+#ifdef OPTIMGLKM
 
-#ifndef OPTIMGLKM
+#ifndef QuaternionGLK_hpp
+#define QuaternionGLK_hpp
 
-#ifndef SGEngine2_Quaternion_h
-#define SGEngine2_Quaternion_h
-
+#include <GLKit/GLKQuaternion.h>
 #include "common.h"
 
 const int ROUNDING_ERROR_S32 = 0;
@@ -18,23 +25,16 @@ const double RECIPROCAL_PI64 = 1.0 / PI64;
 const double DEGTORAD64 = 3.1415926535897932384626433832795028841971693993751 / 180.0;
 class Quaternion {
 public:
-    Quaternion()
-        : x(0.0f)
-        , y(0.0f)
-        , z(0.0f)
-        , w(1.0f)
-    {
-    }
-    Quaternion(float x, float y, float z, float w)
-        : x(x)
-        , y(y)
-        , z(z)
-        , w(w)
-    {
-    }
+    
+    Quaternion();
+    Quaternion(float x, float y, float z, float w);
     Quaternion(float x, float y, float z);
     Quaternion(const Vector3& vec);
     Quaternion(const Mat4& mat);
+    Quaternion(GLKQuaternion quat);
+    void setValues(GLKQuaternion quat);
+    GLKQuaternion glkQuaternion() const;
+    
     Quaternion& operator=(const Quaternion& other);
     Quaternion& operator=(const Mat4& other);
     Quaternion operator+(const Quaternion& other) const;
@@ -48,19 +48,11 @@ public:
     Quaternion& set(float x, float y, float z);
     Quaternion& set(const Vector3& vec);
     Quaternion& set(const Quaternion& quat);
-    bool equals1(float a, float b, float tolerance = ROUNDING_ERROR_float);
-
-    bool equals(const Quaternion& other,
-        const float tolerance = ROUNDING_ERROR_float) const;
     Quaternion& normalize();
     Mat4 getMatrix() const;
-    void getMatrix(Mat4& dest, const Vector3& translation = Vector3()) const;
-    void getMatrixCenter(Mat4& dest, const Vector3& center, const Vector3& translation) const;
-    void getMatrix_transposed(Mat4& dest) const;
     Quaternion& makeInverse();
-    Quaternion& lerp(Quaternion q1, Quaternion q2, float time);
     Quaternion& slerp(Quaternion q1, Quaternion q2,
-        float time, float threshold = .05f);
+                      float time, float threshold = .05f);
     Quaternion& fromAngleAxis(float angle, const Vector3& axis);
     void toAngleAxis(float& angle, Vector3& axis) const;
     void toEuler(Vector3& euler) const;
@@ -72,7 +64,6 @@ public:
     float w; // real part
 };
 
-
-#endif
+#endif /* QuaternionGLK_hpp */
 
 #endif

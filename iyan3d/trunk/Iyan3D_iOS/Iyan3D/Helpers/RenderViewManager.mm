@@ -169,6 +169,12 @@ void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
         editorScene->setControlsUniforms(nodeID, matName);
     else if (callbackFuncName.compare("RotationCircle") == 0)
         editorScene->setRotationCircleUniforms(nodeID, matName);
+    else if (callbackFuncName.compare("GreenLines") == 0)
+        editorScene->setGridLinesUniforms(nodeID, 3, matName);
+    else if (callbackFuncName.compare("BlueLines") == 0)
+        editorScene->setGridLinesUniforms(nodeID, 2, matName);
+    else if (callbackFuncName.compare("RedLines") == 0)
+        editorScene->setGridLinesUniforms(nodeID, 1, matName);
     else if(callbackFuncName.compare("ObjUniforms") == 0){
         editorScene->rigMan->objNodeCallBack(matName);
     }else if(callbackFuncName.compare("jointUniforms") == 0){
@@ -201,6 +207,12 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         else if (callbackFuncName.compare("setOBJUniforms") == 0)
             return false;
         else if (callbackFuncName.compare("RotationCircle") == 0)
+            return false;
+        else if (callbackFuncName.compare("GreenLines") == 0)
+            return false;
+        else if (callbackFuncName.compare("BlueLines") == 0)
+            return false;
+        else if (callbackFuncName.compare("RedLines") == 0)
             return false;
         else if(callbackFuncName.compare("ObjUniforms") == 0)
             return editorScene->rigMan->isOBJTransparent(callbackFuncName);
@@ -452,7 +464,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     switch (rec.state) {
         case UIGestureRecognizerStateBegan: {
             if(editorScene) {
-                editorScene->shadowsOff = true;
+                ShaderManager::shadowsOff = true;
                 editorScene->setLightingOff();
                 touchCountTracker = (int)touchCount;
                 editorScene->moveMan->touchBegan(p[0] * screenScale);
@@ -510,7 +522,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         default: {
             _makePanOrPinch = false;
             _isPanned = false;
-            editorScene->shadowsOff = false;
+            ShaderManager::shadowsOff = false;
             editorScene->moveMan->touchEnd(p[0] * screenScale);
             [self.delegate reloadFrames];
             break;

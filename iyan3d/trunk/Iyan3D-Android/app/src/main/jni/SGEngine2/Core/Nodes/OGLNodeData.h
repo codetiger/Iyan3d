@@ -17,6 +17,8 @@
 
 class OGLNodeData: public APIData{
 public:
+    bool VAOCreated;
+    std::vector<u_int32_t> vertexArrayLocations;
     std::vector<u_int32_t> vertexBufLocations;
     std::vector<u_int32_t> IndexBufLocations;
     OGLNodeData();

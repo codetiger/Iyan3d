@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
+#ifndef OPTIMGLKM
+
 #include "Mat4.h"
 
 Mat4::Mat4()
@@ -136,21 +138,6 @@ void Mat4::translate(const Vector3& v)
 {
     translate(v.x, v.y, v.z);
 }
-void Mat4::rotate(float angle, int axis)
-{
-    const int cos1[3] = { 5, 0, 0 };
-    const int cos2[3] = { 10, 10, 5 };
-    const int sin1[3] = { 9, 2, 4 };
-    const int sin2[3] = { 6, 8, 1 };
-    Mat4 newMatrix;
-
-    newMatrix.c[cos1[axis]] = cos(angle);
-    newMatrix.c[sin1[axis]] = -sin(angle);
-    newMatrix.c[sin2[axis]] = -newMatrix.c[sin1[axis]];
-    newMatrix.c[cos2[axis]] = newMatrix.c[cos1[axis]];
-
-    *this *= newMatrix;
-}
 void Mat4::setRotationRadians(Vector3 rotation)
 {
     const float cr = cos(rotation.x);
@@ -197,25 +184,6 @@ void Mat4::copyMatTo(float *pointer)
 {
     for (int i = 0; i < 16; ++i)
         *pointer++ = this->c[i];
-}
-void Mat4::bias()
-{
-    static const float BIAS_MATRIX[] = {
-        0.5, 0.0, 0.0, 0.0,
-        0.0, 0.5, 0.0, 0.0,
-        0.0, 0.0, 0.5, 0.0,
-        0.5, 0.5, 0.5, 1.0
-    };
-    memcpy(c, BIAS_MATRIX, sizeof(float) * 16);
-}
-void Mat4::ortho(float left, float right, float top, float bottom, float nearz, float farz)
-{
-    memset(c, 0, sizeof(float) * 16);
-    c[0] = 2.0f / (right - left);
-    c[5] = 2.0f / (bottom - top);
-    c[10] = -1.0f / (farz - nearz);
-    c[11] = -nearz / (farz - nearz);
-    c[15] = 1.0f;
 }
 bool Mat4::invert()
 {
@@ -427,3 +395,5 @@ void Mat4::rotateVect(Vector3& vect) const
     vect.y = tmp.x * (*this)[1] + tmp.y * (*this)[5] + tmp.z * (*this)[9];
     vect.z = tmp.x * (*this)[2] + tmp.y * (*this)[6] + tmp.z * (*this)[10];
 }
+
+#endif

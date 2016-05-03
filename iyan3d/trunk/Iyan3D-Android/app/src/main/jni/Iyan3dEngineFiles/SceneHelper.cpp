@@ -75,6 +75,72 @@ SGNode* SceneHelper::createCircle(SceneManager *smgr){
     return rotationCircle;
 }
 
+SGNode* SceneHelper::createRedLines(SceneManager *smgr)
+{
+    int gridSize = 100;
+    vector< Vector3 > vPositions;
+    vPositions.push_back(Vector3(-gridSize, 0, 0));
+    vPositions.push_back(Vector3(gridSize, 0, 0));
+    vPositions.push_back(Vector3(gridSize, 0, 0));
+    return createLines(smgr, vPositions, Vector3(1.0,0.2,0.2), "RedLines", RED_LINES_ID);
+}
+
+SGNode* SceneHelper::createGreenLines(SceneManager *smgr)
+{
+    int gridSize = 100;
+    vector< Vector3 > vPositions;
+    vPositions.push_back(Vector3(0, 0, -gridSize));
+    vPositions.push_back(Vector3(0, 0, gridSize));
+    vPositions.push_back(Vector3(0, 0, gridSize));
+    return createLines(smgr, vPositions, Vector3(0.2,1.0,0.2), "GreenLines", GREEN_LINES_ID);
+
+}
+
+SGNode* SceneHelper::createBlueLines(SceneManager *smgr)
+{
+    int gridSize = 100;
+
+    vector<Vector3> vPositionsGrid;
+    int i = 0;
+    for (i = -gridSize; i <= gridSize; i+= 5) {
+        vPositionsGrid.push_back(Vector3(i, 0, -gridSize));
+        vPositionsGrid.push_back(Vector3(i, 0, gridSize));
+        vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
+        vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
+    }
+    vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
+    return createLines(smgr, vPositionsGrid, Vector3(0.6, 0.6, 1.0), "BlueLines", BLUE_LINES_ID);
+}
+
+SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, Vector3 color, string callbackName, int nodeId) {
+    
+    SGNode* gridLines = new SGNode(NODE_SGM);
+    
+    Mesh * mesh = new Mesh();
+    
+    for(int i = 0; i < positions.size(); i++) {
+        vertexData *v = new vertexData();
+        v->vertPosition = positions[i];
+        mesh->addVertex(v);
+        mesh->addToIndicesArray(i);
+        delete v;
+    }
+    
+    mesh->Commit();
+    
+    shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, callbackName);
+    node->setID(nodeId);
+    node->type = NODE_TYPE_LINES;
+    node->drawMode = DRAW_MODE_LINES;
+    gridLines->node = node;
+    gridLines->props.isLighting = false;
+    gridLines->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    gridLines->props.vertexColor = color;
+    gridLines->props.transparency = 1.0;
+    
+    return gridLines;
+}
+
 vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
 {
     vector<SGNode*> sceneControls;

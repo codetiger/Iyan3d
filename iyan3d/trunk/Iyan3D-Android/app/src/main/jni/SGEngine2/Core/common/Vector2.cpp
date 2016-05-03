@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
+#ifndef OPTIMGLKM
+
 #include "Vector2.h"
 
 Vector2::Vector2()
@@ -123,25 +125,6 @@ float Vector2::operator[](unsigned i) const
     }
 }
 
-float Vector2::sqrMagnitude() const
-{
-    return x * x + y * y;
-}
-
-float Vector2::magnitude() const
-{
-    return sqrtf(x * x + y * y);
-}
-
-float Vector2::Cross(const Vector2& v1, const Vector2& v2)
-{
-    return v1.x * v2.y - v1.y * v2.x;
-}
-
-float Vector2::Dot(const Vector2& v1, const Vector2& v2)
-{
-    return v1.x * v2.x + v1.y * v2.y;
-}
 Vector2 Vector2::normalize()
 {
     float length = x * x + y * y;
@@ -169,3 +152,5 @@ float Vector2::getDistanceFrom(Vector2 other)
 {
     return Vector2(x - other.x, y - other.y).getLength();
 }
+
+#endif

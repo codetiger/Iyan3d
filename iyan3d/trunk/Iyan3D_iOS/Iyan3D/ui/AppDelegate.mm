@@ -21,6 +21,10 @@
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
 
+#include <sys/time.h>
+#import <GLKit/GLKMath.h>
+#include <LinearMath/btMatrixX.h>
+
 #define DB_ALERT 0
 
 SceneManager *scenemgr;

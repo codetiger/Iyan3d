@@ -76,17 +76,17 @@ void RenderHelper::drawGrid()
     
     int gridSize = 100;
     
-    vector<Vector3> vPositionsGrid;
-    for (int i = -gridSize; i <= gridSize; i+= 5) {
-        vPositionsGrid.push_back(Vector3(i, 0, -gridSize));
-        vPositionsGrid.push_back(Vector3(i, 0, gridSize));
-        vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
-        vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
-    }
-    smgr->draw3DLines(vPositionsGrid, Vector3(0.6, 0.6, 1.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-    
-    smgr->draw3DLine(Vector3(-gridSize, 0, 0), Vector3(gridSize, 0, 0), Vector3(1.0,0.2,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
-    smgr->draw3DLine(Vector3(0, 0, -gridSize), Vector3(0, 0, gridSize), Vector3(0.2,1.0,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+//    vector<Vector3> vPositionsGrid;
+//    for (int i = -gridSize; i <= gridSize; i+= 5) {
+//        vPositionsGrid.push_back(Vector3(i, 0, -gridSize));
+//        vPositionsGrid.push_back(Vector3(i, 0, gridSize));
+//        vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
+//        vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
+//    }
+//    smgr->draw3DLines(vPositionsGrid, Vector3(0.6, 0.6, 1.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+//    
+//    smgr->draw3DLine(Vector3(-gridSize, 0, 0), Vector3(gridSize, 0, 0), Vector3(1.0,0.2,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+//    smgr->draw3DLine(Vector3(0, 0, -gridSize), Vector3(0, 0, gridSize), Vector3(0.2,1.0,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
 }
 
 void RenderHelper::drawCircle()
@@ -320,11 +320,12 @@ void RenderHelper::rttDrawCall() {
     if (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying) {
         drawCameraPreview();
     }
-    if (!renderingScene->isRigMode && !renderingScene->shadowsOff) {
-        ShaderManager::shadowsOff = false;
+
+    if (!renderingScene->isRigMode && !renderingScene->shadowsOff && ShaderManager::shadowDensity > 0.0) {
         rttShadowMap();
+        renderingScene->shadowsOff = true;
     } else
-        ShaderManager::shadowsOff = true;
+        renderingScene->shadowsOff = true;
 }
 
 bool RenderHelper::isMovingCameraPreview(Vector2 curTouchPos)
@@ -357,6 +358,10 @@ void RenderHelper::drawCameraPreview()
     
     setRenderCameraOrientation();
     renderingScene->rotationCircle->node->setVisible(false);
+    renderingScene->greenGrid->node->setVisible(false);
+    renderingScene->blueGrid->node->setVisible(false);
+    renderingScene->redGrid->node->setVisible(false);
+    
     smgr->setRenderTarget(renderingScene->previewTexture,true,true,false,Vector4(0.1,0.1,0.1,1.0));
     Vector4 camprevlay = renderingScene->getCameraPreviewLayout();
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
@@ -386,6 +391,10 @@ void RenderHelper::drawCameraPreview()
             renderingScene->setLightingOff();
     }
     ShaderManager::renderingPreview = false;
+    renderingScene->greenGrid->node->setVisible(true);
+    renderingScene->blueGrid->node->setVisible(true);
+    renderingScene->redGrid->node->setVisible(true);
+
     
 }
 
@@ -500,7 +509,7 @@ void RenderHelper::drawJointsSpheresForRTT(bool enableDepthTest)
         scaleValues.push_back(renderingScene->jointSpheres[j]->node->getScale());
         renderingScene->jointSpheres[j]->setScaleOnNode(scaleValues[j] * 1.3);
         renderingScene->jointSpheres[j]->props.vertexColor = Vector3(renderingScene->selectedNodeId/255.0,j/255.0,1.0);
-        smgr->RenderNode(true, smgr->getNodeIndexByID(renderingScene->jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
+        smgr->RenderNode(false, smgr->getNodeIndexByID(renderingScene->jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
     }
     // Reset joints
     for(int j = 0;j < (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getJointCount();j++) {
@@ -592,8 +601,8 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     isExporting1stTime = false;
     
     bool isLightOn = ShaderManager::sceneLighting;
-    bool isShadowsOff = renderingScene->shadowsOff;
-    ShaderManager::shadowsOff = renderingScene->shadowsOff = false;
+    bool isShadowsOff = ShaderManager::shadowsOff;
+    ShaderManager::shadowsOff = false;
     
     if(!isLightOn)
         renderingScene->setLightingOn();
@@ -669,7 +678,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
     
-    ShaderManager::shadowsOff = renderingScene->shadowsOff = isShadowsOff;
+    ShaderManager::shadowsOff = isShadowsOff;
     
     if(renderingType != shaderType)
         renderingScene->updater->resetMaterialTypes(false);
@@ -793,6 +802,10 @@ void RenderHelper::rttShadowMap()
         isRotationCircleVisible = renderingScene->rotationCircle->node->getVisible();
         renderingScene->rotationCircle->node->setVisible(false);
     }
+    renderingScene->greenGrid->node->setVisible(false);
+    renderingScene->blueGrid->node->setVisible(false);
+    renderingScene->redGrid->node->setVisible(false);
+    
     setControlsVisibility(false);
     bool indState = renderingScene->directionIndicator->node->getVisible();
     renderingScene->directionIndicator->node->setVisible(false);
@@ -842,6 +855,9 @@ void RenderHelper::rttShadowMap()
     smgr->setRenderTarget(NULL,true,true,true,Vector4(255,255,255,255));
     if(renderingScene->rotationCircle && renderingScene->rotationCircle->node)
         renderingScene->rotationCircle->node->setVisible(isRotationCircleVisible);
+    renderingScene->greenGrid->node->setVisible(true);
+    renderingScene->blueGrid->node->setVisible(true);
+    renderingScene->redGrid->node->setVisible(true);
     ShaderManager::isRenderingDepthPass = false;
 }
 

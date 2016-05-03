@@ -28,6 +28,9 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 #ifndef UBUNTU
     initTextures();
     rotationCircle = SceneHelper::createCircle(smgr);
+    blueGrid = SceneHelper::createBlueLines(smgr);
+    greenGrid = SceneHelper::createGreenLines(smgr);
+    redGrid = SceneHelper::createRedLines(smgr);
     sceneControls.clear();
     sceneControls = SceneHelper::initControls(smgr);
     directionIndicator = SceneHelper::initIndicatorNode(smgr);
@@ -227,6 +230,10 @@ void SGEditorScene::renderAll()
         renHelper->drawCircle();
         renHelper->drawMoveAxisLine();
         renHelper->renderControls();
+        
+//        if(touchTexture)
+//            smgr->draw2DImage(touchTexture, Vector2(0.0, 150.0), Vector2(256.0, 406.0), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        
         //        // rtt division atlast post and pre stage
         renHelper->postRTTDrawCall();
         renHelper->rttDrawCall();
@@ -428,6 +435,10 @@ void SGEditorScene::setJointsUniforms(int nodeID,string matName)
 void SGEditorScene::setRotationCircleUniforms(int nodeID,string matName)
 {
     shaderMGR->setUniforms(rotationCircle,matName);
+}
+void SGEditorScene::setGridLinesUniforms(int nodeId, int rgb, string matName)
+{
+    shaderMGR->setUniforms((rgb == 1) ? redGrid : (rgb == 2) ? blueGrid : greenGrid, matName);
 }
 bool SGEditorScene::isJointTransparent(int nodeID,string matName)
 {
@@ -713,6 +724,20 @@ bool SGEditorScene::allNodesRemovable()
     }
     return status;
 }
+
+bool SGEditorScene::allNodesClonable()
+{
+    bool status = true;
+    for(int i = 0; i < selectedNodeIds.size(); i++) {
+        NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
+        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT) {
+            status = false;
+            break;
+        }
+    }
+    return status;
+}
+
 
 Vector3 SGEditorScene::getSelectedNodeScale()
 {

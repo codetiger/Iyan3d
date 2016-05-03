@@ -15,7 +15,13 @@
 #import "Constants.h"
 #import "AnimationSelectionCollectionViewCell.h"
 #import "SGEditorScene.h"
+
+#ifdef OPTIMGLKM
+#import "Vector3GLK.h"
+#else
 #import "Vector3.h"
+#endif
+
 
 @protocol SliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;

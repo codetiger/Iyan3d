@@ -88,7 +88,7 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
         case MOVE:{
             if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
                 success = true;
-                actionScene->getParentNode()->setPosition(actionScene->getParentNode()->getPosition() + outputValue);
+                actionScene->getParentNode()->setPosition(actionScene->getParentNode()->getPosition() + outputValue, true);
                 actionScene->getParentNode()->updateAbsoluteTransformation();
                 break;
             } else if(actionScene->isJointSelected){
@@ -97,13 +97,13 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
             }else if(actionScene->isNodeSelected){
                 success = true;
                 selectedNode->setPosition(selectedNode->node->getPosition() + outputValue, actionScene->currentFrame);
-                selectedNode->setPositionOnNode(selectedNode->node->getPosition() + outputValue);
+                selectedNode->setPositionOnNode(selectedNode->node->getPosition() + outputValue, true);
                 break;
             }
             break;
         }
         case ROTATE:{
-            outputValue*=RADTODEG;
+            outputValue *= RADTODEG;
             if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
                 success = true;
                 Quaternion r = Quaternion(outputValue * DEGTORAD);
@@ -152,7 +152,7 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
                 Vector3 newPosition = (touchMove) ? outputValue : rigNode->getPosition() + outputValue;
                 selectedNode->setPosition(newPosition, actionScene->currentFrame);
                 selectedNode->setPositionOnNode(newPosition);
-                rigNode->setPosition(newPosition);
+                rigNode->setPosition(newPosition, true);
                 rigNode->updateAbsoluteTransformation();
                 for (actionScene->ikJointsPositoinMapItr = actionScene->ikJointsPositionMap.begin(); actionScene->ikJointsPositoinMapItr != actionScene->ikJointsPositionMap.end(); actionScene->ikJointsPositoinMapItr++){
                     int jointId = ((*actionScene->ikJointsPositoinMapItr).first);
@@ -534,9 +534,9 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.perVertexColor);
         addAction(assetAction);
     }
-    else if(actionType == ACTION_MULTI_NODE_DELETED_AFTER){
+    else if(actionType == ACTION_MULTI_NODE_DELETED_AFTER || actionType == ACTION_MULTI_NODE_ADDED){
         assetAction.drop();
-        assetAction.actionType = ACTION_MULTI_NODE_DELETED_AFTER;
+        assetAction.actionType = (ActionType)actionType;
         assetAction.objectIndex = (int)actionScene->selectedNodeIds.size();
         addAction(assetAction);
     }
@@ -741,6 +741,11 @@ int SGActionManager::undo(int &returnValue2)
             returnValue = RELOAD_FRAMES;
             break;
         }
+        case ACTION_MULTI_NODE_ADDED: {
+            returnValue = DELETE_MULTI_ASSET;
+            returnValue2 = recentAction.objectIndex;
+            break;
+        }
         case ACTION_MULTI_NODE_DELETED_AFTER: {
             returnValue = ADD_MULTI_ASSET_BACK;
             returnValue2 = recentAction.objectIndex;
@@ -818,6 +823,10 @@ int SGActionManager::redo()
             }
         }
             break;
+        case ACTION_MULTI_NODE_ADDED: {
+            returnValue = (int)ADD_MULTI_ASSET_BACK;
+            break;
+        }
         case ACTION_MULTI_NODE_DELETED_BEFORE:
             returnValue = (int)ACTION_MULTI_NODE_DELETED_BEFORE;
             break;

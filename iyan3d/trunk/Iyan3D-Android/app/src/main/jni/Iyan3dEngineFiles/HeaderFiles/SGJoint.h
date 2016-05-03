@@ -28,8 +28,8 @@ public:
     void  setPosition(Vector3 position , int frameId);
     void  setScale(Vector3 scale , int frameId);
     bool  setRotationOnNode(Quaternion rotation, bool updateBB = false);
-    bool  setPositionOnNode(Vector3 position);
-    bool  setScaleOnNode(Vector3 scale);
+    bool  setPositionOnNode(Vector3 position, bool updateBB = false);
+    bool  setScaleOnNode(Vector3 scale, bool updateBB = false);
         
     Quaternion getRotation(int frameId);
     Vector3 getPosition(int frameId);

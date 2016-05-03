@@ -23,6 +23,7 @@
 class SGMovementManager
 {
 private:
+    bool isPan;
     int swipeTiming;
     float xAcceleration, yAcceleration;
     Vector2 panBeganPoints[2];

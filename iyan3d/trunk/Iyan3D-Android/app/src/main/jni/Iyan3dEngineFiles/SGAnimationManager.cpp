@@ -75,6 +75,21 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId){
     animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
     animScene->nodes[toNodeId]->props.perVertexColor = animScene->nodes[fromNodeId]->props.perVertexColor;
     animScene->nodes[toNodeId]->props.vertexColor = animScene->nodes[fromNodeId]->props.vertexColor;
+    
+//    if(animScene->selectedNodeIds.size() > 0) {
+//        animScene->selectMan->unselectObjects();
+//        animScene->updater->setDataForFrame(animScene->currentFrame);
+//    }
+    
+    ActionKey key;
+    key.isPositionKey = true;
+    key.position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->positionKeys);
+    key.isRotationKey = true;
+    key.rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(animScene->currentFrame, animScene->nodes[fromNodeId]->rotationKeys,true);
+    key.isScaleKey = true;
+    key.scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->scaleKeys);
+
+    animScene->nodes[toNodeId]->setKeyForFrame(0, key);
     Logger::log(INFO,"SgAnimationManager", "Texture Name ; " + animScene->nodes[toNodeId]->textureName);
 }
 

@@ -1230,5 +1230,5 @@ void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame)
     setRotation(rotQ, currentFrame);
     Vector3 rotEuler;rotQ.toEuler(rotEuler);
 
-    node->setRotationInDegrees(rotEuler * RADTODEG);
+    node->setRotationInDegrees(rotEuler * RADTODEG, true);
 }
