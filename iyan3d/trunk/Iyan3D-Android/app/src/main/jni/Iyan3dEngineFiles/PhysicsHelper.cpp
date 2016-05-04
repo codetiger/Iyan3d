@@ -6,8 +6,8 @@
 //  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
-#include "PhysicsHelper.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/PhysicsHelper.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 
 SGEditorScene *scene;

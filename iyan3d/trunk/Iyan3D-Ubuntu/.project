@@ -51,6 +51,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/BoneLimitsHelper.cpp</locationURI>
 		</link>
 		<link>
+			<name>src/Iyan3dEngineFiles/BulletPhysics</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Iyan3dEngineFiles/CameraViewHelper.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/CameraViewHelper.cpp</locationURI>
@@ -74,6 +79,11 @@
 			<name>src/Iyan3dEngineFiles/MathHelper.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/MathHelper.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/Iyan3dEngineFiles/PhysicsHelper.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/PhysicsHelper.cpp</locationURI>
 		</link>
 		<link>
 			<name>src/Iyan3dEngineFiles/RenderHelper.cpp</name>
@@ -229,6 +239,26 @@
 			<name>src/SGEngine2/libpng</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Iyan3dEngineFiles/BulletPhysics/BulletCollision</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/BulletCollision</locationURI>
+		</link>
+		<link>
+			<name>src/Iyan3dEngineFiles/BulletPhysics/BulletDynamics</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/BulletDynamics</locationURI>
+		</link>
+		<link>
+			<name>src/Iyan3dEngineFiles/BulletPhysics/BulletSoftBody</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/BulletSoftBody</locationURI>
+		</link>
+		<link>
+			<name>src/Iyan3dEngineFiles/BulletPhysics/LinearMath</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/LinearMath</locationURI>
 		</link>
 		<link>
 			<name>src/SGEngine2/Core/Material</name>

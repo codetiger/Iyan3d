@@ -129,6 +129,10 @@
 									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/SGEngine2/Font/freeType/include/freetype"/>
 									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/SGEngine2"/>
 									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles"/>
+									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/BulletSoftBody"/>
+									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/BulletDynamics"/>
+									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/BulletCollision"/>
+									<listOptionValue builtIn="false" value="/home/harishankar/Desktop/SGRenderer/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/bullet3/src/"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.538624482" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1132145014" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
@@ -163,7 +167,7 @@
 									<listOptionValue builtIn="false" value="swscale"/>
 									<listOptionValue builtIn="false" value="embree"/>
 								</option>
-								<option id="gnu.cpp.link.option.debugging.gprof.127635885" name="Generate gprof information (-pg)" superClass="gnu.cpp.link.option.debugging.gprof" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.debugging.gprof.127635885" name="Generate gprof information (-pg)" superClass="gnu.cpp.link.option.debugging.gprof" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1211045611" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
