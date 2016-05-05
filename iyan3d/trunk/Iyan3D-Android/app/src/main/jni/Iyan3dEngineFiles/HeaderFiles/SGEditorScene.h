@@ -17,9 +17,13 @@
 #define SHADOW_TEXTURE_HEIGHT 2048
 #define PREVIEW_TEXTURE_WIDTH 512
 #define PREVIEW_TEXTURE_HEIGHT 512
-#define THUMBNAIL_TEXTURE_WIDTH 540
-#define THUMBNAIL_TEXTURE_HEIGHT 380
-
+#ifdef ANDROID
+    #define THUMBNAIL_TEXTURE_WIDTH 270
+    #define THUMBNAIL_TEXTURE_HEIGHT 190
+#else
+    #define THUMBNAIL_TEXTURE_WIDTH 540
+    #define THUMBNAIL_TEXTURE_HEIGHT 380
+#endif
 #define CAM_UPVEC_UPREAL_MAX_DIF 0.80
 #define CAM_PREV_PERCENT 0.18
 #define CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE 1.5
@@ -117,7 +121,7 @@ public:
     SGAutoRigSceneManager *rigMan;
     SGOBJManager *objMan;
     PhysicsHelper * physicsHelper;
-    
+
     /* SGEngine class objects */
     
     std::map<int,Texture*> renderingTextureMap;
@@ -156,7 +160,8 @@ public:
     
     /* Call backs */
     #ifdef ANDROID
-        bool (*downloadMissingAssetsCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture, JNIEnv *env, jclass type);
+        bool (*downloadMissingAssetsCallBack)(jobject object,std::string filePath, NODE_TYPE nodeType, bool hasTexture, JNIEnv *env, jclass type);
+        unsigned char* (*getVideoFrameCallBack)(std::string fileName, int frame,int width, int height);
     #endif
     
     void (*fileWriteCallBack)();
@@ -213,7 +218,7 @@ public:
     Vector3 getPivotPoint(bool initial);
     bool switchMirrorState();
     void setMirrorState(MIRROR_SWITCH_STATE flag);
-    
+
     void updatePhysics(int frame);
     void enableDirectionIndicator();
     void setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType);

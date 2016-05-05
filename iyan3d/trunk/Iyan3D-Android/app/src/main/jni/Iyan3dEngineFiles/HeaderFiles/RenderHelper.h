@@ -22,9 +22,11 @@ public:
     bool isExportingImages,isExporting1stTime;
     bool isMovingPreview;
     Vector2 cameraPreviewMoveDist;
+    bool isFirstTimeRender;
     
     RenderHelper(SceneManager *smgr, void *scene);
     ~RenderHelper();
+    bool supportsVAO();
     void drawGrid();
     void drawCircle();
     void drawMoveAxisLine();
