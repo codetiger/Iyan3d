@@ -40,13 +40,25 @@ RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
     renderingType = SHADER_COMMON_L1;
     isMovingPreview = false;
     cameraPreviewMoveDist = Vector2(0.0, 0.0);
+    isFirstTimeRender = true;
 }
 
 RenderHelper::~RenderHelper(){
     
 }
 
-
+bool RenderHelper::supportsVAO()
+{
+    #ifdef  ANDROID
+    char* exts = glGetString(GL_EXTENSIONS);
+    std::string extStr(exts);
+    std::string instance = "GL_OES_vertex_array_object";
+    if(extStr.find(instance) != std::string::npos)
+        return true;
+    return false;
+    #endif
+    return true;
+}
 
 void RenderHelper::drawGrid()
 {
@@ -321,9 +333,10 @@ void RenderHelper::rttDrawCall() {
         drawCameraPreview();
     }
 
-    if (!renderingScene->isRigMode && !renderingScene->shadowsOff && ShaderManager::shadowDensity > 0.0) {
+    if ((!renderingScene->isRigMode && !renderingScene->shadowsOff && ShaderManager::shadowDensity > 0.0) || isFirstTimeRender) {
         rttShadowMap();
         renderingScene->shadowsOff = true;
+        isFirstTimeRender = false;
     } else
         renderingScene->shadowsOff = true;
 }
