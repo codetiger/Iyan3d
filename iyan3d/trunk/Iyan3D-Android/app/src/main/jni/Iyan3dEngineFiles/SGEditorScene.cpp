@@ -5,6 +5,7 @@
 //  Created by Karthik on 22/12/15.
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
+//
 
 #include "HeaderFiles/SGEditorScene.h"
 #include "HeaderFiles/SGCloudRenderingHelper.h"
@@ -201,7 +202,6 @@ void SGEditorScene::initTextures()
     renderingTextureMap[RESOLUTION[2][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[2][0] , RESOLUTION[2][1]);
     renderingTextureMap[RESOLUTION[3][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[3][0] , RESOLUTION[3][1]);
     renderingTextureMap[RESOLUTION[4][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[4][0] , RESOLUTION[4][1]);
-
 }
 
 void SGEditorScene::renderAll()
@@ -241,7 +241,6 @@ void SGEditorScene::renderAll()
 
         moveMan->swipeToRotate();
         setTransparencyForObjects();
-
     }
 }
 
@@ -612,6 +611,9 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         }
     #else
         texturePath = constants::DocumentsStoragePath+"/importedImages/"+textureFileName+".png";
+            if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
+                texturePath = constants::DocumentsStoragePath+"/mesh/"+textureFileName+".png";
+            }
     #endif
 
     Logger::log(INFO,"SGEDITOR","Texture Path " + texturePath);
