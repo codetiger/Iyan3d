@@ -21,6 +21,7 @@ OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,fl
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
     this->screenScale = screenScale;
+    supportsVAO = false;
     depthBuffer = colorBuffer = frameBuffer = 0;
     shaderPrograms.clear();
     Initialize();
@@ -80,8 +81,15 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
     }
     
     glUseProgram(material->shaderProgram);
-
-    if(node->shouldUpdateMesh || bindAttrib) {
+    if(!supportsVAO) {
+        Mesh *mesh = dynamic_pointer_cast<MeshNode>(node)->getMesh();
+        MESH_TYPE mType = mesh->meshType;
+        if(node->shouldUpdateMesh) {
+            createVertexAndIndexBuffers(node, mType, false);
+            node->shouldUpdateMesh = false;
+        }
+        bindBufferAndAttributes(node, meshBufferIndex, mType);
+    } else if(node->shouldUpdateMesh || bindAttrib) {
         updateVAO(node, false, bindAttrib, meshBufferIndex);
         node->shouldUpdateMesh = false;
     }else
@@ -129,7 +137,7 @@ void OGLES2RenderManager::createVAO(shared_ptr<Node> node, short meshBufferIndex
     }
 }
 
-void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, bool isRTT, short meshBufferIndex)
+void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, bool bindAttrib, short meshBufferIndex)
 {
     
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
@@ -137,7 +145,7 @@ void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, b
     MESH_TYPE mType = mesh->meshType;
         
         handleVAO(node, 2 , meshBufferIndex, mType);
-    if(isRTT) {
+    if(bindAttrib) {
         bindBufferAndAttributes(node, meshBufferIndex, mType);
     } else {
         createVertexBuffer(node, meshBufferIndex, mType);
@@ -160,11 +168,6 @@ void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, b
 void OGLES2RenderManager::bindBufferAndAttributes(shared_ptr<Node> node, int meshBufferIndex, MESH_TYPE meshType)
 {
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
-    
-//    if(node->type == NODE_TYPE_MORPH_SKINNED)
-//        meshType = MESH_TYPE_HEAVY;
-//    else if (node->type == NODE_TYPE_SKINNED)
-//        meshType = (node->skinType == CPU_SKIN) ? MESH_TYPE_LITE : MESH_TYPE_HEAVY;
     
     glBindBuffer(GL_ARRAY_BUFFER, OGLNode->vertexBufLocations[meshBufferIndex]);
     BindAttributes(node->material,meshType);
@@ -195,7 +198,8 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     
     if(nodeMes == NULL)
         return;
-    handleVAO(node, 2, meshBufferIndex);
+    if(supportsVAO)
+        handleVAO(node, 2, meshBufferIndex);
 
     GLenum indicesDataType = GL_UNSIGNED_SHORT;
     if(node->instanceCount)
@@ -217,11 +221,13 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     } else
         drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, 0);
     
-//    for(int i = 0; i < node->getBufferCount();i++){
-//        UnBindAttributes(node->material);
-//    }
-    
-    handleVAO(node, 3);
+    if(supportsVAO)
+        handleVAO(node, 3);
+    else {
+        for(int i = 0; i < node->getBufferCount();i++){
+            UnBindAttributes(node->material);
+        }
+    }
 }
 
 void OGLES2RenderManager::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount)
@@ -522,9 +528,6 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
         return;
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     
-//    if(updateBothBuffers)
-//        OGLNode->IndexBufLocations.clear();
-//    OGLNode->vertexBufLocations.clear();
     
     u16 meshBufferCount = 1;
     if(node->type == NODE_TYPE_MORPH)
@@ -535,7 +538,6 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
         meshBufferCount = (dynamic_pointer_cast<MeshNode>(node))->getMesh()->getMeshBufferCount();
     
     for(int i = 0; i < meshBufferCount;i++) {
-        handleVAO(node, 1, i, meshType);
         createVertexBuffer(node,i,meshType);
         if(updateBothBuffers) {
             if(OGLNode->IndexBufLocations.size() > i) {
@@ -546,7 +548,6 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
             } else
                 OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,i));
         }
-        handleVAO(node, 3);
     }
 }
 

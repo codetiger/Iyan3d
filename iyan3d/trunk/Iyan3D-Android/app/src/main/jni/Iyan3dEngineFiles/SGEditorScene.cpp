@@ -22,6 +22,8 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     SceneHelper::screenHeight = screenHeight;
     printf(" \n Width %f %f ", SceneHelper::screenWidth, SceneHelper::screenHeight);
     this->smgr = smgr;
+    renHelper = new RenderHelper(smgr, this);
+    this->smgr->setVAOSupport(renHelper->supportsVAO());
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
     
     initVariables(smgr, device);
@@ -143,7 +145,6 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
 {
     cmgr = new CollisionManager();
     shaderMGR = new ShaderManager(sceneMngr, devType);
-    renHelper = new RenderHelper(sceneMngr, this);
     selectMan = new SGSelectionManager(sceneMngr, this);
     updater = new SGSceneUpdater(sceneMngr, this);
     loader = new SGSceneLoader(sceneMngr, this);
@@ -729,7 +730,7 @@ bool SGEditorScene::allNodesRemovable()
 
 bool SGEditorScene::allNodesClonable()
 {
-    bool status = true;
+    bool status = (bool)selectedNodeIds.size();
     for(int i = 0; i < selectedNodeIds.size(); i++) {
         NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
         if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT) {

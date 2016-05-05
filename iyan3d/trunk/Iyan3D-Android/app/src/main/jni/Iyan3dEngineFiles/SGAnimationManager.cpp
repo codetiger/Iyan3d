@@ -90,6 +90,26 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId){
     key.scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->scaleKeys);
 
     animScene->nodes[toNodeId]->setKeyForFrame(0, key);
+    
+    SGAction &addAction = (animScene->actionMan->actions[animScene->actionMan->actions.size() -1]);
+    
+    SGNode *sgNode = animScene->nodes[toNodeId];
+
+    if(sgNode->positionKeys.size())
+        addAction.nodePositionKeys = sgNode->positionKeys;
+    if(sgNode->rotationKeys.size())
+        addAction.nodeRotationKeys = sgNode->rotationKeys;
+    if(sgNode->scaleKeys.size())
+        addAction.nodeSCaleKeys = sgNode->scaleKeys;
+    if(sgNode->visibilityKeys.size())
+        addAction.nodeVisibilityKeys = sgNode->visibilityKeys;
+    for (int i = 0; i < (int)sgNode->joints.size(); i++) {
+        addAction.jointRotKeys[i] = sgNode->joints[i]->rotationKeys;
+        if(sgNode->getType() == NODE_TEXT_SKIN){
+            addAction.jointPosKeys[i] = sgNode->joints[i]->positionKeys;
+            addAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
+        }
+    }
     Logger::log(INFO,"SgAnimationManager", "Texture Name ; " + animScene->nodes[toNodeId]->textureName);
 }
 

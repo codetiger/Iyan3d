@@ -20,7 +20,6 @@ private:
     SceneManager* smgr;
     SGAction changeKeysAction;
     SGAction propertyAction;
-    SGAction assetAction;
     Vector3 startScale;
     MIRROR_SWITCH_STATE mirrorSwitchState;
     void rotateJoint(Vector3 outputValue);
@@ -29,6 +28,7 @@ private:
 public:
     
     int currentAction;
+    SGAction assetAction;
     SGAction addJointAction;
     //sabish
     SGAction scaleAction;

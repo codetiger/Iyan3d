@@ -350,9 +350,11 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
     if(!currentScene || !smgr)
         return;
 
-    if(actionType == UNDO_ACTION) {
+    if(actionType == UNDO_ACTION || actionType == REDO_ACTION) {
         int jointsCnt = (int)meshObject->joints.size();
-        SGAction &deleteAction = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1];
+        int actionIndex = (actionType == UNDO_ACTION) ? currentScene->actionMan->currentAction-1 : currentScene->actionMan->currentAction;
+        SGAction &deleteAction = currentScene->actionMan->actions[actionIndex];
+
         if(deleteAction.nodePositionKeys.size())
             meshObject->positionKeys = deleteAction.nodePositionKeys;
         if(deleteAction.nodeRotationKeys.size())
@@ -374,7 +376,7 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
             }
         }
        // meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
-        meshObject->actionId = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].objectIndex;
+        meshObject->actionId = currentScene->actionMan->actions[actionIndex].objectIndex;
     }
     
     if(actionType == REDO_ACTION) {

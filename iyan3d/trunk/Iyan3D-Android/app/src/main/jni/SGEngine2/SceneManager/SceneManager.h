@@ -100,6 +100,7 @@ public:
     void writeImageToFile(Texture *texture , char* filePath, IMAGE_FLIP flipType = NO_FLIP);
     
     void updateVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE);
+    bool setVAOSupport(bool status);
 };
 
 #endif /* defined(__SGEngine2__SceneManager__) */

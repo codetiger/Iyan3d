@@ -2200,7 +2200,24 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                            [self updateAssetListInScenes];
                                            [self showOrHideProgress:HIDE_PROGRESS];
                                        }];
-        [view addAction:deleteButton];
+    UIAlertAction* cloneButton = [UIAlertAction
+                                   actionWithTitle:@"Clone"
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction * action)
+                                   {
+                                       [self showOrHideProgress:SHOW_PROGRESS];
+                                       if(editorScene->selectedNodeIds.size() > 0){
+                                           [self createDuplicateAssets];
+                                           [self undoRedoButtonState:DEACTIVATE_BOTH];
+                                       }
+                                       
+                                       [self updateAssetListInScenes];
+                                       [self showOrHideProgress:HIDE_PROGRESS];
+                                   }];
+
+    [view addAction:deleteButton];
+    if(editorScene && editorScene->allNodesClonable())
+        [view addAction:cloneButton];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceRect = arect;
     popover.sourceView=self.renderView;

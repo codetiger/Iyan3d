@@ -72,7 +72,7 @@ void SceneManager::setDisplayResolution(int width,int height){
 
 void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #ifndef UBUNTU
-    if(device == METAL)
+    if(device == METAL || !renderMan->supportsVAO)
         renderMan->createVertexAndIndexBuffers(node,meshType);
 #endif
     nodes.push_back(node);
@@ -81,11 +81,15 @@ void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType)
 {
 #ifndef UBUNTU
-    if(device == METAL)
+    if(device == METAL || !renderMan->supportsVAO)
         renderMan->createVertexAndIndexBuffers(node,meshType, true);
     if(device == OPENGLES2 && node->type == NODE_TYPE_PARTICLES) {
-        for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount(); i++)
-            ((OGLES2RenderManager*)renderMan)->updateVAO(node, true, false, i);
+        for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount(); i++) {
+            if(renderMan->supportsVAO)
+                ((OGLES2RenderManager*)renderMan)->updateVAO(node, true, false, i);
+            else
+                ((OGLES2RenderManager*)renderMan)->bindBufferAndAttributes(node, i, meshType);
+        }
     }
 #endif
 
@@ -472,4 +476,8 @@ void SceneManager::updateVertexBuffer(int nodeIndex){
 	#endif
 }
 
+bool SceneManager::setVAOSupport(bool status)
+{
+    renderMan->supportsVAO = status;
+}
 

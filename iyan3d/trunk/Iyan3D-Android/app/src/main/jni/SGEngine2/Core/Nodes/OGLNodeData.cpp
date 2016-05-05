@@ -21,7 +21,7 @@ OGLNodeData::~OGLNodeData(){
     for(int i = 0; i < IndexBufLocations.size();i++)
         glDeleteBuffers(1,&IndexBufLocations[i]);
     
-    for(int i = 0; i < IndexBufLocations.size();i++)
+    for(int i = 0; i < vertexArrayLocations.size();i++)
         glDeleteVertexArraysOES(1, &vertexArrayLocations[i]);
 
     vertexBufLocations.clear();

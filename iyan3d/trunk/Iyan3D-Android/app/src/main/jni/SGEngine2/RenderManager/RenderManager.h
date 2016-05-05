@@ -41,6 +41,7 @@ public:
         
     }
     
+    bool supportsVAO;
     int viewportWidth, viewportHeight;
     
     virtual void Initialize() = 0;

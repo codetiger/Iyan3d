@@ -552,7 +552,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         {
 
             if(editorScene->selectedNodeIds.size() > 0) {
-                if(editorScene->allNodesRemovable())
+                if(editorScene->allNodesRemovable() || editorScene->allNodesClonable())
                     [self.delegate presentPopOver:_longPresPosition];
                 _longPress=false;
             } else {

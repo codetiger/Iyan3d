@@ -503,8 +503,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->getType());
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->props.fontSize);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[indexOfAsset]->props.isLighting);
-        if(actionType == ACTION_TEXT_IMAGE_DELETE)
-            StoreDeleteObjectKeys(indexOfAsset);
+        StoreDeleteObjectKeys(indexOfAsset);
         addAction(assetAction);
     } else if (actionType == ACTION_APPLY_ANIM) {
         assetAction.drop();
@@ -649,7 +648,7 @@ int SGActionManager::undo(int &returnValue2)
     
     SGAction &recentAction = actions[currentAction-1];
     int indexOfAction = 0;
-    
+        
     if(currentAction <= 0) {
         currentAction = 0;
         return (actions.size() > 0) ? DEACTIVATE_UNDO:DEACTIVATE_BOTH;
@@ -907,8 +906,10 @@ int SGActionManager::redo()
         default:
             return DO_NOTHING;
     }
+    
     if(recentAction.actionType != ACTION_NODE_ADDED && recentAction.actionType != ACTION_TEXT_IMAGE_ADD)
         currentAction++;
+    
     if(recentAction.actionType != ACTION_SWITCH_FRAME){
         actionScene->selectMan->removeChildren(actionScene->getParentNode());
         actionScene->updater->setKeysForFrame(actionScene->currentFrame);
