@@ -712,9 +712,7 @@
 		2567B0571B179CAD008D25E9 /* depthPassSkin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */; };
 		2567B0581B179CAD008D25E9 /* draw2dImage.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED81B1484AE00DCD585 /* draw2dImage.fsh */; };
 		2567B0591B179CAD008D25E9 /* draw2dImage.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED91B1484AE00DCD585 /* draw2dImage.vsh */; };
-		2567B05A1B179CAD008D25E9 /* GPUSkinShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDA1B1484AE00DCD585 /* GPUSkinShader.fsh */; };
 		2567B05B1B179CAD008D25E9 /* GPUSkinShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */; };
-		2567B05C1B179CAD008D25E9 /* shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDC1B1484AE00DCD585 /* shader.fsh */; };
 		2567B05D1B179CAD008D25E9 /* shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDD1B1484AE00DCD585 /* shader.vsh */; };
 		2567B05E1B179CAD008D25E9 /* toon.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDE1B1484AE00DCD585 /* toon.fsh */; };
 		256ACDAB1CABAEF60080014E /* indicator.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 256ACDAA1CABAEF60080014E /* indicator.sgm */; };
@@ -1752,9 +1750,7 @@
 		6231CEE11B1484AE00DCD585 /* depthPassSkin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */; };
 		6231CEE21B1484AE00DCD585 /* draw2dImage.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED81B1484AE00DCD585 /* draw2dImage.fsh */; };
 		6231CEE31B1484AE00DCD585 /* draw2dImage.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED91B1484AE00DCD585 /* draw2dImage.vsh */; };
-		6231CEE41B1484AE00DCD585 /* GPUSkinShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDA1B1484AE00DCD585 /* GPUSkinShader.fsh */; };
 		6231CEE51B1484AE00DCD585 /* GPUSkinShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */; };
-		6231CEE61B1484AE00DCD585 /* shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDC1B1484AE00DCD585 /* shader.fsh */; };
 		6231CEE71B1484AE00DCD585 /* shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDD1B1484AE00DCD585 /* shader.vsh */; };
 		6231CEE81B1484AE00DCD585 /* toon.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDE1B1484AE00DCD585 /* toon.fsh */; };
 		624641CE19939BB700CE8547 /* Animation-topviewBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 624641CC19939BB700CE8547 /* Animation-topviewBg.png */; };
@@ -2294,7 +2290,6 @@
 		E20672741B049AA6006DD2F7 /* Scene-topviewBg-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9014E1A0A54850051B941 /* Scene-topviewBg-phone@2x.png */; };
 		E20672751B049AA6006DD2F7 /* topbarView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901701A0A54BF0051B941 /* topbarView@2x.png */; };
 		E206727C1B049AA6006DD2F7 /* model@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901091A0A07860051B941 /* model@2x.png */; };
-		E206727F1B049AA6006DD2F7 /* vertexColor.frag in Resources */ = {isa = PBXBuildFile; fileRef = E24975ED196BDD590025D442 /* vertexColor.frag */; };
 		E20672801B049AA6006DD2F7 /* round83.png in Resources */ = {isa = PBXBuildFile; fileRef = 25730E6F1AFD3D560042F81A /* round83.png */; };
 		E20672821B049AA6006DD2F7 /* move-first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9010A1A0A07860051B941 /* move-first@2x.png */; };
 		E20672841B049AA6006DD2F7 /* playing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F31A7251AA4960300A6E7B1 /* playing@3x.png */; };
@@ -2555,7 +2550,6 @@
 		E24974DF196BDC8E0025D442 /* jointsData.json in Resources */ = {isa = PBXBuildFile; fileRef = E24974DC196BDC8E0025D442 /* jointsData.json */; };
 		E24975F1196BDD590025D442 /* color.frag in Resources */ = {isa = PBXBuildFile; fileRef = E24975C2196BDD590025D442 /* color.frag */; };
 		E24975FA196BDD590025D442 /* color.vert in Resources */ = {isa = PBXBuildFile; fileRef = E24975CB196BDD590025D442 /* color.vert */; };
-		E249761C196BDD590025D442 /* vertexColor.frag in Resources */ = {isa = PBXBuildFile; fileRef = E24975ED196BDD590025D442 /* vertexColor.frag */; };
 		E249761D196BDD590025D442 /* vertexColor.vert in Resources */ = {isa = PBXBuildFile; fileRef = E24975EE196BDD590025D442 /* vertexColor.vert */; };
 		E2497622196BDD9D0025D442 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497621196BDD9D0025D442 /* AppDelegate.mm */; };
 		E2497653196BE0190025D442 /* AssetCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497624196BE0190025D442 /* AssetCellView.mm */; };
@@ -3998,9 +3992,7 @@
 		6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPassSkin.vsh; path = Resources/shaders/depthPassSkin.vsh; sourceTree = "<group>"; };
 		6231CED81B1484AE00DCD585 /* draw2dImage.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = draw2dImage.fsh; path = Resources/shaders/draw2dImage.fsh; sourceTree = "<group>"; };
 		6231CED91B1484AE00DCD585 /* draw2dImage.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = draw2dImage.vsh; path = Resources/shaders/draw2dImage.vsh; sourceTree = "<group>"; };
-		6231CEDA1B1484AE00DCD585 /* GPUSkinShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = GPUSkinShader.fsh; path = Resources/shaders/GPUSkinShader.fsh; sourceTree = "<group>"; };
 		6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = GPUSkinShader.vsh; path = Resources/shaders/GPUSkinShader.vsh; sourceTree = "<group>"; };
-		6231CEDC1B1484AE00DCD585 /* shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.fsh; path = Resources/shaders/shader.fsh; sourceTree = "<group>"; };
 		6231CEDD1B1484AE00DCD585 /* shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.vsh; path = Resources/shaders/shader.vsh; sourceTree = "<group>"; };
 		6231CEDE1B1484AE00DCD585 /* toon.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = toon.fsh; path = Resources/shaders/toon.fsh; sourceTree = "<group>"; };
 		624641CC19939BB700CE8547 /* Animation-topviewBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Animation-topviewBg.png"; path = "Resources/imgs/Animation-topviewBg.png"; sourceTree = "<group>"; };
@@ -4413,7 +4405,6 @@
 		E24974DC196BDC8E0025D442 /* jointsData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = jointsData.json; path = Resources/jsonFiles/jointsData.json; sourceTree = "<group>"; };
 		E24975C2196BDD590025D442 /* color.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = color.frag; path = Resources/shaders/color.frag; sourceTree = "<group>"; };
 		E24975CB196BDD590025D442 /* color.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = color.vert; path = Resources/shaders/color.vert; sourceTree = "<group>"; };
-		E24975ED196BDD590025D442 /* vertexColor.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vertexColor.frag; path = Resources/shaders/vertexColor.frag; sourceTree = "<group>"; };
 		E24975EE196BDD590025D442 /* vertexColor.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vertexColor.vert; path = Resources/shaders/vertexColor.vert; sourceTree = "<group>"; };
 		E2497620196BDD9D0025D442 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ui/AppDelegate.h; sourceTree = "<group>"; };
 		E2497621196BDD9D0025D442 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ui/AppDelegate.mm; sourceTree = "<group>"; };
@@ -6907,12 +6898,9 @@
 				6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */,
 				6231CED81B1484AE00DCD585 /* draw2dImage.fsh */,
 				6231CED91B1484AE00DCD585 /* draw2dImage.vsh */,
-				6231CEDA1B1484AE00DCD585 /* GPUSkinShader.fsh */,
 				6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */,
-				6231CEDC1B1484AE00DCD585 /* shader.fsh */,
 				6231CEDD1B1484AE00DCD585 /* shader.vsh */,
 				6231CEDE1B1484AE00DCD585 /* toon.fsh */,
-				E24975ED196BDD590025D442 /* vertexColor.frag */,
 				E24975EE196BDD590025D442 /* vertexColor.vert */,
 				E24975C2196BDD590025D442 /* color.frag */,
 				E24975CB196BDD590025D442 /* color.vert */,
@@ -7491,7 +7479,6 @@
 				7FC901271A0A07860051B941 /* model@2x.png in Resources */,
 				01F873281C3A78B4009AA31E /* Facebook_IPhone.png in Resources */,
 				01B4D0411C2937000091E19B /* Back.png in Resources */,
-				E249761C196BDD590025D442 /* vertexColor.frag in Resources */,
 				01ACD0CA1C3D1AAA0096AD14 /* Render-Preview-size_Large.png in Resources */,
 				7F307CE71B58FBF10065BBC1 /* like-fill-phone@2x.png in Resources */,
 				3D04EAF51C25830F00C18E1A /* No-Bevel.png in Resources */,
@@ -7998,7 +7985,6 @@
 				C8DF1FE11C242DBD00F689D6 /* close.png in Resources */,
 				01F872DE1C3A6C4E009AA31E /* Export-image_IPhone@2x.png in Resources */,
 				7F31A70B1AA469EA00A6E7B1 /* animate-img-phone@3x.png in Resources */,
-				6231CEE41B1484AE00DCD585 /* GPUSkinShader.fsh in Resources */,
 				6231CEE51B1484AE00DCD585 /* GPUSkinShader.vsh in Resources */,
 				7F00878D1ADFC15400764DDE /* justify@3x.png in Resources */,
 				7FC900E61A0A01470051B941 /* properties-img-phone.png in Resources */,
@@ -8068,7 +8054,6 @@
 				25D671931C46353100BE685D /* controls1.sgm in Resources */,
 				7FC900DE1A0A01470051B941 /* move-last-phone.png in Resources */,
 				62FA5F541990E9D4003B0893 /* new-img.png in Resources */,
-				6231CEE61B1484AE00DCD585 /* shader.fsh in Resources */,
 				01B395341C37AACE003955C6 /* Import-models_Pad@2x.png in Resources */,
 				0184EC8A1C35406A006F0B57 /* RenderTableViewCell.xib in Resources */,
 				7FC900EF1A0A01470051B941 /* rotate-img-phone@2x.png in Resources */,
@@ -8338,11 +8323,9 @@
 				01B6C8BA1C3B94590050D2F9 /* AnimationSelectionCollectionViewCellPhone.xib in Resources */,
 				2567B0591B179CAD008D25E9 /* draw2dImage.vsh in Resources */,
 				25EC6CD51C7F39DD002CF5D2 /* wm107.png in Resources */,
-				2567B05A1B179CAD008D25E9 /* GPUSkinShader.fsh in Resources */,
 				2567B05B1B179CAD008D25E9 /* GPUSkinShader.vsh in Resources */,
 				25EC6BA71C7F066B002CF5D2 /* wm13.png in Resources */,
 				25EC6CAD1C7F39DD002CF5D2 /* wm87.png in Resources */,
-				2567B05C1B179CAD008D25E9 /* shader.fsh in Resources */,
 				2567B05D1B179CAD008D25E9 /* shader.vsh in Resources */,
 				2567B05E1B179CAD008D25E9 /* toon.fsh in Resources */,
 				E21A894E1B08A6E200435C87 /* clock.png in Resources */,
@@ -8546,7 +8529,6 @@
 				01F872A31C3A5A06009AA31E /* Play_IPhone.png in Resources */,
 				E206727C1B049AA6006DD2F7 /* model@2x.png in Resources */,
 				0184EC721C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png in Resources */,
-				E206727F1B049AA6006DD2F7 /* vertexColor.frag in Resources */,
 				E20672801B049AA6006DD2F7 /* round83.png in Resources */,
 				01B395021C37A42C003955C6 /* Import-image_Pad.png in Resources */,
 				01ACD0A81C3CEF360096AD14 /* color_IPhone@2x.png in Resources */,

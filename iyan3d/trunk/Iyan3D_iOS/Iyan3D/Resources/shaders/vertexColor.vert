@@ -15,6 +15,7 @@ attribute vec4 optionalData1;
 uniform int isLighting;
 uniform vec3  eyePos;
 uniform mat4 mvp,Model,lvp;
+uniform vec3 perVertexColor;
 
 varying float shadowDist,lightingValue;
 varying vec2 vTexCoord;
@@ -24,7 +25,7 @@ varying vec4 texCoordsBias,normal,eyeVec,lightDir , vertexPosCam;
 
 void main()
 {
-    vertexColor = vec3(optionalData1.xyz);
+    vertexColor = (perVertexColor.x == -1.0) ? vec3(optionalData1.xyz) : perVertexColor;
     vTexCoord = vec2(0.0);
     lightingValue = float(isLighting);
     vec4 vertex_position_cameraspace = Model * vec4(vertPosition, 1.0);

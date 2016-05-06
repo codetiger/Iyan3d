@@ -144,4 +144,25 @@ float MathHelper::GetScreenScaleFactor(const Vector3& worldpnt, shared_ptr<Camer
     return 0;
 }
 
+Vector3 MathHelper::packInterger(int toPack)
+{
+    Vector3 res;
+    res.x = (int)((toPack >> 8) & 0xFF);
+    res.y = (int)(toPack  & 0xFF);
+    res.z = 255.0;
+
+    return res;
+}
+
+int MathHelper::unpackInterger(Vector3 toUnpack)
+{
+    int res = 0;
+    
+    res = res | ((int)toUnpack.x & 0xFF);
+    res = res << 8;
+    res = res | ((int)toUnpack.y & 0xFF);
+    return res;
+}
+
+
 

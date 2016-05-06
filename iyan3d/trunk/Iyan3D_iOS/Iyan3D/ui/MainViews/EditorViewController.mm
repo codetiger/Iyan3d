@@ -441,12 +441,12 @@ BOOL missingAlertShown;
             [self.rotateBtn setEnabled:false];
             [self.scaleBtn setEnabled:false];
             [self.optionsBtn setEnabled:false];
-            return;
+        } else {
+            [self.moveBtn setEnabled:true];
+            [self.rotateBtn setEnabled:true];
+            [self.scaleBtn setEnabled:true];
+            [self.optionsBtn setEnabled:(editorScene->allNodesRemovable() || editorScene->allNodesClonable())];
         }
-        [self.moveBtn setEnabled:true];
-        [self.rotateBtn setEnabled:true];
-        [self.scaleBtn setEnabled:true];
-        [self.optionsBtn setEnabled:false];
     }
     else{
         [self.optionsBtn setEnabled:true];
@@ -1392,27 +1392,16 @@ BOOL missingAlertShown;
 - (IBAction)optionsBtnAction:(id)sender
 {
     
-    if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
-    {
-        /*
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"optionsBtn"];
-        [_popUpVc.view setClipsToBounds:YES];
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = CGSizeMake(205.0, 42);
-        self.popoverController.delegate =self;
-        self.popUpVc.delegate=self;
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:YES];
-         */
+    if((!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED)) && editorScene->selectedNodeIds.size() <= 0)
         return;
-    }
-    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
+    
+    if(editorScene->selectedNodeIds.size() > 0) {
+        if(editorScene->allNodesRemovable() || editorScene->allNodesClonable()){
+            CGRect rect = _optionsBtn.frame;
+            rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+            [self presentPopOver:rect];
+        }
+    } else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
     {
         Quaternion lightProps;
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)

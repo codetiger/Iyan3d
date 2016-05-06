@@ -164,12 +164,12 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
     if(!selectionScene || !smgr)
         return false;
     
-    int nodeId = (int) pixel.x,jointId = pixel.y;
+    int nodeId = MathHelper::unpackInterger(pixel) ,jointId = pixel.z;
     
-    if(nodeId != 255 && nodeId >= selectionScene->nodes.size()){
+    if(nodeId != 65535 && nodeId >= selectionScene->nodes.size()){
         Logger::log(ERROR, "SganimationSceneRTT","Wrong Color from RTT texture colorx:" + to_string(nodeId));
         return false;
-    } else if (nodeId == 255 && jointId == 255 && !touchMove) {
+    } else if (nodeId == 65535 && jointId == 255 && !touchMove) {
         if(selectionScene->selectedNodeIds.size() > 0) {
             unselectObjects();
         } else {
@@ -179,14 +179,14 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
     }
     
     if(touchMove && selectionScene->selectedNodeId == nodeId)
-        selectionScene->moveNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS;
+        selectionScene->moveNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS;
     else if(!touchMove) {
         selectionScene->moveNodeId = NOT_EXISTS;
         if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected && isMultipleSelectionEnabled)
             return multipleSelections(nodeId);
         else {
             unselectObject(selectionScene->selectedNodeId);
-            selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 255) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
+            selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
         }
     }
     if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && selectionScene->selectedNodeIds.size() <= 0) {
@@ -384,11 +384,6 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     
     //currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
     currentSelectedNode->props.isSelected = true;
-    //currentSelectedNode->props.isLighting = false;
-    if(currentSelectedNode->getType() == NODE_RIG || currentSelectedNode->getType() == NODE_TEXT_SKIN)
-        currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-    else
-        currentSelectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     
     currentSelectedNode->props.transparency = NODE_SELECTION_TRANSPARENCY;
     selectionScene->selectedNode = currentSelectedNode;
@@ -448,14 +443,7 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     selectionScene->selectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
 
     selectionScene->isNodeSelected = selectionScene->selectedNode->props.isSelected = true;
-    
-    //selectionScene->selectedNode->props.prevMatName = selectionScene->selectedNode->node->material->name;
-    
-    if(selectionScene->selectedNode->getType() == NODE_RIG || selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
-        selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-    else
-        selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-    
+        
     selectionScene->selectedNode->props.transparency = NODE_SELECTION_TRANSPARENCY;
     
     bool status = true;

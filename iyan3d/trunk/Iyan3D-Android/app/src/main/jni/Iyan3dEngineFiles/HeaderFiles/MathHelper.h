@@ -23,6 +23,9 @@ public:
     static void copyVector4ToPointer(float * pointer , Vector4 value);
     static void copyVector3ToPointer(float * pointer , Vector3 value);
     static float GetScreenScaleFactor(const Vector3& worldpnt,  shared_ptr<CameraNode> camera);
+    static Vector3 packInterger(int toPack);
+    static int unpackInterger(Vector3 toUnpack);
+
     template <typename T>
     static T getLinearInterpolation(float x1, T y1, float x2, T y2, float x)
     {

@@ -474,7 +474,8 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->props.perVertexColor = true;
         renderingScene->nodes[i]->props.isVisible = renderingScene->nodes[i]->isTempNode ? false : true;
-        renderingScene->nodes[i]->props.vertexColor = Vector3((i/255.0),1.0,1.0);
+        Vector3 packed = MathHelper::packInterger(i);
+        renderingScene->nodes[i]->props.vertexColor = packed/255.0;
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
         else if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
@@ -521,7 +522,9 @@ void RenderHelper::drawJointsSpheresForRTT(bool enableDepthTest)
         vertexColors.push_back(renderingScene->jointSpheres[j]->props.vertexColor);
         scaleValues.push_back(renderingScene->jointSpheres[j]->node->getScale());
         renderingScene->jointSpheres[j]->setScaleOnNode(scaleValues[j] * 1.3);
-        renderingScene->jointSpheres[j]->props.vertexColor = Vector3(renderingScene->selectedNodeId/255.0,j/255.0,1.0);
+        Vector3 packed = MathHelper::packInterger(renderingScene->selectedNodeId);
+        packed.z = j;
+        renderingScene->jointSpheres[j]->props.vertexColor = packed/255.0;
         smgr->RenderNode(false, smgr->getNodeIndexByID(renderingScene->jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
     }
     // Reset joints
