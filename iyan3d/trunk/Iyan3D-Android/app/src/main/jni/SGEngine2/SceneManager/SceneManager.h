@@ -70,6 +70,7 @@ public:
     shared_ptr<PlaneMeshNode> createPlaneNode(string callBackFuncName , float aspectRatio);
     shared_ptr<SGCircleNode> createCircleNode(int totVertices,int radius,string callBackFuncName);
     shared_ptr<LightNode> createLightNode(Mesh *mesh, string callBackFuncName);
+    shared_ptr<Node> createInstancedNode(shared_ptr<Node> original, string callBackFuncName);
     
     void (*ShaderCallBackForNode)(int,std::string mateialName,std::string callbackFuncName);
     bool (*isTransparentCallBack)(int nodeId,string callbackFuncName);

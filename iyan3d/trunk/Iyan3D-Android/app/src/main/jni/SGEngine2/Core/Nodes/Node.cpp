@@ -26,8 +26,7 @@ Node::Node() {
         textures[i] = NULL;
     //Parent = NULL;
     Children = make_shared< vector< shared_ptr<Node> > >();
-    this->instancedNodes = make_shared< vector< shared_ptr<InstanceNode> > >();
-    textureCount = instanceCount = 0;
+    textureCount = 0;
     isVisible = true;
     #ifdef ANDROID
     nodeData = make_shared<OGLNodeData>();
@@ -43,21 +42,16 @@ Node::Node() {
     drawMode = DRAW_MODE_TRIANGLES;
 }
 Node::~Node() {
-    if(this->instancedNodes->size()){
-        for(u16 i = 0;i < instancedNodes->size();i++){
-            if((*instancedNodes)[i]) {
-                while ((*instancedNodes)[i].use_count() > 0)
-                    (*instancedNodes)[i].reset();
-                instancedNodes->erase(instancedNodes->begin() + i);
+    if(this->instancedNodes.size()){
+        for(u16 i = 0;i < instancedNodes.size();i++){
+            if(instancedNodes[i]) {
+                while (instancedNodes[i].use_count() > 0)
+                    instancedNodes[i].reset();
+                instancedNodes.erase(instancedNodes.begin() + i);
             }
         }
     }
-    this->instancedNodes->clear();
-    if(this->instancedNodes) {
-        while(this->instancedNodes.use_count() > 0)
-            this->instancedNodes.reset();
-    }
-
+    this->instancedNodes.clear();
     
     if(this->Children->size()){
         for(u16 i = 0;i < Children->size();i++){
@@ -225,28 +219,7 @@ Texture* Node::getActiveTexture(){
         return NULL;
     return textures[activeTextureIndex];
 }
-shared_ptr<InstanceNode> Node::getNodeInstanceByIndex(u16 index){
-    
-    return (*this->instancedNodes)[index];
-}
-bool Node::CreateNodeInstance(u16 instanceCount){
-    if(type <= NODE_TYPE_CAMERA || type == NODE_TYPE_LIGHT || type == NODE_TYPE_LIGHT)
-        return false;
-    this->instanceCount = instanceCount;
-    for(u16 i = 0;i < instanceCount;i++){
-        shared_ptr<InstanceNode> INode = shared_ptr<InstanceNode>(new InstanceNode());
-        this->instancedNodes->push_back(INode);
-    }
-    return true;
-}
-void Node::RemoveNodeInstanceByIndex(u16 index){
-    this->instancedNodes->erase(this->instancedNodes->begin() + index);
-    instanceCount--;
-}
-void Node::RemoveAllInstanceOfNode(){
-    this->instancedNodes->clear();
-    instanceCount = 0;
-}
+
 void Node::setMaterial(Material *mat,bool isTransparentMaterial){
 #ifndef UBUNTU
     if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
@@ -320,4 +293,12 @@ void Node::detachAllChildren(){
     Children->clear();
 }
 
+void Node::setUserPointer(void* userPtr)
+{
+    this->userPtr = userPtr;
+}
+void* Node::getUserPointer()
+{
+    return userPtr;
+}
 

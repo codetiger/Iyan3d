@@ -11,24 +11,18 @@
 
 #include <iostream>
 #include "../common/common.h"
+#include "MeshNode.h"
 
-class InstanceNode{
+class InstanceNode : public MeshNode {
 
 private:
         Mat4 AbsoluteTransformation;
         Vector3 position,scale,rotation;
 public:
-    InstanceNode();
-    ~InstanceNode();
-    Mat4 getAbsoluteTransformation();
-    void setRotationInDegrees(Vector3 rotation);
-    void setRotationInRadians(Vector3 rotation);
-    void setPosition(Vector3 position);
-    void setScale(Vector3 scale);
-    Vector3 getRotationInRadians();
-    Vector3 getRotationInDegrees();
-    Vector3 getPosition();
-    Vector3 getScale();
+    InstanceNode(shared_ptr<Node> node);
+    virtual ~InstanceNode();
+    
+    virtual void update();
 };
 
 #endif /* defined(__SGEngine2__InstanceNode__) */

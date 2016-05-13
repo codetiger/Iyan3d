@@ -19,7 +19,6 @@
 #endif
 
 #include "../Textures/Texture.h"
-#include "InstanceNode.h"
 #include "../Material/Material.h"
 #include <sys/types.h>
 #include <memory>
@@ -42,7 +41,8 @@ typedef enum {
     NODE_TYPE_SKINNED,
     NODE_TYPE_MORPH_SKINNED,
     NODE_TYPE_PARTICLES,
-    NODE_TYPE_LINES
+    NODE_TYPE_LINES,
+    NODE_TYPE_INSTANCED
 } node_type;
 
 
@@ -72,10 +72,10 @@ enum DRAW_MODE{
 class Node : public enable_shared_from_this<Node>{
 
 private:
-    shared_ptr< vector< shared_ptr<InstanceNode> > > instancedNodes;
     int id,textureCount;
     bool isMetalSupported();
     bool isVisible;
+    void * userPtr;
     
 protected:
     Mat4 AbsoluteTransformation;
@@ -83,18 +83,21 @@ protected:
     Texture* textures[MAX_TEXTURE_PER_NODE];
     
 public:
+    
+    int instancingRenderIt;
+    vector< shared_ptr<Node> > instancedNodes;
     BoundingBox bBox;
     skin_type skinType;
     bool needsVertexPosition, needsVertexNormal, needsVertexColor, needsUV1, needsUV2, needsUV3, shouldUpdateMesh;
     bool needsIndexBuf;
     DRAW_MODE drawMode;
     u16 activeTextureIndex;
-    u16 instanceCount;
     string callbackFuncName;
     node_type type;
     node_gpumem_type memtype;
     shared_ptr<APIData> nodeData;
     shared_ptr<Node> Parent;
+    shared_ptr<Node> original;
     shared_ptr< vector< shared_ptr<Node> > > Children;
     Material *material;
     
@@ -114,8 +117,6 @@ public:
     void setActiveTextureByName(string *textureName);
     void setActiveTextureByIndex(int textureIndex);
     void FlagTransformationToChildren(); // NOT FIXED
-    void RemoveNodeInstanceByIndex(u16 index);
-    void RemoveAllInstanceOfNode();
     void setMaterial(Material* mat,bool isTransparentMaterial = false);
     void setID(int id);
     
@@ -126,7 +127,6 @@ public:
     void detachFromParent();
     void detachAllChildren();
     
-    bool CreateNodeInstance(u16 instanceCount);
     BoundingBox getBoundingBox();
     bool getVisible();
     int getID();
@@ -146,8 +146,10 @@ public:
     Texture* getTextureByIndex(u16 textureIndex);
     Texture* getActiveTexture();
     
-    shared_ptr<InstanceNode> getNodeInstanceByIndex(u16 index);
     shared_ptr<Node> getParent();
+    
+    void setUserPointer(void* userPtr);
+    void* getUserPointer();
     
 };
 

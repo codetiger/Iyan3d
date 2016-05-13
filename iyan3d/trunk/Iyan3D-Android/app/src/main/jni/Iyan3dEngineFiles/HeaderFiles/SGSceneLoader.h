@@ -26,6 +26,8 @@ public:
     void readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
     void restoreTexture(SGNode* meshObject,int actionType);
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
+    void removeNodeFromInstances(SGNode* sgNode);
+    void copyMeshFromOriginalNode(SGNode* sgNode);
     bool removeSelectedObjects();
     bool removeTempNodeIfExists();
     
@@ -43,6 +45,11 @@ public:
     void setJointsScale(SGNode *sgNode);
     void addLight(SGNode *light);
     void performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType);
+    
+    // Instanced Nodes
+    
+    void createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType);
+    bool loadInstance(SGNode* iNode, int origActionId, ActionType actionType);
 };
 
 #endif /* SGSceneLoader_h */

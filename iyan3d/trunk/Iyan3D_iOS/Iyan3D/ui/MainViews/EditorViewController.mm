@@ -1570,6 +1570,21 @@ BOOL missingAlertShown;
             }
             break;
         }
+        case ADD_INSTANCE_BACK: {
+            SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction - 1];
+            
+            int actionId = recentAction.actionSpecificIntegers[1];
+            int nodeIndex = -1;
+            for (int i = 0; i < editorScene->nodes.size(); i++) {
+                if(actionId == editorScene->nodes[i]->actionId)
+                    nodeIndex = i;
+            }
+            
+            if(nodeIndex != NOT_EXISTS) {
+                editorScene->loader->createInstance(editorScene->nodes[nodeIndex], editorScene->nodes[nodeIndex]->getType(), UNDO_ACTION);
+            }
+            break;
+        }
         case DELETE_MULTI_ASSET:
         case ADD_MULTI_ASSET_BACK:{
             [self undoMultiAssetDeleted:returnValue2];
@@ -1664,7 +1679,21 @@ BOOL missingAlertShown;
         SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction-1];
         [self redoMultiAssetDeleted:recentAction.objectIndex];
     }
-    else {
+    else if (returnValue == ADD_INSTANCE_BACK) {
+        SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction];
+        
+        int actionId = recentAction.actionSpecificIntegers[1];
+        int nodeIndex = -1;
+        for (int i = 0; i < editorScene->nodes.size(); i++) {
+            if(actionId == editorScene->nodes[i]->actionId)
+                nodeIndex = i;
+        }
+        
+        if(nodeIndex != NOT_EXISTS) {
+            editorScene->loader->createInstance(editorScene->nodes[nodeIndex], editorScene->nodes[nodeIndex]->getType(), REDO_ACTION);
+        }
+
+    }  else {
         if (returnValue != DEACTIVATE_UNDO && returnValue != DEACTIVATE_REDO && returnValue != DEACTIVATE_BOTH) {
             //importPressed = NO;
             assetAddType = REDO_ACTION;
@@ -2384,33 +2413,39 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->selectMan->selectObject(editorScene->nodes.size()-1 , false);
         editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
+    
+    printf(" \n Number of nodes in scene %d ", (int)editorScene->nodes.size());
 }
 
 - (void) cloneSelectedAssetWithId:(int) selectedAssetId NodeType:(int) selectedNodeType AndSelNodeId:(int)selectedNode
 {
-    if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS)
+    if (selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) {
+        
+        if(editorScene->nodes[selectedNode]->node->original && editorScene->nodes[selectedNode]->node->original->instancedNodes.size() >= 8000) {
+            UIAlertView * cloneAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Copy limit exceeded. Import the object using 'Add' button on ToolBar." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [cloneAlert show];
+            return;
+        }
+        editorScene->loader->createInstance(editorScene->nodes[selectedNode], editorScene->nodes[selectedNode]->getType(), assetAddType);
+        
+        if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+            editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, editorScene->nodes[selectedNode]->assetId);
+        [self updateAssetListInScenes];
+        
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
+        
+        
+    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_PARTICLES || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
         [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNode];
-    }
-    else if((selectedNodeType == NODE_IMAGE || selectedNodeType == NODE_VIDEO) && selectedAssetId != NOT_EXISTS){
-        NSString* fileName = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
-        float imgW = editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x;
-        float imgH = editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y;
-        NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
-        [imageDetails setObject:[NSNumber numberWithInt:(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_IMAGE) ? ASSET_IMAGE : ASSET_VIDEO] forKey:@"type"];
-        [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
-        [imageDetails setObject:fileName forKey:@"AssetName"];
-        [imageDetails setObject:[NSNumber numberWithFloat:imgW] forKey:@"Width"];
-        [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
-        [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
-        assetAddType = IMPORT_ASSET_ACTION;
-        [self loadCloneNodeWithType:selectedNodeType WithObject:imageDetails nodeId:selectedNode];
+        
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
+        
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
@@ -2482,7 +2517,10 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
         else{
             [assetsInScenes addObject:name];
         }
-    }    
+    }
+    
+    int totalObjs = (editorScene) ? (int)editorScene->nodes.size() : 0;
+    self.numberOfItems.text = [NSString stringWithFormat:@"%d", totalObjs];
     [self.objectList reloadData];
 }
 
@@ -3193,6 +3231,7 @@ void downloadFile(NSString* url, NSString* fileName)
 }
 
 -(void)cloneDelegateAction{
+    assetAddType = IMPORT_ASSET_ACTION;
     [self createDuplicateAssets];
     [self updateAssetListInScenes];
     [self.popoverController dismissPopoverAnimated:YES];

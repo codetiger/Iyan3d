@@ -9,14 +9,15 @@ precision highp float;
 
 uniform sampler2D depthTexture;
 
-uniform  float transparency,shadowDarkness;
-uniform float reflection;
+uniform  float shadowDarkness;
 uniform  float shadowTextureSize;
 
 uniform float numberOfLights;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
 
+
+varying float vtransparency, visVertexColored, vreflection;
 varying float shadowDist,lightingValue;
 varying vec3 vertexColor;
 varying vec4 texCoordsBias,normal,eyeVec,vertexPosCam;
@@ -67,7 +68,7 @@ void main()
         
         vec4 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
         float e_dot_r =  clamp(dot(eyeVec,reflectValue),0.0,1.0);
-        specular = vec4(reflection * pow(e_dot_r,maxSpecular));
+        specular = vec4(vreflection * pow(e_dot_r,maxSpecular));
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = vec4(0.0);
@@ -89,5 +90,5 @@ void main()
     finalColor = finalColor + (vec4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     
     gl_FragColor.xyz = finalColor.xyz;
-    gl_FragColor.a = transparency;
+    gl_FragColor.a = vtransparency;
 }

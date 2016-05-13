@@ -11,6 +11,7 @@ SGNode::SGNode(NODE_TYPE type){
     this->type = type;
     //node = shared_ptr<Node>();
     
+    instanceNodes.clear();
     isTempNode = false;
     optionalFilePath = "";
     props.transparency = 1.0;
@@ -33,6 +34,8 @@ SGNode::SGNode(NODE_TYPE type){
     props.physicsType = STATIC;
 }
 SGNode::~SGNode(){
+    
+    instanceNodes.clear();
     clearSGJoints();
     node.reset();
 }
@@ -45,7 +48,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node = smgr->createNodeFromMesh(mesh,"setUniforms");
             node->setPosition(Vector3(RENDER_CAM_INIT_POS_X,RENDER_CAM_INIT_POS_Y,RENDER_CAM_INIT_POS_Z));
             props.isLighting = false;
-            node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+            node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
             break;
         }
         case NODE_LIGHT:{
@@ -1037,7 +1040,7 @@ int toString(const char a[]) {
 }
 
 
-void SGNode::readData(ifstream *filePointer)
+void SGNode::readData(ifstream *filePointer, int &origIndex)
 {
     joints.clear();
     assetId = FileHelper::readInt(filePointer);
@@ -1045,7 +1048,7 @@ void SGNode::readData(ifstream *filePointer)
     if(sgbVersion == SGB_VERSION_CURRENT) { // Empty Data for future use
         props.isPhysicsEnabled = FileHelper::readInt(filePointer);
         props.physicsType = (PHYSICS_TYPE)FileHelper::readInt(filePointer);
-        FileHelper::readInt(filePointer);
+        origIndex = FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         FileHelper::readInt(filePointer);
         props.weight = FileHelper::readFloat(filePointer);
@@ -1146,13 +1149,23 @@ void SGNode::readData(ifstream *filePointer)
     }
 }
 
-void SGNode::writeData(ofstream *filePointer)
+void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
 {
     FileHelper::writeInt(filePointer,assetId);
     FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
     FileHelper::writeInt(filePointer, props.isPhysicsEnabled);
     FileHelper::writeInt(filePointer, (int)props.physicsType);
-    FileHelper::writeInt(filePointer, 0);
+    
+    int nodeIndex = 0;
+    if(node->type == NODE_TYPE_INSTANCED) {
+        int actionId = ((SGNode*)node->original->getUserPointer())->actionId;
+        for (int i = 0; i < nodes.size(); i++) {
+            if(actionId == nodes[i]->actionId)
+                nodeIndex = i;
+        }
+    }
+    
+    FileHelper::writeInt(filePointer, nodeIndex); //Action Id of Original Node if Instanced
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeFloat(filePointer, props.weight);

@@ -23,6 +23,7 @@ public:
     static bool isRenderingDepthPass,isRendering , renderingPreview, sceneLighting;
     static bool shadowsOff, lightChanged;
     static float shadowDensity,shadowTextureSize;
+    static int maxIntsances;
     static Vector3 camPos;
     static vector<Vector3> lightPosition,lightColor;
     static vector<float> lightFadeDistances;

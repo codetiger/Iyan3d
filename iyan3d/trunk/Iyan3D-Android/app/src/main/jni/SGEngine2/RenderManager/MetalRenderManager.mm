@@ -272,7 +272,7 @@ void MetalRenderManager::changeViewport(int width, int height)
 }
 
 bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex){
-    if(node->type <= NODE_TYPE_CAMERA)
+    if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return false;
     
     if(node->shouldUpdateMesh) {
@@ -316,7 +316,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
             [RenderCMDBuffer setDepthStencilState:_depthState];
         }
         
-        drawPrimitives(getMTLDrawMode(DRAW_MODE_POINTS), indicesCount,indexType, buf, node->instanceCount);
+        drawPrimitives(getMTLDrawMode(DRAW_MODE_POINTS), indicesCount,indexType, buf, 0);
         
         if(!isRTT) {
             depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
@@ -325,12 +325,11 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
             [RenderCMDBuffer setDepthStencilState:_depthState];
         }
 
-    } else
-        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf,node->instanceCount);
-    
-    //node.reset();
-    //MTLNode.reset();
-    
+    } else {
+        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
+        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, instancingCount+1);
+    }
+        
 }
 bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color) {
     if(!isCmdBufferCommited) // Temporary try for perfection
@@ -381,8 +380,8 @@ void MetalRenderManager::endDisplay()
 }
 void MetalRenderManager::drawPrimitives(MTLPrimitiveType primitiveType,unsigned int count,MTLIndexType type,id <MTLBuffer> indexBuf, GLsizei instanceCount)
 {
-    if(instanceCount)
-        [this->RenderCMDBuffer drawIndexedPrimitives:primitiveType indexCount:count indexType:type indexBuffer:indexBuf indexBufferOffset:0                           instanceCount:instanceCount + 1];
+    if(instanceCount > 1)
+        [this->RenderCMDBuffer drawIndexedPrimitives:primitiveType indexCount:count indexType:type indexBuffer:indexBuf indexBufferOffset:0                           instanceCount:instanceCount];
     else
         [this->RenderCMDBuffer drawIndexedPrimitives:primitiveType indexCount:count indexType:type indexBuffer:indexBuf indexBufferOffset:0];
 }

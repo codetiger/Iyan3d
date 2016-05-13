@@ -25,7 +25,7 @@ PhysicsHelper::PhysicsHelper(void *currentScene)
        
     btVector3 worldAabbMin(-10000,-10000,-10000);
     btVector3 worldAabbMax(10000,10000,10000);
-    int maxProxies = 1024;
+    int maxProxies = 10240;
 
     broadphase = new btAxisSweep3(worldAabbMin,worldAabbMax,maxProxies);
     m_softBodyWorldInfo.m_broadphase = broadphase;

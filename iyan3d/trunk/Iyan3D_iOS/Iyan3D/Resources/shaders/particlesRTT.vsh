@@ -6,7 +6,7 @@ attribute vec3 vertNormal;
 uniform mat4 vp;
 uniform mat4 model;
 
-uniform float isVertexColored;
+uniform float isVertexColored[1];
 uniform vec4 startColor;
 uniform vec4 midColor;
 uniform vec4 endColor;
@@ -28,7 +28,7 @@ void main() {
     float age = mix(percent, percent - 0.5, phase) * 2.0;
     
     color = startColor;
-    if(int(isVertexColored) == 0)
+    if(int(isVertexColored[0]) == 0)
         color = mix(s, e, age);
     
     float live = float(vertNormal.x > 0.0 && vertNormal.x <= float(props.x));

@@ -135,6 +135,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *sceneMirrorLable;
 @property (weak, nonatomic) IBOutlet UISwitch *sceneMirrorSwitch;
 
+@property (weak, nonatomic) IBOutlet UILabel *numberOfItems;
 
 
 

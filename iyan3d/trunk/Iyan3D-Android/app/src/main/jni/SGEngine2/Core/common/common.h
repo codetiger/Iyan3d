@@ -57,6 +57,8 @@ static const double RADTODEG = (180.0 / PI);
 static const double DEGTORAD = (PI / 180.0);
 static short const NOT_EXISTS = -1;
 
+static int maxInstanceCount = 100;
+
 typedef enum {
     CPU_SKIN,
     GPU_SKIN

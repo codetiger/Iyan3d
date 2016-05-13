@@ -48,6 +48,8 @@ public:
     string optionalFilePath;
     properties props;
     Quaternion nodeInitialRotation;
+    
+    std::map< int, SGNode* > instanceNodes;
     vector<SGJoint*> joints;
     vector<SGPositionKey> positionKeys;
     vector<SGRotationKey> rotationKeys;
@@ -71,8 +73,8 @@ public:
     shared_ptr<Node> loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio = 1.0);
     shared_ptr<Node> initLightSceneNode(SceneManager *smgr);
     
-    void writeData(ofstream* filePointer);
-    void readData(ifstream* filePointer);
+    void writeData(ofstream* filePointer, vector<SGNode*> &nodes);
+    void readData(ifstream* filePointer, int &origIndex);
     ActionKey getKeyForFrame(int frameId);
     void setKeyForFrame(int frameId, ActionKey& key);
     void removeAnimationInCurrentFrame(int currentFrame);

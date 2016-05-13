@@ -64,7 +64,7 @@ void OGLES2RenderManager::changeClearColor(Vector4 lClearColor)
 
 
 bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex){
-    if(node->type <= NODE_TYPE_CAMERA)
+    if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return false;
     
     
@@ -202,9 +202,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
         handleVAO(node, 2, meshBufferIndex);
 
     GLenum indicesDataType = GL_UNSIGNED_SHORT;
-    if(node->instanceCount)
-        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, node->instanceCount + 1);
-    else if (node->type == NODE_TYPE_PARTICLES) {
+    if (node->type == NODE_TYPE_PARTICLES) {
         if(!isRTT) {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glDepthMask(GL_FALSE);
@@ -218,13 +216,15 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
             glDepthMask(GL_TRUE);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
-    } else
-        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, 0);
+    } else {
+        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
+        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, (GLsizei)instancingCount+1);
+    }
     
     if(supportsVAO)
         handleVAO(node, 3);
     else {
-        for(int i = 0; i < node->getBufferCount();i++){
+        for(int i = 0; i < node->getBufferCount();i++) {
             UnBindAttributes(node->material);
         }
     }
@@ -412,13 +412,18 @@ void OGLES2RenderManager::draw3DLines(vector<Vector3> vPositions,Material *mater
     indices.clear();
 }
 
-bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color){
+bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color) {
+    
     changeViewport(width, height);
-    glEnable(GL_CULL_FACE); // as now default is back face culling
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    if(!isDepthPass) {
+        glEnable(GL_CULL_FACE); // as now default is back face culling
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    
     changeClearColor(color);
 
     GLbitfield mask = 0;
@@ -428,7 +433,8 @@ bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf
         mask |= GL_DEPTH_BUFFER_BIT;
     glClear(mask);
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+    GLenum func = (!isDepthPass) ? GL_LEQUAL : GL_LESS;
+    glDepthFunc(func);
     return true;
 }
 

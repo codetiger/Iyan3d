@@ -621,6 +621,14 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->props.perVertexColor = false;
+        
+        if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
+            loader->copyMeshFromOriginalNode(nodes[selectedNodeId]);
+            loader->removeNodeFromInstances(nodes[selectedNodeId]);
+            nodes[selectedNodeId]->node->type = NODE_TYPE_MESH;
+            nodes[selectedNodeId]->node->original = shared_ptr<Node>();
+        }
+        
         Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
         nodes[selectedNodeId]->node->setTexture(nodeTex,1);
         if(!isTemp || isUndoRedo){

@@ -20,9 +20,13 @@ MeshNode::~MeshNode() {
     mesh = NULL;
 }
 Mesh* MeshNode::getMesh(){
+    
+    if(type == NODE_TYPE_INSTANCED)
+        return dynamic_pointer_cast<MeshNode>(this->original)->getMesh();
     if(shouldUpdateMesh && meshCache)
         return this->meshCache;
     return this->mesh;
+    
 }
 void MeshNode::update(){
     
@@ -40,7 +44,7 @@ void MeshNode::updateBoundingBox()
         return;
     
     BoundingBox bb;
-    BoundingBox meshBoundingBox = *this->mesh->getBoundingBox();
+    BoundingBox meshBoundingBox = *this->getMesh()->getBoundingBox();
     
     if(Children->size() <= 0) {
         for (int i = 0; i < 8; i++) {

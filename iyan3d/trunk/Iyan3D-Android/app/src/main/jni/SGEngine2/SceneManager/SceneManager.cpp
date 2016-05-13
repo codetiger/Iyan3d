@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 #include "SceneManager.h"
+#include "InstanceNode.h"
 
 #ifdef IOS
 #import "TargetConditionals.h"
@@ -37,6 +38,7 @@ SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYP
     #endif
     mtlManger = new MaterialManager(type);
     renderTargetIndex = 0;
+    renderMan->maxInstances = (device == METAL) ? maxInstanceCount * 40 : maxInstanceCount;
 }
 
 SceneManager::~SceneManager(){
@@ -72,7 +74,7 @@ void SceneManager::setDisplayResolution(int width,int height){
 
 void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #ifndef UBUNTU
-    if(device == METAL || !renderMan->supportsVAO)
+    if((device == METAL && node->type != NODE_TYPE_INSTANCED) || !renderMan->supportsVAO)
         renderMan->createVertexAndIndexBuffers(node,meshType);
 #endif
     nodes.push_back(node);
@@ -202,10 +204,20 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
         return;
     
     for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {
+        
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index))
             return;
-        ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
-        renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
+        
+        if(nodes[index]->instancedNodes.size() > 0) {
+            for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
+                ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+                renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
+            }
+        } else {
+            ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+            renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
+        }
+        
     }
 }
 void SceneManager::setDepthTest(bool enable){
@@ -354,6 +366,17 @@ shared_ptr<LightNode> SceneManager::createLightNode(Mesh *mesh, string callBackF
     AddNode(light,MESH_TYPE_LITE);
     return light;
 }
+
+shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, string callBackFuncName)
+{
+    shared_ptr< InstanceNode > iNode(new InstanceNode(original));
+    iNode->callbackFuncName = callBackFuncName;
+    iNode->mesh = new Mesh();
+    AddNode(iNode, MESH_TYPE_LITE);
+    original->instancedNodes.push_back(iNode);
+    return iNode;
+}
+
 
 void SceneManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {

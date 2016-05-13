@@ -10,12 +10,12 @@ precision highp float;
 uniform sampler2D texture1;
 uniform sampler2D depthTexture;
 
-uniform  float transparency,shadowDarkness , isVertexColored;
-uniform float reflection;
+uniform  float shadowDarkness;
 uniform  float shadowTextureSize;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
 
+varying float vtransparency, visVertexColored, vreflection;
 varying vec3 vertexColor;
 varying float shadowDist,lightingValue;
 varying vec2 vTexCoord;
@@ -47,7 +47,7 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
     
     vec4 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
     float e_dot_r =  clamp(dot(eyeVec,reflectValue),0.0,1.0);
-    specular = vec4(reflection * pow(e_dot_r,maxSpecular));
+    specular = vec4(vreflection * pow(e_dot_r,maxSpecular));
     
     float e_dot_l = dot(lightDir,eyeVec);
     if(e_dot_l < -0.8)
@@ -61,7 +61,7 @@ void main()
     
     lowp vec4 diffuse_color = vec4(vec3(vertexColor),1.0);
     
-    if(int(isVertexColored) == 0)
+    if(visVertexColored < 0.5)
         diffuse_color = texture2D(texture1,vTexCoord.xy);
     
     // shadow Calculation ------
@@ -82,7 +82,7 @@ void main()
     vec4 specular = vec4(0.0), colorOfLight = vec4(1.0);
     
     
-    if(lightingValue != 0.0){
+    if(lightingValue > 0.5){
         colorOfLight = vec4(0.0);
         getColorOfLight(0,specular,colorOfLight);
         colorOfLight = colorOfLight + (vec4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
@@ -97,5 +97,5 @@ void main()
 //    finalColor = finalColor + (vec4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
     
     gl_FragColor.xyz = finalColor.xyz;
-    gl_FragColor.a = diffuse_color.a * transparency;
+    gl_FragColor.a = diffuse_color.a * vtransparency;
 }

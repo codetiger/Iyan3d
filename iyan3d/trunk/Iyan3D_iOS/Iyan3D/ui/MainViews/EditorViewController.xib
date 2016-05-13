@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorViewController">
@@ -28,6 +28,7 @@
                 <outlet property="moveBtnAutorig" destination="3o8-L5-yrV" id="tSa-C9-LYQ"/>
                 <outlet property="moveFirst" destination="GJx-oe-voh" id="aDk-Kf-Jtf"/>
                 <outlet property="moveLast" destination="hqf-aQ-aK5" id="q4T-bf-GhI"/>
+                <outlet property="numberOfItems" destination="eVO-10-Ptq" id="yAB-Uo-G2Z"/>
                 <outlet property="objTableview" destination="0go-cP-r4u" id="hXs-EQ-Xed"/>
                 <outlet property="objectList" destination="Oe9-3f-sks" id="RZu-TM-stB"/>
                 <outlet property="optionsBtn" destination="kZM-y0-mYT" id="DkH-nx-7V3"/>
@@ -317,6 +318,15 @@
                                 <view contentMode="scaleToFill" id="Ni9-Sx-gYu">
                                     <rect key="frame" x="0.0" y="258" width="150" height="31"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eVO-10-Ptq">
+                                            <rect key="frame" x="8" y="5" width="65" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cF5-Om-aXQ">

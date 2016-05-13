@@ -214,7 +214,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
 
 bool SGSelectionManager::multipleSelections(int nodeId)
 {
-    if(nodeId != 255 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) == selectionScene->selectedNodeIds.end()) {
+    if(nodeId != 65535 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) == selectionScene->selectedNodeIds.end()) {
         selectionScene->isMultipleSelection = true;
         if(std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), selectionScene->selectedNodeId) == selectionScene->selectedNodeIds.end() && selectionScene->selectedNodeId != NOT_EXISTS)
             selectionScene->selectedNodeIds.push_back(selectionScene->selectedNodeId);
@@ -228,7 +228,7 @@ bool SGSelectionManager::multipleSelections(int nodeId)
             selectionScene->updater->updateControlsOrientaion();
         }
         selectionScene->clearSelections();
-    } else if(nodeId != 255 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) != selectionScene->selectedNodeIds.end()){
+    } else if(nodeId != 65535 && std::find(selectionScene->selectedNodeIds.begin(), selectionScene->selectedNodeIds.end(), nodeId) != selectionScene->selectedNodeIds.end()){
         removeChildren(getParentNode());
         for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
             if(selectionScene->selectedNodeIds[i] == nodeId)
@@ -432,7 +432,6 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
         multipleSelections(objectId);
         return;
     } else{
-        printf("\nSelected Node id : %d " , selectionScene->selectedNodeId);
         unselectObject(selectionScene->selectedNodeId);
     }
     

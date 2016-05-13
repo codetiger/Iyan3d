@@ -15,13 +15,16 @@ attribute vec4 optionalData2;
 attribute vec4 optionalData3;
 attribute vec4 optionalData4;
 
-uniform int isLighting;
-uniform float isVertexColored;
-uniform vec3 perVertexColor;
+uniform float isLighting[1];
+uniform float isVertexColored[1];
+uniform vec3 perVertexColor[1];
 uniform vec3 eyePos;
-uniform mat4 mvp,Model,lvp;
+uniform mat4 mvp, model[1], lvp;
 uniform mat4 jointTransforms[161];
+uniform float transparency[1], reflection[1];
 
+
+varying float vtransparency, visVertexColored, vreflection;
 varying float shadowDist,lightingValue;
 varying vec2 vTexCoord;
 varying vec3 vertexColor;
@@ -30,8 +33,11 @@ varying vec4 texCoordsBias,normal,eyeVec,vertexPosCam;
 
 void main()
 {
-    vertexColor = mix(vec3(0.0), perVertexColor, isVertexColored);
-    vTexCoord = mix(texCoord1, vec2(0.0), isVertexColored);
+    vtransparency = transparency[0];
+    visVertexColored = isVertexColored[0];
+    vreflection = reflection[0];
+    vertexColor = perVertexColor[0];
+    vTexCoord = texCoord1;
 
     vec4 pos = vec4(0.0);
     vec4 nor = vec4(0.0);
@@ -41,12 +47,12 @@ void main()
     pos = (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
     nor = (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
     
-    lightingValue = float(isLighting);
-    vec4 vertex_position_cameraspace = Model * pos;
+    lightingValue = isLighting[0];
+    vec4 vertex_position_cameraspace = model[0] * pos;
     vertexPosCam = vertex_position_cameraspace;
     
     
-    if(isLighting == 1) {
+    if(int(isLighting[0]) == 1) {
         vec4 vertexLightCoord = lvp * pos;
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         texCoordsBias = (texCoords / 2.0) + 0.5;
@@ -56,7 +62,7 @@ void main()
             shadowDist += 0.00000009;
         }
         vec4 eye_position_cameraspace = vec4(vec3(eyePos),1.0);
-        normal = normalize(Model * normalize(nor));
+        normal = normalize(model[0] * normalize(nor));
         eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
     } else {
         shadowDist = 0.0;

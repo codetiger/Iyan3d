@@ -42,6 +42,7 @@ public:
     }
     
     bool supportsVAO;
+    int maxInstances;
     int viewportWidth, viewportHeight;
     
     virtual void Initialize() = 0;

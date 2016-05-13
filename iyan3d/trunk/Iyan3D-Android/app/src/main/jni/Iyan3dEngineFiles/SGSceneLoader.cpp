@@ -52,14 +52,16 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     vector<SGNode*> tempNodes;
     for(int i = 0;i < nodeCount;i++){
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
-        sgNode->readData(filePointer);
+        int origId = 0;
+        sgNode->readData(filePointer, origId);
         bool status = true;
         
-        if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ)
-        {
+        if(origId > 0) {
+            sgNode->setType(NODE_TEMP_INST);
+            sgNode->assetId = origId;
+        } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ) {
             status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), sgNode->textureName);
-        }
-        else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
+        } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
             status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), sgNode->textureName);
         } else if (sgNode->getType() == NODE_IMAGE) {
             status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor), sgNode->textureName);
@@ -76,7 +78,10 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     for (int i = 0; i < tempNodes.size(); i++) {
         SGNode *sgNode = tempNodes[i];
         bool nodeLoaded = false;
-        if(sgNode)
+        
+        if(sgNode && sgNode->getType() == NODE_TEMP_INST) {
+            nodeLoaded = loadInstance(sgNode, sgNode->assetId, OPEN_SAVED_FILE);
+        } else if(sgNode)
             nodeLoaded = loadNode(sgNode, OPEN_SAVED_FILE);
         
         if(!nodeLoaded)
@@ -419,7 +424,7 @@ void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
         meshObject->props.perVertexColor =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFlags[0];
         currentScene->actionMan->currentAction++;
     }
-    if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->props.perVertexColor){
+    if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->props.perVertexColor && !meshObject->getType() == NODE_TYPE_INSTANCED){
         currentScene->selectMan->selectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId), false);
         currentScene->changeTexture(meshObject->textureName, meshObject->props.vertexColor, true, true);
         currentScene->selectMan->unselectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId));
@@ -430,17 +435,48 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
 {
     if(!currentScene || !smgr || nodeIndex >= currentScene->nodes.size())
         return false;
-
+    
+    SGNode * currentNode = currentScene->nodes[nodeIndex];
+    
+    int instanceSize = (int)currentNode->instanceNodes.size();
+    
+    if(instanceSize > 0) {
+    
+        std::map< int, SGNode* >::iterator it = currentNode->instanceNodes.begin();
+        it->second->instanceNodes.insert(currentNode->instanceNodes.begin(), currentNode->instanceNodes.end());
+        
+        currentNode->node->instancedNodes.erase(currentNode->node->instancedNodes.begin() + 0);
+        it->second->node->instancedNodes = currentNode->node->instancedNodes;
+        
+//        Mesh* sourceMesh = dynamic_pointer_cast<MeshNode>(currentNode->node)->mesh;
+//        memcpy(dynamic_pointer_cast<MeshNode>(it->second->node)->mesh , sourceMesh, sizeof(*sourceMesh));
+        
+        copyMeshFromOriginalNode(it->second);
+        
+        Texture* oldTex = currentNode->node->getActiveTexture();
+        it->second->node->setTexture(oldTex, currentNode->node->activeTextureIndex+1);
+        
+        std::map< int, SGNode* >::iterator newIt = it->second->instanceNodes.begin();
+        it->second->instanceNodes.erase(newIt);
+        it->second->node->setUserPointer(it->second);
+        it->second->node->type = NODE_TYPE_MESH;
+        
+        for(newIt = it->second->instanceNodes.begin(); newIt != it->second->instanceNodes.end(); newIt++) {
+            newIt->second->node->original = it->second->node;
+        }
+    }
+    
+    removeNodeFromInstances(currentNode);
+        
     currentScene->renHelper->setControlsVisibility(false);
     currentScene->renHelper->setJointSpheresVisibility(false);
     
-    SGNode * currentNode = currentScene->nodes[nodeIndex];
     if(currentNode->getType() == NODE_ADDITIONAL_LIGHT) {
         currentScene->popLightProps();
         currentScene->updater->resetMaterialTypes(false);
     }
     
-    if(currentNode->getType() != NODE_TEXT_SKIN && currentNode->getType() != NODE_ADDITIONAL_LIGHT)
+    if(currentNode->getType() != NODE_TEXT_SKIN && currentNode->getType() != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
         smgr->RemoveTexture(currentNode->node->getActiveTexture());
     
     smgr->RemoveNode(currentNode->node);
@@ -456,6 +492,26 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     if(!deAllocScene)
         currentScene->updater->reloadKeyFrameMap();
     return true;
+}
+
+void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
+{
+    Mesh* sourceMesh = dynamic_pointer_cast<MeshNode>(sgNode->node->original)->mesh;
+    memcpy(dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh , sourceMesh, sizeof(*sourceMesh));
+}
+
+void SGSceneLoader::removeNodeFromInstances(SGNode *currentNode)
+{
+    if(currentNode->node->type == NODE_TYPE_INSTANCED) {
+        SGNode* origSgNode = (SGNode*)currentNode->node->original->getUserPointer();
+        if(origSgNode->instanceNodes.find(currentNode->actionId) != origSgNode->instanceNodes.end())
+            origSgNode->instanceNodes.erase(currentNode->actionId);
+        
+        for(int i = 0; i < origSgNode->node->instancedNodes.size(); i ++) {
+            if(currentNode->node->getID() == origSgNode->node->instancedNodes[i]->getID())
+                origSgNode->node->instancedNodes.erase(origSgNode->node->instancedNodes.begin() + i);
+        }
+    }
 }
 
 bool SGSceneLoader::removeSelectedObjects()
@@ -554,3 +610,90 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
         envelopes[jointId]->node->setVisible(true);
     }
 }
+
+void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType)
+{
+    if(!currentScene || (currentScene->selectedNodeId == NOT_EXISTS && currentScene->selectedNodeIds.size() <= 0 && actionType == IMPORT_ASSET_ACTION))
+        return;
+    
+    SGNode* iNode = new SGNode(nType);
+    
+    shared_ptr<Node> original = (sgNode->node->type == NODE_TYPE_INSTANCED) ? sgNode->node->original : sgNode->node;
+    if(sgNode->node->type != NODE_TYPE_INSTANCED)
+        original->setUserPointer(sgNode);
+    
+    shared_ptr<Node> node = smgr->createInstancedNode(original, "setUniforms");
+    iNode->node = node;
+    
+    iNode->assetId = sgNode->assetId;
+    iNode->name = sgNode->name;
+    iNode->setInitialKeyValues(actionType);
+    iNode->node->updateAbsoluteTransformation();
+    iNode->node->updateAbsoluteTransformationOfChildren();
+    
+    if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
+        iNode->actionId = ++currentScene->actionObjectsSize;
+    
+    iNode->node->setID(currentScene->assetIDCounter++);
+    iNode->node->setMaterial(original->material);
+    performUndoRedoOnNodeLoad(iNode,actionType);
+    currentScene->updater->resetMaterialTypes(false);
+    currentScene->updater->updateControlsOrientaion();
+    currentScene->freezeRendering = false;
+
+    ((SGNode*)original->getUserPointer())->instanceNodes.insert(std::pair< int, SGNode* >(iNode->actionId, iNode));
+    currentScene->nodes.push_back(iNode);
+    
+    currentScene->selectMan->removeChildren(currentScene->getParentNode());
+    currentScene->updater->setDataForFrame(currentScene->currentFrame);
+    currentScene->selectMan->updateParentPosition();
+}
+
+bool SGSceneLoader::loadInstance(SGNode* iNode, int origId, ActionType actionType)
+{
+    
+    if(!currentScene)
+        return false;
+    
+    SGNode* sgNode = NULL;
+    if(origId > 1 && origId < currentScene->nodes.size())
+            sgNode = currentScene->nodes[origId];
+    
+    if(!sgNode)
+        return false;
+    
+    iNode->setType(sgNode->getType());
+    
+    shared_ptr<Node> original = (sgNode->node->type == NODE_TYPE_INSTANCED) ? sgNode->node->original : sgNode->node;
+    if(sgNode->node->type != NODE_TYPE_INSTANCED)
+        original->setUserPointer(sgNode);
+    
+    shared_ptr<Node> node = smgr->createInstancedNode(original, "setUniforms");
+    iNode->node = node;
+    
+    iNode->assetId = sgNode->assetId;
+    iNode->name = sgNode->name;
+    iNode->setInitialKeyValues(actionType);
+    iNode->node->updateAbsoluteTransformation();
+    iNode->node->updateAbsoluteTransformationOfChildren();
+    
+    if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
+        iNode->actionId = ++currentScene->actionObjectsSize;
+    
+    iNode->node->setID(currentScene->assetIDCounter++);
+    performUndoRedoOnNodeLoad(iNode,actionType);
+    currentScene->selectMan->removeChildren(currentScene->getParentNode());
+    currentScene->updater->setDataForFrame(currentScene->currentFrame);
+    currentScene->selectMan->updateParentPosition();
+    currentScene->updater->updateControlsOrientaion();
+    currentScene->freezeRendering = false;
+    
+    ((SGNode*)original->getUserPointer())->instanceNodes.insert(std::pair< int, SGNode* >(iNode->actionId, iNode));
+    currentScene->nodes.push_back(iNode);
+    currentScene->updater->resetMaterialTypes(false);
+
+    currentScene->animMan->copyPropsOfNode(origId, currentScene->nodes.size()-1, true);
+    return true;
+}
+
+

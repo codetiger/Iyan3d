@@ -38,8 +38,9 @@ void SGSceneWriter::writeScene(ofstream *filePointer)
         return;
 
     writeGlobalInfo(filePointer);
-    for(unsigned long i = 0;i < writingScene->nodes.size();i++)
-        writingScene->nodes[i]->writeData(filePointer);
+    for(unsigned long i = 0;i < writingScene->nodes.size();i++) {
+        writingScene->nodes[i]->writeData(filePointer, writingScene->nodes);
+    }
 }
 
 void SGSceneWriter::writeGlobalInfo(ofstream *filePointer)

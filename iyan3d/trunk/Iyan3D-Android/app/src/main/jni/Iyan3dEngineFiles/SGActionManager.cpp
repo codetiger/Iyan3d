@@ -457,6 +457,11 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.vertexColor.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.vertexColor.z);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.perVertexColor);
+        assetAction.actionSpecificIntegers.push_back(actionScene->nodes[actionScene->nodes.size()-1]->node->type);
+        if(actionScene->nodes[actionScene->nodes.size()-1]->node->type == NODE_TYPE_INSTANCED) {
+            int actionId = ((SGNode*)actionScene->nodes[actionScene->nodes.size()-1]->node->original->getUserPointer())->actionId;
+            assetAction.actionSpecificIntegers.push_back(actionId);
+        }
         addAction(assetAction);
     } else if(actionType == ACTION_NODE_DELETED) {
         assetAction.drop();
@@ -480,6 +485,13 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.z);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[selectedNodeId]->props.perVertexColor);
+        
+        assetAction.actionSpecificIntegers.push_back(actionScene->nodes[selectedNodeId]->node->type);
+        if(actionScene->nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
+            int actionId = ((SGNode*)actionScene->nodes[selectedNodeId]->node->original->getUserPointer())->actionId;
+            assetAction.actionSpecificIntegers.push_back(actionId);
+        }
+
         addAction(assetAction);
     } else if (actionType == ACTION_TEXT_IMAGE_DELETE|| actionType == ACTION_TEXT_IMAGE_ADD) {
         assetAction.drop();
@@ -717,8 +729,13 @@ int SGActionManager::undo(int &returnValue2)
         }
         case ACTION_ADD_BONE:
         case ACTION_NODE_DELETED:
-            returnValue = ADD_ASSET_BACK;
-            returnValue2 = recentAction.frameId;
+            if(recentAction.actionSpecificIntegers.size() && recentAction.actionSpecificIntegers[0] == NODE_TYPE_INSTANCED) {
+                returnValue = ADD_INSTANCE_BACK;
+                returnValue2 = recentAction.frameId;
+            } else {
+                returnValue = ADD_ASSET_BACK;
+                returnValue2 = recentAction.frameId;
+            }
             break;
         case ACTION_TEXT_IMAGE_ADD: {
             actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
@@ -865,7 +882,10 @@ int SGActionManager::redo()
             break;
         case ACTION_NODE_ADDED:
         {
-            returnValue = recentAction.frameId;
+            if(recentAction.actionSpecificIntegers[0] == NODE_TYPE_INSTANCED)
+                returnValue = ADD_INSTANCE_BACK;
+            else
+                returnValue = recentAction.frameId;
             break;
         }
         case ACTION_ADD_BONE:

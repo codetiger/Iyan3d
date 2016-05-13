@@ -459,13 +459,20 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     vector<std::string> previousMaterialNames;
     vector<bool> nodesVisibility;
     vector<bool> nodeSelection;
+    vector<bool> isVcolored;
+    vector<bool> isLighting;
+    
     for(int i = 0; i < renderingScene->nodes.size(); i++){
         vertexColors.push_back(renderingScene->nodes[i]->props.vertexColor);
         previousMaterialNames.push_back(renderingScene->nodes[i]->node->material->name);
         transparency.push_back(renderingScene->nodes[i]->props.transparency);
         nodesVisibility.push_back(renderingScene->nodes[i]->props.isVisible);
         nodeSelection.push_back(renderingScene->nodes[i]->props.isSelected);
+        isVcolored.push_back(renderingScene->nodes[i]->props.perVertexColor);
+        isLighting.push_back(renderingScene->nodes[i]->props.isLighting);
+        
         renderingScene->nodes[i]->props.transparency = 1.0;
+        
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->props.isSelected = true;
         else
@@ -476,12 +483,17 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         renderingScene->nodes[i]->props.isVisible = renderingScene->nodes[i]->isTempNode ? false : true;
         Vector3 packed = MathHelper::packInterger(i);
         renderingScene->nodes[i]->props.vertexColor = packed/255.0;
+        
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
         else if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES_RTT));
-        else
-            renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        else {
+            if(renderingScene->nodes[i]->getType() == NODE_CAMERA)
+                renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+            renderingScene->nodes[i]->props.perVertexColor = true;
+            renderingScene->nodes[i]->props.isLighting = false;
+        }
         
     }
     smgr->Render(true);
@@ -498,6 +510,8 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         renderingScene->nodes[i]->props.transparency = transparency[i];
         renderingScene->nodes[i]->props.isVisible = nodesVisibility[i];
         renderingScene->nodes[i]->props.isSelected = nodeSelection[i];
+        renderingScene->nodes[i]->props.perVertexColor = isVcolored[i];
+        renderingScene->nodes[i]->props.isLighting = isLighting[i];
     }
     previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();
     
@@ -860,6 +874,7 @@ void RenderHelper::rttShadowMap()
             
         }
     }
+
     smgr->Render(false);
     setJointSpheresVisibility(true); // Unhide joints
     renderingScene->directionIndicator->node->setVisible(indState);
