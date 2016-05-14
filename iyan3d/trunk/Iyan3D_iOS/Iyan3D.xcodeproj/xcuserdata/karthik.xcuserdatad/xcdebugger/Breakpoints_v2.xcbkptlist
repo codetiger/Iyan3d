@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationManager.cpp"
-            timestampString = "476686678.971089"
+            timestampString = "484823963.402478"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "394"
-            endingLineNumber = "394"
+            startingLineNumber = "443"
+            endingLineNumber = "443"
             landmarkName = "SGAnimationManager::storeAnimations(int assetId)"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationManager.cpp"
-            timestampString = "476686682.499102"
+            timestampString = "484823963.402478"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "398"
-            endingLineNumber = "398"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
             landmarkName = "SGAnimationManager::storeAnimations(int assetId)"
             landmarkType = "5">
          </BreakpointContent>

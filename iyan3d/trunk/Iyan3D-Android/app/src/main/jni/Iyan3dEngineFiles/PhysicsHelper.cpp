@@ -334,18 +334,16 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
     if(sgNode->props.physicsType == STATIC) {
         btTriangleMesh *m = new btTriangleMesh();
         
-        for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
-            unsigned short *indices = mesh->getIndicesArray(i);
-            for (int j = 0; j < mesh->getIndicesCount(i); j += 3) {
-                vertexData *v1 = mesh->getLiteVertexByIndex(indices[j+0]);
-                btVector3 btv1 = btVector3(v1->vertPosition.x, v1->vertPosition.y, v1->vertPosition.z);
-                vertexData *v2 = mesh->getLiteVertexByIndex(indices[j+1]);
-                btVector3 btv2 = btVector3(v2->vertPosition.x, v2->vertPosition.y, v2->vertPosition.z);
-                vertexData *v3 = mesh->getLiteVertexByIndex(indices[j+2]);
-                btVector3 btv3 = btVector3(v3->vertPosition.x, v3->vertPosition.y, v3->vertPosition.z);
-                
-                m->addTriangle(btv1, btv2, btv3);
-            }
+        vector< unsigned int > indices = mesh->getTotalIndicesArray();
+        for (int i = 0; i < indices.size(); i += 3) {
+            vertexData *v1 = mesh->getLiteVertexByIndex(indices[i+0]);
+            btVector3 btv1 = btVector3(v1->vertPosition.x, v1->vertPosition.y, v1->vertPosition.z);
+            vertexData *v2 = mesh->getLiteVertexByIndex(indices[i+1]);
+            btVector3 btv2 = btVector3(v2->vertPosition.x, v2->vertPosition.y, v2->vertPosition.z);
+            vertexData *v3 = mesh->getLiteVertexByIndex(indices[i+2]);
+            btVector3 btv3 = btVector3(v3->vertPosition.x, v3->vertPosition.y, v3->vertPosition.z);
+            
+            m->addTriangle(btv1, btv2, btv3);
         }
         
         btBvhTriangleMeshShape *_shape = new btBvhTriangleMeshShape(m, false);
@@ -353,12 +351,10 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
         return _shape;
     } else {
         btConvexHullShape* _shape = new btConvexHullShape();
-        for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
-            for (int j = 0; j < mesh->getVerticesCountInMeshBuffer(i); j += 3) {
-                vertexData *v = mesh->getLiteVertexByIndex(j);
-                btVector3 btv = btVector3(v->vertPosition.x, v->vertPosition.y, v->vertPosition.z);
-                _shape->addPoint(btv);
-            }
+        for (int j = 0; j < mesh->getVerticesCount(); j++) {
+            vertexData *v = mesh->getLiteVertexByIndex(j);
+            btVector3 btv = btVector3(v->vertPosition.x, v->vertPosition.y, v->vertPosition.z);
+            _shape->addPoint(btv);
         }
         
         btShapeHull *hull = new btShapeHull(_shape);
