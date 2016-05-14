@@ -16,13 +16,7 @@ PhysicsHelper::PhysicsHelper(void *currentScene)
 {
     previousFrame = 0;
     scene = (SGEditorScene*)currentScene;
-//    broadphase = new btDbvtBroadphase();
-//    collisionConfiguration = new btDefaultCollisionConfiguration();
-//    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-//    solver = new btSequentialImpulseConstraintSolver();
-//    world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-
-       
+    
     btVector3 worldAabbMin(-10000,-10000,-10000);
     btVector3 worldAabbMax(10000,10000,10000);
     int maxProxies = 10240;
@@ -203,7 +197,8 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
     sgNode->node->shouldUpdateMesh = true;
 }
 
-btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode) {
+btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
+{
     ActionKey key = sgNode->getKeyForFrame(0);
     Vector3 nodePos = key.position;
     Quaternion nodeRot = key.rotation;
@@ -213,8 +208,7 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode) {
     btScalar bodyMass = sgNode->props.weight;
     btVector3 bodyInertia;
     
-    shared_ptr<MeshNode> node = dynamic_pointer_cast<MeshNode>(sgNode->node);
-    btConvexHullShape* shape = getShapeForNode(node);
+    btCollisionShape* shape = getShapeForNode(sgNode);
     shape->setLocalScaling(btVector3(key.scale.x, key.scale.y, key.scale.z));
     shape->calculateLocalInertia(bodyMass, bodyInertia);
     shape->setMargin(0);
@@ -222,6 +216,7 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode) {
     btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
     bodyCI.m_restitution = 0.6f;
     bodyCI.m_friction = 0.5f;
+    bodyCI.m_rollingFriction = 0.5f;
     
     btRigidBody *body = new btRigidBody(bodyCI);
     body->setUserPointer((void*)sgNode);
@@ -331,17 +326,47 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     return sBody;
 }
 
-btConvexHullShape* PhysicsHelper::getShapeForNode(shared_ptr<MeshNode> node)
+btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
 {
+    shared_ptr<MeshNode> node = dynamic_pointer_cast<MeshNode>(sgNode->node);
     Mesh* mesh = node->getMesh();
-    btConvexHullShape* _shape = new btConvexHullShape();
-    for (int i = 0; i < mesh->getVerticesCount(); i++)
-    {
-        vertexData *v = mesh->getLiteVertexByIndex(i);
-        btVector3 btv = btVector3(v->vertPosition.x, v->vertPosition.y, v->vertPosition.z);
-        _shape->addPoint(btv);
+    
+    if(sgNode->props.physicsType == STATIC) {
+        btTriangleMesh *m = new btTriangleMesh();
+        
+        for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
+            unsigned short *indices = mesh->getIndicesArray(i);
+            for (int j = 0; j < mesh->getIndicesCount(i); j += 3) {
+                vertexData *v1 = mesh->getLiteVertexByIndex(indices[j+0]);
+                btVector3 btv1 = btVector3(v1->vertPosition.x, v1->vertPosition.y, v1->vertPosition.z);
+                vertexData *v2 = mesh->getLiteVertexByIndex(indices[j+1]);
+                btVector3 btv2 = btVector3(v2->vertPosition.x, v2->vertPosition.y, v2->vertPosition.z);
+                vertexData *v3 = mesh->getLiteVertexByIndex(indices[j+2]);
+                btVector3 btv3 = btVector3(v3->vertPosition.x, v3->vertPosition.y, v3->vertPosition.z);
+                
+                m->addTriangle(btv1, btv2, btv3);
+            }
+        }
+        
+        btBvhTriangleMeshShape *_shape = new btBvhTriangleMeshShape(m, false);
+        _shape->setMargin(0.5);
+        return _shape;
+    } else {
+        btConvexHullShape* _shape = new btConvexHullShape();
+        for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
+            for (int j = 0; j < mesh->getVerticesCountInMeshBuffer(i); j += 3) {
+                vertexData *v = mesh->getLiteVertexByIndex(j);
+                btVector3 btv = btVector3(v->vertPosition.x, v->vertPosition.y, v->vertPosition.z);
+                _shape->addPoint(btv);
+            }
+        }
+        
+        btShapeHull *hull = new btShapeHull(_shape);
+        hull->buildHull(0.0f);
+        
+        btConvexShape *simlifiedShape = new btConvexHullShape((btScalar*)hull->getVertexPointer(), hull->numVertices());
+        return simlifiedShape;
     }
-    return _shape;
 }
 
 

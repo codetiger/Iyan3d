@@ -13,6 +13,7 @@
 #include "btSoftRigidDynamicsWorld.h"
 #include "btSoftBodyRigidBodyCollisionConfiguration.h"
 #include "btSoftBodyHelpers.h"
+#include "btShapeHull.h"
 
 #include "btBulletDynamicsCommon.h"
 #include "SGNode.h"
@@ -42,7 +43,7 @@ public:
     void calculateAndSetPropsOfObject(SGNode* sgNode, PHYSICS_TYPE pType);
     void updatePhysicsUpToFrame(int frame);
     void updateMeshCache(SGNode* sgNode);
-    btConvexHullShape* getShapeForNode(shared_ptr<MeshNode> node);
+    btCollisionShape* getShapeForNode(SGNode* sgNode);
     btRigidBody* getRigidBody(SGNode* sgNode);
     btSoftBody* getSoftBody(SGNode* sgNode);
 };
