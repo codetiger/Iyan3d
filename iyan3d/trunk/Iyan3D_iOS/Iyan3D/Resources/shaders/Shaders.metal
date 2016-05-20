@@ -196,7 +196,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     
     
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = lvp * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[0].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -301,7 +301,7 @@ vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0)
     float4 e = mix(midColor, eColor, phase);
     float age = mix(percent, float(percent - 0.5), phase) * 2.0;
     
-    out.perVertexColor = (int(isVertexColored[0]) == 0) ? float4(mix(s, e, age)) : float4(sColor);
+    out.perVertexColor = float4(sColor);
     
     float live = float(in_normal.x > 0.0 && in_normal.x <= props[0]);
     
@@ -373,7 +373,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = lvp * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[iid].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -947,7 +947,7 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
     out.vertexDepth = 0.0;
     
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = lvp * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[iid].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -1025,7 +1025,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     out.position = mvp * vertex_position_objectspace;
 
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = lvp * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[0].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically

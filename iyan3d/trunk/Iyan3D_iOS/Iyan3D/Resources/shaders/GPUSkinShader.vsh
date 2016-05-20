@@ -103,7 +103,7 @@ void main()
     vertexPosCam = vertex_position_cameraspace;
     
     if(int(isLighting[0]) == 1) {
-        vec4 vertexLightCoord = lvp * pos;
+        vec4 vertexLightCoord = (lvp * model[0]) * pos;
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         texCoordsBias = (texCoords / 2.0) + 0.5;
         

@@ -109,7 +109,8 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setViewMatrix(sgNode,SHADER_PERVERTEXCOLOR_viewMatrix);
     } else if(matName.find("SHADER_VERTEX_COLOR") !=  string::npos) {
         setVertexColorUniform(sgNode, Vector3(-1.0,-1.0,-1.0), SHADER_COMMON_SKIN_VertexColor, smgr->getNodeIndexByID(sgNode->node->getID()));
-        setIsVertexColored(sgNode, true , SHADER_COMMON_isVertexColored, false);
+        bool isVcolored = (sgNode->getType() == NODE_CAMERA || (sgNode->node->getID() >= CONTROLS_START_ID && sgNode->node->getID() < CONTROLS_START_ID+10)) ? true : sgNode->props.perVertexColor;
+        setIsVertexColored(sgNode, isVcolored , SHADER_COMMON_isVertexColored, false);
         setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);
         setModelMatrix(sgNode, SHADER_PERVERTEXCOLOR_world);
@@ -205,12 +206,8 @@ void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramInde
 
 void ShaderManager::setNumberOfLights(SGNode *sgNode, int paramIndex)
 {
-    //TODO num of lights global variable
     float lights = (float)ShaderManager::lightPosition.size();
-//    if(lightsCount != lights || smgr->device == METAL || sgNode->node->material->name == "SHADER_COLOR") {
-//        lightsCount = lights;
         smgr->setPropertyValue(sgNode->node->material, "numberOfLights", &lights, DATA_FLOAT,1,true,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-//    }
 }
 
 void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2)
@@ -276,10 +273,7 @@ void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
 }
 void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex) {
     float finalShadow = (shadowsOff || sgNode->props.isSelected) ? 0.0 : shadowDensity;
-//    if(prevShadow != finalShadow || smgr->device == METAL || sgNode->node->material->name == "SHADER_COLOR") {
-//        prevShadow = finalShadow;
         smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &finalShadow, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-//    }
 }
 
 void ShaderManager::setReflectionValue(SGNode *sgNode,int paramIndex) {
@@ -300,27 +294,24 @@ void ShaderManager::setReflectionValue(SGNode *sgNode,int paramIndex) {
     }
 
     smgr->setPropertyValue(sgNode->node->material, "reflection", value, DATA_FLOAT, (endIndex - startIndex)+1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    
+    delete [] value;
 
 }
 
 void ShaderManager::setEyePos(SGNode *sgNode,int paramIndex) {
-//    if(smgr->device == METAL || prevCamPos.x != camPos.x || prevCamPos.y != camPos.y || prevCamPos.z != camPos.z || sgNode->node->material->name == "SHADER_COLOR") {
-//        prevCamPos = camPos;
         float *campos = new float[3];
         campos[0] = camPos.x;    campos[1] = camPos.y;    campos[2] = camPos.z;
         smgr->setPropertyValue(sgNode->node->material, "eyePos", campos, DATA_FLOAT_VEC3, 3, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
         delete[] campos;
-//    }
 }
 
 void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex){
-//    if(smgr->device == METAL || sgNode->props.isLighting || sgNode->node->material->name == "SHADER_COLOR") {
         Mat4 lightViewProjMatrix = lighCamProjMatrix;
         lightViewProjMatrix *= lighCamViewMatrix;
-        Mat4 lvp = lightViewProjMatrix * sgNode->node->getModelMatrix();
+    Mat4 lvp = lightViewProjMatrix;// * sgNode->node->getModelMatrix();
         
-        smgr->setPropertyValue(sgNode->node->material, "lvp", lightViewProjMatrix.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
-//    }
+        smgr->setPropertyValue(sgNode->node->material, "lvp", lvp.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
 void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex)
@@ -354,7 +345,6 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int par
 
 void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
 {
-//    if(deviceType == METAL || !sgNode->props.perVertexColor || sgNode->node->material->name == "SHADER_COLOR") {
         int textureValue = 0;
         if(deviceType == OPENGLES2){
             OGLTexture* tex = (OGLTexture*)sgNode->node->getTextureByIndex(1);
@@ -377,7 +367,6 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
                 smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, SHADER_COMMON_texture2,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
             }
         }
-//    }
 }
 
 void ShaderManager::setNodeTransparency(SGNode *sgNode,u16 paramIndex) {
@@ -388,12 +377,12 @@ void ShaderManager::setNodeTransparency(SGNode *sgNode,u16 paramIndex) {
         endIndex = (int)sgNode->instanceNodes.size();
 
     float *transparency = new float[((endIndex - startIndex)+1)];
-    transparency[0] = sgNode->props.isSelected ?  NODE_SELECTION_TRANSPARENCY : sgNode->props.transparency;
+    transparency[0] = (sgNode->props.isSelected || !sgNode->props.isVisible) ?  NODE_SELECTION_TRANSPARENCY : sgNode->props.transparency;
 
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        transparency[i+1] = v[j].second->props.isSelected ?  NODE_SELECTION_TRANSPARENCY : v[j].second->props.transparency;
+        transparency[i+1] = (v[j].second->props.isSelected || !v[j].second->props.isVisible) ?  NODE_SELECTION_TRANSPARENCY : v[j].second->props.transparency;
         i++;
     }
     

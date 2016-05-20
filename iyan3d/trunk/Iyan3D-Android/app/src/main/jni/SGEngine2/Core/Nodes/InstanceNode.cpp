@@ -14,13 +14,15 @@ InstanceNode::InstanceNode(shared_ptr<Node> node){
 
 InstanceNode::~InstanceNode(){
     
-    for( int i = 0; i < this->original->instancedNodes.size(); i ++) {
-        if(this->original->instancedNodes[i]->getID() == this->getID()){
-            this->original->instancedNodes.erase(this->original->instancedNodes.begin() + i);
+    if(this->original) {
+        for( int i = 0; i < this->original->instancedNodes.size(); i ++) {
+            if(this->original->instancedNodes[i]->getID() == this->getID()){
+                this->original->instancedNodes.erase(this->original->instancedNodes.begin() + i);
+            }
         }
-     }
-    
-    this->original = shared_ptr<Node>();
+        
+        this->original = shared_ptr<Node>();
+    }
 }
 
 void InstanceNode::update()

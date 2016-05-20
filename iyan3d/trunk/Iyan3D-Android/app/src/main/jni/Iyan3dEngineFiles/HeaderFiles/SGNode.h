@@ -91,7 +91,7 @@ public:
     void setInitialKeyValues(int actionType);
     void CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,int currentFrame);
     void MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame);
-    void setShaderProperties(float refraction, float reflection, bool isLighting, bool isVisible , float currentFrame);
+    void setMeshProperties(float refraction, float reflection, bool isLighting, bool isVisible , bool isPhysicsObj, int physicsType, float fMagnitude, float currentFrame);
     void clearSGJoints();
     void createSGJoints();
     void faceUserCamera(shared_ptr<CameraNode> viewCamera,int currentFrame);

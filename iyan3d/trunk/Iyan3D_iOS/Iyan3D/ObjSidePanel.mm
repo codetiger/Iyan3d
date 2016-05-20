@@ -143,7 +143,7 @@
         indexPathOfOBJ = (int)indexPath.row;
     else
     {
-        if(indexPath.row == 0){
+        if(indexPath.row == 0) {
             haveTexture = NO;
             _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
             _vertexColorProp.delegate = self;
@@ -162,7 +162,7 @@
         }
         else{
             haveTexture = YES;
-            textureFileName = [[filesList objectAtIndex:indexPath.row-1]stringByDeletingPathExtension];
+            textureFileName = [[filesList objectAtIndex:indexPath.row-1] stringByDeletingPathExtension];
         }
     }
     

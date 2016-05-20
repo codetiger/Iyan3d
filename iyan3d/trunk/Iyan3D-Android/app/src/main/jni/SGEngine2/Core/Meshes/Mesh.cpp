@@ -26,6 +26,26 @@ Mesh::~Mesh() {
     clearIndicesArray();
     clearVerticesArray();
 }
+
+void Mesh::copyDataFromMesh(Mesh* otherMesh)
+{
+    if(otherMesh->meshType == MESH_TYPE_LITE) {
+        for(int i = 0; i < otherMesh->getVerticesCount(); i++) {
+            addVertex(otherMesh->getLiteVertexByIndex(i));
+        }
+    } else {
+        for(int i = 0; i < otherMesh->getVerticesCount(); i++) {
+            addHeavyVertex(otherMesh->getHeavyVertexByIndex(i));
+        }
+    }
+    
+    for(int i = 0; i < otherMesh->getTotalIndicesCount(); i++) {
+        addToIndicesArray(otherMesh->getTotalIndicesArray()[i]);
+    }
+    
+    Commit();
+}
+
 void Mesh::addVertex(vertexData* vertex){
     vertexData vtx;
     vtx.vertPosition = vertex->vertPosition;

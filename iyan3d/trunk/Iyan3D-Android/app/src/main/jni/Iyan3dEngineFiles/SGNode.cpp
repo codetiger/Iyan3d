@@ -97,6 +97,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         case NODE_VIDEO:{
             float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
             props.vertexColor = Vector3(objSpecificColor.x,objSpecificColor.y,objSpecificColor.z);
+            textureName = ConversionHelper::getStringForWString(objectName);
             node = loadVideo(ConversionHelper::getStringForWString(objectName), smgr , aspectRatio);
             break;
         }
@@ -1203,12 +1204,15 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     for(i = 0; i < joints.size(); i++)
         joints[i]->writeData(filePointer);
 }
-void SGNode::setShaderProperties(float refraction, float reflection, bool isLighting, bool isVisible , float currentFrame)
+void SGNode::setMeshProperties(float refraction, float reflection, bool isLighting, bool isVisible , bool isPhysicsObj, int physicsType, float fMagnitude, float currentFrame)
 {
     props.isLighting = isLighting;
     props.refraction = refraction;
     props.reflection = reflection;
     props.isVisible = isVisible;
+    props.isPhysicsEnabled = isPhysicsObj;
+    props.physicsType = (PHYSICS_TYPE)physicsType;
+    props.forceMagnitude = fMagnitude;
     setVisibility(isVisible, currentFrame);
 }
 void SGNode::clearSGJoints()

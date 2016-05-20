@@ -33,6 +33,7 @@
                             <rect key="frame" x="99" y="52" width="308" height="31"/>
                             <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                             <connections>
+                                <action selector="refractionChangeEnded:" destination="-1" eventType="touchUpInside" id="zCO-Ak-VbX"/>
                                 <action selector="refractionValueChanged:" destination="-1" eventType="valueChanged" id="7Kf-GP-oFi"/>
                             </connections>
                         </slider>
@@ -45,6 +46,7 @@
                             <rect key="frame" x="99" y="92" width="308" height="31"/>
                             <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                             <connections>
+                                <action selector="reflectionChangeEnded:" destination="-1" eventType="touchUpInside" id="vcs-pi-pDg"/>
                                 <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="VVA-CW-4Ux"/>
                             </connections>
                         </slider>
@@ -115,6 +117,7 @@
                             <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                             <connections>
                                 <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="QbN-dc-qoY"/>
+                                <action selector="velocityChangeEnded:" destination="-1" eventType="touchUpInside" id="Fex-ek-TKP"/>
                                 <action selector="velocityValueChanged:" destination="-1" eventType="valueChanged" id="nXu-OX-QUF"/>
                             </connections>
                         </slider>

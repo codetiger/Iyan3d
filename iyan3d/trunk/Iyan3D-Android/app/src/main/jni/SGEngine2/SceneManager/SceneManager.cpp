@@ -369,8 +369,11 @@ shared_ptr<LightNode> SceneManager::createLightNode(Mesh *mesh, string callBackF
 
 shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, string callBackFuncName)
 {
-    shared_ptr< InstanceNode > iNode(new InstanceNode(original));
+    //shared_ptr< InstanceNode > iNode(new InstanceNode(original));
+    shared_ptr<MeshNode> iNode = make_shared<MeshNode>();
     iNode->callbackFuncName = callBackFuncName;
+    iNode->type = NODE_TYPE_INSTANCED;
+    iNode->original = original;
     iNode->mesh = new Mesh();
     AddNode(iNode, MESH_TYPE_LITE);
     original->instancedNodes.push_back(iNode);

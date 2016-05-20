@@ -76,24 +76,34 @@
 
 
 
+- (IBAction)reflectionChangeEnded:(id)sender {
+    reflectionValue=self.reflectionSlider.value;
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+}
+
+- (IBAction)refractionChangeEnded:(id)sender {
+    refractionValue=self.refractionSlider.value;
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+}
+
 - (IBAction)refractionValueChanged:(id)sender {
     refractionValue=self.refractionSlider.value;
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
 - (IBAction)reflectionValueChanged:(id)sender {
     reflectionValue=self.reflectionSlider.value;
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
 - (IBAction)lightingSwitchChanged:(id)sender {
     isLightningValue=self.lightingSwitch.on;
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
 - (IBAction)visibleValueChanged:(id)sender {
     isVisibleValue=self.visibleChanged.on;
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
 - (IBAction)cloneButtonAction:(id)sender {
@@ -110,7 +120,7 @@
 
 - (IBAction)faceNormalAction:(id)sender {
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue FaceNormal:isFaceNormal];
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
 - (IBAction)reflectionHqBtnAction:(id)sender {
@@ -137,12 +147,20 @@
 
 - (IBAction)physicsSegmentChanged:(id)sender {
     
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
+    
     if(self.physicsSegment.selectedSegmentIndex == NONE)
         [self.delegate setPhysics:false];
     else {
         [self.delegate setPhysics:true];
         [self.delegate setPhysicsType:(int)self.physicsSegment.selectedSegmentIndex];
     }
+    
+    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+}
+
+- (IBAction)velocityChangeEnded:(id)sender {
+     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
 @end

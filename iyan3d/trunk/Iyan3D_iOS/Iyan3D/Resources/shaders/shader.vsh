@@ -38,7 +38,7 @@ void main()
     
     //Lighting Calculation-------
     if(int(isLighting[iId]) == 1) {
-        vec4 vertexLightCoord = lvp * vec4(vertPosition, 1.0);
+        vec4 vertexLightCoord = (lvp * model[iId]) * vec4(vertPosition, 1.0);
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         texCoordsBias = (texCoords / 2.0) + 0.5;
         

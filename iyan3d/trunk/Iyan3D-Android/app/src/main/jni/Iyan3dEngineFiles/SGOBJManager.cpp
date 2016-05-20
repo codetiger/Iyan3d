@@ -88,7 +88,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     objNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
     
-    objNode->setMaterial(smgr->getMaterialByIndex((isVertexColor) ? SHADER_VERTEX_COLOR_L1 : SHADER_COMMON_L1));
+    objNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     objSGNode->props.isLighting = true;
     
     objNode->setID(OBJ_ID);
@@ -111,7 +111,7 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
 #endif
     ofstream f(outputPath , ios::binary);
     
-    unsigned char versionIdentifier = (hasUV) ? UV_MAPPED : VERTEX_COLORED;
+    unsigned char versionIdentifier = UV_MAPPED;// (hasUV) ? UV_MAPPED : VERTEX_COLORED;
     f.write((char*)&versionIdentifier, sizeof(unsigned char));
     SSGMCountHeaderLowPoly counts;
     Mesh* objMesh = dynamic_pointer_cast<MeshNode>(objNode->node)->mesh;
@@ -135,7 +135,7 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
     
     SSGMUVHeader* texs = new SSGMUVHeader[counts.colCount];
     SSGMColHeader* col = new SSGMColHeader[counts.colCount];
-    if (hasUV) {
+    if (1) {                                                 // hasUV
         for (int i = 0; i < counts.colCount; i++) {
             vertexData * vData = objMesh->getLiteVertexByIndex(i);
             texs[i].s = vData->texCoord1.x;

@@ -320,14 +320,20 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         propertyAction.actionSpecificFloats.push_back(selectedNode->props.reflection);
         propertyAction.actionSpecificFlags.push_back(selectedNode->props.isLighting);
         propertyAction.actionSpecificFlags.push_back(selectedNode->props.isVisible);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->props.isPhysicsEnabled);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.forceMagnitude);
+        propertyAction.actionSpecificIntegers.push_back((int)selectedNode->props.physicsType);
     }
     
-    selectedNode->setShaderProperties(refraction, reflection, isLighting, isVisible, actionScene->currentFrame);
+    selectedNode->setMeshProperties(refraction, reflection, isLighting, isVisible, selectedNode->props.isPhysicsEnabled, selectedNode->props.physicsType, selectedNode->props.forceMagnitude, actionScene->currentFrame);
     if(isChanged){
         propertyAction.actionSpecificFloats.push_back(refraction);
         propertyAction.actionSpecificFloats.push_back(reflection);
         propertyAction.actionSpecificFlags.push_back(isLighting);
         propertyAction.actionSpecificFlags.push_back(isVisible);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->props.isPhysicsEnabled);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.forceMagnitude);
+        propertyAction.actionSpecificIntegers.push_back((int)selectedNode->props.physicsType);
         finalizeAndAddAction(propertyAction);
         propertyAction.drop();
     }
@@ -498,7 +504,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionType = actionType == ACTION_TEXT_IMAGE_DELETE?ACTION_TEXT_IMAGE_DELETE : ACTION_TEXT_IMAGE_ADD;
         int indexOfAsset;
         if(actionScene->selectedNodeIds.size() > 0){
-            indexOfAsset = (actionType == ACTION_TEXT_IMAGE_DELETE) ? ((actionScene->selectedNodeIds.size() > 0) ? assetId : actionScene->selectedNodeId ) : (int)actionScene->nodes.size();
+            indexOfAsset = (actionType == ACTION_TEXT_IMAGE_DELETE) ? ((actionScene->selectedNodeIds.size() > 0) ? assetId : actionScene->selectedNodeId ) : (int)actionScene->nodes.size()-1;
         }
         else
             indexOfAsset = actionType == ACTION_TEXT_IMAGE_DELETE ? actionScene->selectedNodeId : (int)actionScene->nodes.size()-1;
@@ -702,7 +708,7 @@ int SGActionManager::undo(int &returnValue2)
             break;
         }
         case ACTION_CHANGE_PROPERTY_MESH:{
-            actionScene->nodes[indexOfAction]->setShaderProperties(recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.frameId);
+            actionScene->nodes[indexOfAction]->setMeshProperties(recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.actionSpecificFlags[2], recentAction.actionSpecificIntegers[0], recentAction.actionSpecificFloats[2], recentAction.frameId);
             break;
         }
         case ACTION_CHANGE_PROPERTY_LIGHT: {
@@ -866,7 +872,7 @@ int SGActionManager::redo()
             actionScene->currentFrame = recentAction.frameId;
             break;
         case ACTION_CHANGE_PROPERTY_MESH:
-            sgNode->setShaderProperties(recentAction.actionSpecificFloats[2], recentAction.actionSpecificFloats[3], recentAction.actionSpecificFlags[2], recentAction.actionSpecificFlags[3], recentAction.frameId);
+            sgNode->setMeshProperties(recentAction.actionSpecificFloats[3], recentAction.actionSpecificFloats[4], recentAction.actionSpecificFlags[3], recentAction.actionSpecificFlags[4], recentAction.actionSpecificFlags[5], recentAction.actionSpecificIntegers[1], recentAction.actionSpecificFloats[5], recentAction.frameId);
             break;
         case ACTION_CHANGE_PROPERTY_LIGHT:
             ShaderManager::lightColor[0] = Vector3(recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5],recentAction.actionSpecificFloats[6]);

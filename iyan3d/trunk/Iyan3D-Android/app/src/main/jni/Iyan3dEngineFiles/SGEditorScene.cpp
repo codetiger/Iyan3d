@@ -627,6 +627,8 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
             loader->removeNodeFromInstances(nodes[selectedNodeId]);
             nodes[selectedNodeId]->node->type = NODE_TYPE_MESH;
             nodes[selectedNodeId]->node->original = shared_ptr<Node>();
+        } else if (nodes[selectedNodeId]->instanceNodes.size() > 0) {
+            loader->setFirstInstanceAsMainNode(nodes[selectedNodeId]);
         }
         
         Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);

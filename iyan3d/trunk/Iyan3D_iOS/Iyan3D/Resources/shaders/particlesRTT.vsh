@@ -28,8 +28,6 @@ void main() {
     float age = mix(percent, percent - 0.5, phase) * 2.0;
     
     color = startColor;
-    if(int(isVertexColored[0]) == 0)
-        color = mix(s, e, age);
     
     float live = float(vertNormal.x > 0.0 && vertNormal.x <= float(props.x));
     

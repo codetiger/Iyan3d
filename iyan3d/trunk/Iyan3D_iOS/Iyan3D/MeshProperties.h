@@ -15,7 +15,7 @@
 #import "SGNode.h"
 
 @protocol MeshPropertiesDelegate
-- (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible FaceNormal:(BOOL)isHaveFaceNormal;
+- (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible storeInAction:(BOOL)status;
 - (void) deleteDelegateAction;
 - (void)cloneDelegateAction;
 - (void)changeSkinDelgate;
@@ -26,7 +26,7 @@
 - (void) setDirection;
 @end
 
-@interface MeshProperties : GAITrackedViewController{
+@interface MeshProperties : GAITrackedViewController {
     float refractionValue;
     float reflectionValue;
     bool isLightningValue,isHaveLightOption;
@@ -54,6 +54,9 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *physicsSegment;
 @property (weak, nonatomic) IBOutlet UIButton *directionBtn;
 
+- (IBAction)reflectionChangeEnded:(id)sender;
+
+- (IBAction)refractionChangeEnded:(id)sender;
 
 - (IBAction)refractionValueChanged:(id)sender;
 - (IBAction)reflectionValueChanged:(id)sender;
@@ -70,6 +73,7 @@
 - (IBAction)setDirection:(id)sender;
 - (IBAction)physicsSegmentChanged:(id)sender;
 
+- (IBAction)velocityChangeEnded:(id)sender;
 
 @end
 

@@ -28,6 +28,7 @@ public:
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
     void removeNodeFromInstances(SGNode* sgNode);
     void copyMeshFromOriginalNode(SGNode* sgNode);
+    void setFirstInstanceAsMainNode(SGNode* currentNode);
     bool removeSelectedObjects();
     bool removeTempNodeIfExists();
     

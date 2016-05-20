@@ -37,7 +37,7 @@ void main()
     visVertexColored = isVertexColored[iId];
     vreflection = reflection[iId];
     vertexColor = (perVertexColor[iId].x == -1.0) ? vec3(optionalData1.xyz) : perVertexColor[iId];
-    vTexCoord = vec2(0.0);
+    vTexCoord = texCoord1;
     lightingValue = isLighting[iId];
     vec4 vertex_position_cameraspace = model[iId] * vec4(vertPosition, 1.0);
     vertexPosCam = vertex_position_cameraspace;
@@ -45,7 +45,7 @@ void main()
     //Lighting Calculation-------
 
     if(int(isLighting[iId]) == 1) {
-        vec4 vertexLightCoord = lvp * vec4(vertPosition, 1.0);
+        vec4 vertexLightCoord = (lvp * model[iId]) * vec4(vertPosition, 1.0);
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         texCoordsBias = (texCoords / 2.0) + 0.5;
         

@@ -75,6 +75,7 @@ public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
 
+    void copyDataFromMesh(Mesh* otherMesh);
     void addVertex(vertexData* vertex);
     void addHeavyVertex(vertexDataHeavy* vertex);
     void addToIndicesArray(unsigned int index);

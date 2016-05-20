@@ -455,7 +455,7 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
       glBindFramebuffer(GL_FRAMEBUFFER,((OGLTexture*)renderTexture)->rttFrameBuffer);
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)renderTexture)->OGLTextureName);
-      PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer,false,color);
+      PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer, isDepthPass, color);
   }
   else
       resetToMainBuffers();

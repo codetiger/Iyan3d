@@ -193,7 +193,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->freezeRendering = true;
     SGNode *sgnode = new SGNode(type);
     sgnode->node = sgnode->loadNode(assetId,textureName,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
-    if(!sgnode->node){
+    if(!sgnode->node) {
         delete sgnode;
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         currentScene->freezeRendering = false;
@@ -441,29 +441,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     int instanceSize = (int)currentNode->instanceNodes.size();
     
     if(instanceSize > 0) {
-    
-        std::map< int, SGNode* >::iterator it = currentNode->instanceNodes.begin();
-        it->second->instanceNodes.insert(currentNode->instanceNodes.begin(), currentNode->instanceNodes.end());
-        
-        currentNode->node->instancedNodes.erase(currentNode->node->instancedNodes.begin() + 0);
-        it->second->node->instancedNodes = currentNode->node->instancedNodes;
-        
-//        Mesh* sourceMesh = dynamic_pointer_cast<MeshNode>(currentNode->node)->mesh;
-//        memcpy(dynamic_pointer_cast<MeshNode>(it->second->node)->mesh , sourceMesh, sizeof(*sourceMesh));
-        
-        copyMeshFromOriginalNode(it->second);
-        
-        Texture* oldTex = currentNode->node->getActiveTexture();
-        it->second->node->setTexture(oldTex, currentNode->node->activeTextureIndex+1);
-        
-        std::map< int, SGNode* >::iterator newIt = it->second->instanceNodes.begin();
-        it->second->instanceNodes.erase(newIt);
-        it->second->node->setUserPointer(it->second);
-        it->second->node->type = NODE_TYPE_MESH;
-        
-        for(newIt = it->second->instanceNodes.begin(); newIt != it->second->instanceNodes.end(); newIt++) {
-            newIt->second->node->original = it->second->node;
-        }
+        setFirstInstanceAsMainNode(currentNode);
     }
     
     removeNodeFromInstances(currentNode);
@@ -494,10 +472,37 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     return true;
 }
 
+void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
+{
+    std::map< int, SGNode* >::iterator it = currentNode->instanceNodes.begin();
+    it->second->instanceNodes.insert(currentNode->instanceNodes.begin(), currentNode->instanceNodes.end());
+    
+    currentNode->node->instancedNodes.erase(currentNode->node->instancedNodes.begin() + 0);
+    it->second->node->instancedNodes = currentNode->node->instancedNodes;
+    
+    copyMeshFromOriginalNode(it->second);
+    
+    Texture* oldTex = currentNode->node->getActiveTexture();
+    it->second->node->setTexture(oldTex, currentNode->node->activeTextureIndex+1);
+    
+    std::map< int, SGNode* >::iterator newIt = it->second->instanceNodes.begin();
+    it->second->instanceNodes.erase(newIt);
+    it->second->node->setUserPointer(it->second);
+    it->second->node->type = NODE_TYPE_MESH;
+    
+    for(newIt = it->second->instanceNodes.begin(); newIt != it->second->instanceNodes.end(); newIt++) {
+        newIt->second->node->original = it->second->node;
+    }
+    
+    currentNode->instanceNodes.clear();
+    currentNode->node->instancedNodes.clear();
+}
+
 void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
 {
     Mesh* sourceMesh = dynamic_pointer_cast<MeshNode>(sgNode->node->original)->mesh;
-    memcpy(dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh , sourceMesh, sizeof(*sourceMesh));
+    //memcpy(dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh , sourceMesh, sizeof(*sourceMesh));
+    dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh->copyDataFromMesh(sourceMesh);
 }
 
 void SGSceneLoader::removeNodeFromInstances(SGNode *currentNode)
@@ -692,7 +697,7 @@ bool SGSceneLoader::loadInstance(SGNode* iNode, int origId, ActionType actionTyp
     currentScene->nodes.push_back(iNode);
     currentScene->updater->resetMaterialTypes(false);
 
-    currentScene->animMan->copyPropsOfNode(origId, currentScene->nodes.size()-1, true);
+    //currentScene->animMan->copyPropsOfNode(origId, currentScene->nodes.size()-1, true);
     return true;
 }
 

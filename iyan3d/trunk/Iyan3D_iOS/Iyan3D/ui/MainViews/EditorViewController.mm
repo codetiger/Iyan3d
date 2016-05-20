@@ -2225,6 +2225,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                    {
                                        [self showOrHideProgress:SHOW_PROGRESS];
                                        if(editorScene->selectedNodeIds.size() > 0){
+                                           assetAddType = IMPORT_ASSET_ACTION;
                                            [self createDuplicateAssets];
                                            [self undoRedoButtonState:DEACTIVATE_BOTH];
                                        }
@@ -2417,44 +2418,65 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     printf(" \n Number of nodes in scene %d ", (int)editorScene->nodes.size());
 }
 
-- (void) cloneSelectedAssetWithId:(int) selectedAssetId NodeType:(int) selectedNodeType AndSelNodeId:(int)selectedNode
+- (void) cloneSelectedAssetWithId:(int) selectedAssetId NodeType:(int) selectedNodeType AndSelNodeId:(int)selectedNodeIndex
 {
+    SGNode* sgNode = NULL;
+    
+    if(selectedNodeIndex != NOT_EXISTS)
+        sgNode = editorScene->nodes[selectedNodeIndex];
+    
     if (selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) {
         
-        if(editorScene->nodes[selectedNode]->node->original && editorScene->nodes[selectedNode]->node->original->instancedNodes.size() >= 8000) {
+        if(sgNode->node->original && sgNode->node->original->instancedNodes.size() >= 8000) {
             UIAlertView * cloneAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Copy limit exceeded. Import the object using 'Add' button on ToolBar." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [cloneAlert show];
             return;
         }
-        editorScene->loader->createInstance(editorScene->nodes[selectedNode], editorScene->nodes[selectedNode]->getType(), assetAddType);
+        editorScene->loader->createInstance(sgNode, sgNode->getType(), assetAddType);
         
         if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-            editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, editorScene->nodes[selectedNode]->assetId);
+            editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, sgNode->assetId);
         [self updateAssetListInScenes];
         
-        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
+        editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
         
-    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_PARTICLES || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
+    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS)
     {
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+        assetItem.textureName = [NSString stringWithCString:sgNode->textureName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
-        [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNode];
+        [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNodeIndex];
         
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         
-        NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
-        NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
+        NSString *typedText = [self stringWithwstring:sgNode->name];
+        NSString *fontName = [NSString stringWithCString:sgNode->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
-        Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
-        float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
-        int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
-        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+        Vector4 color = Vector4(sgNode->props.vertexColor.x,sgNode->props.vertexColor.y,sgNode->props.vertexColor.z,0.0);
+        float bevalValue = sgNode->props.nodeSpecificFloat;
+        int fontSize = sgNode->props.fontSize;
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->textureName.c_str()
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
-        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
+        editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
+        
+    } else if ((selectedNodeType == NODE_IMAGE || selectedNodeType == NODE_VIDEO) && sgNode) {
+        
+        int assetType = (selectedNodeType == NODE_IMAGE) ? ASSET_IMAGE : ASSET_VIDEO;
+        NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
+        [imageDetails setObject:[NSNumber numberWithInt:assetType] forKey:@"type"];
+        [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
+        [imageDetails setObject:[NSString stringWithFormat:@"%s", sgNode->textureName.c_str()] forKey:@"AssetName"];
+        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->props.vertexColor.x] forKey:@"Width"];
+        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->props.vertexColor.y] forKey:@"Height"];
+        [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
+        
+        assetAddType = IMPORT_ASSET_ACTION;
+        [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
+        
+        editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
     }
 }
 
@@ -2463,8 +2485,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
 if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ || selectedNodeType == NODE_PARTICLES) {
     [self loadNode:(AssetItem *)object];
-   } else if(selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) {
-       [self loadNodeForImage:(NSMutableDictionary *)object];
    }
     editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
 }
@@ -3145,12 +3165,12 @@ void downloadFile(NSString* url, NSString* fileName)
 
 #pragma mark Meshproperties Delegate
 
-- (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible FaceNormal:(BOOL)isHaveFaceNormal
+- (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible storeInAction:(BOOL)status
 {
     if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
         return;
     
-    if (editorScene->nodes[editorScene->selectedNodeId]->props.isLighting != light || editorScene->nodes[editorScene->selectedNodeId]->props.isVisible != visible) { //switch action
+    if (editorScene->nodes[editorScene->selectedNodeId]->props.isLighting != light || editorScene->nodes[editorScene->selectedNodeId]->props.isVisible != visible || status) { //switch action
         editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, true);
     }
     else { //slider action
