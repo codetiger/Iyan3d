@@ -74,7 +74,7 @@ void SceneManager::setDisplayResolution(int width,int height){
 
 void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
 #ifndef UBUNTU
-    if((device == METAL && node->type != NODE_TYPE_INSTANCED) || !renderMan->supportsVAO)
+    if((device == METAL && node->type != NODE_TYPE_INSTANCED) || (!renderMan->supportsVAO && node->type != NODE_TYPE_INSTANCED))
         renderMan->createVertexAndIndexBuffers(node,meshType);
 #endif
     nodes.push_back(node);

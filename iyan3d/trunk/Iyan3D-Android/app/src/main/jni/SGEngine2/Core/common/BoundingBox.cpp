@@ -15,6 +15,13 @@ BoundingBox::BoundingBox()
 BoundingBox::~BoundingBox()
 {
 }
+
+void BoundingBox::clearPoints()
+{
+    MaxEdge = Vector3(-999.0);
+    MinEdge = Vector3(999.0);
+}
+
 void BoundingBox::addPointsToCalculateBoundingBox(Vector3 point)
 {
     if (point.x > MaxEdge.x)

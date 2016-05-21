@@ -75,9 +75,11 @@ Quaternion& Quaternion::operator=(const Mat4& m)
     return *this;
 }
 Quaternion Quaternion::operator*(const Quaternion& other) const
-{
-    GLKQuaternion quat = GLKQuaternionMultiply(glkQuaternion(), other.glkQuaternion());
-    return Quaternion(quat);
+{    
+    Quaternion tmp;
+    GLKQuaternion quat = GLKQuaternionMultiply(other.glkQuaternion(), glkQuaternion());
+    tmp.setValues(quat);
+    return tmp;
 }
 Quaternion Quaternion::operator*(float s) const
 {
@@ -164,13 +166,6 @@ Quaternion& Quaternion::set(const Quaternion& quat)
 Quaternion& Quaternion::normalize()
 {
     GLKQuaternion quat = GLKQuaternionNormalize(glkQuaternion());
-    setValues(quat);
-    return *this;
-}
-
-Quaternion& Quaternion::slerp(Quaternion q1, Quaternion q2, float time, float threshold)
-{
-    GLKQuaternion quat = GLKQuaternionSlerp(q1.glkQuaternion(), q2.glkQuaternion(), time);
     setValues(quat);
     return *this;
 }

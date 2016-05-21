@@ -58,8 +58,6 @@ public:
     void getMatrixCenter(Mat4& dest, const Vector3& center, const Vector3& translation) const;
     void getMatrix_transposed(Mat4& dest) const;
     Quaternion& makeInverse();
-    Quaternion& lerp(Quaternion q1, Quaternion q2, float time);
-    Quaternion& slerp(Quaternion q1, Quaternion q2,
         float time, float threshold = .05f);
     Quaternion& fromAngleAxis(float angle, const Vector3& axis);
     void toAngleAxis(float& angle, Vector3& axis) const;

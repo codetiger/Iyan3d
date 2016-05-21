@@ -397,10 +397,17 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             else if (editorScene->nodes[nodeIndex]->getType() == NODE_OBJ || editorScene->nodes[nodeIndex]->getType() == NODE_SGM || editorScene->nodes[nodeIndex]->getType() == NODE_RIG || editorScene->nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT|| editorScene->nodes[nodeIndex]->getType() == NODE_PARTICLES)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
         }
-        editorScene->loader->removeObject(nodeIndex);
-        [self.delegate updateAssetListInScenes];
-        [self.delegate showOrHideProgress:0];
+        [self performSelectorOnMainThread:@selector(removeNodeInMainThread:) withObject:[NSNumber numberWithInt:nodeIndex] waitUntilDone:YES];
     }
+}
+
+- (void) removeNodeInMainThread:(NSNumber*) indNum
+{
+    int nodeIndex = [indNum intValue];
+    editorScene->loader->removeObject(nodeIndex);
+    [self.delegate updateAssetListInScenes];
+    [self.delegate showOrHideProgress:0];
+
 }
 
 - (void)addGesturesToSceneView

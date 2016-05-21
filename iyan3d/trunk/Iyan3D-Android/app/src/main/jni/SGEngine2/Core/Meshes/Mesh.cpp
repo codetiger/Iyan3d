@@ -46,14 +46,15 @@ void Mesh::copyDataFromMesh(Mesh* otherMesh)
     Commit();
 }
 
-void Mesh::addVertex(vertexData* vertex){
+void Mesh::addVertex(vertexData* vertex, bool updateBB){
     vertexData vtx;
     vtx.vertPosition = vertex->vertPosition;
     vtx.vertNormal = vertex->vertNormal;
     vtx.texCoord1 = vertex->texCoord1;
     vtx.optionalData1 = vertex->optionalData1;
     tempVerticesData.push_back(vtx);
-    BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
+    if(updateBB)
+        BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
 }
 void Mesh::addHeavyVertex(vertexDataHeavy* vertex){
     vertexDataHeavy vtx;
@@ -370,13 +371,20 @@ void Mesh::fixOrientation()
 void Mesh::moveVertices(Vector3 offset)
 {
     const u32 vtxcnt = getVerticesCount();
+    BBox.clearPoints();
+
     for (int i = 0; i!= vtxcnt;i++) {
+        
         Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
         
-        if (meshType == MESH_TYPE_LITE)
+        if (meshType == MESH_TYPE_LITE) {
             getLiteVertexByIndex(i)->vertPosition = Vector3(pos.x, pos.y, pos.z) + offset;
-        else
+            BBox.addPointsToCalculateBoundingBox(Vector3(pos.x, pos.y, pos.z) + offset);
+        }
+        else {
             getHeavyVertexByIndex(i)->vertPosition = Vector3(pos.x, pos.y, pos.z) + offset;
+            BBox.addPointsToCalculateBoundingBox(Vector3(pos.x, pos.y, pos.z) + offset);
+        }
     }
 }
 

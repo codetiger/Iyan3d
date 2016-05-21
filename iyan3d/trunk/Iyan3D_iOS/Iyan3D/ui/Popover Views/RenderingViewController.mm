@@ -651,6 +651,7 @@
                 }
             }
         }
+        [NSThread sleepForTimeInterval:0.1];
     }
     [self.delegate setShaderTypeForRendering:SHADER_DEFAULT];
     if(isCanceled)

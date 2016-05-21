@@ -327,7 +327,7 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
         node->setTexture(nodeTex,1);
     } else
         props.perVertexColor = true;
-
+    node->updateBoundingBox();
     return node;
 }
 

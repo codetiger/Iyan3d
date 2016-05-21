@@ -436,6 +436,8 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     if(!currentScene || !smgr || nodeIndex >= currentScene->nodes.size())
         return false;
     
+    currentScene->freezeRendering = true;
+    
     SGNode * currentNode = currentScene->nodes[nodeIndex];
     
     int instanceSize = (int)currentNode->instanceNodes.size();
@@ -469,6 +471,8 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     currentScene->isNodeSelected = currentScene->isJointSelected = false;
     if(!deAllocScene)
         currentScene->updater->reloadKeyFrameMap();
+    
+    currentScene->freezeRendering = false;
     return true;
 }
 
@@ -489,6 +493,8 @@ void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
     it->second->instanceNodes.erase(newIt);
     it->second->node->setUserPointer(it->second);
     it->second->node->type = NODE_TYPE_MESH;
+    if(smgr->device == METAL)
+        it->second->node->shouldUpdateMesh = true;
     
     for(newIt = it->second->instanceNodes.begin(); newIt != it->second->instanceNodes.end(); newIt++) {
         newIt->second->node->original = it->second->node;
@@ -697,7 +703,9 @@ bool SGSceneLoader::loadInstance(SGNode* iNode, int origId, ActionType actionTyp
     currentScene->nodes.push_back(iNode);
     currentScene->updater->resetMaterialTypes(false);
 
-    //currentScene->animMan->copyPropsOfNode(origId, currentScene->nodes.size()-1, true);
+    if(iNode->textureName == "" || iNode->textureName == "-1")
+        iNode->props.perVertexColor = true;
+
     return true;
 }
 

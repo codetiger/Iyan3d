@@ -22,6 +22,8 @@ private:
 public:
     BoundingBox();
     ~BoundingBox();
+    
+    void clearPoints();
     void addPointsToCalculateBoundingBox(Vector3 pointPosition);
     Vector3 getMaxEdge();
     Vector3 getMinEdge();

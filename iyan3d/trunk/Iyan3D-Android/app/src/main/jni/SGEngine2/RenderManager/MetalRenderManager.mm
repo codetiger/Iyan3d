@@ -276,7 +276,7 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
         return false;
     
     if(node->shouldUpdateMesh) {
-        createVertexAndIndexBuffers(node , MESH_TYPE_LITE, false);
+        createVertexAndIndexBuffers(node , MESH_TYPE_LITE, true);
         node->shouldUpdateMesh = false;
     }
     

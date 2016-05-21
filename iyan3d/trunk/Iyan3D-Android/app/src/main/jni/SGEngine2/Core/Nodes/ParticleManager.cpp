@@ -113,6 +113,7 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
     if(!meshCacheCreated)
         this->meshCache->clearIndices();
     
+    this->meshCache->getBoundingBox()->clearPoints();
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
         this->isSelected = isSelected;
@@ -136,7 +137,9 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
         v->vertNormal.x = finalPos.w;
         v->vertNormal.y = finalPos.w;
         v->vertNormal.z = finalPos.w;
-        this->meshCache->addVertex(v);
+        
+        bool updateBB = p->isLive;
+        this->meshCache->addVertex(v, updateBB);
         if(!meshCacheCreated)
             this->meshCache->addToIndicesArray(i);
         

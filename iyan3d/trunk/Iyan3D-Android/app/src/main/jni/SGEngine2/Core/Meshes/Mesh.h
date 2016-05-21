@@ -76,7 +76,7 @@ public:
     MESH_TYPE meshType;
 
     void copyDataFromMesh(Mesh* otherMesh);
-    void addVertex(vertexData* vertex);
+    void addVertex(vertexData* vertex, bool updateBB = true);
     void addHeavyVertex(vertexDataHeavy* vertex);
     void addToIndicesArray(unsigned int index);
     void Commit();
