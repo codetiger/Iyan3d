@@ -453,7 +453,8 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     currentScene->renHelper->setJointSpheresVisibility(false);
     if(currentNode->getType() == NODE_ADDITIONAL_LIGHT) {
         currentScene->popLightProps();
-        currentScene->updater->resetMaterialTypes(false);
+        if(!deAllocScene)
+            currentScene->updater->resetMaterialTypes(false);
     }
     
     if(currentNode->getType() != NODE_TEXT_SKIN && currentNode->getType() != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
