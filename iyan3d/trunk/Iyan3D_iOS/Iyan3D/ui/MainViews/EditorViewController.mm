@@ -2379,7 +2379,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         assetItem.isTempAsset = YES;
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
         editorScene->animMan->copyKeysOfNode(selectedNode, (int)editorScene->nodes.size()-1);
-        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1);
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
@@ -3728,7 +3728,7 @@ void downloadFile(NSString* url, NSString* fileName)
     objAsset.textureName = (vertexColor == -1) ? [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"] : @"-1";
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
     editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size()-1);
-    editorScene->animMan->copyPropsOfNode(selectedNodeId, editorScene->nodes.size()-1);
+    editorScene->animMan->copyPropsOfNode(selectedNodeId, editorScene->nodes.size()-1, true);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
 }
 

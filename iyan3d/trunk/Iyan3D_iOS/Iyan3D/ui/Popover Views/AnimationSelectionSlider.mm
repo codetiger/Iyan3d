@@ -637,7 +637,7 @@
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->animMan->copyKeysOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId);
-    editorSceneLocal->animMan->copyPropsOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId);
+    editorSceneLocal->animMan->copyPropsOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId, true);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes];
     editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
