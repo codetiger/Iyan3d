@@ -16,6 +16,7 @@
                 <outlet property="reflectionSlider" destination="cEw-ia-XJQ" id="z2C-It-4xf"/>
                 <outlet property="refractionSlider" destination="Gl6-BX-ehp" id="yzc-8y-7sD"/>
                 <outlet property="skinBtn" destination="MT7-Hm-3m1" id="hX4-Qa-0TN"/>
+                <outlet property="velocityLoading" destination="H6Y-dk-0UN" id="NtS-9w-dVj"/>
                 <outlet property="velocitySlider" destination="WmX-9F-9Kk" id="IXR-1T-gJh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="visibleChanged" destination="Sr8-nc-TNF" id="kUD-1b-jS3"/>
@@ -174,6 +175,9 @@
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="H6Y-dk-0UN">
+                            <rect key="frame" x="241" y="251" width="20" height="20"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

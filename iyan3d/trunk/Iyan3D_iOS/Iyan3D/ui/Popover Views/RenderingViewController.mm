@@ -918,10 +918,25 @@
     [[AppHelper getAppHelper] saveToUserDefaults:[NSString stringWithFormat:@"%d",resolutionType] withKey:@"cameraResolution"];
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
+    [self.activityIndicatorView setHidden:NO];
+    [self.activityIndicatorView startAnimating];
+    
+    [self performSelectorInBackground:@selector(syncPhysicsAndStartRendering:) withObject:[NSNumber numberWithInt:credits]];
+    
+}
+
+- (void) syncPhysicsAndStartRendering:(NSNumber*) object
+{
+    [self.delegate syncSceneWithPhysicsWorld];
+    
+    int credits = [object intValue];
     self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d/%d",(int)_trimControl.leftValue,(int)_trimControl.rightValue];
     thread = [[NSThread alloc] initWithTarget:self selector:@selector(renderingProgress:) object:[NSNumber numberWithInt:credits]];
     [thread start];
+    
+    [self.activityIndicatorView setHidden:YES];
 }
+
 - (void) doRenderingOnMainThread
 {
     if(isAppInBg)

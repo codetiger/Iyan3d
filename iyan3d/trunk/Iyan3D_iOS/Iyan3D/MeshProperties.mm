@@ -67,14 +67,49 @@
         [self.velocitySlider setEnabled:NO];
         [self.directionBtn setEnabled:NO];
     }
-    }
+    [self.velocityLoading setHidden:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    
+    [self.delegate showLoadingActivity];
+    [self.delegate setUserInteractionStatus:NO];
+    
+    [self performSelectorInBackground:@selector(applyPhysicsProps) withObject:nil];
+    
+}
 
+- (void) applyPhysicsProps
+{
+    if(canApplyPhysics) {
+        if(velocity != self.velocitySlider.value) {
+            [self.delegate velocityChanged:self.velocitySlider.value];
+            [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+        }
+        if(physicsType != (int)self.physicsSegment.selectedSegmentIndex) {
+            
+            [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
+            
+            if(self.physicsSegment.selectedSegmentIndex == NONE)
+                [self.delegate setPhysics:false];
+            else {
+                [self.delegate setPhysics:true];
+                [self.delegate setPhysicsType:(int)self.physicsSegment.selectedSegmentIndex];
+            }
+            
+            [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+        }
+    }
+    
+    [self.delegate hideLoadingActivity];
+    [self.delegate setUserInteractionStatus:YES];
+}
 
 - (IBAction)reflectionChangeEnded:(id)sender {
     reflectionValue=self.reflectionSlider.value;
@@ -138,7 +173,18 @@
 }
 
 - (IBAction)velocityValueChanged:(id)sender {
-    [self.delegate velocityChanged:self.velocitySlider.value];
+        //[self.delegate velocityChanged:self.velocitySlider.value];
+}
+
+- (void) showLoading
+{
+    if(self && self.delegate != nil)
+        [self.delegate showLoadingActivity];
+}
+
+- (void) hideLoading
+{
+    [self.velocityLoading setHidden:YES];
 }
 
 - (IBAction)setDirection:(id)sender {
@@ -147,20 +193,20 @@
 
 - (IBAction)physicsSegmentChanged:(id)sender {
     
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
-    
-    if(self.physicsSegment.selectedSegmentIndex == NONE)
-        [self.delegate setPhysics:false];
-    else {
-        [self.delegate setPhysics:true];
-        [self.delegate setPhysicsType:(int)self.physicsSegment.selectedSegmentIndex];
-    }
-    
-    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+//    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
+//    
+//    if(self.physicsSegment.selectedSegmentIndex == NONE)
+//        [self.delegate setPhysics:false];
+//    else {
+//        [self.delegate setPhysics:true];
+//        [self.delegate setPhysicsType:(int)self.physicsSegment.selectedSegmentIndex];
+//    }
+//    
+//    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
 - (IBAction)velocityChangeEnded:(id)sender {
-     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+//     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
 @end

@@ -24,6 +24,9 @@
 - (void) setPhysicsType:(int)type;
 - (void) velocityChanged:(double)vel;
 - (void) setDirection;
+- (void) showLoadingActivity;
+- (void) hideLoadingActivity;
+- (void) setUserInteractionStatus:(BOOL) status;
 @end
 
 @interface MeshProperties : GAITrackedViewController {
@@ -53,6 +56,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *velocityLbl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *physicsSegment;
 @property (weak, nonatomic) IBOutlet UIButton *directionBtn;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *velocityLoading;
 
 - (IBAction)reflectionChangeEnded:(id)sender;
 

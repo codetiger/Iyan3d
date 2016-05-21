@@ -957,12 +957,17 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)playButtonAction:(id)sender {
-    [_center_progress setHidden:NO];
-    [_center_progress startAnimating];
-    if(editorScene && editorScene->currentFrame == 0)
+    [self showLoadingActivity];
+    [self performSelectorInBackground:@selector(syncPhysicsAndPlay) withObject:nil];
+}
+
+- (void) syncPhysicsAndPlay
+{
+    if(editorScene && editorScene->currentFrame == 0) {
         [self syncSceneWithPhysicsWorld];
+    }
     [self performSelectorOnMainThread:@selector(playAnimation) withObject:nil waitUntilDone:NO];
-    [_center_progress setHidden:YES];
+    [self hideLoadingActivity];
 }
 
 - (IBAction)moveLastAction:(id)sender {
@@ -1011,6 +1016,11 @@ BOOL missingAlertShown;
         [_center_progress setHidden:NO];
         [_center_progress startAnimating];
     }
+}
+
+- (void) setUserInteractionStatus:(BOOL) status
+{
+    [self.view setUserInteractionEnabled:status];
 }
 
 - (void) hideLoadingActivity
@@ -2181,6 +2191,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) renderFrame:(int)frame withType:(int)shaderType isImage:(bool)isImage andRemoveWatermark:(bool)removeWatermark
 {
     editorScene->renHelper->isExportingImages = true;
+    editorScene->updatePhysics(frame);
     editorScene->updater->setDataForFrame(frame);
     NSString* tempDir = NSTemporaryDirectory();
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, frame];
@@ -3222,18 +3233,17 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) setDirection
 {
-    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]->props.isPhysicsEnabled) {
+    [_popoverController dismissPopoverAnimated:YES];
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->enableDirectionIndicator();
         editorScene->updater->updateControlsOrientaion();
     }
-    [_popoverController dismissPopoverAnimated:YES];
 }
 
 - (void) syncSceneWithPhysicsWorld
 {
     if(editorScene)
         editorScene->syncSceneWithPhysicsWorld();
-    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
 }
 
 -(void) deleteDelegateAction

@@ -31,6 +31,8 @@
 - (void) saveScene;
 - (void) changeRenderingBgColor:(Vector4)vertexColor;
 - (IBAction)loginBtnAction:(id)sender;
+- (void) syncSceneWithPhysicsWorld;
+
 @end
 
 @class GADBannerView;
