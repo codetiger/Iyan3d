@@ -1918,6 +1918,9 @@ BOOL missingAlertShown;
 
 - (void) saveScene
 {
+    if(editorScene) {
+        editorScene->updatePhysics(editorScene->totalFrames-1);
+    }
     [self performSelectorOnMainThread:@selector(saveAnimationData) withObject:nil waitUntilDone:YES];
 }
 

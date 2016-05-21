@@ -566,6 +566,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             nodeToRig->node->setTexture(rigScene->shadowTexture, 2);
             smgr->RemoveNode(meshNode);
         }
+        nodeToRig->props.perVertexColor = isVertexColoredNode;
         nodeToRig->props.transparency = 1.0;
         nodeToRig->node->setVisible(true);
         nodeToRig->node->setID(actualNodeId);

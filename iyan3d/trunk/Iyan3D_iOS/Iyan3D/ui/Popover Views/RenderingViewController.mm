@@ -343,6 +343,9 @@
     if([userCredits intValue] >= abs(credits)) {
         [_creditLable setHidden:YES];
         if(([shaderArray[selectedIndex] intValue] == SHADER_CLOUD)){
+            [self.activityIndicatorView setHidden:NO];
+            [self.activityIndicatorView startAnimating];
+            [self.delegate syncSceneWithPhysicsWorld];
             [self.delegate saveScene];
             [self shaderPhotoAction:credits];
         }
