@@ -34,7 +34,6 @@ SGNode::SGNode(NODE_TYPE type){
     props.physicsType = STATIC;
 }
 SGNode::~SGNode(){
-    
     instanceNodes.clear();
     clearSGJoints();
     node.reset();

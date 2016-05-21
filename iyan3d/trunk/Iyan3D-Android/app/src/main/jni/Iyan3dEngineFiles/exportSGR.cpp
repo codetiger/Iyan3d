@@ -138,7 +138,6 @@ bool exportSGR::createSGR(std::string filePath,shared_ptr<MeshNode> node, std::m
 		}
         
         FileHelper::writeFloat(&filePointer, (rigKeys[j].sphere->node) ? rigKeys[j].sphere->node->getScale().x : 0.2);
-        printf(" \n write Env radius %f Id %d ", rigKeys[j].envelopeRadius, j);
         FileHelper::writeFloat(&filePointer, rigKeys[j].envelopeRadius);
 	}
         //node.reset();

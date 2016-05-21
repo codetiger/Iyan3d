@@ -262,8 +262,6 @@ Vector3 Mat4::getRotationInDegree()
     if (Z < 0.0)
         Z += 360.0;
     
-    printf(" \n Get Degree Rotation %f %f %f ", X, Y, Z);
-
     return Vector3(X, Y, Z);
 }
 Mat4 Mat4::setbyproduct(Mat4& other_a, Mat4& other_b)

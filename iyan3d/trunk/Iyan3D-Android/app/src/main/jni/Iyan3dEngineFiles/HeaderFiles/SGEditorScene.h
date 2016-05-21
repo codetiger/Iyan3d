@@ -147,6 +147,8 @@ public:
     SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight);
     ~SGEditorScene();
     
+    void removeAllNodes();
+    
     /* initializing methods */
     
     void initTextures();

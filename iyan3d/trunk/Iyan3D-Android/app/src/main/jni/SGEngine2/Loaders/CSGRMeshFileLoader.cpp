@@ -116,8 +116,6 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
             f.read((char*)&sphereRadius, sizeof(float));
             float envRadius;
             f.read((char*)&envRadius, sizeof(float));
-
-            printf(" \n Env radius %f Id %d ", envRadius, i);
             
             ibone->envelopeRadius = envRadius;
             ibone->sphereRadius = sphereRadius;

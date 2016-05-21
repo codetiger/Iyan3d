@@ -441,16 +441,16 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     SGNode * currentNode = currentScene->nodes[nodeIndex];
     
     int instanceSize = (int)currentNode->instanceNodes.size();
-    
-    if(instanceSize > 0) {
+    if(instanceSize > 0 && !deAllocScene) {
         setFirstInstanceAsMainNode(currentNode);
     }
     
-    removeNodeFromInstances(currentNode);
-        
+    if(!deAllocScene)
+        removeNodeFromInstances(currentNode);
+    
+
     currentScene->renHelper->setControlsVisibility(false);
     currentScene->renHelper->setJointSpheresVisibility(false);
-    
     if(currentNode->getType() == NODE_ADDITIONAL_LIGHT) {
         currentScene->popLightProps();
         currentScene->updater->resetMaterialTypes(false);
@@ -461,16 +461,16 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     
     smgr->RemoveNode(currentNode->node);
     delete currentNode;
+    
     if(!deAllocScene) {
         currentScene->nodes.erase(currentScene->nodes.begin() + nodeIndex);
-    }
-    currentScene->updater->updateLightProperties(currentScene->currentFrame);
-    currentScene->selectedNodeId = NOT_EXISTS;
-    currentScene->selectedNode = NULL;
-    currentScene->selectedJoint = NULL;
-    currentScene->isNodeSelected = currentScene->isJointSelected = false;
-    if(!deAllocScene)
+        currentScene->updater->updateLightProperties(currentScene->currentFrame);
+        currentScene->selectedNodeId = NOT_EXISTS;
+        currentScene->selectedNode = NULL;
+        currentScene->selectedJoint = NULL;
+        currentScene->isNodeSelected = currentScene->isJointSelected = false;
         currentScene->updater->reloadKeyFrameMap();
+    }
     
     currentScene->freezeRendering = false;
     return true;

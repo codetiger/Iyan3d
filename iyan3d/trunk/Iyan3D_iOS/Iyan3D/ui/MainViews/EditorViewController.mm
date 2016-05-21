@@ -954,6 +954,7 @@ BOOL missingAlertShown;
     NSString* thumbPath = [self saveThumbnail];
     [renderViewMan createi3dFileWithThumb:thumbPath];
     [self loadSceneSelectionView];
+
 }
 
 - (IBAction)playButtonAction:(id)sender {
@@ -3287,6 +3288,7 @@ void downloadFile(NSString* url, NSString* fileName)
     }
     [self performSelectorOnMainThread:@selector(removeSGEngine) withObject:nil waitUntilDone:YES];
     [self removeFromParentViewController];
+
 }
 
 - (void)removeSGEngine

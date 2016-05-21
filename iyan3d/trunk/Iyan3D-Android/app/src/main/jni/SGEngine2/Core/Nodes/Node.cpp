@@ -42,21 +42,21 @@ Node::Node() {
     drawMode = DRAW_MODE_TRIANGLES;
 }
 Node::~Node() {
-    if(this->instancedNodes.size()){
-        for(u16 i = 0;i < instancedNodes.size();i++){
-            if(instancedNodes[i]) {
-                while (instancedNodes[i].use_count() > 0)
-                    instancedNodes[i].reset();
-                instancedNodes.erase(instancedNodes.begin() + i);
-            }
-        }
-    }
+//    if(this->instancedNodes.size()){
+//        for(u16 i = 0;i < instancedNodes.size();i++){
+//            if(instancedNodes[i]) {
+//                while (instancedNodes[i].use_count() > 0)
+//                    instancedNodes[i].reset();
+//                instancedNodes.erase(instancedNodes.begin() + i);
+//            }
+//        }
+//    }
     this->instancedNodes.clear();
     
     if(this->Children->size()){
         for(u16 i = 0;i < Children->size();i++){
             if((*Children)[i]) {
-                while((*Children)[i].use_count() > 0)
+                for(int j = 0; j < (*Children)[i].use_count(); j++)
                     (*Children)[i].reset();
                 Children->erase(Children->begin() + i);
             }
@@ -64,15 +64,15 @@ Node::~Node() {
     }
     this->Children->clear();
     if(this->Children) {
-        while(this->Children.use_count() > 0)
-            this->Children.reset();
+        for(int j = 0; j < Children.use_count(); j++)
+            Children.reset();
     }
     
     if(this->Parent)
     this->Parent.reset();
     
     if(nodeData) {
-        while (nodeData.use_count() > 0)
+        for(int j = 0; j < nodeData.use_count(); j++)
             nodeData.reset();
     }
 }

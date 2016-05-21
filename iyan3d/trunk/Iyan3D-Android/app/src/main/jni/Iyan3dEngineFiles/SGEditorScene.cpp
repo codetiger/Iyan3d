@@ -53,12 +53,9 @@ SGEditorScene::~SGEditorScene()
     selectedNodeIds.clear();
     isKeySetForFrame.clear();
     
-    for(int i = 0;i < nodes.size();i++){
-        if(nodes[i])
-            delete nodes[i];
-    }
-    nodes.clear();   
-        
+    removeAllNodes();
+    nodes.clear();
+    
     if(ikJointsPositionMap.size())
         ikJointsPositionMap.clear();
     
@@ -113,6 +110,13 @@ SGEditorScene::~SGEditorScene()
         delete cmgr;
     if(smgr)
         delete smgr;
+}
+
+void SGEditorScene::removeAllNodes()
+{
+    for(int i = 0; i < nodes.size(); i++) {
+        loader->removeObject(i, true);
+    }
 }
 
 void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)

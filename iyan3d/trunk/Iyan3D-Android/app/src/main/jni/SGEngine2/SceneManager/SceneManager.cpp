@@ -497,8 +497,12 @@ void SceneManager::updateVertexBuffer(int nodeIndex){
 	#ifndef UBUNTU
 		if(device == OPENGLES2)
 			dynamic_pointer_cast<OGLNodeData>(nodes[nodeIndex]->nodeData)->removeVertexBuffers();
-		for(int i = 0; i < dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->getMeshBufferCount(); i++)
+    for(int i = 0; i < dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->getMeshBufferCount(); i++) {
+        if(device == METAL)
 			renderMan->createVertexBuffer(nodes[nodeIndex],i);
+        else
+            ((OGLES2RenderManager*)renderMan)->updateVAO(nodes[nodeIndex], false, false, i);
+    }
 	#endif
 }
 
