@@ -129,6 +129,7 @@ void RenderHelper::drawCircle()
         float distanceFromCamera = nodePos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
         float radius = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_DISTANCE_FROM_NODE);
         float longLineLength = ROTATION_CIRCLE_LONG_LINE_LENGTH * (radius/ROTATION_CIRCLE_LINE_MARKER_RADIUS) ,shorLineLength = ROTATION_CIRCLE_LINE_LENGTH * (radius/ROTATION_CIRCLE_LINE_MARKER_RADIUS);
+        
         renderingScene->rotationCircle->node->setPosition(nodePos);
         renderingScene->rotationCircle->node->setScale(Vector3(radius));
         renderingScene->rotationCircle->node->setRotationInDegrees(circleRotation);

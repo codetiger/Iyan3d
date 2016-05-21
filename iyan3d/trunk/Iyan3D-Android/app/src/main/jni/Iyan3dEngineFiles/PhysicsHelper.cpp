@@ -88,13 +88,19 @@ void PhysicsHelper::syncPhysicsWorld()
 {
     for(int i = 0; i < rBodies.size(); i++) {
         world->removeRigidBody(rBodies[i]);
-        delete rBodies[i]->getCollisionShape();
-        delete rBodies[i];
+        if(rBodies[i]->getMotionState())
+            delete rBodies[i]->getMotionState();
+        if(rBodies[i]->getCollisionShape())
+            delete rBodies[i]->getCollisionShape();
+        if(rBodies[i])
+            delete rBodies[i];
     }
     for(int i = 0; i < sBodies.size(); i++) {
         ((btSoftRigidDynamicsWorld*)world)->removeSoftBody(sBodies[i]);
-        delete sBodies[i]->getCollisionShape();
-        delete sBodies[i];
+        if(sBodies[i]->getCollisionShape())
+            delete sBodies[i]->getCollisionShape();
+        if(sBodies[i])
+            delete sBodies[i];
     }
     
     rBodies.clear();
@@ -233,7 +239,6 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
         body->setLinearVelocity(velocity);
     }
     
-    delete motionState;
     return body;
 }
 
@@ -357,7 +362,6 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
         btBvhTriangleMeshShape *_shape = new btBvhTriangleMeshShape(m, false);
         _shape->setMargin(0.5);
         
-        delete m;
         return _shape;
     } else {
         btConvexHullShape* _shape = new btConvexHullShape();
