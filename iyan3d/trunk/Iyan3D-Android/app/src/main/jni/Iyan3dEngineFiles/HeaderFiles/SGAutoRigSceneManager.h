@@ -44,6 +44,7 @@ public:
     
     bool isSkeletonJointSelected;
     bool isSGRJointSelected, isNodeSelected;
+    bool isVertexColoredNode;
 
     int selectedNodeId, selectedJointId, rigBoneCount;
     float scaleRatio;

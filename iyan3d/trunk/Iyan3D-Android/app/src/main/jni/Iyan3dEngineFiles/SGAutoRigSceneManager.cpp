@@ -94,6 +94,8 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     if(!rigScene || !smgr || !sgNode)
         return;
 
+    rigScene->setLightingOff();
+    isVertexColoredNode = sgNode->props.perVertexColor;
     if(nodeToRig && nodeToRig->node){
         smgr->RemoveNode(nodeToRig->node);
     }
@@ -133,6 +135,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             if (rigKeys.size() > 0)
                 removeRigKeys();
             if(nodeToRig){
+                nodeToRig->props.perVertexColor = isVertexColoredNode;
                 nodeToRig->node->setVisible(true);
                 nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
                 nodeToRig->props.transparency = 1.0;
@@ -143,6 +146,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             
         case RIG_MODE_MOVE_JOINTS:{
             if(nodeToRig){
+                nodeToRig->props.perVertexColor = isVertexColoredNode;
                 nodeToRig->node->setVisible(true);
                 nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
                 nodeToRig->props.transparency = 0.5;
@@ -181,6 +185,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             envelopes.clear();
             selectedNodeId = NOT_SELECTED;
             if(nodeToRig){
+                nodeToRig->props.perVertexColor = true;
                 nodeToRig->node->setVisible(true);
                 nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
                 nodeToRig->props.transparency = 0.5;
@@ -206,6 +211,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             rigScene->renHelper->setControlsVisibility(true);
             rigScene->renHelper->setEnvelopVisibility(envelopes, false);
             if(nodeToRig){
+                nodeToRig->props.perVertexColor = isVertexColoredNode;
                 nodeToRig->node->setVisible(false);
             }
             rigScene->renHelper->setJointAndBonesVisibility(rigKeys, false);
@@ -549,7 +555,7 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
 }
 
 bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
-{    
+{
     if(!isCompleted){
         if(animNode) {
             nodeToRig->setType(NODE_RIG);

@@ -659,6 +659,8 @@ void SGSelectionManager::readSGRSelectionTexture()
 void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJointColor, shared_ptr<AnimatedMeshNode> animNode)
 {
     if(selectedNodeColor != 255){
+        if(selectionScene->rigMan->getRiggedNode())
+            selectionScene->rigMan->getRiggedNode()->props.isSelected = true;
         selectionScene->rigMan->isNodeSelected = true;
         selectionScene->rigMan->selectedNodeId = selectedNodeColor;
         selectionScene->rigMan->selectedNode = selectionScene->rigMan->getRiggedNode();
@@ -675,6 +677,9 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
         if(!status)
             updateSGRSelection(255, 0, animNode);
     }else{
+        if(selectionScene->rigMan->getRiggedNode())
+            selectionScene->rigMan->getRiggedNode()->props.isSelected = false;
+
         if(selectionScene->rigMan->selectedNode)
             selectionScene->rigMan->selectedNode->props.transparency = 1.0;
         selectionScene->rigMan->clearNodeSelections();

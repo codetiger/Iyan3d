@@ -1011,6 +1011,7 @@ void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
         return;
     smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
+    Vector3 vertexColor = sgrSGNode->props.vertexColor;
     sgrSGNode->props.transparency = 1.0;
     sgrSGNode->props.vertexColor = Vector3(0.0,1.0,1.0);
     
@@ -1018,6 +1019,7 @@ void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
     
     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
     sgrSGNode->props.transparency = 1.0;
+    sgrSGNode->props.vertexColor = vertexColor;
     
     // render Joints
     if(renderingScene->rigMan->isNodeSelected){

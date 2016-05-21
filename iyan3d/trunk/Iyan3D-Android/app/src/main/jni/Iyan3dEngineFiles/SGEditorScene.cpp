@@ -137,6 +137,7 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
         delete rigMan;
         updater->resetMaterialTypes(false);
         AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
+        setLightingOn();
     }
     updater->setDataForFrame(currentFrame);
 }
@@ -221,7 +222,7 @@ void SGEditorScene::renderAll()
         rotationCircle->node->setVisible(false);
         renHelper->drawGrid();
         
-        if((selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA) || isPlaying)
+        if((selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA) || isPlaying || isRigMode)
             ShaderManager::isRendering = true;
         else
             ShaderManager::isRendering = false;
@@ -565,7 +566,8 @@ bool SGEditorScene::generateSGFDFile(int frame)
 
 void SGEditorScene::setLightingOn()
 {
-    ShaderManager::sceneLighting = true;
+    if(!isRigMode)
+        ShaderManager::sceneLighting = true;
 }
 
 void SGEditorScene::setLightingOff()
