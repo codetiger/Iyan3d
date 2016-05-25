@@ -12,6 +12,8 @@
 
 float SceneHelper::screenWidth = 0.0;
 float SceneHelper::screenHeight = 0.0;
+Mesh* SceneHelper::pointLightMesh = NULL;
+Mesh* SceneHelper::directionalLightMesh = NULL;
 
 shared_ptr<CameraNode> SceneHelper::initViewCamera(SceneManager *smgr, Vector3& cameraTarget, float& cameraRadius)
 {
@@ -45,6 +47,14 @@ shared_ptr<CameraNode> SceneHelper::initRenderCamera(SceneManager *smgr, float f
     return renderCamera;
 }
 
+void SceneHelper::initLightMesh(SceneManager *smgr)
+{
+    SceneHelper::pointLightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
+    SceneHelper::pointLightMesh->Commit();
+    SceneHelper::directionalLightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
+    SceneHelper::directionalLightMesh->Commit();
+}
+
 Vector3 SceneHelper::planeFacingDirection(int controlType)
 {
     if(controlType == X_MOVE || controlType == X_ROTATE || controlType == X_SCALE)
@@ -73,6 +83,17 @@ SGNode* SceneHelper::createCircle(SceneManager *smgr){
     rotationCircle->props.vertexColor = Vector3(0.0,1.0,0.0);
     rotationCircle->props.transparency = 1.0;
     return rotationCircle;
+}
+
+SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
+{
+    vector< Vector3 > vPositions;
+    vPositions.push_back(Vector3(0.0));
+    vPositions.push_back(Vector3(0.0, 25.0, 0.0));
+    vPositions.push_back(Vector3(0.0, 25.0, 0.0));
+    SGNode *dirLine = createLines(smgr, vPositions, Vector3(1.0, 1.0, 0.0), "LightLine", LIGHT_DIRECTION_ID);
+    dirLine->node->setVisible(false);
+    return dirLine;
 }
 
 SGNode* SceneHelper::createRedLines(SceneManager *smgr)

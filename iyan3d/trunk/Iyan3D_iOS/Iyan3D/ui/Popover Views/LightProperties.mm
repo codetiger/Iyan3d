@@ -15,12 +15,13 @@
 
 @implementation LightProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType Distance:(float)distance {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor NodeType:(NODE_TYPE)nodeType Distance:(float)distance LightType:(int)lightType {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         color = currentLightColor;
-        light = lightType;
+        light = nodeType;
         previousDistance = distance;
+        selectedSegmentIndex = lightType;
     }
     return self;
 }
@@ -34,10 +35,14 @@
     [_distance setEnabled:(light == NODE_ADDITIONAL_LIGHT) ? YES : NO];
     [_distance setValue:(light == NODE_ADDITIONAL_LIGHT) ? previousDistance : 1.0];
     [_shadowDarkness setValue:color.w];
+    [self.lightTypeSeg setSelectedSegmentIndex:selectedSegmentIndex];
     if(light == NODE_LIGHT){
         CGRect frame = _deleteBtn.frame;
+        CGRect frame2 = _directionBtn.frame;
         frame.origin.y = _distance.frame.origin.y + ((_distanceLable.frame.origin.y - _distance.frame.origin.y)/2);
+        frame2.origin.y = _distance.frame.origin.y + ((_distanceLable.frame.origin.y - _distance.frame.origin.y)/2);
         _deleteBtn.frame = frame;
+        _directionBtn.frame = frame2;
         [_distance setHidden:YES];
         [_distanceLable setHidden:YES];
     }
@@ -91,11 +96,11 @@
 }
 
 - (void)lightPropsChangeAction{
-    [_delegate changeLightProps:color Distance:_distance.value isStoredProperty:NO];
+    [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:NO];
 }
 
 - (void)lightPropsEndAction{
-    [_delegate changeLightProps:color Distance:_distance.value isStoredProperty:YES];
+    [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:YES];
 }
 
 - (IBAction)deleteAction:(id)sender {
@@ -104,4 +109,12 @@
 
 
 
+- (IBAction)setDirection:(id)sender {
+    [self.delegate setLightDirection];
+}
+
+- (IBAction)lightTypeChanged:(id)sender {
+    [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:NO];
+    [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:YES];
+}
 @end

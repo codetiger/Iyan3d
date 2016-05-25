@@ -21,7 +21,8 @@
 
 @protocol LightPropertiesDelegate
 
-- (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored;
+- (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance LightType:(int)lightType isStoredProperty:(BOOL)isStored;
+- (void) setLightDirection;
 - (void) deleteObjectOrAnimation;
 @end
 
@@ -30,9 +31,11 @@
     Quaternion color;
     NODE_TYPE light;
     float previousDistance;
+    int selectedSegmentIndex;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor LightType:(NODE_TYPE)lightType Distance:(float)distance;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor NodeType:(NODE_TYPE)nodeType Distance:(float)distance LightType:(int)lightType;
+@property (weak, nonatomic) IBOutlet UIButton *directionBtn;
 
 @property (weak, nonatomic) IBOutlet UIView *colorPickerView;
 @property (strong, nonatomic) GetPixelDemo *demoView;
@@ -42,5 +45,8 @@
 @property (weak, nonatomic) IBOutlet UISlider *distance;
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 @property (weak, nonatomic) IBOutlet UILabel *distanceLable;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *lightTypeSeg;
+- (IBAction)setDirection:(id)sender;
+- (IBAction)lightTypeChanged:(id)sender;
 
 @end

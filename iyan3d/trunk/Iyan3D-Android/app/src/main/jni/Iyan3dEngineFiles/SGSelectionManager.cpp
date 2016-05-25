@@ -394,6 +394,8 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
         else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->props.fontSize/3.0);
+        else if (currentSelectedNode->getType() == NODE_LIGHT || currentSelectedNode->getType() == NODE_ADDITIONAL_LIGHT)
+            selectionScene->updateDirectionLine();
     }
     if(!status)
         unselectObject(selectionScene->selectedNodeId);
@@ -492,6 +494,9 @@ void SGSelectionManager::unselectObject(int objectId)
     selectionScene->clearSelections();
     if(selectionScene->directionIndicator->node->getVisible() && selectionScene->directionIndicator->assetId != selectionScene->selectedNodeId)
         selectionScene->directionIndicator->node->setVisible(false);
+    else if (selectionScene->directionLine->node->getVisible())
+        selectionScene->updateDirectionLine();
+    
     selectionScene->updater->updateControlsOrientaion();
     selectionScene->updater->reloadKeyFrameMap();
 }

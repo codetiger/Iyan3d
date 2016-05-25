@@ -39,6 +39,7 @@ Vector3 ShaderManager::camPos = Vector3(0.0);
 vector<Vector3> ShaderManager::lightPosition;// = Vector3(0.0);
 vector<Vector3> ShaderManager::lightColor;// = Vector3(1.0);
 vector<float> ShaderManager::lightFadeDistances;
+vector< int > ShaderManager::lightTypes;
 Mat4 ShaderManager::lighCamProjMatrix;
 Mat4 ShaderManager::lighCamViewMatrix;
 string ShaderManager::BundlePath = " ";
@@ -171,10 +172,10 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
     }else if(matName == "SHADER_DRAW_2D_IMAGE" || matName == "SHADER_DRAW_2D_IMAGE_DEPTH"){
         setTexturesUniforms(sgNode,SHADER_DRAW_2D_IMAGE_Texture1);
     }else if(matName == "SHADER_SHADOW_DEPTH_PASS_SKIN" || matName == "SHADER_SHADOW_DEPTH_PASS_TEXT"){
-        setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_SKIN_mvp);
+        setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_SKIN_mvp, true);
         setJointTransform(sgNode,SHADER_DEPTH_PASS_SKIN_jointdata,smgr);
     }else if(matName == "SHADER_SHADOW_DEPTH_PASS"){
-        setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_mvp);
+        setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_mvp, true);
     }else if (matName.find("SHADER_PARTICLES") !=  string::npos) {
         setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, false);
         setMVPForParticles(sgNode,0);
@@ -216,18 +217,23 @@ void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int pa
         float * lightPositions = new float[lightsCount * 3];
         float *lightColors = new float[lightsCount * 3];
         float * fadeEndDistance = new float[lightsCount];
-        
+        float * lightType = new float[lightsCount];
+    
         int copyIncrement = 0;
         for(int i = 0; i < lightsCount; i++) {
             MathHelper::copyVector3ToPointer(lightPositions + copyIncrement, lightPosition[i]);
             MathHelper::copyVector3ToPointer(lightColors + copyIncrement, lightColor[i]);
             *(fadeEndDistance + i) = lightFadeDistances[i];
+            *(lightType + i) = (float)lightTypes[i];
             copyIncrement += 3;
         }
         setLightsPosition(sgNode, lightPositions, paramIndex1);
         setLightsColors(sgNode, lightColors, paramIndex2);
         
         smgr->setPropertyValue(sgNode->node->material, "fadeEndDistance", fadeEndDistance, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightFadeDistance,smgr->getNodeIndexByID(sgNode->node->getID()));
+    
+        smgr->setPropertyValue(sgNode->node->material, "lightTypes", lightType, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightType,smgr->getNodeIndexByID(sgNode->node->getID()));
+
         lightChanged = false;
         delete [] fadeEndDistance;
 }
@@ -396,14 +402,14 @@ void ShaderManager::setSceneDataUniforms(SGNode *node,u16 paramIndex){
     
 }
 
-void ShaderManager::setModelViewProjMatrix(SGNode *sgNode,u16 paramIndex) {
+void ShaderManager::setModelViewProjMatrix(SGNode *sgNode,u16 paramIndex, bool isDepthPass) {
     
-    Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
-    Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
+    Mat4 projMat = (isDepthPass) ? lighCamProjMatrix : smgr->getActiveCamera()->getProjectionMatrix();
+    Mat4 viewMat = (isDepthPass) ? lighCamViewMatrix : smgr->getActiveCamera()->getViewMatrix();
     
     Mat4 mvp;
     std::string uniformName = "mvp";
-    if((sgNode->node->getID() != CIRCLE_NODE_ID && sgNode->node->drawMode == DRAW_MODE_LINES) || sgNode->node->material->name.find("SHADER_COMMON_L") != string::npos || sgNode->node->material->name.find("SHADER_VERTEX_COLOR_L") != string::npos) {
+    if((sgNode->node->getID() != CIRCLE_NODE_ID && sgNode->node->getID() != LIGHT_DIRECTION_ID && sgNode->node->drawMode == DRAW_MODE_LINES) || sgNode->node->material->name.find("SHADER_COMMON_L") != string::npos || sgNode->node->material->name.find("SHADER_VERTEX_COLOR_L") != string::npos) {
         uniformName = (sgNode->node->drawMode == DRAW_MODE_LINES) ? "mvp" : "vp";
         mvp = projMat * viewMat;
     } else

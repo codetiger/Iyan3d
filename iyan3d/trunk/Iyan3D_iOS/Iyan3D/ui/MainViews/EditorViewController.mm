@@ -406,7 +406,7 @@ BOOL missingAlertShown;
     {
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT){
             [self.moveBtn setEnabled:true];
-            [self.rotateBtn setEnabled:false];
+            [self.rotateBtn setEnabled:(editorScene->nodes[editorScene->selectedNodeId]->props.specificInt == (int)DIRECTIONAL_LIGHT)];
             [self.optionsBtn setEnabled:true];
             [self.scaleBtn setEnabled:false];
             [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -1424,13 +1424,13 @@ BOOL missingAlertShown;
         lightProps.w = ShaderManager::shadowDensity;
         float distance = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType() Distance:distance];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps NodeType:editorScene->getSelectedNode()->getType() Distance:distance LightType:editorScene->getSelectedNode()->props.specificInt];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;
+        int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 300 : 322;
         if(![Utility IsPadDevice])
             height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 265;
-        self.popoverController.popoverContentSize = CGSizeMake(270, height);
+        self.popoverController.popoverContentSize = CGSizeMake(388, height);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -1957,15 +1957,35 @@ BOOL missingAlertShown;
 }
 
 
-- (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance isStoredProperty:(BOOL)isStored{
+- (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance LightType:(int)lightType isStoredProperty:(BOOL)isStored{
     
     if(editorScene)
         editorScene->shadowsOff = false;
     
     if(!isStored)
-        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w,distance,true);
+        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w, distance, lightType, true);
     else if(isStored)
-        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w,distance);
+        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w, distance, lightType);
+    
+    if(isStored) {
+        [self performSelectorOnMainThread:@selector(updateLightInMainThread:) withObject:[NSNumber numberWithInt:lightType] waitUntilDone:NO];
+    }
+}
+
+- (void) updateLightInMainThread:(NSNumber*) object
+{
+    int lightType = [object intValue];
+    editorScene->updateDirectionLine();
+    editorScene->updateLightMesh(lightType);
+    [self setupEnableDisableControls];
+}
+
+- (void) setLightDirection
+{
+    [_popoverController dismissPopoverAnimated:YES];
+    editorScene->updateDirectionLine();
+    editorScene->controlType = ROTATE;
+    editorScene->updater->updateControlsOrientaion();
 }
 
 - (void)applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame
@@ -2295,7 +2315,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 //        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
         float distance = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
 
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps LightType:editorScene->getSelectedNode()->getType() Distance:distance];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps NodeType:editorScene->getSelectedNode()->getType() Distance:distance LightType:editorScene->getSelectedNode()->props.specificInt];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;

@@ -343,6 +343,7 @@ fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half
 #define SHADER_COMMON_lightViewProjMatrix 11
 #define SHADER_COMMON_viewMatrix 12
 #define SHADER_COMMON_lightFadeDistance 20
+#define SHADER_COMMON_lightType 22
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 
@@ -404,7 +405,8 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
                                depth2d<float> shadow_texture [[texture(SHADER_COMMON_texture2)]],
                                constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
-                               constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]])
+                               constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
+                               constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -436,7 +438,7 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         //getColorOfLight(0,lightPos[0],lightColor[0],lightFadeDistance[0],specular, colorOfLight);
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
-        float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+        float4 lightDir = (lightType[0] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
         half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
         
         
@@ -452,7 +454,12 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = half4(0.0);
-        colorOfLight += half4(half3(lightColor[0]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[0])) * diffuse;
+        
+        float distanceRatio = 1.0;
+        if(lightType[0] == 0.0)
+            distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+        colorOfLight += half4(half3(lightColor[0]),1.0) * distanceRatio * diffuse;
         }
     //-------------
     
@@ -465,7 +472,8 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
                                   depth2d<float> shadow_texture [[texture(SHADER_COMMON_texture2)]],
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
-                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]])
+                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -496,7 +504,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
         
         for(int i = 0 ; i < 2; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -512,7 +520,12 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -528,7 +541,8 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
                                   depth2d<float> shadow_texture [[texture(SHADER_COMMON_texture2)]],
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
-                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]])
+                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -559,7 +573,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
         
         for(int i = 0 ; i < 3; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -575,7 +589,12 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -591,7 +610,8 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
                                   depth2d<float> shadow_texture [[texture(SHADER_COMMON_texture2)]],
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
-                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]])
+                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -622,7 +642,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
         
         for(int i = 0 ; i < 4; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -638,7 +658,12 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -654,7 +679,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
                                   depth2d<float> shadow_texture [[texture(SHADER_COMMON_texture2)]],
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
-                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]])
+                                  constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -685,7 +711,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
         
         for(int i = 0 ; i < 5; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -701,7 +727,12 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }

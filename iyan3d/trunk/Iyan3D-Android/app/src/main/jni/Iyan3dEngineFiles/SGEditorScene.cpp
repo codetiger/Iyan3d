@@ -25,12 +25,13 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     renHelper = new RenderHelper(smgr, this);
     this->smgr->setVAOSupport(renHelper->supportsVAO());
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
-    
+    SceneHelper::initLightMesh(smgr);
     initVariables(smgr, device);
 
 #ifndef UBUNTU
     initTextures();
     rotationCircle = SceneHelper::createCircle(smgr);
+    directionLine = SceneHelper::createLightDirLine(smgr);
     blueGrid = SceneHelper::createBlueLines(smgr);
     greenGrid = SceneHelper::createGreenLines(smgr);
     redGrid = SceneHelper::createRedLines(smgr);
@@ -49,6 +50,7 @@ SGEditorScene::~SGEditorScene()
     ShaderManager::lightPosition.clear();
     ShaderManager::lightColor.clear();
     ShaderManager::lightFadeDistances.clear();
+    ShaderManager::lightTypes.clear();
     
     selectedNodeIds.clear();
     isKeySetForFrame.clear();
@@ -275,6 +277,40 @@ void SGEditorScene::enableDirectionIndicator()
     controlType = ROTATE;
 }
 
+void SGEditorScene::updateDirectionLine()
+{
+    bool status = (selectedNodeId != NOT_EXISTS && (nodes[selectedNodeId]->getType() == NODE_LIGHT || nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT) && nodes[selectedNodeId]->props.specificInt == (int)DIRECTIONAL_LIGHT);
+        
+        directionLine->node->setVisible(status);
+        if(!status)
+            return;
+        
+        Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(currentFrame, nodes[selectedNodeId]->positionKeys);
+        Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(currentFrame, nodes[selectedNodeId]->rotationKeys,true);
+
+        directionLine->node->setPosition(position);
+        directionLine->node->setRotationInDegrees(MathHelper::toEuler(rotation) * RADTODEG);
+}
+
+void SGEditorScene::updateLightMesh(int lightType, int nodeId)
+{
+    int nodeIndex = (nodeId == NOT_EXISTS) ? selectedNodeId : nodeId;
+    bool status = (nodeIndex != NOT_EXISTS && (nodes[nodeIndex]->getType() == NODE_LIGHT || nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT));
+    if(!status)
+        return;
+    if(nodes[nodeIndex]->props.specificInt == (int)DIRECTIONAL_LIGHT) {
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = NULL;
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = SceneHelper::directionalLightMesh;
+        nodes[nodeIndex]->node->shouldUpdateMesh = true;
+    }
+    else {
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = NULL;
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = SceneHelper::pointLightMesh;
+        nodes[nodeIndex]->node->shouldUpdateMesh = true;
+    }
+
+}
+
 void SGEditorScene::setTransparencyForObjects()
 {
     if(!smgr && nodes.size() < 3)
@@ -443,7 +479,7 @@ void SGEditorScene::setRotationCircleUniforms(int nodeID,string matName)
 }
 void SGEditorScene::setGridLinesUniforms(int nodeId, int rgb, string matName)
 {
-    shaderMGR->setUniforms((rgb == 1) ? redGrid : (rgb == 2) ? blueGrid : greenGrid, matName);
+    shaderMGR->setUniforms((rgb == 1) ? redGrid : (rgb == 2) ? blueGrid : (rgb == 3) ? greenGrid : directionLine, matName);
 }
 bool SGEditorScene::isJointTransparent(int nodeID,string matName)
 {
@@ -585,6 +621,7 @@ void SGEditorScene::popLightProps()
         ShaderManager::lightPosition.pop_back();
         ShaderManager::lightColor.pop_back();
         ShaderManager::lightFadeDistances.pop_back();
+        ShaderManager::lightTypes.pop_back();
     }
     
 }

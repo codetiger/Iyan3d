@@ -54,14 +54,12 @@ void SGSceneUpdater::setDataForFrame(int frame)
            sgNode->props.isVisible = sgNode->visibilityKeys[visibilityKeyindex].visibility;
         }
         sgNode->setPositionOnNode(position, !updatingScene->isPlaying);
-        if(sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
-            if(sgNode->rotationKeys.size() > 0 && rotation.w >= 10.0) {
-                sgNode->props.vertexColor = Vector3(rotation.x,rotation.y,rotation.z);
-                sgNode->props.nodeSpecificFloat = rotation.w;
-                lightChanged = true;
-            }
-        } else if(sgNode->getType() == NODE_LIGHT) {
+        
+        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
+            if(updatingScene->directionLine->node->getVisible())
+                updatingScene->updateDirectionLine();
             if(sgNode->scaleKeys.size() > 0) {
+                sgNode->props.vertexColor = Vector3(scale.x, scale.y, scale.z);
                 lightChanged = true;
             }
         } else {
@@ -116,6 +114,8 @@ void SGSceneUpdater::setKeysForFrame(int frame)
             if(visibilityKeyindex != -1){
                 sgNode->props.isVisible =  sgNode->visibilityKeys[visibilityKeyindex].visibility;
             }
+        } else {
+            updatingScene->updateLightMesh(sgNode->props.specificInt);
         }
         
         for (int j = 0; j < sgNode->joints.size(); j++) {
@@ -141,6 +141,7 @@ void SGSceneUpdater::setKeysForFrame(int frame)
         }
     }
     updateControlsOrientaion();
+    updatingScene->updateDirectionLine();
     updateLightCamera();
 }
 
@@ -267,11 +268,7 @@ void SGSceneUpdater::updateLightCamera()
     if(!updatingScene || !smgr)
         return;
 
-    if(updatingScene->nodes.size() > NODE_LIGHT) {
-        for(int i = 0; i < updatingScene->nodes.size(); i++) {
-            updatingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(), updatingScene->currentFrame);
-        }
-        
+    if(updatingScene->nodes.size() > NODE_LIGHT) {        
         updateLightCam(updatingScene->nodes[NODE_LIGHT]->node->getAbsolutePosition());
     }
 }
@@ -281,6 +278,22 @@ void SGSceneUpdater::updateLightCam(Vector3 position)
     if(!updatingScene || !smgr)
         return;
 
+    Vector3 lightPos = position;
+    Vector3 target = Vector3(0.0);
+    
+    if(updatingScene->nodes[NODE_LIGHT]->props.specificInt == (int)DIRECTIONAL_LIGHT) {
+        
+        Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(updatingScene->currentFrame, updatingScene->nodes[NODE_LIGHT]->rotationKeys,true);
+
+        Vector3 direction = Vector3(0.0, 1.0, 0.0);
+        Mat4 rotMat;
+        rotMat.setRotationRadians(MathHelper::toEuler(rotation));
+        rotMat.rotateVect(direction);
+        direction = direction.normalize();
+        
+        position = target - (direction * 50);
+    }
+    
     updatingScene->lightCamera->setPosition(position);
     updatingScene->lightCamera->setTarget(Vector3(0.0));
     ShaderManager::lighCamViewMatrix = updatingScene->lightCamera->getViewMatrix();
@@ -297,17 +310,28 @@ void SGSceneUpdater::updateLightProperties(int frameId)
     for(int i = 0; i < updatingScene->nodes.size(); i++) {
         SGNode* sgNode = updatingScene->nodes[i];
         if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
-            Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frameId, sgNode->positionKeys);
+            
+            Vector3 posOrDir = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frameId, sgNode->positionKeys);
+            
+
             Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId,sgNode->rotationKeys,true);
+            
+            if(sgNode->props.specificInt == (int)DIRECTIONAL_LIGHT) {
+                posOrDir = Vector3(0.0, -1.0, 0.0);
+                Mat4 rotMat;
+                rotMat.setRotationRadians(MathHelper::toEuler(rotation));
+                rotMat.rotateVect(posOrDir);
+            }
+
             Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frameId, sgNode->scaleKeys);
             
-            Vector3 lightColor = (sgNode->getType() == NODE_LIGHT) ? Vector3(scale.x,scale.y,scale.z) : Vector3(rotation.x, rotation.y, rotation.z);
-            float fadeDistance = (sgNode->getType() == NODE_LIGHT) ? 999.0 : rotation.w;
+            Vector3 lightColor = Vector3(scale.x,scale.y,scale.z);
+            float fadeDistance = (sgNode->getType() == NODE_LIGHT) ? 999.0 : sgNode->props.nodeSpecificFloat;
             
             if(index < ShaderManager::lightPosition.size())
-                ShaderManager::lightPosition[index] = position;
+                ShaderManager::lightPosition[index] = posOrDir;
             else
-                ShaderManager::lightPosition.push_back(position);
+                ShaderManager::lightPosition.push_back(posOrDir);
             
             if(index < ShaderManager::lightColor.size())
                 ShaderManager::lightColor[index] = Vector3(lightColor.x,lightColor.y,lightColor.z);
@@ -318,6 +342,11 @@ void SGSceneUpdater::updateLightProperties(int frameId)
                 ShaderManager::lightFadeDistances[index] = fadeDistance;
             else
                 ShaderManager::lightFadeDistances.push_back(fadeDistance);
+            
+            if(index < ShaderManager::lightTypes.size())
+                ShaderManager::lightTypes[index] = sgNode->props.specificInt;
+            else
+                ShaderManager::lightTypes.push_back(sgNode->props.specificInt);
             
             sgNode->props.vertexColor = Vector3(lightColor.x,lightColor.y,lightColor.z);
             index++;
@@ -331,6 +360,8 @@ void SGSceneUpdater::updateLightProperties(int frameId)
             ShaderManager::lightColor.pop_back();
         if(ShaderManager::lightFadeDistances.size() > 1)
             ShaderManager::lightFadeDistances.pop_back();
+        if(ShaderManager::lightTypes.size() > 1)
+            ShaderManager::lightTypes.pop_back();
     }
 }
 
@@ -394,7 +425,6 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
                         break;
                     }
-                    case NODE_LIGHT:
                     case NODE_OBJ:
                     case NODE_SGM:
                     case NODE_IMAGE:
@@ -403,6 +433,8 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
                         break;
                     }
+                        
+                    case NODE_LIGHT:
                     case NODE_ADDITIONAL_LIGHT:{
                         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
                         break;

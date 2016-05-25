@@ -1,3 +1,6 @@
+
+#include "SceneHelper.h"
+
 #include "HeaderFiles/SGNode.h"
 #include "HeaderFiles/ShaderManager.h"
 #include "TextMesh3d.h"
@@ -25,6 +28,7 @@ SGNode::SGNode(NODE_TYPE type){
     textureName = "";
     props.reflection = 0.0;
     props.refraction = 0.0;
+    props.specificInt = (type == NODE_LIGHT) ? DIRECTIONAL_LIGHT : POINT_LIGHT;
     
     props.isPhysicsEnabled = false;
     props.weight = 0.0;
@@ -158,9 +162,8 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
 shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance , Vector3 lightColor, float fadeLevel)
 {
     
-    Mesh* lightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
+    Mesh* lightMesh = SceneHelper::pointLightMesh;
     shared_ptr<LightNode> lightNode = smgr->createLightNode(lightMesh,"setUniforms");
-    
     lightNode->setPosition(Vector3((assetId - (LIGHT_STARTING_ID+4)) * 2.0 ,10.0,10.0));
     lightNode->setScale(Vector3(3.0));
     lightNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -581,13 +584,14 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
 }
 shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
 {
-    Mesh* lightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
+    Mesh* lightMesh = SceneHelper::directionalLightMesh;// CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
     shared_ptr<Node> lightNode = smgr->createNodeFromMesh(lightMesh,"setUniforms");
-    Texture *nodeTex = smgr->loadTexture("Text light.png",constants::BundlePath + "/light.png",TEXTURE_RGBA8,TEXTURE_BYTE);
-    lightNode->setTexture(nodeTex,1);
+    //Texture *nodeTex = smgr->loadTexture("Text light.png",constants::BundlePath + "/light.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+    //lightNode->setTexture(nodeTex,1);
     lightNode->setPosition(Vector3(-LIGHT_INIT_POS_X,LIGHT_INIT_POS_Y,LIGHT_INIT_POS_Z));
-    lightNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-    lightNode->setScale(Vector3(4.0));
+    lightNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    lightNode->setScale(Vector3(3.0));
+    //lightNode->setScale(Vector3(4.0));
     props.isLighting = false;
     return lightNode;
 }
@@ -715,8 +719,14 @@ void SGNode::setInitialKeyValues(int actionType)
             if((assetId - LIGHT_STARTING_ID) % 4 == 0){
                 red = green = blue = 1.0;
             }
-            rotationKey.rotation = Quaternion(red,green,blue,distance);
-            scaleKey.scale = Vector3(1.0);
+            props.nodeSpecificFloat = distance;
+            Vector3 direction = Vector3(0.0) - positionKey.position;
+            
+            Quaternion delta = MathHelper::rotationBetweenVectors(direction, Vector3(0.0, 1.0, 0.0));
+            Vector3 lineRot = Vector3(0.0);
+            rotationKey.rotation = MathHelper::RotateNodeInWorld(lineRot, delta);
+            
+            scaleKey.scale = Vector3(red, green, blue);
             visibilityKey.visibility = true;
             positionKey.id = rotationKey.id = scaleKey.id = visibilityKey.id = 0;
             KeyHelper::addKey(positionKeys, positionKey);
@@ -738,8 +748,7 @@ void SGNode::setInitialKeyValues(int actionType)
                 SGJoint *joint = joints[i];
                 
                 if(joint) {
-                    shared_ptr<JointNode> jointNode = (dynamic_pointer_cast<AnimatedMeshNode>(
-                                                                                              node))->getJointNode(i);
+                    shared_ptr<JointNode> jointNode = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(i);
                     SGPositionKey jointPositionKey;
                     if (type == NODE_TEXT_SKIN)
                         jointPositionKey.position = jointNode->getPosition();
@@ -763,27 +772,36 @@ void SGNode::setInitialKeyValues(int actionType)
         }
     }else if(actionType == OPEN_SAVED_FILE){
         int jointCount = (type == NODE_RIG || type == NODE_TEXT_SKIN) ? (int)(dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointCount():0;
-        if(type == NODE_ADDITIONAL_LIGHT) {
-            if(rotationKeys.size() > 0) {
-                rotationKeys[0].rotation.x = (rotationKeys[0].rotation.x < 0.0 || rotationKeys[0].rotation.x > 1.0) ? 1.0 : rotationKeys[0].rotation.x;
-                rotationKeys[0].rotation.y = (rotationKeys[0].rotation.y < 0.0 || rotationKeys[0].rotation.y > 1.0) ? 1.0 : rotationKeys[0].rotation.y;
-                rotationKeys[0].rotation.z = (rotationKeys[0].rotation.z < 0.0 || rotationKeys[0].rotation.z > 1.0) ? 1.0 : rotationKeys[0].rotation.z;
-                rotationKeys[0].rotation.w = (rotationKeys[0].rotation.w < 50.0 || rotationKeys[0].rotation.w > 300.0) ? 50.0 : rotationKeys[0].rotation.w;
-            } else {
-                SGRotationKey lrotationKey;
-                lrotationKey.rotation = Quaternion(1.0,1.0,1.0,10.0);
-                KeyHelper::addKey(rotationKeys, lrotationKey);
+        
+        if(type == NODE_ADDITIONAL_LIGHT || type == NODE_LIGHT) {
+            
+            if(props.specificInt == -1) {
+                
+                if(rotationKeys.size() > 0 && type == NODE_ADDITIONAL_LIGHT) {
+                    for(int i = 0; i < rotationKeys.size(); i++) {
+                        SGScaleKey scaleKey;
+                        scaleKey.scale = Vector3(rotationKeys[i].rotation.x, rotationKeys[i].rotation.y, rotationKeys[i].rotation.z);
+                        scaleKey.id = rotationKeys[i].id;
+                        KeyHelper::addKey(scaleKeys, scaleKey);
+                    }
+                    props.nodeSpecificFloat = rotationKeys[0].rotation.w;
+                }
+                rotationKeys.clear();
+                
+                Vector3 direction = Vector3(0.0) - node->getAbsolutePosition();
+                
+                Quaternion delta = MathHelper::rotationBetweenVectors(direction, Vector3(0.0, 1.0, 0.0));
+                Vector3 lineRot = Vector3(0.0);
+                SGRotationKey rotationKey;
+                rotationKey.rotation = MathHelper::RotateNodeInWorld(lineRot, delta);
+                rotationKey.id = 0;
+                KeyHelper::addKey(rotationKeys, rotationKey);
+                props.specificInt = 0;
+                
             }
-        } else if (type == NODE_LIGHT) {
-            if(scaleKeys.size() > 0) {
-                scaleKeys[0].scale.x = (scaleKeys[0].scale.x < 0.0 || scaleKeys[0].scale.x > 1.0) ? 1.0 : scaleKeys[0].scale.x;
-                scaleKeys[0].scale.y = (scaleKeys[0].scale.y < 0.0 || scaleKeys[0].scale.y > 1.0) ? 1.0 : scaleKeys[0].scale.y;
-                scaleKeys[0].scale.z = (scaleKeys[0].scale.z < 0.0 || scaleKeys[0].scale.z > 1.0) ? 1.0 : scaleKeys[0].scale.z;
-            } else {
-                SGScaleKey lscaleKey;
-                lscaleKey.scale = Vector3(1.0);
-                KeyHelper::addKey(scaleKeys, lscaleKey);
-            }
+            
+            if(props.nodeSpecificFloat == 0.0)
+                props.nodeSpecificFloat = (type == NODE_LIGHT) ? 300.0 : 50.0;
         }
         
         for (int i = 0; i < jointCount; i++) {
@@ -1049,14 +1067,14 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
         props.isPhysicsEnabled = FileHelper::readInt(filePointer);
         props.physicsType = (PHYSICS_TYPE)FileHelper::readInt(filePointer);
         origIndex = FileHelper::readInt(filePointer);
-        FileHelper::readInt(filePointer);
+        props.specificInt = FileHelper::readInt(filePointer) - 1;
         FileHelper::readInt(filePointer);
         props.weight = FileHelper::readFloat(filePointer);
         props.forceMagnitude = FileHelper::readFloat(filePointer);
         props.forceDirection.x = FileHelper::readFloat(filePointer);
         props.forceDirection.y = FileHelper::readFloat(filePointer);
         props.forceDirection.z = FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
+        props.nodeSpecificFloat = FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
@@ -1165,15 +1183,15 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
         }
     }
     
-    FileHelper::writeInt(filePointer, nodeIndex); //Action Id of Original Node if Instanced
-    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeInt(filePointer, nodeIndex); //Node Index of Original Node if Instanced
+    FileHelper::writeInt(filePointer, props.specificInt+1); // Light Type + 1
     FileHelper::writeInt(filePointer, 0);
     FileHelper::writeFloat(filePointer, props.weight);
     FileHelper::writeFloat(filePointer, props.forceMagnitude);
     FileHelper::writeFloat(filePointer, props.forceDirection.x);
     FileHelper::writeFloat(filePointer, props.forceDirection.y);
     FileHelper::writeFloat(filePointer, props.forceDirection.z);
-    FileHelper::writeFloat(filePointer, 0.0);
+    FileHelper::writeFloat(filePointer, props.nodeSpecificFloat);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);

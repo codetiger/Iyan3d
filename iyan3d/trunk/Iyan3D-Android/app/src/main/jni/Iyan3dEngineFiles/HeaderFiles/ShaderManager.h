@@ -27,6 +27,7 @@ public:
     static Vector3 camPos;
     static vector<Vector3> lightPosition,lightColor;
     static vector<float> lightFadeDistances;
+    static vector< int > lightTypes;
     static Mat4 lighCamProjMatrix;
     static Mat4 lighCamViewMatrix;
     static string BundlePath;
@@ -43,7 +44,7 @@ public:
     void setNumberOfLights(SGNode *sgNode , int paramIndex);
     void setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2);
     void setJointTransform(SGNode *node,SkinMesh *SMesh,int paramIndex);
-    void setModelViewProjMatrix(SGNode *node,u16 paramIndex);
+    void setModelViewProjMatrix(SGNode *node,u16 paramIndex, bool isDepthPass = false);
     void setMVPForParticles(SGNode *node, u16 paramIndex);
     void setViewProjMatrix(SGNode *node,u16 paramIndex);
     void setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex);

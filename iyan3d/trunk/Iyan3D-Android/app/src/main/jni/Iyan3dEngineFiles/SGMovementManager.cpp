@@ -381,6 +381,8 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
         else if(moveScene->getSelectedNode()){
             moveScene->getSelectedNode()->node->updateAbsoluteTransformation();
             nodeRot = (moveScene->directionIndicator->node->getVisible()) ? moveScene->directionIndicator->node->getRotationInDegrees() :moveScene->getSelectedNode()->node->getRotationInDegrees();
+            if(moveScene->directionLine->node->getVisible())
+                nodeRot = moveScene->directionLine->node->getRotationInDegrees();
             delta =  MathHelper::RotateNodeInWorld(nodeRot,delta);
         }
         delta.toEuler(outputValue);

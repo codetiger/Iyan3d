@@ -240,7 +240,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
     bool isNodeSelected = renderingScene->hasNodeSelected();
     SGNode* selectedNode = renderingScene->getSelectedNode();
 
-    if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT)
+    if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT && selectedNode->props.specificInt != (int)DIRECTIONAL_LIGHT)
         renderingScene->controlType = MOVE;
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
     if((isNodeSelected || renderingScene->selectedNodeIds.size() > 0) && isVisible){
@@ -669,8 +669,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(false);
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
-        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
     
     smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],true,true,false,Vector4(bgColor));
@@ -708,8 +706,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(true);
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
-        else if (renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->faceUserCamera(smgr->getActiveCamera(),renderingScene->currentFrame);
     }
     
     renderingScene->greenGrid->node->setVisible(true);
@@ -843,11 +839,16 @@ void RenderHelper::rttShadowMap()
     renderingScene->greenGrid->node->setVisible(false);
     renderingScene->blueGrid->node->setVisible(false);
     renderingScene->redGrid->node->setVisible(false);
+    bool isDirectionLineVisible = renderingScene->directionLine->node->getVisible();
+    renderingScene->directionLine->node->setVisible(false);
+    
     
     setControlsVisibility(false);
     bool indState = renderingScene->directionIndicator->node->getVisible();
     renderingScene->directionIndicator->node->setVisible(false);
     ShaderManager::isRenderingDepthPass = true;
+    Vector3 posn = renderingScene->lightCamera->getAbsolutePosition();
+    
     smgr->setActiveCamera(renderingScene->lightCamera);
     smgr->setRenderTarget(renderingScene->shadowTexture,true,true,true,Vector4(255,255,255,255));
     setJointSpheresVisibility(false); //hide joints
@@ -897,6 +898,7 @@ void RenderHelper::rttShadowMap()
     renderingScene->greenGrid->node->setVisible(true);
     renderingScene->blueGrid->node->setVisible(true);
     renderingScene->redGrid->node->setVisible(true);
+    renderingScene->directionLine->node->setVisible(isDirectionLineVisible);
     ShaderManager::isRenderingDepthPass = false;
 }
 

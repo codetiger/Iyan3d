@@ -101,6 +101,7 @@ public:
     SGNode *selectedNode;
     SGJoint *selectedJoint;
     SGNode* rotationCircle;
+    SGNode* directionLine;
     SGNode* greenGrid;
     SGNode* blueGrid;
     SGNode* redGrid;
@@ -223,6 +224,8 @@ public:
 
     void updatePhysics(int frame);
     void enableDirectionIndicator();
+    void updateDirectionLine();
+    void updateLightMesh(int lightType, int nodeId = NOT_EXISTS);
     void setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType);
     void syncSceneWithPhysicsWorld();
 

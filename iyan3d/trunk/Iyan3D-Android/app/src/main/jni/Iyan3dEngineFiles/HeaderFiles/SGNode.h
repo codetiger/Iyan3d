@@ -17,8 +17,8 @@
 #include "../../SGEngine2/Loaders/OBJMeshFileLoader.h"
 
 struct properties{
-    int isLighting,isSelected,fontSize;
-    float transparency,isColorMaterial,nodeSpecificFloat;
+    int isLighting,isSelected,fontSize, specificInt;
+    float transparency,nodeSpecificFloat;
     float reflection, refraction;
     bool isVisible,perVertexColor, faceNormals;
     Vector3 vertexColor,oriVertexColor;

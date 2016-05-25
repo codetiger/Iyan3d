@@ -20,15 +20,19 @@ class SceneHelper
     public:
     
     static float screenWidth , screenHeight;
+    static Mesh* pointLightMesh;
+    static Mesh* directionalLightMesh;
     
     /* Creation Related Methods */
     
     static shared_ptr<CameraNode> initViewCamera(SceneManager *smgr, Vector3& cameraTarget, float& cameraRadius);
     static shared_ptr<CameraNode> initRenderCamera(SceneManager *smgr, float cameraFOV);
+    static void initLightMesh(SceneManager *smgr);
     static SGNode* createCircle(SceneManager *smgr);
     static SGNode* createRedLines(SceneManager *smgr);
     static SGNode* createBlueLines(SceneManager *smgr);
     static SGNode* createGreenLines(SceneManager *smgr);
+    static SGNode* createLightDirLine(SceneManager *smgr);
     static SGNode* createLines(SceneManager *smgr, vector< Vector3 > positions, Vector3 color, string callbackName, int nodeId);
     static vector<SGNode*> initControls(SceneManager *smgr);
     static SGNode* initIndicatorNode(SceneManager *smgr);

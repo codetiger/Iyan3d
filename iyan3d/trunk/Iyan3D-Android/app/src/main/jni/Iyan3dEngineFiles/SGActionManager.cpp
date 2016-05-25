@@ -98,6 +98,8 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
                 success = true;
                 selectedNode->setPosition(selectedNode->node->getPosition() + outputValue, actionScene->currentFrame);
                 selectedNode->setPositionOnNode(selectedNode->node->getPosition() + outputValue, true);
+                if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT)
+                    actionScene->updateDirectionLine();
                 break;
             }
             break;
@@ -117,7 +119,10 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
                 Quaternion r = Quaternion(outputValue * DEGTORAD);
                  if(actionScene->directionIndicator->node->getVisible())
                      actionScene->directionIndicator->setRotationOnNode(r);
-                 else {
+                 else if (actionScene->directionLine->node->getVisible()) {
+                     actionScene->directionLine->setRotationOnNode(r);
+                     selectedNode->setRotation(r, actionScene->currentFrame);
+                 } else {
                      selectedNode->setRotation(r, actionScene->currentFrame);
                      selectedNode->setRotationOnNode(r, true);
                  }
@@ -360,7 +365,7 @@ void SGActionManager::changeCameraProperty(float fov , int resolutionType, bool 
     
 }
 
-void SGActionManager::changeLightProperty(float red , float green, float blue, float shadow,float distance, bool isChanged)
+void SGActionManager::changeLightProperty(float red , float green, float blue, float shadow,float distance, int lightType, bool isChanged)
 {
     if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
         return;
@@ -369,12 +374,12 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     
     SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     if(propertyAction.actionType == ACTION_EMPTY){
-        propertyAction.actionType = ACTION_CHANGE_PROPERTY_LIGHT;
-        propertyAction.actionSpecificFloats.push_back(ShaderManager::lightColor[0].x);
-        propertyAction.actionSpecificFloats.push_back(ShaderManager::lightColor[0].y);
-        propertyAction.actionSpecificFloats.push_back(ShaderManager::lightColor[0].z);
-        propertyAction.actionSpecificFloats.push_back(ShaderManager::shadowDensity);
         
+        propertyAction.actionType = ACTION_CHANGE_PROPERTY_LIGHT;
+        propertyAction.actionSpecificFloats.push_back(ShaderManager::shadowDensity);
+        propertyAction.actionSpecificIntegers.push_back(selectedNode->props.specificInt);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->props.nodeSpecificFloat);
+        propertyAction.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
         changeKeysAction.drop();
         changeKeysAction.actionType = ACTION_CHANGE_NODE_KEYS;
         changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
@@ -382,37 +387,42 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     
     if(selectedNode->getType() == NODE_LIGHT){
         ShaderManager::shadowDensity = shadow;
+        selectedNode->props.specificInt = (int)lightType;
     }
     else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
         ShaderManager::shadowDensity = shadow;
         selectedNode->props.nodeSpecificFloat = (distance + 0.001) * 300.0;
+        selectedNode->props.specificInt = (int)lightType;
     }
     
     //nodes[selectedNodeId]->props.vertexColor = Vector3(red,green,blue);
-    Quaternion lightPropKey = Quaternion(red,green,blue,selectedNode->props.nodeSpecificFloat);
     Vector3 mainLightColor = Vector3(red,green,blue);
     
     if(selectedNode->getType() == NODE_LIGHT)
         selectedNode->setScale(mainLightColor, actionScene->currentFrame);
     else
-        selectedNode->setRotation(lightPropKey, actionScene->currentFrame);
+        selectedNode->setScale(mainLightColor, actionScene->currentFrame);
     
     actionScene->updater->updateLightProperties(actionScene->currentFrame);
     //    updateLightWithRender();
 }
 
-void SGActionManager::storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity,float distance)
+void SGActionManager::storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity, float distance, int lightType)
 {
-    if(!actionScene || !smgr || actionScene->selectedNodeId != NOT_EXISTS)
+    if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
         return;
     SGNode* selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
     
-    propertyAction.actionSpecificFloats.push_back(red);
-    propertyAction.actionSpecificFloats.push_back(green);
-    propertyAction.actionSpecificFloats.push_back(blue);
     propertyAction.actionSpecificFloats.push_back(shadowDensity);
-    finalizeAndAddAction(changeKeysAction);
+    propertyAction.actionSpecificFloats.push_back(distance);
+    propertyAction.actionSpecificIntegers.push_back(lightType);
+    
+    if(propertyAction.actionSpecificFloats[0] != shadowDensity || (actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT && propertyAction.actionSpecificFloats[1] != distance) || propertyAction.actionSpecificIntegers[0] != lightType) {
+        finalizeAndAddAction(propertyAction);
+    } else
+        finalizeAndAddAction(changeKeysAction);
+    
     changeKeysAction.drop();
     propertyAction.drop();
 }
@@ -713,8 +723,10 @@ int SGActionManager::undo(int &returnValue2)
         }
         case ACTION_CHANGE_PROPERTY_LIGHT: {
             //TODO to do for all lights
-            ShaderManager::lightColor[0] = Vector3(recentAction.actionSpecificFloats[0],recentAction.actionSpecificFloats[1],recentAction.actionSpecificFloats[2]);
-            ShaderManager::shadowDensity = recentAction.actionSpecificFloats[3];
+            
+            ShaderManager::shadowDensity = recentAction.actionSpecificFloats[0];
+            actionScene->nodes[indexOfAction]->props.nodeSpecificFloat = recentAction.actionSpecificFloats[1];
+            actionScene->nodes[indexOfAction]->props.specificInt = recentAction.actionSpecificIntegers[0];
             break;
         }
         case ACTION_CHANGE_PROPERTY_CAMERA:{
@@ -875,8 +887,11 @@ int SGActionManager::redo()
             sgNode->setMeshProperties(recentAction.actionSpecificFloats[3], recentAction.actionSpecificFloats[4], recentAction.actionSpecificFlags[3], recentAction.actionSpecificFlags[4], recentAction.actionSpecificFlags[5], recentAction.actionSpecificIntegers[1], recentAction.actionSpecificFloats[5], recentAction.frameId);
             break;
         case ACTION_CHANGE_PROPERTY_LIGHT:
-            ShaderManager::lightColor[0] = Vector3(recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5],recentAction.actionSpecificFloats[6]);
-            ShaderManager::shadowDensity = recentAction.actionSpecificFloats[7];
+            
+            ShaderManager::shadowDensity = recentAction.actionSpecificFloats[2];
+            sgNode->props.nodeSpecificFloat = recentAction.actionSpecificFloats[3];
+            sgNode->props.specificInt = recentAction.actionSpecificIntegers[1];
+
             break;
         case ACTION_CHANGE_PROPERTY_CAMERA:
             actionScene->updater->setCameraProperty(recentAction.actionSpecificFloats[1], recentAction.actionSpecificIntegers[1]);

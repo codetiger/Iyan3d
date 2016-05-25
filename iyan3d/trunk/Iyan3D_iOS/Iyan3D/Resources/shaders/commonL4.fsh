@@ -14,6 +14,7 @@ uniform  float shadowDarkness;
 uniform  float shadowTextureSize;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
+uniform float lightTypes[5];
 
 varying float vtransparency, visVertexColored, vreflection;
 varying vec3 vertexColor;
@@ -37,7 +38,7 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
     
     float maxSpecular = 30.0;
     vec4 light_position_cameraspace = vec4(vec3(lightPos[index]),1.0);
-    vec4 lightDir = normalize(light_position_cameraspace - vertexPosCam);
+    vec4 lightDir = (lightTypes[index] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - vertexPosCam);
     float distanceFromLight = distance(light_position_cameraspace , vertexPosCam);
     
     vec4 normal = normalize(normal);
@@ -53,7 +54,11 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
     if(e_dot_l < -0.8)
         specular = vec4(0.0);
     
-    colorOfLight += vec4(vec3(lightColor[index]),1.0) * (1.0 - clamp((distanceFromLight/fadeEndDistance[index]) , 0.0,1.0)) * diffuse;
+    float distanceRatio = 1.0;
+    if(lightTypes[index] == 0.0)
+        distanceRatio = (1.0 - clamp((distanceFromLight/fadeEndDistance[index]) , 0.0,1.0));
+    
+    colorOfLight += vec4(vec3(lightColor[index]),1.0) * distanceRatio * diffuse;
 }
 
 void main()

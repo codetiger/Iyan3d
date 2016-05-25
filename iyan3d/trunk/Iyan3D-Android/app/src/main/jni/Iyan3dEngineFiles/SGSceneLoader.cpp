@@ -244,6 +244,9 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
 
+    if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
+        currentScene->updateLightMesh(sgnode->props.specificInt, (int)currentScene->nodes.size()-1);
+    
     return sgnode;
 }
 
@@ -297,10 +300,12 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 #ifndef UBUNTU
         currentScene->initLightCamera(sgNode->node->getPosition());
         addLight(sgNode);
+        currentScene->updateLightMesh(sgNode->props.specificInt, (int)currentScene->nodes.size()-1);
 #endif
-    } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT)
+    } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
         addLight(sgNode);
-    else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
+        currentScene->updateLightMesh(sgNode->props.specificInt, (int)currentScene->nodes.size()-1);
+    } else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
         sgNode->props.isLighting = false;
     else if (sgNode->getType() == NODE_RIG)
         setJointsScale(sgNode);
@@ -342,12 +347,23 @@ void SGSceneLoader::addLight(SGNode *light)
     
     Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(currentScene->currentFrame,light->rotationKeys,true);
     Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(currentScene->currentFrame, light->scaleKeys);
-    Vector3 lightColor = (light->getType() == NODE_LIGHT) ? Vector3(scale.x,scale.y,scale.z) : Vector3(rotation.x, rotation.y, rotation.z);
-    float fadeDistance = (light->getType() == NODE_LIGHT) ? 999.0 : rotation.w;
+    Vector3 lightColor = Vector3(scale.x,scale.y,scale.z);
+    float fadeDistance = (light->getType() == NODE_LIGHT) ? 999.0 : light->props.nodeSpecificFloat;
     
-    ShaderManager::lightPosition.push_back(light->node->getAbsolutePosition());
+    Vector3 posOrDir;
+    if(light->props.specificInt == (int)DIRECTIONAL_LIGHT) {
+        posOrDir = Vector3(0.0, -1.0, 0.0);
+        Mat4 rotMat;
+        rotMat.setRotationRadians(MathHelper::toEuler(rotation));
+        rotMat.rotateVect(posOrDir);
+    } else
+        posOrDir = light->node->getAbsolutePosition();
+        
+    
+    ShaderManager::lightPosition.push_back(posOrDir);
     ShaderManager::lightColor.push_back(Vector3(lightColor.x,lightColor.y,lightColor.z));
     ShaderManager::lightFadeDistances.push_back(fadeDistance);
+    ShaderManager::lightTypes.push_back(light->props.specificInt);
 }
 
 void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
@@ -439,6 +455,8 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     currentScene->freezeRendering = true;
     
     SGNode * currentNode = currentScene->nodes[nodeIndex];
+    NODE_TYPE nType = currentNode->getType();
+    
     
     int instanceSize = (int)currentNode->instanceNodes.size();
     if(instanceSize > 0 && !deAllocScene) {
@@ -451,14 +469,17 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
 
     currentScene->renHelper->setControlsVisibility(false);
     currentScene->renHelper->setJointSpheresVisibility(false);
-    if(currentNode->getType() == NODE_ADDITIONAL_LIGHT) {
+    if(nType == NODE_ADDITIONAL_LIGHT) {
         currentScene->popLightProps();
         if(!deAllocScene)
             currentScene->updater->resetMaterialTypes(false);
     }
     
-    if(currentNode->getType() != NODE_TEXT_SKIN && currentNode->getType() != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
+    if(nType != NODE_TEXT_SKIN && nType != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
         smgr->RemoveTexture(currentNode->node->getActiveTexture());
+    
+    if(nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT)
+        dynamic_pointer_cast<MeshNode>(currentNode->node)->mesh = NULL;
     
     smgr->RemoveNode(currentNode->node);
     delete currentNode;

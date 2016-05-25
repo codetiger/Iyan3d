@@ -56,6 +56,7 @@
 #define SHADER_COMMON_viewMatrix 12
 #define SHADER_COMMON_lightFadeDistance 20
 #define SHADER_COMMON_isVertexColored 21
+#define SHADER_COMMON_lightType 22
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 
