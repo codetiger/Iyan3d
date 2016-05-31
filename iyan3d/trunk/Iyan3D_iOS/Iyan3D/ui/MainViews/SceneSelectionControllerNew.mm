@@ -22,7 +22,8 @@
 
 #define TUTORIAL 0
 #define SETTINGS 1
-#define CONTACT_US 2
+#define CONTACT_US 4
+#define RATE_US 2
 
 #define CAMERA_PREVIEW_SMALL 0
 
@@ -332,7 +333,7 @@
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
+    self.popoverController.popoverContentSize = CGSizeMake(200.0, 39*5);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -378,6 +379,10 @@
             [alert show];
             return;
         }
+    } else if (indexValue == RATE_US) {
+        [self.popoverController dismissPopoverAnimated:YES];
+        NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
     }
 }
 

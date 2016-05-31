@@ -27,8 +27,9 @@ public:
     
     MaterialManager(DEVICE_TYPE deviceType);
     ~MaterialManager();
-    short CreateMaterial(string MaterialNamel,string vShaderName,string fShaderName,bool isDepthPass = false);
+    bool CreateMaterial(string MaterialNamel,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false);
     void RemoveAllMaterials();
+    void clearMaterials();
 };
 
 #endif /* defined(__SGEngine2__MaterialManager__) */

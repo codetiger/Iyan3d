@@ -63,6 +63,7 @@ class Mesh {
 private:
     BoundingBox BBox;
 
+    int instanceCount;
     vector< vector<vertexData> > meshBufferVerticesData;
     vector< vector<vertexDataHeavy> > meshBufferVerticesDataHeavy;
     vector< vector<unsigned short> > meshBufferIndices;
@@ -70,12 +71,14 @@ private:
     vector<vertexData> tempVerticesData;
     vector<vertexDataHeavy> tempVerticesDataHeavy;
     vector<unsigned int> tempIndicesData;
-
+    
 public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
 
     void copyDataFromMesh(Mesh* otherMesh);
+    void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
+    void removeVerticesOfAnInstance(int verticesCount, int indicesCount);
     void addVertex(vertexData* vertex, bool updateBB = true);
     void addHeavyVertex(vertexDataHeavy* vertex);
     void addToIndicesArray(unsigned int index);

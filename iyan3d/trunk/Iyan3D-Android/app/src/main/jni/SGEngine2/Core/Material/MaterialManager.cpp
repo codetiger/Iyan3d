@@ -22,9 +22,9 @@ MaterialManager::~MaterialManager(){
     RemoveAllMaterials();
 }
 
-short MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName,bool isDepthPass){
+bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass){
     Material *newMat = NULL;
-
+    bool status;
 #ifdef ANDROID
     LOGI("Material initialize");
     newMat = new OGLMaterial();
@@ -37,7 +37,9 @@ short MaterialManager::CreateMaterial(string MaterialName,string vShaderName,str
     }
     else if(deviceType == OPENGLES2){
         newMat = new OGLMaterial();
-        ((OGLMaterial*)newMat)->LoadShaders(vShaderName,fShaderName);
+        status = ((OGLMaterial*)newMat)->LoadShaders(vShaderName,fShaderName, shadersStr);
+        if(!status)
+            return false;
     }
     #endif
     if(!newMat){
@@ -47,13 +49,18 @@ short MaterialManager::CreateMaterial(string MaterialName,string vShaderName,str
 
     newMat->name = MaterialName;
     materials->push_back(newMat);
-    return (materials->size() - 1);
+    return true;
 }
 void MaterialManager::RemoveAllMaterials(){
+    clearMaterials();
+    delete materials;
+}
+
+void MaterialManager::clearMaterials()
+{
     for(int i = 0;i < materials->size();i++) {
         if((*materials)[i])
-        delete (*materials)[i];
+            delete (*materials)[i];
     }
     materials->clear();
-    delete materials;
 }

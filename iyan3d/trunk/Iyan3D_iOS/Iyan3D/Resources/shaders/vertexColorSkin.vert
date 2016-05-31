@@ -15,14 +15,12 @@ attribute vec4 optionalData2;
 attribute vec4 optionalData3;
 attribute vec4 optionalData4;
 
-uniform float isLighting[1];
-uniform float isVertexColored[1];
+
 uniform vec3 perVertexColor[1];
 uniform vec3 eyePos;
 uniform mat4 mvp, model[1], lvp;
 uniform mat4 jointTransforms[161];
-uniform float transparency[1], reflection[1];
-
+uniform vec4 props[1];
 
 varying float vtransparency, visVertexColored, vreflection;
 varying float shadowDist,lightingValue;
@@ -33,9 +31,9 @@ varying vec4 texCoordsBias,normal,eyeVec,vertexPosCam;
 
 void main()
 {
-    vtransparency = transparency[0];
-    visVertexColored = isVertexColored[0];
-    vreflection = reflection[0];
+    vtransparency = props[0].x;
+    visVertexColored = props[0].y;
+    vreflection = props[0].z;
     vertexColor = perVertexColor[0];
     vTexCoord = texCoord1;
 
@@ -47,12 +45,12 @@ void main()
     pos = (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
     nor = (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
     
-    lightingValue = isLighting[0];
+    lightingValue = props[0].w;
     vec4 vertex_position_cameraspace = model[0] * pos;
     vertexPosCam = vertex_position_cameraspace;
     
     
-    if(int(isLighting[0]) == 1) {
+    if(int(props[0].w) == 1) {
         vec4 vertexLightCoord = (lvp * model[0]) * pos;
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         texCoordsBias = (texCoords / 2.0) + 0.5;

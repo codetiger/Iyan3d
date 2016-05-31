@@ -50,6 +50,7 @@ public:
     ~SceneManager();
     void initRenderManager(DEVICE_TYPE type);
     
+    void clearMaterials();
     Vector2 getViewPort();
     void RemoveNode(shared_ptr<Node> node);
     void RemoveAllTextures();
@@ -78,7 +79,7 @@ public:
     AnimatedMesh* LoadMesh(string filePath);
     void (*MTLPipelineStateCallBack)(int);
     void (*MTLEndEncoding)();
-    short LoadShaders(string materialName,string vShaderName,string fShaderName,bool isDepthPass = false);
+    bool LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false);
     Material* getMaterialByIndex(int index);
     Material* getMaterialByName(string name);
     int getNodeIndexByID(int id);

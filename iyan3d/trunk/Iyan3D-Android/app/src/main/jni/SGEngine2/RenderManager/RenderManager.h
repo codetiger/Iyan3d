@@ -41,6 +41,7 @@ public:
         
     }
     
+    bool supportsInstancing;
     bool supportsVAO;
     int maxInstances;
     int viewportWidth, viewportHeight;

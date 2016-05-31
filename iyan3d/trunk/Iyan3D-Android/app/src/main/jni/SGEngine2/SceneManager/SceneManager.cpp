@@ -15,8 +15,8 @@
 #endif
 
 DEVICE_TYPE common::deviceType = OPENGLES2;
-SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYPE type,string bundlePath,void *renderView){
-
+SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYPE type,string bundlePath,void *renderView)
+{
     device = type;
     displayWidth = width;
     displayHeight = height;
@@ -36,9 +36,25 @@ SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYP
         #endif
     }
     #endif
+    
+    string extensions = "";
+    if(device == OPENGLES2)
+        extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
+    
+    if(device == OPENGLES2 && extensions.find("GL_EXT_draw_instanced") == std::string::npos) {
+        renderMan->supportsInstancing = false;
+    } else
+        renderMan->supportsInstancing = true;
+
+    
+    
     mtlManger = new MaterialManager(type);
     renderTargetIndex = 0;
-    renderMan->maxInstances = (device == METAL) ? maxInstanceCount * 40 : maxInstanceCount;
+    
+    if(device == METAL) {
+        renderMan->maxInstances = 4000;
+    }
+
 }
 
 SceneManager::~SceneManager(){
@@ -48,6 +64,11 @@ SceneManager::~SceneManager(){
         delete mtlManger;
     if(renderMan)
         delete renderMan;
+}
+
+void SceneManager::clearMaterials()
+{
+    mtlManger->clearMaterials();
 }
 
 Vector2 SceneManager::getViewPort()
@@ -198,7 +219,11 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
         renderMan->setUpDepthState(func,true,clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
     }
     nodes[index]->update();
-    Mesh* meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh();
+    Mesh* meshToRender;
+    if(nodes[index]->instancedNodes.size() > 0 && !renderMan->supportsInstancing)
+        meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->meshCache;
+    else
+        meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh();
     
     if(nodes[index]->drawMode == DRAW_MODE_LINES && isRTT)
         return;
@@ -375,6 +400,15 @@ shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, st
     iNode->type = NODE_TYPE_INSTANCED;
     iNode->original = original;
     iNode->mesh = new Mesh();
+    
+    if(!renderMan->supportsInstancing && original->instancedNodes.size() < renderMan->maxInstances) {
+        if(!dynamic_pointer_cast<MeshNode>(original)->meshCache)
+            dynamic_pointer_cast<MeshNode>(original)->meshCache = new Mesh();
+        
+        dynamic_pointer_cast<MeshNode>(original)->meshCache->copyInstanceToMeshCache(dynamic_pointer_cast<MeshNode>(original)->mesh, (int)original->instancedNodes.size()+1);
+        original->shouldUpdateMesh = true;
+    }
+    
     AddNode(iNode, MESH_TYPE_LITE);
     original->instancedNodes.push_back(iNode);
     return iNode;
@@ -438,8 +472,10 @@ void SceneManager::setPropertyValue(Material *material,string name,int* values,D
 AnimatedMesh* SceneManager::LoadMesh(string filePath){
     return CSGRMeshFileLoader::LoadMesh(filePath,device);
 }
-short SceneManager::LoadShaders(string materialName,string vShaderName,string fShaderName,bool isDepthPass){
-    return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName,isDepthPass);
+bool SceneManager::LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass) {
+    if(device == OPENGLES2)
+        renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
+    return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass);
 }
 Material* SceneManager::getMaterialByIndex(int index){
 	if(index < (int)(*mtlManger->materials).size())

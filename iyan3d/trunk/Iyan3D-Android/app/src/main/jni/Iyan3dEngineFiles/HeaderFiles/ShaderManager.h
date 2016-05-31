@@ -34,12 +34,16 @@ public:
     static DEVICE_TYPE deviceType;
     SceneManager *smgr;
     
-    ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType);
+    ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms);
     void setUniforms(SGNode *node,string matName);
-    void loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType);
-    short LoadShader(DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName);
+    void loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms);
+    static std::map<string, string> getShaderStringsToReplace(int maxUniforms);
+    
+    static bool LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr);
     ~ShaderManager();
     
+    
+    void setMeshProps(SGNode *sgnNode, bool isVColored, int paramIndex);
     void setIsVertexColored(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData);
     void setNumberOfLights(SGNode *sgNode , int paramIndex);
     void setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2);

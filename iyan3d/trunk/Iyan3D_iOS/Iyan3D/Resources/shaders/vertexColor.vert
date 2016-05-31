@@ -13,12 +13,9 @@ attribute vec2 texCoord1;
 attribute vec4 optionalData1;
 
 
-uniform mat4 model[101];
-uniform float isLighting[101];
-uniform float isVertexColored[101];
-uniform float transparency[101];
-uniform float reflection[101];
-uniform vec3 perVertexColor[101];
+uniform mat4 model[uniSize];
+uniform vec4 props[uniSize];
+uniform vec3 perVertexColor[uniSize];
 
 uniform vec3  eyePos;
 uniform mat4 vp,lvp;
@@ -33,18 +30,18 @@ varying vec4 texCoordsBias,normal,eyeVec,lightDir , vertexPosCam;
 void main()
 {
     int iId = gl_InstanceIDEXT;
-    vtransparency = transparency[iId];
-    visVertexColored = isVertexColored[iId];
-    vreflection = reflection[iId];
+    vtransparency = props[iId].x;
+    visVertexColored = props[iId].y;
+    vreflection = props[iId].z;
     vertexColor = (perVertexColor[iId].x == -1.0) ? vec3(optionalData1.xyz) : perVertexColor[iId];
     vTexCoord = texCoord1;
-    lightingValue = isLighting[iId];
+    lightingValue = props[iId].w;
     vec4 vertex_position_cameraspace = model[iId] * vec4(vertPosition, 1.0);
     vertexPosCam = vertex_position_cameraspace;
 
     //Lighting Calculation-------
 
-    if(int(isLighting[iId]) == 1) {
+    if(int(props[iId].w) == 1) {
         vec4 vertexLightCoord = (lvp * model[iId]) * vec4(vertPosition, 1.0);
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         texCoordsBias = (texCoords / 2.0) + 0.5;

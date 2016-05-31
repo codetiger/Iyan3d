@@ -299,8 +299,10 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
-    } else
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+    } else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+    else
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
 
     
     MTLIndexType indexType = MTLIndexTypeUInt16;
@@ -327,7 +329,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
 
     } else {
         int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
-        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, instancingCount+1);
+        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, (supportsInstancing) ? instancingCount : 0);
     }
         
 }
@@ -598,7 +600,9 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
             meshType = MESH_TYPE_LITE;
         }
-    } else
+    } else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+        nodeMes = dynamic_pointer_cast<MeshNode>(node)->meshCache;
+    else
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
 
     for (int i = 0; i < nodeMes->getMeshBufferCount(); i++) {
@@ -639,7 +643,9 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
                 nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
                 meshType = MESH_TYPE_LITE;
             }
-        } else
+        } else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+        else
             nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
     
         id<MTLBuffer> buf;

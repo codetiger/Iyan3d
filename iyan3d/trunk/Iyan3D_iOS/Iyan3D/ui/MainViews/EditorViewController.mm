@@ -42,7 +42,8 @@
 
 #define TUTORIAL 0
 #define SETTINGS 1
-#define CONTACT_US 2
+#define CONTACT_US 4
+#define RATE_US 2
 
 #define FRONT_VIEW 0
 #define TOP_VIEW 1
@@ -264,7 +265,8 @@ BOOL missingAlertShown;
     if (isMetalSupported) {
         [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-        editorScene = new SGEditorScene(METAL, smgr, ScreenWidth * screenScale, ScreenHeight * screenScale);
+        
+        editorScene = new SGEditorScene(METAL, smgr, ScreenWidth * screenScale, ScreenHeight * screenScale, 4000);
         [renderViewMan setUpPaths:smgr];
         editorScene->screenScale = screenScale;
     }
@@ -272,7 +274,9 @@ BOOL missingAlertShown;
         [renderViewMan setupContext];
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-        editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale);
+        [self getMaxUniformsForOpenGL];
+        int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms"] intValue];
+        editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale, maxUnis);
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
@@ -290,6 +294,30 @@ BOOL missingAlertShown;
     [renderViewMan addGesturesToSceneView];
     [self performSelectorOnMainThread:@selector(loadScene) withObject:nil waitUntilDone:YES];
 
+}
+
+- (void) getMaxUniformsForOpenGL
+{
+    ShaderManager::BundlePath = constants::BundlePath;
+    ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
+
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms"]) {
+    
+        int lowerLimit = 0;
+        int upperLimit = 512;
+        while ((upperLimit - lowerLimit) != 1) {
+            int mid = (lowerLimit + upperLimit) / 2;
+            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_COMMON_L1", "shader.vsh", "commonL1.fsh", ShaderManager::getShaderStringsToReplace(mid)))
+                lowerLimit = mid;
+            else
+                upperLimit = mid;
+            
+        }
+        printf("\n Max Uniforms %d ", lowerLimit);
+    
+        smgr->clearMaterials();
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxuniforms"];
+    }
 }
 
 - (bool) isMetalSupportedDevice
@@ -341,7 +369,6 @@ BOOL missingAlertShown;
 -(void)setupEnableDisableControls{
     [self sceneMirrorUIPositionChanger];
     bool sceneMirrorState = !(editorScene && !editorScene->isRigMode && editorScene->getSelectedNode() && editorScene->getSelectedNode()->joints.size() == HUMAN_JOINTS_SIZE);
-    NSLog(@"Scene Mirror State : %d " , sceneMirrorState);
     [_sceneMirrorLable setHidden:sceneMirrorState];
     [_sceneMirrorSwitch setHidden:sceneMirrorState];
     [_sceneMirrorSwitch setOn:editorScene->getMirrorState() animated:YES];
@@ -1288,7 +1315,7 @@ BOOL missingAlertShown;
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"infoBtn"];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
+    self.popoverController.popoverContentSize = CGSizeMake(200.0, 39*5);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
@@ -2909,6 +2936,10 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
             [alert show];
             return;
         }
+    } else if (indexValue == RATE_US) {
+        [self.popoverController dismissPopoverAnimated:YES];
+        NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
     }
 }
 

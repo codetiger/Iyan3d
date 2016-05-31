@@ -91,10 +91,14 @@ short OGLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16
         Logger::log(ERROR, "OGLMaterial", "Error in setting" + name + "Property");
     return uniformNodeIndex;
 }
-void OGLMaterial::LoadShaders(string vShaderName,string fShaderName){
-    GLuint vShaderHandle = CompileShader(vShaderName,GL_VERTEX_SHADER);
-    GLuint fShaderHandle = CompileShader(fShaderName,GL_FRAGMENT_SHADER);
+bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr){
+    GLuint vShaderHandle = CompileShader(vShaderName,GL_VERTEX_SHADER, shadersStr);
+    GLuint fShaderHandle = CompileShader(fShaderName,GL_FRAGMENT_SHADER, shadersStr);
+    if(vShaderHandle == -1 || fShaderHandle == -1)
+        return false;
     shaderProgram = LinkShaders(vShaderHandle,fShaderHandle);
+    if(shaderProgram == -1)
+        return false;
     glUseProgram(shaderProgram);
     GLint maxNameLength = 0;
     glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxNameLength);
@@ -109,6 +113,7 @@ void OGLMaterial::LoadShaders(string vShaderName,string fShaderName){
         AddAttributes(attribNameStr,Helper::getSGEngineDataType(type),CreateAttribute(shaderProgram,attribNameStr),0);
     }
     Logger::log(INFO,"OGLMaterial",vShaderName + "  " + fShaderName + "  Shaders Loaded Succesfully");
+    return true;
 }
 string OGLMaterial::getShaderAttributeNameByIndex(int i){
     int maxAttrib = NOT_EXISTS;
@@ -134,7 +139,7 @@ int OGLMaterial::getMaterialAttribIndexByName(string name){
     }
     return NOT_EXISTS;
 }
-GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType){
+GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType, std::map< string, string > shadersStr){
     // 1
     std::ifstream t(shaderName.c_str());
     std::stringstream buffer;
@@ -142,6 +147,22 @@ GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType){
     string content = buffer.str();
     if (content.length() <= 0)
         Logger::log(ERROR,"OGLMaterial","Error Loading " + shaderName);
+
+    std::map< string, string >::iterator it;
+    
+    for(it = shadersStr.begin(); it != shadersStr.end(); it++) {
+        
+        size_t pos = 0;
+        bool changed = false;
+        while((pos = content.find(it->first, pos)) != std::string::npos) {
+            changed = true;
+            content.replace(pos, it->first.length(), it->second);
+            pos += it->first.length();
+        }
+    }
+    
+
+    
     GLuint shaderHandle = glCreateShader(shaderType);
     
     const char * shaderStringUTF8 = content.c_str();
@@ -155,6 +176,7 @@ GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType){
         GLchar messages[256];
         glGetShaderInfoLog(shaderHandle, sizeof(messages), 0, &messages[0]);
         Logger::log(ERROR,"OGLMaterial",messages);
+        return -1;
     }
     Logger::log(INFO,"OGLMaterial",shaderName + " Compiled");
     return shaderHandle;
@@ -170,6 +192,7 @@ GLuint OGLMaterial::LinkShaders(GLuint vShaderHandle,GLuint fShaderHandle){
         GLchar messages[256];
         glGetProgramInfoLog(programHandle, sizeof(messages), 0, &messages[0]);
         Logger::log(ERROR,"OGLMaterial",messages);
+        return -1;
     }
     return programHandle;
     

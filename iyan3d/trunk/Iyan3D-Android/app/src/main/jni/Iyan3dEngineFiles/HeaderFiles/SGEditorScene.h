@@ -145,7 +145,7 @@ public:
     
     /* Constructor and Destructor */
     
-    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight);
+    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms);
     ~SGEditorScene();
     
     void removeAllNodes();
@@ -154,7 +154,7 @@ public:
     
     void initTextures();
     void enterOrExitAutoRigMode(bool rigMode);
-    void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType);
+    void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType, int maxUniforms);
     void initLightCamera(Vector3 position);
     
     /* Rendering Methods */

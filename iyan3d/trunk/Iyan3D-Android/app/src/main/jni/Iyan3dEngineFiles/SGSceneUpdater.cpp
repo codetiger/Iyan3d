@@ -281,6 +281,8 @@ void SGSceneUpdater::updateLightCam(Vector3 position)
     Vector3 lightPos = position;
     Vector3 target = Vector3(0.0);
     
+    if(updatingScene->nodes.size() <= 2)
+        return;
     if(updatingScene->nodes[NODE_LIGHT]->props.specificInt == (int)DIRECTIONAL_LIGHT) {
         
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(updatingScene->currentFrame, updatingScene->nodes[NODE_LIGHT]->rotationKeys,true);

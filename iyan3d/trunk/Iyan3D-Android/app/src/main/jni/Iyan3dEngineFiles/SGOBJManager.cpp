@@ -56,7 +56,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
         unsigned int vertCount = objMes->getVerticesCount();
         for (unsigned int i = 0; i < vertCount; i++) {
             Vector4 *optionalData1 = &(objMes->getLiteVertexByIndex(i)->optionalData1);
-            (*optionalData1) = Vector4(vColor.x, vColor.y, vColor.z,1.0);
+            (*optionalData1) = Vector4(vColor.x, vColor.y, vColor.z,0.0);
         }
         objMes->Commit();
     }

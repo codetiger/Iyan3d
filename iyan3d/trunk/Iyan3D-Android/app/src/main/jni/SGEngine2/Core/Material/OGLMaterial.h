@@ -9,6 +9,7 @@
 #ifndef __SGEngine2__OGLMaterial__
 #define __SGEngine2__OGLMaterial__
 
+#include <map>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -54,8 +55,8 @@ public:
     void AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex = 0,u16 count = 1,uint32_t location = 0,short nodeIndex = NOT_EXISTS);
     virtual short setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex = 0,int nodeIndex = NOT_EXISTS,int renderTargetIndex = NOT_EXISTS);
     virtual short setPropertyValue(string name,int *values,DATA_TYPE type,u16 count,u16 paramIndex = 0,int nodeIndex = NOT_EXISTS,int renderTargetIndex = NOT_EXISTS);
-    void LoadShaders(string vShaderName,string fShaderName);
-    GLuint CompileShader(string shaderName,GLenum shaderType);
+    bool LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr);
+    GLuint CompileShader(string shaderName,GLenum shaderType, std::map< string, string > shadersStr);
     GLuint LinkShaders(GLuint vShaderHandle,GLuint fShaderHandle);
     GLuint CreateAttribute(GLuint programHandle,string attribName);
     GLuint CreateUniform(GLuint programHandle,string uniName);

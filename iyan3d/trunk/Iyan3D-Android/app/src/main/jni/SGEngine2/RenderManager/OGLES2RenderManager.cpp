@@ -67,32 +67,39 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return false;
     
+    if(node->instancedNodes.size() > 0 && !supportsInstancing && node->shouldUpdateMesh) {
+        shared_ptr<OGLNodeData> nData = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
+        while(node->nodeData.use_count() > 0)
+            node->nodeData.reset();
+        node->nodeData = make_shared<OGLNodeData>();
+    }
+    
     
     OGLMaterial *material = (OGLMaterial*)node->material;
+    Mesh *mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
     
     bool bindAttrib = false;
     if(shaderPrograms.find(node) == shaderPrograms.end()) {
-        if(meshBufferIndex == dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount()-1)
+        if(meshBufferIndex == mesh->getMeshBufferCount()-1)
             shaderPrograms.insert(std::pair< shared_ptr<Node>, u_int32_t >(node, material->shaderProgram));
     } else if(shaderPrograms[node] != material->shaderProgram) {
         bindAttrib = true;
-        if(meshBufferIndex == dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount()-1)
+        if(meshBufferIndex == mesh->getMeshBufferCount()-1)
             shaderPrograms[node] = material->shaderProgram;
     }
     
     glUseProgram(material->shaderProgram);
     if(!supportsVAO) {
-        Mesh *mesh = dynamic_pointer_cast<MeshNode>(node)->getMesh();
         MESH_TYPE mType = mesh->meshType;
         if(node->shouldUpdateMesh) {
-            createVertexAndIndexBuffers(node, mType, false);
+            createVertexAndIndexBuffers(node, mType, (node->instancedNodes.size() > 0));
             node->shouldUpdateMesh = false;
         }
         bindBufferAndAttributes(node, meshBufferIndex, mType);
-    } else if(node->shouldUpdateMesh || bindAttrib) {
-        updateVAO(node, false, bindAttrib, meshBufferIndex);
+    } else if((node->shouldUpdateMesh && dynamic_pointer_cast<OGLNodeData>(node->nodeData)->VAOCreated) || bindAttrib) {
+        updateVAO(node, (node->instancedNodes.size() > 0), bindAttrib, meshBufferIndex);
         node->shouldUpdateMesh = false;
-    }else
+    } else
         createVAO(node, meshBufferIndex);
     
     for(int i = 0;i < material->uniforms.size();i++){
@@ -112,12 +119,13 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
 void OGLES2RenderManager::createVAO(shared_ptr<Node> node, short meshBufferIndex)
 {
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
-    MESH_TYPE mType = dynamic_pointer_cast<MeshNode>(node)->getMesh()->meshType;
-    Mesh* mesh = dynamic_pointer_cast<MeshNode>(node)->getMesh();
+    MESH_TYPE mType = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache->meshType : dynamic_pointer_cast<MeshNode>(node)->getMesh()->meshType;
+    Mesh* mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
 
     if(!OGLNode->VAOCreated) {
         if(meshBufferIndex == mesh->getMeshBufferCount()-1) {
             OGLNode->VAOCreated = true;
+            node->shouldUpdateMesh = false;
         }
         
         handleVAO(node, 1 , meshBufferIndex, mType);
@@ -141,7 +149,7 @@ void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, b
 {
     
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
-    Mesh *mesh = dynamic_pointer_cast<MeshNode>(node)->getMesh();
+    Mesh *mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
     MESH_TYPE mType = mesh->meshType;
         
         handleVAO(node, 2 , meshBufferIndex, mType);
@@ -193,7 +201,9 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
-    } else
+    } else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+    else
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
     
     if(nodeMes == NULL)
@@ -218,7 +228,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
         }
     } else {
         int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
-        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, (GLsizei)instancingCount+1);
+        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, !supportsInstancing ? 0 : (GLsizei)instancingCount+1);
     }
     
     if(supportsVAO)
@@ -530,7 +540,7 @@ void OGLES2RenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDe
 
 }
 void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers){
-    if(node->type <= NODE_TYPE_CAMERA)
+    if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return;
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     
@@ -540,16 +550,20 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
         meshBufferCount = (dynamic_pointer_cast<MorphNode>(node))->getMeshCount();
     else if (node->type == NODE_TYPE_MORPH_SKINNED)
         meshBufferCount = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshCount();
+    else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+        meshBufferCount = (dynamic_pointer_cast<MeshNode>(node))->meshCache->getMeshBufferCount();
     else
         meshBufferCount = (dynamic_pointer_cast<MeshNode>(node))->getMesh()->getMeshBufferCount();
     
     for(int i = 0; i < meshBufferCount;i++) {
         createVertexBuffer(node,i,meshType);
         if(updateBothBuffers) {
+            Mesh* mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? (dynamic_pointer_cast<MeshNode>(node))->meshCache : (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+            
             if(OGLNode->IndexBufLocations.size() > i) {
-                size_t indexCount =  (dynamic_pointer_cast<MeshNode>(node))->getMesh()->getIndicesCount(i);
+                size_t indexCount =  mesh->getIndicesCount(i);
                 GLsizeiptr size = sizeof(unsigned short) * indexCount;
-                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  (dynamic_pointer_cast<MeshNode>(node))->getMesh()->getIndicesArray(i), GL_STATIC_DRAW, OGLNode->IndexBufLocations[i]);
+                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(i), GL_STATIC_DRAW, OGLNode->IndexBufLocations[i]);
                 std::replace(OGLNode->IndexBufLocations.begin(), OGLNode->IndexBufLocations.end(), OGLNode->IndexBufLocations[i], indexBuf);
             } else
                 OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,i));
@@ -569,7 +583,10 @@ void OGLES2RenderManager::handleVAO(shared_ptr<Node> node,int type, short meshBu
         } else
             OGLNode->vertexArrayLocations.push_back(arrayToBind);
     } else if (type == 2) {
-        glBindVertexArrayOES(OGLNode->vertexArrayLocations[meshBufferIndex]);
+        if(OGLNode->vertexArrayLocations.size() <= meshBufferIndex)
+            handleVAO(node, 1, meshBufferIndex, meshType);
+        else
+            glBindVertexArrayOES(OGLNode->vertexArrayLocations[meshBufferIndex]);
     } else
         glBindVertexArrayOES(0);
 }
@@ -587,6 +604,8 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuf
           nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
           meshType = MESH_TYPE_LITE;
       }
+  } else if(node->instancedNodes.size() > 0 && !supportsInstancing) {
+      nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
   } else
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
 
@@ -616,18 +635,21 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuf
 
 }
 
-u_int32_t OGLES2RenderManager::bindIndexBuffer(shared_ptr<Node> node, int meshBufferIndex){
-  Mesh *nodeMes;
-  if(node->type == NODE_TYPE_MORPH)
-      nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(0);
-  else if(node->type == NODE_TYPE_MORPH_SKINNED)
-      nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(0);
-  else if(node->type == NODE_TYPE_SKINNED) {
-      if(node->skinType == GPU_SKIN)
-          nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
-      else
-          nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
-  } else
+u_int32_t OGLES2RenderManager::bindIndexBuffer(shared_ptr<Node> node, int meshBufferIndex)
+{
+    Mesh *nodeMes;
+    if(node->type == NODE_TYPE_MORPH)
+        nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(0);
+    else if(node->type == NODE_TYPE_MORPH_SKINNED)
+        nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(0);
+    else if(node->type == NODE_TYPE_SKINNED) {
+        if(node->skinType == GPU_SKIN)
+            nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
+        else
+            nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
+    } else if(node->instancedNodes.size() > 0 && !supportsInstancing)
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+    else
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
 
     size_t indexCount =  nodeMes->getIndicesCount(meshBufferIndex);

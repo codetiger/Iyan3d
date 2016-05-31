@@ -16,7 +16,7 @@ string constants::DocumentsStoragePath="";
 string constants::impotedImagesPathAndroid="";
 float constants::iOS_Version = 0;
 
-SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight)
+SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms)
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
@@ -26,7 +26,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     this->smgr->setVAOSupport(renHelper->supportsVAO());
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
     SceneHelper::initLightMesh(smgr);
-    initVariables(smgr, device);
+    initVariables(smgr, device, maxUniforms);
 
 #ifndef UBUNTU
     initTextures();
@@ -148,10 +148,10 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
     updater->setDataForFrame(currentFrame);
 }
 
-void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType)
+void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, int maxUniforms)
 {
     cmgr = new CollisionManager();
-    shaderMGR = new ShaderManager(sceneMngr, devType);
+    shaderMGR = new ShaderManager(sceneMngr, devType, maxUniforms);
     selectMan = new SGSelectionManager(sceneMngr, this);
     updater = new SGSceneUpdater(sceneMngr, this);
     loader = new SGSceneLoader(sceneMngr, this);
@@ -240,7 +240,7 @@ void SGEditorScene::renderAll()
         renHelper->renderControls();
         
 //        if(touchTexture)
-//            smgr->draw2DImage(touchTexture, Vector2(0.0, 150.0), Vector2(256.0, 406.0), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+//            smgr->draw2DImage(touchTexture, Vector2(0.0, 150.0), Vector2(1024.0, 1174.0), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
         
         //        // rtt division atlast post and pre stage
         renHelper->postRTTDrawCall();

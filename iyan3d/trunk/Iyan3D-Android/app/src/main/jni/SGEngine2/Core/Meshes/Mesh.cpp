@@ -17,6 +17,7 @@ Mesh::Mesh() {
     meshType = MESH_TYPE_LITE;
     clearVerticesArray();
     clearIndicesArray();
+    instanceCount = 0;
 }
 
 Mesh::~Mesh() {
@@ -25,6 +26,7 @@ Mesh::~Mesh() {
     tempVerticesDataHeavy.clear();
     clearIndicesArray();
     clearVerticesArray();
+    instanceCount = 0;
 }
 
 void Mesh::copyDataFromMesh(Mesh* otherMesh)
@@ -42,6 +44,49 @@ void Mesh::copyDataFromMesh(Mesh* otherMesh)
     for(int i = 0; i < otherMesh->getTotalIndicesCount(); i++) {
         addToIndicesArray(otherMesh->getTotalIndicesArray()[i]);
     }
+    
+    Commit();
+}
+
+void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
+{
+    if(originalMesh->meshType == MESH_TYPE_LITE) {
+        
+        if(instanceIndex == 1)
+            copyInstanceToMeshCache(originalMesh, 0);
+        
+        unsigned int vertexCount = getVerticesCount();
+        
+        for(int i = 0; i < originalMesh->getVerticesCount(); i++) {
+            vertexData v;
+            vertexData *vertx = originalMesh->getLiteVertexByIndex(i);
+            v.vertPosition = vertx->vertPosition;
+            v.vertNormal = vertx->vertNormal;
+            v.texCoord1 = vertx->texCoord1;
+            v.optionalData1 = Vector4(vertx->optionalData1.x, vertx->optionalData1.y, vertx->optionalData1.z, instanceIndex);
+            addVertex(&v);
+        }
+        
+        for( int i = 0; i < originalMesh->getTotalIndicesCount(); i ++) {
+            unsigned int indexToAdd = originalMesh->getTotalIndicesArray()[i] + vertexCount;
+            addToIndicesArray(indexToAdd);
+        }
+    }
+    
+    instanceCount++;
+    Commit();
+}
+
+void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount)
+{
+    int endIndex = (getVerticesCount() > verticesCount) ? getVerticesCount() - verticesCount : getVerticesCount();
+    
+    for(int i = getVerticesCount()-1; i > endIndex; i --)
+        tempVerticesData.erase(tempVerticesData.begin() + i);
+
+    endIndex = (getTotalIndicesCount() > indicesCount) ? getTotalIndicesCount() - indicesCount : getTotalIndicesCount();
+    for(int i = getTotalIndicesCount()-1; i > endIndex; i--)
+        tempIndicesData.erase(tempIndicesData.begin() + i);
     
     Commit();
 }

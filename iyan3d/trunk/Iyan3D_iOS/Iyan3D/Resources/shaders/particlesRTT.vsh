@@ -6,7 +6,6 @@ attribute vec3 vertNormal;
 uniform mat4 vp;
 uniform mat4 model;
 
-uniform float isVertexColored[1];
 uniform vec4 startColor;
 uniform vec4 midColor;
 uniform vec4 endColor;

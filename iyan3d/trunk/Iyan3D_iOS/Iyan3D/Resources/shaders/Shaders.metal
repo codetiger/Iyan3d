@@ -96,15 +96,12 @@ typedef struct {
 vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                                      constant matrix_float4x4& mvp [[ buffer(SHADER_COMMON_SKIN_mvp) ]],
                                      constant JointData* Joint_Data [[ buffer(SHADER_COMMON_SKIN_jointData) ]],
-                                     constant float* transparency [[ buffer(SHADER_COMMON_SKIN_transparency) ]],
                                      constant MatArray* world [[ buffer(SHADER_COMMON_SKIN_world) ]],
-                                     constant float* isLighting [[ buffer(SHADER_COMMON_SKIN_isLighting) ]],
-                                     constant float* reflection [[ buffer(SHADER_COMMON_SKIN_reflection) ]],
                                      constant float& shadowDarkness [[ buffer(SHADER_COMMON_SKIN_shadowDarkness) ]],
                                      constant packed_float3& eyePos [[ buffer(SHADER_COMMON_SKIN_eyePos) ]],
                                      constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
                                      unsigned int vid [[ vertex_id ]],
-                                     constant float* isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                     constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                      constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                      )
 {
@@ -120,7 +117,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     float4 pos = float4(0.0);
     float4 nor = float4(0.0);
     
-    out.isVertexColored = isVertexColored[0];
+    out.isVertexColored = props[0].data[1];
     out.perVertexColor = float4(float3(vertColor[0].data),1.0);
     
     int jointId = int(optionalData1.x);
@@ -188,7 +185,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     float4 vertex_position_cameraspace = world[0].data * pos;
     out.vertexPosCam = vertex_position_cameraspace;
     
-    out.transparency = transparency[0];
+    out.transparency = props[0].data[0];
     out.position = mvp * vertex_position_objectspace;
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x;
@@ -204,13 +201,13 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     //----------
     
     // Lighting Calculation-----------
-    if(int(isLighting[0]) == 1){
+    if(int(props[0].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
         
         out.normal = normalize(world[0].data * float4(float3(nor.xyz),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection[0];
+        out.reflection = props[0].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -349,27 +346,26 @@ fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half
 
 vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant matrix_float4x4& vp [[ buffer(SHADER_COMMON_mvp) ]],
-                                constant float* transparency [[ buffer(SHADER_COMMON_transparency) ]],
                                 constant MatArray* world [[ buffer(SHADER_COMMON_world) ]],
                                 constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
-                                constant float* isLighting [[ buffer(SHADER_COMMON_isLighting) ]],
-                                constant float* reflection [[ buffer(SHADER_COMMON_reflection) ]],
                                 constant packed_float3& eyePos [[ buffer(SHADER_COMMON_eyePos) ]],
                                 constant float& shadowDarkness [[ buffer(SHADER_COMMON_shadowDarkness) ]],
                                 unsigned int vid [[ vertex_id ]],
-                                constant float* isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                 constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]],
                                 unsigned int iid [[ instance_id ]]
                                 )
 {
+//    unsigned int iid = vertex_array[vid].optionalData1[3];
+    
     float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
     float4 vertex_position_cameraspace = world[iid].data * float4(float3(vertex_array[vid].position), 1.0);
     
     ColorInOut out;
     out.vertexPosCam = vertex_position_cameraspace;
-    out.transparency = transparency[iid];
+    out.transparency = props[iid].data[0];
     out.position = vp * world[iid].data * vertex_position_objectspace;
-    out.isVertexColored = isVertexColored[iid];
+    out.isVertexColored = props[iid].data[1];
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x;
     out.uv.y = uv.y;
@@ -383,13 +379,13 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     //----------
     
     // Lighting Calculation-----------
-    if(int(isLighting[iid]) == 1){
+    if(int(props[iid].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace =  float4(float3(eyePos),1.0);
         
         out.normal = normalize(world[iid].data * float4(float3(vertex_array[vid].normal),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection[iid];
+        out.reflection = props[iid].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -951,14 +947,11 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
 // Color_Vertex
 vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]],
                                    constant matrix_float4x4& vp [[buffer(SHADER_COLOR_mvp)]],
-                                   constant float* transparency [[ buffer(SHADER_PERVERTEXCOLOR_transparency) ]],
-                                   constant float* isVertexColored [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                    constant MatArray* world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
-                                   constant float* isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
-                                   constant float* reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
                                    constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
+                                   constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                    constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]],
                                    unsigned int vid [[ vertex_id ]],
                                    unsigned int iid [[ instance_id ]]
@@ -969,10 +962,10 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
     
     ColorInOut out;
     out.vertexPosCam = vertex_position_cameraspace;
-    out.transparency = transparency[iid];
+    out.transparency = props[iid].data[0];
     out.position = vp * world[iid].data * vertex_position_objectspace;
     out.perVertexColor =  (vertColor[iid].data[0] == -1.0) ? vertex_array[vid].optionalData1 : float4(float3(vertColor[iid].data),1.0);;
-    out.isVertexColored = isVertexColored[iid];
+    out.isVertexColored = props[iid].data[1];
     
     out.texture2UV = float2(0.0);
     out.vertexDepth = 0.0;
@@ -986,12 +979,12 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
     //----------
     
     // Lighting Calculation-----------
-    if(int(isLighting[iid]) == 1){
+    if(int(props[iid].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
         out.normal = normalize(world[iid].data * float4(float3(vertex_array[vid].normal),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection[iid];
+        out.reflection = props[iid].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -1003,16 +996,13 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
 
 vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                                    constant matrix_float4x4& mvp [[buffer(SHADER_COLOR_mvp)]],
-                                   constant float* transparency [[ buffer(SHADER_PERVERTEXCOLOR_transparency) ]],
                                    constant MatArray* world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
-                                   constant float* isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
-                                   constant float* reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
                                    constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
                                    unsigned int vid [[ vertex_id ]],
                                    constant JointData* Joint_Data [[ buffer(SHADER_PERVERTEXCOLOR_jointData) ]],
-                                   constant float* isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                   constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                    constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                    )
 {
@@ -1022,11 +1012,11 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
     float4 optionalData1 = vertex_array[vid].optionalData1;
     float4 optionalData2 = vertex_array[vid].optionalData2;
-    out.transparency = transparency[0];
+    out.transparency = props[0].data[0];
     //out.perVertexColor = vertex_array[vid].optionalData4;
     
     
-    out.isVertexColored = isVertexColored[0];
+    out.isVertexColored = props[0].data[1];
     out.perVertexColor = float4(float3(vertColor[0].data),1.0);
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x;
@@ -1052,7 +1042,6 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     float4 vertex_position_objectspace = pos;
     float4 vertex_position_cameraspace = world[0].data * pos;
     out.vertexPosCam = vertex_position_cameraspace;
-    out.transparency = transparency[0];
     out.position = mvp * vertex_position_objectspace;
 
     //Shadow Coords Calculation -----------
@@ -1064,13 +1053,13 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     //----------
     
     // Lighting Calculation-----------
-    if(int(isLighting[0]) == 1){
+    if(int(props[0].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
         
         out.normal = normalize(world[0].data * nor);
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection[0];
+        out.reflection = props[0].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
