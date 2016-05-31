@@ -145,7 +145,7 @@ public:
     
     /* Constructor and Destructor */
     
-    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms);
+    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms = 0);
     ~SGEditorScene();
     
     void removeAllNodes();

@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 #include "SceneManager.h"
-#include "InstanceNode.h"
 
 #ifdef IOS
 #import "TargetConditionals.h"

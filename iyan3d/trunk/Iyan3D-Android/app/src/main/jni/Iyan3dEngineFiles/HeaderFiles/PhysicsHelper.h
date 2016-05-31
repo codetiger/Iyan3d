@@ -13,7 +13,7 @@
 #include "btSoftRigidDynamicsWorld.h"
 #include "btSoftBodyRigidBodyCollisionConfiguration.h"
 #include "btSoftBodyHelpers.h"
-#include "btShapeHull.h"
+#include "BulletCollision/CollisionShapes/btShapeHull.h"
 
 #include "btBulletDynamicsCommon.h"
 #include "SGNode.h"

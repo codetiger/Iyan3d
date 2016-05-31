@@ -230,32 +230,6 @@ Quaternion& Quaternion::normalize()
     //n = 1.0f / sqrtf(n);
     return (*this *= (1.0 / sqrtf(n)));
 }
-Quaternion& Quaternion::lerp(Quaternion q1, Quaternion q2, float time)
-{
-    const float scale = 1.0f - time;
-    return (*this = (q1 * scale) + (q2 * time));
-}
-Quaternion& Quaternion::slerp(Quaternion q1, Quaternion q2, float time, float threshold)
-{
-    float angle = q1.dotProduct(q2);
-    
-    // make sure we use the short rotation
-    if (angle < 0.0f) {
-        q1 *= -1.0f;
-        angle *= -1.0f;
-    }
-    
-    if (angle <= (1 - threshold)) // spherical interpolation
-    {
-        const float theta = acosf(angle);
-        const float invsintheta = 1.0 / (sinf(theta));
-        const float scale = sinf(theta * (1.0f - time)) * invsintheta;
-        const float invscale = sinf(theta * time) * invsintheta;
-        return (*this = (q1 * scale) + (q2 * invscale));
-    }
-    else // linear interploation
-        return lerp(q1, q2, time);
-}
 float Quaternion::dotProduct(const Quaternion& q2) const
 {
     return (x * q2.x) + (y * q2.y) + (z * q2.z) + (w * q2.w);

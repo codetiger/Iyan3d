@@ -1,5 +1,5 @@
 
-#include "SceneHelper.h"
+#include "HeaderFiles/SceneHelper.h"
 
 #include "HeaderFiles/SGNode.h"
 #include "HeaderFiles/ShaderManager.h"
