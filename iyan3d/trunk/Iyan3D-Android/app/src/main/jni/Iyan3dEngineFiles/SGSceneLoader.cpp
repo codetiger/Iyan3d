@@ -440,7 +440,7 @@ void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
         meshObject->props.perVertexColor =currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificFlags[0];
         currentScene->actionMan->currentAction++;
     }
-    if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->props.perVertexColor && !meshObject->getType() == NODE_TYPE_INSTANCED){
+    if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->props.perVertexColor && meshObject->node->type != NODE_TYPE_INSTANCED){
         currentScene->selectMan->selectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId), false);
         currentScene->changeTexture(meshObject->textureName, meshObject->props.vertexColor, true, true);
         currentScene->selectMan->unselectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId));
@@ -459,6 +459,22 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     
     
     int instanceSize = (int)currentNode->instanceNodes.size();
+    
+    if(!smgr->renderMan->supportsInstancing && (instanceSize > 0 || currentNode->node->type == NODE_TYPE_INSTANCED)) {
+        
+        Mesh *meshCahce;
+        Mesh *origMesh;
+        if(currentNode->node->type == NODE_TYPE_INSTANCED) {
+            meshCahce = dynamic_pointer_cast<MeshNode>(currentNode->node->original)->meshCache;
+            origMesh = dynamic_pointer_cast<MeshNode>(currentNode->node->original)->mesh;
+        } else {
+            meshCahce = dynamic_pointer_cast<MeshNode>(currentNode->node)->meshCache;
+            origMesh = dynamic_pointer_cast<MeshNode>(currentNode->node)->mesh;
+        }
+        
+        meshCahce->removeVerticesOfAnInstance(origMesh->getVerticesCount(), origMesh->getTotalIndicesCount());
+    }
+    
     if(instanceSize > 0 && !deAllocScene) {
         setFirstInstanceAsMainNode(currentNode);
     }
@@ -529,8 +545,16 @@ void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
 void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
 {
     Mesh* sourceMesh = dynamic_pointer_cast<MeshNode>(sgNode->node->original)->mesh;
-    //memcpy(dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh , sourceMesh, sizeof(*sourceMesh));
+    
     dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh->copyDataFromMesh(sourceMesh);
+    
+    if(!smgr->renderMan->supportsInstancing) {
+        Mesh *meshCache = dynamic_pointer_cast<MeshNode>(sgNode->node->original)->meshCache;
+        if(!dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache)
+            dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache = new Mesh();
+        dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->copyDataFromMesh(meshCache);
+
+    }
 }
 
 void SGSceneLoader::removeNodeFromInstances(SGNode *currentNode)
