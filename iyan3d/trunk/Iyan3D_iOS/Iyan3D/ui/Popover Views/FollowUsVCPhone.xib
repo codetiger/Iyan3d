@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FollowUsVC">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="312" height="213"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2bM-oQ-UH9">
+                    <rect key="frame" x="86" y="30" width="140" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="fbFollowPhone.png"/>
+                    <connections>
+                        <action selector="fbFollowAction:" destination="-1" eventType="touchUpInside" id="tlC-3H-8gu"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="yZ9-6U-Kzy">
+                    <rect key="frame" x="86" y="114" width="140" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="twitterFollowPhone.png"/>
+                    <connections>
+                        <action selector="twitterFollowAction:" destination="-1" eventType="touchUpInside" id="EtU-SH-eYW"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2X1-At-TnV">
+                    <rect key="frame" x="86" y="156" width="140" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="youtube-subPhone.png"/>
+                    <connections>
+                        <action selector="youtubeSubscribe:" destination="-1" eventType="touchUpInside" id="DoA-qQ-ZAy"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="J1e-7c-I2N">
+                    <rect key="frame" x="86" y="72" width="140" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="gplusFollowPhone.png"/>
+                    <connections>
+                        <action selector="gPlusFollowAction:" destination="-1" eventType="touchUpInside" id="i1J-LI-q47"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="411" y="147.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="fbFollowPhone.png" width="140" height="27"/>
+        <image name="gplusFollowPhone.png" width="140" height="28"/>
+        <image name="twitterFollowPhone.png" width="140" height="27"/>
+        <image name="youtube-subPhone.png" width="140" height="27"/>
+    </resources>
+</document>
