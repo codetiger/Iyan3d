@@ -85,7 +85,7 @@
     }
     else if([clickedBtnName isEqualToString:@"infoBtn"]){
         [self allowMultipleSelection:NO];
-        tableData = [NSMutableArray arrayWithObjects:@"Tutorials",@"Settings", @"Rate This App", @"Share This App", @"Contact Us", nil];
+        tableData = [NSMutableArray arrayWithObjects:@"Tutorials",@"Settings", @"Rate This App", @"Follow Us", @"Contact Us", nil];
     }
     else if([clickedBtnName isEqualToString:@"viewBtn"]){
         [self allowMultipleSelection:NO];

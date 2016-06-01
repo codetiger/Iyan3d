@@ -38,6 +38,7 @@
 #import "MeshProperties.h"
 #import "ScaleForAutoRigViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
+#import "FollowUsVC.h"
 
 @interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate>{
     NSMutableArray *assetsInScenes;
@@ -46,6 +47,7 @@
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
     LoginViewController *loginVc;
+    FollowUsVC *followUsVC;
     ObjSidePanel *objVc;
     LightProperties *lightProperties;
     bool isMetalSupported;

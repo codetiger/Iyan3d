@@ -43,6 +43,7 @@
 #define TUTORIAL 0
 #define SETTINGS 1
 #define CONTACT_US 4
+#define FOLLOW_US 3
 #define RATE_US 2
 
 #define FRONT_VIEW 0
@@ -142,6 +143,7 @@ BOOL missingAlertShown;
     [super viewDidLoad];
     self.screenName = @"EditorView iOS";
     isSelected=NO;
+    followUsVC = nil;
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
     [_rigCancelBtn setHidden:YES];
@@ -2940,10 +2942,57 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
         [self.popoverController dismissPopoverAnimated:YES];
         NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
+    } else if (indexValue == FOLLOW_US) {
+        [self.popoverController dismissPopoverAnimated:YES];
+        if([Utility IsPadDevice]) {
+            if(followUsVC == nil)
+                followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVC" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:followUsVC];
+            self.popoverController.popoverContentSize = CGSizeMake(425.0 , 325.0);
+        } else {
+            if(followUsVC == nil)
+                followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVCPhone" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:followUsVC];
+            self.popoverController.popoverContentSize = CGSizeMake(312.0 , 213.0);
+        }
+        
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [followUsVC.view setClipsToBounds:YES];
+        self.popUpVc.delegate=self;
+        self.popoverController.delegate =self;
+        [self.popoverController presentPopoverFromRect:_infoBtn.frame
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionUp
+                                              animated:YES];
+
+
     }
 }
 
 
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MFMailComposeResultSaved:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MFMailComposeResultSent:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        default:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+    }
+}
 
 
 -(void) optionBtnDelegate:(int)indexValue
@@ -4035,6 +4084,7 @@ void boneLimitsCallBack(){
     assetSelectionSlider = nil;
     loginVc.delegare = nil;
     loginVc = nil;
+    followUsVC = nil;
     lightProperties.delegate = nil;
     lightProperties = nil;
     currentScene = nil;

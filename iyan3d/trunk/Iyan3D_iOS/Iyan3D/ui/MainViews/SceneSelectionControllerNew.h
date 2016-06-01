@@ -24,6 +24,7 @@
 #import "WEPopoverController.h"
 #import "SettingsViewController.h"
 #import "LoggedInViewController.h"
+#import "FollowUsVC.h"
 
 
 @interface SceneSelectionControllerNew : GAITrackedViewController< DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate>{
@@ -64,6 +65,7 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *scenesCollectionView;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
+@property (nonatomic, strong) FollowUsVC *followUsVC;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
 

@@ -23,6 +23,7 @@
 #define TUTORIAL 0
 #define SETTINGS 1
 #define CONTACT_US 4
+#define FOLLOW_US 3
 #define RATE_US 2
 
 #define CAMERA_PREVIEW_SMALL 0
@@ -247,6 +248,7 @@
     }
 }
 
+
 #pragma CollectionView Delegates
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -383,6 +385,32 @@
         [self.popoverController dismissPopoverAnimated:YES];
         NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
+    } else if (indexValue == FOLLOW_US) {
+        
+        [self.popoverController dismissPopoverAnimated:YES];
+        if([Utility IsPadDevice]) {
+            if(_followUsVC == nil)
+                _followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVC" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_followUsVC];
+            self.popoverController.popoverContentSize = CGSizeMake(425.0 , 325.0);
+        } else {
+            if(_followUsVC == nil)
+                _followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVCPhone" bundle:nil];
+            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_followUsVC];
+            self.popoverController.popoverContentSize = CGSizeMake(312.0 , 213.0);
+        }
+        
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [_followUsVC.view setClipsToBounds:YES];
+        self.popUpVc.delegate=self;
+        self.popoverController.delegate =self;
+        [self.popoverController presentPopoverFromRect:_infoBtn.frame
+                                                inView:self.view
+                              permittedArrowDirections:UIPopoverArrowDirectionUp
+                                              animated:YES];
+        
+        
     }
 }
 
@@ -394,15 +422,17 @@
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
+            [self dismissViewControllerAnimated:YES completion:nil];
             break;
         case MFMailComposeResultSent:
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         case MFMailComposeResultFailed:
             NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            [self dismissViewControllerAnimated:YES completion:nil];
             break;
         default:
+            [self dismissViewControllerAnimated:YES completion:nil];
             break;
     }
 }
@@ -837,6 +867,7 @@
 
 - (void)dealloc
 {
+    _followUsVC = nil;
     restClient.delegate = nil;
     restClient = nil;
     self.fileBeginsWith = nil;
