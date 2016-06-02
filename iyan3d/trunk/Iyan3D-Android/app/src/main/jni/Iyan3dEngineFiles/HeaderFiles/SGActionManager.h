@@ -9,7 +9,7 @@
 #ifndef SGActionManager_h
 #define SGActionManager_h
 
-#define MAXUNDO 500
+#define MAXUNDO 700
 
 #include "SGAction.h"
 #include "Constants.h"

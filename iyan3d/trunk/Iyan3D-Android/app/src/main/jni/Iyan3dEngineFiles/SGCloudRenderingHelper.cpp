@@ -101,17 +101,18 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
      if(thisNode->props.isVisible) {
          Vector3 vertColor = thisNode->props.vertexColor;
 
-         Quaternion lightProp;
+         Vector3 lightDir = Vector3(0.0, -1.0, 0.0);
          if(nodeType == NODE_ADDITIONAL_LIGHT) {
-             lightProp = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys, true);
-             FileHelper::writeFloat(frameFilePtr, lightProp.w/DEFAULT_FADE_DISTANCE); // Emission
+             FileHelper::writeFloat(frameFilePtr, thisNode->props.nodeSpecificFloat/DEFAULT_FADE_DISTANCE); // Emission
          } else
              FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_LIGHT) ? 1.0 : 0.0); // Emission
 
-         Vector3 lightColor;
-         if(nodeType == NODE_ADDITIONAL_LIGHT) {
-             lightColor = Vector3(lightProp.x,lightProp.y,lightProp.z);
-         } else {
+         Vector3 lightColor = Vector3(0.0);
+         if(nodeType == NODE_ADDITIONAL_LIGHT || nodeType == NODE_LIGHT) {
+             Quaternion lightRot = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys);
+             Mat4 rotMat;
+             rotMat.setRotationRadians(MathHelper::toEuler(lightRot));
+             rotMat.rotateVect(lightDir);
              lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frameId, scene->nodes[nodeId]->scaleKeys);
          }
 
@@ -123,6 +124,10 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
              FileHelper::writeFloat(frameFilePtr, pColor.x); // Diffusion Color r
              FileHelper::writeFloat(frameFilePtr, pColor.y); // Diffusion Color g
              FileHelper::writeFloat(frameFilePtr, pColor.z); // Diffusion Color b
+         } else if (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) {
+             FileHelper::writeFloat(frameFilePtr, lightDir.x); // LightDir
+             FileHelper::writeFloat(frameFilePtr, lightDir.y);
+             FileHelper::writeFloat(frameFilePtr, lightDir.z);
          } else {
              FileHelper::writeFloat(frameFilePtr, vertColor.x); // Diffusion Color r
              FileHelper::writeFloat(frameFilePtr, vertColor.y); // Diffusion Color g
