@@ -109,6 +109,7 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
 
          Vector3 lightColor = Vector3(0.0);
          if(nodeType == NODE_ADDITIONAL_LIGHT || nodeType == NODE_LIGHT) {
+             FileHelper::writeInt(frameFilePtr, thisNode->props.specificInt);
              Quaternion lightRot = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys);
              Mat4 rotMat;
              rotMat.setRotationRadians(MathHelper::toEuler(lightRot));
@@ -124,15 +125,18 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
              FileHelper::writeFloat(frameFilePtr, pColor.x); // Diffusion Color r
              FileHelper::writeFloat(frameFilePtr, pColor.y); // Diffusion Color g
              FileHelper::writeFloat(frameFilePtr, pColor.z); // Diffusion Color b
-         } else if (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) {
-             FileHelper::writeFloat(frameFilePtr, lightDir.x); // LightDir
-             FileHelper::writeFloat(frameFilePtr, lightDir.y);
-             FileHelper::writeFloat(frameFilePtr, lightDir.z);
          } else {
              FileHelper::writeFloat(frameFilePtr, vertColor.x); // Diffusion Color r
              FileHelper::writeFloat(frameFilePtr, vertColor.y); // Diffusion Color g
              FileHelper::writeFloat(frameFilePtr, vertColor.z); // Diffusion Color b
          }
+         
+         if (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) {
+             FileHelper::writeFloat(frameFilePtr, lightDir.x); // LightDir
+             FileHelper::writeFloat(frameFilePtr, lightDir.y);
+             FileHelper::writeFloat(frameFilePtr, lightDir.z);
+         }
+         
          bool hasTexture = (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true;
          FileHelper::writeBool(frameFilePtr, hasTexture); // Has Texture
 
