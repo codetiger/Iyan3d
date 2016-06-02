@@ -20,7 +20,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
     ofstream frameFilePtr(outputFileName , ios::binary);
     scene->renHelper->setRenderCameraOrientation();
     Vector3 camPos = scene->renderCamera->getAbsolutePosition();
-    
+
     FileHelper::writeFloat(&frameFilePtr, camPos.x);
     FileHelper::writeFloat(&frameFilePtr, camPos.y);
     FileHelper::writeFloat(&frameFilePtr, camPos.z);

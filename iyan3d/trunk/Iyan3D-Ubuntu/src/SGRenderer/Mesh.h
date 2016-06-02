@@ -24,14 +24,21 @@ public:
 		maxPoint = Vec3fa(-999.0f);
 
 		material.emission = readFloat(data);
+		if (material.emission > 0) {
+			material.lightType = readInt(data);
+		}
+
 		material.emissionColor = readVec3fa(data);
 		material.shadowDarkness = readFloat(data);
+		material.diffuse = readVec3fa(data).normalize();
 
 		if (material.emission == 0) {
 			material.emissionColor = Vec3fa();
+		} else {
+			material.lightDirection = readVec3fa(data).normalize();
+			material.lightDirection.x = -material.lightDirection.x;
 		}
 
-		material.diffuse = readVec3fa(data).normalize();
 		material.hasTexture = readBool(data);
 
 		const char *texFile = readString(data);

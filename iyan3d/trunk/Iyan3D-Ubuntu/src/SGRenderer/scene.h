@@ -270,15 +270,22 @@ struct Scene
 
 		for (int i = 0; i < meshes.size(); i++) {
 			if(meshes[i]->material.emission > 0.0) {
-				Vec3fa lightPoint = meshes[i]->getRandomPointInMesh();
-				Vec3fa rayDir = (lightPoint - point).normalize();
-				double dist = lightPoint.distance(point);
-				RTCRay ray = getOcclusion(sgScene, point, rayDir, dist, 0xFFFF0000);
+				if(meshes[i]->material.lightType == 0) {
+					Vec3fa lightPoint = meshes[i]->getRandomPointInMesh();
+					Vec3fa rayDir = (lightPoint - point).normalize();
+					double dist = lightPoint.distance(point);
+					RTCRay ray = getOcclusion(sgScene, point, rayDir, dist, 0xFFFF0000);
 
-				double distanceEffect = 1.0 - ray.tfar / (meshes[i]->material.emission * 999.0);
+					double distanceEffect = 1.0 - ray.tfar / (meshes[i]->material.emission * 999.0);
 
-				if(ray.geomID != 0)
-					lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal) * distanceEffect;
+					if(ray.geomID != 0)
+						lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal) * distanceEffect;
+				} else if(meshes[i]->material.lightType == 1) {
+					Vec3fa rayDir = ((meshes[i]->material.lightDirection * 5000.0) - point).normalize();
+					RTCRay ray = getOcclusion(sgScene, point, rayDir, 5000, 0xFFFF0000);
+					if(ray.geomID != 0)
+						lightsContrib = lightsContrib + meshes[i]->getEmissionColor() * rayDir.dot(normal);
+				}
 			}
 		}
 

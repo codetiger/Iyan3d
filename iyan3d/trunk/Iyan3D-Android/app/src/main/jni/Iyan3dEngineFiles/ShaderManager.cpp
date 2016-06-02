@@ -57,7 +57,9 @@ ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxU
     this->smgr = smgr;
     ShaderManager::BundlePath = constants::BundlePath;
     ShaderManager::deviceType = deviceType;
+#ifndef UBUNTU
     loadAllShaders(smgr,deviceType, maxUniforms);
+#endif
 }
 void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms){
     

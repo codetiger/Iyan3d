@@ -36,6 +36,7 @@ SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYP
     }
     #endif
     
+#ifndef UBUNTU
     string extensions = "";
     if(device == OPENGLES2)
         extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
@@ -45,15 +46,13 @@ SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYP
     } else
         renderMan->supportsInstancing = true;
 
-    
-    
     mtlManger = new MaterialManager(type);
     renderTargetIndex = 0;
     
     if(device == METAL) {
         renderMan->maxInstances = 4000;
     }
-
+#endif
 }
 
 SceneManager::~SceneManager(){

@@ -50,7 +50,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         return false;
     
     vector<SGNode*> tempNodes;
-    for(int i = 0;i < nodeCount;i++){
+    for(int i = 0;i < nodeCount;i++) {
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
         int origId = 0;
         sgNode->readData(filePointer, origId);
@@ -78,7 +78,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     for (int i = 0; i < tempNodes.size(); i++) {
         SGNode *sgNode = tempNodes[i];
         bool nodeLoaded = false;
-        
+
         if(sgNode && sgNode->getType() == NODE_TEMP_INST) {
             nodeLoaded = loadInstance(sgNode, sgNode->assetId, OPEN_SAVED_FILE);
         } else if(sgNode)
@@ -87,7 +87,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         if(!nodeLoaded)
             delete sgNode;
     }
- 
+
     return true;
 }
 
@@ -103,6 +103,7 @@ bool SGSceneLoader::loadSceneData(std::string *filePath, JNIEnv *env, jclass typ
     inputSGBFile.close();
     return true;
 }
+
 bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
 {
     if(!currentScene || !smgr)

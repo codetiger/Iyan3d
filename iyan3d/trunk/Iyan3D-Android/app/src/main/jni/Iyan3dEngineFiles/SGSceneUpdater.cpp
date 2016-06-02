@@ -56,8 +56,10 @@ void SGSceneUpdater::setDataForFrame(int frame)
         sgNode->setPositionOnNode(position, !updatingScene->isPlaying);
         
         if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
-            if(updatingScene->directionLine->node->getVisible())
+			#ifndef UBUNTU
+        	if(updatingScene->directionLine->node->getVisible())
                 updatingScene->updateDirectionLine();
+			#endif
             if(sgNode->scaleKeys.size() > 0) {
                 sgNode->props.vertexColor = Vector3(scale.x, scale.y, scale.z);
                 lightChanged = true;

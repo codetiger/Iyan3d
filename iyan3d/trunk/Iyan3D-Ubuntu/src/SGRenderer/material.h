@@ -11,6 +11,8 @@ struct SGRMaterial
 	float shadowDarkness;
     bool hasTexture, hasLighting;
     float reflectionSharpness;
+    int lightType;
+    Vec3fa lightDirection;
 };
 
 #endif

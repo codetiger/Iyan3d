@@ -20,10 +20,13 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
-    printf(" \n Width %f %f ", SceneHelper::screenWidth, SceneHelper::screenHeight);
     this->smgr = smgr;
     renHelper = new RenderHelper(smgr, this);
+
+#ifndef UBUNTU
     this->smgr->setVAOSupport(renHelper->supportsVAO());
+#endif
+
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
     SceneHelper::initLightMesh(smgr);
     initVariables(smgr, device, maxUniforms);
@@ -279,6 +282,7 @@ void SGEditorScene::enableDirectionIndicator()
 
 void SGEditorScene::updateDirectionLine()
 {
+#ifndef UBUNTU
     bool status = (selectedNodeId != NOT_EXISTS && (nodes[selectedNodeId]->getType() == NODE_LIGHT || nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT) && nodes[selectedNodeId]->props.specificInt == (int)DIRECTIONAL_LIGHT);
         
         directionLine->node->setVisible(status);
@@ -290,6 +294,7 @@ void SGEditorScene::updateDirectionLine()
 
         directionLine->node->setPosition(position);
         directionLine->node->setRotationInDegrees(MathHelper::toEuler(rotation) * RADTODEG);
+#endif
 }
 
 void SGEditorScene::updateLightMesh(int lightType, int nodeId)
