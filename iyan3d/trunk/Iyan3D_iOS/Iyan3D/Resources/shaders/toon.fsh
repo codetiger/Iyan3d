@@ -15,6 +15,7 @@ uniform  float shadowTextureSize;
 uniform float numberOfLights;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
+uniform float lightTypes[5];
 
 varying float vtransparency, visVertexColored, vreflection;
 varying vec3 vertexColor;
@@ -63,7 +64,7 @@ void main()
     if(lightingValue != 0.0){
      
         vec4 light_position_cameraspace = vec4(vec3(lightPos[0]),1.0);
-        vec4 lightDir = normalize(light_position_cameraspace - vertexPosCam);
+        vec4 lightDir = (lightTypes[0] == 1.0) ? light_position_cameraspace :  normalize(light_position_cameraspace - vertexPosCam);
         float distanceFromLight = distance(light_position_cameraspace , vertexPosCam);
 
         vec4 normal = normalize(normal);

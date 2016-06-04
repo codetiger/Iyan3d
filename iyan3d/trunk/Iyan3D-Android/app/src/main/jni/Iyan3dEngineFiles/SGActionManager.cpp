@@ -303,8 +303,8 @@ void SGActionManager::switchFrame(int frame)
         switchFrameAction.actionSpecificIntegers.push_back(actionScene->previousFrame);
         switchFrameAction.frameId = actionScene->currentFrame;
         addAction(switchFrameAction);
+        actionScene->updatePhysics(frame);
     }
-    actionScene->updatePhysics(frame);
     actionScene->selectMan->removeChildren(actionScene->getParentNode());
     actionScene->updater->setDataForFrame(frame);
     actionScene->selectMan->updateParentPosition();
