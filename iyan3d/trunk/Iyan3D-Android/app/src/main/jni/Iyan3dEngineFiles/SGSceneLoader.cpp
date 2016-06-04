@@ -549,6 +549,7 @@ void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
     
     dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh->copyDataFromMesh(sourceMesh);
     
+    
     if(!smgr->renderMan->supportsInstancing) {
         Mesh *meshCache = dynamic_pointer_cast<MeshNode>(sgNode->node->original)->meshCache;
         if(!dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache)
@@ -556,6 +557,10 @@ void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
         dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->copyDataFromMesh(meshCache);
 
     }
+    
+    if(smgr->device == METAL || !smgr->renderMan->supportsVAO)
+        sgNode->node->shouldUpdateMesh = true;
+
 }
 
 void SGSceneLoader::removeNodeFromInstances(SGNode *currentNode)

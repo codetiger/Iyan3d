@@ -303,14 +303,18 @@ void SGEditorScene::updateLightMesh(int lightType, int nodeId)
     bool status = (nodeIndex != NOT_EXISTS && (nodes[nodeIndex]->getType() == NODE_LIGHT || nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT));
     if(!status)
         return;
-    if(nodes[nodeIndex]->props.specificInt == (int)DIRECTIONAL_LIGHT) {
+    if(nodes[nodeIndex]->props.specificInt == (int)DIRECTIONAL_LIGHT && dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->getVerticesCount() != SceneHelper::directionalLightMesh->getVerticesCount()) {
+        delete dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh;
         dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = NULL;
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = SceneHelper::directionalLightMesh;
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = new Mesh();
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->copyDataFromMesh(SceneHelper::directionalLightMesh);
         nodes[nodeIndex]->node->shouldUpdateMesh = true;
     }
-    else {
+    else if(nodes[nodeIndex]->props.specificInt == (int)POINT_LIGHT && dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->getVerticesCount() != SceneHelper::pointLightMesh->getVerticesCount()) {
+        delete dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh;
         dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = NULL;
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = SceneHelper::pointLightMesh;
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = new Mesh();
+        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->copyDataFromMesh(SceneHelper::pointLightMesh);
         nodes[nodeIndex]->node->shouldUpdateMesh = true;
     }
 

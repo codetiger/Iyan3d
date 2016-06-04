@@ -995,6 +995,8 @@ BOOL missingAlertShown;
 {
     if(editorScene && editorScene->currentFrame == 0) {
         [self syncSceneWithPhysicsWorld];
+        for( int i = 0; i < editorScene->totalFrames-1; i++)
+            editorScene->updatePhysics(i);
     }
     [self performSelectorOnMainThread:@selector(playAnimation) withObject:nil waitUntilDone:NO];
     [self hideLoadingActivity];
@@ -1443,17 +1445,14 @@ BOOL missingAlertShown;
         }
     } else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
     {
-        Quaternion lightProps;
-        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)
-            lightProps = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(editorScene->currentFrame,editorScene->nodes[editorScene->selectedNodeId]->rotationKeys,true);
-        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT){
-            Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
-            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,ShaderManager::shadowDensity);
-        }
-        lightProps.w = ShaderManager::shadowDensity;
-        float distance = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+        Quaternion lightProp;
+        Vector3 lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
+        float shad = ShaderManager::shadowDensity;
+        lightProp = Quaternion(lightColor.x, lightColor.y, lightColor.z, shad);
+        float dist = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+        
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps NodeType:editorScene->getSelectedNode()->getType() Distance:distance LightType:editorScene->getSelectedNode()->props.specificInt];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->props.specificInt];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 300 : 322;
@@ -2333,18 +2332,14 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
     if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
     {
-        Quaternion lightProps;
-        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT)
-            lightProps = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(editorScene->currentFrame,editorScene->nodes[editorScene->selectedNodeId]->rotationKeys,true);
-        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT){
-            Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
-            lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,ShaderManager::shadowDensity);
-        }
-        lightProps.w = ShaderManager::shadowDensity;
-//        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-        float distance = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+        Quaternion lightProp;
+        Vector3 lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
+        float shad = ShaderManager::shadowDensity;
+        lightProp = Quaternion(lightColor.x, lightColor.y, lightColor.z, shad);
+        float dist = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+        
 
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProps NodeType:editorScene->getSelectedNode()->getType() Distance:distance LightType:editorScene->getSelectedNode()->props.specificInt];
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->props.specificInt];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;

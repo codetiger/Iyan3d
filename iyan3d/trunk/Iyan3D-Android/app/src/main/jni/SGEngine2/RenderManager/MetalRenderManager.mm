@@ -329,7 +329,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
 
     } else {
         int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
-        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, (supportsInstancing) ? instancingCount : 0);
+        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, (supportsInstancing) ? instancingCount+1 : 0);
     }
         
 }

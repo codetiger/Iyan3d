@@ -162,7 +162,8 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
 shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance , Vector3 lightColor, float fadeLevel)
 {
     
-    Mesh* lightMesh = SceneHelper::pointLightMesh;
+    Mesh* lightMesh = new Mesh();
+    lightMesh->copyDataFromMesh(SceneHelper::pointLightMesh);
     shared_ptr<LightNode> lightNode = smgr->createLightNode(lightMesh,"setUniforms");
     lightNode->setPosition(Vector3((assetId - (LIGHT_STARTING_ID+4)) * 2.0 ,10.0,10.0));
     lightNode->setScale(Vector3(3.0));
@@ -584,7 +585,11 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
 }
 shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
 {
-    Mesh* lightMesh = SceneHelper::directionalLightMesh;// CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
+    // CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
+    
+    Mesh* lightMesh = new Mesh();
+    lightMesh->copyDataFromMesh(SceneHelper::directionalLightMesh);
+
     shared_ptr<Node> lightNode = smgr->createNodeFromMesh(lightMesh,"setUniforms");
     //Texture *nodeTex = smgr->loadTexture("Text light.png",constants::BundlePath + "/light.png",TEXTURE_RGBA8,TEXTURE_BYTE);
     //lightNode->setTexture(nodeTex,1);

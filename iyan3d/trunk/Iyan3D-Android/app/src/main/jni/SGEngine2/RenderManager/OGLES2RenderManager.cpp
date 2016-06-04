@@ -92,12 +92,12 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
     if(!supportsVAO) {
         MESH_TYPE mType = mesh->meshType;
         if(node->shouldUpdateMesh) {
-            createVertexAndIndexBuffers(node, mType, (node->instancedNodes.size() > 0));
+            createVertexAndIndexBuffers(node, mType, true);
             node->shouldUpdateMesh = false;
         }
         bindBufferAndAttributes(node, meshBufferIndex, mType);
     } else if((node->shouldUpdateMesh && dynamic_pointer_cast<OGLNodeData>(node->nodeData)->VAOCreated) || bindAttrib) {
-        updateVAO(node, (node->instancedNodes.size() > 0), bindAttrib, meshBufferIndex);
+        updateVAO(node, true, bindAttrib, meshBufferIndex);
         node->shouldUpdateMesh = false;
     } else
         createVAO(node, meshBufferIndex);

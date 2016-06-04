@@ -461,7 +461,7 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
     finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -530,7 +530,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -599,7 +599,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -668,7 +668,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -737,7 +737,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 
@@ -773,7 +773,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
 fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_TOON_SKIN_texture1)]],
                                     depth2d<float> shadow_texture [[texture(SHADER_TOON_SKIN_texture2)]],
                                     constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
-                                    constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]])
+                                    constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
+                                    constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     // Shadow Calculation----------
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
@@ -799,7 +800,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     if(in.isLighting > 0.5){
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
-        float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+        float4 lightDir = (lightType[0] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
         //float distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
 
         float4 normal = normalize(in.normal);
@@ -834,7 +835,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     }
     //-------------
     finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 #define SHADER_COLOR_mvp 1
