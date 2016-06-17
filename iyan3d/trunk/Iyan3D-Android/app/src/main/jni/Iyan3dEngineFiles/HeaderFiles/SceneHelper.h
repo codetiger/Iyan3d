@@ -33,6 +33,7 @@ class SceneHelper
     static SGNode* createBlueLines(SceneManager *smgr);
     static SGNode* createGreenLines(SceneManager *smgr);
     static SGNode* createLightDirLine(SceneManager *smgr);
+    static SGNode* createLightCircles(SceneManager *smgr);
     static SGNode* createLines(SceneManager *smgr, vector< Vector3 > positions, Vector3 color, string callbackName, int nodeId);
     static vector<SGNode*> initControls(SceneManager *smgr);
     static SGNode* initIndicatorNode(SceneManager *smgr);

@@ -40,7 +40,7 @@
 
 @end
 
-@interface TextSelectionSidePanel : GAITrackedViewController<UICollectionViewDelegate,UICollectionViewDataSource,TextColorPickerDelegate,UITextFieldDelegate>{
+@interface TextSelectionSidePanel : GAITrackedViewController< UICollectionViewDelegate,UICollectionViewDataSource,TextColorPickerDelegate,UITextFieldDelegate, UIGestureRecognizerDelegate > {
     
     NSArray *fontListArray;
     CacheSystem* cache;
@@ -59,6 +59,8 @@
     bool withRig;
     bool isCanceled;
 }
+@property (weak, nonatomic) IBOutlet UIView *dummyLeft;
+@property (weak, nonatomic) IBOutlet UIView *dummyRight;
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *addToScene;

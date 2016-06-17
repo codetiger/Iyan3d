@@ -36,7 +36,7 @@ void OGLTexture::removeTexture(){
         glDeleteTextures(1, &OGLTextureName);
     OGLTextureName = NULL;
 }
-bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
+bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool blurTex)
 {
     textureName = name;
     texelFormat = format;
@@ -57,8 +57,9 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     glGenTextures(1, &OGLTextureName);
     glBindTexture(GL_TEXTURE_2D, OGLTextureName);
     glTexImage2D(GL_TEXTURE_2D, 0,getOGLTextureFormat(format), width, height, 0, getOGLTextureFormat(format), getOGLTextureType(texelType), imageData);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    GLint param = (!blurTex) ? GL_NEAREST : GL_LINEAR;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
     free(imageData);
     return true;
 }

@@ -49,8 +49,8 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *restorePurchaseProgress;
 @property (weak, nonatomic) IBOutlet UISwitch *speedSwitch;
 
+- (IBAction)toolTipAction:(id)sender;
 - (IBAction)qualityOrSpeed:(id)sender;
-
 - (IBAction)restoreAction:(id)sender;
 - (IBAction)toolBarPositionChanged:(id)sender;
 - (IBAction)renderPreviewSizeChanged:(id)sender;

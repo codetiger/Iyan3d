@@ -301,7 +301,7 @@ void OGLES2RenderManager::useMaterialToRender(Material *material)
 {
   glUseProgram(((OGLMaterial*)material)->shaderProgram);
 }
-void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue){
+void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue, bool blurTex){
   uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
   switch (uni.type){
       case DATA_FLOAT:
@@ -343,7 +343,7 @@ void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uI
           break;
   }
 }
-void OGLES2RenderManager::bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData){
+void OGLES2RenderManager::bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex){
 
 }
 void OGLES2RenderManager::setActiveCamera(shared_ptr<CameraNode> camera){

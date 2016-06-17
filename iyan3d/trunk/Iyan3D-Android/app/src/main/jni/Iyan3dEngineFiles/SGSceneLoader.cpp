@@ -247,9 +247,6 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->updater->resetMaterialTypes(false);
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
-
-    if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
-        currentScene->updateLightMesh(sgnode->props.specificInt, (int)currentScene->nodes.size()-1);
     
     return sgnode;
 }
@@ -304,11 +301,9 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 #ifndef UBUNTU
         currentScene->initLightCamera(sgNode->node->getPosition());
         addLight(sgNode);
-        currentScene->updateLightMesh(sgNode->props.specificInt, (int)currentScene->nodes.size()-1);
 #endif
     } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
         addLight(sgNode);
-        currentScene->updateLightMesh(sgNode->props.specificInt, (int)currentScene->nodes.size()-1);
     } else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
         sgNode->props.isLighting = false;
     else if (sgNode->getType() == NODE_RIG)

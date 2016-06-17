@@ -102,6 +102,7 @@ public:
     SGJoint *selectedJoint;
     SGNode* rotationCircle;
     SGNode* directionLine;
+    SGNode* lightCircles;
     SGNode* greenGrid;
     SGNode* blueGrid;
     SGNode* redGrid;
@@ -174,6 +175,7 @@ public:
     bool isNodeTransparent(int nodeId);
     void setJointsUniforms(int nodeID,string matName);
     void setRotationCircleUniforms(int nodeID,string matName);
+    void setLightLineUniforms(int nodeID, string matName);
     void setGridLinesUniforms(int nodeId, int rgb, string matName);
     bool isJointTransparent(int nodeID,string matName);
     void setControlsUniforms(int nodeID,string matName);
@@ -225,7 +227,6 @@ public:
     void updatePhysics(int frame);
     void enableDirectionIndicator();
     void updateDirectionLine();
-    void updateLightMesh(int lightType, int nodeId = NOT_EXISTS);
     void setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType);
     void syncSceneWithPhysicsWorld();
 

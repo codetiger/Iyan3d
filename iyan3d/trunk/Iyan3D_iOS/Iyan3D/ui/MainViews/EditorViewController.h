@@ -40,7 +40,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "FollowUsVC.h"
 
-@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate>{
+@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate>{
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
@@ -77,6 +77,7 @@
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
+@property (weak, nonatomic) IBOutlet UIButton *toolTipBtn;
 
 @property (weak, nonatomic) IBOutlet RenderingView *renderView;
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
@@ -138,9 +139,10 @@
 @property (weak, nonatomic) IBOutlet UISwitch *sceneMirrorSwitch;
 
 @property (weak, nonatomic) IBOutlet UILabel *numberOfItems;
+@property (weak, nonatomic) IBOutlet UILabel *autoRigLbl;
 
 
-
+- (IBAction)toolTipAction:(id)sender;
 - (IBAction)moveLastAction:(id)sender;
 - (IBAction)moveFirstAction:(id)sender;
 - (IBAction)addJoinAction:(id)sender;

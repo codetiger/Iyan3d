@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RenderingViewController">
@@ -15,6 +15,7 @@
                 <outlet property="colorPickerBtn" destination="8g0-ud-PUd" id="y0C-mw-5rB"/>
                 <outlet property="creditLable" destination="hLk-cO-cda" id="Yw6-OV-HId"/>
                 <outlet property="exportButton" destination="ZUU-pt-gvf" id="fmO-uG-1Cq"/>
+                <outlet property="limitFramesLbl" destination="QKd-Gl-wYM" id="qDL-Bt-edU"/>
                 <outlet property="makeVideoLoading" destination="chg-7r-BYf" id="wFs-ZV-FnW"/>
                 <outlet property="nextButton" destination="pdo-ld-rqe" id="fBG-Me-oIy"/>
                 <outlet property="progressSub" destination="KgH-cZ-Wef" id="oXQ-SR-vmB"/>
@@ -32,7 +33,6 @@
                 <outlet property="view" destination="2" id="3"/>
                 <outlet property="waterMarkLabel" destination="8K2-Nn-ge0" id="Rg5-Tg-Vcf"/>
                 <outlet property="watermarkSwitch" destination="7z9-il-Fpy" id="tdg-Ru-dOA"/>
-                <outlet property="youtubeButton" destination="Dey-jF-VZf" id="ceV-ND-Dqk"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -51,6 +51,14 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="O7k-54-Tll">
+                            <rect key="frame" x="428" y="12" width="22" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Help.png"/>
+                            <connections>
+                                <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="BZe-xi-1pm"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                 </view>
@@ -69,6 +77,7 @@
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" id="dzw-IT-60p">
                     <rect key="frame" x="144" y="569" width="201" height="3"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <accessibility key="accessibilityConfiguration" hint="Shows the current progress of Export." identifier="2"/>
                     <color key="progressTintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                     <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                 </progressView>
@@ -93,18 +102,6 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Dey-jF-VZf">
-                    <rect key="frame" x="363" y="550" width="50" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                    <state key="normal" backgroundImage="youtubeUpload.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="youtubeButtonAction:" destination="-1" eventType="touchUpInside" id="gs7-Ub-i4M"/>
-                    </connections>
-                </button>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="chg-7r-BYf">
                     <rect key="frame" x="370" y="546" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -170,6 +167,7 @@
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="7z9-il-Fpy">
                     <rect key="frame" x="374" y="204" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <accessibility key="accessibilityConfiguration" hint="Enable/Disable Watermark image." identifier="2"/>
                     <connections>
                         <action selector="waterMarkValueChanged:" destination="-1" eventType="valueChanged" id="xyN-1V-z91"/>
                     </connections>
@@ -195,7 +193,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Render Normal Shader in Your Device" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="q6U-Pr-Qfx">
-                    <rect key="frame" x="27" y="462" width="441" height="21"/>
+                    <rect key="frame" x="27" y="452" width="441" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -204,6 +202,7 @@
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="hLk-cO-cda">
                     <rect key="frame" x="153" y="559" width="183" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <accessibility key="accessibilityConfiguration" hint="Number of credits required for the current export." identifier="1"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                     <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -226,11 +225,19 @@
                 <view contentMode="center" id="KgH-cZ-Wef" userLabel="progressHolder">
                     <rect key="frame" x="47" y="509" width="400" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <accessibility key="accessibilityConfiguration" hint="Use this to limit the number of frames to exported." identifier="2"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BACKGROUND COLOR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UIQ-pP-dd7">
                     <rect key="frame" x="40" y="173" width="142" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIMIT FRAMES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QKd-Gl-wYM">
+                    <rect key="frame" x="184" y="492" width="126" height="21"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -240,8 +247,8 @@
         </view>
     </objects>
     <resources>
+        <image name="Help.png" width="22" height="22"/>
         <image name="color.png" width="23" height="23"/>
         <image name="videoShare.png" width="40" height="30"/>
-        <image name="youtubeUpload.png" width="50" height="30"/>
     </resources>
 </document>

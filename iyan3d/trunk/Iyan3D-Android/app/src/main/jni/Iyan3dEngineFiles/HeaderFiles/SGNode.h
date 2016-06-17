@@ -41,6 +41,7 @@ public:
     bool isRigged;
     bool isMirrorEnabled;
     bool isTempNode;
+    bool smoothTexture;
     int assetId,actionId;
     shared_ptr<Node> node;
     std::wstring name;

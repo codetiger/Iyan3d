@@ -28,7 +28,7 @@ public:
     
     MTLTexture();
     ~MTLTexture();
-    bool loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
+    bool loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool smoothTexture);
     bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
     void updateTexture(string fileName, int frame);
     int getBytesPerRow(int width,TEXTURE_DATA_FORMAT format);

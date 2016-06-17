@@ -32,6 +32,7 @@
 - (void) changeRenderingBgColor:(Vector4)vertexColor;
 - (IBAction)loginBtnAction:(id)sender;
 - (void) syncSceneWithPhysicsWorld;
+- (void) showPreview:(NSString*) outputPath;
 
 @end
 
@@ -56,6 +57,7 @@
     BOOL cancelPressed;
     Vector3 bgColor;
     int ScreenWidth,ScreenHeight;
+    NSString* outputFilePath;
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
@@ -105,8 +107,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *resolutionType4;
 @property (weak, nonatomic) IBOutlet UIView *progressSub;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *checkCreditProgress;
+@property (weak, nonatomic) IBOutlet UILabel *limitFramesLbl;
 
-
+- (IBAction)toolTipAction:(id)sender;
 - (IBAction)cameraResolutionChanged:(id)sender;
 - (IBAction)transparentBgValueChanged:(id)sender;
 - (IBAction)waterMarkValueChanged:(id)sender;

@@ -7,12 +7,14 @@
 //
 
 #import <AVFoundation/AVFoundation.h>
+#import <Crashlytics/Answers.h>
 
 #import "EditorViewController.h"
 #import "FrameCellNew.h"
 #import "AppDelegate.h"
 #import "WEPopoverContentViewController.h"
 #import "SceneSelectionControllerNew.h"
+#import "MediaPreviewVC.h"
 #import "Constants.h"
 #import <sys/utsname.h>
 @implementation EditorViewController
@@ -37,6 +39,8 @@
 #define IMPORT_OBJFILE 5
 #define IMPORT_ADDBONE 6
 #define IMPORT_PARTICLE 7
+#define IMAGE_EXPORT 8
+#define VIDEO_EXPORT 9
 #define CHANGE_TEXTURE 7
 
 
@@ -152,7 +156,7 @@ BOOL missingAlertShown;
     self.rigAddToSceneBtn.layer.cornerRadius = CORNER_RADIUS;
     self.rigCancelBtn.layer.cornerRadius = CORNER_RADIUS;
     self.publishBtn.layer.cornerRadius = CORNER_RADIUS;
-  
+    
 //    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
 //    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
@@ -189,6 +193,8 @@ BOOL missingAlertShown;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.autoRigLbl setHidden:YES];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
     NSLog(@"Document Path : %@ ",documentsDirectory);
@@ -231,6 +237,13 @@ BOOL missingAlertShown;
         }
         lightCount += lightId-((lightId != 0) ? 900 : 0);
     }
+    
+    UITapGestureRecognizer* topTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    UITapGestureRecognizer* rightTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    topTap.delegate = self;
+    rightTap.delegate = self;
+    [self.topView addGestureRecognizer:topTap];
+    [self.rightView addGestureRecognizer:rightTap];
 }
 
  - (void)viewWillDisappear:(BOOL)animated
@@ -239,6 +252,16 @@ BOOL missingAlertShown;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"applicationDidBecomeActive" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if([touch.view isDescendantOfView:self.renderView] || [touch.view isDescendantOfView:self.toolTipBtn]) {
+        return YES;
+    }
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
+}
+
 
 - (void) openLoggedInView
 {
@@ -705,11 +728,6 @@ BOOL missingAlertShown;
 
 #pragma Touches Actions
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    return YES;
-}
-
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     if(editorScene) {
@@ -731,6 +749,11 @@ BOOL missingAlertShown;
     cameraResoultionType = editorScene->cameraResolutionType;
     editorScene->updater->setCameraProperty(editorScene->cameraFOV, editorScene->cameraResolutionType);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
+    
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"]) {
+        [self setTipArrowDirections];
+        [[AppHelper getAppHelper] showTipForView:self.importBtn InMainView:self.view];
+    }
 }
 
 - (NSString*) getSGBPath
@@ -962,14 +985,29 @@ BOOL missingAlertShown;
 
 - (IBAction)backToScenes:(id)sender {
    
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"backPressed"]) {
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+        [self setTipArrowDirections];
+        [[AppHelper getAppHelper] showTipForView:self.backButton InMainView:self.view];
+        [[AppHelper getAppHelper] showTipForView:self.exportBtn InMainView:self.view];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"backPressed"];
+    } else {
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+        [self exitScene];
+    }
+}
+
+- (void) exitScene
+{
+    [self addFabricEvent:@"BackToScenes" WithAttribute:-1];
     if(editorScene)
         editorScene->freezeRendering = true;
     if(editorScene && editorScene->isPlaying) {
         [self stopPlaying];
         editorScene->freezeRendering = false;
         return;
-            }
-
+    }
+    
     if(editorScene)
         editorScene->isPreviewMode = false;
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
@@ -1002,7 +1040,33 @@ BOOL missingAlertShown;
     [self hideLoadingActivity];
 }
 
+- (IBAction)toolTipAction:(id)sender {
+    
+    [self setTipArrowDirections];
+    [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+}
+
+- (void) setTipArrowDirections
+{
+    NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+    self.importBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.animationBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.optionsBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.exportBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.rotateBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.playBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.objectList.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.undoBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"1";
+    self.redoBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"";
+    self.undoBtn.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"Undo / Redo your actions.";
+    self.redoBtn.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"Undo / Redo your actions." : @"";
+
+}
+
 - (IBAction)moveLastAction:(id)sender {
+    
+    if(sender != nil)
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
     if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW){
         if(editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW){
             
@@ -1068,6 +1132,8 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)moveFirstAction:(id)sender {
+    
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
     if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_OBJVIEW){
         if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1) == RIG_MODE_OBJVIEW) {
             [self.view endEditing:YES];
@@ -1107,6 +1173,7 @@ BOOL missingAlertShown;
 
 - (void) deallocateAutoRigOnMainThread:(NSNumber*) object
 {
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     if(editorScene->rigMan->deallocAutoRig([object boolValue])) {
         editorScene->enterOrExitAutoRigMode(false);
@@ -1298,6 +1365,9 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
+       [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
+    
     BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
     [_popUpVc.view setClipsToBounds:YES];
@@ -1500,7 +1570,8 @@ BOOL missingAlertShown;
         
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] AndMirrorState:state];
+        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
+        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
         self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 320);
@@ -2004,7 +2075,6 @@ BOOL missingAlertShown;
 {
     int lightType = [object intValue];
     editorScene->updateDirectionLine();
-    editorScene->updateLightMesh(lightType);
     [self setupEnableDisableControls];
 }
 
@@ -2387,7 +2457,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 isVideoOrImageOrParticle = true;
         }
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] AndMirrorState:state];
+        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
+        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
         self.popoverController.popoverContentSize =(isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 320);
@@ -2562,11 +2633,27 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
         objVc.objSlideDelegate=self;
         [self showOrHideLeftView:YES withView:objVc.view];
     }
+    NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+    objVc.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+    objVc.importBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+    objVc.colorWheelBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+    objVc.addBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+
 }
 
 -(void) updateAssetListInScenes
 {
     [assetsInScenes removeAllObjects];
+    
+    if(editorScene && editorScene->nodes.size() == 3 && ![[AppHelper getAppHelper] userDefaultsForKey:@"objectImported"]) {
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+        [self setTipArrowDirections];
+        [[AppHelper getAppHelper] showTipForView:self.animationBtn InMainView:self.view];
+        [[AppHelper getAppHelper] showTipForView:self.optionsBtn InMainView:self.view];
+        [[AppHelper getAppHelper] showTipForView:self.rotateBtn InMainView:self.view];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"objectImported"];
+    }
+    
     for(int i = 0; i < editorScene->nodes.size(); i++){
         NSString* name = [self stringWithwstring:editorScene->nodes[i]->name];
         if(name == nil)
@@ -2607,10 +2694,32 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
 
 - (void)objectSelectionCompleted:(int)assetIndex
 {
+    if(!editorScene)
+        return;
+    
     bool isMultiSelectenabled= [[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
     editorScene->selectMan->selectObject(assetIndex,isMultiSelectenabled);
     [self setupEnableDisableControls];
     
+}
+
+- (void) loadAnimationSelectionSliderWithType:(ANIMATION_TYPE) animType
+{
+    if([Utility IsPadDevice]){
+        animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:animType  EditorScene:editorScene FirstTime:YES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+        animationsliderVC.delegate = self;
+        [self showOrHideLeftView:YES withView:animationsliderVC.view];
+    }
+    else{
+        animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:animType EditorScene:editorScene FirstTime:YES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+        animationsliderVC.delegate = self;
+        [self showOrHideLeftView:YES withView:animationsliderVC.view];
+    }
+    NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+    animationsliderVC.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+    animationsliderVC.categoryBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+    animationsliderVC.addBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+
 }
 
 #pragma mark PopUpViewConrollerDelegate
@@ -2626,16 +2735,7 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
         }
         else{
             ANIMATION_TYPE animType = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN) ? TEXT_ANIMATION : RIG_ANIMATION;
-            if([Utility IsPadDevice]){
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSlider" bundle:Nil withType:animType  EditorScene:editorScene FirstTime:YES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-                animationsliderVC.delegate = self;
-                [self showOrHideLeftView:YES withView:animationsliderVC.view];
-            }
-            else{
-                animationsliderVC =[[AnimationSelectionSlider alloc] initWithNibName:@"AnimationSelectionSliderPhone" bundle:Nil withType:animType EditorScene:editorScene FirstTime:YES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-                animationsliderVC.delegate = self;
-                [self showOrHideLeftView:YES withView:animationsliderVC.view];
-            }
+            [self loadAnimationSelectionSliderWithType:animType];
         }
     }
     else if(indexValue==SAVE_ANIMATION){
@@ -2661,9 +2761,10 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
 
 - (void) importBtnDelegateAction:(int)indexValue{
     
+    [self addFabricEvent:@"ImportAction" WithAttribute:indexValue];
     switch (indexValue) {
         case IMPORT_PARTICLE:
-        case IMPORT_MODELS:
+        case IMPORT_MODELS: {
             if([Utility IsPadDevice]){
                 [self.popoverController dismissPopoverAnimated:YES];
                 assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
@@ -2676,9 +2777,14 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
                 assetSelectionSlider.assetSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
             }
+            NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+            assetSelectionSlider.modelCategory.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            assetSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            assetSelectionSlider.addToSceneBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+
             break;
-        case IMPORT_VIDEO:
-        case IMPORT_IMAGES:
+        }   case IMPORT_VIDEO:
+            case IMPORT_IMAGES:
             if([Utility IsPadDevice])
             {
                 [self.popoverController dismissPopoverAnimated:YES];
@@ -2716,7 +2822,7 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
             [self.popoverController dismissPopoverAnimated:YES];
             [self importAdditionalLight];
             break;
-        case IMPORT_OBJFILE:
+        case IMPORT_OBJFILE: {
             if([Utility IsPadDevice]){
                 [self.popoverController dismissPopoverAnimated:YES];
                 objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:IMPORT_OBJFILE];
@@ -2729,7 +2835,13 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
                 objVc.objSlideDelegate=self;
                 [self showOrHideLeftView:YES withView:objVc.view];
             }
+            NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+            objVc.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            objVc.importBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            objVc.colorWheelBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            objVc.addBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
             break;
+        }
         case IMPORT_ADDBONE:{
             [self.popoverController dismissPopoverAnimated:YES];
             NODE_TYPE selectedNodeType = NODE_UNDEFINED;
@@ -2770,6 +2882,14 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
                 textSelectionSlider.textSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:textSelectionSlider.view];
             }
+            NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+            textSelectionSlider.inputText.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            textSelectionSlider.colorWheelbtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            textSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            textSelectionSlider.bevelSlider.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            textSelectionSlider.addToScene.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+            textSelectionSlider.dummyRight.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"Toggle between store fonts and the fonts you have imported.";
+            textSelectionSlider.dummyLeft.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"Toggle between store fonts and the fonts you have imported." : @"";
             break;
         }
         default:
@@ -2777,8 +2897,51 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
     }
 }
 
+- (void) addFabricEvent:(NSString*)eventName WithAttribute:(int)indexValue
+{
+    NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
+
+    switch (indexValue) {
+        case IMPORT_PARTICLE:
+            [attributes setObject:@"Particles" forKey:@"Import"];
+            break;
+        case IMPORT_MODELS:
+            [attributes setObject:@"Models" forKey:@"Import"];
+            break;
+        case IMPORT_IMAGES:
+            [attributes setObject:@"Images" forKey:@"Import"];
+            break;
+        case IMPORT_VIDEO:
+            [attributes setObject:@"Videos" forKey:@"Import"];
+            break;
+        case IMPORT_TEXT:
+            [attributes setObject:@"Text" forKey:@"Import"];
+            break;
+        case IMPORT_ADDBONE:
+            [attributes setObject:@"AddBone" forKey:@"Import"];
+            break;
+        case IMPORT_OBJFILE:
+            [attributes setObject:@"OBJ" forKey:@"Import"];
+            break;
+        case IMPORT_LIGHT:
+            [attributes setObject:@"Light" forKey:@"Import"];
+            break;
+        case IMAGE_EXPORT:
+            [attributes setObject:@"Image" forKey:@"Export"];
+            break;
+        case VIDEO_EXPORT:
+            [attributes setObject:@"Video" forKey:@"Export"];
+            break;
+        default:
+            break;
+    }
+        [Answers logCustomEventWithName:eventName customAttributes:attributes];
+}
+
 - (void) beginRigging
 {
+    
+    [self.autoRigLbl setHidden:NO];
     [self showOrHideProgress:SHOW_PROGRESS];
     [self.addJointBtn setHidden:NO];
     [self.addJointBtn setEnabled:NO];
@@ -2795,6 +2958,12 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
     [self autoRigMirrorBtnHandler];
     [self moveLastAction:nil];
     [self showOrHideProgress:HIDE_PROGRESS];
+    
+    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"AutoRigTip"]) {
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+        [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"AutoRigTip"];
+    }
 }
 
 - (void) exportBtnDelegateAction:(int)indexValue {
@@ -2802,6 +2971,8 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
         editorScene->selectMan->unselectObjects();
         [self setupEnableDisableControls];
     }
+    
+    [self addFabricEvent:@"ExportAction" WithAttribute:IMPORT_PARTICLE+indexValue+1];
     if(indexValue==EXPORT_IMAGE) {
         renderBgColor = Vector4(0.1,0.1,0.1,1.0);
         if([Utility IsPadDevice]) {
@@ -3074,6 +3245,10 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
     else {
         NSLog(@"Error saving animation");
     }
+    
+    [self loadAnimationSelectionSliderWithType:(ANIMATION_TYPE)type];
+    animationsliderVC.tableType = 7;
+    [animationsliderVC openMyAnimations];
 }
 
 #pragma Download Missing Assets
@@ -3288,6 +3463,20 @@ void downloadFile(NSString* url, NSString* fileName)
     }
 }
 
+- (void) setTextureSmoothStatus:(BOOL) status
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
+        editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
+        if(smgr->device == OPENGLES2)
+            [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
+    }
+}
+
+- (void) reloadTexture
+{
+    editorScene->changeTexture(editorScene->nodes[editorScene->selectedNodeId]->textureName, Vector3(1.0), false, false);
+}
+
 - (void) switchMirror
 {
     editorScene->switchMirrorState();
@@ -3377,10 +3566,14 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if([Utility IsPadDevice]) {
         SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:NO];
+        sceneSelectionView.fromLoadingView = false;
+        sceneSelectionView.isAppFirstTime = false;
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     } else {
         SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ?  @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:NO];
+        sceneSelectionView.fromLoadingView = false;
+        sceneSelectionView.isAppFirstTime = false;
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     }
@@ -3417,6 +3610,23 @@ void downloadFile(NSString* url, NSString* fileName)
     [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
     
+}
+
+- (void) showPreview:(NSString*) outputPath
+{
+    [self performSelectorOnMainThread:@selector(showPreviewInMainThread:) withObject:outputPath waitUntilDone:NO];
+}
+
+- (void) showPreviewInMainThread:(NSString*) outputPath
+{
+    int mediaType = [[outputPath pathExtension] isEqualToString:@"png"] ? 0 : 1;
+    
+    if([Utility IsPadDevice]) {
+        MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:@"MediaPreviewVC" bundle:nil mediaType:mediaType medPath:outputPath];
+            [self dismissView];
+            medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+            [self presentViewControllerInCurrentView:medPreview];
+    }
 }
 
 #pragma Show Or Hide Progress
@@ -3656,21 +3866,26 @@ void downloadFile(NSString* url, NSString* fileName)
     if(editorScene && editorScene->isRigMode && (editorScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS || editorScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES)){
         status = (editorScene->rigMan->isNodeSelected && editorScene->rigMan->skeletonType == SKELETON_HUMAN) ? NO : YES;
     }
+    [self.autoRigLbl setHidden:(!editorScene->isRigMode)];
     [_autorigMirrorBtnHolder setHidden:status];
     [_autorigMirrorLable setHidden:status];
     [_autoRigMirrorSwitch setHidden:status];    
     if(editorScene && editorScene->isRigMode){
         switch (editorScene->rigMan->sceneMode) {
             case RIG_MODE_OBJVIEW:
+                [self.autoRigLbl setText:@"Place the bones in appropriate positions within the model."];
                 _rigScreenLabel.text = @"ATTACH SKELETON";
                 break;
             case RIG_MODE_MOVE_JOINTS:
+                [self.autoRigLbl setText:@"Place the bones in appropriate positions within the model."];
                 _rigScreenLabel.text = @"ATTACH SKELETON";
                 break;
             case RIG_MODE_EDIT_ENVELOPES:
+                [self.autoRigLbl setText:@"Scale each bone's envelope to cover the surrounding mesh."];
                 _rigScreenLabel.text = @"ADJUST ENVELOP";
                 break;
             case RIG_MODE_PREVIEW:{
+                [self.autoRigLbl setText:@"Make sure the rig is perfect by animating the model."];
                 _rigScreenLabel.text = @"PREVIEW";
                 break;
             }

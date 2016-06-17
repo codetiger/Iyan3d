@@ -15,11 +15,12 @@
 @protocol LoggedinViewControllerDelegat
 - (void)dismissView;
 - (void) showOrHideProgress:(BOOL) value;
+- (void) showPreview:(NSString*) outputPath;
 @end
 
 @class GIDSignIn;
 
-@interface LoggedInViewController : GAITrackedViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate, AppHelperDelegate>{
+@interface LoggedInViewController : GAITrackedViewController<UITableViewDataSource,UITableViewDelegate,GIDSignInDelegate,GIDSignInUIDelegate, AppHelperDelegate, UIAlertViewDelegate>{
     
     CacheSystem* cache;
     NSMutableArray *renderData;
@@ -28,11 +29,15 @@
     NSArray *renderSectionTitles;
     NSOperationQueue* downloadQueue;
     int downloadCompletedTaskIds;
+    NSString* outputFile;
     
 }
 - (IBAction)add500Credits:(id)sender;
 - (IBAction)add2KCredits:(id)sender;
 - (IBAction)add5KCredits:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIImageView *loginTypeImg;
+@property (weak, nonatomic) IBOutlet UILabel *userNameLbl;
 
 @property (weak, nonatomic) IBOutlet UIView *creditsView;
 @property (weak, nonatomic) IBOutlet UITableView *renderStatus;
@@ -41,4 +46,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *creditsLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *creditsLoading;
 - (IBAction)signOutBtn:(id)sender;
+- (IBAction)manageAccountAction:(id)sender;
 @end

@@ -493,6 +493,7 @@ void SGAutoRigSceneManager::changeEnvelopeScale(Vector3 scale, bool isChanged)
         updateEnvelopes();
         rigScene->updater->updateOBJVertexColor();
         AutoRigHelper::updateOBJVertexColors(sgmNode, envelopes, rigKeys);
+        
     }
 }
 
@@ -517,7 +518,7 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
     if(jointId<=1) return;  //skipping envelope between hip and it's parent.
     int parentId = rigKeys[jointId].parentId;
     
-    if(envelopeSgNod == NULL){
+    if(envelopeSgNod == NULL) {
         envelopeSgNod = new SGNode(NODE_RIG);
         AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr",rigScene->shaderMGR->deviceType);
         envelopeSgNod->setSkinningData((SkinMesh*)mesh);

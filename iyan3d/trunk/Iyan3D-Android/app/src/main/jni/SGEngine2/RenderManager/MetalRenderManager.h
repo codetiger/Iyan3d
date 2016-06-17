@@ -50,6 +50,7 @@ private:
     id <MTLRenderCommandEncoder> rttRenderCMDBuffer;
         id <MTLRenderCommandEncoder> mainRenderCMDBuffer;
     id <CAMetalDrawable> drawable;
+        
     dispatch_semaphore_t        _inflight_semaphore;
     UIView *renderView;
     bool isCmdBufferCommited,isEncodingEnded;
@@ -81,8 +82,8 @@ public:
     bool PrepareNode(shared_ptr<Node> node,int meshBufferIndex, bool isRTT, int nodeIndex = 0);
     void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);
     void drawPrimitives(MTLPrimitiveType primitiveType,unsigned int count,MTLIndexType type,id <MTLBuffer> indexBuf, GLsizei instanceCount);
-    void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragment , int userValue = 0);
-    void BindUniform(DATA_TYPE type,id<MTLBuffer> buf,void* value,int count,int parameterIndex,id<MTLTexture> tex,string matName,int nodeIndex, bool isFragmentData);
+    void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragment , int userValue = 0, bool blurTex = true);
+    void BindUniform(DATA_TYPE type,id<MTLBuffer> buf,void* value,int count,int parameterIndex,id<MTLTexture> tex,string matName,int nodeIndex, bool isFragmentData, bool blurTex = true);
     void BindAttribute(shared_ptr<Node> node,int nodeIndx);
     void (*NodePropertyCallBack)(shared_ptr<Node> node);
     void setActiveCamera(shared_ptr<CameraNode> camera);
@@ -96,7 +97,7 @@ public:
     Texture* createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height);
     void setFrameBufferObjects(u_int32_t framebuff , u_int32_t colorbuff , u_int32_t depthduff);
     void useMaterialToRender(Material *mat);
-    void bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,ushort count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData);
+    void bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,ushort count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex = true);
     void setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass = false,Vector4 color = Vector4(1.0,1.0,1.0,1.0));
     Vector4 getPixelColor(Vector2 touchPosition,Texture* texture);
     void createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE , bool updateBothBuffers = true);

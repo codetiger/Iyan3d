@@ -20,6 +20,7 @@
 -(void)statusForRestorePurchase:(NSNumber *)object;
 -(void)transactionCancelled;
 -(void)setAnimationData:(NSArray*)allAnimations;
+-(void) performLocalTasks;
 @end
 
 @interface AppHelper : NSObject <SKProductsRequestDelegate,SKPaymentTransactionObserver>
@@ -35,6 +36,7 @@
     NSMutableArray *restoreIdArr;
     NSString *fontDirPath;
     NSDictionary* helpStatements;
+    NSMutableArray * toolTips;
 }
 
 @property (nonatomic, assign) id  <AppHelperDelegate> delegate;
@@ -50,7 +52,7 @@
 -(void) removeTransactionObserver;
 -(void) initHelper;
 -(void) missingAlertView;
--(void) downloadJsonData:(BOOL) forceUpdate;
+-(void) downloadJsonData;
 -(BOOL) checkInternetConnected;
 -(NSLocale*) getPriceLocale;
 -(NSMutableArray*) getRestoreIds;
@@ -82,5 +84,9 @@
 - (NSData*) getReceiptData;
 - (void) verifyRestorePurchase;
 
+// Tool Tip methods
+
+- (void) toggleHelp:(UIViewController*) vc Enable:(BOOL)enable;
+- (void) showTipForView:(UIView*) subView InMainView:(UIView*)view;
 
 @end

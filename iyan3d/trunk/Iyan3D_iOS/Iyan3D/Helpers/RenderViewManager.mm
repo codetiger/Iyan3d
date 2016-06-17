@@ -169,14 +169,14 @@ void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
         editorScene->setControlsUniforms(nodeID, matName);
     else if (callbackFuncName.compare("RotationCircle") == 0)
         editorScene->setRotationCircleUniforms(nodeID, matName);
+    else if (callbackFuncName.compare("LightCircles") == 0 || callbackFuncName.compare("LightLine") == 0)
+        editorScene->setLightLineUniforms(nodeID, matName);
     else if (callbackFuncName.compare("GreenLines") == 0)
         editorScene->setGridLinesUniforms(nodeID, 3, matName);
     else if (callbackFuncName.compare("BlueLines") == 0)
         editorScene->setGridLinesUniforms(nodeID, 2, matName);
     else if (callbackFuncName.compare("RedLines") == 0)
         editorScene->setGridLinesUniforms(nodeID, 1, matName);
-    else if (callbackFuncName.compare("LightLine") == 0)
-        editorScene->setGridLinesUniforms(nodeID, 4, matName);
     else if(callbackFuncName.compare("ObjUniforms") == 0){
         editorScene->rigMan->objNodeCallBack(matName);
     }else if(callbackFuncName.compare("jointUniforms") == 0){
@@ -208,7 +208,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             return editorScene->isControlsTransparent(nodeId, callbackFuncName);
         else if (callbackFuncName.compare("setOBJUniforms") == 0)
             return false;
-        else if (callbackFuncName.compare("RotationCircle") == 0)
+        else if (callbackFuncName.compare("RotationCircle") == 0 || callbackFuncName.compare("LightCircles") == 0)
             return false;
         else if (callbackFuncName.compare("GreenLines") == 0)
             return false;
@@ -436,6 +436,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 //    isTapped = true;
     CGPoint position;
     position = [rec locationInView:self.renderView];
+    
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
     
     if(editorScene->renHelper->isMovingCameraPreview(Vector2(position.x, position.y) * screenScale)){
         editorScene->setLightingOn();

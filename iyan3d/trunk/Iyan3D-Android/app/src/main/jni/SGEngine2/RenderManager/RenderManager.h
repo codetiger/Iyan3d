@@ -54,7 +54,7 @@ public:
     virtual void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0) = 0;
     virtual void setActiveCamera(shared_ptr<CameraNode> camera) = 0;
     virtual shared_ptr<CameraNode> getActiveCamera() = 0;
-    virtual void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragmentData, int userValue = 0) = 0;
+    virtual void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragmentData, int userValue = 0, bool blurTex = true) = 0;
     virtual void draw3DLine(Vector3 start,Vector3 end,Material *material) = 0;
     virtual void draw3DLines(vector<Vector3> vPositions,Material *material) = 0;
     virtual void clearDepthBuffer() = 0;
@@ -63,7 +63,7 @@ public:
     virtual Texture* createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height) = 0;
     virtual void endDisplay() = 0;
     virtual void useMaterialToRender(Material *mat) = 0;
-    virtual void bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData) = 0;
+    virtual void bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex = true) = 0;
     virtual void setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass,Vector4 color) = 0;
     virtual void writeImageToFile(Texture *texture , char* filePath , IMAGE_FLIP flipType = FLIP_HORIZONTAL) = 0;
     virtual Vector4 getPixelColor(Vector2 touchPos,Texture* texture) = 0;

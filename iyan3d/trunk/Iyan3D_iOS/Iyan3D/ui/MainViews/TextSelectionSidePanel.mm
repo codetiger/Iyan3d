@@ -67,9 +67,19 @@
     self.addToScene.layer.cornerRadius=CORNER_RADIUS;
     self.bevelSlider.value = bevelRadius;
     _inputText.delegate = self;
+    UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    tapGest.delegate = self;
+    [self.view addGestureRecognizer:tapGest];
     //_inputText.returnKeyType = UIReturnKeyDone  ;
 
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
+}
+
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField{
     if(isCanceled) return NO;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoggedInViewController">
@@ -10,8 +10,10 @@
                 <outlet property="creditsLabel" destination="QeD-hz-DuD" id="4Bj-Yr-zCO"/>
                 <outlet property="creditsLoading" destination="T4I-9o-jS1" id="K9b-o3-FT2"/>
                 <outlet property="creditsView" destination="74D-nF-Tef" id="hVf-IE-GhJ"/>
+                <outlet property="loginTypeImg" destination="rXe-H5-Gdc" id="AN6-pV-SY8"/>
                 <outlet property="renderStatus" destination="ttT-PA-bti" id="uWd-FS-jgs"/>
                 <outlet property="signOutBtn" destination="iTa-Bm-te9" id="nC1-FG-VIt"/>
+                <outlet property="userNameLbl" destination="fo7-2l-sQ6" id="3RH-KI-jPM"/>
                 <outlet property="view" destination="iN0-l3-epB" id="EdW-pj-n6W"/>
             </connections>
         </placeholder>
@@ -21,23 +23,31 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view autoresizesSubviews="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="biq-47-Emr">
-                    <rect key="frame" x="0.0" y="223" width="230" height="30"/>
+                    <rect key="frame" x="0.0" y="229" width="230" height="24"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTa-Bm-te9">
-                            <rect key="frame" x="158" y="0.0" width="72" height="30"/>
+                            <rect key="frame" x="158" y="-5" width="72" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" title="Sign Out"/>
                             <connections>
                                 <action selector="signOutBtn:" destination="-1" eventType="touchUpInside" id="ST0-PJ-yE8"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rsk-Je-0VN">
+                            <rect key="frame" x="8" y="-3" width="123" height="30"/>
+                            <state key="normal" title="Manage Account"/>
+                            <connections>
+                                <action selector="manageAccountAction:" destination="-1" eventType="touchUpInside" id="zbV-4C-WOH"/>
+                            </connections>
+                        </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.78823529410000004" green="0.78823529410000004" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WhT-zs-s8M" userLabel="renderStatus">
-                    <rect key="frame" x="0.0" y="75" width="230" height="146"/>
+                    <rect key="frame" x="0.0" y="87" width="230" height="134"/>
                     <subviews>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="39" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ttT-PA-bti">
-                            <rect key="frame" x="0.0" y="0.0" width="230" height="146"/>
+                            <rect key="frame" x="0.0" y="6" width="230" height="128"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="npo-ku-KUH"/>
@@ -48,7 +58,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="74D-nF-Tef" userLabel="totalCredits">
-                    <rect key="frame" x="8" y="8" width="80" height="64"/>
+                    <rect key="frame" x="8" y="28" width="80" height="64"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DSl-vz-YoS">
                             <rect key="frame" x="0.0" y="36" width="80" height="21"/>
@@ -70,13 +80,13 @@
                     <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add Credits" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dw9-zo-y7s">
-                    <rect key="frame" x="115" y="11" width="90" height="21"/>
+                    <rect key="frame" x="115" y="31" width="90" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnJ-66-BRM">
-                    <rect key="frame" x="95" y="40" width="40" height="32"/>
+                    <rect key="frame" x="95" y="60" width="40" height="32"/>
                     <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="5k"/>
                     <connections>
@@ -84,7 +94,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IPj-AY-F5l">
-                    <rect key="frame" x="185" y="40" width="40" height="32"/>
+                    <rect key="frame" x="185" y="60" width="40" height="32"/>
                     <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="50k"/>
                     <connections>
@@ -92,13 +102,28 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lv5-3S-jfg">
-                    <rect key="frame" x="140" y="40" width="40" height="32"/>
+                    <rect key="frame" x="140" y="60" width="40" height="32"/>
                     <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" title="20k"/>
                     <connections>
                         <action selector="add2KCredits:" destination="-1" eventType="touchUpInside" id="M58-6M-8Tn"/>
                     </connections>
                 </button>
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OrT-15-w5u">
+                    <rect key="frame" x="0.0" y="-1" width="230" height="24"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fo7-2l-sQ6">
+                            <rect key="frame" x="39" y="3" width="177" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rXe-H5-Gdc">
+                    <rect key="frame" x="10" y="-1" width="25" height="25"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>

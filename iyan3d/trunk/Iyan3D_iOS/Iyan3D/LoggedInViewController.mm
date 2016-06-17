@@ -70,7 +70,23 @@
     [self requestCredits];
     NSNumber *credits = [[AppHelper getAppHelper] userDefaultsForKey:@"credits"];
     self.creditsLabel.text = [NSString stringWithFormat:@"%@", credits];
+    NSString * userName = [[AppHelper getAppHelper] userDefaultsForKey:@"username"];
+    if([userName length] > 1)
+        self.userNameLbl.text = userName;
+    
+    int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
+    NSString* extension = [Utility IsPadDevice] ? @"_Pad.png" : @"_Phone.png";
+    
+    
+    if(signinType == GOOGLE_SIGNIN)
+       [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"gPlus%@", extension]]];
+    else if(signinType == FACEBOOK_SIGNIN)
+        [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"fb%@", extension]]];
+    else if(signinType == TWITTER_SIGNIN)
+        [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"twit%@", extension]]];
 
+    
+    
     [GIDSignIn sharedInstance].uiDelegate = self;
     [GIDSignIn sharedInstance].delegate = self;
     
@@ -247,6 +263,18 @@
 
 - (void) downloadAndSaveFile:(int) taskId WithAction:(int)action AndType:(int) type
 {
+    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [docPaths objectAtIndex:0];
+    
+    NSString *extension = (type == VIDEO_FILE) ? @"mp4" : @"png";
+    NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.%@", documentsDirectory, taskId, extension];
+    
+    if(action == DOWNLOAD_FILE && [[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
+        outputFile = outputFilePath;
+        [self.delegare showPreview:outputFile];
+        return;
+    }
+    
     NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/download.php"];
     NSString *postPath = @"https://www.iyan3dapp.com/appapi/download.php";
     
@@ -263,12 +291,13 @@
         if(action == GET_FILE_TYPE)
             [self downloadAndSaveFile:taskId WithAction:DOWNLOAD_FILE AndType:[[operation responseString] intValue]];
         else {
-            NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString* documentsDirectory = [docPaths objectAtIndex:0];
-
-            NSString *extension = (type == VIDEO_FILE) ? @".mp4" : @".png";
-            NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.%@", documentsDirectory, taskId, extension];
-            
+////            NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+////            NSString* documentsDirectory = [docPaths objectAtIndex:0];
+////
+////            NSString *extension = (type == VIDEO_FILE) ? @"mp4" : @"png";
+//            NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.%@", documentsDirectory, taskId, extension];
+            outputFile = outputFilePath;
+            NSLog(@" \n Output File %@ ", outputFile);
             NSData *fileData = [operation responseData];
             [fileData writeToFile:outputFilePath atomically:YES];
             
@@ -328,13 +357,25 @@
         message = @"There is a problem downloading the image/video. Please try again later.";
     
     UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Information" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    alert.delegate = self;
+    
     [alert show];
     
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if([outputFile length] > 5) {
+        [self.delegare showPreview:outputFile];
+    }
+}
+
 - (IBAction)signOutBtn:(id)sender
 {
-    NSLog(@"Signout Clicked");
     if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
         
         int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
@@ -350,6 +391,10 @@
         [self reportAuthStatus];
         [self.delegare dismissView];
     }
+}
+
+- (IBAction)manageAccountAction:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/cms"]];
 }
 
 - (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error {

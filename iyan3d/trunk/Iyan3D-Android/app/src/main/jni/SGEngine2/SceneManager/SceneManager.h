@@ -58,18 +58,19 @@ public:
     void RemoveAllNodes();
     void Render(bool isRTT);
     void RenderNode(bool isRTT, int index,bool clearDepthBuffer = false,METAL_DEPTH_FUNCTION func = CompareFunctionLessEqual,bool changeDepthState = false);
+    void RenderNodeAlone(shared_ptr<Node> node);
     void setDisplayResolution(int width,int height);
     void setActiveCamera(shared_ptr<Node> node);
     void setDepthTest(bool enable);
     shared_ptr<CameraNode> getActiveCamera();
-    Texture* loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type);
+    Texture* loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type, bool blurTexture);
     Texture* loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type);
     shared_ptr<MeshNode> createNodeFromMesh(Mesh* mesh,string callBackFuncName,MESH_TYPE meshType = MESH_TYPE_LITE,int matIndex = -1);
     shared_ptr<AnimatedMeshNode> createAnimatedNodeFromMesh(AnimatedMesh* mesh,string callBackFuncName, rig_type rigType = CHARACTER_RIG ,MESH_TYPE meshType = MESH_TYPE_LITE);
     shared_ptr<ParticleManager> createParticlesFromMesh(Mesh* mesh,string callBackFuncName,MESH_TYPE meshType = MESH_TYPE_LITE,int matIndex = -1);
     shared_ptr<CameraNode> createCameraNode(string callBackFuncName);
     shared_ptr<PlaneMeshNode> createPlaneNode(string callBackFuncName , float aspectRatio);
-    shared_ptr<SGCircleNode> createCircleNode(int totVertices,int radius,string callBackFuncName);
+    shared_ptr<SGCircleNode> createCircleNode(int totVertices, float radius,string callBackFuncName, bool allAxis = false);
     shared_ptr<LightNode> createLightNode(Mesh *mesh, string callBackFuncName);
     shared_ptr<Node> createInstancedNode(shared_ptr<Node> original, string callBackFuncName);
     
@@ -84,7 +85,7 @@ public:
     Material* getMaterialByName(string name);
     int getNodeIndexByID(int id);
     void setPropertyValue(Material *material,string name,float* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex = 0,int nodeIndex = -1,Texture *tex = NULL,int userValue = 0);
-    void setPropertyValue(Material *material,string name,int* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex = 0,int nodeIndex = -1,Texture *tex = NULL,int userValue = 0);
+    void setPropertyValue(Material *material,string name,int* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex = 0,int nodeIndex = -1,Texture *tex = NULL,int userValue = 0, bool blurTex = true);
     bool RemoveMaterialByIndex(u16 index);
     bool RemoveMaterial(Material *mat);
     void draw3DLine(Vector3 start , Vector3 end , Vector3 color , Material *material,int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex);

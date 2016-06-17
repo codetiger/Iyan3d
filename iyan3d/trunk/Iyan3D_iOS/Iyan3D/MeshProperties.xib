@@ -16,6 +16,7 @@
                 <outlet property="reflectionSlider" destination="cEw-ia-XJQ" id="z2C-It-4xf"/>
                 <outlet property="refractionSlider" destination="Gl6-BX-ehp" id="yzc-8y-7sD"/>
                 <outlet property="skinBtn" destination="MT7-Hm-3m1" id="hX4-Qa-0TN"/>
+                <outlet property="textureSwitch" destination="iJR-Nb-aYV" id="vpo-uF-HI8"/>
                 <outlet property="velocityLoading" destination="H6Y-dk-0UN" id="NtS-9w-dVj"/>
                 <outlet property="velocitySlider" destination="WmX-9F-9Kk" id="IXR-1T-gJh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -52,13 +53,13 @@
                             </connections>
                         </slider>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sr8-nc-TNF">
-                            <rect key="frame" x="203" y="155" width="51" height="31"/>
+                            <rect key="frame" x="138" y="155" width="51" height="31"/>
                             <connections>
                                 <action selector="visibleValueChanged:" destination="-1" eventType="valueChanged" id="Jcj-ax-av8"/>
                             </connections>
                         </switch>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YBt-xE-ZrT">
-                            <rect key="frame" x="350" y="155" width="51" height="31"/>
+                            <rect key="frame" x="255" y="155" width="51" height="31"/>
                             <connections>
                                 <action selector="mirrorBtnAction:" destination="-1" eventType="valueChanged" id="LfM-X2-pNB"/>
                             </connections>
@@ -94,12 +95,23 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="VISIBLITY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sab-49-Hjo">
-                            <rect key="frame" x="197" y="134" width="64" height="21"/>
+                            <rect key="frame" x="132" y="134" width="64" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="olt-bO-PVX">
-                            <rect key="frame" x="349" y="134" width="51" height="21"/>
+                            <rect key="frame" x="254" y="134" width="51" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="iJR-Nb-aYV">
+                            <rect key="frame" x="365" y="155" width="51" height="31"/>
+                            <connections>
+                                <action selector="textureSmoothSwitchAction:" destination="-1" eventType="valueChanged" id="RYX-EK-xAk"/>
+                            </connections>
+                        </switch>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEXTURE SMOOTH" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZVG-Hb-kaY">
+                            <rect key="frame" x="338" y="134" width="102" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -165,13 +177,13 @@
                             </connections>
                         </button>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="azO-so-DyO">
-                            <rect key="frame" x="53" y="155" width="51" height="31"/>
+                            <rect key="frame" x="28" y="155" width="51" height="31"/>
                             <connections>
                                 <action selector="lightingSwitchChanged:" destination="-1" eventType="valueChanged" id="J7g-iv-pk0"/>
                             </connections>
                         </switch>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="LIGHT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gY-GU-NrM">
-                            <rect key="frame" x="58" y="134" width="39" height="21"/>
+                            <rect key="frame" x="33" y="134" width="39" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>

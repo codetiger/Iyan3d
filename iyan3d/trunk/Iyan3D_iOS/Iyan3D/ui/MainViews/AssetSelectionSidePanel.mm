@@ -77,11 +77,21 @@
         [self performSelectorInBackground:@selector(downloadAssetsData) withObject:nil];
     } else
         [self.assetLoading setHidden:YES];
+    
+    UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    tapGest.delegate = self;
+    [self.view addGestureRecognizer:tapGest];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
 }
 
 - (void) downloadAssetsData
 {
-    [[AppHelper getAppHelper] downloadJsonData:YES];
+    [[AppHelper getAppHelper] downloadJsonData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

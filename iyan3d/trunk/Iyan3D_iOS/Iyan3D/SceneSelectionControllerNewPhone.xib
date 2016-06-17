@@ -31,6 +31,7 @@
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zEZ-Bi-FMZ" userLabel="addBtn">
                             <rect key="frame" x="4" y="13" width="35" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Creates a new scene." identifier="0"/>
                             <state key="normal" image="New.png"/>
                             <connections>
                                 <action selector="addSceneButtonAction:" destination="-1" eventType="touchUpInside" id="oZE-R5-ZNh"/>
@@ -46,14 +47,21 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVH-Bb-pVz">
                             <rect key="frame" x="539" y="19" width="26" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us." identifier="0"/>
                             <state key="normal" image="info-icon.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="rkf-S4-U2u"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="v8h-mb-fY6">
+                            <rect key="frame" x="505" y="19" width="26" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Help_iphone@2X.png"/>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RFC-ob-Zd6">
-                            <rect key="frame" x="504" y="15" width="30" height="31"/>
+                            <rect key="frame" x="467" y="15" width="30" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Manage your account." identifier="1"/>
                             <state key="normal" image="Login-icon.png"/>
                             <connections>
                                 <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="KaR-Yx-tct"/>
@@ -89,6 +97,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Help_iphone@2X.png" width="37" height="36"/>
         <image name="Login-icon.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>

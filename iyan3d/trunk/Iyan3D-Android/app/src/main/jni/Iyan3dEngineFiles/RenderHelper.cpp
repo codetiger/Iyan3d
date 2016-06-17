@@ -617,6 +617,19 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
     }
 }
 
+void RenderHelper::renderEnvelopes()
+{
+    if(renderingScene && renderingScene->isRigMode) {
+        std::map<int , SGNode*> &envelopes = renderingScene->rigMan->envelopes;
+        for(std::map<int,SGNode *> :: iterator it = envelopes.begin(); it!=envelopes.end(); it++){
+            if(it->second->node->getVisible()) {
+                it->second->node->shouldUpdateMesh = true;
+                smgr->RenderNodeAlone(it->second->node);
+            }
+        }
+    }
+}
+
 void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, int frame, Vector4 bgColor)
 {
     if(!renderingScene || !smgr || renderingScene->isRigMode)
@@ -680,7 +693,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         index = (frame > totalImgs) ? frame - (divisor * totalImgs) : frame;
     }
     string watermarkPath = constants::BundlePath + "/wm" + to_string(index) + ".png";
-    renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture" ,watermarkPath, TEXTURE_RGBA8,TEXTURE_BYTE);
+    renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture" ,watermarkPath, TEXTURE_RGBA8,TEXTURE_BYTE, true);
     int waterMarkSize = SceneHelper::screenWidth * 0.2;
     
     if(!removeWaterMark)
@@ -834,8 +847,10 @@ void RenderHelper::rttShadowMap()
     renderingScene->blueGrid->node->setVisible(false);
     renderingScene->redGrid->node->setVisible(false);
     bool isDirectionLineVisible = renderingScene->directionLine->node->getVisible();
+    bool lightCirclesVisible = renderingScene->lightCircles->node->getVisible();
+
     renderingScene->directionLine->node->setVisible(false);
-    
+    renderingScene->lightCircles->node->setVisible(false);
     
     setControlsVisibility(false);
     bool indState = renderingScene->directionIndicator->node->getVisible();
@@ -893,6 +908,7 @@ void RenderHelper::rttShadowMap()
     renderingScene->blueGrid->node->setVisible(true);
     renderingScene->redGrid->node->setVisible(true);
     renderingScene->directionLine->node->setVisible(isDirectionLineVisible);
+    renderingScene->lightCircles->node->setVisible(lightCirclesVisible);
     ShaderManager::isRenderingDepthPass = false;
 }
 

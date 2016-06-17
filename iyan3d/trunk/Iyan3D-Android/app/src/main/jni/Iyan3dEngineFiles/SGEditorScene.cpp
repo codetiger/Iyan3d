@@ -36,6 +36,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     initTextures();
     rotationCircle = SceneHelper::createCircle(smgr);
     directionLine = SceneHelper::createLightDirLine(smgr);
+    lightCircles = SceneHelper::createLightCircles(smgr);
     blueGrid = SceneHelper::createBlueLines(smgr);
     greenGrid = SceneHelper::createGreenLines(smgr);
     redGrid = SceneHelper::createRedLines(smgr);
@@ -200,14 +201,14 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
 
 void SGEditorScene::initTextures()
 {
-    bgTexture = smgr->loadTexture("bgtex",constants::BundlePath +  "/bgImageforall.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+    bgTexture = smgr->loadTexture("bgtex",constants::BundlePath +  "/bgImageforall.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
     touchTexture = smgr->createRenderTargetTexture("TouchTexture", TEXTURE_RGBA8, TEXTURE_BYTE, TOUCH_TEXTURE_WIDTH, TOUCH_TEXTURE_HEIGHT);
-    watermarkTexture = smgr->loadTexture("waterMarkTexture",constants::BundlePath + "/watermark.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+    watermarkTexture = smgr->loadTexture("waterMarkTexture",constants::BundlePath + "/watermark.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
 
     previewTexture = smgr->createRenderTargetTexture("previewTexture", TEXTURE_RGBA8, TEXTURE_BYTE, PREVIEW_TEXTURE_WIDTH, PREVIEW_TEXTURE_HEIGHT);
     thumbnailTexture = smgr->createRenderTargetTexture("thumbnailTexture", TEXTURE_RGBA8, TEXTURE_BYTE, THUMBNAIL_TEXTURE_WIDTH, THUMBNAIL_TEXTURE_HEIGHT);
     shadowTexture = smgr->createRenderTargetTexture("shadowTexture", TEXTURE_DEPTH32, TEXTURE_BYTE, SHADOW_TEXTURE_WIDTH, SHADOW_TEXTURE_HEIGHT);
-    whiteBorderTexture = smgr->loadTexture("whiteborder",constants::BundlePath + "/whiteborder.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+    whiteBorderTexture = smgr->loadTexture("whiteborder",constants::BundlePath + "/whiteborder.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
     
     renderingTextureMap[RESOLUTION[0][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[0][0] , RESOLUTION[0][1]);
     renderingTextureMap[RESOLUTION[1][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[1][0] , RESOLUTION[1][1]);
@@ -242,6 +243,8 @@ void SGEditorScene::renderAll()
         renHelper->drawCircle();
         renHelper->drawMoveAxisLine();
         renHelper->renderControls();
+        if(isRigMode && rigMan)
+            renHelper->renderEnvelopes();
         
 //        if(touchTexture)
 //            smgr->draw2DImage(touchTexture, Vector2(0.0, 150.0), Vector2(1024.0, 1174.0), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
@@ -284,41 +287,32 @@ void SGEditorScene::enableDirectionIndicator()
 void SGEditorScene::updateDirectionLine()
 {
 #ifndef UBUNTU
-    bool status = (selectedNodeId != NOT_EXISTS && (nodes[selectedNodeId]->getType() == NODE_LIGHT || nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT) && nodes[selectedNodeId]->props.specificInt == (int)DIRECTIONAL_LIGHT);
+    bool status = (selectedNodeId != NOT_EXISTS && (nodes[selectedNodeId]->getType() == NODE_LIGHT || nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT));
+    
+    if(!status) {
+        directionLine->node->setVisible(false);
+        lightCircles->node->setVisible(false);
+        return;
+    }
+    
+     bool isDirectionLight = (nodes[selectedNodeId]->props.specificInt == (int)DIRECTIONAL_LIGHT);
         
-        directionLine->node->setVisible(status);
-        if(!status)
-            return;
-        
-        Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(currentFrame, nodes[selectedNodeId]->positionKeys);
+        directionLine->node->setVisible(isDirectionLight);
+        lightCircles->node->setVisible(!isDirectionLight);
+    
+    Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(currentFrame, nodes[selectedNodeId]->positionKeys);
+
+    if(isDirectionLight) {
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(currentFrame, nodes[selectedNodeId]->rotationKeys,true);
 
         directionLine->node->setPosition(position);
         directionLine->node->setRotationInDegrees(MathHelper::toEuler(rotation) * RADTODEG);
+    } else {
+        lightCircles->node->setPosition(position);
+        lightCircles->node->setScale(Vector3(nodes[selectedNodeId]->props.nodeSpecificFloat));
+        lightCircles->node->updateAbsoluteTransformation();
+    }
 #endif
-}
-
-void SGEditorScene::updateLightMesh(int lightType, int nodeId)
-{
-    int nodeIndex = (nodeId == NOT_EXISTS) ? selectedNodeId : nodeId;
-    bool status = (nodeIndex != NOT_EXISTS && (nodes[nodeIndex]->getType() == NODE_LIGHT || nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT));
-    if(!status)
-        return;
-    if(nodes[nodeIndex]->props.specificInt == (int)DIRECTIONAL_LIGHT && dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->getVerticesCount() != SceneHelper::directionalLightMesh->getVerticesCount()) {
-        delete dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh;
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = NULL;
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = new Mesh();
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->copyDataFromMesh(SceneHelper::directionalLightMesh);
-        nodes[nodeIndex]->node->shouldUpdateMesh = true;
-    }
-    else if(nodes[nodeIndex]->props.specificInt == (int)POINT_LIGHT && dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->getVerticesCount() != SceneHelper::pointLightMesh->getVerticesCount()) {
-        delete dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh;
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = NULL;
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh = new Mesh();
-        dynamic_pointer_cast<MeshNode>(nodes[nodeIndex]->node)->mesh->copyDataFromMesh(SceneHelper::pointLightMesh);
-        nodes[nodeIndex]->node->shouldUpdateMesh = true;
-    }
-
 }
 
 void SGEditorScene::setTransparencyForObjects()
@@ -479,13 +473,19 @@ bool SGEditorScene::isNodeTransparent(int nodeId)
     }
 }
 
+void SGEditorScene::setLightLineUniforms(int nodeID, string matName)
+{
+    shaderMGR->setUniforms((nodeID == LIGHT_CIRCLES) ? lightCircles : directionLine, matName);
+
+}
+
 void SGEditorScene::setJointsUniforms(int nodeID,string matName)
 {
     shaderMGR->setUniforms(jointSpheres[nodeID - JOINT_SPHERES_START_ID],matName);
 }
 void SGEditorScene::setRotationCircleUniforms(int nodeID,string matName)
 {
-    shaderMGR->setUniforms(rotationCircle,matName);
+    shaderMGR->setUniforms((nodeID == LIGHT_CIRCLES) ? lightCircles : rotationCircle,matName);
 }
 void SGEditorScene::setGridLinesUniforms(int nodeId, int rgb, string matName)
 {
@@ -684,7 +684,8 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
             loader->setFirstInstanceAsMainNode(nodes[selectedNodeId]);
         }
         
-        Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
+        bool blurTex = (nodes[selectedNodeId]->smoothTexture);
+        Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, blurTex);
         nodes[selectedNodeId]->node->setTexture(nodeTex,1);
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->textureName = textureFileName;
@@ -734,7 +735,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
 
     if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->props.perVertexColor = false;
-        Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
         nodes[selectedNode]->node->setTexture(nodeTex,1);
     } else {
         nodes[selectedNode]->textureName = "-1";

@@ -27,11 +27,13 @@
 - (void) showLoadingActivity;
 - (void) hideLoadingActivity;
 - (void) setUserInteractionStatus:(BOOL) status;
+- (void) setTextureSmoothStatus:(BOOL) status;
 @end
 
 @interface MeshProperties : GAITrackedViewController {
     float refractionValue;
     float reflectionValue;
+    int smoothTexture;
     bool isLightningValue,isHaveLightOption;
     bool isVisibleValue, canApplyPhysics;
     bool isFaceNormal;
@@ -40,7 +42,7 @@
     double velocity;
     
 }
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil WithProps:(SGNode*) sgNode AndMirrorState:(BOOL)mirror;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil WithProps:(SGNode*) sgNode MirrorState:(int)mirror AndSmoothTexture:(int)smoothTex;
 
 @property (weak, nonatomic) IBOutlet UISlider *refractionSlider;
 @property (weak, nonatomic) IBOutlet UISlider *reflectionSlider;
@@ -57,6 +59,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *physicsSegment;
 @property (weak, nonatomic) IBOutlet UIButton *directionBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *velocityLoading;
+@property (weak, nonatomic) IBOutlet UISwitch *textureSwitch;
 
 - (IBAction)reflectionChangeEnded:(id)sender;
 
@@ -78,6 +81,7 @@
 - (IBAction)physicsSegmentChanged:(id)sender;
 
 - (IBAction)velocityChangeEnded:(id)sender;
+- (IBAction)textureSmoothSwitchAction:(id)sender;
 
 @end
 

@@ -314,6 +314,10 @@
 
 }
 
+- (IBAction)toolTipAction:(id)sender {
+    [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+}
+
 - (IBAction)qualityOrSpeed:(id)sender {
     UIAlertView *displayAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please re-open the scene to apply the change." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [displayAlert show];

@@ -31,6 +31,7 @@
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zEZ-Bi-FMZ" userLabel="addBtn">
                             <rect key="frame" x="7" y="14" width="37" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Creates a new scene." identifier="0"/>
                             <state key="normal" image="New.png"/>
                             <connections>
                                 <action selector="addSceneButtonAction:" destination="-1" eventType="touchUpInside" id="oZE-R5-ZNh"/>
@@ -43,21 +44,28 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="i1k-Qd-hji">
+                            <rect key="frame" x="617" y="17" width="35" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Manage your account." identifier="1"/>
+                            <state key="normal" image="Login-icon.png"/>
+                            <connections>
+                                <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="vhu-HT-KZO"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVH-Bb-pVz">
-                            <rect key="frame" x="697" y="17" width="34" height="26"/>
+                            <rect key="frame" x="691" y="12" width="37" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us." identifier="0"/>
                             <state key="normal" image="info-icon.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="rkf-S4-U2u"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="i1k-Qd-hji">
-                            <rect key="frame" x="657" y="17" width="35" height="26"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="H6r-Ou-1ZQ">
+                            <rect key="frame" x="663" y="19" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="Login-icon.png"/>
-                            <connections>
-                                <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="vhu-HT-KZO"/>
-                            </connections>
+                            <state key="normal" image="Help_iphone@3X.png"/>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -89,6 +97,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Help_iphone@3X.png" width="63" height="63"/>
         <image name="Login-icon.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>

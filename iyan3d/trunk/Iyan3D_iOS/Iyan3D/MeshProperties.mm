@@ -28,7 +28,7 @@
 
 @implementation MeshProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil  WithProps:(SGNode*) sgNode AndMirrorState:(BOOL)mirror {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil  WithProps:(SGNode*) sgNode MirrorState:(int)mirror AndSmoothTexture:(int)smoothTex {
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
@@ -41,6 +41,7 @@
         isHaveLightOption = sgNode->props.isLighting;
         physicsType = (sgNode->props.isPhysicsEnabled) ? sgNode->props.physicsType : NONE;
         velocity = sgNode->props.forceMagnitude;
+        smoothTexture = smoothTex;
         
         canApplyPhysics = (sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ || sgNode->getType() == NODE_TEXT);
     }
@@ -50,15 +51,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.screenName = @"MeshProperties iOS";
-    
+    [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
+    [_mirrorBtn setOn:(mirrorStatus == MIRROR_DISABLE) ? NO : (mirrorStatus == MIRROR_ON) ? YES : NO  animated:NO];
+
     [self.refractionSlider setValue:refractionValue];
     [self.reflectionSlider setValue:reflectionValue];
+    
+    [self.textureSwitch setEnabled:(smoothTexture == -1) ? NO : YES];
+    [self.textureSwitch setOn:(smoothTexture > 0) ? YES : NO];
+    
     self.lightingSwitch.on=isLightningValue;
     self.visibleChanged.on=isVisibleValue;
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
     //[_lightingSwitch setEnabled:isHaveLightOption];
-    [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
-    [_mirrorBtn setOn:(mirrorStatus == MIRROR_DISABLE) ? NO : (mirrorStatus == MIRROR_ON) ? YES : NO  animated:YES];
     
     [self.physicsSegment setSelectedSegmentIndex:physicsType];
     [self.velocitySlider setValue:velocity];
@@ -207,6 +212,11 @@
 
 - (IBAction)velocityChangeEnded:(id)sender {
 //     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
+}
+
+- (IBAction)textureSmoothSwitchAction:(id)sender {
+    [self.delegate setTextureSmoothStatus:self.textureSwitch.isOn];
+    smoothTexture = self.textureSwitch.isOn;
 }
 
 @end

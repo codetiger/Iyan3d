@@ -38,8 +38,15 @@
                     </subviews>
                     <color key="backgroundColor" red="0.52156862745098043" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f1X-a9-tfa">
+                    <rect key="frame" x="475" y="10" width="22" height="22"/>
+                    <state key="normal" image="Help.png"/>
+                    <connections>
+                        <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="3d1-lP-GIc"/>
+                    </connections>
+                </button>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kzY-EN-sGu">
-                    <rect key="frame" x="0.0" y="226" width="542" height="362"/>
+                    <rect key="frame" x="0.0" y="234" width="542" height="362"/>
                     <subviews>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="TcA-9S-yyh">
                             <rect key="frame" x="14" y="40" width="245" height="29"/>
@@ -60,6 +67,7 @@
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TOOLBAR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ITc-Ob-8Zz">
                             <rect key="frame" x="97" y="11" width="78" height="21"/>
+                            <accessibility key="accessibilityConfiguration" hint="Choose whether toolbar should be on the right or left side in Editor." identifier="2"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -84,6 +92,7 @@
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ghl-HK-uiB">
                             <rect key="frame" x="376" y="44" width="51" height="31"/>
+                            <accessibility key="accessibilityConfiguration" hint="Choose between quality or speed of rendering in Editor." identifier="0"/>
                             <connections>
                                 <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="H6P-fg-X9h"/>
                                 <action selector="qualityOrSpeed:" destination="-1" eventType="valueChanged" id="Yjn-MC-tQn"/>
@@ -97,11 +106,12 @@
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EsN-jX-vMF">
                             <rect key="frame" x="158" y="197" width="51" height="31"/>
+                            <accessibility key="accessibilityConfiguration" hint="Enable or Disable multiple objects selection." identifier="3"/>
                             <connections>
                                 <action selector="multiselectValueChanged:" destination="-1" eventType="valueChanged" id="kDp-Ve-xvn"/>
                             </connections>
                         </switch>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This setting does not affect Rendering quality" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXQ-Q6-V4G">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This setting does not affect Export quality" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXQ-Q6-V4G">
                             <rect key="frame" x="260" y="83" width="283" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -135,6 +145,11 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Frame-Count-Display_Duration.png" translatesAutoresizingMaskIntoConstraints="NO" id="pi2-nh-JrL">
                             <rect key="frame" x="282" y="93" width="246" height="40"/>
                         </imageView>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bDb-5m-dho">
+                            <rect key="frame" x="307" y="5" width="33" height="21"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <accessibility key="accessibilityConfiguration" hint="Choose to display time in Frames or Duration(sec)." identifier="3"/>
+                        </view>
                     </subviews>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PvH-IM-Dt5">
@@ -143,6 +158,7 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5SN-55-ANr">
                             <rect key="frame" x="439" y="5" width="80" height="30"/>
                             <color key="backgroundColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to save and close the Settings." identifier="2"/>
                             <state key="normal" title="Done">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -165,6 +181,11 @@
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="IBQ-JF-AsA">
                             <rect key="frame" x="288" y="10" width="20" height="20"/>
                         </activityIndicatorView>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uhy-Dt-Lj7">
+                            <rect key="frame" x="192" y="8" width="20" height="25"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to restore purchase. Works only if purchased Premium in previous versions." identifier="2"/>
+                        </view>
                     </subviews>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -178,6 +199,7 @@
     <resources>
         <image name="Frame-Count-Display_Duration.png" width="246" height="40"/>
         <image name="Frame-Count-Display_Frames.png" width="246" height="40"/>
+        <image name="Help.png" width="22" height="22"/>
         <image name="Tool-Bar_Left.png" width="91" height="63"/>
         <image name="Tool-Bar_Right.png" width="91" height="63"/>
     </resources>

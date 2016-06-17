@@ -12,22 +12,22 @@
 #import "AssetItem.h"
 #import "Utility.h"
 #import "GAI.h"
+#import "AppHelper.h"
 
-@interface LoadingViewControllerPad : GAITrackedViewController<SKProductsRequestDelegate>
+@interface LoadingViewControllerPad : GAITrackedViewController<AppHelperDelegate>
 {
-    float progress;
-    float maxProgress;
     NSNumberFormatter * priceFormatter;
     NSArray *jsonArr;
     CacheSystem* cache;
     NSArray *textureFile,*sceneFiles,*objFiles,*rigFiles;
     BOOL isAppFirstTime;
+    BOOL isOldUser;
+    NSDate *startTime;
 }
 
 @property (strong, nonatomic) NSArray *allProducts;
 @property (strong, nonatomic) NSMutableDictionary *allAssets;
-@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel* ProgessLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
-- (IBAction)continueButtonAction:(id)sender;
 @end

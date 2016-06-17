@@ -39,7 +39,7 @@
 
 @end
 
-@interface AnimationSelectionSlider : GAITrackedViewController<UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate>
+@interface AnimationSelectionSlider : GAITrackedViewController< UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate, UIGestureRecognizerDelegate >
 {
     NSMutableArray *animationJsonArray;
     NSMutableArray* animationsItems;
@@ -63,6 +63,7 @@
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil withType:(ANIMATION_TYPE)type EditorScene:(SGEditorScene*)editorScene FirstTime:(BOOL)isFirstTime ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
 - (void)publishBtnaction;
 
+@property (assign) int tableType;
 @property (weak, nonatomic) IBOutlet UIButton *publishBtn;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *downloadIndicator;
 @property (strong, nonatomic) id <SliderDelegate> delegate;
@@ -74,6 +75,8 @@
 - (IBAction)addBtnFunction:(id)sender;
 - (IBAction)cancelBtnFunction:(id)sender;
 - (IBAction)publishBtnaction:(id)sender;
+
+- (void) openMyAnimations;
 @end
 
 #endif

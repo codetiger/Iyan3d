@@ -24,7 +24,7 @@ public:
     TEXTURE_DATA_FORMAT texelFormat;
     TEXTURE_DATA_TYPE texelType;
     string textureName;
-    virtual bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType) = 0;
+    virtual bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool smoothTexture) = 0;
     virtual bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType) = 0;
     virtual void updateTexture(string filePath, int frame) = 0;
     #ifdef  ANDROID

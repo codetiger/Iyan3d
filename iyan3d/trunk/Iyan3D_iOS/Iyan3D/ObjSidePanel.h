@@ -31,7 +31,7 @@
 @end
 
 
-@interface ObjSidePanel : GAITrackedViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface ObjSidePanel : GAITrackedViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIGestureRecognizerDelegate >
 {
     int indexPathOfOBJ;
     NSString* textureFileName;

@@ -27,7 +27,7 @@
 #import "FollowUsVC.h"
 
 
-@interface SceneSelectionControllerNew : GAITrackedViewController< DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate>{
+@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate >{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -49,6 +49,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *topBar;
 @property (nonatomic, strong) NSString *fileBeginsWith;
+@property (assign) BOOL fromLoadingView;
+@property (assign) BOOL isAppFirstTime;
 @property (weak, nonatomic) IBOutlet UIButton *cloneSceneBtn;
 @property (weak, nonatomic) IBOutlet UIButton *deleteSceneBtn;
 @property (weak, nonatomic) IBOutlet UIButton *mailBtn;
@@ -69,7 +71,7 @@
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
 
-
+- (IBAction)toolTipAction:(id)sender;
 - (IBAction)openSceneAction:(id)sender;
 - (IBAction)loginBtnAction:(id)sender;
 

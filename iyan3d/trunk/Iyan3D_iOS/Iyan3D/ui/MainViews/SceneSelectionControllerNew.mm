@@ -7,9 +7,11 @@
 //
 
 
+#import <Crashlytics/Answers.h>
+
+#import "MediaPreviewVC.h"
 #import "AppDelegate.h"
 #import "SceneSelectionControllerNew.h"
-#import "SceneSelectionEnteredView.h"
 #import "SceneItem.h"
 #import <sys/utsname.h>
 #import "ZipArchive.h"
@@ -97,6 +99,23 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkAndOpeni3d) name:@"i3dopen" object:nil];
 
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
+    
+    UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    tapGest.delegate = self;
+    [self.view addGestureRecognizer:tapGest];
+    
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"tipsShown"]) {
+        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+        if([scenesArray count] > 0)
+            [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"tipsShown"];
+    }
+}
+
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
 }
 
 - (void) checkAndOpeni3d
@@ -224,6 +243,7 @@
 #pragma Button Actions
 
 - (IBAction)addSceneButtonAction:(id)sender {
+    [Answers logCustomEventWithName:@"CreateNewSceneInTopLeft" customAttributes:@{}];
     [self addNewScene];
 }
 
@@ -259,7 +279,14 @@
 {
    SceneSelectionFrameCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
     cell.delegate=self;
-    if(indexPath.row < [scenesArray count]){
+    if(indexPath.row < [scenesArray count]) {
+        if(indexPath.row == 0) {
+            [cell setAccessibilityHint:@"Tap to open the scene."];
+            [cell setAccessibilityIdentifier:@"3"];
+            [cell.propertiesBtn setAccessibilityHint:@"Tap to Clone / Delete / Share the scene."];
+            [cell.propertiesBtn setAccessibilityIdentifier:@"3"];
+        }
+        
         SceneItem* scenes = scenesArray[indexPath.row];
         cell.name.text = [NSString stringWithFormat:@"%@",scenes.name];
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -274,7 +301,12 @@
         cell.image.image= [UIImage imageNamed:@"bgImageforall.png"];
     }
     else{
-        cell.name.text = @"";
+        if(indexPath.row == 0) {
+            [cell setAccessibilityHint:@"Creates a new scene."];
+            [cell setAccessibilityIdentifier:@"3"];
+         }
+
+        cell.name.text = @"Create Scene";
         cell.SelectedindexValue= indexPath.row;
         cell.propertiesBtn.hidden=YES;
         cell.image.image = [UIImage imageNamed:@"New-scene.png"];
@@ -288,8 +320,10 @@
     cell_center = [self.scenesCollectionView convertPoint:cell.center fromView:cell];
     cell_center = [self.view convertPoint:cell_center fromView:self.scenesCollectionView];
     
-    if(indexPath.row == [scenesArray count])
+    if(indexPath.row == [scenesArray count]) {
+        [Answers logCustomEventWithName:@"CreateNewSceneInCollectionView" customAttributes:@{}];
         [self addNewScene];
+    }
     else
         [self openSCene:(int)indexPath.row];
 }
@@ -313,7 +347,15 @@
     }
 }
 
--(void)openSCene: (int)selectedScene{
+-(void)openSCene: (int)selectedScene {
+    
+    if(_fromLoadingView) {
+        NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
+        if(_isAppFirstTime)
+            [attributes setObject:@"YES" forKey:@"FirstTimeUser"];
+        [Answers logCustomEventWithName:@"SceneOpenedFirstTime" customAttributes:attributes];
+    }
+    
     SceneItem *scene = scenesArray[selectedScene];
     NSLog(@" Scene File Name %@ ", scene.sceneFile);
     [[AppHelper getAppHelper] resetAppHelper];
@@ -504,6 +546,10 @@
 
 #pragma View Animation Delegate
 
+- (IBAction)toolTipAction:(id)sender {
+    [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+}
+
 - (IBAction)openSceneAction:(id)sender {
     SceneItem *scene = scenesArray[currentSelectedScene];
     [[AppHelper getAppHelper] resetAppHelper];
@@ -691,6 +737,36 @@
 -(void)shareScene:(NSNumber*)value
 {
     
+    SceneItem * scene = scenesArray[selectedSceneIndex];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
+    if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath]) {
+
+    
+    NSArray *objectsToShare;
+
+        NSURL *videoURL = [NSURL fileURLWithPath:i3dPath];
+        objectsToShare = [NSArray arrayWithObjects:@"A Scene created using Iyan 3D in iOS.", videoURL, nil];
+    
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    
+    if([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        if(!controller.popoverPresentationController.barButtonItem) {
+            controller.popoverPresentationController.sourceView = self.view;
+            
+            controller.popoverPresentationController.sourceRect = [self.scenesCollectionView convertRect:[self.scenesCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:selectedSceneIndex inSection:0]].frame toView:self.view];
+        }
+    }
+    [controller setCompletionHandler:^(NSString *activityType, BOOL completed) {
+    }];
+    
+    [self presentViewController:controller animated:YES completion:nil];
+    }
+
+    /*
+    
     if (![[DBSession sharedSession] isLinked]) {
         int indexValue = [value intValue];
         selectedSceneIndex = indexValue;
@@ -707,6 +783,7 @@
         [logoutAlert show];
         }
     }
+     */
 }
 
 -(bool) Isi3dExists:(int)indexValue
@@ -861,6 +938,23 @@
     [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
 
+}
+
+- (void) showPreview:(NSString*) outputPath
+{
+    [self performSelectorOnMainThread:@selector(showPreviewInMainThread:) withObject:outputPath waitUntilDone:NO];
+}
+
+- (void) showPreviewInMainThread:(NSString*) outputPath
+{
+    int mediaType = [[outputPath pathExtension] isEqualToString:@"png"] ? 0 : 1;
+    
+    if([Utility IsPadDevice]) {
+        MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:@"MediaPreviewVC" bundle:nil mediaType:mediaType medPath:outputPath];
+        [self dismissView];
+        medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:medPreview animated:YES completion:nil];
+    }
 }
 
 #pragma Dealloc Delegate

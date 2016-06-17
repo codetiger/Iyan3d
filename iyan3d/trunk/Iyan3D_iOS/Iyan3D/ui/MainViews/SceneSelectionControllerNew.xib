@@ -36,6 +36,7 @@
                                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="g7e-JY-bEf" userLabel="addBtn">
                                     <rect key="frame" x="18" y="21" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <accessibility key="accessibilityConfiguration" hint="Creates a new scene." identifier="0"/>
                                     <state key="normal" image="New.png"/>
                                     <connections>
                                         <action selector="addSceneButtonAction:" destination="-1" eventType="touchUpInside" id="Jet-pD-tgW"/>
@@ -48,20 +49,31 @@
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zTv-CV-o50">
-                                    <rect key="frame" x="920" y="17" width="44" height="35"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="Login-icon.png"/>
-                                    <connections>
-                                        <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="f5d-uM-EWN"/>
-                                    </connections>
-                                </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fVt-o1-OKO">
-                                    <rect key="frame" x="972" y="18" width="44" height="33"/>
+                                    <rect key="frame" x="974" y="24" width="22" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us." identifier="0"/>
                                     <state key="normal" image="info-icon.png"/>
                                     <connections>
                                         <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="WB0-Ay-9aV"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kf0-ZU-tmJ">
+                                    <rect key="frame" x="921" y="24" width="22" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                    <state key="normal" image="Help.png"/>
+                                    <connections>
+                                        <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="poe-gv-pYF"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zTv-CV-o50">
+                                    <rect key="frame" x="863" y="24" width="22" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    <accessibility key="accessibilityConfiguration" hint="Manage your account." identifier="1"/>
+                                    <state key="normal" image="Login-icon.png"/>
+                                    <connections>
+                                        <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="f5d-uM-EWN"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -98,6 +110,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Help.png" width="22" height="22"/>
         <image name="Login-icon.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>

@@ -62,6 +62,7 @@ public:
     void setLightViewProjMatrix(SGNode *node,u16 paramIndex);
     void setVertexColorUniforms(SGNode *node,u16 paramIndex);
     void setTexturesUniforms(SGNode *node,u16 paramIndex);
+    void setSamplerType(SGNode *sgNode, u16 paramIndex);
     void copyMat(float* pointer,Mat4& mat);
     void setJointTransform(SGNode *node,int paramIndex,SceneManager *smgr);
     void setLightViewProjMatrix(SGNode *sgNode,int paramIndex);

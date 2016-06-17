@@ -74,7 +74,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
 #else
         texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
 #endif
-        Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
         objNode->setTexture(nodeTex,1);
         objNode->setTexture(objScene->shadowTexture,2);
     }

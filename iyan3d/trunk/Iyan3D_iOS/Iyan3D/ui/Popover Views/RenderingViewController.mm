@@ -5,6 +5,10 @@
 //  Created by Harishankar Narayanan on 15/02/14.
 //  Copyright (c) 2014 Smackall Games. All rights reserved.
 
+#import <Crashlytics/Answers.h>
+
+
+#import "MediaPreviewVC.h"
 #import "RenderingViewController.h"
 #import "AVFoundation/AVAssetWriterInput.h"
 #import "AVFoundation/AVAssetWriter.h"
@@ -48,6 +52,9 @@
 #define CANCEL_BUTTON_INDEX  0
 #define OK_BUTTON_INDEX  1
 
+
+#define COMPLETION_ALERT 7
+
 #define DONE 1
 #define START 0
 
@@ -90,7 +97,7 @@
     self.resolutionSegment.selectedSegmentIndex = resolutionType;
     self.nextButton.layer.cornerRadius = 5.0;
     self.cancelButton.layer.cornerRadius = 5.0;
-    [self.activityIndicatorView setHidden:false];
+    [self.activityIndicatorView setHidden:true];
     [self.shareActivityIndicator setHidden:true];
     [self.cancelActivityIndicator setHidden:true];
     [self.watermarkSwitch setOn:YES];
@@ -131,46 +138,17 @@
     [self.exportButton setHidden:true];
     [self.youtubeButton setHidden:true];
     if(renderingExportImage != RENDER_IMAGE){
-        /*
-        _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(_progressSub.frame.origin.x,_progressSub.frame.origin.y, _progressSub.frame.size.width, _progressSub.frame.size.height)];
-        _trimControl.length = renderingEndFrame; // 200 seconds
-        _trimControl.delegate = self;
-        _trimControl.center = _progressSub.center;
-        [self.view addSubview:_trimControl];
-        
-        
-        /*
-        if([Utility IsPadDevice]){
-            _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(35,515, 470, 28)];
-            _trimControl.length = renderingEndFrame; // 200 seconds
-            _trimControl.delegate = self;
-            [self.view addSubview:_trimControl];
-        }
-        else if(iOSVersion >= 8.0 && SCREENWIDTH == 667){
-            _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(210,335, 240, 28)];
-            _trimControl.length = renderingEndFrame; // 200 seconds
-            _trimControl.delegate = self;
-            [self.view addSubview:_trimControl];
-        }
-        else if(iOSVersion >= 8.0 && SCREENWIDTH == 736){
-            _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(110,358, 190, 28)];
-            _trimControl.length = renderingEndFrame; // 200 seconds
-            _trimControl.delegate = self;
-            [self.view addSubview:_trimControl];
-            
-        }
-        else{
-            _trimControl = [[RETrimControl alloc] initWithFrame:CGRectMake(165,285, 190, 28)];
-            _trimControl.length = renderingEndFrame; // 200 seconds
-            _trimControl.delegate = self;
-            [self.view addSubview:_trimControl];
-        }
-        
-        */
     }
     _nextButton.tag = START;
     [_checkCreditProgress setHidden:YES];
     [self updateCreditLable];
+    
+    self.nextButton.accessibilityHint = @"Tap on 'Next' to start exporting.";
+    self.nextButton.accessibilityIdentifier = @"2";
+    
+    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"ExportTipsShown"]) {
+        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+    }
 }
 
 - (void)trimControl:(RETrimControl *)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue
@@ -257,6 +235,19 @@
         [self cancelButtonAction:nil];
     }
     else{
+        
+        [Answers logCustomEventWithName:@"ExportNextAction" customAttributes:@{}];
+        
+        self.nextButton.accessibilityHint = @"";
+        
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+        if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"ExportTipsShown"]) {
+            [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+            [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"ExportTipsShown"];
+        }
+        
+        [self.limitFramesLbl setHidden:YES];
+        
         if(renderingExportImage != RENDER_IMAGE) {
             renderingFrame = _trimControl.leftValue;
             [self.trimControl setHidden:YES];
@@ -678,15 +669,19 @@
         if(self.videoFilePath == nil || [self.videoFilePath isEqualToString:@""])
             return;
         NSString *filePath = [NSString stringWithFormat:@"%@/myMovie.mov", tempDir];
+        outputFilePath = filePath;
         UISaveVideoAtPathToSavedPhotosAlbum(filePath,nil,nil,nil);
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Video successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert setTag:COMPLETION_ALERT];
         [alert show];
     }
     else {
         NSString *filePath = [NSString stringWithFormat:@"%@r-%d.png", tempDir, renderingFrame - 1];
+        outputFilePath = filePath;
         UIImage *image = [UIImage imageWithContentsOfFile:filePath];
         UIImageWriteToSavedPhotosAlbum(image,nil,nil,nil);
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Image was successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert setTag:COMPLETION_ALERT];
         [alert show];
     }
     [_cancelButton setHidden:YES];
@@ -820,7 +815,7 @@
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     switch (alertView.tag) {
-        case SIGNIN_ALERT_VIEW:
+        case SIGNIN_ALERT_VIEW: {
             if(buttonIndex == CANCEL_BUTTON_INDEX){
                 [self dismissViewControllerAnimated:NO completion:^{
                     cancelPressed = YES;
@@ -835,10 +830,28 @@
                 }];
             }
             break;
-            
+        }
+        case COMPLETION_ALERT: {
+            [self performSelectorOnMainThread:@selector(showPreviewInMainThread:) withObject:outputFilePath waitUntilDone:NO];
+        }
         default:
             break;
     }
+}
+
+- (void) showPreviewInMainThread:(NSString*) outputPath
+{
+    int mediaType = [[outputPath pathExtension] isEqualToString:@"png"] ? 0 : 1;
+    
+    if([Utility IsPadDevice]) {
+        MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:@"MediaPreviewVC" bundle:nil mediaType:mediaType medPath:outputPath];
+        medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:medPreview animated:YES completion:nil];
+    }
+}
+
+- (IBAction)toolTipAction:(id)sender {
+    [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
 }
 
 - (IBAction)cameraResolutionChanged:(id)sender {
@@ -853,6 +866,9 @@
 
 - (IBAction) cancelButtonAction:(id)sender
 {
+    if(sender != nil)
+        [Answers logCustomEventWithName:@"ExportCancelAction" customAttributes:@{}];
+
     cancelPressed = YES;
     [self.cancelActivityIndicator setHidden:false];
     [self.cancelActivityIndicator startAnimating];

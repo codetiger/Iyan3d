@@ -13,7 +13,7 @@
 SGNode::SGNode(NODE_TYPE type){
     this->type = type;
     //node = shared_ptr<Node>();
-    
+    smoothTexture = true;
     instanceNodes.clear();
     isTempNode = false;
     optionalFilePath = "";
@@ -151,7 +151,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
             setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
-            Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE);
+            Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
             node->setTexture(nodeTex, 1);
             props.transparency = 0.7;
             break;
@@ -161,7 +161,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             break;
     }
     if(node && node->getTextureCount() == 0) {
-        Texture *nodeTex = smgr->loadTexture("Dummy Light",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture("Dummy Light",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
         node->setTexture(nodeTex,1);
     }
     return node;
@@ -267,7 +267,7 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
-        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex,1);
     } else
         props.perVertexColor = true;
@@ -342,7 +342,7 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     }
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
-        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex,1);
     } else
         props.perVertexColor = true;
@@ -443,7 +443,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     if(textureName != "" && checkFileExists(textureFileName))
     {
         props.perVertexColor = false;
-        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex,1);
     } else
         props.perVertexColor = true;
@@ -517,7 +517,7 @@ StoragePath = constants::DocumentsStoragePath + "/mesh/";
     
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
-        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex,1);
     } else
         props.perVertexColor = true;
@@ -587,7 +587,7 @@ textureFileName=(path).c_str();
 #else
 sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
 #endif
-    Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+    Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, smoothTexture);
     Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
@@ -616,7 +616,7 @@ shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
     // CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
     
     Mesh* lightMesh = new Mesh();
-    lightMesh->copyDataFromMesh(SceneHelper::directionalLightMesh);
+    lightMesh->copyDataFromMesh(SceneHelper::pointLightMesh);
 
     shared_ptr<Node> lightNode = smgr->createNodeFromMesh(lightMesh,"setUniforms");
     //Texture *nodeTex = smgr->loadTexture("Text light.png",constants::BundlePath + "/light.png",TEXTURE_RGBA8,TEXTURE_BYTE);

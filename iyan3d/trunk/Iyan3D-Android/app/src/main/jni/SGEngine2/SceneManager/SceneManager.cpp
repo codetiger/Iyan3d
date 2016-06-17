@@ -188,7 +188,7 @@ void SceneManager::Render(bool isRTT)
     }
     for (int i = 0;i < nodeIndex.size();i++){
         int nodeId = nodeIndex[i];
-        if(nodes[nodeId]->type <= NODE_TYPE_CAMERA || nodes[nodeId]->getVisible() == false || (nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010))
+        if(nodes[nodeId]->type <= NODE_TYPE_CAMERA || nodes[nodeId]->getVisible() == false || (nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010) || (nodes[nodeId]->getID() >= 300000 && nodes[nodeId]->getID() <= 301000))
             continue;
         RenderNode(isRTT, nodeId);
     }
@@ -202,6 +202,44 @@ void SceneManager::EndDisplay()
 void SceneManager::clearDepthBuffer(){
     renderMan->setUpDepthState(CompareFunctionLessEqual,false,true); // ToDo change in depthstate for each render, may need
 }
+void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
+{
+    int index = 0;
+    
+    for( int i = 0; i < nodes.size(); i++) {
+        if(nodes[i]->getID() == node->getID()) {
+            index = i;
+            break;
+        }
+    }
+    
+    nodes[index]->update();
+    Mesh* meshToRender;
+    if(nodes[index]->instancedNodes.size() > 0 && !renderMan->supportsInstancing)
+        meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->meshCache;
+    else
+        meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh();
+
+    for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {
+        
+        if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, false, index))
+            return;
+        
+        if(nodes[index]->instancedNodes.size() > 0) {
+            for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
+                ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+                renderMan->Render(nodes[index], false, index,meshBufferIndex);
+            }
+        } else {
+            ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+            renderMan->Render(nodes[index], false, index,meshBufferIndex);
+        }
+        
+    }
+
+}
+
+
 void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTION func,bool changeDepthState)
 {
     if(!nodes[index])
@@ -275,7 +313,7 @@ void SceneManager::setActiveCamera(shared_ptr<Node> node){
 shared_ptr<CameraNode> SceneManager::getActiveCamera(){
     return renderMan->getActiveCamera();
 }
-Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type)
+Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type, bool blurTexture)
 {
     Texture *newTex = NULL;
     #ifdef ANDROID
@@ -293,7 +331,7 @@ Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DA
 #ifdef UBUNTU
     newTex = new DummyTexture();
 #endif
-    newTex->loadTexture(textureName,filePath,format,type);
+    newTex->loadTexture(textureName,filePath,format,type, blurTexture);
     textures.push_back(newTex);
 
     return newTex;
@@ -376,8 +414,8 @@ shared_ptr<PlaneMeshNode> SceneManager::createPlaneNode(string callBackFuncName 
     AddNode(plane,MESH_TYPE_LITE);
     return plane;
 }
-shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices,int radius,string callBackFuncName){
-    shared_ptr<SGCircleNode> node = shared_ptr<SGCircleNode>(new SGCircleNode(totVertices,radius));
+shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices, float radius,string callBackFuncName, bool allAxis){
+    shared_ptr<SGCircleNode> node = shared_ptr<SGCircleNode>(new SGCircleNode(totVertices, radius, allAxis));
     node->callbackFuncName = callBackFuncName;
     node->mesh->Commit();
     AddNode(node,MESH_TYPE_LITE);
@@ -463,14 +501,14 @@ void SceneManager::setPropertyValue(Material *material,string name,float* values
         renderMan->BindUniform(material,nod,uIndex,isFragmentData,userValue);
     }
 }
-void SceneManager::setPropertyValue(Material *material,string name,int* values,DATA_TYPE type,unsigned short count, bool isFragmentData,u16 paramIndex,int nodeIndex,Texture *tex,int userValue){
+void SceneManager::setPropertyValue(Material *material,string name,int* values,DATA_TYPE type,unsigned short count, bool isFragmentData,u16 paramIndex,int nodeIndex,Texture *tex,int userValue, bool blurTex){
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS) nod = nodes[nodeIndex];
     if(nodeIndex == NOT_EXISTS && device == METAL){
-        renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
+        renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData, blurTex);
     }else{
         short uIndex = material->setPropertyValue(name,values,type,count,paramIndex,nodeIndex,renderTargetIndex);
-        renderMan->BindUniform(material,nod,uIndex,isFragmentData,userValue);
+        renderMan->BindUniform(material,nod,uIndex,isFragmentData,userValue, blurTex);
     }
 }
 AnimatedMesh* SceneManager::LoadMesh(string filePath){

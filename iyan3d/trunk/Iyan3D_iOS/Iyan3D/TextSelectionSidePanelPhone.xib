@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextSelectionSidePanel">
@@ -13,6 +13,8 @@
                 <outlet property="cancelBtn" destination="Mev-Ov-cY1" id="TD2-yc-Zzz"/>
                 <outlet property="collectionView" destination="eIk-mP-vhY" id="hwb-au-jMN"/>
                 <outlet property="colorWheelbtn" destination="fyl-eu-bU3" id="GQu-4J-yw7"/>
+                <outlet property="dummyLeft" destination="NZ2-sC-xGy" id="NU9-y4-81f"/>
+                <outlet property="dummyRight" destination="NOX-e7-aB3" id="eXU-97-M7Q"/>
                 <outlet property="fontTab" destination="En3-oy-ObV" id="o97-q1-BUm"/>
                 <outlet property="inputText" destination="Mgu-M5-NDE" id="kQj-9s-7gU"/>
                 <outlet property="noFontMessageLable" destination="44d-4M-ayc" id="21I-v1-Er2"/>
@@ -32,6 +34,7 @@
                             <rect key="frame" x="58" y="40" width="100" height="31"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <accessibility key="accessibilityConfiguration" hint="Add bevel to 3D text." identifier="3"/>
                             <connections>
                                 <action selector="bevalChangeAction:" destination="-1" eventType="valueChanged" id="L8q-sj-1mG"/>
                             </connections>
@@ -47,6 +50,7 @@
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Text" textAlignment="natural" minimumFontSize="17" id="Mgu-M5-NDE">
                             <rect key="frame" x="16" y="8" width="157" height="30"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Enter your text here." identifier="3"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             <connections>
@@ -72,6 +76,16 @@
                                 <action selector="fontStoreTapChangeAction:" destination="-1" eventType="valueChanged" id="NQC-Ag-7mb"/>
                             </connections>
                         </segmentedControl>
+                        <view contentMode="scaleToFill" id="NOX-e7-aB3">
+                            <rect key="frame" x="184" y="4" width="9" height="28"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="NZ2-sC-xGy">
+                            <rect key="frame" x="22" y="4" width="9" height="28"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -132,6 +146,7 @@
                             <rect key="frame" x="124" y="5" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                            <accessibility key="accessibilityConfiguration" hint="Import selected 3D text into the scene." identifier="3"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <state key="normal" title="ADD TO SCENE">
@@ -147,6 +162,7 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fyl-eu-bU3">
                     <rect key="frame" x="178" y="118" width="24" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <accessibility key="accessibilityConfiguration" hint="Choose color for 3D text." identifier="3"/>
                     <state key="normal" image="color_IPhone.png"/>
                     <connections>
                         <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="rjE-Cn-nGw"/>
@@ -161,6 +177,7 @@
                 </label>
             </subviews>
             <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
+            <accessibility key="accessibilityConfiguration" hint="Choose a font to preview 3D text." identifier="3"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="308" y="414"/>

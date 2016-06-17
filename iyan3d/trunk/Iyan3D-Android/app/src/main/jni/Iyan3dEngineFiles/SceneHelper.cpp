@@ -13,7 +13,6 @@
 float SceneHelper::screenWidth = 0.0;
 float SceneHelper::screenHeight = 0.0;
 Mesh* SceneHelper::pointLightMesh = NULL;
-Mesh* SceneHelper::directionalLightMesh = NULL;
 
 shared_ptr<CameraNode> SceneHelper::initViewCamera(SceneManager *smgr, Vector3& cameraTarget, float& cameraRadius)
 {
@@ -51,8 +50,6 @@ void SceneHelper::initLightMesh(SceneManager *smgr)
 {
     SceneHelper::pointLightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
     SceneHelper::pointLightMesh->Commit();
-    SceneHelper::directionalLightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
-    SceneHelper::directionalLightMesh->Commit();
 }
 
 Vector3 SceneHelper::planeFacingDirection(int controlType)
@@ -85,15 +82,57 @@ SGNode* SceneHelper::createCircle(SceneManager *smgr){
     return rotationCircle;
 }
 
+SGNode* SceneHelper::createLightCircles(SceneManager *smgr)
+{
+    SGNode* circles = new SGNode(NODE_SGM);
+    circles->node = smgr->createCircleNode(50, 1.0, "LightCircles", true);
+    circles->node->setID(LIGHT_CIRCLES);
+    circles->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    circles->props.vertexColor = Vector3(1.0,1.0,0.0);
+    circles->props.transparency = 1.0;
+    circles->node->setVisible(false);
+    return circles;
+}
+
+
 SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
 {
+    float ld = 0.75;
     vector< Vector3 > vPositions;
-    vPositions.push_back(Vector3(0.0));
-    vPositions.push_back(Vector3(0.0, 25.0, 0.0));
-    vPositions.push_back(Vector3(0.0, 25.0, 0.0));
-    SGNode *dirLine = createLines(smgr, vPositions, Vector3(1.0, 1.0, 0.0), "LightLine", LIGHT_DIRECTION_ID);
-    dirLine->node->setVisible(false);
-    return dirLine;
+    vPositions.push_back(Vector3(0.0, 0.0, 0.0));vPositions.push_back(Vector3(0.0, 10.0, 0.0));
+    vPositions.push_back(Vector3(ld, 0.0, ld));vPositions.push_back(Vector3(ld, 10.0, ld));
+    vPositions.push_back(Vector3(-ld, 0.0, -ld));vPositions.push_back(Vector3(-ld, 10.0, -ld));
+    vPositions.push_back(Vector3(ld, 0.0, -ld));vPositions.push_back(Vector3(ld, 10.0, -ld));
+    vPositions.push_back(Vector3(-ld, 0.0, ld));vPositions.push_back(Vector3(-ld, 10.0, ld));
+    vPositions.push_back(Vector3(-ld, 0.0, ld));vPositions.push_back(Vector3(-ld, 10.0, ld));
+    
+  
+    SGNode* gridLines = new SGNode(NODE_SGM);
+    
+    Mesh * mesh = new Mesh();
+    
+    for(int i = 0; i < vPositions.size(); i++) {
+        vertexData *v = new vertexData();
+        v->vertPosition = vPositions[i];
+        mesh->addVertex(v);
+        mesh->addToIndicesArray(i);
+        delete v;
+    }
+    
+    mesh->Commit();
+    
+    shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, "LightLine");
+    node->setID(LIGHT_DIRECTION_ID);
+    node->type = NODE_TYPE_LINES;
+    node->drawMode = DRAW_MODE_LINES;
+    gridLines->node = node;
+    gridLines->props.isLighting = false;
+    gridLines->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+    gridLines->props.vertexColor = Vector3(1.0, 1.0, 0.0);
+    gridLines->props.transparency = 1.0;
+
+    gridLines->node->setVisible(false);
+    return gridLines;
 }
 
 SGNode* SceneHelper::createRedLines(SceneManager *smgr)
@@ -181,7 +220,7 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         sgNode->props.isLighting = false;
         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         
-        Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+        Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
         sgNode->node->setTexture(nodeTex,1);
         sgNode->node->setTexture(nodeTex,2);
         
@@ -213,7 +252,7 @@ SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
     sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     sgNode->node->setID(FORCE_INDICATOR_ID);
     
-    Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE);
+    Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
     sgNode->node->setTexture(nodeTex,1);
     sgNode->node->setTexture(nodeTex,2);
     sgNode->node->setScale(Vector3(0.5,2.0,0.5));

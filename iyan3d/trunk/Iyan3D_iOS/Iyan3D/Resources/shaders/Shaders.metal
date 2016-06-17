@@ -341,6 +341,7 @@ fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half
 #define SHADER_COMMON_viewMatrix 12
 #define SHADER_COMMON_lightFadeDistance 20
 #define SHADER_COMMON_lightType 22
+#define SHADER_COMMON_samplerType 23
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 
@@ -402,10 +403,12 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
                                constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                               constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
+                               constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
+                               constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     
     // Shadow Calculation----------
+    
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
         constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
@@ -416,10 +419,18 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
     //------------------
     
     half4 diffuse_color = half4(in.perVertexColor);
-    
+    half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
-        constexpr sampler quad_sampler(address::repeat,filter::linear);
-        diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+        if(samplerType == 0.0) {
+            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
+            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+        }
+        if(samplerType == 1.0) {
+            constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
+            diffuse_color =  tex2D.sample(nearest_sampler ,in.uv);
+        }
+
+        texTransparency = diffuse_color.w;
     }
     
     
@@ -461,7 +472,7 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
     finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
+    return half4(half3(finalColor.xyz) , texTransparency * in.transparency);
 }
 
 fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -469,7 +480,8 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
+                                  constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     
     // Shadow Calculation----------
@@ -483,10 +495,18 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     //------------------
     
     half4 diffuse_color = half4(in.perVertexColor);
-    
+    half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
-        constexpr sampler quad_sampler(address::repeat,filter::linear);
-        diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+        if(samplerType == 0.0) {
+            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
+            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+        }
+        if(samplerType == 1.0) {
+            constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
+            diffuse_color =  tex2D.sample(nearest_sampler ,in.uv);
+        }
+        
+        texTransparency = diffuse_color.w;
     }
     
     
@@ -530,7 +550,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
+    return half4(half3(finalColor.xyz) , texTransparency * in.transparency);
 }
 
 fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -538,10 +558,10 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
+                                  constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     
-    // Shadow Calculation----------
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
         constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
@@ -552,10 +572,18 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     //------------------
     
     half4 diffuse_color = half4(in.perVertexColor);
-    
+    half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
-        constexpr sampler quad_sampler(address::repeat,filter::linear);
-        diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+        if(samplerType == 0.0) {
+            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
+            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+        }
+        if(samplerType == 1.0) {
+            constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
+            diffuse_color =  tex2D.sample(nearest_sampler ,in.uv);
+        }
+        
+        texTransparency = diffuse_color.w;
     }
     
     
@@ -599,7 +627,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
+    return half4(half3(finalColor.xyz) , texTransparency * in.transparency);
 }
 
 fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -607,10 +635,10 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
+                                  constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     
-    // Shadow Calculation----------
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
         constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
@@ -621,10 +649,18 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     //------------------
     
     half4 diffuse_color = half4(in.perVertexColor);
-    
+    half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
-        constexpr sampler quad_sampler(address::repeat,filter::linear);
-        diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+        if(samplerType == 0.0) {
+            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
+            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+        }
+        if(samplerType == 1.0) {
+            constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
+            diffuse_color =  tex2D.sample(nearest_sampler ,in.uv);
+        }
+        
+        texTransparency = diffuse_color.w;
     }
     
     
@@ -668,7 +704,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
+    return half4(half3(finalColor.xyz) , texTransparency * in.transparency);
 }
 
 fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -676,10 +712,10 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
+                                  constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     
-    // Shadow Calculation----------
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
         constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
@@ -690,10 +726,18 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     //------------------
     
     half4 diffuse_color = half4(in.perVertexColor);
-    
+    half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
-        constexpr sampler quad_sampler(address::repeat,filter::linear);
-        diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+        if(samplerType == 0.0) {
+            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
+            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+        }
+        if(samplerType == 1.0) {
+            constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
+            diffuse_color =  tex2D.sample(nearest_sampler ,in.uv);
+        }
+        
+        texTransparency = diffuse_color.w;
     }
     
     
@@ -737,7 +781,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
+    return half4(half3(finalColor.xyz) , texTransparency * in.transparency);
 }
 
 
@@ -789,10 +833,11 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     
     // Lighting Calculation----------
     half4 diffuse_color = half4(in.perVertexColor);
-    
+    half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
+        texTransparency = diffuse_color.w;
     }
 
     half4 specular;
@@ -835,7 +880,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     }
     //-------------
     finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
+    return half4(half3(finalColor.xyz) , texTransparency * in.transparency);
 }
 
 #define SHADER_COLOR_mvp 1

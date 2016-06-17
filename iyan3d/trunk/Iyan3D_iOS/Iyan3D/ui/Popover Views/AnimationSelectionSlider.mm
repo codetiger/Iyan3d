@@ -26,6 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         animationType = type;
+        self.tableType = 4;
         editorSceneLocal = editorScene;
         selectedNodeId = editorSceneLocal->selectedNodeId;
         bonecount = (int)editorSceneLocal->nodes[selectedNodeId]->joints.size();
@@ -59,7 +60,7 @@
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(false);
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
     cache = [CacheSystem cacheSystem];
-    animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
+    animationsItems = [cache GetAnimationList:animationType fromTable:self.tableType Search:@""];
     [self.animationCollectionView reloadData];    
     downloadQueue = [[NSOperationQueue alloc] init];
     [downloadQueue setMaxConcurrentOperationCount:3];
@@ -70,6 +71,16 @@
     [animDownloadQueue setMaxConcurrentOperationCount:1];
     userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
     [self getAnimationData];
+    
+    UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    tapGest.delegate = self;
+    [self.view addGestureRecognizer:tapGest];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -213,15 +224,9 @@
                                   {
                                       if(animationCategoryTab == MY_ANIMATION)
                                           return;
-                                      [_delegate showOrHideProgress:1];
-                                      [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
-                                      animationsItems = [cache GetAnimationList:animationType fromTable:7 Search:@""];
-                                      [self.delegate myAnimation:YES];
-                                      [self.animationCollectionView reloadData];
-                                      animationCategoryTab = MY_ANIMATION;
-                                      selectedAssetId = -1;
+                                      [self openMyAnimations];
                                       [view dismissViewControllerAnimated:YES completion:nil];
-                                      [_delegate showOrHideProgress:0];
+
                                   }];
     switch (animationCategoryTab) {
         case TRENDING:
@@ -252,6 +257,18 @@
     popover.permittedArrowDirections = UIPopoverArrowDirectionUp;
     if(view != nil)
         [self presentViewController:view animated:YES completion:nil];
+}
+
+- (void) openMyAnimations
+{
+    [_delegate showOrHideProgress:1];
+    [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
+    animationsItems = [cache GetAnimationList:animationType fromTable:7 Search:@""];
+    [self.delegate myAnimation:YES];
+    [self.animationCollectionView reloadData];
+    animationCategoryTab = MY_ANIMATION;
+    selectedAssetId = -1;
+    [_delegate showOrHideProgress:0];
 }
 
 - (IBAction)addBtnFunction:(id)sender {
@@ -486,7 +503,7 @@
         animationJsonArray = [NSMutableArray arrayWithArray:allAnimations];
     if (animationJsonArray != nil && [animationJsonArray count] > 0)
         [self storeDataToLocalDB];
-    animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
+    animationsItems = [cache GetAnimationList:animationType fromTable:self.tableType Search:@""];
     [self.animationCollectionView reloadData];
 }
 

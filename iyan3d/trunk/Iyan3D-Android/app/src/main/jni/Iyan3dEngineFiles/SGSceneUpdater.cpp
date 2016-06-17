@@ -121,8 +121,6 @@ void SGSceneUpdater::setKeysForFrame(int frame)
             if(visibilityKeyindex != -1){
                 sgNode->props.isVisible =  sgNode->visibilityKeys[visibilityKeyindex].visibility;
             }
-        } else {
-            updatingScene->updateLightMesh(sgNode->props.specificInt);
         }
         
         for (int j = 0; j < sgNode->joints.size(); j++) {

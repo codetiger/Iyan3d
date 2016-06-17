@@ -396,7 +396,8 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
             smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()),tex,0);
         }else if(deviceType == METAL){
             textureValue =  1;
-            smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
+            smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, sgNode->smoothTexture);
+            setSamplerType(sgNode, SHADER_COMMON_samplerType);
         }
         
         if(sgNode->node->getTextureCount() > 1){
@@ -411,6 +412,12 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
                 smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, SHADER_COMMON_texture2,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
             }
         }
+}
+
+void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex)
+{
+    float samplerType = (sgNode->smoothTexture) ? 0.0 : 1.0;
+    smgr->setPropertyValue(sgNode->node->material, "samplerType", &samplerType, DATA_FLOAT, 1, true , SHADER_COMMON_samplerType, smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
 void ShaderManager::setNodeTransparency(SGNode *sgNode,u16 paramIndex) {
@@ -447,7 +454,7 @@ void ShaderManager::setModelViewProjMatrix(SGNode *sgNode,u16 paramIndex, bool i
     
     Mat4 mvp;
     std::string uniformName = "mvp";
-    if((sgNode->node->getID() != CIRCLE_NODE_ID && sgNode->node->getID() != LIGHT_DIRECTION_ID && sgNode->node->drawMode == DRAW_MODE_LINES) || sgNode->node->material->name.find("SHADER_COMMON_L") != string::npos || sgNode->node->material->name.find("SHADER_VERTEX_COLOR_L") != string::npos || sgNode->node->material->name == "SHADER_TOON") {
+    if((sgNode->node->getID() != CIRCLE_NODE_ID && sgNode->node->getID() != LIGHT_CIRCLES && sgNode->node->getID() != LIGHT_DIRECTION_ID && sgNode->node->drawMode == DRAW_MODE_LINES) || sgNode->node->material->name.find("SHADER_COMMON_L") != string::npos || sgNode->node->material->name.find("SHADER_VERTEX_COLOR_L") != string::npos || sgNode->node->material->name == "SHADER_TOON") {
         uniformName = (sgNode->node->drawMode == DRAW_MODE_LINES) ? "mvp" : "vp";
         mvp = projMat * viewMat;
     } else

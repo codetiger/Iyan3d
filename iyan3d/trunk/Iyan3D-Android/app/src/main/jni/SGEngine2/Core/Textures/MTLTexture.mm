@@ -23,7 +23,7 @@ MTLTexture::~MTLTexture(){
 void* initMTLTexture(){
     return new MTLTexture();
 }
-bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
+bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool smoothTexture)
 {
     
     textureName = name;
@@ -40,10 +40,18 @@ bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), image.CGImage );
     
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
+    
     texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
     if(!texture)
         return NO;
-    
+/* TODO
+    MTLSamplerDescriptor *desc = [[MTLSamplerDescriptor alloc] init];
+    desc.minFilter = MTLSamplerMinMagFilterLinear;
+    desc.magFilter = MTLSamplerMinMagFilterLinear;
+
+    id <MTLSamplerState> sampler = [device newSamplerStateWithDescriptor:desc];
+ */
+
     [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
                mipmapLevel:0
                  withBytes:CGBitmapContextGetData(context)

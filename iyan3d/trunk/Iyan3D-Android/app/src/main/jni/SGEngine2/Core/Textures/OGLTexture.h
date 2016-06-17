@@ -31,7 +31,7 @@ public:
     OGLTexture();
     ~OGLTexture();
     void removeTexture();
-    bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
+    bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool blurTex);
     bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
     void updateTexture(string filePath, int frame);
 #ifdef  ANDROID

@@ -24,7 +24,7 @@
 
 
 
-@interface AssetSelectionSidePanel : GAITrackedViewController<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate>{
+@interface AssetSelectionSidePanel : GAITrackedViewController< UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate, UIGestureRecognizerDelegate > {
     CacheSystem* cache;
     AssetItem* asset;
     NSMutableArray* assetArray;

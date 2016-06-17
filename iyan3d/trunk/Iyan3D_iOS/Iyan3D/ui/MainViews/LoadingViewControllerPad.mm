@@ -6,26 +6,18 @@
 //  Copyright (c) 2014 Smackall Games. All rights reserved.
 //
 
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Answers.h>
+
 #import "LoadingViewControllerPad.h"
 #import "SceneSelectionControllerNew.h"
 #import "EditorViewController.h"
 #import "AppDelegate.h"
 #import "Utility.h"
 #import "Constants.h"
-#import "AppHelper.h"
 #import "DownloadTask.h"
 
-#define INITIAL_PROGRESS 0.01f
-#define PROGRESS_INCREMENT 0.01f
-#define PROGRESS_SLEEP 0.1f
-#define PROGRESS_COMPLETED 1.0f
-#define JSON_DATA_DOWNLOADED 0.60f
-#define JSON_DECRYPTED 0.70f
-#define ASSET_INFO_STORED 0.65f
-#define ASSET_DOWNLOAD_BEGIN 0.80F
-#define ASSETS_DOWNLOADED 0.95
-
-#define APP_VERSION @"5.0"
+#define APP_VERSION @"5.3"
 
 
 @implementation LoadingViewControllerPad
@@ -34,8 +26,14 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        progress = INITIAL_PROGRESS;
-        maxProgress = INITIAL_PROGRESS + 0.3;
+       
+//        isOldUser = NO;
+//        if(!(isOldUser = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"OldUser"]))
+//            [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"OldUser"];
+
+        [Answers logCustomEventWithName:@"AppStart" customAttributes:@{}];
+        startTime = [NSDate date];
+        
         NSString* dbName = @"iyan3d-2-0.db";
         NSString* projectFolder = @"Projects";
         NSArray* dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -192,11 +190,7 @@
 {
     [super viewDidAppear:animated];
 }
-- (void)introMovieFinished:(NSNotification *)notification
-{
-    if(maxProgress == PROGRESS_COMPLETED)
-    [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
-}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -206,41 +200,30 @@
     [cache createTablesForPrice];
     [cache createRenderTaskTables];
     [cache createAnimationTables];
-    BOOL update = [cache checkAndCreateGroupColumnInAssetsTable];
-    [self performSelectorInBackground:@selector(progressTimerSelector) withObject:nil];
-    [self performSelectorInBackground:@selector(performBackgroundTasks:) withObject:[NSNumber numberWithBool:update]];
+    [cache checkAndCreateGroupColumnInAssetsTable];
+    [self.activityIndicator startAnimating];
+    [self performSelectorInBackground:@selector(performBackgroundTasks) withObject:nil];
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
     [[AppHelper getAppHelper] setIdentifierForVendor];
 
 
 }
--(void)progressTimerSelector
-{
-    if(progress < maxProgress)
-        progress += PROGRESS_INCREMENT;
-    
-    if(progress >= PROGRESS_COMPLETED) {
-        [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
-    }
-    else {
-        [NSThread sleepForTimeInterval:(PROGRESS_SLEEP)];
-        [self performSelectorInBackground:@selector(progressTimerSelector) withObject:nil];
-    }
-    [self performSelectorOnMainThread:@selector(setProgressStatus) withObject:nil waitUntilDone:NO];
 
-}
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (void) performBackgroundTasks:(NSNumber*) object
+- (void) performBackgroundTasks
+{
+    [AppHelper getAppHelper].delegate = self;
+    [[AppHelper getAppHelper] downloadJsonData];
+    
+}
+
+- (void) performLocalTasks
 {
     
-    [[AppHelper getAppHelper] downloadJsonData:[object boolValue]];
-    
-    maxProgress = JSON_DATA_DOWNLOADED;
-    maxProgress = JSON_DECRYPTED;
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
         [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
     } else if([[[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"] isEqualToString:@"4.0"]) {
@@ -253,13 +236,12 @@
         [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
     }
     
-    //TODO :    
+    //TODO :
     // [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"])
-       [[AppHelper getAppHelper] initializeFontListArray];
+        [[AppHelper getAppHelper] initializeFontListArray];
     
-    maxProgress = ASSET_DOWNLOAD_BEGIN;
     
     NSArray* cachepaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [cachepaths objectAtIndex:0];
@@ -276,7 +258,7 @@
     
     NSArray *dirFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory error:nil];
     if([dirFiles count] > 0)
-    textureFile = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
+        textureFile = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
     
     for(int i = 0 ; i< [textureFile count] ; i++)
     {
@@ -285,11 +267,13 @@
         NSData *imageDataforDisplay = [self convertAndScaleImage:[UIImage imageWithContentsOfFile:srcFilePath] size:64];
         [imageDataforDisplay writeToFile:desFilePathForDisplay atomically:YES];
     }
-    maxProgress = ASSETS_DOWNLOADED;
     //[[AppHelper getAppHelper] moveFontFilesIfNeccasary];
     //[self downloadMissingAssets];
-    maxProgress = PROGRESS_COMPLETED;
+    
+    [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
+    
 }
+
 - (NSData*) convertAndScaleImage:(UIImage*)image size:(int)textureRes
 {
     float target = 0;
@@ -305,28 +289,30 @@
 
 //Crash Removed unused functions
 
-- (void) setProgressStatus
-{
-    [self.progressView setProgress:progress];
-}
 
 - (void) loadSceneView
 {
- 
+    [self.activityIndicator setHidden:YES];
+    NSDate *endTime = [NSDate date];
+    NSTimeInterval duration = [endTime timeIntervalSinceDate:startTime];
+    NSDictionary *attribute = @{@"duration" : [NSNumber numberWithDouble:duration]};
+    [Answers logCustomEventWithName:@"LoadingComplete" customAttributes:attribute];
     
     if([Utility IsPadDevice]) {
         SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:YES];
+        sceneSelectionView.fromLoadingView = true;
+        sceneSelectionView.isAppFirstTime = isAppFirstTime;
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     } else {
         SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ?  @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:YES];
+        sceneSelectionView.fromLoadingView = true;
+        sceneSelectionView.isAppFirstTime = isAppFirstTime;
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     }
     [self deallocMemory];
 }
-
-//Crash Removed unused methods
 
 -(void)changeProgressLabel:(NSString*)labelString
 {

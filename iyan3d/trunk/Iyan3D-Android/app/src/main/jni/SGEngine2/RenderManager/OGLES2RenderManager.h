@@ -63,7 +63,7 @@ public:
     void endDisplay();
     void Render(shared_ptr<Node> node, bool isRTT, int nodeIndex = 0, int meshBufferIndex = 0);
     void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount);
-    void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragment , int userValue = 0);
+    void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragment , int userValue = 0, bool blurTex = true);
     void (*NodePropertyCallBack)(shared_ptr<Node> node);
     void setActiveCamera(shared_ptr<CameraNode> camera);
     void BindAttributes(Material *material,MESH_TYPE meshType = MESH_TYPE_LITE);
@@ -79,7 +79,7 @@ public:
     void setFrameBufferObjects(u_int32_t framebuff , u_int32_t colorbuff , u_int32_t depthduff);
     void setRenderTarget(Texture* renderTexture,bool clearBackBuffer = true,bool clearZBuffer = true,bool isDepthPass = false,Vector4 color = Vector4(255,255,255,255));
     void writeImageToFile(Texture *texture , char* filePath, IMAGE_FLIP flipType = NO_FLIP);
-    void bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData);
+    void bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex = true);
     Vector4 getPixelColor(Vector2 touchPos,Texture* texture);
     void setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth = true,bool setToRenderBuffer = false);
     void createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE , bool updateBothBuffers = true);

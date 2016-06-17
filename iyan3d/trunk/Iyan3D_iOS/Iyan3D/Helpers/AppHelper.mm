@@ -7,6 +7,8 @@
 //
 
 
+#import "JDFTooltips.h"
+
 #import <sys/utsname.h>
 #import "AppHelper.h"
 #import "Constants.h"
@@ -46,34 +48,24 @@
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 
-- (void)downloadJsonData:(BOOL) forceUpdate
+- (void)downloadJsonData
 {
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdate"]) {
-        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:[[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdate"]];
-        int hours = timeInterval / 3600;
-        if (hours > 5 || forceUpdate) {
-            if ([self checkInternetConnected]) {
-                
-                [self initHelper];
-                [[AppHelper getAppHelper] loadAllAssets];
-                [AppHelper getAppHelper].isAssetsUpdated = YES;
-                [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AssetDetailsUpdate"];
-                
-            } else{
-                [self performSelectorOnMainThread:@selector(showInternetErrorAlert) withObject:nil waitUntilDone:NO];          }
-        }
-    }
-    else {
+    NSDate *previousDownloadTime = [NSDate distantPast];
+    if ([[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdatev1"])
+        previousDownloadTime = [[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdatev1"];
+    
+    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:previousDownloadTime];
+    int hours = timeInterval / 3600;
+    if (hours > 5) {
         if ([self checkInternetConnected]) {
-            
             [self initHelper];
             [[AppHelper getAppHelper] loadAllAssets];
             [AppHelper getAppHelper].isAssetsUpdated = YES;
-            [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AssetDetailsUpdate"];
-            
         } else{
-            [self performSelectorOnMainThread:@selector(showInternetErrorAlert) withObject:nil waitUntilDone:NO];
-        }
+            [self performSelectorOnMainThread:@selector(showInternetErrorAlert) withObject:nil waitUntilDone:NO];          }
+    } else {
+        if(self.delegate)
+            [self.delegate performLocalTasks];
     }
 }
 
@@ -175,23 +167,24 @@
 {
     jsonArray = [[NSArray alloc] init];
     
-    NSURL *urlForJson = [NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetailv5.json"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:urlForJson];
-    if([NSURLConnection connectionWithRequest:request delegate:self]) {
-        NSData *rawData = [NSData dataWithContentsOfURL:urlForJson];
-        if(rawData){
-            NSError *error;
-            NSData* jsonData = [NSData dataWithData:rawData];
-            if(jsonData == nil) {
-                return;
-            }
-            NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
-            jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
-            jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-            
-            [self setAssetsDetails:ASSET_SELECTION];
-        }
-    }
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForRequest = 5.0;
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    [[session dataTaskWithURL:[NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetailv5.json"]
+            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                if(!error && data != nil) {
+                    NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[data bytes]];
+                    jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
+                    NSError *jsonParserError;
+                    jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&jsonParserError];
+                    
+                    [self setAssetsDetails:ASSET_SELECTION];
+                    [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AssetDetailsUpdatev1"];
+                }
+                if(self.delegate)
+                    [self.delegate performLocalTasks];
+            }] resume];
 }
 
 - (void)performReadingJsonInQueue:(NSOperationQueue*)queue ForPage:(int)viewType
@@ -302,7 +295,6 @@
         objImport.iap = OBJ_IMPORT_IAP;
         objImport.keywords = @"obj";
 
-        [productIdentifierList addObject:objImport.iap];
         [allAssets setObject:objImport forKey:objImport.iap];
     }
 
@@ -310,38 +302,6 @@
     [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AssetDetailsUpdate"];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"AssetsSet" object:nil userInfo:nil];
-
-    if (self.productsRequest) {
-        self.productsRequest.delegate = nil;
-        [self.productsRequest cancel];
-        self.productsRequest = nil;
-    }
-
-    if (productIdentifierList && [productIdentifierList count] > 0) {
-        self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[NSSet setWithArray:productIdentifierList]];
-        self.productsRequest.delegate = self;
-        [self.productsRequest start];
-    }
-    else {
-    }
-}
-
-- (void)productsRequest:(SKProductsRequest*)request didReceiveResponse:(SKProductsResponse*)response
-{
-
-    allProducts = response.products;
-    for (SKProduct* product in allProducts) {
-        AssetItem* asset = [allAssets objectForKey:product.productIdentifier];
-        [priceFormatter setLocale:product.priceLocale];
-        asset.price = [NSString stringWithFormat:@"%@", product.price];
-        [cache updateAssetPrice:asset];
-    }
-
-    self.productsRequest.delegate = nil;
-    [self.productsRequest cancel];
-    self.productsRequest = nil;
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ProductPriceSet" object:nil userInfo:nil];
 }
 
 - (void)writeDataToFile:(NSData*)data FileName:(NSString*)fileName
@@ -361,16 +321,6 @@
     NSString* fileName = [dictionary objectForKey:@"file"];
     if (data)
         [data writeToFile:fileName atomically:YES];
-}
-
-- (void)request:(SKProductsRequest*)request didFailWithError:(NSError*)error
-{
-    NSLog(@"Error: %@ ", error.localizedDescription);
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Status" message:@"In-App Purchase is Disabled. Check your settings to enable Purchases." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-
-    [alert show];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ProductPriceSet" object:nil userInfo:nil];
 }
 
 - (BOOL)userDefaultsBoolForKey:(NSString*)key
@@ -778,9 +728,10 @@
     NSString* deviceId = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
     NSString* osVersion = [UIDevice currentDevice].systemVersion;
     NSString* hwversion = [self deviceName];
-    
+    NSString *deviceToken = [[AppHelper getAppHelper] userDefaultsForKey:@"deviceToken"];
+
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", name, @"username", email, @"email", hwversion, @"hwversion", osVersion, @"osversion", deviceId, @"deviceid", [NSString stringWithFormat:@"%d",type], @"signintype", nil]];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", name, @"username", email, @"email", hwversion, @"hwversion", osVersion, @"osversion", deviceId, @"deviceid", [NSString stringWithFormat:@"%d",type], @"signintype",deviceToken, @"pushid", nil]];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
@@ -853,6 +804,65 @@
                                          
                                      }];
     [operation start];
+}
+
+- (void) toggleHelp:(UIViewController*) vc Enable:(BOOL)enable
+{
+    if(toolTips == nil)
+        toolTips = [[NSMutableArray alloc] init];
+    
+    if(!enable || [toolTips count] > 0) {
+        for(int i = 0; i < [toolTips count]; i++) {
+            JDFTooltipView *tooltip = [toolTips objectAtIndex:i];
+            [tooltip hideAnimated:YES];
+            tooltip = nil;
+        }
+        [toolTips removeAllObjects];
+        toolTips = nil;
+    } else {
+        [self checkToolTip:vc.view MainView:vc.view];
+    }
+}
+
+- (void) showTipForView:(UIView*) subView InMainView:(UIView*)view
+{
+    if(toolTips == nil)
+        toolTips = [[NSMutableArray alloc] init];
+    
+    NSString* hint = [subView accessibilityHint];
+    int arrowDirection = [[subView accessibilityIdentifier] intValue];
+    
+    if([hint length] > 8) {
+        JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:view tooltipText:hint arrowDirection:arrowDirection width:200.0f];
+        [tooltip show];
+        [toolTips addObject:tooltip];
+    } else {
+        for( int i = 0; i < [toolTips count]; i++) {
+            JDFTooltipView *t = [toolTips objectAtIndex:i];
+            if(t.targetView == subView) {
+                [t hideAnimated:YES];
+                [toolTips removeObject:t];
+                t = nil;
+            }
+        }
+    }
+}
+
+- (void) checkToolTip:(UIView*) view MainView:(UIView*) mainView
+{
+    for( UIView* subView in view.subviews) {
+        if(![subView isHidden] && subView.frame.origin.x >= 0 && subView.frame.origin.x < mainView.frame.size.width) {
+            NSString* hint = [subView accessibilityHint];
+            int arrowDirection = [[subView accessibilityIdentifier] intValue];
+            
+            if([hint length] > 8) {
+                JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:mainView tooltipText:hint arrowDirection:arrowDirection width:200.0f];
+                [tooltip show];
+                [toolTips addObject:tooltip];
+            }
+            [self checkToolTip:subView MainView:mainView];
+        }
+    }
 }
 
 -(NSString*) deviceName

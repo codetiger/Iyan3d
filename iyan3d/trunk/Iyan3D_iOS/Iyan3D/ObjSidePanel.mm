@@ -6,6 +6,8 @@
 //  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
+#import "AppHelper.h"
+
 #import "ObjSidePanel.h"
 #import "ObjCellView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -66,7 +68,30 @@
     if(viewType == CHANGE_TEXTURE) {
         [_addBtn setTitle:@"APPLY" forState:UIControlStateNormal];
     }
+    [self setToolTips];
+    
+    UITapGestureRecognizer *tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    tapGest.delegate = self;
+    [self.view addGestureRecognizer:tapGest];
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if([touch.view isDescendantOfView:self.addBtn])
+        return YES;
+    
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
+}
+
+- (void) setToolTips
+{
+    self.view.accessibilityHint = (viewType == IMPORT_OBJFILE && self.addBtn.tag == OBJ) ? @"Select an OBJ to preview." : @"Choose a texture to apply for the selected model.";
+    self.colorWheelBtn.accessibilityHint = ([self.colorWheelBtn isHidden]) ? @"" : @"Choose vertex color for the selected OBJ.";
+    self.importBtn.accessibilityHint = ([self.importBtn isHidden]) ? @"" : @"Tap to import texture from Photo Library.";
+    self.addBtn.accessibilityHint = ([self.addBtn isHidden]) ? @"" : (_addBtn.tag == OBJ) ? @"Tap to choose texture / color for the selected object." : @"Import the model with the selected texture / color.";
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -214,9 +239,14 @@
            [self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
        else
            [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+       [self.view removeFromSuperview];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
        [self.objSlideDelegate deallocSubViews];
     }
+    
+    [self setToolTips];
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+
 }
 
 - (IBAction)colorPickerAction:(id)sender {
@@ -276,6 +306,7 @@
         [self.objSlideDelegate removeTempNodeFromScene];
     else
         [self.objSlideDelegate removeTempTextureAndVertex];
+    [self.view removeFromSuperview];
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
     [self.objSlideDelegate deallocSubViews];
 }
