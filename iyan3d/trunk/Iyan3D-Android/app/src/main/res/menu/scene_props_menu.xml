@@ -12,4 +12,8 @@
         androclass:id="@+id/clone_btn"
         androclass:orderInCategory="2"
         androclass:title="@string/clone" />
+    <item
+        androclass:id="@+id/back_up"
+        androclass:orderInCategory="3"
+        androclass:title="@string/backUp" />
 </menu>

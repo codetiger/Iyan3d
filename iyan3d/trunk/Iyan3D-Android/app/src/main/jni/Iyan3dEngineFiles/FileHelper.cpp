@@ -140,6 +140,8 @@ std::string FileHelper::getCachesDirectory()
 {
 #ifdef UBUNTU
 	return "";
+#elif ANDROID
+    return constants::DocumentsStoragePath;
 #else
 	std::string home = getenv("HOME");
 	std::string caches = "/Library/Caches/";
@@ -152,6 +154,8 @@ std::string FileHelper::getDocumentsDirectory()
 {
 #ifdef UBUNTU
 	return "";
+#elif ANDROID
+	return constants::DocumentsStoragePath;
 #else
     std::string home = getenv("HOME");
     std::string documents = "/Documents/";

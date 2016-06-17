@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 
+import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.ChangeTextureAdapter;
+import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.opengl.GL2JNILib;
 
 /**
  * Created by Sabish.M on 18/3/16.
@@ -21,6 +24,8 @@ public class TextureSelection {
     private Context mContext;
     public ChangeTextureAdapter changeTextureAdapter;
     public AssetsDB assetsDB = new AssetsDB();
+    int selectedNodeid;
+    private Tracker mTracker;
 
     public TextureSelection(Context context){
         this.mContext = context;
@@ -28,7 +33,9 @@ public class TextureSelection {
 
     public void showChangeTexture()
     {
-        ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
+        HitScreens.TextureSelectionView(mContext);
+        selectedNodeid = GL2JNILib.getSelectedNodeId();
+                ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.HIDE);
         final ViewGroup insertPoint = (((EditorView) ((Activity) mContext)).sharedPreferenceManager.getInt(mContext, "toolbarPosition") == 1) ?
                 (ViewGroup) ((Activity) mContext).findViewById(R.id.leftView)
                 : (ViewGroup) ((Activity) mContext).findViewById(R.id.rightView);
@@ -49,7 +56,8 @@ public class TextureSelection {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EditorView)((Activity)mContext)).renderManager.removeTempTexture();
+                HitScreens.EditorView(mContext);
+                ((EditorView)((Activity)mContext)).renderManager.removeTempTexture(selectedNodeid);
                 insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
                 changeTextureAdapter = null;
@@ -58,6 +66,9 @@ public class TextureSelection {
         v.findViewById(R.id.add_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(assetsDB == null || assetsDB.getTexture().equals("") || (assetsDB.getX() == -1.0f && assetsDB.getY() == -1.0f && assetsDB.getZ() == -11.0f))
+                    return;
+                HitScreens.EditorView(mContext);
                 assetsDB.setIsTempNode(false);
                 changeTexture();
                 insertPoint.removeAllViews();
@@ -83,11 +94,13 @@ public class TextureSelection {
     }
 
     public void notifyDataChanged(){
-        changeTextureAdapter.notifyDataSetChanged();
+        if(changeTextureAdapter !=null)
+            changeTextureAdapter.notifyDataSetChanged();
     }
 
     public void changeTexture()
     {
-        ((EditorView)((Activity)mContext)).renderManager.changeTexture(2,assetsDB.getTexture(),assetsDB.getX(),assetsDB.getY(),assetsDB.getZ(),assetsDB.getIsTempNode());
+        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
+        ((EditorView)((Activity)mContext)).renderManager.changeTexture(selectedNodeid,assetsDB.getTexture(),assetsDB.getX(),assetsDB.getY(),assetsDB.getZ(),assetsDB.getIsTempNode());
     }
 }

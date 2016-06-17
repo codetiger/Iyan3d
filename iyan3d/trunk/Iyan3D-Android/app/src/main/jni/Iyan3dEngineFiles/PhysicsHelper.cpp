@@ -128,6 +128,7 @@ void PhysicsHelper::syncPhysicsWorld()
 
 void PhysicsHelper::updatePhysicsUpToFrame(int frame)
 {
+
     if(rBodies.size() > 0 || sBodies.size() > 0) {
         if(frame < previousFrame) {
             previousFrame = 0;
@@ -145,7 +146,6 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                 btQuaternion r = transform.getRotation();
                 Vector3 nodePos = Vector3(p.x(), p.y(), p.z());
                 Quaternion nodeRot = Quaternion(r.x(), r.y(), r.z(), r.w());
-                
                 SGNode* sgNode = (SGNode*)rBodies[j]->getUserPointer();
                 sgNode->setPosition(nodePos, frame);
                 sgNode->setRotation(nodeRot, frame);

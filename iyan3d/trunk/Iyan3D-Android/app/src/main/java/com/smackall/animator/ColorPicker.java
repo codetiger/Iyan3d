@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.UIHelper;
 
 /**
  * Created by Sabish.M on 12/3/16.
@@ -41,7 +42,16 @@ public class ColorPicker implements View.OnTouchListener {
         color_prop.setContentView(R.layout.color_picker);
         color_prop.setCancelable(false);
         color_prop.setCanceledOnTouchOutside(true);
-        color_prop.getWindow().setLayout(Constants.width / 3, Constants.height/2);
+
+        switch (UIHelper.ScreenType){
+            case Constants.SCREEN_NORMAL:
+                color_prop.getWindow().setLayout(Constants.width / 2, Constants.height);
+                break;
+            default:
+                color_prop.getWindow().setLayout(Constants.width / 3, Constants.height/2);
+                break;
+        }
+
         Window window = color_prop.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity= Gravity.TOP | Gravity.START;
@@ -97,7 +107,7 @@ public class ColorPicker implements View.OnTouchListener {
         int blue = Color.blue(touchedRGB);
         colorPreview.setBackgroundColor(touchedRGB);
         if(ViewType == Constants.TEXT_VIEW){
-            ((EditorView)((Activity)mContext)).textSelection.textDB.setRed(red/255.0f);
+            ((EditorView)((Activity)mContext)).textSelection.textDB.setRed(red / 255.0f);
             ((EditorView)((Activity)mContext)).textSelection.textDB.setGreen(green / 255.0f);
             ((EditorView)((Activity)mContext)).textSelection.textDB.setBlue(blue / 255.0f);
             ((EditorView)((Activity)mContext)).textSelection.textDB.setTempNode(true);
@@ -113,7 +123,7 @@ public class ColorPicker implements View.OnTouchListener {
                 ((EditorView)((Activity)mContext)).objSelection.objSelectionAdapter.importOBJ();
         }
         else if(ViewType == Constants.CHANGE_TEXTURE_MODE){
-            ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setx(red/255.0f);
+            ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setx(red / 255.0f);
             ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setY(green / 255.0f);
             ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setZ(blue / 255.0f);
             ((EditorView)((Activity)mContext)).textureSelection.assetsDB.setTexture("-1");

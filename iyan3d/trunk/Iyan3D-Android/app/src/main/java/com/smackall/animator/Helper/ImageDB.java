@@ -7,7 +7,7 @@ package com.smackall.animator.Helper;
 public class ImageDB {
 
     int nodeType;
-    String name;
+    String name = "";
     int width;
     int height;
     int assetAddType;

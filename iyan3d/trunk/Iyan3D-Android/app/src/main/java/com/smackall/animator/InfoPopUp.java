@@ -10,6 +10,9 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.share.widget.LikeView;
+import com.smackall.animator.Helper.Constants;
+
 /**
  * Created by Sabish.M on 7/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
@@ -18,7 +21,9 @@ public class InfoPopUp {
 
     private static final int ID_TUTORIAL  = 0;
     private static final int ID_SETTINGS = 1;
-    private static final int ID_CONTACT = 2;
+    private static final int ID_RATE = 2;
+    private static final int ID_SHARE = 3;
+    private static final int ID_CONTACT = 4;
     private Context mContext;
 
     public void infoPopUpMenu(Context context, View v)
@@ -34,6 +39,12 @@ public class InfoPopUp {
                         break;
                     case ID_SETTINGS:
                         openSettings(mContext);
+                        break;
+                    case ID_RATE:
+                        rateThisApp(mContext);
+                        break;
+                    case ID_SHARE:
+                        openFollowDialog(mContext);
                         break;
                     case ID_CONTACT:
                         openMail(mContext);
@@ -58,22 +69,51 @@ public class InfoPopUp {
         }
     }
 
-    private void openMail(Context context)
+    private void rateThisApp(Context context)
     {
-        Intent email = new Intent(Intent.ACTION_SEND);
-        email.setType("message/rfc822");
-        email.putExtra(Intent.EXTRA_EMAIL,new String[] { "iyan3d@smackall.com" });
-        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Iyan3D 5.0 app ( Device Model " + Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL + " , Android Version " + Build.VERSION.RELEASE + " )");
+        String url = "market://details?id="+context.getPackageName();
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
         try {
-            ((Activity)context).startActivity(email);
+            ((Activity)context).startActivity(i);
         }
         catch (ActivityNotFoundException e){
 
         }
     }
 
+    private void openMail(Context context)
+    {
+        Intent email = new Intent(Intent.ACTION_SEND);
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL,new String[] { "iyan3d@smackall.com" });
+        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Iyan3D 5.1 app ( Device Model " + Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL + " , Android Version " + Build.VERSION.RELEASE + " )");
+        try {
+            ((Activity)context).startActivity(email);
+        }
+        catch (ActivityNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
     private void openSettings(Context context)
     {
-        ((EditorView)((Activity)context)).settings.showSettings();
+        try {
+            if (Constants.currentActivity == 0)
+                ((SceneSelection) ((Activity) context)).settings.showSettings();
+            else
+                ((EditorView) ((Activity) context)).settings.showSettings();
+        }
+        catch (ClassCastException ignored){}
+    }
+
+    private void openFollowDialog(Context context){
+        try {
+            if (Constants.currentActivity == 0)
+                ((SceneSelection) ((Activity) context)).followApp.showFollowOption();
+            else
+                ((EditorView) ((Activity) context)).followApp.showFollowOption();
+        }
+        catch (ClassCastException ignored){}
     }
 }

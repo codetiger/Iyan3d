@@ -92,19 +92,18 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
 }
 
 #ifdef ANDROID
-bool SGSceneLoader::loadSceneData(std::string *filePath, JNIEnv *env, jclass type)
+bool SGSceneLoader::loadSceneData(std::string *filePath, JNIEnv *env, jclass type,jobject object)
 {
     ifstream inputSGBFile(*filePath,ios::in | ios::binary );
     FileHelper::resetSeekPosition();
-    if(!readScene(&inputSGBFile, env, type)){
+    if(!readScene(&inputSGBFile, env, type,object)){
         inputSGBFile.close();
         return false;
     }
     inputSGBFile.close();
     return true;
 }
-
-bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
+bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type,jobject object)
 {
     if(!currentScene || !smgr)
         return false;
@@ -119,31 +118,35 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type)
     vector<SGNode*> tempNodes;
     for(int i = 0;i < nodeCount;i++){
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
-        sgNode->readData(filePointer);
+        int origId = 0;
+        sgNode->readData(filePointer,origId);
         bool status = true;
-        
-        if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ)
-        {
-            status = currentScene->downloadMissingAssetsCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env, type);
-        }
-        else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
-            
-            status = currentScene->downloadMissingAssetsCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env,type);
+        if(origId > 0) {
+                    sgNode->setType(NODE_TEMP_INST);
+                    sgNode->assetId = origId;
+                } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ){
+            status = currentScene->downloadMissingAssetsCallBack(object,to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env, type);
+        } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
+            status = currentScene->downloadMissingAssetsCallBack(object,sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env,type);
         } else if (sgNode->getType() == NODE_IMAGE) {
-            status = currentScene->downloadMissingAssetsCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor), env, type);
-        }  else if (sgNode->getType() == NODE_PARTICLES) {
-            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true);
+            status = currentScene->downloadMissingAssetsCallBack(object,ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor), env, type);
+        } else if (sgNode->getType() == NODE_PARTICLES) {
+           // status = currentScene->downloadMissingAssetCallBack(object,to_string(sgNode->assetId), sgNode->getType(), true, env, type);
         }
         
         if(!status)
             sgNode = NULL;
         tempNodes.push_back(sgNode);
     }
+    currentScene->syncSceneWithPhysicsWorld();
     for (int i = 0; i < tempNodes.size(); i++) {
         SGNode *sgNode = tempNodes[i];
         bool nodeLoaded = false;
-        if(sgNode)
-            nodeLoaded = loadNode(sgNode,OPEN_SAVED_FILE);
+
+        if(sgNode && sgNode->getType() == NODE_TEMP_INST) {
+            nodeLoaded = loadInstance(sgNode, sgNode->assetId, OPEN_SAVED_FILE);
+        } else if(sgNode)
+            nodeLoaded = loadNode(sgNode, OPEN_SAVED_FILE);
         
         if(!nodeLoaded)
             delete sgNode;
@@ -549,7 +552,7 @@ void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
     
     dynamic_pointer_cast<MeshNode>(sgNode->node)->mesh->copyDataFromMesh(sourceMesh);
     
-    
+
     if(!smgr->renderMan->supportsInstancing) {
         Mesh *meshCache = dynamic_pointer_cast<MeshNode>(sgNode->node->original)->meshCache;
         if(!dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache)
@@ -557,7 +560,7 @@ void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
         dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->copyDataFromMesh(meshCache);
 
     }
-    
+
     if(smgr->device == METAL || !smgr->renderMan->supportsVAO)
         sgNode->node->shouldUpdateMesh = true;
 
@@ -745,15 +748,16 @@ bool SGSceneLoader::loadInstance(SGNode* iNode, int origId, ActionType actionTyp
     
     iNode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(iNode,actionType);
-    currentScene->selectMan->removeChildren(currentScene->getParentNode());
-    currentScene->updater->setDataForFrame(currentScene->currentFrame);
-    currentScene->selectMan->updateParentPosition();
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
     
     ((SGNode*)original->getUserPointer())->instanceNodes.insert(std::pair< int, SGNode* >(iNode->actionId, iNode));
     currentScene->nodes.push_back(iNode);
     currentScene->updater->resetMaterialTypes(false);
+
+    currentScene->selectMan->removeChildren(currentScene->getParentNode());
+    currentScene->updater->setDataForFrame(currentScene->currentFrame);
+    currentScene->selectMan->updateParentPosition();
 
     if(iNode->textureName == "" || iNode->textureName == "-1")
         iNode->props.perVertexColor = true;

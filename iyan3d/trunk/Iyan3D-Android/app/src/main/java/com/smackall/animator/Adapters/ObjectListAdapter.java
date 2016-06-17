@@ -132,8 +132,19 @@ public class ObjectListAdapter extends BaseAdapter implements SimpleGestureFilte
                 mEditedIds.clear();
                 mSelectedIds.clear();
                 selectedPosition = -1;
-                ((EditorView) ((Activity) mContext)).deleteNodeAtPosition(position,true);
-                notifyDataSetChanged();
+                ((EditorView) ((Activity) mContext)).glView.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        GL2JNILib.removeNode(position,false);
+                        objectCount = GL2JNILib.getNodeCount();
+                        ((EditorView)mContext).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
             }
         });
         return grid;

@@ -79,7 +79,7 @@ public:
     AnimatedMesh* LoadMesh(string filePath);
     void (*MTLPipelineStateCallBack)(int);
     void (*MTLEndEncoding)();
-    bool LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false);
+    bool LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false, bool isTest = false);
     Material* getMaterialByIndex(int index);
     Material* getMaterialByName(string name);
     int getNodeIndexByID(int id);

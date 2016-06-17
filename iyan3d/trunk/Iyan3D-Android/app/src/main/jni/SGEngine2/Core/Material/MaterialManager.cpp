@@ -22,13 +22,15 @@ MaterialManager::~MaterialManager(){
     RemoveAllMaterials();
 }
 
-bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass){
+bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest){
     Material *newMat = NULL;
     bool status;
 #ifdef ANDROID
     LOGI("Material initialize");
     newMat = new OGLMaterial();
-      ((OGLMaterial*)newMat)->LoadShaders(vShaderName,fShaderName);
+      status = ((OGLMaterial*)newMat)->LoadShaders(vShaderName,fShaderName,shadersStr);
+      if(!status && isTest)
+        return false;
     #elif IOS
     if(deviceType == METAL){
         #if !(TARGET_IPHONE_SIMULATOR)
@@ -38,7 +40,7 @@ bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,stri
     else if(deviceType == OPENGLES2){
         newMat = new OGLMaterial();
         status = ((OGLMaterial*)newMat)->LoadShaders(vShaderName,fShaderName, shadersStr);
-        if(!status)
+        if(!status && isTest)
             return false;
     }
     #endif

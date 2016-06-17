@@ -1,6 +1,11 @@
 package com.smackall.animator.Helper;
 
 import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,11 +55,13 @@ public class Constants {
     public final static int HIGH = 2;
 
     public static int VIEW_TYPE = 0;
+    public final static int EDITOR_VIEW = -1;
     public final static int ASSET_VIEW = 0;
     public final static int ANIMATION_VIEW = 1;
     public final static int TEXT_VIEW = 2;
     public final static int PARTICLE_VIEW = 13;
     public final static int RENDERING_VIEW = 14;
+    public final static int SETTINGS_VIEW = 15;
 
     public final static int MYANIMATION_TABLE = 7;
     public final static int MYANIMATION_DOWNLOAD = 4;
@@ -139,6 +146,8 @@ public class Constants {
     public final static int RELOAD_FRAMES = 9;
     public final static int SWITCH_MIRROR = 10;
     public final static int ADD_MULTI_ASSET_BACK = 11;
+    public final static int DELETE_MULTI_ASSET = 12;
+    public final static int ADD_INSTANCE_BACK = 13;
 
     public final static int ACTION_EMPTY = -1;
     public final static int ACTION_CHANGE_MIRROR_STATE = 0;
@@ -179,14 +188,37 @@ public class Constants {
 
     public static String deviceUniqueId = "";
 
+    public final static int TASK_PROGRESS = 0;
+    public final static int TASK_COMPLETED = 1;
 
-    public final static String urlForMesh = "https://iyan3dapp.com/appapi/mesh/";
-    public final static String urlForTexture = "https://iyan3dapp.com/appapi/meshtexture/";
-    public final static String urlMeshThumbnail =  "https://www.iyan3dapp.com/appapi/128images/";
-    public final static String urlFont = "https://iyan3dapp.com/appapi/font/";
-    public final static String urlAnimationThumbnail = "https://iyan3dapp.com/appapi/animationImage/";
-    public final static String urlForParticle = "https://iyan3dapp.com/appapi/particles/";
-    public final static String urlForAnimation = "http://iyan3dapp.com/appapi/animationFile/";
+    public final static int GOOGLE_SIGNIN = 1;
+    public final static int FACEBOOK_SIGNIN = 2;
+    public final static int TWITTER_SIGNIN = 3;
+    public final static int GOOGLE_SIGNIN_REQUESTCODE = 141;
+
+    public static int currentActivity = -1;
+
+    public static int NONE = 0;
+    public static int STATIC = 1;
+    public static int LIGHT = 2;
+    public static int MEDIUM = 3;
+    public static int HEAVY = 4;
+    public static int CLOTH = 5;
+    public static int BALLOON = 6;
+    public static int JELLY = 7;
+    
+    public static int POINT = 0;
+    public static int DIRECTIONAL = 1;
+
+    public final static int REQUEST_STORAGE = 100;
+    public final static int REQUEST_INTERNET = 101;
+    public final static int REQUEST_GET_ACCOUNTS = 102;
+    public final static int REQUEST_WAKELOCK = 103;
+
+    public final static int STORAGE = 100;
+    public final static int INTERNET = 101;
+    public final static int GET_ACCOUNTS = 102;
+    public final static int WAKELOCK = 103;
 
     public static boolean isPremium(Context mContext) {
         File key = new File("data/data/"+mContext.getPackageName()+"/shared_prefs/key");
@@ -212,5 +244,27 @@ public class Constants {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean checkPlayServices(Context mContext) {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(mContext);
+        return resultCode == ConnectionResult.SUCCESS;
+    }
+
+    public static float getFreeSpace() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+            long bytesAvailable = 0;
+            bytesAvailable = (long)stat.getBlockSizeLong() * (long)stat.getAvailableBlocksLong();
+            return bytesAvailable / (1024.f * 1024.f);
+        }
+        else{
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize = stat.getBlockSize();
+            long availableBlocks = stat.getAvailableBlocks();
+            return (availableBlocks * blockSize)/ (1024.f * 1024.f);
+        }
     }
 }

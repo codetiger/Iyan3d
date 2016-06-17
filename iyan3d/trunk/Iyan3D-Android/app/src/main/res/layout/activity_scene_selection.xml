@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.smackall.animator.SceneSelection"
+    android:orientation="vertical"
+    android:weightSum="1">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +30,7 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.25"
             android:gravity="center|left"
             android:weightSum="1">
 
@@ -36,11 +47,38 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scenes"
+                android:id="@+id/textView41"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
             android:gravity="center|right" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_btn"
+                android:src="@drawable/login_btn"
+                android:adjustViewBounds="false"
+                android:scaleType="center"
+                android:layout_marginRight="30dp"
+                android:clickable="true"
+                android:onClick="showLogIn"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -62,17 +100,25 @@
         android:layout_weight="0.925"
         android:background="#222325">
 
-        <GridView
+        <!--<GridView-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:id="@+id/gridView"-->
+            <!--android:numColumns="4"-->
+            <!--android:stretchMode="columnWidth"-->
+            <!--android:verticalSpacing="0dp"-->
+            <!--android:horizontalSpacing="0dp"-->
+            <!--android:layout_margin="30dp"-->
+            <!--android:foregroundGravity="bottom" />-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/gridView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/gridView"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="0dp"
-            android:horizontalSpacing="0dp"
             android:layout_margin="30dp"
-            android:foregroundGravity="bottom" />
-
+            android:scrollbars="vertical"
+            android:clipToPadding="false"/>
     </LinearLayout>
 
 </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>

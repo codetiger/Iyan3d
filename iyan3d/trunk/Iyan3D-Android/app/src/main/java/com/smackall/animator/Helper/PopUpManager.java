@@ -25,7 +25,7 @@ public class PopUpManager {
     public void initPopUpManager(int selectedNodeId,View v,MotionEvent event)
     {
         if(selectedNodeId == -1) return;
-        int nodeType = GL2JNILib.getNodeType(selectedNodeId);
+            int nodeType = GL2JNILib.getNodeType(selectedNodeId);
 
         switch (nodeType){
             case Constants.NODE_CAMERA:
@@ -40,7 +40,7 @@ public class PopUpManager {
             case Constants.NODE_IMAGE:
             case Constants.NODE_VIDEO:
             case Constants.NODE_PARTICLES:
-                editorView.meshProps.showMeshProps(v,event);
+                editorView.otherProps.showOtherProps(v,event);
                 break;
             case Constants.NODE_TEXT:
             case Constants.NODE_RIG:

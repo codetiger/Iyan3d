@@ -96,11 +96,11 @@ std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniform
 }
 
 
-bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr){
+bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest){
     bool isDepthPass = (fShaderName=="")?true:false;
     if(deviceType == OPENGLES2) {
         return smgr->LoadShaders(materialName, BundlePath + "/" + vShaderName,
-                                 BundlePath + "/" + fShaderName, shadersStr);
+                                 BundlePath + "/" + fShaderName, shadersStr, false, isTest);
     }
     else if(deviceType == METAL)
         return smgr->LoadShaders(materialName,vShaderName,fShaderName, shadersStr, isDepthPass);
@@ -223,7 +223,7 @@ void ShaderManager::setMeshProps(SGNode *sgNode, bool isVColored, int paramIndex
     int endIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt + ShaderManager::maxIntsances : 0;
     if(endIndex > sgNode->instanceNodes.size())
         endIndex = (int)sgNode->instanceNodes.size();
-    
+
     float *props = new float[((endIndex - startIndex)+1) * 4];
     
     props[0] = (sgNode->props.isSelected || !sgNode->props.isVisible) ?  NODE_SELECTION_TRANSPARENCY : sgNode->props.transparency;
@@ -467,11 +467,11 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     if(!renderingPreview) {
         meshCacheCreated = pNode->updateParticles((sgNode->props.isSelected || isRendering), smgr->getActiveCamera()->getPosition());
     }
+
     if(!meshCacheCreated) {
         pNode->shouldUpdateMesh = true;
         smgr->updateVertexAndIndexBuffers(sgNode->node, MESH_TYPE_LITE);
     }
-    
     Mat4 model = sgNode->node->getModelMatrix();
     Mat4 vp = projMat * viewMat;
 

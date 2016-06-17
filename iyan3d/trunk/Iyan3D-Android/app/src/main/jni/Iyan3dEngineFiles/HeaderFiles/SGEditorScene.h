@@ -68,7 +68,7 @@ protected:
 public:
     
     /* cpp class objects */
-    
+    bool addVAOSupport;
     bool isPreviewMode, isRigMode , shadowsOff, shouldRecalculatePhysics;
     bool freezeRendering , isPlaying;
     bool isMultipleSelection;

@@ -45,7 +45,9 @@ public:
     
     OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale);
     ~OGLES2RenderManager();
-    
+    #ifdef ANDROID
+    void initialiseOtherVAOFunc ();
+    #endif
     Vector4 clearColor;
     GLenum depthState;
     GLenum dFactor;

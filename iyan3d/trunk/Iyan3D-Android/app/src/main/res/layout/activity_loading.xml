@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context="com.smackall.animator.LoadingActivity"
@@ -9,32 +11,38 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.7"></LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="0.3"
-        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:weightSum="1">
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/loadingBar"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.7"></LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
             android:layout_gravity="center"
-            android:max="100"
-            android:progress="20"
-            android:indeterminate="false"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:weightSum="1">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/loadingBar"
+                android:layout_gravity="center"
+                android:max="100"
+                android:progress="20"
+                android:indeterminate="false"
+                android:layout_weight="0.5" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

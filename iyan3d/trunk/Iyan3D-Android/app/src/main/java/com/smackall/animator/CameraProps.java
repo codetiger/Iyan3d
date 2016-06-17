@@ -3,6 +3,7 @@ package com.smackall.animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,9 +14,13 @@ import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.SharedPreferenceManager;
+import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.opengl.GL2JNILib;
+
+import java.util.Locale;
 
 /**
  * Created by Sabish.M on 12/3/16.
@@ -36,12 +41,21 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
 
     public void showCameraProps(View v,MotionEvent event)
     {
+        HitScreens.CameraPropsView(mContext);
         Dialog camera_prop = new Dialog(mContext);
         camera_prop.requestWindowFeature(Window.FEATURE_NO_TITLE);
         camera_prop.setContentView(R.layout.camera_props);
         camera_prop.setCancelable(false);
         camera_prop.setCanceledOnTouchOutside(true);
-        camera_prop.getWindow().setLayout(Constants.width / 2, (int) (Constants.height/2));
+        switch (UIHelper.ScreenType){
+            case Constants.SCREEN_NORMAL:
+                camera_prop.getWindow().setLayout((int) (Constants.width/1.3), (int) (Constants.height/1.3));
+                break;
+            default:
+                camera_prop.getWindow().setLayout(Constants.width / 2, (int) (Constants.height/2));
+                break;
+        }
+
         Window window = camera_prop.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity= Gravity.TOP | Gravity.START;
@@ -60,6 +74,12 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
         dialog = camera_prop;
         initViews(camera_prop);
         camera_prop.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                HitScreens.EditorView(mContext);
+            }
+        });
     }
 
     private void initViews(Dialog camera_prop)
@@ -79,7 +99,7 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
     {
         int cameraResolution = GL2JNILib.resolutionType();
         ((SeekBar)camera_prop.findViewById(R.id.field_of_view)).setProgress((int) (GL2JNILib.cameraFov()));
-        ((RadioButton) camera_prop.findViewById(R.id.THOUSAND_EIGHTY)).setChecked((cameraResolution == Constants.THOUSAND_EIGHTY));
+        ((RadioButton)camera_prop.findViewById(R.id.THOUSAND_EIGHTY)).setChecked((cameraResolution == Constants.THOUSAND_EIGHTY));
         ((RadioButton)camera_prop.findViewById(R.id.SEVEN_TWENTY)).setChecked((cameraResolution == Constants.SEVEN_TWENTY));
         ((RadioButton)camera_prop.findViewById(R.id.FOUR_EIGHTY)).setChecked((cameraResolution == Constants.FOUR_EIGHTY));
         ((RadioButton)camera_prop.findViewById(R.id.THREE_SIXTY)).setChecked((cameraResolution == Constants.THREE_SIXTY));
@@ -124,7 +144,8 @@ public class CameraProps implements View.OnClickListener,SeekBar.OnSeekBarChange
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        fov_lable.setText(Integer.toString(progress));
+        if(progress < 1) {seekBar.setProgress(1); return;}
+        fov_lable.setText(String.format(Locale.getDefault(),"%d",progress));
         update(false);
     }
 

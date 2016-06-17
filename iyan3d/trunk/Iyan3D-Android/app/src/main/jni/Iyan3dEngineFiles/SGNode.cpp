@@ -126,19 +126,27 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         }
         case NODE_PARTICLES:{
             textureName = to_string(assetId) + "-cm";
-            Json::Value pData = parseParticlesJson(assetId);
+
             string meshPath = "";
             string texPath = "";
+            string jsonPath = "";
 #ifdef IOS
             meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
             texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
 #elif ANDROID
             meshPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + ".sgm";
             texPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + "-cm.png";
+            jsonPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + ".json";
 #else
             meshPath = to_string(assetId) + ".sgm";
             texPath = to_string(assetId) + "-cm.png";
 #endif
+            #ifdef ANDROID
+                if (!checkFileExists(meshPath) || !checkFileExists(texPath) || !checkFileExists(jsonPath)) {
+                    return shared_ptr<Node>();
+                }
+            #endif
+            Json::Value pData = parseParticlesJson(assetId);
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
             setParticlesData(node, pData);
@@ -239,17 +247,21 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_SHADOW_SKIN_L1));
     node->getMesh()->Commit();
     string textureFileName = "";
-#ifndef ANDROID
     textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
     if(!checkFileExists(textureFileName)){
+    #ifndef ANDROID
         textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
         if(!checkFileExists(textureFileName)){
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
             if(!checkFileExists(textureFileName))
                 textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         }
+         #elif ANDROID
+                            textureFileName = constants::BundlePath+"/"+textureName+".png";
+                            if(!checkFileExists(textureFileName))
+                                textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
+                        #endif
     }
-#endif
 
     printf("Texture File Path : %s " , textureFileName.c_str());
     
@@ -299,12 +311,12 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
             if(FILE *file = fopen(pathForFont.c_str(), "r"))
                 fclose(file);
             else {
+                Logger::log(INFO,"SGNode","Font Path : " + pathForFont);
                 printf("File not exists at %s ",pathForFont.c_str());
                 return shared_ptr<Node>();
             }
         }
     }
-    
     Mesh *mesh = TextMesh3d::get3DTextMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
     
     if(mesh == NULL)
@@ -313,17 +325,21 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
     node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     string textureFileName = "";
-#ifndef ANDROID
     textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
     if(!checkFileExists(textureFileName)){
+    #ifndef ANDROID
         textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
         if(!checkFileExists(textureFileName)){
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
             if(!checkFileExists(textureFileName))
                 textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
         }
+         #elif ANDROID
+                    textureFileName = constants::BundlePath+"/"+textureName+".png";
+                    if(!checkFileExists(textureFileName))
+                        textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
+                #endif
     }
-#endif
     if(textureName != "" && checkFileExists(textureFileName)) {
         props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
@@ -469,14 +485,20 @@ StoragePath = constants::DocumentsStoragePath + "/mesh/";
     }
     
     if(!checkFileExists(textureFileName)){
-        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-        if(!checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-            if(!checkFileExists(textureFileName))
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
+        #ifndef ANDROID
+            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
+            if(!checkFileExists(textureFileName)){
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
                 if(!checkFileExists(textureFileName))
-                    textureFileName = constants::CachesStoragePath + "/"+textureName+".png";
-        }
+                    textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
+                    if(!checkFileExists(textureFileName))
+                        textureFileName = constants::CachesStoragePath + "/"+textureName+".png";
+            }
+         #elif ANDROID
+                    textureFileName = constants::BundlePath+"/"+textureName+".png";
+                    if(!checkFileExists(textureFileName))
+                        textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
+            #endif
     }
     
     AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);
@@ -574,8 +596,14 @@ sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureNa
     return planeNode;
 }
 shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio)
-{
-    Texture *nodeTex = smgr->loadTextureFromVideo(videoFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+{Texture *nodeTex;
+     #ifdef  ANDROID
+         string dummyPath = constants::BundlePath + "/whiteborder.png";
+         nodeTex = smgr->loadTexture("Dummy Vid Tex", dummyPath, TEXTURE_RGBA8, TEXTURE_BYTE);
+     #else
+         nodeTex = smgr->loadTextureFromVideo(videoFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+     #endif
+    //Texture *nodeTex = smgr->loadTextureFromVideo(videoFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
     Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
@@ -662,7 +690,7 @@ void SGNode::setPositionOnNode(Vector3 position, bool updateBB)
 {
     if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
         ShaderManager::lightChanged = true;
-    
+
     node->setPosition(position, updateBB);
     node->updateAbsoluteTransformation();
     

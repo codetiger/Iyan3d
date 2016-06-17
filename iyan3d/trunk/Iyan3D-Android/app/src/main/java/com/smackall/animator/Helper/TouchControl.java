@@ -76,7 +76,6 @@ public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGe
                     }
                     ((EditorView)(Activity)mContext).renderManager.tapMove(event);
                     ((EditorView)(Activity)mContext).renderManager.swipe(velocityTracker);
-
                     return true;
                 } else if (fingerCount == 2) {
                     if (panBegan == 0) {
@@ -99,12 +98,11 @@ public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGe
 
     @Override
     public void onShowPress(MotionEvent e) {
-
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if(GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false);
+        if(GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false,null);
         return false;
     }
 
@@ -115,11 +113,12 @@ public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGe
 
     @Override
     public void onLongPress(MotionEvent e) {
-        if(GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false);
+        if(GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false,null);
         MotionEvent event = e;
-        event.setSource(Constants.LONG_PRESS);
-        ((EditorView) (Activity) mContext).renderManager.checktapposition(event);
-        ((EditorView)(Activity)mContext).renderManager.tapEnd(event);
+            if (GL2JNILib.selectedNodeIdsSize() > 0)
+                ((EditorView) mContext).showCloneOption(null, e);
+            else
+                ((EditorView) ((Activity) mContext)).popUpManager.initPopUpManager(GL2JNILib.getSelectedNodeId(), null, event);
     }
 
     @Override

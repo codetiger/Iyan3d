@@ -18,7 +18,6 @@ public class GetFrameAtTime {
             frame = null;
             frame = mediaMetadata.getFrameAtTime(frameC);
         } catch (Exception e) {
-            System.out.println("Error");
         }
         return frame;
     }

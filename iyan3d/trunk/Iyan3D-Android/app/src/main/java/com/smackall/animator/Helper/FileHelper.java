@@ -1,18 +1,11 @@
-/*
- * Decompiled with CFR 0_110.
- * 
- * Could not load the following classes:
- *  java.io.File
- *  java.io.FileInputStream
- *  java.io.FileOutputStream
- *  java.lang.Exception
- *  java.lang.Object
- *  java.lang.String
- */
 package com.smackall.animator.Helper;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,8 +14,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 public class FileHelper {
     public static boolean checkValidFilePath(File file) {
@@ -162,23 +157,23 @@ public class FileHelper {
 
     public static String md5(String s) {
 
+        String digest = null;
         try {
-            // Create MD5 Hash
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(s.getBytes("UTF-8"));
 
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            return hexString.toString();
+            //converting byte array to Hexadecimal String
+            StringBuilder sb = new StringBuilder(2*hash.length);
+            for(byte b : hash){
+                sb.append(String.format("%02x", b&0xff));
+            }
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            digest = sb.toString();
+
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
         }
-
-        return "";
+        return digest;
     }
 
     public static boolean isItHaveSpecialChar(String input){
@@ -210,10 +205,36 @@ public class FileHelper {
         File files[] = f.listFiles(filenameFilter);
 
         if(files != null) {
-            for (int i = 0; i < files.length; i++) {
-                File file = new File(userMeshFolder + getFileNameFromPath(files[i].getAbsolutePath()));
-                copy(files[i].getAbsoluteFile(), file);
-                files[i].getAbsoluteFile().delete();
+            for (File file1 : files) {
+                File file = new File(userMeshFolder + getFileNameFromPath(file1.getAbsolutePath()));
+                copy(file1.getAbsoluteFile(), file);
+                file1.getAbsoluteFile().delete();
+            }
+        }
+    }
+
+    public static void getFontFromCommonIyan3dPath(Context context){
+        final String commonFolder = PathManager.LocalImportAndExport+"/";
+        final String userFontFolder = PathManager.LocalUserFontFolder+"/";
+
+        final File f = new File(commonFolder);
+
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if(filename.toLowerCase().endsWith("otf") ||  filename.toLowerCase().endsWith("ttf"))
+                    return true;
+                else
+                    return false;
+            }
+        };
+        File files[] = f.listFiles(filenameFilter);
+
+        if(files != null) {
+            for (File file1 : files) {
+                File file = new File(userFontFolder + getFileNameFromPath(file1.getAbsolutePath()));
+                copy(file1.getAbsoluteFile(), file);
+                file1.getAbsoluteFile().delete();
             }
         }
     }
@@ -300,5 +321,98 @@ public class FileHelper {
         } catch (Exception e) {
         }
     }
-}
 
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
+    static SecureRandom rnd = new SecureRandom();
+
+    public static String randomString( int len ){
+        StringBuilder sb = new StringBuilder( len );
+        for( int i = 0; i < len; i++ )
+            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+        return sb.toString();
+    }
+
+    public static String getFilePathFromUri(Uri uri,Context mContext,String type){
+        String[] filePathColumn = {type};
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                filePathColumn, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        else {
+            return null;
+        }
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        return picturePath;
+    }
+
+    public static void manageImageFile(String path,Context mContext){
+        boolean exits = FileHelper.checkValidFilePath(path);
+        if(exits){
+            Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
+            if(bmp == null) return;
+            savePng(bmp, PathManager.LocalThumbnailFolder + "/original" + FileHelper.getFileWithoutExt(path));
+            bmp = null;
+            makeThumbnail(path, "",mContext);
+            scaleToSquare(path,mContext);
+        }
+    }
+
+    public static void makeThumbnail(String path, String fileName,Context mContext)
+    {
+        Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
+        if (bmp == null)
+            return;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 128, 128, false);
+        savePng(scaledBitmap,PathManager.LocalThumbnailFolder+"/"+((fileName.length() >0) ? fileName : FileHelper.getFileWithoutExt(path)));
+        scaledBitmap = null;
+    }
+
+    public static void makeThumbnail(String path,Context mContext)
+    {
+        Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
+        if (bmp == null)
+            return;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 128, 128, false);
+        savePng(scaledBitmap,PathManager.LocalThumbnailFolder+"/"+FileHelper.getFileWithoutExt(path));
+        scaledBitmap = null;
+    }
+
+    private static void scaleToSquare(String path,Context mContext)
+    {
+        Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
+        if(bmp == null) return;
+        final int oriWidth = bmp.getWidth();
+        final int oriHeight = bmp.getHeight();
+        int maxSize = Math.max(oriHeight, oriWidth);
+        int targetSize = 0;
+        if(maxSize <= 128)
+            targetSize = 128;
+        else if(maxSize <= 256)
+            targetSize = 256;
+        else if(maxSize <= 512)
+            targetSize = 512;
+        else
+            targetSize = 1024;
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, targetSize, targetSize, false);
+        savePng(scaledBitmap,PathManager.LocalImportedImageFolder+"/"+FileHelper.getFileWithoutExt(path));
+        scaledBitmap = null;
+    }
+
+    public static void savePng(Bitmap bitmap, String filePath)
+    {
+        try {
+            File temp = new File(filePath);
+            FileOutputStream os = new FileOutputStream(temp+".png");
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

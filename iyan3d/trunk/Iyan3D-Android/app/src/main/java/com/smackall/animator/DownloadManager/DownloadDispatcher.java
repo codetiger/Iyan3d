@@ -1,7 +1,9 @@
 package com.smackall.animator.DownloadManager;
 
 import android.os.Process;
-import android.util.Log;
+
+import com.smackall.animator.Helper.FileHelper;
+import com.smackall.animator.Helper.PathManager;
 
 import org.apache.http.conn.ConnectTimeoutException;
 
@@ -61,7 +63,6 @@ public class DownloadDispatcher extends Thread {
     Timer mTimer;
 
     /** Tag used for debugging/logging */
-    public static final String TAG = "Smackall Games";
 
     /** Constructor take the dependency (DownloadRequest queue) that all the Dispatcher needs */
     public DownloadDispatcher(BlockingQueue<DownloadRequest> queue,
@@ -78,7 +79,6 @@ public class DownloadDispatcher extends Thread {
     		try {
                 mRequest = mQueue.take();
                 mRedirectionCount = 0;
-                Log.v(TAG, "Download initiated for " + mRequest.getDownloadId());
                 updateDownloadState(DownloadManager.STATUS_STARTED);
                 executeDownload(mRequest.getUri().toString());
     		} catch (InterruptedException e) {
@@ -132,8 +132,7 @@ public class DownloadDispatcher extends Thread {
          	
             final int responseCode = conn.getResponseCode();
             
-            Log.v(TAG, "Response code obtained for downloaded Id " + mRequest.getDownloadId() + " : httpResponse Code " + responseCode);
-            
+
             switch (responseCode) {
                 case HTTP_OK:
                     shouldAllowRedirects = false;
@@ -150,7 +149,6 @@ public class DownloadDispatcher extends Thread {
                     // Take redirect url and call executeDownload recursively until
                     // MAX_REDIRECT is reached.
                     while (mRedirectionCount++ < MAX_REDIRECTS && shouldAllowRedirects) {
-                        Log.v(TAG, "Redirect for downloaded Id " + mRequest.getDownloadId());
                         final String location = conn.getHeaderField("Location");
                         executeDownload(location);
                         continue;
@@ -206,6 +204,7 @@ public class DownloadDispatcher extends Thread {
     		File destinationFile = new File(mRequest.getDestinationURI().getPath().toString());
     		
             try {
+                FileHelper.mkDir(PathManager.LocalCacheFolder+"/");
                     out = new FileOutputStream(destinationFile, true);
                     outFd = ((FileOutputStream) out).getFD();
 
@@ -243,10 +242,8 @@ public class DownloadDispatcher extends Thread {
         final byte data[] = new byte[BUFFER_SIZE];
         mCurrentBytes = 0;
         mRequest.setDownloadState(DownloadManager.STATUS_RUNNING);
-        Log.v(TAG, "Content Length: " + mContentLength + " for Download Id " + mRequest.getDownloadId());
         for (;;) {
             if (mRequest.isCanceled()) {
-                Log.v(TAG, "Stopping the download as Download Request is cancelled for Downloaded Id " + mRequest.getDownloadId());
                 mRequest.finish();
                 updateDownloadFailed(DownloadManager.ERROR_DOWNLOAD_CANCELLED,"Download cancelled");
                 return;
@@ -300,7 +297,6 @@ public class DownloadDispatcher extends Thread {
         if (transferEncoding == null) {
             mContentLength = getHeaderFieldLong(conn, "Content-Length", -1);
         } else {
-            Log.v(TAG, "Ignoring Content-Length since Transfer-Encoding is also defined for Downloaded Id " + mRequest.getDownloadId());
             mContentLength = -1;
         }
 
@@ -343,7 +339,6 @@ public class DownloadDispatcher extends Thread {
      * the downloaded file.
      */
     private void cleanupDestination() {
-        Log.d(TAG, "cleanupDestination() deleting " + mRequest.getDestinationURI().toString());
         File destinationFile = new File(mRequest.getDestinationURI().toString());
         if(destinationFile.exists()) {
             destinationFile.delete();

@@ -9,7 +9,15 @@
         androclass:orderInCategory="1"
         androclass:title="@string/settings"/>
     <item
-        androclass:id="@+id/contact_btn"
+        androclass:id="@+id/rate_app"
         androclass:orderInCategory="2"
+        androclass:title="@string/rate" />
+    <item
+        androclass:id="@+id/share_app"
+        androclass:orderInCategory="3"
+        androclass:title="@string/share" />
+    <item
+        androclass:id="@+id/contact_btn"
+        androclass:orderInCategory="4"
         androclass:title="@string/contact" />
 </menu>

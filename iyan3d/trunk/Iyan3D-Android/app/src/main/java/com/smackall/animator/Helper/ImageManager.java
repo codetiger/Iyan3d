@@ -1,6 +1,7 @@
 package com.smackall.animator.Helper;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,15 +30,20 @@ public class ImageManager {
     {
         this.viewType = viewType;
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        ((Activity)mContext).startActivityForResult(i, Constants.IMAGE_IMPORT_RESPONSE);
+        try {
+            ((Activity)mContext).startActivityForResult(i, Constants.IMAGE_IMPORT_RESPONSE);
+        }
+        catch (ActivityNotFoundException e){
+            UIHelper.informDialog(mContext,"Gallery not found.");
+        }
     }
 
     public void startActivityForResult(Intent i, int requestCode,int resultCode)
     {
+        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
         if (requestCode == Constants.IMAGE_IMPORT_RESPONSE && resultCode == Activity.RESULT_OK && null != i) {
             Uri selectedImage = i.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
             Cursor cursor = mContext.getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             if (cursor != null) {
@@ -51,9 +57,10 @@ public class ImageManager {
             cursor.close();
             manageImageFile(picturePath);
         }
+        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
     }
 
-    private void manageImageFile(String path){
+    public void manageImageFile(String path){
         boolean exits = FileHelper.checkValidFilePath(path);
         if(exits){
             ((EditorView)((Activity)mContext)).showOrHideLoading(Constants.SHOW);
@@ -63,12 +70,18 @@ public class ImageManager {
             bmp = null;
             makeThumbnail(path, "");
             scaleToSquare(path);
-            if(viewType == Constants.IMPORT_IMAGES)
-                ((EditorView)((Activity)mContext)).imageSelection.notifyDataChanged();
-            else if(viewType == Constants.IMPORT_OBJ)
-                ((EditorView)((Activity)mContext)).objSelection.notifyDataChanged();
-            else if(viewType == Constants.CHANGE_TEXTURE_MODE)
-                ((EditorView)((Activity)mContext)).textureSelection.notifyDataChanged();
+            if(viewType == Constants.IMPORT_IMAGES) {
+                if (((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).imageSelection != null)
+                    ((EditorView) ((Activity) mContext)).imageSelection.notifyDataChanged();
+            }
+            else if(viewType == Constants.IMPORT_OBJ) {
+                if (((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).objSelection != null)
+                    ((EditorView) ((Activity) mContext)).objSelection.notifyDataChanged();
+            }
+            else if(viewType == Constants.CHANGE_TEXTURE_MODE) {
+                if (((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).textureSelection != null)
+                    ((EditorView) ((Activity) mContext)).textureSelection.notifyDataChanged();
+            }
         }
     }
 

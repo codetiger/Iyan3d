@@ -35,8 +35,8 @@ public:
     void initEnvelope(std::map<int, SGNode*>& envelopes, int jointId);
     
     #ifdef ANDROID
-        bool loadSceneData(std::string *filePath, JNIEnv *env, jclass type);
-        bool readScene(ifstream *filePointer, JNIEnv *env, jclass type);
+    bool loadSceneData(std::string *filePath, JNIEnv *env, jclass type,jobject object);
+	bool readScene(ifstream *filePointer, JNIEnv *env, jclass type,jobject object);
     #endif
     
     SGNode* loadNode(NODE_TYPE type,int assetId,string textureName ,std::wstring imagePath = L" ",int imgWidth = 0,int imgHeight = 0,int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0),string fontFilePath = "",bool isTempNode = false);

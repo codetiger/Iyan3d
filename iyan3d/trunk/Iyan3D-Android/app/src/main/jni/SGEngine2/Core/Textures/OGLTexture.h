@@ -34,6 +34,9 @@ public:
     bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
     bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
     void updateTexture(string filePath, int frame);
+#ifdef  ANDROID
+    void updateTexture(unsigned char* imageData);
+#endif
     GLenum getOGLTextureFormat(TEXTURE_DATA_FORMAT format);
     GLenum getOGLTextureType(TEXTURE_DATA_TYPE type);
     void createRenderTargetTexture(string textureName , TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height);

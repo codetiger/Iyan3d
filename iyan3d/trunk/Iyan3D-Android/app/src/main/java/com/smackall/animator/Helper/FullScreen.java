@@ -1,6 +1,5 @@
 package com.smackall.animator.Helper;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
@@ -20,20 +19,20 @@ public class FullScreen {
 
     public static void HideStatusBar(Activity activity)
     {
-        if (Build.VERSION.SDK_INT < 16) {
-            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        else{
-            View decorView = activity.getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-            ActionBar actionBar = activity.getActionBar();
-            if(actionBar != null)
-                actionBar.hide();
-        }
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
+//        if (Build.VERSION.SDK_INT < 16) {
+//            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        }
+//        else{
+//            View decorView = activity.getWindow().getDecorView();
+//            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+//            decorView.setSystemUiVisibility(uiOptions);
+//            ActionBar actionBar = activity.getActionBar();
+//            if(actionBar != null)
+//                actionBar.hide();
+//        }
     }
 
     public static void FullScreencall(final Activity activity,Context context) {

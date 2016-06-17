@@ -1,4 +1,5 @@
 //
+//
 //  Material.cpp
 //  SGEngine2
 //
@@ -94,11 +95,7 @@ short OGLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16
 bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr){
     GLuint vShaderHandle = CompileShader(vShaderName,GL_VERTEX_SHADER, shadersStr);
     GLuint fShaderHandle = CompileShader(fShaderName,GL_FRAGMENT_SHADER, shadersStr);
-    if(vShaderHandle == -1 || fShaderHandle == -1)
-        return false;
     shaderProgram = LinkShaders(vShaderHandle,fShaderHandle);
-    if(shaderProgram == -1)
-        return false;
     glUseProgram(shaderProgram);
     GLint maxNameLength = 0;
     glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxNameLength);
@@ -113,6 +110,10 @@ bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< s
         AddAttributes(attribNameStr,Helper::getSGEngineDataType(type),CreateAttribute(shaderProgram,attribNameStr),0);
     }
     Logger::log(INFO,"OGLMaterial",vShaderName + "  " + fShaderName + "  Shaders Loaded Succesfully");
+
+        if(vShaderHandle == -1 || fShaderHandle == -1 || shaderProgram == -1)
+            return false;
+
     return true;
 }
 string OGLMaterial::getShaderAttributeNameByIndex(int i){

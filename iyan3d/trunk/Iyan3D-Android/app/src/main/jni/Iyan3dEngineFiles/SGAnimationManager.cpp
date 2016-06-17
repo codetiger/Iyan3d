@@ -59,6 +59,8 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
 
 void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
 {
+    if(fromNodeId < 0 || fromNodeId >= animScene->nodes.size() || toNodeId < 0 || toNodeId >= animScene->nodes.size())
+        return;
     animScene->selectMan->selectObject(toNodeId,false);
     animScene->nodes[toNodeId]->positionKeys = animScene->nodes[fromNodeId]->positionKeys;
     animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
@@ -84,18 +86,21 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
     if(!excludeKeys) {
         ActionKey key;
         key.isPositionKey = true;
-        key.position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->positionKeys);
+        if(animScene->nodes[fromNodeId]->positionKeys.size() > 0)
+            key.position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->positionKeys);
         key.isRotationKey = true;
-        key.rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(animScene->currentFrame, animScene->nodes[fromNodeId]->rotationKeys,true);
+        if(animScene->nodes[fromNodeId]->rotationKeys.size() >0)
+            key.rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(animScene->currentFrame, animScene->nodes[fromNodeId]->rotationKeys,true);
         key.isScaleKey = true;
-        key.scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->scaleKeys);
-        
+        if(animScene->nodes[fromNodeId]->scaleKeys.size() >0)
+            key.scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->scaleKeys);
+
         animScene->nodes[toNodeId]->setKeyForFrame(0, key);
-        
+
         SGAction &addAction = (animScene->actionMan->actions[animScene->actionMan->actions.size() -1]);
-        
+
         SGNode *sgNode = animScene->nodes[toNodeId];
-        
+
         if(sgNode->positionKeys.size())
             addAction.nodePositionKeys = sgNode->positionKeys;
         if(sgNode->rotationKeys.size())
@@ -111,7 +116,7 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
                 addAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
             }
         }
-        
+
         if(addAction.actionType == ACTION_NODE_ADDED) {
             addAction.actionSpecificStrings[0] = (ConversionHelper::getWStringForString(sgNode->oriTextureName));
             addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->textureName));

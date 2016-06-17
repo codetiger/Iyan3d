@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Spinner;
 
+import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.AssetSelectionAdapter;
+import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.DownloadManager.AddToDownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManager;
 import com.smackall.animator.Helper.AssetsDB;
@@ -37,7 +39,7 @@ public class AssetSelection {
     private DownloadManager downloadManager;
     private int PARTICLE = 13;
     ViewGroup insertPoint;
-
+    private Tracker mTracker;
     public AssetSelection(Context context,DatabaseHelper db,AddToDownloadManager addToDownloadManager
     ,DownloadManager downloadManager){
         this.mContext = context;
@@ -48,6 +50,8 @@ public class AssetSelection {
 
     public void showAssetSelection(int viewType)
     {
+        HitScreens.AssetsSelectionView(mContext);
+        addToDownloadManager.lastErrorShowingTime = 0;
         ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
         insertPoint = (((EditorView)((Activity)mContext)).sharedPreferenceManager.getInt(mContext,"toolbarPosition") == 1 ) ?
                 (ViewGroup) ((Activity)mContext).findViewById(R.id.leftView)
@@ -75,12 +79,26 @@ public class AssetSelection {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 category.setSelection(position);
                 assetSelectionAdapter.assetsDBs.clear();
+                assetSelectionAdapter.selectedAsset = -1;
+                ((EditorView)mContext).renderManager.removeTempNode();
                 assetSelectionAdapter.assetsDBs = db.getAllModelDetail((Constants.VIEW_TYPE == Constants.PARTICLE_VIEW) ? PARTICLE : modelType[position]);
+                if(modelType[position] == 0 && (Constants.VIEW_TYPE != Constants.PARTICLE_VIEW)){
+                    for (int i = 0; i < db.getMYModelAssetCount(); i++){
+                        try {
+                            assetSelectionAdapter.assetsDBs.add(db.getAllMyModelDetail().get(i));
+                        }
+                        catch (IndexOutOfBoundsException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 if((Constants.VIEW_TYPE != Constants.PARTICLE_VIEW) && modelType[position] == -1){
                     if(assetSelectionAdapter.assetsDBs != null && assetSelectionAdapter.assetsDBs.size() > 0)
                     assetSelectionAdapter.assetsDBs.clear();
                     assetSelectionAdapter.assetsDBs = db.getAllMyModelDetail();
                 }
+                downloadManager.cancelAll();
+                assetSelectionAdapter.downloadThumbnail();
                 assetSelectionAdapter.notifyDataSetChanged();
             }
 
@@ -93,18 +111,25 @@ public class AssetSelection {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HitScreens.EditorView(mContext);
                 downloadManager.cancelAll();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
+                ((EditorView)((Activity)mContext)).showOrHideLoading(Constants.HIDE);
                 insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).renderManager.removeTempNode();
                 mContext = null;
                 db = null;
                 assetSelectionAdapter = null;
+                Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
             }
         });
         v.findViewById(R.id.add_asset_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(assetSelectionAdapter.selectedAsset == -1){
+                    return;
+                }
+                HitScreens.EditorView(mContext);
                 downloadManager.cancelAll();
                 insertPoint.removeAllViews();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
@@ -115,6 +140,7 @@ public class AssetSelection {
                 mContext = null;
                 db = null;
                 assetSelectionAdapter = null;
+                Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
             }
         });
     }
@@ -122,11 +148,21 @@ public class AssetSelection {
     private void initAssetGrid(GridView gridView,int viewType)
     {
         assetSelectionAdapter = new AssetSelectionAdapter(mContext, db, gridView,this.addToDownloadManager,this.downloadManager);
+        assetSelectionAdapter.downloadThumbnail();
         assetSelectionAdapter.assetsDBs = db.getAllModelDetail((viewType == Constants.PARTICLE_VIEW) ? PARTICLE : modelType[0]);
+
+        for (int i = 0; ((Constants.VIEW_TYPE != Constants.PARTICLE_VIEW) &&i < db.getMYModelAssetCount()); i++){
+            try {
+                assetSelectionAdapter.assetsDBs.add(db.getAllMyModelDetail().get(i));
+            }
+            catch (IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+        }
         gridView.setAdapter(assetSelectionAdapter);
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
-        assetSelectionAdapter.downloadThumbnail();
+
     }
 }

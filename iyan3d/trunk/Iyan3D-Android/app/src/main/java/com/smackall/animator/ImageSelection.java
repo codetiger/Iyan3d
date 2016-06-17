@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 
+import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.ImageSelectionAdapter;
+import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.ImageDB;
 
@@ -21,8 +23,8 @@ public class ImageSelection {
     private Context mContext;
     private ImageSelectionAdapter imageSelectionAdapter;
     ViewGroup insertPoint;
-    public ImageDB imageDB = new ImageDB();
-
+    public ImageDB imageDB;
+    private Tracker mTracker;
 
     public ImageSelection(Context context){
         this.mContext = context;
@@ -30,6 +32,8 @@ public class ImageSelection {
 
     public void showImageSelection()
     {
+        HitScreens.ImageSelectionView(mContext);
+        imageDB = new ImageDB();
         ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
         insertPoint = (((EditorView)((Activity)mContext)).sharedPreferenceManager.getInt(mContext,"toolbarPosition") == 1 ) ?
                 (ViewGroup) ((Activity)mContext).findViewById(R.id.leftView)
@@ -51,6 +55,7 @@ public class ImageSelection {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HitScreens.EditorView(mContext);
                 insertPoint.removeAllViews();
                 ((EditorView) ((Activity) mContext)).renderManager.removeTempNode();
                 ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
@@ -61,6 +66,11 @@ public class ImageSelection {
         v.findViewById(R.id.add_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(imageDB.getName().equals("") || imageDB.getName().length() <= 0){
+                    return;
+                }
+                HitScreens.EditorView(mContext);
+                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
                 imageDB.setTempNode(false);
                 importImage();
                 insertPoint.removeAllViews();
@@ -87,7 +97,8 @@ public class ImageSelection {
     }
 
     public void notifyDataChanged(){
-        imageSelectionAdapter.notifyDataSetChanged();
+        if(imageSelectionAdapter != null)
+            imageSelectionAdapter.notifyDataSetChanged();
     }
 
     public void importImage(){

@@ -44,6 +44,7 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
 
     unsigned char *imageData;
 #ifndef IOS
+    Logger::log(INFO, "OGLTexture.cpp", "loadTexture " + texturePath);
     imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
 #else
     imageData = loadPNGImage(texturePath , width , height);
@@ -104,6 +105,18 @@ void OGLTexture::updateTexture(string fileName, int frame)
     free(imageData);
 }
 
+#ifdef  ANDROID
+void OGLTexture::updateTexture(unsigned char* imageData)
+{
+    if(!imageData)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, OGLTextureName);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, getOGLTextureFormat(texelFormat), getOGLTextureType(texelType), imageData);
+    free(imageData);
+}
+#endif
+
 GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format){
     GLenum oglFormat = GL_RGBA;
     switch(format){
@@ -138,7 +151,7 @@ void OGLTexture::createRenderTargetTexture(string name, TEXTURE_DATA_FORMAT form
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,OGLTextureName,0);
 
     glBindRenderbuffer(GL_RENDERBUFFER,rttDepthBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES,width,height);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16,width,height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,rttDepthBuffer);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

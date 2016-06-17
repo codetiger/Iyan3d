@@ -6,6 +6,7 @@ import android.os.Environment;
 import java.io.File;
 
 public class PathManager {
+
     public static String DefaultFilesDir = "";
     public static String LocalDataFolder = "";
     public static String LocalProjectFolder = "";
@@ -28,39 +29,39 @@ public class PathManager {
     public static void initPaths(Activity activity) {
         DefaultFilesDir = String.valueOf(activity.getFilesDir());
         FileHelper.mkDir(DefaultFilesDir);
-        LocalDataFolder = String.valueOf(activity.getExternalFilesDir(null));
+        LocalDataFolder = String.valueOf(getExternalFiles(activity));
         FileHelper.mkDir(LocalDataFolder);
-        LocalProjectFolder = String.valueOf((activity.getExternalFilesDir(null) + "/projects"));
+        LocalProjectFolder = String.valueOf((getExternalFiles(activity) + "/projects"));
         FileHelper.mkDir(LocalProjectFolder);
-        LocalAnimationFolder = String.valueOf((activity.getExternalFilesDir(null) + "/animations"));
+        LocalAnimationFolder = String.valueOf((getExternalFiles(activity) + "/animations"));
         FileHelper.mkDir(LocalAnimationFolder);
-        LocalThumbnailFolder = String.valueOf((activity.getExternalFilesDir(null) + "/images"));
+        LocalThumbnailFolder = String.valueOf((getExternalFiles(activity) + "/images"));
         FileHelper.mkDir(LocalThumbnailFolder);
-        LocalImportedImageFolder = String.valueOf((activity.getExternalFilesDir(null) + "/importedImages"));
+        LocalImportedImageFolder = String.valueOf((getExternalFiles(activity) + "/importedImages"));
         FileHelper.mkDir(LocalImportedImageFolder);
-        LocalMeshFolder = String.valueOf((activity.getExternalFilesDir(null) + "/mesh"));
+        LocalMeshFolder = String.valueOf((getExternalFiles(activity) + "/mesh"));
         FileHelper.mkDir(LocalMeshFolder);
         LocalUserMeshFolder = LocalMeshFolder + "/usermesh";
         FileHelper.mkDir(LocalUserMeshFolder);
-        LocalCacheFolder = String.valueOf((activity.getExternalFilesDir(null) + "/.cache"));
+        LocalCacheFolder = String.valueOf((getExternalFiles(activity) + "/.cache"));
         FileHelper.mkDir(LocalCacheFolder);
-        LocalFontsFolder = String.valueOf((activity.getExternalFilesDir(null) + "/fonts"));
+        LocalFontsFolder = String.valueOf((getExternalFiles(activity) + "/fonts"));
         FileHelper.mkDir(LocalFontsFolder);
-        LocalUserFontFolder = String.valueOf((activity.getExternalFilesDir(null) + "/fonts/userFonts"));
+        LocalUserFontFolder = String.valueOf((getExternalFiles(activity) + "/fonts/userFonts"));
         FileHelper.mkDir(LocalUserFontFolder);
-        LocalScenesFolder = String.valueOf((activity.getExternalFilesDir(null) + "/scenes"));
+        LocalScenesFolder = String.valueOf((getExternalFiles(activity) + "/scenes"));
         FileHelper.mkDir(LocalScenesFolder);
         LocalImportAndExport = String.valueOf((Environment.getExternalStorageDirectory() + "/iyan3d"));
         FileHelper.mkDir(LocalImportAndExport);
         RenderPath = LocalImportAndExport+"/"+"Render";
         FileHelper.mkDir(RenderPath);
-        LocalUserVideoFolder = String.valueOf((activity.getExternalFilesDir(null) +"/video"));
+        LocalUserVideoFolder = String.valueOf((getExternalFiles(activity) +"/video"));
         FileHelper.mkDir(LocalUserVideoFolder);
         DefaultDatabaseDirectory = DefaultFilesDir + "/databases";
         FileHelper.mkDir(DefaultDatabaseDirectory);
         DefaultAssetsDir = DefaultFilesDir + "/assets";
         FileHelper.mkDir(DefaultAssetsDir);
-        Iyan3DDatabse = LocalDataFolder + "/iyan3d.db";
+        Iyan3DDatabse = DefaultDatabaseDirectory + "/iyan3d.db";
         PathManager.checkOldVersionProjectFilesFound(activity);
     }
     
@@ -135,6 +136,20 @@ public class PathManager {
                 FileHelper.move(string11 + string21, LocalAnimationFolder + "/" + string21);
             }
         }
+    }
+
+    static String getExternalFiles(Activity activity)
+    {
+        String state = Environment.getExternalStorageState();
+        String path;
+            path = String.valueOf(activity.getExternalFilesDir(null));
+        if(path == null || path.equals("null")) {
+            path = Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/files";
+            FileHelper.mkDir(Environment.getExternalStorageDirectory()+"/Android/data/"+activity.getPackageName()+"/");
+            FileHelper.mkDir(Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/");
+            FileHelper.mkDir(Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/files/");
+        }
+        return path;
     }
 }
 

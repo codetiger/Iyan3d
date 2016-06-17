@@ -11,207 +11,272 @@
     android:paddingRight="2dp">
 
     <LinearLayout
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:id="@+id/play_btn"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:gravity="center"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/play_btn"
-            android:background="#f5595c60"
-            android:tag="-1"
-            android:src="@drawable/play_btn"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play_btn" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:id="@+id/my_object_btn"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp" >
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/my_object_btn"
-            android:background="#f5595c60"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:tag="9"
-            android:drawableLeft="@drawable/import_btn"
-            android:text="   MY OBJECTS"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/my_object"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/image_button_3_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:gravity="center|left" />
+            android:text="MY OBJECTS"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/import_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/import_btn"
-            android:background="#f5595c60"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:tag="0"
-            android:drawableLeft="@drawable/import_btn"
-            android:text="   ADD"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/import_btn"
+            android:id="@+id/imageView14"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:gravity="center|left" />
+            android:text="ADD"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/animation_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/animation_btn"
-            android:background="#f5595c60"
-            android:drawableLeft="@drawable/animation_btn"
-            android:tag="1"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/animation_btn"
+            android:id="@+id/imageView15"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="   ANIMATION"
-            android:gravity="center|left" />
+            android:text="ANIMATION"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/option_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/option_btn"
-            android:background="#f5595c60"
-            android:tag="2"
-            android:drawableLeft="@drawable/option_btn"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/option_btn"
+            android:id="@+id/imageView16"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="   OPTIONS"
-            android:gravity="center|left" />
+            android:text="OPTIONS"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/export_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/export_btn"
-            android:background="#f5595c60"
-            android:tag="3"
-            android:drawableLeft="@drawable/export_btn"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/export_btn"
+            android:id="@+id/imageView17"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="   EXPORT"
-            android:gravity="center|left" />
+            android:text="EXPORT"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/move_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/move_btn"
-            android:background="#f5595c60"
-            android:tag="4"
-            android:drawableLeft="@drawable/move_btn"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/move_btn"
+            android:id="@+id/imageView18"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="   MOVE"
-            android:gravity="center|left" />
+            android:text="MOVE"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/rotate_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/rotate_btn"
-            android:background="#f5595c60"
-            android:tag="5"
-            android:drawableLeft="@drawable/rotate_btn"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rotate_btn"
+            android:id="@+id/imageView19"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="   ROTATE"
-            android:gravity="center|left" />
+            android:text="ROTATE"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
+        android:background="#f5595c60"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|left"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/scale_btn">
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/scale_btn"
-            android:background="#f5595c60"
-            android:tag="6"
-            android:drawableLeft="@drawable/scale_btn"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/scale_btn"
+            android:id="@+id/imageView20"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="   SCALE"
-            android:gravity="center|left" />
+            android:text="SCALE"
+            android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -221,40 +286,44 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:weightSum="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
 
         <LinearLayout
+            style="@android:style/Widget.Button"
+            android:background="#f5595c60"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:paddingRight="2dp">
+            android:id="@+id/undo"
+            android:layout_marginRight="2dp">
 
-            <ImageButton
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/undo"
-                android:background="#f5595c60"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@drawable/redo_btn"
-                android:tag="8" />
+                />
         </LinearLayout>
 
         <LinearLayout
+            style="@android:style/Widget.Button"
+            android:background="#f5595c60"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:paddingLeft="2dp">
+            android:id="@+id/redo"
+            android:layout_marginLeft="2dp"
+            >
 
-            <ImageButton
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/redo"
-                android:background="#f5595c60"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@drawable/undo_btn"
-                android:tag="7" />
+                />
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

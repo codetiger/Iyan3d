@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.7"
         android:gravity="center">
 
         <FrameLayout
@@ -51,7 +51,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.3"
         android:gravity="center" >
 
         <TextView
@@ -60,7 +60,10 @@
             android:text="New Text"
             android:id="@+id/lable_text"
             android:gravity="center"
-            android:textColor="#ffffff" />
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#ffffff"
+            android:textSize="8sp"/>
     </LinearLayout>
 
 </LinearLayout>

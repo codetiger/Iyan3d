@@ -49,8 +49,11 @@ typedef struct
 
 typedef struct {
     float isLighting;
+    float pointSize [[point_size]];
     float vertexDepth,reflection;
+    float isVertexColored;
     float shadowDarkness,transparency;
+    float2 pointCoord [[ point_coord ]];
     float2 uv,texture2UV;
     float4 position [[position]] , vertexPosCam;
     float4 normal,eyeVec,lightDir,lightColor,perVertexColor;
@@ -61,6 +64,10 @@ typedef struct {
 typedef struct {
     matrix_float4x4 JointTransform;
 } JointData;
+
+typedef struct {
+    matrix_float4x4 data;
+} MatArray;
 
 typedef struct {
     float3 lightPosition;
@@ -89,15 +96,12 @@ typedef struct {
 vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                                      constant matrix_float4x4& mvp [[ buffer(SHADER_COMMON_SKIN_mvp) ]],
                                      constant JointData* Joint_Data [[ buffer(SHADER_COMMON_SKIN_jointData) ]],
-                                     constant float& transparency [[ buffer(SHADER_COMMON_SKIN_transparency) ]],
-                                     constant matrix_float4x4& world [[ buffer(SHADER_COMMON_SKIN_world) ]],
-                                     constant int& isLighting [[ buffer(SHADER_COMMON_SKIN_isLighting) ]],
-                                     constant float& reflection [[ buffer(SHADER_COMMON_SKIN_reflection) ]],
+                                     constant MatArray* world [[ buffer(SHADER_COMMON_SKIN_world) ]],
                                      constant float& shadowDarkness [[ buffer(SHADER_COMMON_SKIN_shadowDarkness) ]],
                                      constant packed_float3& eyePos [[ buffer(SHADER_COMMON_SKIN_eyePos) ]],
-                                     constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
+                                     constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
                                      unsigned int vid [[ vertex_id ]],
-                                     constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                     constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                      constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                      )
 {
@@ -113,7 +117,8 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     float4 pos = float4(0.0);
     float4 nor = float4(0.0);
     
-    out.perVertexColor = (int(isVertexColored) == 0) ? float4(1.0) : float4(float3(vertColor[0].data),1.0);
+    out.isVertexColored = props[0].data[1];
+    out.perVertexColor = float4(float3(vertColor[0].data),1.0);
     
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
@@ -177,18 +182,18 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     //-----------
     
     float4 vertex_position_objectspace = pos;
-    float4 vertex_position_cameraspace = world * pos;
+    float4 vertex_position_cameraspace = world[0].data * pos;
     out.vertexPosCam = vertex_position_cameraspace;
     
-    out.transparency = transparency;
+    out.transparency = props[0].data[0];
     out.position = mvp * vertex_position_objectspace;
-    float2 uv = (int(isVertexColored) == 0) ? vertex_array[vid].texCoord1 : float2(0.0,0.0);
+    float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     
     
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[0].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -196,13 +201,13 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     //----------
     
     // Lighting Calculation-----------
-    if(isLighting == 1){
+    if(int(props[0].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
         
-        out.normal = normalize(world * float4(float3(nor.xyz),0.0));
+        out.normal = normalize(world[0].data * float4(float3(nor.xyz),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection;
+        out.reflection = props[0].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -220,148 +225,88 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
 #define SHADER_PARTICLE_positions 6
 #define SHADER_PARTICLE_rotations 7
 #define SHADER_PARTICLE_texture1 8
+#define SHADER_PARTICLE_world 9
 
 
 vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                   constant matrix_float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
+                                  constant matrix_float4x4& model [[ buffer(SHADER_PARTICLE_world)]],
                                   constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
                                   constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
                                   constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
                                   constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
-                                  constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
-                                  constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
-                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
-                                  unsigned int vid [[ vertex_id ]],
-                                  unsigned int iid [[instance_id]]
+                                  constant float* isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                  unsigned int vid [[ vertex_id ]]
                                   )
 {
-    float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
+    
+    float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
+    float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
+    
     
     ColorInOut out;
     
-    float2 uv = vertex_array[vid].texCoord1;
-    out.uv.x = uv.x;
-    out.uv.y = uv.y;
-    
-    float percent = (positions[iid].data[3]/props[0]);
+    float percent = (in_normal.x/props[0]);
     float phase = (percent > 0.5);
     
-    float4 s = mix(sColor, mColor, phase);
-    float4 e = mix(mColor, eColor, phase);
-    float age = mix(percent, float(percent - 0.5), phase) * 2.0;
-    out.perVertexColor = (int(isVertexColored) == 0) ? float4(mix(s, e, age)) : float4(sColor);
-    float scale = float(props[1] + (props[2] * positions[iid].data[3]));
-    
-    matrix_float4x4 translation = matrix_float4x4(1);
-    translation[3][0] = positions[iid].data[0];
-    translation[3][1] = positions[iid].data[1];
-    translation[3][2] = positions[iid].data[2];
-    
-    matrix_float4x4 rotationMat = matrix_float4x4(1);
-    float cr = cos(rotations[iid].data[0]);
-    float sr = sin(rotations[iid].data[0]);
-    float cp = cos(rotations[iid].data[1]);
-    float sp = sin(rotations[iid].data[1]);
-    float cy = cos(rotations[iid].data[2]);
-    float sy = sin(rotations[iid].data[2]);
-    
-    rotationMat[0][0] = (cp * cy);
-    rotationMat[0][1] = (cp * sy);
-    rotationMat[0][2] = (-sp);
-    
-    float srsp = sr * sp;
-    float crsp = cr * sp;
-    
-    rotationMat[1][0] = (srsp * cy - cr * sy);
-    rotationMat[1][1] = (srsp * sy + cr * cy);
-    rotationMat[1][2] = (sr * cp);
-    
-    rotationMat[2][0] = (crsp * cy + sr * sy);
-    rotationMat[2][1] = (crsp * sy - sr * cy);
-    rotationMat[2][2] = (cr * cp);
+    float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
+    float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
 
-    matrix_float4x4 scaleMat = matrix_float4x4(1);
-    scaleMat[0][0] = scale;
-    scaleMat[1][1] = scale;
-    scaleMat[2][2] = scale;
+    float4 s = mix(startColor, midColor, phase);
+    float4 e = mix(midColor, eColor, phase);
+    float age = mix(percent, float(percent - 0.5), phase) * 2.0;
     
-    float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
-    translation = translation * live;
+    out.perVertexColor = (int(isVertexColored[0]) == 0) ? float4(mix(s, e, age)) : float4(sColor);
     
-    matrix_float4x4 model = translation * rotationMat;
-    out.position = vp * model * vertex_position_objectspace;
+    float live = float(in_normal.x > 0.0 && in_normal.x <= props[0]);
+    
+    float3 temp = float3(props[1] - in_position.x, props[2] - in_position.y, props[3] - in_position.z);
+    float dist = sqrt(temp.x * temp.x + temp.y * temp.y + temp.z * temp.z);
+
+    out.position = vp * in_position;
+    
+    out.pointSize = (64.0 * sColor[3]/mColor[3] * live) * (100.0/dist);
     
     return out;
 }
 
 vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0) ]],
-                                  constant matrix_float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
-                                  constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
-                                  constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
-                                  constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
-                                  constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
-                                  constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
-                                  constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
-                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
-                                  unsigned int vid [[ vertex_id ]],
-                                  unsigned int iid [[instance_id]]
+                                      constant matrix_float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
+                                      constant matrix_float4x4& model [[ buffer(SHADER_PARTICLE_world)]],
+                                      constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
+                                      constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
+                                      constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
+                                      constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
+                                      constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
+                                      constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
+                                      constant float* isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                      unsigned int vid [[ vertex_id ]]
                                   )
 {
-    float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
+    float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
+    float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
     
     ColorInOut out;
     
-    float2 uv = vertex_array[vid].texCoord1;
-    out.uv.x = uv.x;
-    out.uv.y = uv.y;
-    
-    float percent = (positions[iid].data[3]/props[0]);
+    float percent = (in_normal.x/props[0]);
     float phase = (percent > 0.5);
     
-    float4 s = mix(sColor, mColor, phase);
-    float4 e = mix(mColor, eColor, phase);
+    float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
+    float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
+    
+    float4 s = mix(startColor, mColor, phase);
+    float4 e = mix(midColor, eColor, phase);
     float age = mix(percent, float(percent - 0.5), phase) * 2.0;
-    out.perVertexColor = (int(isVertexColored) == 0) ? float4(mix(s, e, age)) : float4(sColor);
-    float scale = float(props[1] + (props[2] * positions[iid].data[3]));
     
-    matrix_float4x4 translation = matrix_float4x4(1);
-    translation[3][0] = positions[iid].data[0];
-    translation[3][1] = positions[iid].data[1];
-    translation[3][2] = positions[iid].data[2];
+    out.perVertexColor = float4(sColor);
     
-    matrix_float4x4 rotationMat = matrix_float4x4(1);
-    float cr = cos(rotations[iid].data[0]);
-    float sr = sin(rotations[iid].data[0]);
-    float cp = cos(rotations[iid].data[1]);
-    float sp = sin(rotations[iid].data[1]);
-    float cy = cos(rotations[iid].data[2]);
-    float sy = sin(rotations[iid].data[2]);
+    float live = float(in_normal.x > 0.0 && in_normal.x <= props[0]);
     
-    rotationMat[0][0] = (cp * cy);
-    rotationMat[0][1] = (cp * sy);
-    rotationMat[0][2] = (-sp);
+    float3 temp = float3(props[1] - in_position[0], props[2] - in_position[1], props[3] - in_position[2]);
+    float dist = sqrt(temp.x * temp.x + temp.y * temp.y + temp.z * temp.z);
     
-    float srsp = sr * sp;
-    float crsp = cr * sp;
-    
-    rotationMat[1][0] = (srsp * cy - cr * sy);
-    rotationMat[1][1] = (srsp * sy + cr * cy);
-    rotationMat[1][2] = (sr * cp);
-    
-    rotationMat[2][0] = (crsp * cy + sr * sy);
-    rotationMat[2][1] = (crsp * sy - sr * cy);
-    rotationMat[2][2] = (cr * cp);
-    
-    matrix_float4x4 scaleMat = matrix_float4x4(1);
-    scaleMat[0][0] = scale;
-    scaleMat[1][1] = scale;
-    scaleMat[2][2] = scale;
-    
-    float live = float(positions[iid].data[3] > 0.0 && positions[iid].data[3] <= props[0]);
-    translation = translation * live;
-    
-    matrix_float4x4 model = translation * rotationMat;
-    out.position = vp * model * vertex_position_objectspace;
+    out.position = vp * in_position;
+    out.pointSize = (8.0 * live) * (100.0/dist);
     
     return out;
 }
@@ -371,7 +316,7 @@ fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  t
 {
     float4 color = in.perVertexColor;
     constexpr sampler quad_sampler(address::repeat,filter::linear);
-    color[3] =  tex2D.sample(quad_sampler,in.uv)[0];
+    color[3] =  tex2D.sample(quad_sampler, in.pointCoord)[0];
     return color;
 }
 
@@ -395,50 +340,52 @@ fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half
 #define SHADER_COMMON_lightViewProjMatrix 11
 #define SHADER_COMMON_viewMatrix 12
 #define SHADER_COMMON_lightFadeDistance 20
+#define SHADER_COMMON_lightType 22
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 
 vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
-                                constant matrix_float4x4& mvp [[ buffer(SHADER_COMMON_mvp) ]],
-                                constant float& transparency [[ buffer(SHADER_COMMON_transparency) ]],
-                                constant matrix_float4x4& world [[ buffer(SHADER_COMMON_world) ]],
-                                constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
-                                constant int& isLighting [[ buffer(SHADER_COMMON_isLighting) ]],
-                                constant float& reflection [[ buffer(SHADER_COMMON_reflection) ]],
+                                constant matrix_float4x4& vp [[ buffer(SHADER_COMMON_mvp) ]],
+                                constant MatArray* world [[ buffer(SHADER_COMMON_world) ]],
+                                constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
                                 constant packed_float3& eyePos [[ buffer(SHADER_COMMON_eyePos) ]],
                                 constant float& shadowDarkness [[ buffer(SHADER_COMMON_shadowDarkness) ]],
                                 unsigned int vid [[ vertex_id ]],
-                                constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
-                                constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
+                                constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
+                                constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]],
+                                unsigned int iid [[ instance_id ]]
                                 )
 {
+//    unsigned int iid = vertex_array[vid].optionalData1[3];
+    
     float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
-    float4 vertex_position_cameraspace = world * float4(float3(vertex_array[vid].position), 1.0);
+    float4 vertex_position_cameraspace = world[iid].data * float4(float3(vertex_array[vid].position), 1.0);
     
     ColorInOut out;
     out.vertexPosCam = vertex_position_cameraspace;
-    out.transparency = transparency;
-    out.position = mvp * vertex_position_objectspace;
-    float2 uv = (int(isVertexColored) == 0) ? vertex_array[vid].texCoord1 : float2(0.0,0.0);
+    out.transparency = props[iid].data[0];
+    out.position = vp * world[iid].data * vertex_position_objectspace;
+    out.isVertexColored = props[iid].data[1];
+    float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x;
     out.uv.y = uv.y;
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[iid].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
     out.vertexDepth = texCoords.z;
-    out.perVertexColor = (int(isVertexColored) == 0) ? float4(1.0) : float4(float3(vertColor[0].data),1.0);
+    out.perVertexColor = float4(float3(vertColor[iid].data),1.0);
     //----------
     
     // Lighting Calculation-----------
-    if(isLighting == 1){
+    if(int(props[iid].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace =  float4(float3(eyePos),1.0);
         
-        out.normal = normalize(world * float4(float3(vertex_array[vid].normal),0.0));
+        out.normal = normalize(world[iid].data * float4(float3(vertex_array[vid].normal),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection;
+        out.reflection = props[iid].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -455,7 +402,7 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
                                constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                               constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
+                               constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -470,24 +417,24 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 diffuse_color = half4(in.perVertexColor);
     
-    if(isVertexColored == 0.0) {
+    if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
     }
-
+    
     
     // Lighting Calculation----------
     
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = half4(0.0);
         
         //getColorOfLight(0,lightPos[0],lightColor[0],lightFadeDistance[0],specular, colorOfLight);
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
-        float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+        float4 lightDir = (lightType[0] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
         half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
         
         
@@ -503,13 +450,18 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         float e_dot_l = dot(lightDir,eyeVec);
         if(e_dot_l < -0.8)
             specular = half4(0.0);
-        colorOfLight += half4(half3(lightColor[0]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[0])) * diffuse;
+        
+        float distanceRatio = 1.0;
+        if(lightType[0] == 0.0)
+            distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+        colorOfLight += half4(half3(lightColor[0]),1.0) * distanceRatio * diffuse;
         }
     //-------------
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
     finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -517,7 +469,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -532,7 +484,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 diffuse_color = half4(in.perVertexColor);
     
-    if(isVertexColored == 0.0) {
+    if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
     }
@@ -543,12 +495,12 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = half4(0.0);
         
         for(int i = 0 ; i < 2; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -564,7 +516,12 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -573,7 +530,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -581,7 +538,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -596,7 +553,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 diffuse_color = half4(in.perVertexColor);
     
-    if(isVertexColored == 0.0) {
+    if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
     }
@@ -607,12 +564,12 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = half4(0.0);
         
         for(int i = 0 ; i < 3; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -628,7 +585,12 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -637,7 +599,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -645,7 +607,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -660,7 +622,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 diffuse_color = half4(in.perVertexColor);
     
-    if(isVertexColored == 0.0) {
+    if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
     }
@@ -671,12 +633,12 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = half4(0.0);
         
         for(int i = 0 ; i < 4; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -692,7 +654,12 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -701,7 +668,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(SHADER_COMMON_texture1)]],
@@ -709,7 +676,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
                                   constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                   constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                   constant float* lightFadeDistance[[ buffer(SHADER_COMMON_lightFadeDistance)]],
-                                  constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
+                                  constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     
     // Shadow Calculation----------
@@ -724,7 +691,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 diffuse_color = half4(in.perVertexColor);
     
-    if(isVertexColored == 0.0) {
+    if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
     }
@@ -735,12 +702,12 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = half4(0.0);
         
         for(int i = 0 ; i < 5; i++) {
             float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
             
@@ -756,7 +723,12 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             float e_dot_l = dot(lightDir,eyeVec);
             if(e_dot_l < -0.8)
                 specular = half4(0.0);
-            colorOfLight += half4(half3(lightColor[i]),1.0) * (1.0 - saturate(distanceFromLight/lightFadeDistance[i])) * diffuse;
+            
+            float distanceRatio = 1.0;
+            if(lightType[0] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
+
+            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -765,7 +737,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 finalColor = half4(diffuse_color + specular) * colorOfLight;
 //    finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 
@@ -802,7 +774,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
                                     depth2d<float> shadow_texture [[texture(SHADER_TOON_SKIN_texture2)]],
                                     constant packed_float3* lightPos [[ buffer(SHADER_COMMON_lightPos) ]],
                                     constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
-                                    constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]])
+                                    constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     // Shadow Calculation----------
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
@@ -818,18 +790,18 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     // Lighting Calculation----------
     half4 diffuse_color = half4(in.perVertexColor);
     
-    if(isVertexColored == 0.0) {
+    if(in.isVertexColored < 0.5) {
         constexpr sampler quad_sampler(address::repeat,filter::linear);
         diffuse_color =  tex2D.sample(quad_sampler,in.uv);
     }
 
     half4 specular;
     half4 finalColor;
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
-        float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
-        float distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
+        float4 lightDir = (lightType[0] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
+        //float distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
 
         float4 normal = normalize(in.normal);
         float4 eyeVec = normalize(in.eyeVec);
@@ -863,7 +835,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     }
     //-------------
     finalColor = finalColor + (half4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
-    return half4(half3(finalColor.xyz) , in.transparency);
+    return half4(half3(finalColor.xyz) , diffuse_color.w * in.transparency);
 }
 
 #define SHADER_COLOR_mvp 1
@@ -873,13 +845,13 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
 vertex ColorInOut Color_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                constant matrix_float4x4& mvp [[buffer(SHADER_COLOR_mvp)]],
                                constant float3Struct *vertColor [[buffer(SHADER_COLOR_vertexColor)]],
-                               constant float& transparency [[ buffer(SHADER_COLOR_transparency) ]],
+                               constant float* transparency [[ buffer(SHADER_COLOR_transparency) ]],
                                unsigned int vid [[ vertex_id ]]
                                )
 {
     ColorInOut out;
     out.position = (mvp) * float4(float3(vertex_array[vid].position), 1.0);
-    out.perVertexColor = float4(float3(vertColor[0].data),transparency);
+    out.perVertexColor = float4(float3(vertColor[0].data),transparency[0]);
     return out;
 }
 // Fragment shader function
@@ -899,7 +871,7 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
                                     constant matrix_float4x4& mvp [[ buffer(SHADER_COLOR_SKIN_mvp) ]],
                                     constant float3Struct *vertColor [[buffer(SHADER_COLOR_SKIN_vertexColor)]],
                                     constant JointData* Joint_Data [[ buffer(SHADER_COLOR_SKIN_jointData) ]],
-                                    constant float& transparency [[ buffer(SHADER_COLOR_SKIN_transparency) ]],
+                                    constant float* transparency [[ buffer(SHADER_COLOR_SKIN_transparency) ]],
                                     unsigned int vid [[ vertex_id ]]
                                     )
 {
@@ -954,7 +926,7 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
         pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
     
     out.position = mvp * pos;
-    out.perVertexColor = float4(float3(vertColor[0].data),transparency);
+    out.perVertexColor = float4(float3(vertColor[0].data),transparency[0]);
     return out;
 }
 
@@ -975,31 +947,32 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
 #define SHADER_PERVERTEXCOLOR_jointData 13
 // Color_Vertex
 vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]],
-                                   constant matrix_float4x4& mvp [[buffer(SHADER_COLOR_mvp)]],
-                                   constant float& transparency [[ buffer(SHADER_PERVERTEXCOLOR_transparency) ]],
-                                   constant matrix_float4x4& world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
-                                   constant int& isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
-                                   constant float& reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
+                                   constant matrix_float4x4& vp [[buffer(SHADER_COLOR_mvp)]],
+                                   constant MatArray* world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
-                                   constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
+                                   constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
-                                   unsigned int vid [[ vertex_id ]]
+                                   constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
+                                   constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]],
+                                   unsigned int vid [[ vertex_id ]],
+                                   unsigned int iid [[ instance_id ]]
                                    )
 {
     float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
-    float4 vertex_position_cameraspace = world * float4(float3(vertex_array[vid].position), 1.0);
+    float4 vertex_position_cameraspace = world[iid].data * float4(float3(vertex_array[vid].position), 1.0);
     
     ColorInOut out;
     out.vertexPosCam = vertex_position_cameraspace;
-    out.transparency = transparency;
-    out.position = mvp * vertex_position_objectspace;
-    out.perVertexColor = vertex_array[vid].optionalData1;
+    out.transparency = props[iid].data[0];
+    out.position = vp * world[iid].data * vertex_position_objectspace;
+    out.perVertexColor =  (vertColor[iid].data[0] == -1.0) ? vertex_array[vid].optionalData1 : float4(float3(vertColor[iid].data),1.0);;
+    out.isVertexColored = props[iid].data[1];
     
     out.texture2UV = float2(0.0);
     out.vertexDepth = 0.0;
     
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[iid].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -1007,12 +980,12 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
     //----------
     
     // Lighting Calculation-----------
-    if(isLighting == 1){
+    if(int(props[iid].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
-        out.normal = normalize(world * float4(float3(vertex_array[vid].normal),0.0));
+        out.normal = normalize(world[iid].data * float4(float3(vertex_array[vid].normal),0.0));
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection;
+        out.reflection = props[iid].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -1024,16 +997,13 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
 
 vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                                    constant matrix_float4x4& mvp [[buffer(SHADER_COLOR_mvp)]],
-                                   constant float& transparency [[ buffer(SHADER_PERVERTEXCOLOR_transparency) ]],
-                                   constant matrix_float4x4& world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
-                                   constant int& isLighting [[ buffer(SHADER_PERVERTEXCOLOR_isLighting) ]],
-                                   constant float& reflection [[ buffer(SHADER_PERVERTEXCOLOR_reflection) ]],
+                                   constant MatArray* world [[ buffer(SHADER_PERVERTEXCOLOR_world) ]],
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
-                                   constant matrix_float4x4& lightViewProjMatrix [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
+                                   constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
                                    unsigned int vid [[ vertex_id ]],
                                    constant JointData* Joint_Data [[ buffer(SHADER_PERVERTEXCOLOR_jointData) ]],
-                                   constant float& isVertexColored[[ buffer(SHADER_COMMON_isVertexColored)]],
+                                   constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                    constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]]
                                    )
 {
@@ -1043,12 +1013,13 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
     float4 optionalData1 = vertex_array[vid].optionalData1;
     float4 optionalData2 = vertex_array[vid].optionalData2;
-    out.transparency = transparency;
+    out.transparency = props[0].data[0];
     //out.perVertexColor = vertex_array[vid].optionalData4;
     
     
-    out.perVertexColor = (int(isVertexColored) == 0) ? float4(1.0) : float4(float3(vertColor[0].data),1.0);
-    float2 uv = (int(isVertexColored) == 0) ? vertex_array[vid].texCoord1 : float2(0.0,0.0);
+    out.isVertexColored = props[0].data[1];
+    out.perVertexColor = float4(float3(vertColor[0].data),1.0);
+    float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x;
     out.uv.y = uv.y;
 
@@ -1070,13 +1041,12 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     }
     
     float4 vertex_position_objectspace = pos;
-    float4 vertex_position_cameraspace = world * pos;
+    float4 vertex_position_cameraspace = world[0].data * pos;
     out.vertexPosCam = vertex_position_cameraspace;
-    out.transparency = transparency;
     out.position = mvp * vertex_position_objectspace;
 
     //Shadow Coords Calculation -----------
-    float4 vertexLightCoord = (lightViewProjMatrix * world) * vertex_position_objectspace;
+    float4 vertexLightCoord = (lvp * world[0].data) * vertex_position_objectspace;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
@@ -1084,13 +1054,13 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     //----------
     
     // Lighting Calculation-----------
-    if(isLighting == 1){
+    if(int(props[0].data[3]) == 1){
         out.isLighting = 1.0;
         float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
         
-        out.normal = normalize(world * nor);
+        out.normal = normalize(world[0].data * nor);
         out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
-        out.reflection = reflection;
+        out.reflection = props[0].data[2];
         out.shadowDarkness = shadowDarkness;
     }else{
         out.isLighting = 0.0;
@@ -1120,7 +1090,7 @@ fragment half4 Per_Vertex_Color_Shadow_Fragment(ColorInOut in [[stage_in]],depth
     
     // Lighting Calculation----------
     float4 diffuse_color = in.perVertexColor,specular,colorOfLight = float4(1.0);
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = float4(0.0);
         
         int lightsCount = int(numberOfLights);
@@ -1172,7 +1142,7 @@ fragment half4 Per_Vertex_Color_Toon_Fragment(ColorInOut in [[stage_in]],depth2d
     // Lighting Calculation----------
     float4 diffuse_color,specular;
     half4 finalColor;
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
         float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
@@ -1225,7 +1195,7 @@ fragment half4 Per_Vertex_Color_Skin_Fragment(ColorInOut in [[stage_in]],
     // Lighting Calculation----------
     float4 diffuse_color = in.perVertexColor,specular , colorOfLight = float4(1.0);
     
-    if(in.isLighting != 0.0){
+    if(in.isLighting > 0.5){
         colorOfLight = float4(0.0);
         
         int lightsCount = int(numberOfLights);

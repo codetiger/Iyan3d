@@ -8,9 +8,12 @@ import android.view.VelocityTracker;
 import android.view.ViewGroup;
 
 import com.smackall.animator.EditorView;
+import com.smackall.animator.NativeCallBackClasses.NativeCallBacks;
 import com.smackall.animator.R;
 import com.smackall.animator.Rig;
 import com.smackall.animator.opengl.GL2JNILib;
+
+import java.util.List;
 
 /**
  * Created by Sabish.M on 15/3/16.
@@ -54,8 +57,13 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                if (event.getPointerCount() > 1)
-                    GL2JNILib.panProgress(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                try {
+                    if (event.getPointerCount() > 1)
+                        GL2JNILib.panProgress(((EditorView) (Activity) mContext).nativeCallBacks,event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                }
+                catch (IllegalArgumentException e){
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -93,7 +101,7 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.tapMove(event.getRawX(), event.getRawY());
+                GL2JNILib.tapMove(((EditorView)mContext).nativeCallBacks,event.getX(), event.getY());
             }
         });
     }
@@ -107,7 +115,8 @@ public class RenderManager {
                 ((Activity)mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((EditorView) ((Activity) mContext)).frameAdapter.notifyDataSetChanged();
+                        if(mContext != null && ((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).frameAdapter != null)
+                            ((EditorView) ((Activity) mContext)).frameAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -128,18 +137,13 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.tap(event.getX(), event.getY(), (sp.getInt(mContext, "multiSelect") == 1));
-                if(event.getSource() == Constants.LONG_PRESS)
-                    ((Activity)mContext).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((EditorView) ((Activity) mContext)).popUpManager.initPopUpManager(GL2JNILib.getSelectedNodeId(),null, event);
-                        }
-                    });
+                    GL2JNILib.tap(event.getX(), event.getY(), (sp.getInt(mContext, "multiSelect") == 1));
+
                 ((Activity)mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((EditorView)((Activity)mContext)).frameAdapter.notifyDataSetChanged();
+                        if(((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).frameAdapter!= null)
+                            ((EditorView) ((Activity) mContext)).frameAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -173,6 +177,7 @@ public class RenderManager {
             public void run() {
                 GL2JNILib.loadText(textDB.getRed(), textDB.getGreen(), textDB.getBlue(), textDB.getTypeOfNode(), textDB.getTextureName(), textDB.getAssetName()
                         , textDB.getFontSize(), textDB.getBevalValue(), textDB.getActionType(), textDB.getFilePath(), textDB.getTempNode());
+                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
             }
         });
     }
@@ -182,6 +187,8 @@ public class RenderManager {
             @Override
             public void run() {
                 GL2JNILib.importImageOrVideo(imageDB.getNodeType(), imageDB.getName(), imageDB.getWidth(), imageDB.getHeight(), imageDB.getActionType(), imageDB.getIsTempNode());
+                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
+
             }
         });
     }
@@ -190,7 +197,9 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.importAdditionalLight(lightId,action);
+                GL2JNILib.importAdditionalLight(lightId, action);
+                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
+
             }
         });
     }
@@ -200,29 +209,30 @@ public class RenderManager {
             @Override
             public void run() {
                 GL2JNILib.changeTexture(selectedNodeId, textureName, x, y, z, isTemp);
+                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
             }
         });
     }
 
-    public void removeTempTexture(){
+    public void removeTempTexture(final int selectedNodeId){
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.removeTempTexture();
+                GL2JNILib.removeTempTexture(selectedNodeId);
             }
         });
     }
 
-    public void setCurrentFrame(final int frame){
+    public void setCurrentFrame(final int frame, final NativeCallBacks nativeCallBacks){
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.setCurrentFrame(frame);
+                GL2JNILib.setCurrentFrame(frame,nativeCallBacks);
             }
         });
     }
 
-    public void cameraPosition()
+    public void cameraPosition(final float statusBarHeight)
     {
         glView.queueEvent(new Runnable() {
             @Override
@@ -236,8 +246,8 @@ public class RenderManager {
                     }
                 }
                 if(insertPoint != null) {
-                    GL2JNILib.cameraPositionViaToolBarPosition((sp.getInt(mContext, "toolbarPosition")), insertPoint.getWidth(), ((Activity) mContext).findViewById(R.id.recycleViewHolder).getHeight());
-                    GL2JNILib.previewPosition(sp.getInt(mContext, "previewPosition"), (sp.getInt(mContext, "previewSize") == 0) ? 1 : 2,((Activity) mContext).findViewById(R.id.recycleViewHolder).getHeight(),insertPoint.getWidth());
+                    GL2JNILib.cameraPositionViaToolBarPosition((sp.getInt(mContext, "toolbarPosition")), insertPoint.getWidth(), ((Activity) mContext).findViewById(R.id.recycleViewHolder).getHeight()+statusBarHeight);
+                    GL2JNILib.previewPosition(sp.getInt(mContext, "previewPosition"), (sp.getInt(mContext, "previewSize") == 0) ? 1 : 2,((Activity) mContext).findViewById(R.id.recycleViewHolder).getHeight()+statusBarHeight,insertPoint.getWidth());
                 }
             }
         });
@@ -248,16 +258,6 @@ public class RenderManager {
             @Override
             public void run() {
                 GL2JNILib.saveAsSGM(FileName, textureName, tempName, haveTexture, x, y, z);
-//                AssetsDB assetsDB = new AssetsDB();
-//                assetsDB.setIsTempNode(true);
-//                assetsDB.setAssetName(FileName);
-//                assetsDB.setAssetsId(tempName);
-//                assetsDB.setType(Constants.NODE_SGM);
-//                assetsDB.setTexture(textureName);
-//                assetsDB.setx(x);
-//                assetsDB.setY(y);
-//                assetsDB.setZ(z);
-//                importAssets(assetsDB);
             }
         });
     }
@@ -277,7 +277,15 @@ public class RenderManager {
             @Override
             public void run() {
                 GL2JNILib.beginRigging();
-                ((EditorView)((Activity)mContext)).rig.switchSceneMode(1);
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((EditorView) ((Activity) mContext)).rig.switchSceneMode(1);
+                        ((EditorView) ((Activity) mContext)).rig.currentSceneMode += 1;
+                        ((EditorView) ((Activity) mContext)).rig.updateText();
+                    }
+                });
+
             }
         });
     }
@@ -294,7 +302,7 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.switchRigSceneMode(rig, sceneMode);
+                GL2JNILib.switchRigSceneMode(((EditorView)mContext).nativeCallBacks, sceneMode);
             }
         });
     }
@@ -302,7 +310,7 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.addJoint(rig);
+                GL2JNILib.addJoint(((EditorView)mContext).nativeCallBacks);
             }
         });
     }
@@ -340,11 +348,11 @@ public class RenderManager {
         });
     }
 
-    public void setScale(final float x, final float y, final float z){
+    public void setScale(final float x, final float y, final float z, final boolean store){
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.setScaleValue(x, y, z);
+                GL2JNILib.setScaleValue(x, y, z,store);
             }
         });
     }
@@ -356,12 +364,20 @@ public class RenderManager {
             }
         });
     }
+    public void changeEnvelopScale(final float x){
+        glView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                GL2JNILib.changeEnvelopScale(x);
+            }
+        });
+    }
     public void setMove()
     {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.move();
+                GL2JNILib.move(((EditorView) (Activity) mContext).nativeCallBacks);
             }
         });
     }
@@ -370,7 +386,7 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.rotate();
+                GL2JNILib.rotate(((EditorView) (Activity) mContext).nativeCallBacks);
             }
         });
     }
@@ -383,53 +399,86 @@ public class RenderManager {
         });
     }
 
+    public void changeMeshProps(final float refraction, final float reflection, final boolean light, final boolean visible, final boolean storeAction){
+        glView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                GL2JNILib.changeMeshProperty(refraction,reflection,light,visible,storeAction);
+                ((EditorView)mContext).showOrHideLoading(Constants.HIDE);
+            }
+        });
+    }
+
     public void createDuplicate()
     {
-        int selectedAssetId  = -1;
-        int selectedNodeType = Constants.NODE_UNDEFINED;
-        if(GL2JNILib.getSelectedNodeId() != -1) {
-            selectedAssetId = GL2JNILib.getAssetId();
-            selectedNodeType = GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId());
-        }
+        glView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                GL2JNILib.createDuplicateAssets(((EditorView)mContext).nativeCallBacks);
+                ((EditorView) (Activity) mContext).showOrHideLoading(Constants.HIDE);
+            }
+        });
+    }
 
-        if((selectedNodeType == Constants.NODE_RIG || selectedNodeType ==  Constants.NODE_SGM || selectedNodeType ==
-                Constants.NODE_OBJ || selectedNodeType == Constants.NODE_PARTICLES) && selectedAssetId != -1)
+
+    public void cloneSelectedAsset(int selectedAssetId, int selectedNodeType, final int selectedNodeId)
+    {
+        if (selectedNodeType ==  Constants.NODE_SGM || selectedNodeType ==  Constants.NODE_OBJ) {
+            boolean status = GL2JNILib.cloneSelectedAsset(selectedAssetId,selectedNodeType,selectedNodeId,Constants.IMPORT_ASSET_ACTION);
+            if(!status)
+                UIHelper.informDialog(mContext,"Copy limit exceeded. Import the object using 'Add' button on ToolBar.");
+
+        } else if((selectedNodeType == Constants.NODE_RIG || selectedNodeType == Constants.NODE_PARTICLES) && selectedAssetId != Constants.NOT_SELECTED)
         {
-            AssetsDB assetsDB;
-            if(selectedAssetId > 20000 && selectedAssetId <=30000 || selectedAssetId > 40000 && selectedAssetId <=50000)
-                assetsDB = ((EditorView)(Activity)mContext).db.getMyModelWithAssetId(selectedAssetId).get(0);
-            else
-                assetsDB = ((EditorView)(Activity)mContext).db.getModelWithAssetId(selectedAssetId).get(0);
-            assetsDB.texture = GL2JNILib.getTexture(GL2JNILib.getSelectedNodeId());
-            assetsDB.isTempNode = false;
-            importAssets(assetsDB,false);
+            List<AssetsDB> assetsDBs = null;
+            assetsDBs = ((EditorView)mContext).db.getModelWithAssetId(selectedAssetId);
+            if(assetsDBs == null || assetsDBs.size() <= 0)
+                assetsDBs = ((EditorView)mContext).db.getMyModelWithAssetId(selectedAssetId);
+            AssetsDB assetsDB = null;
+            if(assetsDBs != null && assetsDBs.size() > 0) {
+                assetsDB = assetsDBs.get(0);
+                assetsDB.setTexture(GL2JNILib.getTexture(selectedNodeId));
+                assetsDB.setx(GL2JNILib.getVertexColorXWithId(selectedNodeId));
+                assetsDB.setY(GL2JNILib.getVertexColorYWithId(selectedNodeId));
+                assetsDB.setZ(GL2JNILib.getVertexColorZWithId(selectedNodeId));
+                assetsDB.setIsTempNode(false);
+                importAssets(assetsDB,false);
+                GL2JNILib.copyPropsOfNode(selectedNodeId, GL2JNILib.getNodeCount()-1, true);
+            }
         }
-        else if((selectedNodeType == Constants.NODE_IMAGE || selectedNodeType == Constants.NODE_VIDEO) && selectedAssetId != -1){
-            String name = GL2JNILib.getNodeName(GL2JNILib.getSelectedNodeId());
-            int imgW = (int) GL2JNILib.getVertexColorX();
-            int imgH = (int) GL2JNILib.getVertexColorY();
-            ImageDB imageDB = new ImageDB();
-            imageDB.setNodeType((GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_IMAGE) ? Constants.NODE_IMAGE : Constants.NODE_VIDEO);
+        else if((selectedNodeType == Constants.NODE_TEXT_SKIN || selectedNodeType == Constants.NODE_TEXT) && selectedNodeId != Constants.NOT_SELECTED){
+            ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
+            TextDB textDB = new TextDB();
+            textDB.setAssetName(GL2JNILib.getNodeName(selectedNodeId));
+            textDB.setFilePath(GL2JNILib.optionalFilePathWithId(selectedNodeId));
+            textDB.setRed(GL2JNILib.getVertexColorXWithId(selectedNodeId));
+            textDB.setGreen(GL2JNILib.getVertexColorYWithId(selectedNodeId));
+            textDB.setBlue(GL2JNILib.getVertexColorZWithId(selectedNodeId));
+            textDB.setBevalValue((int) GL2JNILib.nodeSpecificFloatWithId(selectedNodeId));
+            textDB.setFontSize(GL2JNILib.getFontSizeWithId(selectedNodeId));
+            textDB.setTextureName(GL2JNILib.getTexture(selectedNodeId));
+            textDB.setTypeOfNode(GL2JNILib.getNodeType(selectedNodeId));
+            textDB.setTempNode(false);
+            GL2JNILib.loadText(textDB.getRed(), textDB.getGreen(), textDB.getBlue(), textDB.getTypeOfNode(), textDB.getTextureName(), textDB.getAssetName()
+                    , textDB.getFontSize(), textDB.getBevalValue(), textDB.getActionType(), textDB.getFilePath(), textDB.getTempNode());
+            GL2JNILib.copyPropsOfNode(selectedNodeId, GL2JNILib.getNodeCount()-1,false);
+            ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
+
+        } else if ((selectedNodeType == Constants.NODE_IMAGE || selectedNodeType == Constants.NODE_VIDEO)) {
+            ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
+            String name = GL2JNILib.getNodeName(selectedNodeId);
+            int imgW = (int) GL2JNILib.getVertexColorXWithId(selectedNodeId);
+            int imgH = (int) GL2JNILib.getVertexColorYWithId(selectedNodeId);
+            final ImageDB imageDB = new ImageDB();
+            imageDB.setNodeType((GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_IMAGE) ? Constants.NODE_IMAGE : Constants.NODE_VIDEO);
             imageDB.setName(name);
             imageDB.setWidth(imgW);
             imageDB.setHeight(imgH);
             imageDB.setAssetAddType(0);
             imageDB.setTempNode(false);
-            importImage(imageDB);
-        }
-        else if((selectedNodeType == Constants.NODE_TEXT_SKIN || selectedNodeType == Constants.NODE_TEXT) && selectedAssetId != -1){
-            TextDB textDB = new TextDB();
-            textDB.setAssetName(GL2JNILib.getNodeName(GL2JNILib.getSelectedNodeId()));
-            textDB.setFilePath(GL2JNILib.optionalFilePath());
-            textDB.setRed(GL2JNILib.getVertexColorX());
-            textDB.setGreen(GL2JNILib.getVertexColorY());
-            textDB.setBlue(GL2JNILib.getVertexColorZ());
-            textDB.setBevalValue((int) GL2JNILib.nodeSpecificFloat());
-            textDB.setFontSize(GL2JNILib.getFontSize());
-            textDB.setTextureName(GL2JNILib.getTexture(GL2JNILib.getSelectedNodeId()));
-            textDB.setTypeOfNode((GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_TEXT) ? Constants.ASSET_TEXT : Constants.ASSET_TEXT_RIG);
-            textDB.setTempNode(false);
-            importText(textDB);
+            GL2JNILib.importImageOrVideo(imageDB.getNodeType(), imageDB.getName(), imageDB.getWidth(), imageDB.getHeight(), imageDB.getActionType(), imageDB.getIsTempNode());
+            GL2JNILib.copyPropsOfNode(selectedNodeId,GL2JNILib.getNodeCount()-1,false);
+            ((EditorView)(Activity)mContext).showOrHideLoading(Constants.HIDE);
         }
     }
 }

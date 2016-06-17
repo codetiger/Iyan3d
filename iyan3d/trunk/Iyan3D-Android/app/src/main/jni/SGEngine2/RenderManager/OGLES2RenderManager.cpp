@@ -14,6 +14,21 @@
 #ifdef ANDROID
 //#include "../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/stdint.h"
 #include "../../opengl.h"
+#include <EGL/egl.h>
+
+PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES;
+PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES;
+PFNGLISVERTEXARRAYOESPROC glIsVertexArrayOES;
+
+void OGLES2RenderManager::initialiseOtherVAOFunc () {
+        Logger::log(INFO, "RenderMan ", "initialize VAO");
+        glGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress ( "glGenVertexArraysOES" );
+        glBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress ( "glBindVertexArrayOES" );
+        glIsVertexArrayOES = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress ( "glIsVertexArrayOES" );
+        if(glGenVertexArraysOES == NULL){
+        Logger::log(INFO,"OGLRenderManager", "glGenVertexArraysOES is null");
+    }
+}
 #endif
 
 OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale){
@@ -73,11 +88,11 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
             node->nodeData.reset();
         node->nodeData = make_shared<OGLNodeData>();
     }
-    
-    
+
+
     OGLMaterial *material = (OGLMaterial*)node->material;
     Mesh *mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
-    
+
     bool bindAttrib = false;
     if(shaderPrograms.find(node) == shaderPrograms.end()) {
         if(meshBufferIndex == mesh->getMeshBufferCount()-1)
@@ -423,9 +438,9 @@ void OGLES2RenderManager::draw3DLines(vector<Vector3> vPositions,Material *mater
 }
 
 bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color) {
-    
+
     changeViewport(width, height);
-    
+
     if(!isDepthPass) {
         glEnable(GL_CULL_FACE); // as now default is back face culling
         glCullFace(GL_BACK);
@@ -433,7 +448,7 @@ bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
-    
+
     changeClearColor(color);
 
     GLbitfield mask = 0;
@@ -559,7 +574,7 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
         createVertexBuffer(node,i,meshType);
         if(updateBothBuffers) {
             Mesh* mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? (dynamic_pointer_cast<MeshNode>(node))->meshCache : (dynamic_pointer_cast<MeshNode>(node))->getMesh();
-            
+
             if(OGLNode->IndexBufLocations.size() > i) {
                 size_t indexCount =  mesh->getIndicesCount(i);
                 GLsizeiptr size = sizeof(unsigned short) * indexCount;
@@ -631,8 +646,6 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuf
             nData->vertexBufLocations.push_back(vertexBufLoc);
         }
     }
-    
-
 }
 
 u_int32_t OGLES2RenderManager::bindIndexBuffer(shared_ptr<Node> node, int meshBufferIndex)

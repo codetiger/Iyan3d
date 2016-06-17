@@ -40,7 +40,13 @@ void SGSceneUpdater::setDataForFrame(int frame)
 
         if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
             Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(1);
+#ifdef ANDROID
+            unsigned char* imageData = updatingScene->getVideoFrameCallBack(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame, 256, 256); //TODO give correct width and height
+            nodeTex->updateTexture(imageData);
+            Logger::log(INFO,"Updater ", "Video Frame Changed " + to_string(frame));
+#else
             nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
+#endif
         }
 
         Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, updatingScene->nodes[i]->positionKeys);
@@ -49,7 +55,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
         int visibilityKeyindex = KeyHelper::getKeyIndex(updatingScene->nodes[i]->visibilityKeys, frame);
 
         SGNode* sgNode = updatingScene->nodes[i];
-        
+
         if(visibilityKeyindex != -1){
            sgNode->props.isVisible = sgNode->visibilityKeys[visibilityKeyindex].visibility;
         }
@@ -79,7 +85,6 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 changed = joint->setScaleOnNode(jointScale, !updatingScene->isPlaying);
             }
         }
-
     }
 #ifndef UBUNTU
     updateControlsOrientaion(updatingScene);

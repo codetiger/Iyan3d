@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +27,6 @@ public class JSONParser {
     }
 
     public String getJSONFromUrl(String url) {
-
         HttpURLConnection c = null;
         try {
             URL u = new URL(url);
@@ -42,7 +39,6 @@ public class JSONParser {
             c.setReadTimeout(5000);
             c.connect();
             int status = c.getResponseCode();
-
             switch (status) {
                 case 200:
                 case 201:
@@ -55,11 +51,6 @@ public class JSONParser {
                     br.close();
                     return sb.toString();
             }
-
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } finally {

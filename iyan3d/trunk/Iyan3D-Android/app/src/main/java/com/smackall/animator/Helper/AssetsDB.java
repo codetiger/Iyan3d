@@ -13,7 +13,7 @@ public class AssetsDB {
     int type;
     int group;
     boolean isTempNode = true;
-    String texture;
+    String texture = "";
     float width = 0;
     float height = 0;
     float x = -1.0f;
@@ -30,7 +30,7 @@ public class AssetsDB {
         this.type = n2;
     }
 
-    public AssetsDB(Integer n, String string2, int n2, int n3, int n4, int n5, String string3, String string4, String string5) {
+    public AssetsDB(Integer n, String string2, int n2, int n3, int n4, int n5, String string3, String string4, String string5,int group) {
         this.id = n;
         this.assetName = string2;
         this.iap = n2;
@@ -40,6 +40,7 @@ public class AssetsDB {
         this.keywords = string3;
         this.hash = string4;
         this.time = string5;
+        this.group = group;
     }
 
     public AssetsDB(String string2, int n2, int n3, int n4, int n5, String string3, String string4, String string5,int group) {

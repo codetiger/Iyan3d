@@ -5,7 +5,14 @@
 	<style name="AppTheme.NoActionBar">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
+		<item name="android:windowAnimationStyle">@null</item>
 		<item name="android:gravity">center_horizontal</item>
+	</style>
+
+	<style name="AppTheme.Fullscreen">
+		<item name="android:windowFullscreen">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<item name="android:windowAnimationStyle">@null</item>
 	</style>
 
 
@@ -20,4 +27,11 @@
 	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+	<style name="FacebookLoginButton">
+		<item name="android:background">@drawable/facebook</item>
+		<item name="android:layout_marginTop">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:layout_gravity">center_horizontal</item>
+	</style>
+
 </resources>

@@ -10,6 +10,11 @@
 #include <jni.h>
 #include <android/log.h>
 
+//TODO es 3.0
+//#define __gl2_h_
+//#include <GLES3/gl3.h>
+//#include <GLES2/gl2ext.h>
+
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 

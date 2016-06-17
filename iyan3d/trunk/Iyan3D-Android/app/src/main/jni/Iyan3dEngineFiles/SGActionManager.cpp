@@ -548,7 +548,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         SGNode * selectedNode = actionScene->nodes[actionScene->selectedNodeId];
         assetAction.frameId = selectedNode->assetId;
         assetAction.objectIndex = selectedNode->actionId;
-        //assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(selectedNode->props.prevMatName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
         StoreDeleteObjectKeys(actionScene->selectedNodeId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->textureName));
@@ -624,7 +624,8 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
         else
             storeActionKeys(false);
     }
-    
+
+
     if(actionScene->selectedNodeIds.size() > 0) {
         Vector3 pScale = actionScene->getParentNode()->getScale();
         actionScene->getParentNode()->setScale(scale);
@@ -634,7 +635,7 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
     } else {
         actionScene->nodes[actionScene->selectedNodeId]->setScale(scale, actionScene->currentFrame);
     }
-    
+
     if(isChanged) {
         if(actionScene->selectedNodeIds.size() > 0) {
             actionScene->selectMan->removeChildren(actionScene->getParentNode(), true);
@@ -643,10 +644,15 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
         } else {
             storeActionKeys(true);
         }
+
+        if(actionScene->selectedNodeIds.size() <= 0)
+            actionScene->updater->setDataForFrame(actionScene->currentFrame);
     }
-    
+
     if(actionScene->selectedNodeIds.size() <= 0)
         actionScene->updater->setDataForFrame(actionScene->currentFrame);
+
+    
     actionScene->updater->reloadKeyFrameMap();
     actionScene->updater->updateControlsOrientaion();
 }

@@ -1,14 +1,16 @@
 package com.smackall.animator.opengl;
 
-
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 
 import com.smackall.animator.EditorView;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.Helper.SharedPreferenceManager;
 
 import java.io.File;
 
@@ -25,21 +27,24 @@ public class GL2JNIView extends GLSurfaceView  {
     public static boolean  tapdetected=false;
 
     Renderer renderer;
-    static Context mContext;
-    public GL2JNIView(Context context) {
+    Context mContext;
+    static SharedPreferenceManager sharedPreferenceManager;
+    static Context staticContext;
+    static boolean addVAOSupport = false;
+    public GL2JNIView(Context context, SharedPreferenceManager sharedPreferenceManager) {
         super(context);
         mContext = context;
+        GL2JNIView.sharedPreferenceManager = sharedPreferenceManager;
+        this.staticContext = context;
         init(false, 0, 0);
     }
-
 
     public GL2JNIView(Context context, boolean translucent, int depth, int stencil) {
         super(context);
         init(translucent, depth, stencil);
     }
 
-    private void init(boolean translucent, int depth, int stencil) {
-
+       private void init(boolean translucent, int depth, int stencil) {
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
          * If we want a translucent one, we should change the surface's
          * format here, using PixelFormat.TRANSLUCENT for GL Surfaces
@@ -52,29 +57,58 @@ public class GL2JNIView extends GLSurfaceView  {
         /* Setup the context factory for 2.0 rendering.
          * See ContextFactory class definition below
          */
-        setEGLContextFactory(new ContextFactory());
-
+           setEGLContextFactory(new ContextFactory());
         /* We need to choose an EGLConfig that matches the format of
          * our surface exactly. This is going to be done in our
          * custom config chooser. See ConfigChooser class definition
          * below.
          */
-        setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 24, 0));
-
+           setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 24, 0));
         /* Set the renderer responsible for frame rendering */
         renderer = new Renderer(mContext);
         setRenderer(renderer);
         //setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
+    public static int detectOpenGLES() {
+        ActivityManager am = (ActivityManager)staticContext.getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = am.getDeviceConfigurationInfo();
+        return info.reqGlEsVersion;
+    }
 
 
     private static class ContextFactory implements EGLContextFactory {
         private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
         public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
             checkEglError("Before eglCreateContext", egl);
-            int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
-            EGLContext context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
+
+            EGLContext context;
+            int[] openglesattrib = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL10.EGL_NONE };
+            EGLConfig eglConfigCopy = eglConfig;
+            EGLConfigChooser eglConfigChooser = null;
+
+            if(detectOpenGLES() >= 0x30000) {
+                addVAOSupport = true;
+            } else {
+                addVAOSupport = false;
+                openglesattrib[1] = 2;
+            }
+
+            try {
+                context = egl.eglCreateContext(display, eglConfigCopy, EGL10.EGL_NO_CONTEXT, openglesattrib);
+            }
+            catch (IllegalArgumentException ex) {
+                eglConfigChooser = new ConfigChooser(5, 6, 5, 0, 16, 0);
+                eglConfigCopy = eglConfigChooser.chooseConfig(egl, display);
+
+                try {
+                    context = egl.eglCreateContext(display, eglConfigCopy, EGL10.EGL_NO_CONTEXT, openglesattrib);
+                }
+                catch (IllegalArgumentException e) {
+                    context = null;
+                }
+            }
+
             checkEglError("After eglCreateContext", egl);
             return context;
         }
@@ -110,9 +144,9 @@ public class GL2JNIView extends GLSurfaceView  {
         private static int EGL_OPENGL_ES2_BIT = 4;
         private static int[] s_configAttribs2 =
                 {
-                        EGL10.EGL_RED_SIZE, 4,
-                        EGL10.EGL_GREEN_SIZE, 4,
-                        EGL10.EGL_BLUE_SIZE, 4,
+                        EGL10.EGL_RED_SIZE, 8,
+                        EGL10.EGL_GREEN_SIZE, 8,
+                        EGL10.EGL_BLUE_SIZE, 8,
                         EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
                         EGL10.EGL_NONE
                 };
@@ -293,8 +327,7 @@ public class GL2JNIView extends GLSurfaceView  {
             if(!((EditorView)((Activity)mContext)).renderingPaused) {
                 ((EditorView)((Activity)mContext)).renderManager.renderAll();
             }
-            else
-                System.out.println("Rendering Stoped");
+
         }
 
         @Override
@@ -304,28 +337,30 @@ public class GL2JNIView extends GLSurfaceView  {
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            GL2JNILib.init(Constants.width, Constants.height);
+            int maxUniform = GL2JNILib.init(Constants.width, Constants.height,addVAOSupport,sharedPreferenceManager.getInt(mContext,"maxUniform"));
+            sharedPreferenceManager.setData(mContext,"maxUniform",maxUniform);
             loadFromFile();
         }
 
         public  void loadFromFile(){
-            String filePath= PathManager.LocalProjectFolder+"/"+((EditorView)(Activity)mContext).projectName+".sgb";
+            String filePath= PathManager.LocalProjectFolder+"/"+((EditorView)(Activity)mContext).projectNameHash+".sgb";
             File f = new File(filePath);
             if(f.exists()){
-                GL2JNILib.loadScene(((EditorView)(Activity)mContext).missingAssetHandler, filePath);
+                GL2JNILib.loadScene(((EditorView)mContext).nativeCallBacks, filePath);
             }else{
-                GL2JNILib.loadScene(((EditorView)(Activity)mContext).missingAssetHandler, "init");
+                GL2JNILib.loadScene(((EditorView)mContext).nativeCallBacks, "init");
             }
         }
     }
 
     public static void callBackSurfaceRendered(){
-        ((EditorView)((Activity)mContext)).showOrHideLoading(Constants.HIDE);
-        ((EditorView)((Activity)mContext)).isDisplayPrepared = true;
-        ((EditorView)((Activity)mContext)).runOnUiThread(new Runnable() {
+        ((EditorView)((Activity)staticContext)).showOrHideLoading(Constants.HIDE);
+        ((EditorView)((Activity)staticContext)).isDisplayPrepared = true;
+        ((EditorView)((Activity)staticContext)).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((EditorView)((Activity)mContext)).frameAdapter.notifyDataSetChanged();
+                if(((EditorView) ((Activity) staticContext)).frameAdapter != null)
+                    ((EditorView) ((Activity) staticContext)).frameAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.smackall.animator.EditorView"
+    android:orientation="vertical"
+    android:weightSum="1">
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -188,13 +198,26 @@
             android:background="#a800ff"
             android:weightSum="1">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:text="New Text"
+                android:id="@+id/rigHeader"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="0.85" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.85"
                 android:orientation="horizontal"
                 android:weightSum="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:id="@+id/frameCtr">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -205,13 +228,16 @@
                     android:tag="firstFrame"
                     android:onClick="goToFirstOrLastFrame"
                     android:gravity="center|right"
-                    android:id="@+id/firstFrameBtn">
+                    android:id="@+id/firstFrameBtn"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/imageView2"
-                        android:src="@drawable/first_frame_btn" />
+                        android:src="@drawable/first_frame_btn"
+                        android:adjustViewBounds="true"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -221,7 +247,9 @@
                     android:orientation="vertical"
                     android:weightSum="1"
                     android:id="@+id/frameHolder"
-                    android:gravity="left|top"></LinearLayout>
+                    android:gravity="left|top"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"></LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -231,13 +259,16 @@
                     android:tag="lastFrame"
                     android:onClick="goToFirstOrLastFrame"
                     android:gravity="center|left"
-                    android:id="@+id/lastFrameBtn">
+                    android:id="@+id/lastFrameBtn"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/last_frame_img"
-                        android:src="@drawable/last_frame_btn" />
+                        android:src="@drawable/last_frame_btn"
+                        android:adjustViewBounds="true"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -247,14 +278,18 @@
                     android:orientation="horizontal"
                     android:weightSum="1"
                     android:onClick="addFramePopUpMenu"
-                    android:gravity="center|left" >
+                    android:gravity="center|left"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/imageView4"
-                        android:src="@drawable/add_frame_btn" />
+                        android:src="@drawable/add_frame_btn"
+                        android:adjustViewBounds="true"/>
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -271,7 +306,8 @@
                     android:orientation="horizontal"
                     android:onClick="showLogin"
                     android:weightSum="3"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id="@+id/login">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -362,12 +398,40 @@
                 android:weightSum="1"
                 android:gravity="center">
 
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/loading_progress"
-                    android:indeterminate="false"
-                    android:visibility="invisible"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/mesurmentLable"
+                        android:textColor="#ffffff" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.8"
+                        android:weightSum="1"
+                        android:gravity="center" >
+
+                        <ProgressBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/loading_progress"
+                            android:indeterminate="false"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/demo"
+                            android:layout_gravity="center_horizontal" />
+                    </LinearLayout>
+
+                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -415,3 +479,4 @@
     </LinearLayout>
 
 </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

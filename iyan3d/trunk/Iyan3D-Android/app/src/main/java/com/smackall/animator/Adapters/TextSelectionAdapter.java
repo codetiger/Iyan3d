@@ -3,6 +3,7 @@ package com.smackall.animator.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,15 @@ import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.R;
+import com.smackall.animator.opengl.GL2JNILib;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -39,6 +45,8 @@ public class TextSelectionAdapter extends BaseAdapter {
     public HashMap<Integer, String> downloadingFonts = new HashMap<Integer, String>();
     private AddToDownloadManager addToDownloadManager;
     private DownloadManager downloadManager;
+    private boolean isStore = true;
+    int previousPosition = -1;
     public TextSelectionAdapter(Context c,DatabaseHelper db,GridView gridView,AddToDownloadManager addToDownloadManager,DownloadManager downloadManager) {
         mContext = c;
         this.db = db;
@@ -74,29 +82,58 @@ public class TextSelectionAdapter extends BaseAdapter {
         }else{
             grid = (View)convertView;
         }
-        grid.getLayoutParams().height = this.gridView.getHeight()/4;
+        switch (UIHelper.ScreenType){
+            case Constants.SCREEN_NORMAL:
+                grid.getLayoutParams().height = this.gridView.getHeight()/3;
+                break;
+            default:
+                grid.getLayoutParams().height = this.gridView.getHeight()/5;
+                break;
+        }
         ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.VISIBLE);
         ((TextView)grid.findViewById(R.id.display_text)).setVisibility(View.INVISIBLE);
 
         String DisplayName = assetsDBs.get(position).getAssetName();
         ((TextView)grid.findViewById(R.id.lable_text)).setText(FileHelper.getFileWithoutExt(DisplayName));
-        String downloadFileName = assetsDBs.get(position).getAssetsId()+"."+FileHelper.getFileExt(DisplayName);
+        String downloadFileName = (isStore) ? assetsDBs.get(position).getAssetsId()+"."+FileHelper.getFileExt(DisplayName) :
+                assetsDBs.get(position).getAssetName();
 
-        if(FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" +downloadFileName)){
+        if(FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" +downloadFileName) || FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder + "/" +downloadFileName)){
             ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
             ((TextView)grid.findViewById(R.id.display_text)).setVisibility(View.VISIBLE);
-            Typeface fontType = Typeface.createFromFile(PathManager.LocalFontsFolder+"/"+downloadFileName);
-            ((TextView)grid.findViewById(R.id.display_text)).setText("TEXT");
-            ((TextView)grid.findViewById(R.id.display_text)).setTypeface(fontType);
+            Typeface fontType;
+            try {
+                if (FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" + downloadFileName)) {
+                    fontType = Typeface.createFromFile(PathManager.LocalFontsFolder + "/" + downloadFileName);
+                } else {
+                    fontType = Typeface.createFromFile(PathManager.LocalUserFontFolder + "/" + downloadFileName);
+                }
+            }
+            catch (RuntimeException e){
+                fontType = null;
+                e.printStackTrace();
+            }
+            ((TextView)grid.findViewById(R.id.display_text)).setText(String.format(Locale.getDefault(),"%s","TEXT"));
+            if(fontType != null)
+                ((TextView)grid.findViewById(R.id.display_text)).setTypeface(fontType);
         } else {
-                ((ProgressBar) grid.findViewById(R.id.progress_bar)).setVisibility(View.VISIBLE);
-                ((TextView)grid.findViewById(R.id.display_text)).setVisibility(View.INVISIBLE);
+             ((ProgressBar) grid.findViewById(R.id.progress_bar)).setVisibility(View.VISIBLE);
+             ((TextView)grid.findViewById(R.id.display_text)).setVisibility(View.INVISIBLE);
+        }
+
+        grid.setBackgroundResource(0);
+        grid.setBackgroundColor(ContextCompat.getColor(mContext,R.color.cellBg));
+        if(previousPosition != -1 && position == previousPosition) {
+            grid.setBackgroundResource(R.drawable.cell_highlight);
         }
 
         grid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                importText(assetsDBs.get(position).getAssetsId()+"."+FileHelper.getFileExt(assetsDBs.get(position).getAssetName()));
+                previousPosition = position;
+                notifyDataSetChanged();
+                importText((isStore)  ?  assetsDBs.get(position).getAssetsId()+"."+FileHelper.getFileExt(assetsDBs.get(position).getAssetName()) :
+                assetsDBs.get(position).getAssetName());
             }
         });
         return grid;
@@ -109,17 +146,62 @@ public class TextSelectionAdapter extends BaseAdapter {
 
     public void downloadFonts()
     {
+        if(downloadingFonts != null){
+            downloadingFonts.clear();
+            downloadingFonts = new HashMap<>();
+        }
         for (int i = 0; i < assetsDBs.size(); ++i){
             if(i >= assetsDBs.size()) continue;
             String DisplayName = assetsDBs.get(i).getAssetName();
             String downloadFileName = assetsDBs.get(i).getAssetsId()+"."+FileHelper.getFileExt(DisplayName);
             if(!FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" +downloadFileName)){
-                String url = Constants.urlFont + downloadFileName;
+                String url = GL2JNILib.Font() + downloadFileName;
                 String desPath = PathManager.LocalCacheFolder + "/";
                 downloadingFonts.put(addToDownloadManager.downloadAdd(mContext, url, downloadFileName, desPath,
-                        DownloadRequest.Priority.HIGH, downloadManager, null, TextSelectionAdapter.this,null), downloadFileName);
+                        DownloadRequest.Priority.HIGH, downloadManager, null, TextSelectionAdapter.this,null,null), downloadFileName);
             }
         }
+    }
+
+    private File[] getFileList()
+    {
+        FileHelper.getFontFromCommonIyan3dPath(mContext);
+        final String userFolder = PathManager.LocalUserFontFolder+"/";
+        final File f = new File(userFolder);
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if(filename.toLowerCase().endsWith("otf") || filename.toLowerCase().endsWith("ttf"))
+                    return true;
+                else
+                    return false;
+            }
+        };
+        return f.listFiles(filenameFilter);
+    }
+
+    public void addFileListToAssetDb(boolean isStore)
+    {
+        if(assetsDBs != null) {
+            assetsDBs.clear();
+            notifyDataSetChanged();
+        }
+        if(isStore){
+            this.isStore = true;
+            assetsDBs = db.getAllModelDetail(50);
+        }
+        else {
+            this.isStore = false;
+            File[] filelist = getFileList();
+            if(filelist == null || filelist.length <= 0){ UIHelper.informDialog(mContext,"Please copy your font's to SDCard/iyan3d Folder.");return;}
+            for (File aFilelist : filelist) {
+                AssetsDB assetsDB = new AssetsDB();
+                assetsDB.setAssetsId(0);
+                assetsDB.setAssetName(FileHelper.getFileNameFromPath(aFilelist.getPath()));
+                assetsDBs.add(assetsDB);
+            }
+        }
+        notifyDataSetChanged();
     }
 }
 

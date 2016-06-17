@@ -39,7 +39,7 @@ public:
     void loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms);
     static std::map<string, string> getShaderStringsToReplace(int maxUniforms);
     
-    static bool LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr);
+    static bool LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest = false);
     ~ShaderManager();
     
     

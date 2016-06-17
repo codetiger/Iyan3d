@@ -112,7 +112,6 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
     this->meshCache->clearVertices();
     if(!meshCacheCreated)
         this->meshCache->clearIndices();
-    
     this->meshCache->getBoundingBox()->clearPoints();
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
@@ -145,7 +144,6 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
         
         delete v;
     }
-    
     this->meshCache->Commit();
     this->shouldUpdateMesh = true;
     

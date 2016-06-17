@@ -3,6 +3,7 @@ package com.smackall.animator.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.R;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Locale;
 
 
 /**
@@ -36,6 +39,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
     private int[] basicShapesDrawableId = {R.drawable.cone,R.drawable.cube,R.drawable.cylinder,R.drawable.plane,R.drawable.sphere,R.drawable.torus};
     private int objSelectedPosition = 0;
     public AssetsDB assetsDB = new AssetsDB();
+    int previousPosition = -1;
 
     public OBJSelectionAdapter(Context c,GridView gridView) {
         mContext = c;
@@ -60,7 +64,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View grid;
+        final View grid;
         if(convertView==null){
             LayoutInflater inflater=((Activity)mContext).getLayoutInflater();
             grid=inflater.inflate(R.layout.asset_cell, parent, false);
@@ -69,8 +73,14 @@ public class OBJSelectionAdapter extends BaseAdapter {
             grid = (View)convertView;
         }
 
-        grid.getLayoutParams().height = this.gridView.getHeight()/5;
-        ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
+        switch (UIHelper.ScreenType){
+            case Constants.SCREEN_NORMAL:
+                grid.getLayoutParams().height = this.gridView.getHeight()/4                                                                                                                                                                                                         ;
+                break;
+            default:
+                grid.getLayoutParams().height = this.gridView.getHeight()/5;
+                break;
+        }        ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
 
         if(position <= 5 && this.gridView.getTag() == Constants.OBJ_MODE){
             ((ImageView) grid.findViewById(R.id.thumbnail)).setImageResource(basicShapesDrawableId[position]);
@@ -85,7 +95,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
         else if(this.gridView.getTag() == Constants.TEXTURE_MODE){
             if(position == 0){
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.DefaultAssetsDir+"/white_texture.png"));
-                ((TextView)grid.findViewById(R.id.assetLable)).setText("Pick Color");
+                ((TextView)grid.findViewById(R.id.assetLable)).setText(String.format(Locale.getDefault(),"%s","Pick Color"));
             }
             else if(files[position-1].exists()) {
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalThumbnailFolder+"/"+FileHelper.getFileNameFromPath(files[position-1].toString())));
@@ -93,9 +103,17 @@ public class OBJSelectionAdapter extends BaseAdapter {
             }
         }
 
+        grid.setBackgroundResource(0);
+        grid.setBackgroundColor(ContextCompat.getColor(mContext,R.color.cellBg));
+        if(previousPosition != -1 && position == previousPosition) {
+            grid.setBackgroundResource(R.drawable.cell_highlight);
+        }
+
         grid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                previousPosition = position;
+                notifyDataSetChanged();
                 manageSelection(position);
             }
         });
@@ -136,6 +154,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
                 ((EditorView) ((Activity) mContext)).renderManager.saveAsSGM(fileName, "white_texture", 123456, true, 1.0f, 1.0f, 1.0f);
             }
             else{
+                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
                 assetsDB.setAssetsId(basicShapesId[position]);
                 assetsDB.setAssetName(basicShapes[position]);
                 assetsDB.setIsTempNode(true);
@@ -156,6 +175,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
     }
 
     public void importOBJ(){
+        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
         if(this.gridView.getTag() == Constants.OBJ_MODE){
             if(objSelectedPosition > 5)
                 assetsDB.setAssetsId(123456);
@@ -163,5 +183,6 @@ public class OBJSelectionAdapter extends BaseAdapter {
                 assetsDB.setAssetsId(basicShapesId[objSelectedPosition]);
         }
         ((EditorView) ((Activity) mContext)).renderManager.importAssets(assetsDB,false);
+        ((EditorView) ((Activity) mContext)).objSelection.modelImported = true;
     }
 }

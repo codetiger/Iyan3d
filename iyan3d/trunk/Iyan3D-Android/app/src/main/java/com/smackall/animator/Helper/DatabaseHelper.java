@@ -15,47 +15,56 @@ import java.util.List;
 
 public class DatabaseHelper {
 
-    private final String SCENE_TABLE = "Scenes";
-    private final String SCENE_KEY_ID = "id";
-    private final String SCENE_KEY_SCENE_NAME = "sceneName";
-    private final String SCENE_KEY_IMAGE = "image";
-    private final String SCENE_KEY_TIME = "time";
+    public static final String SCENE_TABLE = "Scenes";
+    public static final String SCENE_KEY_ID = "id";
+    public static final String SCENE_KEY_SCENE_NAME = "sceneName";
+    public static final String SCENE_KEY_IMAGE = "image";
+    public static final String SCENE_KEY_TIME = "time";
 
-    private final String ANIM_TABLE_ANIMASSETS = "AnimAssets";
-    private final String ANIM_TABLE_MYANIMASSETS = "MyAnimation";
-    private final String ANIM_KEY_ID = "id";
-    private final String ANIM_KEY_ASSETSID = "animAssetId";
-    private final String ANIM_KEY_ANIM_NAME = "animName";
-    private final String ANIM_KEY_KEYWORD = "keyword";
-    private final String ANIM_KEY_USERID = "userid";
-    private final String ANIM_KEY_USERNAME = "username";
-    private final String ANIM_KEY_TYPE = "type";
-    private final String ANIM_KEY_BONECOUNT = "bonecount";
-    private final String ANIM_KEY_FEATUREDINDEX = "featuredindex";
-    private final String ANIM_KEY_UPLOADEDTIME = "uploaded";
-    private final String ANIM_KEY_DOWNLOADS = "downloads";
-    private final String ANIM_KEY_RATING = "rating";
-    private final String ANIM_PUBLISH_ID = "publishId";
+    public static final String ANIM_TABLE_ANIMASSETS = "AnimAssets";
+    public static final String ANIM_TABLE_MYANIMASSETS = "MyAnimation";
+    public static final String ANIM_KEY_ID = "id";
+    public static final String ANIM_KEY_ASSETSID = "animAssetId";
+    public static final String ANIM_KEY_ANIM_NAME = "animName";
+    public static final String ANIM_KEY_KEYWORD = "keyword";
+    public static final String ANIM_KEY_USERID = "userid";
+    public static final String ANIM_KEY_USERNAME = "username";
+    public static final String ANIM_KEY_TYPE = "type";
+    public static final String ANIM_KEY_BONECOUNT = "bonecount";
+    public static final String ANIM_KEY_FEATUREDINDEX = "featuredindex";
+    public static final String ANIM_KEY_UPLOADEDTIME = "uploaded";
+    public static final String ANIM_KEY_DOWNLOADS = "downloads";
+    public static final String ANIM_KEY_RATING = "rating";
+    public static final String ANIM_PUBLISH_ID = "publishId";
 
-    public final String ASSET_TABLE_ASSETS = "Assets";
-    public final String ASSET_TABLE_MY_ASSETS = "MyLibrary";
-    public final String ASSET_KEY_ID = "id";
-    public final String ASSET_KEY_ASSET_NAME = "assetName";
-    public final String ASSET_KEY_IAP = "iap";
-    public final String ASSET_KEY_ASSETSID = "assetsId";
-    public final String ASSET_KEY_TYPE = "type";
-    public final String ASSET_KEY_NBONES = "nbones";
-    public final String ASSET_KEY_KEYWORDS = "keywords";
-    public final String ASSET_KEY_HASH = "hash";
-    public final String ASSET_KEY_TIME = "time";
-    public final String ASSET_KEY_GROUP = "groupId";
+    public static final String ASSET_TABLE_ASSETS = "Assets";
+    public static final String ASSET_TABLE_MY_ASSETS = "MyLibrary";
+    public static final String ASSET_KEY_ID = "id";
+    public static final String ASSET_KEY_ASSET_NAME = "assetName";
+    public static final String ASSET_KEY_IAP = "iap";
+    public static final String ASSET_KEY_ASSETSID = "assetsId";
+    public static final String ASSET_KEY_TYPE = "type";
+    public static final String ASSET_KEY_NBONES = "nbones";
+    public static final String ASSET_KEY_KEYWORDS = "keywords";
+    public static final String ASSET_KEY_HASH = "hash";
+    public static final String ASSET_KEY_TIME = "time";
+    public static final String ASSET_KEY_GROUP = "groupId";
+
+    public static final String TASK_TABLE = "Tasks";
+    public static final String TASK_KEY_ID = "id";
+    public static final String TASK_NAME = "name";
+    public static final String TASK_DATE = "date";
+    public static final String TASK_TASK = "task";
+    public static final String TASK_TYPE = "type";
+    public static final String TASK_COMPLETED = "status";
+    public static final String TASK_PROGRESS = "progress";
+    public static final String TASK_UNIQUEID = "uniqueid";
 
 
 
 
     public void createDataBase() {
         SQLiteDatabase SCENES_DATABASE = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-
         String CREATE_SCENES_TABLE = "CREATE TABLE IF NOT EXISTS " + SCENE_TABLE + "("
                 + SCENE_KEY_ID + " INTEGER PRIMARY KEY," + SCENE_KEY_SCENE_NAME + " TEXT,"
                 + SCENE_KEY_IMAGE + " TEXT," + SCENE_KEY_TIME + " TEXT" + ")";
@@ -101,8 +110,120 @@ public class DatabaseHelper {
         if (myModelAssetDB.isOpen())
             myModelAssetDB.close();
 
+        SQLiteDatabase taskDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        String CREATE_TASK_TABLE = "CREATE TABLE IF NOT EXISTS " + TASK_TABLE + "(" + TASK_KEY_ID + " INTEGER PRIMARY KEY, " + TASK_NAME + " TEXT,"
+                + TASK_DATE + " TEXT," + TASK_TASK + " INTEGER," + TASK_TYPE + " INTEGER," + TASK_COMPLETED + " INTEGER,"+ TASK_PROGRESS + " INTEGER, " + TASK_UNIQUEID + " TEXT" +")";
+        taskDb.execSQL(CREATE_TASK_TABLE);
+        if (taskDb.isOpen())
+            taskDb.close();
+        new File(PathManager.Iyan3DDatabse).setReadable(true,true);
+        new File(PathManager.Iyan3DDatabse).setWritable(true,true);
+        new File(PathManager.Iyan3DDatabse).setExecutable(true,true);
         checkOldDatabaseIsFoundThenCopyTableToNewDatabase();
     }
+
+    public void addNewTask(HQTaskDB hqTaskDB) {
+        SQLiteDatabase taskDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        ContentValues values = new ContentValues();
+        values.put(TASK_NAME, hqTaskDB.getName());
+        values.put(TASK_DATE, hqTaskDB.getDate());
+        values.put(TASK_TASK, hqTaskDB.getTask());
+        values.put(TASK_TYPE,hqTaskDB.getTaskType());
+        values.put(TASK_COMPLETED,hqTaskDB.getCompleted());
+        values.put(TASK_PROGRESS,hqTaskDB.getProgress());
+        values.put(TASK_UNIQUEID,hqTaskDB.getUniqueId());
+        taskDb.insert(TASK_TABLE, null, values);
+        if (taskDb.isOpen())
+            taskDb.close();
+    }
+
+    public int updateTask(HQTaskDB hqTaskDB) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        ContentValues values = new ContentValues();
+        values.put(TASK_KEY_ID, hqTaskDB.getId());
+        values.put(TASK_NAME, hqTaskDB.getName());
+        values.put(TASK_DATE, hqTaskDB.getDate());
+        values.put(TASK_TASK, hqTaskDB.getTask());
+        values.put(TASK_TYPE,hqTaskDB.getTaskType());
+        values.put(TASK_COMPLETED, hqTaskDB.getCompleted());
+        values.put(TASK_PROGRESS,hqTaskDB.getProgress());
+        values.put(TASK_UNIQUEID,hqTaskDB.getUniqueId());
+        db.update(TASK_TABLE, values, TASK_KEY_ID+ " = ?", new String[]{String.valueOf(hqTaskDB.getId())});
+        if (db.isOpen())
+            db.close();
+        values = null;
+        return 0;
+    }
+
+    public List<HQTaskDB> getAllTasks(String uniqueId) {
+        List<HQTaskDB> taskList = new ArrayList<HQTaskDB>();
+        // Select All Query
+        SQLiteDatabase taskDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        Cursor cursor;
+        String selectQuery = "SELECT  * FROM " + TASK_TABLE +" WHERE TRIM(" + TASK_UNIQUEID+") = '" + uniqueId.trim()+"'";
+        cursor = taskDb.rawQuery(selectQuery, null);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    HQTaskDB task = new HQTaskDB();
+                    task.setId(Integer.parseInt(cursor.getString(0)));
+                    task.setName(cursor.getString(1));
+                    task.setDate(cursor.getString(2));
+                    task.setTask(cursor.getInt(3));
+                    task.setTaskType(cursor.getInt(4));
+                    task.setCompleted(cursor.getInt(5));
+                    task.setProgress(cursor.getInt(6));
+                    task.setUniqueId(cursor.getString(7));
+                    // Adding contact to list
+                    taskList.add(task);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (cursor != null)
+                cursor.close();
+            if (taskDb.isOpen())
+                taskDb.close();
+            return null;
+        }
+        return taskList;
+    }
+
+    public List<HQTaskDB> getTaskWithTaskId(int taskid) {
+        List<HQTaskDB> taskDBList = new ArrayList<HQTaskDB>();
+        SQLiteDatabase taskDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        Cursor c = taskDb.rawQuery("SELECT  * FROM " + TASK_TABLE + " WHERE " + TASK_TASK + " = " + taskid , null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    HQTaskDB task = new HQTaskDB();
+                    task.setId(Integer.parseInt(c.getString(0)));
+                    task.setName(c.getString(1));
+                    task.setDate(c.getString(2));
+                    task.setTask(c.getInt(3));
+                    task.setTaskType(c.getInt(4));
+                    task.setCompleted(c.getInt(5));
+                    task.setProgress(c.getInt(6));
+                    task.setUniqueId(c.getString(7));
+                    // Adding contact to list
+                    taskDBList.add(task);
+                } while (c.moveToNext());
+            }
+        } catch (Exception e) {
+            if (c != null)
+                c.close();
+            if (taskDb.isOpen())
+                taskDb.close();
+            return null;
+        }
+        if (c != null)
+            c.close();
+        if (taskDb.isOpen())
+            taskDb.close();
+        return taskDBList;
+    }
+
+
 
     public void addNewScene(SceneDB newScene) {
         SQLiteDatabase scenesDatabase = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
@@ -202,7 +323,13 @@ public class DatabaseHelper {
         SQLiteDatabase sceneDatabase = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
         Cursor cursor;
         String selectQuery = "SELECT  * FROM " + SCENE_TABLE;
-        cursor = sceneDatabase.rawQuery(selectQuery, null);
+        try {
+            cursor = sceneDatabase.rawQuery(selectQuery, null);
+        }
+        catch (RuntimeException e){
+            e.printStackTrace();
+            return null;
+        }
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -545,8 +672,14 @@ public class DatabaseHelper {
 
         List<AnimDB> animList = new ArrayList<AnimDB>();
         SQLiteDatabase animDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-
-        Cursor c = animDb.rawQuery(querySQL, null);
+        Cursor c;
+        try {
+            c = animDb.rawQuery(querySQL, null);
+        }
+        catch (RuntimeException e){
+            e.printStackTrace();
+            return null;
+        }
         try {
             if (c.moveToFirst()) {
                 do {
@@ -582,6 +715,7 @@ public class DatabaseHelper {
     }
 
     public int updateAnimationDetails(AnimDB animDB) {
+
         SQLiteDatabase animDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
         ContentValues values = new ContentValues();
         values.put(ANIM_KEY_ASSETSID, animDB.getAnimAssetId());
@@ -649,8 +783,7 @@ public class DatabaseHelper {
         return count;
     }
 
-    public void addNewModelAssets(AssetsDB assetsDB) {
-        SQLiteDatabase modelAssetDatabase = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+    public ContentValues addNewModelAssets(AssetsDB assetsDB) {
         ContentValues values = new ContentValues();
         values.put(ASSET_KEY_ASSET_NAME, assetsDB.getAssetName());
         values.put(ASSET_KEY_IAP, assetsDB.getIap());
@@ -661,9 +794,7 @@ public class DatabaseHelper {
         values.put(ASSET_KEY_HASH, assetsDB.getHash());
         values.put(ASSET_KEY_TIME, assetsDB.getDateTime());
         values.put(ASSET_KEY_GROUP,assetsDB.getGroup());
-        modelAssetDatabase.insert(ASSET_TABLE_ASSETS, null, values);
-        if (modelAssetDatabase.isOpen())
-            modelAssetDatabase.close();
+        return values;
     }
 
     public void addNewMyModelAssets(AssetsDB assetsDB) {
@@ -852,7 +983,14 @@ public class DatabaseHelper {
         List<AssetsDB> assetsList = new ArrayList<AssetsDB>();
         SQLiteDatabase assetsDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
         String selectQuery = "SELECT  * FROM " + ASSET_TABLE_MY_ASSETS;
-        Cursor c = assetsDb.rawQuery(selectQuery, null);
+        Cursor c;
+        try {
+            c = assetsDb.rawQuery(selectQuery, null);
+        }
+        catch (RuntimeException e){
+            e.printStackTrace();
+            return null;
+        }
         try {
             if (c.moveToFirst()) {
                 do {

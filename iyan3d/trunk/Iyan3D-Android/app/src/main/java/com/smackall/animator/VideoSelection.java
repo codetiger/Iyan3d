@@ -8,8 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 
+import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.VideoSelectionAdapter;
+import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.ImageDB;
+
+import java.util.Locale;
 
 /**
  * Created by Sabish.M on 19/3/16.
@@ -20,6 +25,8 @@ public class VideoSelection {
     private Context mContext;
     private VideoSelectionAdapter videoSelectionAdapter;
     ViewGroup insertPoint;
+    public ImageDB videoDB=new ImageDB();
+    private Tracker mTracker;
 
 
     public VideoSelection(Context context){
@@ -28,6 +35,7 @@ public class VideoSelection {
 
     public void showVideoSelection()
     {
+        HitScreens.VideoSelectionView(mContext);
         ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
         insertPoint = (((EditorView)((Activity)mContext)).sharedPreferenceManager.getInt(mContext,"toolbarPosition") == 1 ) ?
                 (ViewGroup) ((Activity)mContext).findViewById(R.id.leftView)
@@ -45,11 +53,12 @@ public class VideoSelection {
         insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
         GridView gridView = (GridView)v.findViewById(R.id.image_grid);
         initVideoGrid(gridView);
-        ((Button)v.findViewById(R.id.import_btn)).setText("IMPORT VIDEO");
+        ((Button)v.findViewById(R.id.import_btn)).setText(String.format(Locale.getDefault(),"%s","IMPORT VIDEO"));
         Button cancel = (Button)v.findViewById(R.id.cancel_image);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HitScreens.EditorView(mContext);
                 insertPoint.removeAllViews();
                 ((EditorView) ((Activity) mContext)).renderManager.removeTempNode();
                 ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
@@ -59,6 +68,8 @@ public class VideoSelection {
         v.findViewById(R.id.add_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                videoDB.setTempNode(false);
+                importVideo();
                 insertPoint.removeAllViews();
                 ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
                 videoSelectionAdapter = null;
@@ -67,7 +78,8 @@ public class VideoSelection {
         v.findViewById(R.id.import_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EditorView) ((Activity) mContext)).videoManager.getVideoFromStorage();
+                HitScreens.EditorView(mContext);
+//                ((EditorView) ((Activity) mContext)).videoManager.getVideoFromStorage();// Video Restricted
             }
         });
     }
@@ -88,5 +100,11 @@ public class VideoSelection {
                 videoSelectionAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void importVideo()
+    {
+        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
+        ((EditorView) ((Activity) mContext)).renderManager.importImage(videoDB);
     }
 }

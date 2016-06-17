@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.21.2'
+        classpath 'io.fabric.tools:gradle:1.21.5'
     }
 }
 
@@ -12,7 +12,6 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.gms.google-services'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -20,9 +19,15 @@ repositories {
 
 android {
     signingConfigs {
+        Release {
+            keyAlias 'android distribution key'
+            keyPassword 'SmartPh0ne'
+            storeFile file('/home/android-developer/Documents/Cert/DistCert.jks')
+            storePassword 'SmartPh0ne'
+        }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.3"
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId 'com.smackall.animator'
@@ -60,10 +65,22 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
+            signingConfig signingConfigs.Release
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
         }
-        debug {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
+            signingConfig signingConfigs.Release
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
         }
     }
     tasks.withType(JavaCompile) {
@@ -77,16 +94,23 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/jcodec-0.1.9.jar')
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
     compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.2@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
-    compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile files('libs/httpmime-4.2.1.jar')
+    compile('com.twitter.sdk.android:twitter:1.13.0@aar') {
+        transitive = true;
+    }
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
 }
 
 crashlytics {
@@ -94,3 +118,4 @@ crashlytics {
     androidNdkOut 'src/main/obj'
     androidNdkLibsOut 'src/main/libs'
 }
+apply plugin: 'com.google.gms.google-services'

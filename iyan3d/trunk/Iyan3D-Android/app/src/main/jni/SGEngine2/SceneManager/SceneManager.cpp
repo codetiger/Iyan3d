@@ -227,12 +227,15 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
         return;
     
     for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {
-        
+
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index))
             return;
         
         if(nodes[index]->instancedNodes.size() > 0) {
             for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
+
+                if(!renderMan->supportsVAO && nodes[index]->instancingRenderIt > 0)
+                    renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index);
                 ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
                 renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
             }
@@ -276,7 +279,7 @@ Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DA
 {
     Texture *newTex = NULL;
     #ifdef ANDROID
-    newTex = new OGLTexture();
+        newTex = new OGLTexture();
     #elif IOS
     if(device == OPENGLES2)
         newTex = new OGLTexture();
@@ -406,6 +409,9 @@ shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, st
         dynamic_pointer_cast<MeshNode>(original)->meshCache->copyInstanceToMeshCache(dynamic_pointer_cast<MeshNode>(original)->mesh, (int)original->instancedNodes.size()+1);
         original->shouldUpdateMesh = true;
     }
+    else if(!renderMan->supportsVAO){
+        original->shouldUpdateMesh = true;
+    }
     
     AddNode(iNode, MESH_TYPE_LITE);
     original->instancedNodes.push_back(iNode);
@@ -470,10 +476,10 @@ void SceneManager::setPropertyValue(Material *material,string name,int* values,D
 AnimatedMesh* SceneManager::LoadMesh(string filePath){
     return CSGRMeshFileLoader::LoadMesh(filePath,device);
 }
-bool SceneManager::LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass) {
+bool SceneManager::LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest) {
     if(device == OPENGLES2)
         renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
-    return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass);
+    return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass, isTest);
 }
 Material* SceneManager::getMaterialByIndex(int index){
 	if(index < (int)(*mtlManger->materials).size())
@@ -529,13 +535,17 @@ shared_ptr<EmptyNode> SceneManager::addEmptyNode(){
 }
 void SceneManager::updateVertexBuffer(int nodeIndex){
 	#ifndef UBUNTU
-		if(device == OPENGLES2)
+		if(device == OPENGLES2 && renderMan->supportsVAO)
 			dynamic_pointer_cast<OGLNodeData>(nodes[nodeIndex]->nodeData)->removeVertexBuffers();
+			else if(device == OPENGLES2)
+			    renderMan->createVertexAndIndexBuffers(nodes[nodeIndex], dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->meshType, false);
     for(int i = 0; i < dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->getMeshBufferCount(); i++) {
         if(device == METAL)
 			renderMan->createVertexBuffer(nodes[nodeIndex],i);
-        else
+        else if(renderMan->supportsVAO)
             ((OGLES2RenderManager*)renderMan)->updateVAO(nodes[nodeIndex], false, false, i);
+        else
+            ((OGLES2RenderManager*)renderMan)->bindBufferAndAttributes(nodes[nodeIndex], i, dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->meshType);
     }
 	#endif
 }
@@ -543,5 +553,10 @@ void SceneManager::updateVertexBuffer(int nodeIndex){
 bool SceneManager::setVAOSupport(bool status)
 {
     renderMan->supportsVAO = status;
+
+    #ifdef ANDROID
+    if(status && device == OPENGLES2)
+        ((OGLES2RenderManager*)renderMan)->initialiseOtherVAOFunc();
+    #endif
 }
 

@@ -50,12 +50,7 @@ RenderHelper::~RenderHelper(){
 bool RenderHelper::supportsVAO()
 {
     #ifdef  ANDROID
-    char* exts = glGetString(GL_EXTENSIONS);
-    std::string extStr(exts);
-    std::string instance = "GL_OES_vertex_array_object";
-    if(extStr.find(instance) != std::string::npos)
-        return true;
-    return false;
+     return renderingScene->addVAOSupport;
     #endif
     return true;
 }
@@ -684,7 +679,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         int divisor = (frame > totalImgs) ? frame/totalImgs : 1;
         index = (frame > totalImgs) ? frame - (divisor * totalImgs) : frame;
     }
-    
     string watermarkPath = constants::BundlePath + "/wm" + to_string(index) + ".png";
     renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture" ,watermarkPath, TEXTURE_RGBA8,TEXTURE_BYTE);
     int waterMarkSize = SceneHelper::screenWidth * 0.2;

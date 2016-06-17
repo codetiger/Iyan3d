@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/field_of_view"
                         android:indeterminate="false"
-                        android:max="180"/>
+                        android:max="170"/>
                 </LinearLayout>
 
                 <LinearLayout

@@ -20,10 +20,11 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
+    printf(" \n Width %f %f ", SceneHelper::screenWidth, SceneHelper::screenHeight);
     this->smgr = smgr;
     renHelper = new RenderHelper(smgr, this);
 
-#ifndef UBUNTU
+#ifdef IOS
     this->smgr->setVAOSupport(renHelper->supportsVAO());
 #endif
 

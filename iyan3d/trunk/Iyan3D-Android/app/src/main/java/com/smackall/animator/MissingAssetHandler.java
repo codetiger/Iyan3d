@@ -1,6 +1,11 @@
-package com.smackall.animator.Helper;
+package com.smackall.animator;
 
 import android.content.Context;
+
+import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.FileHelper;
+import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.opengl.GL2JNILib;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
@@ -20,24 +25,23 @@ public class MissingAssetHandler {
     }
 
     public boolean checkAssets(String filename , int nodeType){
-        System.out.println("File Name : " + filename);
         switch (nodeType){
             case Constants.NODE_TEXT_SKIN:
             case Constants.NODE_TEXT:
                 if(!FileHelper.checkValidFilePath(PathManager.LocalFontsFolder+"/"+filename))
                     if(!FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder+"/"+filename))
-                        return downloadMissingAsset(Constants.urlFont+filename,PathManager.LocalFontsFolder+"/"+filename);
+                        return downloadMissingAsset(GL2JNILib.Font()+filename,PathManager.LocalFontsFolder+"/"+filename);
                 break;
             case Constants.NODE_SGM:
                 if(!FileHelper.checkValidFilePath(PathManager.LocalMeshFolder+"/"+filename+".sgm")) {
-                    downloadMissingAsset(Constants.urlForMesh + filename + ".sgm", PathManager.LocalMeshFolder + "/" + filename + ".sgm");
-                   return downloadMissingAsset(Constants.urlForTexture + filename + ".png", PathManager.LocalMeshFolder + "/" + filename + "-cm.png");
+                    downloadMissingAsset(GL2JNILib.Mesh() + filename + ".sgm", PathManager.LocalMeshFolder + "/" + filename + ".sgm");
+                   return downloadMissingAsset(GL2JNILib.Texture() + filename + ".png", PathManager.LocalMeshFolder + "/" + filename + "-cm.png");
                 }
                 break;
             case Constants.NODE_RIG:
                 if(!FileHelper.checkValidFilePath(PathManager.LocalMeshFolder+"/"+filename+".sgr")) {
-                    downloadMissingAsset(Constants.urlForMesh + filename + ".sgr", PathManager.LocalMeshFolder + "/" + filename + ".sgr");
-                    return downloadMissingAsset(Constants.urlForTexture + filename + ".png", PathManager.LocalMeshFolder + "/" + filename + "-cm.png");
+                    downloadMissingAsset(GL2JNILib.Mesh() + filename + ".sgr", PathManager.LocalMeshFolder + "/" + filename + ".sgr");
+                    return downloadMissingAsset(GL2JNILib.Texture() + filename + ".png", PathManager.LocalMeshFolder + "/" + filename + "-cm.png");
                 }
                 break;
             case Constants.NODE_PARTICLES:

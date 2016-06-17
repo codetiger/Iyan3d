@@ -85,6 +85,8 @@
                 android:text="New Text"
                 android:id="@+id/object_lable"
                 android:layout_gravity="center_horizontal"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:gravity="center|left" />

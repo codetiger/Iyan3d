@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import com.smackall.animator.EditorView;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
+import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.R;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Locale;
 
 /**
  * Created by Sabish.M on 18/3/16.
@@ -31,7 +34,7 @@ public class ChangeTextureAdapter extends BaseAdapter {
     private Context mContext;
     private GridView gridView;
     public File[] files;
-
+    int previousPosition = -1;
     public ChangeTextureAdapter(Context c,GridView gridView) {
         mContext = c;
         this.gridView = gridView;
@@ -64,23 +67,38 @@ public class ChangeTextureAdapter extends BaseAdapter {
             grid = (View)convertView;
         }
 
-        grid.getLayoutParams().height = this.gridView.getHeight()/5;
+        switch (UIHelper.ScreenType){
+            case Constants.SCREEN_NORMAL:
+                grid.getLayoutParams().height = this.gridView.getHeight()/4                                                                                                                                                                                                         ;
+                break;
+            default:
+                grid.getLayoutParams().height = this.gridView.getHeight()/5;
+                break;
+        }
         ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
         ((ImageView)grid.findViewById(R.id.thumbnail)).setVisibility(View.VISIBLE);
 
             if(position == 0){
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setBackgroundColor(Color.argb(255,(int)((EditorView)((Activity)mContext)).textureSelection.assetsDB.getX()*255
                 ,(int)((EditorView)((Activity)mContext)).textureSelection.assetsDB.getY()*255,(int)((EditorView)((Activity)mContext)).textureSelection.assetsDB.getZ()*255));
-                ((TextView)grid.findViewById(R.id.assetLable)).setText("Pick Color");
+                ((TextView)grid.findViewById(R.id.assetLable)).setText(String.format(Locale.getDefault(),"%s","Pick Color"));
             }
             else if(files[position-1].exists()) {
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalThumbnailFolder+"/"+FileHelper.getFileNameFromPath(files[position-1].toString())));
                 ((TextView)grid.findViewById(R.id.assetLable)).setText(FileHelper.getFileWithoutExt(FileHelper.getFileNameFromPath(files[position-1].toString())));
             }
 
+        grid.setBackgroundResource(0);
+        grid.setBackgroundColor(ContextCompat.getColor(mContext,R.color.cellBg));
+        if(previousPosition != -1 && position == previousPosition) {
+            grid.setBackgroundResource(R.drawable.cell_highlight);
+        }
+
         grid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                previousPosition = position;
+                notifyDataSetChanged();
                 if(position == 0)
                     ((EditorView)((Activity)mContext)).colorPicker.showColorPicker(gridView.getChildAt(0),null,Constants.CHANGE_TEXTURE_MODE);
                 else {

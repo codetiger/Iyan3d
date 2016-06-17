@@ -56,6 +56,7 @@ public interface DownloadManager {
 	/**
 	 * Error code when an error receiving or processing data occurred at the
 	 * HTTP level.
+	 * HTTP level.
 	 */
 	public final static int ERROR_HTTP_DATA_ERROR = 1004;
 

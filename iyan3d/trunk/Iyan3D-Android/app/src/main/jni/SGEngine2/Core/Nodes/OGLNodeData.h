@@ -14,7 +14,6 @@
 #include "APIData.h"
 #include "../Material/OGLMaterial.h"
 
-
 class OGLNodeData: public APIData{
 public:
     bool VAOCreated;
@@ -25,6 +24,7 @@ public:
     ~OGLNodeData();
     void setShaderMaterial(Material *mat);
     void removeVertexBuffers();
+
 };
 
 #endif /* defined(__SGEngine2__OGLNodeData__) */

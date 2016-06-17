@@ -31,11 +31,39 @@
         android:weightSum="1"
         android:padding="10dp">
 
-        <Button
-            android:layout_width="wrap_content"
+        <com.facebook.login.widget.LoginButton
+            xmlns:fb="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/facebook"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/facebook"
-            android:id="@+id/facebook" />
+            android:id="@+id/dummyFacebookBtn"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/facebook"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:weightSum="1"
+        android:padding="10dp"
+        android:id="@+id/twitterBtnHolder">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dummyTwitterbtn"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/twitter"/>
     </LinearLayout>
 
     <LinearLayout
@@ -48,28 +76,12 @@
         android:weightSum="1"
         android:padding="10dp">
 
-        <Button
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/twitter"
-            android:id="@+id/twitter" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:weightSum="1"
-        android:padding="10dp">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/google"
-            android:id="@+id/google" />
+            android:id="@+id/sign_in_button"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/google"/>
     </LinearLayout>
 
     <LinearLayout

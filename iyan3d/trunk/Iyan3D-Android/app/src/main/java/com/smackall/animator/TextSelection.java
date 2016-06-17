@@ -8,14 +8,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.TextSelectionAdapter;
+import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.DownloadManager.AddToDownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManager;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.FileHelper;
+import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.TextDB;
 import com.smackall.animator.Helper.UIHelper;
 
@@ -25,7 +30,6 @@ import com.smackall.animator.Helper.UIHelper;
  */
 
 public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChangeListener {
-
     private Context mContext;
     private DatabaseHelper db;
     TextSelectionAdapter textSelectionAdapter;
@@ -34,6 +38,7 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
     ViewGroup insertPoint;
     View v;
     public TextDB textDB = new TextDB();
+    private Tracker mTracker;
 
     public TextSelection(Context context,DatabaseHelper db,AddToDownloadManager addToDownloadManager,DownloadManager downloadManager){
         this.mContext = context;
@@ -44,6 +49,7 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
 
     public void showTextSelection()
     {
+        HitScreens.TextSelectionView(mContext);
         ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
         insertPoint = (((EditorView)((Activity)mContext)).sharedPreferenceManager.getInt(mContext,"toolbarPosition") == 1 ) ?
                 (ViewGroup) ((Activity)mContext).findViewById(R.id.leftView)
@@ -70,6 +76,8 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
         ((Button)v.findViewById(R.id.add_text_btn)).setOnClickListener(this);
         ((Button)v.findViewById(R.id.color_picker_btn)).setOnClickListener(this);
         ((Button)v.findViewById(R.id.withBone)).setOnClickListener(this);
+        ((RadioButton)v.findViewById(R.id.fontstore)).setOnClickListener(this);
+        ((RadioButton)v.findViewById(R.id.myfont)).setOnClickListener(this);
         ((SeekBar)v.findViewById(R.id.bevalSlider)).setOnSeekBarChangeListener(this);
     }
 
@@ -91,8 +99,10 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
                 break;
             case R.id.cancel_textView:
             case R.id.add_text_btn:
+                HitScreens.EditorView(mContext);
                 textDB.setTempNode((v.getId() == R.id.cancel_textView));
-                importText();
+                if(v.getId() == R.id.add_text_btn)
+                    importText();
                 ((EditorView)((Activity)mContext)).renderManager.removeTempNode();
                 downloadManager.cancelAll();
                 insertPoint.removeAllViews();
@@ -100,9 +110,17 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
                 mContext = null;
                 db = null;
                 textSelectionAdapter = null;
+                Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
                 break;
             case R.id.withBone:
                 importText();
+                break;
+            case R.id.myfont:
+                downloadManager.cancelAll();
+                textSelectionAdapter.addFileListToAssetDb(false);
+                break;
+            case R.id.fontstore:
+                textSelectionAdapter.addFileListToAssetDb(true);
                 break;
         }
     }
@@ -123,11 +141,25 @@ public class TextSelection implements View.OnClickListener,SeekBar.OnSeekBarChan
 
     public void importText(){
         if(textDB.getFilePath().equals("-1")){ UIHelper.informDialog(mContext, "Please Choose Font Style."); return;}
+        else if(!FileHelper.checkValidFilePath(PathManager.LocalFontsFolder+"/"+textDB.getFilePath()) && !FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder+"/"+textDB.getFilePath()) )
+        {
+            UIHelper.informDialog(mContext, "Please Check your network.");
+            return;
+        }
+        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
         textDB.setAssetName(((EditText) v.findViewById(R.id.inputText)).getText().toString());
         textDB.setBevalValue(((SeekBar) v.findViewById(R.id.bevalSlider)).getProgress());
         textDB.setFontSize(10);
         textDB.setTextureName("-1");
         textDB.setTypeOfNode(((Switch) v.findViewById(R.id.withBone)).isChecked() ? Constants.ASSET_TEXT_RIG : Constants.ASSET_TEXT);
         ((EditorView)((Activity)mContext)).renderManager.importText(textDB);
+    }
+
+    public void notifyDataSetChanged(boolean openWithFunction)
+    {
+        if(textSelectionAdapter != null)
+            textSelectionAdapter.notifyDataSetChanged();
+        if(openWithFunction)
+            ((RadioButton)v.findViewById(R.id.myfont)).performClick();
     }
 }

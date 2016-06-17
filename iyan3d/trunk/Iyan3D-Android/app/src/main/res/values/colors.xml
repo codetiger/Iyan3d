@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="selectList">#9289e2</color>
+    <color name="topbar">#a800ff</color>
+    <color name="cellBg">#f3171616</color>
 </resources>

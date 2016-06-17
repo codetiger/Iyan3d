@@ -21,6 +21,23 @@ LOCAL_MODULE    := iyan3d
 
 FILE_LIST := $(wildcard $(LOCAL_PATH)/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/BroadphaseCollision/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionDispatch/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionShapes/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/Gimpact/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/NarrowPhaseCollision/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Character/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/ConstraintSolver/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Dynamics/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Featherstone/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/MLCPSolvers/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Vehicle/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletSoftBody/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/LinearMath/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Material/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Nodes/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Textures/*.cpp)
@@ -46,6 +63,23 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Loaders/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Utilities/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/BroadphaseCollision/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionDispatch/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionShapes/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/Gimpact/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/NarrowPhaseCollision/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Character/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/ConstraintSolver/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Dynamics/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Featherstone/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/MLCPSolvers/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Vehicle/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletSoftBody/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/LinearMath/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Material/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Nodes/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Textures/*.c)
@@ -112,5 +146,52 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/SGEngine2 \
         $(LOCAL_PATH)/SGEngine2/Font/poly2tri/sweep \
         $(LOCAL_PATH)/SGEngine2/Loaders \
         $(LOCAL_PATH)/Iyan3dEngineFiles \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3 \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/BroadphaseCollision \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionDispatch \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionShapes \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/Gimpact \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/NarrowPhaseCollision \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Character \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/ConstraintSolver \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Dynamics \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Featherstone \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/MLCPSolvers \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Vehicle \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletSoftBody \
+        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/LinearMath \
         $(LOCAL_PATH)/Iyan3dEngineFiles/HeaderFiles
 include $(BUILD_SHARED_LIBRARY)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

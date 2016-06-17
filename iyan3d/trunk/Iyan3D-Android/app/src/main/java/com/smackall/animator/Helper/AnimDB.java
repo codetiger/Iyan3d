@@ -47,7 +47,7 @@ public class AnimDB {
         this.publishedId = n7;
     }
 
-    public AnimDB(Integer n, int n2, String string2, String string3, String string4, String string5, int n3, int n4, int n5, String string6, int n6, int n7) {
+    public AnimDB(Integer n, int n2, String string2, String string3, String string4, String string5, int n3, int n4, int n5, String string6, int n6, int n7,int n8) {
         this.id = n;
         this.animAssetId = n2;
         this.animName = string2;
@@ -60,6 +60,7 @@ public class AnimDB {
         this.uploaded = string6;
         this.downloads = n6;
         this.rating = n7;
+        this.publishedId = n8;
     }
 
     public int getAnimAssetId() {

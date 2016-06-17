@@ -24,7 +24,7 @@ import com.smackall.animator.opengl.GL2JNILib;
 public class Scale implements SeekBar.OnSeekBarChangeListener, View.OnClickListener{
     private Context mContext;
     private Dialog scale;
-
+    private boolean defaultValueInitialized = false;
     public Scale(Context context){
         this.mContext = context;
     }
@@ -53,15 +53,16 @@ public class Scale implements SeekBar.OnSeekBarChangeListener, View.OnClickListe
         window.setAttributes(wlp);
 
         this.scale = scale;
+        defaultValueInitialized = false;
         setStartingValue(x,y,z);
         initViews(scale);
-        updateText();
+        updateText(false);
+        defaultValueInitialized = true;
         scale.show();
     }
 
     private void setStartingValue(float x,float y,float z)
     {
-        System.out.println("X Value : " + x + " Y Value : " + y +" Z Value : " + z);
                 ((SeekBar) scale.findViewById(R.id.x)).setMax((((int) (x * 10.0f)) > 10) ? ((int) (x * 10.0f)) * 2 : 10);
         ((SeekBar) scale.findViewById(R.id.y)).setMax((((int)(y*10.0f)) > 10) ? ((int)(y*10.0f)) *2 : 10);
         ((SeekBar) scale.findViewById(R.id.z)).setMax((((int)(z*10.0f)) > 10) ? ((int)(z*10.0f)) *2 : 10);
@@ -107,31 +108,32 @@ public class Scale implements SeekBar.OnSeekBarChangeListener, View.OnClickListe
             ((SeekBar)scale.findViewById(R.id.y)).setProgress(progress);
             ((SeekBar)scale.findViewById(R.id.z)).setProgress(progress);
         }
-        updateText();
+        updateText(false);
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        updateText();
+        updateText(false);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         if(seekBar.getProgress() > 5)
             setMax();
-        updateText();
+        updateText(true);
     }
 
-    private void updateText()
+    private void updateText(boolean store)
     {
         ((TextView)scale.findViewById(R.id.x_value)).setText(String.valueOf((float) ((SeekBar) scale.findViewById(R.id.x)).getProgress() / 10.0f));
         ((TextView)scale.findViewById(R.id.y_value)).setText(String.valueOf((float) ((SeekBar) scale.findViewById(R.id.y)).getProgress() / 10.0f));
         ((TextView)scale.findViewById(R.id.z_value)).setText(String.valueOf((float) ((SeekBar) scale.findViewById(R.id.z)).getProgress() / 10.0f));
+        if(!defaultValueInitialized) return;
         if(!GL2JNILib.isRigMode())
         ((EditorView)((Activity)mContext)).renderManager.setScale(
                 (float) ((SeekBar) scale.findViewById(R.id.x)).getProgress() / 10.0f,
                 (float) ((SeekBar) scale.findViewById(R.id.y)).getProgress() / 10.0f,
-                (float) ((SeekBar) scale.findViewById(R.id.z)).getProgress() / 10.0f
+                (float) ((SeekBar) scale.findViewById(R.id.z)).getProgress() / 10.0f,store
         );
         else
             ((EditorView)((Activity)mContext)).renderManager.setRigScale(
@@ -156,6 +158,6 @@ public class Scale implements SeekBar.OnSeekBarChangeListener, View.OnClickListe
         ((SeekBar) scale.findViewById(R.id.x)).setMax(max*2);
         ((SeekBar) scale.findViewById(R.id.y)).setMax(max*2);
         ((SeekBar) scale.findViewById(R.id.z)).setMax(max*2);
-        updateText();
+        updateText(false);
     }
 }

@@ -15,8 +15,17 @@ import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.opengl.GL2JNILib;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Sabish.M on 23/3/16.
@@ -26,6 +35,8 @@ public class Save {
 
     private Context mContext;
     private DatabaseHelper db;
+    private static final int BUFFER = 2048;
+
     public Save(Context context,DatabaseHelper db){
         this.mContext = context;
         this.db = db;
@@ -37,7 +48,7 @@ public class Save {
         builder.setTitle("Save your Animation as template");
         final EditText input = new EditText(mContext);
         input.setHint("Animation Name");
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -63,7 +74,7 @@ public class Save {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.saveAnimation(Save.this,assetId,name,type);
+                GL2JNILib.saveAnimation(((EditorView)mContext).nativeCallBacks,assetId,name,type);
             }
         });
     }
@@ -82,10 +93,10 @@ public class Save {
                     animDB.setRating(0);
                     animDB.setBonecount(GL2JNILib.jointSize(GL2JNILib.getSelectedNodeId()));
                     animDB.setAnimType(type);
-                    animDB.setUserid("");
-                    animDB.setUserName("Anonymous");
-                    animDB.setKeyword("");
-                    animDB.setUploaded(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+                    animDB.setUserid(((EditorView)(Activity)mContext).userDetails.uniqueId);
+                    animDB.setUserName(((EditorView)(Activity)mContext).userDetails.userName);
+                    animDB.setKeyword(((EditorView)(Activity)mContext).userDetails.userName);
+                    animDB.setUploaded(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date()));
                     db.addNewMyAnimationAssets(animDB);
                     ((EditorView)((Activity)mContext)).imageManager.makeThumbnail(PathManager.LocalAnimationFolder+"/"+assetId+".png");
                     UIHelper.informDialog(mContext,"Animation Saved Successfully.");
@@ -94,5 +105,46 @@ public class Save {
                     System.out.println("Error");
             }
         });
+    }
+
+    public void saveI3DFile(String fileName)
+    {
+        ArrayList<String> fileNames = ((EditorView)mContext).zipManager.getFiles(true);
+        String zipname = fileName+".i3d";
+        String path  =PathManager.LocalProjectFolder+"/";
+
+        try  {
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(path+zipname);
+
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+            byte data[] = new byte[BUFFER];
+
+            for(int i=0; i < fileNames.size(); i++) {
+                if(!FileHelper.checkValidFilePath(fileNames.get(i))) {
+                    break;
+                }
+                FileInputStream fi = new FileInputStream(fileNames.get(i));
+                origin = new BufferedInputStream(fi, BUFFER);
+                ZipEntry entry = new ZipEntry(fileNames.get(i).substring(fileNames.get(i).lastIndexOf("/") + 1));
+                try {
+                    out.putNextEntry(entry);
+                }
+                catch (ZipException e){
+                    e.printStackTrace();
+                    continue;
+                }
+                int count;
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+
+            out.finish();
+            out.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

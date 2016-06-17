@@ -10,11 +10,11 @@
         androclass:orderInCategory="1"
         androclass:icon="@drawable/import_image"
         androclass:title="@string/images"/>
-    <item
-        androclass:id="@+id/videos"
-        androclass:orderInCategory="2"
-        androclass:icon="@drawable/import_video"
-        androclass:title="@string/videos" />
+    <!--<item-->
+        <!--androclass:id="@+id/videos"-->
+        <!--androclass:orderInCategory="2"-->
+        <!--androclass:icon="@drawable/import_video"-->
+        <!--androclass:title="@string/videos" />-->
     <item
         androclass:id="@+id/text"
         androclass:orderInCategory="3"
