@@ -423,6 +423,9 @@ void SGActionManager::storeLightPropertyChangeAction(float red , float green , f
     } else
         finalizeAndAddAction(changeKeysAction);
     
+    if(actionScene->nodes[actionScene->selectedNodeId]->props.specificInt == POINT_LIGHT)
+        actionScene->updateDirectionLine();
+    
     changeKeysAction.drop();
     propertyAction.drop();
 }

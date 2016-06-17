@@ -40,9 +40,9 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
-                        <action selector="distanceChangeAction:" destination="-1" eventType="touchUpInside" id="kb1-fN-Kh8"/>
                         <action selector="distanceChangeAction:" destination="-1" eventType="valueChanged" id="w8O-0F-NRH"/>
-                        <action selector="distanceEndAction:" destination="-1" eventType="touchUpOutside" id="vwJ-K6-Jbp"/>
+                        <action selector="distanceEndAction:" destination="-1" eventType="touchUpInside" id="MV8-DV-IMX"/>
+                        <action selector="distanceEndAction:" destination="-1" eventType="touchUpOutside" id="eUa-Lw-lu7"/>
                     </connections>
                 </slider>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SHADOW DARKNESS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YIC-8n-CUC">

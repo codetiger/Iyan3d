@@ -494,7 +494,7 @@ void SGSelectionManager::unselectObject(int objectId)
     selectionScene->clearSelections();
     if(selectionScene->directionIndicator->node->getVisible() && selectionScene->directionIndicator->assetId != selectionScene->selectedNodeId)
         selectionScene->directionIndicator->node->setVisible(false);
-    else if (selectionScene->directionLine->node->getVisible())
+    else if (selectionScene->directionLine->node->getVisible() || selectionScene->lightCircles->node->getVisible())
         selectionScene->updateDirectionLine();
     
     selectionScene->updater->updateControlsOrientaion();

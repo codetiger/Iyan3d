@@ -63,7 +63,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
         
         if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
 			#ifndef UBUNTU
-        	if(updatingScene->directionLine->node->getVisible())
+        	if(updatingScene->directionLine->node->getVisible() || updatingScene->lightCircles->node->getVisible())
                 updatingScene->updateDirectionLine();
 			#endif
             if(sgNode->scaleKeys.size() > 0) {

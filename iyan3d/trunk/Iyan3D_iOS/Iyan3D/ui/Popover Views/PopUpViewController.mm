@@ -98,7 +98,7 @@
     else if([clickedBtnName isEqualToString:@"myObjectsBtn"]){
         tableData = [NSMutableArray arrayWithObjects:@"Camera", @"Light", nil];
     }
-    else if([clickedBtnName isEqualToString:@"propertiesBtn"]){
+    else if([clickedBtnName isEqualToString:@"propertiesBtn"] || [clickedBtnName isEqualToString:@"animProps"]){
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", nil];
     }
@@ -114,6 +114,10 @@
         self.popoverBtns.hidden=YES;
         [self.loginBtn setHidden:NO];
         [self.loginImage setHidden:NO];
+    }
+    else if([clickedBtnName isEqualToString:@"animProps1"]){
+        [self allowMultipleSelection:NO];
+        tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", @"Publish", nil];
     }
     else {
         tableData = [NSMutableArray arrayWithObjects:@"No data",nil];
@@ -222,23 +226,6 @@
                 else
                     cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_IPhone"];
 
-//
-//            
-//            if([cell.textLabel.text isEqualToString:@"CAMERA"])
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Camera_Pad.png"];
-//            else if([cell.textLabel.text isEqualToString:@"LIGHT"])
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-//            else if([cell.textLabel.text hasPrefix:@"Text"])
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
-//            else if([cell.textLabel.text hasPrefix:@"Image"])
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
-//            else if([cell.textLabel.text hasPrefix:@"Light"])
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Light_Pad.png"];
-//            else if([cell.textLabel.text containsString:@"particle"])
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Particles-Phone.png"];
-//            else
-//                cell.image.image = [UIImage imageNamed:@"My-objects-Models_Pad.png"];
-
         }
      }
     
@@ -282,6 +269,9 @@
     }
     else if([clickedBtn isEqualToString:@"optionsBtn"]){
         [self.delegate optionBtnDelegate:(int)indexPath.row];
+    }
+    else if ([clickedBtn isEqualToString:@"animProps1"]) {
+        [self.delegate propertiesBtnDelegate:(int)indexPath.row];
     }
     else {
         

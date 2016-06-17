@@ -15,9 +15,14 @@
 #define TOP_RATED 6
 #define MY_ANIMATION 7
 #define RECENT 8
-#define USER_NAME_ALERT 100
+#define USER_NAME_ALERT 1
 #define CANCEL_BUTTON 0
 #define OK_BUTTON 1
+
+#define RENAME_ALERT 0
+
+#define CANCEL 0
+#define OK 1
 
 @implementation AnimationSelectionSlider
 
@@ -103,6 +108,14 @@
     cell.layer.borderColor = [UIColor clearColor].CGColor;
     cell.assetNameLabel.text = assetItem.assetName;
     [cell.assetNameLabel adjustsFontSizeToFitWidth];
+    cell.category = animationCategoryTab;
+    if(animationCategoryTab != MY_ANIMATION)
+        [cell.propsBtn setHidden:YES];
+    else
+        [cell.propsBtn setHidden:NO];
+    
+    cell.selectedIndex = (int)indexPath.row;
+    cell.parentVC = self;
     cell.backgroundColor = [UIColor clearColor];
     [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:(animationCategoryTab == MY_ANIMATION) ? MY_ANIMATION_VIEW : ALL_ANIMATION_VIEW OperationQueue:downloadQueue ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
     
@@ -134,6 +147,111 @@
     cell.layer.cornerRadius = 8.0;
     [self displayBasedOnSelection:[NSNumber numberWithInteger:indexPath.row]];
 }
+
+#pragma mark AssetCellView Delegate methods
+
+- (void) deleteAnimationAtIndex:(int) indexVal
+{
+    if(animationCategoryTab != MY_ANIMATION)
+        return;
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    AnimationItem *a = animationsItems[indexVal];
+    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirectory = [docPaths objectAtIndex:0];
+    NSString* extension;
+    if (animationType == 0)
+        extension = @".sgra";
+    else
+        extension = @".sgta";
+
+    NSString* imagePath = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirectory, a.assetId];
+    NSString* animPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirectory, a.assetId, extension];
+    if([fm fileExistsAtPath:imagePath])
+        [fm removeItemAtPath:imagePath error:nil];
+    if([fm fileExistsAtPath:animPath])
+        [fm removeItemAtPath:animPath error:nil];
+    
+    [cache deleteMyAnimation:a.assetId];
+    [animationsItems removeObject:a];
+    [self.animationCollectionView reloadData];
+}
+
+- (void) cloneAnimation:(int) indexVal
+{
+    
+    if(animationCategoryTab != MY_ANIMATION)
+        return;
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    AnimationItem *a = animationsItems[indexVal];
+    
+    int assetId = ANIMATIONS_ID + [cache getNextAnimationAssetId];
+
+    bool status = false;
+    
+    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirectory = [docPaths objectAtIndex:0];
+    NSString* extension;
+    if (animationType == 0)
+        extension = @".sgra";
+    else
+        extension = @".sgta";
+
+    NSString* imagePath = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirectory, a.assetId];
+    NSString* animPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirectory, a.assetId, extension];
+    
+    NSString* newImgPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirectory, assetId];
+    NSString* newAnimPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirectory, assetId, extension];
+
+    if([fm fileExistsAtPath:imagePath])
+        [fm copyItemAtPath:imagePath toPath:newImgPath error:nil];
+    if([fm fileExistsAtPath:animPath]) {
+        status = true;
+        [fm copyItemAtPath:animPath toPath:newAnimPath error:nil];
+    }
+
+    
+    if (status) {
+        AnimationItem* animItem = [[AnimationItem alloc] init];
+        animItem.assetId = assetId;
+        animItem.assetName = [NSString stringWithFormat:@"%@copy",a.assetName];
+        animItem.published = 0;
+        animItem.rating = 0;
+        animItem.boneCount = a.boneCount;
+        animItem.isViewerRated = 0;
+        animItem.type = (int)animationType;
+        animItem.userId = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
+        animItem.userName = @"anonymous";
+        animItem.keywords = [NSString stringWithFormat:@" %@", animItem.assetName];
+        animItem.modifiedDate = @"";
+        [cache UpdateMyAnimation:animItem];
+    }
+    
+    
+    [self openMyAnimations];
+}
+
+- (void) renameAnimation:(int) indexVal
+{
+    if(animationCategoryTab != MY_ANIMATION)
+        return;
+    
+    AnimationItem *a = animationsItems[indexVal];
+
+    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Animation" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    [[renameScene textFieldAtIndex:0] setPlaceholder:a.assetName];
+    [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
+    [renameScene setTag:RENAME_ALERT];
+    [renameScene setAccessibilityIdentifier:[NSString stringWithFormat:@"%d", indexVal]];
+    [renameScene show];
+    [[renameScene textFieldAtIndex:0] becomeFirstResponder];
+
+
+    
+}
+
 #pragma mark Button actions
 
 - (IBAction)categoryBtnFuction:(id)sender
@@ -513,36 +631,75 @@
 
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == USER_NAME_ALERT) {
-        NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
-        
-        if (buttonIndex == OK_BUTTON) {
-            NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            if ([name length] == 0) {
-                [self.view endEditing:YES];
-                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [errorAlert show];
-                [self.publishBtn setHidden:NO];
-
-            }
-            else {
-                [self.view endEditing:YES];
-                if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    
+    switch (alertView.tag) {
+        case USER_NAME_ALERT: {
+            NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+            
+            if (buttonIndex == OK_BUTTON) {
+                NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                if ([name length] == 0) {
+                    [self.view endEditing:YES];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [errorAlert show];
                     [self.publishBtn setHidden:NO];
+                    
                 }
                 else {
-                    if ([[AppHelper getAppHelper] checkInternetConnected]) {
-                        [self.delegate showOrHideProgress:1];
-                        [self.publishBtn setHidden:YES];
-                        [self.view setUserInteractionEnabled:NO];
-                        [self publishAssetWithUserName:[alertView textFieldAtIndex:0].text];
+                    [self.view endEditing:YES];
+                    if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [errorAlert show];
+                        [self.publishBtn setHidden:NO];
+                    }
+                    else {
+                        if ([[AppHelper getAppHelper] checkInternetConnected]) {
+                            [self.delegate showOrHideProgress:1];
+                            [self.publishBtn setHidden:YES];
+                            [self.view setUserInteractionEnabled:NO];
+                            [self publishAssetWithUserName:[alertView textFieldAtIndex:0].text];
+                        }
                     }
                 }
             }
         }
+            
+        case RENAME_ALERT: {
+            NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+            
+            if (buttonIndex == CANCEL) {
+            }
+            else if (buttonIndex == OK) {
+                NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                if ([name length] == 0) {
+                    [self.view endEditing:YES];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [errorAlert show];
+                }
+                else
+                {
+                    if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [errorAlert show];
+                    }
+                    else
+                    {
+                        int indexVal = [[alertView accessibilityIdentifier] intValue];
+                        AnimationItem *a = animationsItems[indexVal];
+                        a.assetName = name;
+                        [cache UpdateMyAnimation:a];
+                        [self openMyAnimations];
+                    }
+                }
+            }
+            [alertView resignFirstResponder];
+            
+            break;
+        }
+        default:
+            break;
     }
+
 }
 
 - (void)publishAssetWithUserName:(NSString*)userName{

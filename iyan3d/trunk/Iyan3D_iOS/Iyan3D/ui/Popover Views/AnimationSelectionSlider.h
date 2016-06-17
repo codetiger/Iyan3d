@@ -39,7 +39,7 @@
 
 @end
 
-@interface AnimationSelectionSlider : GAITrackedViewController< UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate, UIGestureRecognizerDelegate >
+@interface AnimationSelectionSlider : GAITrackedViewController< UICollectionViewDataSource, UICollectionViewDelegate,AppHelperDelegate,UIActionSheetDelegate, UIGestureRecognizerDelegate, AnimationPropsDelegate , UIAlertViewDelegate>
 {
     NSMutableArray *animationJsonArray;
     NSMutableArray* animationsItems;

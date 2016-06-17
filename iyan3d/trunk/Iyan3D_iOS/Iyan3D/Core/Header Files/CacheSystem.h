@@ -32,6 +32,7 @@
 - (void) UpdateAnimation:(AnimationItem *)a;
 - (void) UpdateUserInfoToAnimationTable:(NSArray *)userArray Usrid:(NSString*)userId;
 - (void) UpdateMyAnimation:(AnimationItem *)a;
+- (void) deleteMyAnimation:(int) assetId;
 - (AnimationItem*) GetAnimation:(int)assetId fromTable:(int)tableType;
 - (NSMutableArray*) GetAnimationList:(int)type fromTable:(int)tableType Search:(NSString*)keyword;
 - (int) getNextAnimationAssetId;
