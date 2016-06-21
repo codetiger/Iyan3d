@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.smackall.animator.Helper.Constants;
 
 /**
  * Created by Sabish.M on 5/5/16.
@@ -138,6 +139,14 @@ public class HitScreens {
         AnalyticsApplication application = (AnalyticsApplication) ((Activity)mContext).getApplication();
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("Exporting Video... - Android");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    public static void Preview(Context mContext,int type)
+    {
+        AnalyticsApplication application = (AnalyticsApplication) ((Activity)mContext).getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(((type == Constants.IMAGE) ? "Image Preview" : "Video Preview")+ " - Android");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

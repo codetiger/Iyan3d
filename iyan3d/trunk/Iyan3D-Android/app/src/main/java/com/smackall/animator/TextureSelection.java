@@ -26,7 +26,7 @@ public class TextureSelection {
     public AssetsDB assetsDB = new AssetsDB();
     int selectedNodeid;
     private Tracker mTracker;
-
+    public View v;
     public TextureSelection(Context context){
         this.mContext = context;
     }
@@ -48,7 +48,7 @@ public class TextureSelection {
         insertPoint.removeAllViews();
 
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.image_selection, insertPoint,false);
+        v = vi.inflate(R.layout.image_selection, insertPoint,false);
         insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
         GridView gridView = (GridView)v.findViewById(R.id.image_grid);
         initImagesGrid(gridView);

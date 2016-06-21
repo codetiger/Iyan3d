@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
@@ -83,6 +83,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/help"
+                android:src="@drawable/help"
+                android:adjustViewBounds="false"
+                android:scaleType="center"
+                android:layout_marginRight="30dp"
+                android:clickable="true"
+                android:onClick="showHelp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/info_btn"
                 android:src="@drawable/info_btn"
                 android:adjustViewBounds="false"
@@ -121,4 +132,10 @@
     </LinearLayout>
 
 </LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+
+    <FrameLayout
+        android:id="@+id/tool_tip_view_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </RelativeLayout>

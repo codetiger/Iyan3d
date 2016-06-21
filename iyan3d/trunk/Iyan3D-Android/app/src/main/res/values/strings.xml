@@ -31,6 +31,7 @@
     <string name="apply_animation">Apply Animation</string>
     <string name="save_animation">Save Animation</string>
     <string name="title_activity_editor_view">EditorView</string>
+    <string name="title_activity_preview">Preview</string>
     <string name="delete_animation">   Delete Animation</string>
     <string name="app_id">1434740593485806</string>
     <string name="gcm_defaultSenderIdOwn">328259754555</string>

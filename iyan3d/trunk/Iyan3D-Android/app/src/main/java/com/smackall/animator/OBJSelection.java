@@ -37,7 +37,8 @@ public class OBJSelection {
     ViewGroup insertPoint;
     public boolean modelImported = false;
     private Tracker mTracker;
-
+    public GridView gridView;
+    public View objView;
     public OBJSelection(Context context,DatabaseHelper db){
         this.mContext = context;
         this.db = db;
@@ -59,11 +60,11 @@ public class OBJSelection {
         insertPoint.setVisibility(View.VISIBLE);
         insertPoint.removeAllViews();
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View objView = vi.inflate(R.layout.obj_view,insertPoint,false);
+        objView = vi.inflate(R.layout.obj_view,insertPoint,false);
         insertPoint.addView(objView, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
         final TextView infoLable = (TextView)objView.findViewById(R.id.info_lable);
         ((Button)objView.findViewById(R.id.import_btn)).setVisibility(View.VISIBLE);
-        final GridView gridView = (GridView)objView.findViewById(R.id.obj_grid);
+        gridView = (GridView)objView.findViewById(R.id.obj_grid);
         gridView.setTag(ViewMode);
         infoLable.setText((gridView.getTag() == Constants.OBJ_MODE) ? "Add OBJ files in SD-Card/Iyan3D foler." : "Add Texture files in SD-Card/Iyan3D folder.");
         initAssetGrid(gridView);

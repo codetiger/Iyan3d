@@ -409,6 +409,15 @@ public class RenderManager {
         });
     }
 
+    public void setTextureSmoothStatus(final boolean state){
+        glView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                GL2JNILib.setTextureSmoothStatus(state);
+            }
+        });
+    }
+
     public void createDuplicate()
     {
         glView.queueEvent(new Runnable() {

@@ -104,7 +104,11 @@ public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChang
         ((Switch)mesh_prop.findViewById(R.id.mirror)).setOnCheckedChangeListener(this);
         boolean mirror = (GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_RIG && GL2JNILib.jointSize(GL2JNILib.getSelectedNodeId()) == Constants.HUMAN_JOINTS_SIZE);
         ((Switch)mesh_prop.findViewById(R.id.mirror)).setEnabled(mirror);
+        ((Switch)mesh_prop.findViewById(R.id.texture_smooth)).setOnCheckedChangeListener(this);
 
+        int smoothTexture = GL2JNILib.smoothTexState();
+        ((Switch)mesh_prop.findViewById(R.id.texture_smooth)).setEnabled(smoothTexture != -1);
+        ((Switch)mesh_prop.findViewById(R.id.texture_smooth)).setChecked((smoothTexture > 0));
 
         ((RadioButton)mesh_prop.findViewById(R.id.physics_none)).setOnCheckedChangeListener(this);
         ((RadioButton)mesh_prop.findViewById(R.id.physics_static)).setOnCheckedChangeListener(this);
@@ -173,6 +177,7 @@ public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChang
                 dealloc();
                 break;
             case R.id.skin_btn:
+                Constants.VIEW_TYPE = Constants.CHANGE_TEXTURE;
                 ((EditorView)((Activity)mContext)).textureSelection.showChangeTexture();
                 dealloc();
                 break;
@@ -318,6 +323,9 @@ public class MeshProps  implements View.OnClickListener , SeekBar.OnSeekBarChang
                 break;
             case R.id.mirror:
                 GL2JNILib.switchMirror();
+                break;
+            case R.id.texture_smooth:
+                ((EditorView)mContext).renderManager.setTextureSmoothStatus(isChecked);
                 break;
         }
 

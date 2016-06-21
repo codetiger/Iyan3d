@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Scene;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +27,7 @@ import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.DownloadHelper;
+import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.FullScreen;
 import com.smackall.animator.Helper.KeyMaker;
@@ -50,6 +52,7 @@ public class LoadingActivity extends AppCompatActivity {
     int process = 0;
     public ProgressBar loadingBar;
     boolean activityStarted = false;
+    int startTime = 0;
     Intent i;
     private Tracker mTracker;
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
@@ -102,6 +105,7 @@ public class LoadingActivity extends AppCompatActivity {
                     if(name != null && FileHelper.checkValidFilePath(name)) {
                         intent.putExtra("hasExtraForOpenWith", true);
                         intent.putExtra("i3dPath", name);
+                        i.putExtra("fromLoading",false);
                     }
                 }
                 PendingIntent pi = PendingIntent.getActivity(this, 0, intent,
@@ -140,6 +144,7 @@ public class LoadingActivity extends AppCompatActivity {
                 if(name != null && FileHelper.checkValidFilePath(name)) {
                     i.putExtra("hasExtraForOpenWith", true);
                     i.putExtra("i3dPath", name);
+                    i.putExtra("fromLoading",false);
                 }
             }
         }
@@ -164,6 +169,8 @@ public class LoadingActivity extends AppCompatActivity {
             permissionManager.requestWakeLock(this,coordinatorLayout);
         }
         else {
+            Events.appStart(LoadingActivity.this);
+            startTime = (int) (System.currentTimeMillis()/1000);
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             Constants.width = displaymetrics.widthPixels;
@@ -228,8 +235,11 @@ public class LoadingActivity extends AppCompatActivity {
     {
         if(loadingBar.getProgress() >= 100) {
             if(!activityStarted) {
+                int finishTime = (int) Math.abs(((System.currentTimeMillis()/1000)) - startTime);
+                Events.loadingCompleted(LoadingActivity.this,finishTime);
                 activityStarted = true;
                 i.putExtra("isNotification", false);
+                i.putExtra("fromLoading",true);
                 startActivity(i);
                 LoadingActivity.this.dealloc();
             }

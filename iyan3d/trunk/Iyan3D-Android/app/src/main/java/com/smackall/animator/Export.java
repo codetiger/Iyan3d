@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.smackall.animator.Helper.BitmapUtil;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CreditTask;
 import com.smackall.animator.Helper.Encoder;
+import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.HQTaskDB;
 import com.smackall.animator.Helper.PathManager;
@@ -288,6 +290,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                 break;
             case R.id.cancel:
                 HitScreens.EditorView(mContext);
+                Events.exportCancelAction(mContext);
                 cancel = true;
                 isRendering = false;
                 if(encoder != null && encoder.spsList.size() > 0){
@@ -345,6 +348,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
             enableControls(dialog,true);
         }
         else if(shader != Constants.CLOUD && (type == Constants.EXPORT_VIDEO || type == Constants.EXPORT_IMAGES)) {
+            Events.exportNextAction(mContext);
             GL2JNILib.setfreezeRendering(true);
             dialog.setContentView(R.layout.render_preview);
             initPreview();
@@ -380,6 +384,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
     public void packCloudRender()
     {
         if(((EditorView)((Activity)mContext)).zipManager.packCloudRender()) {
+            Events.exportNextAction(mContext);
             ((EditorView) ((Activity) mContext)).publish.uploadHQRender(min, max, (credit*-1), getCameraResolution()[0],getCameraResolution()[1]);
         }
         else {
@@ -574,7 +579,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
         if(type == Constants.EXPORT_IMAGES){
             FileHelper.move(PathManager.LocalCacheFolder + "/" + frame + ".png", PathManager.RenderPath + "/" + fileName + ".png");
             doFinish();
-            UIHelper.informDialog(mContext, "Image Successfully saved in your SDCard/Iyan3D/Render");
+            renderCompletedDialog(mContext,"Image Successfully saved in your SDCard/Iyan3D/Render");
         }
         else if(type == Constants.EXPORT_VIDEO){
             try {
@@ -588,7 +593,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                     return;
                 }
                 FileHelper.move(PathManager.LocalCacheFolder + "/" + fileName + ".mp4", PathManager.RenderPath + "/" + fileName + ".mp4");
-                UIHelper.informDialog(mContext, "Video successfully saved in your SDCard/Iyan3D/Render");
+                renderCompletedDialog(mContext,"Video successfully saved in your SDCard/Iyan3D/Render");
                 ((Activity)mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -658,6 +663,32 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                                 informDialog.dismiss();
                                 ((EditorView)(Activity)context).showLogin(((Activity) context).findViewById(R.id.login));
                                 ((EditorView)(Activity)context).export.dialog.findViewById(R.id.cancel).performClick();
+                            }
+                        });
+                informDialog.create();
+                try {
+                    informDialog.show();
+                } catch (WindowManager.BadTokenException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void renderCompletedDialog(final Context context, final String msg){
+        ((Activity)context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
+                informDialog
+                        .setMessage(msg)
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface informDialog, int id) {
+                                Intent i = new Intent(((EditorView)mContext),Preview.class);
+                                i.putExtra("path",fileName);
+                                ((Activity)mContext).startActivity(i);
+                                informDialog.dismiss();
                             }
                         });
                 informDialog.create();

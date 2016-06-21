@@ -100,11 +100,21 @@ public class Save {
                     db.addNewMyAnimationAssets(animDB);
                     ((EditorView)((Activity)mContext)).imageManager.makeThumbnail(PathManager.LocalAnimationFolder+"/"+assetId+".png");
                     UIHelper.informDialog(mContext,"Animation Saved Successfully.");
+                    showMyAnimationList();
                 }
                 else
                     System.out.println("Error");
             }
         });
+    }
+
+    public void showMyAnimationList()
+    {
+        if (((EditorView)mContext).animationSelection == null)
+            ((EditorView)mContext).animationSelection = new AnimationSelection(mContext, db,((EditorView)mContext).addToDownloadManager,((EditorView)mContext).downloadManager,((EditorView)mContext).sharedPreferenceManager);
+        Constants.VIEW_TYPE = Constants.ANIMATION_VIEW;
+        ((EditorView)mContext).animationSelection.showAnimationSelection();
+        ((EditorView)mContext).animationSelection.category.setSelection(4);
     }
 
     public void saveI3DFile(String fileName)

@@ -176,6 +176,9 @@ public class GL2JNILib {
     public static native void syncPhysicsWithWorld(int from, int to,boolean updatePhysics);
     public static native void updatePhysics(int frame);
     public static native float getSelectedJointScale();
+    public static native int smoothTexState();
+    public static native int smoothTexStateWithId(int nodeId);
+    public static native void setTextureSmoothStatus(boolean state);
 
     public static void callBackIsDisplayPrepared(){
         GL2JNIView.callBackSurfaceRendered();

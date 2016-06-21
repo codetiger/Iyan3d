@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
@@ -193,7 +193,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.15"
+            android:layout_weight="0.1"
             android:background="#a800ff"
             android:weightSum="1">
 
@@ -203,8 +203,8 @@
                 android:text="New Text"
                 android:id="@+id/rigHeader"
                 android:visibility="gone"
-                android:textStyle="bold"
                 android:textColor="#ffffff"
+                android:textStyle="bold"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_weight="0.85" />
@@ -212,7 +212,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="0.85"
+                android:layout_weight="0.8"
                 android:orientation="horizontal"
                 android:weightSum="1"
                 android:gravity="center"
@@ -228,8 +228,8 @@
                     android:onClick="goToFirstOrLastFrame"
                     android:gravity="center|right"
                     android:id="@+id/firstFrameBtn"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp">
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -247,8 +247,8 @@
                     android:weightSum="1"
                     android:id="@+id/frameHolder"
                     android:gravity="left|top"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp"></LinearLayout>
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"></LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -259,8 +259,8 @@
                     android:onClick="goToFirstOrLastFrame"
                     android:gravity="center|left"
                     android:id="@+id/lastFrameBtn"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp">
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -278,8 +278,9 @@
                     android:weightSum="1"
                     android:onClick="addFramePopUpMenu"
                     android:gravity="center|left"
-                    android:paddingTop="7dp"
-                    android:paddingBottom="7dp">
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:id="@+id/add_frameBtn">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -294,9 +295,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="0.15"
+                android:layout_weight="0.2"
                 android:orientation="horizontal"
-                android:weightSum="3" >
+                android:weightSum="4" >
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -322,13 +323,30 @@
                     android:orientation="horizontal"
                     android:weightSum="3"
                     android:onClick="viewsPopUpMenu"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id="@+id/view_btn">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/imageView6"
                         android:src="@drawable/view_btn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:onClick="showHelp"
+                    android:gravity="center" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView3"
+                        android:src="@drawable/help" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -480,4 +498,4 @@
     </LinearLayout>
 
 </FrameLayout>
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

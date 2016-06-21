@@ -137,6 +137,8 @@ public class AssetSelection {
                 assetsDBs.setIsTempNode(false);
                 assetsDBs.setTexture(assetsDBs.getAssetsId() + "-cm");
                 ((EditorView)(Activity)mContext).renderManager.importAssets(assetsDBs,false);
+                ((EditorView)((Activity)mContext)).descriptionManager.helpForFirstTimeUser(mContext);
+                ((EditorView)((Activity)mContext)).helpDialogs.showPop(mContext);
                 mContext = null;
                 db = null;
                 assetSelectionAdapter = null;

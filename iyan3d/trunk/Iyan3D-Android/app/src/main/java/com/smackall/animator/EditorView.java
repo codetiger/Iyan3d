@@ -45,7 +45,9 @@ import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CreditsManager;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.Delete;
+import com.smackall.animator.Helper.DescriptionManager;
 import com.smackall.animator.Helper.DownloadHelper;
+import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.FollowApp;
 import com.smackall.animator.Helper.FullScreen;
@@ -62,6 +64,7 @@ import com.smackall.animator.Helper.UpdateXYZValues;
 import com.smackall.animator.Helper.WrapContentLinearLayoutManager;
 import com.smackall.animator.Helper.ZipManager;
 import com.smackall.animator.NativeCallBackClasses.NativeCallBacks;
+import com.smackall.animator.OverlayDialogs.HelpDialogs;
 import com.smackall.animator.opengl.GL2JNILib;
 import com.smackall.animator.opengl.GL2JNIView;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -83,8 +86,10 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     public  DatabaseHelper db = new DatabaseHelper();
     InfoPopUp infoPopUp = new InfoPopUp();
     public AddToDownloadManager addToDownloadManager = new AddToDownloadManager();
-    private DownloadManager downloadManager = new DownloadManagerClass();
+    public DownloadManager downloadManager = new DownloadManagerClass();
     public SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager();
+    public HelpDialogs helpDialogs = new HelpDialogs();
+    public DescriptionManager descriptionManager = new DescriptionManager();
     ListPopupWindow listView;
 
     public GLSurfaceView glView;
@@ -565,6 +570,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
+                Events.importEvents(mContext,item.getOrder());
                 switch (item.getOrder()) {
                     case Constants.IMPORT_MODELS:
                         if (assetSelection == null)
@@ -575,6 +581,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                     case Constants.IMPORT_IMAGES:
                         if(imageSelection == null)
                             imageSelection = new ImageSelection(EditorView.this);
+                        Constants.VIEW_TYPE = Constants.IMAGE_VIEW;
                         imageSelection.showImageSelection();
                         break;
                     case Constants.IMPORT_VIDEOS:
@@ -594,6 +601,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                         additionalLight.addLight();
                         break;
                     case Constants.IMPORT_OBJ:
+                        Constants.VIEW_TYPE = Constants.OBJ_VIEW;
                         if (objSelection == null)
                             objSelection= new OBJSelection(EditorView.this, db);
                         objSelection.showObjSelection(Constants.OBJ_MODE);
@@ -603,6 +611,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                         break;
                     case Constants.IMPORT_PARTICLE:
                         showParticlesView();
+                        break;
                 }
                 return true;
             }
@@ -665,6 +674,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         popup.getMenuInflater().inflate(R.menu.export_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
+                Events.exportEvents(mContext,item.getOrder());
                 switch (item.getOrder()) {
                     case Constants.EXPORT_IMAGES:
                         export.showExport(Constants.EXPORT_IMAGES);
@@ -707,8 +717,10 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                 ((ViewGroup) findViewById(R.id.rightView).getParent()).setVisibility(rightViewStatus);
                 ((ViewGroup) findViewById(R.id.leftView).getParent()).setVisibility(leftviewStatus);
                 ((ViewGroup) findViewById(R.id.leftView).getParent()).requestLayout();
-                if (hideOrShow == Constants.SHOW)
+                if (hideOrShow == Constants.SHOW) {
+                    Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
                     dellocAllSubViews();
+                }
             }
         });
     }
@@ -739,6 +751,11 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
             insertPoint.removeAllViews();
         showOrHideToolbarView(Constants.SHOW);
         addRightView((!isActivityStartFirstTime && GL2JNILib.isRigMode()));
+    }
+
+    public void showHelp(View view){
+        descriptionManager.addEditorViewDescription(this);
+        helpDialogs.showPop(this);
     }
 
     public void showCloneOption(View v, MotionEvent event){
@@ -845,7 +862,6 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
             public void run() {
                 GL2JNILib.syncPhysicsWithWorld(0,GL2JNILib.totalFrame()-1,true);
                 GL2JNILib.save(nativeCallBacks,false,projectNameHash);
-
             }
         });
     }
@@ -859,6 +875,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     protected void onDestroy() {
         unbindService(EditorView.this);
         Intent i = new Intent(EditorView.this, SceneSelection.class);
+        i.putExtra("fromLoading",false);
         i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
         overridePendingTransition(0,0);
@@ -887,6 +904,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         ((Activity)mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Events.backToScene(mContext);
                 save.saveI3DFile(projectNameHash);
                 glView.setPreserveEGLContextOnPause(true);
                 glView.onPause();

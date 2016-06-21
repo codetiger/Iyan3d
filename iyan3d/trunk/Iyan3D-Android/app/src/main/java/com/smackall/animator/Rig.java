@@ -20,6 +20,7 @@ import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.SharedPreferenceManager;
@@ -175,6 +176,7 @@ public class Rig implements View.OnClickListener, CompoundButton.OnCheckedChange
         assetsDB.setIsTempNode(false);
         assetsDB.setTexture(assetsDB.getAssetsId()+"-cm");
         ((EditorView) ((Activity) mContext)).renderManager.importAssets(assetsDB, false);
+        Events.rigCompletedEvent(mContext);
     }
 
     public void switchSceneMode(int sceneMode)

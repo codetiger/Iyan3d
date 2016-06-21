@@ -526,7 +526,9 @@ JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_ADD_INSTANCE_
 JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_syncPhysicsWithWorld(JNIEnv *env, jclass type,jint from, jint to,jboolean doUpdatePhysics);
 JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_updatePhysics(JNIEnv *env, jclass type,jint frame);
 JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedJointScale(JNIEnv *env, jclass type);
-
+JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexState(JNIEnv *env, jclass type);
+JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexStateWithId(JNIEnv *env, jclass type, jint nodeId);
+JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTextureSmoothStatus(JNIEnv *env, jclass type, jboolean status);
 
 
 
@@ -975,7 +977,6 @@ JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeLightPr
 	editorScene->actionMan->changeLightProperty(x, y, z, w,distance,lightType,storeAction);
 	if(storeAction) {
         editorScene->updateDirectionLine();
-        editorScene->updateLightMesh(lightType);
     }
 }
 
@@ -1717,6 +1718,24 @@ JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_updatePhysics
 
 JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedJointScale(JNIEnv *env, jclass type){
     return editorScene->rigMan->getSelectedJointScale();
+}
+
+JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexState(JNIEnv *env, jclass type){
+    int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
+    return smoothTex;
+}
+
+JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexStateWithId(JNIEnv *env, jclass type, jint nodeId){
+    int smoothTex = (editorScene->nodes[nodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[nodeId]->smoothTexture;
+    return smoothTex;
+}
+
+JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTextureSmoothStatus(JNIEnv *env, jclass type, jboolean status){
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
+            editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
+            if(sceneManager->device == OPENGLES2)
+                    editorScene->changeTexture(editorScene->nodes[editorScene->selectedNodeId]->textureName, Vector3(1.0), false, false);
+        }
 }
 
 JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_dealloc(JNIEnv *env, jclass type){

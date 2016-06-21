@@ -361,6 +361,9 @@ public class GL2JNIView extends GLSurfaceView  {
             public void run() {
                 if(((EditorView) ((Activity) staticContext)).frameAdapter != null)
                     ((EditorView) ((Activity) staticContext)).frameAdapter.notifyDataSetChanged();
+
+                ((EditorView)((Activity)staticContext)).descriptionManager.helpForFirstTimeUser(staticContext);
+                ((EditorView)((Activity)staticContext)).helpDialogs.showPop(staticContext);
             }
         });
     }

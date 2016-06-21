@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -24,60 +23,78 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:name="com.smackall.animator.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+
+    <permission
+        android:name="com.smackall.animator.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="com.smackall.animator.permission.C2D_MESSAGE" />
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
     <application
-        android:name="com.smackall.animator.Analytics.AnalyticsApplication"
+        android:name=".Analytics.AnalyticsApplication"
         android:allowBackup="true"
+        android:alwaysRetainTaskState="true"
         android:configChanges="orientation|keyboardHidden"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
+        android:launchMode="singleTop"
         android:screenOrientation="sensorLandscape"
         android:supportsRtl="true"
-        android:largeHeap="true"
-        android:windowSoftInputMode="adjustPan"
-        android:launchMode="singleTop"
-        android:alwaysRetainTaskState="true"
-        android:theme="@style/AppTheme.Fullscreen">
-        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
-     dispatching on non-Google Play devices -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        android:theme="@style/AppTheme.Fullscreen"
+        android:windowSoftInputMode="adjustPan">
+
+        <!--
+     Optionally, register AnalyticsReceiver and AnalyticsService to support background
+     dispatching on non-Google Play devices
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false"/>
 
-        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-             installation campaign reporting -->
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!--
+             Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+             installation campaign reporting
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".GCM.MyGcmListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -92,77 +109,87 @@
 
         <activity
             android:name=".LoadingActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowAnimationStyle="@null">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--<intent-filter >-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<data android:mimeType="image/jpeg" />-->
-                <!--<data android:mimeType="image/png" />-->
-                <!--<data android:mimeType="image/bmp" />-->
-            <!--</intent-filter>-->
-            <intent-filter >
+            <!-- <intent-filter > -->
+            <!-- <action android:name="android.intent.action.VIEW" /> -->
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+            <!-- <data android:mimeType="image/jpeg" /> -->
+            <!-- <data android:mimeType="image/png" /> -->
+            <!-- <data android:mimeType="image/bmp" /> -->
+            <!-- </intent-filter> -->
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.i3d"/>
-                <data android:pathPattern=".*\\..*\\.i3d"/>
-                <data android:pathPattern=".*\\..*\\..*\\.i3d"/>
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.i3d"/>
-                <!--<data android:pathPattern=".*\\.obj"/>-->
-                <!--<data android:pathPattern=".*\\..*\\.obj"/>-->
-                <!--<data android:pathPattern=".*\\..*\\..*\\.obj"/>-->
-                <!--<data android:pathPattern=".*\\..*\\..*\\..*\\.obj"/>-->
-                <!--<data android:pathPattern=".*\\.ttf"/>-->
-                <!--<data android:pathPattern=".*\\..*\\.ttf"/>-->
-                <!--<data android:pathPattern=".*\\..*\\..*\\.ttf"/>-->
-                <!--<data android:pathPattern=".*\\..*\\..*\\..*\\.ttf"/>-->
-                <!--<data android:pathPattern=".*\\.otf"/>-->
-                <!--<data android:pathPattern=".*\\..*\\.otf"/>-->
-                <!--<data android:pathPattern=".*\\..*\\..*\\.otf"/>-->
-                <!--<data android:pathPattern=".*\\..*\\..*\\..*\\.otf"/>-->
+                <data android:pathPattern=".*\\.i3d" />
+                <data android:pathPattern=".*\\..*\\.i3d" />
+                <data android:pathPattern=".*\\..*\\..*\\.i3d" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.i3d" />
+                <!-- <data android:pathPattern=".*\\.obj"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\.obj"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\..*\\.obj"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\..*\\..*\\.obj"/> -->
+                <!-- <data android:pathPattern=".*\\.ttf"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\.ttf"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\..*\\.ttf"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\..*\\..*\\.ttf"/> -->
+                <!-- <data android:pathPattern=".*\\.otf"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\.otf"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\..*\\.otf"/> -->
+                <!-- <data android:pathPattern=".*\\..*\\..*\\..*\\.otf"/> -->
                 <data android:host="*" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SceneSelection"
+            android:configChanges="orientation"
             android:label="@string/title_activity_scene_selection"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation"
-            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowAnimationStyle="@null">
-        </activity>
+            android:windowAnimationStyle="@null"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".EditorView"
+            android:configChanges="orientation"
             android:label="@string/title_activity_editor_view"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation"
-            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowAnimationStyle="@null">
-        </activity>
-        <activity android:name="com.facebook.FacebookActivity"
-                  android:configChanges=
-                      "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-                   android:value="@string/app_id"/>
+            android:windowAnimationStyle="@null"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="82cc1475b1d0de67c92e1f4a294db129b3dc410d" />
+        <activity
+            android:name=".Preview"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_preview"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowAnimationStyle="@null"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
+
 </manifest>
-
-

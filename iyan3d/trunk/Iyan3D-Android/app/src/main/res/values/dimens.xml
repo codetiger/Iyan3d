@@ -3,4 +3,13 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="padding">8dp</dimen>
+    <dimen name="radius">8dp</dimen>
+    <dimen name="text_size">16sp</dimen>
+
+    <dimen name="custom_padding">50dip</dimen>
+    <dimen name="ttlm_default_padding">20dip</dimen>
+    <dimen name="ttlm_default_corner_radius">4dip</dimen>
+    <dimen name="ttlm_default_stroke_weight">0dip</dimen>
+    <dimen name="ttlm_default_elevation">2dp</dimen>
 </resources>

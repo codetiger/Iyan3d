@@ -23,12 +23,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Scene;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.crashlytics.android.answers.Answers;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.NoSpacingItemDecoreation;
@@ -40,6 +43,8 @@ import com.smackall.animator.Helper.CheckLicense;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CreditsManager;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.DescriptionManager;
+import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.FollowApp;
 import com.smackall.animator.Helper.FullScreen;
@@ -50,6 +55,7 @@ import com.smackall.animator.Helper.RestoreBackUp;
 import com.smackall.animator.Helper.SceneDB;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 import com.smackall.animator.Helper.UIHelper;
+import com.smackall.animator.OverlayDialogs.HelpDialogs;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.io.File;
@@ -69,16 +75,20 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     public CloudRenderingProgress cloudRenderingProgress;
     public UserDetails userDetails;
     public SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager();
+    public HelpDialogs helpDialogs = new HelpDialogs();
+    private DescriptionManager descriptionManager = new DescriptionManager();
     public CreditsManager creditsManager;
     public Settings settings;
     public RestoreBackUp restoreBackUp;
+
     IInAppBillingService mService;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
     private Tracker mTracker;
 
     Snackbar snackbar;
-
+    boolean fromLoadingView = true;
+    boolean isFirstTime = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,11 +134,12 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
             }
         };
         Bundle data = getIntent().getExtras();
+        if(data != null)
+            fromLoadingView = data.getBoolean("fromLoading");
         if (data != null && data.getBoolean("isNotification")) {
             findViewById(R.id.login_btn).performClick();
         }
-        Bundle a =  getIntent().getExtras();
-        if(a != null && a.getBoolean("hasExtraForOpenWith")) {
+        if(data != null && data.getBoolean("hasExtraForOpenWith")) {
             handleOpenWith(getIntent());
         }
         else {
@@ -139,6 +150,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
             }
             catch (RuntimeException ignored){}
         }
+
 
         registerReceiver();
 
@@ -152,6 +164,8 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         if(space < 50.0){
             UIHelper.informDialog(SceneSelection.this,"Phone storage is low. Minimum 50MB of space is required.",true);
         }
+
+        Constants.isFirstTimeUser = (sharedPreferenceManager.getInt(SceneSelection.this, "firstTimeUser") == 0);
     }
 
     @Override
@@ -236,6 +250,10 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
 
     public void addNewScene(View view)
     {
+        helpDialogs.dismissTips(false,null);
+        if(view != null) Events.createNewSceneInTopLeft(SceneSelection.this);
+        else Events.createNewSceneInCollectionView(SceneSelection.this);
+
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
         List<SceneDB> sceneDBs = db.getAllScenes();
         String sceneName = (sceneDBs == null || sceneDBs.size() <= 0) ? "My Scene " + 1 : "My Scene " + Integer.toString(sceneDBs.get(db.getSceneCount() - 1).getID() + 1);
@@ -336,6 +354,12 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     }
 
     public void loadScene(int position) {
+        helpDialogs.dismissTips(false,null);
+        if(fromLoadingView) {
+            Events.sceneOpenedFirstTime(SceneSelection.this, (sharedPreferenceManager.getInt(SceneSelection.this, "firstTimeUser") == 0) ? "YES" : "NO");
+            sharedPreferenceManager.setData(SceneSelection.this,"firstTimeUser",1);
+        }
+
         Intent editorScene = new Intent(SceneSelection.this,EditorView.class);
         editorScene.putExtra("scenePosition", position);
         editorScene.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -346,18 +370,27 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     }
 
     public void openSceneProps(View v){
+        helpDialogs.dismissTips(false,null);
         if(infoPopUp != null)
             infoPopUp.infoPopUpMenu(SceneSelection.this, v);
     }
 
     public void showLogIn(View v)
     {
+        helpDialogs.dismissTips(false,null);
         userDetails.updateUserDetails();
         if(userDetails.signInType > 0)
             cloudRenderingProgress.showCloudRenderingProgress(v, null);
         else
             login.showLogin(v, null);
     }
+
+    public void showHelp(View view){
+        descriptionManager.addSceneSelectionDescriptions(this);
+        helpDialogs.dismissTips(false,null);
+        helpDialogs.showPop(SceneSelection.this);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -415,6 +448,10 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         FullScreen.HideStatusBar(SceneSelection.this);
+        if(isFirstTime) {
+            isFirstTime = false;
+            showHelp(null);
+        }
         super.onWindowFocusChanged(hasFocus);
     }
 }

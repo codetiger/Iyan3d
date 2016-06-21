@@ -62,6 +62,10 @@ public class Constants {
     public final static int PARTICLE_VIEW = 13;
     public final static int RENDERING_VIEW = 14;
     public final static int SETTINGS_VIEW = 15;
+    public final static int OBJ_VIEW = 16;
+    public final static int OBJ_TEXTURE = 17;
+    public final static int CHANGE_TEXTURE = 18;
+    public final static int IMAGE_VIEW = 19;
 
     public final static int MYANIMATION_TABLE = 7;
     public final static int MYANIMATION_DOWNLOAD = 4;
@@ -219,6 +223,11 @@ public class Constants {
     public final static int INTERNET = 101;
     public final static int GET_ACCOUNTS = 102;
     public final static int WAKELOCK = 103;
+
+    public final static int IMAGE = 0;
+    public final static int VIDEO = 1;
+
+    public static boolean isFirstTimeUser = false;
 
     public static boolean isPremium(Context mContext) {
         File key = new File("data/data/"+mContext.getPackageName()+"/shared_prefs/key");

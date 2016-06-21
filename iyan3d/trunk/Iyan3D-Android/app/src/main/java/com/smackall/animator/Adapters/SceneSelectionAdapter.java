@@ -37,6 +37,9 @@ public class SceneSelectionAdapter extends RecyclerView.Adapter<SceneFrameHolder
     private static final int ID_CLONE = 2;
     private static final int ID_BACKUP = 3;
 
+    public View firstScene;
+    public View firstSceneProps;
+    public View newScene;
 
     public SceneSelectionAdapter(Context c,DatabaseHelper db,RecyclerView gridView) {
         mContext = c;
@@ -62,12 +65,17 @@ public class SceneSelectionAdapter extends RecyclerView.Adapter<SceneFrameHolder
         ImageView sceneProps = (ImageView)holder.view.findViewById(R.id.scene_props_btn);
         textView.setText((sceneDBs.size() == position) ? "" : sceneDBs.get(position).getName());
         if((sceneDBs.size() == position)) {
+            newScene = holder.view;
             imageView.setImageResource(R.drawable.new_scene_grid);
             sceneProps.setVisibility(View.INVISIBLE);
         }
         else {
             imageView.setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalScenesFolder + "/" + sceneDBs.get(position).getImage() + ".png"));
             sceneProps.setVisibility(View.VISIBLE);
+            if(position == 0) {
+                firstSceneProps = sceneProps;
+                firstScene = holder.view;
+            }
         }
         final int finalPosition = position;
         holder.view.setOnClickListener(new View.OnClickListener() {

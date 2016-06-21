@@ -34,4 +34,58 @@
 		<item name="android:layout_gravity">center_horizontal</item>
 	</style>
 
+	<style name="CustomDialogThemeTrasparent"    parent="@android:style/Theme.Dialog">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:windowBackground">@color/transparent</item>
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+	</style>
+
+	<style name="ToolTipLayoutDefaultStyle.Custom1">
+		<item name="android:textAppearance">?android:attr/textAppearanceSmallInverse</item>
+		<item name="android:gravity">center</item>
+	</style>
+
+	<style name="ToolTipLayoutCustomStyle">
+		<item name="ttlm_padding">25dip</item>
+		<item name="ttlm_strokeColor">#ffe5a000</item>
+		<item name="ttlm_backgroundColor">#ffde00</item>
+		<item name="ttlm_strokeWeight">2dip</item>
+		<item name="ttlm_cornerRadius">8dip</item>
+		<item name="ttlm_overlayStyle">@style/ToolTipOverlayCustomStyle</item>
+		<item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
+	</style>
+
+	<style name="ToolTipOverlayCustomStyle">
+		<item name="android:color">#66ffbb00</item>
+		<item name="ttlm_repeatCount">999</item>
+		<item name="ttlm_duration">400</item>
+	</style>
+
+	<style name="ToolTipLayoutDefaultStyle.CustomFont" parent="ToolTipLayoutDefaultStyle">
+		<item name="ttlm_font">fonts/at.ttc</item>
+	</style>
+
+	<style name="ToolTipLayoutDefaultStyle">`
+		<item name="ttlm_padding">@dimen/ttlm_default_padding</item>
+		<item name="ttlm_strokeColor">@android:color/transparent</item>
+		<item name="ttlm_backgroundColor">#ffde00</item>
+		<item name="ttlm_strokeWeight">@dimen/ttlm_default_stroke_weight</item>
+		<item name="ttlm_cornerRadius">@dimen/ttlm_default_corner_radius</item>
+		<item name="ttlm_arrowRatio">1.4</item>
+		<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+		<item name="ttlm_overlayStyle">@style/ToolTipOverlayDefaultStyle</item>
+		<item name="ttlm_elevation">@dimen/ttlm_default_elevation</item>
+	</style>
+
+	<style name="ToolTipOverlayDefaultStyle">
+		<item name="android:color">?attr/colorAccent</item>
+		<item name="ttlm_repeatCount">99</item>
+		<item name="ttlm_duration">600</item>
+		<item name="android:alpha">0.5</item>
+		<item name="android:layout_margin">8dp</item>
+	</style>
+	
 </resources>

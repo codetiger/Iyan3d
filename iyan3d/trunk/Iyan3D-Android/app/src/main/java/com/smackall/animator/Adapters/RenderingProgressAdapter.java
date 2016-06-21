@@ -2,6 +2,7 @@ package com.smackall.animator.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.HQTaskDB;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
+import com.smackall.animator.Preview;
 import com.smackall.animator.R;
 import com.smackall.animator.SceneSelection;
 import com.smackall.animator.opengl.GL2JNILib;
@@ -103,15 +105,22 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
         HQTaskDB task = db.getAllTasks(uniqueId).get(position);
         if(task.getCompleted() == Constants.TASK_PROGRESS || downloadPending)
             return;
-        ((TextView)list.findViewById(R.id.task_precentage)).setVisibility(View.GONE);
-        ((ProgressBar)list.findViewById(R.id.downloadProgress)).setVisibility(View.VISIBLE);
         String ext = (task.getTaskType() == Constants.EXPORT_IMAGES) ? ".png" : ".mp4";
-        String uhash = task.getTask()+"-"+((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
-        uhash = FileHelper.md5(uhash);
-        String url = GL2JNILib.TaskDownload()+"?taskid="+task.getTask()+"&uhash="+uhash+"&action=0";
         String path = PathManager.RenderPath+"/"+task.getTask()+ext;
-        downloadPending = true;
-        new DownloadTaskCompleteFile(url,path,this,task,list).execute();
+        if(FileHelper.checkValidFilePath(path)){
+            Intent i = new Intent(((Activity)mContext),Preview.class);
+            i.putExtra("path",FileHelper.getFileWithoutExt(path));
+            ((Activity)mContext).startActivity(i);
+        }
+        else{
+            ((TextView)list.findViewById(R.id.task_precentage)).setVisibility(View.GONE);
+            ((ProgressBar)list.findViewById(R.id.downloadProgress)).setVisibility(View.VISIBLE);
+            String uhash = task.getTask()+"-"+((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
+            uhash = FileHelper.md5(uhash);
+            String url = GL2JNILib.TaskDownload()+"?taskid="+task.getTask()+"&uhash="+uhash+"&action=0";
+            downloadPending = true;
+            new DownloadTaskCompleteFile(url,path,this,task,list).execute();
+        }
     }
 
     public void updateTaskStatus()
