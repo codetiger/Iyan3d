@@ -450,7 +450,8 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         FullScreen.HideStatusBar(SceneSelection.this);
         if(isFirstTime) {
             isFirstTime = false;
-            showHelp(null);
+            if(Constants.isFirstTimeUser)
+                showHelp(null);
         }
         super.onWindowFocusChanged(hasFocus);
     }

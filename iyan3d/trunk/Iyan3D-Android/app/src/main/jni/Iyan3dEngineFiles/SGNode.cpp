@@ -599,7 +599,7 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
 {Texture *nodeTex;
      #ifdef  ANDROID
          string dummyPath = constants::BundlePath + "/whiteborder.png";
-         nodeTex = smgr->loadTexture("Dummy Vid Tex", dummyPath, TEXTURE_RGBA8, TEXTURE_BYTE);
+         nodeTex = smgr->loadTexture("Dummy Vid Tex", dummyPath, TEXTURE_RGBA8, TEXTURE_BYTE,smoothTexture);
      #else
          nodeTex = smgr->loadTextureFromVideo(videoFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
      #endif

@@ -17,8 +17,6 @@ import com.smackall.animator.FrameGrabber.FrameGrabber;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
-import com.smackall.animator.JavaCV.FFmpegMediaMetadataRetriever;
-import com.smackall.animator.opengl.FFmpeg;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -145,15 +143,10 @@ public class VideoManager {
     }
 
     private Bitmap getFrameAtTimeByFrameGrabber(String path, long time,int width,int height) {
-        System.loadLibrary("ffmpeg_mediametadataretriever_jni");
-        FFmpegMediaMetadataRetriever fFmpegMediaMetadataRetriever = new FFmpegMediaMetadataRetriever();
-        FFmpeg.setDataSource(path);
-//        fFmpegMediaMetadataRetriever.getFrameAtTime(time);
-//        mFrameGrabber = new FrameGrabber();
-//        mFrameGrabber.setDataSource(path);
-//        mFrameGrabber.setTargetSize(width, height);
-//        mFrameGrabber.init();
-//        return mFrameGrabber.getFrameAtTime(time);
-        return fFmpegMediaMetadataRetriever.getFrameAtTime(time);
+        mFrameGrabber = new FrameGrabber();
+        mFrameGrabber.setDataSource(path);
+        mFrameGrabber.setTargetSize(width, height);
+        mFrameGrabber.init();
+        return mFrameGrabber.getFrameAtTime(time);
     }
 }
