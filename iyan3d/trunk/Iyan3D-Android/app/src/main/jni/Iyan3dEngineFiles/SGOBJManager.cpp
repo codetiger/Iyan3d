@@ -135,7 +135,7 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
     
     SSGMUVHeader* texs = new SSGMUVHeader[counts.colCount];
     SSGMColHeader* col = new SSGMColHeader[counts.colCount];
-    if (1) {                                                 // hasUV
+    if (1) {                                                 //TODO hasUV can be used if needed in future
         for (int i = 0; i < counts.colCount; i++) {
             vertexData * vData = objMesh->getLiteVertexByIndex(i);
             texs[i].s = vData->texCoord1.x;

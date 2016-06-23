@@ -37,7 +37,7 @@
 #define CIRCLE_NODE_ID 511000
 #define LIGHT_CIRCLES 512000
 
-#define OBJ_ID 512000
+#define OBJ_ID 513000
 #define SGM_ID 204800
 #define SGR_ID 102400
 #define PIVOT_ID 128000

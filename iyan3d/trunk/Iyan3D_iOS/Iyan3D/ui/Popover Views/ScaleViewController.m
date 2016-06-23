@@ -70,9 +70,9 @@ float previousX = 0 , previousY = 0, previousZ = 0;
 
 -(void) setScaleValueLabelsWithXScale:(float)xSCale YScale:(float)yScale ZScale:(float)ZScale
 {
-    self.xValue.text = [NSString stringWithFormat:@"%.01f",xSCale];
-    self.yValue.text = [NSString stringWithFormat:@"%.01f",yScale];
-    self.zValue.text = [NSString stringWithFormat:@"%.01f",ZScale];
+    self.xValue.text = [NSString stringWithFormat:@"%.02f",xSCale];
+    self.yValue.text = [NSString stringWithFormat:@"%.02f",yScale];
+    self.zValue.text = [NSString stringWithFormat:@"%.02f",ZScale];
 }
 
 -(IBAction)XYZValueChanged:(id)sender
@@ -99,9 +99,9 @@ float previousX = 0 , previousY = 0, previousZ = 0;
         previousY = self.ySlider.value;
         previousZ = self.zSlider.value;
     }
-    self.xValue.text = [NSString stringWithFormat:@"%.01f",self.xSlider.value];
-    self.yValue.text = [NSString stringWithFormat:@"%.01f",self.ySlider.value];
-    self.zValue.text = [NSString stringWithFormat:@"%.01f",self.zSlider.value];
+    self.xValue.text = [NSString stringWithFormat:@"%.02f",self.xSlider.value];
+    self.yValue.text = [NSString stringWithFormat:@"%.02f",self.ySlider.value];
+    self.zValue.text = [NSString stringWithFormat:@"%.02f",self.zSlider.value];
     [self.delegate scalePropertyChanged:self.xSlider.value YValue:self.ySlider.value ZValue:self.zSlider.value];
 }
 - (IBAction)scaleLockSwtichChangedAction:(id)sender

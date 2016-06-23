@@ -612,10 +612,8 @@ bool SGSceneLoader::removeSelectedObjects()
 
 bool SGSceneLoader::removeTempNodeIfExists()
 {
-
     if(!currentScene || !smgr)
         return false;
-
 
     if(currentScene->nodes.size() < 3)
         return false;
