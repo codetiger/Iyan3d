@@ -11,6 +11,7 @@
                 <outlet property="frameCountDisplay" destination="7w5-0u-Qkb" id="ZGb-c8-aca"/>
                 <outlet property="framesDisplayCount" destination="0mj-C5-4vP" id="0iO-bV-qJr"/>
                 <outlet property="framesDisplayDuration" destination="b9h-ak-AHa" id="Rxl-RU-8zc"/>
+                <outlet property="helpBtn" destination="RQA-Zh-GeV" id="pFq-jK-4dr"/>
                 <outlet property="multiSelectSwitch" destination="c9W-Bx-TQb" id="kLA-4q-A6K"/>
                 <outlet property="restoreBtn" destination="NjZ-i4-GH8" id="pFX-5O-fGH"/>
                 <outlet property="restorePurchaseProgress" destination="e08-WE-edF" id="Qeg-gq-Myh"/>
@@ -36,6 +37,14 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RQA-Zh-GeV">
+                            <rect key="frame" x="677" y="16" width="20" height="19"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Help_iphone.png"/>
+                            <connections>
+                                <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="39B-WM-5Gp"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -204,6 +213,7 @@
     <resources>
         <image name="Frame-Count-Display_Duration.png" width="246" height="40"/>
         <image name="Frame-Count-Display_Frames.png" width="246" height="40"/>
+        <image name="Help_iphone.png" width="22" height="22"/>
         <image name="Tool-Bar_Left.png" width="91" height="63"/>
         <image name="Tool-Bar_Right.png" width="91" height="63"/>
     </resources>

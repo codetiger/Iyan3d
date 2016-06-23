@@ -97,6 +97,10 @@
     UITapGestureRecognizer *tappreviewPositionLeftTop = [[UITapGestureRecognizer alloc]
                                                           initWithTarget:self action:@selector(previewPositionLeftTopTap:)];
     
+    UITapGestureRecognizer *wholeTap = [[UITapGestureRecognizer alloc]
+                                                         initWithTarget:self action:nil];
+
+    wholeTap.delegate = self;
     tapToolBarLeft.delegate = self;
     tapToolBarRight.delegate = self;
     taprenderPreviewSizeSmall.delegate=self;
@@ -108,7 +112,7 @@
     tappreviewPositionLeftBottom.delegate=self;
     tappreviewPositionLeftTop.delegate=self;
     
-    
+    [self.view addGestureRecognizer:wholeTap];
     [self.toolbarLeft addGestureRecognizer:tapToolBarLeft];
     [self.toolbarRight addGestureRecognizer:tapToolBarRight];
     [self.renderPreviewSizeSmall addGestureRecognizer:taprenderPreviewSizeSmall];
@@ -121,6 +125,19 @@
     [self.previewPositionLeftTop addGestureRecognizer:tappreviewPositionLeftTop];
     
     
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if([touch.view isDescendantOfView:self.helpBtn]) {
+        return YES;
+    } else if ([touch.view isDescendantOfView:self.toolbarLeft] || [touch.view isDescendantOfView:self.toolbarRight] || [touch.view isDescendantOfView:self.renderPreviewSizeSmall] || [touch.view isDescendantOfView:self.renderPreviewSizeLarge] || [touch.view isDescendantOfView:self.framesDisplayCount] || [touch.view isDescendantOfView:self.framesDisplayDuration] || [touch.view isDescendantOfView:self.previewPositionRightBottom] || [touch.view isDescendantOfView:self.previewPositionRightTop] || [touch.view isDescendantOfView:self.previewPositionLeftBottom] || [touch.view isDescendantOfView:self.previewPositionLeftTop]) {
+        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+        return YES;
+    }
+    
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
 }
 
 /*

@@ -15,11 +15,12 @@
 #define TOP_RATED 6
 #define MY_ANIMATION 7
 #define RECENT 8
-#define USER_NAME_ALERT 1
 #define CANCEL_BUTTON 0
 #define OK_BUTTON 1
 
 #define RENAME_ALERT 0
+#define USER_NAME_ALERT 1
+#define SIGNIN_ALERT 2
 
 #define CANCEL 0
 #define OK 1
@@ -75,7 +76,7 @@
     animDownloadQueue = [[NSOperationQueue alloc] init];
     [animDownloadQueue setMaxConcurrentOperationCount:1];
     userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
-    [self getAnimationData];
+    [self performSelectorInBackground:@selector(getAnimationData) withObject:nil];
     
     UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
@@ -125,8 +126,6 @@
         cell.layer.borderWidth = 1.0f;
         cell.layer.borderColor = [UIColor grayColor].CGColor;
     }
-    [self.downloadIndicator stopAnimating];
-    [self.downloadIndicator setHidden:YES];
     return cell;
 }
 
@@ -421,24 +420,33 @@
     [self deallocView];
 }
 
+- (void) setSelectedAnimationAtIndex:(int)indexVal
+{
+    asset = animationsItems[indexVal];
+}
+
 - (void)publishBtnaction:(id)sender
 {
-    _publishBtn = (UIButton*)sender;
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
-        [_publishBtn setHidden:YES];
-        UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Display Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-        [userNameAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-        [[userNameAlert textFieldAtIndex:0] setPlaceholder:@"Enter Your Name Here"];
-        [[userNameAlert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
-        [userNameAlert setTag:USER_NAME_ALERT];
-        [userNameAlert show];
-        [[userNameAlert textFieldAtIndex:0] becomeFirstResponder];
+    
+    if(sender != nil)
+        _publishBtn = (UIButton*)sender;
+    
+    NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
+    
+    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
+        if(sender != nil)
+            [_publishBtn setHidden:YES];
+        if ([[AppHelper getAppHelper] checkInternetConnected]) {
+            [self.delegate showOrHideProgress:1];
+            [self.publishBtn setHidden:YES];
+            [self.view setUserInteractionEnabled:NO];
+            [self publishAssetWithUserName:[[AppHelper getAppHelper] userDefaultsForKey:@"username"]];
+        }
     }
-    else
-    {
-        UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Sign in with any of your accounts to publish the animation." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [userNameAlert show];
-        [_publishBtn setHidden:NO];
+    else{
+        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [signinAlert show];
+        [signinAlert setTag:SIGNIN_ALERT];
     }
 }
 
@@ -450,7 +458,9 @@
     [AppHelper getAppHelper].delegate = self;
     if ([[AppHelper getAppHelper] checkInternetConnected]) {
         [[AppHelper getAppHelper] performReadingJsonInQueue:downloadQueue ForPage:5];
-       
+    } else {
+        [self.downloadIndicator stopAnimating];
+        [self.downloadIndicator setHidden:YES];
     }
 }
 
@@ -616,12 +626,24 @@
 
 - (void)setAnimationData:(NSArray*)allAnimations
 {
+    [self performSelectorInBackground:@selector(refreshDataInBackground:) withObject:allAnimations];
+}
+
+- (void) refreshDataInBackground:(NSArray*) allAnimations
+{
     [AppHelper getAppHelper].delegate = nil;
     if (allAnimations != nil && allAnimations.count > 0)
         animationJsonArray = [NSMutableArray arrayWithArray:allAnimations];
     if (animationJsonArray != nil && [animationJsonArray count] > 0)
         [self storeDataToLocalDB];
     animationsItems = [cache GetAnimationList:animationType fromTable:self.tableType Search:@""];
+    [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:NO];
+}
+
+- (void) reloadCollectionView
+{
+    [self.downloadIndicator stopAnimating];
+    [self.downloadIndicator setHidden:YES];
     [self.animationCollectionView reloadData];
 }
 
@@ -653,12 +675,6 @@
                         [self.publishBtn setHidden:NO];
                     }
                     else {
-                        if ([[AppHelper getAppHelper] checkInternetConnected]) {
-                            [self.delegate showOrHideProgress:1];
-                            [self.publishBtn setHidden:YES];
-                            [self.view setUserInteractionEnabled:NO];
-                            [self publishAssetWithUserName:[alertView textFieldAtIndex:0].text];
-                        }
                     }
                 }
             }
@@ -687,6 +703,7 @@
                         int indexVal = [[alertView accessibilityIdentifier] intValue];
                         AnimationItem *a = animationsItems[indexVal];
                         a.assetName = name;
+                        a.keywords = [NSString stringWithFormat:@" %@", name];
                         [cache UpdateMyAnimation:a];
                         [self openMyAnimations];
                     }
@@ -694,6 +711,11 @@
             }
             [alertView resignFirstResponder];
             
+            break;
+        }
+            
+        case SIGNIN_ALERT: {
+            [self.delegate loginBtnAction:nil];
             break;
         }
         default:
@@ -712,14 +734,14 @@
     
     if (![asset.userId isEqualToString:@""]) {
         NSString* extension,*uniqueId,*email,*fbid,*fbname,*twitterId,*twitterName;
-        NSString* imgPathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirPath, selectedCell];
+        NSString* imgPathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirPath, asset.assetId];
         
         if (animationType == 0)
             extension = @".sgra";
         else
             extension = @".sgta";
         
-        NSString* filePathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirPath, selectedCell, extension];
+        NSString* filePathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirPath, asset.assetId, extension];
         
         NSLog(@"\nAnimation File Locations : Image %@ \n Animation %@ \n" , imgPathLocation,filePathLocation);
         NSString* name = [NSString stringWithFormat:@"%@", asset.assetName];
@@ -749,9 +771,9 @@
                                                                        parameters:nil
                                                         constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                                                             if (animationImgFile != nil)
-                                                                [formData appendPartWithFileData:animationImgFile name:@"animationImgFile" fileName:[NSString stringWithFormat:@"%d.png", selectedCell] mimeType:@"image/png"];
+                                                                [formData appendPartWithFileData:animationImgFile name:@"animationImgFile" fileName:[NSString stringWithFormat:@"%d.png", asset.assetId] mimeType:@"image/png"];
                                                             if (animationFile != nil)
-                                                                [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", selectedCell, extension] mimeType:@"image/png"];
+                                                                [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", asset.assetId, extension] mimeType:@"image/png"];
                                                             [formData appendPartWithFormData:[userid dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
                                                                 [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueId"];
                                                                 [formData appendPartWithFormData:[email dataUsingEncoding:NSUTF8StringEncoding] name:@"email"];
@@ -761,6 +783,7 @@
                                                             [formData appendPartWithFormData:[bonecountanim dataUsingEncoding:NSUTF8StringEncoding] name:@"bonecount"];
                                                             [formData appendPartWithFormData:[asset_id dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_id"];
                                                             [formData appendPartWithFormData:[type dataUsingEncoding:NSUTF8StringEncoding] name:@"type"];
+                                                            NSLog(@" name %@ animationImgFile %@ ", name, [NSString stringWithFormat:@"%d.png", asset.assetId]);
                                                         }];
         
         AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -773,13 +796,15 @@
             complete = YES;
             asset.published = [[operation responseString] intValue];
             NSLog(@"Publishid : %d",asset.published);
-            [cache UpdateMyAnimation:asset];
-            [self.view setUserInteractionEnabled:YES];
-            if ([animationsItems containsObject:asset]) {
-                int indexRow = (int)[animationsItems indexOfObject:asset];
-                [self displayBasedOnSelection:[NSNumber numberWithInt:indexRow]];
-                [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:YES];
-                [_publishBtn setHidden:YES];
+            if(asset.published > 0) {
+                [cache UpdateMyAnimation:asset];
+                [self.view setUserInteractionEnabled:YES];
+                if ([animationsItems containsObject:asset]) {
+                    int indexRow = (int)[animationsItems indexOfObject:asset];
+                    [self displayBasedOnSelection:[NSNumber numberWithInt:indexRow]];
+                    [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:YES];
+                    [_publishBtn setHidden:YES];
+                }
             }
                                     [self.delegate showOrHideProgress:0];
         } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
@@ -796,10 +821,7 @@
     }
 }
     
-- (void)reloadCollectionView
-{
-    [self.animationCollectionView reloadData];
-}
+
 - (void)hideOrShowPublishBtn:(NSNumber*)value
 {
     [_publishBtn setHidden:[value boolValue]];

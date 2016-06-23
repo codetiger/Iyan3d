@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addSceneBtn" destination="g7e-JY-bEf" id="zM1-5k-HDY"/>
                 <outlet property="centerLoading" destination="rad-5Q-RvL" id="Hlk-Ka-haX"/>
+                <outlet property="helpBtn" destination="kf0-ZU-tmJ" id="upr-Jd-ke1"/>
                 <outlet property="infoBtn" destination="fVt-o1-OKO" id="WKK-uI-qsC"/>
                 <outlet property="loginBtn" destination="zTv-CV-o50" id="hco-IV-cWj"/>
                 <outlet property="scenesCollectionView" destination="GtZ-Ek-nEF" id="4xu-p6-Mnr"/>

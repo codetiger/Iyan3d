@@ -210,16 +210,9 @@
 {
     jsonArray = [[NSArray alloc] init];
 
-    if (rawData) {
-        //NSLog(@"Raw data %@ " , rawData);
+    if (rawData != nil) {
         NSError* error;
-        NSData* jsonData = [NSData dataWithData:rawData];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
-        
-        if (jsonData == nil) {
-            return;
-        }
-        
-        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
+        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[rawData bytes]];
         jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
         jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
         [self setAssetsDetails:ASSET_SELECTION];
@@ -229,13 +222,9 @@
 {
     jsonAnimationArray = [[NSArray alloc] init];
 
-    if (rawData) {
+    if (rawData != nil) {
         NSError* error;
-        NSData* jsonData = [NSData dataWithData:rawData];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
-        if (jsonData == nil) {
-            return nil;
-        }
-        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
+        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[rawData bytes]];
         jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
         if (jsonStr != nil)
             jsonAnimationArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];

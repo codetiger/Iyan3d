@@ -10,10 +10,10 @@
 #define AnimationSelectionSlider_h
 
 #import <UIKit/UIKit.h>
+#import "AnimationSelectionCollectionViewCell.h"
 #import "GAI.h"
 #import "AppHelper.h"
 #import "Constants.h"
-#import "AnimationSelectionCollectionViewCell.h"
 #import "SGEditorScene.h"
 
 #ifdef OPTIMGLKM
@@ -36,6 +36,7 @@
 - (void) removeTempNodeFromScene;
 - (void)deallocSubViews;
 - (void) reloadFrames;
+- (IBAction)loginBtnAction:(id)sender;
 
 @end
 

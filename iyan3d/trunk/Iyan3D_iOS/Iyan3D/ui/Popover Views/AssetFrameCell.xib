@@ -8,21 +8,28 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="gTV-IL-0wX" customClass="AssetFrameCell">
-            <rect key="frame" x="0.0" y="0.0" width="72" height="80"/>
+            <rect key="frame" x="0.0" y="0.0" width="80" height="88"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="72" height="80"/>
+                <rect key="frame" x="0.0" y="0.0" width="80" height="88"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="yak-hS-N2Q">
-                        <rect key="frame" x="0.0" y="57" width="72" height="23"/>
+                        <rect key="frame" x="4" y="65" width="72" height="23"/>
                         <fontDescription key="fontDescription" type="system" pointSize="9"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FOa-bU-5A1" customClass="SmartImageView">
-                        <rect key="frame" x="12" y="8" width="49" height="48"/>
+                        <rect key="frame" x="8" y="8" width="64" height="55"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="365-G7-ZL9">
+                        <rect key="frame" x="55" y="0.0" width="25" height="25"/>
+                        <state key="normal" image="property-icon.png"/>
+                        <connections>
+                            <action selector="propsAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="m3r-xW-h2B"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
@@ -30,8 +37,12 @@
             <connections>
                 <outlet property="assetImage" destination="FOa-bU-5A1" id="Tte-kx-fzc"/>
                 <outlet property="assetName" destination="yak-hS-N2Q" id="5Fb-xu-XC7"/>
+                <outlet property="propsBtn" destination="365-G7-ZL9" id="Jo9-bY-ee9"/>
             </connections>
             <point key="canvasLocation" x="373" y="615"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="property-icon.png" width="40" height="40"/>
+    </resources>
 </document>

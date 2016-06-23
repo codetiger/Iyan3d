@@ -20,6 +20,7 @@
                 <outlet property="exportBtn" destination="Zs9-wP-4jN" id="3ZR-nP-FKb"/>
                 <outlet property="firstFrameBtn" destination="q9T-TD-6di" id="DlF-pn-kq7"/>
                 <outlet property="framesCollectionView" destination="1c4-QV-Hsl" id="Vd7-kq-Niw"/>
+                <outlet property="helpBtn" destination="NXe-Tf-aXZ" id="zDj-lf-FpG"/>
                 <outlet property="importBtn" destination="rE1-GS-WgE" id="ENi-bU-btV"/>
                 <outlet property="infoBtn" destination="G1U-ai-hxF" id="ojw-GT-csK"/>
                 <outlet property="lastFrameBtn" destination="awG-hy-li5" id="z1s-ln-Nhm"/>

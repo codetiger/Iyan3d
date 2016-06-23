@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="doneBtn" destination="K0O-5a-7bb" id="FCW-6X-sca"/>
                 <outlet property="frameCountDisplay" destination="SB8-W0-hYL" id="4zE-Ly-GUQ"/>
+                <outlet property="helpBtn" destination="aIf-YY-O7q" id="oSB-RN-Bhr"/>
                 <outlet property="multiSelectSwitch" destination="HLY-Y3-GAG" id="8q7-cK-IfQ"/>
                 <outlet property="restoreBtn" destination="6f4-Gj-L9N" id="kND-NE-2n2"/>
                 <outlet property="restorePurchaseProgress" destination="0Dv-zy-mGN" id="0r9-mP-OeK"/>
@@ -76,6 +77,14 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="aIf-YY-O7q">
+                            <rect key="frame" x="516" y="18" width="20" height="19"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Help_iphone.png"/>
+                            <connections>
+                                <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="Bdn-aP-loF"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.52156862749999999" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -196,4 +205,7 @@
             <point key="canvasLocation" x="377" y="88"/>
         </view>
     </objects>
+    <resources>
+        <image name="Help_iphone.png" width="22" height="22"/>
+    </resources>
 </document>

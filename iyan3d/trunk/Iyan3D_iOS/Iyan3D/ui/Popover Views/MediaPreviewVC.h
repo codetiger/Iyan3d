@@ -10,6 +10,12 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "GAI.h"
 
+@protocol MediaPreviewDelegate
+
+- (void) closeView;
+
+@end
+
 @interface MediaPreviewVC : UIViewController
 {
     int mediaType;
@@ -19,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIView *medView;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
 @property (weak, nonatomic) IBOutlet UIButton *closeBtn;
+@property (weak, nonatomic) id < MediaPreviewDelegate > delegate;
+
 @property (strong, nonatomic) MPMoviePlayerController *moviePlayer;
 
 

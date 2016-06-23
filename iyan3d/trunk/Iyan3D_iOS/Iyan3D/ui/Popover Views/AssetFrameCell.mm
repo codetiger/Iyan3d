@@ -1,30 +1,31 @@
 //
-//  AnimationSelectionCollectionViewCell.m
+//  AssetFrameCell.m
 //  Iyan3D
 //
-//  Created by Sankar on 21/12/15.
+//  Created by sabish on 22/12/15.
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#import "AnimationSelectionCollectionViewCell.h"
+#import "AssetFrameCell.h"
 
-@implementation AnimationSelectionCollectionViewCell
+@implementation AssetFrameCell
 
-- (void)awakeFromNib
+- (id)initWithFrame:(CGRect)frame
 {
-    // Initialization code
+    self = [super initWithFrame:frame];
+    if (self) {
+    }
+    return self;
 }
 
 - (IBAction)propsAction:(id)sender
 {
-    NSString* btnStr = @"animProps";
-    if(_category == 7)
-        btnStr = @"animProps1";
+    NSString* btnStr = @"assetProps";
     
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:btnStr];
     [_popUpVc.view setClipsToBounds:YES];
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.popoverContentSize = CGSizeMake(180.0, (_category == 7) ? 39*4 : 39*3);
+    self.popoverController.popoverContentSize = CGSizeMake(180.0, 39*3);
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popUpVc.delegate=self;
     CGRect rect = _propsBtn.frame;
@@ -36,19 +37,14 @@
 
 }
 
-- (void) propertiesBtnDelegate:(int)indexValue
+- (void)propertiesBtnDelegate:(int)indexValue
 {
-    self.delegate = _parentVC;
-
     if(indexValue == 0) {
-        [self.delegate cloneAnimation:_selectedIndex];
+        [self.delegate cloneAssetAtIndex:_cellIndex];
     } else if(indexValue == 1) {
-        [self.delegate deleteAnimationAtIndex:_selectedIndex];
+        [self.delegate deleteAssetAtIndex:_cellIndex];
     } else if (indexValue == 2) {
-        [self.delegate renameAnimation:_selectedIndex];
-    } else if (indexValue == 3) {
-        [self.delegate setSelectedAnimationAtIndex:_selectedIndex];
-        [self.delegate publishBtnaction:nil];
+        [self.delegate renameAssetAtIndex:_cellIndex];
     }
     
     [self.popoverController dismissPopoverAnimated:YES];

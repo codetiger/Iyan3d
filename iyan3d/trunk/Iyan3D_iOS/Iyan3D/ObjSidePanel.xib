@@ -45,7 +45,7 @@
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="white" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="iSK-at-mkm">
                     <rect key="frame" x="0.0" y="47" width="300" height="552"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="10" id="7Lw-T1-7gU">
-                        <size key="itemSize" width="72" height="80"/>
+                        <size key="itemSize" width="80" height="88"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
                         <inset key="sectionInset" minX="20" minY="18" maxX="20" maxY="4"/>

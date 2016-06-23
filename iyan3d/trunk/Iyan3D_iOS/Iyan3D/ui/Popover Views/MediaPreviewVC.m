@@ -7,6 +7,7 @@
 //
 
 #import "MediaPreviewVC.h"
+#import <Crashlytics/Answers.h>
 
 @implementation MediaPreviewVC
 
@@ -73,7 +74,9 @@
 {
     [self.moviePlayer stop];
     self.moviePlayer = nil;
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate closeView];
+    }];
 }
 
 - (IBAction)shareAction:(id)sender
@@ -103,6 +106,15 @@
 //        [self.shareActivityIndicator stopAnimating];
 //        [self.shareActivityIndicator setHidden:true];
         [self.shareBtn setHidden:NO];
+        
+        if(completed) {
+            NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
+            if(mediaType == IMAGE_TYPE)
+                [attributes setObject:@"Image" forKey:@"Share"];
+            else
+                [attributes setObject:@"Video" forKey:@"Share"];
+            [Answers logCustomEventWithName:@"ShareOnPreview" customAttributes:attributes];
+        }
     }];
     
     [self presentViewController:controller animated:YES completion:nil];

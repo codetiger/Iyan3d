@@ -9,6 +9,7 @@
 
 #import <Crashlytics/Answers.h>
 
+#import "OnBoardVC.h"
 #import "MediaPreviewVC.h"
 #import "AppDelegate.h"
 #import "SceneSelectionControllerNew.h"
@@ -114,6 +115,10 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    if([touch.view isDescendantOfView:self.helpBtn]) {
+        return YES;
+    }
+    
     [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
     return NO;
 }
@@ -394,6 +399,11 @@
     
     if(indexValue == TUTORIAL){
         [self.popoverController dismissPopoverAnimated:YES];
+        
+//        OnBoardVC* ovc = [[OnBoardVC alloc] initWithNibName:@"OnBoardVC" bundle:nil];
+//        ovc.modalPresentationStyle = UIModalPresentationFormSheet;
+//        [self presentViewController:ovc animated:YES completion:nil];
+        
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/tutorial-videos/"]];
     }
     else if(indexValue==SETTINGS){

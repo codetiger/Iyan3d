@@ -11,6 +11,7 @@
                 <outlet property="frameCountDisplay" destination="14a-cr-DF6" id="jMr-m2-YpE"/>
                 <outlet property="framesDisplayCount" destination="4AM-Oh-6u7" id="0BO-75-0PK"/>
                 <outlet property="framesDisplayDuration" destination="pi2-nh-JrL" id="VcP-JD-c0j"/>
+                <outlet property="helpBtn" destination="f1X-a9-tfa" id="mez-PR-vKm"/>
                 <outlet property="multiSelectSwitch" destination="EsN-jX-vMF" id="JuG-fd-UZo"/>
                 <outlet property="restoreBtn" destination="Tt3-Ct-3uo" id="Ln9-Ea-hon"/>
                 <outlet property="restorePurchaseProgress" destination="IBQ-JF-AsA" id="Sre-ut-SsE"/>

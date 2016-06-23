@@ -6,11 +6,13 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
+#ifndef AssetSelectionSidePanel_h
+#define AssetSelectionSidePanel_h
+
 #import <UIKit/UIKit.h>
-#import "SmartImageView.h"
-#import "CacheSystem.h"
-#import "Constants.h"
+#import "AssetFrameCell.h"
 #import "GAI.h"
+#import "CacheSystem.h"
 
 @protocol AssetSelectionDelegate
 
@@ -24,7 +26,7 @@
 
 
 
-@interface AssetSelectionSidePanel : GAITrackedViewController< UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate, UIGestureRecognizerDelegate > {
+@interface AssetSelectionSidePanel : GAITrackedViewController< UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate,UIAlertViewDelegate, UIGestureRecognizerDelegate , AssetFrameCellDelegate > {
     CacheSystem* cache;
     AssetItem* asset;
     NSMutableArray* assetArray;
@@ -50,3 +52,5 @@
 - (IBAction)cancelButtonAction:(id)sender;
 
 @end
+
+#endif

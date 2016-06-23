@@ -8,7 +8,6 @@
 #import <Crashlytics/Answers.h>
 
 
-#import "MediaPreviewVC.h"
 #import "RenderingViewController.h"
 #import "AVFoundation/AVAssetWriterInput.h"
 #import "AVFoundation/AVAssetWriter.h"
@@ -122,6 +121,8 @@
 
     if(renderingExportImage == RENDER_IMAGE)
     {
+        [_progressSub setHidden:YES];
+        [self.limitFramesLbl setHidden:YES];
         self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d",renderingStartFrame + 1];
         [self.youtubeButton setHidden:true];
         [self.rateButtonImage setEnabled:YES];
@@ -143,12 +144,9 @@
     [_checkCreditProgress setHidden:YES];
     [self updateCreditLable];
     
-    self.nextButton.accessibilityHint = @"Tap on 'Next' to start exporting.";
+    self.nextButton.accessibilityHint = @"Tap to start exporting.";
     self.nextButton.accessibilityIdentifier = @"2";
     
-    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"ExportTipsShown"]) {
-        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
-    }
 }
 
 - (void)trimControl:(RETrimControl *)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue
@@ -232,6 +230,8 @@
 - (IBAction)startButtonAction:(id)sender
 {
     if(_nextButton.tag == DONE){
+        [self.limitFramesLbl setHidden:YES];
+        [_progressSub setHidden:YES];
         [self cancelButtonAction:nil];
     }
     else{
@@ -247,6 +247,7 @@
         }
         
         [self.limitFramesLbl setHidden:YES];
+        [_progressSub setHidden:YES];
         
         if(renderingExportImage != RENDER_IMAGE) {
             renderingFrame = _trimControl.leftValue;
@@ -590,6 +591,10 @@
         [self.view addSubview:_trimControl];
     }
     
+    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"ExportTipsShown"]) {
+        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+    }
+
     [self removeSGFDFilesIfAny];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersBG) name:@"AppGoneBackground" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersFG) name:@"applicationDidBecomeActive" object:nil];
@@ -597,12 +602,26 @@
 
     isAppInBg = false;
     [self updateCreditLable];
+    
+    UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    tapGest.delegate = self;
+    [self.view addGestureRecognizer:tapGest];
 }
 - (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AppGoneBackground" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"applicationDidBecomeActive" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"FileWriteCompleted" object:nil];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if([touch.view isDescendantOfView:self.helpBtn]) {
+        return YES;
+    }
+    
+    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
+    return NO;
 }
 
 - (void) removeSGFDFilesIfAny
@@ -670,19 +689,19 @@
             return;
         NSString *filePath = [NSString stringWithFormat:@"%@/myMovie.mov", tempDir];
         outputFilePath = filePath;
-        UISaveVideoAtPathToSavedPhotosAlbum(filePath,nil,nil,nil);
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Video successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert setTag:COMPLETION_ALERT];
-        [alert show];
+        UISaveVideoAtPathToSavedPhotosAlbum(filePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+//        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Video successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//        [alert setTag:COMPLETION_ALERT];
+//        [alert show];
     }
     else {
         NSString *filePath = [NSString stringWithFormat:@"%@r-%d.png", tempDir, renderingFrame - 1];
         outputFilePath = filePath;
         UIImage *image = [UIImage imageWithContentsOfFile:filePath];
-        UIImageWriteToSavedPhotosAlbum(image,nil,nil,nil);
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Image was successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert setTag:COMPLETION_ALERT];
-        [alert show];
+        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+//        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Image was successfully saved in your gallery." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//        [alert setTag:COMPLETION_ALERT];
+//        [alert show];
     }
     [_cancelButton setHidden:YES];
     [_nextButton setHidden:NO];
@@ -845,6 +864,7 @@
     
     if([Utility IsPadDevice]) {
         MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:@"MediaPreviewVC" bundle:nil mediaType:mediaType medPath:outputPath];
+        medPreview.delegate = self;
         medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:medPreview animated:YES completion:nil];
     }
@@ -878,6 +898,11 @@
     [self.delegate resumeRenderingAnimationScene];
     [self dismissViewControllerAnimated:YES completion:nil];
     [self deallocMem];
+}
+
+- (void) closeView
+{
+    [self cancelButtonAction:nil];
 }
 
 - (IBAction)colorPickerAction:(id)sender {
@@ -1245,5 +1270,18 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     (_transparentBgSwitch.isOn) ? [self.delegate changeRenderingBgColor:(Vector4(bgColor,0.0))] : [self.delegate changeRenderingBgColor:(Vector4(bgColor,1.0))];
     
 }
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    if(error == nil)
+        [self performSelectorOnMainThread:@selector(showPreviewInMainThread:) withObject:outputFilePath waitUntilDone:NO];
+}
+
+- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    if(error == nil)
+        [self performSelectorOnMainThread:@selector(showPreviewInMainThread:) withObject:outputFilePath waitUntilDone:NO];
+}
+
 
 @end

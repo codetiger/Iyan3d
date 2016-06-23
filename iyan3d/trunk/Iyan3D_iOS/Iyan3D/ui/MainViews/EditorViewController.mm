@@ -12,10 +12,8 @@
 #import "EditorViewController.h"
 #import "FrameCellNew.h"
 #import "AppDelegate.h"
-#import "WEPopoverContentViewController.h"
 #import "SceneSelectionControllerNew.h"
 #import "MediaPreviewVC.h"
-#import "Constants.h"
 #import <sys/utsname.h>
 @implementation EditorViewController
 
@@ -255,7 +253,7 @@ BOOL missingAlertShown;
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    if([touch.view isDescendantOfView:self.renderView] || [touch.view isDescendantOfView:self.toolTipBtn]) {
+    if([touch.view isDescendantOfView:self.renderView] || [touch.view isDescendantOfView:self.toolTipBtn] || [touch.view isDescendantOfView:self.helpBtn]) {
         return YES;
     }
     [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
@@ -1161,6 +1159,8 @@ BOOL missingAlertShown;
 
 - (IBAction)rigAddToSceneAction:(id)sender
 {
+    [Answers logCustomEventWithName:@"AutoRig-Completion" customAttributes:nil];
+
     Vector3 vertexColor = Vector3(-1.0);
     if(editorScene->rigMan->nodeToRig->props.perVertexColor){
         vertexColor = editorScene->rigMan->nodeToRig->props.vertexColor;

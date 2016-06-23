@@ -9,7 +9,6 @@
 #import "AppHelper.h"
 
 #import "ObjSidePanel.h"
-#import "ObjCellView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Utility.h>
 
@@ -45,10 +44,8 @@
     [super viewDidLoad];
     self.screenName = @"OBJSelection iOS";
      [self.importFilesCollectionView registerNib:[UINib nibWithNibName:@"ObjCellView" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
+    filesList = [[NSArray alloc] init];
+    [self resetCollectionView:0];
     self.importBtn.layer.cornerRadius=8.0;
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
@@ -73,6 +70,22 @@
     UITapGestureRecognizer *tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
     [self.view addGestureRecognizer:tapGest];
+}
+
+- (void) resetCollectionView:(int) caseNum
+{
+    NSArray *extensions;
+    if(caseNum == 1)
+        extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
+    else
+        extensions = [NSArray arrayWithObjects:@"obj", nil];
+    
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
+    
+    [self.importFilesCollectionView reloadData];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -111,6 +124,8 @@
     ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
     cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
     cell.assetImageView.backgroundColor = [UIColor clearColor];
+    cell.delegate = self;
+    cell.cellIndex = (int)indexPath.row;
 
     if(_addBtn.tag == OBJ)
     {
@@ -118,6 +133,7 @@
         if(indexPath.row > basicShapes.count-1){
             NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
             if([extension isEqualToString:@"obj"]){
+                [cell.propsBtn setHidden:NO];
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
                 cell.layer.borderColor = [UIColor grayColor].CGColor;
                 cell.assetImageView.image =[UIImage imageNamed:@"objfile.png"];
@@ -125,6 +141,7 @@
             }
         }
         else{
+            [cell.propsBtn setHidden:YES];
             cell.assetNameLabel.text = [basicShapes objectAtIndex:indexPath.row];
             cell.layer.borderColor = [UIColor grayColor].CGColor;
             NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
@@ -137,11 +154,13 @@
     {
         _ObjInfoLable.text = @"Add Texture files in Document Directory.";
         if(indexPath.row == 0){
-            cell.assetNameLabel.text = @"Pick Color";           
+            [cell.propsBtn setHidden:YES];
+            cell.assetNameLabel.text = @"Pick Color";
             cell.assetImageView.backgroundColor = [UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0];
             cell.assetImageView.image = NULL;
         }
         else{
+            [cell.propsBtn setHidden:NO];
             NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString* docDirPath = [srcDirPath objectAtIndex:0];
             NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row-1]];
@@ -222,12 +241,7 @@
     if(self.addBtn.tag == OBJ){
         [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
-        filesList=nil;
-        NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
-        NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* docDirPath = [srcDirPath objectAtIndex:0];
-        NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-        filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
+        [self resetCollectionView:1];
         [self.addBtn setTitle:(viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE" forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
         self.addBtn.tag = Texture;
@@ -299,8 +313,6 @@
     [self addBtnAction:nil];
 }
 
-
-
 - (IBAction)cancelBtnAction:(id)sender {
     if(viewType == IMPORT_OBJFILE)
         [self.objSlideDelegate removeTempNodeFromScene];
@@ -310,4 +322,38 @@
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
     [self.objSlideDelegate deallocSubViews];
 }
+
+#pragma mark ObjCellView delegates
+
+
+- (void) deleteAssetAtIndex:(int) indexVal
+{
+
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSString* targetFilePath;
+    int caseNum = 0;
+    if(_addBtn.tag == OBJ) {
+        if(indexVal - 6 < [filesList count]) {
+            targetFilePath = [NSString stringWithFormat:@"%@/%@", docDirPath, [filesList objectAtIndex:indexVal-6]];
+        }
+    } else {
+        if(indexVal - 1 < [filesList count]) {
+            targetFilePath = [NSString stringWithFormat:@"%@/%@", docDirPath, [filesList objectAtIndex:indexVal-1]];
+        }
+        caseNum = 1;
+    }
+    
+    if([fm fileExistsAtPath:targetFilePath])
+        [fm removeItemAtPath:targetFilePath error:nil];
+    [self resetCollectionView: caseNum];
+    
+    if(_addBtn.tag == OBJ)
+        [self.objSlideDelegate removeTempNodeFromScene];
+    else
+        [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+
+}
+
 @end

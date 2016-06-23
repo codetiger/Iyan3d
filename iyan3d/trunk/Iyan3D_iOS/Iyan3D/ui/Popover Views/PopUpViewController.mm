@@ -98,7 +98,7 @@
     else if([clickedBtnName isEqualToString:@"myObjectsBtn"]){
         tableData = [NSMutableArray arrayWithObjects:@"Camera", @"Light", nil];
     }
-    else if([clickedBtnName isEqualToString:@"propertiesBtn"] || [clickedBtnName isEqualToString:@"animProps"]){
+    else if([clickedBtnName isEqualToString:@"propertiesBtn"] || [clickedBtnName isEqualToString:@"assetProps"]){
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", nil];
     }
@@ -118,6 +118,9 @@
     else if([clickedBtnName isEqualToString:@"animProps1"]){
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:@"Clone", @"Delete",@"Rename", @"Publish", nil];
+    } else if([clickedBtnName isEqualToString:@"objImport"]) {
+        [self allowMultipleSelection:NO];
+        tableData = [NSMutableArray arrayWithObjects:@"Delete", nil];
     }
     else {
         tableData = [NSMutableArray arrayWithObjects:@"No data",nil];
@@ -270,7 +273,7 @@
     else if([clickedBtn isEqualToString:@"optionsBtn"]){
         [self.delegate optionBtnDelegate:(int)indexPath.row];
     }
-    else if ([clickedBtn isEqualToString:@"animProps1"]) {
+    else if ([clickedBtn isEqualToString:@"animProps1"] || [clickedBtn isEqualToString:@"assetProps"] || [clickedBtn isEqualToString:@"objImport"]) {
         [self.delegate propertiesBtnDelegate:(int)indexPath.row];
     }
     else {

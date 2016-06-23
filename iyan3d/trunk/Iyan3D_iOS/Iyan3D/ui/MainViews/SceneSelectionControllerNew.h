@@ -70,6 +70,7 @@
 @property (nonatomic, strong) FollowUsVC *followUsVC;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
+@property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)openSceneAction:(id)sender;

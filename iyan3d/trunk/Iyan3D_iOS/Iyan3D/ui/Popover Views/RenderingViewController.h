@@ -17,6 +17,8 @@
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
+#import "MediaPreviewVC.h"
+
 
 @protocol RenderingViewControllerDelegate
 - (void) freezeEditorRender:(BOOL) freeze;
@@ -38,7 +40,7 @@
 
 @class GADBannerView;
 
-@interface RenderingViewController : GAITrackedViewController<RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate>
+@interface RenderingViewController : GAITrackedViewController<RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate, MediaPreviewDelegate, UIGestureRecognizerDelegate>
 {
     int renderingStartFrame, renderingEndFrame, renderingFrame , shaderType,finalFrame,publishId;
     bool isCanceled,isAppInBg;
@@ -108,6 +110,7 @@
 @property (weak, nonatomic) IBOutlet UIView *progressSub;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *checkCreditProgress;
 @property (weak, nonatomic) IBOutlet UILabel *limitFramesLbl;
+@property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)cameraResolutionChanged:(id)sender;

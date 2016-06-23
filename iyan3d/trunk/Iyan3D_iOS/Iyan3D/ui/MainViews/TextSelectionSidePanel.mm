@@ -39,7 +39,7 @@
         docDirPath = [srcDirPath objectAtIndex:0];
         tabValue = FONT_STORE;
         red = green = blue = alpha = 1;
-        withRig = true;
+        withRig = false;
         isCanceled = false;
         
     }

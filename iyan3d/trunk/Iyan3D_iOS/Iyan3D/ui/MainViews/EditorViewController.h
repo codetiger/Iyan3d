@@ -15,19 +15,18 @@
 #endif
 
 #import <UIKit/UIKit.h>
-#import "PopUpViewController.h"
-#import "LightProperties.h"
+#import <MessageUI/MFMailComposeViewController.h>
 #import <GameKit/GameKit.h>
+
+#import "LightProperties.h"
 #import "RenderingView.h"
 #import "ImportImageNew.h"
+#import "AssetSelectionSidePanel.h"
 #import "AnimationSelectionSlider.h"
 #import "TextSelectionSidePanel.h"
-#import "AssetSelectionSidePanel.h"
 #import "RenderingViewController.h"
 #import "SGEditorScene.h"
-#import "FPPopoverController.h"
 #import "RenderViewManager.h"
-#import "WEPopoverController.h"
 #import "LoginViewController.h"
 #import "LoggedInViewController.h"
 #import "SceneItem.h"
@@ -37,7 +36,6 @@
 #import "CameraSettings.h"
 #import "MeshProperties.h"
 #import "ScaleForAutoRigViewController.h"
-#import <MessageUI/MFMailComposeViewController.h>
 #import "FollowUsVC.h"
 
 @interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate,MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,TextSelectionDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate>{
@@ -140,6 +138,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *numberOfItems;
 @property (weak, nonatomic) IBOutlet UILabel *autoRigLbl;
+@property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 
 
 - (IBAction)toolTipAction:(id)sender;

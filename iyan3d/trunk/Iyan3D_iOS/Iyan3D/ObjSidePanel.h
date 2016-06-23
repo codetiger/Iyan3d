@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GAI.h"
+#import "ObjCellView.h"
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
@@ -31,7 +32,7 @@
 @end
 
 
-@interface ObjSidePanel : GAITrackedViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIGestureRecognizerDelegate >
+@interface ObjSidePanel : GAITrackedViewController<UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIGestureRecognizerDelegate , ObjCellViewDelegate>
 {
     int indexPathOfOBJ;
     NSString* textureFileName;

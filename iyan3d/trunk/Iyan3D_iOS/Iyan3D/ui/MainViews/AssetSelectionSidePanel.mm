@@ -7,10 +7,9 @@
 //
 
 #import "AssetSelectionSidePanel.h"
-#import "AssetFrameCell.h"
 #import "Utility.h"
 #import "DownloadTask.h"
-#import "SceneSelectionControllerNew.h"
+#import "Constants.h"
 #import "AppDelegate.h"
 
 #define RESTORING 11
@@ -23,6 +22,10 @@
 #define MINECRAFT 5
 #define FNAF 6
 
+#define RENAME_ALERT 0
+
+#define CANCEL 0
+#define OK 1
 
 @implementation AssetSelectionSidePanel
 
@@ -160,7 +163,13 @@
             cell.layer.borderColor = [UIColor clearColor].CGColor;
         }
         cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-       
+        if(modelCategoryTab == MY_LIBRARY_TYPE)
+            [cell.propsBtn setHidden:NO];
+        else
+            [cell.propsBtn setHidden:YES];
+        
+        cell.delegate = self;
+        cell.cellIndex = (int)indexPath.row;
         cell.assetName.text = assetItem.name;
         [cell.assetImage setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:ASSET_SELECTION OperationQueue:downloadQueue ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         return cell;
@@ -326,16 +335,8 @@
                                   {
                                       if(modelCategoryTab == MY_LIBRARY_TYPE)
                                           return;
-                                      [_assetSelectionDelegate showOrHideProgress:1];
-                                      [_modelCategory setTitle: @"My Library" forState:UIControlStateNormal];
-                                      assetArray = [cache GetAssetList:MY_LIBRARY_TYPE Search:@""];
-                                      [_assetsCollectionView reloadData];
-                                      modelCategoryTab = MY_LIBRARY_TYPE;
-                                      selectedAsset = -1;
+                                      [self openMyLibrary];
                                       [view dismissViewControllerAnimated:YES completion:nil];
-                                      [self.assetSelectionDelegate removeTempNodeFromScene];
-                                      [_addToSceneBtn setEnabled:NO];
-                                      [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
     switch (modelCategoryTab) {
         case ALLMODELS:
@@ -374,6 +375,193 @@
     [self presentViewController:view animated:YES completion:nil];
 }
 
+- (void) openMyLibrary
+{
+    [_assetSelectionDelegate showOrHideProgress:1];
+    [_modelCategory setTitle: @"My Library" forState:UIControlStateNormal];
+    assetArray = [cache GetAssetList:MY_LIBRARY_TYPE Search:@""];
+    [_assetsCollectionView reloadData];
+    modelCategoryTab = MY_LIBRARY_TYPE;
+    selectedAsset = -1;
+    [self.assetSelectionDelegate removeTempNodeFromScene];
+    [_addToSceneBtn setEnabled:NO];
+    [_assetSelectionDelegate showOrHideProgress:0];
+}
+
+#pragma AssetFrameCell delegate
+
+- (void) deleteAssetAtIndex:(int) indexVal
+{
+    if(indexVal >= [assetArray count])
+        return;
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    AssetItem *a = assetArray[indexVal];
+    NSString* meshFilePath;
+    NSString* thumbPath;
+    NSString* imgFilePath;
+    
+    if(a.type == CHARACTERS) {
+        meshFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", docDirPath, a.assetId];
+        thumbPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.png", docDirPath, a.assetId];
+        imgFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d-cm.png", docDirPath, a.assetId];
+    } else {
+        meshFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", docDirPath, a.assetId];
+        thumbPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, a.assetId];
+        imgFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, a.assetId];
+    }
+    
+    if([fm fileExistsAtPath:meshFilePath])
+        [fm removeItemAtPath:meshFilePath error:nil];
+    if([fm fileExistsAtPath:thumbPath])
+        [fm removeItemAtPath:thumbPath error:nil];
+    if([fm fileExistsAtPath:imgFilePath])
+        [fm removeItemAtPath:imgFilePath error:nil];
+    
+    [cache deleteMyAsset:a.assetId];
+    [self openMyLibrary];
+}
+
+- (void) cloneAssetAtIndex:(int) indexVal
+{
+    NSDate *currDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"YY-MM-DD HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:currDate];
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    AssetItem *a = assetArray[indexVal];
+    NSString* meshFilePath;
+    NSString* thumbPath;
+    NSString* imgFilePath;
+    
+    NSString* newMeshPath;
+    NSString* newThumbPath;
+    NSString* newTexPath;
+    
+    AssetItem* cloneAsset = [[AssetItem alloc] init];
+
+    if(a.type == CHARACTERS) {
+        meshFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", docDirPath, a.assetId];
+        thumbPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.png", docDirPath, a.assetId];
+        imgFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d-cm.png", docDirPath, a.assetId];
+        
+        cloneAsset.assetId = 40000 + [cache getNextAutoRigAssetId];
+        cloneAsset.type = CHARACTERS;
+        cloneAsset.name = [NSString stringWithFormat:@"autorig%d",[cache getNextAutoRigAssetId]];
+        
+        newMeshPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", docDirPath, cloneAsset.assetId];
+        newThumbPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.png", docDirPath, cloneAsset.assetId];
+        newTexPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png", docDirPath, cloneAsset.assetId];
+
+    } else {
+        meshFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", docDirPath, a.assetId];
+        thumbPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, a.assetId];
+        imgFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, a.assetId];
+        
+        cloneAsset.assetId = 20000 + [cache getNextObjAssetId];
+        NSLog(@" a.assetId %d new ID %d ", a.assetId, cloneAsset.assetId);
+        cloneAsset.type = NODE_SGM;
+        cloneAsset.name = [NSString stringWithFormat:@"%@copy", a.name];
+        
+        newMeshPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", docDirPath, cloneAsset.assetId];
+        newThumbPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, cloneAsset.assetId];
+        newTexPath = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, cloneAsset.assetId];
+
+    }
+    
+    NSError *error;
+    if([fm fileExistsAtPath:meshFilePath])
+        [fm copyItemAtPath:meshFilePath toPath:newMeshPath error:&error];
+    if([fm fileExistsAtPath:thumbPath])
+        [fm copyItemAtPath:thumbPath toPath:newThumbPath error:&error];
+    if([fm fileExistsAtPath:imgFilePath])
+        [fm copyItemAtPath:imgFilePath toPath:newTexPath error:&error];
+    
+    
+    cloneAsset.iap = 0;
+    cloneAsset.keywords = [NSString stringWithFormat:@" %@",a.name];
+    cloneAsset.boneCount = 0;
+    cloneAsset.hash = [self getMD5ForNonReadableFile:newMeshPath];
+    cloneAsset.modifiedDate = dateString;
+    
+    [cache UpdateAsset:cloneAsset];
+    [cache AddDownloadedAsset:cloneAsset];
+    [self openMyLibrary];
+}
+
+- (void) renameAssetAtIndex:(int) indexVal
+{
+    AssetItem *a = assetArray[indexVal];
+    
+    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Object" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    [[renameScene textFieldAtIndex:0] setPlaceholder:a.name];
+    [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
+    [renameScene setTag:RENAME_ALERT];
+    [renameScene setAccessibilityIdentifier:[NSString stringWithFormat:@"%d", indexVal]];
+    [renameScene show];
+    [[renameScene textFieldAtIndex:0] becomeFirstResponder];
+
+}
+
+-(NSString*) getMD5ForNonReadableFile:(NSString*) path
+{
+    NSData* data = [NSData dataWithContentsOfFile:path];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5([data bytes], (int)[data length], result);
+    NSMutableString *hashString = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; ++i) {
+        [hashString appendFormat:@"%02x", result[i]];
+    }
+    return [NSString stringWithString:hashString];
+}
+
+#pragma mark - AlertView delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case RENAME_ALERT: {
+            NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
+            
+            if (buttonIndex == CANCEL) {
+            }
+            else if (buttonIndex == OK) {
+                NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                if ([name length] == 0) {
+                    [self.view endEditing:YES];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [errorAlert show];
+                }
+                else
+                {
+                    if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [errorAlert show];
+                    }
+                    else
+                    {
+                        int indexVal = [[alertView accessibilityIdentifier] intValue];
+                        AssetItem *a = assetArray[indexVal];
+                        a.name = name;
+                        a.keywords = [NSString stringWithFormat:@" %@", name];
+                        [cache UpdateAsset:a];
+                        [self openMyLibrary];
+                    }
+                }
+            }
+            [alertView resignFirstResponder];
+            
+            break;
+        }
+            
+            
+        default:
+            break;
+    }
+}
+
 #pragma mark - ActionSheet Delegate Functions
 
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -386,6 +574,7 @@
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     
+
     NSString *fileName, *url;
     NSNumber* returnId = [NSNumber numberWithInt:assetvalue.assetId];
     

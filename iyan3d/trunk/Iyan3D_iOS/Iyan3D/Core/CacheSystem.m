@@ -633,6 +633,19 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
      }
 }
 
+- (void) deleteMyAsset:(int)assetId
+{
+    @synchronized (dbLock) {
+        sqlite3_stmt    *statement;
+        NSString *querySQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ = %d", TABLE_DOWNLOADED_ASSET_INFO, DOWNLOADED_ASSET_ID, assetId];
+        sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
+        if (sqlite3_step(statement) != SQLITE_DONE){
+            NSLog(@"Failed Deleting Scene %s", sqlite3_errmsg(_cacheSystem));
+        }
+        sqlite3_finalize(statement);
+    }
+}
+
 - (NSMutableArray*) GetAssetList:(int)type Search:(NSString*)keyword {
     @synchronized (dbLock) {
         NSMutableArray *array = [[NSMutableArray alloc] init];

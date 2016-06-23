@@ -48,6 +48,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftTop;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *restorePurchaseProgress;
 @property (weak, nonatomic) IBOutlet UISwitch *speedSwitch;
+@property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)qualityOrSpeed:(id)sender;

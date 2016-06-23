@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
             <connections>
                 <outlet property="addSceneBtn" destination="zEZ-Bi-FMZ" id="APQ-kd-bK9"/>
+                <outlet property="helpBtn" destination="v8h-mb-fY6" id="5vG-6f-6gm"/>
                 <outlet property="infoBtn" destination="FVH-Bb-pVz" id="sdN-U3-eCa"/>
                 <outlet property="loginBtn" destination="RFC-ob-Zd6" id="A52-f0-eYN"/>
                 <outlet property="scenesCollectionView" destination="pam-NN-pGu" id="Y2U-Db-C0v"/>
@@ -44,27 +45,27 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVH-Bb-pVz">
-                            <rect key="frame" x="539" y="19" width="26" height="23"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us." identifier="0"/>
-                            <state key="normal" image="info-icon.png"/>
-                            <connections>
-                                <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="rkf-S4-U2u"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="v8h-mb-fY6">
-                            <rect key="frame" x="505" y="19" width="26" height="23"/>
+                            <rect key="frame" x="483" y="13" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="Help_iphone@2X.png"/>
+                            <state key="normal" image="Help_iphone.png"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RFC-ob-Zd6">
-                            <rect key="frame" x="467" y="15" width="30" height="31"/>
+                            <rect key="frame" x="449" y="13" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Manage your account." identifier="1"/>
-                            <state key="normal" image="Login-icon.png"/>
+                            <state key="normal" image="Login-IPhone.png"/>
                             <connections>
                                 <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="KaR-Yx-tct"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVH-Bb-pVz">
+                            <rect key="frame" x="517" y="13" width="22" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us." identifier="0"/>
+                            <state key="normal" image="info-icon_phone.png"/>
+                            <connections>
+                                <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="rkf-S4-U2u"/>
                             </connections>
                         </button>
                     </subviews>
@@ -97,10 +98,10 @@
         </view>
     </objects>
     <resources>
-        <image name="Help_iphone@2X.png" width="37" height="36"/>
-        <image name="Login-icon.png" width="22" height="22"/>
+        <image name="Help_iphone.png" width="22" height="22"/>
+        <image name="Login-IPhone.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>
-        <image name="info-icon.png" width="22" height="22"/>
+        <image name="info-icon_phone.png" width="22" height="22"/>
     </resources>
 </document>

@@ -19,6 +19,7 @@
                 <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
                 <outlet property="firstFrameBtn" destination="tmF-dh-ZfO" id="iV5-ye-qB3"/>
                 <outlet property="framesCollectionView" destination="Sij-qL-4rT" id="AQQ-Tb-blg"/>
+                <outlet property="helpBtn" destination="TzV-hj-pyv" id="Qvs-Ad-GvS"/>
                 <outlet property="importBtn" destination="Aga-VX-vgX" id="D9r-nS-Bci"/>
                 <outlet property="infoBtn" destination="jnS-gW-EaC" id="k6p-US-bPT"/>
                 <outlet property="lastFrameBtn" destination="037-BU-8q5" id="RkI-Wm-3aD"/>
@@ -426,7 +427,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
-                            <rect key="frame" x="608" y="19" width="30" height="26"/>
+                            <rect key="frame" x="593" y="21" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Standard view angles." identifier="0"/>
                             <state key="normal" image="View_IPhone.png"/>
@@ -435,7 +436,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Diu-e1-yeL">
-                            <rect key="frame" x="638" y="19" width="30" height="26"/>
+                            <rect key="frame" x="628" y="21" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Login-IPhone.png"/>
                             <connections>
@@ -443,7 +444,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="TzV-hj-pyv">
-                            <rect key="frame" x="669" y="19" width="30" height="26"/>
+                            <rect key="frame" x="664" y="21" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Help_iphone.png"/>
                             <connections>
@@ -451,7 +452,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="037-BU-8q5">
-                            <rect key="frame" x="557" y="19" width="23" height="26"/>
+                            <rect key="frame" x="532" y="19" width="23" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="0.94999999999999996" height="1"/>
                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
@@ -468,7 +469,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="w5e-Hu-oAW">
-                            <rect key="frame" x="580" y="19" width="22" height="26"/>
+                            <rect key="frame" x="555" y="19" width="22" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                             <state key="normal" image="Add-Frames_IPhone.png"/>
@@ -477,7 +478,7 @@
                             </connections>
                         </button>
                         <collectionView clipsSubviews="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="Sij-qL-4rT">
-                            <rect key="frame" x="99" y="19" width="460" height="26"/>
+                            <rect key="frame" x="99" y="19" width="437" height="26"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.4156863093" alpha="1" colorSpace="deviceRGB"/>
                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="uvS-2u-9PT">
@@ -512,9 +513,9 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jnS-gW-EaC">
-                            <rect key="frame" x="698" y="19" width="30" height="26"/>
+                            <rect key="frame" x="698" y="21" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="Info_IPhone.png"/>
+                            <state key="normal" image="info-icon_phone.png"/>
                             <connections>
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="JNr-I9-ifr"/>
                             </connections>
@@ -535,10 +536,9 @@
         <image name="Animation_IPhone.png" width="25" height="18"/>
         <image name="Back_IPhone.png" width="11" height="19"/>
         <image name="EXPORT.png" width="25" height="18"/>
-        <image name="Help_iphone.png" width="20" height="19"/>
+        <image name="Help_iphone.png" width="22" height="22"/>
         <image name="Import_IPhone.png" width="25" height="18"/>
-        <image name="Info_IPhone.png" width="20" height="19"/>
-        <image name="Login-IPhone.png" width="20" height="19"/>
+        <image name="Login-IPhone.png" width="22" height="22"/>
         <image name="MY-OBJECTS_IPhone.png" width="25" height="18"/>
         <image name="Move_IPhone.png" width="25" height="18"/>
         <image name="Next-frame_IPhone.png" width="23" height="26"/>
@@ -550,6 +550,7 @@
         <image name="Scale_IPhone.png" width="25" height="18"/>
         <image name="Undo_IPhone.png" width="17" height="20"/>
         <image name="View_IPhone.png" width="19" height="19"/>
+        <image name="info-icon_phone.png" width="22" height="22"/>
         <image name="move-first.png" width="40" height="40"/>
         <image name="move-last.png" width="40" height="40"/>
     </resources>
