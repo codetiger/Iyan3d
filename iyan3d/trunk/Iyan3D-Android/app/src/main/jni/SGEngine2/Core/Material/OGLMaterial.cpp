@@ -109,10 +109,11 @@ bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< s
         string attribNameStr = string(attribName);
         AddAttributes(attribNameStr,Helper::getSGEngineDataType(type),CreateAttribute(shaderProgram,attribNameStr),0);
     }
-    Logger::log(INFO,"OGLMaterial",vShaderName + "  " + fShaderName + "  Shaders Loaded Succesfully");
 
-        if(vShaderHandle == -1 || fShaderHandle == -1 || shaderProgram == -1)
+    if(vShaderHandle == -1 || fShaderHandle == -1 || shaderProgram == -1)
             return false;
+    
+    Logger::log(INFO,"OGLMaterial",vShaderName + "  " + fShaderName + "  Shaders Loaded Succesfully");
 
     return true;
 }

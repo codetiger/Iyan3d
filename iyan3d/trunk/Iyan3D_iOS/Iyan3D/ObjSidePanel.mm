@@ -45,7 +45,14 @@
     self.screenName = @"OBJSelection iOS";
      [self.importFilesCollectionView registerNib:[UINib nibWithNibName:@"ObjCellView" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     filesList = [[NSArray alloc] init];
-    [self resetCollectionView:0];
+    
+    NSArray *extensions = [NSArray arrayWithObjects:@"obj", nil];
+    
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
+    
     self.importBtn.layer.cornerRadius=8.0;
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
@@ -245,7 +252,6 @@
         [self.addBtn setTitle:(viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE" forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
         self.addBtn.tag = Texture;
-        [self.importFilesCollectionView reloadData];
         [_colorWheelBtn setHidden:NO];
     }
    else if(self.addBtn.tag == Texture){

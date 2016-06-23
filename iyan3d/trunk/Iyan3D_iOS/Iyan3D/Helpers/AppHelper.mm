@@ -174,9 +174,18 @@
     [[session dataTaskWithURL:[NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetailv5.json"]
             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 if(!error && data != nil) {
-                    NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[data bytes]];
+                    
+                    NSData* jsonData = [NSData dataWithData:data];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
+                    
+                    
+                    NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
+                    if (jsonData == nil || [jsonStr length] < 5) {
+                        return;
+                    }
+
                     jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
                     NSError *jsonParserError;
+                    
                     jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&jsonParserError];
                     
                     [self setAssetsDetails:ASSET_SELECTION];
@@ -211,8 +220,14 @@
     jsonArray = [[NSArray alloc] init];
 
     if (rawData != nil) {
+        NSData* jsonData = [NSData dataWithData:rawData];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
+        
         NSError* error;
-        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[rawData bytes]];
+        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
+        if (jsonData == nil || [jsonStr length] < 5) {
+            return;
+        }
+
         jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
         jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
         [self setAssetsDetails:ASSET_SELECTION];
@@ -223,8 +238,14 @@
     jsonAnimationArray = [[NSArray alloc] init];
 
     if (rawData != nil) {
+        NSData* jsonData = [NSData dataWithData:rawData];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
+        
         NSError* error;
-        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[rawData bytes]];
+        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
+        if (jsonData == nil || [jsonStr length] < 5) {
+            return;
+        }
+
         jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
         if (jsonStr != nil)
             jsonAnimationArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];

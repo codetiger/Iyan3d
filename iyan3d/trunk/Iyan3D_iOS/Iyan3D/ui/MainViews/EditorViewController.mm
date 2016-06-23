@@ -330,7 +330,7 @@ BOOL missingAlertShown;
         int upperLimit = 512;
         while ((upperLimit - lowerLimit) != 1) {
             int mid = (lowerLimit + upperLimit) / 2;
-            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_COMMON_L1", "shader.vsh", "commonL1.fsh", ShaderManager::getShaderStringsToReplace(mid)))
+            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_COMMON_L1", "shader.vsh", "commonL1.fsh", ShaderManager::getShaderStringsToReplace(mid), true))
                 lowerLimit = mid;
             else
                 upperLimit = mid;
