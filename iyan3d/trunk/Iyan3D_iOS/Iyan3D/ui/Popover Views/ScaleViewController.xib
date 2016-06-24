@@ -74,7 +74,7 @@
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="d87-jv-V9r">
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="d87-jv-V9r">
                     <rect key="frame" x="213" y="115" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                     <connections>

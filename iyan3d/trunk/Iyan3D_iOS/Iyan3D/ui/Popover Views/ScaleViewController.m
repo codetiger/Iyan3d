@@ -121,6 +121,10 @@ float previousX = 0 , previousY = 0, previousZ = 0;
     previousX = XValue;
     previousY = YValue;
     previousZ = ZValue;
+    
+    float minimumValue = MIN(XValue, MIN(YValue, ZValue));
+    self.xSlider.minimumValue = self.ySlider.minimumValue = self.zSlider.minimumValue = (minimumValue) / 2.0;
+
     float maximumValue = MAX(XValue, MAX(YValue, ZValue));
     self.xSlider.maximumValue = self.ySlider.maximumValue = self.zSlider.maximumValue = (self.xSlider.minimumValue + maximumValue) * 2.0;
     [self setScaleValueLabelsWithXScale:XValue YScale:YValue ZScale:ZValue];

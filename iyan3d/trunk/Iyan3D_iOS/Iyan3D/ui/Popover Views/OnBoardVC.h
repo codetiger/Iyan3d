@@ -9,5 +9,17 @@
 #import <UIKit/UIKit.h>
 
 @interface OnBoardVC : UIViewController
+{
+    NSArray* imagesArray;
+}
+
+@property (weak, nonatomic) IBOutlet UIView *beginView;
+@property (weak, nonatomic) IBOutlet UIButton *startBtn;
+@property (weak, nonatomic) IBOutlet UIButton *skipBtn;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+- (IBAction)startBtnAction:(id)sender;
+- (IBAction)skipBtnAction:(id)sender;
+- (IBAction)closeBtnAction:(id)sender;
 
 @end
