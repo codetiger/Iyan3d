@@ -605,6 +605,74 @@
 		25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
 		250991681CB672410054CA73 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 250991671CB672410054CA73 /* DropboxSDK.framework */; };
 		250991691CB672410054CA73 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 250991671CB672410054CA73 /* DropboxSDK.framework */; };
+		250FEC1B1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */; };
+		250FEC1C1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */; };
+		250FEC1D1D1E52D2000C8A2C /* round-close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC151D1E52D2000C8A2C /* round-close@2x.png */; };
+		250FEC1E1D1E52D2000C8A2C /* round-close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC151D1E52D2000C8A2C /* round-close@2x.png */; };
+		250FEC1F1D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC161D1E52D2000C8A2C /* Step-1_-img@2x.png */; };
+		250FEC201D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC161D1E52D2000C8A2C /* Step-1_-img@2x.png */; };
+		250FEC211D1E52D2000C8A2C /* Step-2_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC171D1E52D2000C8A2C /* Step-2_-img@2x.png */; };
+		250FEC221D1E52D2000C8A2C /* Step-2_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC171D1E52D2000C8A2C /* Step-2_-img@2x.png */; };
+		250FEC231D1E52D2000C8A2C /* Step-3_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC181D1E52D2000C8A2C /* Step-3_-img@2x.png */; };
+		250FEC241D1E52D2000C8A2C /* Step-3_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC181D1E52D2000C8A2C /* Step-3_-img@2x.png */; };
+		250FEC251D1E52D2000C8A2C /* Step-4_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC191D1E52D2000C8A2C /* Step-4_-img@2x.png */; };
+		250FEC261D1E52D2000C8A2C /* Step-4_-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC191D1E52D2000C8A2C /* Step-4_-img@2x.png */; };
+		250FEC271D1E52D2000C8A2C /* Welcome-Img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC1A1D1E52D2000C8A2C /* Welcome-Img@2x.png */; };
+		250FEC281D1E52D2000C8A2C /* Welcome-Img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC1A1D1E52D2000C8A2C /* Welcome-Img@2x.png */; };
+		250FEC3E1D1E5506000C8A2C /* Divider-1_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC291D1E5506000C8A2C /* Divider-1_phone.png */; };
+		250FEC3F1D1E5506000C8A2C /* Divider-1_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC291D1E5506000C8A2C /* Divider-1_phone.png */; };
+		250FEC401D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2A1D1E5506000C8A2C /* Divider-1_phone@2x.png */; };
+		250FEC411D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2A1D1E5506000C8A2C /* Divider-1_phone@2x.png */; };
+		250FEC441D1E5506000C8A2C /* round-close_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2C1D1E5506000C8A2C /* round-close_phone.png */; };
+		250FEC451D1E5506000C8A2C /* round-close_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2C1D1E5506000C8A2C /* round-close_phone.png */; };
+		250FEC461D1E5506000C8A2C /* round-close_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2D1D1E5506000C8A2C /* round-close_phone@2x.png */; };
+		250FEC471D1E5506000C8A2C /* round-close_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2D1D1E5506000C8A2C /* round-close_phone@2x.png */; };
+		250FEC4A1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2F1D1E5506000C8A2C /* Step-1_-img_phone.png */; };
+		250FEC4B1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC2F1D1E5506000C8A2C /* Step-1_-img_phone.png */; };
+		250FEC4C1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC301D1E5506000C8A2C /* Step-1_-img_phone@2x.png */; };
+		250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC301D1E5506000C8A2C /* Step-1_-img_phone@2x.png */; };
+		250FEC501D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC321D1E5506000C8A2C /* Step-2_-img_phone.png */; };
+		250FEC511D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC321D1E5506000C8A2C /* Step-2_-img_phone.png */; };
+		250FEC521D1E5506000C8A2C /* Step-2_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC331D1E5506000C8A2C /* Step-2_-img_phone@2x.png */; };
+		250FEC531D1E5506000C8A2C /* Step-2_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC331D1E5506000C8A2C /* Step-2_-img_phone@2x.png */; };
+		250FEC561D1E5506000C8A2C /* Step-3_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC351D1E5506000C8A2C /* Step-3_-img_phone.png */; };
+		250FEC571D1E5506000C8A2C /* Step-3_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC351D1E5506000C8A2C /* Step-3_-img_phone.png */; };
+		250FEC581D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC361D1E5506000C8A2C /* Step-3_-img_phone@2x.png */; };
+		250FEC591D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC361D1E5506000C8A2C /* Step-3_-img_phone@2x.png */; };
+		250FEC5C1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC381D1E5506000C8A2C /* Step-4_-img_phone.png */; };
+		250FEC5D1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC381D1E5506000C8A2C /* Step-4_-img_phone.png */; };
+		250FEC5E1D1E5506000C8A2C /* Step-4_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC391D1E5506000C8A2C /* Step-4_-img_phone@2x.png */; };
+		250FEC5F1D1E5506000C8A2C /* Step-4_-img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC391D1E5506000C8A2C /* Step-4_-img_phone@2x.png */; };
+		250FEC621D1E5506000C8A2C /* Welcome-Img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC3B1D1E5506000C8A2C /* Welcome-Img_phone.png */; };
+		250FEC631D1E5506000C8A2C /* Welcome-Img_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC3B1D1E5506000C8A2C /* Welcome-Img_phone.png */; };
+		250FEC641D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC3C1D1E5506000C8A2C /* Welcome-Img_phone@2x.png */; };
+		250FEC651D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC3C1D1E5506000C8A2C /* Welcome-Img_phone@2x.png */; };
+		250FEC691D1E5A43000C8A2C /* OnBoardVCPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC681D1E5A43000C8A2C /* OnBoardVCPhone.xib */; };
+		250FEC6A1D1E5A43000C8A2C /* OnBoardVCPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC681D1E5A43000C8A2C /* OnBoardVCPhone.xib */; };
+		250FEC6C1D1E61FD000C8A2C /* BeginViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC6B1D1E61FD000C8A2C /* BeginViewPhone.xib */; };
+		250FEC6D1D1E61FD000C8A2C /* BeginViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC6B1D1E61FD000C8A2C /* BeginViewPhone.xib */; };
+		250FEC751D1E8C4D000C8A2C /* StepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC741D1E8C4D000C8A2C /* StepView.xib */; };
+		250FEC761D1E8C4D000C8A2C /* StepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC741D1E8C4D000C8A2C /* StepView.xib */; };
+		250FEC791D1E8CAB000C8A2C /* StepView.m in Sources */ = {isa = PBXBuildFile; fileRef = 250FEC781D1E8CAB000C8A2C /* StepView.m */; };
+		250FEC7A1D1E8CAB000C8A2C /* StepView.m in Sources */ = {isa = PBXBuildFile; fileRef = 250FEC781D1E8CAB000C8A2C /* StepView.m */; };
+		250FEC821D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7B1D1EA8B2000C8A2C /* Divider-1_phone@3x.png */; };
+		250FEC831D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7B1D1EA8B2000C8A2C /* Divider-1_phone@3x.png */; };
+		250FEC841D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7C1D1EA8B2000C8A2C /* round-close_phone@3x.png */; };
+		250FEC851D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7C1D1EA8B2000C8A2C /* round-close_phone@3x.png */; };
+		250FEC861D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7D1D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png */; };
+		250FEC871D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7D1D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png */; };
+		250FEC881D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7E1D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png */; };
+		250FEC891D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7E1D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png */; };
+		250FEC8A1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7F1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png */; };
+		250FEC8B1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC7F1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png */; };
+		250FEC8C1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */; };
+		250FEC8D1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */; };
+		250FEC8E1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */; };
+		250FEC8F1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */; };
+		250FEC911D1EA982000C8A2C /* OnBoardVCPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC901D1EA982000C8A2C /* OnBoardVCPhone@2x.xib */; };
+		250FEC921D1EA982000C8A2C /* OnBoardVCPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC901D1EA982000C8A2C /* OnBoardVCPhone@2x.xib */; };
+		250FEC941D1EABC4000C8A2C /* BeginViewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC931D1EABC4000C8A2C /* BeginViewPhone@2x.xib */; };
+		250FEC951D1EABC4000C8A2C /* BeginViewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC931D1EABC4000C8A2C /* BeginViewPhone@2x.xib */; };
 		2512BFD51CB24581006E19A3 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD41CB24581006E19A3 /* SafariServices.framework */; };
 		2512BFD61CB2458C006E19A3 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD41CB24581006E19A3 /* SafariServices.framework */; };
 		2512BFD81CB247AE006E19A3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD71CB247AD006E19A3 /* libz.tbd */; };
@@ -684,6 +752,16 @@
 		2518158D1D1D4AAD009F68A8 /* round-close.png in Resources */ = {isa = PBXBuildFile; fileRef = 2518158B1D1D4AAD009F68A8 /* round-close.png */; };
 		2518158F1D1D4EB2009F68A8 /* Divider-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2518158E1D1D4EB2009F68A8 /* Divider-1.png */; };
 		251815901D1D4EB2009F68A8 /* Divider-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2518158E1D1D4EB2009F68A8 /* Divider-1.png */; };
+		251815951D1D5C51009F68A8 /* Step-2_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815911D1D5C51009F68A8 /* Step-2_-img.png */; };
+		251815961D1D5C51009F68A8 /* Step-2_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815911D1D5C51009F68A8 /* Step-2_-img.png */; };
+		251815971D1D5C51009F68A8 /* Step-3_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815921D1D5C51009F68A8 /* Step-3_-img.png */; };
+		251815981D1D5C51009F68A8 /* Step-3_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815921D1D5C51009F68A8 /* Step-3_-img.png */; };
+		251815991D1D5C51009F68A8 /* Step-4_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815931D1D5C51009F68A8 /* Step-4_-img.png */; };
+		2518159A1D1D5C51009F68A8 /* Step-4_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815931D1D5C51009F68A8 /* Step-4_-img.png */; };
+		2518159B1D1D5C51009F68A8 /* Welcome-Img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815941D1D5C51009F68A8 /* Welcome-Img.png */; };
+		2518159C1D1D5C51009F68A8 /* Welcome-Img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815941D1D5C51009F68A8 /* Welcome-Img.png */; };
+		2518159E1D1D76C0009F68A8 /* BeginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2518159D1D1D76C0009F68A8 /* BeginView.xib */; };
+		2518159F1D1D76C0009F68A8 /* BeginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2518159D1D1D76C0009F68A8 /* BeginView.xib */; };
 		251B2B931D1AD3C40059BD36 /* OnBoardVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 251B2B911D1AD3C40059BD36 /* OnBoardVC.m */; };
 		251B2B941D1AD3C40059BD36 /* OnBoardVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 251B2B911D1AD3C40059BD36 /* OnBoardVC.m */; };
 		251B2B951D1AD3C40059BD36 /* OnBoardVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 251B2B921D1AD3C40059BD36 /* OnBoardVC.xib */; };
@@ -2980,6 +3058,41 @@
 		01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoggedInViewControllerPhone.xib; sourceTree = "<group>"; };
 		25095F381C5B631900CF7C68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		250991671CB672410054CA73 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = FrameWorks/DropboxSDK.framework; sourceTree = "<group>"; };
+		250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Divider-1@2x.png"; sourceTree = "<group>"; };
+		250FEC151D1E52D2000C8A2C /* round-close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round-close@2x.png"; sourceTree = "<group>"; };
+		250FEC161D1E52D2000C8A2C /* Step-1_-img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-1_-img@2x.png"; sourceTree = "<group>"; };
+		250FEC171D1E52D2000C8A2C /* Step-2_-img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-2_-img@2x.png"; sourceTree = "<group>"; };
+		250FEC181D1E52D2000C8A2C /* Step-3_-img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img@2x.png"; sourceTree = "<group>"; };
+		250FEC191D1E52D2000C8A2C /* Step-4_-img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img@2x.png"; sourceTree = "<group>"; };
+		250FEC1A1D1E52D2000C8A2C /* Welcome-Img@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img@2x.png"; sourceTree = "<group>"; };
+		250FEC291D1E5506000C8A2C /* Divider-1_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Divider-1_phone.png"; sourceTree = "<group>"; };
+		250FEC2A1D1E5506000C8A2C /* Divider-1_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Divider-1_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC2C1D1E5506000C8A2C /* round-close_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round-close_phone.png"; sourceTree = "<group>"; };
+		250FEC2D1D1E5506000C8A2C /* round-close_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round-close_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC2F1D1E5506000C8A2C /* Step-1_-img_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-1_-img_phone.png"; sourceTree = "<group>"; };
+		250FEC301D1E5506000C8A2C /* Step-1_-img_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-1_-img_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC321D1E5506000C8A2C /* Step-2_-img_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-2_-img_phone.png"; sourceTree = "<group>"; };
+		250FEC331D1E5506000C8A2C /* Step-2_-img_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-2_-img_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC351D1E5506000C8A2C /* Step-3_-img_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img_phone.png"; sourceTree = "<group>"; };
+		250FEC361D1E5506000C8A2C /* Step-3_-img_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC381D1E5506000C8A2C /* Step-4_-img_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img_phone.png"; sourceTree = "<group>"; };
+		250FEC391D1E5506000C8A2C /* Step-4_-img_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC3B1D1E5506000C8A2C /* Welcome-Img_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img_phone.png"; sourceTree = "<group>"; };
+		250FEC3C1D1E5506000C8A2C /* Welcome-Img_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img_phone@2x.png"; sourceTree = "<group>"; };
+		250FEC681D1E5A43000C8A2C /* OnBoardVCPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OnBoardVCPhone.xib; path = "ui/Popover Views/OnBoardVCPhone.xib"; sourceTree = "<group>"; };
+		250FEC6B1D1E61FD000C8A2C /* BeginViewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BeginViewPhone.xib; path = "ui/Popover Views/BeginViewPhone.xib"; sourceTree = "<group>"; };
+		250FEC741D1E8C4D000C8A2C /* StepView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StepView.xib; path = "ui/Popover Views/StepView.xib"; sourceTree = "<group>"; };
+		250FEC771D1E8CAB000C8A2C /* StepView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StepView.h; path = "ui/Popover Views/StepView.h"; sourceTree = "<group>"; };
+		250FEC781D1E8CAB000C8A2C /* StepView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StepView.m; path = "ui/Popover Views/StepView.m"; sourceTree = "<group>"; };
+		250FEC7B1D1EA8B2000C8A2C /* Divider-1_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Divider-1_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC7C1D1EA8B2000C8A2C /* round-close_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round-close_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC7D1D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-1_-img_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC7E1D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-2_-img_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC7F1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img_phone@3x.png"; sourceTree = "<group>"; };
+		250FEC901D1EA982000C8A2C /* OnBoardVCPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "OnBoardVCPhone@2x.xib"; path = "ui/Popover Views/OnBoardVCPhone@2x.xib"; sourceTree = "<group>"; };
+		250FEC931D1EABC4000C8A2C /* BeginViewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "BeginViewPhone@2x.xib"; path = "ui/Popover Views/BeginViewPhone@2x.xib"; sourceTree = "<group>"; };
 		2512BFD41CB24581006E19A3 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		2512BFD71CB247AD006E19A3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = GoogleAnalytics.a; path = FrameWorks/GoogleAnalytics.a; sourceTree = "<group>"; };
@@ -3129,6 +3242,11 @@
 		251815821D1D4924009F68A8 /* Step-1_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-1_-img.png"; sourceTree = "<group>"; };
 		2518158B1D1D4AAD009F68A8 /* round-close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round-close.png"; sourceTree = "<group>"; };
 		2518158E1D1D4EB2009F68A8 /* Divider-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Divider-1.png"; sourceTree = "<group>"; };
+		251815911D1D5C51009F68A8 /* Step-2_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-2_-img.png"; sourceTree = "<group>"; };
+		251815921D1D5C51009F68A8 /* Step-3_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img.png"; sourceTree = "<group>"; };
+		251815931D1D5C51009F68A8 /* Step-4_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img.png"; sourceTree = "<group>"; };
+		251815941D1D5C51009F68A8 /* Welcome-Img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img.png"; sourceTree = "<group>"; };
+		2518159D1D1D76C0009F68A8 /* BeginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BeginView.xib; path = "ui/Popover Views/BeginView.xib"; sourceTree = "<group>"; };
 		251B2B901D1AD3C40059BD36 /* OnBoardVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnBoardVC.h; path = "ui/Popover Views/OnBoardVC.h"; sourceTree = "<group>"; };
 		251B2B911D1AD3C40059BD36 /* OnBoardVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnBoardVC.m; path = "ui/Popover Views/OnBoardVC.m"; sourceTree = "<group>"; };
 		251B2B921D1AD3C40059BD36 /* OnBoardVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OnBoardVC.xib; path = "ui/Popover Views/OnBoardVC.xib"; sourceTree = "<group>"; };
@@ -5290,6 +5408,38 @@
 		2518156F1D1D1C69009F68A8 /* OnBoard */ = {
 			isa = PBXGroup;
 			children = (
+				250FEC7B1D1EA8B2000C8A2C /* Divider-1_phone@3x.png */,
+				250FEC7C1D1EA8B2000C8A2C /* round-close_phone@3x.png */,
+				250FEC7D1D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png */,
+				250FEC7E1D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png */,
+				250FEC7F1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png */,
+				250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */,
+				250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */,
+				250FEC291D1E5506000C8A2C /* Divider-1_phone.png */,
+				250FEC2A1D1E5506000C8A2C /* Divider-1_phone@2x.png */,
+				250FEC2C1D1E5506000C8A2C /* round-close_phone.png */,
+				250FEC2D1D1E5506000C8A2C /* round-close_phone@2x.png */,
+				250FEC2F1D1E5506000C8A2C /* Step-1_-img_phone.png */,
+				250FEC301D1E5506000C8A2C /* Step-1_-img_phone@2x.png */,
+				250FEC321D1E5506000C8A2C /* Step-2_-img_phone.png */,
+				250FEC331D1E5506000C8A2C /* Step-2_-img_phone@2x.png */,
+				250FEC351D1E5506000C8A2C /* Step-3_-img_phone.png */,
+				250FEC361D1E5506000C8A2C /* Step-3_-img_phone@2x.png */,
+				250FEC381D1E5506000C8A2C /* Step-4_-img_phone.png */,
+				250FEC391D1E5506000C8A2C /* Step-4_-img_phone@2x.png */,
+				250FEC3B1D1E5506000C8A2C /* Welcome-Img_phone.png */,
+				250FEC3C1D1E5506000C8A2C /* Welcome-Img_phone@2x.png */,
+				250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */,
+				250FEC151D1E52D2000C8A2C /* round-close@2x.png */,
+				250FEC161D1E52D2000C8A2C /* Step-1_-img@2x.png */,
+				250FEC171D1E52D2000C8A2C /* Step-2_-img@2x.png */,
+				250FEC181D1E52D2000C8A2C /* Step-3_-img@2x.png */,
+				250FEC191D1E52D2000C8A2C /* Step-4_-img@2x.png */,
+				250FEC1A1D1E52D2000C8A2C /* Welcome-Img@2x.png */,
+				251815911D1D5C51009F68A8 /* Step-2_-img.png */,
+				251815921D1D5C51009F68A8 /* Step-3_-img.png */,
+				251815931D1D5C51009F68A8 /* Step-4_-img.png */,
+				251815941D1D5C51009F68A8 /* Welcome-Img.png */,
 				2518158E1D1D4EB2009F68A8 /* Divider-1.png */,
 				2518158B1D1D4AAD009F68A8 /* round-close.png */,
 				251815821D1D4924009F68A8 /* Step-1_-img.png */,
@@ -5301,9 +5451,17 @@
 		251B2B8F1D1AD3810059BD36 /* OnBoarding */ = {
 			isa = PBXGroup;
 			children = (
+				250FEC931D1EABC4000C8A2C /* BeginViewPhone@2x.xib */,
+				250FEC901D1EA982000C8A2C /* OnBoardVCPhone@2x.xib */,
+				250FEC6B1D1E61FD000C8A2C /* BeginViewPhone.xib */,
+				250FEC681D1E5A43000C8A2C /* OnBoardVCPhone.xib */,
 				251B2B901D1AD3C40059BD36 /* OnBoardVC.h */,
 				251B2B911D1AD3C40059BD36 /* OnBoardVC.m */,
 				251B2B921D1AD3C40059BD36 /* OnBoardVC.xib */,
+				2518159D1D1D76C0009F68A8 /* BeginView.xib */,
+				250FEC741D1E8C4D000C8A2C /* StepView.xib */,
+				250FEC771D1E8CAB000C8A2C /* StepView.h */,
+				250FEC781D1E8CAB000C8A2C /* StepView.m */,
 			);
 			name = OnBoarding;
 			sourceTree = "<group>";
@@ -7734,19 +7892,24 @@
 				01ACD0E21C3D3AE20096AD14 /* Frame-Count-Display_Frames@2x.png in Resources */,
 				624641CE19939BB700CE8547 /* Animation-topviewBg.png in Resources */,
 				7F31A73F1AA4960300A6E7B1 /* Menu-phone@3x.png in Resources */,
+				250FEC1B1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */,
 				25DE10DD1CAA8D6D0076F669 /* premake4.lua in Resources */,
+				250FEC641D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */,
 				01F872F21C3A6C4E009AA31E /* Login-IPhone@2x.png in Resources */,
 				25EC6C561C7F39DD002CF5D2 /* wm44.png in Resources */,
+				251815971D1D5C51009F68A8 /* Step-3_-img.png in Resources */,
 				01E9E7541C5F6204002FCA03 /* property-icon_iphone.png in Resources */,
 				25EC6C421C7F39DD002CF5D2 /* wm34.png in Resources */,
 				25EA8EE11BD90506005DBA15 /* light_Phone@2x.png in Resources */,
 				01F872FA1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A51C3CEF360096AD14 /* color_IPhone.png in Resources */,
+				250FEC911D1EA982000C8A2C /* OnBoardVCPhone@2x.xib in Resources */,
 				3DD47BFA1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				3DE065381C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				7FC900DA1A0A01470051B941 /* move-first-phone.png in Resources */,
 				7FC901581A0A54850051B941 /* Animation-topviewBg@2x.png in Resources */,
 				7F00878F1ADFC15400764DDE /* left-align@3x.png in Resources */,
+				250FEC581D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */,
 				25EC6C4C1C7F39DD002CF5D2 /* wm39.png in Resources */,
 				01F8732C1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */,
 				7F31A73B1AA4960300A6E7B1 /* home-phone@3x.png in Resources */,
@@ -7825,6 +7988,7 @@
 				7FC9015D1A0A54850051B941 /* first-pad.png in Resources */,
 				25EC6C301C7F39DD002CF5D2 /* wm25.png in Resources */,
 				25F748D31D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */,
+				251815951D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
 				01B4D0671C2937000091E19B /* Rotate_Pad.png in Resources */,
 				01B02CB81C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */,
 				624641CF19939BB700CE8547 /* Scene-topviewBg.png in Resources */,
@@ -7846,6 +8010,7 @@
 				7F307CEC1B58FBF10065BBC1 /* like-phone@2x.png in Resources */,
 				01F872D61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */,
 				3DD47BF61C60A43500E7CCFD /* 60004.sgm in Resources */,
+				2518159B1D1D5C51009F68A8 /* Welcome-Img.png in Resources */,
 				7FED9E811A8E0F780089869B /* AutoRigHelp1.png in Resources */,
 				7F31A7451AA4960300A6E7B1 /* new-img-phone@3x.png in Resources */,
 				01B4D06F1C2937000091E19B /* Undo_Pad.png in Resources */,
@@ -7878,7 +8043,9 @@
 				25EC6BAC1C7F066B002CF5D2 /* wm16.png in Resources */,
 				7FC900F81A0A01470051B941 /* texts-phone.png in Resources */,
 				25EC6B9C1C7F066B002CF5D2 /* wm0.png in Resources */,
+				250FEC821D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */,
 				7FC900DF1A0A01470051B941 /* move-last-phone@2x.png in Resources */,
+				250FEC441D1E5506000C8A2C /* round-close_phone.png in Resources */,
 				25EC6C641C7F39DD002CF5D2 /* wm51.png in Resources */,
 				62FB86831988D33A00AC7424 /* undo-img.png in Resources */,
 				01B6F3F61C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */,
@@ -7889,6 +8056,7 @@
 				3DBC85EB1C2BCBE400B512AB /* New@2x.png in Resources */,
 				62FB86701988D33A00AC7424 /* animate-img.png in Resources */,
 				C8E1799E1C2060FB00C78C07 /* Images.xcassets in Resources */,
+				250FEC621D1E5506000C8A2C /* Welcome-Img_phone.png in Resources */,
 				25F80AEB1CFDB6E700CF331B /* fbFollow.png in Resources */,
 				6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */,
 				01F8729B1C3A42EF009AA31E /* View_IPhone.png in Resources */,
@@ -7947,6 +8115,7 @@
 				251424701C9698F90012CA68 /* alg-outline in Resources */,
 				01B6F3F31C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
 				62FB86731988D33A00AC7424 /* home.png in Resources */,
+				250FEC501D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */,
 				3DD47BF21C60A43500E7CCFD /* 60002.sgm in Resources */,
 				7F00878B1ADFC15400764DDE /* down-arrow-pad@3x.png in Resources */,
 				25EC6CA41C7F39DD002CF5D2 /* wm83.png in Resources */,
@@ -7955,6 +8124,7 @@
 				25EC6C961C7F39DD002CF5D2 /* wm76.png in Resources */,
 				7FC900E51A0A01470051B941 /* play-video-phone@2x.png in Resources */,
 				01B02CC21C61CAB400C9102A /* Import-models_IPhone@3x.png in Resources */,
+				250FEC8E1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */,
 				25F80B031CFDB6E700CF331B /* twitterFollowPhone.png in Resources */,
 				2512BFDE1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */,
 				256ED8EB1B1FEDED008ADEF8 /* Idigital Bold.otf in Resources */,
@@ -7986,6 +8156,7 @@
 				25EC6C781C7F39DD002CF5D2 /* wm61.png in Resources */,
 				01ACD0951C3CE93D0096AD14 /* TextSelectionSidePanelPhone.xib in Resources */,
 				251424801C9698F90012CA68 /* README in Resources */,
+				250FEC1F1D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */,
 				01F872851C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
 				3D04EAF31C25830F00C18E1A /* Bevel-pad.png in Resources */,
 				25EC6CD61C7F39DD002CF5D2 /* wm108.png in Resources */,
@@ -8003,6 +8174,7 @@
 				0169C4791C33ED5A00132FF6 /* popoverArrowUpSimple.png in Resources */,
 				2518158C1D1D4AAD009F68A8 /* round-close.png in Resources */,
 				01B395091C37A42C003955C6 /* Import-text_Pad.png in Resources */,
+				250FEC8C1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */,
 				01B4D04B1C2937000091E19B /* Move_Pad.png in Resources */,
 				01F8733E1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */,
 				01B02CB61C61CAB400C9102A /* EXPORT@3x.png in Resources */,
@@ -8011,6 +8183,7 @@
 				01B02CC41C61CAB400C9102A /* Import-text_IPhone@3x.png in Resources */,
 				7F0087961ADFC15400764DDE /* up-arrow@3x.png in Resources */,
 				0169C46D1C33ED5A00132FF6 /* popoverArrowRight.png in Resources */,
+				250FEC231D1E52D2000C8A2C /* Step-3_-img@2x.png in Resources */,
 				7FC900FD1A0A01470051B941 /* view-img-phone@2x.png in Resources */,
 				7FC900D61A0A01470051B941 /* Menu-phone.png in Resources */,
 				01B02CBC1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */,
@@ -8058,6 +8231,7 @@
 				254BA1A51B08377100F248A6 /* Iyan3Dcopy-Info.plist in Resources */,
 				3D2696B01C660343004FC023 /* LightPropertiesPhone.xib in Resources */,
 				25EC6CBC1C7F39DD002CF5D2 /* wm95.png in Resources */,
+				250FEC861D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png in Resources */,
 				7FC900E71A0A01470051B941 /* properties-img-phone@2x.png in Resources */,
 				01ACD1001C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png in Resources */,
 				25BBCB121C203D6A0039DA5C /* Splash.png in Resources */,
@@ -8097,6 +8271,7 @@
 				256ED8E11B1FEDED008ADEF8 /* ATClassicRoman.ttf in Resources */,
 				01B4D0431C2937000091E19B /* Export_Pad.png in Resources */,
 				25EC6C8C1C7F39DD002CF5D2 /* wm71.png in Resources */,
+				250FEC561D1E5506000C8A2C /* Step-3_-img_phone.png in Resources */,
 				7FC900EC1A0A01470051B941 /* render_video-phone.png in Resources */,
 				7F31A73A1AA4960300A6E7B1 /* frames-phone@3x.png in Resources */,
 				E249769B196BE0310025D442 /* LoadingViewControllerPad.xib in Resources */,
@@ -8127,6 +8302,7 @@
 				25F80B0D1CFDB6E700CF331B /* youtube-subPhone@2x.png in Resources */,
 				7F31A74A1AA4960300A6E7B1 /* redo-img-phone@3x.png in Resources */,
 				7FC901231A0A07860051B941 /* frames@2x.png in Resources */,
+				250FEC271D1E52D2000C8A2C /* Welcome-Img@2x.png in Resources */,
 				7FC9016E1A0A54850051B941 /* topbarView-phone.png in Resources */,
 				25EC6BC21C7F066B002CF5D2 /* wm8.png in Resources */,
 				7FC900D11A0A01470051B941 /* feedback-img-phone@2x.png in Resources */,
@@ -8148,7 +8324,9 @@
 				25EC6CCC1C7F39DD002CF5D2 /* wm103.png in Resources */,
 				7F0087861ADFC15400764DDE /* down-arrow-large-pad.png in Resources */,
 				62FB867C1988D33A00AC7424 /* render_image.png in Resources */,
+				250FEC751D1E8C4D000C8A2C /* StepView.xib in Resources */,
 				25EC6CDE1C7F39DD002CF5D2 /* wm112.png in Resources */,
+				250FEC461D1E5506000C8A2C /* round-close_phone@2x.png in Resources */,
 				3D5D0F401C632864006B987E /* Particles@2x.png in Resources */,
 				25F748C51D08085400FB0AFD /* fb_Pad.png in Resources */,
 				25DE10311CAA8D6D0076F669 /* CMakeLists.txt in Resources */,
@@ -8170,7 +8348,9 @@
 				3D5F99201C4D04EB00DD47F5 /* Plane@2x.png in Resources */,
 				7F0087891ADFC15400764DDE /* down-arrow-pad.png in Resources */,
 				629A7D5F19892073006B2A15 /* move-last.png in Resources */,
+				250FEC881D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
 				25D7DA811D0714AA00E84D2F /* Help.png in Resources */,
+				250FEC6C1D1E61FD000C8A2C /* BeginViewPhone.xib in Resources */,
 				7FC901631A0A54850051B941 /* last-pad.png in Resources */,
 				01B4D05B1C2937000091E19B /* My-objects-Text_Pad.png in Resources */,
 				25F748C71D08085400FB0AFD /* fb_Pad@2x.png in Resources */,
@@ -8200,11 +8380,13 @@
 				3D5605ED1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png in Resources */,
 				25E86EC51B44D10300BC48DC /* depthPassText.vsh in Resources */,
 				01B4D03D1C2937000091E19B /* Animation_Pad.png in Resources */,
+				250FEC401D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
 				25EC6C321C7F39DD002CF5D2 /* wm26.png in Resources */,
 				7FC524DE1B6F6F3600C5D26D /* Minimize-Full-screen@2x.png in Resources */,
 				25EFBEAE1BE25CA700DB300C /* RenderCell.xib in Resources */,
 				7F7D5A371B8C91D100E6BA86 /* googlelogout_Pad.png in Resources */,
 				251815831D1D4924009F68A8 /* Step-1_-img.png in Resources */,
+				250FEC4C1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
 				25EC6C881C7F39DD002CF5D2 /* wm69.png in Resources */,
 				7F32A01F1AA1ACF7003FEFF9 /* playing.png in Resources */,
 				7F31A74C1AA4960300A6E7B1 /* render_video-phone@3x.png in Resources */,
@@ -8255,6 +8437,7 @@
 				01F872691C3A42EF009AA31E /* Export-video_IPhone.png in Resources */,
 				25EA75501C60B5B3007E17CA /* particleTexture.png in Resources */,
 				7F307CEE1B58FBF10065BBC1 /* like.png in Resources */,
+				250FEC5E1D1E5506000C8A2C /* Step-4_-img_phone@2x.png in Resources */,
 				62FB86811988D33A00AC7424 /* select-img.png in Resources */,
 				25EC6C8E1C7F39DD002CF5D2 /* wm72.png in Resources */,
 				01B02CEA1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */,
@@ -8276,6 +8459,7 @@
 				E2497666196BE0190025D442 /* ObjCellViewPhone.xib in Resources */,
 				01F873301C3A78B4009AA31E /* Twitter_IPhone.png in Resources */,
 				6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */,
+				250FEC8A1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */,
 				7FC900CA1A0A01470051B941 /* back-img-phone@2x.png in Resources */,
 				E2497654196BE0190025D442 /* AssetCellView.xib in Resources */,
 				01F8727B1C3A42EF009AA31E /* Login-IPhone.png in Resources */,
@@ -8297,6 +8481,7 @@
 				E2497665196BE0190025D442 /* ObjCellView.xib in Resources */,
 				25EC6CDA1C7F39DD002CF5D2 /* wm110.png in Resources */,
 				7F31A7511AA4960300A6E7B1 /* select-img-phone@3x.png in Resources */,
+				250FEC521D1E5506000C8A2C /* Step-2_-img_phone@2x.png in Resources */,
 				0169C4631C33ED5A00132FF6 /* popoverArrowLeft-white@2x.png in Resources */,
 				25F748C91D08085400FB0AFD /* fb_Phone.png in Resources */,
 				01F873381C3A7DE4009AA31E /* Facebook_IPhone@2x.png in Resources */,
@@ -8320,6 +8505,7 @@
 				01B4BCB41C328F6900E09269 /* Login-icon.png in Resources */,
 				62E9FCB4199F773A00307056 /* bgImageforall.png in Resources */,
 				01ACD0FE1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */,
+				250FEC251D1E52D2000C8A2C /* Step-4_-img@2x.png in Resources */,
 				7F0C02C91A930F6E00E2E09D /* videoShare.png in Resources */,
 				01CCD1C51C3F927D00565664 /* ObjSidePanel.xib in Resources */,
 				3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */,
@@ -8347,6 +8533,7 @@
 				25641C9E1B0524250067A4F4 /* watermark.png in Resources */,
 				E24975FA196BDD590025D442 /* color.vert in Resources */,
 				01ACD0EE1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png in Resources */,
+				250FEC4A1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
 				3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				7F0C02CC1A931B0300E2E09D /* cancelButton.png in Resources */,
 				7FC900CC1A0A01470051B941 /* clone-img-phone.png in Resources */,
@@ -8356,6 +8543,8 @@
 				01F8730A1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
 				3D5F99261C4D04EB00DD47F5 /* Torus.png in Resources */,
 				25F748CB1D08085400FB0AFD /* fb_Phone@2x.png in Resources */,
+				250FEC841D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */,
+				251815991D1D5C51009F68A8 /* Step-4_-img.png in Resources */,
 				25C90F4A1B3616B400D803DB /* bevel-phone@2x.png in Resources */,
 				256F6B931BF6246300154622 /* json_internalmap.inl in Resources */,
 				01F872631C3A42EF009AA31E /* Animation_IPhone.png in Resources */,
@@ -8376,8 +8565,10 @@
 				7FC527631B6F96FF00C5D26D /* Mail-phone@3x.png in Resources */,
 				01ACD0EA1C3D3AE20096AD14 /* Render-Preview-position_Right-Top@2x.png in Resources */,
 				256ED8E31B1FEDED008ADEF8 /* Bernstein Regular.ttf in Resources */,
+				250FEC1D1D1E52D2000C8A2C /* round-close@2x.png in Resources */,
 				3DAEFFF31C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */,
 				7F31A7101AA474D200A6E7B1 /* add-frame-phone@3x.png in Resources */,
+				250FEC211D1E52D2000C8A2C /* Step-2_-img@2x.png in Resources */,
 				7FC9016A1A0A54850051B941 /* Stop-video-pad.png in Resources */,
 				7F22BB5D1AC54EAA006B44C6 /* down-arrow.png in Resources */,
 				25EC6CD01C7F39DD002CF5D2 /* wm105.png in Resources */,
@@ -8480,6 +8671,7 @@
 				7F31EDE81A109DBB003B8A66 /* bracket.png in Resources */,
 				01B4D0201C292CD50091E19B /* EditorViewController.xib in Resources */,
 				7F0C02CA1A930F6E00E2E09D /* youtubeUpload.png in Resources */,
+				250FEC3E1D1E5506000C8A2C /* Divider-1_phone.png in Resources */,
 				7FC901601A0A54850051B941 /* first-phone@2x.png in Resources */,
 				3DC60FFE1C6B192D00A8D412 /* hq.png in Resources */,
 				7F31A7121AA474D200A6E7B1 /* delete-img-phone@3x.png in Resources */,
@@ -8548,6 +8740,7 @@
 				E249761D196BDD590025D442 /* vertexColor.vert in Resources */,
 				7FC901321A0A07860051B941 /* rotate-img@2x.png in Resources */,
 				7F31A74E1AA4960300A6E7B1 /* save-img-phone@3x.png in Resources */,
+				2518159E1D1D76C0009F68A8 /* BeginView.xib in Resources */,
 				25D3BFC31D1BCD25006952F9 /* info-icon_phone@2x.png in Resources */,
 				3DC418351C85DEBF00E4EF46 /* render1.png in Resources */,
 				3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */,
@@ -8565,6 +8758,7 @@
 				E2C4DB5A1A9F5FFC00F0AD12 /* light.sgm in Resources */,
 				01F872751C3A42EF009AA31E /* Import-text_IPhone.png in Resources */,
 				7F31A73D1AA4960300A6E7B1 /* iphoneband@3x.png in Resources */,
+				250FEC941D1EABC4000C8A2C /* BeginViewPhone@2x.xib in Resources */,
 				01B02CBE1C61CAB400C9102A /* Import-Light_IPhone@3x.png in Resources */,
 				7F2104E51A7A0F13000E1C26 /* iphoneband.png in Resources */,
 				25D671981C46930900BE685D /* controls7.sgm in Resources */,
@@ -8572,6 +8766,7 @@
 				7F1D56A31A0CF9F70060D4DD /* MenuReverse-phone.png in Resources */,
 				3DBC85E81C2BCBDC00B512AB /* Delete@2x.png in Resources */,
 				3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */,
+				250FEC5C1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */,
 				7FC524D71B6F6F3600C5D26D /* Full-screen-phone@3x.png in Resources */,
 				25EA8EE31BD90506005DBA15 /* light_Phone@3x.png in Resources */,
 				7FC900F21A0A01470051B941 /* scale-img-phone.png in Resources */,
@@ -8614,6 +8809,7 @@
 				25EC6C581C7F39DD002CF5D2 /* wm45.png in Resources */,
 				01B02CCA1C61CAB400C9102A /* Login-IPhone@3x.png in Resources */,
 				01ACD0C01C3D1AAA0096AD14 /* Frame-Count-Display_Frames.png in Resources */,
+				250FEC691D1E5A43000C8A2C /* OnBoardVCPhone.xib in Resources */,
 				E2497655196BE0190025D442 /* AssetCellViewPhone.xib in Resources */,
 				25EC6BB81C7F066B002CF5D2 /* wm3.png in Resources */,
 				01B4D0571C2937000091E19B /* My-objects-Models_Pad.png in Resources */,
@@ -8673,19 +8869,24 @@
 				01ACD0E31C3D3AE20096AD14 /* Frame-Count-Display_Frames@2x.png in Resources */,
 				7FDF55111B73688F006DC41F /* premium-phone@2x.png in Resources */,
 				7FDF55121B73688F006DC41F /* premium-phone@3x.png in Resources */,
+				250FEC1C1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */,
 				01F872F31C3A6C4E009AA31E /* Login-IPhone@2x.png in Resources */,
+				250FEC651D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */,
 				25DE10DE1CAA8D6D0076F669 /* premake4.lua in Resources */,
 				25EC6C571C7F39DD002CF5D2 /* wm44.png in Resources */,
+				251815981D1D5C51009F68A8 /* Step-3_-img.png in Resources */,
 				01E9E7551C5F6204002FCA03 /* property-icon_iphone.png in Resources */,
 				25EC6C431C7F39DD002CF5D2 /* wm34.png in Resources */,
 				7FDF55131B73688F006DC41F /* premium.png in Resources */,
 				01F872FB1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A61C3CEF360096AD14 /* color_IPhone.png in Resources */,
+				250FEC921D1EA982000C8A2C /* OnBoardVCPhone@2x.xib in Resources */,
 				3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				7FDF55141B73688F006DC41F /* premium@2x.png in Resources */,
 				7FC5276B1B6F983D00C5D26D /* Mail-phone.png in Resources */,
 				C8DF1FE21C242DBD00F689D6 /* close.png in Resources */,
+				250FEC591D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */,
 				25EC6C4D1C7F39DD002CF5D2 /* wm39.png in Resources */,
 				01F8732D1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */,
 				7FC5276C1B6F983D00C5D26D /* Mail-phone@2x.png in Resources */,
@@ -8764,6 +8965,7 @@
 				25C90F501B362D6E00D803DB /* bevel-on@2x.png in Resources */,
 				25EC6C311C7F39DD002CF5D2 /* wm25.png in Resources */,
 				25F748D41D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */,
+				251815961D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
 				25C90F511B362D6E00D803DB /* bevel-phone.png in Resources */,
 				01B02CB91C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */,
 				01B395281C37AA3A003955C6 /* Export-video_Pad@2x.png in Resources */,
@@ -8785,6 +8987,7 @@
 				2567B0551B179CAD008D25E9 /* depthPass.fsh in Resources */,
 				25EA8EE41BD90506005DBA15 /* light_Phone@3x.png in Resources */,
 				3DD47BF71C60A43500E7CCFD /* 60004.sgm in Resources */,
+				2518159C1D1D5C51009F68A8 /* Welcome-Img.png in Resources */,
 				2567B0561B179CAD008D25E9 /* depthPass.vsh in Resources */,
 				2567B0571B179CAD008D25E9 /* depthPassSkin.vsh in Resources */,
 				01F872FF1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
@@ -8817,7 +9020,9 @@
 				E21A89431B0893BF00435C87 /* toonShadere.png in Resources */,
 				25EC6B9D1C7F066B002CF5D2 /* wm0.png in Resources */,
 				01B6F3F71C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */,
+				250FEC831D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */,
 				25EC6C651C7F39DD002CF5D2 /* wm51.png in Resources */,
+				250FEC451D1E5506000C8A2C /* round-close_phone.png in Resources */,
 				E21A893D1B0877CC00435C87 /* ShaderCellPhone.xib in Resources */,
 				01F873071C3A6C4E009AA31E /* pause_IPhone@2x_.png in Resources */,
 				E28C83D71B0748B600D116DE /* watermark.png in Resources */,
@@ -8828,6 +9033,7 @@
 				01F8729C1C3A42EF009AA31E /* View_IPhone.png in Resources */,
 				01ACD0E11C3D3AE20096AD14 /* Frame-Count-Display_Duration@2x.png in Resources */,
 				E20672131B049AA6006DD2F7 /* up-arrow@2x.png in Resources */,
+				250FEC631D1E5506000C8A2C /* Welcome-Img_phone.png in Resources */,
 				25F80AEC1CFDB6E700CF331B /* fbFollow.png in Resources */,
 				0169C4821C33ED5A00132FF6 /* popoverBgSimple.png in Resources */,
 				E20672151B049AA6006DD2F7 /* view-img.png in Resources */,
@@ -8886,6 +9092,7 @@
 				E20672321B049AA6006DD2F7 /* undo-img-phone.png in Resources */,
 				E20672341B049AA6006DD2F7 /* feedback-img@2x.png in Resources */,
 				3DD47BF31C60A43500E7CCFD /* 60002.sgm in Resources */,
+				250FEC511D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */,
 				01B4D0481C2937000091E19B /* Import_Pad.png in Resources */,
 				25EC6CA51C7F39DD002CF5D2 /* wm83.png in Resources */,
 				25EC6C771C7F39DD002CF5D2 /* wm60.png in Resources */,
@@ -8894,6 +9101,7 @@
 				25EC6C971C7F39DD002CF5D2 /* wm76.png in Resources */,
 				E20672381B049AA6006DD2F7 /* AutoRigHelp4.png in Resources */,
 				2512BFDF1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */,
+				250FEC8F1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */,
 				25F80B041CFDB6E700CF331B /* twitterFollowPhone.png in Resources */,
 				01B02CC31C61CAB400C9102A /* Import-models_IPhone@3x.png in Resources */,
 				E20672391B049AA6006DD2F7 /* play-video-phone@3x.png in Resources */,
@@ -8925,6 +9133,7 @@
 				01F872861C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
 				25EC6C791C7F39DD002CF5D2 /* wm61.png in Resources */,
 				251424811C9698F90012CA68 /* README in Resources */,
+				250FEC201D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */,
 				E20672491B049AA6006DD2F7 /* camera.sgm in Resources */,
 				01ACD1051C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */,
 				E206724A1B049AA6006DD2F7 /* render_image@2x.png in Resources */,
@@ -8942,6 +9151,7 @@
 				01B02CB11C61CAB400C9102A /* Back_IPhone@3x.png in Resources */,
 				2518158D1D1D4AAD009F68A8 /* round-close.png in Resources */,
 				0169C47A1C33ED5A00132FF6 /* popoverArrowUpSimple.png in Resources */,
+				250FEC8D1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */,
 				01F8733F1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */,
 				E206724F1B049AA6006DD2F7 /* redo-img-phone.png in Resources */,
 				E20672501B049AA6006DD2F7 /* AutoRigHelp1.png in Resources */,
@@ -8950,6 +9160,7 @@
 				25EC6C491C7F39DD002CF5D2 /* wm37.png in Resources */,
 				3D5F991D1C4D04EB00DD47F5 /* Cylinder@2x.png in Resources */,
 				01B02CC51C61CAB400C9102A /* Import-text_IPhone@3x.png in Resources */,
+				250FEC241D1E52D2000C8A2C /* Step-3_-img@2x.png in Resources */,
 				E20672511B049AA6006DD2F7 /* new-img-phone@3x.png in Resources */,
 				E20672561B049AA6006DD2F7 /* right-align@3x.png in Resources */,
 				01F8728C1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
@@ -8997,6 +9208,7 @@
 				E20672701B049AA6006DD2F7 /* unlock.png in Resources */,
 				01B4CF891C291EFD0091E19B /* AnimationSelectionSlider.xib in Resources */,
 				01ACD1011C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png in Resources */,
+				250FEC871D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png in Resources */,
 				25EC6CBD1C7F39DD002CF5D2 /* wm95.png in Resources */,
 				3D2696B11C660343004FC023 /* LightPropertiesPhone.xib in Resources */,
 				E20672711B049AA6006DD2F7 /* view-img-phone@3x.png in Resources */,
@@ -9036,6 +9248,7 @@
 				E20672921B049AA6006DD2F7 /* center-align-pad@3x.png in Resources */,
 				3DBC85E41C2BC11B00B512AB /* selected_mark.png in Resources */,
 				25EC6C8D1C7F39DD002CF5D2 /* wm71.png in Resources */,
+				250FEC571D1E5506000C8A2C /* Step-3_-img_phone.png in Resources */,
 				256ED8F01B1FEDED008ADEF8 /* Open Sans Light.ttf in Resources */,
 				01F8730D1C3A6C4E009AA31E /* Redo_IPhone@2x.png in Resources */,
 				E20672941B049AA6006DD2F7 /* first-phone.png in Resources */,
@@ -9066,6 +9279,7 @@
 				E20672AD1B049AA6006DD2F7 /* controls6.sgm in Resources */,
 				25F80B0E1CFDB6E700CF331B /* youtube-subPhone@2x.png in Resources */,
 				E20672AE1B049AA6006DD2F7 /* frames-phone@2x.png in Resources */,
+				250FEC281D1E52D2000C8A2C /* Welcome-Img@2x.png in Resources */,
 				25EC6BC31C7F066B002CF5D2 /* wm8.png in Resources */,
 				01F872E71C3A6C4E009AA31E /* Import-Light_IPhone@2x.png in Resources */,
 				E20672AF1B049AA6006DD2F7 /* back-img@2x.png in Resources */,
@@ -9087,7 +9301,9 @@
 				01F872741C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
 				25EC6CDF1C7F39DD002CF5D2 /* wm112.png in Resources */,
 				E20672BB1B049AA6006DD2F7 /* home-phone.png in Resources */,
+				250FEC761D1E8C4D000C8A2C /* StepView.xib in Resources */,
 				3D5D0F411C632864006B987E /* Particles@2x.png in Resources */,
+				250FEC471D1E5506000C8A2C /* round-close_phone@2x.png in Resources */,
 				3D53489C1C3BF60200C6A437 /* LightProperties.xib in Resources */,
 				25DE10321CAA8D6D0076F669 /* CMakeLists.txt in Resources */,
 				E20672BD1B049AA6006DD2F7 /* scale-img-phone@2x.png in Resources */,
@@ -9109,7 +9325,9 @@
 				253B52821BDBBD9100E93208 /* commonL1.fsh in Resources */,
 				256ED8E61B1FEDED008ADEF8 /* CAC Champagne.ttf in Resources */,
 				01F872981C3A42EF009AA31E /* Scale_IPhone.png in Resources */,
+				250FEC891D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
 				E20672CC1B049AA6006DD2F7 /* properties-img-phone@2x.png in Resources */,
+				250FEC6D1D1E61FD000C8A2C /* BeginViewPhone.xib in Resources */,
 				01B395311C37AACE003955C6 /* Import-Light_Pad@2x.png in Resources */,
 				25D7DA821D0714AA00E84D2F /* Help.png in Resources */,
 				01B395181C37A8DD003955C6 /* Next-Frame@2x.png in Resources */,
@@ -9139,11 +9357,13 @@
 				E20672E01B049AA6006DD2F7 /* redo-img@2x.png in Resources */,
 				E20672E11B049AA6006DD2F7 /* undo-img@2x.png in Resources */,
 				25EC6C331C7F39DD002CF5D2 /* wm26.png in Resources */,
+				250FEC411D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
 				E20672E41B049AA6006DD2F7 /* CrossForMain.png in Resources */,
 				E20672E51B049AA6006DD2F7 /* properties-img.png in Resources */,
 				E20672EA1B049AA6006DD2F7 /* render_video-phone.png in Resources */,
 				25EC6C891C7F39DD002CF5D2 /* wm69.png in Resources */,
 				251815841D1D4924009F68A8 /* Step-1_-img.png in Resources */,
+				250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
 				01B4CF851C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
 				25EFBEB31BE25CA700DB300C /* RenPro.xib in Resources */,
 				E20672EB1B049AA6006DD2F7 /* frames-phone@3x.png in Resources */,
@@ -9194,6 +9414,7 @@
 				E20672FF1B049AA6006DD2F7 /* add-frame.png in Resources */,
 				01E618911C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */,
 				25EC6C8F1C7F39DD002CF5D2 /* wm72.png in Resources */,
+				250FEC5F1D1E5506000C8A2C /* Step-4_-img_phone@2x.png in Resources */,
 				01B02CEB1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */,
 				01A395371C40E8EC007531DB /* SettingsViewControllerPhone2x.xib in Resources */,
 				01F872681C3A42EF009AA31E /* Export-image_IPhone.png in Resources */,
@@ -9215,6 +9436,7 @@
 				E206730B1B049AA6006DD2F7 /* new-img-phone@2x.png in Resources */,
 				E206730C1B049AA6006DD2F7 /* Stop-video-pad@2x.png in Resources */,
 				01F8727C1C3A42EF009AA31E /* Login-IPhone.png in Resources */,
+				250FEC8B1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */,
 				01F872841C3A42EF009AA31E /* My-objects-Models_IPhone.png in Resources */,
 				E206730D1B049AA6006DD2F7 /* justify@2x.png in Resources */,
 				01ACD0B21C3D11BF0096AD14 /* SettingsViewController.xib in Resources */,
@@ -9236,6 +9458,7 @@
 				E20673131B049AA6006DD2F7 /* rotate-img-phone.png in Resources */,
 				E20673141B049AA6006DD2F7 /* rotate-img-phone@3x.png in Resources */,
 				01F873391C3A7DE4009AA31E /* Facebook_IPhone@2x.png in Resources */,
+				250FEC531D1E5506000C8A2C /* Step-2_-img_phone@2x.png in Resources */,
 				01F873181C3A7448009AA31E /* Login-Icon_IPhone.png in Resources */,
 				0169C4641C33ED5A00132FF6 /* popoverArrowLeft-white@2x.png in Resources */,
 				25F748CA1D08085400FB0AFD /* fb_Phone.png in Resources */,
@@ -9259,6 +9482,7 @@
 				E206731A1B049AA6006DD2F7 /* render_video-phone@3x.png in Resources */,
 				01ACD0FF1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */,
 				E206731C1B049AA6006DD2F7 /* move-first-phone@2x.png in Resources */,
+				250FEC261D1E52D2000C8A2C /* Step-4_-img@2x.png in Resources */,
 				01CCD1C61C3F927D00565664 /* ObjSidePanel.xib in Resources */,
 				3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */,
 				E206731F1B049AA6006DD2F7 /* render_video@2x.png in Resources */,
@@ -9286,6 +9510,7 @@
 				01B4CFF51C29219A0091E19B /* Previous-Frame.png in Resources */,
 				01ACD0EF1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png in Resources */,
 				256F6B921BF6246300154622 /* json_internalarray.inl in Resources */,
+				250FEC4B1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
 				259EE14F1BDE081200C99784 /* commonL4.fsh in Resources */,
 				256ED8E81B1FEDED008ADEF8 /* Hemi Head bd.ttf in Resources */,
 				25D6719D1C46930900BE685D /* controls9.sgm in Resources */,
@@ -9295,6 +9520,8 @@
 				3D5F99271C4D04EB00DD47F5 /* Torus.png in Resources */,
 				E20673321B049AA6006DD2F7 /* Scene-topviewBg-phone.png in Resources */,
 				25F748CC1D08085400FB0AFD /* fb_Phone@2x.png in Resources */,
+				250FEC851D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */,
+				2518159A1D1D5C51009F68A8 /* Step-4_-img.png in Resources */,
 				E20673341B049AA6006DD2F7 /* select-img.png in Resources */,
 				01F872641C3A42EF009AA31E /* Animation_IPhone.png in Resources */,
 				E20673361B049AA6006DD2F7 /* view-img-phone.png in Resources */,
@@ -9315,8 +9542,10 @@
 				01ACD0EB1C3D3AE20096AD14 /* Render-Preview-position_Right-Top@2x.png in Resources */,
 				E206733E1B049AA6006DD2F7 /* (null) in Resources */,
 				E206733F1B049AA6006DD2F7 /* back-img-phone@2x.png in Resources */,
+				250FEC1E1D1E52D2000C8A2C /* round-close@2x.png in Resources */,
 				E20673401B049AA6006DD2F7 /* AssetCellView.xib in Resources */,
 				3DAEFFF41C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */,
+				250FEC221D1E52D2000C8A2C /* Step-2_-img@2x.png in Resources */,
 				E20673411B049AA6006DD2F7 /* Stop-video-phone@2x.png in Resources */,
 				2514246D1C9698F90012CA68 /* darwin-iphone in Resources */,
 				01B4D06E1C2937000091E19B /* Scale_Pad@2x.png in Resources */,
@@ -9419,6 +9648,7 @@
 				E20673A11B049AA6006DD2F7 /* move-img@2x.png in Resources */,
 				E20673A31B049AA6006DD2F7 /* Animation-topviewBg-phone@2x.png in Resources */,
 				3DC60FFF1C6B192D00A8D412 /* hq.png in Resources */,
+				250FEC3F1D1E5506000C8A2C /* Divider-1_phone.png in Resources */,
 				E20673A41B049AA6006DD2F7 /* animate-img-phone@3x.png in Resources */,
 				0184EC6E1C350A5B006F0B57 /* Google_Pad.png in Resources */,
 				01B4D0581C2937000091E19B /* My-objects-Models_Pad.png in Resources */,
@@ -9487,6 +9717,7 @@
 				7F5012FD1B2C597E00669B71 /* randNoise.png in Resources */,
 				E20673C61B049AA6006DD2F7 /* rotate-img-phone@2x.png in Resources */,
 				E20673C71B049AA6006DD2F7 /* playing@2x.png in Resources */,
+				2518159F1D1D76C0009F68A8 /* BeginView.xib in Resources */,
 				25D3BFC41D1BCD25006952F9 /* info-icon_phone@2x.png in Resources */,
 				3DC418361C85DEBF00E4EF46 /* render1.png in Resources */,
 				3DAC8C411C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */,
@@ -9504,6 +9735,7 @@
 				E20673D41B049AA6006DD2F7 /* Animation-topviewBg-phone.png in Resources */,
 				01F872761C3A42EF009AA31E /* Import-text_IPhone.png in Resources */,
 				E20673D51B049AA6006DD2F7 /* last-phone.png in Resources */,
+				250FEC951D1EABC4000C8A2C /* BeginViewPhone@2x.xib in Resources */,
 				01B02CBF1C61CAB400C9102A /* Import-Light_IPhone@3x.png in Resources */,
 				E20673D71B049AA6006DD2F7 /* InfoPlist.strings in Resources */,
 				25D671991C46930900BE685D /* controls7.sgm in Resources */,
@@ -9511,6 +9743,7 @@
 				E20673D91B049AA6006DD2F7 /* AutoRigHelp2.png in Resources */,
 				E20673DA1B049AA6006DD2F7 /* scale-img.png in Resources */,
 				3D58CD4A1C3D0D3D006371DE /* TextColorPicker.xib in Resources */,
+				250FEC5D1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */,
 				E20673DB1B049AA6006DD2F7 /* light.sgm in Resources */,
 				C8AA47021C227D3600C4AB53 /* Mail.png in Resources */,
 				E20673DE1B049AA6006DD2F7 /* iphoneband@3x.png in Resources */,
@@ -9553,6 +9786,7 @@
 				25EC6C591C7F39DD002CF5D2 /* wm45.png in Resources */,
 				01B02CCB1C61CAB400C9102A /* Login-IPhone@3x.png in Resources */,
 				256ED8EE1B1FEDED008ADEF8 /* League Gothic Italic.otf in Resources */,
+				250FEC6A1D1E5A43000C8A2C /* OnBoardVCPhone.xib in Resources */,
 				01ACD0C11C3D1AAA0096AD14 /* Frame-Count-Display_Frames.png in Resources */,
 				25EC6BB91C7F066B002CF5D2 /* wm3.png in Resources */,
 				3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */,
@@ -9753,6 +9987,7 @@
 				25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */,
 				256F6B971BF6246300154622 /* json_reader.cpp in Sources */,
 				251424781C9698F90012CA68 /* mesh.c in Sources */,
+				250FEC791D1E8CAB000C8A2C /* StepView.m in Sources */,
 				256F6B991BF6246300154622 /* json_value.cpp in Sources */,
 				25DE108D1CAA8D6D0076F669 /* btMultimaterialTriangleMeshShape.cpp in Sources */,
 				256F6D6E1BF624FB00154622 /* BoundingBox.cpp in Sources */,
@@ -10315,6 +10550,7 @@
 				25DE11421CAA91310076F669 /* btSoftBodyHelpers.cpp in Sources */,
 				2514248D1C9698F90012CA68 /* glue.c in Sources */,
 				256F6EB11BF624FB00154622 /* SceneManager.cpp in Sources */,
+				250FEC7A1D1E8CAB000C8A2C /* StepView.m in Sources */,
 				25DE107A1CAA8D6D0076F669 /* btConvexHullShape.cpp in Sources */,
 				25DE10E41CAA8D6D0076F669 /* btConeTwistConstraint.cpp in Sources */,
 				25DE10621CAA8D6D0076F669 /* btSphereTriangleCollisionAlgorithm.cpp in Sources */,

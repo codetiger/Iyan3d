@@ -964,6 +964,10 @@
     
     [self.activityIndicatorView setHidden:NO];
     [self.activityIndicatorView startAnimating];
+    for(UIView* subView in [self.view subviews]) {
+        if(subView != self.renderedImageView && subView != self.renderingProgressBar && subView != self.renderingProgressLabel && subView != self.topBar && subView != self.cancelButton)
+            [subView setHidden:YES];
+    }
     
     [self performSelectorInBackground:@selector(syncPhysicsAndStartRendering:) withObject:[NSNumber numberWithInt:credits]];
     

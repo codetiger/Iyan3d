@@ -373,12 +373,18 @@ void RenderHelper::drawCameraPreview()
     
     smgr->setRenderTarget(renderingScene->previewTexture,true,true,false,Vector4(0.1,0.1,0.1,1.0));
     Vector4 camprevlay = renderingScene->getCameraPreviewLayout();
+    std::map< int, Vector3 > nPositions;
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
 
-        if(!(renderingScene->nodes[i]->props.isVisible))
+        if(!(renderingScene->nodes[i]->props.isVisible)) {
             renderingScene->nodes[i]->node->setVisible(false);
+            if(renderingScene->nodes[i]->node->type == NODE_TYPE_INSTANCED) {
+                nPositions.insert(std::pair<int, Vector3>(i, renderingScene->nodes[i]->node->getAbsolutePosition()));
+                renderingScene->nodes[i]->node->setPosition(Vector3(5000.0));
+            }
+        }
     }
     setControlsVisibility(false);
     
@@ -393,8 +399,12 @@ void RenderHelper::drawCameraPreview()
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
         
-        if(!(renderingScene->nodes[i]->props.isVisible))
+        if(!(renderingScene->nodes[i]->props.isVisible)) {
             renderingScene->nodes[i]->node->setVisible(true);
+            if(renderingScene->nodes[i]->node->type == NODE_TYPE_INSTANCED) {
+                renderingScene->nodes[i]->node->setPosition(nPositions[i]);
+            }
+        }
         
         if(!isLightOn)
             renderingScene->setLightingOff();
@@ -672,9 +682,15 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         renderingScene->updater->resetMaterialTypes(true);
     }
     
+    std::map< int , Vector3 > nPositions;
     for(unsigned long i = 0; i < renderingScene->nodes.size(); i++){
-        if(!(renderingScene->nodes[i]->props.isVisible))
+        if(!(renderingScene->nodes[i]->props.isVisible)) {
             renderingScene->nodes[i]->node->setVisible(false);
+            if(renderingScene->nodes[i]->node->type == NODE_TYPE_INSTANCED) {
+                nPositions.insert(std::pair<int, Vector3>(i, renderingScene->nodes[i]->node->getAbsolutePosition()));
+                renderingScene->nodes[i]->node->setPosition(Vector3(5000.0));
+            }
+        }
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
     }
@@ -709,8 +725,11 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     
     
     for(unsigned long i = 0; i < renderingScene->nodes.size(); i++){
-        if(!(renderingScene->nodes[i]->props.isVisible))
+        if(!(renderingScene->nodes[i]->props.isVisible)) {
             renderingScene->nodes[i]->node->setVisible(true);
+            if(renderingScene->nodes[i]->node->type == NODE_TYPE_INSTANCED)
+                renderingScene->nodes[i]->node->setPosition(nPositions[i]);
+        }
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
     }

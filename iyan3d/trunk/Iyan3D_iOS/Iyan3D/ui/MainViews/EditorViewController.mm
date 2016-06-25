@@ -1184,6 +1184,7 @@ BOOL missingAlertShown;
     [self autoRigMirrorBtnHandler];
     [self highlightObjectList];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    [self reloadSceneObjects];
 }
 
 - (IBAction)addJoinAction:(id)sender {
@@ -2212,32 +2213,17 @@ BOOL missingAlertShown;
 {
     [self.center_progress setHidden:NO];
     [self.center_progress startAnimating];
-    UIImage* imageData = [info objectForKey:UIImagePickerControllerOriginalImage];
     imgSalt = [[info objectForKey:UIImagePickerControllerReferenceURL] absoluteString];
-    
-    float imgW = imageData.size.width;
-    float imgH = imageData.size.height;
-    float bigSide = (imgW >= imgH) ? imgW : imgH;
-    float target = 0;
-    
-    if (bigSide <= 128)
-        target = 128;
-    else if (bigSide <= 256)
-        target = 256;
-    else if (bigSide <= 512)
-        target = 512;
-    else
-        target = 1024;
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(target, target), NO, 1.0);
-    [imageData drawInRect:CGRectMake(0, 0, target, target)];
-    UIImage* nImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
+
+    UIImage* uiImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    float imgW = uiImage.size.width;
+    float imgH = uiImage.size.height;
+    NSData* data = [self convertAndScaleImage:uiImage size:-1];
+
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cachesDirectory = [paths objectAtIndex:0];
     NSString* fileNameSalt = [Utility getMD5ForString:imgSalt];
     NSString* saveFileName = [NSString stringWithFormat:@"%@/%@.png", cachesDirectory, fileNameSalt];
-    NSData* data = UIImagePNGRepresentation(nImage);
     [data writeToFile:saveFileName atomically:YES];
     
     fileNameSalt = [Utility getMD5ForString:imgSalt];
@@ -2780,7 +2766,6 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
             NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
             assetSelectionSlider.modelCategory.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
             assetSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
-            assetSelectionSlider.addToSceneBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
 
             break;
         }   case IMPORT_VIDEO:
@@ -3075,7 +3060,7 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
     
     if(indexValue == TUTORIAL){
         [self.popoverController dismissPopoverAnimated:YES];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/tutorial-videos/"]];
+        [self presentOnBoard];
     }
     else if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
@@ -3131,11 +3116,27 @@ if(selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNode
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionUp
                                               animated:YES];
-
-
     }
 }
 
+- (void) presentOnBoard
+{
+    NSString *nibName = @"OnBoardVC";
+    if([self iPhone6Plus])
+        nibName = @"OnBoardVCPhone@2x";
+    else if(![Utility IsPadDevice])
+        nibName = @"OnBoardVCPhone";
+    
+    OnBoardVC* ovc = [[OnBoardVC alloc] initWithNibName:nibName bundle:nil];
+    if([Utility IsPadDevice])
+        ovc.modalPresentationStyle = UIModalPresentationFormSheet;
+    ovc.delegate = self;
+    [self presentViewController:ovc animated:YES completion:nil];
+}
+
+- (void) closingOnBoard
+{
+}
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
@@ -4096,14 +4097,10 @@ void downloadFile(NSString* url, NSString* fileName)
         float imgH = image.size.height;
         float bigSide = (imgW >= imgH) ? imgW : imgH;
         //Convert texture image size should be the 2 to the power values for convinent case.
-        if(bigSide <= 128)
-            target = 128;
-        else if(bigSide <= 256)
-            target = 256;
-        else if(bigSide <= 512)
-            target = 512;
-        else
-            target = 1024;
+        
+        target = 2;
+        while (bigSide > target && target <= 1024)
+            target *= 2;
     }
     else
         target = (float)textureRes;

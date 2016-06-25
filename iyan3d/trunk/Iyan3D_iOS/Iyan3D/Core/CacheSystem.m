@@ -643,6 +643,15 @@ static const NSString* RENDER_TASK_DATE = @"task_date";
             NSLog(@"Failed Deleting Scene %s", sqlite3_errmsg(_cacheSystem));
         }
         sqlite3_finalize(statement);
+        
+        sqlite3_stmt    *statement2;
+        NSString *querySQL2 = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_ID, assetId];
+        sqlite3_prepare_v2(_cacheSystem, [querySQL2 UTF8String], -1, &statement2, NULL);
+        if (sqlite3_step(statement2) != SQLITE_DONE){
+            NSLog(@"Failed Deleting Scene %s", sqlite3_errmsg(_cacheSystem));
+        }
+        sqlite3_finalize(statement2);
+
     }
 }
 

@@ -27,7 +27,7 @@
 #import "FollowUsVC.h"
 
 
-@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate >{
+@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate , OnBoardDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;

@@ -8,11 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OnBoardDelegate
+
+- (void) closingOnBoard;
+
+@end
+
 @interface OnBoardVC : UIViewController
 {
-    NSArray* imagesArray;
-}
+    NSArray* titlesArray;
+    NSArray* descArray;
+    BOOL pageControlBeingUsed;
+    int totalPages;
 
+}
+@property (weak, nonatomic) IBOutlet UIView *stepView;
+@property (weak, nonatomic) IBOutlet UIImageView *stepImgView;
+@property (weak, nonatomic) IBOutlet UILabel *stepTitle;
+@property (weak, nonatomic) IBOutlet UILabel *stepBody;
+@property (weak, nonatomic) IBOutlet UIImageView *divider;
+@property (weak, nonatomic) id < OnBoardDelegate > delegate;
 @property (weak, nonatomic) IBOutlet UIView *beginView;
 @property (weak, nonatomic) IBOutlet UIButton *startBtn;
 @property (weak, nonatomic) IBOutlet UIButton *skipBtn;
@@ -21,5 +36,6 @@
 - (IBAction)startBtnAction:(id)sender;
 - (IBAction)skipBtnAction:(id)sender;
 - (IBAction)closeBtnAction:(id)sender;
+- (IBAction) changePage;
 
 @end

@@ -9,7 +9,6 @@
 
 #import <Crashlytics/Answers.h>
 
-#import "OnBoardVC.h"
 #import "MediaPreviewVC.h"
 #import "AppDelegate.h"
 #import "SceneSelectionControllerNew.h"
@@ -106,9 +105,7 @@
     [self.view addGestureRecognizer:tapGest];
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"tipsShown"]) {
-        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
-        if([scenesArray count] > 0)
-            [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"tipsShown"];
+        [self presentOnBoard];
     }
 }
 
@@ -290,6 +287,9 @@
             [cell setAccessibilityIdentifier:@"3"];
             [cell.propertiesBtn setAccessibilityHint:@"Tap to Clone / Delete / Share the scene."];
             [cell.propertiesBtn setAccessibilityIdentifier:@"3"];
+        } else {
+            [cell setAccessibilityHint:@""];
+            [cell.propertiesBtn setAccessibilityHint:@""];
         }
         
         SceneItem* scenes = scenesArray[indexPath.row];
@@ -399,12 +399,8 @@
     
     if(indexValue == TUTORIAL){
         [self.popoverController dismissPopoverAnimated:YES];
+        [self presentOnBoard];
         
-//        OnBoardVC* ovc = [[OnBoardVC alloc] initWithNibName:@"OnBoardVC" bundle:nil];
-//        ovc.modalPresentationStyle = UIModalPresentationFormSheet;
-//        [self presentViewController:ovc animated:YES completion:nil];
-        
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/tutorial-videos/"]];
     }
     else if(indexValue==SETTINGS){
         [self.popoverController dismissPopoverAnimated:YES];
@@ -463,6 +459,30 @@
                                               animated:YES];
         
         
+    }
+}
+
+- (void) presentOnBoard
+{
+    NSString *nibName = @"OnBoardVC";
+    if([self iPhone6Plus])
+        nibName = @"OnBoardVCPhone@2x";
+    else if(![Utility IsPadDevice])
+        nibName = @"OnBoardVCPhone";
+    
+    OnBoardVC* ovc = [[OnBoardVC alloc] initWithNibName:nibName bundle:nil];
+    if([Utility IsPadDevice])
+        ovc.modalPresentationStyle = UIModalPresentationFormSheet;
+    ovc.delegate = self;
+    [self presentViewController:ovc animated:YES completion:nil];
+}
+
+- (void) closingOnBoard
+{
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"tipsShown"]) {
+        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
+        if([scenesArray count] > 0)
+            [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"tipsShown"];
     }
 }
 

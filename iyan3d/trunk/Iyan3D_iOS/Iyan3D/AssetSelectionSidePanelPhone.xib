@@ -72,7 +72,7 @@
                             <rect key="frame" x="124" y="5" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to import the selected model into your scene." identifier="3"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to import the selected model into your scene." identifier="2"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="ADD TO SCENE">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

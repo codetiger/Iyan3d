@@ -31,6 +31,7 @@
                 <outlet property="shaderStyle" destination="MVH-u3-p41" id="zuG-Tg-MoH"/>
                 <outlet property="shareActivityIndicator" destination="qZj-v7-ywE" id="Svx-Fb-Iek"/>
                 <outlet property="startButtonText" destination="pdo-ld-rqe" id="N6o-iw-Y81"/>
+                <outlet property="topBar" destination="OG1-y7-6p6" id="Dit-a8-0fV"/>
                 <outlet property="view" destination="2" id="3"/>
                 <outlet property="waterMarkLabel" destination="8K2-Nn-ge0" id="Rg5-Tg-Vcf"/>
                 <outlet property="watermarkSwitch" destination="7z9-il-Fpy" id="tdg-Ru-dOA"/>

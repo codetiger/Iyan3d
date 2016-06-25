@@ -149,7 +149,7 @@
                                 <segment title="Light"/>
                                 <segment title="Medium"/>
                                 <segment title="Heavy"/>
-                                <segment title="Cloth"/>
+                                <segment title="Cloth" enabled="NO"/>
                                 <segment title="Balloon" enabled="NO"/>
                                 <segment title="Jelly" enabled="NO"/>
                             </segments>

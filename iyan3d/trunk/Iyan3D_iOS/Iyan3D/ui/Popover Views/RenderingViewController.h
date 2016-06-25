@@ -111,6 +111,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *checkCreditProgress;
 @property (weak, nonatomic) IBOutlet UILabel *limitFramesLbl;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
+@property (weak, nonatomic) IBOutlet UIView *topBar;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)cameraResolutionChanged:(id)sender;
