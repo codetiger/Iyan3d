@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AssetFrameCell"/>
@@ -23,6 +23,13 @@
                         <rect key="frame" x="-1" y="0.0" width="53" height="53"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cU6-JC-f9E">
+                        <rect key="frame" x="33" y="0.0" width="19" height="19"/>
+                        <state key="normal" image="property-icon.png"/>
+                        <connections>
+                            <action selector="propsAction:" destination="gGR-la-Ixj" eventType="touchUpInside" id="L7L-2t-yRo"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
@@ -30,8 +37,12 @@
             <connections>
                 <outlet property="assetImage" destination="gbf-ZV-lva" id="sqe-Ca-PuN"/>
                 <outlet property="assetName" destination="zq3-pC-feV" id="dB8-bf-Qne"/>
+                <outlet property="propsBtn" destination="cU6-JC-f9E" id="zX7-Vp-NXa"/>
             </connections>
             <point key="canvasLocation" x="376.5" y="622"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="property-icon.png" width="40" height="40"/>
+    </resources>
 </document>
