@@ -1056,6 +1056,9 @@ BOOL missingAlertShown;
     self.objectList.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.undoBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"1";
     self.redoBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"";
+    self.addJointBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.autorigMirrorBtnHolder.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
+    self.rotateBtnAutorig.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.undoBtn.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"Undo / Redo your actions.";
     self.redoBtn.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"Undo / Redo your actions." : @"";
 
@@ -3929,6 +3932,7 @@ void downloadFile(NSString* url, NSString* fileName)
     std::string *objStr = NULL;
     std::string *textureStr = new std::string([(!isHaveTexture) ? @"White-texture" : textureFileName UTF8String]);
     NSString* assetName = (indexPathOfOBJ < 6 ) ? [basicShapes objectAtIndex:indexPathOfOBJ] : [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
+
     int assetId = (!isTempNode) ? -1 : 123456;
     int assetIdReturn = 0;
     NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];

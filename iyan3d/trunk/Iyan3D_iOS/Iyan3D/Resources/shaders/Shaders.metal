@@ -422,8 +422,8 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
-            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+            constexpr sampler quad_sampler(address::repeat,filter::linear);
+            diffuse_color =  tex2D.sample(quad_sampler,in.uv);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
@@ -498,8 +498,8 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
-            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+            constexpr sampler quad_sampler(address::repeat,filter::linear);
+            diffuse_color =  tex2D.sample(quad_sampler,in.uv);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
@@ -575,8 +575,8 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
-            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+            constexpr sampler quad_sampler(address::repeat,filter::linear);
+            diffuse_color =  tex2D.sample(quad_sampler,in.uv);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
@@ -652,8 +652,8 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
-            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+            constexpr sampler quad_sampler(address::repeat,filter::linear);
+            diffuse_color =  tex2D.sample(quad_sampler,in.uv);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
@@ -729,8 +729,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
-            diffuse_color =  tex2D.sample(linear_sampler ,in.uv);
+            constexpr sampler quad_sampler(address::repeat, filter::linear);
+            diffuse_color =  tex2D.sample(quad_sampler,in.uv);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);

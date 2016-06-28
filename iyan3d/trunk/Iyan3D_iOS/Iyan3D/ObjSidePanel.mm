@@ -44,8 +44,10 @@
     [super viewDidLoad];
     self.screenName = @"OBJSelection iOS";
      [self.importFilesCollectionView registerNib:[UINib nibWithNibName:@"ObjCellView" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-    filesList = [[NSArray alloc] init];
-    [self resetCollectionView:0];
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
     self.importBtn.layer.cornerRadius=8.0;
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
@@ -241,7 +243,12 @@
     if(self.addBtn.tag == OBJ){
         [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
-        [self resetCollectionView:1];
+        filesList=nil;
+        NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
+        NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* docDirPath = [srcDirPath objectAtIndex:0];
+        NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+        filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
         [self.addBtn setTitle:(viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE" forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
         self.addBtn.tag = Texture;

@@ -104,8 +104,9 @@
     tapGest.delegate = self;
     [self.view addGestureRecognizer:tapGest];
     
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"tipsShown"]) {
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"onBoardShown"]) {
         [self presentOnBoard];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"onBoardShown"];
     }
 }
 
