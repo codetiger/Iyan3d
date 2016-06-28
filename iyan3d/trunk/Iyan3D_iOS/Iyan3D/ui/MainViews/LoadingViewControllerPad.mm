@@ -269,7 +269,6 @@
     }
     //[[AppHelper getAppHelper] moveFontFilesIfNeccasary];
     //[self downloadMissingAssets];
-    
     [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
     
 }
@@ -332,6 +331,7 @@
     _allProducts = nil;
     _allAssets = nil;
     textureFile = nil;
+    [AppHelper getAppHelper].delegate = nil;
 }
 
 @end

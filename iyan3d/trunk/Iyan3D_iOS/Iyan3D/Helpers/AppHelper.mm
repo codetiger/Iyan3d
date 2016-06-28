@@ -62,7 +62,10 @@
             [[AppHelper getAppHelper] loadAllAssets];
             [AppHelper getAppHelper].isAssetsUpdated = YES;
         } else{
-            [self performSelectorOnMainThread:@selector(showInternetErrorAlert) withObject:nil waitUntilDone:NO];          }
+            [self performSelectorOnMainThread:@selector(showInternetErrorAlert) withObject:nil waitUntilDone:NO];
+            if(self.delegate)
+                [self.delegate performLocalTasks];
+        }
     } else {
         if(self.delegate)
             [self.delegate performLocalTasks];

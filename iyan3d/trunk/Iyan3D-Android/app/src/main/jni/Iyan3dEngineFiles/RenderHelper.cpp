@@ -774,7 +774,7 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
             Vector3 jointScale = jointNode->getAbsoluteTransformation().getScale();
             Vector3 finalScaleValue;
             if(jointScale.x > nodeScale.x || jointScale.y > nodeScale.y || jointScale.z > nodeScale.z || radius > nodeScale.x || radius > nodeScale.y || radius > nodeScale.z)
-                finalScaleValue = Vector3(radius/jointNode->getAbsoluteTransformation().getScale().x) * animNode->getScale();
+                finalScaleValue = Vector3(radius/jointNode->getAbsoluteTransformation().getScale().x, radius/jointNode->getAbsoluteTransformation().getScale().y, radius/jointNode->getAbsoluteTransformation().getScale().z) * animNode->getScale();
             else
                 finalScaleValue = Vector3(radius);
             

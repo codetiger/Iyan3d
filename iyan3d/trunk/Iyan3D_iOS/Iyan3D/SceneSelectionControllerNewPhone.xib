@@ -49,6 +49,9 @@
                             <rect key="frame" x="483" y="13" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Help_iphone.png"/>
+                            <connections>
+                                <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="MMD-nU-fXP"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RFC-ob-Zd6">
                             <rect key="frame" x="449" y="13" width="22" height="22"/>

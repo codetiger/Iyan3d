@@ -40,7 +40,7 @@
                     <color key="backgroundColor" red="0.52156862745098043" green="0.0" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f1X-a9-tfa">
-                    <rect key="frame" x="475" y="10" width="22" height="22"/>
+                    <rect key="frame" x="500" y="10" width="22" height="22"/>
                     <state key="normal" image="Help.png"/>
                     <connections>
                         <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="3d1-lP-GIc"/>
