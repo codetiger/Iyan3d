@@ -396,6 +396,7 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
             }
         }
        // meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
+        meshObject->props = deleteAction.props;
         meshObject->actionId = currentScene->actionMan->actions[actionIndex].objectIndex;
     }
     
@@ -403,7 +404,7 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
         SGAction &deleteAction = currentScene->actionMan->actions[currentScene->actionMan->currentAction];
         //meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
         meshObject->actionId = deleteAction.objectIndex;
-        meshObject->actionId = currentScene->actionMan->actions[currentScene->actionMan->currentAction].objectIndex;
+        meshObject->props = deleteAction.props;
     }
     if(meshObject->getType() == NODE_SGM || meshObject->getType() == NODE_RIG)
         restoreTexture(meshObject, actionType);
@@ -493,9 +494,6 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     if(nType != NODE_TEXT_SKIN && nType != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
         smgr->RemoveTexture(currentNode->node->getActiveTexture());
     
-    if(nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT)
-        dynamic_pointer_cast<MeshNode>(currentNode->node)->mesh = NULL;
-    
     smgr->RemoveNode(currentNode->node);
     delete currentNode;
     
@@ -507,6 +505,10 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
         currentScene->selectedJoint = NULL;
         currentScene->isNodeSelected = currentScene->isJointSelected = false;
         currentScene->updater->reloadKeyFrameMap();
+    }
+    
+    if(nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT) {
+        currentScene->updateDirectionLine();
     }
     
     currentScene->freezeRendering = false;

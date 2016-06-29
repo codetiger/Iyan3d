@@ -22,7 +22,7 @@ public:
     vector<ActionKey> keys;
     vector<bool> actionSpecificFlags;
     vector<float> actionSpecificFloats;
-    
+    properties props;
     vector<SGPositionKey> nodePositionKeys;
     vector<SGRotationKey> nodeRotationKeys;
     vector<SGScaleKey>    nodeSCaleKeys;

@@ -477,6 +477,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.vertexColor.z);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[actionScene->nodes.size()-1]->props.perVertexColor);
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[actionScene->nodes.size()-1]->node->type);
+        assetAction.props = actionScene->nodes[actionScene->nodes.size()-1]->props;
         if(actionScene->nodes[actionScene->nodes.size()-1]->node->type == NODE_TYPE_INSTANCED) {
             int actionId = ((SGNode*)actionScene->nodes[actionScene->nodes.size()-1]->node->original->getUserPointer())->actionId;
             assetAction.actionSpecificIntegers.push_back(actionId);
@@ -504,7 +505,8 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->props.vertexColor.z);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[selectedNodeId]->props.perVertexColor);
-        
+        assetAction.props = actionScene->nodes[selectedNodeId]->props;
+
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[selectedNodeId]->node->type);
         if(actionScene->nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
             int actionId = ((SGNode*)actionScene->nodes[selectedNodeId]->node->original->getUserPointer())->actionId;
@@ -534,6 +536,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->getType());
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->props.fontSize);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[indexOfAsset]->props.isLighting);
+        assetAction.props = actionScene->nodes[indexOfAsset]->props;
         StoreDeleteObjectKeys(indexOfAsset);
         addAction(assetAction);
     } else if (actionType == ACTION_APPLY_ANIM) {
@@ -562,6 +565,8 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.vertexColor.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.vertexColor.z);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.perVertexColor);
+        assetAction.props = actionScene->nodes[actionScene->selectedNodeId]->props;
+
         addAction(assetAction);
     }
     else if(actionType == ACTION_MULTI_NODE_DELETED_AFTER || actionType == ACTION_MULTI_NODE_ADDED){

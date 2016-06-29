@@ -72,6 +72,8 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
 }
 
 void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excludeKeys){
+    
+    animScene->selectMan->unselectObject(fromNodeId);
     animScene->nodes[toNodeId]->props = animScene->nodes[fromNodeId]->props;
     animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
     animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
@@ -127,6 +129,7 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
             addAction.actionSpecificFloats[4] = (sgNode->props.vertexColor.y);
             addAction.actionSpecificFloats[5] = (sgNode->props.vertexColor.z);
             addAction.actionSpecificFlags[0] = (sgNode->props.perVertexColor);
+            addAction.props = animScene->nodes[fromNodeId]->props;
         }
     }
     Logger::log(INFO,"SgAnimationManager", "Texture Name ; " + animScene->nodes[toNodeId]->textureName);

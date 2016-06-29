@@ -757,7 +757,7 @@ void SGNode::setInitialKeyValues(int actionType)
             
             Quaternion delta = MathHelper::rotationBetweenVectors(direction, Vector3(0.0, 1.0, 0.0));
             Vector3 lineRot = Vector3(0.0);
-            rotationKey.rotation = MathHelper::RotateNodeInWorld(lineRot, delta);
+            rotationKey.rotation = Quaternion(0.8, 0.09, 0.3, -0.5); //  MathHelper::RotateNodeInWorld(lineRot, delta);
             
             scaleKey.scale = Vector3(red, green, blue);
             visibilityKey.visibility = true;
