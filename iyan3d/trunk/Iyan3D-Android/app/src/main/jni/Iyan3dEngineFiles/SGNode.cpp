@@ -1101,7 +1101,8 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
         props.physicsType = (PHYSICS_TYPE)FileHelper::readInt(filePointer);
         origIndex = FileHelper::readInt(filePointer);
         props.specificInt = FileHelper::readInt(filePointer) - 1;
-        FileHelper::readInt(filePointer);
+        int texSmooth = FileHelper::readInt(filePointer);
+        smoothTexture = (texSmooth == 0 || texSmooth == 2) ? true : false;
         props.weight = FileHelper::readFloat(filePointer);
         props.forceMagnitude = FileHelper::readFloat(filePointer);
         props.forceDirection.x = FileHelper::readFloat(filePointer);
@@ -1218,7 +1219,7 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     
     FileHelper::writeInt(filePointer, nodeIndex); //Node Index of Original Node if Instanced
     FileHelper::writeInt(filePointer, props.specificInt+1); // Light Type + 1
-    FileHelper::writeInt(filePointer, 0);
+    FileHelper::writeInt(filePointer, (int)smoothTexture + 1);
     FileHelper::writeFloat(filePointer, props.weight);
     FileHelper::writeFloat(filePointer, props.forceMagnitude);
     FileHelper::writeFloat(filePointer, props.forceDirection.x);
