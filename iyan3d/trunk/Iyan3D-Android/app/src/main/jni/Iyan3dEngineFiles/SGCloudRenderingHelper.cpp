@@ -152,6 +152,7 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
          FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->props.refraction);
          FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->props.transparency);
          FileHelper::writeBool(frameFilePtr, (nodeType == NODE_PARTICLES) ? false : scene->nodes[nodeId]->props.isLighting); // node lighting
+         FileHelper::writeBool(frameFilePtr, scene->nodes[nodeId]->smoothTexture);
 
          vector<TriangleData> trianglesData;
          if(nodeType == NODE_PARTICLES)

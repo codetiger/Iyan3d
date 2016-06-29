@@ -48,7 +48,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     currentScene->nodes.clear();
     if(nodeCount < NODE_LIGHT+1)
         return false;
-    
+
     vector<SGNode*> tempNodes;
     for(int i = 0;i < nodeCount;i++) {
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
@@ -68,7 +68,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         } else if (sgNode->getType() == NODE_PARTICLES) {
             status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true, sgNode->textureName);
         }
-        
+
         if(!status)
             sgNode = NULL;
         tempNodes.push_back(sgNode);
@@ -83,7 +83,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             nodeLoaded = loadInstance(sgNode, sgNode->assetId, OPEN_SAVED_FILE);
         } else if(sgNode)
             nodeLoaded = loadNode(sgNode, OPEN_SAVED_FILE);
-        
+
         if(!nodeLoaded)
             delete sgNode;
     }

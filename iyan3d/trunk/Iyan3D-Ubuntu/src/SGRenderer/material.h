@@ -13,6 +13,7 @@ struct SGRMaterial
     float reflectionSharpness;
     int lightType;
     Vec3fa lightDirection;
+    bool isSmoothTexture;
 };
 
 #endif

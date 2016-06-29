@@ -20,7 +20,6 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
-    printf(" \n Width %f %f ", SceneHelper::screenWidth, SceneHelper::screenHeight);
     this->smgr = smgr;
     renHelper = new RenderHelper(smgr, this);
 
@@ -267,8 +266,10 @@ void SGEditorScene::setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType)
 
 void SGEditorScene::syncSceneWithPhysicsWorld()
 {
+#ifndef UBUNTU
     if(physicsHelper)
         physicsHelper->syncPhysicsWorld();
+#endif
 }
 
 void SGEditorScene::updatePhysics(int frame)

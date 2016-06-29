@@ -519,7 +519,11 @@ bool SceneManager::LoadShaders(string materialName,string vShaderName,string fSh
         renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
     return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass, isTest);
 }
-Material* SceneManager::getMaterialByIndex(int index){
+Material* SceneManager::getMaterialByIndex(int index) {
+#ifdef UBUNTU
+	return 0;
+#endif
+
 	if(index < (int)(*mtlManger->materials).size())
 		return (*mtlManger->materials)[index];
 	else

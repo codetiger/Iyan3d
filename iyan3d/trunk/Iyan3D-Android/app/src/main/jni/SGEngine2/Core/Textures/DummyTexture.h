@@ -17,7 +17,7 @@ class DummyTexture:public Texture{
 public:
     DummyTexture();
     ~DummyTexture();
-    bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
+    bool loadTexture(string texturePath,string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool smoothTexture);
     void createRenderTargetTexture(string textureName , TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height);
     void updateTexture(string filePath, int frame);
     bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);

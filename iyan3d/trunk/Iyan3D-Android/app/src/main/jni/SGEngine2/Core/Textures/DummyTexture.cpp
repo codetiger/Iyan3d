@@ -16,7 +16,7 @@ DummyTexture::DummyTexture(){
 DummyTexture::~DummyTexture(){
 }
 
-bool DummyTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType){
+bool DummyTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool smoothTexture) {
     textureName = name;
     texelFormat = format;
     this->texelType = texelType;

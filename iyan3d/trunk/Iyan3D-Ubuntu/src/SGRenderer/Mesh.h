@@ -50,6 +50,7 @@ public:
 		material.refraction = readFloat(data);
 		material.transparency = readFloat(data);
 		material.hasLighting = readBool(data);
+		material.isSmoothTexture = readBool(data);
 
 		material.reflectionSharpness = 1.0;
 
@@ -166,7 +167,7 @@ public:
 	Vec3fa getColor(double u, double v) {
 		Vec3fa color = Vec3fa(0.0f);
 		if(material.hasTexture)
-			color = texture->getColorAt(u, v);
+			color = texture->getColorAt(u, v, material.isSmoothTexture);
 		else if(material.emission > 0.0)
 			color = material.emissionColor;
 		else

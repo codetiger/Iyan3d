@@ -270,7 +270,7 @@ struct Scene
 
 		for (int i = 0; i < meshes.size(); i++) {
 			if(meshes[i]->material.emission > 0.0) {
-				if(meshes[i]->material.lightType == 0) {
+				if(meshes[i]->material.lightType < 1) {
 					Vec3fa lightPoint = meshes[i]->getRandomPointInMesh();
 					Vec3fa rayDir = (lightPoint - point).normalize();
 					double dist = lightPoint.distance(point);

@@ -23,7 +23,7 @@ struct SGRTTexture
 		}
 	}
 
-	Vec3fa getColorAt(double u, double v) {
+	Vec3fa getColorAt(double u, double v, bool isSmoothTexture) {
 		if(!hasLoadedData) {
 			return Vec3fa(1.0, 1.0, 1.0);
 		}
@@ -47,15 +47,19 @@ struct SGRTTexture
 		int x = floor(u);
 		int y = floor(v);
 
-		double u_ratio = u - x;
-		double v_ratio = v - y;
+		if(!isSmoothTexture)
+			return readImageColor(x, y);
+		else {
+			double u_ratio = u - x;
+			double v_ratio = v - y;
 
-		double u_opposite = 1 - u_ratio;
-		double v_opposite = 1 - v_ratio;
+			double u_opposite = 1 - u_ratio;
+			double v_opposite = 1 - v_ratio;
 
-		Vec3fa result = (readImageColor(x, y)   * u_opposite  + readImageColor(x+1, y)   * u_ratio) * v_opposite + 
-						(readImageColor(x, y+1) * u_opposite  + readImageColor(x+1, y+1) * u_ratio) * v_ratio;
-		return result;
+			Vec3fa result = (readImageColor(x, y)   * u_opposite  + readImageColor(x+1, y)   * u_ratio) * v_opposite +
+							(readImageColor(x, y+1) * u_opposite  + readImageColor(x+1, y+1) * u_ratio) * v_ratio;
+			return result;
+		}
 	}
 
 	Vec3fa readImageColor(int x, int y) {
