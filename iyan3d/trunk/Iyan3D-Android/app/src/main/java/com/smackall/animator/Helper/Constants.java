@@ -66,6 +66,7 @@ public class Constants {
     public final static int OBJ_TEXTURE = 17;
     public final static int CHANGE_TEXTURE = 18;
     public final static int IMAGE_VIEW = 19;
+    public final static int AUTO_RIG_VIEW = 20;
 
     public final static int MYANIMATION_TABLE = 7;
     public final static int MYANIMATION_DOWNLOAD = 4;

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.SystemClock;
 
+import com.smackall.animator.EditorView;
 import com.smackall.animator.LoadingActivity;
 
 import org.json.JSONArray;
@@ -29,9 +30,12 @@ public class DownloadHelper {
     String url;
     Context context;
 
+    String className = "";
+
     public void jsonParse(String url, DatabaseHelper db, Context context, SharedPreferenceManager sp, int jsonType) {
         this.url = url;
         this.context = context;
+        className = this.context.getClass().getSimpleName();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             new JSONParse(db, context, sp, jsonType).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
@@ -66,9 +70,14 @@ public class DownloadHelper {
                 doUpdateDatabase(context, jsonType, sp, json, db);
             } else {
                 UIHelper.informDialog(context,"Check your network connection");
-                ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-                if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                    ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                if(className.toLowerCase().equals("editorview")){
+
+                }
+                else {
+                    ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                    if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                        ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                    }
                 }
             }
         }
@@ -106,9 +115,14 @@ public class DownloadHelper {
                     e.printStackTrace();
                     UIHelper.informDialog(context,"Check your network connection");
                     sp.setData(context, "jsonAssetUpdated", 0);
-                    ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-                    if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                        ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                    if(className.toLowerCase().equals("editorview")){
+
+                    }
+                    else {
+                        ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                        if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                            ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                        }
                     }
                 }
                 sp.setData(context, "jsonAssetUpdated", 1);
@@ -133,9 +147,14 @@ public class DownloadHelper {
                     e.printStackTrace();
                     UIHelper.informDialog(context,"Check your network connection");
                     sp.setData(context, "jsonAnimationUpdated", 0);
-                    ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-                    if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                        ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                    if(className.toLowerCase().equals("editorview")){
+
+                    }
+                    else {
+                        ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                        if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                            ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                        }
                     }
                 }
                 sp.setData(context, "jsonAnimationUpdated", 1);
@@ -173,9 +192,20 @@ public class DownloadHelper {
             modelAssetDatabase.endTransaction();
             if (modelAssetDatabase.isOpen())
                 modelAssetDatabase.close();
-            ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-            if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                ((LoadingActivity) ((Activity) context)).startSceneSelection();
+            if(className.toLowerCase().equals("editorview")){
+                if(isAsset)
+                    try{
+                        if(context == null || ((EditorView)context).assetSelection == null || ((EditorView)context).assetSelection.assetSelectionAdapter == null)
+                            return;
+                        int position = ((EditorView)context).assetSelection.category.getSelectedItemPosition();
+                        ((EditorView)context).assetSelection.onSpinnerItemSelected(position);
+                    }catch (ClassCastException ignored){}
+            }
+            else {
+                ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                    ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                }
             }
         } else {
             SQLiteDatabase aniamtionDatabase = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
@@ -208,9 +238,19 @@ public class DownloadHelper {
             aniamtionDatabase.endTransaction();
             if (aniamtionDatabase.isOpen())
                 aniamtionDatabase.close();
-            ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-            if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                ((LoadingActivity) ((Activity) context)).startSceneSelection();
+            if(className.toLowerCase().equals("editorview")){
+                    try{
+                        if(context == null || ((EditorView)context).animationSelection == null || ((EditorView)context).animationSelection.animationSelectionAdapter== null)
+                            return;
+                        int position = ((EditorView)context).animationSelection.category.getSelectedItemPosition();
+                        ((EditorView)context).animationSelection.onSpinnerItemSelected(position);
+                    }catch (ClassCastException ignored){}
+            }
+            else {
+                ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                    ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                }
             }
         }
     }
@@ -232,7 +272,9 @@ public class DownloadHelper {
                     values.put(DatabaseHelper.ASSET_KEY_HASH, assetsDB.getHash());
                     values.put(DatabaseHelper.ASSET_KEY_TIME, assetsDB.getDateTime());
                     values.put(DatabaseHelper.ASSET_KEY_GROUP, assetsDB.getGroup());
-                    assetsDb.update(DatabaseHelper.ASSET_TABLE_ASSETS, values, DatabaseHelper.ASSET_KEY_ASSETSID + " = ?", new String[]{String.valueOf(assetsDB.getAssetsId())});
+                    int value = assetsDb.update(DatabaseHelper.ASSET_TABLE_ASSETS, values, DatabaseHelper.ASSET_KEY_ASSETSID + " = ?", new String[]{String.valueOf(assetsDB.getAssetsId())});
+                    if(value == 0)
+                        assetsDb.insert(DatabaseHelper.ASSET_TABLE_ASSETS,null,values);
                 }
                 assetsDb.setTransactionSuccessful();
             } finally {
@@ -240,9 +282,20 @@ public class DownloadHelper {
             }
             if (assetsDb.isOpen())
                 assetsDb.close();
-            ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-            if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                ((LoadingActivity) ((Activity) context)).startSceneSelection();
+            if(className.toLowerCase().equals("editorview")){
+                if(isAsset)
+                    try{
+                        if(context == null || ((EditorView)context).assetSelection == null || ((EditorView)context).assetSelection.assetSelectionAdapter == null)
+                            return;
+                        int position = ((EditorView)context).assetSelection.category.getSelectedItemPosition();
+                        ((EditorView)context).assetSelection.onSpinnerItemSelected(position);
+                    }catch (ClassCastException ignored){}
+            }
+            else {
+                ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                    ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                }
             }
         }
         else{
@@ -263,7 +316,9 @@ public class DownloadHelper {
                     values.put(DatabaseHelper.ANIM_KEY_DOWNLOADS, animDB.getDownloads());
                     values.put(DatabaseHelper.ANIM_KEY_RATING, animDB.getRating());
                     values.put(DatabaseHelper.ANIM_PUBLISH_ID, animDB.getpublishedId());
-                    animDb.update(DatabaseHelper.ANIM_TABLE_ANIMASSETS, values, DatabaseHelper.ANIM_KEY_ASSETSID + " = ?", new String[]{String.valueOf(animDB.getAnimAssetId())});
+                    int value = animDb.update(DatabaseHelper.ANIM_TABLE_ANIMASSETS, values, DatabaseHelper.ANIM_KEY_ASSETSID + " = ?", new String[]{String.valueOf(animDB.getAnimAssetId())});
+                    if(value == 0)
+                        animDb.insert(DatabaseHelper.ANIM_TABLE_ANIMASSETS,null,values);
                 }
                 animDb.setTransactionSuccessful();
 
@@ -272,9 +327,20 @@ public class DownloadHelper {
             }
             if (animDb.isOpen())
                 animDb.close();
-            ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
-            if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
-                ((LoadingActivity) ((Activity) context)).startSceneSelection();
+            if(className.toLowerCase().equals("editorview")){
+                if(isAsset)
+                    try{
+                        if(context == null || ((EditorView)context).animationSelection == null || ((EditorView)context).animationSelection.animationSelectionAdapter== null)
+                            return;
+                        int position = ((EditorView)context).animationSelection.category.getSelectedItemPosition();
+                        ((EditorView)context).animationSelection.onSpinnerItemSelected(position);
+                    }catch (ClassCastException ignored){}
+            }
+            else {
+                ((LoadingActivity) ((Activity) context)).loadingBar.setProgress(((LoadingActivity) ((Activity) context)).loadingBar.getProgress() + 25);
+                if (((LoadingActivity) ((Activity) context)).loadingBar.getProgress() >= 100) {
+                    ((LoadingActivity) ((Activity) context)).startSceneSelection();
+                }
             }
         }
     }

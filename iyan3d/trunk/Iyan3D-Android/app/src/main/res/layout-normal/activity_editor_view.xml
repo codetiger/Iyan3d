@@ -372,7 +372,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.85"
+            android:layout_weight="0.9"
             android:weightSum="2" >
 
             <LinearLayout

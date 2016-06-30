@@ -2,14 +2,20 @@ package com.smackall.animator.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -40,6 +46,13 @@ import java.util.List;
  */
 
 public class AnimationSelectionAdapter extends BaseAdapter {
+
+    private static final int ID_CLONE = 0;
+    private static final int ID_RENAME = 1;
+    private static final int ID_DELETE = 2;
+    private static final int ID_PUBLISH = 3;
+
+
     private Context mContext;
     private DatabaseHelper db;
     private SharedPreferenceManager sp;
@@ -103,6 +116,17 @@ public class AnimationSelectionAdapter extends BaseAdapter {
 
         ((TextView) grid.findViewById(R.id.assetLable)).setText(animDBs.get(position).getAnimName());
         String fileName = animDBs.get(position).getAnimAssetId()+".png";
+
+        if (((EditorView) mContext).animationSelection.category.getSelectedItemPosition() == 4) {
+            grid.findViewById(R.id.props_btn).setVisibility(View.VISIBLE);
+            grid.findViewById(R.id.props_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMyAnimationProps(v, position);
+                }
+            });
+        } else
+            grid.findViewById(R.id.props_btn).setVisibility(View.INVISIBLE);
 
         if(FileHelper.checkValidFilePath(PathManager.LocalThumbnailFolder + "/" + fileName)){
             ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
@@ -186,17 +210,107 @@ public class AnimationSelectionAdapter extends BaseAdapter {
         else
             ((LinearLayout)((ViewGroup)((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).getChildAt(0)).getChildAt(0)).setGravity(Gravity.START);
 
-        ((Button)((Activity)mContext).findViewById(R.id.publish)).setOnClickListener(new View.OnClickListener() {
+        ((Button) ((Activity) mContext).findViewById(R.id.publish)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(((EditorView)mContext).userDetails.signInType <= 0){
-                    UIHelper.showSignInPanelWithMessage(mContext,"Please sign in to save your animation.");
+                    UIHelper.showSignInPanelWithMessage(mContext, "Please sign in to publish your animation.");
                     return;
                 }
                 ((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).setVisibility(View.GONE);
                 ((EditorView)((Activity)mContext)).publish.publishAnimation(position);
             }
         });
+    }
+
+    private void showMyAnimationProps(View v, final int position) {
+        final PopupMenu popup = new PopupMenu(mContext, v);
+        popup.getMenuInflater().inflate(R.menu.my_animation_menu, popup.getMenu());
+        popup.getMenu().getItem(3).setVisible(animDBs.get(position).getpublishedId() <= 0);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getOrder()) {
+                    case ID_CLONE:
+                        int animName = animDBs.get(position).getAnimAssetId();
+                        int assetId = 80000 + db.getNextAnimationAssetId();
+                        AnimDB animDB;
+                        animDB = animDBs.get(position);
+                        animDB.setAnimName(animDB.getAnimName() + "copy");
+                        animDB.setAssetsId(assetId);
+                        String ext = (animDBs.get(position).getAnimType() == 0) ? ".sgra" : ".sgta";
+                        FileHelper.copy(PathManager.LocalAnimationFolder + "/" + animName + ext, PathManager.LocalAnimationFolder + "/" + assetId + ext);
+                        FileHelper.copy(PathManager.LocalThumbnailFolder + "/" + animName + ".png", PathManager.LocalThumbnailFolder + "/" + assetId + ".png");
+                        FileHelper.copy(PathManager.LocalAnimationFolder + "/" + animName + ".png", PathManager.LocalAnimationFolder + "/" + assetId + ".png");
+                        db.addNewMyAnimationAssets(animDB);
+                        animDBs.clear();
+                        animDBs = db.getAllMyAnimation((GL2JNILib.getNodeType(((EditorView) mContext).animationSelection.selectedNodeId) == Constants.NODE_RIG) ? 0 : 1);
+                        notifyDataSetChanged();
+                        break;
+                    case ID_RENAME:
+                        renameAnimation(position);
+                        break;
+                    case ID_DELETE:
+                        int animId = animDBs.get(position).getAnimAssetId();
+                        String extension = (animDBs.get(position).getAnimType() == 0) ? ".sgra" : ".sgta";
+                        FileHelper.deleteFilesAndFolder(PathManager.LocalAnimationFolder + "/" + animId + extension);
+                        FileHelper.deleteFilesAndFolder(PathManager.LocalThumbnailFolder + "/" + animId + ".png");
+                        db.deleteMyAnimation(animDBs.get(position).getAnimAssetId());
+                        animDBs.remove(position);
+                        notifyDataSetChanged();
+                        break;
+                    case ID_PUBLISH:
+                        if (((EditorView) mContext).userDetails.signInType <= 0) {
+                            UIHelper.showSignInPanelWithMessage(mContext, "Please sign in to publish your animation.");
+                            break;
+                        }
+                        ((FrameLayout) ((Activity) mContext).findViewById(R.id.publishFrame)).setVisibility(View.GONE);
+                        ((EditorView) ((Activity) mContext)).publish.publishAnimation(position);
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    private void renameAnimation(final int position) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Rename your Animation");
+        final EditText input = new EditText(mContext);
+        input.setHint("Animation Name");
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (input.getText().toString().length() == 0) {
+                    UIHelper.informDialog(mContext, "Animation name cannot be empty.");
+                    return;
+                }
+                if (FileHelper.isItHaveSpecialChar(input.getText().toString())) {
+                    UIHelper.informDialog(mContext, "Animation Name cannot contain any special characters.");
+                    return;
+                }
+                List<AnimDB> animDBs1 = db.getSingleMyAnimationDetail(DatabaseHelper.ANIM_KEY_ANIM_NAME, input.getText().toString());
+                if (animDBs1 != null && animDBs1.size() > 0) {
+                    UIHelper.informDialog(mContext, "Name already exists.");
+                    return;
+                }
+                AnimDB animDB = animDBs.get(position);
+                animDB.setAnimName(input.getText().toString());
+                db.updateMyAnimationDetails(animDB);
+                animDBs.clear();
+                animDBs = db.getAllMyAnimation((GL2JNILib.getNodeType(((EditorView) mContext).animationSelection.selectedNodeId) == Constants.NODE_RIG) ? 0 : 1);
+                notifyDataSetChanged();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 }
 

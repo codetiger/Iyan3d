@@ -149,4 +149,11 @@ public class HitScreens {
         mTracker.setScreenName(((type == Constants.IMAGE) ? "Image Preview" : "Video Preview")+ " - Android");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
+    public static void UserOnBoarding(Context mContext)
+    {
+        AnalyticsApplication application = (AnalyticsApplication) ((Activity)mContext).getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName("User On Boarding"+ " - Android");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 }

@@ -17,6 +17,7 @@ import com.smackall.animator.Helper.CreditTask;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.HQTaskDB;
+import com.smackall.animator.Helper.MediaScannerWrapper;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.Preview;
@@ -50,7 +51,8 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
 
     @Override
     public int getCount() {
-        String uniqueId = ((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
+        String className = mContext.getClass().getSimpleName();
+        String uniqueId = ((className.toLowerCase().equals("sceneselection")) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
         return ((db.getAllTasks(uniqueId) != null) ? db.getAllTasks(uniqueId).size(): 0);
     }
 
@@ -74,22 +76,34 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
         }else{
             list = (View)convertView;
         }
-        String uniqueId = ((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
+
+        String className = mContext.getClass().getSimpleName();
+        String uniqueId = ((className.toLowerCase().equals("sceneselection") ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId));
         HQTaskDB taskDB = db.getAllTasks(uniqueId).get(position);
                 ((TextView) list.findViewById(R.id.taskName)).setText(taskDB.getName());
         ((TextView)list.findViewById(R.id.progress_date)).setText(taskDB.getDate());
         if(taskDB.getTaskType() == Constants.EXPORT_IMAGES) {
-            ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(),"%s","In Queue"));
-            if(taskDB.getProgress() >= 100)
-                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(),"%s","Download"));
+            if(FileHelper.checkValidFilePath(PathManager.RenderPath+"/"+taskDB.getTask()+".png")) {
+                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%s", "Open"));
+            }
+            else{
+                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%s", "In Queue"));
+                if (taskDB.getProgress() >= 100)
+                    ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%s", "Download"));
+            }
         }
         else {
-            if(taskDB.getProgress() > 0)
-                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(),"%d%s",taskDB.getProgress(),"%"));
-            else
-                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(),"%s","In Queue"));
-            if(taskDB.getProgress() >= 100)
-                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(),"%s","Download"));
+            if(FileHelper.checkValidFilePath(PathManager.RenderPath+"/"+taskDB.getTask()+".mp4")) {
+                ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%s", "Open"));
+            }
+            else {
+                if (taskDB.getProgress() > 0)
+                    ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%d%s", taskDB.getProgress(), "%"));
+                else
+                    ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%s", "In Queue"));
+                if (taskDB.getProgress() >= 100)
+                    ((TextView) list.findViewById(R.id.task_precentage)).setText(String.format(Locale.getDefault(), "%s", "Download"));
+            }
         }
         list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +115,8 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
     }
 
     private void downloadTaskFile(int position,View list){
-        String uniqueId = ((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
+        String className = mContext.getClass().getSimpleName();
+        String uniqueId = ((className.toLowerCase().equals("sceneselection") ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId));
         HQTaskDB task = db.getAllTasks(uniqueId).get(position);
         if(task.getCompleted() == Constants.TASK_PROGRESS || downloadPending)
             return;
@@ -115,7 +130,7 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
         else{
             ((TextView)list.findViewById(R.id.task_precentage)).setVisibility(View.GONE);
             ((ProgressBar)list.findViewById(R.id.downloadProgress)).setVisibility(View.VISIBLE);
-            String uhash = task.getTask()+"-"+((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
+            String uhash = task.getTask()+"-"+((className.toLowerCase().equals("sceneselection") ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId));
             uhash = FileHelper.md5(uhash);
             String url = GL2JNILib.TaskDownload()+"?taskid="+task.getTask()+"&uhash="+uhash+"&action=0";
             downloadPending = true;
@@ -125,11 +140,12 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
 
     public void updateTaskStatus()
     {
-        String uniqueId = ((Constants.currentActivity == 0) ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
+        String className = mContext.getClass().getSimpleName();
+        String uniqueId = ((className.toLowerCase().equals("sceneselection") ?((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId));
         for (int i = 0; i < ((db.getAllTasks(uniqueId) != null) ?db.getAllTasks(uniqueId).size(): 0); i++){
             if(db.getAllTasks(uniqueId).get(i).getCompleted() != Constants.TASK_COMPLETED){
                 try {
-                    if (Constants.currentActivity == 0)
+                    if (className.toLowerCase().equals("sceneselection"))
                         ((SceneSelection) ((Activity) mContext)).creditsManager.getTaskProgress(RenderingProgressAdapter.this, db.getAllTasks(uniqueId).get(i).getTask());
                     else
                         ((EditorView) ((Activity) mContext)).creditsManager.getTaskProgress(RenderingProgressAdapter.this, db.getAllTasks(uniqueId).get(i).getTask());
@@ -163,6 +179,8 @@ public class RenderingProgressAdapter extends BaseAdapter implements CreditTask 
             public void run() {
                 if (downloadCompleted) {
                     UIHelper.informDialog(mContext, ((taskDB.getTaskType() == Constants.EXPORT_IMAGES) ? "Image" : "Video") + " Successfully saved in your SDCard/Iyan3D/Render");
+                    String ext = (taskDB.getTaskType() == Constants.EXPORT_IMAGES) ? ".png" : ".mp4";
+                    MediaScannerWrapper.scan(mContext,PathManager.RenderPath + "/" + taskDB.getName() + ext);
                 } else
                     UIHelper.informDialog(mContext, "Cannot download file. Check your internet connection.");
                 ((TextView) list.findViewById(R.id.task_precentage)).setVisibility(View.VISIBLE);

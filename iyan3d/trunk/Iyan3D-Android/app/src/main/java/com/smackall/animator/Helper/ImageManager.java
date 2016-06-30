@@ -113,15 +113,14 @@ public class ImageManager {
         final int oriWidth = bmp.getWidth();
         final int oriHeight = bmp.getHeight();
         int maxSize = Math.max(oriHeight, oriWidth);
-        int targetSize = 0;
-        if(maxSize <= 128)
-            targetSize = 128;
-        else if(maxSize <= 256)
-            targetSize = 256;
-        else if(maxSize <= 512)
-            targetSize = 512;
-        else
-            targetSize = 1024;
+        int targetSize = 2;
+
+        float bigSide = (oriWidth >= oriHeight) ? oriWidth : oriHeight;
+        //Convert texture image size should be the 2 to the power values for convinent case.
+
+        while (bigSide > targetSize && targetSize <= 1024)
+                 targetSize *= 2;
+
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, targetSize, targetSize, false);
         savePng(scaledBitmap,PathManager.LocalImportedImageFolder+"/"+FileHelper.getFileWithoutExt(path));
         scaledBitmap = null;

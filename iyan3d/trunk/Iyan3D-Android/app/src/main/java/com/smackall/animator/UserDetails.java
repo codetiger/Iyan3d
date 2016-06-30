@@ -35,7 +35,8 @@ public class UserDetails{
         sp.setData(mContext,"signinType",signInType);
         if( uniqueId != null && !uniqueId.equals("")&& uniqueId.length() > 5){
             try {
-                if (Constants.currentActivity == 0)
+                String className = mContext.getClass().getSimpleName();
+                if (className.toLowerCase().equals("sceneselection"))
                     ((SceneSelection) (Activity) mContext).showLogIn(((Activity) mContext).findViewById(R.id.login_btn));
                 else
                     ((EditorView) (Activity) mContext).showLogin(((Activity) mContext).findViewById(R.id.login));

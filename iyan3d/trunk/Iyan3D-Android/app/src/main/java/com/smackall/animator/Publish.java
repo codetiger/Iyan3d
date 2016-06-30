@@ -14,18 +14,11 @@ import com.google.android.gms.iid.InstanceID;
 import com.smackall.animator.Helper.AnimDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.FileHelper;
+import com.smackall.animator.Helper.FileUploader;
 import com.smackall.animator.Helper.HQTaskDB;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.opengl.GL2JNILib;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +32,8 @@ import java.util.Locale;
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
 public class Publish {
-    private Context mContext;
 
-    GoogleCloudMessaging gcmObj;
+    private Context mContext;
 
     public Publish(Context context){
         this.mContext = context;
@@ -57,8 +49,7 @@ public class Publish {
     }
 
     private class PublishAnimation extends AsyncTask<String,String,String> {
-        HttpClient httpclient;
-        HttpPost httppost;
+
         String response;
         Context mContext;
         int position;
@@ -72,39 +63,33 @@ public class Publish {
         @Override
         protected String doInBackground(String... params) {
             try {
-                httpclient = new DefaultHttpClient();
-                httppost = new HttpPost(GL2JNILib.PublishAnimation());
-                org.apache.http.entity.mime.MultipartEntity builder = new org.apache.http.entity.mime.MultipartEntity();
+                String charset = "UTF-8";
                 String ext =(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimType() == 0) ? ".sgra" : ".sgta";
                 String anim = PathManager.LocalAnimationFolder+"/"+ Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId())+ext;
                 String img = PathManager.LocalThumbnailFolder+"/"+((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId()+".png";
 
-                if(FileHelper.checkValidFilePath(anim) && FileHelper.checkValidFilePath(img)){
-                    File animationFile= new File(anim);
-                    FileBody animation = new FileBody(animationFile);
-                    builder.addPart("animationFile", animation);
-                    File animationimgFile= new File(img);
-                    FileBody thumbnail = new FileBody(animationimgFile);
-                    builder.addPart("animationImgFile", thumbnail);
+                FileUploader multipart = new FileUploader(GL2JNILib.PublishAnimation(), charset,"POST");
+                if(FileHelper.checkValidFilePath(anim) && FileHelper.checkValidFilePath(img)) {
+                    File animationFile = new File(anim);
+                    multipart.addFilePart("animationFile", animationFile);
+                    File animationimgFile = new File(img);
+                    multipart.addFilePart("animationImgFile", animationimgFile);
                 } else {
-                    Log.e("Error", "File Not Found");
                     asyncDialog.dismiss();
                     UIHelper.informDialog(mContext,"Something Wrong.. Try again.");
                     return null;
                 }
 
-                builder.addPart("userid", new StringBody(((EditorView)((Activity)mContext)).userDetails.uniqueId));
-                builder.addPart("uniqueId", new StringBody(((EditorView)((Activity)mContext)).userDetails.uniqueId));
-                builder.addPart("email", new StringBody(((EditorView)((Activity)mContext)).userDetails.mail));
-                builder.addPart("username", new StringBody(((EditorView)((Activity)mContext)).userDetails.userName));
-                builder.addPart("asset_name",new StringBody(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimName()));
-                builder.addPart("keyword",new StringBody(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getKeyword()));
-                builder.addPart("bonecount", new StringBody(Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getBonecount())));
-                builder.addPart("asset_id", new StringBody(Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId())));
-                builder.addPart("type", new StringBody(Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimType())));
-                httppost.setEntity(builder);
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                response = httpclient.execute(httppost,handler);
+                multipart.addFormField("userid", (((EditorView)((Activity)mContext)).userDetails.uniqueId));
+                multipart.addFormField("uniqueId", (((EditorView)((Activity)mContext)).userDetails.uniqueId));
+                multipart.addFormField("email", (((EditorView)((Activity)mContext)).userDetails.mail));
+                multipart.addFormField("username", (((EditorView)((Activity)mContext)).userDetails.userName));
+                multipart.addFormField("asset_name",(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimName()));
+                multipart.addFormField("keyword",(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getKeyword()));
+                multipart.addFormField("bonecount", (Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getBonecount())));
+                multipart.addFormField("asset_id", (Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimAssetId())));
+                multipart.addFormField("type", (Integer.toString(((EditorView) ((Activity) mContext)).animationSelection.animationSelectionAdapter.animDBs.get(position).getAnimType())));
+                response = multipart.finish();
             } catch (IOException e) {
                 e.printStackTrace();
                 asyncDialog.dismiss();
@@ -142,7 +127,6 @@ public class Publish {
         }
     }
 
-
     public void uploadHQRender(int startFrame,int endFrame,int credits,int x,int y)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -153,8 +137,6 @@ public class Publish {
     }
 
     private class UploadHQRender extends AsyncTask<String,String,String> {
-        HttpClient httpclient;
-        HttpPost httppost;
         String response;
         Context mContext;
         ProgressDialog asyncDialog;
@@ -170,30 +152,19 @@ public class Publish {
         @Override
         protected String doInBackground(String... params) {
             try {
-                httpclient = new DefaultHttpClient();
-                httppost = new HttpPost(GL2JNILib.RenderTask());
-                org.apache.http.entity.mime.MultipartEntity builder = new org.apache.http.entity.mime.MultipartEntity();
+                String charset = "UTF-8";
+
+                FileUploader multipart = new FileUploader(GL2JNILib.RenderTask(), charset,"POST");
+
                 String zip = PathManager.LocalCacheFolder+"/index.zip";
                 if(FileHelper.checkValidFilePath(zip)){
-                    File renderFile = new File(zip);
-                    FileBody renderFileBody = new FileBody(renderFile,"image/png");
-                    builder.addPart("renderFile", renderFileBody);
+                    multipart.addFilePart("renderFile",new File(zip));
                 } else {
                     Log.e("Error", "File Not Found");
                     asyncDialog.dismiss();
                     UIHelper.informDialog(mContext,"Something Wrong.. Try again.");
                     return null;
                 }
-
-//                String id = "";
-//                String regId = "";
-//                if (gcmObj == null) {
-//                    gcmObj = GoogleCloudMessaging
-//                            .getInstance(mContext);
-//                }
-//                regId = gcmObj
-//                        .register("328259754555");
-//                id = regId;
 
                 String token = "";
                 if(Constants.checkPlayServices(mContext)) {
@@ -205,17 +176,16 @@ public class Publish {
                         e.printStackTrace();
                     }
                 }
-                builder.addPart("userid", new StringBody(((EditorView) ((Activity) mContext)).userDetails.uniqueId));
-                builder.addPart("startFrame", new StringBody(Integer.toString(startFrame)));
-                builder.addPart("endFrame", new StringBody(Integer.toString(endFrame)));
-                builder.addPart("width", new StringBody(Integer.toString(x)));
-                builder.addPart("height", new StringBody(Integer.toString(y)));
-                builder.addPart("credits", new StringBody(Integer.toString(credits)));
-                builder.addPart("pushid", new StringBody(token));
-                builder.addPart("os", new StringBody("2"));
-                httppost.setEntity(builder);
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                response = httpclient.execute(httppost, handler);
+
+                multipart.addFormField("userid", ((EditorView) ((Activity) mContext)).userDetails.uniqueId);
+                multipart.addFormField("startFrame", (Integer.toString(startFrame)));
+                multipart.addFormField("endFrame",(Integer.toString(endFrame)));
+                multipart.addFormField("width", (Integer.toString(x)));
+                multipart.addFormField("height", (Integer.toString(y)));
+                multipart.addFormField("credits", (Integer.toString(credits)));
+                multipart.addFormField("pushid", (token));
+                multipart.addFormField("os", ("2"));
+                response = multipart.finish();
             } catch (IOException e) {
                 e.printStackTrace();
                 asyncDialog.dismiss();

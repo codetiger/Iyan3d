@@ -16,6 +16,11 @@ public class SharedPreferenceManager {
         editor.putInt(key, value);
         editor.apply();
     }
+    public void setData(Context context,String key,long value){
+        SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
+        editor.putLong(key, value);
+        editor.apply();
+    }
 
     public void setData(Context context,String key,String value){
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
@@ -48,6 +53,11 @@ public class SharedPreferenceManager {
     public float getFloat(Context context,String key){
         SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
         return prefs.getFloat(key, 0);
+    }
+
+    public long getLong(Context context,String key){
+        SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
+        return prefs.getLong(key, 0);
     }
 
     public boolean getBool(Context context,String key){

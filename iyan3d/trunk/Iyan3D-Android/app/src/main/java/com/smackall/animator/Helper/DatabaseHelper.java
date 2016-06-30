@@ -405,11 +405,25 @@ public class DatabaseHelper {
         values.put(ANIM_KEY_UPLOADEDTIME, animDB.getUploaded());
         values.put(ANIM_KEY_DOWNLOADS, animDB.getDownloads());
         values.put(ANIM_KEY_RATING, animDB.getRating());
-        values.put(ANIM_PUBLISH_ID, animDB.getRating());
+        values.put(ANIM_PUBLISH_ID, animDB.getpublishedId());
         myAniamtionDatabase.insert(ANIM_TABLE_MYANIMASSETS, null, values);
         if (myAniamtionDatabase.isOpen())
             myAniamtionDatabase.close();
         values = null;
+    }
+
+    public void deleteMyAnimation(int animId) {
+        SQLiteDatabase myAniamtionDatabase = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        myAniamtionDatabase.delete("MyAnimation", "animAssetId" + " = ?", new String[]{String.valueOf(animId)});
+        if (myAniamtionDatabase.isOpen())
+            myAniamtionDatabase.close();
+    }
+
+    public void deleteMyMyModel(int assetId) {
+        SQLiteDatabase myModelDatabase = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        myModelDatabase.delete("MyLibrary", "assetsId" + " = ?", new String[]{String.valueOf(assetId)});
+        if (myModelDatabase.isOpen())
+            myModelDatabase.close();
     }
 
     public List<AnimDB> getAllAnimationDetailWithSearch(String table, String searchName, String animationType) {
@@ -578,7 +592,7 @@ public class DatabaseHelper {
         if (animDb.isOpen())
             animDb.close();
 
-        return (animList.size() > 0) ? animList.get(animList.size() - 1).getID() : 1;
+        return (animList.size() > 0) ? animList.get(animList.size() - 1).getID() + 1 : 1;
     }
 
     public List<AnimDB> getAllMyAnimation(int type)
@@ -1171,7 +1185,7 @@ public class DatabaseHelper {
     public List<AnimDB> getSingleMyAnimationDetail(String columnName, String keyWord) {
         List<AnimDB> animList = new ArrayList<AnimDB>();
         SQLiteDatabase animDb = SQLiteDatabase.openDatabase(PathManager.Iyan3DDatabse, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        Cursor c = animDb.rawQuery("SELECT  * FROM " + ANIM_TABLE_MYANIMASSETS + " WHERE " + columnName + " LIKE " + "'%" + keyWord + "%'", null);
+        Cursor c = animDb.rawQuery("SELECT  * FROM " + ANIM_TABLE_MYANIMASSETS + " WHERE " + columnName + " = " + "'" + keyWord + "'", null);
         try {
             if (c.moveToFirst()) {
                 do {

@@ -1,14 +1,9 @@
 package com.smackall.animator.Helper;
 
 import android.content.Context;
-import android.os.Build;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.smackall.animator.AssetSelection;
-import com.smackall.animator.ImageSelection;
-import com.smackall.animator.OBJSelection;
-import com.smackall.animator.TextSelection;
 
 /**
  * Created by Sabish.M on 4/6/16.
@@ -95,5 +90,10 @@ public class Events {
 
     public static void rigCompletedEvent(Context mContext){
 
+        Answers.getInstance().logCustom(new CustomEvent("AutoRig-Completion"));
+    }
+    public static void shareEvent(Context mContext,int type){
+
+        Answers.getInstance().logCustom(new CustomEvent("ShareOnPreview").putCustomAttribute((type == Constants.VIDEO) ? "Video" :"Image","Share"));
     }
 }

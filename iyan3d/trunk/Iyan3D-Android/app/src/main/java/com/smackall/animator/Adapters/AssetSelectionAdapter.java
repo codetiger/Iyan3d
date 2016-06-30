@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,6 +22,7 @@ import com.smackall.animator.EditorView;
 import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.DownloadHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
@@ -35,6 +38,8 @@ import java.util.List;
  */
 
 public class AssetSelectionAdapter extends BaseAdapter {
+
+    private static final int ID_DELETE = 0;
 
     private Context mContext;
     private DatabaseHelper db;
@@ -62,6 +67,11 @@ public class AssetSelectionAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if(assetsDBs == null || assetsDBs.size() <= 0) {
+            DownloadHelper downloadHelper = new DownloadHelper();
+
+        }
+
         return (assetsDBs != null && assetsDBs.size() > 0) ? assetsDBs.size() : 0;
     }
 
@@ -101,6 +111,17 @@ public class AssetSelectionAdapter extends BaseAdapter {
 
         ((TextView) grid.findViewById(R.id.assetLable)).setText(assetsDBs.get(position).getAssetName());
         String fileName = assetsDBs.get(position).getAssetsId()+".png";
+
+        if (((EditorView) mContext).assetSelection.category.getSelectedItemPosition() == 6) {
+            grid.findViewById(R.id.props_btn).setVisibility(View.VISIBLE);
+            grid.findViewById(R.id.props_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMyModelProps(v, position);
+                }
+            });
+        } else
+            grid.findViewById(R.id.props_btn).setVisibility(View.INVISIBLE);
 
         if(FileHelper.checkValidFilePath(PathManager.LocalThumbnailFolder+"/"+fileName)){
             ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
@@ -197,6 +218,29 @@ public class AssetSelectionAdapter extends BaseAdapter {
             queueList.clear();
         else
             queueList = new HashMap();
+    }
+
+    private void showMyModelProps(View v, final int position) {
+        final PopupMenu popup = new PopupMenu(mContext, v);
+        popup.getMenuInflater().inflate(R.menu.my_model_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getOrder()) {
+                    case ID_DELETE:
+                        int assetsId = assetsDBs.get(position).getAssetsId();
+                        String meshExt = (assetsDBs.get(position).getType() == 1) ? ".sgr" : ".sgm";
+                        FileHelper.deleteFilesAndFolder(PathManager.LocalMeshFolder + "/" + assetsId + meshExt);
+                        FileHelper.deleteFilesAndFolder(PathManager.LocalThumbnailFolder + "/" + assetsId + ".png");
+                        FileHelper.deleteFilesAndFolder(PathManager.LocalMeshFolder + "/" + assetsId + "-cm.png");
+                        db.deleteMyMyModel(assetsId);
+                        assetsDBs.remove(position);
+                        notifyDataSetChanged();
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 }
 

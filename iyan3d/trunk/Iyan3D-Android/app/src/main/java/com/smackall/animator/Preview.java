@@ -1,16 +1,12 @@
 package com.smackall.animator;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -18,6 +14,7 @@ import android.widget.VideoView;
 
 import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
@@ -45,8 +42,6 @@ public class Preview extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void showPreview(String fileNameWithoutExt){
-
-        System.out.println("Path " + fileNameWithoutExt);
 
         if(FileHelper.checkValidFilePath(PathManager.RenderPath+"/"+ fileNameWithoutExt+".png"))
             type = Constants.IMAGE;
@@ -78,6 +73,7 @@ public class Preview extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
+        HitScreens.Preview(this, type);
         if(type == Constants.IMAGE)
             preview_ImageView.setImageBitmap(BitmapFactory.decodeFile(path));
         else{
@@ -107,6 +103,7 @@ public class Preview extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.preview_share:
                 try {
+                    Events.shareEvent(this,type);
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));

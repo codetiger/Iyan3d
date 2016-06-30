@@ -1,0 +1,6 @@
+<menu xmlns:androclass="http://schemas.android.com/apk/res/android">
+    <item
+        androclass:id="@+id/delete_btn"
+        androclass:orderInCategory="0"
+        androclass:title="@string/delete"/>
+</menu>

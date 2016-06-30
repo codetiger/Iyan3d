@@ -17,6 +17,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.DownloadManager.AddToDownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManager;
 import com.smackall.animator.DownloadManager.DownloadManagerClass;
+import com.smackall.animator.Helper.AssetsAnimationRegularUpdate;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CreditsManager;
 import com.smackall.animator.Helper.DatabaseHelper;
@@ -133,6 +135,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     public CreditsManager creditsManager;
     public ZipManager zipManager;
     public NativeCallBacks nativeCallBacks;
+    public AssetsAnimationRegularUpdate assetsAniamtionRegularUpdate;
 
     ImageView referenceImg;
 
@@ -159,10 +162,11 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         Constants.currentActivity =1;
         referenceImg = (ImageView)findViewById(R.id.last_frame_img);
 
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        EditorView.this.bindService(serviceIntent, EditorView.this, Context.BIND_AUTO_CREATE);
-
+        try {
+            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+            serviceIntent.setPackage("com.android.vending");
+            EditorView.this.bindService(serviceIntent, EditorView.this, Context.BIND_AUTO_CREATE);
+        }catch (NullPointerException ignored){}
         Bundle bundle = getIntent().getExtras();
         int position = bundle.getInt("scenePosition");
         try {
@@ -269,6 +273,11 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
 
     private void initViews()
     {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        Constants.width = displaymetrics.widthPixels;
+        Constants.height = displaymetrics.heightPixels;
+
         followApp = new FollowApp(EditorView.this);
         downloadHelper = new DownloadHelper();
         assetSelection = new AssetSelection(this,this.db,addToDownloadManager,downloadManager);
@@ -319,6 +328,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         FrameLayout.LayoutParams glParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         ((FrameLayout)findViewById(R.id.glView)).addView(glView, glParams);
         renderManager.glView = glView;
+        assetsAniamtionRegularUpdate = new  AssetsAnimationRegularUpdate(EditorView.this,sharedPreferenceManager,db);
     }
 
     public void goToFirstOrLastFrame(View view)
@@ -446,6 +456,8 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         v.findViewById(R.id.scale_btn).setOnClickListener(EditorView.this);
         v.findViewById(R.id.undo).setOnClickListener(EditorView.this);
         v.findViewById(R.id.redo).setOnClickListener(EditorView.this);
+        Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
+        HitScreens.EditorView(this);
     }
 
     @Override

@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,16 +26,13 @@ import android.widget.Switch;
 import com.android.vending.billing.IInAppBillingService;
 import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.Helper.DescriptionManager;
+import com.smackall.animator.Helper.FileUploader;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 import com.smackall.animator.Helper.UIHelper;
+import com.smackall.animator.OverlayDialogs.HelpDialogs;
 import com.smackall.animator.opengl.GL2JNILib;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +60,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
     public IInAppBillingService mService;
     HashMap<String, String> map;
 
-
+    float divideValue = 0.0f;
     public Settings(Context context,SharedPreferenceManager sp,IInAppBillingService service){
         this.mContext = context;
         this.sp = sp;
@@ -69,6 +69,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
     }
 
     public void showSettings() {
+        Constants.VIEW_TYPE = Constants.SETTINGS_VIEW;
         HitScreens.SettingsView(mContext);
         if(map != null) map.clear();
         final Dialog dialog = new Dialog(mContext);
@@ -80,6 +81,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 dialog.getWindow().setLayout((int) (Constants.width), Constants.height);
                 break;
             default:
+                divideValue = 1.5f;
                 dialog.getWindow().setLayout((int) (Constants.width / 1.5), Constants.height);
                 break;
         }
@@ -110,11 +112,13 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
         frame_duration_btn.setOnClickListener(this);
 
 
+        final String className = mContext.getClass().getSimpleName();
         done_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HitScreens.EditorView(mContext);
-                if(Constants.currentActivity == 1) {
+                String className = mContext.getClass().getSimpleName();
+                if(!className.toLowerCase().equals("sceneselection")) {
                     ((EditorView) ((Activity) mContext)).swapViews();
                     ((EditorView) ((Activity) mContext)).renderManager.cameraPosition(Constants.height - ((FrameLayout) ((Activity)mContext).findViewById(R.id.glView)).getHeight());
                     Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
@@ -128,7 +132,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
             public void onClick(View v) {
                 //queryForItemAvailable();
                 try {
-                    if ((Constants.currentActivity == 0) ? ((SceneSelection) (Activity) mContext).userDetails.signInType <= 0 : ((EditorView) (Activity) mContext).userDetails.signInType <= 0) {
+                    if (className.toLowerCase().equals("sceneselection") ? ((SceneSelection) (Activity) mContext).userDetails.signInType <= 0 : ((EditorView) (Activity) mContext).userDetails.signInType <= 0) {
                         informDialog(mContext, "Please SignIn to continue.");
                         done_btn.performClick();
                         return;
@@ -141,7 +145,31 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
 
         settingsBtnHandler();
         dialog.show();
-        Constants.VIEW_TYPE = Constants.SETTINGS_VIEW;
+        final DescriptionManager descriptionManager = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection)(mContext)).descriptionManager : ((EditorView)(mContext)).descriptionManager);
+        final HelpDialogs helpDialogs = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection)(mContext)).helpDialogs : ((EditorView)(mContext)).helpDialogs);
+        dialog.findViewById(R.id.help).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.findViewById(R.id.viewGroup).bringToFront();
+               descriptionManager.addSettingsViewDescriptions(mContext, dialog);
+                helpDialogs.showPop(mContext, ((ViewGroup) dialog.findViewById(R.id.viewGroup)), (divideValue > 0) ? ((ViewGroup) dialog.findViewById(R.id.viewGroup)).getWidth() : 0);
+            }
+        });
+
+        dialog.findViewById(R.id.viewGroup).bringToFront();
+        dialog.findViewById(R.id.viewGroup).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT < 16) {
+                    dialog.findViewById(R.id.viewGroup).getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                } else {
+                    dialog.findViewById(R.id.viewGroup).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+                if (sp.getInt(mContext, "firstTimeUserForSetting") == 0) {
+                    sp.setData(mContext, "firstTimeUserForSetting", 1);
+                    descriptionManager.addSettingsViewDescriptions(mContext, dialog);
+                    helpDialogs.showPop(mContext, (ViewGroup) dialog.getWindow().getDecorView(), (divideValue > 0) ? ((ViewGroup) dialog.findViewById(R.id.viewGroup)).getWidth() : 0);
+                }
+            }});
     }
 
     private void initButtons(Dialog dialog)
@@ -376,16 +404,13 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
         protected String doInBackground(Integer... params) {
             String uniqueId = ((Constants.currentActivity == 0) ? ((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
             String url = GL2JNILib.verifyRestorePurchase();
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(url);
-            org.apache.http.entity.mime.MultipartEntity builder = new org.apache.http.entity.mime.MultipartEntity();
+            String charset = "UTF-8";
             try {
-                builder.addPart("uniqueid",new StringBody(uniqueId));
-                builder.addPart("signed_data",new StringBody(json));
-                builder.addPart("signature",new StringBody(signature));
-                httpPost.setEntity(builder);
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                response = httpClient.execute(httpPost,handler);
+                FileUploader multiPart = new FileUploader(url,charset,"POST");
+                multiPart.addFormField("uniqueid",(uniqueId));
+                multiPart.addFormField("signed_data",(json));
+                multiPart.addFormField("signature",(signature));
+                response = multiPart.finish();
             } catch (IOException e) {
                 e.printStackTrace();
                 UIHelper.informDialog(mContext,"Please Check your network connection.");
@@ -437,7 +462,8 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                             public void onClick(DialogInterface informDialog, int id) {
                                 informDialog.dismiss();
                                 try {
-                                    if (Constants.currentActivity == 0) {
+                                    String className = context.getClass().getSimpleName();
+                                    if (className.toLowerCase().equals("sceneselection")) {
                                         ((SceneSelection) context).settings.done_btn.performClick();
                                         ((SceneSelection) context).showLogIn(((Activity) context).findViewById(R.id.login_btn));
                                     } else {

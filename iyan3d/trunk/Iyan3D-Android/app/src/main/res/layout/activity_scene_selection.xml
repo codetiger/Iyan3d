@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
@@ -16,7 +16,8 @@
     android:layout_height="match_parent"
     tools:context="com.smackall.animator.SceneSelection"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/scene_selection">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -30,7 +31,7 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:gravity="center|left"
             android:weightSum="1">
 
@@ -50,7 +51,7 @@
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:gravity="center" >
 
             <TextView
@@ -66,41 +67,42 @@
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.25"
-            android:gravity="center|right" >
+            android:layout_weight="0.2"
+            android:gravity="center|right"
+            android:weightSum="3">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/login_btn"
                 android:src="@drawable/login_btn"
-                android:adjustViewBounds="false"
+                android:adjustViewBounds="true"
                 android:scaleType="center"
-                android:layout_marginRight="30dp"
                 android:clickable="true"
-                android:onClick="showLogIn"/>
+                android:onClick="showLogIn"
+                android:layout_weight="1" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/help"
                 android:src="@drawable/help"
-                android:adjustViewBounds="false"
+                android:adjustViewBounds="true"
                 android:scaleType="center"
-                android:layout_marginRight="30dp"
                 android:clickable="true"
-                android:onClick="showHelp" />
+                android:onClick="showHelp"
+                android:layout_weight="1" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/info_btn"
                 android:src="@drawable/info_btn"
-                android:adjustViewBounds="false"
+                android:adjustViewBounds="true"
                 android:scaleType="center"
                 android:onClick="openSceneProps"
-                android:layout_marginRight="30dp"
-                android:clickable="true" />
+                android:clickable="true"
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 
@@ -138,4 +140,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    </RelativeLayout>
+    </FrameLayout>

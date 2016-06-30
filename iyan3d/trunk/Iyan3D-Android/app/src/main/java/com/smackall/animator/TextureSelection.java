@@ -24,7 +24,7 @@ public class TextureSelection {
     private Context mContext;
     public ChangeTextureAdapter changeTextureAdapter;
     public AssetsDB assetsDB = new AssetsDB();
-    int selectedNodeid;
+    public int selectedNodeid;
     private Tracker mTracker;
     public View v;
     public TextureSelection(Context context){

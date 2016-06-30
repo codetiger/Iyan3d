@@ -3,6 +3,7 @@ package com.smackall.animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -58,6 +59,7 @@ public class Rig implements View.OnClickListener, CompoundButton.OnCheckedChange
         selectedNodeType = (selectedNodeId != -1) ? GL2JNILib.getNodeType(selectedNodeId) : -1;
         int selectedNodeType = (GL2JNILib.getSelectedNodeId() != -1) ? ((GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()))) : -1;
         if(selectedNodeType != -1 && (selectedNodeType == Constants.NODE_SGM || selectedNodeType == Constants.NODE_RIG)){
+            Constants.VIEW_TYPE = Constants.AUTO_RIG_VIEW;
             ((RecyclerView) ((Activity)mContext).findViewById(R.id.frames)).setVisibility(View.GONE);
             ((LinearLayout) ((Activity)mContext).findViewById(R.id.frameCtr)).setVisibility(View.GONE);
             ((TextView) ((Activity)mContext).findViewById(R.id.rigHeader)).setVisibility(View.VISIBLE);
@@ -145,6 +147,17 @@ public class Rig implements View.OnClickListener, CompoundButton.OnCheckedChange
         ((Activity)mContext).findViewById(R.id.rig_next_scene).setOnClickListener(this);
         ((Activity)mContext).findViewById(R.id.rig_add_to_scene).setOnClickListener(this);
         ((Activity)mContext).findViewById(R.id.rig_add_to_scene).setVisibility(View.INVISIBLE);
+        Constants.VIEW_TYPE = Constants.AUTO_RIG_VIEW;
+        if(sharedPreferenceManager.getInt(mContext,"isFirstTimeUserForAutoRig") == 0){
+            sharedPreferenceManager.setData(mContext,"isFirstTimeUserForAutoRig",1);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                        ((EditorView)mContext).showHelp(null);
+                }
+            }, 100);
+        }
     }
 
     private void addRigToDB(String nodeName,String textureName,int boneCount)

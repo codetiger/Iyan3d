@@ -23,32 +23,42 @@
             android:gravity="center|right" />
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1.05"
-        android:gravity="center">
-        <GridView
-            android:layout_width="fill_parent"
+        android:layout_gravity="center"
+        android:foregroundGravity="center">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/asset_grid"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="0dp"
-            android:horizontalSpacing="0dp"
-            android:foregroundGravity="bottom"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.9"
+            android:gravity="center">
+
+            <GridView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/asset_grid"
+                android:numColumns="4"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0dp"
+                android:horizontalSpacing="0dp"
+                android:foregroundGravity="bottom"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+
+        </LinearLayout>
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/jsonLoading"
-            android:layout_gravity="center_vertical"
-            android:visibility="gone" />
-    </LinearLayout>
+            android:id="@+id/loadingJson"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:orientation="horizontal"

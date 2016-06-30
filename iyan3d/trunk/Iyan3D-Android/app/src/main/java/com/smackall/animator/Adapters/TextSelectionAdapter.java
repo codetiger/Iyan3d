@@ -193,7 +193,7 @@ public class TextSelectionAdapter extends BaseAdapter {
         else {
             this.isStore = false;
             File[] filelist = getFileList();
-            if(filelist == null || filelist.length <= 0){ UIHelper.informDialog(mContext,"Please copy your font's to SDCard/iyan3d Folder.");return;}
+            if(filelist == null || filelist.length <= 0){ UIHelper.informDialog(mContext,"Please copy your fonts to SDCard/iyan3d Folder.");return;}
             for (File aFilelist : filelist) {
                 AssetsDB assetsDB = new AssetsDB();
                 assetsDB.setAssetsId(0);

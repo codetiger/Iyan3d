@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.7"
         android:gravity="center">
 
         <FrameLayout
@@ -30,6 +30,7 @@
                     android:indeterminate="true"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true" />
+
             </RelativeLayout>
 
             <ImageView
@@ -41,6 +42,27 @@
                 android:paddingTop="10dp"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/props_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:src="@drawable/scene_properties_btn"
+                    android:layout_gravity="right"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:adjustViewBounds="true"
+                    android:layout_weight="0.5"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
         </FrameLayout>
 
     </LinearLayout>
@@ -49,7 +71,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.3"
         android:gravity="center" >
 
         <TextView
@@ -61,7 +83,8 @@
             android:layout_gravity="center_horizontal"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textSize="8sp"/>
     </LinearLayout>
 
 </LinearLayout>

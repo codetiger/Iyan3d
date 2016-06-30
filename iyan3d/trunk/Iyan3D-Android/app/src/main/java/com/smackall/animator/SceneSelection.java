@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
@@ -56,6 +57,7 @@ import com.smackall.animator.Helper.SceneDB;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.OverlayDialogs.HelpDialogs;
+import com.smackall.animator.UserOnBoarding.UserOnBoarding;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.io.File;
@@ -76,7 +78,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     public UserDetails userDetails;
     public SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager();
     public HelpDialogs helpDialogs = new HelpDialogs();
-    private DescriptionManager descriptionManager = new DescriptionManager();
+    public DescriptionManager descriptionManager = new DescriptionManager();
     public CreditsManager creditsManager;
     public Settings settings;
     public RestoreBackUp restoreBackUp;
@@ -88,7 +90,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
 
     Snackbar snackbar;
     boolean fromLoadingView = true;
-    boolean isFirstTime = true;
+    boolean isFirstTimeForToolTip = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +104,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
 //            window.setStatusBarColor(ContextCompat.getColor(this, R.color.topbar));
 //        }
         HitScreens.SceneSelectionView(SceneSelection.this);
-        Constants.currentActivity =0;
+        Constants.currentActivity = 0;
         restoreBackUp = new RestoreBackUp(this);
         initGridView();
         initClass();
@@ -166,6 +168,12 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         }
 
         Constants.isFirstTimeUser = (sharedPreferenceManager.getInt(SceneSelection.this, "firstTimeUser") == 0);
+
+        if(sharedPreferenceManager.getInt(this,"firstTimeUser") == 0) {
+            Intent i = new Intent(SceneSelection.this, UserOnBoarding.class);
+            i.putExtra("firstTimeUser",1);
+            startActivity(i);
+        }
     }
 
     @Override
@@ -186,6 +194,9 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         Bundle a = intent.getExtras();
         if(a != null && a.getBoolean("hasExtraForOpenWith")) {
             handleOpenWith(intent);
+        }
+        else if(a != null && a.getInt("userOnBoardClosed") == 1){
+           isFirstTimeForToolTip = true;
         }
         else{
             findViewById(R.id.login_btn).performClick();
@@ -304,6 +315,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
 
     private void renameScene(String name, int position) {
         List<SceneDB> sceneDBs = db.getAllScenes();
+        if(sceneDBs == null || sceneDBs.size()==0) return;
         db.updateSceneDetails(new SceneDB(sceneDBs.get(position).getID(), name, sceneDBs.get(position).getImage(), sceneDBs.get(position).getTime()));
         this.sceneAdapter.sceneDBs = db.getAllScenes();
         this.sceneAdapter.notifyDataSetChanged();
@@ -312,6 +324,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     public void deleteScene(int position)
     {
         List<SceneDB> sceneDBs = db.getAllScenes();
+        if(sceneDBs == null || sceneDBs.size()==0) return;
         File image = new File(PathManager.LocalScenesFolder+"/" + sceneDBs.get(position).getImage() + ".png");
         File projectFile = new File(PathManager.LocalProjectFolder+"/" + sceneDBs.get(position).getImage() + ".sgb");
         File backUpFile = new File(PathManager.LocalProjectFolder+"/" + sceneDBs.get(position).getImage() + ".i3d");
@@ -330,6 +343,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     {
         String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date());
         List<SceneDB> sceneDBs = db.getAllScenes();
+        if(sceneDBs == null || sceneDBs.size()==0) return;
         String sceneName = (sceneDBs.size() <= 0) ? "My Scene " + 1 : "My Scene " + Integer.toString(sceneDBs.get(db.getSceneCount() - 1).getID() + 1);
         File thumpnailFrom = new File(PathManager.LocalScenesFolder+"/" + sceneDBs.get(position).getImage() + ".png");
         File thumpnailTo = new File(PathManager.LocalScenesFolder+"/" + FileHelper.md5(sceneName) + ".png");
@@ -357,6 +371,10 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         helpDialogs.dismissTips(false,null);
         if(fromLoadingView) {
             Events.sceneOpenedFirstTime(SceneSelection.this, (sharedPreferenceManager.getInt(SceneSelection.this, "firstTimeUser") == 0) ? "YES" : "NO");
+            if((sharedPreferenceManager.getInt(SceneSelection.this, "firstTimeUser") == 0)) {
+                sharedPreferenceManager.setData(SceneSelection.this, "lastAnimationJsonUpdatedTime", System.currentTimeMillis());
+                sharedPreferenceManager.setData(SceneSelection.this, "lastAssetJsonUpdatedTime", System.currentTimeMillis());
+            }
             sharedPreferenceManager.setData(SceneSelection.this,"firstTimeUser",1);
         }
 
@@ -448,10 +466,18 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         FullScreen.HideStatusBar(SceneSelection.this);
-        if(isFirstTime) {
-            isFirstTime = false;
-            if(Constants.isFirstTimeUser)
-                showHelp(null);
+        if(isFirstTimeForToolTip) {
+            isFirstTimeForToolTip = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(sharedPreferenceManager.getInt(SceneSelection.this,"firstTimeUserForSceneSelection") == 0) {
+                        sharedPreferenceManager.setData(SceneSelection.this,"firstTimeUserForSceneSelection",1);
+                        showHelp(null);
+                    }
+                }
+            }, 100);
         }
         super.onWindowFocusChanged(hasFocus);
     }

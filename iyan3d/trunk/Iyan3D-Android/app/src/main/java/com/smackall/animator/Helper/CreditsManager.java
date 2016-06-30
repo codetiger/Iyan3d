@@ -9,20 +9,13 @@ import com.smackall.animator.SceneSelection;
 import com.smackall.animator.UserDetails;
 import com.smackall.animator.opengl.GL2JNILib;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 
 /**
  * Created by Sabish.M on 28/3/16.
@@ -37,7 +30,8 @@ public class CreditsManager {
     public CreditsManager(Context mContext){
         this.mContext = mContext;
         try {
-            if (Constants.currentActivity == 0) {
+            String className = mContext.getClass().getSimpleName();
+            if (className.toLowerCase().equals("sceneselection")){
                 userDetails = ((SceneSelection) ((Activity) mContext)).userDetails;
             } else
                 userDetails = ((EditorView) ((Activity) mContext)).userDetails;
@@ -79,13 +73,12 @@ public class CreditsManager {
         }
         @Override
         protected String doInBackground(Integer... params) {
-            String url = GL2JNILib.Credits()+"?uniqueid="+uniqueId+"&username="+name+"&email="+email+"&hwversion="+
-                    hwversion+"&osversion="+osversion+"&deviceid="+Constants.deviceUniqueId+"&signintype="+signInType;
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url.replace(" ","%20"));
             try {
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                response = httpClient.execute(httpGet,handler);
+                String charset = "UTF-8";
+                String url = GL2JNILib.Credits()+"?uniqueid="+uniqueId+"&username="+name+"&email="+email+"&hwversion="+
+                        hwversion+"&osversion="+osversion+"&deviceid="+Constants.deviceUniqueId+"&signintype="+signInType;
+                FileUploader multiPart = new FileUploader(url,charset,"GET");
+                response = multiPart.finish();
             } catch (IOException e) {
                 e.printStackTrace();
                 UIHelper.informDialog(mContext,"Please Check your network connection.");
@@ -96,7 +89,12 @@ public class CreditsManager {
         protected void onPostExecute(String st) {
             if(st != null && st.length() >5) {
                 jsonToMap(st);
-                this.task.onCreditRequestCompleted(Integer.parseInt(map.get("credits")),Integer.parseInt(map.get("premium")));
+                if(Integer.parseInt(map.get("result")) < 0){
+                    UIHelper.informDialog(mContext,map.get("message"));
+                }
+                else {
+                    this.task.onCreditRequestCompleted(Integer.parseInt(map.get("credits")), Integer.parseInt(map.get("premium")));
+                }
             }
             else{
                 this.task.failed();
@@ -138,12 +136,11 @@ public class CreditsManager {
         }
         @Override
         protected String doInBackground(Integer... params) {
-            String url = GL2JNILib.CheckProgress()+"?taskid="+taskId;
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url);
             try {
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                response = httpClient.execute(httpGet,handler);
+                String charset = "UTF-8";
+                String url = GL2JNILib.CheckProgress()+"?taskid="+taskId;
+                FileUploader multiPart = new FileUploader(url,charset,"GET");
+                response = multiPart.finish();
             } catch (IOException e) {
                 e.printStackTrace();
                 UIHelper.informDialog(mContext,"Please Check your network connection.");
@@ -185,18 +182,15 @@ public class CreditsManager {
         @Override
         protected String doInBackground(Integer... params) {
             String uniqueId = userDetails.uniqueId;
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(GL2JNILib.UseOrRecharge());
             try {
-                MultipartEntity multipartEntity = new MultipartEntity();
-                multipartEntity.addPart("uniqueid",new StringBody(uniqueId));
-                multipartEntity.addPart("signed_data",new StringBody(signed_data));
-                multipartEntity.addPart("signature",new StringBody(signature));
-                multipartEntity.addPart("usagetype",new StringBody(usageType));
-                multipartEntity.addPart("credits",new StringBody(Integer.toString(credits)));
-                httpPost.setEntity(multipartEntity);
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                response = httpClient.execute(httpPost,handler);
+                String charset = "UTF-8";
+                FileUploader multiPart = new FileUploader(GL2JNILib.UseOrRecharge(),charset,"POST");
+                multiPart.addFormField("uniqueid",(uniqueId));
+                multiPart.addFormField("signed_data",(signed_data));
+                multiPart.addFormField("signature",(signature));
+                multiPart.addFormField("usagetype",(usageType));
+                multiPart.addFormField("credits",(Integer.toString(credits)));
+                response = multiPart.finish();
             } catch (IOException e) {
                 e.printStackTrace();
                 UIHelper.informDialog(mContext,"Please Check your network connection.");

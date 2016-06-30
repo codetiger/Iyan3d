@@ -63,13 +63,13 @@ public class SceneSelectionAdapter extends RecyclerView.Adapter<SceneFrameHolder
         ImageView imageView = (ImageView)holder.view.findViewById(R.id.imagepart);
         TextView textView = (TextView)holder.view.findViewById(R.id.textpart);
         ImageView sceneProps = (ImageView)holder.view.findViewById(R.id.scene_props_btn);
-        textView.setText((sceneDBs.size() == position) ? "" : sceneDBs.get(position).getName());
-        if((sceneDBs.size() == position)) {
+        textView.setText((sceneDBs == null || sceneDBs.size() == position) ? "" : sceneDBs.get(position).getName());
+        if(sceneDBs == null || ( sceneDBs.size() == position)) {
             newScene = holder.view;
             imageView.setImageResource(R.drawable.new_scene_grid);
             sceneProps.setVisibility(View.INVISIBLE);
         }
-        else {
+        else if(sceneDBs != null && sceneDBs.size() >0){
             imageView.setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalScenesFolder + "/" + sceneDBs.get(position).getImage() + ".png"));
             sceneProps.setVisibility(View.VISIBLE);
             if(position == 0) {
@@ -88,7 +88,7 @@ public class SceneSelectionAdapter extends RecyclerView.Adapter<SceneFrameHolder
         sceneProps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSceneProps(v,finalPosition,FileHelper.checkValidFilePath(PathManager.LocalProjectFolder+"/"+sceneDBs.get(finalPosition).getImage()+".i3d"));
+                openSceneProps(v,finalPosition,(sceneDBs != null && sceneDBs.size() >0 && FileHelper.checkValidFilePath(PathManager.LocalProjectFolder+"/"+sceneDBs.get(finalPosition).getImage()+".i3d")));
             }
         });
     }
@@ -99,7 +99,7 @@ public class SceneSelectionAdapter extends RecyclerView.Adapter<SceneFrameHolder
     }
 
     private void addNewScene(int position){
-        if((sceneDBs.size() == position)) {
+        if(sceneDBs == null || (sceneDBs.size() == position)) {
             ((SceneSelection) (mContext)).addNewScene(null);
         }
         else
@@ -123,7 +123,8 @@ public class SceneSelectionAdapter extends RecyclerView.Adapter<SceneFrameHolder
                         ((SceneSelection) (mContext)).cloneScene(position);
                         break;
                     case ID_BACKUP:
-                        ((SceneSelection)(mContext)).backUp(sceneDBs.get(position).getImage()+".i3d");
+                        if(sceneDBs.size() > position)
+                            ((SceneSelection)(mContext)).backUp(sceneDBs.get(position).getImage()+".i3d");
                         break;
                 }
                 return true;

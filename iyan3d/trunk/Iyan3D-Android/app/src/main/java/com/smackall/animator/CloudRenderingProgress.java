@@ -27,6 +27,8 @@ import com.smackall.animator.Helper.CreditTask;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.HQTaskDB;
+import com.smackall.animator.Helper.MediaScannerWrapper;
+import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
 
 import org.json.JSONException;
@@ -90,7 +92,8 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
         initViews(cloud_rendering);
         dialog = cloud_rendering;
         try {
-            if (Constants.currentActivity == 0)
+            String className = mContext.getClass().getSimpleName();
+            if (className.toLowerCase().equals("sceneselection"))
                 ((SceneSelection) ((Activity) mContext)).creditsManager.getCreditsForUniqueId(CloudRenderingProgress.this);
             else
                 ((EditorView) ((Activity) mContext)).creditsManager.getCreditsForUniqueId(CloudRenderingProgress.this);
@@ -133,7 +136,8 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
                 break;
             case R.id.sign_out:
                 try {
-                    if (Constants.currentActivity == 0)
+                    String className = mContext.getClass().getSimpleName();
+                    if (className.toLowerCase().equals("sceneselection"))
                         ((SceneSelection) ((Activity) mContext)).login.logOut();
                     else
                         ((EditorView) ((Activity) mContext)).login.logOut();
@@ -221,7 +225,8 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
                         else if(sku.equals("megarecharge"))
                             credit = 50000;
                         try {
-                            if (Constants.currentActivity == 0)
+                            String className = mContext.getClass().getSimpleName();
+                            if (className.toLowerCase().equals("sceneselection"))
                                 ((SceneSelection) (Activity) mContext).creditsManager.useOrRechargeCredits(credit, "RECHARGE", purchaseData, dataSignature, 0, CloudRenderingProgress.this);
                             else
                                 ((EditorView) (Activity) mContext).creditsManager.useOrRechargeCredits(credit, "RECHARGE", purchaseData, dataSignature, 0, CloudRenderingProgress.this);

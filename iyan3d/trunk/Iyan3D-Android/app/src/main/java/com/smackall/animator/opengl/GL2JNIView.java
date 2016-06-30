@@ -362,8 +362,10 @@ public class GL2JNIView extends GLSurfaceView  {
                 if(((EditorView) ((Activity) staticContext)).frameAdapter != null)
                     ((EditorView) ((Activity) staticContext)).frameAdapter.notifyDataSetChanged();
 
-                ((EditorView)((Activity)staticContext)).descriptionManager.helpForFirstTimeUser(staticContext);
-                ((EditorView)((Activity)staticContext)).helpDialogs.showPop(staticContext);
+                if(Constants.isFirstTimeUser) {
+                    ((EditorView) ((Activity) staticContext)).descriptionManager.helpForFirstTimeUser(staticContext);
+                    ((EditorView) ((Activity) staticContext)).helpDialogs.showPop(staticContext);
+                }
             }
         });
     }

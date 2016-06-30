@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -31,6 +33,9 @@ import java.util.Locale;
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
 public class OBJSelectionAdapter extends BaseAdapter {
+
+    private static final int ID_DELETE = 0;
+
     private Context mContext;
     private GridView gridView;
     public File[] files;
@@ -38,6 +43,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
     private int[] basicShapesId = {60001,60002,60003,60004,60005,60006};
     private int[] basicShapesDrawableId = {R.drawable.cone,R.drawable.cube,R.drawable.cylinder,R.drawable.plane,R.drawable.sphere,R.drawable.torus};
     private int objSelectedPosition = 0;
+    private int textureSelectedPosition = 0;
     public AssetsDB assetsDB = new AssetsDB();
     int previousPosition = -1;
 
@@ -49,7 +55,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         this.files = getFileList(this.gridView);
-        return ((this.files != null && this.files.length > 0) ? files.length : 0) + ((gridView.getTag() == Constants.OBJ_MODE) ? 6 : 1);
+        return ((this.files != null && this.files.length > 0) ? files.length : 0) + ((Integer.parseInt(gridView.getTag().toString()) == Constants.OBJ_MODE) ? 6 : 1);
     }
 
     @Override
@@ -68,10 +74,8 @@ public class OBJSelectionAdapter extends BaseAdapter {
         if(convertView==null){
             LayoutInflater inflater=((Activity)mContext).getLayoutInflater();
             grid=inflater.inflate(R.layout.asset_cell, parent, false);
-
-        }else{
+        } else
             grid = (View)convertView;
-        }
 
         switch (UIHelper.ScreenType){
             case Constants.SCREEN_NORMAL:
@@ -80,26 +84,48 @@ public class OBJSelectionAdapter extends BaseAdapter {
             default:
                 grid.getLayoutParams().height = this.gridView.getHeight()/5;
                 break;
-        }        ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
+        }
 
-        if(position <= 5 && this.gridView.getTag() == Constants.OBJ_MODE){
+        ((ProgressBar) grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
+        if(position <= 5 && (Integer.parseInt(this.gridView.getTag().toString())) == Constants.OBJ_MODE){
             ((ImageView) grid.findViewById(R.id.thumbnail)).setImageResource(basicShapesDrawableId[position]);
             ((TextView)grid.findViewById(R.id.assetLable)).setText(basicShapes[position]);
+            grid.findViewById(R.id.props_btn).setVisibility(View.INVISIBLE);
+
         }
-        else if(position > 5 && this.gridView.getTag() == Constants.OBJ_MODE ) {
+        else if(position > 5 && (Integer.parseInt(this.gridView.getTag().toString())) == Constants.OBJ_MODE ) {
+
+            grid.findViewById(R.id.props_btn).setVisibility(View.VISIBLE);
+            grid.findViewById(R.id.props_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showObjModelAndTextureProps(v, position, gridView);
+                }
+            });
+
             if(files[position-6].exists()) {
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setImageResource(R.drawable.obj_file);
                 ((TextView)grid.findViewById(R.id.assetLable)).setText(FileHelper.getFileWithoutExt(FileHelper.getFileNameFromPath(files[position-6].toString())));
             }
         }
-        else if(this.gridView.getTag() == Constants.TEXTURE_MODE){
+        else if((Integer.parseInt(this.gridView.getTag().toString())) == Constants.TEXTURE_MODE){
             if(position == 0){
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.DefaultAssetsDir+"/white_texture.png"));
                 ((TextView)grid.findViewById(R.id.assetLable)).setText(String.format(Locale.getDefault(),"%s","Pick Color"));
+
+                grid.findViewById(R.id.props_btn).setVisibility(View.INVISIBLE);
             }
             else if(files[position-1].exists()) {
                 ((ImageView) grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalThumbnailFolder+"/"+FileHelper.getFileNameFromPath(files[position-1].toString())));
                 ((TextView)grid.findViewById(R.id.assetLable)).setText(FileHelper.getFileWithoutExt(FileHelper.getFileNameFromPath(files[position-1].toString())));
+
+                grid.findViewById(R.id.props_btn).setVisibility(View.VISIBLE);
+                grid.findViewById(R.id.props_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showObjModelAndTextureProps(v, position, gridView);
+                    }
+                });
             }
         }
 
@@ -140,7 +166,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
     }
 
     private void manageSelection(int position){
-        if(this.gridView.getTag() == Constants.OBJ_MODE){
+        if((Integer.parseInt(this.gridView.getTag().toString())) == Constants.OBJ_MODE){
             objSelectedPosition = position;
             String fileName;
             if(position > 5) {
@@ -163,7 +189,8 @@ public class OBJSelectionAdapter extends BaseAdapter {
                 ((EditorView) ((Activity) mContext)).renderManager.importAssets(assetsDB,false);
             }
         }
-        else if(this.gridView.getTag() == Constants.TEXTURE_MODE){
+        else if((Integer.parseInt(this.gridView.getTag().toString())) == Constants.TEXTURE_MODE){
+            textureSelectedPosition = position;
             if(position == 0){
                 ((EditorView)((Activity)mContext)).colorPicker.showColorPicker(this.gridView.getChildAt(0),null,Constants.TEXTURE_MODE);
                 return;
@@ -176,7 +203,7 @@ public class OBJSelectionAdapter extends BaseAdapter {
 
     public void importOBJ(){
         ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
-        if(this.gridView.getTag() == Constants.OBJ_MODE){
+        if((Integer.parseInt(this.gridView.getTag().toString())) == Constants.OBJ_MODE){
             if(objSelectedPosition > 5)
                 assetsDB.setAssetsId(123456);
             else
@@ -184,5 +211,42 @@ public class OBJSelectionAdapter extends BaseAdapter {
         }
         ((EditorView) ((Activity) mContext)).renderManager.importAssets(assetsDB,false);
         ((EditorView) ((Activity) mContext)).objSelection.modelImported = true;
+    }
+
+    private void showObjModelAndTextureProps(View view, final int position, final GridView gridView) {
+
+        final PopupMenu popup = new PopupMenu(mContext, view);
+        popup.getMenuInflater().inflate(R.menu.my_model_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getOrder()) {
+                    case ID_DELETE:
+                        String ext = ((Integer.parseInt(gridView.getTag().toString())) == Constants.OBJ_MODE) ? ".obj" : ".png";
+                        String fileName = FileHelper.getFileWithoutExt(FileHelper.getFileNameFromPath(files[position - ((((Integer.parseInt(gridView.getTag().toString())) == Constants.OBJ_MODE)) ? 6 : 1)].toString()));
+
+                        if ((Integer.parseInt(gridView.getTag().toString())) == Constants.TEXTURE_MODE) {
+                            FileHelper.deleteFilesAndFolder(PathManager.LocalImportedImageFolder + "/" + fileName + ext);
+                            FileHelper.deleteFilesAndFolder(PathManager.LocalThumbnailFolder + "/" + fileName + ext);
+                            if (textureSelectedPosition == position) {
+                                assetsDB.setTexture("white_texture");
+                                ((EditorView) ((Activity) mContext)).renderManager.importAssets(assetsDB, false);
+                                ((EditorView) ((Activity) mContext)).objSelection.modelImported = true;
+                            }
+                        } else if (((Integer.parseInt(gridView.getTag().toString())) == Constants.OBJ_MODE)) {
+                            FileHelper.deleteFilesAndFolder(PathManager.LocalUserMeshFolder + "/" + fileName + ext);
+                            if (objSelectedPosition == position) {
+                                ((EditorView) mContext).renderManager.removeTempNode();
+                                ((EditorView) ((Activity) mContext)).objSelection.modelImported = false;
+                            }
+                        }
+
+                        files = null;
+                        notifyDataSetChanged();
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 }

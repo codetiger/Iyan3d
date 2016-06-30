@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.TwitterButton;
 import com.smackall.animator.Helper.UIHelper;
@@ -70,7 +73,8 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
             map.clear();
 
         try {
-            if (Constants.currentActivity == 0)
+            String className = mContext.getClass().getSimpleName();
+            if (className.toLowerCase().equals("sceneselection"))
                 userDetails = ((SceneSelection) ((Activity) mContext)).userDetails;
             else
                 userDetails = ((EditorView) ((Activity) mContext)).userDetails;
@@ -129,6 +133,7 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addOnConnectionFailedListener(this)
@@ -251,6 +256,7 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
 
     private void handleGoogleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
+            mGoogleApiClient.connect();
             GoogleSignInAccount acct = result.getSignInAccount();
             if(acct != null && userDetails != null) {
                 userDetails.uniqueId = acct.getId();
@@ -270,7 +276,8 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
     {
 
         try {
-            if (Constants.currentActivity == 0) {
+            String className = mContext.getClass().getSimpleName();
+            if (className.toLowerCase().equals("sceneselection")) {
                 ((SceneSelection) ((Activity) mContext)).userDetails.resetUserDetails();
             } else
                 ((EditorView) ((Activity) mContext)).userDetails.resetUserDetails();
@@ -280,7 +287,21 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
             Twitter.getSessionManager().clearActiveSession();
             Twitter.logOut();
             LoginManager.getInstance().logOut();
-            mGoogleApiClient.disconnect();
+
+            if (mGoogleApiClient.isConnected())
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+
+                    }
+                });
+            if (mGoogleApiClient.isConnected())
+                Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+
+                    }
+                });
         }
         catch (IllegalStateException e){
             e.printStackTrace();

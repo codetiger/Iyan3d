@@ -19,11 +19,14 @@ import com.smackall.animator.DownloadManager.DownloadManager;
 import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
+import com.smackall.animator.Helper.DownloadHelper;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 import com.smackall.animator.Helper.TextDB;
 import com.smackall.animator.Helper.UIHelper;
 import com.smackall.animator.opengl.GL2JNILib;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Sabish.M on 8/3/16.
@@ -43,13 +46,13 @@ public class AnimationSelection {
     private AddToDownloadManager addToDownloadManager;
     private DownloadManager downloadManager;
     ViewGroup insertPoint;
-    private int selectedNodeId = -1;
+    public int selectedNodeId = -1;
     private int currentFrame, totalFrame;
 
     public String filePath = "";
 
     public boolean processCompleted = true;
-
+    View view;
     public AnimationSelection(Context context,DatabaseHelper db,AddToDownloadManager addToDownloadManager
             ,DownloadManager downloadManager,SharedPreferenceManager sp){
         this.mContext = context;
@@ -87,27 +90,19 @@ public class AnimationSelection {
         insertPoint.removeAllViews();
 
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.animation_view,insertPoint,false);
-        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        GridView gridView = (GridView)v.findViewById(R.id.animation_grid);
+        view = vi.inflate(R.layout.animation_view,insertPoint,false);
+        insertPoint.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        GridView gridView = (GridView)view.findViewById(R.id.animation_grid);
         initAssetGrid(gridView);
-        Button cancel = (Button)v.findViewById(R.id.cancel_animationView);
-        category = (Spinner)v.findViewById(R.id.animation_categary);
+        Button cancel = (Button)view.findViewById(R.id.cancel_animationView);
+        category = (Spinner)view.findViewById(R.id.animation_categary);
         ArrayAdapter<String> adapter_state = new ArrayAdapter<String>(mContext,R.layout.spinner_cell, animationCategory);
         adapter_state.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         category.setAdapter(adapter_state);
         category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).setVisibility(View.GONE);
-                category.setSelection(position);
-                animationSelectionAdapter.animDBs.clear();
-                animationSelectionAdapter.selectedId = -1;
-                filePath = "";
-                animationSelectionAdapter.animDBs = ((animationType[position]) == 7) ? db.getAllMyAnimation((GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1) : db.getAllMyAnimation(animationType[position], (GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1, "");
-                downloadManager.cancelAll();
-                animationSelectionAdapter.downloadThumbnail();
-                animationSelectionAdapter.notifyDataSetChanged();
+                onSpinnerItemSelected(position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -125,7 +120,7 @@ public class AnimationSelection {
                 Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
             }
         });
-        v.findViewById(R.id.add_animation_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.add_animation_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(filePath.length() <= 0 || !processCompleted) return;
@@ -136,6 +131,36 @@ public class AnimationSelection {
                 Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
             }
         });
+    }
+
+    public void onSpinnerItemSelected(int position){
+        ((FrameLayout)((Activity)mContext).findViewById(R.id.publishFrame)).setVisibility(View.GONE);
+        category.setSelection(position);
+        animationSelectionAdapter.animDBs.clear();
+        animationSelectionAdapter.selectedId = -1;
+        filePath = "";
+        view.findViewById(R.id.loadingJson).setVisibility(View.INVISIBLE);
+        if(((((animationType[position]) == 7) ? db.getAllMyAnimation((GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1) : db.getAllMyAnimation(animationType[position], (GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1, "")) == null ||
+                (((animationType[position]) == 7) ? db.getAllMyAnimation((GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1) : db.getAllMyAnimation(animationType[position], (GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1, "")).size() == 0) && animationType[position] != 7){
+            view.findViewById(R.id.loadingJson).setVisibility(View.VISIBLE);
+            DownloadHelper animationJsonDownload = new DownloadHelper();
+            animationJsonDownload.jsonParse("https://iyan3dapp.com/appapi/json/animationDetail.json", db, mContext, sp, Constants.ANIMATION_JSON);
+        }
+        else{
+            if(mContext != null && ((EditorView)mContext) != null && ((EditorView)mContext).sharedPreferenceManager != null){
+                long lastTimeInHour = TimeUnit.MILLISECONDS.toHours(((EditorView)mContext).sharedPreferenceManager.getLong(mContext,"lastAnimationJsonUpdatedTime"));
+                long currentTimeInHour =TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
+                int difference =  (int) ((Math.abs(Math.max(lastTimeInHour,currentTimeInHour) - Math.min(lastTimeInHour,currentTimeInHour) )));
+                if(difference >= 5) {
+                    ((EditorView)mContext).sharedPreferenceManager.setData(mContext,"lastAnimationJsonUpdatedTime",System.currentTimeMillis());
+                    ((EditorView)mContext).assetsAniamtionRegularUpdate.jsonParse("https://iyan3dapp.com/appapi/json/animationDetail.json", Constants.ANIMATION_JSON);
+                }
+            }
+        }
+        animationSelectionAdapter.animDBs = ((animationType[position]) == 7) ? db.getAllMyAnimation((GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1) : db.getAllMyAnimation(animationType[position], (GL2JNILib.getNodeType(selectedNodeId) == Constants.NODE_RIG) ? 0 : 1, "");
+        downloadManager.cancelAll();
+        animationSelectionAdapter.downloadThumbnail();
+        animationSelectionAdapter.notifyDataSetChanged();
     }
 
     private void applyAnimation(final boolean isCancel)

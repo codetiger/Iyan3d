@@ -1,8 +1,8 @@
 package com.smackall.animator.OverlayDialogs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,10 +22,23 @@ public class HelpDialogs implements Tooltip.Callback{
 
     public void showPop(Context ctx)
     {
+        ViewGroup rootView = (ViewGroup) (((Activity) ctx).getWindow().getDecorView());
+        //getAllContentDescriptionViews(view);+
+        try {
+            for (int i = 0; i < views.size(); i++) {
+                if (views.get(i) != null && views.get(i).getTag() != null && views.get(i).getContentDescription() != null)
+                    showToolTipView(ctx, views.get(i), views.get(i).getTag().toString(), views.get(i).getContentDescription().toString(), R.color.yellow, rootView, 0);
+            }
+        }
+        catch (NullPointerException e){}
+    }
+
+    //For Resized Dialog's Views
+    public void showPop(Context ctx, ViewGroup rootView, int width) {
         //getAllContentDescriptionViews(view);
-        for (int i = 0; i < views.size(); i++){
-            if(views.get(i) != null && views.get(i).getTag() != null && views.get(i).getContentDescription() != null)
-                showToolTipView(ctx,views.get(i),views.get(i).getTag().toString(),views.get(i).getContentDescription().toString(),R.color.yellow);
+        for (int i = 0; i < views.size(); i++) {
+            if (views.get(i) != null && views.get(i).getTag() != null && views.get(i).getContentDescription() != null)
+                showToolTipView(ctx, views.get(i), views.get(i).getTag().toString(), views.get(i).getContentDescription().toString(), R.color.yellow, rootView, width);
         }
     }
 
@@ -47,7 +60,7 @@ public class HelpDialogs implements Tooltip.Callback{
         }
     }
 
-    private void showToolTipView(Context context,View anchorView, String tag, CharSequence text, int backgroundColor) {
+    private void showToolTipView(Context context, View anchorView, String tag, String text, int backgroundColor, ViewGroup rootView, int width) {
        Tooltip.Gravity gravity = Tooltip.Gravity.LEFT;
 
         if(tag.toLowerCase().equals("right"))
@@ -62,7 +75,6 @@ public class HelpDialogs implements Tooltip.Callback{
             gravity = Tooltip.Gravity.CENTER;
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-
        toolTips.add(Tooltip.make(
                 context,
                 new Tooltip.Builder()
@@ -70,15 +82,17 @@ public class HelpDialogs implements Tooltip.Callback{
                         .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_CONSUME,0)
                         .text(text)
                         .fitToScreen(true)
+                        .viewWidth(width)
                         .withCallback(this)
                         .maxWidth(metrics.widthPixels / 2)
                         .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
                         .build(),backgroundColor));
-       toolTips.get(toolTips.size()-1).show();
+        toolTips.get(toolTips.size() - 1).show(rootView);
     }
 
     @Override
     public void onTooltipClose(Tooltip.TooltipView tooltip, boolean fromUser, boolean containsTouch) {
+        if(!fromUser && !containsTouch) return;
         dismissTips(containsTouch,tooltip);
     }
 
@@ -99,22 +113,22 @@ public class HelpDialogs implements Tooltip.Callback{
 
     public void dismissTips(boolean containsTouch, Tooltip.TooltipView tooltip)
     {
-        System.out.println("Contains Touch : " + containsTouch);
-        for (int i = 0; i < toolTips.size(); i++){
-            if(containsTouch){
-                if(toolTips.get(i) == tooltip) {
-                    toolTips.remove(i);
-                    tooltip.hide();
-                    tooltip.remove();
-                    break;
+        try {
+            for (int i = 0; i < toolTips.size(); i++) {
+                if (containsTouch) {
+                    if (toolTips.get(i) == tooltip) {
+                        toolTips.remove(i);
+                        tooltip.hide();
+                        tooltip.remove();
+                        break;
+                    }
+                } else if (toolTips.get(i) != null && toolTips.get(i).isShown()) {
+                    toolTips.get(i).hide();
+                    toolTips.get(i).remove();
                 }
             }
-            else if(toolTips.get(i) != null && toolTips.get(i).isShown()) {
-                toolTips.get(i).hide();
-                toolTips.get(i).remove();
-            }
-        }
-        if(!containsTouch)
-            toolTips.clear();
+            if (!containsTouch)
+                toolTips.clear();
+        }catch (NullPointerException e){e.printStackTrace();}
     }
 }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.PopupMenu;
@@ -12,6 +14,7 @@ import android.view.View;
 
 import com.facebook.share.widget.LikeView;
 import com.smackall.animator.Helper.Constants;
+import com.smackall.animator.UserOnBoarding.UserOnBoarding;
 
 /**
  * Created by Sabish.M on 7/3/16.
@@ -58,15 +61,9 @@ public class InfoPopUp {
 
     private void openTutorial(Context context)
     {
-        String url = "https://www.iyan3dapp.com/tutorial-videos/";
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        try {
-            ((Activity)context).startActivity(i);
-        }
-        catch (ActivityNotFoundException e){
-
-        }
+        String className = context.getClass().getSimpleName();
+        Intent i = new Intent((className.toLowerCase().equals("sceneselection") ? ((SceneSelection)(context)) : ((EditorView)(context))), UserOnBoarding.class);
+        context.startActivity(i);
     }
 
     private void rateThisApp(Context context)
@@ -87,7 +84,16 @@ public class InfoPopUp {
         Intent email = new Intent(Intent.ACTION_SEND);
         email.setType("message/rfc822");
         email.putExtra(Intent.EXTRA_EMAIL,new String[] { "iyan3d@smackall.com" });
-        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Iyan3D 5.1 app ( Device Model " + Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL + " , Android Version " + Build.VERSION.RELEASE + " )");
+        PackageInfo pInfo = null;
+        String version = "";
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            version = "";
+        }
+        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Iyan3D "+version+" app ( Device Model " + Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL + " , Android Version " + Build.VERSION.RELEASE + " )");
         try {
             ((Activity)context).startActivity(email);
         }
@@ -99,7 +105,8 @@ public class InfoPopUp {
     private void openSettings(Context context)
     {
         try {
-            if (Constants.currentActivity == 0)
+            String className = context.getClass().getSimpleName();
+            if (className.toLowerCase().equals("sceneselection"))
                 ((SceneSelection) ((Activity) context)).settings.showSettings();
             else
                 ((EditorView) ((Activity) context)).settings.showSettings();
@@ -109,7 +116,8 @@ public class InfoPopUp {
 
     private void openFollowDialog(Context context){
         try {
-            if (Constants.currentActivity == 0)
+            String className = context.getClass().getSimpleName();
+            if (className.toLowerCase().equals("sceneselection"))
                 ((SceneSelection) ((Activity) context)).followApp.showFollowOption();
             else
                 ((EditorView) ((Activity) context)).followApp.showFollowOption();

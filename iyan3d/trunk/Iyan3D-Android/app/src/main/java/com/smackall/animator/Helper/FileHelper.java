@@ -21,11 +21,11 @@ import java.security.SecureRandom;
 
 public class FileHelper {
     public static boolean checkValidFilePath(File file) {
-        return file.exists();
+        return file != null && file.exists();
     }
 
     public static boolean checkValidFilePath(String string2) {
-        return new File(string2).exists();
+        return string2 != null && new File(string2).exists();
     }
 
     /*

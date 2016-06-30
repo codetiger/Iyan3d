@@ -17,9 +17,6 @@
 #}
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
--dontwarn org.apache.commons.**
--keep class org.apache.http.** { *; }
--dontwarn org.apache.http.**
 -keep class com.facebook.android.** {*;}
 -keep class com.crashlytics.sdk.android.** {*;}
 -keep class com.twitter.sdk.android.** {*;}

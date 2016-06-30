@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,14 +27,17 @@ import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.BitmapUtil;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CreditTask;
+import com.smackall.animator.Helper.DescriptionManager;
 import com.smackall.animator.Helper.Encoder;
 import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.HQTaskDB;
+import com.smackall.animator.Helper.MediaScannerWrapper;
 import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.RangeSeekBar;
 import com.smackall.animator.Helper.SharedPreferenceManager;
 import com.smackall.animator.Helper.UIHelper;
+import com.smackall.animator.OverlayDialogs.HelpDialogs;
 import com.smackall.animator.opengl.GL2JNILib;
 
 import org.jcodec.api.SequenceEncoder;
@@ -59,6 +64,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
     private Context mContext;
     private SharedPreferenceManager sp;
     public Dialog dialog;
+
     private float x = 0.1f;    private float y = 0.1f;    private float z = 0.1f;
     private boolean waterMark = true;
     private int shader;
@@ -74,13 +80,14 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
     public boolean isRendering = false;
     TextView helpHint;
     boolean renderingStarted = false;
+    float divideValue = 0.0f;
 
     public Export(Context mContext,SharedPreferenceManager sp){
         this.mContext = mContext;
         this.sp = sp;
     }
 
-    public void showExport(int type)
+    public void showExport(final int type)
     {
         HitScreens.ExportVideo(mContext);
         Dialog export = new Dialog(mContext);
@@ -90,12 +97,14 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
         export.setCanceledOnTouchOutside(false);
         switch (UIHelper.ScreenType){
             case Constants.SCREEN_NORMAL:
-                export.getWindow().setLayout(Constants.width, (int) (Constants.height/1.1));
+                export.getWindow().setLayout(Constants.width, (int) (Constants.height));
                 break;
             default:
-                export.getWindow().setLayout(Constants.width / 2, (int) (Constants.height / 1.14285714286));
+                divideValue = 1.5f;
+                export.getWindow().setLayout((int) (Constants.width / 1.5), (int) (Constants.height));
                 break;
         }
+
         dialog = export;
         x = 0.1f;
         y = 0.1f;
@@ -121,6 +130,33 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
             min = max = GL2JNILib.currentFrame()+1;
             hideView();
         }
+
+        final String className = mContext.getClass().getSimpleName();
+        final DescriptionManager descriptionManager = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection)(mContext)).descriptionManager : ((EditorView)(mContext)).descriptionManager);
+        final HelpDialogs helpDialogs = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection)(mContext)).helpDialogs : ((EditorView)(mContext)).helpDialogs);
+        export.findViewById(R.id.help).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.findViewById(R.id.viewGroup).bringToFront();
+                descriptionManager.addExportViewDescriptions(mContext, dialog,type);
+                helpDialogs.showPop(mContext, ((ViewGroup) dialog.findViewById(R.id.viewGroup)), (divideValue > 0) ? ((ViewGroup) dialog.findViewById(R.id.viewGroup)).getWidth() : 0);
+            }
+        });
+
+        export.findViewById(R.id.viewGroup).bringToFront();
+        export.findViewById(R.id.viewGroup).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT < 16) {
+                    dialog.findViewById(R.id.viewGroup).getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                } else {
+                    dialog.findViewById(R.id.viewGroup).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+                if (sp.getInt(mContext, "firstTimeUserForExport") == 0) {
+                    sp.setData(mContext, "firstTimeUserForExport", 1);
+                    descriptionManager.addExportViewDescriptions(mContext, dialog,type);
+                    helpDialogs.showPop(mContext, (ViewGroup) dialog.getWindow().getDecorView(), (divideValue > 0) ? ((ViewGroup) dialog.findViewById(R.id.viewGroup)).getWidth() : 0);
+                }
+            }});
     }
 
     private void initViews(Dialog export)
@@ -542,12 +578,16 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                     } catch (IOException | IllegalStateException e) {
                         e.printStackTrace();
                     }
-                    if (frameCount >= max && !cancel) {
-                        if(usageType.equals("240P")) finishExport(0,true,"");
-                        else ((EditorView)((Activity)mContext)).creditsManager.useOrRechargeCredits(credit*-1,usageType,"","",0,Export.this);
-                        cancel = true;
-                        return;
+                    try {
+                        if (frameCount >= max && !cancel) {
+                            if (usageType.equals("240P")) finishExport(0, true, "");
+                            else
+                                ((EditorView) ((Activity) mContext)).creditsManager.useOrRechargeCredits(credit * -1, usageType, "", "", 0, Export.this);
+                            cancel = true;
+                            return;
+                        }
                     }
+                    catch (IllegalStateException ignored){}
                     if(renderedImg.size() > 0) {
                         try {
                             FileHelper.deleteFilesAndFolder(PathManager.LocalCacheFolder + "/" + renderedImg.get(0) + ".png");
@@ -579,6 +619,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
         if(type == Constants.EXPORT_IMAGES){
             FileHelper.move(PathManager.LocalCacheFolder + "/" + frame + ".png", PathManager.RenderPath + "/" + fileName + ".png");
             doFinish();
+            MediaScannerWrapper.scan(mContext,PathManager.RenderPath + "/" + fileName + ".png");
             renderCompletedDialog(mContext,"Image Successfully saved in your SDCard/Iyan3D/Render");
         }
         else if(type == Constants.EXPORT_VIDEO){
@@ -593,6 +634,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                     return;
                 }
                 FileHelper.move(PathManager.LocalCacheFolder + "/" + fileName + ".mp4", PathManager.RenderPath + "/" + fileName + ".mp4");
+                MediaScannerWrapper.scan(mContext,PathManager.RenderPath + "/" + fileName + ".mp4");
                 renderCompletedDialog(mContext,"Video successfully saved in your SDCard/Iyan3D/Render");
                 ((Activity)mContext).runOnUiThread(new Runnable() {
                     @Override

@@ -61,12 +61,12 @@ public class OBJSelection {
         insertPoint.removeAllViews();
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         objView = vi.inflate(R.layout.obj_view,insertPoint,false);
-        insertPoint.addView(objView, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        insertPoint.addView(objView, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         final TextView infoLable = (TextView)objView.findViewById(R.id.info_lable);
         ((Button)objView.findViewById(R.id.import_btn)).setVisibility(View.VISIBLE);
         gridView = (GridView)objView.findViewById(R.id.obj_grid);
         gridView.setTag(ViewMode);
-        infoLable.setText((gridView.getTag() == Constants.OBJ_MODE) ? "Add OBJ files in SD-Card/Iyan3D foler." : "Add Texture files in SD-Card/Iyan3D folder.");
+        infoLable.setText(((Integer.parseInt(gridView.getTag().toString()) == Constants.OBJ_MODE)) ? "Add OBJ files in SD-Card/Iyan3D foler." : "Add Texture files in SD-Card/Iyan3D folder.");
         initAssetGrid(gridView);
         Button cancel = (Button)objView.findViewById(R.id.cancel_obj);
         ((Button)objView.findViewById(R.id.import_btn)).setText(String.format(Locale.getDefault(),"%s","IMPORT OBJ"));
@@ -85,7 +85,7 @@ public class OBJSelection {
         objView.findViewById(R.id.import_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(gridView.getTag() == Constants.OBJ_MODE){
+                if((Integer.parseInt(gridView.getTag().toString())) == Constants.OBJ_MODE){
                     getObjFromStorage();
                 }
                 else {
@@ -97,7 +97,7 @@ public class OBJSelection {
             @Override
             public void onClick(View v) {
 
-                if (gridView.getTag() == Constants.OBJ_MODE) {
+                if ((Integer.parseInt(gridView.getTag().toString())) == Constants.OBJ_MODE) {
                     if(!modelImported) return;
                     HitScreens.EditorView(mContext);
                     gridView.setTag(Constants.TEXTURE_MODE);

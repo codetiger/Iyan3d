@@ -28,7 +28,6 @@ android {
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId 'com.smackall.animator'
         minSdkVersion 14
@@ -65,13 +64,13 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.pro'
             signingConfig signingConfigs.Release
-            debuggable true
-            jniDebuggable true
-            renderscriptDebuggable true
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
         }
         debug {
             minifyEnabled false
@@ -100,7 +99,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.2@aar') {
         transitive = true;
     }
-    compile files('libs/httpmime-4.2.1.jar')
     compile('com.twitter.sdk.android:twitter:1.13.0@aar') {
         transitive = true;
     }

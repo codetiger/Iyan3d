@@ -72,8 +72,10 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                if(event.getPointerCount() > 1)
-                    GL2JNILib.panBegin(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                try {
+                    if (event.getPointerCount() > 1)
+                        GL2JNILib.panBegin(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                }catch (IllegalArgumentException ignored){}
             }
         });
     }
@@ -82,8 +84,10 @@ public class RenderManager {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                if(event.getPointerCount() == 1)
-                    GL2JNILib.touchBegan(event.getX(), event.getY());
+                try {
+                    if (event.getPointerCount() == 1)
+                        GL2JNILib.touchBegan(event.getX(), event.getY());
+                }catch (IllegalArgumentException ignored){}
             }
         });
     }
@@ -92,7 +96,10 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.swipe(velocityTracker.getXVelocity(), velocityTracker.getYVelocity());
+                try {
+                    GL2JNILib.swipe(velocityTracker.getXVelocity(), velocityTracker.getYVelocity());
+                }
+                catch (IllegalArgumentException ignored){}
             }
         });
     }
@@ -101,7 +108,9 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.tapMove(((EditorView)mContext).nativeCallBacks,event.getX(), event.getY());
+                try {
+                    GL2JNILib.tapMove(((EditorView) mContext).nativeCallBacks, event.getX(), event.getY());
+                }catch (IllegalArgumentException ignored){}
             }
         });
     }
@@ -111,25 +120,30 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.tapEnd(event.getX(), event.getY());
-                ((Activity)mContext).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(mContext != null && ((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).frameAdapter != null)
-                            ((EditorView) ((Activity) mContext)).frameAdapter.notifyDataSetChanged();
-                    }
-                });
+                try {
+                    GL2JNILib.tapEnd(event.getX(), event.getY());
+                    ((Activity) mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mContext != null && ((EditorView) ((Activity) mContext)) != null && ((EditorView) ((Activity) mContext)).frameAdapter != null)
+                                ((EditorView) ((Activity) mContext)).frameAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }catch (IllegalArgumentException ignored){}
             }
         });
     }
     public void checkControlSelection(final MotionEvent event)
     {
-        ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
-            @Override
-            public void run() {
-                GL2JNILib.controlSelection(event.getX(), event.getY(), (sp.getInt(mContext, "multiSelect") == 1));
-            }
-        });
+            ((EditorView) ((Activity) mContext)).glView.queueEvent(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
+                        GL2JNILib.controlSelection(event.getX(), event.getY(), (sp.getInt(mContext, "multiSelect") == 1));
+                    }catch (IllegalArgumentException ignored){}
+                }
+            });
     }
 
     public void checktapposition(final MotionEvent event)
@@ -137,8 +151,9 @@ public class RenderManager {
         ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
+                try {
                     GL2JNILib.tap(event.getX(), event.getY(), (sp.getInt(mContext, "multiSelect") == 1));
-
+                }catch (IllegalArgumentException ignored){}
                 ((Activity)mContext).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
