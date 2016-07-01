@@ -58,6 +58,7 @@
 #define SHADER_COMMON_isVertexColored 21
 #define SHADER_COMMON_lightType 22
 #define SHADER_COMMON_samplerType 23
+#define SHADER_COMMON_ambientLight 24
 #define SHADER_COMMON_texture1 0
 #define SHADER_COMMON_texture2 1
 

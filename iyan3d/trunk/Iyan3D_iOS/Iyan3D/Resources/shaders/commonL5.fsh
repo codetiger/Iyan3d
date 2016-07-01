@@ -18,7 +18,7 @@ uniform float lightTypes[5];
 
 varying float vtransparency, visVertexColored, vreflection;
 varying vec3 vertexColor;
-varying float shadowDist,lightingValue;
+varying float shadowDist, lightingValue, vAmbientLight;
 varying vec2 vTexCoord;
 varying vec4 texCoordsBias,normal,eyeVec,lightDir , vertexPosCam;
 
@@ -27,6 +27,7 @@ float unpack(const in vec4 rgba_depth) {
     float depth = dot(rgba_depth.rgb, bit_shift);
     return depth;
 }
+
 float GetShadowValue(in vec2 offset) {
     vec2 pixelCoord = vec2(texCoordsBias.x, texCoordsBias.y);
     vec4 texelColor = texture2D(depthTexture, pixelCoord + offset);
@@ -34,6 +35,7 @@ float GetShadowValue(in vec2 offset) {
     float extractedDistance = unpack(unpackValue);
     return (extractedDistance < shadowDist) ? (shadowDarkness):(0.0);
 }
+
 void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight) {
     
     float maxSpecular = 30.0;
@@ -44,7 +46,6 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
     vec4 normal = normalize(normal);
     vec4 eyeVec = normalize(eyeVec);
     float n_dot_l = clamp(dot(normal,lightDir),0.0,1.0);
-    vec4 diffuse = vec4(vec3(n_dot_l),1.0);
     
     vec4 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
     float e_dot_r =  clamp(dot(eyeVec,reflectValue),0.0,1.0);
@@ -58,7 +59,9 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
     if(lightTypes[index] == 0.0)
         distanceRatio = (1.0 - clamp((distanceFromLight/fadeEndDistance[index]) , 0.0,1.0));
     
-    colorOfLight += vec4(vec3(lightColor[index]),1.0) * distanceRatio * diffuse;
+    float darkness = distanceRatio * n_dot_l;
+    darkness = clamp(darkness, vAmbientLight, 1.0);
+    colorOfLight += vec4(vec3(lightColor[index]) * darkness, 1.0);
 }
 
 void main()

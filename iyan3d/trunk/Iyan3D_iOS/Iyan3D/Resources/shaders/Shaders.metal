@@ -6,15 +6,11 @@
 //  Copyright (c) 2014 Vivek. All rights reserved.
 //
 
-
-
 #include <metal_stdlib>
 #include <metal_geometric>
 #include <simd/simd.h>
 
 using namespace metal;
-
-
 
 typedef struct
 {
@@ -39,12 +35,12 @@ typedef struct
 typedef struct
 {
     packed_float3 data;
-}float3Struct;
+} float3Struct;
 
 typedef struct
 {
     packed_float4 data;
-}float4Struct;
+} float4Struct;
 
 
 typedef struct {
@@ -52,7 +48,7 @@ typedef struct {
     float pointSize [[point_size]];
     float vertexDepth,reflection;
     float isVertexColored;
-    float shadowDarkness,transparency;
+    float shadowDarkness, transparency, ambientLight;
     float2 pointCoord [[ point_coord ]];
     float2 uv,texture2UV;
     float4 position [[position]] , vertexPosCam;
@@ -90,6 +86,7 @@ typedef struct {
 #define SHADER_COMMON_SKIN_VertexColor 14
 #define SHADER_COMMON_SKIN_texture1 0
 #define SHADER_COMMON_SKIN_texture2 1
+#define SHADER_COMMON_ambientLight 24
 
 #define SHADER_COMMON_isVertexColored 21
 
@@ -98,6 +95,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
                                      constant JointData* Joint_Data [[ buffer(SHADER_COMMON_SKIN_jointData) ]],
                                      constant MatArray* world [[ buffer(SHADER_COMMON_SKIN_world) ]],
                                      constant float& shadowDarkness [[ buffer(SHADER_COMMON_SKIN_shadowDarkness) ]],
+                                     constant float& ambientLight [[ buffer(SHADER_COMMON_ambientLight) ]],
                                      constant packed_float3& eyePos [[ buffer(SHADER_COMMON_SKIN_eyePos) ]],
                                      constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_SKIN_lightViewProjMatrix) ]],
                                      unsigned int vid [[ vertex_id ]],
@@ -119,6 +117,7 @@ vertex ColorInOut Common_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buff
     
     out.isVertexColored = props[0].data[1];
     out.perVertexColor = float4(float3(vertColor[0].data),1.0);
+    out.ambientLight = ambientLight;
     
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
@@ -351,6 +350,7 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant matrix_float4x4& lvp [[ buffer(SHADER_COMMON_lightViewProjMatrix) ]],
                                 constant packed_float3& eyePos [[ buffer(SHADER_COMMON_eyePos) ]],
                                 constant float& shadowDarkness [[ buffer(SHADER_COMMON_shadowDarkness) ]],
+                                constant float& ambientLight [[ buffer(SHADER_COMMON_ambientLight) ]],
                                 unsigned int vid [[ vertex_id ]],
                                 constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                 constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]],
@@ -378,7 +378,8 @@ vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.vertexDepth = texCoords.z;
     out.perVertexColor = float4(float3(vertColor[iid].data),1.0);
     //----------
-    
+    out.ambientLight = ambientLight;
+
     // Lighting Calculation-----------
     if(int(props[iid].data[3]) == 1){
         out.isLighting = 1.0;
@@ -440,20 +441,16 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
-    if(in.isLighting > 0.5){
+    if(in.isLighting > 0.5) {
         colorOfLight = half4(0.0);
-        
-        //getColorOfLight(0,lightPos[0],lightColor[0],lightFadeDistance[0],specular, colorOfLight);
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
         float4 lightDir = (lightType[0] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
         half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
         
-        
         float4 normal = normalize(in.normal);
         float4 eyeVec = normalize(in.eyeVec);
         float n_dot_l = saturate(dot(normal,lightDir));
-        half4 diffuse = half4(half3(n_dot_l),1.0);
         
         float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
         float e_dot_r = saturate(dot(eyeVec,reflectValue));
@@ -467,7 +464,9 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         if(lightType[0] == 0.0)
             distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
 
-        colorOfLight += half4(half3(lightColor[0]),1.0) * distanceRatio * diffuse;
+        float darkness = distanceRatio * n_dot_l;
+        darkness = clamp(darkness, in.ambientLight, 1.0);
+        colorOfLight += half4(half3(lightColor[0]) * darkness, 1.0);
         }
     //-------------
     
@@ -526,11 +525,9 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
-            
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflectValue));
@@ -544,7 +541,9 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
             if(lightType[0] == 0.0)
                 distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
 
-            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
+            float darkness = distanceRatio * n_dot_l;
+            darkness = clamp(darkness, in.ambientLight, 1.0);
+            colorOfLight += half4(half3(lightColor[i]) * darkness, 1.0);
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -605,11 +604,9 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
-            
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflectValue));
@@ -623,7 +620,9 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
             if(lightType[0] == 0.0)
                 distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
 
-            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
+            float darkness = distanceRatio * n_dot_l;
+            darkness = clamp(darkness, in.ambientLight, 1.0);
+            colorOfLight += half4(half3(lightColor[i]) * darkness, 1.0);
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -684,11 +683,9 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
             half distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
             
-            
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflectValue));
@@ -702,7 +699,9 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
             if(lightType[0] == 0.0)
                 distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
 
-            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
+            float darkness = distanceRatio * n_dot_l;
+            darkness = clamp(darkness, in.ambientLight, 1.0);
+            colorOfLight += half4(half3(lightColor[i]) * darkness, 1.0);
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -767,7 +766,6 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             float4 normal = normalize(in.normal);
             float4 eyeVec = normalize(in.eyeVec);
             float n_dot_l = saturate(dot(normal,lightDir));
-            half4 diffuse = half4(half3(n_dot_l),1.0);
             
             float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
             float e_dot_r = saturate(dot(eyeVec,reflectValue));
@@ -781,7 +779,9 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
             if(lightType[0] == 0.0)
                 distanceRatio = (1.0 - saturate(distanceFromLight/lightFadeDistance[0]));
 
-            colorOfLight += half4(half3(lightColor[i]),1.0) * distanceRatio * diffuse;
+            float darkness = distanceRatio * n_dot_l;
+            darkness = clamp(darkness, in.ambientLight, 1.0);
+            colorOfLight += half4(half3(lightColor[i]) * darkness, 1.0);
             if(i == 0)
                 colorOfLight = colorOfLight + (half4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
         }
@@ -1006,6 +1006,7 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
                                    constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
+                                   constant float& ambientLight [[ buffer(SHADER_COMMON_ambientLight) ]],
                                    constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
                                    constant float3Struct *vertColor [[buffer(SHADER_COMMON_SKIN_VertexColor)]],
                                    unsigned int vid [[ vertex_id ]],
@@ -1021,7 +1022,8 @@ vertex ColorInOut Per_Vertex_Color(device vertex_t* vertex_array [[ buffer(0) ]]
     out.position = vp * world[iid].data * vertex_position_objectspace;
     out.perVertexColor =  (vertColor[iid].data[0] == -1.0) ? vertex_array[vid].optionalData1 : float4(float3(vertColor[iid].data),1.0);;
     out.isVertexColored = props[iid].data[1];
-    
+    out.ambientLight = ambientLight;
+
     out.texture2UV = float2(0.0);
     out.vertexDepth = 0.0;
     
@@ -1055,6 +1057,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
                                    constant packed_float3& eyePos [[ buffer(SHADER_PERVERTEXCOLOR_eyePos) ]],
                                    constant matrix_float4x4& lvp [[ buffer(SHADER_PERVERTEXCOLOR_lightViewProjMatrix) ]],
                                    constant float& shadowDarkness [[ buffer(SHADER_PERVERTEXCOLOR_shadowDarkness) ]],
+                                        constant float& ambientLight [[ buffer(SHADER_COMMON_ambientLight) ]],
                                    unsigned int vid [[ vertex_id ]],
                                    constant JointData* Joint_Data [[ buffer(SHADER_PERVERTEXCOLOR_jointData) ]],
                                    constant float4Struct *props [[ buffer(SHADER_COMMON_isVertexColored) ]],
@@ -1069,7 +1072,7 @@ vertex ColorInOut Per_Vertex_Color_Skin(device vertex_heavy_t* vertex_array [[ b
     float4 optionalData2 = vertex_array[vid].optionalData2;
     out.transparency = props[0].data[0];
     //out.perVertexColor = vertex_array[vid].optionalData4;
-    
+    out.ambientLight = ambientLight;
     
     out.isVertexColored = props[0].data[1];
     out.perVertexColor = float4(float3(vertColor[0].data),1.0);

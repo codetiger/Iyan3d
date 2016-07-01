@@ -21,9 +21,10 @@ uniform vec3 eyePos;
 uniform mat4 mvp, model[1], lvp;
 uniform mat4 jointTransforms[161];
 uniform vec4 props[1];
+uniform float ambientLight;
 
 varying float vtransparency, visVertexColored, vreflection;
-varying float shadowDist,lightingValue;
+varying float shadowDist, lightingValue, vAmbientLight;
 varying vec2 vTexCoord;
 varying vec3 vertexColor;
 varying vec4 texCoordsBias,normal,eyeVec,vertexPosCam;
@@ -36,6 +37,7 @@ void main()
     vreflection = props[0].z;
     vertexColor = perVertexColor[0];
     vTexCoord = texCoord1;
+    vAmbientLight = ambientLight;
 
     vec4 pos = vec4(0.0);
     vec4 nor = vec4(0.0);

@@ -16,12 +16,13 @@ attribute vec4 optionalData1;
 uniform mat4 model[uniSize];
 uniform vec4 props[uniSize];
 uniform vec3 perVertexColor[uniSize];
+uniform float ambientLight;
 
 uniform vec3  eyePos;
 uniform mat4 vp,lvp;
 
 varying float vtransparency, visVertexColored, vreflection;
-varying float shadowDist,lightingValue;
+varying float shadowDist, lightingValue, vAmbientLight;
 varying vec2 vTexCoord;
 varying vec3 vertexColor;
 varying vec4 texCoordsBias,normal,eyeVec,lightDir , vertexPosCam;
@@ -35,6 +36,8 @@ void main()
     vreflection = props[iId].z;
     vertexColor = (perVertexColor[iId].x == -1.0) ? vec3(optionalData1.xyz) : perVertexColor[iId];
     vTexCoord = texCoord1;
+    vAmbientLight = ambientLight;
+
     lightingValue = props[iId].w;
     vec4 vertex_position_cameraspace = model[iId] * vec4(vertPosition, 1.0);
     vertexPosCam = vertex_position_cameraspace;

@@ -32,6 +32,7 @@ public:
     static Mat4 lighCamViewMatrix;
     static string BundlePath;
     static DEVICE_TYPE deviceType;
+    static float ambientLight;
     SceneManager *smgr;
     
     ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms);

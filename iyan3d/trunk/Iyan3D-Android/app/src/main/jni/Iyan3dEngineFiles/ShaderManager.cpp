@@ -45,6 +45,7 @@ Mat4 ShaderManager::lighCamViewMatrix;
 string ShaderManager::BundlePath = " ";
 DEVICE_TYPE ShaderManager::deviceType = OPENGLES2;
 int ShaderManager::maxIntsances = 100;
+float ShaderManager::ambientLight = 0.0f;
 
 ShaderManager::~ShaderManager(){
 }
@@ -297,8 +298,9 @@ void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int pa
         setLightsColors(sgNode, lightColors, paramIndex2);
         
         smgr->setPropertyValue(sgNode->node->material, "fadeEndDistance", fadeEndDistance, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightFadeDistance,smgr->getNodeIndexByID(sgNode->node->getID()));
-    
         smgr->setPropertyValue(sgNode->node->material, "lightTypes", lightType, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightType,smgr->getNodeIndexByID(sgNode->node->getID()));
+
+        smgr->setPropertyValue(sgNode->node->material, "ambientLight", &ambientLight, DATA_FLOAT, 1, false, SHADER_COMMON_ambientLight, smgr->getNodeIndexByID(sgNode->node->getID()));
 
         lightChanged = false;
         delete [] fadeEndDistance;

@@ -72,7 +72,7 @@ short OGLMaterial::setPropertyValue(string name,int *values,DATA_TYPE type,u16 c
     }
     return uniformNodeIndex;
 }
-short OGLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex,int renderTargetIndex){
+short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex){
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){
         if(uniforms[i].name == name){
