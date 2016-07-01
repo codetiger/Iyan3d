@@ -462,11 +462,12 @@ bool SGEditorScene::isNodeTransparent(int nodeId)
 {
     if(nodeId == -1)
         return false;
-    else{
-        for(int i = 0; i < nodes.size();i++){
-            if(nodes[i]->node->getID() == nodeId){
-                if(nodes[i]->getType() == NODE_PARTICLES)
+    else {
+        for(int i = 0; i < nodes.size(); i++) {
+            if(nodes[i]->node->getID() == nodeId) {
+                if(nodes[i]->getType() == NODE_PARTICLES || nodes[i]->node->hasTransparency)
                     return true;
+                
                 return (nodes[i]->props.transparency < 1.0) || nodes[i]->props.isSelected || (!nodes[i]->props.isVisible);
                 break;
             }
@@ -477,7 +478,6 @@ bool SGEditorScene::isNodeTransparent(int nodeId)
 void SGEditorScene::setLightLineUniforms(int nodeID, string matName)
 {
     shaderMGR->setUniforms((nodeID == LIGHT_CIRCLES) ? lightCircles : directionLine, matName);
-
 }
 
 void SGEditorScene::setJointsUniforms(int nodeID,string matName)

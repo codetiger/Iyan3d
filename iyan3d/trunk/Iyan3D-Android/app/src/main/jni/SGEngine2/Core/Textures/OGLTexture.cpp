@@ -47,7 +47,7 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     Logger::log(INFO, "OGLTexture.cpp", "loadTexture " + texturePath);
     imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
 #else
-    imageData = loadPNGImage(texturePath , width , height);
+    imageData = loadPNGImage(texturePath, width, height, hasTransparency);
 #endif
 
     if(!imageData)

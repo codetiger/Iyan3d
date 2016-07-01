@@ -133,7 +133,7 @@ id <CAMetalDrawable> MetalRenderManager::currentDrawable()
     return _currentDrawable;
 }
 
-void* initMetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale){
+void* initMetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale) {
     #if !(TARGET_IPHONE_SIMULATOR)
     return new MetalRenderManager(renderView,screenWidth,screenHeight,screenScale);
     #endif
@@ -195,6 +195,9 @@ void MetalRenderManager::draw3DLines(vector<Vector3> vPositions,Material *materi
 void MetalRenderManager::clearDepthBuffer()
 {
     setUpDepthState(CompareFunctionLessEqual,true,false);
+}
+void MetalRenderManager::setTransparencyBlending(bool enable) {
+    
 }
 void MetalRenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {

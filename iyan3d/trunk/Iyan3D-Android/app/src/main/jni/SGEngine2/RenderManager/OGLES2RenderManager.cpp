@@ -53,7 +53,6 @@ void OGLES2RenderManager::Initialize(){
     glEnable(GL_CULL_FACE); // as now default is back face culling
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
-    glEnable(GL_BLEND);
 }
 
 Vector2 OGLES2RenderManager::getViewPort()
@@ -357,6 +356,17 @@ void OGLES2RenderManager::clearDepthBuffer()
 {
     glClear(GL_DEPTH_BUFFER_BIT);
 }
+
+void OGLES2RenderManager::setTransparencyBlending(bool enable) {
+    if(enable) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else {
+        glDisable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    }
+}
+
 void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
   glDepthFunc(GL_ALWAYS);
@@ -437,7 +447,7 @@ void OGLES2RenderManager::draw3DLines(vector<Vector3> vPositions,Material *mater
     indices.clear();
 }
 
-bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color) {
+bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color) {
 
     changeViewport(width, height);
 
@@ -445,8 +455,6 @@ bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf
         glEnable(GL_CULL_FACE); // as now default is back face culling
         glCullFace(GL_BACK);
         glFrontFace(GL_CW);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     changeClearColor(color);

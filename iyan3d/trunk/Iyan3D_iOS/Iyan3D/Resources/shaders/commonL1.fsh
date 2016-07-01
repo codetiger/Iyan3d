@@ -63,12 +63,14 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
 
 void main()
 {
-    
     lowp vec4 diffuse_color = vec4(vertexColor,1.0);
     
     if(visVertexColored < 0.5)
         diffuse_color = texture2D(texture1,vTexCoord.xy);
     
+    if(diffuse_color.a <= 0.5)
+        discard;
+
     // shadow Calculation ------
     float shadowValue = 0.0;
     if(shadowDist > 0.0) {

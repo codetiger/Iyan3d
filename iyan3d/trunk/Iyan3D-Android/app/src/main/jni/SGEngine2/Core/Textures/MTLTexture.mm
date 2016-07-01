@@ -34,7 +34,9 @@ bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     width = (uint32_t)CGImageGetWidth(image.CGImage);
     height = (uint32_t)CGImageGetHeight(image.CGImage);
     int bytesPerRow = getBytesPerRow(width,format);
-    
+    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(image.CGImage);
+    hasTransparency = (alphaInfo == kCGImageAlphaFirst || alphaInfo == kCGImageAlphaLast || alphaInfo == kCGImageAlphaPremultipliedFirst || alphaInfo == kCGImageAlphaPremultipliedLast);
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate( NULL, width, height, getBitsPerCompomentForFormat(format), bytesPerRow, colorSpace, (CGBitmapInfo)kCGImageAlphaPremultipliedLast );
     CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), image.CGImage );

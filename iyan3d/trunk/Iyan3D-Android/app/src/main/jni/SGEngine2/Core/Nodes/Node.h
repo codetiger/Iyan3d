@@ -83,7 +83,7 @@ protected:
     Texture* textures[MAX_TEXTURE_PER_NODE];
     
 public:
-    
+    bool hasTransparency;
     int instancingRenderIt;
     vector< shared_ptr<Node> > instancedNodes;
     BoundingBox bBox;

@@ -15,7 +15,7 @@
 
 #import "ImageLoaderOBJC.h"
 
-uint8_t* loadPNGImage(std::string filePath, int &width, int &height){
+uint8_t* loadPNGImage(std::string filePath, int &width, int &height, bool &hasTransparency){
     NSString *fileName = [NSString stringWithFormat:@"%s",filePath.c_str()];
     CGImageRef spriteImage = [UIImage imageWithContentsOfFile:fileName].CGImage;
     
@@ -24,7 +24,9 @@ uint8_t* loadPNGImage(std::string filePath, int &width, int &height){
     
     width = CGImageGetWidth(spriteImage);
     height = CGImageGetHeight(spriteImage);
-    
+    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(spriteImage);
+    hasTransparency = (alphaInfo == kCGImageAlphaFirst || alphaInfo == kCGImageAlphaLast || alphaInfo == kCGImageAlphaPremultipliedFirst || alphaInfo == kCGImageAlphaPremultipliedLast);
+
     GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
     CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);

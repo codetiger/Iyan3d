@@ -176,20 +176,26 @@ bool SceneManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool c
 }
 void SceneManager::Render(bool isRTT)
 {
+    renderMan->setTransparencyBlending(false);
     vector<int> nodeIndex;
-    for (int i = 0;i < nodes.size();i++){
+    for (int i = 0; i < nodes.size(); i++) {
         if(nodes[i]->type <= NODE_TYPE_CAMERA || nodes[i]->getVisible() == false)
             continue;
-        if(isTransparentCallBack(nodes[i]->getID(),nodes[i]->callbackFuncName)){
+        
+        if(isTransparentCallBack(nodes[i]->getID(), nodes[i]->callbackFuncName)) {
             nodeIndex.push_back(i);
             continue;
         }
+        
         RenderNode(isRTT, i);
     }
-    for (int i = 0;i < nodeIndex.size();i++){
+    
+    renderMan->setTransparencyBlending(true);
+    for (int i = 0; i < nodeIndex.size(); i++) {
         int nodeId = nodeIndex[i];
-        if(nodes[nodeId]->type <= NODE_TYPE_CAMERA || nodes[nodeId]->getVisible() == false || (nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010) || (nodes[nodeId]->getID() >= 300000 && nodes[nodeId]->getID() <= 301000))
+        if((nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010) || (nodes[nodeId]->getID() >= 300000 && nodes[nodeId]->getID() <= 301000))
             continue;
+        
         RenderNode(isRTT, nodeId);
     }
     nodeIndex.clear();
@@ -285,12 +291,12 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
     }
 }
 void SceneManager::setDepthTest(bool enable){
-	#ifndef UBUNTU
-    	if(enable)
-    		glEnable(GL_DEPTH_TEST);
-    	else
-    		glDisable(GL_DEPTH_TEST);
-	#endif
+#ifndef UBUNTU
+    if(enable)
+        glEnable(GL_DEPTH_TEST);
+    else
+        glDisable(GL_DEPTH_TEST);
+#endif
 }
 void SceneManager::setShaderState(int nodeIndex){
     if(nodes[nodeIndex]->type <= NODE_TYPE_CAMERA)

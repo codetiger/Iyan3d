@@ -28,6 +28,7 @@ Node::Node() {
     Children = make_shared< vector< shared_ptr<Node> > >();
     textureCount = 0;
     isVisible = true;
+    hasTransparency = false;
     #ifdef ANDROID
     nodeData = make_shared<OGLNodeData>();
     #elif IOS
@@ -104,6 +105,7 @@ void Node::setTexture(Texture *texture,int textureIndex){
     if(textures[textureIndex-1] == NULL)
         textureCount++;
     textures[textureIndex-1] = texture;
+    hasTransparency = texture->hasTransparency;
 }
 void Node::setRotationInDegrees(Vector3 rotation, bool updateBB){
     this->rotation = Vector3(rotation.x * (PI/180.0),rotation.y * (PI/180.0),rotation.z * (PI/180.0));
