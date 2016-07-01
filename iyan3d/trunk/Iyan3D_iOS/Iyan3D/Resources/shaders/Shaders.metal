@@ -433,9 +433,10 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],texture2d<half>  te
         texTransparency = diffuse_color.w;
     }
     
-    
+    if(texTransparency <= 0.5)
+        discard_fragment();
+
     // Lighting Calculation----------
-    
     
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
     
@@ -509,6 +510,8 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],texture2d<half>  te
         texTransparency = diffuse_color.w;
     }
     
+    if(texTransparency <= 0.5)
+        discard_fragment();
     
     // Lighting Calculation----------
     
@@ -586,6 +589,8 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],texture2d<half>  te
         texTransparency = diffuse_color.w;
     }
     
+    if(texTransparency <= 0.5)
+        discard_fragment();
     
     // Lighting Calculation----------
     
@@ -663,6 +668,8 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],texture2d<half>  te
         texTransparency = diffuse_color.w;
     }
     
+    if(texTransparency <= 0.5)
+        discard_fragment();
     
     // Lighting Calculation----------
     
@@ -740,6 +747,8 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],texture2d<half>  te
         texTransparency = diffuse_color.w;
     }
     
+    if(texTransparency <= 0.5)
+        discard_fragment();
     
     // Lighting Calculation----------
     
