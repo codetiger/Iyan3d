@@ -199,6 +199,7 @@
     [cache OpenDatabase];
     [cache createTablesForPrice];
     [cache createRenderTaskTables];
+    [cache createNewsFeedTable];
     [cache createAnimationTables];
     [cache checkAndCreateGroupColumnInAssetsTable];
     [self.activityIndicator startAnimating];

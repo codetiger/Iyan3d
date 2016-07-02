@@ -909,6 +909,11 @@
     return std::wstring((wchar_t*)[asData bytes], [asData length] / sizeof(wchar_t));
 }
 
+-(BOOL)iPhone6Plus{
+    if (([UIScreen mainScreen].scale > 2.0)) return YES;
+    return NO;
+}
+
 - (void)resetAppHelper
 {
     cache = nil;

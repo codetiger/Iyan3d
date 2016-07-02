@@ -8,6 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
             <connections>
                 <outlet property="addSceneBtn" destination="zEZ-Bi-FMZ" id="APQ-kd-bK9"/>
+                <outlet property="centerLoading" destination="iIU-WK-k0e" id="VrR-Vx-ijN"/>
+                <outlet property="feedBtn" destination="3WR-Ml-9GB" id="mBd-Vu-riS"/>
+                <outlet property="feedCount" destination="juS-pg-mEs" id="PRA-Ll-gz7"/>
                 <outlet property="helpBtn" destination="v8h-mb-fY6" id="5vG-6f-6gm"/>
                 <outlet property="infoBtn" destination="FVH-Bb-pVz" id="sdN-U3-eCa"/>
                 <outlet property="loginBtn" destination="RFC-ob-Zd6" id="A52-f0-eYN"/>
@@ -46,7 +49,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="v8h-mb-fY6">
-                            <rect key="frame" x="483" y="13" width="22" height="22"/>
+                            <rect key="frame" x="478" y="13" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Help_iphone.png"/>
                             <connections>
@@ -54,7 +57,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RFC-ob-Zd6">
-                            <rect key="frame" x="449" y="13" width="22" height="22"/>
+                            <rect key="frame" x="444" y="13" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Manage your account." identifier="1"/>
                             <state key="normal" image="Login-IPhone.png"/>
@@ -62,8 +65,16 @@
                                 <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="KaR-Yx-tct"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3WR-Ml-9GB">
+                            <rect key="frame" x="414" y="13" width="22" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Feeds_iphone.png"/>
+                            <connections>
+                                <action selector="feedBtnAction:" destination="-1" eventType="touchUpInside" id="oq5-mC-mTc"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVH-Bb-pVz">
-                            <rect key="frame" x="517" y="13" width="22" height="22"/>
+                            <rect key="frame" x="512" y="13" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us." identifier="0"/>
                             <state key="normal" image="info-icon_phone.png"/>
@@ -71,6 +82,14 @@
                                 <action selector="infoBtnAction:" destination="-1" eventType="touchUpInside" id="rkf-S4-U2u"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="juS-pg-mEs">
+                            <rect key="frame" x="426" y="8" width="17" height="15"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -88,6 +107,10 @@
                         <outlet property="delegate" destination="-1" id="Vum-rw-3Vg"/>
                     </connections>
                 </collectionView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="iIU-WK-k0e">
+                    <rect key="frame" x="274" y="171" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -97,6 +120,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Feeds_iphone.png" width="20" height="20"/>
         <image name="Help_iphone.png" width="22" height="22"/>
         <image name="Login-IPhone.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>

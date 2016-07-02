@@ -24,10 +24,11 @@
 #import "WEPopoverController.h"
 #import "SettingsViewController.h"
 #import "LoggedInViewController.h"
+#import "NewsFeedVC.h"
 #import "FollowUsVC.h"
 
 
-@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate , OnBoardDelegate>{
+@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate , OnBoardDelegate, NewsFeedDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -71,10 +72,13 @@
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
+@property (weak, nonatomic) IBOutlet UIButton *feedBtn;
+@property (weak, nonatomic) IBOutlet UILabel *feedCount;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)openSceneAction:(id)sender;
 - (IBAction)loginBtnAction:(id)sender;
+- (IBAction)feedBtnAction:(id)sender;
 
 @end
 

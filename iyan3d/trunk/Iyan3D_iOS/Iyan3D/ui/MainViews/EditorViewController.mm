@@ -3630,6 +3630,11 @@ void downloadFile(NSString* url, NSString* fileName)
             [self dismissView];
             medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewControllerInCurrentView:medPreview];
+    } else {
+        MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:[[AppHelper getAppHelper] iPhone6Plus] ? @"MediaPreviewVCPhone@2x" : @"MediaPreviewVCPhone" bundle:nil mediaType:mediaType medPath:outputPath];
+        [self dismissView];
+        medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewControllerInCurrentView:medPreview];
     }
 }
 

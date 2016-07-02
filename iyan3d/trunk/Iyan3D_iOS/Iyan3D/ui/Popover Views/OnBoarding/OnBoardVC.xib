@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnBoardVC">
+            <connections>
+                <outlet property="divider" destination="i4Q-3I-eIM" id="CO7-Ix-B2w"/>
+                <outlet property="pageControl" destination="WrU-uq-Jvk" id="OyY-VN-jH6"/>
+                <outlet property="scrollView" destination="IGq-KO-Yil" id="j6F-Sz-xN4"/>
+                <outlet property="skipBtn" destination="KQV-Ri-756" id="cNe-EC-pLS"/>
+                <outlet property="startBtn" destination="UiE-fK-kY1" id="9CD-RX-WIg"/>
+                <outlet property="stepBody" destination="jjS-NO-3rh" id="ou7-5j-vOp"/>
+                <outlet property="stepImgView" destination="F52-HT-iWC" id="O07-Cn-E1u"/>
+                <outlet property="stepTitle" destination="wfN-O0-tnI" id="1Fq-wm-PMq"/>
+                <outlet property="stepView" destination="6Nn-D8-fRN" id="oaf-Xr-79W"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="576"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Nn-D8-fRN">
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="576"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Step-1_-img.png" translatesAutoresizingMaskIntoConstraints="NO" id="F52-HT-iWC">
+                            <rect key="frame" x="0.0" y="89" width="368" height="326"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Divider-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="i4Q-3I-eIM">
+                            <rect key="frame" x="376" y="149" width="74" height="248"/>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add characters, environment, props from our library of over 300 assets or import an OBJ from an external source." lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjS-NO-3rh">
+                            <rect key="frame" x="458" y="195" width="286" height="108"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create a Scene" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfN-O0-tnI">
+                            <rect key="frame" x="435" y="131" width="282" height="36"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                            <color key="textColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGq-KO-Yil">
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="576"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="EJO-zY-5R1"/>
+                    </connections>
+                </scrollView>
+                <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="WrU-uq-Jvk">
+                    <rect key="frame" x="344" y="519" width="75" height="37"/>
+                    <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="currentPageIndicatorTintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                    <connections>
+                        <action selector="changePage" destination="-1" eventType="valueChanged" id="THQ-3W-8ZU"/>
+                    </connections>
+                </pageControl>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UiE-fK-kY1">
+                    <rect key="frame" x="625" y="523" width="117" height="30"/>
+                    <state key="normal" title="Let's get started">
+                        <color key="titleColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="startBtnAction:" destination="-1" eventType="touchUpInside" id="x0V-cd-ex2"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KQV-Ri-756">
+                    <rect key="frame" x="29" y="523" width="80" height="30"/>
+                    <state key="normal" title="More Info">
+                        <color key="titleColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="skipBtnAction:" destination="-1" eventType="touchUpInside" id="2LY-oG-LLv"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lgp-Lc-f6e">
+                    <rect key="frame" x="715" y="28" width="31" height="31"/>
+                    <state key="normal" image="round-close.png"/>
+                    <connections>
+                        <action selector="closeBtnAction:" destination="-1" eventType="touchUpInside" id="g0f-66-2N1"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Divider-1.png" width="74" height="248"/>
+        <image name="Step-1_-img.png" width="368" height="326"/>
+        <image name="round-close.png" width="31" height="31"/>
+    </resources>
+</document>

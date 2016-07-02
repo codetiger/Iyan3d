@@ -15,7 +15,8 @@
 #import "SceneItem.h"
 #import <sys/utsname.h>
 #import "ZipArchive.h"
-
+#import "AFHTTPRequestOperation.h"
+#import "AFHTTPClient.h"
 
 #define SCENE_NAME_ALERT 0
 #define LOGOUT_ALERT 1
@@ -35,6 +36,10 @@
 
 #define RESTORE_PURCHASH_ALERT 2
 
+#define ALERT_TYPE 1
+#define IMAGE_TYPE 2
+#define URL_TYPE 3
+
 @implementation SceneSelectionControllerNew
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil IsFirstTimeOpen:(BOOL)value {
@@ -53,7 +58,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.screenName = @"SceneSelectionView iOS";
+    [self.feedCount setHidden:YES];
     
+    self.feedCount.layer.cornerRadius = 20.0;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
     if([Utility IsPadDevice]){
@@ -72,7 +79,7 @@
     }
     
     isFirstTimeUser = false;
-    
+    [self loadNewsFeedData];
     /*
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   
@@ -110,6 +117,77 @@
     }
 }
 
+- (void) loadNewsFeedData
+{
+    
+    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/newsfeed.php"];
+    NSString *postPath = @"https://www.iyan3dapp.com/appapi/newsfeed.php";
+    
+    NSString* lastid = @"0";
+    if([[AppHelper getAppHelper] userDefaultsForKey:@"lastfeedid"])
+        lastid = [[AppHelper getAppHelper] userDefaultsForKey:@"lastfeedid"];
+    
+    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:lastid, @"lastid", nil]];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSError * jsonError;
+        NSArray* jsonArray = [[NSArray alloc] init];
+        jsonArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:&jsonError];
+        if(!jsonError && [jsonArray count] > 0) {
+            for(int i = 0; i < [jsonArray count]; i++) {
+                FeedItem *f = [[FeedItem alloc] init];
+                f.itemId = [[[jsonArray objectAtIndex:i] objectForKey:@"id"] intValue];
+                f.type = [[[jsonArray objectAtIndex:i] objectForKey:@"type"] intValue];
+                f.title = [[jsonArray objectAtIndex:i] objectForKey:@"title"];
+                f.message = [[jsonArray objectAtIndex:i] objectForKey:@"message"];
+                f.url = [[jsonArray objectAtIndex:i] objectForKey:@"url"];
+                f.thumbImage = [[jsonArray objectAtIndex:i] objectForKey:@"thumbnailurl"];
+                f.isRead = false;
+                [cache addNewsFeed:f];
+                
+                if(i == 0) {
+                    [[AppHelper getAppHelper] saveToUserDefaults:[NSString stringWithFormat:@"%d", f.itemId] withKey:@"lastfeedid"];
+                }
+            }
+            
+            NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
+            [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
+        } else {
+            NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
+            [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
+        }
+    }
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Failure: %@", error.localizedDescription);
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Could not load content. Check your internet connection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         //[userNameAlert show];
+                                         NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
+                                         [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
+                                     }];
+    [operation start];
+    
+}
+
+- (void) setFeedsCount:(NSMutableArray*) feedItems
+{
+    int count = 0;
+    for(int i = 0; i < [feedItems count]; i ++) {
+        FeedItem* f = [feedItems objectAtIndex:i];
+        if(!f.isRead)
+            count++;
+    }
+    
+    if(count > 0) {
+        [self.feedCount setHidden:NO];
+        self.feedCount.text = [NSString stringWithFormat:@"%d", count];
+        self.feedCount.layer.cornerRadius = 7.5;
+        self.feedCount.clipsToBounds = YES;
+    } else
+        [self.feedCount setHidden:YES];
+}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
@@ -674,6 +752,32 @@
 
 }
 
+- (IBAction)feedBtnAction:(id)sender
+{
+    
+    [self.feedCount setHidden:YES];
+    NSString* nibName = @"NewsFeedVC";
+    CGSize sizeOfView = CGSizeMake(305, 495);
+    if(![Utility IsPadDevice]) {
+        nibName = @"NewsFeedVCPhone";
+        sizeOfView = CGSizeMake(305, 253);
+    }
+    
+    NewsFeedVC *newsVC = [[NewsFeedVC alloc] initWithNibName:nibName bundle:nil];
+    newsVC.delegate = self;
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:newsVC];
+    self.popoverController.popoverContentSize = sizeOfView;
+    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [newsVC.view setClipsToBounds:YES];
+    self.popUpVc.delegate=self;
+    self.popoverController.delegate =self;
+    [self.popoverController presentPopoverFromRect:_feedBtn.frame
+                                            inView:self.view
+                          permittedArrowDirections:UIPopoverArrowDirectionUp
+                                          animated:YES];
+}
+
 - (void) showOrHideProgress:(BOOL) value
 {
     
@@ -978,6 +1082,7 @@
 
 - (void) showPreviewInMainThread:(NSString*) outputPath
 {
+    [self.centerLoading setHidden:YES];
     int mediaType = [[outputPath pathExtension] isEqualToString:@"png"] ? 0 : 1;
     
     if([Utility IsPadDevice]) {
@@ -985,6 +1090,38 @@
         [self dismissView];
         medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:medPreview animated:YES completion:nil];
+    } else {
+        MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:[[AppHelper getAppHelper] iPhone6Plus] ? @"MediaPreviewVCPhone@2x" : @"MediaPreviewVCPhone" bundle:nil mediaType:mediaType medPath:outputPath];
+        [self dismissView];
+        medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:medPreview animated:YES completion:nil];
+    }
+}
+
+- (void) performActionForSelectedFeed:(FeedItem*) feed
+{
+    [self.popoverController dismissPopoverAnimated:YES];
+    
+    if(feed.type == ALERT_TYPE) {
+        UIAlertView * infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:feed.message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [infoAlert show];
+    } else if(feed.type == IMAGE_TYPE) {
+        [self.centerLoading setHidden:NO];
+        [self.centerLoading startAnimating];
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* imagePath = [NSString stringWithFormat:@"%@/feedImage.png", tempDir];
+        if([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+            [self showPreviewInMainThread:imagePath];
+        } else {
+            DownloadTask *t = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(showPreviewInMainThread:) returnObject:imagePath outputFilePath:imagePath andURL:feed.url];
+            t.taskType = DOWNLOAD_AND_WRITE_IMAGE;
+            t.queuePriority = NSOperationQueuePriorityHigh;
+            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+            [queue addOperation:t];
+        }
+        
+    } else if(feed.type == URL_TYPE) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:feed.url]];
     }
 }
 

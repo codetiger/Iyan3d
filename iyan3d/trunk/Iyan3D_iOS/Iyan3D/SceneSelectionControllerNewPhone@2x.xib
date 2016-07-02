@@ -8,6 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
             <connections>
                 <outlet property="addSceneBtn" destination="zEZ-Bi-FMZ" id="APQ-kd-bK9"/>
+                <outlet property="centerLoading" destination="JVP-HW-qNk" id="bZ6-iN-7pB"/>
+                <outlet property="feedBtn" destination="qWp-W5-uhP" id="3sR-HI-qBb"/>
+                <outlet property="feedCount" destination="1US-0Z-GGS" id="37U-SV-5u1"/>
                 <outlet property="helpBtn" destination="H6r-Ou-1ZQ" id="WdI-3C-SF3"/>
                 <outlet property="infoBtn" destination="FVH-Bb-pVz" id="sdN-U3-eCa"/>
                 <outlet property="loginBtn" destination="i1k-Qd-hji" id="CMt-CS-mbl"/>
@@ -46,12 +49,20 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="i1k-Qd-hji">
-                            <rect key="frame" x="583" y="17" width="22" height="22"/>
+                            <rect key="frame" x="588" y="17" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Manage your account." identifier="1"/>
                             <state key="normal" image="Login-IPhone.png"/>
                             <connections>
                                 <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="vhu-HT-KZO"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qWp-W5-uhP">
+                            <rect key="frame" x="543" y="17" width="22" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="Feeds_iphone.png"/>
+                            <connections>
+                                <action selector="feedBtnAction:" destination="-1" eventType="touchUpInside" id="rW0-6z-tKH"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVH-Bb-pVz">
@@ -71,6 +82,14 @@
                                 <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="FqI-Td-htp"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1US-0Z-GGS">
+                            <rect key="frame" x="557" y="9" width="23" height="15"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -101,6 +120,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Feeds_iphone.png" width="20" height="20"/>
         <image name="Help_iphone.png" width="22" height="22"/>
         <image name="Login-IPhone.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>

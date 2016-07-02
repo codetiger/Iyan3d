@@ -8,6 +8,7 @@
 
 #import "MediaPreviewVC.h"
 #import <Crashlytics/Answers.h>
+#import "Utility.h"
 
 @implementation MediaPreviewVC
 
@@ -39,14 +40,16 @@
         float aspectRatio = (imgWidth > imgHeight) ? (imgWidth / imgHeight) : (imgHeight / imgWidth);
         CGRect imgViewFrame = self.medView.frame;
         
-        if(imgWidth > imgHeight) {
-            imgViewFrame.size.height = (imgViewFrame.size.width / aspectRatio);
-            float offset = (self.medView.frame.size.height - imgViewFrame.size.height) / 2.0;
-            imgViewFrame.origin.y = offset;
-        } else {
-            imgViewFrame.size.width = (imgViewFrame.size.height / aspectRatio);
-            float offset = (self.medView.frame.size.width - imgViewFrame.size.width) / 2.0;
-            imgViewFrame.origin.x = offset;
+        if([Utility IsPadDevice]) {
+            if(imgWidth > imgHeight) {
+                imgViewFrame.size.height = (imgViewFrame.size.width / aspectRatio);
+                float offset = (self.medView.frame.size.height - imgViewFrame.size.height) / 2.0;
+                imgViewFrame.origin.y = offset;
+            } else {
+                imgViewFrame.size.width = (imgViewFrame.size.height / aspectRatio);
+                float offset = (self.medView.frame.size.width - imgViewFrame.size.width) / 2.0;
+                imgViewFrame.origin.x = offset;
+            }
         }
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:imgViewFrame];

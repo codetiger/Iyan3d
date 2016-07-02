@@ -867,6 +867,11 @@
         medPreview.delegate = self;
         medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:medPreview animated:YES completion:nil];
+    } else {
+        MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:[[AppHelper getAppHelper] iPhone6Plus] ? @"MediaPreviewVCPhone@2x" : @"MediaPreviewVCPhone" bundle:nil mediaType:mediaType medPath:outputPath];
+        medPreview.delegate = self;
+        medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:medPreview animated:YES completion:nil];
     }
 }
 

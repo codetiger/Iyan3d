@@ -89,4 +89,4 @@
 - (void) toggleHelp:(UIViewController*) vc Enable:(BOOL)enable;
 - (void) showTipForView:(UIView*) subView InMainView:(UIView*)view;
 
-@end
+-(BOOL)iPhone6Plus;@end
