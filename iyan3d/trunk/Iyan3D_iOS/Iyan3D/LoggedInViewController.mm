@@ -385,7 +385,7 @@
             FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
             [loginManager logOut];
         } else if (signinType == TWITTER_SIGNIN) {
-            [[Twitter sharedInstance]logOut];
+            [[[Twitter sharedInstance] sessionStore] logOutUserID:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]];
         }
 
         [self reportAuthStatus];
