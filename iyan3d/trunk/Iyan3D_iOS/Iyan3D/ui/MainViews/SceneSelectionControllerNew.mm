@@ -162,8 +162,6 @@
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Could not load content. Check your internet connection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-                                         //[userNameAlert show];
                                          NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
                                          [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
                                      }];
@@ -1103,8 +1101,8 @@
         [self.centerLoading startAnimating];
         NSString* tempDir = NSTemporaryDirectory();
         NSString* imagePath = [NSString stringWithFormat:@"%@/feedImage.png", tempDir];
-        if([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-            [self showPreviewInMainThread:imagePath];
+        if(![[AppHelper getAppHelper] checkInternetConnected])  {
+            [self showInternetError:SLOW_INTERNET];
         } else {
             DownloadTask *t = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(showPreviewInMainThread:) returnObject:imagePath outputFilePath:imagePath andURL:feed.url];
             t.taskType = DOWNLOAD_AND_WRITE_IMAGE;
@@ -1112,9 +1110,17 @@
             NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             [queue addOperation:t];
         }
-        
     } else if(feed.type == URL_TYPE) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:feed.url]];
+    }
+}
+
+- (void)showInternetError:(int)connectionError
+{
+    if (connectionError != SLOW_INTERNET) {
+        [self.view endEditing:YES];
+        UIAlertView* internetError = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [internetError performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     }
 }
 
