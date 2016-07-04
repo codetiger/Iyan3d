@@ -448,7 +448,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Help_iphone.png"/>
                             <connections>
-                                <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="UuY-Ya-02F"/>
+                                <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="RHI-Uh-i94"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="037-BU-8q5">

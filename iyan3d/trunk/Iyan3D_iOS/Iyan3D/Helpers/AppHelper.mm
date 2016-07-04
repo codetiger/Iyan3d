@@ -183,6 +183,8 @@
                     
                     NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
                     if (jsonData == nil || [jsonStr length] < 5) {
+                        if(self.delegate)
+                            [self.delegate performLocalTasks];
                         return;
                     }
 
@@ -846,7 +848,8 @@
     int arrowDirection = [[subView accessibilityIdentifier] intValue];
     
     if([hint length] > 8) {
-        JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:view tooltipText:hint arrowDirection:arrowDirection width:200.0f];
+        JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:view tooltipText:hint arrowDirection:arrowDirection width:220.0f];
+        tooltip.font = [UIFont fontWithName:tooltip.font.fontName size:([Utility IsPadDevice] || [self iPhone6Plus]) ? 12 : 9];
         [tooltip show];
         [toolTips addObject:tooltip];
     } else {
@@ -869,7 +872,8 @@
             int arrowDirection = [[subView accessibilityIdentifier] intValue];
             
             if([hint length] > 8) {
-                JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:mainView tooltipText:hint arrowDirection:arrowDirection width:200.0f];
+                JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:mainView tooltipText:hint arrowDirection:arrowDirection width:220.0f];
+                tooltip.font = [UIFont fontWithName:tooltip.font.fontName size:([Utility IsPadDevice] || [self iPhone6Plus]) ? 12 : 9];
                 [tooltip show];
                 [toolTips addObject:tooltip];
             }

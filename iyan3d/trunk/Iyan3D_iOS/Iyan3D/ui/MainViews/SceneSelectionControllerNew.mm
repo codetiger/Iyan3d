@@ -879,25 +879,18 @@
     if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath]) {
 
     
-    NSArray *objectsToShare;
-
-        NSURL *videoURL = [NSURL fileURLWithPath:i3dPath];
-        objectsToShare = [NSArray arrayWithObjects:@"A Scene created using Iyan 3D in iOS.", videoURL, nil];
-    
-    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-    
-    
-    if([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-        if(!controller.popoverPresentationController.barButtonItem) {
-            controller.popoverPresentationController.sourceView = self.view;
-            
-            controller.popoverPresentationController.sourceRect = [self.scenesCollectionView convertRect:[self.scenesCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:selectedSceneIndex inSection:0]].frame toView:self.view];
-        }
-    }
-    [controller setCompletionHandler:^(NSString *activityType, BOOL completed) {
-    }];
-    
-    [self presentViewController:controller animated:YES completion:nil];
+        NSArray *objectsToShare;
+        
+        NSURL *sceneURL = [NSURL fileURLWithPath:i3dPath];
+        objectsToShare = [NSArray arrayWithObjects:@"A Scene created using Iyan 3D in iOS.", sceneURL, nil];
+        
+        self.docController = [UIDocumentInteractionController interactionControllerWithURL:sceneURL];
+        self.docController.UTI = @"com.smackall.i3d";
+            if (self.docController != nil) {
+                self.docController.delegate = self;
+                CGRect sourceRect = [self.scenesCollectionView convertRect:[self.scenesCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:selectedSceneIndex inSection:0]].frame toView:self.view];
+                [self.docController presentOptionsMenuFromRect:sourceRect inView:self.view animated:YES];
+            }
     }
 
     /*

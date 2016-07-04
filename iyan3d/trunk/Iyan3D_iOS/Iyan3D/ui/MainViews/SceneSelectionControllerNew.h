@@ -28,7 +28,7 @@
 #import "FollowUsVC.h"
 
 
-@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate , OnBoardDelegate, NewsFeedDelegate>{
+@interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, DBRestClientDelegate, UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate,ScenePropertiesDelegate,UIAlertViewDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,SettingsViewControllerDelegate,LoggedinViewControllerDelegat,LoginViewControllerDelegate,MFMailComposeViewControllerDelegate , OnBoardDelegate, NewsFeedDelegate, UIDocumentInteractionControllerDelegate>{
     NSMutableArray *scenesArray;
     CacheSystem* cache;
     NSDateFormatter *dateFormatter;
@@ -71,6 +71,7 @@
 @property (nonatomic, strong) FollowUsVC *followUsVC;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
+@property (nonatomic, strong) UIDocumentInteractionController *docController;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 @property (weak, nonatomic) IBOutlet UIButton *feedBtn;
 @property (weak, nonatomic) IBOutlet UILabel *feedCount;
