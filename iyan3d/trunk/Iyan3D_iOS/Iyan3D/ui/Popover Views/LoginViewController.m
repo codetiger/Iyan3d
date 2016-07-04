@@ -224,12 +224,13 @@ didSignInForUser:(GIDGoogleUser *)user
 
 - (void)toggleAllowSignInWithBrowser:(UISwitch*)sender
 {
-    [GIDSignIn sharedInstance].allowsSignInWithBrowser = sender.on;
+    NSLog(@" Deprecated ");
+    //[GIDSignIn sharedInstance].allowsSignInWithBrowser = sender.on;
 }
 
 - (void)toggleAllowSignInWithWebView:(UISwitch*)sender
 {
-    [GIDSignIn sharedInstance].allowsSignInWithWebView = sender.on;
+    //[GIDSignIn sharedInstance].allowsSignInWithWebView = sender.on;
 }
 
 #pragma mark - AppHelperDelegates

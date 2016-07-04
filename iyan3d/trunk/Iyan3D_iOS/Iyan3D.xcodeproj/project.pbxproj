@@ -2338,6 +2338,16 @@
 		8ADEFEA9197425E8001E159D /* bonelimits.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ADEFEA7197425E8001E159D /* bonelimits.json */; };
 		8ADEFEAA197425E8001E159D /* humanTPoseBoneLimits.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ADEFEA8197425E8001E159D /* humanTPoseBoneLimits.json */; };
 		8AED29BB198A29AD004FC1E5 /* viewCameraModes.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AED29BA198A29AD004FC1E5 /* viewCameraModes.json */; };
+		C4BEFB031D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */; };
+		C4BEFB041D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */; };
+		C4BEFB051D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */; };
+		C4BEFB061D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */; };
+		C4BEFB071D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */; };
+		C4BEFB081D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */; };
+		C4BEFB091D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */; };
+		C4BEFB0A1D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */; };
+		C4BEFB0B1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */; };
+		C4BEFB0C1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */; };
 		C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C825377418EA881B00F49E91 /* StoreKit.framework */; };
 		C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82EA4BA187E869F00A8468A /* CoreMotion.framework */; };
 		C831F1B21876E0AC00966179 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B11876E0AC00966179 /* Security.framework */; };
@@ -4630,6 +4640,11 @@
 		8ADEFEA7197425E8001E159D /* bonelimits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bonelimits.json; path = Resources/jsonFiles/bonelimits.json; sourceTree = "<group>"; };
 		8ADEFEA8197425E8001E159D /* humanTPoseBoneLimits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = humanTPoseBoneLimits.json; path = Resources/jsonFiles/humanTPoseBoneLimits.json; sourceTree = "<group>"; };
 		8AED29BA198A29AD004FC1E5 /* viewCameraModes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = viewCameraModes.json; path = Resources/jsonFiles/viewCameraModes.json; sourceTree = "<group>"; };
+		C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAppUtilities.framework; path = FrameWorks/GoogleAppUtilities.framework; sourceTree = "<group>"; };
+		C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAuthUtilities.framework; path = FrameWorks/GoogleAuthUtilities.framework; sourceTree = "<group>"; };
+		C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleNetworkingUtilities.framework; path = FrameWorks/GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
+		C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = FrameWorks/GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+		C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleUtilities.framework; path = FrameWorks/GoogleUtilities.framework; sourceTree = "<group>"; };
 		C825377418EA881B00F49E91 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		C82EA4BA187E869F00A8468A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		C831F1B11876E0AC00966179 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -4741,6 +4756,7 @@
 				2593C41E1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
 				25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */,
 				01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */,
+				C4BEFB031D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */,
 				25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */,
 				25F7C4651B682F7400C4183F /* libz.dylib in Frameworks */,
 				251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
@@ -4758,11 +4774,15 @@
 				E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */,
 				01D2F0A31C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */,
 				C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */,
+				C4BEFB0B1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
+				C4BEFB051D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */,
 				C87EBFE218F3DAD800EB656E /* CoreData.framework in Frameworks */,
 				C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */,
 				01D2F0A51C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */,
+				C4BEFB071D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
 				C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */,
 				01C2B7981C46419300384370 /* TwitterCore.framework in Frameworks */,
+				C4BEFB091D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */,
 				C831F1B21876E0AC00966179 /* Security.framework in Frameworks */,
 				C885D7811876BE6100A45D71 /* CoreGraphics.framework in Frameworks */,
 				C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */,
@@ -4781,6 +4801,7 @@
 				2593C41F1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
 				01BA32541C5CEC8C000A5F3E /* AssetsLibrary.framework in Frameworks */,
 				25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */,
+				C4BEFB041D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */,
 				01C2B79D1C46553500384370 /* Social.framework in Frameworks */,
 				251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */,
 				7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */,
@@ -4798,11 +4819,15 @@
 				251BF4571C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
 				E20672021B049AA6006DD2F7 /* OpenGLES.framework in Frameworks */,
 				E20672031B049AA6006DD2F7 /* SystemConfiguration.framework in Frameworks */,
+				C4BEFB0C1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
+				C4BEFB061D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */,
 				01D2F0A41C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */,
 				01C2B7951C46419300384370 /* TwitterKit.framework in Frameworks */,
 				E20672051B049AA6006DD2F7 /* CoreData.framework in Frameworks */,
+				C4BEFB081D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
 				E20672071B049AA6006DD2F7 /* StoreKit.framework in Frameworks */,
 				E20672081B049AA6006DD2F7 /* CoreMotion.framework in Frameworks */,
+				C4BEFB0A1D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */,
 				E20672091B049AA6006DD2F7 /* Security.framework in Frameworks */,
 				E206720A1B049AA6006DD2F7 /* CoreGraphics.framework in Frameworks */,
 				E206720B1B049AA6006DD2F7 /* UIKit.framework in Frameworks */,
@@ -7699,6 +7724,11 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */,
+				C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */,
+				C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */,
+				C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */,
+				C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */,
 				2544C2701CCE1A4A009A3620 /* GLKit.framework */,
 				250991671CB672410054CA73 /* DropboxSDK.framework */,
 				2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */,
