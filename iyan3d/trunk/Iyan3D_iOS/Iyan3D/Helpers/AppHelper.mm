@@ -849,7 +849,7 @@
     
     if([hint length] > 8) {
         JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:view tooltipText:hint arrowDirection:arrowDirection width:220.0f];
-        tooltip.font = [UIFont fontWithName:tooltip.font.fontName size:([Utility IsPadDevice] || [self iPhone6Plus]) ? 12 : 9];
+        tooltip.font = [UIFont fontWithName:tooltip.font.fontName size:([Utility IsPadDevice]) ? 12 : 9];
         [tooltip show];
         [toolTips addObject:tooltip];
     } else {
@@ -873,7 +873,7 @@
             
             if([hint length] > 8) {
                 JDFTooltipView *tooltip = [[JDFTooltipView alloc] initWithTargetView:subView hostView:mainView tooltipText:hint arrowDirection:arrowDirection width:220.0f];
-                tooltip.font = [UIFont fontWithName:tooltip.font.fontName size:([Utility IsPadDevice] || [self iPhone6Plus]) ? 12 : 9];
+                tooltip.font = [UIFont fontWithName:tooltip.font.fontName size:([Utility IsPadDevice]) ? 12 : 9];
                 [tooltip show];
                 [toolTips addObject:tooltip];
             }
