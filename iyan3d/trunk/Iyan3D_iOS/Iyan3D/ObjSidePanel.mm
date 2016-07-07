@@ -43,7 +43,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.screenName = @"OBJSelection iOS";
-     [self.importFilesCollectionView registerNib:[UINib nibWithNibName:@"ObjCellView" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
+    NSString* nibName = @"ObjCellView";
+    if([[AppHelper getAppHelper] iPhone6Plus])
+        nibName = @"ObjCellViewPhone";
+     [self.importFilesCollectionView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
