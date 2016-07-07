@@ -355,7 +355,7 @@ BOOL missingAlertShown;
 
 - (void) updateXYZValuesHide:(BOOL)hide X:(float)x Y:(float)y Z:(float)z
 {
-    BOOL status = hide;
+    BOOL status = (editorScene && editorScene->isRigMode) ? YES : hide;
     
     if(x == -999.0 && y == -999.0 & z == -999.0)
         status = YES;
@@ -1047,6 +1047,8 @@ BOOL missingAlertShown;
 - (void) setTipArrowDirections
 {
     NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+    
+    self.myObjectsBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.importBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.animationBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.optionsBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
@@ -1531,8 +1533,9 @@ BOOL missingAlertShown;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 300 : 322;
         if(![Utility IsPadDevice])
-            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 265;
-        self.popoverController.popoverContentSize = CGSizeMake(388, height);
+            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 241;
+        int width = ([Utility IsPadDevice] ? 388 : 320);
+        self.popoverController.popoverContentSize = CGSizeMake(width, height);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -1577,8 +1580,12 @@ BOOL missingAlertShown;
         int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
         _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
+        
+//        Options *exampleOption = [[Options alloc] init];
+//        NSArray* props = [NSArray arrayWithObjects:exampleOption, exampleOption, exampleOption, nil];
+//        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:props];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 320);
+        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];
@@ -2403,8 +2410,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;
         if(![Utility IsPadDevice])
-            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 265;
-        self.popoverController.popoverContentSize = CGSizeMake(270,  height);
+            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 241;
+        int width = ([Utility IsPadDevice] ? 388 : 320);
+        self.popoverController.popoverContentSize = CGSizeMake(width,  height);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_lightProp.view setClipsToBounds:YES];
@@ -2450,7 +2458,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize =(isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 320);
+        self.popoverController.popoverContentSize =(isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
         [_meshProp.view setClipsToBounds:YES];

@@ -643,6 +643,12 @@
 		2503501A1D2509AB0036F201 /* NewsFeedVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 250350181D2509AB0036F201 /* NewsFeedVC.mm */; };
 		2503501D1D25284A0036F201 /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2503501C1D25284A0036F201 /* FeedItem.m */; };
 		2503501E1D25284A0036F201 /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2503501C1D25284A0036F201 /* FeedItem.m */; };
+		25069F581D2B9CEB00DBAE44 /* Options.m in Sources */ = {isa = PBXBuildFile; fileRef = 25069F571D2B9CEB00DBAE44 /* Options.m */; };
+		25069F591D2B9CEB00DBAE44 /* Options.m in Sources */ = {isa = PBXBuildFile; fileRef = 25069F571D2B9CEB00DBAE44 /* Options.m */; };
+		25069F5B1D2BD81E00DBAE44 /* CommonProps.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25069F5A1D2BD81E00DBAE44 /* CommonProps.xib */; };
+		25069F5C1D2BD81E00DBAE44 /* CommonProps.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25069F5A1D2BD81E00DBAE44 /* CommonProps.xib */; };
+		25069F5F1D2BDAC900DBAE44 /* CommonProps.m in Sources */ = {isa = PBXBuildFile; fileRef = 25069F5E1D2BDAC900DBAE44 /* CommonProps.m */; };
+		25069F601D2BDAC900DBAE44 /* CommonProps.m in Sources */ = {isa = PBXBuildFile; fileRef = 25069F5E1D2BDAC900DBAE44 /* CommonProps.m */; };
 		25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
 		25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
 		250991681CB672410054CA73 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 250991671CB672410054CA73 /* DropboxSDK.framework */; };
@@ -3120,6 +3126,11 @@
 		250350181D2509AB0036F201 /* NewsFeedVC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedVC.mm; sourceTree = "<group>"; };
 		2503501B1D2528330036F201 /* FeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedItem.h; path = "Core/Header Files/FeedItem.h"; sourceTree = "<group>"; };
 		2503501C1D25284A0036F201 /* FeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedItem.m; path = Core/FeedItem.m; sourceTree = "<group>"; };
+		25069F561D2B9CCE00DBAE44 /* Options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Options.h; path = "Core/Header Files/Options.h"; sourceTree = "<group>"; };
+		25069F571D2B9CEB00DBAE44 /* Options.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Options.m; path = Core/Options.m; sourceTree = "<group>"; };
+		25069F5A1D2BD81E00DBAE44 /* CommonProps.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommonProps.xib; path = "ui/Popover Views/CommonProps.xib"; sourceTree = "<group>"; };
+		25069F5D1D2BDAC900DBAE44 /* CommonProps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonProps.h; path = "ui/Popover Views/CommonProps.h"; sourceTree = "<group>"; };
+		25069F5E1D2BDAC900DBAE44 /* CommonProps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommonProps.m; path = "ui/Popover Views/CommonProps.m"; sourceTree = "<group>"; };
 		25095F381C5B631900CF7C68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		250991671CB672410054CA73 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = FrameWorks/DropboxSDK.framework; sourceTree = "<group>"; };
 		250991AB1D27CD2E005327E6 /* MediaPreviewVCPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MediaPreviewVCPhone.xib; path = "ui/Popover Views/MediaPreviewVCPhone.xib"; sourceTree = "<group>"; };
@@ -6919,6 +6930,7 @@
 		25F80AC31CFDB1F600CF331B /* Properties */ = {
 			isa = PBXGroup;
 			children = (
+				25069F5A1D2BD81E00DBAE44 /* CommonProps.xib */,
 				3D5348961C3BF60200C6A437 /* LightProperties.h */,
 				3D5348971C3BF60200C6A437 /* LightProperties.mm */,
 				3D5348981C3BF60200C6A437 /* LightProperties.xib */,
@@ -6930,6 +6942,8 @@
 				01AAE2941C43C25000B194E0 /* MeshProperties.mm */,
 				01AAE2951C43C25000B194E0 /* MeshProperties.xib */,
 				3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */,
+				25069F5D1D2BDAC900DBAE44 /* CommonProps.h */,
+				25069F5E1D2BDAC900DBAE44 /* CommonProps.m */,
 			);
 			name = Properties;
 			sourceTree = "<group>";
@@ -7618,6 +7632,7 @@
 			children = (
 				E24973EB196BD7F50025D442 /* Header Files */,
 				E24973F1196BD80F0025D442 /* AssetItem.m */,
+				25069F571D2B9CEB00DBAE44 /* Options.m */,
 				2503501C1D25284A0036F201 /* FeedItem.m */,
 				E24973F2196BD80F0025D442 /* CacheSystem.m */,
 				25EFBEBB1BE25D2800DB300C /* RenderItem.m */,
@@ -7867,6 +7882,7 @@
 				E24973EF196BD8040025D442 /* SmartImageView.h */,
 				E24973F0196BD8040025D442 /* Utility.h */,
 				25895B711B4F031100E833F8 /* AnimationItem.h */,
+				25069F561D2B9CCE00DBAE44 /* Options.h */,
 			);
 			name = "Header Files";
 			sourceTree = "<group>";
@@ -8431,6 +8447,7 @@
 				0184EC831C352DCC006F0B57 /* LoggedInViewController.xib in Resources */,
 				E249769C196BE0310025D442 /* LoadingViewControllerPhone.xib in Resources */,
 				01F873491C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib in Resources */,
+				25069F5B1D2BD81E00DBAE44 /* CommonProps.xib in Resources */,
 				25EC6C461C7F39DD002CF5D2 /* wm36.png in Resources */,
 				25EC6CBA1C7F39DD002CF5D2 /* wm94.png in Resources */,
 				25EC6CCC1C7F39DD002CF5D2 /* wm103.png in Resources */,
@@ -9419,6 +9436,7 @@
 				01F8734A1C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib in Resources */,
 				01B4CF911C291EFD0091E19B /* ImportImageNew.xib in Resources */,
 				25EC6C471C7F39DD002CF5D2 /* wm36.png in Resources */,
+				25069F5C1D2BD81E00DBAE44 /* CommonProps.xib in Resources */,
 				25EC6CBB1C7F39DD002CF5D2 /* wm94.png in Resources */,
 				25EC6CCD1C7F39DD002CF5D2 /* wm103.png in Resources */,
 				01F872741C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
@@ -10130,6 +10148,7 @@
 				C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				256F6D881BF624FB00154622 /* OGLMaterial.cpp in Sources */,
 				25DE10811CAA8D6D0076F669 /* btConvexShape.cpp in Sources */,
+				25069F581D2B9CEB00DBAE44 /* Options.m in Sources */,
 				25730E671AFD3C7B0042F81A /* BitmapContextManipulator.m in Sources */,
 				256F6D821BF624FB00154622 /* Material.cpp in Sources */,
 				25DE10FB1CAA8D6D0076F669 /* btSliderConstraint.cpp in Sources */,
@@ -10176,6 +10195,7 @@
 				62FA5F6119A3132F00F137C8 /* HelpViewController.m in Sources */,
 				25DE105D1CAA8D6D0076F669 /* btSphereBoxCollisionAlgorithm.cpp in Sources */,
 				25DE10F91CAA8D6D0076F669 /* btSequentialImpulseConstraintSolver.cpp in Sources */,
+				25069F5F1D2BDAC900DBAE44 /* CommonProps.m in Sources */,
 				256F6D981BF624FB00154622 /* AnimatedMeshNode.cpp in Sources */,
 				25DE10211CAA8D6D0076F669 /* btCollisionAlgorithm.cpp in Sources */,
 				25DE101D1CAA8D6D0076F669 /* btAxisSweep3.cpp in Sources */,
@@ -10412,6 +10432,7 @@
 				25DE110A1CAA8D6D0076F669 /* btMultiBody.cpp in Sources */,
 				3D3F59141C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */,
 				25DE10C61CAA8D6D0076F669 /* btContinuousConvexCollision.cpp in Sources */,
+				25069F591D2B9CEB00DBAE44 /* Options.m in Sources */,
 				25DE102C1CAA8D6D0076F669 /* btOverlappingPairCache.cpp in Sources */,
 				25DE10CA1CAA8D6D0076F669 /* btGjkConvexCast.cpp in Sources */,
 				25DE0EA41CAA8C980076F669 /* btGeometryUtil.cpp in Sources */,
@@ -10607,6 +10628,7 @@
 				E206719B1B049AA6006DD2F7 /* CGImageContainer.m in Sources */,
 				25DE108E1CAA8D6D0076F669 /* btMultimaterialTriangleMeshShape.cpp in Sources */,
 				25DE105C1CAA8D6D0076F669 /* btSimulationIslandManager.cpp in Sources */,
+				25069F601D2BDAC900DBAE44 /* CommonProps.m in Sources */,
 				256F6D6F1BF624FB00154622 /* BoundingBox.cpp in Sources */,
 				25DE10F21CAA8D6D0076F669 /* btHinge2Constraint.cpp in Sources */,
 				25DE103C1CAA8D6D0076F669 /* btCollisionDispatcher.cpp in Sources */,

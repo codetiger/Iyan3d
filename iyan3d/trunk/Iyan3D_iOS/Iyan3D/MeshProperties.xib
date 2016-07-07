@@ -25,47 +25,14 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="464" height="320"/>
+            <rect key="frame" x="0.0" y="0.0" width="464" height="280"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U9I-4i-cZa" userLabel="meshproperty">
                     <rect key="frame" x="0.0" y="0.0" width="464" height="320"/>
                     <subviews>
-                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gl6-BX-ehp">
-                            <rect key="frame" x="99" y="52" width="308" height="31"/>
-                            <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
-                            <connections>
-                                <action selector="refractionChangeEnded:" destination="-1" eventType="touchUpInside" id="zCO-Ak-VbX"/>
-                                <action selector="refractionValueChanged:" destination="-1" eventType="valueChanged" id="7Kf-GP-oFi"/>
-                            </connections>
-                        </slider>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GLASSY" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ggf-Le-lmH">
-                            <rect key="frame" x="14" y="56" width="88" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cEw-ia-XJQ">
-                            <rect key="frame" x="99" y="92" width="308" height="31"/>
-                            <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
-                            <connections>
-                                <action selector="reflectionChangeEnded:" destination="-1" eventType="touchUpInside" id="vcs-pi-pDg"/>
-                                <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="VVA-CW-4Ux"/>
-                            </connections>
-                        </slider>
-                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sr8-nc-TNF">
-                            <rect key="frame" x="138" y="155" width="51" height="31"/>
-                            <connections>
-                                <action selector="visibleValueChanged:" destination="-1" eventType="valueChanged" id="Jcj-ax-av8"/>
-                            </connections>
-                        </switch>
-                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YBt-xE-ZrT">
-                            <rect key="frame" x="255" y="155" width="51" height="31"/>
-                            <connections>
-                                <action selector="mirrorBtnAction:" destination="-1" eventType="valueChanged" id="LfM-X2-pNB"/>
-                            </connections>
-                        </switch>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MT7-Hm-3m1">
-                            <rect key="frame" x="379" y="8" width="74" height="36"/>
+                            <rect key="frame" x="379" y="-2" width="74" height="35"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <state key="normal" title="  SKIN" image="popover-skin.png">
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -75,7 +42,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZr-9C-v5A">
-                            <rect key="frame" x="195" y="8" width="74" height="36"/>
+                            <rect key="frame" x="195" y="-2" width="74" height="36"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <state key="normal" title="  CLONE" image="popover-clone.png">
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -85,7 +52,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rX2-c1-0Az">
-                            <rect key="frame" x="14" y="8" width="78" height="36"/>
+                            <rect key="frame" x="14" y="-2" width="78" height="36"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <state key="normal" title="  DELETE" image="popover-delete.png">
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -94,39 +61,86 @@
                                 <action selector="deleteBtnAction:" destination="-1" eventType="touchUpInside" id="gpr-VE-PKx"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k9j-st-tbS">
+                            <rect key="frame" x="8" y="235" width="89" height="30"/>
+                            <state key="normal" title="Set Direction"/>
+                            <connections>
+                                <action selector="setDirection:" destination="-1" eventType="touchUpInside" id="U1d-Gx-Hqg"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g9w-4y-Dgn" userLabel="refractionHqBtn">
+                            <rect key="frame" x="413" y="68" width="40" height="34"/>
+                            <state key="normal" image="hq.png"/>
+                            <connections>
+                                <action selector="refractionHqBtnAction:" destination="-1" eventType="touchUpInside" id="YB1-wZ-iJs"/>
+                            </connections>
+                        </button>
+                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gl6-BX-ehp">
+                            <rect key="frame" x="99" y="37" width="308" height="31"/>
+                            <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                            <connections>
+                                <action selector="refractionChangeEnded:" destination="-1" eventType="touchUpInside" id="zCO-Ak-VbX"/>
+                                <action selector="refractionValueChanged:" destination="-1" eventType="valueChanged" id="7Kf-GP-oFi"/>
+                            </connections>
+                        </slider>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GLASSY" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ggf-Le-lmH">
+                            <rect key="frame" x="14" y="41" width="88" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cEw-ia-XJQ">
+                            <rect key="frame" x="99" y="72" width="308" height="31"/>
+                            <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                            <connections>
+                                <action selector="reflectionChangeEnded:" destination="-1" eventType="touchUpInside" id="vcs-pi-pDg"/>
+                                <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="VVA-CW-4Ux"/>
+                            </connections>
+                        </slider>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sr8-nc-TNF">
+                            <rect key="frame" x="138" y="125" width="51" height="31"/>
+                            <connections>
+                                <action selector="visibleValueChanged:" destination="-1" eventType="valueChanged" id="Jcj-ax-av8"/>
+                            </connections>
+                        </switch>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YBt-xE-ZrT">
+                            <rect key="frame" x="255" y="125" width="51" height="31"/>
+                            <connections>
+                                <action selector="mirrorBtnAction:" destination="-1" eventType="valueChanged" id="LfM-X2-pNB"/>
+                            </connections>
+                        </switch>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="VISIBLITY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sab-49-Hjo">
-                            <rect key="frame" x="132" y="134" width="64" height="21"/>
+                            <rect key="frame" x="132" y="104" width="64" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="olt-bO-PVX">
-                            <rect key="frame" x="254" y="134" width="51" height="21"/>
+                            <rect key="frame" x="254" y="104" width="51" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="iJR-Nb-aYV">
-                            <rect key="frame" x="365" y="155" width="51" height="31"/>
+                            <rect key="frame" x="365" y="125" width="51" height="31"/>
                             <connections>
                                 <action selector="textureSmoothSwitchAction:" destination="-1" eventType="valueChanged" id="RYX-EK-xAk"/>
                             </connections>
                         </switch>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEXTURE SMOOTH" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZVG-Hb-kaY">
-                            <rect key="frame" x="338" y="134" width="102" height="21"/>
+                            <rect key="frame" x="338" y="104" width="102" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="REFLECTION" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Ux-8q-yWk">
-                            <rect key="frame" x="14" y="97" width="85" height="21"/>
+                            <rect key="frame" x="14" y="77" width="85" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PHYSICS TYPE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NH9-6o-p3c">
-                            <rect key="frame" x="152" y="191" width="103" height="21"/>
+                            <rect key="frame" x="152" y="156" width="103" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="WmX-9F-9Kk">
-                            <rect key="frame" x="115" y="270" width="340" height="31"/>
+                            <rect key="frame" x="115" y="235" width="340" height="31"/>
                             <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                             <connections>
                                 <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="QbN-dc-qoY"/>
@@ -134,15 +148,8 @@
                                 <action selector="velocityValueChanged:" destination="-1" eventType="valueChanged" id="nXu-OX-QUF"/>
                             </connections>
                         </slider>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k9j-st-tbS">
-                            <rect key="frame" x="8" y="270" width="89" height="30"/>
-                            <state key="normal" title="Set Direction"/>
-                            <connections>
-                                <action selector="setDirection:" destination="-1" eventType="touchUpInside" id="U1d-Gx-Hqg"/>
-                            </connections>
-                        </button>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="opT-ge-IeQ">
-                            <rect key="frame" x="11" y="214" width="442" height="29"/>
+                            <rect key="frame" x="11" y="179" width="442" height="29"/>
                             <segments>
                                 <segment title="None"/>
                                 <segment title="Static"/>
@@ -158,37 +165,30 @@
                             </connections>
                         </segmentedControl>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="VELOCITY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aGw-N5-92x">
-                            <rect key="frame" x="171" y="250" width="63" height="21"/>
+                            <rect key="frame" x="171" y="215" width="63" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUj-9x-LKr" userLabel="reflectionHqBtn">
-                            <rect key="frame" x="413" y="50" width="40" height="34"/>
+                            <rect key="frame" x="413" y="35" width="40" height="34"/>
                             <state key="normal" image="hq.png"/>
                             <connections>
                                 <action selector="reflectionHqBtnAction:" destination="-1" eventType="touchUpInside" id="LHr-dt-BHQ"/>
                             </connections>
                         </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g9w-4y-Dgn" userLabel="refractionHqBtn">
-                            <rect key="frame" x="413" y="88" width="40" height="34"/>
-                            <state key="normal" image="hq.png"/>
-                            <connections>
-                                <action selector="refractionHqBtnAction:" destination="-1" eventType="touchUpInside" id="YB1-wZ-iJs"/>
-                            </connections>
-                        </button>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="azO-so-DyO">
-                            <rect key="frame" x="28" y="155" width="51" height="31"/>
+                            <rect key="frame" x="28" y="125" width="51" height="31"/>
                             <connections>
                                 <action selector="lightingSwitchChanged:" destination="-1" eventType="valueChanged" id="J7g-iv-pk0"/>
                             </connections>
                         </switch>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="LIGHT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gY-GU-NrM">
-                            <rect key="frame" x="33" y="134" width="39" height="21"/>
+                            <rect key="frame" x="33" y="104" width="39" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="H6Y-dk-0UN">
-                            <rect key="frame" x="241" y="251" width="20" height="20"/>
+                            <rect key="frame" x="241" y="216" width="20" height="20"/>
                         </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -196,7 +196,7 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="555" y="410"/>
+            <point key="canvasLocation" x="555" y="390"/>
         </view>
     </objects>
     <resources>

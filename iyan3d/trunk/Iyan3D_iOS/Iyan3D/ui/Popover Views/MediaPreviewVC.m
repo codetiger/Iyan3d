@@ -9,6 +9,7 @@
 #import "MediaPreviewVC.h"
 #import <Crashlytics/Answers.h>
 #import "Utility.h"
+#import "AppHelper.h"
 
 @implementation MediaPreviewVC
 
@@ -40,7 +41,7 @@
         float aspectRatio = (imgWidth > imgHeight) ? (imgWidth / imgHeight) : (imgHeight / imgWidth);
         CGRect imgViewFrame = self.medView.frame;
         
-        if([Utility IsPadDevice]) {
+        if([Utility IsPadDevice] || [[AppHelper getAppHelper] iPhone6Plus]) {
             if(imgWidth > imgHeight) {
                 imgViewFrame.size.height = (imgViewFrame.size.width / aspectRatio);
                 float offset = (self.medView.frame.size.height - imgViewFrame.size.height) / 2.0;
@@ -54,6 +55,7 @@
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:imgViewFrame];
         imageView.image = img;
+        imageView.autoresizingMask = self.medView.autoresizingMask;
         [self.medView addSubview:imageView];
         
     } else if (mediaType == VIDEO_TYPE) {

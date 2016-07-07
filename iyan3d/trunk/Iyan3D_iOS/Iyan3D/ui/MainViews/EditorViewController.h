@@ -36,6 +36,7 @@
 #import "ObjSidePanel.h"
 #import "CameraSettings.h"
 #import "MeshProperties.h"
+#import "CommonProps.h"
 #import "ScaleForAutoRigViewController.h"
 #import "FollowUsVC.h"
 
