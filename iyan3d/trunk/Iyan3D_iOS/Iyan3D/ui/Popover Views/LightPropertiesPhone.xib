@@ -75,7 +75,7 @@
                         <segment title="Directional"/>
                     </segments>
                     <connections>
-                        <action selector="lightTypeChanged:" destination="-1" eventType="touchUpInside" id="HGW-x4-aWD"/>
+                        <action selector="lightTypeChanged:" destination="-1" eventType="valueChanged" id="Zkm-Md-RMD"/>
                     </connections>
                 </segmentedControl>
                 <view contentMode="scaleToFill" id="kR6-UB-2FV">
