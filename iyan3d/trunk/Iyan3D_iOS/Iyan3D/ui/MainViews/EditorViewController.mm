@@ -4107,23 +4107,23 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (NSData*) convertAndScaleImage:(UIImage*)image size:(int)textureRes
 {
-    float target = 0;
+    float nWidth = textureRes, nHeight = textureRes;
+    
     if(textureRes == -1) {
-        
         float imgW = image.size.width;
         float imgH = image.size.height;
-        float bigSide = (imgW >= imgH) ? imgW : imgH;
-        //Convert texture image size should be the 2 to the power values for convinent case.
         
-        target = 2;
-        while (bigSide > target && target <= 1024)
-            target *= 2;
+        nWidth = 2;
+        while(nWidth < imgW && nWidth <= 1024)
+            nWidth *= 2;
+        
+        nHeight = 2;
+        while(nHeight < imgH && nHeight <= 1024)
+            nHeight *= 2;
     }
-    else
-        target = (float)textureRes;
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(target, target), NO, 1.0);
-    [image drawInRect:CGRectMake(0, 0, target, target)];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(nWidth, nHeight), NO, 1.0);
+    [image drawInRect:CGRectMake(0, 0, nWidth, nHeight)];
     UIImage* nImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     NSData* data = UIImagePNGRepresentation(nImage);

@@ -19,6 +19,7 @@
 OGLMaterial::OGLMaterial(){
     
 }
+
 OGLMaterial::~OGLMaterial(){
     if(shaderProgram){
         uint32_t shaders[MAX_SHADERS_PER_MATERIAL];
@@ -33,6 +34,7 @@ OGLMaterial::~OGLMaterial(){
     uniforms.clear();
     attributes.clear();
 }
+
 void OGLMaterial::AddAttributes(string name,DATA_TYPE type,uint32_t location,u16 bufIndex){
     attribute attr;
     attr.name = name;
@@ -40,7 +42,8 @@ void OGLMaterial::AddAttributes(string name,DATA_TYPE type,uint32_t location,u16
     attr.location = location;
     attributes.push_back(attr);
 }
-void OGLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex,u16 count,uint32_t location,short nodeIndex){
+
+void OGLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, short nodeIndex){
     uniform uni;
     uni.location = location;
     uni.name = propertyName;
@@ -51,27 +54,31 @@ void OGLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TY
     uni.nodeIndex = nodeIndex;
     uniforms.push_back(uni);
 }
-short OGLMaterial::setPropertyValue(string name,int *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex,int renderTargetIndex){
+
+short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex) {
     
     short uniformNodeIndex = NOT_EXISTS;
-    for(int i = 0; i < uniforms.size();i++){
-        if(uniforms[i].name == name){
+    for(int i = 0; i < uniforms.size(); i++) {
+        if(uniforms[i].name == name) {
             uniforms[i].values = values;
             uniformNodeIndex = i;
             break;
         }
     }
-    if(uniformNodeIndex == NOT_EXISTS){
-        uint location = glGetUniformLocation(shaderProgram,name.c_str());
-        AddProperty(name,NODE_PROPERTY_USER_DEFINED,type,0,count,location,nodeIndex);
+    
+    if(uniformNodeIndex == NOT_EXISTS) {
+        uint location = glGetUniformLocation(shaderProgram, name.c_str());
+        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, 0, count, location, nodeIndex);
         uniformNodeIndex = uniforms.size()-1;
         uniforms[uniformNodeIndex].values = values;
     }
+    
     if(uniformNodeIndex == NOT_EXISTS) {
         Logger::log(ERROR, "OGLMaterial", "Error in setting" + name + "Property");
     }
     return uniformNodeIndex;
 }
+
 short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex){
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){
@@ -82,16 +89,20 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
             break;
         }
     }
+    
     if(uniformNodeIndex == NOT_EXISTS){
         uint location = glGetUniformLocation(shaderProgram,name.c_str());
-        AddProperty(name,NODE_PROPERTY_USER_DEFINED,type,0,count,location,nodeIndex);
+        AddProperty(name,NODE_PROPERTY_USER_DEFINED, type, 0, count, location, nodeIndex);
         uniformNodeIndex = uniforms.size()-1;
         uniforms[uniformNodeIndex].values = values;
     }
+    
     if(uniformNodeIndex == NOT_EXISTS)
         Logger::log(ERROR, "OGLMaterial", "Error in setting" + name + "Property");
+
     return uniformNodeIndex;
 }
+
 bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr){
     GLuint vShaderHandle = CompileShader(vShaderName,GL_VERTEX_SHADER, shadersStr);
     GLuint fShaderHandle = CompileShader(fShaderName,GL_FRAGMENT_SHADER, shadersStr);
@@ -117,6 +128,7 @@ bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< s
 
     return true;
 }
+
 string OGLMaterial::getShaderAttributeNameByIndex(int i){
     int maxAttrib = NOT_EXISTS;
     glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTES, &maxAttrib);

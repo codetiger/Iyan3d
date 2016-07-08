@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifndef OPTIMGLKM
+#ifdef OPTIMSGM
 
 #include "Vector2.h"
 

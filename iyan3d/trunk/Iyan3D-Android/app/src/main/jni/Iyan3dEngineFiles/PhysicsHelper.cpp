@@ -255,8 +255,7 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
         mesh_vertices[(i * 3) + 2] = v->vertPosition.z;
     }
     
-    for( int i = 0; i < mesh->getTotalIndicesCount(); i++)
-    {
+    for( int i = 0; i < mesh->getTotalIndicesCount(); i++) {
         mesh_indices[i] = mesh->getTotalIndicesArray()[i];
     }
     
@@ -267,42 +266,34 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     btScalar bodyMass = sgNode->props.weight;
     sBody->setMass(1, bodyMass);
     
-    for (int i = 0; i< sBody->m_faces.size(); i++)
-    {
+    for (int i = 0; i< sBody->m_faces.size(); i++) {
         btSoftBody::Face face = sBody->m_faces[i];
         
-        for (int j = 0; j < 3; j++)
-        {
-            if (node_map.find(face.m_n[j]) == node_map.end())
-            {
+        for (int j = 0; j < 3; j++) {
+            if (node_map.find(face.m_n[j]) == node_map.end()) {
                 node_map.insert(std::make_pair(face.m_n[j], node_map.size()));
             }
         }
-        for (int j = 0; j < 3; j++)
-        {
+        for (int j = 0; j < 3; j++) {
             indices.push_back(node_map.find(face.m_n[j])->second);
         }
     }
 
     std::map<btSoftBody::Node*, int>::const_iterator node_iter;
-    for (node_iter = node_map.begin(); node_iter != node_map.end(); ++node_iter)
-    {
+    for (node_iter = node_map.begin(); node_iter != node_map.end(); ++node_iter) {
         vertices.insert(std::make_pair(node_iter->second, node_iter->first));
     }
     
     std::map<int, btSoftBody::Node*>::const_iterator it;
     
-    for (int i = 0; i < mesh->getVerticesCount(); i++)
-    {
-        for (it=vertices.begin(); it != vertices.end(); ++it)
-        {
+    for (int i = 0; i < mesh->getVerticesCount(); i++) {
+        for (it=vertices.begin(); it != vertices.end(); ++it) {
             int v_index = it->first;
             btSoftBody::Node* node = it->second;
             Vector3 vPos = mesh->getLiteVertexByIndex(i)->vertPosition;
             if (node->m_x.x() ==  vPos.x &&
                 node->m_x.y() ==  vPos.y &&
-                node->m_x.z() ==  vPos.z)
-            {
+                node->m_x.z() ==  vPos.z) {
                 testMesh_map.insert(std::make_pair(i, v_index));
                 break;
             }

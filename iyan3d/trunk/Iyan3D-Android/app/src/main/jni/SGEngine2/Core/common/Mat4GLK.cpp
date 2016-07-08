@@ -89,10 +89,10 @@ Vector4 Mat4::operator*(const Vector4& v) const
     return Vector4(vect);
 }
 
-float& Mat4::operator[](unsigned i)
-{
-    return matrix.m[i];
+void Mat4::setElement(unsigned int index, float value) {
+    matrix.m[index] = value;
 }
+
 float Mat4::operator[](unsigned i) const
 {
     return matrix.m[i];

@@ -103,50 +103,51 @@ Mat4 CameraNode::getViewMatrix(){
     Vector3 yaxis = zaxis.crossProduct(xaxis);
     yaxis.normalize();
     
-    (view)[0] = xaxis.x;
-    (view)[1] = yaxis.x;
-    (view)[2] = zaxis.x;
-    (view)[3] = 0;
+    view.setElement(0, xaxis.x);
+    view.setElement(1, yaxis.x);
+    view.setElement(2, zaxis.x);
+    view.setElement(3, 0);
     
-    (view)[4] = xaxis.y;
-    (view)[5] = yaxis.y;
-    (view)[6] = zaxis.y;
-    (view)[7] = 0;
+    view.setElement(4, xaxis.y);
+    view.setElement(5, yaxis.y);
+    view.setElement(6, zaxis.y);
+    view.setElement(7, 0);
     
-    (view)[8] = xaxis.z;
-    (view)[9] = yaxis.z;
-    (view)[10] = zaxis.z;
-    (view)[11] = 0;
+    view.setElement(8, xaxis.z);
+    view.setElement(9, yaxis.z);
+    view.setElement(10, zaxis.z);
+    view.setElement(11, 0);
     
-    (view)[12] = -xaxis.dotProduct(position);
-    (view)[13] = -yaxis.dotProduct(position);
-    (view)[14] = -zaxis.dotProduct(position);
-    (view)[15] = 1;
+    view.setElement(12, -xaxis.dotProduct(position));
+    view.setElement(13, -yaxis.dotProduct(position));
+    view.setElement(14, -zaxis.dotProduct(position));
+    view.setElement(15, 1);
     return view;
 }
+
 Mat4 CameraNode::getProjectionMatrix(){
     const float h = 1.0 / (tan(fov*0.5));
     const float w = (h / aspectRatio);
     
-    (projection)[0] = w;
-    (projection)[1] = 0;
-    (projection)[2] = 0;
-    (projection)[3] = 0;
+    projection.setElement(0, w);
+    projection.setElement(1, 0);
+    projection.setElement(2, 0);
+    projection.setElement(3, 0);
     
-    (projection)[4] = 0;
-    (projection)[5] = h;
-    (projection)[6] = 0;
-    (projection)[7] = 0;
+    projection.setElement(4, 0);
+    projection.setElement(5, h);
+    projection.setElement(6, 0);
+    projection.setElement(7, 0);
     
-    (projection)[8] = 0;
-    (projection)[9] = 0;
-    (projection)[10] = (farDistance/(farDistance-nearDistance));
-    (projection)[11] = 1;
+    projection.setElement(8, 0);
+    projection.setElement(9, 0);
+    projection.setElement(10, (farDistance/(farDistance-nearDistance)));
+    projection.setElement(11, 1);
     
-    (projection)[12] = 0;
-    (projection)[13] = 0;
-    (projection)[14] = (-nearDistance*farDistance/(farDistance-nearDistance));
-    (projection)[15] = 0;
+    projection.setElement(12, 0);
+    projection.setElement(13, 0);
+    projection.setElement(14, (-nearDistance*farDistance/(farDistance-nearDistance)));
+    projection.setElement(15, 0);
     return projection;
 }
 Vector3 CameraNode::getRotation(){

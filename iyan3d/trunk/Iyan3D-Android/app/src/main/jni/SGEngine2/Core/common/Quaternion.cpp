@@ -1,5 +1,5 @@
 
-#ifndef OPTIMGLKM
+#ifdef OPTIMSGM
 
 #include "Quaternion.h"
 

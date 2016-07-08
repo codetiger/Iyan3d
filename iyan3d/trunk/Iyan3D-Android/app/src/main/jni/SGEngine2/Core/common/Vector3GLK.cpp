@@ -154,10 +154,6 @@ Vector3 Vector3::normalize()
     y = (y * length);
     z = (z * length);
     return Vector3(x, y, z);
-
-//    GLKVector3 vect = GLKVector3Normalize(glkVector());
-//    setValues(vect);
-//    return *this;
 }
 
 Vector3 Vector3::crossProduct(Vector3 p)
@@ -173,7 +169,6 @@ float Vector3::dotProduct(Vector3 other)
 double Vector3::getLength()
 {
     return sqrtf(x * x + y * y + z * z);
-    //return GLKVector3Length(glkVector());
 }
 double Vector3::getDistanceFrom(Vector3 other)
 {

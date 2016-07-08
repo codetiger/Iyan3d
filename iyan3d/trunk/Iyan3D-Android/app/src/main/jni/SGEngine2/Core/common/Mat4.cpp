@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifndef OPTIMGLKM
+#ifdef OPTIMSGM
 
 #include "Mat4.h"
 
@@ -109,10 +109,14 @@ Vector4 Mat4::operator*(const Vector4& v) const
     return result;
 }
 
-float& Mat4::operator[](unsigned i)
-{
-    return c[i];
+void Mat4::setElement(unsigned int index, float value) {
+    c[index] = value;
 }
+
+//float& Mat4::operator[](unsigned i)
+//{
+//    return c[i];
+//}
 float Mat4::operator[](unsigned i) const
 {
     return c[i];
@@ -292,14 +296,17 @@ void Mat4::buildProjectionMatrixPerspectiveFovLH(float fieldOfViewRadians, float
     (*this)[14] = (-zNear * zFar / (zFar - zNear));
     (*this)[15] = 0;
 }
+
 Vector3 Mat4::getTranslation()
 {
     return Vector3((*this)[12], (*this)[13], (*this)[14]);
 }
+
 Vector3 Mat4::getRotation()
 {
     return Vector3((*this)[12], (*this)[13], (*this)[14]);
 }
+
 Vector3 Mat4::getScale()
 {
     const Mat4& M = *this;

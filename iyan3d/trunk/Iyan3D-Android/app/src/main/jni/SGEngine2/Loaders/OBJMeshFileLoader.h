@@ -83,10 +83,6 @@ private:
     // -1 for the index if it doesn't exist
     // indices are changed to 0-based index instead of 1-based from the obj file
     bool retrieveVertexIndices(c8* vertexData, int* idx, const c8* bufEnd, u32 vbsize, u32 vtsize, u32 vnsize);
-    void recalculateNormalsT(Mesh* mesh);
-    Vector3 getAngleWeight(Vector3& v1,
-        Vector3& v2,
-        Vector3& v3);
 
     void cleanUp();
     u32 strtoul10(const char* in, const char** out = 0);

@@ -7,11 +7,14 @@
 //
 precision highp float;
 
-uniform sampler2D texture1;
-uniform sampler2D depthTexture;
+uniform sampler2D colorMap;
+uniform sampler2D shadowMap;
+uniform sampler2D normalMap;
+uniform sampler2D reflectionMap;
 
-uniform  float shadowDarkness;
-uniform  float shadowTextureSize;
+uniform float shadowDarkness;
+uniform float shadowTextureSize;
+uniform float hasReflectionMap, hasNormalMap;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
 uniform float lightTypes[5];
@@ -19,39 +22,55 @@ uniform float lightTypes[5];
 varying float vtransparency, visVertexColored, vreflection;
 varying vec3 vertexColor;
 varying float shadowDist, lightingValue, vAmbientLight;
-varying vec2 vTexCoord;
-varying vec4 texCoordsBias,normal,eyeVec,lightDir , vertexPosCam;
+varying vec2 vTexCoord, texCoordsBias;
+varying vec3 normal, eyeVec, vertexPosCam;
+varying mat3 tbnMatrix;
 
 float unpack(const in vec4 rgba_depth) {
     const vec3 bit_shift = vec3(1.0/65536.0, 1.0/256.0, 1.0);
     float depth = dot(rgba_depth.rgb, bit_shift);
     return depth;
 }
+
 float GetShadowValue(in vec2 offset) {
     vec2 pixelCoord = vec2(texCoordsBias.x, texCoordsBias.y);
-    vec4 texelColor = texture2D(depthTexture, pixelCoord + offset);
+    vec4 texelColor = texture2D(shadowMap, pixelCoord + offset);
     vec4 unpackValue = vec4(vec3(texelColor.xyz),1.0);
     float extractedDistance = unpack(unpackValue);
     return (extractedDistance < shadowDist) ? (shadowDarkness):(0.0);
 }
+
 void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight) {
     
     float maxSpecular = 30.0;
-    vec4 light_position_cameraspace = vec4(vec3(lightPos[index]),1.0);
-    vec4 lightDir = (lightTypes[index] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - vertexPosCam);
-    float distanceFromLight = distance(light_position_cameraspace , vertexPosCam);
+    vec3 lightDir = (lightTypes[index] == 1.0) ? lightPos[index] :  normalize(lightPos[index] - vertexPosCam);
+    float distanceFromLight = distance(lightPos[index] , vertexPosCam);
     
-    vec4 normal = normalize(normal);
-    vec4 eyeVec = normalize(eyeVec);
-    float n_dot_l = clamp(dot(normal,lightDir),0.0,1.0);
+    vec3 normal = normalize(normal);
+    if(hasNormalMap > 0.5) {
+        vec3 n = texture2D(normalMap, vTexCoord.xy).xyz * 2.0 - 1.0;
+        normal = normalize(tbnMatrix * n);
+    }
     
-    vec4 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
-    float e_dot_r =  clamp(dot(eyeVec,reflectValue),0.0,1.0);
-    specular = vec4(vreflection * pow(e_dot_r,maxSpecular));
+    vec3 eyeVec = normalize(eyeVec);
+    float n_dot_l = clamp(dot(normal, lightDir), 0.0, 1.0);
     
-    float e_dot_l = dot(lightDir,eyeVec);
-    if(e_dot_l < -0.8)
-        specular = vec4(0.0);
+    vec3 reflectValue = -lightDir + 2.0 * n_dot_l * normal;
+    float e_dot_r =  clamp(dot(eyeVec, reflectValue), 0.0, 1.0);
+    
+    if(hasReflectionMap > 0.5) {
+        vec3 r = reflect( -eyeVec, normal );
+        float m = 2. * sqrt(pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2.0));
+        vec2 vN = r.xy / m + .5;
+        vN.y = -vN.y;
+        specular = texture2D(reflectionMap, vN);
+    } else {
+        specular = vec4(vreflection * pow(e_dot_r, maxSpecular));
+        
+        float e_dot_l = dot(lightDir, eyeVec);
+        if(e_dot_l < -0.8)
+            specular = vec4(0.0);
+    }
     
     float distanceRatio = 1.0;
     if(lightTypes[index] == 0.0)
@@ -64,15 +83,14 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
 
 void main()
 {
-    lowp vec4 diffuse_color = vec4(vec3(vertexColor),1.0);
+    lowp vec4 diffuse_color = vec4(vertexColor,1.0);
     
     if(visVertexColored < 0.5)
-        diffuse_color = texture2D(texture1,vTexCoord.xy);
+        diffuse_color = texture2D(colorMap, vTexCoord.xy);
     
     if(diffuse_color.a <= 0.5)
         discard;
-    
-    // shadow Calculation ------
+
     float shadowValue = 0.0;
     if(shadowDist > 0.0) {
         float delta = 1.0/2048.0; // todo
@@ -83,26 +101,21 @@ void main()
         shadowValue += GetShadowValue(vec2(0.0, delta));
         shadowValue /= 5.0;
     }
-    //------
-    
-    // Lighting calculation-----
-    
+
     vec4 specular = vec4(0.0), colorOfLight = vec4(1.0);
     
-    
-    if(lightingValue > 0.5){
+    if(lightingValue > 0.5) {
         colorOfLight = vec4(0.0);
-        getColorOfLight(0,specular,colorOfLight);
-        colorOfLight = colorOfLight + (vec4(0.0,0.0,0.0,0.0) - colorOfLight) * (shadowValue);
-        getColorOfLight(1,specular,colorOfLight);
-        getColorOfLight(2,specular,colorOfLight);
-        getColorOfLight(3,specular,colorOfLight);
-        
+        getColorOfLight(0, specular, colorOfLight);
+        getColorOfLight(1, specular, colorOfLight);
+        getColorOfLight(2, specular, colorOfLight);
+        getColorOfLight(3, specular, colorOfLight);
     }
-    //-------------
-    
+
     vec4 finalColor = vec4(diffuse_color + specular) * colorOfLight;
-//    finalColor = finalColor + (vec4(0.0,0.0,0.0,0.0) - finalColor) * (shadowValue);
+    if(hasReflectionMap > 0.5)
+        finalColor = vec4(diffuse_color * (1.0 - vreflection) + specular * vreflection) * colorOfLight;
+    finalColor = finalColor + (vec4(0.0, 0.0, 0.0, 0.0) - finalColor) * (shadowValue);
     
     gl_FragColor.xyz = finalColor.xyz;
     gl_FragColor.a = diffuse_color.a * vtransparency;

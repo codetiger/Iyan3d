@@ -12,22 +12,6 @@
 #include "../opengl.h"
 #endif
 
-//std::map< string, float > transparencies;
-//std::map< string, float >::iterator transIt;
-//
-//std::map< string, float > reflections;
-//std::map< string, float >::iterator reflectIt;
-//
-//std::map< string, float > isVColored;
-//std::map< string, float >::iterator isVColorIt;
-//
-//std::map< string, int > nodesLighting;
-//std::map< string, int >::iterator lightingIt;
-//
-//float prevShadow = -1.0;
-//float lightsCount = -1.0;
-//Vector3 prevCamPos = Vector3(-9999.0);
-
 bool ShaderManager::renderingPreview = false;
 bool ShaderManager::isRenderingDepthPass = false;
 bool ShaderManager::shadowsOff = false;
@@ -47,10 +31,10 @@ DEVICE_TYPE ShaderManager::deviceType = OPENGLES2;
 int ShaderManager::maxIntsances = 100;
 float ShaderManager::ambientLight = 0.0f;
 
-ShaderManager::~ShaderManager(){
+ShaderManager::~ShaderManager() {
 }
 
-ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms){
+ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms) {
     isRenderingDepthPass = false;
     shadowDensity = 0.0;
     shadowTextureSize = 2048.0;
@@ -62,7 +46,8 @@ ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxU
     loadAllShaders(smgr,deviceType, maxUniforms);
 #endif
 }
-void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms){
+
+void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms) {
     
     std::map< string, string > strsToReplace;
     
@@ -80,8 +65,7 @@ void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, in
     }
 }
 
-std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniforms)
-{
+std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniforms) {
     std::map<string, string> strsToReplace;
     
     string extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
@@ -96,8 +80,7 @@ std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniform
     return strsToReplace;
 }
 
-
-bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest){
+bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest) {
     bool isDepthPass = (fShaderName=="")?true:false;
     if(deviceType == OPENGLES2) {
         return smgr->LoadShaders(materialName, BundlePath + "/" + vShaderName,
@@ -107,7 +90,8 @@ bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string
         return smgr->LoadShaders(materialName,vShaderName,fShaderName, shadersStr, isDepthPass);
     return false;
 }
-void ShaderManager::setUniforms(SGNode *sgNode,string matName){
+
+void ShaderManager::setUniforms(SGNode *sgNode,string matName) {
     if(matName == "SHADER_SHADOW_1ST_PASS"){
         
     } else if(matName.find("SHADER_VERTEX_COLOR_SHADOW_SKIN") !=  string::npos || matName.find("SHADER_VERTEX_COLOR_SKIN_TOON") !=  string::npos) {
@@ -116,7 +100,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         
         setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, true);
         setJointTransform(sgNode, SHADER_PERVERTEXCOLOR_jointData, smgr);
-        setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
+        setTexturesUniforms(sgNode, SHADER_COMMON_colorMap);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);
         setModelMatrix(sgNode, SHADER_PERVERTEXCOLOR_world);
         setShadowDakness(sgNode,SHADER_PERVERTEXCOLOR_shadowDarkness);
@@ -129,7 +113,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setVertexColorUniform(sgNode, Vector3(-1.0,-1.0,-1.0), SHADER_COMMON_SKIN_VertexColor, smgr->getNodeIndexByID(sgNode->node->getID()));
         bool isVcolored = (sgNode->getType() == NODE_CAMERA || (sgNode->node->getID() >= CONTROLS_START_ID && sgNode->node->getID() < CONTROLS_START_ID+10)) ? true : sgNode->props.perVertexColor;
         setMeshProps(sgNode, isVcolored, SHADER_COMMON_isVertexColored);
-        setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
+        setTexturesUniforms(sgNode, SHADER_COMMON_colorMap);
         setModelViewProjMatrix(sgNode, SHADER_PERVERTEXCOLOR_mvp);
         setModelMatrix(sgNode, SHADER_PERVERTEXCOLOR_world);
         setShadowDakness(sgNode,SHADER_PERVERTEXCOLOR_shadowDarkness);
@@ -153,7 +137,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         
         setMeshProps(sgNode, sgNode->props.perVertexColor, SHADER_COMMON_isVertexColored);
         setIsVertexColored(sgNode, sgNode->props.perVertexColor , SHADER_COMMON_isVertexColored, true);
-        setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
+        setTexturesUniforms(sgNode, SHADER_COMMON_colorMap);
         setModelViewProjMatrix(sgNode,SHADER_COMMON_SKIN_mvp);
         setModelMatrix(sgNode, SHADER_COMMON_SKIN_world);
         setShadowDakness(sgNode,SHADER_COMMON_SKIN_shadowDarkness);
@@ -166,7 +150,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
         setVertexColorUniform(sgNode, sgNode->props.vertexColor, SHADER_COMMON_SKIN_VertexColor, smgr->getNodeIndexByID(sgNode->node->getID()));
 
         setMeshProps(sgNode, sgNode->props.perVertexColor, SHADER_COMMON_isVertexColored);
-        setTexturesUniforms(sgNode,SHADER_COMMON_texture1);
+        setTexturesUniforms(sgNode, SHADER_COMMON_colorMap);
         setModelViewProjMatrix(sgNode,SHADER_COMMON_mvp);
         setModelMatrix(sgNode, SHADER_COMMON_world);
         setShadowDakness(sgNode,SHADER_COMMON_shadowDarkness);
@@ -189,8 +173,7 @@ void ShaderManager::setUniforms(SGNode *sgNode,string matName){
     }
 }
 
-void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex)
-{
+void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex) {
     int startIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt : 0;
     int endIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt + ShaderManager::maxIntsances : 0;
     if(endIndex > sgNode->instanceNodes.size())
@@ -218,8 +201,7 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode , Vector3 color,int par
     delete [] vertColor;
 }
 
-void ShaderManager::setMeshProps(SGNode *sgNode, bool isVColored, int paramIndex)
-{
+void ShaderManager::setMeshProps(SGNode *sgNode, bool isVColored, int paramIndex) {
     int startIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt : 0;
     int endIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt + ShaderManager::maxIntsances : 0;
     if(endIndex > sgNode->instanceNodes.size())
@@ -246,13 +228,9 @@ void ShaderManager::setMeshProps(SGNode *sgNode, bool isVColored, int paramIndex
     Material * material = sgNode->node->material;
     smgr->setPropertyValue(material, "props", props, DATA_FLOAT_VEC4, ((endIndex - startIndex)+1) * 4, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
     delete [] props;
-
-
 }
 
-void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData)
-{
-    
+void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData) {
     int startIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt : 0;
     int endIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt + ShaderManager::maxIntsances : 0;
     if(endIndex > sgNode->instanceNodes.size())
@@ -272,14 +250,12 @@ void ShaderManager::setIsVertexColored(SGNode *sgNode,bool status, int paramInde
     delete [] isVertexColored;
 }
 
-void ShaderManager::setNumberOfLights(SGNode *sgNode, int paramIndex)
-{
+void ShaderManager::setNumberOfLights(SGNode *sgNode, int paramIndex) {
     float lights = (float)ShaderManager::lightPosition.size();
         smgr->setPropertyValue(sgNode->node->material, "numberOfLights", &lights, DATA_FLOAT,1,true,paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
-void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2)
-{
+void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2) {
         int lightsCount = (int)ShaderManager::lightPosition.size();
         float * lightPositions = new float[lightsCount * 3];
         float *lightColors = new float[lightsCount * 3];
@@ -307,23 +283,19 @@ void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int pa
     delete [] lightType;
 }
 
-void ShaderManager::setLightsPosition(SGNode *sgNode, float *lightPositions, int paramIndex)
-{
+void ShaderManager::setLightsPosition(SGNode *sgNode, float *lightPositions, int paramIndex) {
     int lightsCount = (int)ShaderManager::lightPosition.size();
     smgr->setPropertyValue(sgNode->node->material, "lightPos", lightPositions, DATA_FLOAT_VEC3, lightsCount * 3, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
     delete(lightPositions);
 }
 
-void ShaderManager::setLightsColors(SGNode *sgNode, float *lightColors, int paramIndex)
-{
+void ShaderManager::setLightsColors(SGNode *sgNode, float *lightColors, int paramIndex) {
     int lightsCount = (int)ShaderManager::lightPosition.size();
         smgr->setPropertyValue(sgNode->node->material, "lightColor", lightColors, DATA_FLOAT_VEC3, lightsCount * 3, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
     delete(lightColors);
 }
 
-void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
-{
-    
+void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex) {
     int startIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt : 0;
     int endIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt + ShaderManager::maxIntsances : 0;
     if(endIndex > sgNode->instanceNodes.size())
@@ -346,6 +318,7 @@ void ShaderManager::setNodeLighting(SGNode *sgNode,int paramIndex)
     delete [] lighting;
 
 }
+
 void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex) {
     float finalShadow = (shadowsOff || sgNode->props.isSelected) ? 0.0 : shadowDensity;
         smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &finalShadow, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
@@ -381,7 +354,7 @@ void ShaderManager::setEyePos(SGNode *sgNode,int paramIndex) {
         delete[] campos;
 }
 
-void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex){
+void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex) {
         Mat4 lightViewProjMatrix = lighCamProjMatrix;
         lightViewProjMatrix *= lighCamViewMatrix;
     Mat4 lvp = lightViewProjMatrix;// * sgNode->node->getModelMatrix();
@@ -389,35 +362,36 @@ void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex){
         smgr->setPropertyValue(sgNode->node->material, "lvp", lvp.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
-void ShaderManager::setTexturesUniforms(SGNode *sgNode,u16 paramIndex)
-{
+void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex) {
+    string textureNames[] = {"colorMap", "shadowMap", "normalMap", "reflectionMap"};
+    
+    for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_REFLECTIONMAP; i++) {
         int textureValue = 0;
-        if(deviceType == OPENGLES2){
-            OGLTexture* tex = (OGLTexture*)sgNode->node->getTextureByIndex(1);
-            textureValue = tex->OGLTextureName;
-            smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()),tex,0);
-        }else if(deviceType == METAL){
-            textureValue =  1;
-            smgr->setPropertyValue(sgNode->node->material,"texture1",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, sgNode->smoothTexture);
-            setSamplerType(sgNode, SHADER_COMMON_samplerType);
-        }
         
-        if(sgNode->node->getTextureCount() > 1){
-            if(deviceType == OPENGLES2){
-                OGLTexture* tex = (OGLTexture*)sgNode->node->getTextureByIndex(2);
-                if(tex != NULL){
-                    textureValue = tex->OGLTextureName;
-                    smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, paramIndex+1,smgr->getNodeIndexByID(sgNode->node->getID()),tex,1);
-                }
-            }else if(deviceType == METAL){
-                textureValue = 2;
-                smgr->setPropertyValue(sgNode->node->material,"depthTexture",&textureValue,DATA_TEXTURE_2D,1, true, SHADER_COMMON_texture2,smgr->getNodeIndexByID(sgNode->node->getID()),NULL,1);
+        if(deviceType == OPENGLES2) {
+            OGLTexture* tex = (OGLTexture*)sgNode->node->getTextureByIndex(i);
+            if(tex != NULL) {
+                textureValue = tex->OGLTextureName;
+                smgr->setPropertyValue(sgNode->node->material, textureNames[i], &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + i, smgr->getNodeIndexByID(sgNode->node->getID()), tex, i);
             }
+        } else if(deviceType == METAL) {
+            textureValue =  i;
+            smgr->setPropertyValue(sgNode->node->material, textureNames[i], &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + i, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (i == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
         }
+    }
+    
+    Texture* etex = sgNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_REFLECTIONMAP);
+    float hasReflectionMap = (etex != NULL);
+    smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()));
+
+    Texture* ntex = sgNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_NORMALMAP);
+    float hasNormalMap = (ntex != NULL);
+    smgr->setPropertyValue(sgNode->node->material, "hasNormalMap", &hasNormalMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasNormalMap, smgr->getNodeIndexByID(sgNode->node->getID()));
+
+    setSamplerType(sgNode, SHADER_COMMON_samplerType);
 }
 
-void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex)
-{
+void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex) {
     float samplerType = (sgNode->smoothTexture) ? 0.0 : 1.0;
     smgr->setPropertyValue(sgNode->node->material, "samplerType", &samplerType, DATA_FLOAT, 1, true , SHADER_COMMON_samplerType, smgr->getNodeIndexByID(sgNode->node->getID()));
 }
@@ -595,25 +569,25 @@ Mat4 ShaderManager::ortho2d_oc(float left,
     float sHeight = 1.0f / (top   - bottom);
     float sDepth  = 1.0f / (far   - near);
     
-    mat[0] = 2.0f * sLength;
-    mat[4] = 0.0f;
-    mat[8] = 0.0f;
-    mat[12] = 0.0f;
+    mat.setElement(0, 2.0f * sLength);
+    mat.setElement(4, 0.0f);
+    mat.setElement(8, 0.0f);
+    mat.setElement(12, 0.0f);
     
-    mat[1] = 0.0f;
-    mat[5] = 2.0f * sHeight;
-    mat[9] = 0.0f;
-    mat[13] = 0.0f;
+    mat.setElement(1, 0.0f);
+    mat.setElement(5, 2.0f * sHeight);
+    mat.setElement(9, 0.0f);
+    mat.setElement(13, 0.0f);
     
-    mat[2] = 0.0f;
-    mat[6] = 0.0f;
-    mat[10] = sDepth;
-    mat[14] = 0.0f;
+    mat.setElement(2, 0.0f);
+    mat.setElement(6, 0.0f);
+    mat.setElement(10, sDepth);
+    mat.setElement(14, 0.0f);
     
-    mat[3] = -sLength * (left + right);
-    mat[7] = -sHeight * (top + bottom);
-    mat[11] = -sDepth  * near;
-    mat[15] =  1.0f;
+    mat.setElement(3, -sLength * (left + right));
+    mat.setElement(7, -sHeight * (top + bottom));
+    mat.setElement(11, -sDepth  * near);
+    mat.setElement(15, 1.0f);
     
     return mat;
 }

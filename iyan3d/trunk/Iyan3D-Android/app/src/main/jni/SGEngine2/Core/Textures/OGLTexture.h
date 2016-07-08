@@ -26,7 +26,7 @@
 
 class OGLTexture:public Texture{
 public:
-    GLuint OGLTextureName,rttFrameBuffer,rttDepthBuffer;
+    GLuint OGLTextureName, rttFrameBuffer, rttDepthBuffer;
     char texturePathconverted[];
     OGLTexture();
     ~OGLTexture();

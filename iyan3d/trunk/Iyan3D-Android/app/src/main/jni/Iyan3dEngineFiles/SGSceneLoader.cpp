@@ -234,7 +234,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     }
 
     //if (type >= NODE_LIGHT && type != NODE_ADDITIONAL_LIGHT)
-    sgnode->node->setTexture(currentScene->shadowTexture,2);
+    sgnode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
 
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
@@ -288,7 +288,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     sgNode->node->updateAbsoluteTransformation();
     sgNode->node->updateAbsoluteTransformationOfChildren();
     //if(sgNode->getType() >= NODE_LIGHT)
-    sgNode->node->setTexture(currentScene->shadowTexture,2);
+    sgNode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgNode->node->setVisible(true);
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgNode->actionId = ++currentScene->actionObjectsSize;
@@ -492,7 +492,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     }
     
     if(nType != NODE_TEXT_SKIN && nType != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
-        smgr->RemoveTexture(currentNode->node->getActiveTexture());
+        smgr->RemoveTexture(currentNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP));
     
     smgr->RemoveNode(currentNode->node);
     delete currentNode;
@@ -525,8 +525,8 @@ void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
     
     copyMeshFromOriginalNode(it->second);
     
-    Texture* oldTex = currentNode->node->getActiveTexture();
-    it->second->node->setTexture(oldTex, currentNode->node->activeTextureIndex+1);
+    Texture* oldTex = currentNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP);
+    it->second->node->setTexture(oldTex, NODE_TEXTURE_TYPE_COLORMAP);
     
     std::map< int, SGNode* >::iterator newIt = it->second->instanceNodes.begin();
     it->second->instanceNodes.erase(newIt);

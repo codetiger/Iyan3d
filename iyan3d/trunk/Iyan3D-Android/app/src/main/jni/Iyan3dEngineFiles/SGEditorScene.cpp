@@ -687,7 +687,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         
         bool blurTex = (nodes[selectedNodeId]->smoothTexture);
         Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, blurTex);
-        nodes[selectedNodeId]->node->setTexture(nodeTex,1);
+        nodes[selectedNodeId]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->textureName = textureFileName;
         }
@@ -737,7 +737,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
     if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
-        nodes[selectedNode]->node->setTexture(nodeTex,1);
+        nodes[selectedNode]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     } else {
         nodes[selectedNode]->textureName = "-1";
         nodes[selectedNode]->props.vertexColor = nodes[selectedNode]->props.oriVertexColor;

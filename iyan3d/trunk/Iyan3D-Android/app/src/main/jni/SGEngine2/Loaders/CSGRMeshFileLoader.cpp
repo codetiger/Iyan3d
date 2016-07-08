@@ -85,8 +85,9 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
             ibone = animMesh->addJoint(NULL);
 
         for (int j = 0; j < 16; ++j)
-            ibone->LocalAnimatedMatrix[j] = boneMatrix[j];
-        delete boneMatrix;
+            ibone->LocalAnimatedMatrix.setElement(j, boneMatrix[j]);
+        delete[] boneMatrix;
+        
         unsigned short boneWeightCount;
         f.read((char*)&boneWeightCount, sizeof(unsigned short));
 
@@ -181,9 +182,9 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
             sgmMesh->addVertex(&vts);
             sgmMesh->addToIndicesArray(i);
         }
-        delete verts;
-        delete texs;
-        delete col;
+        delete[] verts;
+        delete[] texs;
+        delete[] col;
     }
     else {
         SSGMCountHeaderLowPoly counts;
@@ -224,9 +225,10 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
             sgmMesh->addVertex(&vts);
             sgmMesh->addToIndicesArray(i);
         }
-        delete verts;
-        delete texs;
-        delete col;
+        delete[] verts;
+        delete[] texs;
+        delete[] col;
     }
+    sgmMesh->Commit();
     return sgmMesh;
 }

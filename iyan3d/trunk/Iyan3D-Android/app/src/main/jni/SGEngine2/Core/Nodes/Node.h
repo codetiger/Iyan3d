@@ -59,6 +59,13 @@ typedef enum {
     NODE_GPUMEM_TYPE_DYNAMIC,
 } node_gpumem_type;
 
+typedef enum {
+    NODE_TEXTURE_TYPE_COLORMAP = 0,
+    NODE_TEXTURE_TYPE_SHADOWMAP = 1,
+    NODE_TEXTURE_TYPE_NORMALMAP = 2,
+    NODE_TEXTURE_TYPE_REFLECTIONMAP = 3,
+} node_texture_type;
+
 enum DRAW_MODE{
     DRAW_MODE_POINTS,
     DRAW_MODE_LINES,
@@ -72,7 +79,7 @@ enum DRAW_MODE{
 class Node : public enable_shared_from_this<Node>{
 
 private:
-    int id,textureCount;
+    int id;
     bool isMetalSupported();
     bool isVisible;
     void * userPtr;
@@ -91,7 +98,6 @@ public:
     bool needsVertexPosition, needsVertexNormal, needsVertexColor, needsUV1, needsUV2, needsUV3, shouldUpdateMesh;
     bool needsIndexBuf;
     DRAW_MODE drawMode;
-    u16 activeTextureIndex;
     string callbackFuncName;
     node_type type;
     node_gpumem_type memtype;
@@ -113,9 +119,6 @@ public:
     void setVisible(bool isVisible);
     Vector3 getAbsolutePosition();
     void setTexture(Texture *texture,int textureIndex);
-    void setActiveTexture(Texture *texture);
-    void setActiveTextureByName(string *textureName);
-    void setActiveTextureByIndex(int textureIndex);
     void FlagTransformationToChildren(); // NOT FIXED
     void setMaterial(Material* mat,bool isTransparentMaterial = false);
     void setID(int id);
@@ -130,7 +133,6 @@ public:
     BoundingBox getBoundingBox();
     bool getVisible();
     int getID();
-    int getTextureCount();
     
     u16 getBufferCount();
     
@@ -144,7 +146,6 @@ public:
     Mat4 getAbsoluteTransformation();
 
     Texture* getTextureByIndex(u16 textureIndex);
-    Texture* getActiveTexture();
     
     shared_ptr<Node> getParent();
     

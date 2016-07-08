@@ -26,7 +26,16 @@
 #include "Vector3GLK.h"
 #include "Mat4GLK.h"
 #include "QuaternionGLK.h"
-#else
+#endif
+
+#ifdef OPTIMGLM
+#include "Vector2GLM.h"
+#include "Vector3GLM.h"
+#include "Mat4GLM.h"
+#include "QuaternionGLM.h"
+#endif
+
+#ifdef OPTIMSGM
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Mat4.h"
@@ -40,8 +49,8 @@
 #include<iostream>
 using namespace std;
 
-#define MAX_VERTEX_DATA 4
-#define MAX_VERTEX_DATA_SKINNED 7
+#define MAX_VERTEX_DATA 6
+#define MAX_VERTEX_DATA_SKINNED 9
 
 #define MAX_VERTICES_COUNT 65535
 
@@ -161,14 +170,14 @@ enum IMAGE_FLIP {
 //}
 
 static const int totalAttributes = MAX_VERTEX_DATA;
-static const string attributesName[MAX_VERTEX_DATA] = { "vertPosition", "vertNormal", "texCoord1", "optionalData1" };
-static const DATA_TYPE attributesType[MAX_VERTEX_DATA] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
-static const u_int32_t attributesTotalValues[MAX_VERTEX_DATA] = { 3, 3, 2, 4 };
+static const string attributesName[MAX_VERTEX_DATA] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "optionalData1" };
+static const DATA_TYPE attributesType[MAX_VERTEX_DATA] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
+static const u_int32_t attributesTotalValues[MAX_VERTEX_DATA] = { 3, 3, 2, 3, 3, 4 };
 
 static const int totalAttributesSkinned = MAX_VERTEX_DATA_SKINNED;
-static const string attributesNameSkinned[MAX_VERTEX_DATA_SKINNED] = { "vertPosition", "vertNormal", "texCoord1", "optionalData1", "optionalData2", "optionalData3", "optionalData4" };
-static const DATA_TYPE attributesTypeSkinned[MAX_VERTEX_DATA_SKINNED] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
-static const u_int32_t attributesTotalValuesSkinned[MAX_VERTEX_DATA_SKINNED] = { 3, 3, 2, 4, 4, 4, 4 };
+static const string attributesNameSkinned[MAX_VERTEX_DATA_SKINNED] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "optionalData1", "optionalData2", "optionalData3", "optionalData4" };
+static const DATA_TYPE attributesTypeSkinned[MAX_VERTEX_DATA_SKINNED] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
+static const u_int32_t attributesTotalValuesSkinned[MAX_VERTEX_DATA_SKINNED] = { 3, 3, 2, 3, 3, 4, 4, 4, 4 };
 
 class common {
 public:

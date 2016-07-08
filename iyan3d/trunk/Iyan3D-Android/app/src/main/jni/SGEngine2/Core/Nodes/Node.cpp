@@ -21,12 +21,12 @@ Node::Node() {
     position = Vector3(0.0);
     rotation = Vector3(0.0);
     scale = Vector3(1.0);
-    activeTextureIndex = 0;
-    for(int i = 0;i < MAX_TEXTURE_PER_NODE;i++)
+    
+    for(int i = 0; i < MAX_TEXTURE_PER_NODE; i++)
         textures[i] = NULL;
+
     //Parent = NULL;
     Children = make_shared< vector< shared_ptr<Node> > >();
-    textureCount = 0;
     isVisible = true;
     hasTransparency = false;
     #ifdef ANDROID
@@ -97,18 +97,19 @@ bool Node::isMetalSupported(){
     return false;
     #endif
 }
-void Node::setTexture(Texture *texture,int textureIndex){
-    if(textureIndex > MAX_TEXTURE_PER_NODE){
-        Logger::log(ERROR, "OGLNodeData", "Texture Index crossed maximum index limit");
+void Node::setTexture(Texture *texture, int textureIndex) {
+    if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
         return;
-    }
-    if(textures[textureIndex-1] == NULL)
-        textureCount++;
-    textures[textureIndex-1] = texture;
-    hasTransparency = texture->hasTransparency;
+
+    textures[textureIndex] = texture;
+    
+    if(textureIndex == NODE_TEXTURE_TYPE_COLORMAP)
+        hasTransparency = texture->hasTransparency;
 }
-void Node::setRotationInDegrees(Vector3 rotation, bool updateBB){
-    this->rotation = Vector3(rotation.x * (PI/180.0),rotation.y * (PI/180.0),rotation.z * (PI/180.0));
+
+void Node::setRotationInDegrees(Vector3 rotation, bool updateBB) {
+//    printf("Node : %d    Rot: %f %f %f\n", getID(), rotation.x, rotation.y, rotation.z);
+    this->rotation = Vector3(rotation.x * (PI/180.0), rotation.y * (PI/180.0), rotation.z * (PI/180.0));
     if(updateBB)
         FlagTransformationToChildren();
 }
@@ -210,16 +211,11 @@ void Node::FlagTransformationToChildren(){
     updateBoundingBox();
     return;
 }
-Texture* Node::getTextureByIndex(u16 textureIndex){
-    if(textureIndex > MAX_TEXTURE_PER_NODE || textureIndex <= 0 || textureIndex > textureCount){
+Texture* Node::getTextureByIndex(u16 textureIndex) {
+    if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
         return NULL;
-    }
-    return textures[textureIndex - 1];
-}
-Texture* Node::getActiveTexture(){
-    if(textureCount < 1)
-        return NULL;
-    return textures[activeTextureIndex];
+
+    return textures[textureIndex];
 }
 
 void Node::setMaterial(Material *mat,bool isTransparentMaterial){
@@ -275,10 +271,7 @@ bool Node::getVisible()
 {
     return this->isVisible;
 }
-int Node::getTextureCount()
-{
-    return textureCount;
-}
+
 void Node::detachFromParent(){
     if(getParent()){
         for(int c = 0;c < getParent()->Children->size();c++){

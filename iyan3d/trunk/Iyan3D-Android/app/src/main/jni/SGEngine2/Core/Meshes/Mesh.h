@@ -13,6 +13,7 @@
 #include "../common/BoundingBox.h"
 #include <iostream>
 #include <map>
+#include "md5.h"
 
 typedef enum {
     MESH_FORMAT_TRIANGLES = 0,
@@ -31,6 +32,8 @@ struct vertexData{
     Vector3 vertPosition;
     Vector3 vertNormal;
     Vector2 texCoord1;
+    Vector3 vertTangent;
+    Vector3 vertBitangent;
     Vector4 optionalData1;
 };
 
@@ -38,6 +41,8 @@ struct vertexDataHeavy{
     Vector3 vertPosition;
     Vector3 vertNormal;
     Vector2 texCoord1;
+    Vector3 vertTangent;
+    Vector3 vertBitangent;
     Vector4 optionalData1;
     Vector4 optionalData2;
     Vector4 optionalData3;
@@ -55,11 +60,9 @@ struct vertexCompare
     {
         return (lhs.vertPosition.x != rhs.vertPosition.x || lhs.vertPosition.y != rhs.vertPosition.y || lhs.vertPosition.z != rhs.vertPosition.z);
     }
-
 };
 
 class Mesh {
-    
 private:
     BoundingBox BBox;
 
@@ -86,9 +89,12 @@ public:
 
     void clearVerticesArray();
     void clearIndicesArray();
+    
+    void reCalculateTangents();
+    void calculateTanget(Vector3 &tangent, Vector3 &bitangent, Vector3 vt1, Vector3 vt2, Vector3 vt3, Vector2 tc1, Vector2 tc2, Vector2 tc3);
+
     void generateUV();
-    void recalculateNormalsT(bool smooth = true);
-    void removeDoubles();
+    void recalculateNormals();
     void fixOrientation();
     void moveVertices(Vector3 offset);
     vertexData* getLiteVertexByIndex(unsigned int index);
@@ -108,18 +114,10 @@ public:
     void clearVertices();
     void clearIndices();
     BoundingBox* getBoundingBox();
-    Vector3 getAngleWeight(Vector3& v1,Vector3& v2,Vector3& v3);
-    void removeDoubles(bool usePos,bool useTcoords,bool useNormals);
-    void removeDoublesInHeavyMesh(bool usePos,bool useTcoords,bool useNormals);
+    Vector3 getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3);
+    void removeDoublesInMesh();
     Mesh();
     ~Mesh();
-    template <typename T>
-    static T getLinearInterpolation(float x1, T y1, float x2, T y2, float x)
-    {
-        return y1+(y2+(y1*-1.0))*(float)((x-x1)/(x2-x1));
-        //Source: https://en.wikipedia.org/wiki/Linear_interpolation
-    }
-
 };
 
 

@@ -391,7 +391,7 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
         
        	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius);
        	AddBevel(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius, bevelSegments, height);
-        tempMesh->removeDoublesInHeavyMesh(true, false, false);
+        tempMesh->removeDoublesInMesh();
         unsigned int oldVertCount = mesh->getVerticesCount();
         
         for (int j = 0; j < tempMesh->getVerticesCount(); j++) {
@@ -409,9 +409,9 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
        	offset = AddCharacter(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
         if(text[i] != ' ') {
             double diff = prevOffset - offset;
-            joint->LocalAnimatedMatrix[12] = -offset - diff/2.0;
-            joint->LocalAnimatedMatrix[13] = height / 2;
-            joint->LocalAnimatedMatrix[14] = -extrude / 2;
+            joint->LocalAnimatedMatrix.setElement(12, -offset - diff/2.0);
+            joint->LocalAnimatedMatrix.setElement(13, height / 2);
+            joint->LocalAnimatedMatrix.setElement(14, -extrude / 2);
         }
         
         if(offset == -10000.0)
@@ -420,9 +420,9 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
         prevOffset = offset;
     }
     mesh->finalize();
-    rootBone->LocalAnimatedMatrix[12] = offset / 2;
-    rootBone->LocalAnimatedMatrix[13] = -height/2;
-    rootBone->LocalAnimatedMatrix[14] = extrude/2;
+    rootBone->LocalAnimatedMatrix.setElement(12, offset/2);
+    rootBone->LocalAnimatedMatrix.setElement(13, -height/2);
+    rootBone->LocalAnimatedMatrix.setElement(14, extrude/2);
 
     FT_Done_Face(face);
     FT_Done_FreeType(library);
@@ -431,7 +431,7 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
         return NULL;
 
     mesh->fixOrientation();
-    mesh->recalculateNormalsT(true);
+    mesh->recalculateNormals();
     mesh->generateUV();
 
     return mesh;
@@ -460,7 +460,7 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         SkinMesh *tempMesh = new SkinMesh();
        	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius);
        	AddBevel(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius, bevelSegments, height);
-        tempMesh->removeDoublesInHeavyMesh(true, false, false);
+        tempMesh->removeDoublesInMesh();
         unsigned int oldVertCount = mesh->getVerticesCount();
         
         for (int j = 0; j < tempMesh->getVerticesCount(); j++) {
@@ -502,10 +502,10 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         unsigned int in = mesh->getHighPolyIndicesArray()[i];
         m->addToIndicesArray(in);
     }
-    m->generateUV();
     m->fixOrientation();
     m->moveVertices(Vector3(offset / 2, -height/2, extrude/2));
-    m->recalculateNormalsT(true);
+    m->recalculateNormals();
+    m->generateUV();
     m->Commit();
 
     return m;

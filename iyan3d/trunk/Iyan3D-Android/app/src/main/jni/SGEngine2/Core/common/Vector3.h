@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifndef OPTIMGLKM
+#ifdef OPTIMSGM
 
 #ifndef __SGEngine2__Vector3__
 #define __SGEngine2__Vector3__

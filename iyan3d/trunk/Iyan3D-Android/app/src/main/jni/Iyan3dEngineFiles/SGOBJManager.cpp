@@ -75,8 +75,8 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
         texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
 #endif
         Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
-        objNode->setTexture(nodeTex,1);
-        objNode->setTexture(objScene->shadowTexture,2);
+        objNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        objNode->setTexture(objScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     }
     // scale to fit all obj in same proportion-----
     float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();

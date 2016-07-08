@@ -39,7 +39,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
 
         if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
-            Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(1);
+            Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP);
 #ifdef ANDROID
             unsigned char* imageData = updatingScene->getVideoFrameCallBack(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame, 256, 256); //TODO give correct width and height
             nodeTex->updateTexture(imageData);

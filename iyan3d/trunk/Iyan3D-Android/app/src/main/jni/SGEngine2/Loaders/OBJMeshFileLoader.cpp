@@ -221,7 +221,7 @@ Mesh* OBJMeshFileLoader::createMesh(string filepath, int& status, DEVICE_TYPE de
     }
     VertMap.clear();
     delete[] buf;
-    objMesh->recalculateNormalsT();
+    objMesh->recalculateNormals();
     file.close();
     return objMesh;
 }
@@ -450,80 +450,4 @@ u32 OBJMeshFileLoader::strtoul10(const char* in, const char** out)
         *out = in;
 
     return unsignedValue;
-}
-
-void OBJMeshFileLoader::recalculateNormalsT(Mesh* mesh)
-{
-    const u32 vtxcnt = mesh->getVerticesCount();
-    
-    for(int iIndex = 0; iIndex < mesh->getMeshBufferCount(); iIndex++) {
-        const u32 idxcnt = mesh->getIndicesCount(iIndex);
-        const u32* idx = reinterpret_cast<u32*>(mesh->getIndicesArray(iIndex));
-        
-        if (true) {
-            for (u32 i = 0; i < idxcnt; i += 3) {
-                int index[3];
-                index[0] = mesh->getIndicesArray(iIndex)[i + 0];
-                index[1] = mesh->getIndicesArray(iIndex)[i + 1];
-                index[2] = mesh->getIndicesArray(iIndex)[i + 2];
-                Vector3& v1 = mesh->getLiteVertexByIndex(index[0])->vertPosition;
-                Vector3& v2 = mesh->getLiteVertexByIndex(index[1])->vertPosition;
-                Vector3& v3 = mesh->getLiteVertexByIndex(index[2])->vertPosition;
-                Vector3 dir1 = (v2 - v1).normalize();
-                Vector3 dir2 = (v3 - v1).normalize();
-                Vector3 normal = dir1.crossProduct(dir2).normalize();
-                mesh->getLiteVertexByIndex(index[0])->vertNormal = (normal);
-                mesh->getLiteVertexByIndex(index[1])->vertNormal = (normal);
-                mesh->getLiteVertexByIndex(index[2])->vertNormal = (normal);
-                //                printf("\n tri %d %d %d",index[0],index[1],index[2]);
-                //            printf("\n normal %f %f %f ",round(<#double#>) normal.x,normal.y,normal.z);
-            }
-        }
-        else {
-            u32 i;
-            for (i = 0; i != vtxcnt; ++i)
-                mesh->getLiteVertexByIndex(i)->vertNormal = Vector3(0.0, 0.0, 0.0);
-            
-            for (i = 0; i < idxcnt; i += 3) {
-                Vector3& v1 = mesh->getLiteVertexByIndex(idx[i + 0])->vertPosition;
-                Vector3& v2 = mesh->getLiteVertexByIndex(idx[i + 1])->vertPosition;
-                Vector3& v3 = mesh->getLiteVertexByIndex(idx[i + 2])->vertPosition;
-                Vector3 dir1 = (v2 - v1).normalize();
-                Vector3 dir2 = (v3 - v1).normalize();
-                
-                Vector3 normal = dir1.crossProduct(dir2).normalize();
-                
-                Vector3 weight(1.f, 1.f, 1.f);
-                weight = getAngleWeight(v1, v2, v3); // writing irr::scene:: necessary for borland
-                
-                mesh->getLiteVertexByIndex(idx[i + 0])->vertNormal += (normal * weight.x);
-                mesh->getLiteVertexByIndex(idx[i + 1])->vertNormal += (normal * weight.y);
-                mesh->getLiteVertexByIndex(idx[i + 2])->vertNormal += (normal * weight.z);
-            }
-            for (i = 0; i != vtxcnt; ++i)
-                mesh->getLiteVertexByIndex(i)->vertNormal.normalize();
-        }
-    }
-}
-Vector3 OBJMeshFileLoader::getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3)
-{
-    // Calculate this triangle's weight for each of its three vertices
-    // start by calculating the lengths of its sides
-    Vector3 asq = Vector3(v2.x - v3.x, v2.y - v3.y, v2.z - v3.z);
-    const f32 a = asq.x * asq.x + asq.y * asq.y + asq.z * asq.z;
-    const f32 asqrt = sqrtf(a);
-
-    asq = Vector3(v1.x - v3.x, v1.y - v3.y, v1.z - v3.z);
-    const f32 b = asq.x * asq.x + asq.y * asq.y + asq.z * asq.z;
-    const f32 bsqrt = sqrtf(b);
-
-    asq = Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
-    const f32 c = asq.x * asq.x + asq.y * asq.y + asq.z * asq.z;
-    const f32 csqrt = sqrtf(c);
-
-    // use them to find the angle at each vertex
-    return Vector3(
-        acosf((b + c - a) / (2.f * bsqrt * csqrt)),
-        acosf((-b + c + a) / (2.f * asqrt * csqrt)),
-        acosf((b - c + a) / (2.f * bsqrt * asqrt)));
 }

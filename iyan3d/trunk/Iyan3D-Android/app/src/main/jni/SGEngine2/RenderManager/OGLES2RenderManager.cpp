@@ -241,8 +241,8 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     } else {
-        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
-        drawElements(getOGLDrawMode(node->drawMode),(GLsizei)nodeMes->getIndicesCount(meshBufferIndex),indicesDataType, 0, !supportsInstancing ? 0 : (GLsizei)instancingCount+1);
+        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) : maxInstances;
+        drawElements(getOGLDrawMode(node->drawMode), (GLsizei)nodeMes->getIndicesCount(meshBufferIndex), indicesDataType, 0, !supportsInstancing ? 0 : (GLsizei)instancingCount+1);
     }
     
     if(supportsVAO)
@@ -300,7 +300,7 @@ void OGLES2RenderManager::useMaterialToRender(Material *material)
 {
   glUseProgram(((OGLMaterial*)material)->shaderProgram);
 }
-void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue, bool blurTex){
+void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue, bool blurTex) {
   uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
   switch (uni.type){
       case DATA_FLOAT:
@@ -333,8 +333,8 @@ void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uI
       case DATA_TEXTURE_CUBE:{
           glActiveTexture(GL_TEXTURE0 + userValue);
           u_int32_t *textureName = (u_int32_t*)uni.values;
-          glBindTexture(GL_TEXTURE_2D,*textureName);
-          glUniform1i(uni.location,userValue);
+          glBindTexture(GL_TEXTURE_2D, *textureName);
+          glUniform1i(uni.location, userValue);
       }
           break;
       default:
@@ -539,9 +539,10 @@ void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath , IM
     writePNGImage(buffer,texture->width,texture->height,filePath);
 #endif
 
-  delete buffer;
-  delete imageData;
+  delete[] buffer;
+  delete[] imageData;
 }
+
 Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *texture)
 {
   float mid = texture->height / 2.0;
@@ -717,6 +718,7 @@ void OGLES2RenderManager::resetToMainBuffers(){
 //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);
 //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
 }
+
 GLenum OGLES2RenderManager::getOGLDrawMode(DRAW_MODE mode){
   switch(mode){
       case DRAW_MODE_POINTS:

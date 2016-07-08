@@ -36,8 +36,6 @@
 #define SHADER_COMMON_SKIN_jointData 12
 #define SHADER_COMMON_SKIN_ViewMatrix 13
 #define SHADER_COMMON_SKIN_VertexColor 14
-#define SHADER_COMMON_SKIN_texture1 0
-#define SHADER_COMMON_SKIN_texture2 1
 
 
 
@@ -59,8 +57,13 @@
 #define SHADER_COMMON_lightType 22
 #define SHADER_COMMON_samplerType 23
 #define SHADER_COMMON_ambientLight 24
-#define SHADER_COMMON_texture1 0
-#define SHADER_COMMON_texture2 1
+#define SHADER_COMMON_hasReflectionMap 25
+#define SHADER_COMMON_hasNormalMap 26
+
+#define SHADER_COMMON_colorMap 0
+#define SHADER_COMMON_shadowMap 1
+#define SHADER_COMMON_normalMap 2
+#define SHADER_COMMON_reflectionMap 3
 
 
 #define SHADER_COLOR_mvp 1
@@ -86,7 +89,6 @@
 #define SHADER_PERVERTEXCOLOR_lightViewProjMatrix 10
 #define SHADER_PERVERTEXCOLOR_lightColor 11
 #define SHADER_PERVERTEXCOLOR_viewMatrix 12
-#define SHADER_PERVERTEXCOLOR_texture1 1
 #define SHADER_PERVERTEXCOLOR_jointData 13
 
 
@@ -108,8 +110,7 @@
 #define SHADER_TOON_SKIN_lightColor 10
 #define SHADER_TOON_SKIN_lightViewProjMatrix 11
 #define SHADER_TOON_SKIN_jointData 12
-#define SHADER_TOON_SKIN_texture1 0
-#define SHADER_TOON_SKIN_texture2 1
+
 
 #define SHADER_TOON_mvp 1
 #define SHADER_TOON_transparency 2
@@ -122,7 +123,5 @@
 #define SHADER_TOON_eyePos 9
 #define SHADER_TOON_lightColor 10
 #define SHADER_TOON_lightViewProjMatrix 11
-#define SHADER_TOON_texture1 0
-#define SHADER_TOON_texture2 1
 
 #endif

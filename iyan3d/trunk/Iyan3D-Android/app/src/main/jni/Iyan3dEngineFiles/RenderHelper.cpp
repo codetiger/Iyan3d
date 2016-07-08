@@ -324,7 +324,6 @@ void RenderHelper::rttDrawCall() {
     if (!renderingScene)
         return;
 
-
     if (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying) {
         drawCameraPreview();
     }

@@ -8,8 +8,6 @@
 
 #include "Mesh.h"
 
-
-
 Mesh::Mesh() {
     tempVerticesData.clear();
     tempVerticesDataHeavy.clear();
@@ -29,8 +27,7 @@ Mesh::~Mesh() {
     instanceCount = 0;
 }
 
-void Mesh::copyDataFromMesh(Mesh* otherMesh)
-{
+void Mesh::copyDataFromMesh(Mesh* otherMesh) {
     if(otherMesh->meshType == MESH_TYPE_LITE) {
         for(int i = 0; i < otherMesh->getVerticesCount(); i++) {
             addVertex(otherMesh->getLiteVertexByIndex(i));
@@ -48,8 +45,7 @@ void Mesh::copyDataFromMesh(Mesh* otherMesh)
     Commit();
 }
 
-void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
-{
+void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex) {
     if(originalMesh->meshType == MESH_TYPE_LITE) {
         
         if(instanceIndex == 1)
@@ -77,8 +73,7 @@ void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
     Commit();
 }
 
-void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount)
-{
+void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount) {
     int endIndex = (getVerticesCount() > verticesCount) ? getVerticesCount() - verticesCount : getVerticesCount();
     
     for(int i = getVerticesCount()-1; i > endIndex; i --)
@@ -101,6 +96,7 @@ void Mesh::addVertex(vertexData* vertex, bool updateBB){
     if(updateBB)
         BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
 }
+
 void Mesh::addHeavyVertex(vertexDataHeavy* vertex){
     vertexDataHeavy vtx;
     vtx.vertPosition = vertex->vertPosition;
@@ -119,6 +115,8 @@ void Mesh::addToIndicesArray(unsigned int index) {
 }
 
 void Mesh::Commit() {
+    removeDoublesInMesh();
+    reCalculateTangents();
     
     clearVerticesArray();
     clearIndicesArray();
@@ -235,8 +233,7 @@ void Mesh::Commit() {
     BBox.calculateEdges();
 }
 
-void Mesh::clearVerticesArray()
-{
+void Mesh::clearVerticesArray() {
     if(meshType == MESH_TYPE_HEAVY) {
         for(int i = 0; i < meshBufferVerticesDataHeavy.size(); i++) {
             meshBufferVerticesDataHeavy[i].clear();
@@ -250,160 +247,233 @@ void Mesh::clearVerticesArray()
     }
 }
 
-void Mesh::clearIndicesArray()
-{
+void Mesh::clearIndicesArray() {
     for(int i = 0; i < meshBufferIndices.size(); i++) {
         meshBufferIndices[i].clear();
     }
     meshBufferIndices.clear();
 }
 
+void Mesh::reCalculateTangents() {
+    if(meshType == MESH_TYPE_LITE) {
+        for (int i = 0; i + 2 < tempIndicesData.size(); i += 3) {
+            Vector3 tangent = Vector3(0.0), bitangent = Vector3(0.0);
+            vertexData *v1 = getLiteVertexByIndex(tempIndicesData[i + 0]);
+            vertexData *v2 = getLiteVertexByIndex(tempIndicesData[i + 1]);
+            vertexData *v3 = getLiteVertexByIndex(tempIndicesData[i + 2]);
+
+            if(v1 && v2 && v3) {
+                calculateTanget(tangent, bitangent, v1->vertPosition, v2->vertPosition, v3->vertPosition, v1->texCoord1, v2->texCoord1, v3->texCoord1);
+            
+                v1->vertTangent = tangent;
+                v2->vertTangent = tangent;
+                v3->vertTangent = tangent;
+                v1->vertBitangent = bitangent;
+                v2->vertBitangent = bitangent;
+                v3->vertBitangent = bitangent;
+            }
+        }
+    } else {
+        for (int i = 0; i < tempIndicesData.size(); i += 3) {
+            Vector3 tangent = Vector3(0.0), bitangent = Vector3(0.0);
+            vertexDataHeavy *v1 = getHeavyVertexByIndex(tempIndicesData[i + 0]);
+            vertexDataHeavy *v2 = getHeavyVertexByIndex(tempIndicesData[i + 1]);
+            vertexDataHeavy *v3 = getHeavyVertexByIndex(tempIndicesData[i + 2]);
+            
+            if(v1 && v2 && v3) {
+                calculateTanget(tangent, bitangent, v1->vertPosition, v2->vertPosition, v3->vertPosition, v1->texCoord1, v2->texCoord1, v3->texCoord1);
+                
+                v1->vertTangent = tangent;
+                v2->vertTangent = tangent;
+                v3->vertTangent = tangent;
+                v1->vertBitangent = bitangent;
+                v2->vertBitangent = bitangent;
+                v3->vertBitangent = bitangent;
+            }
+        }
+    }
+}
+
+void Mesh::calculateTanget(Vector3 &tangent, Vector3 &bitangent, Vector3 vt1, Vector3 vt2, Vector3 vt3, Vector2 tc1, Vector2 tc2, Vector2 tc3) {
+    Vector3 v1 = vt1 - vt2;
+    Vector3 v2 = vt3 - vt1;
+    Vector3 normal = v2.crossProduct(v1);
+    normal.normalize();
+    
+    f32 deltaX1 = tc1.x - tc2.x;
+    f32 deltaX2 = tc3.x - tc1.x;
+    bitangent = (v1 * deltaX2) - (v2 * deltaX1);
+    bitangent.normalize();
+    
+    f32 deltaY1 = tc1.y - tc2.y;
+    f32 deltaY2 = tc3.y - tc1.y;
+    tangent = (v1 * deltaY2) - (v2 * deltaY1);
+    tangent.normalize();
+    
+    Vector3 txb = tangent.crossProduct(bitangent);
+    if (txb.dotProduct(normal) < 0.0f) {
+        tangent *= -1.0f;
+        bitangent *= -1.0f;
+    }
+}
+
 void Mesh::generateUV() {
     BoundingBox *bb = getBoundingBox();
     float largeExtend = bb->getXExtend() > bb->getYExtend() ? bb->getXExtend() : bb->getYExtend();
+    largeExtend = largeExtend > bb->getZExtend() ? largeExtend : bb->getZExtend();
     
     const u32 vtxcnt = getVerticesCount();
-    for (int i = 0; i!= vtxcnt;i++) {
+    for (int i = 0; i != vtxcnt; i++) {
         Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
+        Vector3 normal = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal;
+
+        Vector3 r = Vector3(fabs(normal.x), fabs(normal.y), fabs(normal.z));
         
         Vector2 tex;
-        tex.x = (pos.x - bb->getMinEdge().x) / largeExtend;
-        tex.y = (pos.y - bb->getMinEdge().y) / largeExtend;
+        tex.x = 0.0;
+        tex.y = 0.0;
+
+        if(r.z <= 0.1) {
+            tex.x = (pos.z - bb->getMinEdge().z) / largeExtend;
+            tex.y = atan2f(r.y, r.x);
+        } else {
+            tex.x = (pos.x - bb->getMinEdge().x) / largeExtend;
+            tex.y = (pos.y - bb->getMinEdge().y) / largeExtend;
+        }
         
         if (meshType == MESH_TYPE_LITE)
             getLiteVertexByIndex(i)->texCoord1 = tex;
         else
             getHeavyVertexByIndex(i)->texCoord1 = tex;
     }
-    
 }
 
-vertexData* Mesh::getLiteVertexByIndex(unsigned int index)
-{
+vertexData* Mesh::getLiteVertexByIndex(unsigned int index) {
     return &tempVerticesData[index];
 }
-vertexDataHeavy* Mesh::getHeavyVertexByIndex(unsigned int index)
-{
+
+vertexDataHeavy* Mesh::getHeavyVertexByIndex(unsigned int index) {
     return &tempVerticesDataHeavy[index];
 }
 
-vector<vertexData> Mesh::getLiteVerticesArray(int index)
-{
+vector<vertexData> Mesh::getLiteVerticesArray(int index) {
     return meshBufferVerticesData[index];
 }
 
-vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int index)
-{
+vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int index) {
     return meshBufferVerticesDataHeavy[index];
 }
 
-vector<vertexData> Mesh::getTotalLiteVerticesArray()
-{
+vector<vertexData> Mesh::getTotalLiteVerticesArray() {
     return tempVerticesData;
 }
 
-vector<vertexDataHeavy> Mesh::getTotalHeavyVerticesArray()
-{
+vector<vertexDataHeavy> Mesh::getTotalHeavyVerticesArray() {
     return tempVerticesDataHeavy;
 }
 
-unsigned int Mesh::getVerticesCountInMeshBuffer(int index){
+unsigned int Mesh::getVerticesCountInMeshBuffer(int index) {
     if(meshType == MESH_TYPE_HEAVY)
         return (unsigned int)meshBufferVerticesDataHeavy[index].size();
     else
         return (unsigned int)meshBufferVerticesData[index].size();
 }
 
-unsigned int Mesh::getVerticesCount(){
+unsigned int Mesh::getVerticesCount() {
     if(meshType == MESH_TYPE_HEAVY)
         return (unsigned int)tempVerticesDataHeavy.size();
     else
         return (unsigned int)tempVerticesData.size();
 }
 
-BoundingBox* Mesh::getBoundingBox(){
+BoundingBox* Mesh::getBoundingBox() {
     return &BBox;
 }
-unsigned int * Mesh::getHighPolyIndicesArray()
-{
+
+unsigned int * Mesh::getHighPolyIndicesArray() {
     return &tempIndicesData[0];
 }
-unsigned short* Mesh::getIndicesArray(int index)
-{
+
+unsigned short* Mesh::getIndicesArray(int index) {
     return &(meshBufferIndices[index][0]);
 }
 
-unsigned int Mesh::getIndicesCount(int index){
+unsigned int Mesh::getIndicesCount(int index) {
     return (unsigned int )(meshBufferIndices[index]).size();
 }
 
-unsigned int Mesh::getTotalIndicesCount()
-{
+unsigned int Mesh::getTotalIndicesCount() {
     return (int)tempIndicesData.size();
 }
 
-vector< unsigned int > Mesh::getTotalIndicesArray()
-{
+vector< unsigned int > Mesh::getTotalIndicesArray() {
     return tempIndicesData;
 }
 
-int Mesh::getMeshBufferCount()
-{
+int Mesh::getMeshBufferCount() {
     return (int)meshBufferIndices.size();
 }
 
-void Mesh::clearVertices()
-{
+void Mesh::clearVertices() {
     tempVerticesData.clear();
 }
 
-void Mesh::clearIndices()
-{
+void Mesh::clearIndices() {
     tempIndicesData.clear();
 }
 
-void Mesh::removeDoublesInHeavyMesh(bool usePos,bool useTcoords,bool useNormals){
+void Mesh::removeDoublesInMesh() {
+    std::map<std::string, unsigned int> vertMap;
+    vector<unsigned int> tIndicesData;
     
-    //This method should only be used for 3D Text
-    map<string,unsigned int> vertMap;
-    vector<vertexDataHeavy> verticesDataDup;
-    tempIndicesData.clear();
-    
-    const u32 vtxcnt = getVerticesCount();
-    for(u32 i=0; i<vtxcnt; i++){
-        vertexDataHeavy *vert =  getHeavyVertexByIndex(i);
-        string unique;
-        if(usePos)
-            unique = to_string(vert->vertPosition.x) + to_string(vert->vertPosition.y) + to_string(vert->vertPosition.z);
-        if(useTcoords)
-            unique += (to_string(vert->texCoord1.x) + to_string(vert->texCoord1.y));
-        if(useNormals)
-            unique += (to_string(vert->vertNormal.x) + to_string(vert->vertNormal.y) + to_string(vert->vertNormal.z));
-        /*
-         Normal Approximation
-         
-         int t = atan(vert->vertNormal.y/vert->vertNormal.x) / 4.0f;
-         int p = acos(vert->vertNormal.z/vert->vertNormal.x) / 4.0f;
-         unique += (to_string(t) + to_string(p));
+    if(meshType == MESH_TYPE_LITE) {
+        vector<vertexData> verticesDataDup;
 
-         */
-        if(vertMap.find(unique) != vertMap.end()){
-            addToIndicesArray((unsigned short)vertMap[unique]);
-        }else{
-            verticesDataDup.push_back(*vert);
-            vertMap.insert(std::pair<string,unsigned int>(unique,(unsigned int)verticesDataDup.size()-1));
-            addToIndicesArray((unsigned short)verticesDataDup.size()-1);
+        for(u32 i = 0; i < tempIndicesData.size(); i++) {
+            vertexData *vert =  getLiteVertexByIndex(tempIndicesData[i]);
+            string unique = to_string(vert->vertPosition.x) + to_string(vert->vertPosition.y) + to_string(vert->vertPosition.z) + to_string(vert->texCoord1.x) + to_string(vert->texCoord1.y) + to_string(vert->vertNormal.x) + to_string(vert->vertNormal.y) + to_string(vert->vertNormal.z) + to_string(vert->optionalData1.x) + to_string(vert->optionalData1.y) + to_string(vert->optionalData1.z) + to_string(vert->optionalData1.w);
+            MD5 md5;
+            unique = md5.digestString((char*)unique.c_str());
+
+            if(vertMap.find(unique) != vertMap.end()) {
+                tIndicesData.push_back((unsigned int)vertMap[unique]);
+            } else {
+                verticesDataDup.push_back(*vert);
+                vertMap.insert(std::pair<std::string, unsigned int>(unique, (unsigned int)verticesDataDup.size() - 1));
+                tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
+            }
         }
+        tempVerticesData.clear();
+        tempVerticesData = verticesDataDup;
+        tempIndicesData.clear();
+        tempIndicesData = tIndicesData;
+    } else {
+        vector<vertexDataHeavy> verticesDataDup;
+        
+        for(u32 i = 0; i < tempIndicesData.size(); i++) {
+            vertexDataHeavy *vert =  getHeavyVertexByIndex(tempIndicesData[i]);
+            string unique = to_string(vert->vertPosition.x) + to_string(vert->vertPosition.y) + to_string(vert->vertPosition.z) + to_string(vert->texCoord1.x) + to_string(vert->texCoord1.y) + to_string(vert->vertNormal.x) + to_string(vert->vertNormal.y) + to_string(vert->vertNormal.z) + to_string(vert->optionalData1.x) + to_string(vert->optionalData1.y) + to_string(vert->optionalData1.z) + to_string(vert->optionalData1.w);
+            MD5 md5;
+            unique = md5.digestString((char*)unique.c_str());
+            
+            if(vertMap.find(unique) != vertMap.end()) {
+                tIndicesData.push_back((unsigned int)vertMap[unique]);
+            } else {
+                verticesDataDup.push_back(*vert);
+                vertMap.insert(std::pair<std::string, unsigned int>(unique, (unsigned int)verticesDataDup.size() - 1));
+                tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
+            }
+        }
+        tempVerticesDataHeavy.clear();
+        tempVerticesDataHeavy = verticesDataDup;
+        tempIndicesData.clear();
+        tempIndicesData = tIndicesData;
     }
-    tempVerticesDataHeavy.clear();
-    tempVerticesDataHeavy = verticesDataDup;
 }
 
-void Mesh::fixOrientation()
-{
-//    float dif = BBox.getXExtend()/2.0;
+void Mesh::fixOrientation() {
     const u32 vtxcnt = getVerticesCount();
-    for (int i = 0; i!= vtxcnt;i++) {
+    for (int i = 0; i != vtxcnt; i++) {
         Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
         
         if (meshType == MESH_TYPE_LITE)
@@ -413,8 +483,7 @@ void Mesh::fixOrientation()
     }
 }
 
-void Mesh::moveVertices(Vector3 offset)
-{
+void Mesh::moveVertices(Vector3 offset) {
     const u32 vtxcnt = getVerticesCount();
     BBox.clearPoints();
 
@@ -433,94 +502,38 @@ void Mesh::moveVertices(Vector3 offset)
     }
 }
 
-void Mesh::recalculateNormalsT(bool smooth)
-{
-    const u32 vtxcnt = getVerticesCount();
-    const u32 idxcnt = getTotalIndicesCount();
-    
-    if (!smooth)
-    {
-        for (int i = 0; i!= vtxcnt; ++i) {
-            (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal = Vector3(-2.0,-2.0,-2.0);
-        }
-        
-        for (u32 i=0; i<idxcnt; i+=3)
-        {
-            int index[3];
-            index[0] = reinterpret_cast<u32*>(getHighPolyIndicesArray())[i+0];
-            index[1] = reinterpret_cast<u32*>(getHighPolyIndicesArray())[i+1];
-            index[2] = reinterpret_cast<u32*>(getHighPolyIndicesArray())[i+2];
-            Vector3& v1 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[0])->vertPosition : getHeavyVertexByIndex(index[0])->vertPosition;
-            Vector3& v2 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[1])->vertPosition : getHeavyVertexByIndex(index[1])->vertPosition;
-            Vector3& v3 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[2])->vertPosition : getHeavyVertexByIndex(index[2])->vertPosition;
-            Vector3 dir1 = (v2 - v1).normalize();
-            Vector3 dir2 = (v3 - v1).normalize();
-            Vector3 normal = dir1.crossProduct(dir2).normalize();
-            
-            Vector3& n1 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[0])->vertNormal : getHeavyVertexByIndex(index[0])->vertNormal;
-            Vector3& n2 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[1])->vertNormal : getHeavyVertexByIndex(index[1])->vertNormal;
-            Vector3& n3 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[2])->vertNormal : getHeavyVertexByIndex(index[2])->vertNormal;
-            
-            if(n1.x == -2.0)
-                n1 = (normal);
-            else
-                n1 = getLinearInterpolation(1,n1,3,normal,2);
-            
-            if(n2.x == -2.0)
-                n2 = (normal);
-            else
-                n2 = getLinearInterpolation(1,n2,3,normal,2);
-            
-            if(n3.x == -2.0)
-                n3 = (normal);
-            else
-                n3 = getLinearInterpolation(1,n3,3,normal,2);
-        }
+void Mesh::recalculateNormals() {
+    for (int i = 0; i < getVerticesCount(); ++i) {
+        Vector3 &n = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal;
+        n = Vector3(0.0, 0.0, 0.0);
     }
-    else
-    {
-        u32 i;
-        for ( i = 0; i!= vtxcnt; ++i ) {
-            (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal = Vector3(0.0, 0.0, 0.0);
-        }
+
+    for (int i = 0; i < getTotalIndicesCount(); i += 3) {
+        Vector3& v1 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(tempIndicesData[i+0])->vertPosition : getHeavyVertexByIndex(tempIndicesData[i+0])->vertPosition;
+        Vector3& v2 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(tempIndicesData[i+1])->vertPosition : getHeavyVertexByIndex(tempIndicesData[i+1])->vertPosition;
+        Vector3& v3 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(tempIndicesData[i+2])->vertPosition : getHeavyVertexByIndex(tempIndicesData[i+2])->vertPosition;
+        Vector3 dir1 = (v2 - v1).normalize();
+        Vector3 dir2 = (v3 - v1).normalize();
+        Vector3 normal = dir1.crossProduct(dir2).normalize();
+
+        Vector3 weight(1.f, 1.f, 1.f);
+        weight = getAngleWeight(v1, v2, v3);
         
-        for ( i=0; i<idxcnt; i+=3)
-        {
-            int index[3];
-            index[0] = reinterpret_cast<u32*>(getHighPolyIndicesArray())[i+0];
-            index[1] = reinterpret_cast<u32*>(getHighPolyIndicesArray())[i+1];
-            index[2] = reinterpret_cast<u32*>(getHighPolyIndicesArray())[i+2];
-            
-            Vector3& v1 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[0])->vertPosition : getHeavyVertexByIndex(index[0])->vertPosition;
-            Vector3& v2 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[1])->vertPosition : getHeavyVertexByIndex(index[1])->vertPosition;
-            Vector3& v3 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[2])->vertPosition : getHeavyVertexByIndex(index[2])->vertPosition;
-            Vector3 dir1 = (v2 - v1).normalize();
-            Vector3 dir2 = (v3 - v1).normalize();
-            
-            Vector3 normal = dir1.crossProduct(dir2).normalize();
-            
-            Vector3 weight(1.f,1.f,1.f);
-            weight = getAngleWeight(v1,v2,v3);
-            
-            Vector3& n1 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[0])->vertNormal : getHeavyVertexByIndex(index[0])->vertNormal;
-            Vector3& n2 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[1])->vertNormal : getHeavyVertexByIndex(index[1])->vertNormal;
-            Vector3& n3 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(index[2])->vertNormal : getHeavyVertexByIndex(index[2])->vertNormal;
-            
-            n1 += (normal * weight.x);
-            n2 += (normal * weight.y);
-            n3 += (normal * weight.z);
-        }
-        for ( i = 0; i!= vtxcnt; ++i ) {
-            Vector3 &vertexNormal = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal;
-            vertexNormal.normalize();
-        }
+        Vector3& n1 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(tempIndicesData[i+0])->vertNormal : getHeavyVertexByIndex(tempIndicesData[i+0])->vertNormal;
+        Vector3& n2 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(tempIndicesData[i+1])->vertNormal : getHeavyVertexByIndex(tempIndicesData[i+1])->vertNormal;
+        Vector3& n3 = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(tempIndicesData[i+2])->vertNormal : getHeavyVertexByIndex(tempIndicesData[i+2])->vertNormal;
+        n1 += normal * weight.x;
+        n2 += normal * weight.y;
+        n3 += normal * weight.z;
+    }
+    
+    for (int i = 0; i < getVerticesCount(); ++i) {
+        Vector3 &n = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal;
+        n = n.normalize();
     }
 }
 
-Vector3 Mesh::getAngleWeight(Vector3& v1,Vector3& v2,Vector3& v3)
-{
-    // Calculate this triangle's weight for each of its three vertices
-    // start by calculating the lengths of its sides
+Vector3 Mesh::getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3) {
     Vector3 asq =  Vector3(v2.x - v3.x,v2.y - v3.y,v2.z - v3.z);
     const f32 a = asq.x * asq.x + asq.y * asq.y + asq.z * asq.z;
     const f32 asqrt = sqrtf(a);
@@ -533,10 +546,7 @@ Vector3 Mesh::getAngleWeight(Vector3& v1,Vector3& v2,Vector3& v3)
     const f32 c = asq.x * asq.x + asq.y * asq.y + asq.z * asq.z;
     const f32 csqrt = sqrtf(c);
     
-    // use them to find the angle at each vertex
-    return Vector3(
-                   acosf((b + c - a) / (2.f * bsqrt * csqrt)),
+    return Vector3(acosf((b + c - a) / (2.f * bsqrt * csqrt)),
                    acosf((-b + c + a) / (2.f * asqrt * csqrt)),
                    acosf((b - c + a) / (2.f * bsqrt * asqrt)));
 }
-

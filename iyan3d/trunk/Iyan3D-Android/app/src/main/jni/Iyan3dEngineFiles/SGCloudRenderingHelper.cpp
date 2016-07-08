@@ -374,10 +374,10 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_pt
     shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(node);
     Vector4 props = pNode->getParticleProps();
         Mat4 translation = Mat4();
-        translation[12] = position.x;
-        translation[13] = position.y;
-        translation[14] = position.z;
-        
+    translation.setElement(12, position.x);
+    translation.setElement(13, position.y);
+    translation.setElement(14, position.z);
+    
         Mat4 rotationMat = Mat4();
         float cr = cos(rotation.x);
         float sr = sin(rotation.x);
@@ -386,25 +386,25 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexDataForParticle(shared_pt
         float cy = cos(rotation.z);
         float sy = sin(rotation.z);
         
-        rotationMat[0] = (cp * cy);
-        rotationMat[1] = (cp * sy);
-        rotationMat[2] = (-sp);
-        
+    rotationMat.setElement(0, (cp * cy));
+    rotationMat.setElement(1, (cp * sy));
+    rotationMat.setElement(2, -sp);
+    
         float srsp = sr * sp;
         float crsp = cr * sp;
         
-        rotationMat[4] = (srsp * cy - cr * sy);
-        rotationMat[5] = (srsp * sy + cr * cy);
-        rotationMat[6] = (sr * cp);
+        rotationMat.setElement(4, srsp * cy - cr * sy);
+        rotationMat.setElement(5, srsp * sy + cr * cy);
+        rotationMat.setElement(6, sr * cp);
         
-        rotationMat[8] = (crsp * cy + sr * sy);
-        rotationMat[9] = (crsp * sy - sr * cy);
-        rotationMat[10] = (cr * cp);
+        rotationMat.setElement(8, crsp * cy + sr * sy);
+        rotationMat.setElement(9, crsp * sy - sr * cy);
+        rotationMat.setElement(10, cr * cp);
         
         float live = float(position.w > 0.0 && position.w <= float(props.x));
         if(live <= 0.0) {
             for(int i = 0; i < 16; i ++)
-                translation[i] = 0;
+                translation.setElement(i, 0);
         }
         Mat4 pModel = translation * rotationMat;
         

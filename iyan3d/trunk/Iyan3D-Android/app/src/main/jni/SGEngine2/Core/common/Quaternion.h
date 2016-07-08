@@ -1,6 +1,6 @@
 
 
-#ifndef OPTIMGLKM
+#ifdef OPTIMSGM
 
 #ifndef SGEngine2_Quaternion_h
 #define SGEngine2_Quaternion_h

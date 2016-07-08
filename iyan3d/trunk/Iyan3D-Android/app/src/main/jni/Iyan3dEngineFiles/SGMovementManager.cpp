@@ -14,8 +14,7 @@
 
 SGEditorScene *moveScene;
 
-SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene)
-{
+SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene) {
     this->smgr = smgr;
     moveScene = (SGEditorScene*)scene;
     swipeTiming = 0;
@@ -23,13 +22,11 @@ SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene)
     xAcceleration = yAcceleration = 0.0;
 }
 
-SGMovementManager::~SGMovementManager(){
+SGMovementManager::~SGMovementManager() {
 
 }
 
-
-void SGMovementManager::touchBegan(Vector2 curTouchPos)
-{
+void SGMovementManager::touchBegan(Vector2 curTouchPos) {
     prevTouchPoints[0] = curTouchPos;
     if(moveScene->renHelper->isMovingCameraPreview(curTouchPos)) {
         moveScene->renHelper->isMovingPreview = true;
@@ -37,8 +34,7 @@ void SGMovementManager::touchBegan(Vector2 curTouchPos)
     xAcceleration = yAcceleration = 0.0;
 }
 
-void SGMovementManager::swipeProgress(float angleX , float angleY)
-{
+void SGMovementManager::swipeProgress(float angleX , float angleY) {
     if(!moveScene || !smgr || moveScene->moveNodeId != NOT_EXISTS)
         return;
     if(moveScene->isControlSelected || swipeTiming < 3) {
@@ -53,8 +49,7 @@ void SGMovementManager::swipeProgress(float angleX , float angleY)
 
 }
 
-void SGMovementManager::swipeToRotate()
-{
+void SGMovementManager::swipeToRotate() {
     if(!moveScene || !smgr)
         return;
 
@@ -103,8 +98,7 @@ void SGMovementManager::swipeToRotate()
     
 }
 
-void SGMovementManager::touchEnd(Vector2 curTouchPos)
-{
+void SGMovementManager::touchEnd(Vector2 curTouchPos) {
     if(!moveScene || !smgr)
         return;
 
@@ -146,13 +140,9 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos)
         moveScene->actionMan->storeActionKeys(true);
         moveScene->moveNodeId = NOT_EXISTS;
     }
-    
-    
-
 }
 
-void SGMovementManager::panBegan(Vector2 touch1, Vector2 touch2)
-{
+void SGMovementManager::panBegan(Vector2 touch1, Vector2 touch2) {
     if(!moveScene || !smgr)
         return;
     
@@ -162,8 +152,7 @@ void SGMovementManager::panBegan(Vector2 touch1, Vector2 touch2)
     previousRadius = moveScene->cameraRadius;
 }
 
-void SGMovementManager::panProgress(Vector2 touch1, Vector2 touch2)
-{
+void SGMovementManager::panProgress(Vector2 touch1, Vector2 touch2) {
     if(!moveScene || !smgr)
         return;
     
@@ -210,8 +199,7 @@ void SGMovementManager::panProgress(Vector2 touch1, Vector2 touch2)
     moveScene->updater->updateControlsOrientaion();
 }
 
-void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height)
-{
+void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height) {
     if(!moveScene || !smgr || (!moveScene->isNodeSelected && moveScene->selectedNodeIds.size() <= 0))
         return;
 
@@ -245,8 +233,7 @@ void SGMovementManager::touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float
     }
 }
 
-bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoint, bool isSGJoint)
-{
+bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoint, bool isSGJoint) {
     if(!moveScene || !smgr)
         return false;
     
@@ -303,8 +290,7 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
     
 }
 
-bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,Vector3 &outputValue,bool isSGJoint)
-{
+bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,Vector3 &outputValue,bool isSGJoint) {
     if(!moveScene || !smgr)
         return false;
 
@@ -391,8 +377,7 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint,Vector2 prevT
     return false;
 }
 
-void SGMovementManager::getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 curPoint, Vector3& oldPos, Vector3& newPos)
-{
+void SGMovementManager::getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 curPoint, Vector3& oldPos, Vector3& newPos) {
     Line3D oldRay = moveScene->cmgr->getRayFromScreenCoordinates(prevTouchPoint, smgr->getActiveCamera(), SceneHelper::screenWidth, SceneHelper::screenHeight);
     Line3D newRay = moveScene->cmgr->getRayFromScreenCoordinates(curPoint, smgr->getActiveCamera(), SceneHelper::screenWidth, SceneHelper::screenHeight);
 
@@ -403,8 +388,7 @@ void SGMovementManager::getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 c
     moveScene->circleTouchPoint = newPos;
 }
 
-void SGMovementManager::touchBeganRig(Vector2 curTouchPos)
-{
+void SGMovementManager::touchBeganRig(Vector2 curTouchPos) {
     if(!moveScene || !smgr || !moveScene->isRigMode)
         return;
 
@@ -417,8 +401,7 @@ void SGMovementManager::touchBeganRig(Vector2 curTouchPos)
     xAcceleration = yAcceleration = 0.0;
 }
 
-void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height)
-{
+void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height) {
     if(!moveScene || !smgr || !moveScene->isRigMode || !moveScene->rigMan->isNodeSelected)
         return;
 
@@ -455,8 +438,7 @@ void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,fl
     return;
 }
 
-void SGMovementManager::touchEndRig(Vector2 curTouchPos)
-{
+void SGMovementManager::touchEndRig(Vector2 curTouchPos) {
     if(!moveScene || !smgr || !moveScene->isRigMode)
         return;
 

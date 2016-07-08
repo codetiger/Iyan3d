@@ -22,6 +22,7 @@ OGLTexture::OGLTexture(){
     rttFrameBuffer = NOT_EXISTS;
     rttDepthBuffer = NOT_EXISTS;
 }
+
 OGLTexture::~OGLTexture(){
     if(rttFrameBuffer != NOT_EXISTS)
         glDeleteBuffers(1,&rttFrameBuffer);
@@ -31,11 +32,13 @@ OGLTexture::~OGLTexture(){
         glDeleteTextures(1, &OGLTextureName);
     OGLTextureName = NULL;
 }
+
 void OGLTexture::removeTexture(){
     if(OGLTextureName)
         glDeleteTextures(1, &OGLTextureName);
     OGLTextureName = NULL;
 }
+
 bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool blurTex)
 {
     textureName = name;
@@ -89,7 +92,6 @@ bool OGLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
     return true;
 }
 
-
 void OGLTexture::updateTexture(string fileName, int frame)
 {
     unsigned char *imageData;
@@ -135,6 +137,7 @@ GLenum OGLTexture::getOGLTextureType(TEXTURE_DATA_TYPE type){
 // switch
     return oglType;
 }
+
 void OGLTexture::createRenderTargetTexture(string name, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type, int textureWidth, int textureHeight)
 {
     textureName = name;
@@ -158,6 +161,7 @@ void OGLTexture::createRenderTargetTexture(string name, TEXTURE_DATA_FORMAT form
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         Logger::log(ERROR,"OGLTexture CreateRenderBuffer","FB Not Complete");
 }
+
 void OGLTexture::createTexture(TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type, int textureWidth, int textureHeight, const GLvoid *data)
 {
     glGenTextures(1, &OGLTextureName);

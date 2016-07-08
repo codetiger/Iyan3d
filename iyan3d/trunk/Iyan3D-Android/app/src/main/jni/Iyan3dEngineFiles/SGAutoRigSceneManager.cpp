@@ -79,7 +79,7 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     mesh->Commit();
     animNode->setVisible(false);
     shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
-    meshNode->setTexture(rigNode->node->getTextureByIndex(1), 1);
+    meshNode->setTexture(rigNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
     rigNode->node = meshNode;
     rigNode->node->setID(SGM_ID);
     rigNode->node->setPosition(rigNode->node->getAbsolutePosition());
@@ -117,7 +117,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     sgmNode->setPosition(Vector3(0.0));
     sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
     nodeToRig->props.isLighting = true;
-    nodeToRig->node->setTexture(rigScene->shadowTexture,2);
+    nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgmNode->setID(SGM_ID);
     nodeToRig->node->updateAbsoluteTransformation();
 }
@@ -232,8 +232,8 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->createSGJoints();
                     sgrSGNode->node->setID(SGR_ID);
                     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
-                    sgrSGNode->node->setTexture(nodeToRig->node->getActiveTexture(),1);
-                    sgrSGNode->node->setTexture(rigScene->shadowTexture,2);
+                    sgrSGNode->node->setTexture(nodeToRig->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
+                    sgrSGNode->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
                     sgrSGNode->props.transparency = 1.0;
                     sgrSGNode->props.isLighting = true;
                     sgrSGNode->props.perVertexColor = nodeToRig->props.perVertexColor;
@@ -564,7 +564,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             animNode->setVisible(true);
             shared_ptr<MeshNode> meshNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
             nodeToRig->node = animNode;
-            nodeToRig->node->setTexture(rigScene->shadowTexture, 2);
+            nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
             smgr->RemoveNode(meshNode);
         }
         nodeToRig->props.perVertexColor = isVertexColoredNode;
