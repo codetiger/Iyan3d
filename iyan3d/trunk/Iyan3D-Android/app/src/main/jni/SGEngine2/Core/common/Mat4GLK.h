@@ -29,7 +29,7 @@
 class Mat4 {
     
 public:
-    glm::mat4 matrix;
+    GLKMatrix4 matrix;
     Mat4();
     Mat4(float* pMat);
     Mat4(const Vector3& axis_x, const Vector3& axis_y, const Vector3& axis_z, const Vector3& trans);
@@ -42,7 +42,7 @@ public:
     Vector4 operator*(const Vector4& v) const;
     
     void setElement(unsigned int index, float value);
-//    float& operator[](unsigned i);
+    float& operator[](unsigned i);
     float operator[](unsigned i) const;
     
     void perspective(float fov, float aspect, float nearz, float farz);
