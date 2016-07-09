@@ -13,15 +13,12 @@
 
 Mat4::Mat4()
 {
-    static const float IDENTITY_MATRIX[] = {
+    const float c[] = {
         1.0, 0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         0.0, 0.0, 0.0, 1.0
     };
-    float c[16];
-    memcpy(c, IDENTITY_MATRIX, sizeof(float) * 16);
-
     matrix = glm::make_mat4(c);
 }
 Mat4::Mat4(float* pMat)
@@ -183,6 +180,7 @@ void Mat4::transpose()
 {
     matrix = glm::transpose(matrix);
 }
+
 float* Mat4::pointer()
 {
     return glm::value_ptr(matrix);

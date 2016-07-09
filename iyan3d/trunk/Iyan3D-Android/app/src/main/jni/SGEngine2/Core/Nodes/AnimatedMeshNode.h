@@ -32,11 +32,11 @@ public:
     ~AnimatedMeshNode();
     virtual AnimatedMesh* getMesh();
     Mesh* getMeshCache();
-    void initializeMeshCache(rig_type rigType);
-    void updateMeshCache(rig_type rigType);
-    void updatePartOfMeshCache(rig_type rigType , int jointId = 0);
+    void initializeMeshCache();
+    void updateMeshCache();
+    void updatePartOfMeshCache(int jointId = 0);
     void getAllPaintedVertices(SkinMesh *skinMesh , vector<int> &paintedVertices , int jointId);
-    void setMesh(AnimatedMesh *mesh , rig_type rigType = NO_RIG);
+    void setMesh(AnimatedMesh *mesh, rig_type rigType = NO_RIG);
     void updateBoundingBox();
     void update();
     virtual short getActiveMeshIndex(int index);

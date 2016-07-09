@@ -167,11 +167,11 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
         }
 
-//        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-//        node->setTexture(nodeEnvTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
-//
-//        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-//        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
+        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        node->setTexture(nodeEnvTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
+
+        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
     }
 
     return node;

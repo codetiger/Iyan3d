@@ -56,9 +56,9 @@ void SGSceneUpdater::setDataForFrame(int frame)
 
         SGNode* sgNode = updatingScene->nodes[i];
 
-        if(visibilityKeyindex != -1){
+        if(visibilityKeyindex != -1)
            sgNode->props.isVisible = sgNode->visibilityKeys[visibilityKeyindex].visibility;
-        }
+
         sgNode->setPositionOnNode(position, !updatingScene->isPlaying);
         
         if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
@@ -74,6 +74,8 @@ void SGSceneUpdater::setDataForFrame(int frame)
             sgNode->setRotationOnNode(rotation, !updatingScene->isPlaying);
             sgNode->setScaleOnNode(scale, !updatingScene->isPlaying);
         }
+        
+        
         for (int j = 0; j < sgNode->joints.size(); j++) {
             SGJoint *joint = sgNode->joints[j];
             Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame,joint->rotationKeys,true);
@@ -85,6 +87,11 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 changed = joint->setScaleOnNode(jointScale, !updatingScene->isPlaying);
             }
         }
+        
+        if(sgNode->node->type == NODE_TYPE_SKINNED && sgNode->node->skinType == CPU_SKIN) {
+            (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->updateMeshCache();
+        }
+
     }
 #ifndef UBUNTU
     updateControlsOrientaion(updatingScene);
@@ -447,7 +454,10 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                         break;
                     }
                     case NODE_RIG: {
-                        sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
+                        if(sgNode->node->skinType == CPU_SKIN)
+                            sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
+                        else
+                            sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
                         break;
                     }
                     case NODE_TEXT_SKIN: {

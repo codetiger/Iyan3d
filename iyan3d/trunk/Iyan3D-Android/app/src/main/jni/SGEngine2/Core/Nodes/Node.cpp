@@ -11,6 +11,7 @@
 #import "TargetConditionals.h"
 #endif
 Node::Node() {
+//    skinType = CPU_SKIN;
     skinType = GPU_SKIN;
     id = NOT_EXISTS;
     type = NODE_TYPE_EMPTY;
@@ -42,6 +43,7 @@ Node::Node() {
     #endif
     drawMode = DRAW_MODE_TRIANGLES;
 }
+
 Node::~Node() {
 //    if(this->instancedNodes.size()){
 //        for(u16 i = 0;i < instancedNodes.size();i++){
@@ -77,11 +79,13 @@ Node::~Node() {
             nodeData.reset();
     }
 }
+
 bool Node::operator==(shared_ptr<Node> n) {
     if(n->getID() != id || n->position != position || n->scale != scale || n->rotation != rotation || n->callbackFuncName.compare(callbackFuncName) != 0 || n->type != type)
         return false;
     return true;
 }
+
 bool Node::isMetalSupported(){
     #ifdef IOS
     size_t size;

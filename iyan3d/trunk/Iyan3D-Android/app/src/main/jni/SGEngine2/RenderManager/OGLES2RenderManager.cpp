@@ -76,7 +76,6 @@ void OGLES2RenderManager::changeClearColor(Vector4 lClearColor)
     }
 }
 
-
 bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex){
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return false;
@@ -87,7 +86,6 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
             node->nodeData.reset();
         node->nodeData = make_shared<OGLNodeData>();
     }
-
 
     OGLMaterial *material = (OGLMaterial*)node->material;
     Mesh *mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
@@ -161,7 +159,6 @@ void OGLES2RenderManager::createVAO(shared_ptr<Node> node, short meshBufferIndex
 
 void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, bool bindAttrib, short meshBufferIndex)
 {
-    
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     Mesh *mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
     MESH_TYPE mType = mesh->meshType;
@@ -559,15 +556,16 @@ void OGLES2RenderManager::setFrameBufferObjects(u_int32_t framebuff, u_int32_t c
   colorBuffer = colorbuff;
   depthBuffer = depthduff;
 }
+
 void OGLES2RenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth,bool setToRenderBuffer)
 {
 
 }
+
 void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers){
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return;
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
-    
     
     u16 meshBufferCount = 1;
     if(node->type == NODE_TYPE_MORPH)

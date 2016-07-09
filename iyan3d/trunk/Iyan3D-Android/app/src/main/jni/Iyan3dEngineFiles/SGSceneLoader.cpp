@@ -226,9 +226,9 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         sgnode->props.isLighting = false;
     } else if (type == NODE_RIG) {
         setJointsScale(sgnode);
-        dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(CHARACTER_RIG);
+        dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache();
     } else if (type == NODE_TEXT_SKIN) {
-        dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(TEXT_RIG);
+        dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache();
     } else if (type == NODE_ADDITIONAL_LIGHT) {
         addLight(sgnode);
     }
@@ -257,7 +257,7 @@ void SGSceneLoader::setJointsScale(SGNode *sgNode)
         return;
     
     shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node);
-    SkinMesh * sMesh = (SkinMesh*)animNode->getMesh();
+    SkinMesh * sMesh = (SkinMesh*)animNode->mesh;
     if(sMesh->joints->size() != currentScene->tPoseJoints.size())
         return;
     

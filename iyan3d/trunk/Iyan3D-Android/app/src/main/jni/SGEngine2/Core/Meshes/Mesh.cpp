@@ -115,7 +115,6 @@ void Mesh::addToIndicesArray(unsigned int index) {
 }
 
 void Mesh::Commit() {
-    removeDoublesInMesh();
     reCalculateTangents();
     
     clearVerticesArray();

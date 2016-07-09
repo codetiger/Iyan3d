@@ -12,6 +12,7 @@ MeshNode::MeshNode() {
     this->meshCache = NULL;
     type = NODE_TYPE_MESH;
 }
+
 MeshNode::~MeshNode() {
     if(mesh && mesh->getVerticesCount())
         delete mesh;
@@ -22,21 +23,25 @@ MeshNode::~MeshNode() {
     mesh = NULL;
     meshCache = NULL;
 }
-Mesh* MeshNode::getMesh(){
-    
+
+Mesh* MeshNode::getMesh() {
     if(type == NODE_TYPE_INSTANCED)
         return dynamic_pointer_cast<MeshNode>(this->original)->getMesh();
+    
     if(shouldUpdateMesh && meshCache)
         return this->meshCache;
-    return this->mesh;
     
+    return this->mesh;
 }
+
 void MeshNode::update(){
     
 }
+
 short MeshNode::getActiveMeshIndex(int index){
     return index;
 }
+
 Mesh* MeshNode::getMeshByIndex(int index){
     return mesh;
 }

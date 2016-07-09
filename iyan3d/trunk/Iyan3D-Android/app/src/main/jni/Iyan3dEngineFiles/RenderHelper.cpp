@@ -490,7 +490,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         renderingScene->nodes[i]->props.vertexColor = packed/255.0;
         
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
-            renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
+            renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(renderingScene->nodes[i]->node->skinType == CPU_SKIN ? SHADER_COLOR : SHADER_COLOR_SKIN));
         else if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES_RTT));
         else {
@@ -502,7 +502,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         
     }
     smgr->Render(true);
-    // Draw Joints
+
     if((selectedSGNode && renderingScene->selectedNodeIds.size() <= 0 && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT_SKIN) && !touchMove) || renderingScene->isJointSelected)
         drawJointsSpheresForRTT(true);
     

@@ -140,6 +140,10 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos) {
         moveScene->actionMan->storeActionKeys(true);
         moveScene->moveNodeId = NOT_EXISTS;
     }
+    
+    if(moveScene->selectedNodeId != NOT_SELECTED && moveScene->nodes[moveScene->selectedNodeId] && moveScene->nodes[moveScene->selectedNodeId]->node->type == NODE_TYPE_SKINNED && moveScene->nodes[moveScene->selectedNodeId]->node->skinType == CPU_SKIN) {
+        dynamic_pointer_cast<AnimatedMeshNode>(moveScene->nodes[moveScene->selectedNodeId]->node)->updateMeshCache();
+    }
 }
 
 void SGMovementManager::panBegan(Vector2 touch1, Vector2 touch2) {

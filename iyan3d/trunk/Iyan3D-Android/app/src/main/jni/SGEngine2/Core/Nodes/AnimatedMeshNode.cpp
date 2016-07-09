@@ -36,7 +36,6 @@ AnimatedMeshNode::~AnimatedMeshNode()
 
 void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, rig_type rigType)
 {
-    // If Skinned Mesh
     this->mesh = mesh;
     SkinMesh* SMesh = (SkinMesh*)mesh;
     for (int i = 0; i < SMesh->joints->size(); i++) {
@@ -86,18 +85,16 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, rig_type rigType)
             node->Children->push_back(jointNodes[childIndex]);
         }
         node->updateBoundingBox();
-        //node.reset();
     }
     SMesh->recoverJointsFromMesh(jointNodes);
-    if (rigType != NO_RIG && skinType == CPU_SKIN)
-        initializeMeshCache(rigType);
+    
+    if (skinType == CPU_SKIN)
+        initializeMeshCache();
 }
 
-void AnimatedMeshNode::initializeMeshCache(rig_type rigType)
+void AnimatedMeshNode::initializeMeshCache()
 {
-
-    /*
-        meshCache = new Mesh();
+    meshCache = new Mesh();
     
     for (int vIndex = 0; vIndex < this->mesh->getVerticesCount(); vIndex++) {
         vertexData finalVertData;
@@ -107,26 +104,23 @@ void AnimatedMeshNode::initializeMeshCache(rig_type rigType)
         finalVertData.vertNormal = vertex->vertNormal;
         finalVertData.texCoord1 = vertex->texCoord1;
         finalVertData.optionalData1 = vertex->optionalData4;
+        finalVertData.vertTangent = vertex->vertTangent;
+        finalVertData.vertBitangent = vertex->vertBitangent;
 
         meshCache->addVertex(&finalVertData);
     }
 
-    this->meshCache->indicesType = this->mesh->indicesType;
-    if (this->mesh->indicesType == LOW_POLY_INDICES) {
-        for (int iIndex = 0; iIndex < this->mesh->getIndicesCount(); iIndex++) {
-            this->meshCache->addToLowPolyIndicesArray(this->mesh->getLowPolyIndicesArray()[iIndex]);
-        }
+    for (int iIndex = 0; iIndex < mesh->getTotalIndicesCount(); iIndex++) {
+        meshCache->addToIndicesArray(mesh->getTotalIndicesArray()[iIndex]);
     }
-    else {
-        for (int iIndex = 0; iIndex < this->mesh->getIndicesCount(); iIndex++) {
-            this->meshCache->addToHighPolyIndicesArray(this->mesh->getHighPolyIndicesArray()[iIndex]);
-        }
-    }
-     */
+    meshCache->Commit();
 }
 
 AnimatedMesh* AnimatedMeshNode::getMesh()
 {
+    if(skinType == CPU_SKIN)
+        return (AnimatedMesh*)this->meshCache;
+    
     return (AnimatedMesh*)this->mesh;
 }
 
@@ -162,14 +156,12 @@ void AnimatedMeshNode::updateBoundingBox()
 
 void AnimatedMeshNode::update()
 {
-    //If Skinned
     ((SkinMesh*)this->mesh)->transferJointsToMesh(jointNodes);
     ((SkinMesh*)this->mesh)->buildAllGlobalAnimatedMatrices(NULL, NULL);
 }
 
-void AnimatedMeshNode::updateMeshCache(rig_type rigType)
+void AnimatedMeshNode::updateMeshCache()
 {
-    /*
     if(skinType != CPU_SKIN)
         return;
     
@@ -190,17 +182,19 @@ void AnimatedMeshNode::updateMeshCache(rig_type rigType)
         finalVertData->vertNormal = vertex->vertNormal;
         finalVertData->texCoord1 = vertex->texCoord1;
         finalVertData->optionalData1 = vertex->optionalData4;
+        finalVertData->vertTangent = vertex->vertTangent;
+        finalVertData->vertBitangent = vertex->vertBitangent;
 
         calculateJointTransforms(vertex, jointTransforms, finalVertData->vertPosition, finalVertData->vertNormal);
     }
     jointTransforms.clear();
+    
+    meshCache->Commit();
     this->shouldUpdateMesh = true;
-     */
 }
 
-void AnimatedMeshNode::updatePartOfMeshCache(rig_type rigType , int jointId)
+void AnimatedMeshNode::updatePartOfMeshCache(int jointId)
 {
-    /*
     if(jointId <= 0 || skinType != CPU_SKIN)
         return;
     
@@ -233,7 +227,6 @@ void AnimatedMeshNode::updatePartOfMeshCache(rig_type rigType , int jointId)
     PaintedVertexIndices.clear();
     
     this->shouldUpdateMesh = true;
-     */
 }
 
 void AnimatedMeshNode::getAllPaintedVertices(SkinMesh *skinMesh , vector<int> &paintedVertices , int jointId)
@@ -247,13 +240,13 @@ void AnimatedMeshNode::getAllPaintedVertices(SkinMesh *skinMesh , vector<int> &p
             getAllPaintedVertices(skinMesh, paintedVertices, (*(*skinMesh->joints)[jointId]->childJoints)[childId]->Index);
         }
     }
-
 }
 
 short AnimatedMeshNode::getActiveMeshIndex(int index)
 {
     return index;
 }
+
 Mesh* AnimatedMeshNode::getMeshByIndex(int index)
 {
     return this->mesh;
@@ -340,7 +333,7 @@ void AnimatedMeshNode::calculateSingleJointTransforms(vertexDataHeavy* vertex, M
     
 }
 
-void AnimatedMeshNode::calculateJointTransforms(vertexDataHeavy* vertex, vector<Mat4> jointTransforms, Vector3& vertPosition, Vector3& vertNormal , rig_type rigType)
+void AnimatedMeshNode::calculateJointTransforms(vertexDataHeavy* vertex, vector<Mat4> jointTransforms, Vector3& vertPosition, Vector3& vertNormal, rig_type rigType)
 {
     Vector4 pos = Vector4(0.0);
     Vector4 nor = Vector4(0.0);

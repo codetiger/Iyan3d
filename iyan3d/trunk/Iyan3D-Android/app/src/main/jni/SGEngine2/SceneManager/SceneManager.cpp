@@ -285,7 +285,7 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
             }
         } else {
             ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
-            renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
+            renderMan->Render(nodes[index], isRTT, index, meshBufferIndex);
         }
         
     }
