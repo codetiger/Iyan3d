@@ -10,7 +10,6 @@
 
 #include "Mat4.h"
 #include "Mat4GLK.h"
-#include "Mat4GLM.h"
 
 @interface Iyan3DTests : XCTestCase
 

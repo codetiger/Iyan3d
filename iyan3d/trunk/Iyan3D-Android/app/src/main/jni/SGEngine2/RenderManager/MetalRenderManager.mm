@@ -93,33 +93,37 @@ void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDep
         isEncodingEnded = false;
     }
 }
-void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> texture,Vector4 color, bool isDepthPass)
+void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> texture, Vector4 color, bool isDepthPass)
 {
     if (_renderPassDescriptor == nil || isDepthPass)
         _renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
     int colorTextureType = MTLTextureType2D,sampleCount = 1;
-    if(!isDepthPass){
+    
+    if(!isDepthPass) {
         if(ANTI_ALIASING_SAMPLE_COUNT > 1){
             colorTextureType = MTLTextureType2DMultisample;    sampleCount = 2;
-            _renderPassDescriptor.colorAttachments[0].texture = getMSATexture(sampleCount,(int)texture.width,(int)texture.height);
+            _renderPassDescriptor.colorAttachments[0].texture = getMSATexture(sampleCount, (int)texture.width, (int)texture.height);
             _renderPassDescriptor.colorAttachments[0].resolveTexture = texture;
             _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionMultisampleResolve;
-        }else{
+        } else {
             _renderPassDescriptor.colorAttachments[0].texture = texture;
             _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
         }
         _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-        _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x,color.y,color.z,color.w);
+        _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x, color.y, color.z, color.w);
     }
+
     MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width: texture.width height: texture.height mipmapped: NO];
     desc.textureType = colorTextureType;
     desc.sampleCount = sampleCount;
     _depthTex = [device newTextureWithDescriptor: desc];
+    
     _renderPassDescriptor.depthAttachment.texture = _depthTex;
     _renderPassDescriptor.depthAttachment.loadAction = MTLLoadActionClear;
     _renderPassDescriptor.depthAttachment.clearDepth = 1.0f;
     _renderPassDescriptor.depthAttachment.storeAction = (isDepthPass)? MTLStoreActionStore:MTLStoreActionDontCare;
 }
+
 id <CAMetalDrawable> MetalRenderManager::currentDrawable()
 {
     if(_currentDrawable == nil)
@@ -348,9 +352,9 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
     dispatch_semaphore_wait(_inflight_semaphore, DISPATCH_TIME_FOREVER);
     
     renderingTexture = drawable.texture;
-    if(clearColorBuf){
+    if(clearColorBuf) {
         isEncodingEnded = false;
-        setupRenderPassDescriptorForTexture(drawable.texture,color);
+        setupRenderPassDescriptorForTexture(drawable.texture, color);
         if(_renderPassDescriptor && CMDBuffer) {
             RenderCMDBuffer = [CMDBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
             [RenderCMDBuffer setCullMode:MTLCullModeBack];
@@ -521,7 +525,7 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
         _renderPassDescriptor = nil;
         _renderPassDescriptor = [MTLRenderPassDescriptor new];
         int sampleCount = 1,colorTextureType = MTLTextureType2D;
-        if(!isDepthPass){
+        if(!isDepthPass) {
             if(ANTI_ALIASING_SAMPLE_COUNT > 1){
                 sampleCount = ANTI_ALIASING_SAMPLE_COUNT;colorTextureType = MTLTextureType2DMultisample;
                 _renderPassDescriptor.colorAttachments[0].texture = getMSATexture(sampleCount,(int)((MTLTexture*)renderTexture)->texture.width,(int)((MTLTexture*)renderTexture)->texture.height);
@@ -539,7 +543,8 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
             desc.textureType = colorTextureType;
             _depthTex = [device newTextureWithDescriptor: desc];
         }
-        _renderPassDescriptor.depthAttachment.texture = (isDepthPass)? ((MTLTexture*)renderTexture)->texture:_depthTex;
+        
+        _renderPassDescriptor.depthAttachment.texture = (isDepthPass)? ((MTLTexture*)renderTexture)->texture : _depthTex;
         _renderPassDescriptor.depthAttachment.loadAction = (isDepthPass)?MTLLoadActionClear:MTLLoadActionDontCare;
         _renderPassDescriptor.depthAttachment.clearDepth = 1.0f;
         _renderPassDescriptor.depthAttachment.storeAction = MTLStoreActionStore;
