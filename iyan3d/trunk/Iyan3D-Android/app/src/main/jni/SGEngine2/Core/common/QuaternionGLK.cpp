@@ -70,10 +70,56 @@ GLKQuaternion Quaternion::glkQuaternion() const
 
 Quaternion& Quaternion::operator=(const Mat4& m)
 {
-    GLKQuaternion quat = GLKQuaternionMakeWithMatrix4(m.matrix);
-    setValues(quat);
-    return *this;
+    const float diag = m[0] + m[5] + m[10] + 1;
+    
+    if (diag > 0.0f) {
+        const float scale = sqrtf(diag) * 2.0f; // get scale from diagonal
+        
+        // TODO: speed this up
+        x = (m[6] - m[9]) / scale;
+        y = (m[8] - m[2]) / scale;
+        z = (m[1] - m[4]) / scale;
+        w = 0.25f * scale;
+    }
+    else {
+        if (m[0] > m[5] && m[0] > m[10]) {
+            // 1st element of diag is greatest value
+            // find scale according to 1st element, and double it
+            const float scale = sqrtf(1.0f + m[0] - m[5] - m[10]) * 2.0f;
+            
+            // TODO: speed this up
+            x = 0.25f * scale;
+            y = (m[4] + m[1]) / scale;
+            z = (m[2] + m[8]) / scale;
+            w = (m[6] - m[9]) / scale;
+        }
+        else if (m[5] > m[10]) {
+            // 2nd element of diag is greatest value
+            // find scale according to 2nd element, and double it
+            const float scale = sqrtf(1.0f + m[5] - m[0] - m[10]) * 2.0f;
+            
+            // TODO: speed this up
+            x = (m[4] + m[1]) / scale;
+            y = 0.25f * scale;
+            z = (m[9] + m[6]) / scale;
+            w = (m[8] - m[2]) / scale;
+        }
+        else {
+            // 3rd element of diag is greatest value
+            // find scale according to 3rd element, and double it
+            const float scale = sqrtf(1.0f + m[10] - m[0] - m[5]) * 2.0f;
+            
+            // TODO: speed this up
+            x = (m[8] + m[2]) / scale;
+            y = (m[9] + m[6]) / scale;
+            z = 0.25f * scale;
+            w = (m[1] - m[4]) / scale;
+        }
+    }
+    
+    return normalize();
 }
+
 Quaternion Quaternion::operator*(const Quaternion& other) const
 {    
     Quaternion tmp;
@@ -81,10 +127,12 @@ Quaternion Quaternion::operator*(const Quaternion& other) const
     tmp.setValues(quat);
     return tmp;
 }
+
 Quaternion Quaternion::operator*(float s) const
 {
     return Quaternion(s * x, s * y, s * z, s * w);
 }
+
 Quaternion& Quaternion::operator*=(float s)
 {
     x *= s;
@@ -93,15 +141,18 @@ Quaternion& Quaternion::operator*=(float s)
     w *= s;
     return *this;
 }
+
 Quaternion& Quaternion::operator*=(const Quaternion& other)
 {
     return (*this = other * (*this));
 }
+
 Quaternion Quaternion::operator+(const Quaternion& b) const
 {
     GLKQuaternion quat = GLKQuaternionAdd(glkQuaternion(), b.glkQuaternion());
     return Quaternion(quat);
 }
+
 Mat4 Quaternion::getMatrix() const
 {
     Mat4 m;
@@ -118,6 +169,7 @@ Quaternion& Quaternion::makeInverse()
 //    z = -z;
     return *this;
 }
+
 Quaternion& Quaternion::set(float x, float y, float z, float w)
 {
     this->x = x;
@@ -126,6 +178,7 @@ Quaternion& Quaternion::set(float x, float y, float z, float w)
     this->w = w;
     return *this;
 }
+
 Quaternion& Quaternion::set(float X, float Y, float Z)
 {
     double angle;
@@ -154,10 +207,12 @@ Quaternion& Quaternion::set(float X, float Y, float Z)
     
     return normalize();
 }
+
 Quaternion& Quaternion::set(const Vector3& vec)
 {
     return set(vec.x, vec.y, vec.z);
 }
+
 Quaternion& Quaternion::set(const Quaternion& quat)
 {
     return (*this = quat);

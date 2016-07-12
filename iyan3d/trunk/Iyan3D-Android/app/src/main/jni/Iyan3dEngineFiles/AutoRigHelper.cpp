@@ -3,7 +3,7 @@
 vector< set<int> > adjacentVertices;
 std::map<int, Mat4> envelopeMatrices;
 
-void initAdjacencyMatrix(int verticesCount, int indicesCount, u32* indices){
+void initAdjacencyMatrix(int verticesCount, int indicesCount, u32* indices) {
     adjacentVertices.clear();
     set<int> emptySet;
     emptySet.clear();
@@ -20,7 +20,7 @@ void initAdjacencyMatrix(int verticesCount, int indicesCount, u32* indices){
     }
 }
 
-void initUnmatchedWeights(int verticesCount,std::map<int,bool> &isWeighted, std::map<int, vector<InfluencedObject> > &influencedVertices, std::map<int, vector<InfluencedObject> > &influencedJoints){
+void initUnmatchedWeights(int verticesCount,std::map<int,bool> &isWeighted, std::map<int, vector<InfluencedObject> > &influencedVertices, std::map<int, vector<InfluencedObject> > &influencedJoints) {
     queue < pair<int, int> > unmatchedVertices;
     bool isVisited[verticesCount+5];
     memset(isVisited, false, sizeof(isVisited));
@@ -67,7 +67,7 @@ void initUnmatchedWeights(int verticesCount,std::map<int,bool> &isWeighted, std:
     }
 }
 
-bool isInsideTruncatedCone(Vector3 point, float baseRadius, float topRadius, float height){
+bool isInsideTruncatedCone(Vector3 point, float baseRadius, float topRadius, float height) {
     if(point.y > height || point.y < 0.0)
         return false;
     float nearRadius = MathHelper::getLinearInterpolation(0.0, baseRadius, height,  topRadius, point.y);
@@ -75,18 +75,18 @@ bool isInsideTruncatedCone(Vector3 point, float baseRadius, float topRadius, flo
     return (point.x*point.x + point.z * point.z) <= (nearRadius*nearRadius);
 }
 
-bool isInsideSphere(Vector3 point, float radius){
+bool isInsideSphere(Vector3 point, float radius) {
     return (point.x*point.x+point.y*point.y+point.z*point.z) <= (radius*radius);
 }
 
-bool isInsideHemiSphere(Vector3 point, Vector3 sphereOrigin, Vector3 sphereTip){
+bool isInsideHemiSphere(Vector3 point, Vector3 sphereOrigin, Vector3 sphereTip) {
     float dy = sphereTip.y - sphereOrigin.y;
     if((point.y - sphereOrigin.y) * dy < 0.0)
         return false;
     return isInsideSphere(point,dy);
 }
 
-bool isInsideEnvelope(Vector3 point, float baseRadius, float topRadius, float height){
+bool isInsideEnvelope(Vector3 point, float baseRadius, float topRadius, float height) {
     if(isInsideTruncatedCone(point, baseRadius, topRadius, height))
         return true;
     if(isInsideHemiSphere(point, Vector3(0.0), Vector3(0.0,-baseRadius,0.0)))
@@ -96,8 +96,7 @@ bool isInsideEnvelope(Vector3 point, float baseRadius, float topRadius, float he
     return false;
 }
 
-
-float getInterpolatedWeight(Vector3 point, float baseRadius, float topRadius, float height){
+float getInterpolatedWeight(Vector3 point, float baseRadius, float topRadius, float height) {
     if(!isInsideEnvelope(point,baseRadius,topRadius,height))
         return 0.0;
     Vector3 envelopeBase = Vector3(0.0,-baseRadius,0.0);
@@ -110,7 +109,7 @@ float getInterpolatedWeight(Vector3 point, float baseRadius, float topRadius, fl
         return MathHelper::getLinearInterpolation(envelopeMidPoint.y, 1.0, envelopeTop.y, 0.0, point.y);
 }
 
-void initEnvelopeMatrices(std::map<int,RigKey> &rigKeys){
+void initEnvelopeMatrices(std::map<int,RigKey> &rigKeys) {
     envelopeMatrices.clear();
     for(std::map<int, RigKey>::iterator it = rigKeys.begin(); it!=rigKeys.end(); it++){
         int parentId = it->second.parentId;
@@ -124,7 +123,7 @@ void initEnvelopeMatrices(std::map<int,RigKey> &rigKeys){
     }
 }
 
-bool isInsideEnvelope(Vector3 vertexGlobalPosition, int jointId, std::map<int, RigKey> &rigKeys){
+bool isInsideEnvelope(Vector3 vertexGlobalPosition, int jointId, std::map<int, RigKey> &rigKeys) {
     int parentId = rigKeys[jointId].parentId;
     Vector3 vertexLocalPosition = MathHelper::getRelativePosition(envelopeMatrices[jointId], vertexGlobalPosition);
     
@@ -135,7 +134,7 @@ bool isInsideEnvelope(Vector3 vertexGlobalPosition, int jointId, std::map<int, R
     return isInsideEnvelope(vertexLocalPosition,baseRadius,topRadius,height);
 }
 
-void AutoRigHelper::updateOBJVertexColors(shared_ptr<MeshNode> objNode, std::map<int, SGNode*> &envelopes, std::map<int, RigKey> &rigKeys,int selectedJointId, int mirrorJointId){
+void AutoRigHelper::updateOBJVertexColors(shared_ptr<MeshNode> objNode, std::map<int, SGNode*> &envelopes, std::map<int, RigKey> &rigKeys,int selectedJointId, int mirrorJointId) {
     
     
     initEnvelopeMatrices(rigKeys);
@@ -166,8 +165,7 @@ void AutoRigHelper::updateOBJVertexColors(shared_ptr<MeshNode> objNode, std::map
     //objNode.reset();
 }
 
-
-float getWeight(Vector3 &vertexGlobalPosition, int jointId, std::map<int, RigKey> &rigKeys){
+float getWeight(Vector3 &vertexGlobalPosition, int jointId, std::map<int, RigKey> &rigKeys) {
     int parentId = rigKeys[jointId].parentId;
     if(parentId <= 0)       //Ignoring weights for pivot joint.
         return 0.0;
@@ -182,8 +180,7 @@ float getWeight(Vector3 &vertexGlobalPosition, int jointId, std::map<int, RigKey
     return weight;
 }
 
-
-void AutoRigHelper::initWeights(shared_ptr<MeshNode> meshSceneNode, std::map<int, RigKey> &rigKeys, std::map<int, vector<InfluencedObject> > &influencedVertices, std::map<int, vector<InfluencedObject> > &influencedJoints){
+void AutoRigHelper::initWeights(shared_ptr<MeshNode> meshSceneNode, std::map<int, RigKey> &rigKeys, std::map<int, vector<InfluencedObject> > &influencedVertices, std::map<int, vector<InfluencedObject> > &influencedJoints) {
     
     influencedJoints.clear();
     influencedVertices.clear();
@@ -292,8 +289,7 @@ void AutoRigHelper::initWeights(shared_ptr<MeshNode> meshSceneNode, std::map<int
     //meshSceneNode.reset();
 }
 
-
-Vector3 AutoRigHelper::getVertexGlobalPosition(Vector3 vertexPos,shared_ptr<MeshNode> meshSceneNode){
+Vector3 AutoRigHelper::getVertexGlobalPosition(Vector3 vertexPos,shared_ptr<MeshNode> meshSceneNode) {
     Mat4 vertexMat;
     vertexMat.translate(vertexPos);
     vertexMat = meshSceneNode->getAbsoluteTransformation() * vertexMat;
@@ -301,4 +297,3 @@ Vector3 AutoRigHelper::getVertexGlobalPosition(Vector3 vertexPos,shared_ptr<Mesh
     
     return vertexMat.getTranslation();
 }
-

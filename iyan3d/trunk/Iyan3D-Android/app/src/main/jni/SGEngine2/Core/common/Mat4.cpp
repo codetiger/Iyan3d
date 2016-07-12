@@ -20,10 +20,12 @@ Mat4::Mat4()
     };
     memcpy(c, IDENTITY_MATRIX, sizeof(float) * 16);
 }
+
 Mat4::Mat4(float* pMat)
 {
     memcpy(c, pMat, sizeof(float) * 16);
 }
+
 Mat4::Mat4(const Vector3& axis_x, const Vector3& axis_y, const Vector3& axis_z, const Vector3& trans)
 {
     c[0] = axis_x.x;
@@ -43,9 +45,11 @@ Mat4::Mat4(const Vector3& axis_x, const Vector3& axis_y, const Vector3& axis_z, 
     c[14] = trans.z;
     c[15] = 1.0f;
 }
+
 Mat4::~Mat4()
 {
 }
+
 Mat4& Mat4::operator=(const Mat4& m)
 {
     if (this != &m) {
@@ -53,10 +57,12 @@ Mat4& Mat4::operator=(const Mat4& m)
     }
     return *this;
 }
+
 bool Mat4::operator==(const Mat4& m) const
 {
     return memcmp(c, m.c, sizeof(float) * 16) == 0;
 }
+
 Mat4& Mat4::operator*=(const Mat4& m)
 {
     Mat4 m3;
@@ -84,6 +90,7 @@ Mat4& Mat4::operator*=(const Mat4& m)
 
     return *this;
 }
+
 Mat4 Mat4::operator*(const Mat4& m) const
 {
     Mat4 ret = *this;
@@ -113,14 +120,16 @@ void Mat4::setElement(unsigned int index, float value) {
     c[index] = value;
 }
 
-//float& Mat4::operator[](unsigned i)
-//{
-//    return c[i];
-//}
+float& Mat4::operator[](unsigned i)
+{
+    return c[i];
+}
+
 float Mat4::operator[](unsigned i) const
 {
     return c[i];
 }
+
 void Mat4::perspective(float fov, float aspect, float nearz, float farz)
 {
     memset(c, 0, sizeof(float) * 16);
@@ -132,16 +141,19 @@ void Mat4::perspective(float fov, float aspect, float nearz, float farz)
     c[11] = -1;
     c[14] = -(2 * farz * nearz) / (farz - nearz);
 }
+
 void Mat4::translate(float x, float y, float z)
 {
     (*this)[12] = x;
     (*this)[13] = y;
     (*this)[14] = z;
 }
+
 void Mat4::translate(const Vector3& v)
 {
     translate(v.x, v.y, v.z);
 }
+
 void Mat4::setRotationRadians(Vector3 rotation)
 {
     const float cr = cos(rotation.x);
@@ -166,6 +178,7 @@ void Mat4::setRotationRadians(Vector3 rotation)
     (*this)[9] = (crsp * sy - sr * cy);
     (*this)[10] = (cr * cp);
 }
+
 void Mat4::scale(float x, float y, float z)
 {
     Mat4 newMatrix;
@@ -176,19 +189,23 @@ void Mat4::scale(float x, float y, float z)
 
     *this *= newMatrix;
 }
+
 void Mat4::scale(const Vector3& v)
 {
     scale(v.x, v.y, v.z);
 }
+
 void Mat4::scale(float s)
 {
     scale(s, s, s);
 }
+
 void Mat4::copyMatTo(float *pointer)
 {
     for (int i = 0; i < 16; ++i)
         *pointer++ = this->c[i];
 }
+
 bool Mat4::invert()
 {
     float inv[16], det;
@@ -225,6 +242,7 @@ bool Mat4::invert()
 
     return true;
 }
+
 void Mat4::transpose()
 {
     float trans[16];
@@ -236,10 +254,12 @@ void Mat4::transpose()
 
     memcpy(c, trans, sizeof(float) * 16);
 }
+
 float* Mat4::pointer()
 {
     return c;
 }
+
 void Mat4::buildCameraLookAtMatrixLH(Vector3 position, Vector3 target, Vector3 upVector)
 {
     Vector3 zaxis = target - position;
@@ -271,6 +291,7 @@ void Mat4::buildCameraLookAtMatrixLH(Vector3 position, Vector3 target, Vector3 u
     (*this)[14] = -zaxis.dotProduct(position);
     (*this)[15] = 1;
 }
+
 void Mat4::buildProjectionMatrixPerspectiveFovLH(float fieldOfViewRadians, float aspectRatio, float zNear, float zFar)
 {
     const float h = 1.0 / (tan(fieldOfViewRadians * 0.5));
@@ -318,6 +339,7 @@ Vector3 Mat4::getScale()
         sqrtf(M[4] * M[4] + M[5] * M[5] + M[6] * M[6]),
         sqrtf(M[8] * M[8] + M[9] * M[9] + M[10] * M[10]));
 }
+
 Vector3 Mat4::getRotationInDegree()
 {
     const Mat4& mat = *this;
@@ -368,6 +390,7 @@ Vector3 Mat4::getRotationInDegree()
         Z += 360.0;
     return Vector3(X, Y, Z);
 }
+
 Mat4 Mat4::setbyproduct(Mat4& other_a, Mat4& other_b)
 {
     float* m1 = other_a.pointer();

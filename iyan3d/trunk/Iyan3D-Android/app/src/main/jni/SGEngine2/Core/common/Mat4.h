@@ -38,7 +38,7 @@ public:
     Vector4 operator*(const Vector4& v) const;
 
     void setElement(unsigned int index, float value);
-//    float& operator[](unsigned i);
+    float& operator[](unsigned i);
     float operator[](unsigned i) const;
 
     void perspective(float fov, float aspect, float nearz, float farz);

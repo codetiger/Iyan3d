@@ -134,6 +134,7 @@ Vector2 Vector2::normalize()
     y = (y * length);
     return Vector2(x, y);
 }
+
 Vector2 Vector2::crossProduct(Vector2 p)
 {
     return Vector2(y * p.x - x * p.y, x * p.y - y * p.x);
@@ -148,6 +149,7 @@ float Vector2::getLength()
 {
     return sqrtf(x * x + y * y);
 }
+
 float Vector2::getDistanceFrom(Vector2 other)
 {
     return Vector2(x - other.x, y - other.y).getLength();

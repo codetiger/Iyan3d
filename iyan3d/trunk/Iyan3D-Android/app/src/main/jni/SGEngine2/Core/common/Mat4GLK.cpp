@@ -23,12 +23,14 @@ Mat4::Mat4()
     memcpy(c, IDENTITY_MATRIX, sizeof(float) * 16);
     matrix = GLKMatrix4MakeWithArray(c);
 }
+
 Mat4::Mat4(float* pMat)
 {
     float c[16];
     memcpy(c, pMat, sizeof(float) * 16);
     matrix = GLKMatrix4MakeWithArray(c);
 }
+
 Mat4::Mat4(const Vector3& axis_x, const Vector3& axis_y, const Vector3& axis_z, const Vector3& trans)
 {
     float c[16];
@@ -69,17 +71,17 @@ bool Mat4::operator==(const Mat4& m) const
 {
     return memcmp(matrix.m, m.matrix.m, sizeof(float) * 16) == 0;
 }
+
 Mat4& Mat4::operator*=(const Mat4& m)
 {
-    Mat4 m1 = (*this);
-    this->matrix = GLKMatrix4Multiply(m1.matrix, m.matrix);
-    
+    matrix = GLKMatrix4Multiply(matrix, m.matrix);
     return *this;
 }
+
 Mat4 Mat4::operator*(const Mat4& m) const
 {
-    Mat4 ret = *this;
-    ret *= m;
+    Mat4 ret;
+    ret.matrix = GLKMatrix4Multiply(matrix, m.matrix);
     return ret;
 }
 
@@ -92,6 +94,7 @@ Vector4 Mat4::operator*(const Vector4& v) const
 void Mat4::setElement(unsigned int index, float value) {
     matrix.m[index] = value;
 }
+
 float& Mat4::operator[](unsigned i)
 {
     return matrix.m[i];
@@ -101,6 +104,7 @@ float Mat4::operator[](unsigned i) const
 {
     return matrix.m[i];
 }
+
 void Mat4::perspective(float fov, float aspect, float nearz, float farz)
 {
     memset(matrix.m, 0, sizeof(float) * 16);
@@ -149,14 +153,17 @@ void Mat4::setRotationRadians(Vector3 rotation)
     (*this)[9] = (crsp * sy - sr * cy);
     (*this)[10] = (cr * cp);
 }
+
 void Mat4::scale(float x, float y, float z)
 {
     matrix = GLKMatrix4Scale(matrix, x, y, z);
 }
+
 void Mat4::scale(const Vector3& v)
 {
     scale(v.x, v.y, v.z);
 }
+
 void Mat4::scale(float s)
 {
     scale(s, s, s);
@@ -171,15 +178,47 @@ void Mat4::copyMatTo(float *pointer)
 
 bool Mat4::invert()
 {
-    bool invertible;
-    matrix = GLKMatrix4Invert(matrix, &invertible);
-    return invertible;
+    float inv[16], det;
+    int i;
+    
+    inv[0] = (*this)[5] * (*this)[10] * (*this)[15] - (*this)[5] * (*this)[11] * (*this)[14] - (*this)[9] * (*this)[6] * (*this)[15] + (*this)[9] * (*this)[7] * (*this)[14] + (*this)[13] * (*this)[6] * (*this)[11] - (*this)[13] * (*this)[7] * (*this)[10];
+    inv[4] = -(*this)[4] * (*this)[10] * (*this)[15] + (*this)[4] * (*this)[11] * (*this)[14] + (*this)[8] * (*this)[6] * (*this)[15] - (*this)[8] * (*this)[7] * (*this)[14] - (*this)[12] * (*this)[6] * (*this)[11] + (*this)[12] * (*this)[7] * (*this)[10];
+    inv[8] = (*this)[4] * (*this)[9] * (*this)[15] - (*this)[4] * (*this)[11] * (*this)[13] - (*this)[8] * (*this)[5] * (*this)[15] + (*this)[8] * (*this)[7] * (*this)[13] + (*this)[12] * (*this)[5] * (*this)[11] - (*this)[12] * (*this)[7] * (*this)[9];
+    inv[12] = -(*this)[4] * (*this)[9] * (*this)[14] + (*this)[4] * (*this)[10] * (*this)[13] + (*this)[8] * (*this)[5] * (*this)[14] - (*this)[8] * (*this)[6] * (*this)[13] - (*this)[12] * (*this)[5] * (*this)[10] + (*this)[12] * (*this)[6] * (*this)[9];
+    inv[1] = -(*this)[1] * (*this)[10] * (*this)[15] + (*this)[1] * (*this)[11] * (*this)[14] + (*this)[9] * (*this)[2] * (*this)[15] - (*this)[9] * (*this)[3] * (*this)[14] - (*this)[13] * (*this)[2] * (*this)[11] + (*this)[13] * (*this)[3] * (*this)[10];
+    inv[5] = (*this)[0] * (*this)[10] * (*this)[15] - (*this)[0] * (*this)[11] * (*this)[14] - (*this)[8] * (*this)[2] * (*this)[15] + (*this)[8] * (*this)[3] * (*this)[14] + (*this)[12] * (*this)[2] * (*this)[11] - (*this)[12] * (*this)[3] * (*this)[10];
+    inv[9] = -(*this)[0] * (*this)[9] * (*this)[15] + (*this)[0] * (*this)[11] * (*this)[13] + (*this)[8] * (*this)[1] * (*this)[15] - (*this)[8] * (*this)[3] * (*this)[13] - (*this)[12] * (*this)[1] * (*this)[11] + (*this)[12] * (*this)[3] * (*this)[9];
+    inv[13] = (*this)[0] * (*this)[9] * (*this)[14] - (*this)[0] * (*this)[10] * (*this)[13] - (*this)[8] * (*this)[1] * (*this)[14] + (*this)[8] * (*this)[2] * (*this)[13] + (*this)[12] * (*this)[1] * (*this)[10] - (*this)[12] * (*this)[2] * (*this)[9];
+    inv[2] = (*this)[1] * (*this)[6] * (*this)[15] - (*this)[1] * (*this)[7] * (*this)[14] - (*this)[5] * (*this)[2] * (*this)[15] + (*this)[5] * (*this)[3] * (*this)[14] + (*this)[13] * (*this)[2] * (*this)[7] - (*this)[13] * (*this)[3] * (*this)[6];
+    inv[6] = -(*this)[0] * (*this)[6] * (*this)[15] + (*this)[0] * (*this)[7] * (*this)[14] + (*this)[4] * (*this)[2] * (*this)[15] - (*this)[4] * (*this)[3] * (*this)[14] - (*this)[12] * (*this)[2] * (*this)[7] + (*this)[12] * (*this)[3] * (*this)[6];
+    inv[10] = (*this)[0] * (*this)[5] * (*this)[15] - (*this)[0] * (*this)[7] * (*this)[13] - (*this)[4] * (*this)[1] * (*this)[15] + (*this)[4] * (*this)[3] * (*this)[13] + (*this)[12] * (*this)[1] * (*this)[7] - (*this)[12] * (*this)[3] * (*this)[5];
+    inv[14] = -(*this)[0] * (*this)[5] * (*this)[14] + (*this)[0] * (*this)[6] * (*this)[13] + (*this)[4] * (*this)[1] * (*this)[14] - (*this)[4] * (*this)[2] * (*this)[13] - (*this)[12] * (*this)[1] * (*this)[6] + (*this)[12] * (*this)[2] * (*this)[5];
+    inv[3] = -(*this)[1] * (*this)[6] * (*this)[11] + (*this)[1] * (*this)[7] * (*this)[10] + (*this)[5] * (*this)[2] * (*this)[11] - (*this)[5] * (*this)[3] * (*this)[10] - (*this)[9] * (*this)[2] * (*this)[7] + (*this)[9] * (*this)[3] * (*this)[6];
+    inv[7] = (*this)[0] * (*this)[6] * (*this)[11] - (*this)[0] * (*this)[7] * (*this)[10] - (*this)[4] * (*this)[2] * (*this)[11] + (*this)[4] * (*this)[3] * (*this)[10] + (*this)[8] * (*this)[2] * (*this)[7] - (*this)[8] * (*this)[3] * (*this)[6];
+    inv[11] = -(*this)[0] * (*this)[5] * (*this)[11] + (*this)[0] * (*this)[7] * (*this)[9] + (*this)[4] * (*this)[1] * (*this)[11] - (*this)[4] * (*this)[3] * (*this)[9] - (*this)[8] * (*this)[1] * (*this)[7] + (*this)[8] * (*this)[3] * (*this)[5];
+    inv[15] = (*this)[0] * (*this)[5] * (*this)[10] - (*this)[0] * (*this)[6] * (*this)[9] - (*this)[4] * (*this)[1] * (*this)[10] + (*this)[4] * (*this)[2] * (*this)[9] + (*this)[8] * (*this)[1] * (*this)[6] - (*this)[8] * (*this)[2] * (*this)[5];
+    
+    det = (*this)[0] * inv[0] + (*this)[1] * inv[4] + (*this)[2] * inv[8] + (*this)[3] * inv[12];
+    
+    if (det == 0)
+        return false;
+    
+    det = 1.0 / det;
+    
+    for (i = 0; i < 16; i++) {
+        inv[i] = inv[i] * det;
+    }
+    
+    matrix = GLKMatrix4MakeWithArray(inv);
+
+    return true;
 }
 
 void Mat4::transpose()
 {
     matrix = GLKMatrix4Transpose(matrix);
 }
+
 float* Mat4::pointer()
 {
     return matrix.m;
@@ -268,6 +307,7 @@ Vector3 Mat4::getRotationInDegree()
     
     return Vector3(X, Y, Z);
 }
+
 Mat4 Mat4::setbyproduct(Mat4& other_a, Mat4& other_b)
 {
     float* m1 = other_a.pointer();
