@@ -23,6 +23,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Scene;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -97,12 +98,7 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         FullScreen.HideStatusBar(this);
         setContentView(R.layout.activity_scene_selection);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Window window = getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.setStatusBarColor(ContextCompat.getColor(this, R.color.topbar));
-//        }
+
         HitScreens.SceneSelectionView(SceneSelection.this);
         Constants.currentActivity = 0;
         restoreBackUp = new RestoreBackUp(this);
@@ -197,6 +193,16 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         }
         else if(a != null && a.getInt("userOnBoardClosed") == 1){
            isFirstTimeForToolTip = true;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(sharedPreferenceManager.getInt(SceneSelection.this,"firstTimeUserForSceneSelection") == 0) {
+                        sharedPreferenceManager.setData(SceneSelection.this,"firstTimeUserForSceneSelection",1);
+                        showHelp(null);
+                    }
+                }
+            }, 100);
         }
         else{
             findViewById(R.id.login_btn).performClick();
@@ -248,6 +254,18 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
 
     private void initGridView(){
         RecyclerView gridview = (RecyclerView) findViewById(R.id.gridView);
+
+        if (gridview != null) {
+            gridview.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                        if (helpDialogs != null && sharedPreferenceManager.getInt(SceneSelection.this,"firstTimeUserForSceneSelection") == 1)
+                            helpDialogs.dismissTips(false, null);
+                    return false;
+                }
+            });
+        }
+
         sceneAdapter = new SceneSelectionAdapter(this, db,gridview);
 
         if (gridview != null) {
@@ -468,16 +486,6 @@ public class SceneSelection extends AppCompatActivity implements ServiceConnecti
         FullScreen.HideStatusBar(SceneSelection.this);
         if(isFirstTimeForToolTip) {
             isFirstTimeForToolTip = false;
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(sharedPreferenceManager.getInt(SceneSelection.this,"firstTimeUserForSceneSelection") == 0) {
-                        sharedPreferenceManager.setData(SceneSelection.this,"firstTimeUserForSceneSelection",1);
-                        showHelp(null);
-                    }
-                }
-            }, 100);
         }
         super.onWindowFocusChanged(hasFocus);
     }

@@ -81,6 +81,7 @@ public class UserOnBoarding extends FragmentActivity implements View.OnClickList
 				viewPager.arrowScroll(View.FOCUS_RIGHT);
 				if(((TextView)findViewById(R.id.next_btn_text)).getText().toString().toLowerCase().equals("done"))
 					finish();
+				showHelpTip();
 				break;
 			case R.id.more_info:
 				String url = "https://www.iyan3dapp.com/tutorial-videos/";
@@ -93,26 +94,32 @@ public class UserOnBoarding extends FragmentActivity implements View.OnClickList
 					UIHelper.informDialog(this,"Browser not found.");
 				}
 				finish();
+				showHelpTip();
 				break;
 			case R.id.close_btn:
 				finish();
-				if(firstTimeUser) {
-					Intent intent = new Intent(Intent.ACTION_MAIN);
-					intent.setClass(this,SceneSelection.class);
-					intent.addCategory(Intent.ACTION_MAIN);
-					intent.addCategory(Intent.CATEGORY_LAUNCHER);
-					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-							Intent.FLAG_ACTIVITY_SINGLE_TOP);
-					intent.putExtra("userOnBoardClosed", 1);
-					PendingIntent pi = PendingIntent.getActivity(this, 0, intent,
-							PendingIntent.FLAG_UPDATE_CURRENT);
-					try {
-						pi.send();
-					} catch (PendingIntent.CanceledException e) {
-						e.printStackTrace();
-					}
-				}
+				showHelpTip();
 				break;
+		}
+	}
+
+	private void showHelpTip()
+	{
+		if(firstTimeUser) {
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.setClass(this,SceneSelection.class);
+			intent.addCategory(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_LAUNCHER);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+					Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			intent.putExtra("userOnBoardClosed", 1);
+			PendingIntent pi = PendingIntent.getActivity(this, 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			try {
+				pi.send();
+			} catch (PendingIntent.CanceledException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

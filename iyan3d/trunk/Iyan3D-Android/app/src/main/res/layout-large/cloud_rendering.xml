@@ -10,7 +10,45 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.35"
+        android:layout_weight="0.1"
+        android:weightSum="1" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:weightSum="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:id="@+id/loginTypeImage"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.9" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="center|left" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userName" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.3"
         android:weightSum="1">
 
         <LinearLayout
@@ -115,7 +153,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.7"
+        android:layout_weight="0.6"
         android:weightSum="1">
 
         <LinearLayout
@@ -130,7 +168,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Render Progress"
+                android:text="HQ Render Progress"
                 android:id="@+id/textView22"
                 android:textColor="#000000"
                 android:textStyle="bold" />
@@ -156,7 +194,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.15"
+            android:layout_weight="0.2"
             android:gravity="center|right" >
 
             <LinearLayout
@@ -171,7 +209,7 @@
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="My Account"
+                    android:text="Manage Account"
                     android:id="@+id/my_account"
                     android:textSize="10sp"
                     android:layout_weight="0.73"

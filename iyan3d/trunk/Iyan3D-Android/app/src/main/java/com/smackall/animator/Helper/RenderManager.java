@@ -300,7 +300,6 @@ public class RenderManager {
                         ((EditorView) ((Activity) mContext)).rig.updateText();
                     }
                 });
-
             }
         });
     }

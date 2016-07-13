@@ -7,15 +7,18 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -111,8 +114,41 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
         ((Button)cloudRendering.findViewById(R.id.add50K)).setOnClickListener(this);
         ((Button)cloudRendering.findViewById(R.id.sign_out)).setOnClickListener(this);
         ((Button)cloudRendering.findViewById(R.id.my_account)).setOnClickListener(this);
+        showLoginTypeAndUserName(cloudRendering);
         adapter = new RenderingProgressAdapter(mContext,db);
         initList(cloudRendering);
+
+    }
+
+    private void showLoginTypeAndUserName(Dialog cloudRendering)
+    {
+        UserDetails userDetails = null;
+        String className = mContext.getClass().getSimpleName();
+
+        try{
+            if (className.toLowerCase().equals("sceneselection"))
+                userDetails =((SceneSelection) ((Activity) mContext)).userDetails;
+            else
+                userDetails = ((EditorView) ((Activity) mContext)).userDetails;
+        }
+        catch (ClassCastException ignored){}
+        Drawable drawable = null;
+        if(userDetails == null) return;
+        switch (userDetails.signInType){
+            case Constants.GOOGLE_SIGNIN:
+                drawable = ContextCompat.getDrawable(mContext,R.drawable.gplus);
+                break;
+            case Constants.FACEBOOK_SIGNIN:
+                drawable = ContextCompat.getDrawable(mContext,R.drawable.fb);
+                break;
+            case Constants.TWITTER_SIGNIN:
+                drawable = ContextCompat.getDrawable(mContext,R.drawable.twit);
+                break;
+        }
+        if(drawable != null)
+            ((ImageView)cloudRendering.findViewById(R.id.loginTypeImage)).setImageDrawable(drawable);
+            ((TextView)cloudRendering.findViewById(R.id.userName)).setText(userDetails.userName);
+
     }
 
 
@@ -151,7 +187,7 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
                 try {
                     ((Activity)mContext).startActivity(i);
                 }
-                catch (ActivityNotFoundException e){
+                catch (ActivityNotFoundException ignored){
 
                 }
                 break;

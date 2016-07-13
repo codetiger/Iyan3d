@@ -72,7 +72,7 @@ public class DescriptionManager {
             ((Activity)context).findViewById(R.id.view_btn).setContentDescription("Standard view angles.");
 
             ((Activity)context).findViewById(R.id.add_frameBtn).setTag("left");
-            ((Activity)context).findViewById(R.id.view_btn).setTag("bottom");
+            ((Activity)context).findViewById(R.id.view_btn).setTag("left");
 
             //Asset View
             if(Constants.VIEW_TYPE == Constants.ASSET_VIEW || Constants.VIEW_TYPE == Constants.PARTICLE_VIEW) {

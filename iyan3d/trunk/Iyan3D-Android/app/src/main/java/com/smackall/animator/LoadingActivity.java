@@ -44,6 +44,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
+import io.fabric.sdk.android.services.common.SystemCurrentTimeProvider;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -59,9 +60,11 @@ public class LoadingActivity extends AppCompatActivity {
     private static final String TWITTER_KEY = "FVYtYJI6e4lZMHoZvYCt2ejao";
     private static final String TWITTER_SECRET = "eiFIXzb9zjoaH0lrDZ2Jrh2ezvbmuFv6rvPJdIXLYxgkaZ7YKC";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             Intent intent;
             if(Constants.currentActivity != -1) {
@@ -148,8 +151,7 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }
-
-    init();
+        init();
     }
 
     private void init(){

@@ -3,11 +3,13 @@ package com.smackall.animator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ import com.smackall.animator.Helper.DescriptionManager;
 import com.smackall.animator.Helper.Encoder;
 import com.smackall.animator.Helper.Events;
 import com.smackall.animator.Helper.FileHelper;
+import com.smackall.animator.Helper.FileUploader;
 import com.smackall.animator.Helper.HQTaskDB;
 import com.smackall.animator.Helper.MediaScannerWrapper;
 import com.smackall.animator.Helper.PathManager;
@@ -42,6 +45,7 @@ import com.smackall.animator.opengl.GL2JNILib;
 
 import org.jcodec.api.SequenceEncoder;
 import org.jcodec.common.NIOUtils;
+import org.jcodec.common.RunLength;
 import org.jcodec.common.SeekableByteChannel;
 import org.jcodec.common.model.Picture;
 import org.jcodec.containers.mp4.Brand;
@@ -64,6 +68,8 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
     private Context mContext;
     private SharedPreferenceManager sp;
     public Dialog dialog;
+    FFmpeg fFmpeg;
+
 
     private float x = 0.1f;    private float y = 0.1f;    private float z = 0.1f;
     private boolean waterMark = true;
@@ -81,10 +87,11 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
     TextView helpHint;
     boolean renderingStarted = false;
     float divideValue = 0.0f;
-
     public Export(Context mContext,SharedPreferenceManager sp){
         this.mContext = mContext;
         this.sp = sp;
+        if(Constants.isFfmpegSupport())
+            fFmpeg = new FFmpeg();
     }
 
     public void showExport(final int type)
@@ -496,6 +503,10 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                             ((ProgressBar) dialog.findViewById(R.id.previewProgress)).setVisibility(View.INVISIBLE);
                             ((TextView) dialog.findViewById(R.id.progresstext)).setText(String.format(Locale.getDefault(),"%s","Making Video"));
                             ((ProgressBar) dialog.findViewById(R.id.roundProgress)).setVisibility(View.VISIBLE);
+                            try {
+                                if(Constants.isFfmpegSupport())
+                                    runFFmpeg();
+                            }catch (Exception ignored){}
                         }
                     });
                 }
@@ -510,6 +521,7 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
             public void run() {
                 if(!cancel) {
                     try {
+                        System.out.println("Frame : " + frame);
                         ((ImageView) dialog.findViewById(R.id.preview)).setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalCacheFolder + "/" + frame + ".png"));
                     }
                     catch (OutOfMemoryError e){
@@ -523,9 +535,9 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
                 }
                 if(!renderingStarted){
                     renderingStarted = true;
-                    if (type == Constants.EXPORT_VIDEO) {
-                        initEncoder();
-                        encodeImage(min);
+                    if (type == Constants.EXPORT_VIDEO && !Constants.isFfmpegSupport()) {
+                       initEncoder();
+                       encodeImage(min);
                     }
                 }
                 if (type == Constants.EXPORT_IMAGES) {
@@ -623,28 +635,30 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
             renderCompletedDialog(mContext,"Image Successfully saved in your SDCard/Iyan3D/Render");
         }
         else if(type == Constants.EXPORT_VIDEO){
-            try {
-                if(encoder != null)
-                    encoder.finish();
-                else{
+            if(!Constants.isFfmpegSupport()) {
+                if (encoder != null)
+                    try {
+                        encoder.finish();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                else {
                     UIHelper.informDialog(mContext, "Unable to continue try again.");
                     isRendering = false;
                     cancel = true;
                     dialog.dismiss();
                     return;
                 }
-                FileHelper.move(PathManager.LocalCacheFolder + "/" + fileName + ".mp4", PathManager.RenderPath + "/" + fileName + ".mp4");
-                MediaScannerWrapper.scan(mContext,PathManager.RenderPath + "/" + fileName + ".mp4");
-                renderCompletedDialog(mContext,"Video successfully saved in your SDCard/Iyan3D/Render");
-                ((Activity)mContext).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        doFinish();
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            FileHelper.move(PathManager.LocalCacheFolder + "/" + fileName + ".mp4", PathManager.RenderPath + "/" + fileName + ".mp4");
+            MediaScannerWrapper.scan(mContext,PathManager.RenderPath + "/" + fileName + ".mp4");
+            renderCompletedDialog(mContext,"Video successfully saved in your SDCard/Iyan3D/Render");
+            ((Activity)mContext).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    doFinish();
+                }
+            });
         }
     }
 
@@ -801,6 +815,27 @@ public class Export implements View.OnClickListener,CreditTask , CompoundButton.
         if(buttonView.getId() == R.id.waterMark){
             waterMark = ((Switch)dialog.findViewById(R.id.waterMark)).isChecked();
             updateCreditLable();
+        }
+    }
+
+    private void runFFmpeg()
+    {
+        String widthHeight = getCameraResolution()[0]+"x"+getCameraResolution()[1];
+        if(fFmpeg == null) fFmpeg = new FFmpeg();
+        int status = fFmpeg.ffmpegRunCommand("empty",fileName,widthHeight);
+        if (status >= 0) {
+            if (usageType.equals("240P"))
+                finishExport(0, true, "");
+            else
+                ((EditorView) ((Activity) mContext)).creditsManager.useOrRechargeCredits(credit * -1, usageType, "", "", 0, Export.this);
+            cancel = true;
+        }
+        else{
+            UIHelper.informDialog(mContext, "Unable to continue try again.");
+            isRendering = false;
+            cancel = true;
+            if(dialog != null)
+                dialog.dismiss();
         }
     }
 }

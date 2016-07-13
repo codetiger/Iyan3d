@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -121,7 +122,8 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 if(!className.toLowerCase().equals("sceneselection")) {
                     ((EditorView) ((Activity) mContext)).swapViews();
                     ((EditorView) ((Activity) mContext)).renderManager.cameraPosition(Constants.height - ((FrameLayout) ((Activity)mContext).findViewById(R.id.glView)).getHeight());
-                    Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
+                    if(Constants.VIEW_TYPE != Constants.AUTO_RIG_VIEW)
+                        Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
                 }
                 dialog.dismiss();
             }

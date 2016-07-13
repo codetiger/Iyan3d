@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.io.File;
@@ -257,8 +258,8 @@ public class Constants {
     }
 
     public static boolean checkPlayServices(Context mContext) {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(mContext);
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int resultCode = api.isGooglePlayServicesAvailable(mContext);
         return resultCode == ConnectionResult.SUCCESS;
     }
 
@@ -276,5 +277,10 @@ public class Constants {
             long availableBlocks = stat.getAvailableBlocks();
             return (availableBlocks * blockSize)/ (1024.f * 1024.f);
         }
+    }
+
+    public static boolean isFfmpegSupport()
+    {
+        return !(System.getProperty("os.arch").toLowerCase().contains("mips") || System.getProperty("os.arch").toLowerCase().contains("mips64"));
     }
 }

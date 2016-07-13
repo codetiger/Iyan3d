@@ -1,23 +1,76 @@
-# Copyright (C) 2009 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-TOP_LOCAL_PATH:=$(call my-dir)
-include $(call all-subdir-makefiles)
-LOCAL_PATH := $(TOP_LOCAL_PATH)  
+LOCAL_PATH := $(call my-dir)
+
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := iyan3d
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), mips mips64))
+
+else
+LOCAL_MODULE := libavcodec
+LOCAL_C_INCLUDES := ../obj/local/$(TARGET_ARCH_ABI)/include
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi))
+LOCAL_CFLAGS  := -march=armv7-a -mfloat-abi=softfp
+endif
+LOCAL_SRC_FILES := ../obj/local/$(TARGET_ARCH_ABI)/lib/libavcodec.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := libavfilter
+LOCAL_C_INCLUDES := ../obj/local/$(TARGET_ARCH_ABI)/include
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi))
+LOCAL_CFLAGS  := -march=armv7-a -mfloat-abi=softfp
+endif
+LOCAL_SRC_FILES := ../obj/local/$(TARGET_ARCH_ABI)/lib/libavfilter.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := libavformat
+LOCAL_C_INCLUDES := ../obj/local/$(TARGET_ARCH_ABI)/include
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi))
+LOCAL_CFLAGS  := -march=armv7-a -mfloat-abi=softfp
+endif
+LOCAL_SRC_FILES := ../obj/local/$(TARGET_ARCH_ABI)/lib/libavformat.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := libavutil
+LOCAL_C_INCLUDES := ../obj/local/$(TARGET_ARCH_ABI)/include
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi))
+LOCAL_CFLAGS  := -march=armv7-a -mfloat-abi=softfp
+endif
+LOCAL_SRC_FILES := ../obj/local/$(TARGET_ARCH_ABI)/lib/libavutil.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := libswscale
+LOCAL_C_INCLUDES := ../obj/local/$(TARGET_ARCH_ABI)/include
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi))
+LOCAL_CFLAGS  := -march=armv7-a -mfloat-abi=softfp
+endif
+LOCAL_SRC_FILES := ../obj/local/$(TARGET_ARCH_ABI)/lib/libswscale.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_LDLIBS  := -llog -landroid -lz -lm
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI), armeabi-v7a armeabi))
+LOCAL_CFLAGS  := -march=armv7-a -mfloat-abi=softfp
+endif
+LOCAL_SHARED_LIBRARIES :=libswscale libavfilter libavformat libavcodec libavutil
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/ffmpeg
+LOCAL_C_INCLUDES += /storage/Sabish/Iyan3D-5.0SVN/app/src/main/obj/local/$(TARGET_ARCH_ABI)/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/ffmpeg/$(TARGET_ARCH_ABI)-config
+LOCAL_SRC_FILES := ffmpeg/FFmpegJni.c ffmpeg/ffmpeg.c ffmpeg/cmdutils.c ffmpeg/ffmpeg_filter.c ffmpeg/ffmpeg_opt.c
+LOCAL_MODULE := videokit
+include $(BUILD_SHARED_LIBRARY)
+endif
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := iyan3d
 
 FILE_LIST := $(wildcard $(LOCAL_PATH)/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/*.cpp)
@@ -166,32 +219,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/SGEngine2 \
         $(LOCAL_PATH)/Iyan3dEngineFiles/HeaderFiles
 include $(BUILD_SHARED_LIBRARY)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+LOCAL_PATH := $(call my-dir)
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/ffmpeg
+include $(all-subdir-makefiles)
