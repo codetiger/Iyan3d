@@ -708,7 +708,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         index = (frame > totalImgs) ? frame - (divisor * totalImgs) : frame;
     }
     string watermarkPath = constants::BundlePath + "/wm" + to_string(index) + ".png";
-    renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture" ,watermarkPath, TEXTURE_RGBA8,TEXTURE_BYTE, true);
+    renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture", watermarkPath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
     int waterMarkSize = SceneHelper::screenWidth * 0.2;
     
     if(!removeWaterMark)

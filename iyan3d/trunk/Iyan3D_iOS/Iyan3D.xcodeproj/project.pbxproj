@@ -1827,6 +1827,8 @@
 		3D5605EE1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EB1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png */; };
 		3D5605EF1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */; };
 		3D5605F01C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */; };
+		3D57C7F21D38BBA000713D66 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D57C7F11D38BBA000713D66 /* Accelerate.framework */; };
+		3D57C7F31D38DD1F00713D66 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D57C7F11D38BBA000713D66 /* Accelerate.framework */; };
 		3D58CD471C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
 		3D58CD481C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
 		3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */; };
@@ -4250,6 +4252,7 @@
 		3D5348981C3BF60200C6A437 /* LightProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightProperties.xib; path = "ui/Popover Views/LightProperties.xib"; sourceTree = "<group>"; };
 		3D5605EB1C81F77F003C73C1 /* Photo-Realistic-shader_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Photo-Realistic-shader_Pad.png"; sourceTree = "<group>"; };
 		3D5605EC1C81F77F003C73C1 /* Photo-Realistic-shader_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Photo-Realistic-shader_Pad@2x.png"; sourceTree = "<group>"; };
+		3D57C7F11D38BBA000713D66 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		3D58CD441C3D0D3D006371DE /* TextColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextColorPicker.h; path = "ui/Popover Views/TextColorPicker.h"; sourceTree = "<group>"; };
 		3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextColorPicker.mm; path = "ui/Popover Views/TextColorPicker.mm"; sourceTree = "<group>"; };
 		3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextColorPicker.xib; path = "ui/Popover Views/TextColorPicker.xib"; sourceTree = "<group>"; };
@@ -4795,6 +4798,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D57C7F31D38DD1F00713D66 /* Accelerate.framework in Frameworks */,
 				2512BFD51CB24581006E19A3 /* SafariServices.framework in Frameworks */,
 				01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */,
 				2593C41E1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
@@ -4839,6 +4843,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D57C7F21D38BBA000713D66 /* Accelerate.framework in Frameworks */,
 				2512BFD81CB247AE006E19A3 /* libz.tbd in Frameworks */,
 				2512BFD61CB2458C006E19A3 /* SafariServices.framework in Frameworks */,
 				2593C41F1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
@@ -7800,6 +7805,7 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3D57C7F11D38BBA000713D66 /* Accelerate.framework */,
 				C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */,
 				C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */,
 				C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */,

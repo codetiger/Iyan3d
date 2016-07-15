@@ -162,16 +162,11 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
     }
     
     if(node) {
-        if(node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP) == NULL) {
-            Texture *nodeTex = smgr->loadTexture("Dummy Light", constants::BundlePath + "/dummy.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-            node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        }
-
-        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
         node->setTexture(nodeEnvTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
 
-        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
+//        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+//        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
     }
 
     return node;

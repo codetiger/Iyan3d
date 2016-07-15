@@ -342,6 +342,7 @@ fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half
 #define SHADER_COMMON_samplerType 23
 #define SHADER_COMMON_hasReflectionMap 25
 #define SHADER_COMMON_hasNormalMap 26
+#define SHADER_COMMON_uvScale 27
 
 vertex ColorInOut Common_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 constant float4x4& vp [[ buffer(SHADER_COMMON_mvp) ]],
@@ -414,6 +415,7 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],
                                   constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
                                   constant float& hasReflectionMap [[ buffer(SHADER_COMMON_hasReflectionMap) ]],
                                   constant float& hasNormalMap [[ buffer(SHADER_COMMON_hasNormalMap) ]],
+                                  constant float& uvScale [[ buffer(SHADER_COMMON_uvScale) ]],
                                   constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
@@ -426,14 +428,14 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],
     
     half4 diffuse_color = half4(in.perVertexColor);
     half texTransparency = 1.0;
-    constexpr sampler quad_sampler(address::repeat,filter::linear);
+    constexpr sampler quad_sampler(address::repeat, filter::linear);
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            diffuse_color =  colorMap.sample(quad_sampler,in.uv);
+            diffuse_color =  colorMap.sample(quad_sampler, in.uv * uvScale);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
-            diffuse_color =  colorMap.sample(nearest_sampler ,in.uv);
+            diffuse_color =  colorMap.sample(nearest_sampler, in.uv * uvScale);
         }
         
         texTransparency = diffuse_color.w;
@@ -455,7 +457,7 @@ fragment half4 Common_Fragment_L1(ColorInOut in [[stage_in]],
         if(hasNormalMap > 0.5) {
             half4 n =  normalMap.sample(quad_sampler, in.uv);
             float3x3 tbnMatrix = float3x3(in.tangent.xyz, in.bitangent.xyz, in.normal.xyz);
-            normal = float4(normalize(tbnMatrix * float3(n.xyz)), 0.0);
+            normal = float4(normalize(tbnMatrix * float3(n.xyz * uvScale)), 0.0);
         }
         
         float4 eyeVec = normalize(in.eyeVec);
@@ -505,6 +507,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],
                                   constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
                                   constant float& hasReflectionMap [[ buffer(SHADER_COMMON_hasReflectionMap) ]],
                                   constant float& hasNormalMap [[ buffer(SHADER_COMMON_hasNormalMap) ]],
+                                  constant float& uvScale [[ buffer(SHADER_COMMON_uvScale) ]],
                                   constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     float shadowBias = 0.005, shadowValue = 0.0, maxSpecular = 30.0;
@@ -521,11 +524,11 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            diffuse_color =  colorMap.sample(quad_sampler,in.uv);
+            diffuse_color =  colorMap.sample(quad_sampler, in.uv * uvScale);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
-            diffuse_color =  colorMap.sample(nearest_sampler, in.uv);
+            diffuse_color =  colorMap.sample(nearest_sampler, in.uv * uvScale);
         }
         
         texTransparency = diffuse_color.w;
@@ -542,7 +545,7 @@ fragment half4 Common_Fragment_L2(ColorInOut in [[stage_in]],
         if(hasNormalMap > 0.5) {
             half4 n =  normalMap.sample(quad_sampler, in.uv);
             float3x3 tbnMatrix = float3x3(in.tangent.xyz, in.bitangent.xyz, in.normal.xyz);
-            normal = float4(normalize(tbnMatrix * float3(n.xyz)), 0.0);
+            normal = float4(normalize(tbnMatrix * float3(n.xyz * uvScale)), 0.0);
         }
         
         float4 eyeVec = normalize(in.eyeVec);
@@ -600,6 +603,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],
                                   constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
                                   constant float& hasReflectionMap [[ buffer(SHADER_COMMON_hasReflectionMap) ]],
                                   constant float& hasNormalMap [[ buffer(SHADER_COMMON_hasNormalMap) ]],
+                                  constant float& uvScale [[ buffer(SHADER_COMMON_uvScale) ]],
                                   constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {    float shadowBias = 0.005, shadowValue = 0.0, maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
@@ -615,11 +619,11 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            diffuse_color =  colorMap.sample(quad_sampler,in.uv);
+            diffuse_color =  colorMap.sample(quad_sampler, in.uv * uvScale);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
-            diffuse_color =  colorMap.sample(nearest_sampler, in.uv);
+            diffuse_color =  colorMap.sample(nearest_sampler, in.uv * uvScale);
         }
         
         texTransparency = diffuse_color.w;
@@ -636,7 +640,7 @@ fragment half4 Common_Fragment_L3(ColorInOut in [[stage_in]],
         if(hasNormalMap > 0.5) {
             half4 n =  normalMap.sample(quad_sampler, in.uv);
             float3x3 tbnMatrix = float3x3(in.tangent.xyz, in.bitangent.xyz, in.normal.xyz);
-            normal = float4(normalize(tbnMatrix * float3(n.xyz)), 0.0);
+            normal = float4(normalize(tbnMatrix * float3(n.xyz * uvScale)), 0.0);
         }
         
         float4 eyeVec = normalize(in.eyeVec);
@@ -694,6 +698,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],
                                   constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
                                   constant float& hasReflectionMap [[ buffer(SHADER_COMMON_hasReflectionMap) ]],
                                   constant float& hasNormalMap [[ buffer(SHADER_COMMON_hasNormalMap) ]],
+                                  constant float& uvScale [[ buffer(SHADER_COMMON_uvScale) ]],
                                   constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     float shadowBias = 0.005, shadowValue = 0.0, maxSpecular = 30.0;
@@ -710,11 +715,11 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            diffuse_color =  colorMap.sample(quad_sampler, in.uv);
+            diffuse_color =  colorMap.sample(quad_sampler, in.uv * uvScale);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
-            diffuse_color =  colorMap.sample(nearest_sampler, in.uv);
+            diffuse_color =  colorMap.sample(nearest_sampler, in.uv * uvScale);
         }
         
         texTransparency = diffuse_color.w;
@@ -731,7 +736,7 @@ fragment half4 Common_Fragment_L4(ColorInOut in [[stage_in]],
         if(hasNormalMap > 0.5) {
             half4 n =  normalMap.sample(quad_sampler, in.uv);
             float3x3 tbnMatrix = float3x3(in.tangent.xyz, in.bitangent.xyz, in.normal.xyz);
-            normal = float4(normalize(tbnMatrix * float3(n.xyz)), 0.0);
+            normal = float4(normalize(tbnMatrix * float3(n.xyz * uvScale)), 0.0);
         }
         
         float4 eyeVec = normalize(in.eyeVec);
@@ -790,6 +795,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],
                                   constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]],
                                   constant float& hasReflectionMap [[ buffer(SHADER_COMMON_hasReflectionMap) ]],
                                   constant float& hasNormalMap [[ buffer(SHADER_COMMON_hasNormalMap) ]],
+                                  constant float& uvScale [[ buffer(SHADER_COMMON_uvScale) ]],
                                   constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {    float shadowBias = 0.005, shadowValue = 0.0, maxSpecular = 30.0;
     if(in.shadowDarkness > 0.0){
@@ -805,11 +811,11 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
         if(samplerType == 0.0) {
-            diffuse_color =  colorMap.sample(quad_sampler,in.uv);
+            diffuse_color =  colorMap.sample(quad_sampler, in.uv * uvScale);
         }
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
-            diffuse_color =  colorMap.sample(nearest_sampler, in.uv);
+            diffuse_color =  colorMap.sample(nearest_sampler, in.uv * uvScale);
         }
         
         texTransparency = diffuse_color.w;
@@ -826,7 +832,7 @@ fragment half4 Common_Fragment_L5(ColorInOut in [[stage_in]],
         if(hasNormalMap > 0.5) {
             half4 n =  normalMap.sample(quad_sampler, in.uv);
             float3x3 tbnMatrix = float3x3(in.tangent.xyz, in.bitangent.xyz, in.normal.xyz);
-            normal = float4(normalize(tbnMatrix * float3(n.xyz)), 0.0);
+            normal = float4(normalize(tbnMatrix * float3(n.xyz * uvScale)), 0.0);
         }
         
         float4 eyeVec = normalize(in.eyeVec);
@@ -908,6 +914,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
                                     constant packed_float3* lightColor [[ buffer(SHADER_COMMON_lightColor) ]],
                                     constant float& hasReflectionMap [[ buffer(SHADER_COMMON_hasReflectionMap) ]],
                                     constant float& hasNormalMap [[ buffer(SHADER_COMMON_hasNormalMap) ]],
+                                    constant float& uvScale [[ buffer(SHADER_COMMON_uvScale) ]],
                                     constant float* lightType [[ buffer(SHADER_COMMON_lightType) ]])
 {
     float shadowBias = 0.005,shadowValue = 0.0,maxSpecular = 30.0;
@@ -923,7 +930,7 @@ fragment half4 Common_Toon_Fragment(ColorInOut in [[stage_in]],texture2d<half>  
     half4 diffuse_color = half4(in.perVertexColor);
     half texTransparency = 1.0;
     if(in.isVertexColored < 0.5) {
-        diffuse_color =  colorMap.sample(quad_sampler,in.uv);
+        diffuse_color =  colorMap.sample(quad_sampler, in.uv * uvScale);
         texTransparency = diffuse_color.w;
     }
     

@@ -45,6 +45,7 @@ public:
     bool supportsVAO;
     int maxInstances;
     int viewportWidth, viewportHeight;
+    Texture *emptyTexture;
     
     virtual void Initialize() = 0;
     

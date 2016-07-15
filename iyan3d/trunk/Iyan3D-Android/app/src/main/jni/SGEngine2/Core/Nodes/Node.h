@@ -86,17 +86,17 @@ private:
     
 protected:
     Mat4 AbsoluteTransformation;
-    Vector3 position,scale,rotation;
+    Vector3 position, scale, rotation;
     Texture* textures[MAX_TEXTURE_PER_NODE];
     
 public:
-    bool hasTransparency;
+    bool hasTransparency, hasNormalMap, hasReflectionMap;
     int instancingRenderIt;
     vector< shared_ptr<Node> > instancedNodes;
     BoundingBox bBox;
     skin_type skinType;
-    bool needsVertexPosition, needsVertexNormal, needsVertexColor, needsUV1, needsUV2, needsUV3, shouldUpdateMesh;
-    bool needsIndexBuf;
+    float uvScale;
+    bool shouldUpdateMesh;
     DRAW_MODE drawMode;
     string callbackFuncName;
     node_type type;

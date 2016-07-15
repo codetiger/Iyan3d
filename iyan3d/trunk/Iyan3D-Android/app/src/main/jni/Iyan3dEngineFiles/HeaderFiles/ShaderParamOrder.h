@@ -59,6 +59,7 @@
 #define SHADER_COMMON_ambientLight 24
 #define SHADER_COMMON_hasReflectionMap 25
 #define SHADER_COMMON_hasNormalMap 26
+#define SHADER_COMMON_uvScale 27
 
 #define SHADER_COMMON_colorMap 0
 #define SHADER_COMMON_shadowMap 1

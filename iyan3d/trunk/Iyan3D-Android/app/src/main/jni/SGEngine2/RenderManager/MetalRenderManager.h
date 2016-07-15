@@ -72,7 +72,7 @@ private:
 public:
     MetalHandler *mtlHandler;
     id <MTLTexture> renderingTexture;
-    MetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale);
+    MetalRenderManager(void *renderView, float screenWidth, float screenHeight, float screenScale);
     ~MetalRenderManager();
    
     void Initialize();

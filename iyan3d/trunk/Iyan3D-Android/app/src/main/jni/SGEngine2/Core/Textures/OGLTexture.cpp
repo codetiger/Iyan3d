@@ -15,7 +15,8 @@
 #include "OGLTexture.h"
 
 
-OGLTexture::OGLTexture(){
+OGLTexture::OGLTexture()
+{
     texelFormat = TEXTURE_RGBA8;
     texelType = TEXTURE_BYTE;
     OGLTextureName = NULL;
@@ -23,7 +24,8 @@ OGLTexture::OGLTexture(){
     rttDepthBuffer = NOT_EXISTS;
 }
 
-OGLTexture::~OGLTexture(){
+OGLTexture::~OGLTexture()
+{
     if(rttFrameBuffer != NOT_EXISTS)
         glDeleteBuffers(1,&rttFrameBuffer);
     if(rttDepthBuffer != NOT_EXISTS)
@@ -33,13 +35,14 @@ OGLTexture::~OGLTexture(){
     OGLTextureName = NULL;
 }
 
-void OGLTexture::removeTexture(){
+void OGLTexture::removeTexture()
+{
     if(OGLTextureName)
         glDeleteTextures(1, &OGLTextureName);
     OGLTextureName = NULL;
 }
 
-bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool blurTex)
+bool OGLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, bool blurTex, int blurRadius)
 {
     textureName = name;
     texelFormat = format;
@@ -50,16 +53,15 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     Logger::log(INFO, "OGLTexture.cpp", "loadTexture " + texturePath);
     imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
 #else
-    imageData = loadPNGImage(texturePath, width, height, hasTransparency);
+    imageData = loadPNGImage(texturePath, width, height, hasTransparency, blurRadius);
 #endif
 
     if(!imageData)
         return false;
 
-//    Logger::log(INFO, "OGLTEX LOADTEX", "width " + to_string(width) + " height " + to_string(height));
     glGenTextures(1, &OGLTextureName);
     glBindTexture(GL_TEXTURE_2D, OGLTextureName);
-    glTexImage2D(GL_TEXTURE_2D, 0,getOGLTextureFormat(format), width, height, 0, getOGLTextureFormat(format), getOGLTextureType(texelType), imageData);
+    glTexImage2D(GL_TEXTURE_2D, 0, getOGLTextureFormat(format), width, height, 0, getOGLTextureFormat(format), getOGLTextureType(texelType), imageData);
     GLint param = (!blurTex) ? GL_NEAREST : GL_LINEAR;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
@@ -120,7 +122,8 @@ void OGLTexture::updateTexture(unsigned char* imageData)
 }
 #endif
 
-GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format){
+GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format)
+{
     GLenum oglFormat = GL_RGBA;
     switch(format){
         case TEXTURE_RG:
@@ -132,7 +135,9 @@ GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format){
     }
     return oglFormat;
 }
-GLenum OGLTexture::getOGLTextureType(TEXTURE_DATA_TYPE type){
+
+GLenum OGLTexture::getOGLTextureType(TEXTURE_DATA_TYPE type)
+{
     GLenum oglType = GL_UNSIGNED_BYTE;
 // switch
     return oglType;

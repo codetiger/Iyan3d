@@ -18,7 +18,7 @@ CameraNode::CameraNode() {
     aspectRatio = 4.0/3.0;
     nearDistance = 1.0;
     farDistance = 3000.0;
-    needsVertexPosition = bindTargetAndRotation = needsIndexBuf = false;
+    bindTargetAndRotation = false;
     viewFrustum = new Frustum();
     update();
 }

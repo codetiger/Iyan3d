@@ -15,7 +15,7 @@
 class CameraNode : public Node {
 
 private:
-    bool isActive,bindTargetAndRotation;
+    bool isActive, bindTargetAndRotation;
     Vector3 target;
     Vector3 UpVector;
     float fov,aspectRatio,nearDistance,farDistance;

@@ -14,7 +14,8 @@
 #endif
 
 DEVICE_TYPE common::deviceType = OPENGLES2;
-SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYPE type,string bundlePath,void *renderView)
+
+SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_TYPE type, string bundlePath, void *renderView)
 {
     device = type;
     displayWidth = width;
@@ -25,12 +26,12 @@ SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYP
     renderMan = new OGLES2RenderManager(width,height,screenScale);
     common::deviceType = OPENGLES2;
     #elif IOS
-    if(type == OPENGLES2){
+    if(type == OPENGLES2) {
         renderMan = new OGLES2RenderManager(width,height,screenScale);
         common::deviceType = OPENGLES2;
-    }else if(type == METAL){
+    } else if(type == METAL) {
         #if !(TARGET_IPHONE_SIMULATOR)
-            renderMan = (RenderManager*)initMetalRenderManager(renderView,width,height,screenScale);
+            renderMan = (RenderManager*)initMetalRenderManager(renderView, width, height, screenScale);
             common::deviceType = METAL;
         #endif
     }
@@ -53,9 +54,12 @@ SceneManager::SceneManager(float width,float height,float screenScale,DEVICE_TYP
         renderMan->maxInstances = 4000;
     }
 #endif
+    
+    renderMan->emptyTexture = loadTexture("Env Texture", bundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
 }
 
-SceneManager::~SceneManager(){
+SceneManager::~SceneManager()
+{
     RemoveAllNodes();
     RemoveAllTextures();
     if(mtlManger)
@@ -86,12 +90,14 @@ void SceneManager::RemoveAllTextures()
 
 }
 
-void SceneManager::setDisplayResolution(int width,int height){
+void SceneManager::setDisplayResolution(int width, int height)
+{
     displayWidth = width;
     displayHeight = height;
 }
 
-void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
+void SceneManager::AddNode(shared_ptr<Node> node, MESH_TYPE meshType)
+{
 #ifndef UBUNTU
     if((device == METAL && node->type != NODE_TYPE_INSTANCED) || (!renderMan->supportsVAO && node->type != NODE_TYPE_INSTANCED))
         renderMan->createVertexAndIndexBuffers(node,meshType);
@@ -99,7 +105,7 @@ void SceneManager::AddNode(shared_ptr<Node> node,MESH_TYPE meshType){
     nodes.push_back(node);
 }
 
-void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType)
+void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node, MESH_TYPE meshType)
 {
 #ifndef UBUNTU
     if(device == METAL || !renderMan->supportsVAO)
@@ -139,7 +145,9 @@ void SceneManager::RemoveNode(shared_ptr<Node> node)
     }
     //node.reset();
 }
-void SceneManager::RemoveTexture(Texture *texture){
+
+void SceneManager::RemoveTexture(Texture *texture)
+{
     for(int i = 0;i < textures.size();i++){
         if(textures[i] == texture){
             if(device == OPENGLES2){
@@ -158,7 +166,9 @@ void SceneManager::RemoveTexture(Texture *texture){
         }
     }
 }
-void SceneManager::RemoveAllNodes(){
+
+void SceneManager::RemoveAllNodes()
+{
     for(int i = 0;i < nodes.size();i++){
         if (nodes[i])
         {
@@ -170,10 +180,13 @@ void SceneManager::RemoveAllNodes(){
         }
     nodes.clear();
 }
-bool SceneManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color){
+
+bool SceneManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color)
+{
     renderTargetIndex++;
     return renderMan->PrepareDisplay(width,height,clearColorBuf,clearDepthBuf,isDepthPass,color);
 }
+
 void SceneManager::Render(bool isRTT)
 {
     renderMan->setTransparencyBlending(false);
@@ -200,14 +213,18 @@ void SceneManager::Render(bool isRTT)
     }
     nodeIndex.clear();
 }
+
 void SceneManager::EndDisplay()
 {
     renderTargetIndex = 0;
     renderMan->endDisplay();
 }
-void SceneManager::clearDepthBuffer(){
+
+void SceneManager::clearDepthBuffer()
+{
     renderMan->setUpDepthState(CompareFunctionLessEqual,false,true); // ToDo change in depthstate for each render, may need
 }
+
 void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
 {
     int index = 0;
@@ -245,8 +262,7 @@ void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
 
 }
 
-
-void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_DEPTH_FUNCTION func,bool changeDepthState)
+void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, METAL_DEPTH_FUNCTION func, bool changeDepthState)
 {
     if(!nodes[index])
         return;
@@ -290,7 +306,9 @@ void SceneManager::RenderNode(bool isRTT, int index,bool clearDepthBuffer,METAL_
         
     }
 }
-void SceneManager::setDepthTest(bool enable){
+
+void SceneManager::setDepthTest(bool enable)
+{
 #ifndef UBUNTU
     if(enable)
         glEnable(GL_DEPTH_TEST);
@@ -298,7 +316,9 @@ void SceneManager::setDepthTest(bool enable){
         glDisable(GL_DEPTH_TEST);
 #endif
 }
-void SceneManager::setShaderState(int nodeIndex){
+
+void SceneManager::setShaderState(int nodeIndex)
+{
     if(nodes[nodeIndex]->type <= NODE_TYPE_CAMERA)
          return;
     if(device == OPENGLES2){
@@ -307,7 +327,9 @@ void SceneManager::setShaderState(int nodeIndex){
         MTLPipelineStateCallBack(nodeIndex);
     }
 }
-void SceneManager::setActiveCamera(shared_ptr<Node> node){
+
+void SceneManager::setActiveCamera(shared_ptr<Node> node)
+{
     for(int i = 0;i < nodes.size();i++){
         if(nodes[i]->type <= NODE_TYPE_CAMERA)
             (dynamic_pointer_cast<CameraNode>(nodes[i]))->setActive(false);
@@ -316,10 +338,13 @@ void SceneManager::setActiveCamera(shared_ptr<Node> node){
     renderMan->setActiveCamera(dynamic_pointer_cast<CameraNode>(node));
 #endif
 }
-shared_ptr<CameraNode> SceneManager::getActiveCamera(){
+
+shared_ptr<CameraNode> SceneManager::getActiveCamera()
+{
     return renderMan->getActiveCamera();
 }
-Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type, bool blurTexture)
+
+Texture* SceneManager::loadTexture(string textureName, string filePath, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type, bool blurTexture, int blurRadius)
 {
     Texture *newTex = NULL;
     #ifdef ANDROID
@@ -337,13 +362,13 @@ Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DA
 #ifdef UBUNTU
     newTex = new DummyTexture();
 #endif
-    newTex->loadTexture(textureName,filePath,format,type, blurTexture);
+    newTex->loadTexture(textureName, filePath, format, type, blurTexture, blurRadius);
     textures.push_back(newTex);
 
     return newTex;
 }
 
-Texture* SceneManager::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type)
+Texture* SceneManager::loadTextureFromVideo(string videoFileName, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type)
 {
     Texture *newTex = NULL;
 #ifdef ANDROID
@@ -361,19 +386,18 @@ Texture* SceneManager::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FO
 #ifdef UBUNTU
     newTex = new DummyTexture();
 #endif
-    newTex->loadTextureFromVideo(videoFileName,format,type);
+    newTex->loadTextureFromVideo(videoFileName, format, type);
     textures.push_back(newTex);
     
     return newTex;
 }
 
-
-shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh,string callbackFuncName,MESH_TYPE meshType,int matIndex){
+shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh, string callbackFuncName, MESH_TYPE meshType, int matIndex)
+{
     shared_ptr<MeshNode> node = make_shared<MeshNode>(); //shared_ptr<MeshNode>(new MeshNode());
     if(matIndex != NOT_EXISTS && mtlManger->materials->size())
         node->setMaterial(getMaterialByIndex(matIndex));
     node->mesh = mesh;
-    node->needsVertexNormal = true;
     node->callbackFuncName = callbackFuncName;
     if(node->mesh)
     	node->mesh->Commit();
@@ -381,24 +405,24 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh,string callback
     AddNode(node,meshType);
     return node;
 }
-shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMesh* mesh,string callbackFuncName,rig_type rigType ,MESH_TYPE meshType){
+
+shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMesh* mesh, string callbackFuncName, rig_type rigType, MESH_TYPE meshType)
+{
     shared_ptr<AnimatedMeshNode> node = make_shared<AnimatedMeshNode>();
     node->setMesh(mesh , rigType);
-    node->needsVertexNormal = true;
-    node->needsUV1 = true;
     node->callbackFuncName = callbackFuncName;
     node->mesh->Commit();
     node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
 }
-shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh,string callBackFuncName,MESH_TYPE meshType,int matIndex)
+
+shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh, string callBackFuncName, MESH_TYPE meshType, int matIndex)
 {
     shared_ptr<ParticleManager> node = make_shared<ParticleManager>();
     if(matIndex != NOT_EXISTS && mtlManger->materials->size())
         node->setMaterial(getMaterialByIndex(matIndex));
     node->mesh = mesh;
-    node->needsVertexNormal = true;
     node->callbackFuncName = callBackFuncName;
     if(node->mesh)
         node->mesh->Commit();
@@ -407,20 +431,25 @@ shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh,str
     return node;
 }
 
-shared_ptr<CameraNode> SceneManager::createCameraNode(string callBackFuncName){
+shared_ptr<CameraNode> SceneManager::createCameraNode(string callBackFuncName)
+{
     shared_ptr<CameraNode> cam = make_shared<CameraNode>();
     cam->callbackFuncName = callBackFuncName;
     AddNode(cam,MESH_TYPE_LITE);
     return cam;
 }
-shared_ptr<PlaneMeshNode> SceneManager::createPlaneNode(string callBackFuncName , float aspectRatio){
+
+shared_ptr<PlaneMeshNode> SceneManager::createPlaneNode(string callBackFuncName, float aspectRatio)
+{
     shared_ptr<PlaneMeshNode> plane(new PlaneMeshNode(aspectRatio));// = make_shared<PlaneMeshNode>(aspectRatio);
     plane->callbackFuncName = callBackFuncName;
     plane->mesh->Commit();
     AddNode(plane,MESH_TYPE_LITE);
     return plane;
 }
-shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices, float radius,string callBackFuncName, bool allAxis){
+
+shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices, float radius, string callBackFuncName, bool allAxis)
+{
     shared_ptr<SGCircleNode> node = shared_ptr<SGCircleNode>(new SGCircleNode(totVertices, radius, allAxis));
     node->callbackFuncName = callBackFuncName;
     node->mesh->Commit();
@@ -428,7 +457,8 @@ shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices, float r
     return node;
 }
 
-shared_ptr<LightNode> SceneManager::createLightNode(Mesh *mesh, string callBackFuncName) {
+shared_ptr<LightNode> SceneManager::createLightNode(Mesh *mesh, string callBackFuncName)
+{
     shared_ptr<LightNode> light(new LightNode());
     light->callbackFuncName = callBackFuncName;
     light->mesh = mesh;
@@ -462,8 +492,7 @@ shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, st
     return iNode;
 }
 
-
-void SceneManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
+void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, bool isBGImage, Material *material, bool isRTT)
 {
     renderMan->useMaterialToRender(material);
     int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
@@ -471,7 +500,8 @@ void SceneManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endC
     renderMan->draw2DImage(texture,originCoord,endCoord,isBGImage,material,isRTT);
     
 }
-void SceneManager::draw3DLine(Vector3 start , Vector3 end , Vector3 color , Material *material,int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex)
+
+void SceneManager::draw3DLine(Vector3 start, Vector3 end, Vector3 color, Material *material, int mvpUniParamIndex, int vertexColorUniParamIndex, int transparencyUniParamIndex)
 {
     renderMan->useMaterialToRender(material);
     float vertColor[3] = {color.x,color.y,color.z};
@@ -484,7 +514,7 @@ void SceneManager::draw3DLine(Vector3 start , Vector3 end , Vector3 color , Mate
     renderMan->draw3DLine(start,end,material);
 }
 
-void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex)
+void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex, int vertexColorUniParamIndex, int transparencyUniParamIndex)
 {
     renderMan->useMaterialToRender(material);
     float vertColor[3] = {color.x,color.y,color.z};
@@ -497,7 +527,8 @@ void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Materi
     renderMan->draw3DLines(vPositions, material);
 }
 
-void SceneManager::setPropertyValue(Material *material,string name,float* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex,int nodeIndex,Texture *tex,int userValue){
+void SceneManager::setPropertyValue(Material *material, string name, float* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, Texture *tex, int userValue)
+{
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS) nod = nodes[nodeIndex];
     if(nodeIndex == NOT_EXISTS && device == METAL){
@@ -508,7 +539,8 @@ void SceneManager::setPropertyValue(Material *material,string name,float* values
     }
 }
 
-void SceneManager::setPropertyValue(Material *material, string name, int* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, Texture *tex, int userValue, bool blurTex) {
+void SceneManager::setPropertyValue(Material *material, string name, int* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, Texture *tex, int userValue, bool blurTex)
+{
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS)
         nod = nodes[nodeIndex];
@@ -520,15 +552,21 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
         renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue, blurTex);
     }
 }
-AnimatedMesh* SceneManager::LoadMesh(string filePath){
+
+AnimatedMesh* SceneManager::LoadMesh(string filePath)
+{
     return CSGRMeshFileLoader::LoadMesh(filePath,device);
 }
-bool SceneManager::LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest) {
+
+bool SceneManager::LoadShaders(string materialName, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
+{
     if(device == OPENGLES2)
         renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
     return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass, isTest);
 }
-Material* SceneManager::getMaterialByIndex(int index) {
+
+Material* SceneManager::getMaterialByIndex(int index)
+{
 #ifdef UBUNTU
 	return 0;
 #endif
@@ -538,7 +576,9 @@ Material* SceneManager::getMaterialByIndex(int index) {
 	else
 		return 0;
 }
-Material* SceneManager::getMaterialByName(string name){
+
+Material* SceneManager::getMaterialByName(string name)
+{
     for(int i = 0 ; i < mtlManger->materials->size();i++){
         if((*mtlManger->materials)[i]->name.compare(name) == 0)
             return (*mtlManger->materials)[i];
@@ -546,7 +586,9 @@ Material* SceneManager::getMaterialByName(string name){
     Logger::log(ERROR,"SceneManager::getMaterialByName","No Material with the" + name + "exists");
     return NULL;
 }
-int SceneManager::getNodeIndexByID(int id){
+
+int SceneManager::getNodeIndexByID(int id)
+{
     for(int i = 0;i < nodes.size();i++){
         if(nodes[i]->getID() == id)
             return i;
@@ -554,37 +596,48 @@ int SceneManager::getNodeIndexByID(int id){
     Logger::log(ERROR, "SceneManager:getNodeIndexByID","Id not Exits");
     return NULL;
 }
-Texture* SceneManager::createRenderTargetTexture(string textureName , TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height){
+
+Texture* SceneManager::createRenderTargetTexture(string textureName, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height)
+{
     textures.push_back(renderMan->createRenderTargetTexture(textureName,format,texelType,width,height));
     
     return textures[textures.size()-1];
 }
-void SceneManager::setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass,Vector4 color)
+
+void SceneManager::setRenderTarget(Texture *renderTexture, bool clearBackBuffer, bool clearZBuffer, bool isDepthPass, Vector4 color)
 {
     if(renderTexture)
         renderTargetIndex++;
     renderMan->setRenderTarget(renderTexture,clearBackBuffer,clearZBuffer,isDepthPass,color);
 }
-Vector3 SceneManager::getPixelColor(Vector2 touchPosition,Texture* texture,Vector4 bgColor)
+
+Vector3 SceneManager::getPixelColor(Vector2 touchPosition, Texture* texture, Vector4 bgColor)
 {
     Vector4 color = renderMan->getPixelColor(touchPosition,texture);
     return Vector3(color.x,color.y,color.z);
 }
+
 void SceneManager::writeImageToFile(Texture *texture, char* filePath, IMAGE_FLIP flipType)
 {
     renderMan->writeImageToFile(texture, filePath , flipType);
 }
-void SceneManager::setFrameBufferObjects(uint32_t fb,uint32_t cb,uint32_t db){
+
+void SceneManager::setFrameBufferObjects(uint32_t fb, uint32_t cb, uint32_t db)
+{
 	#ifndef UBUNTU
     	((OGLES2RenderManager*)renderMan)->setFrameBufferObjects(fb,cb,db);
 	#endif
 }
-shared_ptr<EmptyNode> SceneManager::addEmptyNode(){
+
+shared_ptr<EmptyNode> SceneManager::addEmptyNode()
+{
     shared_ptr<EmptyNode> eNode = make_shared<EmptyNode>(); //shared_ptr<EmptyNode>(new EmptyNode());
     AddNode(eNode);
     return eNode;
 }
-void SceneManager::updateVertexBuffer(int nodeIndex){
+
+void SceneManager::updateVertexBuffer(int nodeIndex)
+{
 	#ifndef UBUNTU
 		if(device == OPENGLES2 && renderMan->supportsVAO)
 			dynamic_pointer_cast<OGLNodeData>(nodes[nodeIndex]->nodeData)->removeVertexBuffers();

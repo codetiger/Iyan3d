@@ -10,18 +10,16 @@
 #ifdef IOS
 #import "TargetConditionals.h"
 #endif
-Node::Node() {
-//    skinType = CPU_SKIN;
+Node::Node()
+{
     skinType = GPU_SKIN;
     id = NOT_EXISTS;
     type = NODE_TYPE_EMPTY;
-    needsVertexColor = shouldUpdateMesh = false;
-    needsVertexNormal = false;
-    needsVertexPosition = true;
-    needsIndexBuf = true;
+    shouldUpdateMesh = false;
     position = Vector3(0.0);
     rotation = Vector3(0.0);
     scale = Vector3(1.0);
+    uvScale = 1.0f;
     
     for(int i = 0; i < MAX_TEXTURE_PER_NODE; i++)
         textures[i] = NULL;
@@ -29,7 +27,7 @@ Node::Node() {
     //Parent = NULL;
     Children = make_shared< vector< shared_ptr<Node> > >();
     isVisible = true;
-    hasTransparency = false;
+    hasTransparency = hasNormalMap = hasReflectionMap = false;
     #ifdef ANDROID
     nodeData = make_shared<OGLNodeData>();
     #elif IOS
@@ -44,7 +42,8 @@ Node::Node() {
     drawMode = DRAW_MODE_TRIANGLES;
 }
 
-Node::~Node() {
+Node::~Node()
+{
 //    if(this->instancedNodes.size()){
 //        for(u16 i = 0;i < instancedNodes.size();i++){
 //            if(instancedNodes[i]) {
@@ -80,13 +79,15 @@ Node::~Node() {
     }
 }
 
-bool Node::operator==(shared_ptr<Node> n) {
+bool Node::operator==(shared_ptr<Node> n)
+{
     if(n->getID() != id || n->position != position || n->scale != scale || n->rotation != rotation || n->callbackFuncName.compare(callbackFuncName) != 0 || n->type != type)
         return false;
     return true;
 }
 
-bool Node::isMetalSupported(){
+bool Node::isMetalSupported()
+{
     #ifdef IOS
     size_t size;
     cpu_type_t type;
@@ -101,7 +102,9 @@ bool Node::isMetalSupported(){
     return false;
     #endif
 }
-void Node::setTexture(Texture *texture, int textureIndex) {
+
+void Node::setTexture(Texture *texture, int textureIndex)
+{
     if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
         return;
 
@@ -109,41 +112,60 @@ void Node::setTexture(Texture *texture, int textureIndex) {
     
     if(textureIndex == NODE_TEXTURE_TYPE_COLORMAP)
         hasTransparency = texture->hasTransparency;
+    else if(textureIndex == NODE_TEXTURE_TYPE_REFLECTIONMAP)
+        hasReflectionMap = (texture != nil);
+    else if(textureIndex == NODE_TEXTURE_TYPE_NORMALMAP)
+        hasNormalMap = (texture != nil);
 }
 
-void Node::setRotationInDegrees(Vector3 rotation, bool updateBB) {
-//    printf("Node : %d    Rot: %f %f %f\n", getID(), rotation.x, rotation.y, rotation.z);
+void Node::setRotationInDegrees(Vector3 rotation, bool updateBB)
+{
     this->rotation = Vector3(rotation.x * (PI/180.0), rotation.y * (PI/180.0), rotation.z * (PI/180.0));
     if(updateBB)
         FlagTransformationToChildren();
 }
-void Node::setRotationInRadians(Vector3 rotation, bool updateBB){
+
+void Node::setRotationInRadians(Vector3 rotation, bool updateBB)
+{
     this->rotation = rotation;
     if(updateBB)
         FlagTransformationToChildren();
 }
-void Node::setPosition(Vector3 position, bool updateBB){
+
+void Node::setPosition(Vector3 position, bool updateBB)
+{
     this->position = position;
     if(updateBB)
         FlagTransformationToChildren();
 }
-void Node::setScale(Vector3 scale, bool updateBB){
+
+void Node::setScale(Vector3 scale, bool updateBB)
+{
     this->scale = scale;
     if(updateBB)
         FlagTransformationToChildren();
 }
-Vector3 Node::getRotationInRadians(){
+
+Vector3 Node::getRotationInRadians()
+{
     return rotation;
 }
-Vector3 Node::getRotationInDegrees(){
+
+Vector3 Node::getRotationInDegrees()
+{
     return rotation * (180.0/PI);
 }
-Vector3 Node::getPosition(){
+
+Vector3 Node::getPosition()
+{
     return position;
 }
-Vector3 Node::getScale(){
+
+Vector3 Node::getScale()
+{
     return scale;
 }
+
 Vector3 Node::getAbsolutePosition()
 {
     return getAbsoluteTransformation().getTranslation();
@@ -171,7 +193,8 @@ void Node::updateBoundingBox()
     bBox = bb;
 }
 
-void Node::updateAbsoluteTransformation(bool updateFromRoot){
+void Node::updateAbsoluteTransformation(bool updateFromRoot)
+{
     if(Parent){
         AbsoluteTransformation = Parent->getAbsoluteTransformation() * getRelativeTransformation();
     }else {
@@ -179,7 +202,8 @@ void Node::updateAbsoluteTransformation(bool updateFromRoot){
     }
 }
 
-void Node::updateAbsoluteTransformationOfChildren(){
+void Node::updateAbsoluteTransformationOfChildren()
+{
     updateAbsoluteTransformation();
     if(Children->size()){
         for(unsigned short i = 0; i < Children->size();i++){
@@ -188,15 +212,19 @@ void Node::updateAbsoluteTransformationOfChildren(){
         }
     }
 }
-Mat4 Node::getAbsoluteTransformation(){
+
+Mat4 Node::getAbsoluteTransformation()
+{
     updateAbsoluteTransformation();
     return AbsoluteTransformation;
 }
 
-void Node::updateRelativeTransformation(){
+void Node::updateRelativeTransformation()
+{
 }
 
-Mat4 Node::getRelativeTransformation(){
+Mat4 Node::getRelativeTransformation()
+{
     Mat4 localMat;
     localMat.translate(position);
     localMat.setRotationRadians(rotation);
@@ -205,24 +233,31 @@ Mat4 Node::getRelativeTransformation(){
     }
     return localMat;
 }
-Mat4 Node::getModelMatrix(){
+
+Mat4 Node::getModelMatrix()
+{
     return getAbsoluteTransformation();
 }
-void Node::FlagTransformationToChildren(){
+
+void Node::FlagTransformationToChildren()
+{
     updateAbsoluteTransformation();
     update();
     updateAbsoluteTransformationOfChildren();
     updateBoundingBox();
     return;
 }
-Texture* Node::getTextureByIndex(u16 textureIndex) {
+
+Texture* Node::getTextureByIndex(u16 textureIndex)
+{
     if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
         return NULL;
 
     return textures[textureIndex];
 }
 
-void Node::setMaterial(Material *mat,bool isTransparentMaterial){
+void Node::setMaterial(Material *mat,bool isTransparentMaterial)
+{
 #ifndef UBUNTU
     if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
         return;
@@ -230,17 +265,24 @@ void Node::setMaterial(Material *mat,bool isTransparentMaterial){
     this->material->isTransparent = isTransparentMaterial;
 #endif
 }
-u16 Node::getBufferCount(){
+
+u16 Node::getBufferCount()
+{
     if(type == NODE_TYPE_MORPH || type== NODE_TYPE_MORPH_SKINNED)
         return 2;
     return 1;
 }
-void Node::setID(int id){
+
+void Node::setID(int id)
+{
     this->id = id;
 }
-int Node::getID(){
+
+int Node::getID()
+{
     return id;
 }
+
 void Node::setParent(shared_ptr<Node> parent)
 {
     if(this->Parent && this->Parent->Children && this->Parent->Children->size() > 0) { // remove from child list of previous parent
@@ -258,9 +300,12 @@ void Node::setParent(shared_ptr<Node> parent)
     if(parent)
         this->Parent->Children->push_back(shared_from_this());
 }
-shared_ptr<Node> Node::getParent(){
+
+shared_ptr<Node> Node::getParent()
+{
     return Parent;
 }
+
 void Node::setVisible(bool isVisible)
 {
     this->isVisible = isVisible;
@@ -276,7 +321,8 @@ bool Node::getVisible()
     return this->isVisible;
 }
 
-void Node::detachFromParent(){
+void Node::detachFromParent()
+{
     if(getParent()){
         for(int c = 0;c < getParent()->Children->size();c++){
             if((*getParent()->Children)[c]->getID() == getID()){
@@ -286,7 +332,9 @@ void Node::detachFromParent(){
         }
     }
 }
-void Node::detachAllChildren(){
+
+void Node::detachAllChildren()
+{
     for(int c = 0;c < Children->size();c++)
         (*Children)[c]->setParent(shared_ptr<Node>());
     Children->clear();
@@ -296,6 +344,7 @@ void Node::setUserPointer(void* userPtr)
 {
     this->userPtr = userPtr;
 }
+
 void* Node::getUserPointer()
 {
     return userPtr;

@@ -51,7 +51,7 @@ short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16
         Logger::log(ERROR, "MTLMaterial", "Error in setting" + name + "Property");
     return uIndex;
 }
-short MTLMaterial::setPropertyValue(string name,int *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex,int renderTargetIndex){
+short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex){
     
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){

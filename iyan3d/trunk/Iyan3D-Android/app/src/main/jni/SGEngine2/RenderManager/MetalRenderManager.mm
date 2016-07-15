@@ -18,7 +18,9 @@ struct BufferState{
     bool isOccupied;
 };
 std::map<int,vector<BufferState> > MTLBuffersMap;
-MetalRenderManager::MetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale) {
+
+MetalRenderManager::MetalRenderManager(void *renderView, float screenWidth, float screenHeight, float screenScale)
+{
     _currentDrawable = drawable = nil;
     this->renderView = (__bridge UIView*)renderView;
     mtlRenderView = (RenderingView*)this->renderView;
@@ -30,7 +32,9 @@ MetalRenderManager::MetalRenderManager(void *renderView,float screenWidth,float 
     isCmdBufferCommited = false; isEncodingEnded = true;
     renderingTexture = NULL;
 }
-MetalRenderManager::~MetalRenderManager(){
+
+MetalRenderManager::~MetalRenderManager()
+{
     device = nil;
     _commandQueue = nil;
     
@@ -49,7 +53,9 @@ void MetalRenderManager::setupMetal()
     MetalHandler::setMTLLibrary(_defaultLibrary);
     _inflight_semaphore = dispatch_semaphore_create(4);
 }
-void MetalRenderManager::setupMetalLayer(){
+
+void MetalRenderManager::setupMetalLayer()
+{
     _metalLayer = (CAMetalLayer*)mtlRenderView.layer;
     _metalLayer.device = device;
     _metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
@@ -64,6 +70,7 @@ void MetalRenderManager::setupMetalLayer(){
     renderView.backgroundColor = nil;
     renderView.contentScaleFactor = [UIScreen mainScreen].scale;
 }
+
 void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth,bool clearDepthBuffer)
 {
     if(isEncodingEnded)
@@ -93,6 +100,7 @@ void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDep
         isEncodingEnded = false;
     }
 }
+
 void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> texture, Vector4 color, bool isDepthPass)
 {
     if (_renderPassDescriptor == nil || isDepthPass)
@@ -137,14 +145,19 @@ id <CAMetalDrawable> MetalRenderManager::currentDrawable()
     return _currentDrawable;
 }
 
-void* initMetalRenderManager(void *renderView,float screenWidth,float screenHeight,float screenScale) {
+void* initMetalRenderManager(void *renderView, float screenWidth, float screenHeight, float screenScale)
+{
     #if !(TARGET_IPHONE_SIMULATOR)
-    return new MetalRenderManager(renderView,screenWidth,screenHeight,screenScale);
+    MetalRenderManager *metalRenderManager = new MetalRenderManager(renderView, screenWidth, screenHeight, screenScale);
+    return metalRenderManager;
     #endif
 }
-void MetalRenderManager::Initialize(){
+
+void MetalRenderManager::Initialize()
+{
     
 }
+
 void MetalRenderManager::draw3DLine(Vector3 start,Vector3 end,Material *material)
 {
     if(_currentDrawable == nil)
@@ -200,9 +213,12 @@ void MetalRenderManager::clearDepthBuffer()
 {
     setUpDepthState(CompareFunctionLessEqual,true,false);
 }
-void MetalRenderManager::setTransparencyBlending(bool enable) {
+
+void MetalRenderManager::setTransparencyBlending(bool enable)
+{
     
 }
+
 void MetalRenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
     setUpDepthState(CompareFunctionAlways,false,false);
@@ -260,6 +276,7 @@ void MetalRenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector
     if(isBGImage)
         setUpDepthState(CompareFunctionLessEqual,true,false);
 }
+
 void MetalRenderManager::useMaterialToRender(Material *mat)
 {
     if(_currentDrawable == nil)
@@ -278,7 +295,8 @@ void MetalRenderManager::changeViewport(int width, int height)
     viewportHeight = height;
 }
 
-bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex){
+bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex)
+{
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return false;
     
@@ -292,7 +310,9 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
     //node.reset();
      return true;
 }
-void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex){
+
+void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex)
+{
     if(node->type <= NODE_TYPE_CAMERA)
         return;
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
@@ -340,7 +360,9 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
     }
         
 }
-bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color) {
+
+bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color)
+{
     if(!isCmdBufferCommited) // Temporary try for perfection
         endDisplay();
     isCmdBufferCommited = false;
@@ -368,6 +390,7 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
     }
     return true;
 }
+
 void MetalRenderManager::endDisplay()
 {
     if(isCmdBufferCommited || drawable == nil)
@@ -387,19 +410,23 @@ void MetalRenderManager::endDisplay()
     _currentDrawable = nil;
     freeDynamicBuffers();
 }
+
 void MetalRenderManager::drawPrimitives(MTLPrimitiveType primitiveType,unsigned int count,MTLIndexType type,id <MTLBuffer> indexBuf, GLsizei instanceCount)
 {
     if(instanceCount > 1)
-        [this->RenderCMDBuffer drawIndexedPrimitives:primitiveType indexCount:count indexType:type indexBuffer:indexBuf indexBufferOffset:0                           instanceCount:instanceCount];
+        [this->RenderCMDBuffer drawIndexedPrimitives:primitiveType indexCount:count indexType:type indexBuffer:indexBuf indexBufferOffset:0 instanceCount:instanceCount];
     else
         [this->RenderCMDBuffer drawIndexedPrimitives:primitiveType indexCount:count indexType:type indexBuffer:indexBuf indexBufferOffset:0];
 }
-void MetalRenderManager::BindAttribute(shared_ptr<Node> node,int meshIndx){
+
+void MetalRenderManager::BindAttribute(shared_ptr<Node> node,int meshIndx)
+{
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
     if(meshIndx < [MTLNode->VertexBuffers count])
         [this->RenderCMDBuffer setVertexBuffer:[MTLNode->VertexBuffers objectAtIndex:meshIndx] offset:0 atIndex:0];
 }
-void MetalRenderManager::BindUniform(DATA_TYPE type,id<MTLBuffer> buf,void* values,int count,int parameterIndex,id<MTLTexture> tex,string matName,int nodeIndex, bool isFragmentData, bool blurTex)
+
+void MetalRenderManager::BindUniform(DATA_TYPE type, id<MTLBuffer> buf, void* values, int count, int parameterIndex, id<MTLTexture> tex, string matName, int nodeIndex, bool isFragmentData, bool blurTex)
 {
     switch (type){
         case DATA_FLOAT:
@@ -432,11 +459,13 @@ void MetalRenderManager::BindUniform(DATA_TYPE type,id<MTLBuffer> buf,void* valu
             break;
         }
         default:
-            Logger::log(ERROR, "OGLES2RenderManager","Uniform: " + matName + " Type Not Matched");
+            Logger::log(ERROR, "OGLES2RenderManager", "Uniform: " + matName + " Type Not Matched");
             break;
     }
 }
-void MetalRenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 uIndex, bool isFragmentData, int userValue, bool blurTex){
+
+void MetalRenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
+{
     MTLMaterial *MTLMat = ((MTLMaterial*)mat);
     id<MTLTexture> tex = NULL;
     if(MTLMat->uniforms[uIndex].type == DATA_TEXTURE_2D || MTLMat->uniforms[uIndex].type == DATA_TEXTURE_CUBE){
@@ -444,18 +473,22 @@ void MetalRenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 u
         if((MTLTexture*)node->getTextureByIndex(textureIndex) != NULL)
             tex = ((MTLTexture*)node->getTextureByIndex(textureIndex))->texture;
         else
-            tex = ((MTLTexture*)node->getTextureByIndex(1))->texture;
+            tex = ((MTLTexture*)emptyTexture)->texture;
     }
-    BindUniform(MTLMat->uniforms[uIndex].type,MTLMat->uniforms[uIndex].buf,MTLMat->uniforms[uIndex].values,MTLMat->uniforms[uIndex].count,MTLMat->uniforms[uIndex].parameterIndex,tex,MTLMat->uniforms[uIndex].name,MTLMat->uniforms[uIndex].nodeIndex , isFragmentData, blurTex);
-    //node.reset();
+    
+    BindUniform(MTLMat->uniforms[uIndex].type, MTLMat->uniforms[uIndex].buf, MTLMat->uniforms[uIndex].values, MTLMat->uniforms[uIndex].count, MTLMat->uniforms[uIndex].parameterIndex, tex, MTLMat->uniforms[uIndex].name, MTLMat->uniforms[uIndex].nodeIndex, isFragmentData, blurTex);
 }
-void MetalRenderManager::bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,ushort count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex){
+
+void MetalRenderManager::bindDynamicUniform(Material *material, string name, void* values, DATA_TYPE type, ushort count, u16 paramIndex, int nodeIndex, Texture *tex, bool isFragmentData, bool blurTex)
+{
     int dataTypeSize = (type == DATA_INTEGER) ? sizeof(int) : sizeof(float);
     int bufIndex = getAvailableBfferWithSize(count * dataTypeSize);
     id<MTLTexture> texture = (tex) ? ((MTLTexture*)tex)->texture : NULL;
-    BindUniform(type,MTLBuffersMap[count * dataTypeSize][bufIndex].buf,values,count,paramIndex,texture,name,NOT_EXISTS,isFragmentData, blurTex);
+    BindUniform(type, MTLBuffersMap[count * dataTypeSize][bufIndex].buf, values, count, paramIndex, texture, name, NOT_EXISTS, isFragmentData, blurTex);
 }
-int MetalRenderManager::getAvailableBfferWithSize(int bufSize){
+
+int MetalRenderManager::getAvailableBfferWithSize(int bufSize)
+{
     bool bufAvailable = false;
     int bufIndex = NOT_EXISTS;
     if(MTLBuffersMap.find(bufSize)->first == bufSize){
@@ -476,6 +509,7 @@ int MetalRenderManager::getAvailableBfferWithSize(int bufSize){
     }
     return bufIndex;
 }
+
 void MetalRenderManager::freeDynamicBuffers()
 {
     for(std::map<int,vector<BufferState> >::iterator it = MTLBuffersMap.begin();it != MTLBuffersMap.end();it++){
@@ -483,14 +517,20 @@ void MetalRenderManager::freeDynamicBuffers()
             it->second[i].isOccupied = false;
     }
 }
-void MetalRenderManager::setActiveCamera(shared_ptr<CameraNode> camera){
+
+void MetalRenderManager::setActiveCamera(shared_ptr<CameraNode> camera)
+{
     this->camera = camera;
     this->camera->setActive(true);
 }
-shared_ptr<CameraNode> MetalRenderManager::getActiveCamera(){
+
+shared_ptr<CameraNode> MetalRenderManager::getActiveCamera()
+{
     return camera;
 }
-Texture* MetalRenderManager::createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height){
+
+Texture* MetalRenderManager::createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height)
+{
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:getTexturePixelFormat(format) width:width height:height mipmapped:NO];
     id<MTLTexture> texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
     MTLTexture *MtlTex = new MTLTexture();
@@ -499,14 +539,18 @@ Texture* MetalRenderManager::createRenderTargetTexture(string textureName ,TEXTU
     MtlTex->width = width; MtlTex->height = height;
     return MtlTex;
 }
-int MetalRenderManager::getTexturePixelFormat(TEXTURE_DATA_FORMAT format){
+
+int MetalRenderManager::getTexturePixelFormat(TEXTURE_DATA_FORMAT format)
+{
     if(format == TEXTURE_RGBA8)
         return MTLPixelFormatBGRA8Unorm;
     else if(format == TEXTURE_DEPTH32)
         return MTLPixelFormatDepth32Float;
     return MTLPixelFormatBGRA8Unorm;
 }
-id<MTLTexture> MetalRenderManager::getMSATexture(int sampleCount,int width,int height){
+
+id<MTLTexture> MetalRenderManager::getMSATexture(int sampleCount,int width,int height)
+{
     MTLTextureDescriptor *msaaTexDesc = [MTLTextureDescriptor
                                          texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm
                                          width:width height:height mipmapped:NO];
@@ -514,6 +558,7 @@ id<MTLTexture> MetalRenderManager::getMSATexture(int sampleCount,int width,int h
     msaaTexDesc.sampleCount = sampleCount;
     return [device newTextureWithDescriptor:msaaTexDesc];
 }
+
 void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass,Vector4 color)
 {
     if(isCmdBufferCommited)
@@ -567,13 +612,16 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
         endEncoding();
     }
 }
-void MetalRenderManager::endEncoding(){
+
+void MetalRenderManager::endEncoding()
+{
     if(!isEncodingEnded){
         [RenderCMDBuffer popDebugGroup];
         [RenderCMDBuffer endEncoding];
         isEncodingEnded = true;
     }
 }
+
 Vector4 MetalRenderManager::getPixelColor(Vector2 touchPosition,Texture* renderTexture)
 {
     unsigned char color[4];
@@ -581,7 +629,9 @@ Vector4 MetalRenderManager::getPixelColor(Vector2 touchPosition,Texture* renderT
     [((MTLTexture*)renderTexture)->texture getBytes:&color[0] bytesPerRow:renderTexture->width * 4 fromRegion:region mipmapLevel:0];
     return Vector4(color[2],color[1],color[0],color[3]);
 }
-void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers){
+
+void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers)
+{
     if(node->type <= NODE_TYPE_CAMERA)
         return;
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
@@ -622,6 +672,7 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
         }
     }
 }
+
 void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBufferIndex, MESH_TYPE meshType)
 {
     if(node->type <= NODE_TYPE_CAMERA)
@@ -710,7 +761,9 @@ void MetalRenderManager::writeImageToFile(Texture *texture , char* filePath,IMAG
     
     delete buffer;
 }
-int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode){
+
+int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode)
+{
     switch(mode){
         case DRAW_MODE_POINTS:
             return MTLPrimitiveTypePoint;

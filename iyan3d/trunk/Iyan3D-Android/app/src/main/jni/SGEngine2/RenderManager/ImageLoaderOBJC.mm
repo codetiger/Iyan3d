@@ -12,27 +12,56 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/gl.h>
 #import <AVFoundation/AVFoundation.h>
+#import <Accelerate/Accelerate.h>
 
 #import "ImageLoaderOBJC.h"
 
-uint8_t* loadPNGImage(std::string filePath, int &width, int &height, bool &hasTransparency){
+uint8_t* loadPNGImage(std::string filePath, int &width, int &height, bool &hasTransparency, int blurRadius)
+{
     NSString *fileName = [NSString stringWithFormat:@"%s",filePath.c_str()];
     CGImageRef spriteImage = [UIImage imageWithContentsOfFile:fileName].CGImage;
     
     if (!spriteImage) 
-        NSLog(@"Failed to load image %@ FilePath %@", fileName,fileName);
+        NSLog(@"Failed to load image %@ FilePath %@", fileName, fileName);
     
-    width = CGImageGetWidth(spriteImage);
-    height = CGImageGetHeight(spriteImage);
+    width = (int)CGImageGetWidth(spriteImage);
+    height = (int)CGImageGetHeight(spriteImage);
     CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(spriteImage);
     hasTransparency = (alphaInfo == kCGImageAlphaFirst || alphaInfo == kCGImageAlphaLast || alphaInfo == kCGImageAlphaPremultipliedFirst || alphaInfo == kCGImageAlphaPremultipliedLast);
 
-    GLubyte * spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
-    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+    GLubyte *spriteData = (GLubyte *) malloc(width * height * 4);
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width * 4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
     CGContextRelease(spriteContext);
 
-    return spriteData;
+    if(blurRadius) {
+        vImage_Buffer effectInBuffer;
+        effectInBuffer.data     = spriteData;
+        effectInBuffer.width    = width;
+        effectInBuffer.height   = height;
+        effectInBuffer.rowBytes = width * 4;
+
+        GLubyte *blurData = (GLubyte *) malloc(width * height * 4);
+        vImage_Buffer effectOutBuffer;
+        effectOutBuffer.data     = blurData;
+        effectOutBuffer.width    = width;
+        effectOutBuffer.height   = height;
+        effectOutBuffer.rowBytes = width * 4;
+        
+        blurRadius = blurRadius - (blurRadius % 2) + 1;
+
+        vImage_Error error = vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, blurRadius, blurRadius, NULL, kvImageEdgeExtend);
+        vImageBoxConvolve_ARGB8888(&effectOutBuffer, &effectInBuffer, NULL, 0, 0, blurRadius, blurRadius, 0, kvImageEdgeExtend);
+        vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, blurRadius, blurRadius, 0, kvImageEdgeExtend);
+
+        if (error) {
+            NSLog(@"error from convolution %ld", error);
+        }
+        
+        delete spriteData;
+        return blurData;
+    } else
+        return spriteData;
 }
 
 void writePNGImage(uint8_t *imageData , int width , int height , char * filePath)

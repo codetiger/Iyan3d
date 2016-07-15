@@ -11,26 +11,93 @@
 #ifdef IOS
 #import "MetalHandler.h"
 #import <AVFoundation/AVFoundation.h>
+#import <Accelerate/Accelerate.h>
 #endif
 
 
-MTLTexture::MTLTexture(){
+MTLTexture::MTLTexture()
+{
     texelFormat = TEXTURE_RGBA8;
 }
-MTLTexture::~MTLTexture(){
-    
-}
-void* initMTLTexture(){
-    return new MTLTexture();
-}
-bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType, bool smoothTexture)
+
+MTLTexture::~MTLTexture()
 {
     
+}
+
+void* initMTLTexture()
+{
+    return new MTLTexture();
+}
+
+UIImage* boxblurImage(UIImage *image, int boxSize)
+{
+    CGImageRef img = image.CGImage;
+    
+    vImage_Buffer inBuffer, outBuffer;
+    
+    void *pixelBuffer;
+    
+    CGDataProviderRef inProvider = CGImageGetDataProvider(img);
+    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
+    
+    inBuffer.width = CGImageGetWidth(img);
+    inBuffer.height = CGImageGetHeight(img);
+    inBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
+    
+    pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
+    outBuffer.data = pixelBuffer;
+    outBuffer.width = CGImageGetWidth(img);
+    outBuffer.height = CGImageGetHeight(img);
+    outBuffer.rowBytes = CGImageGetBytesPerRow(img);
+
+    boxSize = boxSize - (boxSize % 2) + 1;
+
+    vImage_Error error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    
+    if (error) {
+        NSLog(@"error from convolution %ld", error);
+    }
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,
+                                             outBuffer.width,
+                                             outBuffer.height,
+                                             8,
+                                             outBuffer.rowBytes,
+                                             colorSpace,
+                                             kCGImageAlphaNoneSkipLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
+    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
+    
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(colorSpace);
+    
+    free(pixelBuffer);
+    CFRelease(inBitmapData);
+    
+    CGColorSpaceRelease(colorSpace);
+    CGImageRelease(imageRef);
+    
+    return returnImage;
+}
+
+bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, bool smoothTexture, int blurRadius)
+{
     textureName = name;
     NSString *pathToTextureFile = [NSString stringWithFormat:@"%s",texturePath.c_str()];
-    UIImage *image = [UIImage imageWithContentsOfFile:pathToTextureFile];
+
+    UIImage *originalImage = [UIImage imageWithContentsOfFile:pathToTextureFile];
+    UIImage *image = originalImage;
+
+    if(blurRadius)
+        image = boxblurImage(originalImage, blurRadius);
+    
     if (!image)
         return NO;
+
     width = (uint32_t)CGImageGetWidth(image.CGImage);
     height = (uint32_t)CGImageGetHeight(image.CGImage);
     int bytesPerRow = getBytesPerRow(width,format);
@@ -46,13 +113,6 @@ bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
     if(!texture)
         return NO;
-/* TODO
-    MTLSamplerDescriptor *desc = [[MTLSamplerDescriptor alloc] init];
-    desc.minFilter = MTLSamplerMinMagFilterLinear;
-    desc.magFilter = MTLSamplerMinMagFilterLinear;
-
-    id <MTLSamplerState> sampler = [device newSamplerStateWithDescriptor:desc];
- */
 
     [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
                mipmapLevel:0
@@ -187,13 +247,18 @@ void MTLTexture::updateTexture(string fileName, int frame)
     gen = nil;    
 }
 
-int MTLTexture::getBytesPerRow(int width,TEXTURE_DATA_FORMAT format){
+int MTLTexture::getBytesPerRow(int width,TEXTURE_DATA_FORMAT format)
+{
     return width * getMTLPixelBytesForFormat(format);
 }
-int MTLTexture::getBytesPerRow(){
+
+int MTLTexture::getBytesPerRow()
+{
     return getBytesPerRow(width,texelFormat);
 }
-MTLPixelFormat MTLTexture::getMTLPixelFormat(TEXTURE_DATA_FORMAT format){
+
+MTLPixelFormat MTLTexture::getMTLPixelFormat(TEXTURE_DATA_FORMAT format)
+{
     MTLPixelFormat MTLFormat = MTLPixelFormatRGBA8Unorm;
     switch (format) {
         case TEXTURE_RG:
@@ -207,10 +272,14 @@ MTLPixelFormat MTLTexture::getMTLPixelFormat(TEXTURE_DATA_FORMAT format){
     }
     return MTLFormat;
 }
-int MTLTexture::getBitsPerCompomentForFormat(TEXTURE_DATA_FORMAT format){
+
+int MTLTexture::getBitsPerCompomentForFormat(TEXTURE_DATA_FORMAT format)
+{
     return 8;// To do
 }
-int MTLTexture::getMTLPixelBytesForFormat(TEXTURE_DATA_FORMAT format){
+
+int MTLTexture::getMTLPixelBytesForFormat(TEXTURE_DATA_FORMAT format)
+{
     int bytesCount = 4;
     switch (format) {
         case TEXTURE_RG:
@@ -224,9 +293,9 @@ int MTLTexture::getMTLPixelBytesForFormat(TEXTURE_DATA_FORMAT format){
     }
     return bytesCount;
 }
+
 void MTLTexture::createRenderTargetTexture(string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType,int width,int height)
 {
     
 }
-
 

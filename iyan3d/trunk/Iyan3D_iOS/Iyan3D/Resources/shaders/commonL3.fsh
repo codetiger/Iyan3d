@@ -14,7 +14,7 @@ uniform sampler2D reflectionMap;
 
 uniform float shadowDarkness;
 uniform float shadowTextureSize;
-uniform float hasReflectionMap, hasNormalMap;
+uniform float hasReflectionMap, hasNormalMap, uvScale;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
 uniform float lightTypes[5];
@@ -48,7 +48,7 @@ void getColorOfLight(in int index, inout vec4 specular , inout vec4 colorOfLight
     
     vec3 normal = normalize(normal);
     if(hasNormalMap > 0.5) {
-        vec3 n = texture2D(normalMap, vTexCoord.xy).xyz * 2.0 - 1.0;
+        vec3 n = texture2D(normalMap, vTexCoord.xy * uvScale).xyz * 2.0 - 1.0;
         normal = normalize(tbnMatrix * n);
     }
     
@@ -86,7 +86,7 @@ void main()
     lowp vec4 diffuse_color = vec4(vertexColor,1.0);
     
     if(visVertexColored < 0.5)
-        diffuse_color = texture2D(colorMap, vTexCoord.xy);
+        diffuse_color = texture2D(colorMap, vTexCoord.xy * uvScale);
     
     if(diffuse_color.a <= 0.5)
         discard;
