@@ -13,12 +13,16 @@
 #include "Node.h"
 #include "../Meshes/Mesh.h"
 #include "../Meshes/SkinMesh.h"
+#include "btSoftBody.h"
 
 class MeshNode : public Node {
     
 public:
     Mesh *mesh;
     Mesh *meshCache;
+
+    std::map<int, int> MeshMap;
+    std::map<int, btSoftBody::Node*> m_vertices;
 
     MeshNode();
     virtual ~MeshNode();

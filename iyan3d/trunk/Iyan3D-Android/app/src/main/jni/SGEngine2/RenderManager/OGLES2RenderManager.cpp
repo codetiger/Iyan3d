@@ -20,7 +20,8 @@ PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES;
 PFNGLISVERTEXARRAYOESPROC glIsVertexArrayOES;
 
-void OGLES2RenderManager::initialiseOtherVAOFunc () {
+void OGLES2RenderManager::initialiseOtherVAOFunc ()
+{
         Logger::log(INFO, "RenderMan ", "initialize VAO");
         glGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress ( "glGenVertexArraysOES" );
         glBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress ( "glBindVertexArrayOES" );
@@ -31,7 +32,8 @@ void OGLES2RenderManager::initialiseOtherVAOFunc () {
 }
 #endif
 
-OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale){
+OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale)
+{
     c = 0;
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
@@ -41,7 +43,9 @@ OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,fl
     shaderPrograms.clear();
     Initialize();
 }
-OGLES2RenderManager::~OGLES2RenderManager(){
+
+OGLES2RenderManager::~OGLES2RenderManager()
+{
     glDeleteFramebuffers(1,&depthBuffer);
     glDeleteFramebuffers(1,&colorBuffer);
     glDeleteFramebuffers(1,&frameBuffer);
@@ -49,7 +53,9 @@ OGLES2RenderManager::~OGLES2RenderManager(){
     if(this->camera)
         this->camera.reset();
 }
-void OGLES2RenderManager::Initialize(){
+
+void OGLES2RenderManager::Initialize()
+{
     glEnable(GL_CULL_FACE); // as now default is back face culling
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
@@ -60,7 +66,8 @@ Vector2 OGLES2RenderManager::getViewPort()
     return Vector2(viewportWidth, viewportHeight);
 }
 
-void OGLES2RenderManager::changeViewport(int width, int height) {
+void OGLES2RenderManager::changeViewport(int width, int height)
+{
     if(viewportWidth != width || viewportHeight != height) {
         viewportHeight = height;
         viewportWidth = width;
@@ -76,7 +83,8 @@ void OGLES2RenderManager::changeClearColor(Vector4 lClearColor)
     }
 }
 
-bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex){
+bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex, bool isRTT, int nodeIndex)
+{
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return false;
     
@@ -105,12 +113,10 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
         MESH_TYPE mType = mesh->meshType;
         if(node->shouldUpdateMesh) {
             createVertexAndIndexBuffers(node, mType, true);
-            node->shouldUpdateMesh = false;
         }
         bindBufferAndAttributes(node, meshBufferIndex, mType);
     } else if((node->shouldUpdateMesh && dynamic_pointer_cast<OGLNodeData>(node->nodeData)->VAOCreated) || bindAttrib) {
         updateVAO(node, true, bindAttrib, meshBufferIndex);
-        node->shouldUpdateMesh = false;
     } else
         createVAO(node, meshBufferIndex);
     
@@ -137,21 +143,20 @@ void OGLES2RenderManager::createVAO(shared_ptr<Node> node, short meshBufferIndex
     if(!OGLNode->VAOCreated) {
         if(meshBufferIndex == mesh->getMeshBufferCount()-1) {
             OGLNode->VAOCreated = true;
-            node->shouldUpdateMesh = false;
         }
         
         handleVAO(node, 1 , meshBufferIndex, mType);
         createVertexBuffer(node, meshBufferIndex, mType);
         
-        BindAttributes(node->material,mType);
+        BindAttributes(node->material, mType);
         
-            if(OGLNode->IndexBufLocations.size() > meshBufferIndex) {
-                size_t indexCount = mesh->getIndicesCount(meshBufferIndex);
-                GLsizeiptr size = sizeof(unsigned short) * indexCount;
-                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(meshBufferIndex), GL_STATIC_DRAW, OGLNode->IndexBufLocations[meshBufferIndex]);
-                std::replace(OGLNode->IndexBufLocations.begin(), OGLNode->IndexBufLocations.end(), OGLNode->IndexBufLocations[meshBufferIndex], indexBuf);
-            } else
-                OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,meshBufferIndex));
+        if(OGLNode->IndexBufLocations.size() > meshBufferIndex) {
+            size_t indexCount = mesh->getIndicesCount(meshBufferIndex);
+            GLsizeiptr size = sizeof(unsigned short) * indexCount;
+            u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(meshBufferIndex), node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW, OGLNode->IndexBufLocations[meshBufferIndex]);
+            std::replace(OGLNode->IndexBufLocations.begin(), OGLNode->IndexBufLocations.end(), OGLNode->IndexBufLocations[meshBufferIndex], indexBuf);
+        } else
+            OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,meshBufferIndex));
         
         handleVAO(node, 3);
     }
@@ -163,25 +168,26 @@ void OGLES2RenderManager::updateVAO(shared_ptr<Node> node, bool updateIndices, b
     Mesh *mesh = (node->instancedNodes.size() > 0 && !supportsInstancing) ? dynamic_pointer_cast<MeshNode>(node)->meshCache : dynamic_pointer_cast<MeshNode>(node)->getMesh();
     MESH_TYPE mType = mesh->meshType;
         
-        handleVAO(node, 2 , meshBufferIndex, mType);
+    handleVAO(node, 2 , meshBufferIndex, mType);
     if(bindAttrib) {
         bindBufferAndAttributes(node, meshBufferIndex, mType);
     } else {
         createVertexBuffer(node, meshBufferIndex, mType);
     
-        BindAttributes(node->material,mType);
+        BindAttributes(node->material, mType);
     
         if(updateIndices) {
             if(OGLNode->IndexBufLocations.size() > meshBufferIndex) {
                 size_t indexCount =  mesh->getIndicesCount(meshBufferIndex);
                 GLsizeiptr size = sizeof(unsigned short) * indexCount;
-                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(meshBufferIndex), GL_STATIC_DRAW, OGLNode->IndexBufLocations[meshBufferIndex]);
+                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(meshBufferIndex), node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW, OGLNode->IndexBufLocations[meshBufferIndex]);
                 std::replace(OGLNode->IndexBufLocations.begin(), OGLNode->IndexBufLocations.end(), OGLNode->IndexBufLocations[meshBufferIndex], indexBuf);
             } else
                 OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,meshBufferIndex));
         }
     }
-        handleVAO(node, 3);
+    
+    handleVAO(node, 3);
 }
 
 void OGLES2RenderManager::bindBufferAndAttributes(shared_ptr<Node> node, int meshBufferIndex, MESH_TYPE meshType)
@@ -194,11 +200,13 @@ void OGLES2RenderManager::bindBufferAndAttributes(shared_ptr<Node> node, int mes
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, OGLNode->IndexBufLocations[meshBufferIndex]);
 }
 
-void OGLES2RenderManager::endDisplay(){
+void OGLES2RenderManager::endDisplay()
+{
     
 }
 
-void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex){
+void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex)
+{
     glDepthFunc(GL_LEQUAL);
     if(!node || node->type <= NODE_TYPE_CAMERA)
         return;
@@ -219,6 +227,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     
     if(nodeMes == NULL)
         return;
+    
     if(supportsVAO)
         handleVAO(node, 2, meshBufferIndex);
 
@@ -263,7 +272,9 @@ void OGLES2RenderManager::drawElements(GLenum mode, GLsizei count, GLenum type, 
               glDrawElements(mode, count, type, data);
       #endif
 }
-void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType){
+
+void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType)
+{
   int valueIndex = 0;
   OGLMaterial *mat = (OGLMaterial*)material;
   if (meshType == MESH_TYPE_LITE) {
@@ -288,16 +299,21 @@ void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType)
       }
   }
 }
-void OGLES2RenderManager::UnBindAttributes(Material *material){
+
+void OGLES2RenderManager::UnBindAttributes(Material *material)
+{
   OGLMaterial *mat = (OGLMaterial*)material;
   for(int i = 0; i < mat->attributes.size();i++)
       glDisableVertexAttribArray((GLuint)mat->attributes[i].location);
 }
+
 void OGLES2RenderManager::useMaterialToRender(Material *material)
 {
   glUseProgram(((OGLMaterial*)material)->shaderProgram);
 }
-void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue, bool blurTex) {
+
+void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
+{
   uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
   switch (uni.type){
       case DATA_FLOAT:
@@ -339,22 +355,30 @@ void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uI
           break;
   }
 }
-void OGLES2RenderManager::bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex){
+
+void OGLES2RenderManager::bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex)
+{
 
 }
-void OGLES2RenderManager::setActiveCamera(shared_ptr<CameraNode> camera){
+
+void OGLES2RenderManager::setActiveCamera(shared_ptr<CameraNode> camera)
+{
   this->camera = camera;
   this->camera->setActive(true);
 }
-shared_ptr<CameraNode> OGLES2RenderManager::getActiveCamera(){
+
+shared_ptr<CameraNode> OGLES2RenderManager::getActiveCamera()
+{
   return camera;
 }
+
 void OGLES2RenderManager::clearDepthBuffer()
 {
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
-void OGLES2RenderManager::setTransparencyBlending(bool enable) {
+void OGLES2RenderManager::setTransparencyBlending(bool enable)
+{
     if(enable) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -404,6 +428,7 @@ void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vecto
   if(isBGImage)
       glClear(GL_DEPTH_BUFFER_BIT);
 }
+
 void OGLES2RenderManager::draw3DLine(Vector3 start,Vector3 end,Material *material)
 {
   vertexData vertData[2];
@@ -411,7 +436,7 @@ void OGLES2RenderManager::draw3DLine(Vector3 start,Vector3 end,Material *materia
   vertData[1].vertPosition = end;
   u16 indices[] = {0, 1};
 
-  u_int32_t _vertexBuffer = createAndBindBuffer(GL_ARRAY_BUFFER, (GLuint)(2*sizeof(vertexData)),&vertData[0], GL_STATIC_DRAW);
+  u_int32_t _vertexBuffer = createAndBindBuffer(GL_ARRAY_BUFFER, (GLuint)(2 * sizeof(vertexData)), &vertData[0], GL_STATIC_DRAW);
   u_int32_t _indexBuffer = createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (2 * sizeof(unsigned short)) ,&indices[0], GL_STATIC_DRAW);
   BindAttributes(material);
   drawElements(GL_LINES, 2, GL_UNSIGNED_SHORT, 0, 0);
@@ -444,7 +469,8 @@ void OGLES2RenderManager::draw3DLines(vector<Vector3> vPositions,Material *mater
     indices.clear();
 }
 
-bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color) {
+bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color)
+{
 
     changeViewport(width, height);
 
@@ -468,7 +494,8 @@ bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorB
     return true;
 }
 
-Texture* OGLES2RenderManager::createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height){
+Texture* OGLES2RenderManager::createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height)
+{
   Texture *newTex = new OGLTexture();
   newTex->createRenderTargetTexture(textureName, format, texelType, width, height);
   GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -479,6 +506,7 @@ Texture* OGLES2RenderManager::createRenderTargetTexture(string textureName ,TEXT
   }
   return newTex;
 }
+
 void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass,Vector4 color)
 {
   if(renderTexture){
@@ -490,6 +518,7 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
   else
       resetToMainBuffers();
 }
+
 void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath , IMAGE_FLIP flipType)
 {
     int bytesPerPix = 4;
@@ -562,7 +591,8 @@ void OGLES2RenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDe
 
 }
 
-void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers){
+void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers)
+{
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return;
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
@@ -585,7 +615,7 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
             if(OGLNode->IndexBufLocations.size() > i) {
                 size_t indexCount =  mesh->getIndicesCount(i);
                 GLsizeiptr size = sizeof(unsigned short) * indexCount;
-                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(i), GL_STATIC_DRAW, OGLNode->IndexBufLocations[i]);
+                u_int32_t indexBuf = updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size,  mesh->getIndicesArray(i), node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW, OGLNode->IndexBufLocations[i]);
                 std::replace(OGLNode->IndexBufLocations.begin(), OGLNode->IndexBufLocations.end(), OGLNode->IndexBufLocations[i], indexBuf);
             } else
                 OGLNode->IndexBufLocations.push_back(bindIndexBuffer(node,i));
@@ -613,7 +643,8 @@ void OGLES2RenderManager::handleVAO(shared_ptr<Node> node,int type, short meshBu
         glBindVertexArrayOES(0);
 }
 
-void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBufferIndex,MESH_TYPE meshType){
+void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node, short meshBufferIndex, MESH_TYPE meshType)
+{
   Mesh *nodeMes;
   if(node->type == NODE_TYPE_MORPH)
       nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(meshBufferIndex);
@@ -638,18 +669,18 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuf
     shared_ptr<OGLNodeData> nData = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     if(meshType == MESH_TYPE_LITE){
         if(nData->vertexBufLocations.size() > meshBufferIndex) {
-            vertexBufLoc = updateBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW, nData->vertexBufLocations[meshBufferIndex]);
+            vertexBufLoc = updateBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW, nData->vertexBufLocations[meshBufferIndex]);
             std::replace(nData->vertexBufLocations.begin(), nData->vertexBufLocations.end(), nData->vertexBufLocations[meshBufferIndex], vertexBufLoc);
         } else {
-            vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW);
+            vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getLiteVerticesArray(meshBufferIndex))[0], node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
             nData->vertexBufLocations.push_back(vertexBufLoc);
         }
     }else{
         if(nData->vertexBufLocations.size() > meshBufferIndex) {
-            vertexBufLoc = updateBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getHeavyVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW, nData->vertexBufLocations[meshBufferIndex]);
+            vertexBufLoc = updateBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getHeavyVerticesArray(meshBufferIndex))[0], node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW, nData->vertexBufLocations[meshBufferIndex]);
             std::replace(nData->vertexBufLocations.begin(), nData->vertexBufLocations.end(), nData->vertexBufLocations[meshBufferIndex], vertexBufLoc);
         } else {
-            vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getHeavyVerticesArray(meshBufferIndex))[0], GL_STATIC_DRAW);
+            vertexBufLoc = createAndBindBuffer(GL_ARRAY_BUFFER, size, &(nodeMes->getHeavyVerticesArray(meshBufferIndex))[0], node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
             nData->vertexBufLocations.push_back(vertexBufLoc);
         }
     }
@@ -677,9 +708,9 @@ u_int32_t OGLES2RenderManager::bindIndexBuffer(shared_ptr<Node> node, int meshBu
     shared_ptr<OGLNodeData> nData = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     size = sizeof(unsigned short) * indexCount;
     if(nData->IndexBufLocations.size() > meshBufferIndex)
-        return updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size, nodeMes->getIndicesArray(meshBufferIndex), GL_STATIC_DRAW, nData->IndexBufLocations[meshBufferIndex]);
+        return updateBuffer(GL_ELEMENT_ARRAY_BUFFER, size, nodeMes->getIndicesArray(meshBufferIndex), node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW, nData->IndexBufLocations[meshBufferIndex]);
     else
-        return createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER , size , nodeMes->getIndicesArray(meshBufferIndex) , GL_STATIC_DRAW);
+        return createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER , size , nodeMes->getIndicesArray(meshBufferIndex), node->memtype == NODE_GPUMEM_TYPE_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 }
 
 u_int32_t OGLES2RenderManager::createAndBindBuffer(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage)
@@ -709,7 +740,9 @@ void OGLES2RenderManager::deleteAndUnbindBuffer(GLenum target,GLsizei size,const
   glDeleteBuffers(size, bufferToDelete);
   glBindBuffer(target, 0);
 }
-void OGLES2RenderManager::resetToMainBuffers(){
+
+void OGLES2RenderManager::resetToMainBuffers()
+{
   glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
 //    glBindRenderbuffer(GL_RENDERBUFFER,colorBuffer);
 //    glBindRenderbuffer(GL_RENDERBUFFER,depthBuffer);
@@ -717,7 +750,8 @@ void OGLES2RenderManager::resetToMainBuffers(){
 //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
 }
 
-GLenum OGLES2RenderManager::getOGLDrawMode(DRAW_MODE mode){
+GLenum OGLES2RenderManager::getOGLDrawMode(DRAW_MODE mode)
+{
   switch(mode){
       case DRAW_MODE_POINTS:
           return GL_POINTS;

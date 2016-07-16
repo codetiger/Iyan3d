@@ -31,9 +31,6 @@ class PhysicsHelper
     
     vector < btRigidBody* > rBodies;
     vector < btSoftBody* > sBodies;
-    
-    std::map<int, btSoftBody::Node*> vertices;
-    std::map<int, int> testMesh_map;
 
 public:
     

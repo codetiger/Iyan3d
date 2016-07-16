@@ -260,6 +260,7 @@ void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
         
     }
 
+    nodes[index]->shouldUpdateMesh = false;
 }
 
 void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, METAL_DEPTH_FUNCTION func, bool changeDepthState)
@@ -273,9 +274,11 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
         		glClear(GL_DEPTH_BUFFER_BIT);
 		#endif
     }
+
     if(device == METAL) {
-        renderMan->setUpDepthState(func,true,clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
+        renderMan->setUpDepthState(func, true, clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
     }
+
     nodes[index]->update();
     Mesh* meshToRender;
     if(nodes[index]->instancedNodes.size() > 0 && !renderMan->supportsInstancing)
@@ -305,6 +308,8 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
         }
         
     }
+
+    nodes[index]->shouldUpdateMesh = false;
 }
 
 void SceneManager::setDepthTest(bool enable)

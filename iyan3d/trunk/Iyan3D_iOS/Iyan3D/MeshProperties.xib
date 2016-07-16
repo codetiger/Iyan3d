@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -139,15 +139,6 @@
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="WmX-9F-9Kk">
-                            <rect key="frame" x="115" y="235" width="340" height="31"/>
-                            <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
-                            <connections>
-                                <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="QbN-dc-qoY"/>
-                                <action selector="velocityChangeEnded:" destination="-1" eventType="touchUpInside" id="Fex-ek-TKP"/>
-                                <action selector="velocityValueChanged:" destination="-1" eventType="valueChanged" id="nXu-OX-QUF"/>
-                            </connections>
-                        </slider>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="opT-ge-IeQ">
                             <rect key="frame" x="11" y="179" width="442" height="29"/>
                             <segments>
@@ -156,9 +147,9 @@
                                 <segment title="Light"/>
                                 <segment title="Medium"/>
                                 <segment title="Heavy"/>
-                                <segment title="Cloth" enabled="NO"/>
-                                <segment title="Balloon" enabled="NO"/>
-                                <segment title="Jelly" enabled="NO"/>
+                                <segment title="Cloth"/>
+                                <segment title="Balloon"/>
+                                <segment title="Jelly"/>
                             </segments>
                             <connections>
                                 <action selector="physicsSegmentChanged:" destination="-1" eventType="valueChanged" id="O0f-0t-agc"/>
@@ -190,13 +181,22 @@
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="H6Y-dk-0UN">
                             <rect key="frame" x="241" y="216" width="20" height="20"/>
                         </activityIndicatorView>
+                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="WmX-9F-9Kk">
+                            <rect key="frame" x="115" y="235" width="340" height="31"/>
+                            <color key="tintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
+                            <connections>
+                                <action selector="reflectionValueChanged:" destination="-1" eventType="valueChanged" id="QbN-dc-qoY"/>
+                                <action selector="velocityChangeEnded:" destination="-1" eventType="touchUpInside" id="Fex-ek-TKP"/>
+                                <action selector="velocityValueChanged:" destination="-1" eventType="valueChanged" id="nXu-OX-QUF"/>
+                            </connections>
+                        </slider>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="555" y="390"/>
+            <point key="canvasLocation" x="642" y="302"/>
         </view>
     </objects>
     <resources>

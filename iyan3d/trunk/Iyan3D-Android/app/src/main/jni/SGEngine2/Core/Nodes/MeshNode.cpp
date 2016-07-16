@@ -27,10 +27,12 @@ MeshNode::~MeshNode() {
 Mesh* MeshNode::getMesh() {
     if(type == NODE_TYPE_INSTANCED)
         return dynamic_pointer_cast<MeshNode>(this->original)->getMesh();
-    
-    if(shouldUpdateMesh && meshCache)
-        return this->meshCache;
-    
+
+    if(meshCache) {
+        if(shouldUpdateMesh || memtype == NODE_GPUMEM_TYPE_DYNAMIC)
+            return this->meshCache;
+    }
+
     return this->mesh;
 }
 

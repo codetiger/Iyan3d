@@ -1029,11 +1029,9 @@ BOOL missingAlertShown;
 
 - (void) syncPhysicsAndPlay
 {
-    if(editorScene && editorScene->currentFrame == 0) {
+    if(editorScene && editorScene->currentFrame == 0)
         [self syncSceneWithPhysicsWorld];
-        for( int i = 0; i < editorScene->totalFrames-1; i++)
-            editorScene->updatePhysics(i);
-    }
+    
     [self performSelectorOnMainThread:@selector(playAnimation) withObject:nil waitUntilDone:NO];
     [self hideLoadingActivity];
 }

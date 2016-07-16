@@ -302,7 +302,6 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
     
     if(node->shouldUpdateMesh) {
         createVertexAndIndexBuffers(node , dynamic_pointer_cast<MeshNode>(node)->getMesh()->meshType, true);
-        node->shouldUpdateMesh = false;
     }
     
     useMaterialToRender(node->material);
@@ -358,7 +357,8 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
         int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
         drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, (supportsInstancing) ? instancingCount+1 : 0);
     }
-        
+    
+    node->shouldUpdateMesh = false;
 }
 
 bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,bool clearDepthBuf,bool isDepthPass,Vector4 color)
