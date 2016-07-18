@@ -28,16 +28,19 @@ typedef enum{
 }MESH_TYPE;
 using std::vector;
 
-struct vertexData{
+struct vertexData {
     Vector3 vertPosition;
     Vector3 vertNormal;
     Vector2 texCoord1;
     Vector3 vertTangent;
     Vector3 vertBitangent;
     Vector4 optionalData1;
+    bool operator==(const vertexData& rhs) {
+        return (vertPosition == rhs.vertPosition && vertNormal == rhs.vertNormal && texCoord1 == rhs.texCoord1);
+    }
 };
 
-struct vertexDataHeavy{
+struct vertexDataHeavy {
     Vector3 vertPosition;
     Vector3 vertNormal;
     Vector2 texCoord1;

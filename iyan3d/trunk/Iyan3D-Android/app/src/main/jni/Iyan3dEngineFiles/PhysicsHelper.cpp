@@ -160,7 +160,7 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                 SGNode *sgNode = (SGNode*)sBodies[k]->getUserPointer();
                 sgNode->setPosition(nodePos, frame);
                 sgNode->setRotation(nodeRot, frame);
-                sgNode->setScale(sgNode->scaleKeys[0].scale, frame);
+                sgNode->setScale(Vector3(1.0), frame);
                 updateMeshCache(sgNode);
             }
         }
@@ -256,14 +256,24 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     int count = 0;
 
     Mesh* mesh = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh();
+
+    int indicesCount = mesh->getTotalIndicesCount();
+    unsigned int indicesArray[indicesCount];
+    vector< unsigned int > inds = mesh->getTotalIndicesArray();
+    std::copy(inds.begin(), inds.end(), indicesArray);
     
-    for( int i = 0; i < mesh->getTotalIndicesCount(); i++) {
-        int iIndex = mesh->getTotalIndicesArray()[i];
-        Vector3 v1 = mesh->getLiteVertexByIndex(iIndex)->vertPosition;
+    int vtxCount = mesh->getVerticesCount();
+    vertexData *vertexArray = new vertexData[vtxCount];
+    vector< vertexData > vtx = mesh->getTotalLiteVerticesArray();
+    std::copy(vtx.begin(), vtx.end(), vertexArray);
+    
+    for( int i = 0; i < indicesCount; i++) {
+        int iIndex = indicesArray[i];
+        Vector3 v1 = vertexArray[iIndex].vertPosition;
         bool isFirst = true;
         for (int j = 0; j < i; j++) {
-            int jIndex = mesh->getTotalIndicesArray()[j];
-            Vector3 v2 = mesh->getLiteVertexByIndex(jIndex)->vertPosition;
+            int jIndex = indicesArray[j];
+            Vector3 v2 = vertexArray[jIndex].vertPosition;
             
             if(v1 == v2) {
                 index_map.insert(make_pair(i, j));
@@ -275,22 +285,20 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
         if(isFirst) {
             index_map.insert(std::make_pair(i, i));
             bullet_map.insert(std::make_pair(i, count));
-            Vector3 v3 = mesh->getLiteVertexByIndex(iIndex)->vertPosition;
+            Vector3 v3 = vertexArray[iIndex].vertPosition;
             vertex_map.insert(std::make_pair(count, v3));
             count++;
         }
     }
 
-    int indexCount = mesh->getTotalIndicesCount();
-    int *indices = new int[indexCount];
-
-    for(int i = 0; i < indexCount; i++) {
+    int *indices = new int[indicesCount];
+    for(int i = 0; i < indicesCount; i++) {
         int index1 = index_map.find(i)->second;
         int index2 = bullet_map.find(index1)->second;
         indices[i]   = index2;
     }
 
-    int vertexCount = vertex_map.size();
+    int vertexCount = (int)vertex_map.size();
     btScalar *vertices = new btScalar[vertexCount*3];
     
     for(int i = 0; i < vertexCount; i++) {
@@ -299,9 +307,7 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
         vertices[3*i+2] = vertex_map[i].z;
     }
 
-    btSoftBody* sBody = btSoftBodyHelpers::CreateFromTriMesh(m_softBodyWorldInfo, vertices, indices, indexCount/3);
-//    btScalar bodyMass = sgNode->props.weight;
-//    sBody->setMass(1, bodyMass);
+    btSoftBody* sBody = btSoftBodyHelpers::CreateFromTriMesh(m_softBodyWorldInfo, vertices, indices, indicesCount/3);
 
     std::map<btSoftBody::Node*, int> node_map;
 
@@ -311,19 +317,16 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
         for(int j = 0; j < 3; j++)
             if(node_map.find(face.m_n[j]) == node_map.end())
                 node_map.insert(std::make_pair(face.m_n[j], node_map.size()));
-        
-//        for(int j = 0; j < 3; j++)
-//            n->m_indices.push_back(node_map.find(face.m_n[j])->second);
     }
 
     for(auto& node_iter : std::move(node_map))
         n->m_vertices.insert(std::make_pair(node_iter.second, node_iter.first));
     
-    for(u32 i = 0; i < mesh->getVerticesCount(); i++) {
+    for(u32 i = 0; i < vtxCount; i++) {
         for(auto& it : std::move(n->m_vertices)) {
             int v_index = it.first;
             auto node = it.second;
-            Vector3 v1 = mesh->getLiteVertexByIndex(i)->vertPosition;
+            Vector3 v1 = vertexArray[i].vertPosition;
             if(node->m_x.x() == v1.x &&
                node->m_x.y() == v1.y &&
                node->m_x.z() == v1.z) {
@@ -349,9 +352,18 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     sBody->m_materials[0]->m_kLST = 0.8f;
     sBody->m_materials[0]->m_kAST = 0.8f;
     sBody->m_materials[0]->m_kVST = 0.8f;
-//    sBody->scale(btVector3(sgNode->getNodeScale().x, sgNode->getNodeScale().y, sgNode->getNodeScale().x));
+    sBody->scale(btVector3(sgNode->getNodeScale().x, sgNode->getNodeScale().y, sgNode->getNodeScale().x));
     sBody->setUserPointer((void*)sgNode);
-//    sgNode->setScale(Vector3(1.0), 0);
+    
+    if(sgNode->props.physicsType == BALLOON) {
+        sBody->generateBendingConstraints(2);
+        sBody->m_cfg.piterations = 2;
+        sBody->randomizeConstraints();
+    } else if(sgNode->props.physicsType == JELLY) {
+        sBody->generateBendingConstraints(2);
+        sBody->m_cfg.piterations = 2;
+        sBody->randomizeConstraints();
+    }
     
     btMatrix3x3 m;
     m.setIdentity();
