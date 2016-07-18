@@ -20,12 +20,7 @@
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
 #import "GAI.h"
-
-#ifdef OPTIMGLKM
-#import "Vector3GLK.h"
-#else
 #import "Vector3.h"
-#endif
 
 
 @protocol TextSelectionDelegate

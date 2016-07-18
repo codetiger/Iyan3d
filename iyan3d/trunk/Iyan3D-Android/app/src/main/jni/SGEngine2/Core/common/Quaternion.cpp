@@ -1,20 +1,44 @@
-
-#ifdef OPTIMSGM
+//
+//  QuaternionGLK.cpp
+//  Iyan3D
+//
+//  Created by Karthik on 26/04/16.
+//  Copyright © 2016 Smackall Games. All rights reserved.
+//
 
 #include "Quaternion.h"
+
+Quaternion::Quaternion()
+{
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
+    w = 1.0f;
+}
+
+Quaternion::Quaternion(float x, float y, float z, float w)
+{
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->w = w;
+}
 
 Quaternion::Quaternion(float x, float y, float z)
 {
     set(x, y, z);
 }
+
 Quaternion::Quaternion(const Vector3& vec)
 {
     set(vec.x, vec.y, vec.z);
 }
+
 Quaternion::Quaternion(const Mat4& mat)
 {
     (*this) = mat;
 }
+
 Quaternion& Quaternion::operator=(const Quaternion& other)
 {
     x = other.x;
@@ -23,6 +47,28 @@ Quaternion& Quaternion::operator=(const Quaternion& other)
     w = other.w;
     return *this;
 }
+
+Quaternion::Quaternion(GLKQuaternion quat)
+{
+    x = quat.x;
+    y = quat.y;
+    z = quat.z;
+    w = quat.w;
+}
+
+void Quaternion::setValues(GLKQuaternion quat)
+{
+    x = quat.x;
+    y = quat.y;
+    z = quat.z;
+    w = quat.w;
+}
+
+GLKQuaternion Quaternion::glkQuaternion() const
+{
+    return GLKQuaternionMake(x, y, z, w);
+}
+
 Quaternion& Quaternion::operator=(const Mat4& m)
 {
     const float diag = m[0] + m[5] + m[10] + 1;
@@ -74,21 +120,20 @@ Quaternion& Quaternion::operator=(const Mat4& m)
     
     return normalize();
 }
+
 Quaternion Quaternion::operator*(const Quaternion& other) const
-{
+{    
     Quaternion tmp;
-    
-    tmp.w = (other.w * w) - (other.x * x) - (other.y * y) - (other.z * z);
-    tmp.x = (other.w * x) + (other.x * w) + (other.y * z) - (other.z * y);
-    tmp.y = (other.w * y) + (other.y * w) + (other.z * x) - (other.x * z);
-    tmp.z = (other.w * z) + (other.z * w) + (other.x * y) - (other.y * x);
-    
+    GLKQuaternion quat = GLKQuaternionMultiply(other.glkQuaternion(), glkQuaternion());
+    tmp.setValues(quat);
     return tmp;
 }
+
 Quaternion Quaternion::operator*(float s) const
 {
     return Quaternion(s * x, s * y, s * z, s * w);
 }
+
 Quaternion& Quaternion::operator*=(float s)
 {
     x *= s;
@@ -97,77 +142,35 @@ Quaternion& Quaternion::operator*=(float s)
     w *= s;
     return *this;
 }
+
 Quaternion& Quaternion::operator*=(const Quaternion& other)
 {
     return (*this = other * (*this));
 }
+
 Quaternion Quaternion::operator+(const Quaternion& b) const
 {
-    return Quaternion(x + b.x, y + b.y, z + b.z, w + b.w);
+    GLKQuaternion quat = GLKQuaternionAdd(glkQuaternion(), b.glkQuaternion());
+    return Quaternion(quat);
 }
+
 Mat4 Quaternion::getMatrix() const
 {
     Mat4 m;
-    getMatrix(m);
+    m.matrix = GLKMatrix4MakeWithQuaternion(glkQuaternion());
     return m;
 }
-void Quaternion::getMatrix(Mat4& dest,
-                                  const Vector3& center) const
-{
-    dest[0] = 1.0f - 2.0f * y * y - 2.0f * z * z;
-    dest[1] = 2.0f * x * y + 2.0f * z * w;
-    dest[2] = 2.0f * x * z - 2.0f * y * w;
-    dest[3] = 0.0f;
-    
-    dest[4] = 2.0f * x * y - 2.0f * z * w;
-    dest[5] = 1.0f - 2.0f * x * x - 2.0f * z * z;
-    dest[6] = 2.0f * z * y + 2.0f * x * w;
-    dest[7] = 0.0f;
-    
-    dest[8] = 2.0f * x * z + 2.0f * y * w;
-    dest[9] = 2.0f * z * y - 2.0f * x * w;
-    dest[10] = 1.0f - 2.0f * x * x - 2.0f * y * y;
-    dest[11] = 0.0f;
-    
-    dest[12] = center.x;
-    dest[13] = center.y;
-    dest[14] = center.z;
-    dest[15] = 1.f;
-}
-void Quaternion::getMatrixCenter(Mat4& dest,
-                                        const Vector3& center,
-                                        const Vector3& translation) const
-{
-}
-void Quaternion::getMatrix_transposed(Mat4& dest) const
-{
-    dest[0] = 1.0f - 2.0f * y * y - 2.0f * z * z;
-    dest[4] = 2.0f * x * y + 2.0f * z * w;
-    dest[8] = 2.0f * x * z - 2.0f * y * w;
-    dest[12] = 0.0f;
-    
-    dest[1] = 2.0f * x * y - 2.0f * z * w;
-    dest[5] = 1.0f - 2.0f * x * x - 2.0f * z * z;
-    dest[9] = 2.0f * z * y + 2.0f * x * w;
-    dest[13] = 0.0f;
-    
-    dest[2] = 2.0f * x * z + 2.0f * y * w;
-    dest[6] = 2.0f * z * y - 2.0f * x * w;
-    dest[10] = 1.0f - 2.0f * x * x - 2.0f * y * y;
-    dest[14] = 0.0f;
-    
-    dest[3] = 0.f;
-    dest[7] = 0.f;
-    dest[11] = 0.f;
-    dest[15] = 1.f;
-}
+
 Quaternion& Quaternion::makeInverse()
 {
-    x = -x;
-    y = -y;
-    z = -z;
+    GLKQuaternion quat = GLKQuaternionInvert(glkQuaternion());
+    setValues(quat);
+//    x = -x;
+//    y = -y;
+//    z = -z;
     return *this;
 }
+
 Quaternion& Quaternion::set(float x, float y, float z, float w)
 {
     this->x = x;
@@ -176,6 +179,7 @@ Quaternion& Quaternion::set(float x, float y, float z, float w)
     this->w = w;
     return *this;
 }
+
 Quaternion& Quaternion::set(float X, float Y, float Z)
 {
     double angle;
@@ -204,39 +208,31 @@ Quaternion& Quaternion::set(float X, float Y, float Z)
     
     return normalize();
 }
+
 Quaternion& Quaternion::set(const Vector3& vec)
 {
     return set(vec.x, vec.y, vec.z);
 }
+
 Quaternion& Quaternion::set(const Quaternion& quat)
 {
     return (*this = quat);
 }
-bool Quaternion::equals1(float a, float b, float tolerance)
-{
-    return (a + tolerance >= b) && (a - tolerance <= b);
-}
-bool Quaternion::equals(const Quaternion& other, const float tolerance) const
-{
-    return ((x + tolerance >= other.x) && (x - tolerance <= other.x)) && ((y + tolerance >= other.y) && (y - tolerance <= other.y)) && ((z + tolerance >= other.z) && (z - tolerance <= other.z)) && ((w + tolerance >= other.w) && (w - tolerance <= other.w));
-}
+
 Quaternion& Quaternion::normalize()
 {
-    const float n = x * x + y * y + z * z + w * w;
-    
-    if (n == 1)
-        return *this;
-    
-    //n = 1.0f / sqrtf(n);
-    return (*this *= (1.0 / sqrtf(n)));
+    GLKQuaternion quat = GLKQuaternionNormalize(glkQuaternion());
+    setValues(quat);
+    return *this;
 }
+
 float Quaternion::dotProduct(const Quaternion& q2) const
 {
     return (x * q2.x) + (y * q2.y) + (z * q2.z) + (w * q2.w);
 }
+
 Quaternion& Quaternion::fromAngleAxis(float angle, const Vector3& axis)
 {
-    
     const float fHalfAngle = 0.5f * angle;
     const float fSin = sinf(fHalfAngle);
     w = cosf(fHalfAngle);
@@ -244,9 +240,15 @@ Quaternion& Quaternion::fromAngleAxis(float angle, const Vector3& axis)
     y = fSin * axis.y;
     z = fSin * axis.z;
     return *this;
+
+//    GLKQuaternion quat = GLKQuaternionMakeWithAngleAndAxis(angle, axis.x, axis.y, axis.z);
+//    setValues(quat);
+//    return *this;
 }
+
 void Quaternion::toAngleAxis(float& angle, Vector3& axis) const
 {
+    //TODO use for setrotation radians
     const float scale = sqrtf(x * x + y * y + z * z);
     
     if (scale == 0.0 || w > 1.0f || w < -1.0f) {
@@ -263,6 +265,7 @@ void Quaternion::toAngleAxis(float& angle, Vector3& axis) const
         axis.z = z * invscale;
     }
 }
+
 void Quaternion::toEuler(Vector3& euler) const
 {
     const double sqw = w * w;
@@ -296,10 +299,10 @@ void Quaternion::toEuler(Vector3& euler) const
         euler.y = (float)asin(fmin(fmax(test, -1.0), 1.0));
     }
 }
+
 Vector3 Quaternion::operator*(const Vector3& v) const
 {
     // nVidia SDK implementation
-    
     Vector3 uv, uuv;
     Vector3 qvec(x, y, z);
     uv = qvec.crossProduct(v);
@@ -309,6 +312,7 @@ Vector3 Quaternion::operator*(const Vector3& v) const
     
     return v + uv + uuv;
 }
+
 Quaternion& Quaternion::makeIdentity()
 {
     w = 1.f;
@@ -317,5 +321,3 @@ Quaternion& Quaternion::makeIdentity()
     z = 0.f;
     return *this;
 }
-
-#endif

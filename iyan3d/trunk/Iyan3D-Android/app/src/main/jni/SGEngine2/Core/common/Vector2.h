@@ -1,26 +1,25 @@
 //
-//  Vector2.h
-//  SGEngine2
+//  Vector2GLK.hpp
+//  Iyan3D
 //
-//  Created by Harishankar on 13/11/14.
-//  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
+//  Created by Karthik on 26/04/16.
+//  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
-#ifdef OPTIMSGM
+#ifndef Vector2GLK_hpp
+#define Vector2GLK_hpp
 
-#ifndef __SGEngine2__Vector2__
-#define __SGEngine2__Vector2__
+#include <GLKit/GLKVector2.h>
 
-#include "common.h"
 
 class Vector2 {
 public:
     float x, y;
-
+        
     Vector2();
     Vector2(float X, float Y);
     ~Vector2();
-
+    
     Vector2& operator=(const Vector2& b);
     Vector2 operator+(const Vector2& b) const;
     Vector2 operator-(const Vector2& b) const;
@@ -28,18 +27,18 @@ public:
     Vector2 operator-() const;
     Vector2 operator*(const float v) const;
     Vector2 operator/(const float v) const;
-
+    
     Vector2& operator+=(const Vector2& b);
     Vector2& operator-=(const Vector2& b);
     Vector2& operator*=(const float v);
     Vector2& operator/=(const float v);
-
+    
     bool operator==(const Vector2& b) const;
     bool operator!=(const Vector2& b) const;
-
+    
     float& operator[](unsigned i);
     float operator[](unsigned i) const;
-
+    
     Vector2 normalize();
     Vector2 crossProduct(Vector2 p);
     float dotProduct(Vector2 other);
@@ -48,5 +47,3 @@ public:
 };
 
 #endif
-
-#endif /* defined(__SGEngine2__Vector2__) */

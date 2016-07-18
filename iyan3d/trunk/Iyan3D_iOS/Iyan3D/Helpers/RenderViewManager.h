@@ -21,12 +21,7 @@
 #import "RenderingView.h"
 #import "SceneManager.h"
 #import "Constants.h"
-
-#ifdef OPTIMGLKM
-#import "Vector3GLK.h"
-#else
 #import "Vector3.h"
-#endif
 
 @protocol RenderViewManagerDelegate
 

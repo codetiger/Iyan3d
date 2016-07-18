@@ -11,12 +11,7 @@
 #import "GetPixelDemo.h"
 #import "Constants.h"
 #import "Utility.h"
-
-#ifdef OPTIMGLKM
-#import "Vector3GLK.h"
-#else
 #import "Vector3.h"
-#endif
 
 
 @protocol LightPropertiesDelegate

@@ -21,27 +21,10 @@
 #include <vector>
 #include <sstream>
 
-#ifdef OPTIMGLKM
-#include "Vector2GLK.h"
-#include "Vector3GLK.h"
-#include "Mat4GLK.h"
-#include "QuaternionGLK.h"
-#endif
-
-#ifdef OPTIMGLM
-#include "Vector2GLM.h"
-#include "Vector3GLM.h"
-#include "Mat4GLM.h"
-#include "QuaternionGLM.h"
-#endif
-
-#ifdef OPTIMSGM
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Mat4.h"
 #include "Quaternion.h"
-#endif
-
 
 #include "../../Utilities/Logger.h"
 #include "../../Utilities/Maths.h"

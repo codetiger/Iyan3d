@@ -1,21 +1,16 @@
 //
-//  Vector4.cpp
-//  SGEngine2
+//  Vector4GLK.cpp
+//  Iyan3D
 //
-//  Created by Harishankar on 13/11/14.
-//  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
+//  Created by Karthik on 26/04/16.
+//  Copyright © 2016 Smackall Games. All rights reserved.
 //
-
-#ifdef OPTIMSGM
 
 #include "Vector4.h"
 
 Vector4::Vector4()
 {
-    x = 0.0;
-    y = 0.0;
-    z = 0.0;
-    w = 0.0;
+    x = y = z = w = 0.0;
 }
 
 Vector4::Vector4(float value)
@@ -25,10 +20,9 @@ Vector4::Vector4(float value)
 
 Vector4::Vector4(Vector3 a, float W)
 {
-    x = a.x;
-    y = a.y;
-    z = a.z;
-    w = W;
+    
+    GLKVector4 vect = GLKVector4MakeWithVector3(a.glkVector(), W);
+    setValues(vect);
 }
 
 Vector4::Vector4(float X, float Y, float Z, float W)
@@ -39,8 +33,30 @@ Vector4::Vector4(float X, float Y, float Z, float W)
     w = W;
 }
 
+Vector4::Vector4(GLKVector4 vect)
+{
+    x = vect.x;
+    y = vect.y;
+    z = vect.z;
+    w = vect.w;
+}
+
+GLKVector4 Vector4::glkVector() const
+{
+    return GLKVector4Make(x, y, z, w);
+}
+
+
 Vector4::~Vector4()
 {
+}
+
+void Vector4::setValues(GLKVector4 vect)
+{
+    x = vect.x;
+    y = vect.y;
+    z = vect.z;
+    w = vect.w;
 }
 
 Vector4& Vector4::operator=(const Vector4& b)
@@ -54,12 +70,14 @@ Vector4& Vector4::operator=(const Vector4& b)
 
 Vector4 Vector4::operator+(const Vector4& b) const
 {
-    return Vector4(x + b.x, y + b.y, z + b.z, w + b.w);
+    GLKVector4 vect = GLKVector4Add(glkVector(), b.glkVector());
+    return Vector4(vect);
 }
 
 Vector4 Vector4::operator-(const Vector4& b) const
 {
-    return Vector4(x - b.x, y - b.y, z - b.z, w - b.w);
+    GLKVector4 vect = GLKVector4Subtract(glkVector(), b.glkVector());
+    return Vector4(vect);
 }
 
 Vector4 Vector4::operator+() const
@@ -74,64 +92,42 @@ Vector4 Vector4::operator-() const
 
 Vector4 Vector4::operator*(const float v) const
 {
-    return Vector4(x * v, y * v, z * v, w * v);
+    GLKVector4 vect = GLKVector4MultiplyScalar(glkVector(), v);
+    return Vector4(vect);
 }
 
 Vector4 Vector4::operator/(const float v) const
 {
-    float inv_v = 1.0f / v;
-    return Vector4(x * inv_v, y * inv_v, z * inv_v, w * inv_v);
+    GLKVector4 vect = GLKVector4DivideScalar(glkVector(), v);
+    return Vector4(vect);
 }
 
 Vector4& Vector4::operator+=(const Vector4& b)
 {
-    x += b.x;
-    y += b.y;
-    z += b.z;
-    w += b.w;
+    GLKVector4 vect = GLKVector4Add(glkVector(), b.glkVector());
+    setValues(vect);
     return *this;
 }
 
 Vector4& Vector4::operator-=(const Vector4& b)
 {
-    x -= b.x;
-    y -= b.y;
-    z -= b.z;
-    w -= b.w;
+    GLKVector4 vect = GLKVector4Subtract(glkVector(), b.glkVector());
+    setValues(vect);
     return *this;
 }
 
 Vector4& Vector4::operator*=(const float v)
 {
-    x *= v;
-    y *= v;
-    z *= v;
-    w *= v;
+    GLKVector4 vect = GLKVector4MultiplyScalar(glkVector(), v);
+    setValues(vect);
     return *this;
 }
 
 Vector4& Vector4::operator/=(const float v)
 {
-    float inv_v = 1.0f / v;
-    x *= inv_v;
-    y *= inv_v;
-    z *= inv_v;
-    w *= inv_v;
+    GLKVector4 vect = GLKVector4DivideScalar(glkVector(), v);
+    setValues(vect);
     return *this;
-}
-
-Vector4 Vector4::normalize()
-{
-    float length = x * x + y * y + z * z + w * w;
-    if (length == 0)
-        return *this;
-    length = 1.0 / sqrt(length);
-
-    x = (x * length);
-    y = (y * length);
-    z = (z * length);
-    w = (w * length);
-    return Vector4(x, y, z, w);
 }
 
 bool Vector4::operator==(const Vector4& b) const
@@ -147,31 +143,36 @@ bool Vector4::operator!=(const Vector4& b) const
 float& Vector4::operator[](unsigned i)
 {
     switch (i) {
-    case 0:
-        return x;
-    case 1:
-        return y;
-    case 2:
-        return z;
-    default:
-    case 3:
-        return w;
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        case 3:
+        default:
+            return w;
     }
 }
 
 float Vector4::operator[](unsigned i) const
 {
     switch (i) {
-    case 0:
-        return x;
-    case 1:
-        return y;
-    case 2:
-        return z;
-    default:
-    case 3:
-        return w;
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        case 3:
+        default:
+            return w;
     }
 }
 
-#endif
+Vector4 Vector4::normalize()
+{
+    GLKVector4 vect = GLKVector4Normalize(glkVector());
+    setValues(vect);
+    return *this;
+}

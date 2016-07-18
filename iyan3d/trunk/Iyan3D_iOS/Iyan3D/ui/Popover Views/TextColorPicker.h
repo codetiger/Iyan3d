@@ -10,12 +10,7 @@
 #import "GAI.h"
 #import "GetPixelDemo.h"
 #import "Constants.h"
-
-#ifdef OPTIMGLKM
-#import "Vector3GLK.h"
-#else
 #import "Vector3.h"
-#endif
 
 @protocol TextColorPickerDelegate
 - (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish;
