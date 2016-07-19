@@ -215,7 +215,8 @@ void SGMovementManager::touchMove(Vector2 curTouchPos, Vector2 prevTouchPos, flo
     
     if(moveScene->isControlSelected) {
         Vector3 outputValue;
-        bool isMoved = calculateControlMovements(curTouchPos, prevTouchPoints[0], outputValue);
+        Quaternion outputQuatValue;
+        bool isMoved = calculateControlMovements(curTouchPos, prevTouchPoints[0], outputValue, outputQuatValue);
         prevTouchPoints[0] = curTouchPos;
         
         if(moveScene->controlType == SCALE) {
@@ -232,7 +233,7 @@ void SGMovementManager::touchMove(Vector2 curTouchPos, Vector2 prevTouchPos, flo
             
             moveScene->actionMan->changeObjectScale(moveScene->getSelectedNodeScale() + outputValue, false);
         } else
-            isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue);
+            isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue, outputQuatValue);
         
     } else if (moveScene->moveNodeId != NOT_EXISTS && moveScene->controlType == MOVE) {
         moveObjectInPlane(curTouchPos, prevTouchPoints[0], true);
@@ -293,7 +294,7 @@ bool SGMovementManager::moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoi
     
 }
 
-bool SGMovementManager::calculateControlMovements(Vector2 curPoint, Vector2 prevTouchPoint, Vector3 &outputValue, bool isSGJoint) {
+bool SGMovementManager::calculateControlMovements(Vector2 curPoint, Vector2 prevTouchPoint, Vector3 &outputValue, Quaternion &outputQuatValue, bool isSGJoint) {
     if(!moveScene || !smgr)
         return false;
     
@@ -329,14 +330,14 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint, Vector2 prev
         outputValue.z = ((moveScene->selectedControlId == Z_MOVE || moveScene->selectedControlId == Z_SCALE) ? 1.0 : 0.0) * delta.z;
         
         return true;
-    }
-    else if(moveScene->controlType == ROTATE){
-        
+    } else if(moveScene->controlType == ROTATE) {
         Vector2 p1;
-        p1.x = prevTouchPoint.x; p1.y = prevTouchPoint.y;
-        Vector2 p2;
-        p2.x = curPoint.x;	p2.y = curPoint.y;
+        p1.x = prevTouchPoint.x;
+        p1.y = prevTouchPoint.y;
         
+        Vector2 p2;
+        p2.x = curPoint.x;
+        p2.y = curPoint.y;
         
         Vector3 oldPos;
         Vector3 newPos;
@@ -345,7 +346,6 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint, Vector2 prev
         Vector3 parentToOldPos = (oldPos - center).normalize();
         
         Quaternion delta = MathHelper::rotationBetweenVectors(parentToNewPos, parentToOldPos);
-        
         Quaternion nodeRot;
         
         if(moveScene->selectedNodeIds.size() > 0) {
@@ -378,7 +378,7 @@ bool SGMovementManager::calculateControlMovements(Vector2 curPoint, Vector2 prev
             delta =  MathHelper::RotateNodeInWorld(nodeRot, delta);
         }
         
-        delta.toEuler(outputValue);
+        outputQuatValue = delta;
         return true;
     }
     return false;
@@ -417,7 +417,8 @@ void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,fl
     
     if(moveScene->isControlSelected) {
         Vector3 outputValue;
-        calculateControlMovements(curTouchPos,prevTouchPoints[0] ,outputValue, isJointSelected ? true:false);
+        Quaternion outputQuatValue;
+        calculateControlMovements(curTouchPos, prevTouchPoints[0], outputValue, outputQuatValue, isJointSelected ? true : false);
         prevTouchPoints[0] = curTouchPos;
         switch(moveScene->controlType){
             case MOVE:
@@ -430,8 +431,8 @@ void SGMovementManager::touchMoveRig(Vector2 curTouchPos,Vector2 prevTouchPos,fl
                 break;
             case ROTATE:
                 if(isNodeSelected) {
-                    moveScene->actionMan->changeSkeletonRotation(outputValue);
-                    moveScene->actionMan->changeSGRRotation(outputValue);
+                    moveScene->actionMan->changeSkeletonRotation(outputQuatValue);
+                    moveScene->actionMan->changeSGRRotation(outputQuatValue);
                 }
                 break;
             case SCALE:

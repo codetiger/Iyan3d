@@ -52,7 +52,7 @@ public:
     
     void touchMove(Vector2 curTouchPos,Vector2 prevTouchPos,float width,float height);
     bool moveObjectInPlane(Vector2 curPoint, Vector2 prevTouchPoint, bool isSGJoint);
-    bool calculateControlMovements(Vector2 curPoint,Vector2 prevTouchPoint,Vector3 &outputValue,bool isSGJoint = true);
+    bool calculateControlMovements(Vector2 curPoint, Vector2 prevTouchPoint, Vector3 &outputValue, Quaternion& outputQuatValue, bool isSGJoint = true);
     void getOldAndNewPosInWorld(Vector2 prevTouchPoint, Vector2 curPoint, Vector3& oldPos, Vector3& newPos);
     
     void touchEnd(Vector2 curTouchPos);

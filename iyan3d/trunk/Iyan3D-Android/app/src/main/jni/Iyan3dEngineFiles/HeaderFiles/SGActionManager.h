@@ -22,7 +22,7 @@ private:
     SGAction propertyAction;
     Vector3 startScale;
     MIRROR_SWITCH_STATE mirrorSwitchState;
-    void rotateJoint(Vector3 outputValue);
+    void rotateJoint(Quaternion outputValue);
     void StoreDeleteObjectKeys(int nodeIndex);
 
 public:
@@ -44,7 +44,7 @@ public:
     
     /* Move/Rotate node/joint actions */
     
-    bool changeObjectOrientation(Vector3 outputValue);
+    bool changeObjectOrientation(Vector3 outputValue, Quaternion outputQuatValue);
     void moveJoint(Vector3 outputValue, bool touchMove = false);
     bool isIKJoint(int jointId);
     void storeActionKeys(bool finished);

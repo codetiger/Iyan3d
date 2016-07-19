@@ -830,9 +830,11 @@ Vector3 SGEditorScene::getTransformValue()
     
     if(controlType == MOVE)
         return curNode->getAbsolutePosition();
-//    else if (controlType == ROTATE)
-//        return curNode->getRotation();
-    else if (controlType == SCALE)
+    else if (controlType == ROTATE) {
+        Vector3 rot;
+        curNode->getRotation().toEuler(rot);
+        return rot;
+    } else if (controlType == SCALE)
         return curNode->getScale();
     
     return Vector3(-999.0 ,-999.0, -999.0);

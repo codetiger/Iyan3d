@@ -284,28 +284,20 @@ void Quaternion::toEuler(Vector3& euler) const
     const double sqz = z * z;
     const double test = 2.0 * (y * w - x * z);
     double tolerance = 0.000001;
+
     if (((test + tolerance >= 1.0) && (test - tolerance <= 1.0))) {
-        // heading = rotation about z-axis
         euler.z = (float)(-2.0 * atan2(x, w));
-        // bank = rotation about x-axis
         euler.x = 0;
-        // attitude = rotation about y-axis
         euler.y = (float)(PI64 / 2.0);
     }
     else if (((test + tolerance >= -1.0) && (test - tolerance <= -1.0))) {
-        // heading = rotation about z-axis
         euler.z = (float)(2.0 * atan2(x, w));
-        // bank = rotation about x-axis
         euler.x = 0;
-        // attitude = rotation about y-axis
         euler.y = (float)(PI64 / -2.0);
     }
     else {
-        // heading = rotation about z-axis
         euler.z = (float)atan2(2.0 * (x * y + z * w), (sqx - sqy - sqz + sqw));
-        // bank = rotation about x-axis
         euler.x = (float)atan2(2.0 * (y * z + x * w), (-sqx - sqy + sqz + sqw));
-        // attitude = rotation about y-axis
         euler.y = (float)asin(fmin(fmax(test, -1.0), 1.0));
     }
 }

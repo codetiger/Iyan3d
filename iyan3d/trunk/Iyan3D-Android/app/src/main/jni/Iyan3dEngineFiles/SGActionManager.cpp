@@ -76,7 +76,7 @@ bool SGActionManager::isIKJoint(int jointId)
 }
 
 
-bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
+bool SGActionManager::changeObjectOrientation(Vector3 outputValue, Quaternion outputQuatValue)
 {
     if(!actionScene || !smgr || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0))
         return false;
@@ -108,23 +108,21 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
             outputValue *= RADTODEG;
             if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
                 success = true;
-                Quaternion r = Quaternion(outputValue * DEGTORAD);
-                actionScene->getParentNode()->setRotation(r, true);
+                actionScene->getParentNode()->setRotation(outputQuatValue, true);
                 break;
             } else if(actionScene->isJointSelected){
                 success = true;
-                rotateJoint(outputValue);
+                rotateJoint(outputQuatValue);
              }else if(actionScene->isNodeSelected){
                 success = true;
-                Quaternion r = Quaternion(outputValue * DEGTORAD);
                  if(actionScene->directionIndicator->node->getVisible())
-                     actionScene->directionIndicator->setRotationOnNode(r);
+                     actionScene->directionIndicator->setRotationOnNode(outputQuatValue);
                  else if (actionScene->directionLine->node->getVisible()) {
-                     actionScene->directionLine->setRotationOnNode(r);
-                     selectedNode->setRotation(r, actionScene->currentFrame);
+                     actionScene->directionLine->setRotationOnNode(outputQuatValue);
+                     selectedNode->setRotation(outputQuatValue, actionScene->currentFrame);
                  } else {
-                     selectedNode->setRotation(r, actionScene->currentFrame);
-                     selectedNode->setRotationOnNode(r, true);
+                     selectedNode->setRotation(outputQuatValue, actionScene->currentFrame);
+                     selectedNode->setRotationOnNode(outputQuatValue, true);
                  }
                 break;
             }
@@ -204,17 +202,17 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
 // TODO For CPU Skin update mesh cache
 }
 
-void SGActionManager::rotateJoint(Vector3 outputValue)
+void SGActionManager::rotateJoint(Quaternion outputValue)
 {
     SGNode* selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     SGJoint * selectedJoint = actionScene->selectedJoint;
 
-    selectedJoint->setRotation(Quaternion(outputValue*DEGTORAD), actionScene->currentFrame);
-    selectedJoint->setRotationOnNode(Quaternion(outputValue*DEGTORAD), true);
+    selectedJoint->setRotation(outputValue, actionScene->currentFrame);
+    selectedJoint->setRotationOnNode(outputValue, true);
     if(actionScene->getMirrorState() == MIRROR_ON){
         int mirrorJointId = BoneLimitsHelper::getMirrorJointId(actionScene->selectedJointId);
         if(mirrorJointId != -1) {
-            Quaternion rot = Quaternion(outputValue*Vector3(1.0,-1.0,-1.0)*DEGTORAD);
+            Quaternion rot = Quaternion(outputValue.x, -outputValue.y, -outputValue.z, outputValue.w);
             selectedNode->joints[mirrorJointId]->setRotation(rot, actionScene->currentFrame);
             selectedNode->joints[mirrorJointId]->setRotationOnNode(rot, true);
         }
