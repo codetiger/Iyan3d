@@ -80,10 +80,6 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
             p->age = maxLife * maxLifeRandPercent * 0.01f * rand()/(float)RAND_MAX;
             p->position = getAbsoluteTransformation().getTranslation();
             Vector3 direction = Vector3(0, 1, 0);
-            Mat4 rotMatix;
-            Vector3 rot = getRotationInRadians() + Vector3(- 0.5 + rand()/(float)RAND_MAX, 0.0, - 0.5 + rand()/(float)RAND_MAX) * startVelocitySpreadAngle * DEGTORAD;
-            rotMatix.setRotationRadians(rot);
-            rotMatix.rotateVect(direction);
             p->velocity = direction * (startVelocityMagnitude + rand()/RAND_MAX *  startVelocityMagnitudeRand);
         } else break;
     }

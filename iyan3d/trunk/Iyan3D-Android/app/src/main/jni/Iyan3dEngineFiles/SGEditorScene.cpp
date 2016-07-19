@@ -307,7 +307,7 @@ void SGEditorScene::updateDirectionLine()
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(currentFrame, nodes[selectedNodeId]->rotationKeys,true);
 
         directionLine->node->setPosition(position);
-        directionLine->node->setRotationInDegrees(MathHelper::toEuler(rotation) * RADTODEG);
+        directionLine->node->setRotation(rotation);
     } else {
         lightCircles->node->setPosition(position);
         lightCircles->node->setScale(Vector3(nodes[selectedNodeId]->props.nodeSpecificFloat));
@@ -830,8 +830,8 @@ Vector3 SGEditorScene::getTransformValue()
     
     if(controlType == MOVE)
         return curNode->getAbsolutePosition();
-    else if (controlType == ROTATE)
-        return curNode->getRotationInDegrees();
+//    else if (controlType == ROTATE)
+//        return curNode->getRotation();
     else if (controlType == SCALE)
         return curNode->getScale();
     

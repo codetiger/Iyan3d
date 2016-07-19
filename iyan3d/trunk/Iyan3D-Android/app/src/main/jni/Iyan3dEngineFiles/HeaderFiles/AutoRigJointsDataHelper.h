@@ -15,7 +15,8 @@ using namespace std;
 struct TPoseJoint{
     int id;
     int parentId;
-    Vector3 position, rotation;
+    Vector3 position;
+    Quaternion rotation;
     float sphereRadius,envelopeRadius;
 };
 

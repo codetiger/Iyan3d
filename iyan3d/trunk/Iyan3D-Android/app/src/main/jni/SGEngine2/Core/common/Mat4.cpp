@@ -127,29 +127,9 @@ void Mat4::translate(const Vector3& v)
     translate(v.x, v.y, v.z);
 }
 
-void Mat4::setRotationRadians(Vector3 rotation)
+void Mat4::setRotation(Quaternion rotation)
 {
-    const float cr = cos(rotation.x);
-    const float sr = sin(rotation.x);
-    const float cp = cos(rotation.y);
-    const float sp = sin(rotation.y);
-    const float cy = cos(rotation.z);
-    const float sy = sin(rotation.z);
-    
-    (*this)[0] = (cp * cy);
-    (*this)[1] = (cp * sy);
-    (*this)[2] = (-sp);
-    
-    const float srsp = sr * sp;
-    const float crsp = cr * sp;
-    
-    (*this)[4] = (srsp * cy - cr * sy);
-    (*this)[5] = (srsp * sy + cr * cy);
-    (*this)[6] = (sr * cp);
-    
-    (*this)[8] = (crsp * cy + sr * sy);
-    (*this)[9] = (crsp * sy - sr * cy);
-    (*this)[10] = (cr * cp);
+    matrix = GLKMatrix4Multiply(matrix, rotation.getMatrix().matrix);
 }
 
 void Mat4::scale(float x, float y, float z)
@@ -237,11 +217,6 @@ Vector3 Mat4::getTranslation()
     return Vector3((*this)[12], (*this)[13], (*this)[14]);
 }
 
-Vector3 Mat4::getRotation()
-{
-    return Vector3((*this)[12], (*this)[13], (*this)[14]);
-}
-
 Vector3 Mat4::getScale()
 {
     const Mat4& M = *this;
@@ -254,56 +229,9 @@ Vector3 Mat4::getScale()
                    sqrtf(M[8] * M[8] + M[9] * M[9] + M[10] * M[10]));
 }
 
-Vector3 Mat4::getRotationInDegree()
+Quaternion Mat4::getRotation()
 {
-    const Mat4& mat = *this;
-    Vector3 scale = getScale();
-    // we need to check for negative scale on to axes, which would bring up wrong results
-    if (scale.y < 0 && scale.z < 0) {
-        scale.y = -scale.y;
-        scale.z = -scale.z;
-    }
-    else if (scale.x < 0 && scale.z < 0) {
-        scale.x = -scale.x;
-        scale.z = -scale.z;
-    }
-    else if (scale.x < 0 && scale.y < 0) {
-        scale.x = -scale.x;
-        scale.y = -scale.y;
-    }
-    Vector3 invScale(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
-    
-    double Y = -asin(Maths::clamp(mat[2] * invScale.x, -1.0, 1.0));
-    const double C = cos(Y);
-    Y *= (180.0 / 3.1415926535897932384626433832795028841971693993751);
-    
-    double rotx, roty, X, Z;
-    
-    if (!Maths::iszero(C)) {
-        const double invC = (double)1.0f / C;
-        rotx = mat[10] * invC * invScale.z;
-        roty = mat[6] * invC * invScale.y;
-        X = atan2(roty, rotx) * (180.0 / 3.1415926535897932384626433832795028841971693993751);
-        rotx = mat[0] * invC * invScale.x;
-        roty = mat[1] * invC * invScale.x;
-        Z = atan2(roty, rotx) * (180.0 / 3.1415926535897932384626433832795028841971693993751);
-    }
-    else {
-        X = 0.0;
-        rotx = mat[5] * invScale.y;
-        roty = -mat[4] * invScale.y;
-        Z = atan2(roty, rotx) * (180.0 / 3.1415926535897932384626433832795028841971693993751);
-    }
-    
-    // fix values that get below zero
-    if (X < 0.0)
-        X += 360.0;
-    if (Y < 0.0)
-        Y += 360.0;
-    if (Z < 0.0)
-        Z += 360.0;
-    
-    return Vector3(X, Y, Z);
+    return Quaternion(*this);
 }
 
 Mat4 Mat4::setbyproduct(Mat4& other_a, Mat4& other_b)

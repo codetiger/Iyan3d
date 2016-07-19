@@ -17,10 +17,10 @@ SGAnimationManager::SGAnimationManager(SceneManager* smgr, void* scene)
     animScene = (SGEditorScene*)scene;
 }
 
-SGAnimationManager::~SGAnimationManager(){
+SGAnimationManager::~SGAnimationManager()
+{
     
 }
-
 
 vector<Vector3> SGAnimationManager::storeTextInitialPositions(SGNode *sgnode)
 {
@@ -45,14 +45,15 @@ void SGAnimationManager::applyAnimations(string filePath , int nodeIndex)
     animFilePath = filePath;
     animStartFrame = animScene->currentFrame;
     SGNode *sgNode = NULL;
-    if(nodeIndex < animScene->nodes.size()) {
+
+    if(nodeIndex < animScene->nodes.size())
         sgNode = animScene->nodes[nodeIndex];
-    }
-    if(sgNode->getType() == NODE_RIG) {
+    
+    if(sgNode->getType() == NODE_RIG)
         applySGRAnimations(filePath, sgNode, animScene->totalFrames, animScene->currentFrame, animTotalFrames);
-    } else if (sgNode->getType() == NODE_TEXT_SKIN) {
+    else if (sgNode->getType() == NODE_TEXT_SKIN)
         applyTextAnimations(filePath, sgNode, animScene->totalFrames, animScene->currentFrame ,animScene->textJointsBasePos[nodeIndex], animTotalFrames);
-    }
+    
     animScene->updater->setDataForFrame(animScene->currentFrame);
     animScene->updater->reloadKeyFrameMap();
 }
@@ -71,7 +72,8 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
     }
 }
 
-void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excludeKeys){
+void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excludeKeys)
+{
     
     animScene->selectMan->unselectObject(fromNodeId);
     animScene->nodes[toNodeId]->props = animScene->nodes[fromNodeId]->props;
@@ -152,7 +154,7 @@ void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int
     
     Vector3 nodeInitPos = sgNode->node->getAbsolutePosition();
     int posCount = 0;
-    //printf("Node Init Pos %f %f %f ",nodeInitPos.x, nodeInitPos.y, nodeInitPos.z);
+
     for (int i = 0; i < numberOfKeyFrames; i++) {
         short keyFrameId = currentFrame + FileHelper::readShort(&sgraFile);
         
@@ -178,8 +180,7 @@ void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int
                 }
                 posCount++;
                 nodeKey.position = position;
-            }
-            if(keyType == 2) {
+            } else if(keyType == 2) {
                 nodeKey.isRotationKey = true;
                 Quaternion rotation;
                 rotation.x = FileHelper::readFloat(&sgraFile);
@@ -187,8 +188,7 @@ void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int
                 rotation.z = FileHelper::readFloat(&sgraFile);
                 rotation.w = FileHelper::readFloat(&sgraFile);
                 nodeKey.rotation = rotation;
-            }
-            if(keyType == 3) {
+            } else if(keyType == 3) {
                 nodeKey.isScaleKey = true;
                 Vector3 scale;
                 scale.x = FileHelper::readFloat(&sgraFile);
@@ -201,9 +201,7 @@ void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int
         sgNode->setKeyForFrame(keyFrameId, nodeKey);
         
         for (int jointId = 1; jointId < numberOfJoints; jointId++) {
-            
             ActionKey jointKey;
-            
             short activeKeys = FileHelper::readShort(&sgraFile);
             int keyType = 0;
             for (short j = 0; j < activeKeys; j++) {
@@ -215,8 +213,7 @@ void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int
                     position.y = FileHelper::readFloat(&sgraFile);
                     position.z = FileHelper::readFloat(&sgraFile);
                     jointKey.position = position;
-                }
-                if(keyType == 2) {
+                } else if(keyType == 2) {
                     jointKey.isRotationKey = true;
                     Quaternion rotation;
                     rotation.x = FileHelper::readFloat(&sgraFile);
@@ -224,8 +221,7 @@ void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int
                     rotation.z = FileHelper::readFloat(&sgraFile);
                     rotation.w = FileHelper::readFloat(&sgraFile);
                     jointKey.rotation = rotation;
-                }
-                if(keyType == 3) {
+                } else if(keyType == 3) {
                     jointKey.isScaleKey = true;
                     Vector3 scale;
                     scale.x = FileHelper::readFloat(&sgraFile);
@@ -429,7 +425,6 @@ void SGAnimationManager::removeAppliedAnimation(int startFrame, int endFrame)
     animScene->updater->reloadKeyFrameMap();
     animScene->selectMan->unselectObject(animScene->selectedNodeId);
 }
-
 
 bool SGAnimationManager::storeAnimations(int assetId)
 {

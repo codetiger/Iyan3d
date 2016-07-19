@@ -20,6 +20,5 @@
 #include "Core/common/Frustum.h"
 #include "Core/Nodes/LightNode.h"
 #include  "Core/Textures/Texture.h"
-#include  "Core/Nodes/AnimatedMorphNode.h"
 
 #endif

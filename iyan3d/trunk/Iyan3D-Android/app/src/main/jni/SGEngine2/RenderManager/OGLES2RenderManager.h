@@ -23,7 +23,7 @@
 #include "../Core/Nodes/OGLNodeData.h"
 #include "../Core/Textures/OGLTexture.h"
 #include "../Core/Material/OGLMaterial.h"
-#include "../Core/Nodes/AnimatedMorphNode.h"
+#include "../Core/Nodes/AnimatedMeshNode.h"
 #include "../Utilities/Helper.h"
 
 class OGLES2RenderManager : public RenderManager {

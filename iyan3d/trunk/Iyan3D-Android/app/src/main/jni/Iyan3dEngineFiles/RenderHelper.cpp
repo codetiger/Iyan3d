@@ -127,7 +127,7 @@ void RenderHelper::drawCircle()
         
         renderingScene->rotationCircle->node->setPosition(nodePos);
         renderingScene->rotationCircle->node->setScale(Vector3(radius));
-        renderingScene->rotationCircle->node->setRotationInDegrees(circleRotation);
+        renderingScene->rotationCircle->node->setRotation(Quaternion(circleRotation * DEGTORAD));
         renderingScene->rotationCircle->node->setVisible(true);
         smgr->RenderNode(false, smgr->getNodeIndexByID(renderingScene->rotationCircle->node->getID()),true);
         
@@ -422,14 +422,13 @@ void RenderHelper::setRenderCameraOrientation()
         return;
     renderingScene->renderCamera->setPosition(renderingScene->nodes[NODE_CAMERA]->node->getPosition());
     renderingScene->renderCamera->updateAbsoluteTransformation();
-    Vector3 rot  = renderingScene->nodes[NODE_CAMERA]->node->getRotationInDegrees();
-    rot.x += 180.0f;
-    renderingScene->renderCamera->setRotation(rot);
+    Quaternion rot  = renderingScene->nodes[NODE_CAMERA]->node->getRotation();
+    renderingScene->renderCamera->setRotation(rot * Quaternion(Vector3(180, 0, 0) * DEGTORAD));
     renderingScene->renderCamera->updateAbsoluteTransformation();
     
-    Vector3 upReal = Vector3(0.0,1.0,0.0);
+    Vector3 upReal = Vector3(0.0, 1.0, 0.0);
     Mat4 rotmat;
-    rotmat.setRotationRadians(Vector3(rot.x - 180.0,rot.y,rot.z) * DEGTORAD);
+    rotmat.setRotation(Quaternion(Vector3(rot.x - 180.0, rot.y, rot.z) * DEGTORAD));
     rotmat.rotateVect(upReal);
     renderingScene->renderCamera->setUpVector(upReal);
 #ifndef UBUNTU

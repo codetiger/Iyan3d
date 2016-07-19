@@ -8,92 +8,136 @@
 
 #include "CameraNode.h"
 
-CameraNode::CameraNode() {
+CameraNode::CameraNode()
+{
     type = NODE_TYPE_CAMERA;
     isActive = false;
     position = Vector3(0.0);
     target = Vector3(0.0);
-    UpVector = Vector3(0.0,1.0,0.0);
-    fov = 65.0*(PI/180.0);
-    aspectRatio = 4.0/3.0;
+    UpVector = Vector3(0.0, 1.0, 0.0);
+    fov = 65.0 * (PI / 180.0);
+    aspectRatio = 4.0 / 3.0;
     nearDistance = 1.0;
     farDistance = 3000.0;
     bindTargetAndRotation = false;
     viewFrustum = new Frustum();
     update();
 }
-CameraNode::~CameraNode() {
+
+CameraNode::~CameraNode()
+{
     if(viewFrustum)
         delete viewFrustum;
 }
-void CameraNode::setPosition(Vector3 position){
+
+void CameraNode::setPosition(Vector3 position)
+{
     this->position = position;
     update();
 }
-void CameraNode::setTarget(Vector3 target){
+
+void CameraNode::setTarget(Vector3 target)
+{
     this->target = target;
     update();
 }
-void CameraNode::setRotation(Vector3 rotation){
-    if(bindTargetAndRotation)
-        this->target = position + rotation.rotationToDirection();
+
+void CameraNode::setRotation(Quaternion rotation)
+{
+    if(bindTargetAndRotation) {
+        Mat4 trans = Mat4();
+        trans.translate(position);
+        trans.setRotation(rotation);
+        
+        this->target = trans.getTranslation();
+    }
+    
     this->rotation = rotation;
     update();
 }
-void CameraNode::setScale(Vector3 Scale){
-    
-}
-void CameraNode::setFOVInRadians(float fov){
+
+void CameraNode::setFOVInRadians(float fov)
+{
     this->fov = fov;
     update();
 }
-void CameraNode::setAspectRatio(float aspectRatio){
+
+void CameraNode::setAspectRatio(float aspectRatio)
+{
     this->aspectRatio = aspectRatio;
     update();
 }
-void CameraNode::setNearValue(float value){
+
+void CameraNode::setNearValue(float value)
+{
     this->nearDistance = value;
     update();
 }
-void CameraNode::setFarValue(float value){
+
+void CameraNode::setFarValue(float value)
+{
     this->farDistance = value;
     update();
 }
-void CameraNode::setActive(bool status){
+
+void CameraNode::setActive(bool status)
+{
     isActive = status;
 }
-void CameraNode::setUpVector(Vector3 UpVector){
+
+void CameraNode::setUpVector(Vector3 UpVector)
+{
     this->UpVector = UpVector;
     update();
 }
-void CameraNode::setTargetAndRotationBindStatus(bool bind){
+
+void CameraNode::setTargetAndRotationBindStatus(bool bind)
+{
     bindTargetAndRotation = bind;
 }
-bool CameraNode::getActiveStatus(){
+
+bool CameraNode::getActiveStatus()
+{
     return  isActive;
 }
-Vector3 CameraNode::getPosition(){
+
+Vector3 CameraNode::getPosition()
+{
     return position;
 }
-Vector3 CameraNode::getTarget(){
+
+Vector3 CameraNode::getTarget()
+{
     return target;
 }
-float CameraNode::getFOVInRadians(){
+
+float CameraNode::getFOVInRadians()
+{
     return fov;
 }
-float CameraNode::getAspectRatio(){
+
+float CameraNode::getAspectRatio()
+{
     return aspectRatio;
 }
-float CameraNode::getNearValue(){
+
+float CameraNode::getNearValue()
+{
     return nearDistance;
 }
-float CameraNode::getFarValue(){
+
+float CameraNode::getFarValue()
+{
     return farDistance;
 }
-Vector3 CameraNode::getUpVector(){
+
+Vector3 CameraNode::getUpVector()
+{
     return UpVector;
 }
-Mat4 CameraNode::getViewMatrix(){
+
+Mat4 CameraNode::getViewMatrix()
+{
     Vector3 zaxis = target - position;
     zaxis.normalize();
     
@@ -125,7 +169,8 @@ Mat4 CameraNode::getViewMatrix(){
     return view;
 }
 
-Mat4 CameraNode::getProjectionMatrix(){
+Mat4 CameraNode::getProjectionMatrix()
+{
     const float h = 1.0 / (tan(fov*0.5));
     const float w = (h / aspectRatio);
     
@@ -150,19 +195,18 @@ Mat4 CameraNode::getProjectionMatrix(){
     projection.setElement(15, 0);
     return projection;
 }
-Vector3 CameraNode::getRotation(){
-    return rotation;
-}
-Vector3 CameraNode::getScale(){
-    return scale;
-}
-void CameraNode::update(){
+
+void CameraNode::update()
+{
     getViewMatrix();
     getProjectionMatrix();
     Mat4 mat;
     mat.setbyproduct(projection,view);
     viewFrustum->constructWithProjViewMatrix(mat);
 }
-Frustum* CameraNode::getViewFrustum(){
+
+Frustum* CameraNode::getViewFrustum()
+{
     return  viewFrustum;
 }
+

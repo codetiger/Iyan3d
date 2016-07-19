@@ -10,7 +10,8 @@
 #endif
 
 
-SGNode::SGNode(NODE_TYPE type){
+SGNode::SGNode(NODE_TYPE type)
+{
     this->type = type;
     //node = shared_ptr<Node>();
     smoothTexture = true;
@@ -37,11 +38,14 @@ SGNode::SGNode(NODE_TYPE type){
     props.isSoft = false;
     props.physicsType = STATIC;
 }
-SGNode::~SGNode(){
+
+SGNode::~SGNode()
+{
     instanceNodes.clear();
     clearSGJoints();
     node.reset();
 }
+
 shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE objectType,SceneManager *smgr, std::wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
 {
     shared_ptr<Node> node;
@@ -172,7 +176,8 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
     return node;
 }
 
-shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance , Vector3 lightColor, float fadeLevel) {
+shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance , Vector3 lightColor, float fadeLevel)
+{
     Mesh* lightMesh = new Mesh();
     lightMesh->copyDataFromMesh(SceneHelper::pointLightMesh);
     shared_ptr<LightNode> lightNode = smgr->createLightNode(lightMesh,"setUniforms");
@@ -186,7 +191,8 @@ shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance ,
     return lightNode;
 }
 
-shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
+shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments)
+{
     if(bevelRadius == 0 || bevelSegments == 0)
         bevelSegments = 0;
     
@@ -278,7 +284,8 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     return node;
 }
 
-shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments) {
+shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments)
+{
     if(bevelRadius == 0 || bevelSegments == 0)
         bevelSegments = 0;
     
@@ -467,7 +474,8 @@ bool SGNode::checkFileExists(std::string fileName)
     }
 }
 
-shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr){
+shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr)
+{
 string StoragePath;
 
 #ifdef IOS
@@ -527,7 +535,9 @@ StoragePath = constants::DocumentsStoragePath + "/mesh/";
     
     return node;
 }
-void SGNode::setSkinningData(SkinMesh *mesh){
+
+void SGNode::setSkinningData(SkinMesh *mesh)
+{
     for(int j = 0; j < mesh->joints->size();j++){
         Joint *meshJoint = (*mesh->joints)[j];
         for(int v = 0;v < meshJoint->PaintedVertices->size();v++){
@@ -581,7 +591,9 @@ void SGNode::setSkinningData(SkinMesh *mesh){
         sum = od21.x + od21.y + od21.z + od21.w + od41.x + od41.y + od41.z + od41.w;
     }
 }
-shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float aspectRatio){
+
+shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float aspectRatio)
+{
 char* textureFileName = new char[256];
 
 #ifdef ANDROID
@@ -598,6 +610,7 @@ sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureNa
     //delete [] textureFileName; //TODO TEST
     return planeNode;
 }
+
 shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio)
 {Texture *nodeTex;
      #ifdef  ANDROID
@@ -614,6 +627,7 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
     //delete [] textureFileName; //TODO TEST
     return planeNode;
 }
+
 shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
 {
     // CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
@@ -647,6 +661,7 @@ void SGNode::setPosition(Vector3 position, int frameId)
             positionKeys[keyIndex].position = position;
     }
 }
+
 void SGNode::setRotation(Quaternion rotation, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(rotationKeys,frameId);
@@ -661,6 +676,7 @@ void SGNode::setRotation(Quaternion rotation, int frameId)
             rotationKeys[keyIndex].rotation = rotation;
     }
 }
+
 void SGNode::setScale(Vector3 scale, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(scaleKeys,frameId);
@@ -675,6 +691,7 @@ void SGNode::setScale(Vector3 scale, int frameId)
             scaleKeys[keyIndex].scale = scale;
     }
 }
+
 void SGNode::setVisibility(bool isVisible, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(visibilityKeys,frameId);
@@ -689,6 +706,7 @@ void SGNode::setVisibility(bool isVisible, int frameId)
             visibilityKeys[keyIndex].visibility = isVisible;
     }
 }
+
 void SGNode::setPositionOnNode(Vector3 position, bool updateBB)
 {
     if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
@@ -703,14 +721,16 @@ void SGNode::setPositionOnNode(Vector3 position, bool updateBB)
             rootJointNode->updateAbsoluteTransformationOfChildren();
     }
 }
+
 void SGNode::setRotationOnNode(Quaternion rotation, bool updateBB)
 {
-    node->setRotationInDegrees(MathHelper::getEulerRotation(rotation), updateBB);
+    node->setRotation(rotation, updateBB);
     node->updateAbsoluteTransformation();
     
     if(type == NODE_RIG || type == NODE_TEXT_SKIN)
         (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(0)->updateAbsoluteTransformationOfChildren();
 }
+
 void SGNode::setScaleOnNode(Vector3 scale, bool updateBB)
 {
     node->setScale(scale, updateBB);
@@ -719,20 +739,25 @@ void SGNode::setScaleOnNode(Vector3 scale, bool updateBB)
     if(type == NODE_RIG || type == NODE_TEXT_SKIN)
         (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(0)->updateAbsoluteTransformationOfChildren();
 }
+
 void SGNode::setVisibilityOnNode(bool visibility)
 {
     // TODO
 }
+
 void SGNode::setInitialKeyValues(int actionType)
 {
     if(actionType == IMPORT_ASSET_ACTION || actionType == UNDO_ACTION || actionType == REDO_ACTION){
         SGPositionKey positionKey;
         positionKey.position = Vector3(0.0f);
+        
         SGRotationKey rotationKey;
-        rotationKey.rotation = Quaternion(node->getRotationInRadians());
-        nodeInitialRotation = Quaternion(node->getRotationInRadians());
+        rotationKey.rotation = node->getRotation();
+        nodeInitialRotation = node->getRotation();
+        
         SGScaleKey scaleKey;
         scaleKey.scale = Vector3(1.0);
+        
         SGVisibilityKey visibilityKey;
         
         if(type == NODE_CAMERA) {
@@ -756,20 +781,16 @@ void SGNode::setInitialKeyValues(int actionType)
                 red = green = blue = 1.0;
             }
             props.nodeSpecificFloat = distance;
-            Vector3 direction = Vector3(0.0) - positionKey.position;
-            
-            Quaternion delta = MathHelper::rotationBetweenVectors(direction, Vector3(0.0, 1.0, 0.0));
-            Vector3 lineRot = Vector3(0.0);
-            rotationKey.rotation = Quaternion(0.8, 0.09, 0.3, -0.5); //  MathHelper::RotateNodeInWorld(lineRot, delta);
-            
+
+            rotationKey.rotation = Quaternion(0.8, 0.09, 0.3, -0.5);
             scaleKey.scale = Vector3(red, green, blue);
             visibilityKey.visibility = true;
             positionKey.id = rotationKey.id = scaleKey.id = visibilityKey.id = 0;
+
             KeyHelper::addKey(positionKeys, positionKey);
             KeyHelper::addKey(rotationKeys, rotationKey);
             KeyHelper::addKey(scaleKeys, scaleKey);
             KeyHelper::addKey(visibilityKeys, visibilityKey);
-            
         } else {
             visibilityKey.visibility = true;
             positionKey.id = rotationKey.id = scaleKey.id = visibilityKey.id = 0;
@@ -791,7 +812,7 @@ void SGNode::setInitialKeyValues(int actionType)
                     else
                         jointPositionKey.position = Vector3(0.0f);
                     SGRotationKey jointRotationKey;
-                    jointRotationKey.rotation = Quaternion(jointNode->getRotationInRadians());
+                    jointRotationKey.rotation = jointNode->getRotation();
                     SGScaleKey jointScaleKey;
                     jointScaleKey.scale = Vector3(1.0);
                     SGVisibilityKey jointVisibilityKey;
@@ -833,7 +854,6 @@ void SGNode::setInitialKeyValues(int actionType)
                 rotationKey.id = 0;
                 KeyHelper::addKey(rotationKeys, rotationKey);
                 props.specificInt = 0;
-                
             }
             
             if(props.nodeSpecificFloat == 0.0)
@@ -843,7 +863,7 @@ void SGNode::setInitialKeyValues(int actionType)
         for (int i = 0; i < jointCount; i++) {
             shared_ptr<JointNode> jointNode = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointNode(i);
             SGRotationKey jointRotationKey;
-            jointRotationKey.rotation = Quaternion(jointNode->getRotationInRadians());
+            jointRotationKey.rotation = jointNode->getRotation();
             jointsInitialRotations.push_back(jointRotationKey.rotation);
             if(i < joints.size()) {
                 if(joints[i]->positionKeys.size() <= 0) {
@@ -863,7 +883,9 @@ void SGNode::setInitialKeyValues(int actionType)
         }
     }
 }
-void SGNode::setKeyForFrame(int frameId, ActionKey& key){
+
+void SGNode::setKeyForFrame(int frameId, ActionKey& key)
+{
     //erase all keys in this frame if exist
     int index;
     if(positionKeys.size()) {
@@ -891,14 +913,17 @@ void SGNode::setKeyForFrame(int frameId, ActionKey& key){
     
     if(key.isScaleKey)    setScale(key.scale, frameId);
 }
+
 NODE_TYPE SGNode::getType()
 {
     return type;
 }
+
 void SGNode::setType(NODE_TYPE type)
 {
     this->type = type;
 }
+
 Quaternion SGNode::GetLocalQuaternion(int boneIndex, Quaternion q)
 {
     shared_ptr<AnimatedMeshNode> selectedNode = dynamic_pointer_cast<AnimatedMeshNode>(node);
@@ -908,7 +933,9 @@ Quaternion SGNode::GetLocalQuaternion(int boneIndex, Quaternion q)
     //bone.reset();
     return q * getGlobalQuaternion(parent).makeInverse();
 }
-ActionKey SGNode::getKeyForFrame(int frameId){
+
+ActionKey SGNode::getKeyForFrame(int frameId)
+{
     ActionKey key;
     int index = KeyHelper::getKeyIndex(positionKeys, frameId);
     if(index!=-1 && index < positionKeys.size() &&  positionKeys[index].id == frameId){
@@ -929,18 +956,17 @@ ActionKey SGNode::getKeyForFrame(int frameId){
     }
     return key;
 }
+
 Vector3 SGNode::getNodePosition()
 {
     return node->getPosition();
 }
-Vector3 SGNode::getNodeRotation()
-{
-    return node->getRotationInDegrees();
-}
+
 Vector3 SGNode::getNodeScale()
 {
     return node->getScale();
 }
+
 Vector3 SGNode::getJointPosition(int jointId, bool isAbsolutePosition)
 {
     shared_ptr<AnimatedMeshNode> selectedNode = dynamic_pointer_cast<AnimatedMeshNode>(node);
@@ -948,15 +974,17 @@ Vector3 SGNode::getJointPosition(int jointId, bool isAbsolutePosition)
     //selectedNode.reset();
     return ((isAbsolutePosition)? joint->getAbsolutePosition():joint->getPosition());
 }
+
 Quaternion SGNode::getGlobalQuaternion(shared_ptr<JointNode> bone)
 {
     
     shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(bone->Parent);
     if(parent)
-        return Quaternion(bone->getRotationInRadians()) * getGlobalQuaternion(parent);
+        return bone->getRotation() * getGlobalQuaternion(parent);
     else
-        return Quaternion(bone->getRotationInRadians());
+        return bone->getRotation();
 }
+
 void SGNode::removeAnimationInCurrentFrame(int currentFrame)
 {
     for(int i = 0; i < joints.size(); i++)
@@ -974,6 +1002,7 @@ void SGNode::removeAnimationInCurrentFrame(int currentFrame)
         scaleKeys.erase(scaleKeys.begin()+keyIndex);
     
 }
+
 void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,int currentFrame)
 {
     
@@ -1003,15 +1032,16 @@ void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,
         Quaternion global = MathHelper::getGlobalQuaternion(parent);
         global = global * delta;
         Quaternion local = global * MathHelper::getGlobalQuaternion(dynamic_pointer_cast<JointNode>(parent->getParent())).makeInverse();
-        ;
-        parent->setRotationInDegrees(MathHelper::getEulerRotation(local), true);
-        joints[parent->getID()]->setRotation(local,currentFrame);
+
+        parent->setRotation(local, true);
+        joints[parent->getID()]->setRotation(local, currentFrame);
         joints[parent->getID()]->setRotationOnNode(local, true);
         parent->updateAbsoluteTransformation();
         parent->updateAbsoluteTransformationOfChildren();
     }
     //parent.reset();
 }
+
 void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame)
 {
     if(bone) {
@@ -1043,8 +1073,8 @@ void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame
             float totAng = 0.1;
             while(1){
                 Quaternion delta = Quaternion(Vector3(angleX,0.0,0.0) * DEGTORAD);
-                Quaternion local = delta * Quaternion(grandParent->getRotationInRadians());
-                grandParent->setRotationInDegrees(MathHelper::getEulerRotation(local), true);
+                Quaternion local = delta * grandParent->getRotation();
+                grandParent->setRotation(local, true);
                 joints[grandParent->getID()]->setRotation(local,currentFrame);
                 joints[grandParent->getID()]->setRotationOnNode(local, true);
                 grandParent->updateAbsoluteTransformation();
@@ -1061,12 +1091,11 @@ void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame
             }
             CCD(bone,target,0,currentFrame);
         }
-        //bone.reset();
-        //parent.reset();
-        //grandParent.reset();
     }
 }
-int toString(const char a[]) {
+
+int toString(const char a[])
+{
     int c, sign, offset, n;
     
     if (a[0] == '-') {  // Handle negative integers
@@ -1092,7 +1121,6 @@ int toString(const char a[]) {
     
     return n;
 }
-
 
 void SGNode::readData(ifstream *filePointer, int &origIndex)
 {
@@ -1258,6 +1286,7 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     for(i = 0; i < joints.size(); i++)
         joints[i]->writeData(filePointer);
 }
+
 void SGNode::setMeshProperties(float refraction, float reflection, bool isLighting, bool isVisible , bool isPhysicsObj, int physicsType, float fMagnitude, float currentFrame)
 {
     props.isLighting = isLighting;
@@ -1269,6 +1298,7 @@ void SGNode::setMeshProperties(float refraction, float reflection, bool isLighti
     props.forceMagnitude = fMagnitude;
     setVisibility(isVisible, currentFrame);
 }
+
 void SGNode::clearSGJoints()
 {
     if(type != NODE_RIG && type != NODE_TEXT_SKIN)
@@ -1279,6 +1309,7 @@ void SGNode::clearSGJoints()
     }
     joints.clear();
 }
+
 void SGNode::createSGJoints()
 {
     if(type != NODE_RIG)
@@ -1289,17 +1320,15 @@ void SGNode::createSGJoints()
         joints.push_back(joint);
     }
 }
-void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame) {
+
+void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame)
+{
     if(type != NODE_LIGHT)
         return;
     Vector3 lightPos = node->getAbsolutePosition();
     Vector3 camPos = viewCamera->getPosition();
     Vector3 rotDir = (camPos - lightPos).normalize();
-    Quaternion rotQ;
-    rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0,0.0,1.0));
-
+    Quaternion rotQ = MathHelper::rotationBetweenVectors(rotDir, Vector3(0.0, 0.0, 1.0));
     setRotation(rotQ, currentFrame);
-    Vector3 rotEuler;rotQ.toEuler(rotEuler);
-
-    node->setRotationInDegrees(rotEuler * RADTODEG, true);
+    node->setRotation(rotQ, true);
 }

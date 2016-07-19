@@ -118,16 +118,8 @@ void Node::setTexture(Texture *texture, int textureIndex)
         hasNormalMap = (texture != nil);
 }
 
-void Node::setRotationInDegrees(Vector3 rotation, bool updateBB)
-{
-    this->rotation = Vector3(rotation.x * (PI/180.0), rotation.y * (PI/180.0), rotation.z * (PI/180.0));
-    if(updateBB)
-        FlagTransformationToChildren();
-}
-
-void Node::setRotationInRadians(Vector3 rotation, bool updateBB)
-{
-    this->rotation = rotation;
+void Node::setRotation(Quaternion r, bool updateBB) {
+    rotation = r;
     if(updateBB)
         FlagTransformationToChildren();
 }
@@ -146,14 +138,8 @@ void Node::setScale(Vector3 scale, bool updateBB)
         FlagTransformationToChildren();
 }
 
-Vector3 Node::getRotationInRadians()
-{
+Quaternion Node::getRotation() {
     return rotation;
-}
-
-Vector3 Node::getRotationInDegrees()
-{
-    return rotation * (180.0/PI);
 }
 
 Vector3 Node::getPosition()
@@ -195,18 +181,17 @@ void Node::updateBoundingBox()
 
 void Node::updateAbsoluteTransformation(bool updateFromRoot)
 {
-    if(Parent){
+    if(Parent)
         AbsoluteTransformation = Parent->getAbsoluteTransformation() * getRelativeTransformation();
-    }else {
+    else
         AbsoluteTransformation = getRelativeTransformation();
-    }
 }
 
 void Node::updateAbsoluteTransformationOfChildren()
 {
     updateAbsoluteTransformation();
-    if(Children->size()){
-        for(unsigned short i = 0; i < Children->size();i++){
+    if(Children->size()) {
+        for(unsigned short i = 0; i < Children->size();i++) {
             if((*Children)[i])
                 (*Children)[i]->updateAbsoluteTransformation();
         }
@@ -225,12 +210,13 @@ void Node::updateRelativeTransformation()
 
 Mat4 Node::getRelativeTransformation()
 {
-    Mat4 localMat;
+    Mat4 localMat = Mat4();
     localMat.translate(position);
-    localMat.setRotationRadians(rotation);
-    if(scale != Vector3(1.0f)){
+    localMat.setRotation(rotation);
+    
+    if(scale != Vector3(1.0f))
         localMat.scale(scale);
-    }
+    
     return localMat;
 }
 

@@ -30,7 +30,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
     FileHelper::writeFloat(&frameFilePtr, camTarget.y);
     FileHelper::writeFloat(&frameFilePtr, camTarget.z);
     
-    Vector3 camRotation = scene->nodes[NODE_CAMERA]->node->getRotationInDegrees();
+    Vector3 camRotation = Vector3();//scene->nodes[NODE_CAMERA]->node->getRotation();
     camRotation += 180.0f;
     
     FileHelper::writeFloat(&frameFilePtr, camRotation.x);
@@ -112,7 +112,7 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
              FileHelper::writeInt(frameFilePtr, thisNode->props.specificInt);
              Quaternion lightRot = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys);
              Mat4 rotMat;
-             rotMat.setRotationRadians(MathHelper::toEuler(lightRot));
+             rotMat.setRotation(lightRot);
              rotMat.rotateVect(lightDir);
              lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frameId, scene->nodes[nodeId]->scaleKeys);
          }
@@ -332,7 +332,7 @@ vertexData SGCloudRenderingHelper::calculateFinalVertexData(shared_ptr<Node> nod
         vector<Mat4> jointTransforms;
         for(int i = 0; i < (int)sMesh->joints->size(); ++i){
             Mat4 JointVertexPull;
-            JointVertexPull.setbyproduct((*sMesh->joints)[i]->GlobalAnimatedMatrix,(*sMesh->joints)[i]->GlobalInversedMatrix);
+            JointVertexPull.setbyproduct((*sMesh->joints)[i]->GlobalAnimatedMatrix, (*sMesh->joints)[i]->GlobalInversedMatrix);
             jointTransforms.push_back(JointVertexPull);
         }
         calculateJointTransforms(((vertexDataHeavy*)vertex), jointTransforms, finalVertData.vertPosition, finalVertData.vertNormal);

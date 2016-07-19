@@ -316,11 +316,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
         return;
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
     Mesh *nodeMes;
-    if(node->type == NODE_TYPE_MORPH)
-        nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_MORPH_SKINNED)
-        nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_SKINNED) {
+    if(node->type == NODE_TYPE_SKINNED) {
         if(node->skinType == GPU_SKIN)
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
@@ -329,7 +325,6 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
     else
         nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
-
     
     MTLIndexType indexType = MTLIndexTypeUInt16;
     unsigned int indicesCount = nodeMes->getIndicesCount(meshBufferIndex);
@@ -647,11 +642,7 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
         [MTLNode->indexBuffers removeAllObjects];
     
     Mesh *nodeMes;
-    if(node->type == NODE_TYPE_MORPH)
-        nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_MORPH_SKINNED)
-        nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(0);
-    else if (node->type == NODE_TYPE_SKINNED) {
+    if (node->type == NODE_TYPE_SKINNED) {
         if(node->skinType == GPU_SKIN)
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else {
@@ -684,32 +675,22 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
     } else if(MTLNode->VertexBuffers == nil)
         MTLNode->VertexBuffers = [[NSMutableArray alloc] init];
     
-    u16 meshCount = 1;
-    if(node->type == NODE_TYPE_MORPH)
-        meshCount = (dynamic_pointer_cast<MorphNode>(node))->getMeshCount();
-    else if (node->type == NODE_TYPE_MORPH_SKINNED)
-        meshCount = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshCount();
+    Mesh *nodeMes;
+    if(node->type == NODE_TYPE_SKINNED) {
+        if(node->skinType == GPU_SKIN)
+            nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
+        else {
+            nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
+            meshType = MESH_TYPE_LITE;
+        }
+    } else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
+    else
+        nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
     
-        Mesh *nodeMes;
-        if(node->type == NODE_TYPE_MORPH)
-            nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(meshBufferIndex);
-        else if(node->type == NODE_TYPE_MORPH_SKINNED)
-            nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(meshBufferIndex);
-        else if(node->type == NODE_TYPE_SKINNED) {
-            if(node->skinType == GPU_SKIN)
-                nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
-            else {
-                nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMeshCache();
-                meshType = MESH_TYPE_LITE;
-            }
-        } else if (node->instancedNodes.size() > 0 && !supportsInstancing)
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
-        else
-            nodeMes = (dynamic_pointer_cast<MeshNode>(node))->getMesh();
+    id<MTLBuffer> buf;
     
-        id<MTLBuffer> buf;
-    
-    if([MTLNode->VertexBuffers count] >= meshBufferIndex+1){
+    if([MTLNode->VertexBuffers count] >= meshBufferIndex+1) {
         buf = [MTLNode->VertexBuffers objectAtIndex:meshBufferIndex];
         uint8_t *bufferPointer = (uint8_t *)[buf contents];
         
@@ -718,8 +699,7 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
         else
             memcpy(bufferPointer,&(nodeMes->getHeavyVerticesArray(meshBufferIndex)[0]),sizeof(vertexDataHeavy) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex));
         
-    }else{
-        
+    } else {
         if(meshType == MESH_TYPE_LITE)
             buf = [device newBufferWithBytes:&(nodeMes->getLiteVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexData) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceOptionCPUCacheModeDefault];
         else

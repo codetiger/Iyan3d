@@ -7,14 +7,17 @@
 //
 
 #include "Joint.h"
-Joint::Joint(){
+Joint::Joint()
+{
     PaintedVertices = make_shared< vector< shared_ptr<PaintedVertex> > >();
     childJoints = new vector<Joint*>();
     envelopeRadius = 0.5;
     sphereRadius = 1.0;
     Index = 0;
 }
-Joint::~Joint(){
+
+Joint::~Joint()
+{
     for(int i = 0; i < PaintedVertices->size();i++){
         if((*PaintedVertices)[i])
             (*PaintedVertices)[i].reset();

@@ -15,6 +15,7 @@ SGJoint::SGJoint()
     scaleKeys.clear();
     visibilityKeys.clear();
 }
+
 void SGJoint::readData(ifstream * filePointer)
 {
     // Some values read but not stored are not neccasary, but it should be done according to the file format.
@@ -37,6 +38,7 @@ void SGJoint::readData(ifstream * filePointer)
     KeyHelper::readData(filePointer, keysCount, positionKeys, rotationKeys, scaleKeys, visibilityKeys);
     FileHelper::readInt(filePointer);
 }
+
 void SGJoint::writeData(ofstream * filePointer)
 {
     
@@ -57,6 +59,7 @@ void SGJoint::writeData(ofstream * filePointer)
     KeyHelper::writeData(filePointer, positionKeys, rotationKeys, scaleKeys, visibilityKeys);
     FileHelper::writeInt(filePointer, 0);
 }
+
 void SGJoint::setRotation(Quaternion rotation, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(rotationKeys,frameId);
@@ -71,17 +74,15 @@ void SGJoint::setRotation(Quaternion rotation, int frameId)
             rotationKeys[keyIndex].rotation = rotation;
     }
 }
+
 bool SGJoint::setRotationOnNode(Quaternion rotation, bool updateBB)
 {
-    Vector3 eulerRotation;
-    rotation.toEuler(eulerRotation);
-    eulerRotation = eulerRotation * RADTODEG;
-    
-    jointNode->setRotationInDegrees(eulerRotation, updateBB);
+    jointNode->setRotation(rotation, updateBB);
     jointNode->updateAbsoluteTransformationOfChildren();
     return true;
 }
-void SGJoint::setPosition(Vector3 position , int frameId)
+
+void SGJoint::setPosition(Vector3 position, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(positionKeys,frameId);
     if(keyIndex == -1 || positionKeys[keyIndex].id != frameId){
@@ -95,6 +96,7 @@ void SGJoint::setPosition(Vector3 position , int frameId)
             positionKeys[keyIndex].position = position;
     }
 }
+
 bool SGJoint::setPositionOnNode(Vector3 position, bool updateBB)
 {
     if(jointNode->getPosition() == position)
@@ -103,6 +105,7 @@ bool SGJoint::setPositionOnNode(Vector3 position, bool updateBB)
     jointNode->updateAbsoluteTransformation();
     return true;
 }
+
 void SGJoint::setScale(Vector3 scale, int frameId)
 {
     int keyIndex = KeyHelper::getKeyIndex(scaleKeys,frameId);
@@ -117,6 +120,7 @@ void SGJoint::setScale(Vector3 scale, int frameId)
             scaleKeys[keyIndex].scale = scale;
     }
 }
+
 bool SGJoint::setScaleOnNode(Vector3 scale, bool updateBB)
 {
     if(jointNode->getScale() == scale)
@@ -125,6 +129,7 @@ bool SGJoint::setScaleOnNode(Vector3 scale, bool updateBB)
     jointNode->updateAbsoluteTransformation();
     return true;
 }
+
 ActionKey SGJoint::getKeyForFrame(int frameId)
 {
     ActionKey key;
@@ -148,6 +153,7 @@ ActionKey SGJoint::getKeyForFrame(int frameId)
 
     return key;
 }
+
 void SGJoint::setKeyForFrame(int frameId, ActionKey& key)
 {
     int index = KeyHelper::getKeyIndex(rotationKeys, frameId);
@@ -176,6 +182,7 @@ void SGJoint::setKeyForFrame(int frameId, ActionKey& key)
     if(key.isScaleKey)
         setScale(key.scale, frameId);
 }
+
 void SGJoint::removeAnimationInCurrentFrame(int selectedFrame)
 {
     int keyIndex = KeyHelper::getKeyIndex(positionKeys, selectedFrame);
@@ -207,7 +214,9 @@ Quaternion SGJoint::getRotation(int frameId)
             return rotationKeys[0].rotation;
     }
 }
-Vector3 SGJoint::getPosition(int frameId){
+
+Vector3 SGJoint::getPosition(int frameId)
+{
     int keyIndex = KeyHelper::getKeyIndex(positionKeys,frameId);
     if(keyIndex == -1 || positionKeys[keyIndex].id != frameId){
         SGPositionKey positionKey;
@@ -217,7 +226,9 @@ Vector3 SGJoint::getPosition(int frameId){
     else
        return positionKeys[keyIndex].position;
 }
-Vector3 SGJoint::getScale(int frameId){
+
+Vector3 SGJoint::getScale(int frameId)
+{
     int keyIndex = KeyHelper::getKeyIndex(scaleKeys,frameId);
     if(keyIndex == -1 || scaleKeys[keyIndex].id != frameId){
         SGScaleKey scaleKey;
@@ -230,14 +241,13 @@ Vector3 SGJoint::getScale(int frameId){
 
 Quaternion SGJoint::getRotationOnNode(int frameId)
 {
-    Quaternion r = Quaternion(jointNode->getRotationInRadians());
-    return r;
+    return jointNode->getRotation();
 }
+
 Vector3 SGJoint::getPositionOnNode(int frameId)
 {
     return jointNode->getPosition();
 }
-
 
 SGJoint::~SGJoint()
 {

@@ -62,7 +62,6 @@ bool exportSGR::writeSGR(std::string filePath,shared_ptr<AnimatedMeshNode> node)
 		else
 			FileHelper::writeShort(&filePointer,node->getJointNode(j)->getParent()->getID()); // write bone ParentId
 		
-        
 		Mat4 jointMatrix = (*skinnedMesh->joints)[j]->LocalAnimatedMatrix;
 		for(int k = 0;k < 16;k++) // write jointMatrix
 			FileHelper::writeFloat(&filePointer, jointMatrix[k]);

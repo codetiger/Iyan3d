@@ -18,7 +18,7 @@ private:
     bool isActive, bindTargetAndRotation;
     Vector3 target;
     Vector3 UpVector;
-    float fov,aspectRatio,nearDistance,farDistance;
+    float fov, aspectRatio, nearDistance, farDistance;
     Mat4 view, projection;
     Frustum *viewFrustum;
 
@@ -30,8 +30,7 @@ public:
     
     void setPosition(Vector3 position);
     void setTarget(Vector3 target);
-    void setRotation(Vector3 rotation);
-    void setScale(Vector3 Scale);
+    void setRotation(Quaternion rotation);
     void setFOVInRadians(float fov);
     void setAspectRatio(float aspectRatio);
     void setNearValue(float value);
@@ -46,16 +45,14 @@ public:
     Vector3 getUpVector();
     Vector3 getPosition();
     Vector3 getTarget();
+    
     float getFOVInRadians();
     float getAspectRatio();
     float getNearValue();
     float getFarValue();
+    
     Mat4 getViewMatrix();
     Mat4 getProjectionMatrix();
-    
-    Vector3 getRotation();
-    Vector3 getScale();
-    
     Frustum* getViewFrustum();
 };
 

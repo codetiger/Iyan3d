@@ -83,9 +83,9 @@ public:
     /* AutoRig */
     
     bool changeSkeletonPosition(Vector3 outputValue);
-    bool changeSkeletonRotation(Vector3 outputValue);
+    bool changeSkeletonRotation(Quaternion outputValue);
     bool changeSGRPosition(Vector3 outputValue);
-    bool changeSGRRotation(Vector3 outputValue);
+    bool changeSGRRotation(Quaternion outputValue);
 };
 
 #endif /* SGActionManager_h */

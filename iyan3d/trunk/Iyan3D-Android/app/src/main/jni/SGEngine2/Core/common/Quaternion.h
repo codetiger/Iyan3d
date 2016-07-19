@@ -21,6 +21,9 @@ const float HALF_PI = 3.14159265359f / 2.0f;
 const double PI64 = 3.1415926535897932384626433832795028841971693993751;
 const double RECIPROCAL_PI64 = 1.0 / PI64;
 const double DEGTORAD64 = 3.1415926535897932384626433832795028841971693993751 / 180.0;
+
+class Mat4;
+
 class Quaternion {
 public:
     
@@ -41,6 +44,9 @@ public:
     Quaternion& operator*=(float s);
     Vector3 operator*(const Vector3& v) const;
     Quaternion& operator*=(const Quaternion& other);
+    bool operator==(const Quaternion& b) const;
+    bool operator!=(const Quaternion& b) const;
+    
     float dotProduct(const Quaternion& other) const;
     Quaternion& set(float x, float y, float z, float w);
     Quaternion& set(float x, float y, float z);

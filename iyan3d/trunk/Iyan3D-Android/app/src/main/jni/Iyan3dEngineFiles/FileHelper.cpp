@@ -23,13 +23,16 @@ void FileHelper::clearFolder()
 {
     
 }
+
 void FileHelper::printStatement(char* stringToPrint)
 {
     cout<<stringToPrint;
 }
+
 void FileHelper::resetSeekPosition(){
     seekPosition = 0;
 }
+
 int FileHelper::readInt(ifstream *file)
 {
     int intRead;
@@ -37,6 +40,7 @@ int FileHelper::readInt(ifstream *file)
     seekPosition += sizeof(int);
     return intRead;
 }
+
 int FileHelper::readShort(ifstream *file)
 {
     short shortRead;
@@ -44,6 +48,7 @@ int FileHelper::readShort(ifstream *file)
     seekPosition += sizeof(short);
     return shortRead;
 }
+
 float FileHelper::readFloat(ifstream *file)
 {
     float floatRead;
@@ -51,6 +56,7 @@ float FileHelper::readFloat(ifstream *file)
     seekPosition += sizeof(float);
     return floatRead;
 }
+
 bool FileHelper::readBool(ifstream *file)
 {
     bool boolRead;
@@ -58,6 +64,7 @@ bool FileHelper::readBool(ifstream *file)
     seekPosition += sizeof(bool);
     return boolRead;
 }
+
 std::string FileHelper::readString(ifstream *file,int sgbVersion)
 {
     int stringSize;
@@ -100,18 +107,22 @@ void FileHelper::writeInt(ofstream *file , int data)
 {
     file->write((char*)&data , sizeof(int));
 }
+
 void FileHelper::writeShort(ofstream *file , short data)
 {
     file->write((char*)&data , sizeof(short));
 }
+
 void FileHelper::writeFloat(ofstream *file , float data)
 {
     file->write((char*)&data , sizeof(float));
 }
+
 void FileHelper::writeBool(ofstream *file , bool data)
 {
     file->write((char*)&data , sizeof(bool));
 }
+
 void FileHelper::writeString(ofstream *file , std::string data)
 {
     int len = (int)data.size();
@@ -124,6 +135,7 @@ void FileHelper::writeString(ofstream *file , std::string data)
     file->write(dataToWrite,len);
     delete[] dataToWrite;
 }
+
 void FileHelper::writeWString(ofstream *file , std::wstring data)
 {
     int len = (int)data.length();
@@ -168,12 +180,14 @@ void FileHelper::setDocumentsDirectory(string documentsPath)
 {
     FileHelper::documentsDirectory = documentsPath;
 }
-char * FileHelper::getCharacterPointer(std::string &str){
+
+char * FileHelper::getCharacterPointer(std::string &str)
+{
     return strcpy((char*)malloc(str.length()+1), str.c_str());
 }
 
- bool FileHelper::checkFileExists(std::string fileName)
- {
+bool FileHelper::checkFileExists(std::string fileName)
+{
      if(FILE *file = fopen(fileName.c_str(), "r"))
      {
          fclose(file);

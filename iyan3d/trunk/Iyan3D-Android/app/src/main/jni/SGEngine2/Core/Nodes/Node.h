@@ -86,7 +86,8 @@ private:
     
 protected:
     Mat4 AbsoluteTransformation;
-    Vector3 position, scale, rotation;
+    Vector3 position, scale;
+    Quaternion rotation;
     Texture* textures[MAX_TEXTURE_PER_NODE];
     
 public:
@@ -111,16 +112,17 @@ public:
     virtual ~Node();
     virtual void update() = 0;
     bool operator==(shared_ptr<Node> n);
-    void setRotationInRadians(Vector3 rotation, bool updateBB = false);
-    void setRotationInDegrees(Vector3 rotation, bool updateBB = false);
+    
     void setPosition(Vector3 position, bool updateBB = false);
     void setScale(Vector3 scale, bool updateBB = false);
+    void setRotation(Quaternion r, bool updateBB = false);
+    
     void setParent(shared_ptr<Node> parent);
     void setVisible(bool isVisible);
     Vector3 getAbsolutePosition();
-    void setTexture(Texture *texture,int textureIndex);
+    void setTexture(Texture *texture, int textureIndex);
     void FlagTransformationToChildren(); // NOT FIXED
-    void setMaterial(Material* mat,bool isTransparentMaterial = false);
+    void setMaterial(Material* mat, bool isTransparentMaterial = false);
     void setID(int id);
     
     virtual void updateBoundingBox();
@@ -136,8 +138,7 @@ public:
     
     u16 getBufferCount();
     
-    Vector3 getRotationInDegrees();
-    Vector3 getRotationInRadians();
+    Quaternion getRotation();
     Vector3 getPosition();
     Vector3 getScale();
 
@@ -151,7 +152,6 @@ public:
     
     void setUserPointer(void* userPtr);
     void* getUserPointer();
-    
 };
 
 #endif /* defined(__SGEngine2__Node__) */

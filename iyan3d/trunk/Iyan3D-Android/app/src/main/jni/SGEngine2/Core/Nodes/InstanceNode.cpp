@@ -7,12 +7,14 @@
 //
 
 #include "InstanceNode.h"
-InstanceNode::InstanceNode(shared_ptr<Node> node){
+InstanceNode::InstanceNode(shared_ptr<Node> node)
+{
     original = node;
     type = NODE_TYPE_INSTANCED;
 }
 
-InstanceNode::~InstanceNode(){
+InstanceNode::~InstanceNode()
+{
     
     if(this->original) {
         for( int i = 0; i < this->original->instancedNodes.size(); i ++) {

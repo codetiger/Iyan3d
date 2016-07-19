@@ -920,8 +920,6 @@
 		256F6D971BF624FB00154622 /* SkinMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BE31BF624FB00154622 /* SkinMesh.cpp */; };
 		256F6D981BF624FB00154622 /* AnimatedMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BE61BF624FB00154622 /* AnimatedMeshNode.cpp */; };
 		256F6D991BF624FB00154622 /* AnimatedMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BE61BF624FB00154622 /* AnimatedMeshNode.cpp */; };
-		256F6D9A1BF624FB00154622 /* AnimatedMorphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BE81BF624FB00154622 /* AnimatedMorphNode.cpp */; };
-		256F6D9B1BF624FB00154622 /* AnimatedMorphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BE81BF624FB00154622 /* AnimatedMorphNode.cpp */; };
 		256F6D9C1BF624FB00154622 /* APIData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BEA1BF624FB00154622 /* APIData.cpp */; };
 		256F6D9D1BF624FB00154622 /* APIData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BEA1BF624FB00154622 /* APIData.cpp */; };
 		256F6D9E1BF624FB00154622 /* CameraNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BEC1BF624FB00154622 /* CameraNode.cpp */; };
@@ -936,8 +934,6 @@
 		256F6DA71BF624FB00154622 /* LightNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BF41BF624FB00154622 /* LightNode.cpp */; };
 		256F6DA81BF624FB00154622 /* MeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BF61BF624FB00154622 /* MeshNode.cpp */; };
 		256F6DA91BF624FB00154622 /* MeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BF61BF624FB00154622 /* MeshNode.cpp */; };
-		256F6DAA1BF624FB00154622 /* MorphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BF81BF624FB00154622 /* MorphNode.cpp */; };
-		256F6DAB1BF624FB00154622 /* MorphNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BF81BF624FB00154622 /* MorphNode.cpp */; };
 		256F6DAC1BF624FB00154622 /* MTLNodeData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BFB1BF624FB00154622 /* MTLNodeData.mm */; };
 		256F6DAE1BF624FB00154622 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BFC1BF624FB00154622 /* Node.cpp */; };
 		256F6DAF1BF624FB00154622 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BFC1BF624FB00154622 /* Node.cpp */; };
@@ -3440,8 +3436,6 @@
 		256F6BE41BF624FB00154622 /* SkinMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinMesh.h; sourceTree = "<group>"; };
 		256F6BE61BF624FB00154622 /* AnimatedMeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedMeshNode.cpp; sourceTree = "<group>"; };
 		256F6BE71BF624FB00154622 /* AnimatedMeshNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedMeshNode.h; sourceTree = "<group>"; };
-		256F6BE81BF624FB00154622 /* AnimatedMorphNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedMorphNode.cpp; sourceTree = "<group>"; };
-		256F6BE91BF624FB00154622 /* AnimatedMorphNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedMorphNode.h; sourceTree = "<group>"; };
 		256F6BEA1BF624FB00154622 /* APIData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = APIData.cpp; sourceTree = "<group>"; };
 		256F6BEB1BF624FB00154622 /* APIData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIData.h; sourceTree = "<group>"; };
 		256F6BEC1BF624FB00154622 /* CameraNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraNode.cpp; sourceTree = "<group>"; };
@@ -3456,8 +3450,6 @@
 		256F6BF51BF624FB00154622 /* LightNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightNode.h; sourceTree = "<group>"; };
 		256F6BF61BF624FB00154622 /* MeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshNode.cpp; sourceTree = "<group>"; };
 		256F6BF71BF624FB00154622 /* MeshNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshNode.h; sourceTree = "<group>"; };
-		256F6BF81BF624FB00154622 /* MorphNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MorphNode.cpp; sourceTree = "<group>"; };
-		256F6BF91BF624FB00154622 /* MorphNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MorphNode.h; sourceTree = "<group>"; };
 		256F6BFA1BF624FB00154622 /* MTLNodeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLNodeData.h; sourceTree = "<group>"; };
 		256F6BFB1BF624FB00154622 /* MTLNodeData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTLNodeData.mm; sourceTree = "<group>"; };
 		256F6BFC1BF624FB00154622 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
@@ -5827,8 +5819,6 @@
 				2516DC081C5F52FD0034145D /* ParticleManager.cpp */,
 				256F6BE61BF624FB00154622 /* AnimatedMeshNode.cpp */,
 				256F6BE71BF624FB00154622 /* AnimatedMeshNode.h */,
-				256F6BE81BF624FB00154622 /* AnimatedMorphNode.cpp */,
-				256F6BE91BF624FB00154622 /* AnimatedMorphNode.h */,
 				256F6BEA1BF624FB00154622 /* APIData.cpp */,
 				256F6BEB1BF624FB00154622 /* APIData.h */,
 				256F6BEC1BF624FB00154622 /* CameraNode.cpp */,
@@ -5843,8 +5833,6 @@
 				256F6BF51BF624FB00154622 /* LightNode.h */,
 				256F6BF61BF624FB00154622 /* MeshNode.cpp */,
 				256F6BF71BF624FB00154622 /* MeshNode.h */,
-				256F6BF81BF624FB00154622 /* MorphNode.cpp */,
-				256F6BF91BF624FB00154622 /* MorphNode.h */,
 				256F6BFA1BF624FB00154622 /* MTLNodeData.h */,
 				256F6BFB1BF624FB00154622 /* MTLNodeData.mm */,
 				256F6BFC1BF624FB00154622 /* Node.cpp */,
@@ -10380,7 +10368,6 @@
 				25FCAB4D1C3003330051DBBA /* SGMovementManager.cpp in Sources */,
 				E249769A196BE0310025D442 /* LoadingViewControllerPad.mm in Sources */,
 				25DE101F1CAA8D6D0076F669 /* btBroadphaseProxy.cpp in Sources */,
-				256F6D9A1BF624FB00154622 /* AnimatedMorphNode.cpp in Sources */,
 				25730E651AFD3C7B0042F81A /* CGContextCreator.m in Sources */,
 				256F6B851BF6246300154622 /* AutoRigHelper.cpp in Sources */,
 				256F6D921BF624FB00154622 /* PlaneMeshNode.cpp in Sources */,
@@ -10403,7 +10390,6 @@
 				25DE10A31CAA8D6D0076F669 /* btTriangleCallback.cpp in Sources */,
 				25DE11211CAA8D6D0076F669 /* btWheelInfo.cpp in Sources */,
 				3D58CD621C3D43C2006371DE /* WEPopoverContainerView.m in Sources */,
-				256F6DAA1BF624FB00154622 /* MorphNode.cpp in Sources */,
 				256F6EB61BF624FB00154622 /* Helper.cpp in Sources */,
 				256F6EAA1BF624FB00154622 /* OGLES2RenderManager.cpp in Sources */,
 				25DE11491CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp in Sources */,
@@ -10544,7 +10530,6 @@
 				E20670FE1B049AA6006DD2F7 /* ObjCellView.mm in Sources */,
 				25DE10261CAA8D6D0076F669 /* btDbvtBroadphase.cpp in Sources */,
 				3D58CD611C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */,
-				256F6DAB1BF624FB00154622 /* MorphNode.cpp in Sources */,
 				25DE102A1CAA8D6D0076F669 /* btMultiSapBroadphase.cpp in Sources */,
 				256F6D9D1BF624FB00154622 /* APIData.cpp in Sources */,
 				25DE10C01CAA8D6D0076F669 /* gim_contact.cpp in Sources */,
@@ -10704,7 +10689,6 @@
 				01B4CF8F1C291EFD0091E19B /* ImportImageNew.mm in Sources */,
 				25DE10721CAA8D6D0076F669 /* btCompoundShape.cpp in Sources */,
 				E20671AA1B049AA6006DD2F7 /* BitmapRotationManipulator.m in Sources */,
-				256F6D9B1BF624FB00154622 /* AnimatedMorphNode.cpp in Sources */,
 				25DE11101CAA8D6D0076F669 /* btMultiBodyDynamicsWorld.cpp in Sources */,
 				25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */,
 				256F6BB41BF6246300154622 /* ShaderManager.cpp in Sources */,

@@ -98,7 +98,6 @@ public:
     void faceUserCamera(shared_ptr<CameraNode> viewCamera,int currentFrame);
     
     Vector3 getNodePosition();
-    Vector3 getNodeRotation();
     Vector3 getNodeScale();
     Vector3 getJointPosition(int jointId, bool isAbsolutePosition);
     

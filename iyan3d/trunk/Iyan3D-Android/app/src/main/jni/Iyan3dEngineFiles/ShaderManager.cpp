@@ -588,11 +588,11 @@ void ShaderManager::setJointTransform(SGNode *sgNode,int paramIndex,SceneManager
     
     for(int i = 0; i < sMesh->joints->size(); ++i){
         Mat4 JointVertexPull;
-        JointVertexPull.setbyproduct((*sMesh->joints)[i]->GlobalAnimatedMatrix,(*sMesh->joints)[i]->GlobalInversedMatrix);
-        copyMat(JointArray + copyIncrement,JointVertexPull);
+        JointVertexPull.setbyproduct((*sMesh->joints)[i]->GlobalAnimatedMatrix, (*sMesh->joints)[i]->GlobalInversedMatrix);
+        copyMat(JointArray + copyIncrement, JointVertexPull);
         copyIncrement += 16;
     }
-    smgr->setPropertyValue(sgNode->node->material,"jointTransforms", JointArray, DATA_FLOAT_MAT4, sMesh->joints->size() * 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material,"jointTransforms", JointArray, DATA_FLOAT_MAT4, sMesh->joints->size() * 16, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
     delete [] JointArray;
 }
 

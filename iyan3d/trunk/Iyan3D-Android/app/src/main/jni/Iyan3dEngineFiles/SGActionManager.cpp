@@ -109,7 +109,7 @@ bool SGActionManager::changeObjectOrientation(Vector3 outputValue)
             if(actionScene->selectedNodeIds.size() > 0 && actionScene->getParentNode()) {
                 success = true;
                 Quaternion r = Quaternion(outputValue * DEGTORAD);
-                actionScene->getParentNode()->setRotationInDegrees(MathHelper::getEulerRotation(r), true);
+                actionScene->getParentNode()->setRotation(r, true);
                 break;
             } else if(actionScene->isJointSelected){
                 success = true;
@@ -195,7 +195,7 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
             if(mirrorJointId != -1) {
                 selectedJoint = selectedNode->joints[actionScene->selectedJointId];
                 shared_ptr<JointNode> mirrorNode = (dynamic_pointer_cast<AnimatedMeshNode>(selectedNode->node))->getJointNode(mirrorJointId);
-                rot = Quaternion(selectedNode->joints[selectedJoint->jointNode->getParent()->getID()]->jointNode->getRotationInDegrees()*Vector3(1.0,-1.0,-1.0)*DEGTORAD);
+                rot = selectedNode->joints[selectedJoint->jointNode->getParent()->getID()]->jointNode->getRotation() * Quaternion(1.0, -1.0, -1.0);
                 selectedNode->joints[mirrorNode->getParent()->getID()]->setRotation(rot,actionScene->currentFrame);
                 selectedNode->joints[mirrorNode->getParent()->getID()]->setRotationOnNode(rot, true);
             }
@@ -221,6 +221,7 @@ void SGActionManager::rotateJoint(Vector3 outputValue)
     }
     // TODO For CPU Skin update mesh cache
 }
+
 void SGActionManager::storeActionKeys(bool finished)
 {
     if(!actionScene || !smgr || !actionScene->isNodeSelected)
@@ -440,6 +441,7 @@ void SGActionManager::setMirrorState(MIRROR_SWITCH_STATE flag)
     if(actionScene->isJointSelected)
         actionScene->selectMan->highlightJointSpheres();
 }
+
 bool SGActionManager::switchMirrorState()
 {
     if(!actionScene || !smgr || actionScene->selectedNodeId == NOT_EXISTS)
@@ -1032,27 +1034,24 @@ bool SGActionManager::changeSkeletonPosition(Vector3 outputValue)
     return false;
 }
 
-bool SGActionManager::changeSkeletonRotation(Vector3 outputValue)
+bool SGActionManager::changeSkeletonRotation(Quaternion outputValue)
 {
     if(!actionScene || !smgr || !actionScene->isRigMode || actionScene->rigMan->sceneMode != RIG_MODE_MOVE_JOINTS)
         return false;
-
-    outputValue *= RADTODEG;
     
     bool isNodeSelected = actionScene->hasNodeSelected();
     int selectedNodeId = actionScene->rigMan->selectedNodeId;
     SGNode* selectedNode = actionScene->getSelectedNode();
     
     if (actionScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS && selectedNodeId > 0){
-        selectedNode->node->setRotationInDegrees(outputValue);
+        selectedNode->node->setRotation(outputValue);
         selectedNode->node->updateAbsoluteTransformation();
         actionScene->updater->updateSkeletonBone(actionScene->rigMan->rigKeys, selectedNodeId);
-        if(getMirrorState() == MIRROR_ON)
-        {
+        if(getMirrorState() == MIRROR_ON) {
             int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedNodeId);
             if(mirrorJointId != -1){
                 shared_ptr<Node> mirrorNode = actionScene->rigMan->rigKeys[mirrorJointId].referenceNode->node;
-                mirrorNode->setRotationInDegrees(outputValue * Vector3(1.0,-1.0,-1.0));
+                mirrorNode->setRotation(outputValue * Quaternion(1.0, -1.0, -1.0));
                 mirrorNode->updateAbsoluteTransformation();
                 actionScene->updater->updateSkeletonBone(actionScene->rigMan->rigKeys, mirrorJointId);
                 //mirrorNode.reset();
@@ -1060,12 +1059,13 @@ bool SGActionManager::changeSkeletonRotation(Vector3 outputValue)
         }
         //        updateEnvelopes();
         return true;
-    }
-    else if(selectedNode){
-        selectedNode->node->setRotationInDegrees(outputValue);
+    } else if(selectedNode) {
+        selectedNode->node->setRotation(outputValue);
         if(isNodeSelected)
             selectedNode->node->updateAbsoluteTransformationOfChildren();
-        else selectedNode->node->updateAbsoluteTransformation();
+        else
+            selectedNode->node->updateAbsoluteTransformation();
+        
         return true;
     }
     return false;
@@ -1085,13 +1085,13 @@ bool SGActionManager::changeSGRPosition(Vector3 outputValue)
     
     if(isJointSelected){
         Vector3 target = selectedJoint->jointNode->getAbsolutePosition() + outputValue;
-        selectedJoint->jointNode->getParent()->setRotationInDegrees(MathHelper::getRelativeParentRotation(selectedJoint->jointNode,target));
+        selectedJoint->jointNode->getParent()->setRotation(MathHelper::getRelativeParentRotation(selectedJoint->jointNode, target));
         (dynamic_pointer_cast<JointNode>(selectedJoint->jointNode->getParent()))->updateAbsoluteTransformationOfChildren();
         if(getMirrorState() == MIRROR_ON){
             int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);
             if(mirrorJointId != -1){
                 shared_ptr<JointNode> mirrorNode = (dynamic_pointer_cast<AnimatedMeshNode>(sgrSGNode->node))->getJointNode(mirrorJointId);
-                mirrorNode->getParent()->setRotationInDegrees(selectedJoint->jointNode->getParent()->getRotationInDegrees() * Vector3(1.0,-1.0,-1.0));
+                mirrorNode->getParent()->setRotation(selectedJoint->jointNode->getParent()->getRotation() * Quaternion(1.0, -1.0, -1.0));
                 (dynamic_pointer_cast<JointNode>(mirrorNode->getParent()))->updateAbsoluteTransformationOfChildren();
             }
         }
@@ -1105,7 +1105,7 @@ bool SGActionManager::changeSGRPosition(Vector3 outputValue)
     return false;
 }
 
-bool SGActionManager::changeSGRRotation(Vector3 outputValue)
+bool SGActionManager::changeSGRRotation(Quaternion outputValue)
 {
     if(!actionScene || !smgr || !actionScene->isRigMode || actionScene->rigMan->sceneMode != RIG_MODE_PREVIEW)
         return false;
@@ -1119,13 +1119,13 @@ bool SGActionManager::changeSGRRotation(Vector3 outputValue)
     
     outputValue *= RADTODEG;
     if(isJointSelected){
-        selectedJoint->jointNode->setRotationInDegrees(outputValue);
+        selectedJoint->jointNode->setRotation(outputValue);
         selectedJoint->jointNode->updateAbsoluteTransformationOfChildren();
         if(getMirrorState() == MIRROR_ON){
             int mirrorJointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);
             if(mirrorJointId != -1){
                 shared_ptr<JointNode> mirrorNode = (dynamic_pointer_cast<AnimatedMeshNode>(sgrSGNode->node))->getJointNode(mirrorJointId);
-                mirrorNode->setRotationInDegrees(outputValue * Vector3(1.0,-1.0,-1.0));
+                mirrorNode->setRotation(outputValue * Quaternion(1.0, -1.0, -1.0));
                 mirrorNode->updateAbsoluteTransformationOfChildren();
                 //mirrorNode.reset();
             }
@@ -1133,7 +1133,7 @@ bool SGActionManager::changeSGRRotation(Vector3 outputValue)
         return true;
     }
     else if(selectedNode){
-        selectedNode->node->setRotationInDegrees(outputValue);
+        selectedNode->node->setRotation(outputValue);
         if(isNodeSelected)
             selectedNode->node->updateAbsoluteTransformation();
         else

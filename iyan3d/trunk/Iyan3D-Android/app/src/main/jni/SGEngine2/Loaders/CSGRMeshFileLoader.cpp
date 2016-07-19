@@ -84,8 +84,8 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
         else
             ibone = animMesh->addJoint(NULL);
 
-        for (int j = 0; j < 16; ++j)
-            ibone->LocalAnimatedMatrix.setElement(j, boneMatrix[j]);
+        ibone->LocalAnimatedMatrix = Mat4(boneMatrix);
+        
         delete[] boneMatrix;
         
         unsigned short boneWeightCount;

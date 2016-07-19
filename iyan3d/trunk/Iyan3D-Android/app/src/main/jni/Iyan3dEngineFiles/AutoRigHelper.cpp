@@ -118,7 +118,7 @@ void initEnvelopeMatrices(std::map<int,RigKey> &rigKeys) {
         envelopeMatrix.translate(rigKeys[parentId].referenceNode->node->getAbsolutePosition());
         Vector3 currentDir = ENVELOPE_BASE_DIRECTION;
         Vector3 targetDir = (rigKeys[it->first].referenceNode->node->getAbsolutePosition() - rigKeys[parentId].referenceNode->node->getAbsolutePosition() ).normalize();
-        envelopeMatrix.setRotationRadians((MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))));
+        envelopeMatrix.setRotation(MathHelper::rotationBetweenVectors(targetDir, currentDir));
         envelopeMatrices[it->first] = envelopeMatrix;
     }
 }

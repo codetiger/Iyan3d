@@ -10,6 +10,7 @@
 #define Mat4GLK_h
 
 #include "Vector4.h"
+#include "Quaternion.h"
 #include <GLKit/GLKMath.h>
 
 
@@ -22,6 +23,7 @@
 #include <string.h>
 #endif
 
+class Quaternion;
 
 class Mat4 {
     
@@ -50,18 +52,20 @@ public:
     void scale(const Vector3& v);
     void scale(float s);
     void copyMatTo(float *pointer);
-    //    void rotate(const Quaternion &q);
-    void setRotationRadians(Vector3 rotation);
+
+    void setRotation(Quaternion q);
+    
     void bias();
     bool invert();
     void transpose();
     float* pointer();
     void buildCameraLookAtMatrixLH(Vector3 position, Vector3 target, Vector3 upVector);
     void buildProjectionMatrixPerspectiveFovLH(float fieldOfViewRadians, float aspectRatio, float zNear, float zFar);
+    
     Vector3 getTranslation();
-    Vector3 getRotationInDegree();
-    Vector3 getRotation();
+    Quaternion getRotation();
     Vector3 getScale();
+
     Mat4 setbyproduct(Mat4& other_a, Mat4& other_b);
     void rotateVect(Vector3& vect) const;
 };

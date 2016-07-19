@@ -19,6 +19,7 @@ struct Key
         isPositionKey = isRotationKey = isScaleKey = isVisibleKey = false;
     }
 };
+
 bool operator < (Key A, Key B)
 {
     return A.id > B.id;   //To sort in descending order. Lowest element is picked first in heap!
@@ -80,6 +81,7 @@ void KeyHelper::readData(ifstream* filePointer, int numKeys, vector<SGPositionKe
         }
     }
 }
+
 void KeyHelper::writeData(ofstream* filePointer, vector<SGPositionKey> &positionKeys, vector<SGRotationKey> &rotationKeys, vector<SGScaleKey> &scaleKeys, vector<SGVisibilityKey> &visibilityKeys)
 {
     

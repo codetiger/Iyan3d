@@ -157,7 +157,6 @@ void SGSceneUpdater::setKeysForFrame(int frame)
     updateLightCamera();
 }
 
-
 void SGSceneUpdater::updateControlsMaterial()
 {
     if(!updatingScene || !smgr)
@@ -192,8 +191,10 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
 
     if((!isNodeSelected || !selectedNode) && (!isJointSelected || !selectedJoint) && updatingScene->selectedNodeIds.size() <= 0)
         return;
+
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
+
     Vector3 nodePos;
     if(updatingScene->selectedNodeIds.size() > 0 && updatingScene->getParentNode())
         nodePos = updatingScene->getPivotPoint(false);
@@ -204,11 +205,9 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     
     float distanceFromCamera = nodePos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
     float ctrlScale = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_SCALE);
-
     ctrlScale = forRTT ? (ctrlScale * 1.5) : ctrlScale * 1.3;
     
     float ctrlDistanceFromNode = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_DISTANCE_FROM_NODE);
-    
     ctrlDistanceFromNode = forRTT ? (ctrlDistanceFromNode/1.2) : ctrlDistanceFromNode;
     
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
@@ -216,25 +215,23 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
         currentControl->node->setScale(Vector3(ctrlScale));
         switch(i%3) {
             case 0:
-                currentControl->node->setPosition(Vector3(nodePos) + Vector3(ctrlDistanceFromNode,0,0));
-                currentControl->node->setRotationInDegrees(Vector3(0.0,180.0,0.0));
+                currentControl->node->setPosition(Vector3(nodePos) + Vector3(ctrlDistanceFromNode, 0, 0));
+                currentControl->node->setRotation(Quaternion(Vector3(0.0, 180.0, 0.0) * DEGTORAD));
                 break;
             case 1:
-                currentControl->node->setPosition(Vector3(nodePos) + Vector3(0,ctrlDistanceFromNode,0));
-                currentControl->node->setRotationInDegrees(Vector3(0.0, 0.0, (i == Y_ROTATE) ? 180.0 : 0.0));
+                currentControl->node->setPosition(Vector3(nodePos) + Vector3(0, ctrlDistanceFromNode, 0));
+                currentControl->node->setRotation(Quaternion(Vector3(0.0, 0.0, (i == Y_ROTATE) ? 180.0 : 0.0) * DEGTORAD));
                 break;
             case 2:
-                currentControl->node->setPosition(Vector3(nodePos) + Vector3(0,0,ctrlDistanceFromNode));
-                currentControl->node->setRotationInDegrees(Vector3(0.0, (i == Z_ROTATE) ? 90.0 : 0.0, (i == Z_ROTATE) ? -90.0 : 0.0));
+                currentControl->node->setPosition(Vector3(nodePos) + Vector3(0, 0, ctrlDistanceFromNode));
+                currentControl->node->setRotation(Quaternion(Vector3(0.0, (i == Z_ROTATE) ? 90.0 : 0.0, (i == Z_ROTATE) ? -90.0 : 0.0) * DEGTORAD));
                 break;
         }
         
         if(isJointSelected && selectedNode->getType() == NODE_TEXT_SKIN) {
-            Vector3 rot = selectedNode->node->getRotationInRadians();
             Vector3 delta;
             switch(i%3) {
                 case 0:
-                    //rot.y = (180.0 - (rot.y * RADTODEG)) * DEGTORAD;
                     delta = Vector3(ctrlDistanceFromNode, 0, 0);
                     break;
                 case 1:
@@ -244,13 +241,16 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
                     delta = Vector3(0, 0, ctrlDistanceFromNode);
                     break;
             }
-            Mat4 rotMat;
-            rotMat.setRotationRadians(rot);
-            rotMat.rotateVect(delta);
-            Quaternion finalRotation = MathHelper::RotateNodeInWorld(currentControl->node->getRotationInDegrees(), Quaternion(rot));
 
-            currentControl->node->setRotationInRadians(MathHelper::toEuler(finalRotation));
-            currentControl->node->setPosition(Vector3(nodePos) + delta);
+            Quaternion rot = selectedNode->node->getRotation();
+
+            Mat4 rotMat = rot.getMatrix();
+            rotMat.rotateVect(delta);
+            
+            Quaternion finalRotation = MathHelper::RotateNodeInWorld(currentControl->node->getRotation(), rot);
+
+            currentControl->node->setRotation(finalRotation);
+            currentControl->node->setPosition(nodePos + delta);
         }
         
         currentControl->node->updateAbsoluteTransformation();
@@ -301,7 +301,7 @@ void SGSceneUpdater::updateLightCam(Vector3 position)
 
         Vector3 direction = Vector3(0.0, 1.0, 0.0);
         Mat4 rotMat;
-        rotMat.setRotationRadians(MathHelper::toEuler(rotation));
+        rotMat.setRotation(rotation);
         rotMat.rotateVect(direction);
         direction = direction.normalize();
         
@@ -333,7 +333,7 @@ void SGSceneUpdater::updateLightProperties(int frameId)
             if(sgNode->props.specificInt == (int)DIRECTIONAL_LIGHT) {
                 posOrDir = Vector3(0.0, -1.0, 0.0);
                 Mat4 rotMat;
-                rotMat.setRotationRadians(MathHelper::toEuler(rotation));
+                rotMat.setRotation(rotation);
                 rotMat.rotateVect(posOrDir);
             }
 
@@ -571,14 +571,18 @@ void SGSceneUpdater::updateSkeletonBone(std::map<int, RigKey>& rigKeys, int join
     Vector3 currentDir = BONE_BASE_DIRECTION;
     if(rigKeys[jointId].bone && rigKeys[jointId].bone->node) {
         Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
-        rigKeys[jointId].bone->node->setRotationInDegrees(MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))*RADTODEG);
+        rigKeys[jointId].bone->node->setRotation(MathHelper::rotationBetweenVectors(targetDir, currentDir));
         rigKeys[jointId].bone->node->updateAbsoluteTransformation();
+
         f32 boneLength = rigKeys[jointId].referenceNode->node->getAbsolutePosition().getDistanceFrom(rigKeys[parentId].referenceNode->node->getAbsolutePosition());
+
         Mat4 childGlobal;
         childGlobal.scale(boneLength);
+
         Mat4 parentGlobal;
         parentGlobal.scale(rigKeys[0].referenceNode->node->getAbsoluteTransformation().getScale());
         parentGlobal.invert();
+
         Mat4 childLocal = parentGlobal * childGlobal;
         rigKeys[jointId].bone->node->setScale(Vector3(rigKeys[jointId].bone->node->getScale().x,childLocal.getScale().y,rigKeys[jointId].bone->node->getScale().z));
         rigKeys[jointId].bone->node->updateAbsoluteTransformationOfChildren();

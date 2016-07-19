@@ -349,9 +349,9 @@ void SGSelectionManager::removeChildren(shared_ptr<Node> fromParent, bool resetK
         for(int i = 0; i < selectionScene->selectedNodeIds.size(); i++) {
             selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->updateAbsoluteTransformation();
             positions.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsolutePosition());
-            Vector3 delta = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getRotationInDegree();
-                rotations.push_back(Quaternion(delta * DEGTORAD));
-                scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
+            Quaternion delta = selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getRotation();
+            rotations.push_back(delta);
+            scales.push_back(selectionScene->nodes[selectionScene->selectedNodeIds[i]]->node->getAbsoluteTransformation().getScale());
         }
     }
 

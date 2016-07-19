@@ -18,12 +18,12 @@
 
 using std::vector;
 
-struct PaintedVertex{
+struct PaintedVertex {
     int vertexId;
     float weight;
 };
 
-class Joint{
+class Joint {
     
 public:
     Joint();

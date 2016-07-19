@@ -8,13 +8,18 @@
 
 #include "JointNode.h"
 
-JointNode::JointNode(){
+JointNode::JointNode()
+{
     
 }
-JointNode::~JointNode(){
+
+JointNode::~JointNode()
+{
     
 }
-void JointNode::update(){
+
+void JointNode::update()
+{
     
 }
 

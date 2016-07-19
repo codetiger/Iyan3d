@@ -2,7 +2,7 @@
 #define Iyan3D_BoneLimits_h
 
 #include "SGEngineCommon.h"
-class BoneLimits{
+class BoneLimits { 
 public:
     int id;
     std::string name;

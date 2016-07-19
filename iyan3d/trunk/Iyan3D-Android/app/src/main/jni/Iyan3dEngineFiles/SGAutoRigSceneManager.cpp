@@ -83,7 +83,7 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     rigNode->node = meshNode;
     rigNode->node->setID(SGM_ID);
     rigNode->node->setPosition(rigNode->node->getAbsolutePosition());
-    rigNode->node->setRotationInDegrees(rigNode->node->getRotationInDegrees());
+    rigNode->node->setRotation(rigNode->node->getRotation());
     rigNode->node->setScale(rigNode->node->getScale());
     rigNode->node->setVisible(false);
     return rigNode;
@@ -314,7 +314,7 @@ void SGAutoRigSceneManager::resetRigKeys()
             rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node = smgr->addEmptyNode();
             rigKeys[rigScene->tPoseJoints[i].id].parentId = rigScene->tPoseJoints[i].parentId;
             rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node->setPosition(Vector3(rigScene->tPoseJoints[i].position));
-            rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node->setRotationInDegrees(Vector3(rigScene->tPoseJoints[i].rotation));
+            rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node->setRotation(rigScene->tPoseJoints[i].rotation);
             rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node->updateAbsoluteTransformation();
             rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node->setID(REFERENCE_NODE_START_ID + i);
             rigKeys[rigScene->tPoseJoints[i].id].envelopeRadius = rigScene->tPoseJoints[i].envelopeRadius;
@@ -535,7 +535,7 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
         
         Vector3 currentDir = BONE_BASE_DIRECTION;
         Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
-        envelopeSgNod->node->setRotationInDegrees(MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))*RADTODEG);
+        envelopeSgNod->node->setRotation(MathHelper::rotationBetweenVectors(targetDir, currentDir));
         envelopeSgNod->node->updateAbsoluteTransformation();
         shared_ptr<JointNode> topJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_TOP_JOINT_ID);
         shared_ptr<JointNode> bottomJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_BOTTOM_JOINT_ID);

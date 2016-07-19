@@ -154,6 +154,16 @@ Quaternion Quaternion::operator+(const Quaternion& b) const
     return Quaternion(quat);
 }
 
+bool Quaternion::operator==(const Quaternion& b) const
+{
+    return x == b.x && y == b.y && z == b.z && w == b.w;
+}
+
+bool Quaternion::operator!=(const Quaternion& b) const
+{
+    return x != b.x || y != b.y || z != b.z || w != b.w;
+}
+
 Mat4 Quaternion::getMatrix() const
 {
     Mat4 m;

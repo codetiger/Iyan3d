@@ -8,12 +8,14 @@
 
 #include "MeshNode.h"
 
-MeshNode::MeshNode() {
+MeshNode::MeshNode()
+{
     this->meshCache = NULL;
     type = NODE_TYPE_MESH;
 }
 
-MeshNode::~MeshNode() {
+MeshNode::~MeshNode()
+{
     if(mesh && mesh->getVerticesCount())
         delete mesh;
     
@@ -24,7 +26,8 @@ MeshNode::~MeshNode() {
     meshCache = NULL;
 }
 
-Mesh* MeshNode::getMesh() {
+Mesh* MeshNode::getMesh()
+{
     if(type == NODE_TYPE_INSTANCED)
         return dynamic_pointer_cast<MeshNode>(this->original)->getMesh();
 
@@ -36,15 +39,18 @@ Mesh* MeshNode::getMesh() {
     return this->mesh;
 }
 
-void MeshNode::update(){
+void MeshNode::update()
+{
     
 }
 
-short MeshNode::getActiveMeshIndex(int index){
+short MeshNode::getActiveMeshIndex(int index)
+{
     return index;
 }
 
-Mesh* MeshNode::getMeshByIndex(int index){
+Mesh* MeshNode::getMeshByIndex(int index)
+{
     return mesh;
 }
 

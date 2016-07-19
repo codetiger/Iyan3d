@@ -54,10 +54,8 @@ void AutoRigJointsDataHelper::getTPoseJointsDataFromMesh(vector<TPoseJoint> &tPo
         Joint * joint = (*sMesh->joints)[i];
         tJoint.id = joint->Index;
         tJoint.parentId = (joint->Parent) ? joint->Parent->Index : -1;
-        Vector3 localPos = joint->LocalAnimatedMatrix.getTranslation();
-        Vector3 localRot = joint->LocalAnimatedMatrix.getRotationInDegree();
-        tJoint.position = Vector3(localPos.x, localPos.y, localPos.z);
-        tJoint.rotation = Vector3(localRot.x, localRot.y, localRot.z);
+        tJoint.position = joint->LocalAnimatedMatrix.getTranslation();
+        tJoint.rotation = joint->LocalAnimatedMatrix.getRotation();
         tJoint.sphereRadius = (i ==0) ? 0.0 : (joint->sphereRadius > 1.0) ? 1.0 :joint->sphereRadius;
         tJoint.envelopeRadius = joint->envelopeRadius;
         tPoseJoints.push_back(tJoint);
@@ -85,32 +83,25 @@ void AutoRigJointsDataHelper::getTPoseJointsDataForOwnRig(vector<TPoseJoint> & t
         Json::Value jointJson = joints[i];
         joint.id = jointJson.get("id", 0).asInt();
         joint.parentId = jointJson.get("parentId", 0).asInt();
-        joint.position.x = 0.0;
-        joint.position.y = posY;
-        joint.position.z = 0.0;
-        joint.rotation.x = 0.0;//jointJson.get("XRot", 0.0).asDouble();
-        joint.rotation.y = 0.0;//jointJson.get("YRot", 0.0).asDouble();
-        joint.rotation.z = 0.0;//jointJson.get("ZRot", 0.0).asDouble();
-        joint.sphereRadius = 1.0;//jointJson.get("sphereRadius", 0.0).asDouble();
-        joint.envelopeRadius = 1.0;//jointJson.get("envelopeRadius", 0.0).asDouble();
+        joint.position = Vector3(0.0, posY, 0.0);
+        joint.rotation = Quaternion();
+        joint.sphereRadius = 1.0;
+        joint.envelopeRadius = 1.0;
         posY += 1.0;
         tPoseJoints.push_back(joint);
     }
     jsonFile.close();
     return;
 }
+
 void AutoRigJointsDataHelper::addNewTPoseJointData(vector<TPoseJoint> & tPoseJoints,int fromJointId)
 {
     Vector3 position, rotation;
     TPoseJoint joint;
     joint.id = (int)tPoseJoints.size();
     joint.parentId = fromJointId;
-    joint.position.x =  0.0;
-    joint.position.y = tPoseJoints[fromJointId].position.y + 1.0;
-    joint.position.z =  0.0;
-    joint.rotation.x = 0.0;//jointJson.get("XRot", 0.0).asDouble();
-    joint.rotation.y = 0.0;//jointJson.get("YRot", 0.0).asDouble();
-    joint.rotation.z = 0.0;//jointJson.get("ZRot", 0.0).asDouble();
+    joint.position = Vector3(0.0, tPoseJoints[fromJointId].position.y + 1.0, 0.0);
+    joint.rotation = Quaternion();
     joint.sphereRadius = 1.0;//jointJson.get("sphereRadius", 0.0).asDouble();
     joint.envelopeRadius = 1.0;//jointJson.get("envelopeRadius", 0.0).asDouble();
     tPoseJoints.push_back(joint);

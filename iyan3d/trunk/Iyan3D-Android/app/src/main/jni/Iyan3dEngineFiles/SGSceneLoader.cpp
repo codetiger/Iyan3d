@@ -353,7 +353,7 @@ void SGSceneLoader::addLight(SGNode *light)
     if(light->props.specificInt == (int)DIRECTIONAL_LIGHT) {
         posOrDir = Vector3(0.0, -1.0, 0.0);
         Mat4 rotMat;
-        rotMat.setRotationRadians(MathHelper::toEuler(rotation));
+        rotMat.setRotation(rotation);
         rotMat.rotateVect(posOrDir);
     } else
         posOrDir = light->node->getAbsolutePosition();
@@ -654,7 +654,7 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
         
         Vector3 currentDir = BONE_BASE_DIRECTION;
         Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
-        envelopeSgNod->node->setRotationInDegrees(MathHelper::toEuler(MathHelper::rotationBetweenVectors(targetDir,currentDir))*RADTODEG);
+        envelopeSgNod->node->setRotation(MathHelper::rotationBetweenVectors(targetDir, currentDir));
         envelopeSgNod->node->updateAbsoluteTransformation();
         shared_ptr<JointNode> topJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_TOP_JOINT_ID);
         shared_ptr<JointNode> bottomJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_BOTTOM_JOINT_ID);

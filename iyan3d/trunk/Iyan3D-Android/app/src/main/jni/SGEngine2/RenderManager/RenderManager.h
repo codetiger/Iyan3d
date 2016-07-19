@@ -12,7 +12,6 @@
 #include "../Core/common/common.h"
 #include "../Core/Nodes/Node.h"
 #include "../Core/Nodes/MeshNode.h"
-#include "../Core/Nodes/MorphNode.h"
 #include "../Core/Meshes/CubeMeshNode.h"
 #include "../Core/Nodes/LightNode.h"
 #include "../Core/Nodes/CameraNode.h"

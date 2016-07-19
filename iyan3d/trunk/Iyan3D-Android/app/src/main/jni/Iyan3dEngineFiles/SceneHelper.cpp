@@ -226,10 +226,9 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
 
         sceneControls.push_back(sgNode);
         sgNode->node->setID(CONTROLS_START_ID + (int)sceneControls.size() - 1);
-//        if(i == X_MOVE || i == X_ROTATE) // flipped control meshes
-//            sgNode->node->setRotationInDegrees(Vector3(0.0,180.0,0.0));
+
         if(i == Y_ROTATE)
-            sgNode->node->setRotationInDegrees(Vector3(180.0, 1800.0, 0.0));
+            sgNode->node->setRotation(Quaternion(Vector3(180.0, 180.0, 0.0) * DEGTORAD));
     }
     
     return sceneControls;

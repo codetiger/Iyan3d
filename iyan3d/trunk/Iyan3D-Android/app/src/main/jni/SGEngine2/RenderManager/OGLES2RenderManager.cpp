@@ -211,11 +211,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     if(!node || node->type <= NODE_TYPE_CAMERA)
         return;
     Mesh *nodeMes;
-    if(node->type == NODE_TYPE_MORPH)
-        nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_MORPH_SKINNED)
-        nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_SKINNED) {
+    if(node->type == NODE_TYPE_SKINNED) {
         if(node->skinType == GPU_SKIN)
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
@@ -598,11 +594,7 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     
     u16 meshBufferCount = 1;
-    if(node->type == NODE_TYPE_MORPH)
-        meshBufferCount = (dynamic_pointer_cast<MorphNode>(node))->getMeshCount();
-    else if (node->type == NODE_TYPE_MORPH_SKINNED)
-        meshBufferCount = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshCount();
-    else if (node->instancedNodes.size() > 0 && !supportsInstancing)
+    if (node->instancedNodes.size() > 0 && !supportsInstancing)
         meshBufferCount = (dynamic_pointer_cast<MeshNode>(node))->meshCache->getMeshBufferCount();
     else
         meshBufferCount = (dynamic_pointer_cast<MeshNode>(node))->getMesh()->getMeshBufferCount();
@@ -646,11 +638,7 @@ void OGLES2RenderManager::handleVAO(shared_ptr<Node> node,int type, short meshBu
 void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node, short meshBufferIndex, MESH_TYPE meshType)
 {
   Mesh *nodeMes;
-  if(node->type == NODE_TYPE_MORPH)
-      nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(meshBufferIndex);
-  else if(node->type == NODE_TYPE_MORPH_SKINNED)
-      nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(meshBufferIndex);
-  else if(node->type == NODE_TYPE_SKINNED) {
+  if(node->type == NODE_TYPE_SKINNED) {
       if(node->skinType == GPU_SKIN)
           nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
       else {
@@ -689,11 +677,7 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node, short meshBu
 u_int32_t OGLES2RenderManager::bindIndexBuffer(shared_ptr<Node> node, int meshBufferIndex)
 {
     Mesh *nodeMes;
-    if(node->type == NODE_TYPE_MORPH)
-        nodeMes = (dynamic_pointer_cast<MorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_MORPH_SKINNED)
-        nodeMes = (dynamic_pointer_cast<AnimatedMorphNode>(node))->getMeshByIndex(0);
-    else if(node->type == NODE_TYPE_SKINNED) {
+    if(node->type == NODE_TYPE_SKINNED) {
         if(node->skinType == GPU_SKIN)
             nodeMes = (dynamic_pointer_cast<AnimatedMeshNode>(node))->getMesh();
         else
