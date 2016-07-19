@@ -1770,7 +1770,6 @@
 		3D04EAF91C25883900C18E1A /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D04EAF71C25883900C18E1A /* color.png */; };
 		3D2696B01C660343004FC023 /* LightPropertiesPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2696AF1C660343004FC023 /* LightPropertiesPhone.xib */; };
 		3D2696B11C660343004FC023 /* LightPropertiesPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2696AF1C660343004FC023 /* LightPropertiesPhone.xib */; };
-		3D3A1BC51D34C19100913555 /* Iyan3DTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D3A1AA01D34B6A600913555 /* Iyan3DTests.mm */; };
 		3D3F59131C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */; };
 		3D3F59141C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */; };
 		3D3F591A1C2801C600713C79 /* TextFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F59181C2801C600713C79 /* TextFrameCell.m */; };
@@ -2749,16 +2748,6 @@
 		E2C4DB5C1A9F602000F0AD12 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB5B1A9F602000F0AD12 /* light.png */; };
 		E2F556AA1AFA1D8300079118 /* vertexColorToon.frag in Resources */ = {isa = PBXBuildFile; fileRef = E2F556A91AFA1D8300079118 /* vertexColorToon.frag */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		3D3A1BCA1D34DACA00913555 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C885D7731876BE6100A45D71 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C885D77A1876BE6100A45D71;
-			remoteInfo = Iyan3D;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown-white@2x.png"; sourceTree = "<group>"; };
@@ -4172,9 +4161,6 @@
 		3D04EAF71C25883900C18E1A /* color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = color.png; sourceTree = "<group>"; };
 		3D0CA0BC1D2D042B005B4838 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
 		3D2696AF1C660343004FC023 /* LightPropertiesPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightPropertiesPhone.xib; path = "ui/Popover Views/LightPropertiesPhone.xib"; sourceTree = "<group>"; };
-		3D3A1A9E1D34B6A600913555 /* Iyan3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Iyan3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D3A1AA01D34B6A600913555 /* Iyan3DTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Iyan3DTests.mm; sourceTree = "<group>"; };
-		3D3A1AA21D34B6A600913555 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D3F59121C27EC8000713C79 /* TextSelectionSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextSelectionSidePanel.mm; path = ui/MainViews/TextSelectionSidePanel.mm; sourceTree = "<group>"; };
 		3D3F59171C2801C600713C79 /* TextFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFrameCell.h; path = "ui/Popover Views/TextFrameCell.h"; sourceTree = "<group>"; };
 		3D3F59181C2801C600713C79 /* TextFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFrameCell.m; path = "ui/Popover Views/TextFrameCell.m"; sourceTree = "<group>"; };
@@ -4720,13 +4706,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3D3A1A9B1D34B6A600913555 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C885D7781876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -7040,15 +7019,6 @@
 			path = Resources/images/TextSelection;
 			sourceTree = "<group>";
 		};
-		3D3A1A9F1D34B6A600913555 /* Iyan3DTests */ = {
-			isa = PBXGroup;
-			children = (
-				3D3A1AA01D34B6A600913555 /* Iyan3DTests.mm */,
-				3D3A1AA21D34B6A600913555 /* Info.plist */,
-			);
-			path = Iyan3DTests;
-			sourceTree = "<group>";
-		};
 		3D5F98CE1C4CD3E300DD47F5 /* BasicShapes */ = {
 			isa = PBXGroup;
 			children = (
@@ -7652,7 +7622,6 @@
 			children = (
 				256AD50A1AEEC66000905F65 /* FonStyles */,
 				C885D7841876BE6100A45D71 /* Iyan3D */,
-				3D3A1A9F1D34B6A600913555 /* Iyan3DTests */,
 				C885D77D1876BE6100A45D71 /* Frameworks */,
 				C885D77C1876BE6100A45D71 /* Products */,
 			);
@@ -7663,7 +7632,6 @@
 			children = (
 				C885D77B1876BE6100A45D71 /* Iyan3D.app */,
 				E20674061B049AA6006DD2F7 /* Iyan3Dcopy.app */,
-				3D3A1A9E1D34B6A600913555 /* Iyan3DTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7837,24 +7805,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3D3A1A9D1D34B6A600913555 /* Iyan3DTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D3A1AA71D34B6A600913555 /* Build configuration list for PBXNativeTarget "Iyan3DTests" */;
-			buildPhases = (
-				3D3A1A9A1D34B6A600913555 /* Sources */,
-				3D3A1A9B1D34B6A600913555 /* Frameworks */,
-				3D3A1A9C1D34B6A600913555 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3D3A1BCB1D34DACA00913555 /* PBXTargetDependency */,
-			);
-			name = Iyan3DTests;
-			productName = Iyan3DTests;
-			productReference = 3D3A1A9E1D34B6A600913555 /* Iyan3DTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		C885D77A1876BE6100A45D71 /* Iyan3D */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C885D7B01876BE6200A45D71 /* Build configuration list for PBXNativeTarget "Iyan3D" */;
@@ -7900,10 +7850,6 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Smackall Games";
 				TargetAttributes = {
-					3D3A1A9D1D34B6A600913555 = {
-						CreatedOnToolsVersion = 7.3;
-						TestTargetID = C885D77A1876BE6100A45D71;
-					};
 					C885D77A1876BE6100A45D71 = {
 						DevelopmentTeam = 3MT93EVK96;
 					};
@@ -7925,19 +7871,11 @@
 			targets = (
 				C885D77A1876BE6100A45D71 /* Iyan3D */,
 				E20670DC1B049AA6006DD2F7 /* Iyan3DSimulator1 */,
-				3D3A1A9D1D34B6A600913555 /* Iyan3DTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3D3A1A9C1D34B6A600913555 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C885D7791876BE6100A45D71 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -9930,14 +9868,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3D3A1A9A1D34B6A600913555 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D3A1BC51D34C19100913555 /* Iyan3DTests.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C885D7771876BE6100A45D71 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -10672,14 +10602,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		3D3A1BCB1D34DACA00913555 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C885D77A1876BE6100A45D71 /* Iyan3D */;
-			targetProxy = 3D3A1BCA1D34DACA00913555 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		C885D7871876BE6100A45D71 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -10692,58 +10614,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		3D3A1AA51D34B6A600913555 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Iyan3DTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator.Iyan3DTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Iyan3D.app/Iyan3D";
-			};
-			name = Debug;
-		};
-		3D3A1AA61D34B6A600913555 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Iyan3DTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator.Iyan3DTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Iyan3D.app/Iyan3D";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		C885D7AE1876BE6200A45D71 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -10976,15 +10846,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3D3A1AA71D34B6A600913555 /* Build configuration list for PBXNativeTarget "Iyan3DTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D3A1AA51D34B6A600913555 /* Debug */,
-				3D3A1AA61D34B6A600913555 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		C885D7761876BE6100A45D71 /* Build configuration list for PBXProject "Iyan3D" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
