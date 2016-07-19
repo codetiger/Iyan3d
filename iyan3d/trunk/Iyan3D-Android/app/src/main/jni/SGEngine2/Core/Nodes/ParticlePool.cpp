@@ -9,7 +9,8 @@
 #include "../Nodes/ParticlePool.h"
 #include <algorithm>
 
-ParticlePool::ParticlePool(int count) {
+ParticlePool::ParticlePool(int count)
+{
     maxParticleCount = count;
     for (int i = 0; i < count; i++) {
         Particle* p = new Particle();
@@ -29,7 +30,8 @@ ParticlePool::~ParticlePool()
     particles.clear();
 }
 
-Particle* ParticlePool::reuseDeadParticle() {
+Particle* ParticlePool::reuseDeadParticle()
+{
     int stopIteration = deadIterator;
     
     while (particles[deadIterator]->isLive) {
@@ -43,7 +45,8 @@ Particle* ParticlePool::reuseDeadParticle() {
     return particles[deadIterator];
 }
 
-Particle* ParticlePool::getNextLiveParticle() {
+Particle* ParticlePool::getNextLiveParticle()
+{
     if(iterator >= maxParticleCount)
         return NULL;
     else {
@@ -56,19 +59,23 @@ Particle* ParticlePool::getNextLiveParticle() {
     }
 }
 
-Particle* ParticlePool::getParticleByIndex(int index) {
+Particle* ParticlePool::getParticleByIndex(int index)
+{
     return particles[index];
 }
 
-void ParticlePool::resetIteration() {
+void ParticlePool::resetIteration()
+{
     iterator = 0;
 }
 
-bool checkOrder(Particle *A, Particle *B) {
+bool checkOrder(Particle *A, Particle *B)
+{
     return A->distance > B->distance;
 }
 
-void ParticlePool::sortByDistance() {
+void ParticlePool::sortByDistance()
+{
 #ifdef UBUNTU
     std::sort(particles.begin(), particles.end(), checkOrder);
 #else

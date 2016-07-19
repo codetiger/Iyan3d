@@ -10,6 +10,7 @@
 Material::Material(){
     isTransparent = false;
 }
+
 Material::~Material(){
     
 }

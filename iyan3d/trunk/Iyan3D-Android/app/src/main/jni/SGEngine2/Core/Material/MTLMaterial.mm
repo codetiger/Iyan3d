@@ -11,14 +11,18 @@
 #endif
 #include "MTLMaterial.h"
 
-MTLMaterial::MTLMaterial(){
+MTLMaterial::MTLMaterial()
+{
     
 }
+
 MTLMaterial::~MTLMaterial()
 {
     uniforms.clear();
 }
-void MTLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex,u16 count,uint32_t location,int nodeIndex,short renderTargetIndex){
+
+void MTLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex,u16 count,uint32_t location,int nodeIndex,short renderTargetIndex)
+{
     MTLUniform uni;
     uni.name = propertyName;
     uni.type = type;
@@ -31,7 +35,9 @@ void MTLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TY
     uni.renderTargetIndex = renderTargetIndex;
     this->uniforms.push_back(uni);
 }
-short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex,int renderTargetIndex){
+
+short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex,int renderTargetIndex)
+{
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){ //ToDo search optimisation
         if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].renderTargetIndex == renderTargetIndex && uniforms[i].count == count){
@@ -51,7 +57,9 @@ short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16
         Logger::log(ERROR, "MTLMaterial", "Error in setting" + name + "Property");
     return uIndex;
 }
-short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex){
+
+short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex)
+{
     
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){

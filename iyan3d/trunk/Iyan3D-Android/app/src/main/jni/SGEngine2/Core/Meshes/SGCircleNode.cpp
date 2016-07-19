@@ -8,7 +8,8 @@
 
 #include "SGCircleNode.h"
 
-SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis) {
+SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis)
+{
     drawMode = DRAW_MODE_LINES;
     this->mesh = new Mesh();
     
@@ -21,7 +22,8 @@ SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis) {
     updateAbsoluteTransformation();
 }
 
-void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float radius) {
+void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float radius)
+{
     int vertexCount = m->getVerticesCount();
     double theta = 0.0;
     for(int i = 0; i < noOfVertices+1; i++){
@@ -47,12 +49,14 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
     m->addToIndicesArray(vertexCount);
 }
 
-
-SGCircleNode::~SGCircleNode() {
+SGCircleNode::~SGCircleNode()
+{
     if(this->mesh)
         delete this->mesh;
     
 }
-void SGCircleNode::update(){
+
+void SGCircleNode::update()
+{
     
 }

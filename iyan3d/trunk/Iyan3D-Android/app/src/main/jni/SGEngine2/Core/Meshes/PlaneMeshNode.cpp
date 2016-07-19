@@ -8,7 +8,8 @@
 
 #include "PlaneMeshNode.h"
 
-PlaneMeshNode::PlaneMeshNode(float aspectRatio) {
+PlaneMeshNode::PlaneMeshNode(float aspectRatio)
+{
     this->mesh = new Mesh();
     Logger::log(INFO, "PLANEMESHNODE", "aspectratio "+ to_string(aspectRatio));
     // Front
@@ -53,10 +54,14 @@ PlaneMeshNode::PlaneMeshNode(float aspectRatio) {
         this->mesh->addToIndicesArray(indices[i]);
     updateAbsoluteTransformation();
 }
-PlaneMeshNode::~PlaneMeshNode() {
+
+PlaneMeshNode::~PlaneMeshNode()
+{
     if(this->mesh)
         delete this->mesh;
 }
-void PlaneMeshNode::update(){
+
+void PlaneMeshNode::update()
+{
     
 }

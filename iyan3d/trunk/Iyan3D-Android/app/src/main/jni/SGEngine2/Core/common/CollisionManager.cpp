@@ -11,10 +11,12 @@ CollisionManager::CollisionManager()
 {
 
 }
+
 CollisionManager::~CollisionManager()
 {
 
 }
+
 Line3D CollisionManager::getRayFromScreenCoordinates(Vector2 screenCoords, shared_ptr<CameraNode> camera, double screenWidth, double screenHeight)
 {
     Frustum* f = camera->getViewFrustum();

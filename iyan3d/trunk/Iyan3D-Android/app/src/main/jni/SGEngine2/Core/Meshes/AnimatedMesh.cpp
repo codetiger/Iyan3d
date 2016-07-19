@@ -11,6 +11,7 @@
 AnimatedMesh::AnimatedMesh(){
     
 }
+
 AnimatedMesh::~AnimatedMesh(){
     
 }

@@ -8,7 +8,8 @@
 
 #include "ParticleManager.h"
 
-ParticleManager::ParticleManager() {
+ParticleManager::ParticleManager()
+{
     type = NODE_TYPE_PARTICLES;
     startColor = Vector4(1.0,1.0,1.0,1.0);
     midColor = Vector4(1.0, 1.0, 0.0, 1.0);
@@ -66,7 +67,8 @@ ParticleManager::~ParticleManager()
     }
 }
 
-void ParticleManager::update() {
+void ParticleManager::update()
+{
     
     
 }
@@ -159,7 +161,8 @@ Quaternion ParticleManager::rotationBetweenVectors(Vector3 targetDirection, Vect
     return delta;
 }
 
-void ParticleManager::sortParticles(Vector3 position) {
+void ParticleManager::sortParticles(Vector3 position)
+{
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
         if(p->isLive) {
@@ -191,6 +194,7 @@ int ParticleManager::getParticlesCount()
     return maxParticleCount;
 }
 
-void ParticleManager::setParticleRotation(Vector3 rot) {
+void ParticleManager::setParticleRotation(Vector3 rot)
+{
     particleRotation = rot;
 }

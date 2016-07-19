@@ -11,6 +11,7 @@
 MTLNodeData::MTLNodeData(){
     
 }
+
 MTLNodeData::~MTLNodeData(){
     if(VertexBuffers) {
         [VertexBuffers removeAllObjects];
@@ -24,9 +25,11 @@ MTLNodeData::~MTLNodeData(){
     
     VAOCreated = false;
 }
+
 shared_ptr<void> initMetalNodeData(){
     return make_shared<MTLNodeData>();
 }
+
 void MTLNodeData::removeVertexBuffers()
 {
     

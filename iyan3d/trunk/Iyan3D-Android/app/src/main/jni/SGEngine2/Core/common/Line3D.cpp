@@ -10,6 +10,7 @@
 Line3D::Line3D()
 {
 }
+
 Line3D::~Line3D()
 {
 }

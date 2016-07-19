@@ -10,9 +10,11 @@
 Frustum::Frustum()
 {
 }
+
 Frustum::~Frustum()
 {
 }
+
 void Frustum::constructWithProjViewMatrix(Mat4 ProjViewMat)
 {
     planes[F_LEFT_PLANE].normal.x = ProjViewMat[3] + ProjViewMat[0];
@@ -57,18 +59,21 @@ void Frustum::constructWithProjViewMatrix(Mat4 ProjViewMat)
         planes[i].distanceFromOrigin *= len;
     }
 }
+
 Vector3 Frustum::getFarLeftUp()
 {
     Vector3 p;
     planes[F_FAR_PLANE].getIntersectionWithPlanes(planes[F_TOP_PLANE], planes[F_LEFT_PLANE], p);
     return p;
 }
+
 Vector3 Frustum::getFarLeftDown()
 {
     Vector3 p;
     planes[F_FAR_PLANE].getIntersectionWithPlanes(planes[F_BOTTOM_PLANE], planes[F_LEFT_PLANE], p);
     return p;
 }
+
 Vector3 Frustum::getFarRightUp()
 {
     Vector3 p;
@@ -76,6 +81,7 @@ Vector3 Frustum::getFarRightUp()
 
     return p;
 }
+
 Vector3 Frustum::getFarRightDown()
 {
     Vector3 p;
@@ -83,6 +89,7 @@ Vector3 Frustum::getFarRightDown()
 
     return p;
 }
+
 Vector3 Frustum::getNearLeftUp()
 {
     Vector3 p;
@@ -90,6 +97,7 @@ Vector3 Frustum::getNearLeftUp()
 
     return p;
 }
+
 Vector3 Frustum::getNearLeftDown()
 {
     Vector3 p;
@@ -97,6 +105,7 @@ Vector3 Frustum::getNearLeftDown()
 
     return p;
 }
+
 Vector3 Frustum::getNearRightUp()
 {
     Vector3 p;
@@ -104,6 +113,7 @@ Vector3 Frustum::getNearRightUp()
 
     return p;
 }
+
 Vector3 Frustum::getNearRightDown()
 {
     Vector3 p;

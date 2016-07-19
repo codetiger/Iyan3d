@@ -13,18 +13,22 @@
 #include <EGL/egl.h>
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOES;
 
-void initialiseDeleteVAOFunc () {
+void initialiseDeleteVAOFunc()
+{
     glDeleteVertexArraysOES = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress ( "glDeleteVertexArraysOES" );
 }
-
 #endif
-OGLNodeData::OGLNodeData(){
+
+OGLNodeData::OGLNodeData()
+{
     VAOCreated = false;
     IndexBufLocations.clear();
     vertexBufLocations.clear();
     vertexArrayLocations.clear();
 }
-OGLNodeData::~OGLNodeData(){
+
+OGLNodeData::~OGLNodeData()
+{
 
 #ifdef ANDROID
     if(vertexArrayLocations.size() > 0)
@@ -44,6 +48,7 @@ OGLNodeData::~OGLNodeData(){
     IndexBufLocations.clear();
     vertexArrayLocations.clear();
 }
+
 void OGLNodeData::removeVertexBuffers()
 {
     for(int i = 0; i < vertexBufLocations.size();i++)

@@ -14,15 +14,20 @@
 #elif ANDROID
 #include "../../../opengl.h"
 #endif
-MaterialManager::MaterialManager(DEVICE_TYPE deviceType){
+
+MaterialManager::MaterialManager(DEVICE_TYPE deviceType)
+{
     this->deviceType = deviceType;
     materials = new vector<Material*>();
 }
-MaterialManager::~MaterialManager(){
+
+MaterialManager::~MaterialManager()
+{
     RemoveAllMaterials();
 }
 
-bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest){
+bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
+{
     Material *newMat = NULL;
     bool status;
 #ifdef ANDROID
@@ -53,7 +58,9 @@ bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,stri
     materials->push_back(newMat);
     return true;
 }
-void MaterialManager::RemoveAllMaterials(){
+
+void MaterialManager::RemoveAllMaterials()
+{
     clearMaterials();
     delete materials;
 }

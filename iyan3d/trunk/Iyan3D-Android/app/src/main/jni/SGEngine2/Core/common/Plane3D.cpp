@@ -10,16 +10,18 @@
 Plane3D::Plane3D()
 {
 }
+
 void Plane3D::setPositionAndNormal(Vector3 position, Vector3 normal)
 {
     this->normal = normal;
     distanceFromOrigin = -position.dotProduct(normal);
 }
+
 Plane3D::~Plane3D()
 {
 }
-bool Plane3D::getIntersectionWithPlanes(Plane3D& o1,
-    Plane3D& o2, Vector3& outPoint)
+
+bool Plane3D::getIntersectionWithPlanes(Plane3D& o1, Plane3D& o2, Vector3& outPoint)
 {
     Vector3 linePoint, lineVect;
     if (getIntersectionWithPlane(o1, linePoint, lineVect))
@@ -27,6 +29,7 @@ bool Plane3D::getIntersectionWithPlanes(Plane3D& o1,
 
     return false;
 }
+
 bool Plane3D::getIntersectionWithPlane(Plane3D& other, Vector3& outLinePoint, Vector3& outLineVect)
 {
     float fn00 = normal.getLength();
@@ -45,6 +48,7 @@ bool Plane3D::getIntersectionWithPlane(Plane3D& other, Vector3& outLinePoint, Ve
     outLinePoint = normal * (double)fc0 + other.normal * (double)fc1;
     return true;
 }
+
 bool Plane3D::getIntersectionWithLine(Vector3& linePoint, Vector3& lineVect, Vector3& outIntersection)
 {
     float t2 = normal.dotProduct(lineVect);
@@ -54,6 +58,7 @@ bool Plane3D::getIntersectionWithLine(Vector3& linePoint, Vector3& lineVect, Vec
     outIntersection = linePoint + (lineVect * t);
     return true;
 }
+
 void Plane3D::setPosition(Vector3 pos)
 {
     distanceFromOrigin = -position.dotProduct(normal);

@@ -16,11 +16,13 @@
 #endif
 
 
-OGLMaterial::OGLMaterial(){
+OGLMaterial::OGLMaterial()
+{
     
 }
 
-OGLMaterial::~OGLMaterial(){
+OGLMaterial::~OGLMaterial()
+{
     if(shaderProgram){
         uint32_t shaders[MAX_SHADERS_PER_MATERIAL];
         int32_t count;
@@ -35,7 +37,8 @@ OGLMaterial::~OGLMaterial(){
     attributes.clear();
 }
 
-void OGLMaterial::AddAttributes(string name,DATA_TYPE type,uint32_t location,u16 bufIndex){
+void OGLMaterial::AddAttributes(string name,DATA_TYPE type,uint32_t location,u16 bufIndex)
+{
     attribute attr;
     attr.name = name;
     attr.type = type;
@@ -43,7 +46,8 @@ void OGLMaterial::AddAttributes(string name,DATA_TYPE type,uint32_t location,u16
     attributes.push_back(attr);
 }
 
-void OGLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, short nodeIndex){
+void OGLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, short nodeIndex)
+{
     uniform uni;
     uni.location = location;
     uni.name = propertyName;
@@ -55,7 +59,8 @@ void OGLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_
     uniforms.push_back(uni);
 }
 
-short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex) {
+short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex)
+{
     
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
@@ -79,7 +84,8 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     return uniformNodeIndex;
 }
 
-short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex){
+short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex)
+{
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){
         if(uniforms[i].name == name){
@@ -103,7 +109,8 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     return uniformNodeIndex;
 }
 
-bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr){
+bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr)
+{
     GLuint vShaderHandle = CompileShader(vShaderName,GL_VERTEX_SHADER, shadersStr);
     GLuint fShaderHandle = CompileShader(fShaderName,GL_FRAGMENT_SHADER, shadersStr);
     shaderProgram = LinkShaders(vShaderHandle,fShaderHandle);
@@ -129,7 +136,8 @@ bool OGLMaterial::LoadShaders(string vShaderName,string fShaderName, std::map< s
     return true;
 }
 
-string OGLMaterial::getShaderAttributeNameByIndex(int i){
+string OGLMaterial::getShaderAttributeNameByIndex(int i)
+{
     int maxAttrib = NOT_EXISTS;
     glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTES, &maxAttrib);
     if(i >= maxAttrib)
@@ -146,14 +154,18 @@ string OGLMaterial::getShaderAttributeNameByIndex(int i){
 
     return string(attribName);
 }
-int OGLMaterial::getMaterialAttribIndexByName(string name){
+
+int OGLMaterial::getMaterialAttribIndexByName(string name)
+{
     for(int i = 0;i < attributes.size();i++){
         if(attributes[i].name.compare(name) == 0)
             return i;
     }
     return NOT_EXISTS;
 }
-GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType, std::map< string, string > shadersStr){
+
+GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType, std::map< string, string > shadersStr)
+{
     // 1
     std::ifstream t(shaderName.c_str());
     std::stringstream buffer;
@@ -195,7 +207,9 @@ GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType, std::map<
     Logger::log(INFO,"OGLMaterial",shaderName + " Compiled");
     return shaderHandle;
 }
-GLuint OGLMaterial::LinkShaders(GLuint vShaderHandle,GLuint fShaderHandle){
+
+GLuint OGLMaterial::LinkShaders(GLuint vShaderHandle,GLuint fShaderHandle)
+{
     GLuint programHandle = glCreateProgram();
     glAttachShader(programHandle, vShaderHandle);
     glAttachShader(programHandle, fShaderHandle);
@@ -211,11 +225,15 @@ GLuint OGLMaterial::LinkShaders(GLuint vShaderHandle,GLuint fShaderHandle){
     return programHandle;
     
 }
-GLuint OGLMaterial::CreateAttribute(GLuint programHandle,string attribName){
+
+GLuint OGLMaterial::CreateAttribute(GLuint programHandle,string attribName)
+{
     GLuint location = glGetAttribLocation(programHandle, attribName.c_str());
     glEnableVertexAttribArray(location);
     return location;
 }
-GLuint OGLMaterial::CreateUniform(GLuint programHandle,string uniName){
+
+GLuint OGLMaterial::CreateUniform(GLuint programHandle,string uniName)
+{
     return glGetUniformLocation(programHandle,uniName.c_str());
 }

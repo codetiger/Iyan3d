@@ -8,7 +8,8 @@
 
 #include "CubeMeshNode.h"
 
-CubeMeshNode::CubeMeshNode() {
+CubeMeshNode::CubeMeshNode()
+{
     this->mesh = new Mesh();
 
     // Front
@@ -147,11 +148,15 @@ CubeMeshNode::CubeMeshNode() {
         this->mesh->addToIndicesArray(indices[i]);
     updateAbsoluteTransformation();
 }
-CubeMeshNode::~CubeMeshNode() {
+
+CubeMeshNode::~CubeMeshNode()
+{
     if(this->mesh)
         delete this->mesh;
     this->mesh = NULL;
 }
-void CubeMeshNode::update(){
+
+void CubeMeshNode::update()
+{
     
 }

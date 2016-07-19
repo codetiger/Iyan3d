@@ -12,6 +12,7 @@ BoundingBox::BoundingBox()
     MaxEdge = Vector3(-999.0);
     MinEdge = Vector3(999.0);
 }
+
 BoundingBox::~BoundingBox()
 {
 }
@@ -38,22 +39,27 @@ void BoundingBox::addPointsToCalculateBoundingBox(Vector3 point)
     if (point.z < MinEdge.z)
         MinEdge.z = point.z;
 }
+
 Vector3 BoundingBox::getMaxEdge()
 {
     return MaxEdge;
 }
+
 Vector3 BoundingBox::getMinEdge()
 {
     return MinEdge;
 }
+
 Vector3 BoundingBox::getCenter()
 {
     return (MaxEdge + MinEdge) / 2.0;
 }
+
 Vector3 BoundingBox::getEdgeByIndex(u16 index)
 {
     return edges[index];
 }
+
 BoundingBox BoundingBox::transformBoundingBox(Mat4 absTransformation)
 {
     BoundingBox bb;
@@ -64,18 +70,22 @@ BoundingBox BoundingBox::transformBoundingBox(Mat4 absTransformation)
     }
     return bb;
 }
+
 float BoundingBox::getZExtend()
 {
     return MaxEdge.z - MinEdge.z;
 }
+
 float BoundingBox::getYExtend()
 {
     return MaxEdge.y - MinEdge.y;
 }
+
 float BoundingBox::getXExtend()
 {
     return MaxEdge.x - MinEdge.x;
 }
+
 void BoundingBox::calculateEdges()
 {
     //

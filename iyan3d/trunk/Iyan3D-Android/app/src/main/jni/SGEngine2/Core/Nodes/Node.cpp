@@ -118,7 +118,8 @@ void Node::setTexture(Texture *texture, int textureIndex)
         hasNormalMap = (texture != nil);
 }
 
-void Node::setRotation(Quaternion r, bool updateBB) {
+void Node::setRotation(Quaternion r, bool updateBB)
+{
     rotation = r;
     if(updateBB)
         FlagTransformationToChildren();
@@ -138,7 +139,8 @@ void Node::setScale(Vector3 scale, bool updateBB)
         FlagTransformationToChildren();
 }
 
-Quaternion Node::getRotation() {
+Quaternion Node::getRotation()
+{
     return rotation;
 }
 
