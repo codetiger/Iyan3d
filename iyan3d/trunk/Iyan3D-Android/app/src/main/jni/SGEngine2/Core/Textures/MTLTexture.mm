@@ -33,9 +33,7 @@ void* initMTLTexture()
 UIImage* boxblurImage(UIImage *image, int boxSize)
 {
     CGImageRef img = image.CGImage;
-    
     vImage_Buffer inBuffer, outBuffer;
-    
     void *pixelBuffer;
     
     CGDataProviderRef inProvider = CGImageGetDataProvider(img);
@@ -61,14 +59,7 @@ UIImage* boxblurImage(UIImage *image, int boxSize)
     }
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,
-                                             outBuffer.width,
-                                             outBuffer.height,
-                                             8,
-                                             outBuffer.rowBytes,
-                                             colorSpace,
-                                             kCGImageAlphaNoneSkipLast);
+    CGContextRef ctx = CGBitmapContextCreate(outBuffer.data, outBuffer.width, outBuffer.height, 8, outBuffer.rowBytes, colorSpace, kCGImageAlphaNoneSkipLast);
     CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
     UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
     
@@ -87,7 +78,7 @@ UIImage* boxblurImage(UIImage *image, int boxSize)
 bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, bool smoothTexture, int blurRadius)
 {
     textureName = name;
-    NSString *pathToTextureFile = [NSString stringWithFormat:@"%s",texturePath.c_str()];
+    NSString *pathToTextureFile = [NSString stringWithFormat:@"%s", texturePath.c_str()];
 
     UIImage *originalImage = [UIImage imageWithContentsOfFile:pathToTextureFile];
     UIImage *image = originalImage;
@@ -119,8 +110,12 @@ bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
                  withBytes:CGBitmapContextGetData(context)
                bytesPerRow:4 * width];
     
-    CGColorSpaceRelease( colorSpace );
+    CGColorSpaceRelease(colorSpace);
+    colorSpace = nil;
+    
     CGContextRelease(context);
+    context = nil;
+    
     return YES;
 }
 

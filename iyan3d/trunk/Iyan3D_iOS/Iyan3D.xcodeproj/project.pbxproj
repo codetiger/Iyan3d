@@ -734,14 +734,6 @@
 		251424671C9698F90012CA68 /* FtglPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2514242E1C9698F90012CA68 /* FtglPoint.cpp */; };
 		251424681C9698F90012CA68 /* Vectoriser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251424301C9698F90012CA68 /* Vectoriser.cpp */; };
 		251424691C9698F90012CA68 /* Vectoriser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251424301C9698F90012CA68 /* Vectoriser.cpp */; };
-		2514246A1C9698F90012CA68 /* darwin in Resources */ = {isa = PBXBuildFile; fileRef = 251424341C9698F90012CA68 /* darwin */; };
-		2514246B1C9698F90012CA68 /* darwin in Resources */ = {isa = PBXBuildFile; fileRef = 251424341C9698F90012CA68 /* darwin */; };
-		2514246C1C9698F90012CA68 /* darwin-iphone in Resources */ = {isa = PBXBuildFile; fileRef = 251424351C9698F90012CA68 /* darwin-iphone */; };
-		2514246D1C9698F90012CA68 /* darwin-iphone in Resources */ = {isa = PBXBuildFile; fileRef = 251424351C9698F90012CA68 /* darwin-iphone */; };
-		2514246E1C9698F90012CA68 /* default in Resources */ = {isa = PBXBuildFile; fileRef = 251424361C9698F90012CA68 /* default */; };
-		2514246F1C9698F90012CA68 /* default in Resources */ = {isa = PBXBuildFile; fileRef = 251424361C9698F90012CA68 /* default */; };
-		251424701C9698F90012CA68 /* alg-outline in Resources */ = {isa = PBXBuildFile; fileRef = 2514243B1C9698F90012CA68 /* alg-outline */; };
-		251424711C9698F90012CA68 /* alg-outline in Resources */ = {isa = PBXBuildFile; fileRef = 2514243B1C9698F90012CA68 /* alg-outline */; };
 		251424721C9698F90012CA68 /* dict.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514243D1C9698F90012CA68 /* dict.c */; };
 		251424731C9698F90012CA68 /* dict.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514243D1C9698F90012CA68 /* dict.c */; };
 		251424741C9698F90012CA68 /* geom.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514243F1C9698F90012CA68 /* geom.c */; };
@@ -754,8 +746,6 @@
 		2514247B1C9698F90012CA68 /* normal.c in Sources */ = {isa = PBXBuildFile; fileRef = 251424451C9698F90012CA68 /* normal.c */; };
 		2514247E1C9698F90012CA68 /* priorityq.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514244A1C9698F90012CA68 /* priorityq.c */; };
 		2514247F1C9698F90012CA68 /* priorityq.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514244A1C9698F90012CA68 /* priorityq.c */; };
-		251424801C9698F90012CA68 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 2514244C1C9698F90012CA68 /* README */; };
-		251424811C9698F90012CA68 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 2514244C1C9698F90012CA68 /* README */; };
 		251424821C9698F90012CA68 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514244D1C9698F90012CA68 /* render.c */; };
 		251424831C9698F90012CA68 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514244D1C9698F90012CA68 /* render.c */; };
 		251424841C9698F90012CA68 /* sweep.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514244F1C9698F90012CA68 /* sweep.c */; };
@@ -772,10 +762,6 @@
 		2514248F1C9698F90012CA68 /* project.c in Sources */ = {isa = PBXBuildFile; fileRef = 251424591C9698F90012CA68 /* project.c */; };
 		251424901C9698F90012CA68 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514245A1C9698F90012CA68 /* registry.c */; };
 		251424911C9698F90012CA68 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = 2514245A1C9698F90012CA68 /* registry.c */; };
-		251424921C9698F90012CA68 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 2514245B1C9698F90012CA68 /* Makefile */; };
-		251424931C9698F90012CA68 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 2514245B1C9698F90012CA68 /* Makefile */; };
-		251424941C9698F90012CA68 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 2514245C1C9698F90012CA68 /* README */; };
-		251424951C9698F90012CA68 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 2514245C1C9698F90012CA68 /* README */; };
 		251424961C9698F90012CA68 /* TextMesh3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251424601C9698F90012CA68 /* TextMesh3d.cpp */; };
 		251424971C9698F90012CA68 /* TextMesh3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251424601C9698F90012CA68 /* TextMesh3d.cpp */; };
 		2516DC091C5F52FD0034145D /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC081C5F52FD0034145D /* ParticleManager.cpp */; };
@@ -1153,8 +1139,6 @@
 		25DE102E1CAA8D6D0076F669 /* btQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0EED1CAA8D6D0076F669 /* btQuantizedBvh.cpp */; };
 		25DE102F1CAA8D6D0076F669 /* btSimpleBroadphase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0EEF1CAA8D6D0076F669 /* btSimpleBroadphase.cpp */; };
 		25DE10301CAA8D6D0076F669 /* btSimpleBroadphase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0EEF1CAA8D6D0076F669 /* btSimpleBroadphase.cpp */; };
-		25DE10311CAA8D6D0076F669 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 25DE0EF11CAA8D6D0076F669 /* CMakeLists.txt */; };
-		25DE10321CAA8D6D0076F669 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 25DE0EF11CAA8D6D0076F669 /* CMakeLists.txt */; };
 		25DE10331CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0EF31CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.cpp */; };
 		25DE10341CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0EF31CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.cpp */; };
 		25DE10351CAA8D6D0076F669 /* btBox2dBox2dCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0EF51CAA8D6D0076F669 /* btBox2dBox2dCollisionAlgorithm.cpp */; };
@@ -1325,12 +1309,8 @@
 		25DE10DA1CAA8D6D0076F669 /* btSubSimplexConvexCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FBD1CAA8D6D0076F669 /* btSubSimplexConvexCast.cpp */; };
 		25DE10DB1CAA8D6D0076F669 /* btVoronoiSimplexSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FBF1CAA8D6D0076F669 /* btVoronoiSimplexSolver.cpp */; };
 		25DE10DC1CAA8D6D0076F669 /* btVoronoiSimplexSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FBF1CAA8D6D0076F669 /* btVoronoiSimplexSolver.cpp */; };
-		25DE10DD1CAA8D6D0076F669 /* premake4.lua in Resources */ = {isa = PBXBuildFile; fileRef = 25DE0FC11CAA8D6D0076F669 /* premake4.lua */; };
-		25DE10DE1CAA8D6D0076F669 /* premake4.lua in Resources */ = {isa = PBXBuildFile; fileRef = 25DE0FC11CAA8D6D0076F669 /* premake4.lua */; };
 		25DE10DF1CAA8D6D0076F669 /* btKinematicCharacterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FC51CAA8D6D0076F669 /* btKinematicCharacterController.cpp */; };
 		25DE10E01CAA8D6D0076F669 /* btKinematicCharacterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FC51CAA8D6D0076F669 /* btKinematicCharacterController.cpp */; };
-		25DE10E11CAA8D6D0076F669 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 25DE0FC71CAA8D6D0076F669 /* CMakeLists.txt */; };
-		25DE10E21CAA8D6D0076F669 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 25DE0FC71CAA8D6D0076F669 /* CMakeLists.txt */; };
 		25DE10E31CAA8D6D0076F669 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FC91CAA8D6D0076F669 /* btConeTwistConstraint.cpp */; };
 		25DE10E41CAA8D6D0076F669 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FC91CAA8D6D0076F669 /* btConeTwistConstraint.cpp */; };
 		25DE10E51CAA8D6D0076F669 /* btContactConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0FCC1CAA8D6D0076F669 /* btContactConstraint.cpp */; };
@@ -1389,8 +1369,6 @@
 		25DE111A1CAA8D6D0076F669 /* btLemkeAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE100E1CAA8D6D0076F669 /* btLemkeAlgorithm.cpp */; };
 		25DE111B1CAA8D6D0076F669 /* btMLCPSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE10111CAA8D6D0076F669 /* btMLCPSolver.cpp */; };
 		25DE111C1CAA8D6D0076F669 /* btMLCPSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE10111CAA8D6D0076F669 /* btMLCPSolver.cpp */; };
-		25DE111D1CAA8D6D0076F669 /* premake4.lua in Resources */ = {isa = PBXBuildFile; fileRef = 25DE10161CAA8D6D0076F669 /* premake4.lua */; };
-		25DE111E1CAA8D6D0076F669 /* premake4.lua in Resources */ = {isa = PBXBuildFile; fileRef = 25DE10161CAA8D6D0076F669 /* premake4.lua */; };
 		25DE111F1CAA8D6D0076F669 /* btRaycastVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE10181CAA8D6D0076F669 /* btRaycastVehicle.cpp */; };
 		25DE11201CAA8D6D0076F669 /* btRaycastVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE10181CAA8D6D0076F669 /* btRaycastVehicle.cpp */; };
 		25DE11211CAA8D6D0076F669 /* btWheelInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE101B1CAA8D6D0076F669 /* btWheelInfo.cpp */; };
@@ -1411,10 +1389,6 @@
 		25DE11481CAA91310076F669 /* btSoftRigidDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE11341CAA91310076F669 /* btSoftRigidDynamicsWorld.cpp */; };
 		25DE11491CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE11361CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp */; };
 		25DE114A1CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE11361CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp */; };
-		25DE114B1CAA91310076F669 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 25DE11391CAA91310076F669 /* CMakeLists.txt */; };
-		25DE114C1CAA91310076F669 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 25DE11391CAA91310076F669 /* CMakeLists.txt */; };
-		25DE114D1CAA91310076F669 /* premake4.lua in Resources */ = {isa = PBXBuildFile; fileRef = 25DE113A1CAA91310076F669 /* premake4.lua */; };
-		25DE114E1CAA91310076F669 /* premake4.lua in Resources */ = {isa = PBXBuildFile; fileRef = 25DE113A1CAA91310076F669 /* premake4.lua */; };
 		25DE11511CAA98C90076F669 /* PhysicsHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE11501CAA98C90076F669 /* PhysicsHelper.cpp */; };
 		25DE11521CAA98C90076F669 /* PhysicsHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE11501CAA98C90076F669 /* PhysicsHelper.cpp */; };
 		25E364491B38DDE10039A8C5 /* wheel2.png in Resources */ = {isa = PBXBuildFile; fileRef = 25E364481B38DDE10039A8C5 /* wheel2.png */; };
@@ -3267,12 +3241,8 @@
 		2514242F1C9698F90012CA68 /* FtglPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FtglPoint.h; sourceTree = "<group>"; };
 		251424301C9698F90012CA68 /* Vectoriser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vectoriser.cpp; sourceTree = "<group>"; };
 		251424311C9698F90012CA68 /* Vectoriser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vectoriser.h; sourceTree = "<group>"; };
-		251424341C9698F90012CA68 /* darwin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = darwin; sourceTree = "<group>"; };
-		251424351C9698F90012CA68 /* darwin-iphone */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "darwin-iphone"; sourceTree = "<group>"; };
-		251424361C9698F90012CA68 /* default */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = default; sourceTree = "<group>"; };
 		251424381C9698F90012CA68 /* glu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glu.h; sourceTree = "<group>"; };
 		251424391C9698F90012CA68 /* gluos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gluos.h; sourceTree = "<group>"; };
-		2514243B1C9698F90012CA68 /* alg-outline */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "alg-outline"; sourceTree = "<group>"; };
 		2514243C1C9698F90012CA68 /* dict-list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "dict-list.h"; sourceTree = "<group>"; };
 		2514243D1C9698F90012CA68 /* dict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dict.c; sourceTree = "<group>"; };
 		2514243E1C9698F90012CA68 /* dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dict.h; sourceTree = "<group>"; };
@@ -3287,7 +3257,6 @@
 		251424491C9698F90012CA68 /* priorityq-sort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "priorityq-sort.h"; sourceTree = "<group>"; };
 		2514244A1C9698F90012CA68 /* priorityq.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = priorityq.c; sourceTree = "<group>"; };
 		2514244B1C9698F90012CA68 /* priorityq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = priorityq.h; sourceTree = "<group>"; };
-		2514244C1C9698F90012CA68 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		2514244D1C9698F90012CA68 /* render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = render.c; sourceTree = "<group>"; };
 		2514244E1C9698F90012CA68 /* render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render.h; sourceTree = "<group>"; };
 		2514244F1C9698F90012CA68 /* sweep.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sweep.c; sourceTree = "<group>"; };
@@ -3301,8 +3270,6 @@
 		251424581C9698F90012CA68 /* gluint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gluint.h; sourceTree = "<group>"; };
 		251424591C9698F90012CA68 /* project.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = project.c; sourceTree = "<group>"; };
 		2514245A1C9698F90012CA68 /* registry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = registry.c; sourceTree = "<group>"; };
-		2514245B1C9698F90012CA68 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		2514245C1C9698F90012CA68 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		251424601C9698F90012CA68 /* TextMesh3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextMesh3d.cpp; sourceTree = "<group>"; };
 		251424611C9698F90012CA68 /* TextMesh3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMesh3d.h; sourceTree = "<group>"; };
 		2516DC051C5F4ED80034145D /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
@@ -3684,7 +3651,6 @@
 		25DE0EEE1CAA8D6D0076F669 /* btQuantizedBvh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btQuantizedBvh.h; sourceTree = "<group>"; };
 		25DE0EEF1CAA8D6D0076F669 /* btSimpleBroadphase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSimpleBroadphase.cpp; sourceTree = "<group>"; };
 		25DE0EF01CAA8D6D0076F669 /* btSimpleBroadphase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSimpleBroadphase.h; sourceTree = "<group>"; };
-		25DE0EF11CAA8D6D0076F669 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		25DE0EF31CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btActivatingCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		25DE0EF41CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btActivatingCollisionAlgorithm.h; sourceTree = "<group>"; };
 		25DE0EF51CAA8D6D0076F669 /* btBox2dBox2dCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btBox2dBox2dCollisionAlgorithm.cpp; sourceTree = "<group>"; };
@@ -3888,11 +3854,9 @@
 		25DE0FBE1CAA8D6D0076F669 /* btSubSimplexConvexCast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSubSimplexConvexCast.h; sourceTree = "<group>"; };
 		25DE0FBF1CAA8D6D0076F669 /* btVoronoiSimplexSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btVoronoiSimplexSolver.cpp; sourceTree = "<group>"; };
 		25DE0FC01CAA8D6D0076F669 /* btVoronoiSimplexSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btVoronoiSimplexSolver.h; sourceTree = "<group>"; };
-		25DE0FC11CAA8D6D0076F669 /* premake4.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = premake4.lua; sourceTree = "<group>"; };
 		25DE0FC41CAA8D6D0076F669 /* btCharacterControllerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCharacterControllerInterface.h; sourceTree = "<group>"; };
 		25DE0FC51CAA8D6D0076F669 /* btKinematicCharacterController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btKinematicCharacterController.cpp; sourceTree = "<group>"; };
 		25DE0FC61CAA8D6D0076F669 /* btKinematicCharacterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btKinematicCharacterController.h; sourceTree = "<group>"; };
-		25DE0FC71CAA8D6D0076F669 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		25DE0FC91CAA8D6D0076F669 /* btConeTwistConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConeTwistConstraint.cpp; sourceTree = "<group>"; };
 		25DE0FCA1CAA8D6D0076F669 /* btConeTwistConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConeTwistConstraint.h; sourceTree = "<group>"; };
 		25DE0FCB1CAA8D6D0076F669 /* btConstraintSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConstraintSolver.h; sourceTree = "<group>"; };
@@ -3967,7 +3931,6 @@
 		25DE10131CAA8D6D0076F669 /* btMLCPSolverInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMLCPSolverInterface.h; sourceTree = "<group>"; };
 		25DE10141CAA8D6D0076F669 /* btPATHSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btPATHSolver.h; sourceTree = "<group>"; };
 		25DE10151CAA8D6D0076F669 /* btSolveProjectedGaussSeidel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSolveProjectedGaussSeidel.h; sourceTree = "<group>"; };
-		25DE10161CAA8D6D0076F669 /* premake4.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = premake4.lua; sourceTree = "<group>"; };
 		25DE10181CAA8D6D0076F669 /* btRaycastVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btRaycastVehicle.cpp; sourceTree = "<group>"; };
 		25DE10191CAA8D6D0076F669 /* btRaycastVehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btRaycastVehicle.h; sourceTree = "<group>"; };
 		25DE101A1CAA8D6D0076F669 /* btVehicleRaycaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btVehicleRaycaster.h; sourceTree = "<group>"; };
@@ -3994,8 +3957,6 @@
 		25DE11361CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSoftSoftCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		25DE11371CAA91310076F669 /* btSoftSoftCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSoftSoftCollisionAlgorithm.h; sourceTree = "<group>"; };
 		25DE11381CAA91310076F669 /* btSparseSDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSparseSDF.h; sourceTree = "<group>"; };
-		25DE11391CAA91310076F669 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		25DE113A1CAA91310076F669 /* premake4.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = premake4.lua; sourceTree = "<group>"; };
 		25DE114F1CAA98AE0076F669 /* PhysicsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicsHelper.h; sourceTree = "<group>"; };
 		25DE11501CAA98C90076F669 /* PhysicsHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsHelper.cpp; sourceTree = "<group>"; };
 		25E364481B38DDE10039A8C5 /* wheel2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wheel2.png; path = ../wheel2.png; sourceTree = "<group>"; };
@@ -5275,7 +5236,6 @@
 				251423D11C9698F90012CA68 /* freeType */,
 				2514242B1C9698F90012CA68 /* ftgl */,
 				251424321C9698F90012CA68 /* iGLU-1.0.0 */,
-				2514245D1C9698F90012CA68 /* poly2tri */,
 				251424601C9698F90012CA68 /* TextMesh3d.cpp */,
 				251424611C9698F90012CA68 /* TextMesh3d.h */,
 			);
@@ -5429,24 +5389,11 @@
 		251424321C9698F90012CA68 /* iGLU-1.0.0 */ = {
 			isa = PBXGroup;
 			children = (
-				251424331C9698F90012CA68 /* configs */,
 				251424371C9698F90012CA68 /* include */,
 				2514243A1C9698F90012CA68 /* libtess */,
 				251424551C9698F90012CA68 /* libutil */,
-				2514245B1C9698F90012CA68 /* Makefile */,
-				2514245C1C9698F90012CA68 /* README */,
 			);
 			path = "iGLU-1.0.0";
-			sourceTree = "<group>";
-		};
-		251424331C9698F90012CA68 /* configs */ = {
-			isa = PBXGroup;
-			children = (
-				251424341C9698F90012CA68 /* darwin */,
-				251424351C9698F90012CA68 /* darwin-iphone */,
-				251424361C9698F90012CA68 /* default */,
-			);
-			path = configs;
 			sourceTree = "<group>";
 		};
 		251424371C9698F90012CA68 /* include */ = {
@@ -5461,7 +5408,6 @@
 		2514243A1C9698F90012CA68 /* libtess */ = {
 			isa = PBXGroup;
 			children = (
-				2514243B1C9698F90012CA68 /* alg-outline */,
 				2514243C1C9698F90012CA68 /* dict-list.h */,
 				2514243D1C9698F90012CA68 /* dict.c */,
 				2514243E1C9698F90012CA68 /* dict.h */,
@@ -5476,7 +5422,6 @@
 				251424491C9698F90012CA68 /* priorityq-sort.h */,
 				2514244A1C9698F90012CA68 /* priorityq.c */,
 				2514244B1C9698F90012CA68 /* priorityq.h */,
-				2514244C1C9698F90012CA68 /* README */,
 				2514244D1C9698F90012CA68 /* render.c */,
 				2514244E1C9698F90012CA68 /* render.h */,
 				2514244F1C9698F90012CA68 /* sweep.c */,
@@ -5499,29 +5444,6 @@
 				2514245A1C9698F90012CA68 /* registry.c */,
 			);
 			path = libutil;
-			sourceTree = "<group>";
-		};
-		2514245D1C9698F90012CA68 /* poly2tri */ = {
-			isa = PBXGroup;
-			children = (
-				2514245E1C9698F90012CA68 /* common */,
-				2514245F1C9698F90012CA68 /* sweep */,
-			);
-			path = poly2tri;
-			sourceTree = "<group>";
-		};
-		2514245E1C9698F90012CA68 /* common */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
-		2514245F1C9698F90012CA68 /* sweep */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = sweep;
 			sourceTree = "<group>";
 		};
 		2518156F1D1D1C69009F68A8 /* OnBoard */ = {
@@ -6141,12 +6063,10 @@
 			isa = PBXGroup;
 			children = (
 				25DE0EDA1CAA8D6D0076F669 /* BroadphaseCollision */,
-				25DE0EF11CAA8D6D0076F669 /* CMakeLists.txt */,
 				25DE0EF21CAA8D6D0076F669 /* CollisionDispatch */,
 				25DE0F2A1CAA8D6D0076F669 /* CollisionShapes */,
 				25DE0F771CAA8D6D0076F669 /* Gimpact */,
 				25DE0F9F1CAA8D6D0076F669 /* NarrowPhaseCollision */,
-				25DE0FC11CAA8D6D0076F669 /* premake4.lua */,
 			);
 			name = BulletCollision;
 			path = bullet3/src/BulletCollision;
@@ -6416,12 +6336,10 @@
 			isa = PBXGroup;
 			children = (
 				25DE0FC31CAA8D6D0076F669 /* Character */,
-				25DE0FC71CAA8D6D0076F669 /* CMakeLists.txt */,
 				25DE0FC81CAA8D6D0076F669 /* ConstraintSolver */,
 				25DE0FEE1CAA8D6D0076F669 /* Dynamics */,
 				25DE0FF71CAA8D6D0076F669 /* Featherstone */,
 				25DE100A1CAA8D6D0076F669 /* MLCPSolvers */,
-				25DE10161CAA8D6D0076F669 /* premake4.lua */,
 				25DE10171CAA8D6D0076F669 /* Vehicle */,
 			);
 			name = BulletDynamics;
@@ -6576,8 +6494,6 @@
 				25DE11361CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp */,
 				25DE11371CAA91310076F669 /* btSoftSoftCollisionAlgorithm.h */,
 				25DE11381CAA91310076F669 /* btSparseSDF.h */,
-				25DE11391CAA91310076F669 /* CMakeLists.txt */,
-				25DE113A1CAA91310076F669 /* premake4.lua */,
 			);
 			name = BulletSoftBody;
 			path = bullet3/src/BulletSoftBody;
@@ -8038,14 +7954,12 @@
 				3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCE1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
 				01B4D05D1C2937000091E19B /* My-objects-Text_Pad@2x.png in Resources */,
-				25DE114B1CAA91310076F669 /* CMakeLists.txt in Resources */,
 				3D5F99241C4D04EB00DD47F5 /* Sphere@2x.png in Resources */,
 				25EC6C381C7F39DD002CF5D2 /* wm29.png in Resources */,
 				25EC6C601C7F39DD002CF5D2 /* wm49.png in Resources */,
 				7FC900F61A0A01470051B941 /* select-img-phone.png in Resources */,
 				7F0087951ADFC15400764DDE /* up-arrow@2x.png in Resources */,
 				62FA5F451990A386003B0893 /* view-img.png in Resources */,
-				25DE10E11CAA8D6D0076F669 /* CMakeLists.txt in Resources */,
 				257564C51AE6E3D400B66113 /* RenderingViewControllerPhone.xib in Resources */,
 				2518158F1D1D4EB2009F68A8 /* Divider-1.png in Resources */,
 				7FC900D51A0A01470051B941 /* info-phone@2x.png in Resources */,
@@ -8066,7 +7980,6 @@
 				7F31A73F1AA4960300A6E7B1 /* Menu-phone@3x.png in Resources */,
 				250FEC1B1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */,
 				25034FEA1D24F9960036F201 /* OnBoardVCPhone@2x.xib in Resources */,
-				25DE10DD1CAA8D6D0076F669 /* premake4.lua in Resources */,
 				250FEC641D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */,
 				01F872F21C3A6C4E009AA31E /* Login-IPhone@2x.png in Resources */,
 				25EC6C561C7F39DD002CF5D2 /* wm44.png in Resources */,
@@ -8136,7 +8049,6 @@
 				7F0C02D01A932CE000E2E09D /* cancelButton@2x.png in Resources */,
 				7F0087941ADFC15400764DDE /* up-arrow-75-90.png in Resources */,
 				7FC900C91A0A01470051B941 /* back-img-phone.png in Resources */,
-				2514246E1C9698F90012CA68 /* default in Resources */,
 				25EA8EDF1BD90506005DBA15 /* light_Phone.png in Resources */,
 				01F872E81C3A6C4E009AA31E /* Import-model_IPhone@2x.png in Resources */,
 				25D7DA7B1D07147B00E84D2F /* Help_iphone@3X.png in Resources */,
@@ -8286,7 +8198,6 @@
 				7F31A7551AA4960300A6E7B1 /* undo-img-phone@3x.png in Resources */,
 				3D5F99281C4D04EB00DD47F5 /* Torus@2x.png in Resources */,
 				01F8726B1C3A42EF009AA31E /* EXPORT.png in Resources */,
-				251424701C9698F90012CA68 /* alg-outline in Resources */,
 				01B6F3F31C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
 				62FB86731988D33A00AC7424 /* home.png in Resources */,
 				250FEC501D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */,
@@ -8329,7 +8240,6 @@
 				7FC9015A1A0A54850051B941 /* CrossForMain-iphone@2x.png in Resources */,
 				25EC6C781C7F39DD002CF5D2 /* wm61.png in Resources */,
 				01ACD0951C3CE93D0096AD14 /* TextSelectionSidePanelPhone.xib in Resources */,
-				251424801C9698F90012CA68 /* README in Resources */,
 				250FEC1F1D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */,
 				01F872851C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
 				3D04EAF31C25830F00C18E1A /* Bevel-pad.png in Resources */,
@@ -8505,7 +8415,6 @@
 				250FEC461D1E5506000C8A2C /* round-close_phone@2x.png in Resources */,
 				3D5D0F401C632864006B987E /* Particles@2x.png in Resources */,
 				25F748C51D08085400FB0AFD /* fb_Pad.png in Resources */,
-				25DE10311CAA8D6D0076F669 /* CMakeLists.txt in Resources */,
 				01F872731C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
 				7FDF550C1B736108006DC41F /* premium-phone@2x.png in Resources */,
 				3D53489B1C3BF60200C6A437 /* LightProperties.xib in Resources */,
@@ -8541,7 +8450,6 @@
 				25F80AF71CFDB6E700CF331B /* Subscribe button 01 ipad.psd in Resources */,
 				C8AA47051C227D3600C4AB53 /* New.png in Resources */,
 				256F6B911BF6246300154622 /* json_internalarray.inl in Resources */,
-				2514246A1C9698F90012CA68 /* darwin in Resources */,
 				25EC6C3A1C7F39DD002CF5D2 /* wm30.png in Resources */,
 				7F31A74D1AA4960300A6E7B1 /* rotate-img-phone@3x.png in Resources */,
 				25EC6CAA1C7F39DD002CF5D2 /* wm86.png in Resources */,
@@ -8645,7 +8553,6 @@
 				01ACD0B11C3D11BF0096AD14 /* SettingsViewController.xib in Resources */,
 				250991AD1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */,
 				01F872DA1C3A6C4E009AA31E /* Animation_IPhone@2x.png in Resources */,
-				25DE111D1CAA8D6D0076F669 /* premake4.lua in Resources */,
 				3D5F99141C4D04EB00DD47F5 /* Cone@2x.png in Resources */,
 				7F22BB5E1AC54EAA006B44C6 /* up-arrow.png in Resources */,
 				7F31A7371AA4960300A6E7B1 /* cancelButton@3x.png in Resources */,
@@ -8653,7 +8560,6 @@
 				7FC900D71A0A01470051B941 /* Menu-phone@2x.png in Resources */,
 				25EC6C9C1C7F39DD002CF5D2 /* wm79.png in Resources */,
 				01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */,
-				25DE114D1CAA91310076F669 /* premake4.lua in Resources */,
 				257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */,
 				E2497665196BE0190025D442 /* ObjCellView.xib in Resources */,
 				25EC6CDA1C7F39DD002CF5D2 /* wm110.png in Resources */,
@@ -8738,7 +8644,6 @@
 				01B02CAC1C61CAB400C9102A /* Add-Frames_IPhone@3x.png in Resources */,
 				01F873141C3A6C4E009AA31E /* View_IPhone@2x.png in Resources */,
 				25EC6BAA1C7F066B002CF5D2 /* wm15.png in Resources */,
-				251424941C9698F90012CA68 /* README in Resources */,
 				627A5F8119ED438600CB545C /* last.png in Resources */,
 				01F872EE1C3A6C4E009AA31E /* Import_IPhone@2x.png in Resources */,
 				7FC527631B6F96FF00C5D26D /* Mail-phone@3x.png in Resources */,
@@ -8751,7 +8656,6 @@
 				7FC9016A1A0A54850051B941 /* Stop-video-pad.png in Resources */,
 				7F22BB5D1AC54EAA006B44C6 /* down-arrow.png in Resources */,
 				25EC6CD01C7F39DD002CF5D2 /* wm105.png in Resources */,
-				2514246C1C9698F90012CA68 /* darwin-iphone in Resources */,
 				01B02CB41C61CAB400C9102A /* Export-video_IPhone@3x.png in Resources */,
 				01B4CFF61C29219A0091E19B /* View.png in Resources */,
 				01B395211C37AA3A003955C6 /* Add-Bones_Pad@2x.png in Resources */,
@@ -9030,7 +8934,6 @@
 				3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCF1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
 				3D5F99251C4D04EB00DD47F5 /* Sphere@2x.png in Resources */,
-				25DE114C1CAA91310076F669 /* CMakeLists.txt in Resources */,
 				25EC6C391C7F39DD002CF5D2 /* wm29.png in Resources */,
 				25EC6C611C7F39DD002CF5D2 /* wm49.png in Resources */,
 				7F7D5A3B1B8CA54B00E6BA86 /* googlelogin_Iphone@3x.png in Resources */,
@@ -9038,7 +8941,6 @@
 				7F7D5A3D1B8CA54B00E6BA86 /* googlelogin_Pad@2x.png in Resources */,
 				7F7D5A3E1B8CA54B00E6BA86 /* googlelogout_Iphone.png in Resources */,
 				01B4CFEF1C29219A0091E19B /* info-icon.png in Resources */,
-				25DE10E21CAA8D6D0076F669 /* CMakeLists.txt in Resources */,
 				251815901D1D4EB2009F68A8 /* Divider-1.png in Resources */,
 				25EA8EDC1BD90506005DBA15 /* light_ipad.png in Resources */,
 				7F7D5A3F1B8CA54B00E6BA86 /* googlelogout_Iphone@2x.png in Resources */,
@@ -9060,7 +8962,6 @@
 				25034FEB1D24F9960036F201 /* OnBoardVCPhone@2x.xib in Resources */,
 				01F872F31C3A6C4E009AA31E /* Login-IPhone@2x.png in Resources */,
 				250FEC651D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */,
-				25DE10DE1CAA8D6D0076F669 /* premake4.lua in Resources */,
 				25EC6C571C7F39DD002CF5D2 /* wm44.png in Resources */,
 				251815981D1D5C51009F68A8 /* Step-3_-img.png in Resources */,
 				01E9E7551C5F6204002FCA03 /* property-icon_iphone.png in Resources */,
@@ -9129,7 +9030,6 @@
 				7F307CF41B58FDBF0065BBC1 /* like-fill@2x.png in Resources */,
 				7F307CF51B58FDBF0065BBC1 /* like-phone.png in Resources */,
 				01F872E91C3A6C4E009AA31E /* Import-model_IPhone@2x.png in Resources */,
-				2514246F1C9698F90012CA68 /* default in Resources */,
 				7F307CF61B58FDBF0065BBC1 /* like-phone@2x.png in Resources */,
 				25D7DA7C1D07147B00E84D2F /* Help_iphone@3X.png in Resources */,
 				25EC6C931C7F39DD002CF5D2 /* wm74.png in Resources */,
@@ -9277,7 +9177,6 @@
 				3D5F99291C4D04EB00DD47F5 /* Torus@2x.png in Resources */,
 				E20672301B049AA6006DD2F7 /* feedback-img-phone.png in Resources */,
 				E20672311B049AA6006DD2F7 /* topbarView-phone@2x.png in Resources */,
-				251424711C9698F90012CA68 /* alg-outline in Resources */,
 				E20672321B049AA6006DD2F7 /* undo-img-phone.png in Resources */,
 				E20672341B049AA6006DD2F7 /* feedback-img@2x.png in Resources */,
 				3DD47BF31C60A43500E7CCFD /* 60002.sgm in Resources */,
@@ -9321,7 +9220,6 @@
 				25EC6C711C7F39DD002CF5D2 /* wm57.png in Resources */,
 				01F872861C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
 				25EC6C791C7F39DD002CF5D2 /* wm61.png in Resources */,
-				251424811C9698F90012CA68 /* README in Resources */,
 				250FEC201D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */,
 				E20672491B049AA6006DD2F7 /* camera.sgm in Resources */,
 				01ACD1051C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */,
@@ -9496,7 +9394,6 @@
 				3D5D0F411C632864006B987E /* Particles@2x.png in Resources */,
 				250FEC471D1E5506000C8A2C /* round-close_phone@2x.png in Resources */,
 				3D53489C1C3BF60200C6A437 /* LightProperties.xib in Resources */,
-				25DE10321CAA8D6D0076F669 /* CMakeLists.txt in Resources */,
 				E20672BD1B049AA6006DD2F7 /* scale-img-phone@2x.png in Resources */,
 				25F748C61D08085400FB0AFD /* fb_Pad.png in Resources */,
 				E20672BF1B049AA6006DD2F7 /* controls5.sgm in Resources */,
@@ -9533,7 +9430,6 @@
 				01CCD1C91C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */,
 				25F80AF81CFDB6E700CF331B /* Subscribe button 01 ipad.psd in Resources */,
 				E20672D51B049AA6006DD2F7 /* Menu.png in Resources */,
-				2514246B1C9698F90012CA68 /* darwin in Resources */,
 				25EC6CAB1C7F39DD002CF5D2 /* wm86.png in Resources */,
 				25EC6C451C7F39DD002CF5D2 /* wm35.png in Resources */,
 				25EC6C9B1C7F39DD002CF5D2 /* wm78.png in Resources */,
@@ -9634,7 +9530,6 @@
 				3D5F991F1C4D04EB00DD47F5 /* Plane.png in Resources */,
 				01F872DB1C3A6C4E009AA31E /* Animation_IPhone@2x.png in Resources */,
 				E206730E1B049AA6006DD2F7 /* down-arrow-pad.png in Resources */,
-				25DE111E1CAA8D6D0076F669 /* premake4.lua in Resources */,
 				250991AE1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */,
 				3D5F99151C4D04EB00DD47F5 /* Cone@2x.png in Resources */,
 				C8AA47061C227D3600C4AB53 /* New.png in Resources */,
@@ -9643,7 +9538,6 @@
 				25EC6C9D1C7F39DD002CF5D2 /* wm79.png in Resources */,
 				E20673111B049AA6006DD2F7 /* last-pad.png in Resources */,
 				25F748E41D08175200FB0AFD /* twit_Pad@2x.png in Resources */,
-				25DE114E1CAA91310076F669 /* premake4.lua in Resources */,
 				E20673121B049AA6006DD2F7 /* add-frame@2x.png in Resources */,
 				01B4D0561C2937000091E19B /* My-objects-Light_Pad@2x.png in Resources */,
 				25EC6CDB1C7F39DD002CF5D2 /* wm110.png in Resources */,
@@ -9727,7 +9621,6 @@
 				01F8733D1C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png in Resources */,
 				01F873151C3A6C4E009AA31E /* View_IPhone@2x.png in Resources */,
 				01B02CAD1C61CAB400C9102A /* Add-Frames_IPhone@3x.png in Resources */,
-				251424951C9698F90012CA68 /* README in Resources */,
 				E206733C1B049AA6006DD2F7 /* justify.png in Resources */,
 				25EC6BAB1C7F066B002CF5D2 /* wm15.png in Resources */,
 				E206733D1B049AA6006DD2F7 /* ObjCellViewPhone.xib in Resources */,
@@ -9741,7 +9634,6 @@
 				3DAEFFF41C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */,
 				250FEC221D1E52D2000C8A2C /* Step-2_-img@2x.png in Resources */,
 				E20673411B049AA6006DD2F7 /* Stop-video-phone@2x.png in Resources */,
-				2514246D1C9698F90012CA68 /* darwin-iphone in Resources */,
 				01B4D06E1C2937000091E19B /* Scale_Pad@2x.png in Resources */,
 				E20673431B049AA6006DD2F7 /* up-arrow.png in Resources */,
 				25EC6CD11C7F39DD002CF5D2 /* wm105.png in Resources */,
@@ -10139,7 +10031,6 @@
 				25D96E591CCF2F0F00A5AEED /* Vector2.cpp in Sources */,
 				7F19F6791B5E6C9F001A342C /* AFHTTPRequestOperation.m in Sources */,
 				25DE10F11CAA8D6D0076F669 /* btHinge2Constraint.cpp in Sources */,
-				251424921C9698F90012CA68 /* Makefile in Sources */,
 				256F6DB41BF624FB00154622 /* OGLTexture.cpp in Sources */,
 				25DE10371CAA8D6D0076F669 /* btBoxBoxCollisionAlgorithm.cpp in Sources */,
 				25DE10C91CAA8D6D0076F669 /* btGjkConvexCast.cpp in Sources */,
@@ -10425,7 +10316,6 @@
 				251424791C9698F90012CA68 /* mesh.c in Sources */,
 				256F6BA21BF6246300154622 /* SGAction.cpp in Sources */,
 				25DE10F41CAA8D6D0076F669 /* btHingeConstraint.cpp in Sources */,
-				251424931C9698F90012CA68 /* Makefile in Sources */,
 				25DE10741CAA8D6D0076F669 /* btConcaveShape.cpp in Sources */,
 				25D7DA671D06F6DC00E84D2F /* JDFTooltipView.m in Sources */,
 				7F35D9AA1B5F53770003F1CE /* AFAPIClient.m in Sources */,
@@ -10862,7 +10752,6 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = NO;
-				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -10875,6 +10764,7 @@
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
 				GCC_STRICT_ALIASING = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -10908,7 +10798,6 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = NO;
-				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -10921,6 +10810,7 @@
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
 				GCC_STRICT_ALIASING = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;

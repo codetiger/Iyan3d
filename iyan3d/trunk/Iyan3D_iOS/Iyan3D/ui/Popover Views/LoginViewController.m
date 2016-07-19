@@ -153,7 +153,7 @@ didSignInForUser:(GIDGoogleUser *)user
         return;
     }
     NSString *userId = user.userID;                  // For client-side use only!
-    NSString *idToken = user.authentication.idToken; // Safe to send to the server
+//    NSString *idToken = user.authentication.idToken; // Safe to send to the server
     NSLog(@"\n User Id: %@",userId);
     [self reportAuthStatus];
     [self.delegare googleSigninDelegate];

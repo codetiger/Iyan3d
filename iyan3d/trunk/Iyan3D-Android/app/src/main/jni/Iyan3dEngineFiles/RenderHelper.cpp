@@ -80,20 +80,6 @@ void RenderHelper::drawGrid()
         
         smgr->draw3DLines(vPosBB, Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
     }
-    
-    int gridSize = 100;
-    
-//    vector<Vector3> vPositionsGrid;
-//    for (int i = -gridSize; i <= gridSize; i+= 5) {
-//        vPositionsGrid.push_back(Vector3(i, 0, -gridSize));
-//        vPositionsGrid.push_back(Vector3(i, 0, gridSize));
-//        vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
-//        vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
-//    }
-//    smgr->draw3DLines(vPositionsGrid, Vector3(0.6, 0.6, 1.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
-//    
-//    smgr->draw3DLine(Vector3(-gridSize, 0, 0), Vector3(gridSize, 0, 0), Vector3(1.0,0.2,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
-//    smgr->draw3DLine(Vector3(0, 0, -gridSize), Vector3(0, 0, gridSize), Vector3(0.2,1.0,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
 }
 
 void RenderHelper::drawCircle()
@@ -668,7 +654,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     renderingScene->blueGrid->node->setVisible(false);
     renderingScene->redGrid->node->setVisible(false);
     
-    int selectedObjectId;
+    int selectedObjectId = 0;
     if(renderingScene->selectedNodeId != NOT_SELECTED) {
         selectedObjectId = renderingScene->selectedNodeId;
         renderingScene->selectMan->unselectObject(renderingScene->selectedNodeId);
@@ -751,7 +737,8 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     if(!renderingScene || !smgr)
         return false;
 
-    bool status;
+    bool status = false;;
+    
     removeJointSpheres();
     int bonesCount = (int)animNode->getJointCount();
     if(bonesCount > renderingScene->jointSpheres.size())
@@ -760,10 +747,6 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     for(int i = 0;i < bonesCount;i++){
         shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
         renderingScene->jointSpheres[i]->node->setParent(jointNode);
-//        Vector3 scaleRatio;
-//        scaleRatio.x = (jointNode->getScale().x > 1.0) ? jointNode->getScale().x : 1.0;
-//        scaleRatio.y = (jointNode->getScale().y > 1.0) ? jointNode->getScale().y : 1.0;
-//        scaleRatio.z = (jointNode->getScale().z > 1.0) ? jointNode->getScale().z : 1.0;
         if(bonesCount != renderingScene->tPoseJoints.size())
             renderingScene->jointSpheres[i]->node->setScale(scaleValue);
         else {
@@ -782,7 +765,6 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     setJointSpheresVisibility(true);
     displayJointsBasedOnSelection();
     return status;
-    //animNode.reset();
 }
 
 bool RenderHelper::createJointSpheres(int additionalJoints)
@@ -796,12 +778,15 @@ bool RenderHelper::createJointSpheres(int additionalJoints)
     for(int i = (int)renderingScene->jointSpheres.size();i < maxCount;i++){
         SGNode *sgNode = new SGNode(NODE_SGM);
         Mesh *jointSphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
-        if(jointSphereMesh == NULL)
+        if(jointSphereMesh == NULL) {
+            delete sgNode;
             return false;
+        }
         
         shared_ptr<MeshNode> sphereNode = smgr->createNodeFromMesh(jointSphereMesh,"setJointSpheresUniforms");
         if(!sphereNode){
             Logger::log(ERROR,"SGScene", "Unable to create sgrSpheres");
+            delete sgNode;
             break;
         }
         sphereNode->updateAbsoluteTransformation();

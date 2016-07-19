@@ -278,7 +278,7 @@ void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType)
           GLenum type = Helper::getOGLES2DataType(attributesType[i]);
           int attributeIndex = mat->getMaterialAttribIndexByName(attributesName[i]);
           if(attributeIndex != NOT_EXISTS){
-              glVertexAttribPointer((GLuint)mat->attributes[attributeIndex].location,attributesTotalValues[i],type,GL_FALSE,sizeof(vertexData),(GLvoid*)valueIndex);
+              glVertexAttribPointer((GLuint)mat->attributes[attributeIndex].location, attributesTotalValues[i], type, GL_FALSE, sizeof(vertexData), &valueIndex);
               glEnableVertexAttribArray((GLuint)mat->attributes[attributeIndex].location);
           }
           valueIndex += sizeof(type) * attributesTotalValues[i];
@@ -288,7 +288,7 @@ void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType)
           GLenum type = Helper::getOGLES2DataType(attributesTypeSkinned[i]);
           int attributeIndex = mat->getMaterialAttribIndexByName(attributesNameSkinned[i]);
           if(attributeIndex != NOT_EXISTS){
-              glVertexAttribPointer((GLuint)mat->attributes[attributeIndex].location,attributesTotalValuesSkinned[i],type,GL_FALSE,sizeof(vertexDataHeavy),(GLvoid*)valueIndex);
+              glVertexAttribPointer((GLuint)mat->attributes[attributeIndex].location, attributesTotalValuesSkinned[i], type, GL_FALSE, sizeof(vertexDataHeavy), &valueIndex);
               glEnableVertexAttribArray((GLuint)mat->attributes[attributeIndex].location);
           }
           valueIndex += sizeof(type) * attributesTotalValuesSkinned[i];

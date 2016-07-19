@@ -682,7 +682,6 @@
 
 - (void) renderFinishAction:(NSNumber*)object
 {
-    int renderingType = [object intValue];
     NSString *tempDir = NSTemporaryDirectory();
     if(renderingExportImage == RENDER_VIDEO){
         if(self.videoFilePath == nil || [self.videoFilePath isEqualToString:@""])
@@ -1118,8 +1117,10 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(pxdata, imageSize.width, imageSize.height, 8, 4*imageSize.width, rgbColorSpace, (CGBitmapInfo)kCGImageAlphaNoneSkipFirst);
-    if(!context)
+    if(!context) {
+        CGColorSpaceRelease(rgbColorSpace);
         return 0;
+    }
     CGAffineTransform trans = CGAffineTransformIdentity;
     CGContextConcatCTM(context, trans);
     CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),

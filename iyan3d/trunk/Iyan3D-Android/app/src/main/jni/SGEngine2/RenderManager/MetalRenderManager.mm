@@ -739,7 +739,7 @@ void MetalRenderManager::writeImageToFile(Texture *texture , char* filePath,IMAG
     writePNGImage(buffer,texture->width,texture->height,filePath);
 #endif
     
-    delete buffer;
+    delete[] buffer;
 }
 
 int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode)

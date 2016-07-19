@@ -161,9 +161,9 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
 
         f.write((char*)&ind, sizeof(SSGMIndexHeaderLowPoly));
     }
-    delete verts;
-    delete texs;
-    delete col;
+    delete[] verts;
+    delete[] texs;
+    delete[] col;
     
     f.close();
 

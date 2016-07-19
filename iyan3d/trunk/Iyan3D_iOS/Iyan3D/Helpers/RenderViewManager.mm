@@ -255,17 +255,17 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     
     switch (type) {
         case ASSET_CAMERA: {
-            editorScene->loader->loadNode(NODE_CAMERA,assetId ,"",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            editorScene->loader->loadNode(NODE_CAMERA, assetId, "", name, 0, 0, assetAddType,vertexColor, "", isTempNode);
             break;
         }
         case ASSET_LIGHT: {
-            editorScene->loader->loadNode(NODE_LIGHT, assetId,"",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            editorScene->loader->loadNode(NODE_LIGHT, assetId, "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             break;
         }
         case ASSET_BACKGROUNDS:
         case ASSET_ACCESSORIES: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId,textureNameStr ,name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -277,7 +277,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_RIGGED: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED_HUMAN];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId,textureNameStr,name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -289,7 +289,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_OBJ: {
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId,"",name, 0, 0, assetAddType,vertexColor,"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -302,7 +302,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_IMAGE: {
             NODE_TYPE nType = (type == ASSET_VIDEO) ? NODE_VIDEO : NODE_IMAGE;
 //            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(nType, 0,"",name, imgWidth, imgHeight, assetAddType,Vector4(imgWidth,imgHeight,0,0),"",isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(nType, 0, "", name, imgWidth, imgHeight, assetAddType, Vector4(imgWidth, imgHeight, 0, 0), "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -358,7 +358,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_ADDITIONAL_LIGHT: {
             //TODO enum for max lights
             if(ShaderManager::lightPosition.size() < 5) {
-                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId ,"",name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
+                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId, "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId , "Light"+ to_string(assetId-ASSET_ADDITIONAL_LIGHT));
 
@@ -370,7 +370,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         case ASSET_PARTICLES: {
-           SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId ,"",name, imgWidth , imgHeight , assetAddType , Vector4(1.0),"",isTempNode);
+           SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId, "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
             if(particle)
                 particle->isTempNode = isTempNode;
             if(!isTempNode){
@@ -516,6 +516,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                         editorScene->moveMan->touchMoveRig(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
                     else
                         editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+                    
                     if(!editorScene->renHelper->isMovingPreview)
                         editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
                     break;
@@ -670,7 +671,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void) createi3dFileWithThumb:(NSString*) thumbPath
 {
-//    CGPoint camResolution = [self.delegate getCameraResolution];
     NSMutableArray* fileNames = [self getFileNamesFromScene:true];
     NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString* sgbFilePath = [self.delegate getSGBPath];
@@ -682,20 +682,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     ZipArchive* zip = [[ZipArchive alloc] init];
     BOOL ret = [zip CreateZipFile2:zipfile];
     
-    if([[NSFileManager defaultManager] fileExistsAtPath:sgbFilePath]) {
+    if([[NSFileManager defaultManager] fileExistsAtPath:sgbFilePath])
         ret = [zip addFileToZip:sgbFilePath newname:[sgbFilePath lastPathComponent]];
-    }
     
-    for(int i = 0; i < [userFiles count]; i++) {
-        NSLog(@"\n User File: %@", [userFiles objectAtIndex:i]);
+    for(int i = 0; i < [userFiles count]; i++)
         ret = [zip addFileToZip:[userFiles objectAtIndex:i] newname:[[userFiles objectAtIndex:i] lastPathComponent]];
-    }
     
     if( ![zip CloseZipFile2] )
-    {
         zipfile = @"";
-    }
-    NSLog(@"The file has been created");
 }
 
 @end

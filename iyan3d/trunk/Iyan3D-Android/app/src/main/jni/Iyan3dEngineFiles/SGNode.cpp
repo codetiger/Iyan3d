@@ -1096,28 +1096,22 @@ void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame
 
 int toString(const char a[])
 {
-    int c, sign, offset, n;
-    
+    int sign = 1;
     if (a[0] == '-') {  // Handle negative integers
         sign = -1;
     }
     
-    if (sign == -1) {  // Set starting position to convert
+    int offset = 0;
+    if (sign == -1)  // Set starting position to convert
         offset = 1;
-    }
-    else {
+    else
         offset = 0;
-    }
     
-    n = 0;
-    
-    for (c = offset; a[c] != '\0'; c++) {
+    int n = 0;
+    for (int c = offset; a[c] != '\0'; c++)
         n = n * 10 + a[c] - '0';
-    }
     
-    if (sign == -1) {
-        n = -n;
-    }
+    n = n * sign;
     
     return n;
 }

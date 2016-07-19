@@ -793,7 +793,6 @@ BOOL missingAlertShown;
 }
 
 - (void) reloadSceneObjects{
-    NSUInteger assetsCount = editorScene->nodes.size();
     [self updateAssetListInScenes];
     [self.objectList reloadData];
 }
@@ -2082,7 +2081,6 @@ BOOL missingAlertShown;
 
 - (void) updateLightInMainThread:(NSNumber*) object
 {
-    int lightType = [object intValue];
     editorScene->updateDirectionLine();
     [self setupEnableDisableControls];
 }

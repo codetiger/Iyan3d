@@ -286,16 +286,6 @@ vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0)
     
     ColorInOut out;
     
-    float percent = (in_normal.x/props[0]);
-    float phase = (percent > 0.5);
-    
-    float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
-    float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
-    
-    float4 s = mix(startColor, mColor, phase);
-    float4 e = mix(midColor, eColor, phase);
-    float age = mix(percent, float(percent - 0.5), phase) * 2.0;
-    
     out.perVertexColor = float4(sColor);
     
     float live = float(in_normal.x > 0.0 && in_normal.x <= props[0]);
@@ -1290,7 +1280,6 @@ fragment half4 Per_Vertex_Color_Toon_Fragment(ColorInOut in [[stage_in]],depth2d
         
         float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
         float4 lightDir = normalize(light_position_cameraspace - in.vertexPosCam);
-        float distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
         
         float4 normal = normalize(in.normal);
         float4 eyeVec = normalize(in.eyeVec);

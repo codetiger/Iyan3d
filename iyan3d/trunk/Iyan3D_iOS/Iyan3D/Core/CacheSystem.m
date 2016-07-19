@@ -131,7 +131,7 @@ static const NSString* FEED_ISREAD = @"isread";
         NSDate *currentDate = [dateFormatter dateFromString:currentDateString];
         
         NSMutableArray *scenes = [self GetSceneList];
-        NSString * sceneName = [NSString stringWithFormat:@"MyScene%d", [scenes count]+1];
+        NSString * sceneName = [NSString stringWithFormat:@"MyScene%d", (int)[scenes count] + 1];
         
         NSString* salt = [NSString stringWithFormat:@"%@:SG:%@", sceneName, currentDate];
         NSString* sceneFile = [Utility getMD5ForString:salt];

@@ -733,7 +733,7 @@
         asset.userName = userName;
     
     if (![asset.userId isEqualToString:@""]) {
-        NSString* extension,*uniqueId,*email,*fbid,*fbname,*twitterId,*twitterName;
+        NSString* extension, *uniqueId, *email;
         NSString* imgPathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirPath, asset.assetId];
         
         if (animationType == 0)

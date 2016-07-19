@@ -125,13 +125,15 @@ void OGLTexture::updateTexture(unsigned char* imageData)
 GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format)
 {
     GLenum oglFormat = GL_RGBA;
-    switch(format){
+    switch(format) {
         case TEXTURE_RG:
             oglFormat = GL_RG8_EXT;
             break;
         case TEXTURE_R8:
             oglFormat = GL_RED_EXT;
             break;
+        default:
+            oglFormat = GL_RGBA;
     }
     return oglFormat;
 }
