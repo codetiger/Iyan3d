@@ -70,7 +70,7 @@ SceneManager::~SceneManager()
 
 void SceneManager::clearMaterials()
 {
-    mtlManger->clearMaterials();
+    mtlManger->RemoveAllMaterials();
 }
 
 Vector2 SceneManager::getViewPort()

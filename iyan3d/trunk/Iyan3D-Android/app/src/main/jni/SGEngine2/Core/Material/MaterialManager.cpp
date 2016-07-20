@@ -24,6 +24,7 @@ MaterialManager::MaterialManager(DEVICE_TYPE deviceType)
 MaterialManager::~MaterialManager()
 {
     RemoveAllMaterials();
+    delete materials;
 }
 
 bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
@@ -66,6 +67,4 @@ void MaterialManager::RemoveAllMaterials()
             delete (*materials)[i];
     }
     materials->clear();
-
-    delete materials;
 }
