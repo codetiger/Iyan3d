@@ -61,15 +61,11 @@ bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,stri
 
 void MaterialManager::RemoveAllMaterials()
 {
-    clearMaterials();
-    delete materials;
-}
-
-void MaterialManager::clearMaterials()
-{
     for(int i = 0;i < materials->size();i++) {
         if((*materials)[i])
             delete (*materials)[i];
     }
     materials->clear();
+
+    delete materials;
 }

@@ -244,11 +244,12 @@ Texture* Node::getTextureByIndex(u16 textureIndex)
     return textures[textureIndex];
 }
 
-void Node::setMaterial(Material *mat,bool isTransparentMaterial)
+void Node::setMaterial(Material *mat, bool isTransparentMaterial)
 {
 #ifndef UBUNTU
     if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
         return;
+    
     this->material = mat;
     this->material->isTransparent = isTransparentMaterial;
 #endif
@@ -258,6 +259,7 @@ u16 Node::getBufferCount()
 {
     if(type == NODE_TYPE_MORPH || type== NODE_TYPE_MORPH_SKINNED)
         return 2;
+    
     return 1;
 }
 

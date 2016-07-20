@@ -31,6 +31,7 @@
 #endif
 
 #endif
+
 typedef enum {
     NODE_TYPE_EMPTY,
     NODE_TYPE_CAMERA,
@@ -44,7 +45,6 @@ typedef enum {
     NODE_TYPE_LINES,
     NODE_TYPE_INSTANCED
 } node_type;
-
 
 typedef enum {
     FM_NODE_TYPE_PLATFORM_SINGLE,
@@ -76,7 +76,7 @@ enum DRAW_MODE{
     DRAW_MODE_TRIANGLE_FAN
 };
 
-class Node : public enable_shared_from_this<Node>{
+class Node : public enable_shared_from_this<Node> {
 
 private:
     int id;

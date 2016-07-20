@@ -25,11 +25,12 @@
 
 SGEditorScene * renderingScene;
 
-static Vector3 redColor = Vector3(1.0,0.2,0.2);
-static Vector3 greenColor = Vector3(0.2,1.0,0.2);
-static Vector3 blueColor = Vector3(0.2,0.2,1.0);
-Vector3 constants::sgrJointDefaultColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
-Vector3 constants::selectionColor = Vector3(SELECT_COLOR_R,SELECT_COLOR_G,SELECT_COLOR_B);
+static Vector3 redColor = Vector3(1.0, 0.2, 0.2);
+static Vector3 greenColor = Vector3(0.2, 1.0, 0.2);
+static Vector3 blueColor = Vector3(0.2, 0.2, 1.0);
+
+Vector3 constants::sgrJointDefaultColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R, SGR_JOINT_DEFAULT_COLOR_G, SGR_JOINT_DEFAULT_COLOR_B);
+Vector3 constants::selectionColor = Vector3(SELECT_COLOR_R, SELECT_COLOR_G, SELECT_COLOR_B);
 
 RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
 {
@@ -43,7 +44,8 @@ RenderHelper::RenderHelper(SceneManager* sceneMngr, void* scene)
     isFirstTimeRender = true;
 }
 
-RenderHelper::~RenderHelper(){
+RenderHelper::~RenderHelper()
+{
     
 }
 
@@ -194,14 +196,14 @@ void RenderHelper::renderControls()
         ctrlTransparency = (ctrlTransparency < 0.0) ? 0.0 : ctrlTransparency;
         renderingScene->sceneControls[i]->props.transparency = ctrlTransparency;
         
-        if(renderingScene->selectedControlId == NOT_SELECTED){
+        if(renderingScene->selectedControlId == NOT_SELECTED) {
             renderingScene->sceneControls[i]->props.isVisible = true;
             renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
-        }else if(i == renderingScene->selectedControlId) {
+        } else if(i == renderingScene->selectedControlId) {
             renderingScene->sceneControls[i]->props.isVisible = true;
             renderingScene->sceneControls[i]->props.vertexColor = Vector3(SELECTION_COLOR_R, SELECTION_COLOR_G, SELECTION_COLOR_B);
             renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-        }else {
+        } else {
             renderingScene->sceneControls[i]->props.isVisible = false;
         }
         
@@ -218,35 +220,38 @@ void RenderHelper::setControlsVisibility(bool isVisible)
 {
     if(!renderingScene || renderingScene->sceneControls.size() == 0)
         return;
+    
     bool isNodeSelected = renderingScene->hasNodeSelected();
     SGNode* selectedNode = renderingScene->getSelectedNode();
 
     if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT && selectedNode->props.specificInt != (int)DIRECTIONAL_LIGHT)
         renderingScene->controlType = MOVE;
+    
     int controlStartToVisible = NOT_EXISTS,controlEndToVisible = NOT_EXISTS;
     if((isNodeSelected || renderingScene->selectedNodeIds.size() > 0) && isVisible){
-        if(renderingScene->controlType == MOVE){
+        if(renderingScene->controlType == MOVE) {
             controlStartToVisible = X_MOVE;
             controlEndToVisible = Z_MOVE;
-        }else if(renderingScene->controlType == ROTATE){
+        } else if(renderingScene->controlType == ROTATE) {
             controlStartToVisible = X_ROTATE;
             controlEndToVisible = Z_ROTATE;
-        } else if(renderingScene->controlType == SCALE){
+        } else if(renderingScene->controlType == SCALE) {
             controlStartToVisible = X_SCALE;
             controlEndToVisible = Z_SCALE;
         } else {
-            for (int i = 0; i < renderingScene->sceneControls.size(); i++) {
+            for (int i = 0; i < renderingScene->sceneControls.size(); i++)
                 renderingScene->sceneControls[i]->node->setVisible(false);
-            }
+
             return;
         }
     }
-    for(int i = X_MOVE;i <= Z_SCALE;i++){
+    
+    for(int i = X_MOVE;i <= Z_SCALE;i++) {
         isVisible = (i >= controlStartToVisible && i <= controlEndToVisible) ? true:false;
         if(renderingScene->isControlSelected && isVisible)
             isVisible = (i == renderingScene->selectedControlId) ? true : false;
+        
         renderingScene->sceneControls[i]->node->setVisible(isVisible);
-
     }
 }
 
@@ -306,7 +311,8 @@ void RenderHelper::postRTTDrawCall()
     }
 }
 
-void RenderHelper::rttDrawCall() {
+void RenderHelper::rttDrawCall()
+{
     if (!renderingScene)
         return;
 
@@ -484,8 +490,8 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
             renderingScene->nodes[i]->props.perVertexColor = true;
             renderingScene->nodes[i]->props.isLighting = false;
         }
-        
     }
+    
     smgr->Render(true);
 
     if((selectedSGNode && renderingScene->selectedNodeIds.size() <= 0 && (selectedSGNode->getType() == NODE_RIG || selectedSGNode->getType() == NODE_TEXT_SKIN) && !touchMove) || renderingScene->isJointSelected)
@@ -539,7 +545,6 @@ void RenderHelper::drawJointsSpheresForRTT(bool enableDepthTest)
     vertexColors.clear();
 }
 
-
 void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
 {
     if(!renderingScene || !smgr)
@@ -591,6 +596,7 @@ void RenderHelper::setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool 
         }
     }
 }
+
 void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
 {
     setEnvelopVisibility(envelopes, false);
@@ -730,7 +736,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     if(selectedObjectId != NOT_SELECTED)
         renderingScene->selectMan->selectObject(selectedObjectId,false);
 }
-
 
 bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue)
 {
