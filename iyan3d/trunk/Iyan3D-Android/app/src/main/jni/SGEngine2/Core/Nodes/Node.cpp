@@ -274,8 +274,8 @@ int Node::getID()
 void Node::setParent(shared_ptr<Node> parent)
 {
     if(this->Parent && this->Parent->Children && this->Parent->Children->size() > 0) { // remove from child list of previous parent
-        for(int i = 0; i < this->Parent->Children->size();i++){
-            if((*this->Parent->Children)[i] && (*this->Parent->Children)[i]->getID() == id){
+        for(int i = 0; i < this->Parent->Children->size();i++) {
+            if((*this->Parent->Children)[i] && (*this->Parent->Children)[i]->getID() == id) {
                 (this->Parent->Children)->erase(this->Parent->Children->begin() + i);
                 this->Parent.reset();
                 break;

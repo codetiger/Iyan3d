@@ -166,7 +166,6 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     objMan = new SGOBJManager(sceneMngr, this);
     physicsHelper = new PhysicsHelper(this);
 
-
     camPreviewOrigin = camPreviewEnd = Vector2(0.0, 0.0);
     isMultipleSelection = false;
     isJointSelected = isNodeSelected = isControlSelected = shadowsOff = false;
@@ -415,7 +414,6 @@ void SGEditorScene::getIKJointPosition()
     }
 }
 
-
 MIRROR_SWITCH_STATE SGEditorScene::getMirrorState()
 {
     return actionMan->getMirrorState();
@@ -484,18 +482,22 @@ void SGEditorScene::setJointsUniforms(int nodeID,string matName)
 {
     shaderMGR->setUniforms(jointSpheres[nodeID - JOINT_SPHERES_START_ID],matName);
 }
+
 void SGEditorScene::setRotationCircleUniforms(int nodeID,string matName)
 {
     shaderMGR->setUniforms((nodeID == LIGHT_CIRCLES) ? lightCircles : rotationCircle,matName);
 }
+
 void SGEditorScene::setGridLinesUniforms(int nodeId, int rgb, string matName)
 {
     shaderMGR->setUniforms((rgb == 1) ? redGrid : (rgb == 2) ? blueGrid : (rgb == 3) ? greenGrid : directionLine, matName);
 }
+
 bool SGEditorScene::isJointTransparent(int nodeID,string matName)
 {
     return (jointSpheres[nodeID - JOINT_SPHERES_START_ID]->props.transparency < 1.0);
 }
+
 void SGEditorScene::setControlsUniforms(int nodeID,string matName)
 {
     if(nodeID == FORCE_INDICATOR_ID)
@@ -503,6 +505,7 @@ void SGEditorScene::setControlsUniforms(int nodeID,string matName)
     else
         shaderMGR->setUniforms(sceneControls[nodeID - CONTROLS_START_ID],matName);
 }
+
 bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 {
     if(nodeID == FORCE_INDICATOR_ID)
@@ -514,10 +517,12 @@ bool SGEditorScene::hasNodeSelected()
 {
     return (isRigMode && rigMan) ? rigMan->isNodeSelected : isNodeSelected;
 }
+
 bool SGEditorScene::hasJointSelected()
 {
     return (isRigMode && rigMan) ? rigMan->isSGRJointSelected : isJointSelected;
 }
+
 SGNode* SGEditorScene::getSelectedNode()
 {
     if(isRigMode && rigMan->isNodeSelected)
@@ -526,6 +531,7 @@ SGNode* SGEditorScene::getSelectedNode()
         return selectedNode;
     return NULL;
 }
+
 SGJoint* SGEditorScene::getSelectedJoint()
 {
     if(isRigMode && rigMan->isSGRJointSelected)
@@ -550,7 +556,8 @@ void SGEditorScene::saveSceneData(std::string *filePath)
     writer->saveSceneData(filePath);
 }
 
-bool SGEditorScene::checkNodeSize(){
+bool SGEditorScene::checkNodeSize()
+{
     if(nodes.size() < NODE_LIGHT + 1)
         return false;
     return true;
@@ -604,6 +611,7 @@ int SGEditorScene::undo(int &returnValue2)
 {
     return actionMan->undo(returnValue2);
 }
+
 int SGEditorScene::redo()
 {
     return actionMan->redo();
@@ -806,7 +814,6 @@ bool SGEditorScene::allNodesClonable()
     return status;
 }
 
-
 Vector3 SGEditorScene::getSelectedNodeScale()
 {
     if(selectedNodeIds.size() > 0 && getParentNode())
@@ -839,7 +846,6 @@ Vector3 SGEditorScene::getTransformValue()
     
     return Vector3(-999.0 ,-999.0, -999.0);
 }
-
 
 Vector3 SGEditorScene::getPivotPoint(bool initial)
 {

@@ -154,4 +154,4 @@ public:
     void* getUserPointer();
 };
 
-#endif /* defined(__SGEngine2__Node__) */
+#endif

@@ -67,7 +67,7 @@
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:databasePath]) {
                 isAppFirstTime = true;
-            }else{
+            } else {
                 NSFileManager *fm = [NSFileManager defaultManager];
                 NSString* resourceDirPath = [NSString stringWithFormat:@"%@/Resources",docsDir];
                 NSString* projectDirPath = [NSString stringWithFormat:@"%@/Projects",docsDir];
@@ -93,7 +93,7 @@
                 for (NSString *fileName in objFiles) {
                     NSArray *fileNameArray = [fileName componentsSeparatedByString:@"."];
                     NSString *file =[fileNameArray objectAtIndex:0];
-                    if([file length] == 5){ // without extension
+                    if([file length] == 5) { // without extension
                         if([self isFullyInteger:file] && ([file intValue] >= 20000) && ([file intValue] < 30000)){
                             [fm moveItemAtPath:[cachesDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",file]] toPath:[objDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",file]] error:nil];
                             [fm moveItemAtPath:[cachesDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.obj",file]] toPath:[objDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.obj",file]] error:nil];
@@ -176,16 +176,19 @@
     }
     return self;
 }
--(bool) isFullyInteger:(NSString*)str {
+
+-(bool) isFullyInteger:(NSString*)str
+{
     bool isFullyIntegers = true;
     char* nameArr = (char*)[str UTF8String];
-    for(int i = 0;i<[str length];i++){
+    for(int i = 0;i<[str length];i++) {
         int num = nameArr[i];
         if(!(num >= 48 && num <= 57))
             isFullyIntegers  = false;
     }
     return isFullyIntegers;
 }
+
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -230,10 +233,11 @@
     } else if([[[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"] isEqualToString:@"4.0"]) {
         [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
     }
+    
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
         [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
         
-    }else if([[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
+    } else if([[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
         [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
     }
     
@@ -253,16 +257,16 @@
     
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil]; //Create folder
+        [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil];
+
     NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"JPEG", @"PNG", nil];
-    
-    
+   
     NSArray *dirFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory error:nil];
+
     if([dirFiles count] > 0)
         textureFile = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
     
-    for(int i = 0 ; i< [textureFile count] ; i++)
-    {
+    for(int i = 0 ; i< [textureFile count] ; i++) {
         NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",documentsDirectory,textureFile[i]];
         NSString* desFilePathForDisplay = [NSString stringWithFormat:@"%@/%@",dataPath,textureFile[i]];
         NSData *imageDataforDisplay = [self convertAndScaleImage:[UIImage imageWithContentsOfFile:srcFilePath] size:64];
@@ -283,12 +287,10 @@
     [image drawInRect:CGRectMake(0, 0, target, target)];
     UIImage* nImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
     NSData* data = UIImagePNGRepresentation(nImage);
     return data;
 }
-
-//Crash Removed unused functions
-
 
 - (void) loadSceneView
 {
@@ -311,6 +313,7 @@
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     }
+    
     [self deallocMemory];
 }
 
@@ -319,8 +322,11 @@
     self.ProgessLabel.text = labelString;
 }
 
--(BOOL)iPhone6Plus{
-    if (([UIScreen mainScreen].scale > 2.0)) return YES;
+-(BOOL)iPhone6Plus
+{
+    if (([UIScreen mainScreen].scale > 2.0))
+        return YES;
+    
     return NO;
 }
 

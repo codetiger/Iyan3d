@@ -51,14 +51,13 @@
 #include "SGAnimationManager.h"
 #include "SGOBJManager.h"
 
-
 #include "PhysicsHelper.h"
 
 
 class SGEditorScene {
-    
+   
 private:
-    
+   
     SceneManager *smgr;
     Vector2 previousDistance;
     void setTransparencyForObjects();
@@ -67,7 +66,6 @@ protected:
     
 public:
     
-    /* cpp class objects */
     bool addVAOSupport;
     bool isPreviewMode, isRigMode , shadowsOff, shouldRecalculatePhysics;
     bool freezeRendering , isPlaying;
@@ -107,10 +105,12 @@ public:
     SGNode* blueGrid;
     SGNode* redGrid;
     SGNode* directionIndicator;
+
     vector<SGNode*> sceneControls;
     vector<SGNode*> nodes;
     vector<SGNode*> jointSpheres;
     vector<TPoseJoint> tPoseJoints;
+
     ShaderManager *shaderMGR;
     RenderHelper *renHelper;
     SGSelectionManager *selectMan;
@@ -124,14 +124,12 @@ public:
     SGOBJManager *objMan;
     PhysicsHelper * physicsHelper;
 
-    /* SGEngine class objects */
-    
     std::map<int,Texture*> renderingTextureMap;
-    Texture *bgTexture,*watermarkTexture,*whiteBorderTexture,*touchTexture;
-    Texture *previewTexture ,*thumbnailTexture,*shadowTexture, *alphaTexture;
+    Texture *bgTexture, *watermarkTexture, *whiteBorderTexture, *touchTexture;
+    Texture *previewTexture, *thumbnailTexture, *shadowTexture, *alphaTexture;
     Plane3D *controlsPlane;
     Vector2 nodeJointPickerPosition;
-    Vector3 circleTouchPoint,cameraAngle;
+    Vector3 circleTouchPoint, cameraAngle;
     Vector3 cameraTarget;
     Vector2 camPreviewOrigin;
     Vector2 camPreviewEnd;
@@ -144,25 +142,18 @@ public:
     std::map<int,vector<Vector3> > textJointsBasePos;
     CollisionManager *cmgr;
     
-    /* Constructor and Destructor */
-    
     SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms = 0);
     ~SGEditorScene();
     
     void removeAllNodes();
-    
-    /* initializing methods */
     
     void initTextures();
     void enterOrExitAutoRigMode(bool rigMode);
     void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType, int maxUniforms);
     void initLightCamera(Vector3 position);
     
-    /* Rendering Methods */
-    
     void renderAll();
     
-    /* Call backs */
     #ifdef ANDROID
         bool (*downloadMissingAssetsCallBack)(jobject object,std::string filePath, NODE_TYPE nodeType, bool hasTexture, JNIEnv *env, jclass type);
         unsigned char* (*getVideoFrameCallBack)(std::string fileName, int frame,int width, int height);
@@ -197,13 +188,9 @@ public:
     bool checkNodeSize();
     void saveThumbnail(char* imagePath);
 
-    /* Read and Write */
-    
     bool loadSceneData(std::string *filePath);
     void saveSceneData(std::string *filePath);
 
-    /* Other Methods */
-    
     int undo(int& returnValue2);
     int redo();
     
@@ -232,4 +219,4 @@ public:
 
 };
 
-#endif /* SGEditorScene_h */
+#endif

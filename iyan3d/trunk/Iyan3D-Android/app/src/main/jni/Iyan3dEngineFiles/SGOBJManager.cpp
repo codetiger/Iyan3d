@@ -36,15 +36,15 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     SGNode* objSGNode = new SGNode(NODE_OBJ);
     int objLoadStatus = 0;
     string finalPath="";
-
+    
 #ifdef ANDROID
     finalPath = constants::DocumentsStoragePath+"/mesh/usermesh/"+objPath+".obj";
 #else
     finalPath = FileHelper::getDocumentsDirectory() + objPath + ".obj";
 #endif
-
+    
     Logger::log(INFO,"OBJMANAGER",objPath + " " + textureName + " " + to_string(assetId) + " ");
-
+    
     Mesh *objMes = objLoader->createMesh(finalPath, objLoadStatus, objScene->shaderMGR->deviceType);
     if(objMes == NULL) {
         printf(" Obj path %s ", finalPath.c_str());
@@ -60,13 +60,13 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
         }
         objMes->Commit();
     }
-
-    shared_ptr<MeshNode> objNode = smgr->createNodeFromMesh(objMes,"ObjUniforms");
+    
+    shared_ptr<MeshNode> objNode = smgr->createNodeFromMesh(objMes, "ObjUniforms");
     objSGNode->node = objNode;
-
+    
     if(!isVertexColor) {
         string texturePath = "";
-
+        
 #ifdef ANDROID
         texturePath = constants::DocumentsStoragePath+ "/importedImages/"+textureName+".png";
         if(!FileHelper::checkFileExists(texturePath))
@@ -82,8 +82,10 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();
     float extendY = objNode->getMesh()->getBoundingBox()->getYExtend();
     float extendZ = objNode->getMesh()->getBoundingBox()->getZExtend();
+
     float max = ((extendX >= extendY) ? extendX:extendY);
     max = ((max >= extendZ) ? max:extendZ);
+
     float scaleRatio = (max / OBJ_BOUNDINGBOX_MAX_LIMIT);
     objNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
@@ -98,7 +100,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
         return false;
     }
     
-     return writeSGM(to_string(assetId) , objSGNode, !isVertexColor);
+    return writeSGM(to_string(assetId) , objSGNode, !isVertexColor);
 }
 
 bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
@@ -158,7 +160,7 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
         vector<unsigned int> allInd = objMesh->getTotalIndicesArray();
         ind.vtInd = allInd[i];
         ind.colInd = allInd[i];
-
+        
         f.write((char*)&ind, sizeof(SSGMIndexHeaderLowPoly));
     }
     delete[] verts;
@@ -166,7 +168,7 @@ bool SGOBJManager::writeSGM(string filePath, SGNode *objNode, bool hasUV)
     delete[] col;
     
     f.close();
-
+    
     if(objNode->node) {
         smgr->RemoveNode(objNode->node);
     }

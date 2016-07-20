@@ -19,9 +19,11 @@
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property(nonatomic, strong) id<GAITracker> tracker;
+
 +(AppDelegate *)getAppDelegate;
 -(void*) getSceneManager;
 -(void) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*)view; 
 -(bool) isMetalSupported;
+
 @end
 

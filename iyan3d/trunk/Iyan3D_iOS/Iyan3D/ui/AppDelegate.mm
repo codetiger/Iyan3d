@@ -47,11 +47,9 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil]];
     } else {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-         (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
     
-
     [[Twitter sharedInstance] startWithConsumerKey:@"FVYtYJI6e4lZMHoZvYCt2ejao" consumerSecret:@"eiFIXzb9zjoaH0lrDZ2Jrh2ezvbmuFv6rvPJdIXLYxgkaZ7YKC"];
     
 #if !(TARGET_IPHONE_SIMULATOR)
@@ -80,24 +78,22 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     NSLog(@"doc dir %@",docDirPath);
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    if([Utility IsPadDevice]){
+    
+    if([Utility IsPadDevice]) {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
 		loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:@"LoadingViewControllerPad" bundle:nil];
-    }
-    else {
+    } else {
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:([self iPhone6Plus]) ? @"LoadingViewControllerPhone@2x" : @"LoadingViewControllerPhone" bundle:nil];
     }
+
     [self.window setRootViewController:loadingViewController];
     [self.window makeKeyAndVisible];
     
-    if (launchOptions != nil)
-    {
+    if (launchOptions != nil) {
         NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         if (dictionary != nil)
-        {
             [self saveBoolToUserDefaultsWith:YES AndKey:@"openrenderTasks"];
-        }
     }
     
     return YES;
@@ -160,7 +156,6 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     [[NSNotificationCenter defaultCenter] postNotificationName:@"renderCompleted" object:nil];
 }
 
-
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -189,11 +184,14 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
 {
     scenemgr = new SceneManager(width,height,screenScale,(DEVICE_TYPE)type,[[[NSBundle mainBundle] resourcePath] UTF8String],(__bridge void*)view);
 }
+
 +(AppDelegate *)getAppDelegate
 {
     return (AppDelegate*)[UIApplication sharedApplication].delegate;
 }
--(void*) getSceneManager{
+
+-(void*) getSceneManager
+{
     return scenemgr;
 }
 
@@ -211,23 +209,29 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
         return true;
     return false;
 }
-- (void)applicationWillResignActive:(UIApplication *)application {
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"AppGoneBackground" object:nil userInfo:nil];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
     [self sendHitsInBackground];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
     [GAI sharedInstance].optOut = ![[NSUserDefaults standardUserDefaults] boolForKey:kAllowTracking];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"applicationDidBecomeActive" object:nil userInfo:nil];
 }
 
-- (void)sendHitsInBackground {
+- (void)sendHitsInBackground
+{
     self.okToWait = YES;
     __weak AppDelegate *weakSelf = self;
     __block UIBackgroundTaskIdentifier backgroundTaskId =
@@ -251,9 +255,12 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     [[GAI sharedInstance] dispatchWithCompletionHandler:self.dispatchHandler];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
 }
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
     NSString* ext = [[url absoluteString] pathExtension];
     NSString* msg;
     
@@ -305,7 +312,7 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
 	return YES;
 }
 
- - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     switch (alertView.tag) {
         case DB_ALERT:
@@ -317,7 +324,8 @@ static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4lt
     
 }
 
--(BOOL)iPhone6Plus{
+-(BOOL)iPhone6Plus
+{
     if (([UIScreen mainScreen].scale > 2.0)) return YES;
     return NO;
 }

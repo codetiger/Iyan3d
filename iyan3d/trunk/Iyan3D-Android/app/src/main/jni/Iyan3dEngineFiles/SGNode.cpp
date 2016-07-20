@@ -70,7 +70,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             oriTextureName = textureName;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             props.oriVertexColor = props.vertexColor;
-            node = loadSGMandOBJ(assetId,objectType,smgr);
+            node = loadSGMandOBJ(assetId, objectType, smgr);
             break;
         }
         case NODE_TEXT:{
@@ -397,11 +397,12 @@ void SGNode::setParticlesData(shared_ptr<Node> particleNode, Json::Value pData)
 
 }
 
-shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr)
+shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId, NODE_TYPE objectType, SceneManager *smgr)
 {
     string StoragePath;
     OBJMeshFileLoader *objLoader;
-    string fileExt = (objectType == NODE_SGM) ? ".sgm":".obj";
+    string fileExt = (objectType == NODE_SGM) ? ".sgm" : ".obj";
+    
     if(objectType == NODE_OBJ)
         objLoader = new OBJMeshFileLoader();
 #ifdef IOS
@@ -460,6 +461,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
     
     if(objectType == NODE_OBJ && objLoader != NULL)
         delete objLoader;
+    
     return node;
 }
 
