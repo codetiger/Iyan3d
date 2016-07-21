@@ -8,6 +8,7 @@
 #ifndef __GLK_MATH_TYPES_H
 #define __GLK_MATH_TYPES_H
 
+#define GLK_INLINE inline
 
 #if TARGET_OS_MAC && !TARGET_OS_IPHONE
 	#ifndef __SSE3__

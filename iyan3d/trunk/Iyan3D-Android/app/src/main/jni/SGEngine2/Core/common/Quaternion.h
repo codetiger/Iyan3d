@@ -9,7 +9,7 @@
 #ifndef QuaternionGLK_hpp
 #define QuaternionGLK_hpp
 
-#include <GLKit/GLKQuaternion.h>
+#include "GLKQuaternion.h"
 #include "common.h"
 
 const int ROUNDING_ERROR_S32 = 0;

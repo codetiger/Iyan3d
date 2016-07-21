@@ -9,7 +9,7 @@
 #ifndef Vector3GLK_hpp
 #define Vector3GLK_hpp
 
-#include <GLKit/GLKVector3.h>
+#include "GLKVector3.h"
 #include <iostream>
 #include <math.h>
 

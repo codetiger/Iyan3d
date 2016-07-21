@@ -9,7 +9,7 @@
 #ifndef Vector2GLK_hpp
 #define Vector2GLK_hpp
 
-#include <GLKit/GLKVector2.h>
+#include "GLKVector2.h"
 
 
 class Vector2 {

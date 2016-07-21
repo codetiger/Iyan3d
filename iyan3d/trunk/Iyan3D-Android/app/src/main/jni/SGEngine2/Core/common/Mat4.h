@@ -11,8 +11,6 @@
 
 #include "Vector4.h"
 #include "Quaternion.h"
-#include <GLKit/GLKMath.h>
-
 
 #ifdef ANDROID
 #include "Utilities/Maths.h"

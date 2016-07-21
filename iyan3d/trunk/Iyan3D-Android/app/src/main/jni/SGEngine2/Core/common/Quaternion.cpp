@@ -7,6 +7,7 @@
 //
 
 #include "Quaternion.h"
+#include "GLKMatrix4.h"
 
 Quaternion::Quaternion()
 {

@@ -8,6 +8,7 @@
 
 #include "Mat4.h"
 #include "Quaternion.h"
+#include "GLKMatrix4.h"
 
 Mat4::Mat4()
 {
