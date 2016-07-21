@@ -75,13 +75,13 @@ GLK_INLINE GLKQuaternion GLKQuaternionInvert(GLKQuaternion quaternion);
 GLK_INLINE GLKQuaternion GLKQuaternionNormalize(GLKQuaternion quaternion);
 
 GLK_INLINE GLKVector3 GLKQuaternionRotateVector3(GLKQuaternion quaternion, GLKVector3 vector);
-void GLKQuaternionRotateVector3Array(GLKQuaternion quaternion, GLKVector3 *__nonnull vectors, size_t vectorCount);
+void GLKQuaternionRotateVector3Array(GLKQuaternion quaternion, GLKVector3 *vectors, size_t vectorCount);
     
 /*
  The fourth component of the vector is ignored when calculating the rotation.
  */
 GLK_INLINE GLKVector4 GLKQuaternionRotateVector4(GLKQuaternion quaternion, GLKVector4 vector);
-void GLKQuaternionRotateVector4Array(GLKQuaternion quaternion, GLKVector4 *__nonnull vectors, size_t vectorCount);
+void GLKQuaternionRotateVector4Array(GLKQuaternion quaternion, GLKVector4 *vectors, size_t vectorCount);
     
 #pragma mark -
 #pragma mark Implementations

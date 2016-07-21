@@ -195,19 +195,19 @@ GLK_INLINE GLKVector3 GLKMatrix4MultiplyAndProjectVector3(GLKMatrix4 matrixLeft,
 /*
  Assumes 0 in the w component.
  */
-GLK_INLINE void GLKMatrix4MultiplyVector3Array(GLKMatrix4 matrix, GLKVector3 *__nonnull vectors, size_t vectorCount);
+GLK_INLINE void GLKMatrix4MultiplyVector3Array(GLKMatrix4 matrix, GLKVector3 *vectors, size_t vectorCount);
 /*
  Assumes 1 in the w component.
  */
-GLK_INLINE void GLKMatrix4MultiplyVector3ArrayWithTranslation(GLKMatrix4 matrix, GLKVector3 *__nonnull vectors, size_t vectorCount);
+GLK_INLINE void GLKMatrix4MultiplyVector3ArrayWithTranslation(GLKMatrix4 matrix, GLKVector3 *vectors, size_t vectorCount);
 /*
  Assumes 1 in the w component and divides the resulting vector by w before returning.
  */
-GLK_INLINE void GLKMatrix4MultiplyAndProjectVector3Array(GLKMatrix4 matrix, GLKVector3 *__nonnull vectors, size_t vectorCount);
+GLK_INLINE void GLKMatrix4MultiplyAndProjectVector3Array(GLKMatrix4 matrix, GLKVector3 *vectors, size_t vectorCount);
     
 GLK_INLINE GLKVector4 GLKMatrix4MultiplyVector4(GLKMatrix4 matrixLeft, GLKVector4 vectorRight);
 
-GLK_INLINE void GLKMatrix4MultiplyVector4Array(GLKMatrix4 matrix, GLKVector4 *__nonnull vectors, size_t vectorCount);
+GLK_INLINE void GLKMatrix4MultiplyVector4Array(GLKMatrix4 matrix, GLKVector4 *vectors, size_t vectorCount);
 
 #pragma mark -
 #pragma mark Implementations
@@ -940,21 +940,21 @@ GLK_INLINE GLKVector3 GLKMatrix4MultiplyAndProjectVector3(GLKMatrix4 matrixLeft,
     return GLKVector3MultiplyScalar(GLKVector3Make(v4.v[0], v4.v[1], v4.v[2]), 1.0f / v4.v[3]);
 }
 
-GLK_INLINE void GLKMatrix4MultiplyVector3Array(GLKMatrix4 matrix, GLKVector3 *__nonnull vectors, size_t vectorCount)
+GLK_INLINE void GLKMatrix4MultiplyVector3Array(GLKMatrix4 matrix, GLKVector3 *vectors, size_t vectorCount)
 {
     int i;
     for (i=0; i < vectorCount; i++)
         vectors[i] = GLKMatrix4MultiplyVector3(matrix, vectors[i]);
 }
 
-GLK_INLINE void GLKMatrix4MultiplyVector3ArrayWithTranslation(GLKMatrix4 matrix, GLKVector3 *__nonnull vectors, size_t vectorCount)
+GLK_INLINE void GLKMatrix4MultiplyVector3ArrayWithTranslation(GLKMatrix4 matrix, GLKVector3 *vectors, size_t vectorCount)
 {
     int i;
     for (i=0; i < vectorCount; i++)
         vectors[i] = GLKMatrix4MultiplyVector3WithTranslation(matrix, vectors[i]);
 }
     
-GLK_INLINE void GLKMatrix4MultiplyAndProjectVector3Array(GLKMatrix4 matrix, GLKVector3 *__nonnull vectors, size_t vectorCount)
+GLK_INLINE void GLKMatrix4MultiplyAndProjectVector3Array(GLKMatrix4 matrix, GLKVector3 *vectors, size_t vectorCount)
 {
     int i;
     for (i=0; i < vectorCount; i++)
@@ -998,7 +998,7 @@ GLK_INLINE GLKVector4 GLKMatrix4MultiplyVector4(GLKMatrix4 matrixLeft, GLKVector
 #endif
 }
 
-GLK_INLINE void GLKMatrix4MultiplyVector4Array(GLKMatrix4 matrix, GLKVector4 *__nonnull vectors, size_t vectorCount)
+GLK_INLINE void GLKMatrix4MultiplyVector4Array(GLKMatrix4 matrix, GLKVector4 *vectors, size_t vectorCount)
 {
     int i;
     for (i=0; i < vectorCount; i++)
