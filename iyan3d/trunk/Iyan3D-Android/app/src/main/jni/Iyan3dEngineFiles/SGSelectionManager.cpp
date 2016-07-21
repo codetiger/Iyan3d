@@ -383,9 +383,9 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     SGNode* currentSelectedNode = selectionScene->nodes[selectedNodeId];
     
     //currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
-    currentSelectedNode->props.isSelected = true;
+    currentSelectedNode->options[SELECTED].value.x = true;
     
-    currentSelectedNode->props.transparency = NODE_SELECTION_TRANSPARENCY;
+    currentSelectedNode->options[TRANSPARENCY].value.x = NODE_SELECTION_TRANSPARENCY;
     selectionScene->selectedNode = currentSelectedNode;
     
     bool status = true;
@@ -393,7 +393,7 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
         if(currentSelectedNode->getType() == NODE_RIG)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
         else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
-            status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->props.fontSize/3.0);
+            status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->options[FONT_SIZE].value.x/3.0);
         else if (currentSelectedNode->getType() == NODE_LIGHT || currentSelectedNode->getType() == NODE_ADDITIONAL_LIGHT)
             selectionScene->updateDirectionLine();
     }
@@ -415,9 +415,9 @@ void SGSelectionManager::highlightJointSpheres()
             if(selectionScene->jointSpheres[i]){
                 int mirrorjointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);
                 if((i == selectedJointId) || (selectionScene->getMirrorState() && (i == mirrorjointId))) {
-                    selectionScene->jointSpheres[i]->props.vertexColor = constants::selectionColor;
+                    selectionScene->jointSpheres[i]->options[VERTEX_COLOR].value = Vector4(constants::selectionColor, 0);
                 }else{
-                    selectionScene->jointSpheres[i]->props.vertexColor = constants::sgrJointDefaultColor;
+                    selectionScene->jointSpheres[i]->options[VERTEX_COLOR].value = Vector4(constants::sgrJointDefaultColor, 0);
                 }
             }
     } else {
@@ -443,15 +443,15 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     selectionScene->selectedNodeId = objectId;
     selectionScene->selectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
 
-    selectionScene->isNodeSelected = selectionScene->selectedNode->props.isSelected = true;
+    selectionScene->isNodeSelected = selectionScene->selectedNode->options[SELECTED].value.x = true;
         
-    selectionScene->selectedNode->props.transparency = NODE_SELECTION_TRANSPARENCY;
+    selectionScene->selectedNode->options[TRANSPARENCY].value.x = NODE_SELECTION_TRANSPARENCY;
     
     bool status = true;
     if(selectionScene->selectedNode->getType() == NODE_RIG)
         status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node));
     else if (selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
-        status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node), selectionScene->selectedNode->props.fontSize/3.0);
+        status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node), selectionScene->selectedNode->options[FONT_SIZE].value.x/3.0);
     if(!status)
         unselectObject(selectionScene->selectedNodeId);
     
@@ -460,7 +460,7 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
             highlightJointSpheres();
         
     }else if(selectionScene->selectedNode->getType() == NODE_CAMERA){
-        selectionScene->selectedNode->props.perVertexColor = false;
+        selectionScene->selectedNode->options[IS_VERTEX_COLOR].value.x = false;
     }
     if(!selectionScene->isNodeSelected || (selectionScene->selectedNode->getType() != NODE_RIG && selectionScene->selectedNode->getType() != NODE_TEXT_SKIN))
         selectionScene->renHelper->setJointSpheresVisibility(false);
@@ -478,8 +478,8 @@ void SGSelectionManager::unselectObject(int objectId)
     
     if(objectId >= 0 && objectId < selectionScene->nodes.size())
     {
-        selectionScene->nodes[objectId]->props.transparency = 1.0;
-        selectionScene->nodes[objectId]->props.isSelected = false;
+        selectionScene->nodes[objectId]->options[TRANSPARENCY].value.x = 1.0;
+        selectionScene->nodes[objectId]->options[SELECTED].value.x = false;
         selectionScene->selectedJoint = NULL;
         selectionScene->selectedNode = NULL;
         selectionScene->selectedJointId = NOT_EXISTS;
@@ -489,7 +489,7 @@ void SGSelectionManager::unselectObject(int objectId)
         selectionScene->renHelper->setJointSpheresVisibility(false);
         
         if(selectionScene->nodes[objectId]->getType() == NODE_CAMERA)
-            selectionScene->nodes[objectId]->props.perVertexColor = true;
+            selectionScene->nodes[objectId]->options[IS_VERTEX_COLOR].value.x = true;
     }
     selectionScene->clearSelections();
     if(selectionScene->directionIndicator->node->getVisible() && selectionScene->directionIndicator->assetId != selectionScene->selectedNodeId)
@@ -609,23 +609,23 @@ void SGSelectionManager::updateSkeletonSelectionColors(int prevSelectedBoneId)
     std::map<int, RigKey>& rigKeys = selectionScene->rigMan->rigKeys;
     
     if(prevSelectedBoneId > 0 && prevSelectedBoneId < selectionScene->tPoseJoints.size() && selectionScene->rigMan->findInRigKeys(prevSelectedBoneId))
-        rigKeys[prevSelectedBoneId].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
+        rigKeys[prevSelectedBoneId].sphere->options[VERTEX_COLOR].value = Vector4(SGR_JOINT_DEFAULT_COLOR_R, SGR_JOINT_DEFAULT_COLOR_G, SGR_JOINT_DEFAULT_COLOR_B, 0);
     
     if((selectionScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS || selectionScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES) && prevSelectedBoneId > 0) {
         int jointId = BoneLimitsHelper::getMirrorJointId(prevSelectedBoneId);
         if((!selectionScene->getMirrorState() || jointId != NOT_EXISTS) && selectionScene->rigMan->findInRigKeys(jointId))
-            rigKeys[jointId].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
+            rigKeys[jointId].sphere->options[VERTEX_COLOR].value = Vector4(SGR_JOINT_DEFAULT_COLOR_R, SGR_JOINT_DEFAULT_COLOR_G, SGR_JOINT_DEFAULT_COLOR_B, 0);
     }
     
     if(selectionScene->rigMan->selectedNodeId > 0 && selectionScene->rigMan->findInRigKeys(selectionScene->rigMan->selectedNodeId))
-        rigKeys[selectionScene->rigMan->selectedNodeId].sphere->props.vertexColor = Vector3(SELECTION_COLOR_R,SELECTION_COLOR_G,SELECTION_COLOR_B);
+        rigKeys[selectionScene->rigMan->selectedNodeId].sphere->options[VERTEX_COLOR].value = Vector4(SELECTION_COLOR_R, SELECTION_COLOR_G, SELECTION_COLOR_B, 0);
     
     if((selectionScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS || selectionScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES) && selectionScene->rigMan->selectedNodeId > 0) {
         int jointId = BoneLimitsHelper::getMirrorJointId(selectionScene->rigMan->selectedNodeId);
         if(jointId != NOT_EXISTS && selectionScene->getMirrorState() && selectionScene->rigMan->findInRigKeys(jointId))
-            rigKeys[jointId].sphere->props.vertexColor = Vector3(SELECTION_COLOR_R,SELECTION_COLOR_G,SELECTION_COLOR_B);
+            rigKeys[jointId].sphere->options[VERTEX_COLOR].value = Vector4(SELECTION_COLOR_R, SELECTION_COLOR_G, SELECTION_COLOR_B, 0);
         else if(jointId != NOT_EXISTS && selectionScene->rigMan->findInRigKeys(jointId)) {
-            rigKeys[jointId].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
+            rigKeys[jointId].sphere->options[VERTEX_COLOR].value = Vector4(SGR_JOINT_DEFAULT_COLOR_R, SGR_JOINT_DEFAULT_COLOR_G, SGR_JOINT_DEFAULT_COLOR_B, 0);
         }
         
     }
@@ -634,7 +634,7 @@ void SGSelectionManager::updateSkeletonSelectionColors(int prevSelectedBoneId)
         for (int i = 1; i < selectionScene->tPoseJoints.size(); i++) {
             int id = selectionScene->tPoseJoints[i].id;
             if(selectionScene->rigMan->findInRigKeys(id)){
-                rigKeys[id].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
+                rigKeys[id].sphere->options[VERTEX_COLOR].value = Vector4(SGR_JOINT_DEFAULT_COLOR_R, SGR_JOINT_DEFAULT_COLOR_G, SGR_JOINT_DEFAULT_COLOR_B, 0);
             }
         }
     }
@@ -665,11 +665,11 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
 {
     if(selectedNodeColor != 255){
         if(selectionScene->rigMan->getRiggedNode())
-            selectionScene->rigMan->getRiggedNode()->props.isSelected = true;
+            selectionScene->rigMan->getRiggedNode()->options[SELECTED].value.x = true;
         selectionScene->rigMan->isNodeSelected = true;
         selectionScene->rigMan->selectedNodeId = selectedNodeColor;
         selectionScene->rigMan->selectedNode = selectionScene->rigMan->getRiggedNode();
-        selectionScene->rigMan->selectedNode->props.transparency = NODE_SELECTION_TRANSPARENCY;
+        selectionScene->rigMan->selectedNode->options[TRANSPARENCY].value.x = NODE_SELECTION_TRANSPARENCY;
         if(selectedJointColor >= 1 && selectedJointColor < animNode->getJointCount()){
             selectionScene->rigMan->selectedJointId = selectedJointColor;
             selectionScene->rigMan->isSGRJointSelected = true;
@@ -683,10 +683,10 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
             updateSGRSelection(255, 0, animNode);
     }else{
         if(selectionScene->rigMan->getRiggedNode())
-            selectionScene->rigMan->getRiggedNode()->props.isSelected = false;
+            selectionScene->rigMan->getRiggedNode()->options[SELECTED].value.x = false;
 
         if(selectionScene->rigMan->selectedNode)
-            selectionScene->rigMan->selectedNode->props.transparency = 1.0;
+            selectionScene->rigMan->selectedNode->options[TRANSPARENCY].value.x = 1.0;
         selectionScene->rigMan->clearNodeSelections();
         selectionScene->renHelper->setJointSpheresVisibility(false);
         selectionScene->rigMan->selectedNodeId = 0;

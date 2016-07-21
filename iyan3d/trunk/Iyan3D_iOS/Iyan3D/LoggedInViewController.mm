@@ -389,7 +389,7 @@
         }
 
         [self reportAuthStatus];
-        [self.delegare dismissView];
+        [self.delegare dismissView:self];
     }
 }
 

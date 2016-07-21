@@ -199,7 +199,6 @@ void SceneManager::Render(bool isRTT)
             nodeIndex.push_back(i);
             continue;
         }
-        
         RenderNode(isRTT, i);
     }
     

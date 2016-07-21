@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -7,58 +7,96 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonProps">
             <connections>
+                <outlet property="colorPickerView" destination="hgF-3M-Rcp" id="tv4-AM-WIH"/>
+                <outlet property="colorView" destination="2CZ-QU-En3" id="dQZ-sx-bWz"/>
                 <outlet property="propTableView" destination="ePM-u7-DmJ" id="psX-6f-Pde"/>
+                <outlet property="selectedColorView" destination="SyS-Ud-EuY" id="vr1-ue-xkl"/>
+                <outlet property="subPropTable" destination="W7x-NN-v1m" id="szx-cb-BLx"/>
+                <outlet property="subPropView" destination="EbK-bO-jgd" id="52T-mH-1oM"/>
+                <outlet property="view" destination="U9I-4i-cZa" id="fG7-jp-p4w"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="464" height="320"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <rect key="frame" x="0.0" y="0.0" width="464" height="280"/>
+            <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U9I-4i-cZa" userLabel="meshproperty">
-                    <rect key="frame" x="0.0" y="0.0" width="464" height="320"/>
+                <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="U9I-4i-cZa" userLabel="meshproperty">
+                    <rect key="frame" x="0.0" y="0.0" width="464" height="280"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MT7-Hm-3m1">
-                            <rect key="frame" x="379" y="8" width="74" height="36"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <state key="normal" title="  SKIN" image="popover-skin.png">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZr-9C-v5A">
-                            <rect key="frame" x="195" y="8" width="74" height="36"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <state key="normal" title="  CLONE" image="popover-clone.png">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rX2-c1-0Az">
-                            <rect key="frame" x="14" y="8" width="78" height="36"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <state key="normal" title="  DELETE" image="popover-delete.png">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                        </button>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ePM-u7-DmJ">
-                            <rect key="frame" x="0.0" y="52" width="464" height="268"/>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ePM-u7-DmJ">
+                            <rect key="frame" x="0.0" y="0.0" width="464" height="280"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="txB-Lc-YSS"/>
                                 <outlet property="delegate" destination="-1" id="wQd-s6-UPT"/>
                             </connections>
                         </tableView>
+                        <view contentMode="scaleToFill" id="EbK-bO-jgd">
+                            <rect key="frame" x="464" y="0.0" width="464" height="280"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="e9q-Yn-zJs">
+                                    <rect key="frame" x="6" y="2" width="64" height="23"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title=" Back" image="BackBtn.png">
+                                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="backPressed:" destination="-1" eventType="touchUpInside" id="dW7-Ng-Aiw"/>
+                                    </connections>
+                                </button>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="W7x-NN-v1m">
+                                    <rect key="frame" x="0.0" y="36" width="464" height="244"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-1" id="7X5-AM-4cf"/>
+                                        <outlet property="delegate" destination="-1" id="0Y6-78-ohb"/>
+                                    </connections>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="2CZ-QU-En3">
+                            <rect key="frame" x="464" y="0.0" width="464" height="280"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" id="hgF-3M-Rcp">
+                                    <rect key="frame" x="76" y="30" width="313" height="185"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Pf9-I0-kT7">
+                                    <rect key="frame" x="4" y="4" width="64" height="23"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title=" Back" image="BackBtn.png">
+                                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="backPressed:" destination="-1" eventType="touchUpInside" id="h5o-TL-hAQ"/>
+                                    </connections>
+                                </button>
+                                <view contentMode="scaleToFill" id="SyS-Ud-EuY">
+                                    <rect key="frame" x="43" y="230" width="378" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="555" y="410"/>
+            <point key="canvasLocation" x="569" y="357"/>
         </view>
     </objects>
     <resources>
-        <image name="popover-clone.png" width="16" height="20"/>
-        <image name="popover-delete.png" width="13" height="18"/>
-        <image name="popover-skin.png" width="24" height="19"/>
+        <image name="BackBtn.png" width="14" height="23"/>
     </resources>
 </document>

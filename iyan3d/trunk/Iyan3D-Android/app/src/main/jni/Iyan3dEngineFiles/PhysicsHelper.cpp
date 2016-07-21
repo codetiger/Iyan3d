@@ -50,29 +50,32 @@ PhysicsHelper::~PhysicsHelper()
     delete broadphase;
 }
 
-void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, PHYSICS_TYPE pType)
+void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
 {
     double density = 0.0;
-    sgNode->props.physicsType = (PHYSICS_TYPE)pType;
+    sgNode->addOrUpdateProperty(PHYSICS_KIND, Vector4(pType), HAS_PHYSICS);
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
     
+    for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
+        sgNode->addOrUpdateProperty((PROP_INDEX)pI, Vector4((physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0), HAS_PHYSICS);
+
     switch (pType) {
-        case STATIC:
-            sgNode->props.weight = 0.0;
+        case PHYSICS_STATIC:
+            sgNode->addOrUpdateProperty(WEIGHT, Vector4(0.0), HAS_PHYSICS);
             return;
             break;
-        case LIGHT:
+        case PHYSICS_LIGHT:
             density = 3.0;
             break;
-        case MEDIUM:
+        case PHYSICS_MEDIUM:
             density = 3.0;
             break;
-        case HEAVY:
+        case PHYSICS_HEAVY:
             density = 27.0;
             break;
-        case CLOTH:
-        case BALLOON:
-        case JELLY:
-            sgNode->props.isSoft = true;
+        case PHYSICS_CLOTH:
+        case PHYSICS_JELLY:
+            sgNode->addOrUpdateProperty(IS_SOFT, Vector4(1.0), HAS_PHYSICS);
             break;
         default:
             break;
@@ -80,7 +83,7 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, PHYSICS_TYPE pT
     sgNode->node->updateBoundingBox();
     BoundingBox b = sgNode->node->getBoundingBox();
     double volume = b.getXExtend() * b.getYExtend() * b.getZExtend();
-    sgNode->props.weight = volume * density;
+    sgNode->addOrUpdateProperty(WEIGHT, Vector4(volume * density), HAS_PHYSICS);
 }
 
 void PhysicsHelper::syncPhysicsWorld()
@@ -106,11 +109,12 @@ void PhysicsHelper::syncPhysicsWorld()
     sBodies.clear();
     
     for (int i = 0; i < scene->nodes.size(); i++) {
-        if(scene->nodes[i]->props.isPhysicsEnabled && !scene->nodes[i]->props.isSoft) {
+        std::map<PROP_INDEX, Property> physicsProps = scene->nodes[i]->options[HAS_PHYSICS].subProps;
+        if(scene->nodes[i]->options[HAS_PHYSICS].value.x && !(bool)physicsProps[IS_SOFT].value.x) {
             btRigidBody *body = getRigidBody(scene->nodes[i]);
             world->addRigidBody(body);
             rBodies.push_back(body);
-        } else if(scene->nodes[i]->props.isPhysicsEnabled && scene->nodes[i]->props.isSoft) {
+        } else if(scene->nodes[i]->options[HAS_PHYSICS].value.x && (bool)physicsProps[IS_SOFT].value.x) {
             btSoftBody *body = getSoftBody(scene->nodes[i]);
             ((btSoftRigidDynamicsWorld*)world)->addSoftBody(body);
             if(dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache) {
@@ -213,13 +217,15 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
 
 btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
 {
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+    
     ActionKey key = sgNode->getKeyForFrame(0);
     Vector3 nodePos = key.position;
     Quaternion nodeRot = key.rotation;
     btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
     btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
     btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
-    btScalar bodyMass = sgNode->props.weight;
+    btScalar bodyMass = physicsProps[WEIGHT].value.x;
     btVector3 bodyInertia;
     
     btCollisionShape* shape = getShapeForNode(sgNode);
@@ -234,9 +240,11 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
     
     btRigidBody *body = new btRigidBody(bodyCI);
     body->setUserPointer((void*)sgNode);
-    body->setLinearFactor(btVector3(1, 1, 1));
-    if(sgNode->props.forceMagnitude > 0.0) {
-        Vector3 v = sgNode->props.forceDirection * sgNode->props.forceMagnitude;
+    body->setLinearFactor(btVector3(1,1,1));
+    
+    if(physicsProps[FORCE_MAGNITUDE].value.x > 0.0) {
+        Vector4 fDir = physicsProps[FORCE_DIRECTION].value;
+        Vector3 v = Vector3(fDir.x, fDir.y, fDir.z) * (physicsProps[FORCE_MAGNITUDE].value.x * 100.0);
         btVector3 velocity = btVector3(v.x, v.y, v.z);
         body->setLinearVelocity(velocity);
     }
@@ -355,11 +363,13 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     sBody->scale(btVector3(sgNode->getNodeScale().x, sgNode->getNodeScale().y, sgNode->getNodeScale().x));
     sBody->setUserPointer((void*)sgNode);
     
-    if(sgNode->props.physicsType == BALLOON) {
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+    
+    if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_CLOTH) {
         sBody->generateBendingConstraints(2);
         sBody->m_cfg.piterations = 2;
         sBody->randomizeConstraints();
-    } else if(sgNode->props.physicsType == JELLY) {
+    } else if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_JELLY) {
         sBody->generateBendingConstraints(2);
         sBody->m_cfg.piterations = 2;
         sBody->randomizeConstraints();
@@ -377,7 +387,9 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
     shared_ptr<MeshNode> node = dynamic_pointer_cast<MeshNode>(sgNode->node);
     Mesh* mesh = node->getMesh();
     
-    if(sgNode->props.physicsType == STATIC) {
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+
+    if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_STATIC) {
         btTriangleMesh *m = new btTriangleMesh();
         
         vector< unsigned int > indices = mesh->getTotalIndicesArray();

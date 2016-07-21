@@ -18,7 +18,7 @@
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor NodeType:(NODE_TYPE)nodeType Distance:(float)distance LightType:(int)lightType {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        color = currentLightColor;
+        color = Vector4(currentLightColor.x, currentLightColor.y, currentLightColor.z, currentLightColor.w);
         light = nodeType;
         previousDistance = distance;
         selectedSegmentIndex = lightType;
@@ -66,7 +66,7 @@
 
 - (void)pixelDemoGotPixel:(BMPixel)pixel
 {
-    color = Quaternion(pixel.red,pixel.green,pixel.blue,_shadowDarkness.value);
+    color = Vector4(pixel.red,pixel.green,pixel.blue,_shadowDarkness.value);
     [self.colorPreview setBackgroundColor:[UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha]];
     [self lightPropsChangeAction];
 }
@@ -78,12 +78,12 @@
 }
 
 - (IBAction)shadowDarknessChange:(id)sender {
-    color = Quaternion(color.x,color.y,color.z,_shadowDarkness.value);
+    color = Vector4(color.x,color.y,color.z,_shadowDarkness.value);
     [self lightPropsChangeAction];
 }
 
 - (IBAction)shadowDarknessEnd:(id)sender {
-    color = Quaternion(color.x,color.y,color.z,_shadowDarkness.value);
+    color = Vector4(color.x,color.y,color.z,_shadowDarkness.value);
     [self lightPropsEndAction];
 }
 

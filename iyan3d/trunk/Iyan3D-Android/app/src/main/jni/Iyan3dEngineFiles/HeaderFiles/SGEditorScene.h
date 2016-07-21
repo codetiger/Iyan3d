@@ -214,7 +214,7 @@ public:
     void updatePhysics(int frame);
     void enableDirectionIndicator();
     void updateDirectionLine();
-    void setPropsOfObject(SGNode *sgNode, PHYSICS_TYPE pType);
+    void setPropsOfObject(SGNode *sgNode, int pType);
     void syncSceneWithPhysicsWorld();
 
 };

@@ -95,7 +95,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
         return;
 
     rigScene->setLightingOff();
-    isVertexColoredNode = sgNode->props.perVertexColor;
+    isVertexColoredNode = sgNode->options[IS_VERTEX_COLOR].value.x;
     if(nodeToRig && nodeToRig->node){
         smgr->RemoveNode(nodeToRig->node);
     }
@@ -116,7 +116,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     //-----------
     sgmNode->setPosition(Vector3(0.0));
     sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-    nodeToRig->props.isLighting = true;
+    nodeToRig->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
     nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgmNode->setID(SGM_ID);
     nodeToRig->node->updateAbsoluteTransformation();
@@ -135,21 +135,21 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             if (rigKeys.size() > 0)
                 removeRigKeys();
             if(nodeToRig){
-                nodeToRig->props.perVertexColor = isVertexColoredNode;
+                nodeToRig->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(isVertexColoredNode, 0, 0, 0), UNDEFINED);
                 nodeToRig->node->setVisible(true);
                 nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-                nodeToRig->props.transparency = 1.0;
-                nodeToRig->props.isLighting = true;
+                nodeToRig->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0, 0, 0), UNDEFINED);
+                nodeToRig->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
             }
             break;
         }
             
         case RIG_MODE_MOVE_JOINTS:{
             if(nodeToRig){
-                nodeToRig->props.perVertexColor = isVertexColoredNode;
+                nodeToRig->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(isVertexColoredNode, 0, 0, 0), UNDEFINED);
                 nodeToRig->node->setVisible(true);
                 nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-                nodeToRig->props.transparency = 0.5;
+                nodeToRig->addOrUpdateProperty(TRANSPARENCY, Vector4(0.5, 0, 0, 0), UNDEFINED);
             }
             rigScene->renHelper->setControlsVisibility(true);
             if(rigKeys.size()==0)
@@ -185,10 +185,10 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             envelopes.clear();
             selectedNodeId = NOT_SELECTED;
             if(nodeToRig){
-                nodeToRig->props.perVertexColor = true;
+                nodeToRig->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), UNDEFINED);
                 nodeToRig->node->setVisible(true);
                 nodeToRig->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
-                nodeToRig->props.transparency = 0.5;
+                nodeToRig->addOrUpdateProperty(TRANSPARENCY, Vector4(0.5, 0, 0, 0), UNDEFINED);
             }
             if(rigKeys.size() > 0 && rigKeys[0].referenceNode)
                 rigScene->renHelper->setJointAndBonesVisibility(rigKeys, true);
@@ -211,7 +211,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
             rigScene->renHelper->setControlsVisibility(true);
             rigScene->renHelper->setEnvelopVisibility(envelopes, false);
             if(nodeToRig){
-                nodeToRig->props.perVertexColor = isVertexColoredNode;
+                nodeToRig->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(isVertexColoredNode, 0, 0, 0), UNDEFINED);
                 nodeToRig->node->setVisible(false);
             }
             rigScene->renHelper->setJointAndBonesVisibility(rigKeys, false);
@@ -234,10 +234,10 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
                     sgrSGNode->node->setTexture(nodeToRig->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
                     sgrSGNode->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
-                    sgrSGNode->props.transparency = 1.0;
-                    sgrSGNode->props.isLighting = true;
-                    sgrSGNode->props.perVertexColor = nodeToRig->props.perVertexColor;
-                    sgrSGNode->props.vertexColor = nodeToRig->props.vertexColor;
+                    sgrSGNode->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0, 0, 0), UNDEFINED);
+                    sgrSGNode->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
+                    sgrSGNode->addOrUpdateProperty(IS_VERTEX_COLOR, nodeToRig->options[IS_VERTEX_COLOR].value, UNDEFINED);
+                    sgrSGNode->addOrUpdateProperty(VERTEX_COLOR, nodeToRig->options[VERTEX_COLOR].value, UNDEFINED);
                     sgrSGNode->node->setVisible(true);
                     printf("\n setscenemode - Vertices count %d ", dynamic_pointer_cast<MeshNode>(sgrSGNode->node)->getMesh()->getVerticesCount());
                 }
@@ -326,7 +326,8 @@ void SGAutoRigSceneManager::resetRigKeys()
                 rigKeys[rigScene->tPoseJoints[i].id].sphere->node->setScale(Vector3(rigScene->tPoseJoints[i].sphereRadius));
                 rigKeys[rigScene->tPoseJoints[i].id].sphere->node->updateAbsoluteTransformation();
                 rigKeys[rigScene->tPoseJoints[i].id].sphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-                rigKeys[rigScene->tPoseJoints[i].id].sphere->props.vertexColor = Vector3(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B);
+                Vector4 vColor = Vector4(SGR_JOINT_DEFAULT_COLOR_R,SGR_JOINT_DEFAULT_COLOR_G,SGR_JOINT_DEFAULT_COLOR_B, 1.0);
+                rigKeys[rigScene->tPoseJoints[i].id].sphere->addOrUpdateProperty(VERTEX_COLOR, vColor, UNDEFINED);
             }
         }
     }
@@ -348,8 +349,9 @@ void SGAutoRigSceneManager::resetRigKeys()
             boneMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/BoneMesh.sgm", rigScene->shaderMGR->deviceType);
             rigKeys[rigScene->tPoseJoints[i].id].bone->node = smgr->createNodeFromMesh(boneMesh,"BoneUniforms");
             rigKeys[rigScene->tPoseJoints[i].id].bone->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-            rigKeys[rigScene->tPoseJoints[i].id].bone->props.vertexColor = Vector3(1.0,1.0,1.0);
-            rigKeys[rigScene->tPoseJoints[i].id].bone->props.transparency = 0.6;
+            Vector4 vColor = Vector4(1.0, 1.0, 1.0, 1.0);
+            rigKeys[rigScene->tPoseJoints[i].id].bone->addOrUpdateProperty(VERTEX_COLOR, vColor, UNDEFINED);
+            rigKeys[rigScene->tPoseJoints[i].id].bone->addOrUpdateProperty(TRANSPARENCY, Vector4(0.6, 0, 0, 0), UNDEFINED);
             rigKeys[rigScene->tPoseJoints[i].id].bone->node->setID(BONE_START_ID + i);
             rigKeys[rigScene->tPoseJoints[i].id].bone->node->setParent(rigKeys[parentId].referenceNode->node);
             rigKeys[rigScene->tPoseJoints[i].id].bone->node->updateAbsoluteTransformation();
@@ -463,14 +465,14 @@ bool SGAutoRigSceneManager::isSGRTransparent(int jointId,string matName)
 {
     if(!rigScene || !smgr)
         return false;
-    return sgrSGNode->props.transparency < 1.0;
+    return sgrSGNode->options[TRANSPARENCY].value.x < 1.0;
 }
 
 bool SGAutoRigSceneManager::isOBJTransparent(string materialName)
 {
     if(!rigScene || !smgr)
         return false;
-    return nodeToRig->props.transparency < 1.0;
+    return nodeToRig->options[TRANSPARENCY].value.x < 1.0;
 }
 
 SGNode* SGAutoRigSceneManager::getRiggedNode()
@@ -527,8 +529,8 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
         envelopeNode->setParent(rigKeys[parentId].referenceNode->node);
         envelopeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
         envelopeSgNod->node = envelopeNode;
-        envelopeSgNod->props.vertexColor = Vector3(1.0);
-        envelopeSgNod->props.transparency = 0.4;
+        envelopeSgNod->addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), UNDEFINED);
+        envelopeSgNod->addOrUpdateProperty(TRANSPARENCY, Vector4(0.4, 0, 0, 0), UNDEFINED);
     }
     if(envelopeSgNod->node) {
         envelopeSgNod->node->updateAbsoluteTransformation();
@@ -567,8 +569,8 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
             smgr->RemoveNode(meshNode);
         }
-        nodeToRig->props.perVertexColor = isVertexColoredNode;
-        nodeToRig->props.transparency = 1.0;
+        nodeToRig->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(isVertexColoredNode, 0, 0, 0), UNDEFINED);
+        nodeToRig->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0, 0, 0), UNDEFINED);
         nodeToRig->node->setVisible(true);
         nodeToRig->node->setID(actualNodeId);
     }else if(isCompleted){

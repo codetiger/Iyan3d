@@ -15,7 +15,6 @@
 }
 
 @property (atomic, assign) int type;
-@property (atomic, assign) int subPropsCount;
 @property (atomic, copy) NSString* title;
 @property (atomic, copy) NSArray* subProps;
 @property (atomic, assign) float x;

@@ -37,7 +37,7 @@ public:
     PhysicsHelper(void *scene);
     ~PhysicsHelper();
     void syncPhysicsWorld();
-    void calculateAndSetPropsOfObject(SGNode* sgNode, PHYSICS_TYPE pType);
+    void calculateAndSetPropsOfObject(SGNode* sgNode, int pType);
     void updatePhysicsUpToFrame(int frame);
     void updateMeshCache(SGNode* sgNode);
     btCollisionShape* getShapeForNode(SGNode* sgNode);

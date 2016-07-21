@@ -30,7 +30,6 @@ struct properties{
     double forceMagnitude;
     Vector3 forceDirection;
     bool isSoft;
-    PHYSICS_TYPE physicsType;
 };
 
 class SGNode{
@@ -38,6 +37,8 @@ private:
     NODE_TYPE type;
     
 public:
+    
+    std::map< PROP_INDEX, Property > options;
     bool isRigged;
     bool isMirrorEnabled;
     bool isTempNode;
@@ -47,7 +48,7 @@ public:
     std::wstring name;
     std::string textureName,oriTextureName;
     string optionalFilePath;
-    properties props;
+    //properties props;
     Quaternion nodeInitialRotation;
     
     std::map< int, SGNode* > instanceNodes;
@@ -59,6 +60,7 @@ public:
     vector<Quaternion> jointsInitialRotations;
     
     SGNode(NODE_TYPE type);
+    void setPropertiesOfNode();
     ~SGNode();
     bool checkFileExists(std::string fileName);
     void setSkinningData(SkinMesh *mesh);
@@ -106,5 +108,9 @@ public:
     
     NODE_TYPE getType();
     void setType(NODE_TYPE type);
+    
+    Property getProperty(PROP_INDEX pIndex);
+    void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
+    void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
 };
 #endif

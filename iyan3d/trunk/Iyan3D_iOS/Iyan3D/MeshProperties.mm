@@ -33,14 +33,14 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        refractionValue = sgNode->props.refraction;
-        reflectionValue = sgNode->props.reflection;
-        isLightningValue = sgNode->props.isLighting;
-        isVisibleValue = sgNode->props.isVisible;
+        refractionValue = sgNode->getProperty(REFRACTION).value.x;
+        reflectionValue = sgNode->getProperty(REFLECTION).value.x;
+        isLightningValue = sgNode->options[LIGHTING].value.x;
+        isVisibleValue = sgNode->options[VISIBILITY].value.x;
         mirrorStatus = mirror;
-        isHaveLightOption = sgNode->props.isLighting;
-        physicsType = (sgNode->props.isPhysicsEnabled) ? sgNode->props.physicsType : NONE;
-        velocity = sgNode->props.forceMagnitude;
+        isHaveLightOption = sgNode->options[LIGHTING].value.x;
+        physicsType = (sgNode->options[HAS_PHYSICS].value.x) ? sgNode->options[PHYSICS_KIND].value.x : NONE;
+        velocity = sgNode->options[FORCE_MAGNITUDE].value.x;
         smoothTexture = smoothTex;
         
         canApplyPhysics = (sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ || sgNode->getType() == NODE_TEXT);

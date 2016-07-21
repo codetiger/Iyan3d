@@ -22,7 +22,8 @@ public:
     vector<ActionKey> keys;
     vector<bool> actionSpecificFlags;
     vector<float> actionSpecificFloats;
-    properties props;
+    std::map < PROP_INDEX, Property > options;
+    //properties props;
     vector<SGPositionKey> nodePositionKeys;
     vector<SGRotationKey> nodeRotationKeys;
     vector<SGScaleKey>    nodeSCaleKeys;

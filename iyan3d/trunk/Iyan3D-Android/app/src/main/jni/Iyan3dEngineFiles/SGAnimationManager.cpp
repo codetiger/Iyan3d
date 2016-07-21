@@ -76,11 +76,11 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
 {
     
     animScene->selectMan->unselectObject(fromNodeId);
-    animScene->nodes[toNodeId]->props = animScene->nodes[fromNodeId]->props;
+    animScene->nodes[toNodeId]->options = animScene->nodes[fromNodeId]->options;
     animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
     animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
-    animScene->nodes[toNodeId]->props.perVertexColor = animScene->nodes[fromNodeId]->props.perVertexColor;
-    animScene->nodes[toNodeId]->props.vertexColor = animScene->nodes[fromNodeId]->props.vertexColor;
+    animScene->nodes[toNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(animScene->nodes[fromNodeId]->options[IS_VERTEX_COLOR].value.x), UNDEFINED);
+    animScene->nodes[toNodeId]->addOrUpdateProperty(VERTEX_COLOR, animScene->nodes[fromNodeId]->options[VERTEX_COLOR].value, UNDEFINED);
     
 //    if(animScene->selectedNodeIds.size() > 0) {
 //        animScene->selectMan->unselectObjects();
@@ -124,14 +124,14 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
         if(addAction.actionType == ACTION_NODE_ADDED) {
             addAction.actionSpecificStrings[0] = (ConversionHelper::getWStringForString(sgNode->oriTextureName));
             addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->textureName));
-            addAction.actionSpecificFloats[0] = (sgNode->props.oriVertexColor.x);
-            addAction.actionSpecificFloats[1] = (sgNode->props.oriVertexColor.y);
-            addAction.actionSpecificFloats[2] = (sgNode->props.oriVertexColor.z);
-            addAction.actionSpecificFloats[3] = (sgNode->props.vertexColor.x);
-            addAction.actionSpecificFloats[4] = (sgNode->props.vertexColor.y);
-            addAction.actionSpecificFloats[5] = (sgNode->props.vertexColor.z);
-            addAction.actionSpecificFlags[0] = (sgNode->props.perVertexColor);
-            addAction.props = animScene->nodes[fromNodeId]->props;
+            addAction.actionSpecificFloats[0] = (sgNode->options[ORIG_VERTEX_COLOR].value.x);
+            addAction.actionSpecificFloats[1] = (sgNode->options[ORIG_VERTEX_COLOR].value.y);
+            addAction.actionSpecificFloats[2] = (sgNode->options[ORIG_VERTEX_COLOR].value.z);
+            addAction.actionSpecificFloats[3] = (sgNode->options[VERTEX_COLOR].value.x);
+            addAction.actionSpecificFloats[4] = (sgNode->options[VERTEX_COLOR].value.y);
+            addAction.actionSpecificFloats[5] = (sgNode->options[VERTEX_COLOR].value.z);
+            addAction.actionSpecificFlags[0] = (sgNode->options[IS_VERTEX_COLOR].value.x);
+            addAction.options = animScene->nodes[fromNodeId]->options;
         }
     }
     Logger::log(INFO,"SgAnimationManager", "Texture Name ; " + animScene->nodes[toNodeId]->textureName);

@@ -129,7 +129,7 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos) {
             Mat4 rotMatrix;
             rotMatrix.setRotation(moveScene->directionIndicator->node->getRotation());
             rotMatrix.rotateVect(direction);
-            moveScene->nodes[moveScene->selectedNodeId]->props.forceDirection = direction;
+            moveScene->nodes[moveScene->selectedNodeId]->addOrUpdateProperty(FORCE_DIRECTION, Vector4(direction, 0.0), HAS_PHYSICS);
             moveScene->syncSceneWithPhysicsWorld();
         } else if(moveScene->controlType != SCALE)
             moveScene->actionMan->storeActionKeys(true);

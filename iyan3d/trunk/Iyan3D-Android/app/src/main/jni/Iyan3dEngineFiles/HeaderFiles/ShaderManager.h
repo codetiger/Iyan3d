@@ -52,7 +52,7 @@ public:
     void setModelViewProjMatrix(SGNode *node,u16 paramIndex, bool isDepthPass = false);
     void setMVPForParticles(SGNode *node, u16 paramIndex);
     void setViewProjMatrix(SGNode *node,u16 paramIndex);
-    void setVertexColorUniform(SGNode *sgNode , Vector3 color,int paramIndex,int nodeIndex);
+    void setVertexColorUniform(SGNode *sgNode , Vector4 color,int paramIndex,int nodeIndex);
     void setNodeLighting(SGNode *sgNode,int paramIndex);
     void setViewProjMatrix(Material *material);
     void setSceneDataUniforms(SGNode *node,u16 paramIndex);

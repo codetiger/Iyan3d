@@ -91,7 +91,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     //-----------
     
     objNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
-    objSGNode->props.isLighting = true;
+    objSGNode->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
     
     objNode->setID(OBJ_ID);
     objSGNode->node->updateAbsoluteTransformation();

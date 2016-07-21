@@ -27,7 +27,7 @@
 #define SGB_VERSION_2 201601
 #define SGB_VERSION_1 201506
 
-#define DEFAULT_LIGHT_COLOR Vector3(1.0)
+#define DEFAULT_LIGHT_COLOR Vector4(1.0)
 #define DEFAULT_FADE_DISTANCE 300.0
 
 #define LIGHT_DIRECTION_ID 99996
@@ -67,6 +67,90 @@
 
 #define UV_MAPPED 1
 #define VERTEX_COLORED 2
+
+#define PHYSICS_CONST 33
+#define PHYSICS_TYPE_COUNT 7
+
+enum PROP_INDEX {
+    UNDEFINED = -1,
+    DELETE = 0,
+    CLONE,
+    LIGHTING,
+    SELECTED,
+    VISIBILITY,
+    TEXTURE,
+    TEXTURE_SCALE,
+    TEXTURE_SMOOTH,
+    BUMP_MAP,
+    BUMP_DEPTH,
+    FOV,
+    CAM_RESOLUTION,
+    THOUSAND_EIGHTY,
+    SEVEN_TWENTY,
+    FOUR_EIGHTY,
+    THREE_SIXTY,
+    TWO_FORTY,
+    TRANSPARENCY,
+    REFLECTION,
+    REFRACTION,
+    FONT_SIZE,
+    VERTEX_COLOR,
+    LIGHT_TYPE,
+    LIGHT_POINT,
+    LIGHT_DIRECTIONAL,
+    SHADOW_DARKNESS,
+    SPECIFIC_FLOAT,
+    IS_VERTEX_COLOR,
+    ORIG_VERTEX_COLOR,
+    TEXT_COLOR,
+    MATERIAL_PROPS,
+    HAS_PHYSICS,
+    PHYSICS_KIND,
+    PHYSICS_NONE, // Keep these at same places as written to file.
+    PHYSICS_STATIC,
+    PHYSICS_LIGHT,
+    PHYSICS_MEDIUM,
+    PHYSICS_HEAVY,
+    PHYSICS_CLOTH,
+    PHYSICS_JELLY,
+    WEIGHT,
+    FORCE_MAGNITUDE,
+    FORCE_DIRECTION,
+    IS_SOFT
+};
+
+enum PROP_TYPE {
+    TYPE_NONE = -1,
+    SLIDER_TYPE = 0,
+    COLOR_TYPE,
+    SWITCH_TYPE,
+    PARENT_TYPE,
+    BUTTON_TYPE,
+    SEGMENT_TYPE,
+    LIST_TYPE,
+    ICON_TYPE,
+    IMAGE_TYPE
+};
+
+enum ICON_INDEX {
+    NO_ICON = -1,
+    DELETE_ICON = 0,
+    CLONE_ICON
+};
+
+struct Property {
+    PROP_INDEX index;
+    PROP_INDEX parentIndex;
+    PROP_TYPE type;
+    std::string title;
+    std::string fileName;
+    ICON_INDEX iconId;
+    std::string groupName;
+    std::map< PROP_INDEX, Property > subProps;
+    Vector4 value;
+    bool isEnabled;
+
+};
 
 const char textCharArray[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9','_','?','*','%','(',')',':',',','$','!','.','<','#','/','@','&','^','"','>'};
 
@@ -475,17 +559,6 @@ enum BASIC_SHAPES{
     PLANE,
     SPHERE,
     TORUS
-};
-
-enum PHYSICS_TYPE
-{
-    STATIC = 1,
-    LIGHT,
-    MEDIUM,
-    HEAVY,
-    CLOTH,
-    BALLOON,
-    JELLY
 };
 
 class constants{

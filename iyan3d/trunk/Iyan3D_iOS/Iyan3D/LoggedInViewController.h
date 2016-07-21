@@ -13,7 +13,7 @@
 #import "AppHelper.h"
 
 @protocol LoggedinViewControllerDelegat
-- (void)dismissView;
+- (void)dismissView:(UIViewController*) VC;
 - (void) showOrHideProgress:(BOOL) value;
 - (void) showPreview:(NSString*) outputPath;
 @end

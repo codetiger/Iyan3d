@@ -16,14 +16,14 @@
 
 @protocol LightPropertiesDelegate
 
-- (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance LightType:(int)lightType isStoredProperty:(BOOL)isStored;
+- (void) changeLightProps:(Vector4)lightProps Distance:(float)distance LightType:(int)lightType isStoredProperty:(BOOL)isStored;
 - (void) setLightDirection;
 - (void) deleteObjectOrAnimation;
 @end
 
 @interface LightProperties : GAITrackedViewController<GetPixelDemoDelegate>
 {
-    Quaternion color;
+    Vector4 color;
     NODE_TYPE light;
     float previousDistance;
     int selectedSegmentIndex;

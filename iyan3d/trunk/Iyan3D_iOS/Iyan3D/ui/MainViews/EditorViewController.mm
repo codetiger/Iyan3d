@@ -456,7 +456,7 @@ BOOL missingAlertShown;
     {
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT){
             [self.moveBtn setEnabled:true];
-            [self.rotateBtn setEnabled:(editorScene->nodes[editorScene->selectedNodeId]->props.specificInt == (int)DIRECTIONAL_LIGHT)];
+            [self.rotateBtn setEnabled:(editorScene->nodes[editorScene->selectedNodeId]->options[LIGHT_TYPE].value.x == (int)DIRECTIONAL_LIGHT)];
             [self.optionsBtn setEnabled:true];
             [self.scaleBtn setEnabled:false];
             [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -1165,8 +1165,9 @@ BOOL missingAlertShown;
     [Answers logCustomEventWithName:@"AutoRig-Completion" customAttributes:nil];
     
     Vector3 vertexColor = Vector3(-1.0);
-    if(editorScene->rigMan->nodeToRig->props.perVertexColor){
-        vertexColor = editorScene->rigMan->nodeToRig->props.vertexColor;
+    if(editorScene->rigMan->nodeToRig->options[IS_VERTEX_COLOR].value.x){
+        Vector4 vColor = editorScene->rigMan->nodeToRig->options[VERTEX_COLOR].value;
+        vertexColor = Vector3(vColor.x, vColor.y, vColor.z);
     }
     
     [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"] VertexColor:vertexColor];
@@ -1529,10 +1530,11 @@ BOOL missingAlertShown;
         Vector3 lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
         float shad = ShaderManager::shadowDensity;
         lightProp = Quaternion(lightColor.x, lightColor.y, lightColor.z, shad);
-        float dist = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+        float dist = ((editorScene->getSelectedNode()->options[SPECIFIC_FLOAT].value.x/300.0)-0.001);
         
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->props.specificInt];
+        /*
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->options[LIGHT_TYPE].value.x];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 300 : 322;
@@ -1549,12 +1551,29 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
+         */
+        
+        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->options];
+        commonProps.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
+        self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [commonProps.view setClipsToBounds:YES];
+        CGRect rect = _optionsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                              animated:NO];
+
     }
     else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
     {
         float fovValue = editorScene->cameraFOV;
         NSInteger resolutionType = editorScene->cameraResolutionType;
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+        /*
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
@@ -1568,6 +1587,22 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
+         */
+        
+        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->options];
+        commonProps.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
+        self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [commonProps.view setClipsToBounds:YES];
+        CGRect rect = _optionsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                              animated:NO];
+
     }
     else
     {
@@ -1580,19 +1615,18 @@ BOOL missingAlertShown;
         }
         
         BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
-        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
-        _meshProp.delegate = self;
+//        int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
+//        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
+//        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
+//        _meshProp.delegate = self;
         
-        //        Options *exampleOption = [[Options alloc] init];
-        //        NSArray* props = [NSArray arrayWithObjects:exampleOption, exampleOption, exampleOption, nil];
-        //        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:props];
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
+        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->options];
+        commonProps.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
         self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
         self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_meshProp.view setClipsToBounds:YES];
+        [commonProps.view setClipsToBounds:YES];
         CGRect rect = _optionsBtn.frame;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
@@ -2066,19 +2100,20 @@ BOOL missingAlertShown;
     return CGPointMake(resWidth, resHeight);
 }
 
-- (void) changeLightProps:(Quaternion)lightProps Distance:(float)distance LightType:(int)lightType isStoredProperty:(BOOL)isStored
+
+- (void) changeLightProps:(Vector4)lightColor Distance:(float)distance LightType:(int)lType isStoredProperty:(BOOL)isStored
 {
     
     if(editorScene)
         editorScene->shadowsOff = false;
     
     if(!isStored)
-        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w, distance, lightType, true);
+        editorScene->actionMan->changeLightProperty(lightColor.x, lightColor.y, lightColor.z, lightColor.w, distance, lType, true);
     else if(isStored)
-        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w, distance, lightType);
+        editorScene->actionMan->storeLightPropertyChangeAction(lightColor.x, lightColor.y, lightColor.z, lightColor.w, distance, lType);
     
     if(isStored) {
-        [self performSelectorOnMainThread:@selector(updateLightInMainThread:) withObject:[NSNumber numberWithInt:lightType] waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(updateLightInMainThread:) withObject:[NSNumber numberWithInt:lType] waitUntilDone:NO];
     }
 }
 
@@ -2400,10 +2435,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         Vector3 lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
         float shad = ShaderManager::shadowDensity;
         lightProp = Quaternion(lightColor.x, lightColor.y, lightColor.z, shad);
-        float dist = ((editorScene->getSelectedNode()->props.nodeSpecificFloat/300.0)-0.001);
+        float dist = ((editorScene->getSelectedNode()->options[SPECIFIC_FLOAT].value.x/300.0)-0.001);
         
-        
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->props.specificInt];
+
+        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->options[LIGHT_TYPE].value.x];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
         int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;
@@ -2452,7 +2487,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 isVideoOrImageOrParticle = true;
         }
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
+        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->options[IS_VERTEX_COLOR].value.x) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
         _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
@@ -2494,9 +2529,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
-        Vector4 color = Vector4(editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.x,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.y,editorScene->nodes[editorScene->selectedNodeId]->props.vertexColor.z,0.0);
-        float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->props.nodeSpecificFloat;
-        int fontSize = editorScene->nodes[editorScene->selectedNodeId]->props.fontSize;
+        Vector4 color = editorScene->nodes[editorScene->selectedNodeId]->options[VERTEX_COLOR].value;
+        color.w = 0.0;
+        float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->options[SPECIFIC_FLOAT].value.x;
+        int fontSize = editorScene->nodes[editorScene->selectedNodeId]->options[FONT_SIZE].value.x;
         
         [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
@@ -2580,9 +2616,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NSString *typedText = [self stringWithwstring:sgNode->name];
         NSString *fontName = [NSString stringWithCString:sgNode->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
-        Vector4 color = Vector4(sgNode->props.vertexColor.x,sgNode->props.vertexColor.y,sgNode->props.vertexColor.z,0.0);
-        float bevalValue = sgNode->props.nodeSpecificFloat;
-        int fontSize = sgNode->props.fontSize;
+        Vector4 color = sgNode->options[VERTEX_COLOR].value;
+        color.w = 0.0;
+        
+        float bevalValue = sgNode->options[SPECIFIC_FLOAT].value.x;
+        int fontSize = sgNode->options[FONT_SIZE].value.x;
         [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->textureName.c_str()
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
@@ -2594,8 +2632,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [imageDetails setObject:[NSNumber numberWithInt:assetType] forKey:@"type"];
         [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
         [imageDetails setObject:[NSString stringWithFormat:@"%s", sgNode->textureName.c_str()] forKey:@"AssetName"];
-        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->props.vertexColor.x] forKey:@"Width"];
-        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->props.vertexColor.y] forKey:@"Height"];
+        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->options[VERTEX_COLOR].value.x] forKey:@"Width"];
+        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->options[VERTEX_COLOR].value.y] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
         
         assetAddType = IMPORT_ASSET_ACTION;
@@ -3457,12 +3495,160 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->actionMan->changeCameraProperty(fov, (int)resolution, false); //slider action
 }
 
+#pragma mark CommonPropsDelegate
+
+- (void) changedPropertyAtIndex:(PROP_INDEX) index WithValue:(Vector4) value AndStatus:(BOOL) status
+{
+    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+        return;
+    
+    SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
+    
+    switch (index) {
+            
+        case VISIBILITY:
+        case LIGHTING:
+        case REFRACTION:
+        case REFLECTION: {
+            float prevRefraction = selectedNode->getProperty(REFRACTION).value.x;
+            float prevReflection = selectedNode->getProperty(REFLECTION).value.x;
+            bool prevLighting = selectedNode->options[LIGHTING].value.x;
+            bool prevVisibility = selectedNode->options[VISIBILITY].value.x;
+            
+            editorScene->actionMan->changeMeshProperty((index == REFRACTION) ? value.x : prevRefraction, (index == REFLECTION) ? value.x : prevReflection, (index == LIGHTING) ? value.x : prevLighting, (index == VISIBILITY) ? value.x : prevVisibility, status);
+            break;
+        }
+        case TEXTURE_SMOOTH: {
+            if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
+                editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
+                editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(TEXTURE_SMOOTH, value, MATERIAL_PROPS);
+                if(smgr->device == OPENGLES2)
+                    [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
+            }
+            break;
+        }
+        case TEXTURE: {
+            [self changeTextureForAsset];
+            break;
+        }
+        case DELETE: {
+            if(editorScene->selectedNodeIds.size() > 0){
+                editorScene->loader->removeSelectedObjects();
+                [self undoRedoButtonState:DEACTIVATE_BOTH];
+            }
+            else{
+                [self deleteObjectOrAnimation];
+                [self undoRedoButtonState:DEACTIVATE_BOTH];
+            }
+            [self updateAssetListInScenes];
+            break;
+        }
+        case CLONE: {
+            assetAddType = IMPORT_ASSET_ACTION;
+            [self createDuplicateAssets];
+            [self updateAssetListInScenes];
+            break;
+        }
+        case VERTEX_COLOR: {
+            if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
+                [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
+            }
+            break;
+        }
+        
+        case SPECIFIC_FLOAT: {
+            if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
+                [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
+            }
+            break;
+        }
+        case SHADOW_DARKNESS:
+        case LIGHT_DIRECTIONAL:
+        case LIGHT_POINT: {
+            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
+            break;
+        }
+        case FORCE_DIRECTION: {
+            [self setDirection];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void) changeLightPropertyAtIndex:(PROP_INDEX) pIndex WithValue:(Vector4) value AndStatus:(BOOL) status
+{
+    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED)
+        return;
+    
+    SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
+    Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, selectedNode->scaleKeys);
+    Vector4 lightProps = (pIndex == VERTEX_COLOR) ? value : Vector4(scale, ShaderManager::shadowDensity);
+    float dist = (pIndex == SPECIFIC_FLOAT) ? value.x : selectedNode->options[SPECIFIC_FLOAT].value.x;
+    int lightType = (selectedNode->options[pIndex].groupName == "LIGHT TYPE") ? pIndex - 23 : selectedNode->options[LIGHT_TYPE].value.x;
+    lightProps.w = (pIndex == SHADOW_DARKNESS) ? value.x : ShaderManager::shadowDensity;
+    /* Number 22 because Point light's value is 0 in previous version , now it is 22 */
+    if(!status)
+        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w, dist, lightType, true);
+    else if(status)
+        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w, dist, lightType);
+    
+    if(status) {
+        [self performSelectorOnMainThread:@selector(updateLightInMainThread:) withObject:[NSNumber numberWithInt:lightType] waitUntilDone:NO];
+    }
+
+}
+
+- (void) applyPhysicsProps:(Property) property
+{
+    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED)
+        return;
+    
+    SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
+    if(selectedNode->getType() == NODE_SGM || selectedNode->getType() == NODE_OBJ || selectedNode->getType() == NODE_TEXT) {
+        std::map<PROP_INDEX, Property> currentPhysics = selectedNode->options[HAS_PHYSICS].subProps;
+        std::map<PROP_INDEX, Property> newPhysics = property.subProps;
+        
+        float prevRefraction = selectedNode->getProperty(REFRACTION).value.x;
+        float prevReflection = selectedNode->getProperty(REFLECTION).value.x;
+        bool prevLighting = selectedNode->options[LIGHTING].value.x;
+        bool prevVisibility = selectedNode->options[VISIBILITY].value.x;
+        
+        NSLog(@" Prev type %f new Type %f ", currentPhysics[PHYSICS_KIND].value.x, newPhysics[PHYSICS_KIND].value.x);
+        
+        if(currentPhysics[FORCE_MAGNITUDE].value.x != newPhysics[FORCE_MAGNITUDE].value.x) {
+            [self velocityChanged:newPhysics[FORCE_MAGNITUDE].value.x];
+            [self meshPropertyChanged:prevRefraction Reflection:prevReflection Lighting:prevLighting Visible:prevVisibility storeInAction:YES];
+        }
+        if(currentPhysics[PHYSICS_KIND].value.x != newPhysics[PHYSICS_KIND].value.x) {
+            
+            [self meshPropertyChanged:prevRefraction Reflection:prevReflection Lighting:prevLighting Visible:prevVisibility storeInAction:NO];
+            int pType = (newPhysics[PHYSICS_KIND].value.x);
+            if(pType == PHYSICS_NONE)
+                [self setPhysics:false];
+            else {
+                [self setPhysics:true];
+                [self setPhysicsType:pType];
+            }
+            
+            [self meshPropertyChanged:prevRefraction Reflection:prevReflection Lighting:prevLighting Visible:prevVisibility storeInAction:YES];
+        }
+        
+        [self hideLoadingActivity];
+        [self setUserInteractionStatus:YES];
+    }
+}
+
+
+#pragma mark Meshproperties Delegate
+
 - (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible storeInAction:(BOOL)status
 {
     if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
         return;
     
-    if (editorScene->nodes[editorScene->selectedNodeId]->props.isLighting != light || editorScene->nodes[editorScene->selectedNodeId]->props.isVisible != visible || status) { //switch action
+    if (editorScene->nodes[editorScene->selectedNodeId]->options[LIGHTING].value.x != light || editorScene->nodes[editorScene->selectedNodeId]->options[VISIBILITY].value.x != visible || status) { //switch action
         editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, true);
     }
     else { //slider action
@@ -3498,7 +3684,7 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     bool status = [object boolValue];
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->nodes[editorScene->selectedNodeId]->props.isPhysicsEnabled = status;
+        editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(HAS_PHYSICS, Vector4(status, 0, 0, 0), UNDEFINED);
         if(!status) {
             [self showLoadingActivity];
             [self syncSceneWithPhysicsWorld];
@@ -3509,7 +3695,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) setPhysicsType:(int)type;
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->setPropsOfObject(editorScene->nodes[editorScene->selectedNodeId], (PHYSICS_TYPE)type);
+        editorScene->setPropsOfObject(editorScene->nodes[editorScene->selectedNodeId], type);
         [self showLoadingActivity];
         [self syncSceneWithPhysicsWorld];
     }
@@ -3519,7 +3705,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) velocityChanged:(double)vel
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->nodes[editorScene->selectedNodeId]->props.forceMagnitude = vel;
+        editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(vel), HAS_PHYSICS);
         [self showLoadingActivity];
         [self syncSceneWithPhysicsWorld];
     }
@@ -3611,11 +3797,20 @@ void downloadFile(NSString* url, NSString* fileName)
     [self.popoverController dismissPopoverAnimated:YES];
 }
 
--(void)dismissView
+#pragma mark LoggedinViewController Delegate
+
+-(void)dismissView:(UIViewController*) VC
 {
-    [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
+    [VC dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
     
+}
+
+-(void)dismissView:(UIViewController*) VC WithProperty:(Property) physicsProp
+{
+    [VC dismissViewControllerAnimated:YES completion:nil];
+    [self.popoverController dismissPopoverAnimated:YES];
+    [self applyPhysicsProps:physicsProp];
 }
 
 - (void) showPreview:(NSString*) outputPath
@@ -3629,12 +3824,12 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if([Utility IsPadDevice]) {
         MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:@"MediaPreviewVC" bundle:nil mediaType:mediaType medPath:outputPath];
-        [self dismissView];
-        medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
-        [self presentViewControllerInCurrentView:medPreview];
+        [self dismissView:_loggedInVc];
+            medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
+            [self presentViewControllerInCurrentView:medPreview];
     } else {
         MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:[[AppHelper getAppHelper] iPhone6Plus] ? @"MediaPreviewVCPhone@2x" : @"MediaPreviewVCPhone" bundle:nil mediaType:mediaType medPath:outputPath];
-        [self dismissView];
+        [self dismissView:_loggedInVc];
         medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewControllerInCurrentView:medPreview];
     }
@@ -4161,7 +4356,7 @@ void downloadFile(NSString* url, NSString* fileName)
         if(assetId >= 20000 && assetId <= 30000){
             NSMutableArray* nodes = [[NSMutableArray alloc]init];
             for(int i = 0; i < editorScene->nodes.size(); i++){
-                if(i != editorScene->nodes.size()-1 && editorScene->nodes[i]->props.isVisible == true){
+                if(i != editorScene->nodes.size()-1 && editorScene->nodes[i]->options[VISIBILITY].value.x == true){
                     editorScene->nodes[i]->node->setVisible(false);
                     [nodes addObject:[NSNumber numberWithInt:i]];
                 }

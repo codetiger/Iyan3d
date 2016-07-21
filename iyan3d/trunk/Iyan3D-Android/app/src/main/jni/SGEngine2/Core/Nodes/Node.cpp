@@ -113,9 +113,9 @@ void Node::setTexture(Texture *texture, int textureIndex)
     if(textureIndex == NODE_TEXTURE_TYPE_COLORMAP)
         hasTransparency = texture->hasTransparency;
     else if(textureIndex == NODE_TEXTURE_TYPE_REFLECTIONMAP)
-        hasReflectionMap = (texture != nil);
+        hasReflectionMap = (texture != NULL);
     else if(textureIndex == NODE_TEXTURE_TYPE_NORMALMAP)
-        hasNormalMap = (texture != nil);
+        hasNormalMap = (texture != NULL);
 }
 
 void Node::setRotation(Quaternion r, bool updateBB)
