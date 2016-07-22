@@ -63,7 +63,6 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *fontTab;
 @property (weak, nonatomic) IBOutlet UISlider *bevelSlider;
 @property (weak, nonatomic) IBOutlet UITextField *inputText;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *fontStoreTab;
 @property (weak, nonatomic) id <TextSelectionDelegate> textSelectionDelegate;
 @property (nonatomic, strong) TextColorPicker *textColorProp;
 @property (nonatomic, strong) WEPopoverController *popoverController;
@@ -73,6 +72,8 @@
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
 - (IBAction)cancelBtnAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *noFontMessageLable;
+@property (weak, nonatomic) IBOutlet UILabel *addBoneLabel;
+@property (weak, nonatomic) IBOutlet UILabel *colorLabel;
 
 @end
 

@@ -18,11 +18,8 @@
 #define IMPORT_OBJFILE 5
 #define CHANGE_TEXTURE 7
 
-@interface ObjSidePanel ()
-
-@end
-
-@implementation ObjSidePanel{
+@implementation ObjSidePanel
+{
     NSArray *filesList;
 }
 
@@ -32,7 +29,14 @@
     if (self) {
         haveTexture = NO;
         color = Vector3(1.0,1.0,1.0);
-        basicShapes = [NSArray arrayWithObjects:@"Cone",@"Cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
+        basicShapes = [NSArray arrayWithObjects:
+                       NSLocalizedString(@"Cone", nil),
+                       NSLocalizedString(@"Cube", nil),
+                       NSLocalizedString(@"Cylinder", nil),
+                       NSLocalizedString(@"Plane", nil),
+                       NSLocalizedString(@"Sphere", nil),
+                       NSLocalizedString(@"Torus", nil),
+                       nil];
         indexPathOfOBJ = -1;
         viewType = type;
         textureFileName = @"-1";
@@ -40,7 +44,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"OBJSelection iOS";
     NSString* nibName = @"ObjCellView";
@@ -68,7 +73,7 @@
     
     _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
     if(viewType == CHANGE_TEXTURE) {
-        [_addBtn setTitle:@"APPLY" forState:UIControlStateNormal];
+        [_addBtn setTitle:NSLocalizedString(@"APPLY", nil) forState:UIControlStateNormal];
     }
     [self setToolTips];
     
@@ -104,18 +109,16 @@
 
 - (void) setToolTips
 {
-    self.view.accessibilityHint = (viewType == IMPORT_OBJFILE && self.addBtn.tag == OBJ) ? @"Select an OBJ to preview." : @"Choose a texture to apply for the selected model.";
-    self.colorWheelBtn.accessibilityHint = ([self.colorWheelBtn isHidden]) ? @"" : @"Choose vertex color for the selected OBJ.";
-    self.importBtn.accessibilityHint = ([self.importBtn isHidden]) ? @"" : @"Tap to import texture from Photo Library.";
-    self.addBtn.accessibilityHint = ([self.addBtn isHidden]) ? @"" : (_addBtn.tag == OBJ) ? @"Tap to choose texture / color for the selected object." : @"Import the model with the selected texture / color.";
+    self.view.accessibilityHint = (viewType == IMPORT_OBJFILE && self.addBtn.tag == OBJ) ? NSLocalizedString(@"select_obj_preview", nil) : NSLocalizedString(@"choose_texture", nil);
+    self.colorWheelBtn.accessibilityHint = ([self.colorWheelBtn isHidden]) ? @"" : NSLocalizedString(@"choose_color", nil);
+    self.importBtn.accessibilityHint = ([self.importBtn isHidden]) ? @"" : NSLocalizedString(@"tap_import_photos", nil);
+    self.addBtn.accessibilityHint = ([self.addBtn isHidden]) ? @"" : (_addBtn.tag == OBJ) ? NSLocalizedString(@"tap_to_choose_texture", nil) : NSLocalizedString(@"import_model_selected_texture", nil);
 }
 
-
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-
 }
-
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -124,6 +127,7 @@
     else
         return [filesList count]+1;
 }
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
@@ -134,7 +138,7 @@
 
     if(_addBtn.tag == OBJ)
     {
-        _ObjInfoLable.text = @"Add OBJ files in Document Directory.";
+        _ObjInfoLable.text = NSLocalizedString(@"add_obj_document_dir", nil);
         if(indexPath.row > basicShapes.count-1){
             NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
             if([extension isEqualToString:@"obj"]){
@@ -157,10 +161,10 @@
     }
     else
     {
-        _ObjInfoLable.text = @"Add Texture files in Document Directory.";
+        _ObjInfoLable.text = NSLocalizedString(@"add_texture_document_dir", nil);
         if(indexPath.row == 0){
             [cell.propsBtn setHidden:YES];
-            cell.assetNameLabel.text = @"Pick Color";
+            cell.assetNameLabel.text = NSLocalizedString(@"Pick Color", nil);
             cell.assetImageView.backgroundColor = [UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0];
             cell.assetImageView.image = NULL;
         }
@@ -221,7 +225,8 @@
         [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES];
 }
 
-- (IBAction)importBtnAction:(id)sender {
+- (IBAction)importBtnAction:(id)sender
+{
 
     self.ipc= [[UIImagePickerController alloc] init];
     self.ipc.delegate = self;
@@ -239,8 +244,8 @@
     [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }
 
-
-- (IBAction)addBtnAction:(id)sender {
+- (IBAction)addBtnAction:(id)sender
+{
     if(indexPathOfOBJ == -1)
         return;
     if(self.addBtn.tag == OBJ){
@@ -252,7 +257,7 @@
         NSString* docDirPath = [srcDirPath objectAtIndex:0];
         NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
         filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
-        [self.addBtn setTitle:(viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE" forState:UIControlStateNormal];
+        [self.addBtn setTitle:NSLocalizedString((viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE", nil) forState:UIControlStateNormal];
         [self.viewTitle setText:@"Import Texture"];
         self.addBtn.tag = Texture;
         [self.importFilesCollectionView reloadData];
@@ -273,7 +278,8 @@
 
 }
 
-- (IBAction)colorPickerAction:(id)sender {
+- (IBAction)colorPickerAction:(id)sender
+{
     _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
     _vertexColorProp.delegate = self;
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_vertexColorProp];
@@ -304,7 +310,8 @@
     }
 }
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
     [_popoverController dismissPopoverAnimated:YES];
     NSDate *now = [NSDate date];
     
@@ -323,7 +330,8 @@
     [self addBtnAction:nil];
 }
 
-- (IBAction)cancelBtnAction:(id)sender {
+- (IBAction)cancelBtnAction:(id)sender
+{
     if(viewType == IMPORT_OBJFILE)
         [self.objSlideDelegate removeTempNodeFromScene];
     else
@@ -332,9 +340,6 @@
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
     [self.objSlideDelegate deallocSubViews];
 }
-
-#pragma mark ObjCellView delegates
-
 
 - (void) deleteAssetAtIndex:(int) indexVal
 {

@@ -15,7 +15,8 @@
 
 @implementation LightProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor NodeType:(NODE_TYPE)nodeType Distance:(float)distance LightType:(int)lightType {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil LightColor:(Quaternion)currentLightColor NodeType:(NODE_TYPE)nodeType Distance:(float)distance LightType:(int)lightType
+{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         color = Vector4(currentLightColor.x, currentLightColor.y, currentLightColor.z, currentLightColor.w);
@@ -26,8 +27,8 @@
     return self;
 }
 
-
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"LightProperties iOS";
     [self initializeColorWheel];
@@ -48,10 +49,12 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated
+{
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     
 }
@@ -77,44 +80,52 @@
     [self lightPropsEndAction];
 }
 
-- (IBAction)shadowDarknessChange:(id)sender {
+- (IBAction)shadowDarknessChange:(id)sender
+{
     color = Vector4(color.x,color.y,color.z,_shadowDarkness.value);
     [self lightPropsChangeAction];
 }
 
-- (IBAction)shadowDarknessEnd:(id)sender {
+- (IBAction)shadowDarknessEnd:(id)sender
+{
     color = Vector4(color.x,color.y,color.z,_shadowDarkness.value);
     [self lightPropsEndAction];
 }
 
-- (IBAction)distanceChangeAction:(id)sender {
+- (IBAction)distanceChangeAction:(id)sender
+{
     [self lightPropsChangeAction];
 }
 
-- (IBAction)distanceEndAction:(id)sender {
+- (IBAction)distanceEndAction:(id)sender
+{
     [self lightPropsEndAction];
 }
 
-- (void)lightPropsChangeAction{
+- (void)lightPropsChangeAction
+{
     [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:NO];
 }
 
-- (void)lightPropsEndAction{
+- (void)lightPropsEndAction
+{
     [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:YES];
 }
 
-- (IBAction)deleteAction:(id)sender {
+- (IBAction)deleteAction:(id)sender
+{
     [self.delegate deleteObjectOrAnimation];
 }
 
-
-
-- (IBAction)setDirection:(id)sender {
+- (IBAction)setDirection:(id)sender
+{
     [self.delegate setLightDirection];
 }
 
-- (IBAction)lightTypeChanged:(id)sender {
+- (IBAction)lightTypeChanged:(id)sender
+{
     [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:NO];
     [_delegate changeLightProps:color Distance:_distance.value  LightType:(int)self.lightTypeSeg.selectedSegmentIndex isStoredProperty:YES];
 }
+
 @end

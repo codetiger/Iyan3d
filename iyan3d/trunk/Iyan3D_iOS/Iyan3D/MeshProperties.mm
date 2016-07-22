@@ -21,14 +21,10 @@
 #define BALLOON 6
 #define JELLY 7
 
-
-@interface MeshProperties ()
-
-@end
-
 @implementation MeshProperties
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil  WithProps:(SGNode*) sgNode MirrorState:(int)mirror AndSmoothTexture:(int)smoothTex {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil  WithProps:(SGNode*) sgNode MirrorState:(int)mirror AndSmoothTexture:(int)smoothTex
+{
     
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
@@ -48,7 +44,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"MeshProperties iOS";
     [_mirrorBtn setEnabled:(mirrorStatus == MIRROR_DISABLE) ? NO : YES];
@@ -75,7 +72,8 @@
     [self.velocityLoading setHidden:YES];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -116,68 +114,82 @@
     [self.delegate setUserInteractionStatus:YES];
 }
 
-- (IBAction)reflectionChangeEnded:(id)sender {
+- (IBAction)reflectionChangeEnded:(id)sender
+{
     reflectionValue=self.reflectionSlider.value;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
-- (IBAction)refractionChangeEnded:(id)sender {
+- (IBAction)refractionChangeEnded:(id)sender
+{
     refractionValue=self.refractionSlider.value;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
-- (IBAction)refractionValueChanged:(id)sender {
+- (IBAction)refractionValueChanged:(id)sender
+{
     refractionValue=self.refractionSlider.value;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
-- (IBAction)reflectionValueChanged:(id)sender {
+- (IBAction)reflectionValueChanged:(id)sender
+{
     reflectionValue=self.reflectionSlider.value;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
-- (IBAction)lightingSwitchChanged:(id)sender {
+- (IBAction)lightingSwitchChanged:(id)sender
+{
     isLightningValue=self.lightingSwitch.on;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
-- (IBAction)visibleValueChanged:(id)sender {
+- (IBAction)visibleValueChanged:(id)sender
+{
     isVisibleValue=self.visibleChanged.on;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
-- (IBAction)cloneButtonAction:(id)sender {
+- (IBAction)cloneButtonAction:(id)sender
+{
     [self.delegate cloneDelegateAction];
 }
 
-- (IBAction)deleteBtnAction:(id)sender {
+- (IBAction)deleteBtnAction:(id)sender
+{
     [self.delegate deleteDelegateAction];
 }
 
-- (IBAction)skinBtnAction:(id)sender {
+- (IBAction)skinBtnAction:(id)sender
+{
     [self.delegate changeSkinDelgate];
 }
 
-- (IBAction)faceNormalAction:(id)sender {
+- (IBAction)faceNormalAction:(id)sender
+{
     isFaceNormal = (_faceNormalBtn.isOn) ? true : false;
     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 }
 
-- (IBAction)reflectionHqBtnAction:(id)sender {
-    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"This Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+- (IBAction)reflectionHqBtnAction:(id)sender
+{
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"only_hq_options", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     [closeAlert show];   
 }
 
-- (IBAction)refractionHqBtnAction:(id)sender {
-    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"This Property is only for HighQuality Rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+- (IBAction)refractionHqBtnAction:(id)sender
+{
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"only_hq_options", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     [closeAlert show];
 }
 
-- (IBAction)mirrorBtnAction:(id)sender {
+- (IBAction)mirrorBtnAction:(id)sender
+{
     [self.delegate switchMirror];
 }
 
-- (IBAction)velocityValueChanged:(id)sender {
+- (IBAction)velocityValueChanged:(id)sender
+{
         //[self.delegate velocityChanged:self.velocitySlider.value];
 }
 
@@ -192,11 +204,13 @@
     [self.velocityLoading setHidden:YES];
 }
 
-- (IBAction)setDirection:(id)sender {
+- (IBAction)setDirection:(id)sender
+{
     [self.delegate setDirection];
 }
 
-- (IBAction)physicsSegmentChanged:(id)sender {
+- (IBAction)physicsSegmentChanged:(id)sender
+{
     
 //    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:NO];
 //    
@@ -210,11 +224,13 @@
 //    [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
-- (IBAction)velocityChangeEnded:(id)sender {
+- (IBAction)velocityChangeEnded:(id)sender
+{
 //     [self.delegate meshPropertyChanged:refractionValue Reflection:reflectionValue Lighting:isLightningValue Visible:isVisibleValue storeInAction:YES];
 }
 
-- (IBAction)textureSmoothSwitchAction:(id)sender {
+- (IBAction)textureSmoothSwitchAction:(id)sender
+{
     [self.delegate setTextureSmoothStatus:self.textureSwitch.isOn];
     smoothTexture = self.textureSwitch.isOn;
 }

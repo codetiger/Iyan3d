@@ -18,7 +18,8 @@
 
 @implementation NewsFeedVC
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     //[self.feedTableView registerClass:[NewsFeedCell class] forCellReuseIdentifier:@"NewsFeedCell"];
     downloadQueue = [[NSOperationQueue alloc] init];
@@ -30,10 +31,13 @@
     [self.feedTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:nibName];
     cache = [CacheSystem cacheSystem];
     [self setTableDataArray];
-    // Do any additional setup after loading the view.
+    
+    [self.newsFeedTitleLabel setText:NSLocalizedString(@"News Feed", nil)];
+    [self.clearAllBtn setTitle:NSLocalizedString(@"Clear All", nil) forState:UIControlStateNormal];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -82,7 +86,7 @@
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Could not load content. Check your internet connection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:nil];
                                          [userNameAlert show];
                                      }];
     [operation start];
@@ -120,15 +124,6 @@
     [cell setImageWithUrl:f.thumbImage InQueue:downloadQueue];
     return cell;
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -144,8 +139,10 @@
     feedItems = nil;
 }
 
-- (IBAction)clearAllAction:(id)sender {
+- (IBAction)clearAllAction:(id)sender
+{
     [cache clearAllFeeds];
     [self setTableDataArray];
 }
+
 @end

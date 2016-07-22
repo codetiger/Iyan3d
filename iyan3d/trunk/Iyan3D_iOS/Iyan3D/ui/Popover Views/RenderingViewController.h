@@ -73,7 +73,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
-@property (weak, nonatomic) IBOutlet UIButton *youtubeButton;
 @property (weak, nonatomic) IBOutlet UIButton *rateButtonImage;
 @property (weak, nonatomic) IBOutlet UIButton *rateButtonText;
 @property (weak, nonatomic) IBOutlet UIButton *startButtonText;
@@ -120,7 +119,6 @@
 - (IBAction)cancelButtonAction:(id)sender;
 - (IBAction)rateButtonAction:(id)sender;
 - (IBAction)exportButtonAction:(id)sender;
-- (IBAction)youtubeButtonAction:(id)sender;
 - (IBAction)startButtonAction:(id)sender;
 - (void) shaderPhotoAction:(int)credits;
 

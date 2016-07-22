@@ -28,5 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *clearAllBtn;
 @property (weak, nonatomic) id <NewsFeedDelegate> delegate;
 - (IBAction)clearAllAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *newsFeedTitleLabel;
 
 @end

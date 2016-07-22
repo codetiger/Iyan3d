@@ -12,11 +12,6 @@
 #import "AFHTTPRequestOperation.h"
 
 
-
-@interface RenPro ()
-
-@end
-
 @implementation RenPro{
     
     NSMutableArray *nameArray,*frameArray,*progressArray,*renArray;
@@ -24,7 +19,8 @@
     RenderItem *renderItem;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     
     [super viewDidLoad];
     
@@ -49,7 +45,6 @@
     
     downloadQueue = [[NSOperationQueue alloc] init];
 }
-
 
 - (void) updateUIForRenderTasks
 {
@@ -103,25 +98,15 @@
     [operation start];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma - mark UITableView Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-
 {
     
     return [nameArray count];
@@ -129,7 +114,6 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-
 {
     
     return 65;
@@ -224,7 +208,6 @@
     
 }
 
-    
 - (void) donwloadCompleted:(id)object
 {
     DownloadTask* t = (DownloadTask*)object;

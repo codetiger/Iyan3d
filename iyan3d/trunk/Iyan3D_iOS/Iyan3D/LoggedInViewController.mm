@@ -31,10 +31,6 @@
 #define DEFAULT_OR_IMAGE 0
 #define VIDEO_FILE 1
 
-@interface LoggedInViewController ()
-
-@end
-
 @implementation LoggedInViewController
 
 #define FIVE_THOUSAND_CREDITS @"basicrecharge"
@@ -55,7 +51,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"CreditsView iOS";
     [self.creditsLoading setHidden:NO];
@@ -98,13 +95,13 @@
         }
     }
 
-    
-//    [self.renderStatus registerClass:[RenderTableViewCell class] forCellReuseIdentifier:@"RenderTableViewCell"];
-    renderSectionTitles = [NSArray arrayWithObjects:@"In Progress", @"Completed", nil];
+    renderSectionTitles = [NSArray arrayWithObjects:
+                           NSLocalizedString(@"In Progress", nil),
+                           NSLocalizedString(@"Completed", nil),
+                           nil];
     self.creditsView.layer.cornerRadius = 10;
     self.creditsView.layer.masksToBounds = YES;
-    
-    // Do any additional setup after loading the view from its nib.
+   
 }
 
 - (void) requestCredits
@@ -172,20 +169,10 @@
     [self.creditsLoading stopAnimating];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -198,15 +185,16 @@
     
     return count;
 }
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString* title = (section == IN_PROGRESS && [progressingTasks count] > 0) ? @"In Progress" :  @"Completed";
+    title = NSLocalizedString(title, nil);
     return title;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     if((section == IN_PROGRESS && progressingTasks != nil && [progressingTasks count] > 0))
         return [progressingTasks count];
     else
@@ -234,8 +222,8 @@
         return nil;
     
     cell.renderlabel.text = rItem.taskName;
-    NSString* progressStr = (rItem.taskProgress > 0) ? [NSString stringWithFormat:@"%d%%",rItem.taskProgress] : @"In Queue";
-    progressStr = (indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) ? progressStr : @"Download";
+    NSString* progressStr = (rItem.taskProgress > 0) ? [NSString stringWithFormat:@"%d%%", rItem.taskProgress] : NSLocalizedString(@"In Queue", nil);
+    progressStr = (indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) ? progressStr : NSLocalizedString(@"Download", nil);
     cell.renderProgressLabel.text = progressStr;
     cell.dateLabel.text = rItem.dateAdded;
     [cell.renderProgressLabel setTag:rItem.taskId];
@@ -243,13 +231,14 @@
     if(downloadCompletedTaskIds == rItem.taskId){
         [cell.downloadProgress stopAnimating];
         [cell.downloadProgress setHidden:YES];
-        cell.renderProgressLabel.text = @"Download";
+        cell.renderProgressLabel.text = NSLocalizedString(@"Download", nil);
     }
     
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if(indexPath.section == IN_PROGRESS && [progressingTasks count] > 0) return;
     RenderTableViewCell *cell = [self.renderStatus cellForRowAtIndexPath:indexPath];
     [cell.downloadProgress setHidden:NO];
@@ -291,11 +280,6 @@
         if(action == GET_FILE_TYPE)
             [self downloadAndSaveFile:taskId WithAction:DOWNLOAD_FILE AndType:[[operation responseString] intValue]];
         else {
-////            NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-////            NSString* documentsDirectory = [docPaths objectAtIndex:0];
-////
-////            NSString *extension = (type == VIDEO_FILE) ? @"mp4" : @"png";
-//            NSString* outputFilePath = [NSString stringWithFormat:@"%@/%d.%@", documentsDirectory, taskId, extension];
             outputFile = outputFilePath;
             NSLog(@" \n Output File %@ ", outputFile);
             NSData *fileData = [operation responseData];
@@ -315,7 +299,7 @@
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Cannot download file. Check your net connection." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                                          [userNameAlert show];
                                          downloadCompletedTaskIds = taskId;
                                          [_renderStatus setUserInteractionEnabled:YES];
@@ -349,14 +333,13 @@
 
 - (void) showCompletionAlert:(id) object
 {
-    
     NSString * message = @"";
     if([object boolValue])
-        message = @"Image/Video successfully saved to Photos.";
+        message = NSLocalizedString(@"successful_saved_phot_gallery", nil);
     else
-        message = @"There is a problem downloading the image/video. Please try again later.";
+        message = NSLocalizedString(@"failed_saved_phot_gallery", nil);
     
-    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Information" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:message delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     alert.delegate = self;
     
     [alert show];
@@ -376,7 +359,7 @@
 
 - (IBAction)signOutBtn:(id)sender
 {
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
         
         int signinType = [[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue];
         if(signinType == GOOGLE_SIGNIN)
@@ -393,11 +376,13 @@
     }
 }
 
-- (IBAction)manageAccountAction:(id)sender {
+- (IBAction)manageAccountAction:(id)sender
+{
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/cms"]];
 }
 
-- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error {
+- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error
+{
     // Perform any operations when the user disconnects from app here.
     if(error){
         NSLog(@"Error");
@@ -423,7 +408,8 @@
     //[[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"creditsupdate"];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated
+{
     [super viewDidDisappear:(BOOL)animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];
     [renderData removeAllObjects];
@@ -494,14 +480,17 @@
 {
     
 }
+
 -(void)addRestoreId:(NSString*)productIdentifier
 {
     
 }
+
 -(void)statusForRestorePurchase:(NSNumber *)object
 {
     
 }
+
 -(void)setAnimationData:(NSArray*)allAnimations
 {
     

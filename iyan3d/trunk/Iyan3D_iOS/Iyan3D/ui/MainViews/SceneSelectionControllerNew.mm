@@ -42,7 +42,8 @@
 
 @implementation SceneSelectionControllerNew
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil IsFirstTimeOpen:(BOOL)value {
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil IsFirstTimeOpen:(BOOL)value
+{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         cache = [CacheSystem cacheSystem];
@@ -55,8 +56,12 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
+    self.sceneTitleLabel.text = NSLocalizedString(@"Scenes", nil);
+    
     self.screenName = @"SceneSelectionView iOS";
     [self.feedCount setHidden:YES];
     
@@ -73,18 +78,13 @@
     [self.sceneView setHidden:YES];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && isFirstTime) {
-        UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You have already upgraded to Premium. Please 'Signin' and use 'Restore Purchase' in 'Settings' menu to verify your purchase." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Already_upgraded_Premium_Please_Restore_Purchase", nil) delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [infoAlert setTag:RESTORE_PURCHASH_ALERT];
         [infoAlert show];
     }
     
     isFirstTimeUser = false;
     [self loadNewsFeedData];
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];   
-     */
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -230,7 +230,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
@@ -251,7 +252,6 @@
     if([zip UnzipOpenFile:filePath]) {
         if([zip UnzipFileTo:unzipPath overWrite:YES]) {
             [fm removeItemAtPath:filePath error:nil];
-            NSLog(@" Unzipped files to directory %@ ", unzipPath);
             NSString *sceneFile = [cache insertImportedScene];
     
             NSArray * filesArr = [fm contentsOfDirectoryAtPath:unzipPath error:nil];
@@ -321,36 +321,39 @@
 
 #pragma Button Actions
 
-- (IBAction)addSceneButtonAction:(id)sender {
+- (IBAction)addSceneButtonAction:(id)sender
+{
     [Answers logCustomEventWithName:@"CreateNewSceneInTopLeft" customAttributes:@{}];
     [self addNewScene];
 }
 
-- (IBAction)scenePreviewClosebtn:(id)sender {
+- (IBAction)scenePreviewClosebtn:(id)sender
+{
     //[self popZoomOut];
 }
 
-- (IBAction)feedBackButtonAction:(id)sender {
+- (IBAction)feedBackButtonAction:(id)sender
+{
     
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         picker.mailComposeDelegate = self;
         NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)", [self deviceName],iOSVersion]];
+        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@, iOS Version: %.01f)", [self deviceName], iOSVersion]];
         [picker setToRecipients:usersTo];
         [self presentModalViewController:picker animated:YES];
-    }else {
+    } else {
         [self.view endEditing:YES];
-        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Email account not configured." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"No_Email_account_configured", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [alert show];
         return;
     }
 }
 
-
 #pragma CollectionView Delegates
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     return [scenesArray count]+1;
 }
 
@@ -418,7 +421,7 @@
     SceneItem *previousScene;
     if([scenesArray count] != 0)
         previousScene = scenesArray[[scenesArray count]-1];
-    scene.name = [NSString stringWithFormat:@"MyScene %d", previousScene.sceneId+1];
+    scene.name = [NSString stringWithFormat:NSLocalizedString(@"My Scene %d", nil), previousScene.sceneId+1];
     scene.createdDate = [dateFormatter stringFromDate:[NSDate date]];
     
     if([cache AddScene:scene]) {
@@ -429,8 +432,8 @@
     }
 }
 
--(void)openSCene: (int)selectedScene {
-    
+-(void)openSCene: (int)selectedScene
+{
     if(_fromLoadingView) {
         NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
         if(_isAppFirstTime)
@@ -439,18 +442,18 @@
     }
     
     SceneItem *scene = scenesArray[selectedScene];
-    NSLog(@" Scene File Name %@ ", scene.sceneFile);
     [[AppHelper getAppHelper] resetAppHelper];
-    if([Utility IsPadDevice]){
+    
+    if([Utility IsPadDevice]) {
         EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil SceneItem:scene selectedindex:selectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
-    }
-    else{
+    } else {
         EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:selectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
     }
+    
     [self removeFromParentViewController];
 }
 
@@ -465,33 +468,27 @@
     self.popUpVc.delegate=self;
     CGRect rect = _infoBtn.frame;
     rect = [self.view convertRect:rect fromView:_infoBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect
-                                            inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionAny
-                                          animated:YES];
+    [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
-
-- (void) infoBtnDelegateAction:(int)indexValue{
-    
-    if(indexValue == TUTORIAL){
+- (void) infoBtnDelegateAction:(int)indexValue
+{
+    if(indexValue == TUTORIAL) {
         [self.popoverController dismissPopoverAnimated:YES];
         [self presentOnBoard];
-        
-    }
-    else if(indexValue==SETTINGS){
+
+    } else if(indexValue==SETTINGS) {
         [self.popoverController dismissPopoverAnimated:YES];
         settingsVc = [[SettingsViewController alloc]initWithNibName:([Utility IsPadDevice]) ? @"SettingsViewController" :
-                      ([self iPhone6Plus]) ? @"SettingsViewControllerPhone2x" :
-                      @"SettingsViewControllerPhone" bundle:nil];
+                      ([self iPhone6Plus]) ? @"SettingsViewControllerPhone2x" : @"SettingsViewControllerPhone" bundle:nil];
         [settingsVc.view setClipsToBounds:YES];
         settingsVc.delegate=self;
         if([Utility IsPadDevice] || screenHeight < 400)
             settingsVc.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:settingsVc animated:YES completion:nil];
         settingsVc.view.superview.backgroundColor = [UIColor clearColor];
-    }
-    else if(indexValue==CONTACT_US){
+
+    } else if(indexValue==CONTACT_US) {
         [self.popoverController dismissPopoverAnimated:YES];
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
@@ -500,16 +497,18 @@
             [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)", [self deviceName],iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
-        }else {
+        } else {
             [self.view endEditing:YES];
-            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Email account not configured." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"No_Email_account_configured", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [alert show];
             return;
         }
+        
     } else if (indexValue == RATE_US) {
         [self.popoverController dismissPopoverAnimated:YES];
         NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
+        
     } else if (indexValue == FOLLOW_US) {
         
         [self.popoverController dismissPopoverAnimated:YES];
@@ -530,12 +529,7 @@
         [_followUsVC.view setClipsToBounds:YES];
         self.popUpVc.delegate=self;
         self.popoverController.delegate =self;
-        [self.popoverController presentPopoverFromRect:_infoBtn.frame
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionUp
-                                              animated:YES];
-        
-        
+        [self.popoverController presentPopoverFromRect:_infoBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     }
 }
 
@@ -577,7 +571,6 @@
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         case MFMailComposeResultFailed:
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         default:
@@ -591,24 +584,26 @@
     struct utsname systemInfo;
     uname(&systemInfo);
     
-    return [NSString stringWithCString:systemInfo.machine
-                              encoding:NSUTF8StringEncoding];
+    return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 
--(void)updateSceneDB {
+-(void)updateSceneDB
+{
     NSCharacterSet * set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
     NSString* name = [_sceneTitle.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
     if([name length] == 0) {
         [self.view endEditing:YES];
-        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Scene name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Scene_name_empty", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [errorAlert show];
+        
     } else {
         [self.view endEditing:YES];
-        if([name rangeOfCharacterFromSet:set].location != NSNotFound){
-            UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Scene Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        if([name rangeOfCharacterFromSet:set].location != NSNotFound) {
+            UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Scene_name_special_character", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [errorAlert show];
-        }
-        else{
+            
+        } else {
             if(currentSelectedScene < [scenesArray count]) {
                 SceneItem* scene = scenesArray[currentSelectedScene];
                 scene.name = _sceneTitle.text;
@@ -623,16 +618,16 @@
     }
 }
 
-- (IBAction)titleChangeAction:(id)sender {
+- (IBAction)titleChangeAction:(id)sender
+{
     [self updateSceneDB];
 }
 
 #pragma Scene Preview Delegates
 
-- (void) showSceneEnteredView:(NSIndexPath*)sceneIndex{
-    
+- (void) showSceneEnteredView:(NSIndexPath*)sceneIndex
+{
     [self.sceneView setHidden:NO];
-    //[self popUpZoomIn];
     currentSelectedScene = sceneIndex.row;
     if(sceneIndex.row < [scenesArray count]) {
         SceneItem* scenes = scenesArray[sceneIndex.row];
@@ -653,19 +648,22 @@
 
 #pragma View Animation Delegate
 
-- (IBAction)toolTipAction:(id)sender {
+- (IBAction)toolTipAction:(id)sender
+{
     [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
 }
 
-- (IBAction)openSceneAction:(id)sender {
+- (IBAction)openSceneAction:(id)sender
+{
     SceneItem *scene = scenesArray[currentSelectedScene];
     [[AppHelper getAppHelper] resetAppHelper];
-    if([Utility IsPadDevice]){
+
+    if([Utility IsPadDevice]) {
         EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
-    }
-    else{
+
+    } else {
         EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:animationEditor];
@@ -674,11 +672,10 @@
     [self removeFromParentViewController];
 }
 
-- (IBAction)loginBtnAction:(id)sender {
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
-    {
-        if ([Utility IsPadDevice])
-        {
+- (IBAction)loginBtnAction:(id)sender
+{
+    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
+        if ([Utility IsPadDevice]) {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
             self.popoverController.popoverContentSize = CGSizeMake(305, 495);
@@ -692,9 +689,7 @@
                                                     inView:self.view
                                   permittedArrowDirections:UIPopoverArrowDirectionUp
                                                   animated:YES];
-        }
-        else
-        {
+        } else {
             _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
             self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
@@ -710,11 +705,8 @@
                                                   animated:YES];
         }   
         
-    }
-    else
-    {
-        if ([Utility IsPadDevice])
-        {
+    } else {
+        if ([Utility IsPadDevice]) {
             loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
             self.popoverController.popoverContentSize = CGSizeMake(302 , 240.0);
@@ -724,14 +716,9 @@
             self.popUpVc.delegate=self;
             loginVc.delegare=self;
             self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
-                                                  animated:YES];
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
             
-        }
-        else
-        {
+        } else {
             loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
             self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
             self.popoverController.popoverContentSize = CGSizeMake(228.00, 208.0);
@@ -741,10 +728,7 @@
             self.popUpVc.delegate=self;
             loginVc.delegare=self;
             self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                  animated:YES];
+            [self.popoverController presentPopoverFromRect:_loginBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         }
     }
 
@@ -770,10 +754,7 @@
     [newsVC.view setClipsToBounds:YES];
     self.popUpVc.delegate=self;
     self.popoverController.delegate =self;
-    [self.popoverController presentPopoverFromRect:_feedBtn.frame
-                                            inView:self.view
-                          permittedArrowDirections:UIPopoverArrowDirectionUp
-                                          animated:YES];
+    [self.popoverController presentPopoverFromRect:_feedBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
 }
 
 - (void) showOrHideProgress:(BOOL) value
@@ -783,8 +764,8 @@
 
 #pragma mark ScenePropertiesDelegate
 
--(void)duplicateScene:(int) indexValue{
-    
+-(void)duplicateScene:(int) indexValue
+{
     if([scenesArray count] <= 0)
         return;
     
@@ -794,12 +775,12 @@
     SceneItem *previousScene;
     if([scenesArray count] != 0)
         previousScene = scenesArray[[scenesArray count]-1];
-    scene.name = [NSString stringWithFormat:@"MyScene %d", previousScene.sceneId+1];
+    scene.name = [NSString stringWithFormat:NSLocalizedString(@"My Scene %d", nil), previousScene.sceneId+1];
     scene.createdDate = [dateFormatter stringFromDate:[NSDate date]];
     
     if(![cache AddScene:scene]) {
         [self.view endEditing:YES];
-        UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Duplicate Scene Name" message:@"Another Scene with the same name already exists. Please provide a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Duplicate_Scene_Name", nil) message:NSLocalizedString(@"Duplicate_Scene_Name_message", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [errorAlert show];
     } else {
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -818,8 +799,6 @@
         [self.scenesCollectionView reloadData];
         
     }
-    
-
 }
 
 -(void)deleteScene:(int)indexValue
@@ -852,7 +831,8 @@
 
 -(void)renameScene:(int)indexValue
 {
-    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Scene" message:@"Please enter a new Scene name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    UIAlertView *renameScene = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Rename Scene", nil) message:NSLocalizedString(@"Duplicate_Scene_Name_message", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
+
     sceneToBeRenamed=indexValue;
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[renameScene textFieldAtIndex:0] setPlaceholder:@"Scene Name"];
@@ -880,7 +860,7 @@
         NSArray *objectsToShare;
         
         NSURL *sceneURL = [NSURL fileURLWithPath:i3dPath];
-        objectsToShare = [NSArray arrayWithObjects:@"A Scene created using Iyan 3D in iOS.", sceneURL, nil];
+        objectsToShare = [NSArray arrayWithObjects:NSLocalizedString(@"A Scene created using Iyan 3D in iOS.", nil), sceneURL, nil];
         
         self.docController = [UIDocumentInteractionController interactionControllerWithURL:sceneURL];
         self.docController.UTI = @"com.smackall.i3d";
@@ -890,26 +870,6 @@
                 [self.docController presentOptionsMenuFromRect:sourceRect inView:self.view animated:YES];
             }
     }
-
-    /*
-    
-    if (![[DBSession sharedSession] isLinked]) {
-        int indexValue = [value intValue];
-        selectedSceneIndex = indexValue;
-        isFirstTimeUser = true;
-        [[DBSession sharedSession] linkFromController:self];
-    } else {
-        if(isFirstTimeUser)
-        {
-            isFirstTimeUser = false;
-            [self uploadSceneToDropBox];
-        } else {
-         UIAlertView *logoutAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"You are already logged in with DropBox. Do You wish to continue with the same account or logout?" delegate:self cancelButtonTitle:@"Logout" otherButtonTitles:@"Continue", nil];
-        [logoutAlert setTag:LOGOUT_ALERT];
-        [logoutAlert show];
-        }
-    }
-     */
 }
 
 -(bool) Isi3dExists:(int)indexValue
@@ -920,8 +880,8 @@
     NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
     if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath])
         return true;
-    return false;
 
+    return false;
 }
 
 - (void)restClient:(DBRestClient*)client uploadProgress:(CGFloat)progress
@@ -932,18 +892,16 @@
 - (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath from:(NSString*)srcPath
           metadata:(DBMetadata*)metadata
 {
-    NSLog(@" \n Dest PAth %@ ", destPath);
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
     [self.view setUserInteractionEnabled:YES];
-    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"File successfully saved to DropBox. You can find it in your DropBox account 'Apps/Iyan3D'." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Success", nil) message:NSLocalizedString(@"file_successfully_saved_dropbox", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil] show];
 }
 
 - (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error
 {
-    NSLog(@" Error Uploading %@ ", error.localizedDescription);
     [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
     [self.view setUserInteractionEnabled:YES];
-    [[[UIAlertView alloc] initWithTitle:@"Failure" message:@"Error uploading file. Please check your internet connection." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"Error_uploading_file", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
 }
 
 - (void)restClient:(DBRestClient*)client loadAccountInfoFailedWithError:(NSError*)error
@@ -964,22 +922,20 @@
         NSCharacterSet* set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
         
         if (buttonIndex == CANCEL) {
-        }
-        else if (buttonIndex == OK) {
+        } else if (buttonIndex == OK) {
             NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if ([name length] == 0) {
                 [self.view endEditing:YES];
-                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Scene name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Scene_name_empty", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+
                 [errorAlert show];
-            }
-            else
-            {
+                
+            } else {
                 if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Scene Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Scene_name_special_character", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                     [errorAlert show];
-                }
-                else
-                {
+                    
+                } else {
                     SceneItem* scene = scenesArray[sceneToBeRenamed];
                     scene.name = name;
                     scene.createdDate = scene.createdDate;
@@ -1029,38 +985,52 @@
 
 #pragma Settings Delegates
 
--(void)frameCountDisplayMode{
+-(void)frameCountDisplayMode
+{
     
 }
--(void)cameraPreviewSize{
+
+-(void)cameraPreviewSize
+{
    
 }
--(void)cameraPreviewPosition{
+
+-(void)cameraPreviewPosition
+{
 
 }
--(void)toolbarPosition:(int)selctedIndex{
+
+-(void)toolbarPosition:(int)selctedIndex
+{
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];
 
 }
--(void)multiSelectUpdate:(BOOL)value{
+
+-(void)multiSelectUpdate:(BOOL)value
+{
     [[AppHelper getAppHelper] saveBoolUserDefaults:value withKey:@"multiSelectOption"];
 }
 
--(BOOL)iPhone6Plus{
+-(BOOL)iPhone6Plus
+{
     if (([UIScreen mainScreen].scale > 2.0)) return YES;
     return NO;
 }
 
 #pragma LogIn Delegates
--(void)googleSigninDelegate{
+-(void)googleSigninDelegate
+{
     isLoggedin= true;
 }
--(void)dismisspopover{
+
+-(void)dismisspopover
+{
     [self.popoverController dismissPopoverAnimated:YES];
 
 }
 
--(void)dismissView{
+-(void)dismissView
+{
     [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
 
@@ -1119,7 +1089,8 @@
 {
     if (connectionError != SLOW_INTERNET) {
         [self.view endEditing:YES];
-        UIAlertView* internetError = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *internetError = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+
         [internetError performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     }
 }

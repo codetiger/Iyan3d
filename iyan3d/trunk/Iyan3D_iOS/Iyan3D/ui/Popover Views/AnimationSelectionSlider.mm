@@ -47,7 +47,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"AnimationSelection iOS";
     if([Utility IsPadDevice]){
@@ -89,7 +90,8 @@
     return NO;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -238,7 +240,7 @@
     
     AnimationItem *a = animationsItems[indexVal];
 
-    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Animation" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Rename Animation", nil) message:NSLocalizedString(@"Please enter a name", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[renameScene textFieldAtIndex:0] setPlaceholder:a.assetName];
     [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
@@ -246,9 +248,6 @@
     [renameScene setAccessibilityIdentifier:[NSString stringWithFormat:@"%d", indexVal]];
     [renameScene show];
     [[renameScene textFieldAtIndex:0] becomeFirstResponder];
-
-
-    
 }
 
 #pragma mark Button actions
@@ -256,18 +255,18 @@
 - (IBAction)categoryBtnFuction:(id)sender
 {
     UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:@"Category"
+                                 alertControllerWithTitle:NSLocalizedString(@"Category", nil)
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction* trending = [UIAlertAction
-                                actionWithTitle:@"Trending"
+                                actionWithTitle:NSLocalizedString(@"Trending", nil)
                                 style:UIAlertActionStyleDefault
                                 handler:^(UIAlertAction * action)
                                 {
                                     if(animationCategoryTab == TRENDING)
                                         return;
                                     [_delegate showOrHideProgress:1];
-                                    [self.categoryBtn setTitle: @"Trending" forState:UIControlStateNormal];
+                                    [self.categoryBtn setTitle:NSLocalizedString(@"Trending", nil) forState:UIControlStateNormal];
                                     animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
                                     [self.delegate myAnimation:YES];
                                     [self.animationCollectionView reloadData];
@@ -277,7 +276,7 @@
                                     [_delegate showOrHideProgress:0];
                                 }];
     UIAlertAction* featured = [UIAlertAction
-                                actionWithTitle:@"Featured"
+                                actionWithTitle:NSLocalizedString(@"Featured", nil)
                                 style:UIAlertActionStyleDefault
                                 handler:^(UIAlertAction * action)
                                 {
@@ -285,7 +284,7 @@
                                         return;
                                     [_delegate showOrHideProgress:1];
                                     animationsItems = [cache GetAnimationList:animationType fromTable:6 Search:@""];
-                                    [self.categoryBtn setTitle:@"Featured" forState:UIControlStateNormal];
+                                    [self.categoryBtn setTitle:NSLocalizedString(@"Featured", nil) forState:UIControlStateNormal];
                                     [self.animationCollectionView reloadData];
                                     [self.delegate myAnimation:YES];
                                     animationCategoryTab = FEATURED;
@@ -296,16 +295,15 @@
                                 }];
     
     UIAlertAction* toprated = [UIAlertAction
-                                  actionWithTitle:@"Top Rated"
+                                  actionWithTitle:NSLocalizedString(@"Top Rated", nil)
                                   style:UIAlertActionStyleDefault
                                   handler:^(UIAlertAction * action)
                                   {
                                       if(animationCategoryTab == TOP_RATED)
                                           return;
                                       [_delegate showOrHideProgress:1];
-                                      [self.categoryBtn setTitle: @"Top Rated" forState:UIControlStateNormal];
                                       animationsItems = [cache GetAnimationList:animationType fromTable:5 Search:@""];
-                                      [self.categoryBtn setTitle:@"Top Rated" forState:UIControlStateNormal];
+                                      [self.categoryBtn setTitle:NSLocalizedString(@"Top Rated", nil) forState:UIControlStateNormal];
                                       [self.animationCollectionView reloadData];
                                       [self.delegate myAnimation:YES];
                                       animationCategoryTab = TOP_RATED;
@@ -315,16 +313,15 @@
                                       
                                   }];
     UIAlertAction* recent = [UIAlertAction
-                               actionWithTitle:@"Recent"
+                               actionWithTitle:NSLocalizedString(@"Recent", nil)
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction * action)
                                {
                                    if(animationCategoryTab == RECENT)
                                        return;
                                    [_delegate showOrHideProgress:1];
-                                   [self.categoryBtn setTitle: @"Recent" forState:UIControlStateNormal];
                                    animationsItems = [cache GetAnimationList:animationType fromTable:8 Search:@""];
-                                   [self.categoryBtn setTitle:@"Recent" forState:UIControlStateNormal];
+                                   [self.categoryBtn setTitle:NSLocalizedString(@"Recent", nil) forState:UIControlStateNormal];
                                    [self.animationCollectionView reloadData];
                                    [self.delegate myAnimation:YES];
                                    animationCategoryTab = RECENT;
@@ -335,7 +332,7 @@
                                }];
     
     UIAlertAction* myanimation = [UIAlertAction
-                                  actionWithTitle:@"My Animations"
+                                  actionWithTitle:NSLocalizedString(@"My Animations", nil)
                                   style:UIAlertActionStyleDefault
                                   handler:^(UIAlertAction * action)
                                   {
@@ -379,7 +376,7 @@
 - (void) openMyAnimations
 {
     [_delegate showOrHideProgress:1];
-    [self.categoryBtn setTitle: @"My Animations" forState:UIControlStateNormal];
+    [self.categoryBtn setTitle:NSLocalizedString(@"My Animations", nil) forState:UIControlStateNormal];
     animationsItems = [cache GetAnimationList:animationType fromTable:7 Search:@""];
     [self.delegate myAnimation:YES];
     [self.animationCollectionView reloadData];
@@ -388,7 +385,8 @@
     [_delegate showOrHideProgress:0];
 }
 
-- (IBAction)addBtnFunction:(id)sender {
+- (IBAction)addBtnFunction:(id)sender
+{
     [self applyAnimationKeyToOriginalNode];
     [self.delegate myAnimation:YES];
     [self.delegate showOrHideLeftView:NO withView:nil];
@@ -399,7 +397,8 @@
     [self deallocView];
 }
 
-- (IBAction)cancelBtnFunction:(id)sender {
+- (IBAction)cancelBtnFunction:(id)sender
+{
     [self.delegate showOrHideProgress:0];
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
@@ -444,7 +443,7 @@
         }
     }
     else{
-        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"sign_in_to_continue", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
         [signinAlert show];
         [signinAlert setTag:SIGNIN_ALERT];
     }
@@ -525,7 +524,6 @@
     }
 }
 
-
 - (void)storeDataToLocalDB
 {
     AnimationItem* animItem = [[AnimationItem alloc] init];
@@ -575,13 +573,11 @@
     }
     else {
         [self.view endEditing:YES];
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
         return false;
     }
 }
-
-
 
 - (void) cancelOperations:(NSOperationQueue*) queue
 {
@@ -591,7 +587,6 @@
         [task cancel];
     }
 }
-
 
 # pragma mark AppHelper delegates
 
@@ -619,6 +614,7 @@
 {
     
 }
+
 -(void)transactionCancelled
 {
     
@@ -662,7 +658,7 @@
                 NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if ([name length] == 0) {
                     [self.view endEditing:YES];
-                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"username_isempty", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                     [errorAlert show];
                     [self.publishBtn setHidden:NO];
                     
@@ -670,7 +666,7 @@
                 else {
                     [self.view endEditing:YES];
                     if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"username_has_special_char", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                         [errorAlert show];
                         [self.publishBtn setHidden:NO];
                     }
@@ -689,13 +685,13 @@
                 NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if ([name length] == 0) {
                     [self.view endEditing:YES];
-                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Animation name cannot be empty.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                     [errorAlert show];
                 }
                 else
                 {
                     if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Animation_Name_special", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                         [errorAlert show];
                     }
                     else
@@ -724,7 +720,8 @@
 
 }
 
-- (void)publishAssetWithUserName:(NSString*)userName{
+- (void)publishAssetWithUserName:(NSString*)userName
+{
     
     if ([asset.userId isEqualToString:@""])
         asset.userId = userid;
@@ -789,10 +786,10 @@
         AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         __block BOOL complete = NO;
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
-            //ret = [self handle:data];
-            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Animation Published Successfully." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+
+            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Success", nil) message:NSLocalizedString(@"success_animation_publish", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
             [userNameAlert show];
-            //[_publishBtn setHidden:YES];
+            
             complete = YES;
             asset.published = [[operation responseString] intValue];
             NSLog(@"Publishid : %d",asset.published);
@@ -811,7 +808,7 @@
             NSLog(@"Failure: %@", error);
             [self.view setUserInteractionEnabled:YES];
             [self.view endEditing:YES];
-            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to publish, Please check your network settings." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [userNameAlert show];
             complete = YES;
             [_publishBtn setHidden:NO];
@@ -821,7 +818,6 @@
     }
 }
     
-
 - (void)hideOrShowPublishBtn:(NSNumber*)value
 {
     [_publishBtn setHidden:[value boolValue]];
@@ -829,7 +825,8 @@
 
 #pragma mark OpenGl related Functions
 
-- (void)applyAnimationKeyToOriginalNode{
+- (void)applyAnimationKeyToOriginalNode
+{
     [_delegate stopPlaying];
     editorSceneLocal->nodes[selectedNodeId]->node->setVisible(true);
     editorSceneLocal->animMan->copyKeysOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId);
@@ -855,8 +852,8 @@
     else
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
 
-    if(animBoneCount != bonecount && animationType != TEXT_ANIMATION){
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    if(animBoneCount != bonecount && animationType != TEXT_ANIMATION) {
+        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"bone_count_mismatch", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
         [self.delegate showOrHideProgress:0];
         return;
@@ -879,9 +876,8 @@
         if(animationType == RIG_ANIMATION){
             if(animBoneCount == bonecount || animationType == TEXT_ANIMATION){
                 [self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
-            }
-            else{
-                UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Bone count cannot match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            } else {
+                UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"bone_count_mismatch", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
             }
         }

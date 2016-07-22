@@ -82,6 +82,7 @@
     }
     return self;
 }
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -110,9 +111,9 @@
     
     [self.delegate freezeEditorRender:YES];
     
-    [shaderTypesDict setObject:@"Normal Shader" forKey:[NSNumber numberWithInt:SHADER_DEFAULT]];
-    [shaderTypesDict setObject:@"Toon Shader" forKey:[NSNumber numberWithInt:SHADER_TOON ]];
-    [shaderTypesDict setObject:@"HQ Rendering" forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
+    [shaderTypesDict setObject:NSLocalizedString(@"Normal Shader", nil) forKey:[NSNumber numberWithInt:SHADER_DEFAULT]];
+    [shaderTypesDict setObject:NSLocalizedString(@"Toon Shader", nil) forKey:[NSNumber numberWithInt:SHADER_TOON ]];
+    [shaderTypesDict setObject:NSLocalizedString(@"HQ Rendering", nil) forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
     //[shaderTypesDict setObject:@"Photo Realistic" forKey:[NSNumber numberWithInt:SHADER_PHOTO ]];
     if([Utility IsPadDevice])
         [self.renderingTypes registerNib:[UINib nibWithNibName:@"ShaderCell" bundle:nil] forCellWithReuseIdentifier:@"TYPE"];
@@ -124,7 +125,6 @@
         [_progressSub setHidden:YES];
         [self.limitFramesLbl setHidden:YES];
         self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d",renderingStartFrame + 1];
-        [self.youtubeButton setHidden:true];
         [self.rateButtonImage setEnabled:YES];
         [self.rateButtonText setEnabled:YES];
     }
@@ -137,14 +137,13 @@
     self.renderingProgressBar.progress = ((float)(renderingFrame - renderingStartFrame))/(1 + renderingEndFrame - renderingStartFrame);
     [self.makeVideoLoading setHidden:YES];
     [self.exportButton setHidden:true];
-    [self.youtubeButton setHidden:true];
     if(renderingExportImage != RENDER_IMAGE){
     }
     _nextButton.tag = START;
     [_checkCreditProgress setHidden:YES];
     [self updateCreditLable];
     
-    self.nextButton.accessibilityHint = @"Tap to start exporting.";
+    self.nextButton.accessibilityHint = NSLocalizedString(@"tap_to_start", nil);
     self.nextButton.accessibilityIdentifier = @"2";
     
 }
@@ -154,7 +153,8 @@
     [self updateCreditLable];
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+- (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
     if([Utility IsPadDevice])
         return UIEdgeInsetsMake(20, 20, 20, 20);
     else {
@@ -172,17 +172,6 @@
 
      // top, left, bottom, right
 }
-
-//- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-//    if([Utility IsPadDevice])
-//        return 10.0;
-//    else {
-//        if(iOSVersion >= 8.0 && SCREENWIDTH > 667)
-//            return 80.0;
-//        else
-//            return 80.0;
-//    }
-//}
 
 -(void) beginViewHideAndShow :(BOOL)isHidden
 {
@@ -214,11 +203,13 @@
     }
 }
 
--(void) appEntersBG{
+-(void) appEntersBG
+{
     isAppInBg = true;
 }
 
--(void) appEntersFG{
+-(void) appEntersFG
+{
     isAppInBg = false;
 }
 
@@ -264,7 +255,7 @@
              [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:[[AppHelper getAppHelper] userDefaultsForKey:@"username"] Email:[[AppHelper getAppHelper] userDefaultsForKey:@"email"] SignInType:[[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue]];
             }
             else{
-                UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"please_signin", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                 [signinAlert show];
                 [signinAlert setTag:SIGNIN_ALERT_VIEW];
                 [self.trimControl setHidden:NO];
@@ -278,12 +269,11 @@
     [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
 }
 
-
 - (void) creditsUsed:(NSNotification*) notification
 {
     NSDictionary* userInfo = notification.userInfo;
     NSLog(@" \n userinfo %@ ", userInfo);
-    BOOL network = [userInfo[@"network"]boolValue];
+    BOOL network = [userInfo[@"network"] boolValue];
     [_checkCreditProgress stopAnimating];
     [_checkCreditProgress setHidden:YES];
     if(network) {
@@ -303,8 +293,6 @@
         [self MakeVideo];
         [self.makeVideoLoading stopAnimating];
         [self.makeVideoLoading setHidden:YES];
-        [self.youtubeButton setHidden:false];
-        [self.youtubeButton setEnabled:true];
         [self.rateButtonImage setEnabled:YES];
         [self.rateButtonText setEnabled:YES];
     }
@@ -348,14 +336,14 @@
             [_creditLable setHidden:YES];
             [self renderBeginFunction:credits];
         }  else{
-            UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"not_enough_credits", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
             [notEnoughCredit show];
             [notEnoughCredit setTag:CREDITS_VIEW];
             [self.trimControl setHidden:NO];
             [_nextButton setHidden:NO];
         }
     } else{
-        UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:@"Information" message:[NSString stringWithFormat:@"%@",@"You are not have enough credits please recharge your account to proceed." ] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"not_enough_credits", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
         [notEnoughCredit show];
         [notEnoughCredit setTag:CREDITS_VIEW];
         [self.trimControl setHidden:NO];
@@ -433,8 +421,8 @@
     return filtFilePaths;
 }
 
-
--(void) shaderPhotoAction:(int)credits{
+-(void) shaderPhotoAction:(int)credits
+{
     
     NSFileManager  *manager = [NSFileManager defaultManager];
     NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -446,12 +434,11 @@
         [self.makeVideoLoading startAnimating];
         NSMutableArray *fileNames = [self.delegate getFileNamesToAttach:false];
         if(![self.delegate canUploadToCloud]) {
-            UIAlertView *errAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Scene contains video/praticles which is currently not supported in HQ rendering." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *errAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"scene_no_support_hqrender", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [errAlert show];
             [_cancelButton setHidden:YES];
             [_nextButton setHidden:NO];
             [_nextButton setEnabled:YES];
-            [_youtubeButton setHidden:YES];
             [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
             _nextButton.tag = DONE;
             return;
@@ -473,11 +460,7 @@
         }
         
         if( ![zip CloseZipFile2] )
-        {
             zipfile = @"";
-        }
-        NSLog(@"The file has been zipped");
-        
         
         NSString *osId = @"1";
         NSString *uniqueId= [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
@@ -487,7 +470,6 @@
         
         int startFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.leftValue + 1);
         int endFrame = (renderingExportImage == RENDER_IMAGE) ? renderingStartFrame+1 : ((int)_trimControl.rightValue);
-        printf("\n Frame %d %d " , startFrame , endFrame);
         NSString *sFrame = [NSString stringWithFormat:@"%d",startFrame];
         NSString *eFrame = [NSString stringWithFormat:@"%d",endFrame];
         NSString *creditsStr = [NSString stringWithFormat:@"%d",credits];
@@ -496,13 +478,12 @@
         NSString *resolutionHeight = [NSString stringWithFormat:@"%f",camResolution.y];
         
         NSString *fileUrl= [docDirectory stringByAppendingString:@"/index.zip"];
-        NSLog(@"File Url: %@",fileUrl);
         NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/rendertask.php"];
         NSString *postPath = @"https://www.iyan3dapp.com/appapi/rendertask.php";
         NSData *dataZip = [NSData dataWithContentsOfFile:fileUrl];
         //NSLog(@"%@ Data Items:", dataZip);
         if(dataZip == nil){
-            UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure" message:@"The Requested Data doest not exist!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"data_doesnot_exist", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:nil];
             [userNameAlert show];
             [self.nextButton setHidden:NO];
             [self.makeVideoLoading setHidden:YES];
@@ -526,13 +507,10 @@
             AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
             
             [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"Request Successfull");
-                publishId=[[operation responseString] intValue];
-                NSLog(@"publish Id %d",publishId);
+                publishId = [[operation responseString] intValue];
                 
                 NSError *error = nil;
-                for (NSString *sqliteFile in sgfdFiles)
-                {
+                for (NSString *sqliteFile in sgfdFiles) {
                     [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:sqliteFile] error:&error];
                 }
                 [manager removeItemAtPath:[docDirectory stringByAppendingPathComponent:@"index.zip"] error:&error];
@@ -545,14 +523,13 @@
 
                 [cache addRenderTaskData:publishId estTime:renderingStartFrame+1 proName:self.projectName date:dateStr];
                 
-                UIAlertView *showAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Uploaded successfully. You can see the progress of your render in your profile view." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView *showAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"hqrender_uploaded_success", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [showAlert show];
 
                 [_cancelButton setHidden:YES];
                 [_nextButton setHidden:NO];
                 [_nextButton setEnabled:YES];
-                [_youtubeButton setHidden:YES];
-                [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+                [_nextButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
                 _nextButton.tag = DONE;
             }
                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -560,21 +537,19 @@
                                                  [_cancelButton setHidden:YES];
                                                  [_nextButton setHidden:NO];
                                                  [_nextButton setEnabled:YES];
-                                                 [_youtubeButton setHidden:YES];
-                                                 [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+                                                 [_nextButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
                                                  _nextButton.tag = DONE;
 
-                                                 NSLog(@"Failure: %@", error);
                                                  [self.view setUserInteractionEnabled:YES];
                                                  [self.makeVideoLoading setHidden:YES];
-                                                 UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                                 UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"Error_uploading_file", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:nil];
                                                  [userNameAlert show];
                                                  
                                              }];
             [operation start];
         }
-    }else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Network Error" message:@"No Network Available" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil , nil];
+    } else {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [alertView show];
     }
 }
@@ -607,6 +582,7 @@
     tapGest.delegate = self;
     [self.view addGestureRecognizer:tapGest];
 }
+
 - (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AppGoneBackground" object:nil];
@@ -705,21 +681,10 @@
     [_cancelButton setHidden:YES];
     [_nextButton setHidden:NO];
     [_nextButton setEnabled:YES];
-    [_youtubeButton setHidden:YES];
-    [_nextButton setTitle:@"Done" forState:UIControlStateNormal];
+    [_nextButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
     _nextButton.tag = DONE;
 }
 
-- (IBAction)youtubeButtonAction:(id)sender
-{
-    if(sender != nil) {
-    }
-    [self.view endEditing:YES];
-    uploadSceneAlert = [[UIAlertView alloc]initWithTitle:@"Upload Video" message:@"Do you want to Upload the video to your Youtube?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-    [uploadSceneAlert setTag:YOUTUBE_BUTTON_TAG];
-    [uploadSceneAlert show];
-    
-}
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [shaderArray count];
@@ -754,6 +719,7 @@
     }
     return cell;
 }
+
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if([shaderArray[indexPath.row] intValue] == SHADER_TOON){
@@ -801,34 +767,6 @@
     }
     [self updateCreditLable];
 }
-//-(void)showUpgradeView:(int)selectedRowIndex
-//{
-//    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"]){
-//        if([Utility IsPadDevice]) {
-//            upgradeView = [[PremiumUpgardeVCViewController alloc] initWithNibName:@"PremiumUpgardeVCViewController" bundle:nil];
-//            upgradeView.delegate = self;
-//            upgradeView.modalPresentationStyle = UIModalPresentationFormSheet;
-//            [self presentViewController:upgradeView animated:YES completion:nil];
-//            upgradeView.view.superview.backgroundColor = [UIColor clearColor];
-//            upgradeView.view.layer.borderWidth = 2.0f;
-//            upgradeView.view.layer.borderColor = [UIColor grayColor].CGColor;
-//        }else{
-//            upgradeView = [[PremiumUpgardeVCViewController alloc] initWithNibName:@"PremiumUpgradeViewControllerPhone" bundle:nil];
-//            upgradeView.delegate = self;
-//            upgradeView.modalPresentationStyle = UIModalPresentationFormSheet;
-//            [self presentViewController:upgradeView animated:YES completion:nil];
-//        }
-//    }
-//    else {
-//        if(selectedRowIndex != -1) {
-//        shaderType = [shaderArray[selectedRowIndex] intValue];
-//        selectedIndex = selectedRowIndex;
-//        [self.renderingTypes reloadData];
-//        } else {
-//            [self.watermarkSwitch setOn:NO];
-//        }
-//    }
-//}
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -874,17 +812,20 @@
     }
 }
 
-- (IBAction)toolTipAction:(id)sender {
+- (IBAction)toolTipAction:(id)sender
+{
     [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
 }
 
-- (IBAction)cameraResolutionChanged:(id)sender {
+- (IBAction)cameraResolutionChanged:(id)sender
+{
     resolutionType = (int)self.resolutionSegment.selectedSegmentIndex;
     [self.delegate cameraResolutionChanged:resolutionType];
     [self updateCreditLable];
 }
 
-- (IBAction)waterMarkValueChanged:(id)sender {
+- (IBAction)waterMarkValueChanged:(id)sender
+{
         [self updateCreditLable];
 }
 
@@ -909,7 +850,8 @@
     [self cancelButtonAction:nil];
 }
 
-- (IBAction)colorPickerAction:(id)sender {
+- (IBAction)colorPickerAction:(id)sender
+{
     _bgColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
     _bgColorProp.delegate = self;
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_bgColorProp];
@@ -1024,6 +966,7 @@
         [self.activityIndicatorView setHidden:true];
     }
 }
+
 - (void) MakeVideo
 {
     NSLog(@"Camera Width %f Height %f " ,cameraResolutionWidth,cameraResolutionHeight);
@@ -1099,6 +1042,7 @@
     [videoWriterInput markAsFinished];
     [videoWriter finishWriting];
 }
+
 CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1132,22 +1076,26 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     
     return pxbuffer;
 }
+
 - (void) doMakeVideoUIUpdate
 {
     self.renderingProgressLabel.text = @"MAKING VIDEO";
     [self.makeVideoLoading setHidden:NO];
     [self.makeVideoLoading startAnimating];
 }
+
 - (void) doMakeGifUIUpdate
 {
     self.renderingProgressLabel.text = @"MAKING GIF";
     [self.makeVideoLoading setHidden:NO];
     [self.makeVideoLoading startAnimating];
 }
+
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
+
 - (void) makingGif
 {
     /*
@@ -1180,6 +1128,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
      */
     
 }
+
 - (IBAction) exportButtonAction:(id)sender
 {
     [self.exportButton setHidden:true];
@@ -1218,6 +1167,7 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     
     [self presentViewController:controller animated:YES completion:nil];
 }
+
 - (IBAction) rateButtonAction:(id)sender
 {
     //    NSString *templateReviewURL = @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=640516535";
@@ -1231,10 +1181,12 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     //[self.delegate upgradeButtonPressed];
     //[[AppHelper getAppHelper] callPaymentGateWayForPremiumUpgrade];
 }
+
 -(void)loadingViewStatus:(BOOL)status
 {
     
 }
+
 -(void)premiumUnlocked
 {
     if(tempSelectedIndex == 0 || tempSelectedIndex == -1) {
@@ -1251,16 +1203,19 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     
     [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 }
+
 -(void)premiumUnlockedCancelled
 {
     
 }
+
 -(void)statusForOBJImport:(NSNumber*)status
 {
     
 }
 
-- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish{
+- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish
+{
     bgColor = vetexColor;
     if(isDragFinish){
         [self.delegate changeRenderingBgColor:Vector4(bgColor,(_transparentBgSwitch.isOn) ? 0.0 : 1.0)];
@@ -1276,7 +1231,8 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];
 }
 
-- (IBAction)transparentBgValueChanged:(id)sender {
+- (IBAction)transparentBgValueChanged:(id)sender
+{
     (_transparentBgSwitch.isOn) ? [self.delegate changeRenderingBgColor:(Vector4(bgColor,0.0))] : [self.delegate changeRenderingBgColor:(Vector4(bgColor,1.0))];
     
 }
@@ -1292,6 +1248,5 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     if(error == nil)
         [self performSelectorOnMainThread:@selector(showPreviewInMainThread:) withObject:outputFilePath waitUntilDone:NO];
 }
-
 
 @end

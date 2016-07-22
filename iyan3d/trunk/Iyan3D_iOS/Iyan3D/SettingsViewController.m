@@ -24,12 +24,6 @@
 #define EDITOR_VIEW_CONTROL 1
 
 
-
-
-@interface SettingsViewController ()
-
-@end
-
 @implementation SettingsViewController
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
@@ -139,16 +133,6 @@
     [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
     return NO;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)toolBarPositionChanged:(id)sender {
     NSLog(@"Tool Bar position Changed");
@@ -336,7 +320,7 @@
 }
 
 - (IBAction)qualityOrSpeed:(id)sender {
-    UIAlertView *displayAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please re-open the scene to apply the change." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    UIAlertView *displayAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"reopen_apply_changes", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
     [displayAlert show];
     [[AppHelper getAppHelper] saveBoolUserDefaults:self.speedSwitch.isOn withKey:@"ScreenScaleDisable"];
 }
@@ -344,7 +328,7 @@
 - (IBAction)restoreAction:(id)sender
 {
     if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] &&  [[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"] length] <= 5){
-        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please SignIn to continue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"sign_in_to_continue", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
         [signinAlert show];
         return;
     }
@@ -359,7 +343,6 @@
 -(void)statusForRestorePurchase:(NSNumber *)object
 {
     if([object boolValue]) {
-        NSLog(@" Restored ");
         NSArray *restoreIds = [[AppHelper getAppHelper] getRestoreIds];
         for (int i = 0; i < [restoreIds count]; i++) {
             if ([[restoreIds objectAtIndex:i] isEqual:@"objimport"]) {
@@ -383,12 +366,10 @@
         }
         
         if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] || ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"]) {
-            UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"There seems to be a problem with your purchase. Please make sure that you have upgraded to Premium with the current account." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"no_premium_restored", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
             [infoAlert show];
         }
     }
-    
-    
 }
 
 -(void)transactionCancelled

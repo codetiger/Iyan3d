@@ -19,7 +19,8 @@
     return self;
 }
 
-- (IBAction)propertiesAction:(id)sender {
+- (IBAction)propertiesAction:(id)sender
+{
     NSString* clickedBtn = @"propertiesBtn";
     bool isi3dFileExists = [self.delegate Isi3dExists:_SelectedindexValue];
     if(isi3dFileExists)
@@ -40,7 +41,8 @@
 
 }
 
-- (void) propertiesBtnDelegate:(int)indexValue{
+- (void) propertiesBtnDelegate:(int)indexValue
+{
     if(indexValue==0){
         NSLog(@"Duplicate Delegate %ld",(long)_SelectedindexValue);
         [self.delegate duplicateScene:(int)_SelectedindexValue];
@@ -64,42 +66,52 @@
 {
     
 }
+
 - (void) importBtnDelegateAction:(int)indexValue
 {
     
 }
+
 - (void) exportBtnDelegateAction:(int)indexValue
 {
     
 }
+
 - (void) viewBtnDelegateAction:(int)indexValue
 {
     
 }
+
 - (void) infoBtnDelegateAction:(int)indexValue
 {
     
 }
+
 - (void) addFrameBtnDelegateAction:(int)indexValue
 {
     
 }
+
 - (void) myObjectsBtnDelegateAction:(int)indexValue
 {
     
 }
+
 - (void)highlightObjectList
 {
     
 }
+
 - (void) loginBtnAction
 {
     
 }
+
 - (void) optionBtnDelegate:(int)indexValue
 {
     
 }
+
 - (NODE_TYPE) getNodeType:(int)nodeId
 {
     

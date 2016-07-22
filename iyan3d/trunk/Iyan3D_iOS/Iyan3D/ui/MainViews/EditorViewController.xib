@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -30,6 +30,7 @@
                 <outlet property="moveBtnAutorig" destination="3o8-L5-yrV" id="tSa-C9-LYQ"/>
                 <outlet property="moveFirst" destination="GJx-oe-voh" id="aDk-Kf-Jtf"/>
                 <outlet property="moveLast" destination="hqf-aQ-aK5" id="q4T-bf-GhI"/>
+                <outlet property="myObjectsLabel" destination="AOn-20-20f" id="KyZ-Ic-29x"/>
                 <outlet property="numberOfItems" destination="eVO-10-Ptq" id="yAB-Uo-G2Z"/>
                 <outlet property="objTableview" destination="0go-cP-r4u" id="hXs-EQ-Xed"/>
                 <outlet property="objectList" destination="Oe9-3f-sks" id="RZu-TM-stB"/>
@@ -379,20 +380,6 @@
                                 <action selector="playButtonAction:" destination="-1" eventType="touchUpInside" id="mEC-im-k0W"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Zs9-wP-4jN">
-                            <rect key="frame" x="10" y="483" width="140" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Export image/video to the Camera roll." identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  EXPORT" image="Export_Pad.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="exportAction:" destination="-1" eventType="touchUpInside" id="Mjk-cP-FJf"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rE1-GS-WgE">
                             <rect key="frame" x="10" y="346" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -405,6 +392,20 @@
                             </state>
                             <connections>
                                 <action selector="importBtnAction:" destination="-1" eventType="touchUpInside" id="jTu-rU-0By"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xCo-ML-HQa">
+                            <rect key="frame" x="10" y="391" width="140" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text." identifier="1"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  ANIMATION" image="Animation_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="animationBtnAction:" destination="-1" eventType="touchUpInside" id="wFE-Mu-XdK"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kZM-y0-mYT">
@@ -421,6 +422,20 @@
                                 <action selector="optionsBtnAction:" destination="-1" eventType="touchUpInside" id="A20-DP-Cz9"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Zs9-wP-4jN">
+                            <rect key="frame" x="10" y="483" width="140" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
+                            <accessibility key="accessibilityConfiguration" hint="Export image/video to the Camera roll." identifier="1"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  EXPORT" image="Export_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="exportAction:" destination="-1" eventType="touchUpInside" id="Mjk-cP-FJf"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2KQ-lp-58n">
                             <rect key="frame" x="10" y="529" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -432,6 +447,20 @@
                             </state>
                             <connections>
                                 <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="jVm-Rs-PPe"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kdb-Pl-f7f">
+                            <rect key="frame" x="10" y="570" width="140" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode." identifier="1"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="Ga5-e3-VWf"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6N0-LM-Ula">
@@ -470,34 +499,6 @@
                             </state>
                             <connections>
                                 <action selector="redoBtnAction:" destination="-1" eventType="touchUpInside" id="3fi-gq-gmE"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xCo-ML-HQa">
-                            <rect key="frame" x="10" y="391" width="140" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text." identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  ANIMATION" image="Animation_Pad.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="animationBtnAction:" destination="-1" eventType="touchUpInside" id="wFE-Mu-XdK"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kdb-Pl-f7f">
-                            <rect key="frame" x="10" y="570" width="140" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode." identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="Ga5-e3-VWf"/>
                             </connections>
                         </button>
                         <view hidden="YES" contentMode="scaleToFill" id="M0Q-M4-4QQ">

@@ -35,8 +35,8 @@
 
 - (void) setArrayValues
 {
-    titlesArray = [[NSArray alloc] initWithObjects:@"Create a Scene", @"Animate Character", @"Export Video", @"Share your video", nil];
-    descArray = [[NSArray alloc] initWithObjects:@"Add characters, environments, props from our library of over 300 assets or import an OBJ file from an external source.", @"Bring your character to life with our pre-defined motions, apply physics simulation or make one of your own actions.", @"Render the final video with the desired quality and style.", @"That's it. Send your 3D movie and showoff your creative skills to your friends.", nil];
+    titlesArray = [[NSArray alloc] initWithObjects:NSLocalizedString(@"Create a Scene", nil), NSLocalizedString(@"Animate Character", nil), NSLocalizedString(@"Export Video", nil), NSLocalizedString(@"Share your video", nil), nil];
+    descArray = [[NSArray alloc] initWithObjects:NSLocalizedString(@"onboarding_message_#1", nil), NSLocalizedString(@"onboarding_message_#2", nil), NSLocalizedString(@"onboarding_message_#3", nil), NSLocalizedString(@"onboarding_message_#4", nil), nil];
 }
 
 - (void) setupScrollView
@@ -156,9 +156,9 @@
         [self.skipBtn setHidden:YES];
         [self.startBtn setHidden:NO];
         if(self.pageControl.currentPage > 0)
-            [self.startBtn setTitle:@"Next" forState:UIControlStateNormal];
+            [self.startBtn setTitle:NSLocalizedString(@"Next", nil) forState:UIControlStateNormal];
         else
-            [self.startBtn setTitle:@"Let's get started" forState:UIControlStateNormal];
+            [self.startBtn setTitle:NSLocalizedString(@"Let's get started", nil) forState:UIControlStateNormal];
     }
 }
 

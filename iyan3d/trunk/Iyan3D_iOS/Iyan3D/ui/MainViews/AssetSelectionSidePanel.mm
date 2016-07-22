@@ -50,18 +50,22 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"AssetSelection iOS";
     
-    if([Utility IsPadDevice]){
+    if([Utility IsPadDevice])
        [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-    }
-    else{
+    else
         [self.assetsCollectionView registerNib:[UINib nibWithNibName:@"AssetFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-    }
-    self.cancelBtn.layer.cornerRadius = CORNER_RADIUS;
+
+        self.cancelBtn.layer.cornerRadius = CORNER_RADIUS;
     self.addToSceneBtn.layer.cornerRadius = CORNER_RADIUS;
+    
+    [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
+    [self.addToSceneBtn setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
+    
     selectedAsset = -1;
     modelCategoryTab = 0;
     //addToScenePressed = false;
@@ -114,13 +118,15 @@
     [self.assetsCollectionView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
 #pragma Button Actions
 
-- (IBAction)cancelButtonAction:(id)sender {
+- (IBAction)cancelButtonAction:(id)sender
+{
     [self.assetSelectionDelegate showOrHideProgress:1];
     [self cancelOperations:downloadQueue];
     [self.assetSelectionDelegate removeTempNodeFromScene];
@@ -131,7 +137,8 @@
     [self deallocMem];
 }
 
-- (IBAction)addToSceneButtonAction:(id)sender {
+- (IBAction)addToSceneButtonAction:(id)sender
+{
      //addToScenePressed = YES;
     [self.assetSelectionDelegate showOrHideProgress:1];
     [self cancelOperations:downloadQueue];
@@ -176,7 +183,8 @@
     }
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
     [self.assetSelectionDelegate showOrHideProgress:1];
         [_addToSceneBtn setEnabled:NO];
     NSArray* indexPathArr = [collectionView indexPathsForVisibleItems];
@@ -210,25 +218,18 @@
     }
 }
 
-
-
 #pragma mark Button actions
 
 - (IBAction)categoryBtnFuction:(id)sender
 {
-    UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:@"Category"
-                                 message:nil
-                                 preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction* allmodels = [UIAlertAction
-                                actionWithTitle:@"All Models"
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action)
+    UIAlertController * view=   [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Category", nil) message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* allmodels = [UIAlertAction actionWithTitle:NSLocalizedString(@"All Models", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                 {
                                     if(modelCategoryTab == ALLMODELS)
                                         return;
                                     [_assetSelectionDelegate showOrHideProgress:1];
-                                    [_modelCategory setTitle: @"All Models" forState:UIControlStateNormal];
+                                    [_modelCategory setTitle:NSLocalizedString(@"All Models", nil) forState:UIControlStateNormal];
                                     assetArray = [cache GetAssetList:ALLMODELS Search:@""];
                                     [_assetsCollectionView reloadData];
                                     modelCategoryTab = ALLMODELS;
@@ -238,15 +239,12 @@
                                     [_addToSceneBtn setEnabled:NO];
                                     [_assetSelectionDelegate showOrHideProgress:0];
                                 }];
-    UIAlertAction* character = [UIAlertAction
-                                actionWithTitle:@"Character"
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action)
+    UIAlertAction* character = [UIAlertAction actionWithTitle:NSLocalizedString(@"Character", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                 {
                                     if(modelCategoryTab == CHARACTERS)
                                         return;
                                     [_assetSelectionDelegate showOrHideProgress:1];
-                                    [_modelCategory setTitle: @"Characters" forState:UIControlStateNormal];
+                                    [_modelCategory setTitle:NSLocalizedString(@"Characters", nil) forState:UIControlStateNormal];
                                     assetArray = [cache GetAssetList:CHARACTERS Search:@""];
                                     [_assetsCollectionView reloadData];
                                     modelCategoryTab = CHARACTERS;
@@ -256,15 +254,12 @@
                                     [_addToSceneBtn setEnabled:NO];
                                     [_assetSelectionDelegate showOrHideProgress:0];
                                 }];
-    UIAlertAction* backgrounds = [UIAlertAction
-                                  actionWithTitle:@"Backgrounds"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
+    UIAlertAction* backgrounds = [UIAlertAction actionWithTitle:NSLocalizedString(@"Backgrounds", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                   {
                                       if(modelCategoryTab == BACKGROUNDS)
                                           return;
                                       [_assetSelectionDelegate showOrHideProgress:1];
-                                      [_modelCategory setTitle: @"Backgrounds" forState:UIControlStateNormal];
+                                      [_modelCategory setTitle:NSLocalizedString(@"Backgrounds", nil) forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:BACKGROUNDS Search:@""];
                                       [_assetsCollectionView reloadData];
                                       modelCategoryTab = BACKGROUNDS;
@@ -274,15 +269,12 @@
                                       [_addToSceneBtn setEnabled:NO];
                                       [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
-    UIAlertAction* accessories = [UIAlertAction
-                                  actionWithTitle:@"Accessories"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
+    UIAlertAction* accessories = [UIAlertAction actionWithTitle:NSLocalizedString(@"Accessories", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                   {
                                       if(modelCategoryTab == ACCESSORIES)
                                           return;
                                       [_assetSelectionDelegate showOrHideProgress:1];
-                                      [_modelCategory setTitle: @"Accessories" forState:UIControlStateNormal];
+                                      [_modelCategory setTitle:NSLocalizedString(@"Accessories", nil) forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:ACCESSORIES Search:@""];
                                       [_assetsCollectionView reloadData];
                                       modelCategoryTab = ACCESSORIES;
@@ -292,15 +284,12 @@
                                       [_addToSceneBtn setEnabled:NO];
                                       [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
-    UIAlertAction* minecraft = [UIAlertAction
-                                  actionWithTitle:@"Minecraft"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
+    UIAlertAction* minecraft = [UIAlertAction actionWithTitle:NSLocalizedString(@"Minecraft", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                   {
                                       if(modelCategoryTab == MINECRAFT)
                                           return;
                                       [_assetSelectionDelegate showOrHideProgress:1];
-                                      [_modelCategory setTitle: @"Minecraft" forState:UIControlStateNormal];
+                                      [_modelCategory setTitle:NSLocalizedString(@"Minecraft", nil) forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:MINECRAFT Search:@""];
                                       [_assetsCollectionView reloadData];
                                       modelCategoryTab = MINECRAFT;
@@ -310,15 +299,12 @@
                                       [_addToSceneBtn setEnabled:NO];
                                       [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
-    UIAlertAction* fnaf = [UIAlertAction
-                                  actionWithTitle:@"FNAF"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
+    UIAlertAction* fnaf = [UIAlertAction actionWithTitle:NSLocalizedString(@"FNAF", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                   {
                                       if(modelCategoryTab == FNAF)
                                           return;
                                       [_assetSelectionDelegate showOrHideProgress:1];
-                                      [_modelCategory setTitle: @"FNAF" forState:UIControlStateNormal];
+                                      [_modelCategory setTitle:NSLocalizedString(@"FNAF", nil) forState:UIControlStateNormal];
                                       assetArray = [cache GetAssetList:FNAF Search:@""];
                                       [_assetsCollectionView reloadData];
                                       modelCategoryTab = FNAF;
@@ -328,10 +314,7 @@
                                       [_addToSceneBtn setEnabled:NO];
                                       [_assetSelectionDelegate showOrHideProgress:0];
                                   }];
-    UIAlertAction* mylibrary = [UIAlertAction
-                                  actionWithTitle:@"My Library"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
+    UIAlertAction* mylibrary = [UIAlertAction actionWithTitle:NSLocalizedString(@"My Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
                                   {
                                       if(modelCategoryTab == MY_LIBRARY_TYPE)
                                           return;
@@ -378,7 +361,7 @@
 - (void) openMyLibrary
 {
     [_assetSelectionDelegate showOrHideProgress:1];
-    [_modelCategory setTitle: @"My Library" forState:UIControlStateNormal];
+    [_modelCategory setTitle:NSLocalizedString(@"My Library", nil) forState:UIControlStateNormal];
     assetArray = [cache GetAssetList:MY_LIBRARY_TYPE Search:@""];
     [_assetsCollectionView reloadData];
     modelCategoryTab = MY_LIBRARY_TYPE;
@@ -494,7 +477,7 @@
 {
     AssetItem *a = assetArray[indexVal];
     
-    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:@"Rename Object" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Rename Object", nil) message:NSLocalizedString(@"Please enter a name", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[renameScene textFieldAtIndex:0] setPlaceholder:a.name];
     [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
@@ -531,13 +514,13 @@
                 NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if ([name length] == 0) {
                     [self.view endEditing:YES];
-                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Animation name cannot be empty.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                     [errorAlert show];
                 }
                 else
                 {
                     if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Animation_Name_special", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                         [errorAlert show];
                     }
                     else
@@ -778,7 +761,7 @@
         [_addToSceneBtn setEnabled:NO];
         [self.assetSelectionDelegate showOrHideProgress:0];
         [self.view endEditing:YES];
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     }
 }
@@ -789,7 +772,6 @@
         return;
     [self proceedToFileVerification:task];
 }
-
 
 - (void)addDownloadTaskWithFileName:(NSString*)fileName URL:(NSString*)url returnId:(NSNumber*)returnId andSelector:(SEL)selector priority:(NSOperationQueuePriority)priority
 {

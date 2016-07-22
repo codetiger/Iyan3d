@@ -68,6 +68,10 @@
         [self.moviePlayer play];
         
     }
+    
+    [self.shareBtn setTitle:NSLocalizedString(@"SHARE", nil) forState:UIControlStateNormal];
+    [self.closeBtn setTitle:NSLocalizedString(@"CLOSE", nil) forState:UIControlStateNormal];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -87,19 +91,18 @@
 - (IBAction)shareAction:(id)sender
 {
     [self.shareBtn setHidden:YES];
-//    [self.shareActivityIndicator setHidden:false];
-//    [self.shareActivityIndicator startAnimating];
+    //    [self.shareActivityIndicator setHidden:false];
+    //    [self.shareActivityIndicator startAnimating];
     
     NSArray *objectsToShare;
     if(mediaType == IMAGE_TYPE) {
-        objectsToShare = [NSArray arrayWithObjects:@"A 3D Scene, I created using Iyan 3D on iOS", [UIImage imageWithContentsOfFile:mediaPath], nil];
+        objectsToShare = [NSArray arrayWithObjects:NSLocalizedString(@"share_image_social_media", nil), [UIImage imageWithContentsOfFile:mediaPath], nil];
     } else if(mediaType == VIDEO_TYPE){
         NSURL *videoURL = [NSURL fileURLWithPath:mediaPath];
-        objectsToShare = [NSArray arrayWithObjects:@"An Animation video, I created using Iyan 3D on iOS", videoURL, nil];
+        objectsToShare = [NSArray arrayWithObjects:NSLocalizedString(@"share_video_social_media", nil), videoURL, nil];
     }
     
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-    
     
     if([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
         if(!controller.popoverPresentationController.barButtonItem) {
@@ -108,8 +111,8 @@
         }
     }
     [controller setCompletionHandler:^(NSString *activityType, BOOL completed) {
-//        [self.shareActivityIndicator stopAnimating];
-//        [self.shareActivityIndicator setHidden:true];
+        //        [self.shareActivityIndicator stopAnimating];
+        //        [self.shareActivityIndicator setHidden:true];
         [self.shareBtn setHidden:NO];
         
         if(completed) {
@@ -123,6 +126,7 @@
     }];
     
     [self presentViewController:controller animated:YES completion:nil];
-
+    
 }
+
 @end

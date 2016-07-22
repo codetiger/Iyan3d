@@ -75,6 +75,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 @property (weak, nonatomic) IBOutlet UIButton *feedBtn;
 @property (weak, nonatomic) IBOutlet UILabel *feedCount;
+@property (weak, nonatomic) IBOutlet UILabel *sceneTitleLabel;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)openSceneAction:(id)sender;

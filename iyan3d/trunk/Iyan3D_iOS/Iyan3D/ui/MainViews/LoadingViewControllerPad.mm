@@ -199,6 +199,7 @@
     [super viewDidLoad];
     self.screenName = @"LoadingView iOS";
     
+    self.ProgessLabel.text = NSLocalizedString(@"Loading Assets", nil);
     [cache OpenDatabase];
     [cache createTablesForPrice];
     [cache createRenderTaskTables];
@@ -222,7 +223,6 @@
 {
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] downloadJsonData];
-    
 }
 
 - (void) performLocalTasks

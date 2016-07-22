@@ -21,7 +21,8 @@
 
 @implementation LoginViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"LoginViewVC iOS";
     [GIDSignIn sharedInstance].uiDelegate = self;
@@ -31,38 +32,31 @@
 
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-
-- (IBAction)cancelBtnAction:(id)sender {
+- (IBAction)cancelBtnAction:(id)sender
+{
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
-- (IBAction)googleSigninAction:(id)sender {
+- (IBAction)googleSigninAction:(id)sender
+{
     [self.delegare dismisspopover];
     [[GIDSignIn sharedInstance] signIn];
 }
 
-- (IBAction)fbSigninAction:(id)sender {
+- (IBAction)fbSigninAction:(id)sender
+{
     
    
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
-     logInWithReadPermissions: @[@"email",@"public_profile", @"user_friends"]
+     logInWithReadPermissions: @[@"email", @"public_profile", @"user_friends"]
      fromViewController:self
      handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          
@@ -92,7 +86,8 @@
      }];
 }
 
-- (IBAction)twitterSigninAction:(id)sender {
+- (IBAction)twitterSigninAction:(id)sender
+{
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc]
                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
@@ -107,9 +102,9 @@
             NSLog(@"signed in as %@", [session userName]);
             
             [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"signedin"];
-            [[AppHelper getAppHelper]saveToUserDefaults:[session userName] withKey:@"username"];
-            [[AppHelper getAppHelper]saveToUserDefaults:[session userID] withKey:@"uniqueid"];
-            [[AppHelper getAppHelper]saveToUserDefaults:@"" withKey:@"email"];
+            [[AppHelper getAppHelper] saveToUserDefaults:[session userName] withKey:@"username"];
+            [[AppHelper getAppHelper] saveToUserDefaults:[session userID] withKey:@"uniqueid"];
+            [[AppHelper getAppHelper] saveToUserDefaults:@"" withKey:@"email"];
             [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:TWITTER_SIGNIN] withKey:@"signintype"];
             [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"credits"];
 
@@ -126,12 +121,13 @@
             [self.cancelBtn setEnabled:true];
             [self.facebookSignin setEnabled:true];
             [self.googleSigninBtn setEnabled:true];
+            
             NSString *message = [NSString stringWithFormat:@"%@",[error localizedDescription]];
-            message = @"Setup Twitter Accounnt in your device.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+            message = NSLocalizedString(@"no_twitter_account", nil);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil)
                                                                     message:message
                                                                    delegate:nil
-                                                          cancelButtonTitle:@"OK"
+                                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                           otherButtonTitles:nil];
             [alert show];
 
@@ -139,13 +135,12 @@
     }];
 }
 
-
-
 #pragma mark - GIDSignInDelegate
 
 - (void)signIn:(GIDSignIn *)signIn
 didSignInForUser:(GIDGoogleUser *)user
-     withError:(NSError *)error {
+     withError:(NSError *)error
+{
     
     if (error) {
         [self.view removeFromSuperview];
@@ -165,7 +160,8 @@ didSignInForUser:(GIDGoogleUser *)user
     
 }
 
-- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error {
+- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error
+{
     // Perform any operations when the user disconnects from app here.
     if(error){
         NSLog(@"Error");
@@ -176,16 +172,18 @@ didSignInForUser:(GIDGoogleUser *)user
     [self reportAuthStatus];
     
 }
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
     return [[GIDSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication
                                       annotation:annotation];
 }
+
 - (void)presentSignInViewController:(UIViewController*)viewController
 {
     [[self navigationController] pushViewController:viewController animated:YES];
 }
-
 
 - (void)reportAuthStatus
 {
@@ -211,12 +209,6 @@ didSignInForUser:(GIDGoogleUser *)user
     }
 }
 
-// Implement these methods only if the GIDSignInUIDelegate is not a subclass of
-// UIViewController.
-
-#pragma mark - IBActions
-
-
 - (void)toggleBasicProfile:(UISwitch*)sender
 {
     [GIDSignIn sharedInstance].shouldFetchBasicProfile = sender.on;
@@ -239,26 +231,32 @@ didSignInForUser:(GIDGoogleUser *)user
 {
     
 }
+
 -(void)statusForOBJImport:(NSNumber*)object
 {
     
 }
+
 -(void)premiumUnlocked
 {
     
 }
+
 -(void)addRestoreId:(NSString*)productIdentifier
 {
     
 }
+
 -(void)statusForRestorePurchase:(NSNumber *)object
 {
     
 }
+
 -(void)transactionCancelled
 {
     
 }
+
 -(void)setAnimationData:(NSArray*)allAnimations
 {
     
@@ -266,7 +264,8 @@ didSignInForUser:(GIDGoogleUser *)user
 
 #pragma mark - dealloc
 
--(void)deallocMem{
+-(void)deallocMem
+{
     [GIDSignIn sharedInstance].uiDelegate = nil;
     [GIDSignIn sharedInstance].delegate = nil;
 }

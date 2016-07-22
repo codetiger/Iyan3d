@@ -223,7 +223,6 @@
                     
                     cell.titleLabel.text =   [NSString stringWithCString:property.title.c_str() encoding:NSUTF8StringEncoding];
                     if(property.type == IMAGE_TYPE && property.fileName.length() > 5) {
-                        printf(" \n Texture File Name %s ", property.fileName.c_str());
                         NSString *imageFile = [NSString stringWithCString:property.fileName.c_str() encoding:NSUTF8StringEncoding];
                         cell.texImageView.image = [UIImage imageWithContentsOfFile:imageFile];
                     } else {
@@ -366,7 +365,6 @@
 }
 
 - (IBAction)backPressed:(id)sender {
-    
     CGRect frame = [sender superview].frame;
     frame.origin.x = self.view.frame.size.width;
     [UIView animateWithDuration:0.4 animations:^{
@@ -401,12 +399,9 @@
     [self.delegate applyPhysicsProps:physicsProperty];
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
 
 
 @end

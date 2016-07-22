@@ -74,7 +74,7 @@
 
 - (void) showInternetErrorAlert
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warining" message:@"Please connect with internet some resources files are missing need to download it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     [alert show];
 }
 
@@ -482,7 +482,7 @@
         [[SKPaymentQueue defaultQueue] addPayment:payment];
     }
     else {
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"In-App Purchase is Disabled. Check your settings to enable Purchases." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"inapp_disabled", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
         [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithBool:NO]];
     }
@@ -490,7 +490,7 @@
 
 - (void)missingAlertView
 {
-    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Missing Data" message:@"Some resources files are missing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"missing_resources", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     [closeAlert show];
 }
 - (void)restorePurchasedTransaction
@@ -500,7 +500,7 @@
         [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
     }
     else {
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"In-App Purchase is Disabled. Check your settings to enable Purchases." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"inapp_disabled", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     }
 }
@@ -533,10 +533,10 @@
 
 - (void)paymentQueue:(SKPaymentQueue*)queue restoreCompletedTransactionsFailedWithError:(NSError*)error
 {
-    UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Error"
+    UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil)
                                                       message:error.localizedDescription
                                                      delegate:nil
-                                            cancelButtonTitle:@"OK"
+                                            cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                             otherButtonTitles:nil];
     [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
@@ -597,7 +597,7 @@
             [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:0]];
             [self performSelectorInBackground:@selector(transactionCancelled) withObject:nil];
             if (transaction.error.code != SKErrorPaymentCancelled) {
-                UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Error" message:transaction.error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:transaction.error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                 [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
             }
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -643,14 +643,6 @@
 
 - (void)parseHelpJson
 {
-    /*
-     ifstream jsonFile(constants::BundlePath + "/helpStatements.json");
-     Json::Reader reader;
-     if(!reader.parse(jsonFile, helpStatements, false)){
-     Logger::log(ERROR, "Unable to parse helpStatements.json", "AppHelper");
-     }
-     */
-
     helpStatements = [self parseJsonFileWithName:@"helpStatements"];
 }
 
@@ -721,8 +713,7 @@
         
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So unable to complete the operation." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                                          [userNameAlert show];
                                      }];
     [operation start];
@@ -766,7 +757,7 @@
     }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                                         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                                          [userNameAlert show];
                                          
                                          [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:NO], @"network", nil]];
@@ -814,8 +805,7 @@
      
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"Failure: %@", error);
-                                         UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Failure Error" message:@"Check your net connection it was slow. So animation cannot be uploaded." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-                                         [userNameAlert show];
+                                         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];                                         [userNameAlert show];
                                          
                                      }];
     [operation start];

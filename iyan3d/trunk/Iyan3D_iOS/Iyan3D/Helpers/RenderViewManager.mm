@@ -339,7 +339,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
             SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
-                UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"The font style you choose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"fontstyle_char_unsupported", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                 [loadNodeAlert show];
                 [self.delegate showOrHideProgress:0];
                 if(editorScene && editorScene->loader)

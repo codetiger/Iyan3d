@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -7,11 +7,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextSelectionSidePanel">
             <connections>
+                <outlet property="addBoneLabel" destination="veO-ZZ-Lbt" id="QMs-NO-3Xe"/>
                 <outlet property="addToScene" destination="3Qp-dd-cNo" id="tce-F9-LaW"/>
                 <outlet property="bevelSlider" destination="l6Y-Fo-bKR" id="5i4-DW-KGg"/>
                 <outlet property="boneSwitch" destination="axZ-uQ-2OO" id="px9-d0-HBw"/>
                 <outlet property="cancelBtn" destination="c9v-9A-XSr" id="43x-kw-hEK"/>
                 <outlet property="collectionView" destination="P2e-gr-fZj" id="Sz1-ag-nUf"/>
+                <outlet property="colorLabel" destination="LiZ-Np-RE4" id="YTr-ig-ItA"/>
                 <outlet property="colorWheelbtn" destination="4to-JM-G7I" id="0Qw-jw-mg4"/>
                 <outlet property="dummyLeft" destination="uZZ-do-Rny" id="aXj-XJ-QJT"/>
                 <outlet property="dummyRight" destination="LPq-bb-X0L" id="9Vh-sm-Lnk"/>

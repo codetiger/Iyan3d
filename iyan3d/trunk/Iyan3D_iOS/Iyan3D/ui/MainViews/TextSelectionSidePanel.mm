@@ -49,6 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.screenName = @"TextSelection iOS";
+    
     fontArray = [cache GetAssetList:FONT Search:@""];
     typedText = [NSString stringWithFormat:@"Text"];
     cache = [CacheSystem cacheSystem];
@@ -66,6 +67,17 @@
     self.cancelBtn.layer.cornerRadius=CORNER_RADIUS;
     self.addToScene.layer.cornerRadius=CORNER_RADIUS;
     self.bevelSlider.value = bevelRadius;
+    
+    [self.inputText setText:NSLocalizedString(@"Enter Text", nil)];
+    [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
+    [self.addToScene setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
+    
+    [self.addBoneLabel setText:NSLocalizedString(@"With Bones", nil)];
+    [self.colorLabel setText:NSLocalizedString(@"Color", nil)];
+    
+    [self.fontTab setTitle:NSLocalizedString(@"Font Store", nil) forSegmentAtIndex:0];
+    [self.fontTab setTitle:NSLocalizedString(@"My Fonts", nil) forSegmentAtIndex:1];
+
     _inputText.delegate = self;
     UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
@@ -142,7 +154,7 @@
 {
     if (connectionError != SLOW_INTERNET) {
         [self.view endEditing:YES];
-        UIAlertView* internetError = [[UIAlertView alloc] initWithTitle:@"Connection Error" message:@"Unable to connect to the server, Please check your network settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* internetError = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [internetError performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
     }
 }
@@ -380,13 +392,13 @@
 
 - (void) load3dText{
     if(_inputText.text.length ==0){
-         UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Field Empty" message:@"Please enter some text to add." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+         UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Field Empty", nil) message:NSLocalizedString(@"Please enter some text to add.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
     [loadNodeAlert show];
         [self.textSelectionDelegate showOrHideProgress:0];
         return;
     }
    else if(fontFileName.length == 0){
-    UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please Choose Font Style." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Please Choose Font Style.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
         [loadNodeAlert show];
        [self.textSelectionDelegate showOrHideProgress:0];
         return;

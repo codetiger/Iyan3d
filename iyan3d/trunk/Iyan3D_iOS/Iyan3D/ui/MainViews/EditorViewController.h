@@ -141,6 +141,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *numberOfItems;
 @property (weak, nonatomic) IBOutlet UILabel *autoRigLbl;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
+@property (weak, nonatomic) IBOutlet UILabel *myObjectsLabel;
 
 
 - (IBAction)toolTipAction:(id)sender;

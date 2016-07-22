@@ -19,17 +19,6 @@
 SGPreviewScene* previewSceneObj;
 RenderingView *renderView;
 
-//+ (PreviewHelper *)getPreviewHelper
-//{
-//    static PreviewHelper *previewHelper;
-//    @synchronized(self) {
-//        if (!previewHelper)
-//            previewHelper = [[self alloc] init];
-//    }
-//    return previewHelper;
-//}
-
-
 -(SGPreviewScene*) initScene:(RenderingView*)renderingView viewType:(VIEW_TYPE)viewType
 {
     currentView = viewType;
@@ -81,12 +70,15 @@ RenderingView *renderView;
     [renderView addGestureRecognizer:panRecognizer];
 }
 
-- (void)setupLayer {
+- (void)setupLayer
+{
     _eaglLayer = (CAEAGLLayer*) renderView.layer;
     _eaglLayer.opaque = YES;
     _eaglLayer.contentsScale = screenScale;
 }
-- (void)setupContext {
+
+- (void)setupContext
+{
     EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context)
@@ -95,29 +87,37 @@ RenderingView *renderView;
     if (![EAGLContext setCurrentContext:_context])
         Logger::log(INFO,"AnimatinEditor" ,  "Failed to set current OpenGL context");
 }
+
 -(void) setCurrentContext
 {
     if (![EAGLContext setCurrentContext:_context])
         Logger::log(INFO,"AnimatinEditor" ,  "Failed to set current OpenGL context");
 }
-- (void)setupRenderBuffer {
+
+- (void)setupRenderBuffer
+{
     glGenRenderbuffers(1, &_colorRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
 }
-- (void)setupDepthBuffer {
+
+- (void)setupDepthBuffer
+{
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, renderView.frame.size.width * screenScale, renderView.frame.size.height * screenScale);
 }
-- (void)setupFrameBuffer {
+
+- (void)setupFrameBuffer
+{
     glGenFramebuffers(1, &_frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
 }
 
--(void) presentRenderBuffer{
+-(void) presentRenderBuffer
+{
     if(!isMetalSupported)
     [_context presentRenderbuffer:_colorRenderBuffer];
     //glFlush();
@@ -151,6 +151,7 @@ void nodeShaderCallBack(int nodeID,string matName,string callbackFuncName)
     if(callbackFuncName.compare("setUniforms") == 0 && previewSceneObj)
         previewSceneObj->shaderCallBackForNode(nodeID,matName);
 }
+
 bool transparentCallBack(int nodeId,string callbackFuncName)
 {
     if(callbackFuncName.compare("setUniforms") == 0 && previewSceneObj)
@@ -214,8 +215,8 @@ bool transparentCallBack(int nodeId,string callbackFuncName)
         }
         case FONT:{
             SGNode *textNode = previewSceneObj->loadNode(NODE_TEXT, 0,name,fontSize,bevelValue,textColor,fontFilePath);
-            if(textNode == NULL){
-                UIAlertView *loadNodeAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"The font style you chose does not support the characters you entered." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            if(textNode == NULL) {
+                UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"fontstyle_char_unsupported", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                 [loadNodeAlert show];
                 return false;
             }

@@ -143,6 +143,27 @@ BOOL missingAlertShown;
 {
     [super viewDidLoad];
     self.screenName = @"EditorView iOS";
+    
+    [self.backButton setTitle:NSLocalizedString(@"Scenes", nil) forState:UIControlStateNormal];
+    [self.myObjectsBtn setTitle:NSLocalizedString(@"My Objects", nil) forState:UIControlStateNormal];
+    [self.myObjectsLabel setText:NSLocalizedString(@"My Objects", nil)];
+    [self.editobjectBtn setTitle:NSLocalizedString(@"Edit", nil) forState:UIControlStateNormal];
+
+    [self.importBtn setTitle:NSLocalizedString(@"ADD", nil) forState:UIControlStateNormal];
+    [self.animationBtn setTitle:NSLocalizedString(@"ANIMATION", nil) forState:UIControlStateNormal];
+    [self.optionsBtn setTitle:NSLocalizedString(@"OPTIONS", nil) forState:UIControlStateNormal];
+    [self.exportBtn setTitle:NSLocalizedString(@"EXPORT", nil) forState:UIControlStateNormal];
+
+    [self.moveBtn setTitle:NSLocalizedString(@"MOVE", nil) forState:UIControlStateNormal];
+    [self.rotateBtn setTitle:NSLocalizedString(@"ROTATE", nil) forState:UIControlStateNormal];
+    [self.scaleBtn setTitle:NSLocalizedString(@"SCALE", nil) forState:UIControlStateNormal];
+
+    [self.addJointBtn setTitle:NSLocalizedString(@"ADD JOINT", nil) forState:UIControlStateNormal];
+    [self.rigCancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
+    [self.rigAddToSceneBtn setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
+
+    [self.autorigMirrorLable setText:NSLocalizedString(@"MIRROR", nil)];
+
     isSelected=NO;
     followUsVC = nil;
     [_center_progress setHidden:NO];
@@ -178,13 +199,11 @@ BOOL missingAlertShown;
     [self.objectList reloadData];
     
     [self undoRedoButtonState:DEACTIVATE_BOTH];
-    if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
-        self.objectList.allowsMultipleSelection=YES;
-    }
+
+    if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"] == YES)
+        self.objectList.allowsMultipleSelection = YES;
     else
-    {
         self.objectList.allowsMultipleSelection=NO;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -204,7 +223,7 @@ BOOL missingAlertShown;
     
     ScreenWidth = self.renderView.frame.size.width;
     ScreenHeight = self.renderView.frame.size.height;
-    if(!editorScene){
+    if(!editorScene) {
         [self initScene];
         [self changeAllButtonBG];
         [self setupEnableDisableControls];
@@ -212,7 +231,6 @@ BOOL missingAlertShown;
         
         if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
             [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
-            NSLog(@"Toolbar position : %@ ",[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]);
         } else {
             [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
             [self toolbarPosition:0];
@@ -226,9 +244,9 @@ BOOL missingAlertShown;
         [self.undoBtn setEnabled:YES];
     
     
-    if(editorScene){
+    if(editorScene) {
         int lightId = 0;
-        for(int i = 0 ; i < editorScene->nodes.size(); i++){
+        for(int i = 0 ; i < editorScene->nodes.size(); i++) {
             if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
                 lightId = MAX(editorScene->nodes[i]->assetId,lightId);
         }
@@ -374,14 +392,12 @@ BOOL missingAlertShown;
 {
     UIColor *selectedColor = [UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1];
     UIColor *unSelectedColor = [UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1];
-    if(editorScene->isNodeSelected || editorScene->selectedNodeIds.size()>0)
-    {
+    
+    if(editorScene->isNodeSelected || editorScene->selectedNodeIds.size() > 0) {
         [_moveBtn setBackgroundColor:(editorScene->controlType==MOVE) ? selectedColor : unSelectedColor];
         [_rotateBtn setBackgroundColor:(editorScene->controlType==ROTATE) ? selectedColor : unSelectedColor];
         [_scaleBtn setBackgroundColor:(editorScene->controlType==SCALE) ? selectedColor : unSelectedColor];
-    }
-    else
-    {
+    } else {
         [self.moveBtn setBackgroundColor:unSelectedColor];
         [self.rotateBtn setBackgroundColor:unSelectedColor];
         [self.scaleBtn setBackgroundColor:unSelectedColor];
@@ -421,9 +437,8 @@ BOOL missingAlertShown;
         [self.rotateBtnAutorig setHidden:false];
         [self.myObjectsBtn setHidden:YES];
         return;
-    }
-    else
-    {
+        
+    } else {
         [self.moveBtn setHidden:false];
         [self.optionsBtn setHidden:false];
         [self.rotateBtn setHidden:false];
@@ -451,7 +466,6 @@ BOOL missingAlertShown;
         
     }
     
-    
     if(editorScene->isNodeSelected)
     {
         if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT){
@@ -461,8 +475,8 @@ BOOL missingAlertShown;
             [self.scaleBtn setEnabled:false];
             [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
             return;
-        }
-        else if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES){
+            
+        } else if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES){
             [self.moveBtn setEnabled:true];
             [self.rotateBtn setEnabled:true];
             [self.optionsBtn setEnabled:true];
@@ -470,8 +484,8 @@ BOOL missingAlertShown;
             if(editorScene->controlType == SCALE)
                 [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
             return;
-        }
-        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA){
+            
+        } else if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA) {
             [self.moveBtn setEnabled:true];
             [self.rotateBtn setEnabled:true];
             [self.optionsBtn setEnabled:true];
@@ -612,7 +626,7 @@ BOOL missingAlertShown;
         lightCount++;
         [self undoRedoButtonState:DEACTIVATE_BOTH];
     } else {
-        UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Scene cannot contain more than five lights." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"max_five_lights_per_scene", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [closeAlert show];
     }
 }
@@ -627,7 +641,7 @@ BOOL missingAlertShown;
         int videoFrames = (int)(duration * 24.0);
         int extraFrames = (videoFrames/24 > 0) ? videoFrames - ((videoFrames/24) * 24) : 24 - videoFrames;
         videoFrames = videoFrames - extraFrames;
-        printf(" \n duration %f frames %d ", duration, videoFrames);
+
         editorScene->totalFrames = (editorScene->totalFrames < videoFrames) ? videoFrames : editorScene->totalFrames;
         [self.framesCollectionView reloadData];
         AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
@@ -773,7 +787,7 @@ BOOL missingAlertShown;
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         if (fileSize == 0 || !editorScene->loadSceneData(SGBFilePath)) {
             [self.view endEditing:YES];
-            UIAlertView* fileCorruptAlert = [[UIAlertView alloc] initWithTitle:@"File Corrupted" message:@"The project you are trying to open is corrupted." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            UIAlertView* fileCorruptAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"File Corrupted", nil) message:NSLocalizedString(@"File_Corrupted_message", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil, nil];
             [fileCorruptAlert show];
             delete SGBFilePath;
             return false;
@@ -1064,22 +1078,21 @@ BOOL missingAlertShown;
 
 - (IBAction)moveLastAction:(id)sender
 {
-    
     if(sender != nil)
         [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
-    if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW){
-        if(editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW){
+    
+    if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW) {
+        if(editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW) {
             
             if(editorScene->rigMan->rigNodeType == NODE_RIG) {
                 [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
             } else {
-                UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:@"Select Bone Structure" message:@"You can either start with a complete Human Bone structure or with a single bone?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Single Bone", @"Human Bone Structure", nil];
+                UIAlertView *closeAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Select Bone Structure", nil) message:NSLocalizedString(@"start_single_bone_or_human_message", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Single Bone", nil), NSLocalizedString(@"Human Bone Structure", nil), nil];
                 [closeAlert setTag:CHOOSE_RIGGING_METHOD];
                 [closeAlert show];
             }
             
-        } else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW){
-            //[[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        } else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW) {
             [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
             NSString *tempDir = NSTemporaryDirectory();
             NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
@@ -1088,9 +1101,7 @@ BOOL missingAlertShown;
             [_rigAddToSceneBtn setHidden:NO];
             [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
             [_addJointBtn setEnabled:NO];
-        }
-        else
-        {
+        } else {
             [_rigAddToSceneBtn setHidden:YES];
             [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
         }
@@ -1138,7 +1149,7 @@ BOOL missingAlertShown;
     if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_OBJVIEW){
         if((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode-1) == RIG_MODE_OBJVIEW) {
             [self.view endEditing:YES];
-            UIAlertView *dataLossAlert = [[UIAlertView alloc]initWithTitle:@"Warning" message:@"Are you sure you want to go back to previous mode? By pressing Yes all your changes will be discarded." delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"Yes", nil];
+            UIAlertView *dataLossAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"rigging_back_previous_mode", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"NO", nil) otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
             [dataLossAlert setTag:DATA_LOSS_ALERT];
             [dataLossAlert show];
         } else {
@@ -1339,7 +1350,7 @@ BOOL missingAlertShown;
 
 - (IBAction)animationBtnAction:(id)sender
 {
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT){
+    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT) {
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -1349,12 +1360,9 @@ BOOL missingAlertShown;
         self.popUpVc.delegate=self;
         CGRect rect = _animationBtn.frame;
         rect = [self.view convertRect:rect fromView:_animationBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionLeft
-                                              animated:YES];
-    }
-    else{
+        [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+
+    } else {
         _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"animationBtn"];
         [_popUpVc.view setClipsToBounds:YES];
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
@@ -1364,10 +1372,7 @@ BOOL missingAlertShown;
         self.popUpVc.delegate=self;
         CGRect rect = _animationBtn.frame;
         rect = [self.view convertRect:rect fromView:_animationBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionRight
-                                              animated:YES];
+        [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:UIPopoverArrowDirectionRight animated:YES];
     }
 }
 
@@ -1386,10 +1391,7 @@ BOOL missingAlertShown;
     self.popUpVc.delegate=self;
     CGRect rect = _importBtn.frame;
     rect = [self.view convertRect:rect fromView:_importBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect
-                                            inView:self.view
-                          permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                          animated:YES];
+    [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
     
 }
 
@@ -1859,7 +1861,7 @@ BOOL missingAlertShown;
             int assetId = returnValue;
             if(assetId > 900 && assetId < 1000) {
                 int numberOfLight = assetId - 900;
-                [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
+                [self addLightToScene:[NSString stringWithFormat:NSLocalizedString(@"Light %d", nil), numberOfLight] assetId:assetId];
             } else {
                 AssetItem* assetObject = [cache GetAsset:assetId];
                 assetObject.isTempAsset = NO;
@@ -2099,7 +2101,6 @@ BOOL missingAlertShown;
     
     return CGPointMake(resWidth, resHeight);
 }
-
 
 - (void) changeLightProps:(Vector4)lightColor Distance:(float)distance LightType:(int)lType isStoredProperty:(BOOL)isStored
 {
@@ -2362,7 +2363,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
     
     UIAlertAction* deleteButton = [UIAlertAction
-                                   actionWithTitle:@"Delete"
+                                   actionWithTitle:NSLocalizedString(@"Delete", nil)
                                    style:UIAlertActionStyleDefault
                                    handler:^(UIAlertAction * action)
                                    {
@@ -2380,7 +2381,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                        [self showOrHideProgress:HIDE_PROGRESS];
                                    }];
     UIAlertAction* cloneButton = [UIAlertAction
-                                  actionWithTitle:@"Clone"
+                                  actionWithTitle:NSLocalizedString(@"Clone", nil)
                                   style:UIAlertActionStyleDefault
                                   handler:^(UIAlertAction * action)
                                   {
@@ -2575,8 +2576,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->selectMan->selectObject(editorScene->nodes.size()-1 , false);
         editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
-    
-    printf(" \n Number of nodes in scene %d ", (int)editorScene->nodes.size());
 }
 
 - (void) cloneSelectedAssetWithId:(int) selectedAssetId NodeType:(int) selectedNodeType AndSelNodeId:(int)selectedNodeIndex
@@ -2589,7 +2588,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if (selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) {
         
         if(sgNode->node->original && sgNode->node->original->instancedNodes.size() >= 8000) {
-            UIAlertView * cloneAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Copy limit exceeded. Import the object using 'Add' button on ToolBar." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            UIAlertView * cloneAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"copy_limit_exceed_message", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
             [cloneAlert show];
             return;
         }
@@ -2693,28 +2692,21 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         if(name == nil)
             name = @"";
         
-        if(editorScene->nodes[i]->getType() == NODE_CAMERA){
-            [assetsInScenes addObject:@"CAMERA"];
-        }
-        else if(editorScene->nodes[i]->getType() == NODE_LIGHT){
-            [assetsInScenes addObject:@"LIGHT"];
-        }
-        else if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT){
+        if(editorScene->nodes[i]->getType() == NODE_CAMERA) {
+            [assetsInScenes addObject:NSLocalizedString(@"CAMERA", nil)];
+        } else if(editorScene->nodes[i]->getType() == NODE_LIGHT) {
+            [assetsInScenes addObject:NSLocalizedString(@"LIGHT", nil)];
+        } else if(editorScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT) {
             [assetsInScenes addObject:name];
-        }
-        else if(editorScene->nodes[i]->getType() == NODE_IMAGE){
-            [assetsInScenes addObject:[NSString stringWithFormat:@"Image : %@",name]];
-        }
-        else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN){
-            [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
-        }
-        else if(editorScene->nodes[i]->getType() == NODE_TEXT){
-            [assetsInScenes addObject:[NSString stringWithFormat:@"Text : %@",name]];
-        }
-        else if(editorScene->nodes[i]->getType() == NODE_VIDEO){
-            [assetsInScenes addObject:[NSString stringWithFormat:@"Video : %@",name]];
-        }
-        else{
+        } else if(editorScene->nodes[i]->getType() == NODE_IMAGE) {
+            [assetsInScenes addObject:[NSString stringWithFormat:NSLocalizedString(@"Image : %@", nil), name]];
+        } else if(editorScene->nodes[i]->getType() == NODE_TEXT_SKIN) {
+            [assetsInScenes addObject:[NSString stringWithFormat:NSLocalizedString(@"Text : %@", nil), name]];
+        } else if(editorScene->nodes[i]->getType() == NODE_TEXT) {
+            [assetsInScenes addObject:[NSString stringWithFormat:NSLocalizedString(@"Text : %@", nil), name]];
+        } else if(editorScene->nodes[i]->getType() == NODE_VIDEO) {
+            [assetsInScenes addObject:[NSString stringWithFormat:NSLocalizedString(@"Video : %@", nil), name]];
+        } else {
             [assetsInScenes addObject:name];
         }
     }
@@ -2756,11 +2748,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) animationBtnDelegateAction:(int)indexValue
 {
-    if(indexValue==APPLY_ANIMATION){
+    if(indexValue==APPLY_ANIMATION) {
         [self.popoverController dismissPopoverAnimated:YES];
         if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN)) || editorScene->isJointSelected) {
             [self.view endEditing:YES];
-            UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please select a text or character to apply the animation." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"apply_animation_error", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [closeAlert show];
         }
         else{
@@ -2772,15 +2764,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.popoverController dismissPopoverAnimated:YES];
         if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN)) || editorScene->isJointSelected) {
             [self.view endEditing:YES];
-            UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please select a text or character to save the animation as a template." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"apply_animation_error", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [closeAlert show];
         }
         else {
             
             [self.view endEditing:YES];
-            UIAlertView* addAnimAlert = [[UIAlertView alloc] initWithTitle:@"Save your Animation as template" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+            UIAlertView* addAnimAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Confirmation", nil) message:NSLocalizedString(@"Save your Animation as template", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
             [addAnimAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-            [[addAnimAlert textFieldAtIndex:0] setPlaceholder:@"Animation Name"];
+            [[addAnimAlert textFieldAtIndex:0] setPlaceholder:NSLocalizedString(@"Animation Name", nil)];
             [[addAnimAlert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
             [addAnimAlert setTag:ADD_BUTTON_TAG];
             [addAnimAlert show];
@@ -2879,10 +2871,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
                 
                 if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && selectedNodeType != NODE_RIG) {
-                    UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Bones cannot be added to this model." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Bones cannot be added to this model.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                     [error show];
                 } else if(selectedNodeType == NODE_RIG && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
-                    UIAlertView* warning = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"This model was rigged using the previous version. Some of the envelope information might be missing. Do you want to continue?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES",nil];
+                    UIAlertView* warning = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"model_cannot_add_bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"NO", nil) otherButtonTitles:NSLocalizedString(@"YES", nil), nil];
                     [warning setTag:SGR_WARNING];
                     [warning show];
                     
@@ -2892,7 +2884,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             }
             else
             {
-                UIAlertView* error = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Select any Node to add Bone" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Please Select any Node to add Bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [error show];
             }
             break;
@@ -3130,12 +3122,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
             NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %.01f)", [self deviceName],iOSVersion]];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@ , iOS Version: %.01f)", [self deviceName],iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
         }else {
             [self.view endEditing:YES];
-            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Email account not configured." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"No_Email_account_configured", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [alert show];
             return;
         }
@@ -3231,12 +3223,11 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     UIAlertView* deleteAlert = nil;
     if (editorScene->selectedNodeId <= NODE_LIGHT) {
         [self.view endEditing:YES];
-        deleteAlert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete Animation in this Frame", nil];
+        deleteAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Delete", nil) message:@"" delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Delete Animation in this Frame", nil), nil];
         [deleteAlert setTag:DELETE_BUTTON_OBJECT_ANIMATION];
-    }
-    else {
+    } else {
         [self.view endEditing:YES];
-        deleteAlert = [[UIAlertView alloc] initWithTitle:@"Delete" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete Animation in this Frame", @"Delete Object", nil];
+        deleteAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Delete", nil) message:@"" delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Delete Animation in this Frame", nil), NSLocalizedString(@"Delete Object", nil), nil];
         [deleteAlert setTag:DELETE_BUTTON_OBJECT];
     }
     
@@ -3302,8 +3293,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType, bool hasTexture, std::string textureName)
 {
-    
-    NSLog(@"File Name %s Node Type %d",fileName.c_str(),nodeType);
+    NSLog(@"File Name %s Node Type %d", fileName.c_str(), nodeType);
     
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
@@ -3476,7 +3466,7 @@ void downloadFile(NSString* url, NSString* fileName)
     bool isKeySetForNode = editorScene->animMan->removeAnimationForSelectedNodeAtFrame(editorScene->currentFrame);
     if (!isKeySetForNode) {
         [self.view endEditing:YES];
-        UIAlertView* deleteAlert = [[UIAlertView alloc] initWithTitle:@"Info" message:@"There is no animation in this frame." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        UIAlertView* deleteAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Info", nil) message:NSLocalizedString(@"There is no animation in this frame.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
         [deleteAlert setTag:UNDEFINED_OBJECT];
         [deleteAlert show];
     }
@@ -3639,7 +3629,6 @@ void downloadFile(NSString* url, NSString* fileName)
         [self setUserInteractionStatus:YES];
     }
 }
-
 
 #pragma mark Meshproperties Delegate
 
@@ -3880,13 +3869,13 @@ void downloadFile(NSString* url, NSString* fileName)
             NSString* name = [[alertView textFieldAtIndex:0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if ([name length] == 0) {
                 [self.view endEditing:YES];
-                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation name cannot be empty." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Animation name cannot be empty.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                 [errorAlert show];
             }
             else {
                 [self.view endEditing:YES];
                 if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Animation Name cannot contain any special characters." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Animation_Name_special", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                     [errorAlert show];
                 }
                 else {
@@ -4078,20 +4067,17 @@ void downloadFile(NSString* url, NSString* fileName)
     if(editorScene && editorScene->isRigMode){
         switch (editorScene->rigMan->sceneMode) {
             case RIG_MODE_OBJVIEW:
-                [self.autoRigLbl setText:@"Place the bones in appropriate positions within the model."];
-                _rigScreenLabel.text = @"ATTACH SKELETON";
-                break;
             case RIG_MODE_MOVE_JOINTS:
-                [self.autoRigLbl setText:@"Place the bones in appropriate positions within the model."];
-                _rigScreenLabel.text = @"ATTACH SKELETON";
+                [self.autoRigLbl setText:NSLocalizedString(@"Step_1_rigging_message", nil)];
+                _rigScreenLabel.text = NSLocalizedString(@"ATTACH SKELETON", nil);
                 break;
             case RIG_MODE_EDIT_ENVELOPES:
-                [self.autoRigLbl setText:@"Scale each bone's envelope to cover the surrounding mesh."];
-                _rigScreenLabel.text = @"ADJUST ENVELOP";
+                [self.autoRigLbl setText:NSLocalizedString(@"Step_2_rigging_message", nil)];
+                _rigScreenLabel.text = NSLocalizedString(@"ADJUST ENVELOP", nil);
                 break;
             case RIG_MODE_PREVIEW:{
-                [self.autoRigLbl setText:@"Make sure the rig is perfect by animating the model."];
-                _rigScreenLabel.text = @"PREVIEW";
+                [self.autoRigLbl setText:NSLocalizedString(@"Step_3_rigging_message", nil)];
+                _rigScreenLabel.text = NSLocalizedString(@"PREVIEW", nil);
                 break;
             }
             default:
@@ -4124,7 +4110,8 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode
 {
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
-    NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
+    NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone", @"Cube", @"Cylinder", @"Plane", @"Sphere", @"Torus", nil];
+    
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
@@ -4133,6 +4120,7 @@ void downloadFile(NSString* url, NSString* fileName)
     std::string *objStr = NULL;
     std::string *textureStr = new std::string([(!isHaveTexture) ? @"White-texture" : textureFileName UTF8String]);
     NSString* assetName = (indexPathOfOBJ < 6 ) ? [basicShapes objectAtIndex:indexPathOfOBJ] : [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
+    assetName = NSLocalizedString(assetName, nil);
     
     int assetId = (!isTempNode) ? -1 : 123456;
     int assetIdReturn = 0;
@@ -4391,7 +4379,7 @@ void boneLimitsCallBack()
 - (void) boneLimitsAlert
 {
     [self.view endEditing:YES];
-    UIAlertView *boneLimitMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"The maximum bones per object cannot exceed 57." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *boneLimitMsg = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"bone_count_exceed", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     [boneLimitMsg show];
 }
 

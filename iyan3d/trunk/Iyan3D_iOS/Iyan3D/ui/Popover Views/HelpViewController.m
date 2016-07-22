@@ -74,6 +74,7 @@
     }
     return self;
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -121,6 +122,7 @@
 {
     [super viewDidAppear:animated];
 }
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -129,15 +131,23 @@
         [self.view.layer setMasksToBounds:YES];
     }
 }
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
     [self.responseData setLength:0];
 }
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
     [self.responseData appendData:data];
 }
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
 }
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
 
     [self performSelectorInBackground:@selector(reloadScrollView) withObject:nil];
     [connection cancel];
@@ -237,7 +247,9 @@
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",currentLinkValue]]];
 }
-- (NSString*) DownloadImage:(NSString *)nameImage{
+
+- (NSString*) DownloadImage:(NSString *)nameImage
+{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheDirectory = [paths objectAtIndex:0];
     NSString* fileName = [NSString stringWithFormat:@"%@/%@", cacheDirectory, nameImage];
@@ -247,7 +259,9 @@
     [UIImagePNGRepresentation(image) writeToFile:fileName options:NSAtomicWrite error:nil];
     return fileName;
 }
-- (UIImage*) GetImage:(NSString*)name{
+
+- (UIImage*) GetImage:(NSString*)name
+{
     UIImage* image = nil;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -259,6 +273,7 @@
     }
     return image;
 }
+
 - (void) scrollViewDidScroll:(UIScrollView *)sender
 {
     if (!pageControlBeingUsed) {
@@ -268,6 +283,7 @@
         self.pageControl.currentPage = page;
     }
 }
+
 - (IBAction) changePage
 {
     CGRect frame;
@@ -283,14 +299,17 @@
     pageControlBeingUsed = YES;
     
 }
+
 - (void) scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     pageControlBeingUsed = NO;
 }
+
 - (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     pageControlBeingUsed = NO;
 }
+
 - (void) didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -298,10 +317,12 @@
     
     // Release any cached data, images, etc that aren't in use.
 }
+
 - (IBAction) doneButtonAction:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (IBAction) moreInfoButtonAction:(id)sender
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.smackall.com/iyan3d/"]];

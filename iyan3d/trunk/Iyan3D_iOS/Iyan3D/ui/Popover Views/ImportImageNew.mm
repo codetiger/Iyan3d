@@ -26,17 +26,18 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"ImportImage iOS";
     
     [self.addBtn setEnabled:NO];
     self.cancelBtn.layer.cornerRadius = 8.0f;
     self.addBtn.layer.cornerRadius = 8.0f;
-    if(viewType == PICK_VIDEO){
+    
+    if(viewType == PICK_VIDEO) {
         [_addBtn setHidden:YES];
-    }
-    else{
+    } else {
         [_addBtn setHidden:NO];
         [_cancelBtn setHidden:NO];
     }
@@ -69,18 +70,17 @@
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    if(viewType == PICK_IMAGE){
+    if(viewType == PICK_IMAGE) {
         imageInfo = nil;
         imageInfo = [NSDictionary dictionaryWithDictionary:info];
         
-        if(imageInfo){
+        if(imageInfo) {
             [self.delegate pickedImageWithInfo:imageInfo type:YES];
             [self.addBtn setEnabled:YES];
-        }
-        else
+        } else
             [self.addBtn setEnabled:NO];
-    }
-    else if(viewType == PICK_VIDEO){
+        
+    } else if(viewType == PICK_VIDEO) {
         NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
         
         if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
@@ -94,7 +94,8 @@
     }
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
     [self.delegate showOrHideLeftView:NO withView:nil];
     [self.delegate removeTempNodeFromScene];
     [self.view removeFromSuperview];
