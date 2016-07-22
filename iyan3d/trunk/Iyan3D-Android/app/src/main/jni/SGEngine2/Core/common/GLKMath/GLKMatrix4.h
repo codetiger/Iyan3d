@@ -146,8 +146,8 @@ GLK_INLINE GLKMatrix4 GLKMatrix4SetColumn(GLKMatrix4 matrix, int column, GLKVect
     
 GLK_INLINE GLKMatrix4 GLKMatrix4Transpose(GLKMatrix4 matrix);
     
-GLKMatrix4 GLKMatrix4Invert(GLKMatrix4 matrix, bool * __nullable isInvertible);
-GLKMatrix4 GLKMatrix4InvertAndTranspose(GLKMatrix4 matrix, bool * __nullable isInvertible);
+GLKMatrix4 GLKMatrix4Invert(GLKMatrix4 matrix, bool *isInvertible);
+GLKMatrix4 GLKMatrix4InvertAndTranspose(GLKMatrix4 matrix, bool *isInvertible);
 
 GLK_INLINE GLKMatrix4 GLKMatrix4Multiply(GLKMatrix4 matrixLeft, GLKMatrix4 matrixRight);
 
