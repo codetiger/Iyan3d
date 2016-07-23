@@ -63,10 +63,12 @@
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil StartFrame:(int)startFrame EndFrame:(int)endFrame renderOutput:(int)exportType caMresolution:(int)resolution ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;
+
 @property (strong, nonatomic) RETrimControl *trimControl;
 @property (strong, nonatomic) NSString *sgbPath;
 @property (strong, nonatomic) NSString *projectName;
 @property (strong, nonatomic) NSString *videoFilePath;
+
 @property (weak, nonatomic) IBOutlet UILabel *transparentBgLabel;
 @property(nonatomic, weak) IBOutlet GADBannerView *bannerView;
 @property (weak, nonatomic) IBOutlet UIImageView *renderedImageView;
@@ -111,6 +113,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *limitFramesLbl;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 @property (weak, nonatomic) IBOutlet UIView *topBar;
+@property (weak, nonatomic) IBOutlet UILabel *renderTitleLabel;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)cameraResolutionChanged:(id)sender;

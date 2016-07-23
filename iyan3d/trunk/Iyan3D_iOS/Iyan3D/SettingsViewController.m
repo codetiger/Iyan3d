@@ -35,7 +35,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.screenName = @"SettingsViewVC iOS";
     [self setupImageTap];
@@ -46,6 +47,24 @@
     
     if(self.speedSwitch != nil)
         [self.speedSwitch setOn:[[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"]];
+    
+    [self.frameCountLabel setText:NSLocalizedString(@"FRAME COUNT DISPLAY", nil)];
+    [self.toolBarLabel setText:NSLocalizedString(@"TOOLBAR", nil)];
+    [self.workspaceLabel setText:NSLocalizedString(@"3D WORKSPACE", nil)];
+    [self.qualityLebel setText:NSLocalizedString(@"Quality", nil)];
+    [self.speedLabel setText:NSLocalizedString(@"Speed", nil)];
+    [self.qualitySettingIfoLabel setText:NSLocalizedString(@"This setting does not affect Export quality", nil)];
+    [self.multiselectLabel setText:NSLocalizedString(@"MultiSelect", nil)];
+    [self.settingsTitleLabel setText:NSLocalizedString(@"SETTINGS", nil)];
+    
+    [self.doneBtn setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
+    [self.restoreBtn setTitle:NSLocalizedString(@"RESTORE PURCHASE", nil) forState:UIControlStateNormal];
+    
+    [self.toolbarPosition setTitle:NSLocalizedString(@"RIGHT", nil) forSegmentAtIndex:0];
+    [self.toolbarPosition setTitle:NSLocalizedString(@"LEFT", nil) forSegmentAtIndex:1];
+
+    [self.frameCountDisplay setTitle:NSLocalizedString(@"FRAMES", nil) forSegmentAtIndex:0];
+    [self.frameCountDisplay setTitle:NSLocalizedString(@"DURATION", nil) forSegmentAtIndex:1];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -53,12 +72,14 @@
     [self.speedSwitch setOn:[[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"]];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)setupImageTap{
+-(void)setupImageTap
+{
     self.toolbarLeft.userInteractionEnabled = YES;
     UITapGestureRecognizer *tapToolBarLeft = [[UITapGestureRecognizer alloc]
                                               initWithTarget:self action:@selector(toolbarLeftTap:)];
@@ -134,33 +155,39 @@
     return NO;
 }
 
-- (IBAction)toolBarPositionChanged:(id)sender {
+- (IBAction)toolBarPositionChanged:(id)sender
+{
     NSLog(@"Tool Bar position Changed");
     [self.delegate toolbarPosition:(int)self.toolbarPosition.selectedSegmentIndex];
 }
 
-- (IBAction)renderPreviewSizeChanged:(id)sender {
+- (IBAction)renderPreviewSizeChanged:(id)sender
+{
     NSLog(@"Render preview size Changed");
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:(int)self.renderPreviewSize.selectedSegmentIndex] withKey:@"cameraPreviewSize"];
     [self.delegate cameraPreviewSize];
 }
 
-- (IBAction)frameCountDisplayType:(id)sender {
+- (IBAction)frameCountDisplayType:(id)sender
+{
     NSLog(@"frame display type Changed");
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.frameCountDisplay.selectedSegmentIndex] withKey:@"indicationType"];
     [self.delegate frameCountDisplayMode];
 }
 
-- (IBAction)previewpositionChanged:(id)sender {
+- (IBAction)previewpositionChanged:(id)sender
+{
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.renderPreviewPosition.selectedSegmentIndex] withKey:@"cameraPreviewPosition"];
     [self.delegate cameraPreviewPosition];
 }
 
-- (IBAction)doneBtnAction:(id)sender {
+- (IBAction)doneBtnAction:(id)sender
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)toolbarLeftTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+- (void)toolbarLeftTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.toolbarPosition.selectedSegmentIndex==0){
         self.toolbarPosition.selectedSegmentIndex=1;
         [self.delegate toolbarPosition:(int)self.toolbarPosition.selectedSegmentIndex];
@@ -170,7 +197,9 @@
     }
     
 }
-- (void)toolbarRightTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)toolbarRightTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.toolbarPosition.selectedSegmentIndex==0){
         
     }
@@ -180,7 +209,9 @@
     }
     
 }
-- (void)renderPreviewSizeSmallTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)renderPreviewSizeSmallTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.renderPreviewSize.selectedSegmentIndex==0){
         
     }
@@ -192,7 +223,9 @@
     }
     
 }
-- (void)renderPreviewSizeLargeTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)renderPreviewSizeLargeTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.renderPreviewSize.selectedSegmentIndex==0){
         self.renderPreviewSize.selectedSegmentIndex=1;
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithFloat:(int)self.renderPreviewSize.selectedSegmentIndex] withKey:@"cameraPreviewSize"];
@@ -204,7 +237,9 @@
     }
     
 }
-- (void)framesDisplayDurationTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)framesDisplayDurationTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.frameCountDisplay.selectedSegmentIndex==0){
         self.frameCountDisplay.selectedSegmentIndex=1;
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:(int)self.frameCountDisplay.selectedSegmentIndex] withKey:@"indicationType"];
@@ -215,7 +250,9 @@
     }
     
 }
-- (void)framesDisplayCountTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)framesDisplayCountTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.frameCountDisplay.selectedSegmentIndex==0){
         
     }
@@ -226,7 +263,9 @@
     }
     
 }
-- (void)previewPositionRightBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)previewPositionRightBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.renderPreviewPosition.selectedSegmentIndex!=0){
          self.renderPreviewPosition.selectedSegmentIndex=0;
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"cameraPreviewPosition"];
@@ -237,7 +276,9 @@
     }
     
 }
-- (void)previewPositionRightTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)previewPositionRightTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.renderPreviewPosition.selectedSegmentIndex!=1){
         self.renderPreviewPosition.selectedSegmentIndex=1;
                 [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:1] withKey:@"cameraPreviewPosition"];
@@ -248,7 +289,9 @@
     }
     
 }
-- (void)previewPositionLeftBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)previewPositionLeftBottomTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.renderPreviewPosition.selectedSegmentIndex!=2){
         self.renderPreviewPosition.selectedSegmentIndex=2;
                 [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:2] withKey:@"cameraPreviewPosition"];
@@ -259,7 +302,9 @@
     }
     
 }
-- (void)previewPositionLeftTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer{
+
+- (void)previewPositionLeftTopTap:(UITapGestureRecognizer *)pinchGestureRecognizer
+{
     if(self.renderPreviewPosition.selectedSegmentIndex!=3){
         self.renderPreviewPosition.selectedSegmentIndex=3;
                 [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:3] withKey:@"cameraPreviewPosition"];
@@ -271,8 +316,8 @@
     
 }
 
-
-- (IBAction)multiselectValueChanged:(id)sender {
+- (IBAction)multiselectValueChanged:(id)sender
+{
     if(self.multiSelectSwitch.isOn){
         [self.delegate multiSelectUpdate:YES];
     }
@@ -281,7 +326,8 @@
     }
 }
 
--(void) readUserSettings{
+-(void) readUserSettings
+{
     float cameraPreviewSize= [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewSize"]floatValue];
     int cameraPosition = [[[AppHelper getAppHelper]userDefaultsForKey:@"cameraPreviewPosition"]intValue];
     int frameCountMode = [[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"]intValue];
@@ -315,11 +361,13 @@
 
 }
 
-- (IBAction)toolTipAction:(id)sender {
+- (IBAction)toolTipAction:(id)sender
+{
     [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
 }
 
-- (IBAction)qualityOrSpeed:(id)sender {
+- (IBAction)qualityOrSpeed:(id)sender
+{
     UIAlertView *displayAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"reopen_apply_changes", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
     [displayAlert show];
     [[AppHelper getAppHelper] saveBoolUserDefaults:self.speedSwitch.isOn withKey:@"ScreenScaleDisable"];
@@ -385,18 +433,22 @@
 {
     
 }
+
 -(void)statusForOBJImport:(NSNumber*)object
 {
     
 }
+
 -(void)premiumUnlocked
 {
     
 }
+
 -(void)addRestoreId:(NSString*)productIdentifier
 {
     
 }
+
 -(void)setAnimationData:(NSArray*)allAnimations
 {
     

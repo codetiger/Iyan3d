@@ -9,17 +9,25 @@
             <connections>
                 <outlet property="doneBtn" destination="5SN-55-ANr" id="5R2-K9-dIk"/>
                 <outlet property="frameCountDisplay" destination="14a-cr-DF6" id="jMr-m2-YpE"/>
+                <outlet property="frameCountLabel" destination="ON9-M2-3L7" id="sEi-Cv-eQe"/>
                 <outlet property="framesDisplayCount" destination="4AM-Oh-6u7" id="0BO-75-0PK"/>
                 <outlet property="framesDisplayDuration" destination="pi2-nh-JrL" id="VcP-JD-c0j"/>
                 <outlet property="helpBtn" destination="f1X-a9-tfa" id="mez-PR-vKm"/>
                 <outlet property="multiSelectSwitch" destination="EsN-jX-vMF" id="JuG-fd-UZo"/>
+                <outlet property="multiselectLabel" destination="oMY-Au-PYQ" id="nrM-FQ-F5K"/>
+                <outlet property="qualityLebel" destination="YZe-Yf-86V" id="7WB-Ip-3Qk"/>
+                <outlet property="qualitySettingIfoLabel" destination="rXQ-Q6-V4G" id="zuJ-oO-mtf"/>
                 <outlet property="restoreBtn" destination="Tt3-Ct-3uo" id="Ln9-Ea-hon"/>
                 <outlet property="restorePurchaseProgress" destination="IBQ-JF-AsA" id="Sre-ut-SsE"/>
+                <outlet property="settingsTitleLabel" destination="v2J-gy-lLb" id="bHC-Lp-0Bj"/>
+                <outlet property="speedLabel" destination="b0U-w7-1zW" id="UQV-Ia-vTb"/>
                 <outlet property="speedSwitch" destination="Ghl-HK-uiB" id="yZu-rt-hiZ"/>
+                <outlet property="toolBarLabel" destination="ITc-Ob-8Zz" id="8bG-tO-CXD"/>
                 <outlet property="toolbarLeft" destination="BnY-cJ-lir" id="XTn-1t-vSr"/>
                 <outlet property="toolbarPosition" destination="TcA-9S-yyh" id="NWI-RQ-a2d"/>
                 <outlet property="toolbarRight" destination="DOc-LE-l8X" id="iVP-Zc-8Xn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="workspaceLabel" destination="2Iq-aE-Kig" id="e6r-1y-oCc"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -31,7 +39,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="542" height="38"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SETTINGS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v2J-gy-lLb">
-                            <rect key="frame" x="226" y="9" width="91" height="21"/>
+                            <rect key="frame" x="200" y="9" width="142" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>

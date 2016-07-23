@@ -80,6 +80,12 @@
     UITapGestureRecognizer *tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
     [self.view addGestureRecognizer:tapGest];
+    
+    [self.viewTitle setText:NSLocalizedString(@"Import Obj", nil)];
+    [self.ObjInfoLable setText:NSLocalizedString(@"Copy OBJ files in Document Directory.", nil)];
+    
+    [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
+    [self.addBtn setTitle:NSLocalizedString(@"NEXT", nil) forState:UIControlStateNormal];
 }
 
 - (void) resetCollectionView:(int) caseNum

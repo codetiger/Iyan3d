@@ -50,6 +50,15 @@
 @property (weak, nonatomic) IBOutlet UISwitch *speedSwitch;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 
+@property (weak, nonatomic) IBOutlet UILabel *frameCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *toolBarLabel;
+@property (weak, nonatomic) IBOutlet UILabel *workspaceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *qualityLebel;
+@property (weak, nonatomic) IBOutlet UILabel *speedLabel;
+@property (weak, nonatomic) IBOutlet UILabel *qualitySettingIfoLabel;
+@property (weak, nonatomic) IBOutlet UILabel *multiselectLabel;
+@property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
+
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)qualityOrSpeed:(id)sender;
 - (IBAction)restoreAction:(id)sender;

@@ -145,7 +145,16 @@
     
     self.nextButton.accessibilityHint = NSLocalizedString(@"tap_to_start", nil);
     self.nextButton.accessibilityIdentifier = @"2";
-    
+ 
+    [self.renderTitleLabel setText:NSLocalizedString(@"RENDERING PROGRESS", nil)];
+    [self.resolutionTypeLabel setText:NSLocalizedString(@"RESOLUTION", nil)];
+    [self.backgroundColorLable setText:NSLocalizedString(@"BACKGROUND COLOR", nil)];
+    [self.waterMarkLabel setText:NSLocalizedString(@"WATERMARK", nil)];
+    [self.renderingStyleLabel setText:NSLocalizedString(@"RENDERING STYLE", nil)];
+
+    [self.renderDesc setText:NSLocalizedString(@"Render Normal Shader in Your Device", nil)];
+    [self.limitFramesLbl setText:NSLocalizedString(@"LIMIT FRAMES", nil)];
+    [self.creditLable setText:NSLocalizedString(@"Credits", nil)];
 }
 
 - (void)trimControl:(RETrimControl *)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue

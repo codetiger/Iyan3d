@@ -22,14 +22,16 @@
 @interface LoginViewController : GAITrackedViewController<GIDSignInDelegate, GIDSignInUIDelegate,AppHelperDelegate>{
     
 }
-@property (weak, nonatomic) IBOutlet UIView *buttonView;
+
 @property (weak, nonatomic) IBOutlet UIButton *twitterSignin;
 @property (weak, nonatomic) IBOutlet UIButton *facebookSignin;
-
-@property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *googleSigninBtn;
+
+@property (weak, nonatomic) IBOutlet UILabel *infoLabel;
+@property (weak, nonatomic) IBOutlet UILabel *signinLabel;
+
 @property (weak, nonatomic) id <LoginViewControllerDelegate> delegare;
-- (IBAction)cancelBtnAction:(id)sender;
+
 - (IBAction)googleSigninAction:(id)sender;
 - (IBAction)fbSigninAction:(id)sender;
 - (IBAction)twitterSigninAction:(id)sender;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -9,13 +9,21 @@
             <connections>
                 <outlet property="doneBtn" destination="K0O-5a-7bb" id="FCW-6X-sca"/>
                 <outlet property="frameCountDisplay" destination="SB8-W0-hYL" id="4zE-Ly-GUQ"/>
+                <outlet property="frameCountLabel" destination="X9W-mD-14I" id="Jyn-NH-X2O"/>
                 <outlet property="helpBtn" destination="aIf-YY-O7q" id="oSB-RN-Bhr"/>
                 <outlet property="multiSelectSwitch" destination="HLY-Y3-GAG" id="8q7-cK-IfQ"/>
+                <outlet property="multiselectLabel" destination="ACw-lA-AL8" id="qwZ-qT-Yna"/>
+                <outlet property="qualityLebel" destination="11D-8I-IBV" id="BnX-f0-VOe"/>
+                <outlet property="qualitySettingIfoLabel" destination="hDK-dV-ydn" id="uPZ-KG-zjF"/>
                 <outlet property="restoreBtn" destination="6f4-Gj-L9N" id="kND-NE-2n2"/>
                 <outlet property="restorePurchaseProgress" destination="0Dv-zy-mGN" id="0r9-mP-OeK"/>
+                <outlet property="settingsTitleLabel" destination="v3R-Mg-cku" id="dif-lV-kSe"/>
+                <outlet property="speedLabel" destination="x4x-Z9-3KO" id="zjx-v0-Kis"/>
                 <outlet property="speedSwitch" destination="hET-nI-78L" id="oP4-hl-NSz"/>
+                <outlet property="toolBarLabel" destination="hpY-7U-sdz" id="bo4-3B-2uq"/>
                 <outlet property="toolbarPosition" destination="DR4-hq-Opf" id="2Ox-GC-taB"/>
                 <outlet property="view" destination="JSk-PW-0a1" id="Dex-54-031"/>
+                <outlet property="workspaceLabel" destination="pIQ-ov-ZbP" id="Bui-s2-L3i"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

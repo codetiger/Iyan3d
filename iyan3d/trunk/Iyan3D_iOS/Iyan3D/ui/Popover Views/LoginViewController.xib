@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
                 <outlet property="facebookSignin" destination="XC8-5H-C4c" id="q1n-t4-XGk"/>
                 <outlet property="googleSigninBtn" destination="8UU-lq-KgC" id="vnI-39-dHm"/>
+                <outlet property="infoLabel" destination="Xu5-c4-Bnj" id="XeJ-8w-XbP"/>
+                <outlet property="signinLabel" destination="E4E-UX-IoG" id="oSI-3e-mBp"/>
                 <outlet property="twitterSignin" destination="3hH-KI-AGn" id="XQA-MT-K5m"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

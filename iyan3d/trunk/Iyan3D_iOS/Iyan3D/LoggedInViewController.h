@@ -41,10 +41,22 @@
 
 @property (weak, nonatomic) IBOutlet UIView *creditsView;
 @property (weak, nonatomic) IBOutlet UITableView *renderStatus;
-@property (weak, nonatomic) IBOutlet UIButton *signOutBtn;
 @property (weak, nonatomic) id <LoggedinViewControllerDelegat> delegare;
 @property (weak, nonatomic) IBOutlet UILabel *creditsLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *creditsLoading;
+
+@property (weak, nonatomic) IBOutlet UILabel *creditsTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *addCreditsLabel;
+@property (weak, nonatomic) IBOutlet UIButton *add5kCreditsButton;
+@property (weak, nonatomic) IBOutlet UIButton *add20kCreditsButton;
+@property (weak, nonatomic) IBOutlet UIButton *add50kCreditsButton;
+
+@property (weak, nonatomic) IBOutlet UILabel *hqProgressTitleLabel;
+
+@property (weak, nonatomic) IBOutlet UIButton *manageAccountButton;
+@property (weak, nonatomic) IBOutlet UIButton *signOutBtn;
+
 - (IBAction)signOutBtn:(id)sender;
 - (IBAction)manageAccountAction:(id)sender;
+
 @end

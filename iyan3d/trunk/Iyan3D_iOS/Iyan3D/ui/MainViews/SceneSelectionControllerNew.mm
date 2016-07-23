@@ -363,9 +363,9 @@
     cell.delegate=self;
     if(indexPath.row < [scenesArray count]) {
         if(indexPath.row == 0) {
-            [cell setAccessibilityHint:@"Tap to open the scene."];
+            [cell setAccessibilityHint:NSLocalizedString(@"Tap to open the scene.", nil)];
             [cell setAccessibilityIdentifier:@"3"];
-            [cell.propertiesBtn setAccessibilityHint:@"Tap to Clone / Delete / Share the scene."];
+            [cell.propertiesBtn setAccessibilityHint:NSLocalizedString(@"Tap to Clone / Delete / Share the scene.", nil)];
             [cell.propertiesBtn setAccessibilityIdentifier:@"3"];
         } else {
             [cell setAccessibilityHint:@""];
@@ -387,11 +387,11 @@
     }
     else{
         if(indexPath.row == 0) {
-            [cell setAccessibilityHint:@"Creates a new scene."];
+            [cell setAccessibilityHint:NSLocalizedString(@"Creates a new scene.", nil)];
             [cell setAccessibilityIdentifier:@"3"];
          }
 
-        cell.name.text = @"Create Scene";
+        cell.name.text = NSLocalizedString(@"Create Scene", nil);
         cell.SelectedindexValue= indexPath.row;
         cell.propertiesBtn.hidden=YES;
         cell.image.image = [UIImage imageNamed:@"New-scene.png"];
@@ -835,7 +835,7 @@
 
     sceneToBeRenamed=indexValue;
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    [[renameScene textFieldAtIndex:0] setPlaceholder:@"Scene Name"];
+    [[renameScene textFieldAtIndex:0] setPlaceholder:NSLocalizedString(@"Scene Name", nil)];
     [[renameScene textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeAlphabet];
     [renameScene setTag:SCENE_NAME_ALERT];
     [renameScene show];

@@ -27,9 +27,9 @@
     self.screenName = @"LoginViewVC iOS";
     [GIDSignIn sharedInstance].uiDelegate = self;
     [GIDSignIn sharedInstance].delegate = self;
-    // Do any additional setup after loading the view from its nib.
     
-
+    [self.infoLabel setText:NSLocalizedString(@"Sign In", nil)];
+    [self.signinLabel setText:NSLocalizedString(@"Login to enjoy more features", nil)];
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,7 +94,6 @@
     activityView.center=self.view.center;
     [activityView startAnimating];
     [self.view addSubview:activityView];
-    [self.cancelBtn setEnabled:false];
     [self.facebookSignin setEnabled:false];
     [self.googleSigninBtn setEnabled:false];
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
@@ -109,7 +108,6 @@
             [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"credits"];
 
             [activityView setHidden:YES];
-            [self.cancelBtn setEnabled:true];
             [self.facebookSignin setEnabled:true];
             [self.googleSigninBtn setEnabled:true];
             [self.delegare dismisspopover];
@@ -118,7 +116,6 @@
         {
             NSLog(@"error: %@", [error localizedDescription]);
             [activityView setHidden:YES];
-            [self.cancelBtn setEnabled:true];
             [self.facebookSignin setEnabled:true];
             [self.googleSigninBtn setEnabled:true];
             

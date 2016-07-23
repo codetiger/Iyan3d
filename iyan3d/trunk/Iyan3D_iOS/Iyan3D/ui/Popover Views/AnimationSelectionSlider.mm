@@ -82,6 +82,10 @@
     UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
     [self.view addGestureRecognizer:tapGest];
+    
+    [self.addBtn setTitle:NSLocalizedString(@"ADD", nil) forState:UIControlStateNormal];
+    [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
+    [self.categoryBtn setTitle:NSLocalizedString(@"Trending", nil) forState:UIControlStateNormal];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

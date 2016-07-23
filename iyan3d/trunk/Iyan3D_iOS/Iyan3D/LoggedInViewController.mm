@@ -59,6 +59,16 @@
     [self.creditsLoading startAnimating];
     [self.creditsLoading setHidesWhenStopped:YES];
     
+    [self.creditsTitleLabel setText:NSLocalizedString(@"Credits", nil)];
+    [self.add5kCreditsButton setTitle:NSLocalizedString(@"Add 5k Credits", nil) forState:UIControlStateNormal];
+    [self.add20kCreditsButton setTitle:NSLocalizedString(@"Add 20k Credits", nil) forState:UIControlStateNormal];
+    [self.add50kCreditsButton setTitle:NSLocalizedString(@"Add 50k Credits", nil) forState:UIControlStateNormal];
+    
+    [self.hqProgressTitleLabel setText:NSLocalizedString(@"HQ Render Progress", nil)];
+    [self.addCreditsLabel setText:NSLocalizedString(@"Add Credits", nil)];
+    
+    [self.manageAccountButton setTitle:NSLocalizedString(@"Manage Account", nil) forState:UIControlStateNormal];
+    [self.signOutBtn setTitle:NSLocalizedString(@"Sign Out", nil) forState:UIControlStateNormal];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUserCredits_stopLoading) name:@"creditsupdate" object:nil];
     
@@ -76,12 +86,12 @@
     
     
     if(signinType == GOOGLE_SIGNIN)
-       [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"gPlus%@", extension]]];
+        [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"gPlus%@", extension]]];
     else if(signinType == FACEBOOK_SIGNIN)
         [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"fb%@", extension]]];
     else if(signinType == TWITTER_SIGNIN)
         [self.loginTypeImg setImage:[UIImage imageNamed:[NSString stringWithFormat:@"twit%@", extension]]];
-
+    
     
     
     [GIDSignIn sharedInstance].uiDelegate = self;
@@ -94,14 +104,14 @@
             [self getRenderTaskProgress:renderItem.taskId];
         }
     }
-
+    
     renderSectionTitles = [NSArray arrayWithObjects:
                            NSLocalizedString(@"In Progress", nil),
                            NSLocalizedString(@"Completed", nil),
                            nil];
     self.creditsView.layer.cornerRadius = 10;
     self.creditsView.layer.masksToBounds = YES;
-   
+    
 }
 
 - (void) requestCredits
@@ -122,7 +132,7 @@
     
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",taskId], @"taskid", nil]];
-
+    
     AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     __block BOOL complete = NO;
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
@@ -150,7 +160,7 @@
     
     if(renderData == nil)
         return;
-
+    
     for(int i = 0; i < [renderData count]; i++) {
         RenderItem* r = [renderData objectAtIndex:i];
         if(r.taskProgress >= 100)
@@ -292,7 +302,7 @@
                     UIImage *img = [UIImage imageWithContentsOfFile:outputFilePath];
                     UIImageWriteToSavedPhotosAlbum(img, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
                 }
-                    
+                
             }
             downloadCompletedTaskIds = taskId;
         }
@@ -308,7 +318,7 @@
     [operation start];
 }
 
- - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
     if(error != nil)
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
@@ -319,7 +329,7 @@
     [_renderStatus reloadData];
 }
 
- - (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
     if(error != nil)
         [self performSelectorOnMainThread:@selector(showCompletionAlert:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
@@ -328,7 +338,7 @@
     [self.delegare showOrHideProgress:NO];
     [_renderStatus setUserInteractionEnabled:YES];
     [_renderStatus reloadData];
-
+    
 }
 
 - (void) showCompletionAlert:(id) object
@@ -370,7 +380,7 @@
         } else if (signinType == TWITTER_SIGNIN) {
             [[[Twitter sharedInstance] sessionStore] logOutUserID:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]];
         }
-
+        
         [self reportAuthStatus];
         [self.delegare dismissView:self];
     }
@@ -389,7 +399,7 @@
     }
     else {
         NSLog(@"Success");
-         [self reportAuthStatus];
+        [self reportAuthStatus];
     }
 }
 
@@ -426,7 +436,7 @@
     [self.creditsLoading setHidden:NO];
     [self.creditsLoading startAnimating];
     [self.creditsLoading setHidesWhenStopped:YES];
-
+    
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
     [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIVE_THOUSAND_CREDITS];
@@ -437,7 +447,7 @@
     [self.creditsLoading setHidden:NO];
     [self.creditsLoading startAnimating];
     [self.creditsLoading setHidesWhenStopped:YES];
-
+    
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
     [[AppHelper getAppHelper] callPaymentGateWayForProduct:TWENTY_THOUSAND_CREDITS];
@@ -448,7 +458,7 @@
     [self.creditsLoading setHidden:NO];
     [self.creditsLoading startAnimating];
     [self.creditsLoading setHidesWhenStopped:YES];
-
+    
     [AppHelper getAppHelper].delegate = self;
     [[AppHelper getAppHelper] addTransactionObserver];
     [[AppHelper getAppHelper] callPaymentGateWayForProduct:FIFTY_THOUSAND_CREDITS];
@@ -466,7 +476,7 @@
 {
     [self.creditsLoading setHidden:YES];
     [self.creditsLoading stopAnimating];
-
+    
     [[AppHelper getAppHelper] removeTransactionObserver];
     [AppHelper getAppHelper].delegate = nil;
 }

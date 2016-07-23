@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -7,10 +7,16 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoggedInViewController">
             <connections>
-                <outlet property="creditsLabel" destination="W6X-Gk-Nbc" id="x4m-rt-RaH"/>
+                <outlet property="add20kCreditsButton" destination="FG0-MY-6tR" id="kNk-aB-XAI"/>
+                <outlet property="add50kCreditsButton" destination="p5W-c5-7em" id="MTg-uz-E3d"/>
+                <outlet property="add5kCreditsButton" destination="3NT-QT-Yg3" id="TFF-l5-TZh"/>
+                <outlet property="creditsLabel" destination="W6X-Gk-Nbc" id="WEd-mt-oer"/>
                 <outlet property="creditsLoading" destination="sJo-Vn-f2a" id="b9l-gT-03N"/>
+                <outlet property="creditsTitleLabel" destination="aBU-84-0Dh" id="G6f-Oe-m6E"/>
                 <outlet property="creditsView" destination="azG-rY-D24" id="xe9-pB-11t"/>
+                <outlet property="hqProgressTitleLabel" destination="nML-Fd-Itc" id="QiG-9F-ukg"/>
                 <outlet property="loginTypeImg" destination="XS5-g4-Qko" id="zgS-r5-Zzq"/>
+                <outlet property="manageAccountButton" destination="8bn-r1-jyb" id="CkR-ei-pOk"/>
                 <outlet property="renderStatus" destination="cjG-Jk-ict" id="tJs-RW-cBZ"/>
                 <outlet property="signOutBtn" destination="6dJ-Nl-VGu" id="gkc-gf-TVZ"/>
                 <outlet property="userNameLbl" destination="Vqr-A4-cVK" id="RCi-ol-HY8"/>

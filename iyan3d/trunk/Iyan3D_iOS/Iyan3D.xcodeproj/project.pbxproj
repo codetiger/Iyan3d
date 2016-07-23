@@ -1990,9 +1990,6 @@
 		62FA5F511990E9D4003B0893 /* clone-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F4B1990E9D4003B0893 /* clone-img.png */; };
 		62FA5F531990E9D4003B0893 /* feedback-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F4D1990E9D4003B0893 /* feedback-img.png */; };
 		62FA5F541990E9D4003B0893 /* new-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F4E1990E9D4003B0893 /* new-img.png */; };
-		62FA5F6119A3132F00F137C8 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62FA5F5F19A3132E00F137C8 /* HelpViewController.m */; };
-		62FA5F6219A3132F00F137C8 /* HelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F6019A3132E00F137C8 /* HelpViewController.xib */; };
-		62FA5F6619A31C8400F137C8 /* HelpViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F6519A31C8400F137C8 /* HelpViewControllerPhone.xib */; };
 		62FA5F6819A331A300F137C8 /* CrossForMain.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F6719A331A200F137C8 /* CrossForMain.png */; };
 		62FA5F7719A3696900F137C8 /* fatman_joints_poseA (ALPHA).png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F7519A3696900F137C8 /* fatman_joints_poseA (ALPHA).png */; };
 		62FA5F7819A3696900F137C8 /* fatman_poseA (ALPHA).png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F7619A3696900F137C8 /* fatman_poseA (ALPHA).png */; };
@@ -2405,7 +2402,6 @@
 		E20671571B049AA6006DD2F7 /* BitmapCropManipulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E591AFD3C7B0042F81A /* BitmapCropManipulator.m */; };
 		E206715C1B049AA6006DD2F7 /* AssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E24973F1196BD80F0025D442 /* AssetItem.m */; };
 		E206715E1B049AA6006DD2F7 /* FPPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173418C5DD7100BC5342 /* FPPopoverView.m */; };
-		E20671601B049AA6006DD2F7 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62FA5F5F19A3132E00F137C8 /* HelpViewController.m */; };
 		E20671631B049AA6006DD2F7 /* GetPixelDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E771AFD3E2B0042F81A /* GetPixelDemo.m */; };
 		E20671681B049AA6006DD2F7 /* ScaleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764E196BE0190025D442 /* ScaleViewController.m */; };
 		E206716A1B049AA6006DD2F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C885D78A1876BE6100A45D71 /* main.m */; };
@@ -2464,7 +2460,6 @@
 		E20672381B049AA6006DD2F7 /* AutoRigHelp4.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FED9E7D1A8E0F780089869B /* AutoRigHelp4.png */; };
 		E20672391B049AA6006DD2F7 /* play-video-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F31A7241AA4960300A6E7B1 /* play-video-phone@3x.png */; };
 		E206723C1B049AA6006DD2F7 /* clone-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F4B1990E9D4003B0893 /* clone-img.png */; };
-		E206723D1B049AA6006DD2F7 /* HelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F6019A3132E00F137C8 /* HelpViewController.xib */; };
 		E206723E1B049AA6006DD2F7 /* cancelButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0C02CD1A932CE000E2E09D /* cancelButton@2x.png */; };
 		E20672421B049AA6006DD2F7 /* up-arrow-75-90.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0087801ADFC15400764DDE /* up-arrow-75-90.png */; };
 		E20672441B049AA6006DD2F7 /* back-img-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC900901A0A01460051B941 /* back-img-phone.png */; };
@@ -2593,7 +2588,6 @@
 		E20673261B049AA6006DD2F7 /* texts-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F31A7301AA4960300A6E7B1 /* texts-phone@3x.png */; };
 		E20673271B049AA6006DD2F7 /* render_image-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC900B11A0A01470051B941 /* render_image-phone.png */; };
 		E206732A1B049AA6006DD2F7 /* animate-img-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9008F1A0A01460051B941 /* animate-img-phone@2x.png */; };
-		E206732B1B049AA6006DD2F7 /* HelpViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F6519A31C8400F137C8 /* HelpViewControllerPhone.xib */; };
 		E206732C1B049AA6006DD2F7 /* new-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9010D1A0A07860051B941 /* new-img@2x.png */; };
 		E206732D1B049AA6006DD2F7 /* BoneMesh.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974A8196BDC650025D442 /* BoneMesh.sgm */; };
 		E20673301B049AA6006DD2F7 /* back-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA5F4A1990E9D4003B0893 /* back-img.png */; };
@@ -4344,10 +4338,6 @@
 		62FA5F4B1990E9D4003B0893 /* clone-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "clone-img.png"; path = "Resources/imgs/clone-img.png"; sourceTree = "<group>"; };
 		62FA5F4D1990E9D4003B0893 /* feedback-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "feedback-img.png"; path = "Resources/imgs/feedback-img.png"; sourceTree = "<group>"; };
 		62FA5F4E1990E9D4003B0893 /* new-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "new-img.png"; path = "Resources/imgs/new-img.png"; sourceTree = "<group>"; };
-		62FA5F5E19A3132E00F137C8 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpViewController.h; path = "ui/Popover Views/HelpViewController.h"; sourceTree = "<group>"; };
-		62FA5F5F19A3132E00F137C8 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpViewController.m; path = "ui/Popover Views/HelpViewController.m"; sourceTree = "<group>"; };
-		62FA5F6019A3132E00F137C8 /* HelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HelpViewController.xib; path = "ui/Popover Views/HelpViewController.xib"; sourceTree = "<group>"; };
-		62FA5F6519A31C8400F137C8 /* HelpViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HelpViewControllerPhone.xib; path = "ui/Popover Views/HelpViewControllerPhone.xib"; sourceTree = "<group>"; };
 		62FA5F6719A331A200F137C8 /* CrossForMain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CrossForMain.png; path = Resources/imgs/CrossForMain.png; sourceTree = "<group>"; };
 		62FA5F7519A3696900F137C8 /* fatman_joints_poseA (ALPHA).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "fatman_joints_poseA (ALPHA).png"; path = "Resources/imgs/fatman_joints_poseA (ALPHA).png"; sourceTree = "<group>"; };
 		62FA5F7619A3696900F137C8 /* fatman_poseA (ALPHA).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "fatman_poseA (ALPHA).png"; path = "Resources/imgs/fatman_poseA (ALPHA).png"; sourceTree = "<group>"; };
@@ -6696,10 +6686,10 @@
 		25F80AB61CFDAEF400CF331B /* FollowUs */ = {
 			isa = PBXGroup;
 			children = (
-				25F80B171CFDC60000CF331B /* FollowUsVCPhone.xib */,
-				25F80AAF1CFDAC9F00CF331B /* FollowUsVC.xib */,
 				25F80ACE1CFDB30500CF331B /* FollowUsVC.h */,
 				25F80ACA1CFDB2CA00CF331B /* FollowUsVC.mm */,
+				25F80B171CFDC60000CF331B /* FollowUsVCPhone.xib */,
+				25F80AAF1CFDAC9F00CF331B /* FollowUsVC.xib */,
 			);
 			name = FollowUs;
 			sourceTree = "<group>";
@@ -6824,17 +6814,6 @@
 				01CCD1C71C3FDBA600565664 /* ObjSidePanelPhone.xib */,
 			);
 			name = OBJSelection;
-			sourceTree = "<group>";
-		};
-		25F80ABF1CFDB10100CF331B /* HelpView */ = {
-			isa = PBXGroup;
-			children = (
-				62FA5F5E19A3132E00F137C8 /* HelpViewController.h */,
-				62FA5F5F19A3132E00F137C8 /* HelpViewController.m */,
-				62FA5F6019A3132E00F137C8 /* HelpViewController.xib */,
-				62FA5F6519A31C8400F137C8 /* HelpViewControllerPhone.xib */,
-			);
-			name = HelpView;
 			sourceTree = "<group>";
 		};
 		25F80AC01CFDB16E00CF331B /* LoginView */ = {
@@ -7547,7 +7526,6 @@
 				25F80AC21CFDB1DB00CF331B /* SettingsView */,
 				25F80AC11CFDB19000CF331B /* UserAndRenderDetails */,
 				25F80AC01CFDB16E00CF331B /* LoginView */,
-				25F80ABF1CFDB10100CF331B /* HelpView */,
 				25F80ABE1CFDB0D000CF331B /* OBJSelection */,
 				25F80ABD1CFDB0A700CF331B /* AssetSelection */,
 				25F80ABC1CFDB09000CF331B /* TextImport */,
@@ -8066,7 +8044,6 @@
 				01ACD0A11C3CEEE70096AD14 /* No-Bevel_IPhone@2x.png in Resources */,
 				62FA5F511990E9D4003B0893 /* clone-img.png in Resources */,
 				01B4CFEC1C29219A0091E19B /* External-Render.png in Resources */,
-				62FA5F6219A3132F00F137C8 /* HelpViewController.xib in Resources */,
 				7F0C02D01A932CE000E2E09D /* cancelButton@2x.png in Resources */,
 				7F0087941ADFC15400764DDE /* up-arrow-75-90.png in Resources */,
 				7FC900C91A0A01470051B941 /* back-img-phone.png in Resources */,
@@ -8526,7 +8503,6 @@
 				7FC900C81A0A01470051B941 /* animate-img-phone@2x.png in Resources */,
 				25EC6CB81C7F39DD002CF5D2 /* wm93.png in Resources */,
 				01B395131C37A8DD003955C6 /* Add-Frames@2x.png in Resources */,
-				62FA5F6619A31C8400F137C8 /* HelpViewControllerPhone.xib in Resources */,
 				C8AA46FF1C227D3600C4AB53 /* Delete.png in Resources */,
 				25CACF671B27C2500027F48C /* FontCellViewPhone.xib in Resources */,
 				25EC3D561D366882006AE211 /* View_IPhone@3x.png in Resources */,
@@ -9235,7 +9211,6 @@
 				25EC6C2D1C7F39DD002CF5D2 /* wm23.png in Resources */,
 				25F80B0C1CFDB6E700CF331B /* twitterFollowPhone@2x.png in Resources */,
 				01B4D0501C2937000091E19B /* My-objects-Camera_Pad.png in Resources */,
-				E206723D1B049AA6006DD2F7 /* HelpViewController.xib in Resources */,
 				01B3953E1C37AC54003955C6 /* Normal-shader_Pad@2x.png in Resources */,
 				E206723E1B049AA6006DD2F7 /* cancelButton@2x.png in Resources */,
 				E20672421B049AA6006DD2F7 /* up-arrow-75-90.png in Resources */,
@@ -9631,7 +9606,6 @@
 				E252859B1B340319007C50F8 /* vertexColorSkin.vert in Resources */,
 				E206732A1B049AA6006DD2F7 /* animate-img-phone@2x.png in Resources */,
 				25EC6C751C7F39DD002CF5D2 /* wm59.png in Resources */,
-				E206732B1B049AA6006DD2F7 /* HelpViewControllerPhone.xib in Resources */,
 				E206732C1B049AA6006DD2F7 /* new-img@2x.png in Resources */,
 				E206732D1B049AA6006DD2F7 /* BoneMesh.sgm in Resources */,
 				25EC6B9F1C7F066B002CF5D2 /* wm1.png in Resources */,
@@ -10180,7 +10154,6 @@
 				C8E6173818C5DD7100BC5342 /* FPPopoverView.m in Sources */,
 				0184EC881C35406A006F0B57 /* RenderTableViewCell.m in Sources */,
 				25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */,
-				62FA5F6119A3132F00F137C8 /* HelpViewController.m in Sources */,
 				25DE105D1CAA8D6D0076F669 /* btSphereBoxCollisionAlgorithm.cpp in Sources */,
 				25DE10F91CAA8D6D0076F669 /* btSequentialImpulseConstraintSolver.cpp in Sources */,
 				25069F5F1D2BDAC900DBAE44 /* CommonProps.mm in Sources */,
@@ -10554,7 +10527,6 @@
 				25DE102E1CAA8D6D0076F669 /* btQuantizedBvh.cpp in Sources */,
 				E206715C1B049AA6006DD2F7 /* AssetItem.m in Sources */,
 				E206715E1B049AA6006DD2F7 /* FPPopoverView.m in Sources */,
-				E20671601B049AA6006DD2F7 /* HelpViewController.m in Sources */,
 				25DE10D81CAA8D6D0076F669 /* btRaycastCallback.cpp in Sources */,
 				25DE10C81CAA8D6D0076F669 /* btConvexCast.cpp in Sources */,
 				E20671631B049AA6006DD2F7 /* GetPixelDemo.m in Sources */,

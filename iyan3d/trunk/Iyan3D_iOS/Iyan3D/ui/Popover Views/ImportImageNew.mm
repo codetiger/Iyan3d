@@ -41,7 +41,9 @@
         [_addBtn setHidden:NO];
         [_cancelBtn setHidden:NO];
     }
-   
+ 
+    [self.addBtn setTitle:NSLocalizedString(@"ADD", nil) forState:UIControlStateNormal];
+    [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning

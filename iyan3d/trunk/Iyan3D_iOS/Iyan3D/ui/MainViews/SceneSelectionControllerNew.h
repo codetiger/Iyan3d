@@ -16,7 +16,6 @@
 #import <DropboxSDK/DropboxSDK.h>
 
 #import "Utility.h"
-#import "HelpViewController.h"
 #import "AppHelper.h"
 #import "GAI.h"
 #import "SceneSelectionFrameCell.h"
