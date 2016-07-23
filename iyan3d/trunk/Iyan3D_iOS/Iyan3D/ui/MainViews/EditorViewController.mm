@@ -1071,9 +1071,9 @@ BOOL missingAlertShown;
     self.addJointBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.autorigMirrorBtnHolder.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.rotateBtnAutorig.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
-    self.undoBtn.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"Undo / Redo your actions.";
-    self.redoBtn.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"Undo / Redo your actions." : @"";
-    
+    self.undoBtn.accessibilityHint = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"" : @"Undo / Redo your actions.", nil);
+    self.redoBtn.accessibilityHint = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"Undo / Redo your actions." : @"", nil);
+   
 }
 
 - (IBAction)moveLastAction:(id)sender
@@ -2910,8 +2910,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             textSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
             textSelectionSlider.bevelSlider.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
             textSelectionSlider.addToScene.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
-            textSelectionSlider.dummyRight.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"Toggle between store fonts and the fonts you have imported.";
-            textSelectionSlider.dummyLeft.accessibilityHint = (toolBarPos == TOOLBAR_LEFT) ? @"Toggle between store fonts and the fonts you have imported." : @"";
+            textSelectionSlider.dummyRight.accessibilityHint = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"" : @"Toggle between store fonts and the fonts you have imported.", nil);
+            textSelectionSlider.dummyLeft.accessibilityHint = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"Toggle between store fonts and the fonts you have imported." : @"", nil);
             break;
         }
         default:

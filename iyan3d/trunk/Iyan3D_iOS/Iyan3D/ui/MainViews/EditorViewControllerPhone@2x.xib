@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -69,7 +69,7 @@
                             <rect key="frame" x="507" y="378" width="74" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to add the rigged model in to the scene." identifier="2"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to add the rigged model in to the scene" identifier="2"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
                             <state key="normal" title="ADD TO SCENE">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -82,7 +82,7 @@
                             <rect key="frame" x="358" y="377" width="73" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to publish your animation to the store." identifier="2"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to publish your animation to the store" identifier="2"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="PUBLISH">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -105,7 +105,7 @@
                             <rect key="frame" x="349" y="378" width="100" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.42352944609999998" alpha="1" colorSpace="deviceRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Current mode in rigging." identifier="2"/>
+                            <accessibility key="accessibilityConfiguration" hint="Current mode in rigging" identifier="2"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -177,7 +177,7 @@
                             <rect key="frame" x="182" y="376" width="74" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549018" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Cancel rigging and go back to the scene." identifier="2"/>
+                            <accessibility key="accessibilityConfiguration" hint="Cancel rigging and go back to the scene" identifier="2"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
                             <state key="normal" title="CANCEL">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -196,7 +196,7 @@
                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jl8-44-P9I">
                     <rect key="frame" x="62" y="56" width="59" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Enable to move / rotate the mirror joint of selected joint." identifier="3"/>
+                    <accessibility key="accessibilityConfiguration" hint="Enable to move / rotate the mirror joint of selected joint" identifier="3"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -213,7 +213,7 @@
                             <rect key="frame" x="0.0" y="4" width="110" height="43"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to add a joint to the selected joint in the rig." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to add a joint to the selected joint in the rig" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="  ADD JOINT" image="Add-Bone-IPhone.png"/>
                             <connections>
@@ -224,7 +224,7 @@
                             <rect key="frame" x="0.0" y="193" width="110" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Export image/video to the Camera roll." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Export image/video to the Camera roll" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="EXPORT" image="EXPORT.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -237,7 +237,7 @@
                             <rect key="frame" x="1" y="43" width="109" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Manage objects in the scene." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Manage objects in the scene" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="MY OBJECTS" image="MY-OBJECTS_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -298,7 +298,7 @@
                             <rect key="frame" x="0.0" y="98" width="110" height="43"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  ROTATE" image="Rotate_IPhone.png">
@@ -312,7 +312,7 @@
                             <rect key="frame" x="0.0" y="81" width="110" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Import objects into the scene." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Import objects into the scene" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="ADD" image="Import_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -325,7 +325,7 @@
                             <rect key="frame" x="1" y="156" width="109" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Change properties of selected object." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Change properties of selected object" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="OPTIONS" image="Options_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -350,7 +350,7 @@
                             <rect key="frame" x="1" y="334" width="48" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Undo / Redo your actions." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Undo / Redo your actions" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" image="Redo_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -387,7 +387,7 @@
                             <rect key="frame" x="0.0" y="5" width="110" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Play the animation preview." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Play the animation preview" identifier="1"/>
                             <state key="normal" image="Play_IPhone.png"/>
                             <connections>
                                 <action selector="playButtonAction:" destination="-1" eventType="touchUpInside" id="ItS-2J-Xrp"/>
@@ -397,7 +397,7 @@
                             <rect key="frame" x="0.0" y="118" width="110" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="ANIMATION" image="Animation_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -410,7 +410,7 @@
                             <rect key="frame" x="1" y="263" width="109" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <state key="normal" title="ROTATE" image="Rotate_IPhone.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -429,7 +429,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
                             <rect key="frame" x="593" y="21" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Standard view angles." identifier="0"/>
+                            <accessibility key="accessibilityConfiguration" hint="Standard view angles" identifier="0"/>
                             <state key="normal" image="View_IPhone.png"/>
                             <connections>
                                 <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="6Gl-Tv-Qd8"/>
@@ -496,7 +496,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="G8Y-1j-55x">
                             <rect key="frame" x="0.0" y="19" width="75" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Save and Exit the scene." identifier="0"/>
+                            <accessibility key="accessibilityConfiguration" hint="Save and Exit the scene" identifier="0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" title=" Scenes" image="Back_IPhone.png"/>
                             <connections>
@@ -549,7 +549,7 @@
         <image name="Rotate_IPhone.png" width="25" height="18"/>
         <image name="Scale_IPhone.png" width="25" height="18"/>
         <image name="Undo_IPhone.png" width="17" height="20"/>
-        <image name="View_IPhone.png" width="19" height="19"/>
+        <image name="View_IPhone.png" width="22" height="22"/>
         <image name="info-icon_phone.png" width="22" height="22"/>
         <image name="move-first.png" width="40" height="40"/>
         <image name="move-last.png" width="40" height="40"/>

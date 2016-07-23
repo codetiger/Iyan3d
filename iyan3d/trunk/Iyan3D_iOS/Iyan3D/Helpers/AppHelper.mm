@@ -834,7 +834,7 @@
     if(toolTips == nil)
         toolTips = [[NSMutableArray alloc] init];
     
-    NSString* hint = [subView accessibilityHint];
+    NSString* hint = NSLocalizedString([subView accessibilityHint], nil);
     int arrowDirection = [[subView accessibilityIdentifier] intValue];
     
     if([hint length] > 8) {
@@ -858,7 +858,7 @@
 {
     for( UIView* subView in view.subviews) {
         if(![subView isHidden] && subView.frame.origin.x >= 0 && subView.frame.origin.x < mainView.frame.size.width) {
-            NSString* hint = [subView accessibilityHint];
+            NSString* hint = NSLocalizedString([subView accessibilityHint], nil);
             int arrowDirection = [[subView accessibilityIdentifier] intValue];
             
             if([hint length] > 8) {

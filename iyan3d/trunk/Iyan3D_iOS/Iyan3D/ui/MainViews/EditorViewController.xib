@@ -94,7 +94,7 @@
                             <rect key="frame" x="424" y="694" width="175" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.42352944609999998" alpha="1" colorSpace="deviceRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Current mode in rigging." identifier="2"/>
+                            <accessibility key="accessibilityConfiguration" hint="Current mode in rigging" identifier="2"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -103,7 +103,7 @@
                             <rect key="frame" x="457" y="694" width="110" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.51764705879999995" green="0.0" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to publish your animation to the store." identifier="2"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to publish your animation to the store" identifier="2"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <state key="normal" title="PUBLISH">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -196,7 +196,7 @@
                     <rect key="frame" x="723" y="696" width="110" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
-                    <accessibility key="accessibilityConfiguration" hint="Tap to add the rigged model in to the scene." identifier="2"/>
+                    <accessibility key="accessibilityConfiguration" hint="Tap to add the rigged model in to the scene" identifier="2"/>
                     <state key="normal" title="ADD TO SCENE">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -240,7 +240,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="euE-kx-9ry">
                             <rect key="frame" x="782" y="24" width="37" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Add Frames." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Add Frames" identifier="1"/>
                             <state key="normal" image="Add-Frames.png"/>
                             <connections>
                                 <action selector="addFrames:" destination="-1" eventType="touchUpInside" id="hqU-7U-POi"/>
@@ -273,7 +273,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Pow-v7-nF2">
                             <rect key="frame" x="6" y="24" width="74" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Save and Exit the scene." identifier="0"/>
+                            <accessibility key="accessibilityConfiguration" hint="Save and Exit the scene" identifier="0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" title=" Scenes" image="Back.png"/>
                             <connections>
@@ -298,7 +298,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wLO-9c-KMj">
                             <rect key="frame" x="840" y="33" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Standard view angles." identifier="0"/>
+                            <accessibility key="accessibilityConfiguration" hint="Standard view angles" identifier="0"/>
                             <state key="normal" title="Button" backgroundImage="View.png"/>
                             <connections>
                                 <action selector="viewBtn:" destination="-1" eventType="touchUpInside" id="vwX-Dj-z9m"/>
@@ -316,7 +316,7 @@
                             <rect key="frame" x="10" y="5" width="139" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to add a joint to the selected joint in the rig." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Tap to add a joint to the selected joint in the rig" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" title="  ADD JOINT" image="Add-Bone-pad.png"/>
                             <connections>
@@ -366,6 +366,19 @@
                                         <action selector="editFunction:" destination="-1" eventType="touchUpInside" id="1gK-at-C7P"/>
                                     </connections>
                                 </button>
+                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XNK-gI-GK5">
+                                    <rect key="frame" x="6" y="88" width="139" height="40"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                    <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <state key="normal" title="  SCALE" image="Scale_Pad.png">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="scaleBtnAction:" destination="-1" eventType="touchUpInside" id="KV5-Fe-mzH"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration" hint="Manage objects in the scene." identifier="1"/>
@@ -374,7 +387,7 @@
                             <rect key="frame" x="5" y="5" width="150" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Play the animation preview." identifier="0"/>
+                            <accessibility key="accessibilityConfiguration" hint="Play the animation preview" identifier="0"/>
                             <state key="normal" image="Play_Pad.png"/>
                             <connections>
                                 <action selector="playButtonAction:" destination="-1" eventType="touchUpInside" id="mEC-im-k0W"/>
@@ -384,7 +397,7 @@
                             <rect key="frame" x="10" y="346" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Import objects into the scene." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Import objects into the scene" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  ADD" image="Import_Pad.png">
@@ -398,7 +411,7 @@
                             <rect key="frame" x="10" y="391" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  ANIMATION" image="Animation_Pad.png">
@@ -412,7 +425,7 @@
                             <rect key="frame" x="10" y="437" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Change properties of selected object." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Change properties of selected object" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  OPTIONS" image="Options_Pad.png">
@@ -426,7 +439,7 @@
                             <rect key="frame" x="10" y="483" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Export image/video to the Camera roll." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Export image/video to the Camera roll" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  EXPORT" image="Export_Pad.png">
@@ -453,7 +466,7 @@
                             <rect key="frame" x="10" y="570" width="140" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
@@ -480,7 +493,7 @@
                             <rect key="frame" x="10" y="658" width="50" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Undo / Redo your actions." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Undo / Redo your actions" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <state key="normal" image="Redo_Pad.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -521,7 +534,7 @@
                                 </label>
                             </subviews>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Enable mirror to move / rotate the mirror joint of the selected joint." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Enable mirror to move / rotate the mirror joint of the selected joint" identifier="1"/>
                         </view>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3o8-L5-yrV">
                             <rect key="frame" x="10" y="50" width="139" height="40"/>
@@ -540,7 +553,7 @@
                             <rect key="frame" x="10" y="95" width="139" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode." identifier="1"/>
+                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
@@ -548,19 +561,6 @@
                             </state>
                             <connections>
                                 <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="ZMc-sR-zOd"/>
-                            </connections>
-                        </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XNK-gI-GK5">
-                            <rect key="frame" x="10" y="140" width="139" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  SCALE" image="Scale_Pad.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="scaleBtnAction:" destination="-1" eventType="touchUpInside" id="KV5-Fe-mzH"/>
                             </connections>
                         </button>
                     </subviews>
