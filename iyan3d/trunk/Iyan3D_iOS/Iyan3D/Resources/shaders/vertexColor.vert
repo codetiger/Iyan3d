@@ -17,14 +17,14 @@ attribute vec4 optionalData1;
 uniform mat4 model[uniSize];
 uniform vec4 props[uniSize];
 uniform vec3 perVertexColor[uniSize];
-uniform float ambientLight;
+uniform float ambientLight, uvScale;
 
 uniform vec3 eyePos;
 uniform mat4 vp,lvp;
 
 varying float vtransparency, visVertexColored, vreflection;
-varying float shadowDist, lightingValue, vAmbientLight;
-varying vec2 vTexCoord, texCoordsBias;
+varying float shadowDist, lightingValue;
+varying vec2 vTexCoord, texCoordsBias, vReflectionCoord;
 varying vec3 vertexColor;
 varying vec3 normal, eyeVec, vertexPosCam;
 varying mat3 tbnMatrix;
@@ -36,8 +36,7 @@ void main()
     visVertexColored = props[iId].y;
     vreflection = props[iId].z;
     vertexColor = (perVertexColor[iId].x == -1.0) ? optionalData1.xyz : perVertexColor[iId];
-    vTexCoord = texCoord1;
-    vAmbientLight = ambientLight;
+    vTexCoord = texCoord1 * uvScale;
 
     vec3 T = normalize(vec3(model[iId] * vec4(vertTangent, 0.0)));
     vec3 B = normalize(vec3(model[iId] * vec4(vertBitangent, 0.0)));
@@ -67,6 +66,11 @@ void main()
         eyeVec = vec3(0.0);
     }
     
+    vec3 r = reflect( -eyeVec, normal );
+    float m = 2. * sqrt(pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2.0));
+    vReflectionCoord = r.xy / m + .5;
+    vReflectionCoord.y = -vReflectionCoord.y;
+
     gl_Position = vp * model[iId] * vec4(vec3(vertPosition), 1.0);
 }
 

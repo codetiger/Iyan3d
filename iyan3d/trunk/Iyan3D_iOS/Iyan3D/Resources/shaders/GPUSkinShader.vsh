@@ -21,11 +21,11 @@ uniform vec3 perVertexColor[1];
 uniform mat4 mvp, model[1] ,lvp;
 uniform mat4 jointTransforms[57];
 uniform vec4 props[1];
-uniform float ambientLight;
+uniform float ambientLight, uvScale;
 
 varying float vtransparency, visVertexColored, vreflection;
-varying float shadowDist, lightingValue, vAmbientLight;
-varying vec2 vTexCoord, texCoordsBias;
+varying float shadowDist, lightingValue;
+varying vec2 vTexCoord, texCoordsBias, vReflectionCoord;
 varying vec3 vertexColor;
 varying vec3 normal, eyeVec, vertexPosCam;
 varying mat3 tbnMatrix;
@@ -35,10 +35,9 @@ void main()
     vtransparency = props[0].x;
     visVertexColored = props[0].y;
     vreflection = props[0].z;
-    vAmbientLight = ambientLight;
 
     vertexColor = perVertexColor[0];
-    vTexCoord = texCoord1;
+    vTexCoord = texCoord1 * uvScale;
 
     vec4 pos = vec4(0.0);
     vec4 nor = vec4(0.0);
@@ -126,6 +125,11 @@ void main()
     vec3 B = normalize(vec3(model[0] * vec4(vertBitangent, 0.0)));
     vec3 N = normalize(vec3(model[0] * vec4(vertNormal,  0.0)));
     tbnMatrix = mat3(T, B, N);
+
+    vec3 r = reflect( -eyeVec, normal );
+    float m = 2. * sqrt(pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2.0));
+    vReflectionCoord = r.xy / m + .5;
+    vReflectionCoord.y = -vReflectionCoord.y;
 
     gl_Position = mvp * pos;
 }

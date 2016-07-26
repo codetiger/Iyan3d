@@ -311,16 +311,6 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
     nodes[index]->shouldUpdateMesh = false;
 }
 
-void SceneManager::setDepthTest(bool enable)
-{
-#ifndef UBUNTU
-    if(enable)
-        glEnable(GL_DEPTH_TEST);
-    else
-        glDisable(GL_DEPTH_TEST);
-#endif
-}
-
 void SceneManager::setShaderState(int nodeIndex)
 {
     if(nodes[nodeIndex]->type <= NODE_TYPE_CAMERA)

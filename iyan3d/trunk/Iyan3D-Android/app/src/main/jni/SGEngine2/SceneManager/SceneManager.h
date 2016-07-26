@@ -61,7 +61,6 @@ public:
     void RenderNodeAlone(shared_ptr<Node> node);
     void setDisplayResolution(int width,int height);
     void setActiveCamera(shared_ptr<Node> node);
-    void setDepthTest(bool enable);
     shared_ptr<CameraNode> getActiveCamera();
     Texture* loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type, bool blurTexture, int blurRadius = 0);
     Texture* loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type);

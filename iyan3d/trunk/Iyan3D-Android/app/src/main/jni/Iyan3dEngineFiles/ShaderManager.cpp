@@ -60,11 +60,11 @@ void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, in
         ShaderManager::maxIntsances = 4000;
     }
 
-    for(int i = 0; i < TOTAL_MATERIALS;i++){
+    for(int i = 0; i < TOTAL_MATERIALS;i++) {
         if(deviceType == OPENGLES2)
-            LoadShader(smgr, deviceType,OGLMaterialAndShaderNames[i][0],OGLMaterialAndShaderNames[i][1],OGLMaterialAndShaderNames[i][2], strsToReplace);
-        if(deviceType == METAL)
-            LoadShader(smgr, deviceType,MTLMaterialAndShaderNames[i][0],MTLMaterialAndShaderNames[i][1],MTLMaterialAndShaderNames[i][2], strsToReplace);
+            LoadShader(smgr, deviceType, OGLMaterialAndShaderNames[i][0], OGLMaterialAndShaderNames[i][1], OGLMaterialAndShaderNames[i][2], strsToReplace);
+        else if(deviceType == METAL)
+            LoadShader(smgr, deviceType, MTLMaterialAndShaderNames[i][0], MTLMaterialAndShaderNames[i][1], MTLMaterialAndShaderNames[i][2], strsToReplace);
     }
 }
 
@@ -78,21 +78,21 @@ std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniform
         strsToReplace.insert(std::pair<string, string>("gl_InstanceIDEXT", "int(optionalData1.w)"));
     }
     
-        ShaderManager::maxIntsances = maxUniforms;
-        strsToReplace.insert(std::pair<string, string>("uniSize", to_string(ShaderManager::maxIntsances+1)));
+    ShaderManager::maxIntsances = maxUniforms;
+    strsToReplace.insert(std::pair<string, string>("uniSize", to_string(ShaderManager::maxIntsances+1)));
     
     return strsToReplace;
 }
 
 bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest)
 {
-    bool isDepthPass = (fShaderName=="")?true:false;
-    if(deviceType == OPENGLES2) {
-        return smgr->LoadShaders(materialName, BundlePath + "/" + vShaderName,
-                                 BundlePath + "/" + fShaderName, shadersStr, false, isTest);
-    }
+    bool isDepthPass = (fShaderName == "") ? true : false;
+
+    if(deviceType == OPENGLES2)
+        return smgr->LoadShaders(materialName, BundlePath + "/" + vShaderName, BundlePath + "/" + fShaderName, shadersStr, false, isTest);
     else if(deviceType == METAL)
-        return smgr->LoadShaders(materialName,vShaderName,fShaderName, shadersStr, isDepthPass);
+        return smgr->LoadShaders(materialName, vShaderName, fShaderName, shadersStr, isDepthPass);
+    
     return false;
 }
 
@@ -287,7 +287,7 @@ void ShaderManager::setLightsProperties(SGNode *sgNode, int paramIndex1 , int pa
         smgr->setPropertyValue(sgNode->node->material, "fadeEndDistance", fadeEndDistance, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightFadeDistance,smgr->getNodeIndexByID(sgNode->node->getID()));
         smgr->setPropertyValue(sgNode->node->material, "lightTypes", lightType, DATA_FLOAT, lightsCount, true ,SHADER_COMMON_lightType,smgr->getNodeIndexByID(sgNode->node->getID()));
 
-        smgr->setPropertyValue(sgNode->node->material, "ambientLight", &ambientLight, DATA_FLOAT, 1, false, SHADER_COMMON_ambientLight, smgr->getNodeIndexByID(sgNode->node->getID()));
+        smgr->setPropertyValue(sgNode->node->material, "ambientLight", &ambientLight, DATA_FLOAT, 1, true, SHADER_COMMON_ambientLight, smgr->getNodeIndexByID(sgNode->node->getID()));
 
         lightChanged = false;
         delete [] fadeEndDistance;
@@ -412,7 +412,7 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex)
 
     setSamplerType(sgNode, SHADER_COMMON_samplerType);
 
-    smgr->setPropertyValue(sgNode->node->material, "uvScale", &sgNode->node->uvScale, DATA_FLOAT, 1, true, SHADER_COMMON_uvScale, smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "uvScale", &sgNode->node->uvScale, DATA_FLOAT, 1, false, SHADER_COMMON_uvScale, smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
 void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex)

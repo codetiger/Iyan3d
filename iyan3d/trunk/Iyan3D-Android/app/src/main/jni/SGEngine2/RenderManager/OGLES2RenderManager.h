@@ -28,6 +28,12 @@
 
 class OGLES2RenderManager : public RenderManager {
 private:
+    uint32_t currentMaterial;
+    uint32_t currentTextures[32];
+    int currentTextureIndex;
+    bool currentDepthMask;
+    GLenum currentDepthFunction, currentBlendFunction;
+    
     void deleteAndUnbindBuffer(GLenum target,GLsizei size,const GLuint *bufferToDelete);
     void resetToMainBuffers();
     u_int32_t bindIndexBuffer(shared_ptr<Node> node, int meshBufferIndex);
@@ -69,6 +75,7 @@ public:
     void BindAttributes(Material *material,MESH_TYPE meshType = MESH_TYPE_LITE);
     void UnBindAttributes(Material *material);
     void useMaterialToRender(Material *material);
+    void bindTexture(int index, uint32_t texture);
     void draw3DLine(Vector3 start,Vector3 end,Material *material);
     void draw3DLines(vector<Vector3> vPositions,Material *material);
     void clearDepthBuffer();
@@ -89,6 +96,10 @@ public:
     
     void createVAO(shared_ptr<Node> node, short meshBufferIndex = 0);
     void updateVAO(shared_ptr<Node> node, bool updateIndices, bool updateAttr, short meshBufferIndex = 0);
+
+    void setDepthMask(bool enable);
+    void setDepthFunction(GLenum func);
+    void blendFunction(GLenum func);
 
 };
 

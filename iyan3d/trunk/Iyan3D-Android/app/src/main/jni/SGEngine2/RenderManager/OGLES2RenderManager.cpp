@@ -56,9 +56,10 @@ OGLES2RenderManager::~OGLES2RenderManager()
 
 void OGLES2RenderManager::Initialize()
 {
-    glEnable(GL_CULL_FACE); // as now default is back face culling
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
+    glEnable(GL_DEPTH_TEST);
 }
 
 Vector2 OGLES2RenderManager::getViewPort()
@@ -108,7 +109,7 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
             shaderPrograms[node] = material->shaderProgram;
     }
     
-    glUseProgram(material->shaderProgram);
+    useMaterialToRender(material);
     if(!supportsVAO) {
         MESH_TYPE mType = mesh->meshType;
         if(node->shouldUpdateMesh) {
@@ -207,7 +208,7 @@ void OGLES2RenderManager::endDisplay()
 
 void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex)
 {
-    glDepthFunc(GL_LEQUAL);
+//    setDepthFunction(GL_LEQUAL);
     if(!node || node->type <= NODE_TYPE_CAMERA)
         return;
     Mesh *nodeMes;
@@ -230,8 +231,8 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     GLenum indicesDataType = GL_UNSIGNED_SHORT;
     if (node->type == NODE_TYPE_PARTICLES) {
         if(!isRTT) {
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            glDepthMask(GL_FALSE);
+            blendFunction(GL_ONE);
+            setDepthMask(false);
         }
         unsigned int indicesSize = nodeMes->getIndicesCount(meshBufferIndex);
         shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
@@ -239,8 +240,8 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
             drawElements(getOGLDrawMode(DRAW_MODE_POINTS),(GLsizei)indicesSize,indicesDataType, 0, 0);
         
         if(!isRTT) {
-            glDepthMask(GL_TRUE);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            setDepthMask(true);
+            blendFunction(GL_ONE_MINUS_SRC_ALPHA);
         }
     } else {
         int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) : maxInstances;
@@ -305,13 +306,32 @@ void OGLES2RenderManager::UnBindAttributes(Material *material)
 
 void OGLES2RenderManager::useMaterialToRender(Material *material)
 {
-    glUseProgram(((OGLMaterial*)material)->shaderProgram);
+    if(currentMaterial != ((OGLMaterial*)material)->shaderProgram) {
+        glUseProgram(((OGLMaterial*)material)->shaderProgram);
+        currentMaterial = ((OGLMaterial*)material)->shaderProgram;
+    }
 }
 
-void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
+void OGLES2RenderManager::bindTexture(int index, uint32_t texture)
+{
+    if(currentTextures[index] != texture) {
+        if(currentTextureIndex != index) {
+            glActiveTexture(index);
+            currentTextureIndex = index;
+        }
+        glBindTexture(GL_TEXTURE_2D, texture);
+        currentTextures[index] = texture;
+    }
+}
+
+void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
 {
     uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
-    switch (uni.type){
+
+    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
+        return;
+    
+    switch (uni.type) {
         case DATA_FLOAT:
             glUniform1fv(uni.location,uni.count,(float*)uni.values);
             break;
@@ -340,16 +360,18 @@ void OGLES2RenderManager::BindUniform(Material* mat,shared_ptr<Node> node,u16 uI
         }
         case DATA_TEXTURE_2D:
         case DATA_TEXTURE_CUBE:{
-            glActiveTexture(GL_TEXTURE0 + userValue);
             u_int32_t *textureName = (u_int32_t*)uni.values;
-            glBindTexture(GL_TEXTURE_2D, *textureName);
-            glUniform1i(uni.location, userValue);
+            bindTexture(GL_TEXTURE0 + userValue, *textureName);
+            
+            if(uni.isUpdated)
+                glUniform1i(uni.location, userValue);
         }
             break;
         default:
-            Logger::log(ERROR, "OGLES2RenderManager","Uniform: " + uni.name + " Type Not Matched");
+            Logger::log(ERROR, "OGLES2RenderManager", "Uniform: " + uni.name + " Type Not Matched");
             break;
     }
+    ((OGLMaterial*)mat)->uniforms[uIndex].isUpdated = false;
 }
 
 void OGLES2RenderManager::bindDynamicUniform(Material *material,string name,void* values,DATA_TYPE type,unsigned short count,u16 paramIndex,int nodeIndex,Texture *tex, bool isFragmentData, bool blurTex)
@@ -377,16 +399,23 @@ void OGLES2RenderManager::setTransparencyBlending(bool enable)
 {
     if(enable) {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        blendFunction(GL_ONE_MINUS_SRC_ALPHA);
     } else {
         glDisable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    }
+}
+
+void OGLES2RenderManager::blendFunction(GLenum func)
+{
+    if(currentBlendFunction != func) {
+        glBlendFunc(GL_SRC_ALPHA, func);
+        currentBlendFunction = func;
     }
 }
 
 void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
-    glDepthFunc(GL_ALWAYS);
+//    setDepthFunction(GL_ALWAYS);
     // to flip horizontally for opengl textures
     Vector2 bottomRight = Helper::screenToOpenglCoords(originCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
     Vector2 upperLeft = Helper::screenToOpenglCoords(endCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
@@ -467,15 +496,7 @@ void OGLES2RenderManager::draw3DLines(vector<Vector3> vPositions,Material *mater
 
 bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color)
 {
-    
     changeViewport(width, height);
-    
-    if(!isDepthPass) {
-//        glEnable(GL_CULL_FACE); // as now default is back face culling
-//        glCullFace(GL_BACK);
-//        glFrontFace(GL_CW);
-    }
-    
     changeClearColor(color);
     
     GLbitfield mask = 0;
@@ -484,12 +505,11 @@ bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorB
     if(clearDepthBuf)
         mask |= GL_DEPTH_BUFFER_BIT;
     
-    glDepthMask(GL_TRUE);
+    setDepthMask(true);
     glClear(mask);
     
-    glEnable(GL_DEPTH_TEST);
     GLenum func = (!isDepthPass) ? GL_LEQUAL : GL_LESS;
-    glDepthFunc(func);
+    setDepthFunction(func);
     return true;
 }
 
@@ -510,8 +530,7 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
 {
     if(renderTexture){
         glBindFramebuffer(GL_FRAMEBUFFER,((OGLTexture*)renderTexture)->rttFrameBuffer);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)renderTexture)->OGLTextureName);
+        bindTexture(GL_TEXTURE0, ((OGLTexture*)renderTexture)->OGLTextureName);
         PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer, isDepthPass, color);
     }
     else
@@ -572,7 +591,7 @@ Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *textu
 {
     float mid = texture->height / 2.0;
     float difFromMid = touchPosition.y - mid;
-    glBindTexture(GL_TEXTURE_2D,((OGLTexture*)texture)->OGLTextureName);
+    glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)texture)->OGLTextureName);
     GLubyte pixelColor[4];
     glReadPixels((int)touchPosition.x,(int)(mid - difFromMid),1,1,GL_RGBA,GL_UNSIGNED_BYTE,&pixelColor[0]);
     return Vector4((int)pixelColor[0],(int)pixelColor[1],(int)pixelColor[2],(int)pixelColor[3]);
@@ -758,3 +777,21 @@ GLenum OGLES2RenderManager::getOGLDrawMode(DRAW_MODE mode)
             return GL_TRIANGLES;
     }
 }
+
+void OGLES2RenderManager::setDepthMask(bool enable)
+{
+    if(currentDepthMask != enable) {
+        glDepthMask(enable ? GL_TRUE : GL_FALSE);
+        currentDepthMask = enable;
+    }
+}
+
+void OGLES2RenderManager::setDepthFunction(GLenum func) {
+    if(currentDepthFunction != func) {
+        glDepthFunc(func);
+        currentDepthFunction = func;
+    }
+}
+
+
+

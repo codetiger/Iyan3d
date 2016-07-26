@@ -25,7 +25,7 @@
 
 #define MAX_SHADERS_PER_MATERIAL 8
 
-struct uniform{
+struct uniform {
     std::string name;
     uint32_t location;
     DATA_TYPE type;
@@ -34,6 +34,7 @@ struct uniform{
     unsigned short count;
     void *values;
     short nodeIndex;
+    bool isUpdated;
 };
 
 struct attribute{

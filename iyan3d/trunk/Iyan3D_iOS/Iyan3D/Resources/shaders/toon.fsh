@@ -17,7 +17,7 @@ uniform  float shadowTextureSize;
 uniform float numberOfLights;
 uniform vec3 lightColor[5] , lightPos[5];
 uniform float fadeEndDistance[5];
-uniform float lightTypes[5];
+uniform float lightTypes[5], uvScale;
 
 varying float vtransparency, visVertexColored, vreflection;
 varying vec3 vertexColor;
@@ -61,7 +61,7 @@ void main()
     lowp vec4 diffuse_color = vec4(vec3(vertexColor),1.0);
     
     if(int(visVertexColored) == 0)
-        diffuse_color = texture2D(colorMap, vTexCoord.xy);
+        diffuse_color = texture2D(colorMap, vTexCoord);
 
     vec4 specular = vec4(0.0);
     vec4 toonColor = diffuse_color;
