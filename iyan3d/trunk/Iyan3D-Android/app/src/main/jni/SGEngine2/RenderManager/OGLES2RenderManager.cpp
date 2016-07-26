@@ -471,9 +471,9 @@ bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorB
     changeViewport(width, height);
     
     if(!isDepthPass) {
-        glEnable(GL_CULL_FACE); // as now default is back face culling
-        glCullFace(GL_BACK);
-        glFrontFace(GL_CW);
+//        glEnable(GL_CULL_FACE); // as now default is back face culling
+//        glCullFace(GL_BACK);
+//        glFrontFace(GL_CW);
     }
     
     changeClearColor(color);
@@ -483,7 +483,10 @@ bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorB
         mask |= GL_COLOR_BUFFER_BIT;
     if(clearDepthBuf)
         mask |= GL_DEPTH_BUFFER_BIT;
+    
+    glDepthMask(GL_TRUE);
     glClear(mask);
+    
     glEnable(GL_DEPTH_TEST);
     GLenum func = (!isDepthPass) ? GL_LEQUAL : GL_LESS;
     glDepthFunc(func);
