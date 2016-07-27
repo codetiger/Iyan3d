@@ -1892,6 +1892,13 @@
 		3D71B0741C2930E30038C4BD /* AssetFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B0711C2930E30038C4BD /* AssetFrameCell.mm */; };
 		3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
 		3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
+		3DA6EE851D486E5100C842C6 /* mesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE841D486E5100C842C6 /* mesh.vsh */; };
+		3DA6EE871D4870C000C842C6 /* common.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE861D4870C000C842C6 /* common.fsh */; };
+		3DA6EE891D48807400C842C6 /* skin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE881D48807400C842C6 /* skin.vsh */; };
+		3DA6EE8B1D48838A00C842C6 /* textskin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE8A1D48838A00C842C6 /* textskin.vsh */; };
+		3DA6EE8C1D48838A00C842C6 /* textskin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE8A1D48838A00C842C6 /* textskin.vsh */; };
+		3DA6EE8E1D48892700C842C6 /* colortext.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE8D1D48892700C842C6 /* colortext.vsh */; };
+		3DA6EE8F1D48892700C842C6 /* colortext.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE8D1D48892700C842C6 /* colortext.vsh */; };
 		3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
 		3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
 		3DAC8C3D1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */; };
@@ -4268,6 +4275,11 @@
 		3D71B0701C2930E30038C4BD /* AssetFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetFrameCell.h; path = "ui/Popover Views/AssetFrameCell.h"; sourceTree = "<group>"; };
 		3D71B0711C2930E30038C4BD /* AssetFrameCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AssetFrameCell.mm; path = "ui/Popover Views/AssetFrameCell.mm"; sourceTree = "<group>"; };
 		3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetFrameCell.xib; path = "ui/Popover Views/AssetFrameCell.xib"; sourceTree = "<group>"; };
+		3DA6EE841D486E5100C842C6 /* mesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = mesh.vsh; path = Resources/shaders/mesh.vsh; sourceTree = "<group>"; };
+		3DA6EE861D4870C000C842C6 /* common.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = common.fsh; path = Resources/shaders/common.fsh; sourceTree = "<group>"; };
+		3DA6EE881D48807400C842C6 /* skin.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = skin.vsh; path = Resources/shaders/skin.vsh; sourceTree = "<group>"; };
+		3DA6EE8A1D48838A00C842C6 /* textskin.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = textskin.vsh; path = Resources/shaders/textskin.vsh; sourceTree = "<group>"; };
+		3DA6EE8D1D48892700C842C6 /* colortext.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = colortext.vsh; path = Resources/shaders/colortext.vsh; sourceTree = "<group>"; };
 		3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SceneSelectionControllerNewPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LoadingViewControllerPhone@2x.xib"; path = "ui/MainViews/LoadingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RenderingViewControllerPhone@2x.xib"; path = "ui/Popover Views/RenderingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
@@ -7555,6 +7567,14 @@
 		C82EA4BD187EAACE00A8468A /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				3DA6EE841D486E5100C842C6 /* mesh.vsh */,
+				3DA6EE881D48807400C842C6 /* skin.vsh */,
+				3DA6EE8A1D48838A00C842C6 /* textskin.vsh */,
+				3DA6EE861D4870C000C842C6 /* common.fsh */,
+				E24975CB196BDD590025D442 /* color.vert */,
+				E22678851AC4557A001C8C66 /* colorskin.vert */,
+				3DA6EE8D1D48892700C842C6 /* colortext.vsh */,
+				E24975C2196BDD590025D442 /* color.frag */,
 				253B52801BDBBD9100E93208 /* commonL1.fsh */,
 				259EE1461BDE081200C99784 /* commonL2.fsh */,
 				259EE1471BDE081200C99784 /* commonL3.fsh */,
@@ -7565,11 +7585,8 @@
 				E24975EE196BDD590025D442 /* vertexColor.vert */,
 				6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */,
 				6231CEDD1B1484AE00DCD585 /* shader.vsh */,
-				E211247C1AF20A0D00C23624 /* Shaders.metal */,
 				6231CEDE1B1484AE00DCD585 /* toon.fsh */,
-				E24975C2196BDD590025D442 /* color.frag */,
-				E24975CB196BDD590025D442 /* color.vert */,
-				E22678851AC4557A001C8C66 /* colorskin.vert */,
+				E211247C1AF20A0D00C23624 /* Shaders.metal */,
 				25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */,
 				2516DC0B1C5F90C70034145D /* particles.vsh */,
 				2516DC0E1C5F915C0034145D /* particles.fsh */,
@@ -8159,6 +8176,7 @@
 				01B395191C37A8DD003955C6 /* Previous-Frame@2x.png in Resources */,
 				7FC901711A0A54BF0051B941 /* topbarView@2x.png in Resources */,
 				0169C4771C33ED5A00132FF6 /* popoverArrowUp@2x.png in Resources */,
+				3DA6EE871D4870C000C842C6 /* common.fsh in Resources */,
 				01B4BCB71C32904C00E09269 /* EditorViewControllerPhone.xib in Resources */,
 				01B02CCC1C61CAB400C9102A /* Move_IPhone@3x.png in Resources */,
 				25EC6C6A1C7F39DD002CF5D2 /* wm54.png in Resources */,
@@ -8369,6 +8387,7 @@
 				01B02CBA1C61CAB400C9102A /* Google_IPhone@3x.png in Resources */,
 				01F8730C1C3A6C4E009AA31E /* Redo_IPhone@2x.png in Resources */,
 				6231CEE81B1484AE00DCD585 /* toon.fsh in Resources */,
+				3DA6EE891D48807400C842C6 /* skin.vsh in Resources */,
 				7F31A7541AA4960300A6E7B1 /* topbarView-phone@3x.png in Resources */,
 				01ACD09F1C3CEEE70096AD14 /* No-Bevel_IPhone.png in Resources */,
 				7FC527691B6F96FF00C5D26D /* Rate.png in Resources */,
@@ -8573,6 +8592,7 @@
 				01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */,
 				254A4B331D34F82B00D23D6D /* SwitchPropCell.xib in Resources */,
 				257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */,
+				3DA6EE851D486E5100C842C6 /* mesh.vsh in Resources */,
 				E2497665196BE0190025D442 /* ObjCellView.xib in Resources */,
 				250E54A91D3E07C40081A7CB /* Icon0@2x - Copy.png in Resources */,
 				25EC6CDA1C7F39DD002CF5D2 /* wm110.png in Resources */,
@@ -8753,6 +8773,7 @@
 				01B4BD1B1C32C93B00E09269 /* Undo_IPhone@2x.png in Resources */,
 				7FC527681B6F96FF00C5D26D /* Rate-phone@3x.png in Resources */,
 				E21A89491B08A5AA00435C87 /* clock.png in Resources */,
+				3DA6EE8E1D48892700C842C6 /* colortext.vsh in Resources */,
 				6231CEE21B1484AE00DCD585 /* draw2dImage.fsh in Resources */,
 				7F7D5A2F1B8C91D100E6BA86 /* googlelogin_Iphone.png in Resources */,
 				01ACD0921C3CDEE60096AD14 /* ImportImageNewPhone.xib in Resources */,
@@ -8849,6 +8870,7 @@
 				7FC901561A0A54850051B941 /* Animation-topviewBg-phone.png in Resources */,
 				7FC901651A0A54850051B941 /* last-phone.png in Resources */,
 				25EFBEB91BE25CB400DB300C /* RETrimControl.bundle in Resources */,
+				3DA6EE8B1D48838A00C842C6 /* textskin.vsh in Resources */,
 				7FC900C61A0A01470051B941 /* add-frame-phone@2x.png in Resources */,
 				7FED9E821A8E0F780089869B /* AutoRigHelp2.png in Resources */,
 				62FB86801988D33A00AC7424 /* scale-img.png in Resources */,
@@ -9470,6 +9492,7 @@
 				250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
 				01B4CF851C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
 				25EFBEB31BE25CA700DB300C /* RenPro.xib in Resources */,
+				3DA6EE8C1D48838A00C842C6 /* textskin.vsh in Resources */,
 				E20672EB1B049AA6006DD2F7 /* frames-phone@3x.png in Resources */,
 				01F8730F1C3A6C4E009AA31E /* Rotate_IPhone@2x.png in Resources */,
 				E20672EC1B049AA6006DD2F7 /* LoadingViewControllerPad.xib in Resources */,
@@ -9627,6 +9650,7 @@
 				0169C4801C33ED5A00132FF6 /* popoverBg@2x.png in Resources */,
 				3DAEFFF11C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */,
 				01F8730B1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
+				3DA6EE8F1D48892700C842C6 /* colortext.vsh in Resources */,
 				25EC3D1D1D360CFF006AE211 /* info-icon_phone@2x.png in Resources */,
 				3D5F99271C4D04EB00DD47F5 /* Torus.png in Resources */,
 				E20673321B049AA6006DD2F7 /* Scene-topviewBg-phone.png in Resources */,

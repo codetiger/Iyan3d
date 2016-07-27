@@ -15,7 +15,7 @@ uniform sampler2D reflectionMap;
 uniform float shadowDarkness;
 uniform float shadowTextureSize;
 uniform float hasReflectionMap, hasNormalMap, ambientLight;
-uniform vec3 lightColor[5] , lightPos[5];
+uniform vec3 lightColor[5], lightPos[5];
 uniform float fadeEndDistance[5];
 uniform float lightTypes[5];
 
