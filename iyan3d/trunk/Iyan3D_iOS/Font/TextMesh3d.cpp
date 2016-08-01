@@ -17,7 +17,8 @@ int boneIndex;
 Vector4 vertexColor;
 typedef GLvoid (*GLUTesselatorFunction) ();
 
-void AddMeshVertex(SkinMesh* mesh, Vector4 v) {
+void AddMeshVertex(SkinMesh* mesh, Vector4 v)
+{
     vertexDataHeavy vts;
     vts.vertPosition.x = v.x;
     vts.vertPosition.y = v.y;
@@ -30,30 +31,36 @@ void AddMeshVertex(SkinMesh* mesh, Vector4 v) {
     mesh->addToIndicesArray(mesh->getVerticesCount()-1);
 }
 
-void beginCallback(GLenum which) {
+void beginCallback(GLenum which)
+{
 }
 
-void endCallback(void) {
+void endCallback(void)
+{
 }
 
-void flagCallback( GLboolean ) {
+void flagCallback( GLboolean )
+{
     
 }
 
-void errorCallback(GLenum errorCode) {
+void errorCallback(GLenum errorCode)
+{
     const GLubyte *estring;
     
     estring = gluErrorString(errorCode);
     fprintf (stderr, "Tessellation Error: %s\n", estring);
 }
 
-void vertexCallback(GLvoid *vertex) {
+void vertexCallback(GLvoid *vertex)
+{
     const GLdouble *d;
     d = (GLdouble *) vertex;
     AddMeshVertex(mesh, Vector4(d[0], d[1], d[2], 0.0));
 }
 
-void combineCallback(GLdouble coords[3], GLdouble *vertex_data[4], GLfloat weight[4], GLdouble **dataOut) {
+void combineCallback(GLdouble coords[3], GLdouble *vertex_data[4], GLfloat weight[4], GLdouble **dataOut)
+{
     GLdouble *vertex;
     
     vertex = (GLdouble *) malloc(6 * sizeof(GLdouble));
@@ -63,7 +70,8 @@ void combineCallback(GLdouble coords[3], GLdouble *vertex_data[4], GLfloat weigh
     *dataOut = vertex;
 }
 
-Vectoriser* TextMesh3d::generateVertices(FT_Face face, wchar_t ch, unsigned short bezierSteps, double strength) {
+Vectoriser* TextMesh3d::generateVertices(FT_Face face, wchar_t ch, unsigned short bezierSteps, double strength)
+{
     FT_UInt charIndex = FT_Get_Char_Index(face, ch);
     if(FT_Load_Glyph(face, charIndex, FT_LOAD_DEFAULT)) {
         Logger::log(INFO, "TextMesh3d", "FT_Load_Glyph failed");
@@ -94,7 +102,8 @@ Vectoriser* TextMesh3d::generateVertices(FT_Face face, wchar_t ch, unsigned shor
     return v;
 }
 
-void TextMesh3d::AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius) {
+void TextMesh3d::AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius)
+{
     static FT_UInt prevCharIndex = 0, curCharIndex = 0;
     static FT_Pos  prev_rsb_delta = 0;
     
@@ -161,7 +170,8 @@ void TextMesh3d::AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short b
     prevCharIndex = curCharIndex;
 }
 
-double TextMesh3d::AddCharacter(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius) {
+double TextMesh3d::AddCharacter(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius)
+{
     static FT_UInt prevCharIndex = 0, curCharIndex = 0;
     static FT_Pos  prev_rsb_delta = 0;
     
@@ -261,7 +271,8 @@ double TextMesh3d::AddCharacter(FT_Face face, wchar_t ch, unsigned short bezierS
     return offset + chSize;
 }
 
-void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius, int bevelSegments, int height) {
+void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius, int bevelSegments, int height)
+{
     static FT_UInt prevCharIndex = 0, curCharIndex = 0;
     static FT_Pos  prev_rsb_delta = 0;
     
@@ -360,7 +371,8 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
     prevCharIndex = curCharIndex;
 }
 
-AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments) {
+AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments)
+{
     FT_Library library;
     if (FT_Init_FreeType(&library)) {
         printf("FT_Init_FreeType failed\n");
@@ -437,7 +449,8 @@ AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, f
     return mesh;
 }
 
-Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments) {
+Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments)
+{
     FT_Library library;
     if (FT_Init_FreeType(&library)) {
         printf("FT_Init_FreeType failed\n");

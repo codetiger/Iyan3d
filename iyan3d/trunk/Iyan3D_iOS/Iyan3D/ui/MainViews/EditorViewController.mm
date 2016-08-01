@@ -16,6 +16,8 @@
 #import "MediaPreviewVC.h"
 #import <sys/utsname.h>
 
+#import "SceneImporter.h"
+
 @implementation EditorViewController
 
 #define EXPORT_POPUP 1
@@ -1404,6 +1406,33 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
+    /*
+    SceneImporter *loader = new SceneImporter();
+    vector< shared_ptr<Node> > nds = loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "bonetest.dae");
+    for (int i = 0; i < nds.size(); i++) {
+        nds[i]->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
+        nds[i]->callbackFuncName = "setUniforms";
+        
+        smgr->AddNode(nds[i], MESH_TYPE_HEAVY);
+        SGNode* sgn = new SGNode(NODE_RIG);
+        sgn->setSkinningData((SkinMesh*)dynamic_pointer_cast<AnimatedMeshNode>(nds[i])->getMesh());
+        sgn->node = nds[i];
+
+        bool isSGJointsCreated = (sgn->joints.size() > 0) ? true : false;
+        for(int i = 0;i < dynamic_pointer_cast<AnimatedMeshNode>(sgn->node)->getJointCount();i++){
+            dynamic_pointer_cast<AnimatedMeshNode>(sgn->node)->getJointNode(i)->setID(i);
+            if(!isSGJointsCreated){
+                SGJoint *joint = new SGJoint();
+                joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sgn->node)->getJointNode(i);
+                sgn->joints.push_back(joint);
+            }
+        }
+
+        sgn->setInitialKeyValues(IMPORT_ASSET_ACTION);
+        editorScene->nodes.push_back(sgn);
+    }
+    */
+    
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
     
@@ -1418,7 +1447,6 @@ BOOL missingAlertShown;
     CGRect rect = _importBtn.frame;
     rect = [self.view convertRect:rect fromView:_importBtn.superview];
     [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
-    
 }
 
 - (IBAction)infoBtnAction:(id)sender
@@ -4177,7 +4205,7 @@ void downloadFile(NSString* url, NSString* fileName)
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-    NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
+    NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", nil]]];
     NSFileManager* fm = [[NSFileManager alloc]init];
     std::string *objStr = NULL;
     std::string *textureStr = new std::string([(!isHaveTexture) ? @"White-texture" : textureFileName UTF8String]);

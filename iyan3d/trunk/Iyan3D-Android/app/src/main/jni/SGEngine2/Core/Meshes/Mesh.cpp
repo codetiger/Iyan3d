@@ -29,6 +29,11 @@ Mesh::~Mesh()
     instanceCount = 0;
 }
 
+void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi) {
+    meshBufferVerticesData.push_back(mbvd);
+    meshBufferIndices.push_back(mbi);
+}
+
 void Mesh::copyDataFromMesh(Mesh* otherMesh)
 {
     if(otherMesh->meshType == MESH_TYPE_LITE) {

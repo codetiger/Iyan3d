@@ -82,6 +82,7 @@ public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
 
+    void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi);
     void copyDataFromMesh(Mesh* otherMesh);
     void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
     void removeVerticesOfAnInstance(int verticesCount, int indicesCount);
