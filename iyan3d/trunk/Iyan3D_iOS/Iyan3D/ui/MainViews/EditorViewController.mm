@@ -314,8 +314,10 @@ BOOL missingAlertShown;
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         [self getMaxUniformsForOpenGL];
+        [self getMaximumJointsSize];
         int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms"] intValue];
-        editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale, maxUnis);
+        int maxJoints = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints"] intValue];
+        editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale, maxUnis, maxJoints);
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
@@ -346,7 +348,7 @@ BOOL missingAlertShown;
         int upperLimit = 512;
         while ((upperLimit - lowerLimit) != 1) {
             int mid = (lowerLimit + upperLimit) / 2;
-            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_COMMON_L1", "shader.vsh", "commonL1.fsh", ShaderManager::getShaderStringsToReplace(mid), true))
+            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_MESH", "mesh.vsh", "common.fsh", ShaderManager::getShaderStringsToReplace(mid), true))
                 lowerLimit = mid;
             else
                 upperLimit = mid;
@@ -356,6 +358,30 @@ BOOL missingAlertShown;
         
         smgr->clearMaterials();
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxuniforms"];
+    }
+}
+
+- (void) getMaximumJointsSize
+{
+    ShaderManager::BundlePath = constants::BundlePath;
+    ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
+    
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints"]) {
+        
+        int lowerLimit = 0;
+        int upperLimit = 512;
+        while ((upperLimit - lowerLimit) != 1) {
+            int mid = (lowerLimit + upperLimit) / 2;
+            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_SKIN", "skin.vsh", "common.fsh", ShaderManager::getStringsForRiggedObjects(mid), true))
+                lowerLimit = mid;
+            else
+                upperLimit = mid;
+            
+        }
+        printf("\n Max Joints %d ", lowerLimit);
+        
+        smgr->clearMaterials();
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxjoints"];
     }
 }
 
@@ -1176,8 +1202,8 @@ BOOL missingAlertShown;
     [Answers logCustomEventWithName:@"AutoRig-Completion" customAttributes:nil];
     
     Vector3 vertexColor = Vector3(-1.0);
-    if(editorScene->rigMan->nodeToRig->options[IS_VERTEX_COLOR].value.x){
-        Vector4 vColor = editorScene->rigMan->nodeToRig->options[VERTEX_COLOR].value;
+    if(editorScene->rigMan->nodeToRig->getProperty(IS_VERTEX_COLOR).value.x){
+        Vector4 vColor = editorScene->rigMan->nodeToRig->getProperty(VERTEX_COLOR).value;
         vertexColor = Vector3(vColor.x, vColor.y, vColor.z);
     }
     
@@ -1517,8 +1543,26 @@ BOOL missingAlertShown;
 - (IBAction)optionsBtnAction:(id)sender
 {
     
-    if((!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED)) && editorScene->selectedNodeIds.size() <= 0)
+    if((!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED)) && editorScene->selectedNodeIds.size() <= 0) {
+        
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+
+        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->shaderMGR->sceneProps];
+        commonProps.delegate = self;
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
+        self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
+        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        [commonProps.view setClipsToBounds:YES];
+        CGRect rect = _optionsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                              animated:NO];
+
         return;
+    }
     
     if(editorScene->selectedNodeIds.size() > 0) {
         if(editorScene->allNodesRemovable() || editorScene->allNodesClonable()){
@@ -2488,7 +2532,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 isVideoOrImageOrParticle = true;
         }
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->options[IS_VERTEX_COLOR].value.x) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
+        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
         _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
@@ -2530,7 +2574,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
-        Vector4 color = editorScene->nodes[editorScene->selectedNodeId]->options[VERTEX_COLOR].value;
+        Vector4 color = editorScene->nodes[editorScene->selectedNodeId]->getProperty(VERTEX_COLOR).value;
         color.w = 0.0;
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->options[SPECIFIC_FLOAT].value.x;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->options[FONT_SIZE].value.x;
@@ -2615,7 +2659,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NSString *typedText = [self stringWithwstring:sgNode->name];
         NSString *fontName = [NSString stringWithCString:sgNode->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
-        Vector4 color = sgNode->options[VERTEX_COLOR].value;
+        Vector4 color = sgNode->getProperty(VERTEX_COLOR).value;
         color.w = 0.0;
         
         float bevalValue = sgNode->options[SPECIFIC_FLOAT].value.x;
@@ -2631,8 +2675,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [imageDetails setObject:[NSNumber numberWithInt:assetType] forKey:@"type"];
         [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
         [imageDetails setObject:[NSString stringWithFormat:@"%s", sgNode->textureName.c_str()] forKey:@"AssetName"];
-        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->options[VERTEX_COLOR].value.x] forKey:@"Width"];
-        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->options[VERTEX_COLOR].value.y] forKey:@"Height"];
+        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->getProperty(VERTEX_COLOR).value.x] forKey:@"Width"];
+        [imageDetails setObject:[NSNumber numberWithFloat:sgNode->getProperty(VERTEX_COLOR).value.y] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
         
         assetAddType = IMPORT_ASSET_ACTION;
@@ -2893,7 +2937,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             if([Utility IsPadDevice])
             {
                 [self.popoverController dismissPopoverAnimated:YES];
-                textSelectionSlider =[[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
+                textSelectionSlider = [[TextSelectionSidePanel alloc] initWithNibName:@"TextSelectionSidePanel" bundle:Nil];
                 textSelectionSlider.textSelectionDelegate = self;
                 [self showOrHideLeftView:YES withView:textSelectionSlider.view];
             }
@@ -2974,7 +3018,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     editorScene->enterOrExitAutoRigMode(true);
     editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
     editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
-    editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
     [self setupEnableDisableControls];
     [_rigCancelBtn setHidden:NO];
     [self autoRigMirrorBtnHandler];
@@ -3489,10 +3532,11 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) changedPropertyAtIndex:(PROP_INDEX) index WithValue:(Vector4) value AndStatus:(BOOL) status
 {
-    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
-        return;
     
-    SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
+    SGNode* selectedNode= NULL;
+    
+    if(editorScene->selectedNodeId >= 0 || editorScene->selectedNodeId < editorScene->nodes.size())
+        selectedNode = editorScene->nodes[editorScene->selectedNodeId];
     
     switch (index) {
             
@@ -3519,6 +3563,11 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         case TEXTURE: {
             [self changeTextureForAsset];
+            break;
+        }
+        case TEXTURE_SCALE: {
+            editorScene->selectMan->unHightlightSelectedNode();
+            editorScene->actionMan->changeUVScale(editorScene->selectedNodeId, value.x);
             break;
         }
         case DELETE: {
@@ -3560,6 +3609,19 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         case FORCE_DIRECTION: {
             [self setDirection];
+            break;
+        }
+        case FOV:
+        case CAM_RESOLUTION: {
+            
+            float cameraFOV = (index == FOV) ? value.x : editorScene->nodes[editorScene->selectedNodeId]->options[FOV].value.x;
+            int resolnType = (index == CAM_RESOLUTION) ? value.x : editorScene->nodes[editorScene->selectedNodeId]->options[CAM_RESOLUTION].value.x;
+            
+            editorScene->actionMan->changeCameraProperty(cameraFOV , resolnType, status);
+            break;
+        }
+        case AMBIENT_LIGHT: {
+            editorScene->shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, value, UNDEFINED);
             break;
         }
         default:
@@ -3694,7 +3756,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) velocityChanged:(double)vel
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(vel), HAS_PHYSICS);
+        editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(vel, 0, 0, true), HAS_PHYSICS);
         [self showLoadingActivity];
         [self syncSceneWithPhysicsWorld];
     }
@@ -4367,20 +4429,6 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
         }
     }
-}
-
-void boneLimitsCallBack()
-{
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    EditorViewController *autoRigVC = (EditorViewController*)[[appDelegate window] rootViewController];
-    [autoRigVC boneLimitsAlert];
-}
-
-- (void) boneLimitsAlert
-{
-    [self.view endEditing:YES];
-    UIAlertView *boneLimitMsg = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"bone_count_exceed", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-    [boneLimitMsg show];
 }
 
 - (void) scalePropertyChangedInRigView:(float)scaleValue

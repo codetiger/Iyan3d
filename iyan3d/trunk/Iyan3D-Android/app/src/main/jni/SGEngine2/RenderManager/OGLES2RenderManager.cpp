@@ -263,7 +263,7 @@ void OGLES2RenderManager::drawElements(GLenum mode, GLsizei count, GLenum type, 
     glDrawElements(mode, count, type, data);
 #elif IOS
     
-    if(instanceCount > 0)
+    if(instanceCount > 1)
         glDrawElementsInstancedEXT(mode, count, type, data, instanceCount);
     else
         glDrawElements(mode, count, type, data);
@@ -328,8 +328,8 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
 {
     uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
 
-    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
-        return;
+//    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
+//        return;
     
     switch (uni.type) {
         case DATA_FLOAT:
@@ -361,9 +361,11 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
         case DATA_TEXTURE_2D:
         case DATA_TEXTURE_CUBE:{
             u_int32_t *textureName = (u_int32_t*)uni.values;
-            bindTexture(GL_TEXTURE0 + userValue, *textureName);
+            glActiveTexture(GL_TEXTURE0 + userValue);
+            glBindTexture(GL_TEXTURE_2D, *textureName);
+            //bindTexture(GL_TEXTURE0 + userValue, *textureName);
             
-            if(uni.isUpdated)
+            //if(uni.isUpdated)
                 glUniform1i(uni.location, userValue);
         }
             break;

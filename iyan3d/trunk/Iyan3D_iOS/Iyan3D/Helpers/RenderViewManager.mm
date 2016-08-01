@@ -129,9 +129,7 @@ SGEditorScene *editorScene;
 
 - (void) setupAutoRigCallBacks
 {
-    //editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
     editorScene->rigMan->objLoaderCallBack = &objLoaderCallBack;
-    //editorScene->rigMan->notRespondingCallBack = &notRespondingCallBackAutoRigScene;
 }
 
 
@@ -160,7 +158,7 @@ void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
 {
     if(!editorScene)
         return;
-    
+        
     if (callbackFuncName.compare("setUniforms") == 0)
         editorScene->shaderCallBackForNode(nodeID, matName);
     else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)

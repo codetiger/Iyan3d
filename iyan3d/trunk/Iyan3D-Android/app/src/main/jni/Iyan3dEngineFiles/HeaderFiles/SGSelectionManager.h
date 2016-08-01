@@ -42,6 +42,7 @@ public:
     void addSelectedChildren(shared_ptr<Node> toParent);
     void removeChildren(shared_ptr<Node> fromParent, bool resetKeys = false);
     void highlightSelectedNode(int nodeId = -1);
+    void unHightlightSelectedNode();
     void highlightJointSpheres();
     void selectObject(int objectId ,bool isMultiSelectionEnabled);
     void unselectObject(int objectId);

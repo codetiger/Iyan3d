@@ -48,6 +48,7 @@
     NSMutableArray* subSectionHeaders;
     std::map< string , vector< Property > > subGroupedData;
     
+    UITableViewCell* selectedCell;
     Property selectedParentProp;
     Property physicsProperty;
     Property selectedListProp;

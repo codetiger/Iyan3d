@@ -16,7 +16,7 @@ string constants::DocumentsStoragePath="";
 string constants::impotedImagesPathAndroid="";
 float constants::iOS_Version = 0;
 
-SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms)
+SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms, int maxJoints)
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
@@ -29,7 +29,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
 
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
     SceneHelper::initLightMesh(smgr);
-    initVariables(smgr, device, maxUniforms);
+    initVariables(smgr, device, maxUniforms, maxJoints);
 
 #ifndef UBUNTU
     initTextures();
@@ -152,10 +152,10 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
     updater->setDataForFrame(currentFrame);
 }
 
-void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, int maxUniforms)
+void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, int maxUniforms, int maxJoints)
 {
     cmgr = new CollisionManager();
-    shaderMGR = new ShaderManager(sceneMngr, devType, maxUniforms);
+    shaderMGR = new ShaderManager(sceneMngr, devType, maxUniforms, maxJoints);
     selectMan = new SGSelectionManager(sceneMngr, this);
     updater = new SGSceneUpdater(sceneMngr, this);
     loader = new SGSceneLoader(sceneMngr, this);
@@ -195,6 +195,9 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     previousDistance = Vector2(0.0, 0.0);
     actionObjectsSize = 0;
     moveNodeId = NOT_SELECTED;
+    
+    shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, Vector4(0), UNDEFINED, SLIDER_TYPE, "Ambient Light", "Scene Properties");
+    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", constants::BundlePath + "/envmap.png");
 }
 
 void SGEditorScene::initTextures()
@@ -682,7 +685,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     Logger::log(INFO,"SGEDITOR","Texture Path " + texturePath);
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
-        nodes[selectedNodeId]->options[IS_VERTEX_COLOR].value.x = false;
+        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         
         if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
             loader->copyMeshFromOriginalNode(nodes[selectedNodeId]);
@@ -698,22 +701,22 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         nodes[selectedNodeId]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->textureName = textureFileName;
-            nodes[selectedNodeId]->addOrUpdateProperty(TEXTURE, nodes[selectedNodeId]->options[VERTEX_COLOR].value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", texturePath);
+            nodes[selectedNodeId]->addOrUpdateProperty(TEXTURE, nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", texturePath);
         }
     } else {
-        nodes[selectedNodeId]->options[VERTEX_COLOR].value = Vector4(vertexColor, 0);
+        nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value = Vector4(vertexColor, 0);
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->textureName = "-1";
-            nodes[selectedNodeId]->addOrUpdateProperty(TEXTURE, nodes[selectedNodeId]->options[VERTEX_COLOR].value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
+            nodes[selectedNodeId]->addOrUpdateProperty(TEXTURE, nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
         }
-        nodes[selectedNodeId]->options[IS_VERTEX_COLOR].value.x = true;
+        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
     }
     
     if(!isTemp)
         actionMan->storeAddOrRemoveAssetAction(ACTION_TEXTURE_CHANGE, 0);
     if(!isTemp || isUndoRedo){
         nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->textureName;
-        nodes[selectedNodeId]->options[ORIG_VERTEX_COLOR].value = nodes[selectedNodeId]->options[VERTEX_COLOR].value;
+        nodes[selectedNodeId]->options[ORIG_VERTEX_COLOR].value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value;
     }
 }
 
@@ -745,13 +748,13 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
     #endif
 
     if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
-        nodes[selectedNode]->options[IS_VERTEX_COLOR].value.x = false;
+        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
         nodes[selectedNode]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     } else {
         nodes[selectedNode]->textureName = "-1";
-        nodes[selectedNode]->options[VERTEX_COLOR].value = nodes[selectedNode]->options[ORIG_VERTEX_COLOR].value;
-        nodes[selectedNode]->options[IS_VERTEX_COLOR].value.x = true;
+        nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->options[ORIG_VERTEX_COLOR].value;
+        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
     }
 }
 

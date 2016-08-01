@@ -66,14 +66,15 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
         if(uniforms[i].name == name) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count)
-                uniforms[i].values = new int[count];
-            
-            if(memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
-                memcpy(uniforms[i].values, values, count * sizeof(int));
+//            if(uniforms[i].values == NULL || uniforms[i].count != count)
+//                uniforms[i].values = new int[count];
+//            
+//            if(memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
+//                memcpy(uniforms[i].values, values, count * sizeof(int));
                 uniforms[i].count = count;
                 uniforms[i].isUpdated = true;
-            }
+                uniforms[i].values = values;
+//            }
 
             uniformNodeIndex = i;
             break;
@@ -84,8 +85,8 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
         uint location = glGetUniformLocation(shaderProgram, name.c_str());
         AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, 0, count, location, nodeIndex);
         uniformNodeIndex = uniforms.size()-1;
-        uniforms[uniformNodeIndex].values = new int[count];
-        memcpy(uniforms[uniformNodeIndex].values, values, count * sizeof(int));
+        uniforms[uniformNodeIndex].values = values; //new int[count];
+        //memcpy(uniforms[uniformNodeIndex].values, values, count * sizeof(int));
         uniforms[uniformNodeIndex].count = count;
         uniforms[uniformNodeIndex].isUpdated = true;
     }
@@ -101,15 +102,16 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
         if(uniforms[i].name == name) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count)
-                uniforms[i].values = new float[count];
+//            if(uniforms[i].values == NULL || uniforms[i].count != count)
+//                uniforms[i].values = new float[count];
 
-            if(memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
-//                printf("Uniform : %s %s %f %f %d\n", this->name.c_str(), name.c_str(), *((float*)uniforms[i].values), *values, count);
-                memcpy(uniforms[i].values, values, count * sizeof(float));
+//            if(memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
+////                printf("Uniform : %s %s %f %f %d\n", this->name.c_str(), name.c_str(), *((float*)uniforms[i].values), *values, count);
+//                memcpy(uniforms[i].values, values, count * sizeof(float));
                 uniforms[i].count = count;
                 uniforms[i].isUpdated = true;
-            }
+                uniforms[i].values = values;
+//            }
             uniformNodeIndex = i;
             break;
         }
@@ -119,8 +121,8 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
         uint location = glGetUniformLocation(shaderProgram, name.c_str());
         AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, 0, count, location, nodeIndex);
         uniformNodeIndex = uniforms.size()-1;
-        uniforms[uniformNodeIndex].values = new float[count];
-        memcpy(uniforms[uniformNodeIndex].values, values, count * sizeof(float));
+        uniforms[uniformNodeIndex].values = values;//new float[count];
+        //memcpy(uniforms[uniformNodeIndex].values, values, count * sizeof(float));
         uniforms[uniformNodeIndex].count = count;
         uniforms[uniformNodeIndex].isUpdated = true;
     }

@@ -24,6 +24,7 @@ public:
     static bool shadowsOff, lightChanged;
     static float shadowDensity,shadowTextureSize;
     static int maxIntsances;
+    static int maxJoints;
     static Vector3 camPos;
     static vector<Vector3> lightPosition,lightColor;
     static vector<float> lightFadeDistances;
@@ -35,19 +36,22 @@ public:
     static float ambientLight;
     SceneManager *smgr;
     
-    ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms);
+    std::map< PROP_INDEX, Property > sceneProps;
+    
+    ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints);
     void setUniforms(SGNode *node,string matName);
-    void loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms);
+    void loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints);
     static std::map<string, string> getShaderStringsToReplace(int maxUniforms);
+    static std::map<string, string> getStringsForRiggedObjects(int maxJoints);
     
     static bool LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest = false);
     ~ShaderManager();
     
     
     void setMeshProps(SGNode *sgnNode, bool isVColored, int paramIndex);
-    void setIsVertexColored(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData);
+    void setHasMeshColor(SGNode *sgNode,bool status, int paramIndex, bool isFragmentData);
     void setNumberOfLights(SGNode *sgNode , int paramIndex);
-    void setLightsProperties(SGNode *sgNode, int paramIndex1 , int paramIndex2);
+    void setLightsProperties(SGNode *sgNode, int param1 , int param2, int param3, int param4, int param5);
     void setJointTransform(SGNode *node,SkinMesh *SMesh,int paramIndex);
     void setModelViewProjMatrix(SGNode *node,u16 paramIndex, bool isDepthPass = false);
     void setMVPForParticles(SGNode *node, u16 paramIndex);
@@ -57,6 +61,7 @@ public:
     void setViewProjMatrix(Material *material);
     void setSceneDataUniforms(SGNode *node,u16 paramIndex);
     void setNodeTransparency(SGNode *node,u16 paramIndex);
+    void setUVScaleValue(SGNode *sgNode, u16 paramIndex);
     void setModelMatrix(SGNode *node,u16 paramIndex);
     void setProjectionMatrix(SGNode *node,u16 paramIndex);
     void setViewMatrix(SGNode *node,u16 paramIndex);
@@ -72,5 +77,10 @@ public:
     void setLightsPosition(SGNode *sgNode , float *lightPositions , int paramIndex);
     void setLightsColors(SGNode *sgNode, float *lightColors, int paramIndex);
     void setEyePos(SGNode *sgNode,int paramIndex);
+    
+    void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
+    void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
+    Property& getProperty(PROP_INDEX pIndex);
+
 };
 #endif /* defined(__FatMan__ShaderManager__) */

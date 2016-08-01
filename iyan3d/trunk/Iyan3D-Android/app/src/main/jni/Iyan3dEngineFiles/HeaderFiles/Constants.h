@@ -18,7 +18,7 @@
 #define OBJ_IMPORT_IAP @"objimport"
 #define VIEWCAMERA_ZOOM_START 1.89
 #define CONTROLS_DEFAULT_DISTANCE 7.0
-#define TOTAL_MATERIALS 32
+#define TOTAL_MATERIALS 12
 #define SELECTION_COLOR_R 0.0
 #define SELECTION_COLOR_G 1.0
 #define SELECTION_COLOR_B 0.0
@@ -116,7 +116,9 @@ enum PROP_INDEX {
     WEIGHT,
     FORCE_MAGNITUDE,
     FORCE_DIRECTION,
-    IS_SOFT
+    IS_SOFT,
+    AMBIENT_LIGHT,
+    ENVIRONMENT_TEXTURE
 };
 
 enum PROP_TYPE {
@@ -164,70 +166,30 @@ const float RESOLUTION[5][2] = {
 
 const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
 {
-    {"SHADER_COMMON_L1","shader.vsh","commonL1.fsh"},
-    {"SHADER_COMMON_L2","shader.vsh","commonL2.fsh"},
-    {"SHADER_COMMON_L3","shader.vsh","commonL3.fsh"},
-    {"SHADER_COMMON_L4","shader.vsh","commonL4.fsh"},
-    {"SHADER_COMMON_L5","shader.vsh","commonL5.fsh"},
-    {"SHADER_COMMON_SKIN_L1","GPUSkinShader.vsh","commonL1.fsh"},
-    {"SHADER_COMMON_SKIN_L2","GPUSkinShader.vsh","commonL2.fsh"},
-    {"SHADER_COMMON_SKIN_L3","GPUSkinShader.vsh","commonL3.fsh"},
-    {"SHADER_COMMON_SKIN_L4","GPUSkinShader.vsh","commonL4.fsh"},
-    {"SHADER_COMMON_SKIN_L5","GPUSkinShader.vsh","commonL5.fsh"},
+    {"SHADER_MESH", "mesh.vsh", "common.fsh"},
+    {"SHADER_SKIN", "skin.vsh", "common.fsh"},
+    {"SHADER_TEXT_SKIN", "textskin.vsh", "common.fsh"},
     {"SHADER_COLOR", "color.vert","color.frag"},
     {"SHADER_COLOR_SKIN", "colorskin.vert","color.frag"},
     {"SHADER_DRAW_2D_IMAGE", "draw2dImage.vsh","draw2dImage.fsh"},
-    {"SHADER_TOON", "shader.vsh","toon.fsh"},
-    {"SHADER_TOON_SKIN","GPUSkinShader.vsh","toon.fsh"},
-    {"SHADER_VERTEX_COLOR_SKIN_TOON", "vertexColorSkin.vert","vertexColorToon.frag"},
     {"SHADER_SHADOW_DEPTH_PASS","depthPass.vsh","depthPass.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_SKIN","depthPassSkin.vsh","depthPass.fsh"},
     {"SHADER_DRAW_2D_IMAGE_DEPTH", "draw2dImage.vsh","draw2dImage.fsh"},
-    {"SHADER_VERTEX_COLOR_L1", "vertexColor.vert","commonL1.fsh"},
-    {"SHADER_VERTEX_COLOR_L2", "vertexColor.vert","commonL2.fsh"},
-    {"SHADER_VERTEX_COLOR_L3", "vertexColor.vert","commonL3.fsh"},
-    {"SHADER_VERTEX_COLOR_L4", "vertexColor.vert","commonL4.fsh"},
-    {"SHADER_VERTEX_COLOR_L5", "vertexColor.vert","commonL5.fsh"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L1", "vertexColorSkin.vert" , "commonL1.fsh"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L2", "vertexColorSkin.vert" , "commonL2.fsh"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L3", "vertexColorSkin.vert" , "commonL3.fsh"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4", "vertexColorSkin.vert" , "commonL4.fsh"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5", "vertexColorSkin.vert" , "commonL5.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
     {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
     {"SHADER_PARTICLES_RTT", "particlesRTT.vsh","particles.fsh"}
 };
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
 {
-    {"SHADER_COMMON_L1","Common_Vertex","Common_Fragment_L1"},
-    {"SHADER_COMMON_L2","Common_Vertex","Common_Fragment_L2"},
-    {"SHADER_COMMON_L3","Common_Vertex","Common_Fragment_L3"},
-    {"SHADER_COMMON_L4","Common_Vertex","Common_Fragment_L4"},
-    {"SHADER_COMMON_L5","Common_Vertex","Common_Fragment_L5"},
-    {"SHADER_COMMON_SKIN_L1","Common_Skin_Vertex","Common_Fragment_L1"},
-    {"SHADER_COMMON_SKIN_L2","Common_Skin_Vertex","Common_Fragment_L2"},
-    {"SHADER_COMMON_SKIN_L3","Common_Skin_Vertex","Common_Fragment_L3"},
-    {"SHADER_COMMON_SKIN_L4","Common_Skin_Vertex","Common_Fragment_L4"},
-    {"SHADER_COMMON_SKIN_L5","Common_Skin_Vertex","Common_Fragment_L5"},
+    {"SHADER_MESH", "Mesh_Vertex", "Common_Fragment"},
+    {"SHADER_SKIN", "Skin_Vertex", "Common_Fragment"},
+    {"SHADER_TEXT_SKIN", "Text_Skin_Vertex", "Common_Fragment"},
     {"SHADER_COLOR", "Color_Vertex","Color_Fragment"},
     {"SHADER_COLOR_SKIN","Color_Skin_Vertex","Color_Fragment"},
     {"SHADER_DRAW_2D_IMAGE", "Draw2DImage_Vertex","Draw2DImage_Fragment"},
-    {"SHADER_TOON", "Common_Vertex","Common_Toon_Fragment"},
-    {"SHADER_TOON_SKIN","Common_Skin_Vertex","Common_Toon_Fragment"},
-    {"SHADER_VERTEX_COLOR_SKIN_TOON","Per_Vertex_Color_Skin","Common_Fragment_L1"},
     {"SHADER_SHADOW_DEPTH_PASS","Depth_Pass_vert",""},
     {"SHADER_SHADOW_DEPTH_PASS_SKIN","Depth_Pass_Skin_vert",""},
     {"SHADER_DRAW_2D_IMAGE_DEPTH", "Draw2DImage_Vertex","Draw2DImage_Fragment_Depth"},
-    {"SHADER_VERTEX_COLOR_L1","Per_Vertex_Color","Common_Fragment_L1"},
-    {"SHADER_VERTEX_COLOR_L2","Per_Vertex_Color","Common_Fragment_L2"},
-    {"SHADER_VERTEX_COLOR_L3","Per_Vertex_Color","Common_Fragment_L3"},
-    {"SHADER_VERTEX_COLOR_L4","Per_Vertex_Color","Common_Fragment_L4"},
-    {"SHADER_VERTEX_COLOR_L5","Per_Vertex_Color","Common_Fragment_L5"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L1","Per_Vertex_Color_Skin","Common_Fragment_L1"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L2","Per_Vertex_Color_Skin","Common_Fragment_L2"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L3","Per_Vertex_Color_Skin","Common_Fragment_L3"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L4","Per_Vertex_Color_Skin","Common_Fragment_L4"},
-    {"SHADER_VERTEX_COLOR_SHADOW_SKIN_L5","Per_Vertex_Color_Skin","Common_Fragment_L5"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
     {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"},
     {"SHADER_PARTICLES_RTT", "Particle_Vertex_RTT","Particle_Fragment_RTT"}
@@ -295,35 +257,15 @@ enum Slidername
 
 enum MATERIAL_TYPE
 {
-    SHADER_COMMON_L1,
-    SHADER_COMMON_L2,
-    SHADER_COMMON_L3,
-    SHADER_COMMON_L4,
-    SHADER_COMMON_L5,
-    SHADER_COMMON_SKIN_L1,
-    SHADER_COMMON_SKIN_L2,
-    SHADER_COMMON_SKIN_L3,
-    SHADER_COMMON_SKIN_L4,
-    SHADER_COMMON_SKIN_L5,
+    SHADER_MESH,
+    SHADER_SKIN,
+    SHADER_TEXT_SKIN,
     SHADER_COLOR,
     SHADER_COLOR_SKIN,
     SHADER_DRAW_2D_IMAGE,
-    SHADER_TOON,
-    SHADER_TOON_SKIN,
-    SHADER_VERTEX_COLOR_SKIN_TOON,
     SHADER_SHADOW_DEPTH_PASS,
     SHADER_SHADOW_DEPTH_PASS_SKIN,
     SHADER_DRAW_2D_IMAGE_DEPTH,
-    SHADER_VERTEX_COLOR_L1,
-    SHADER_VERTEX_COLOR_L2,
-    SHADER_VERTEX_COLOR_L3,
-    SHADER_VERTEX_COLOR_L4,
-    SHADER_VERTEX_COLOR_L5,
-    SHADER_VERTEX_COLOR_SHADOW_SKIN_L1,
-    SHADER_VERTEX_COLOR_SHADOW_SKIN_L2,
-    SHADER_VERTEX_COLOR_SHADOW_SKIN_L3,
-    SHADER_VERTEX_COLOR_SHADOW_SKIN_L4,
-    SHADER_VERTEX_COLOR_SHADOW_SKIN_L5,
     SHADER_SHADOW_DEPTH_PASS_TEXT,
     SHADER_PARTICLES,
     SHADER_PARTICLES_RTT

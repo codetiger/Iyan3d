@@ -90,7 +90,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     objNode->setScale(Vector3(1.0/scaleRatio));
     //-----------
     
-    objNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+    objNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     objSGNode->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
     
     objNode->setID(OBJ_ID);

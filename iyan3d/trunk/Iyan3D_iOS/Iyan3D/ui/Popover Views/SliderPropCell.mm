@@ -23,9 +23,17 @@
 
 - (IBAction)sliderValueChanged:(id)sender {
     [self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:NO];
+    if(_dynamicSlider) {
+        _xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
+    }
 }
 
 - (IBAction)sliderChangeEnds:(id)sender {
     [self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:YES];
+    if(_dynamicSlider) {
+        _xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
+        _slider.minimumValue = _slider.value - 0.5;
+        _slider.maximumValue = _slider.value + 0.5;
+    }
 }
 @end

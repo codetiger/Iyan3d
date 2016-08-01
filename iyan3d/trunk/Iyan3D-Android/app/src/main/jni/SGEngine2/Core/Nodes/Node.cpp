@@ -245,7 +245,7 @@ Texture* Node::getTextureByIndex(u16 textureIndex)
 }
 
 void Node::setMaterial(Material *mat, bool isTransparentMaterial)
-{
+{    
 #ifndef UBUNTU
     if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
         return;

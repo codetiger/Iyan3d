@@ -637,6 +637,7 @@
 		250E54B91D3E092C0081A7CB /* Icon0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250E54B61D3E092C0081A7CB /* Icon0@3x.png */; };
 		250E54BA1D3E092C0081A7CB /* Icon1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250E54B71D3E092C0081A7CB /* Icon1@3x.png */; };
 		250E54BB1D3E092C0081A7CB /* Icon1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250E54B71D3E092C0081A7CB /* Icon1@3x.png */; };
+		250F58C11D4C9BDC006EB24A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		250FEC1B1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */; };
 		250FEC1C1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */; };
 		250FEC1D1D1E52D2000C8A2C /* round-close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC151D1E52D2000C8A2C /* round-close@2x.png */; };
@@ -1073,6 +1074,9 @@
 		25D96E671CCF7B9900A5AEED /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25D96E641CCF7B9900A5AEED /* Quaternion.cpp */; };
 		25DAD21E1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
 		25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */; };
+		25DC3E951D49F81F00D6F26C /* mesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE841D486E5100C842C6 /* mesh.vsh */; };
+		25DC3E961D49F82500D6F26C /* skin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE881D48807400C842C6 /* skin.vsh */; };
+		25DC3E971D49F82A00D6F26C /* common.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE861D4870C000C842C6 /* common.fsh */; };
 		25DE0E9D1CAA8C980076F669 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E771CAA8C980076F669 /* btAlignedAllocator.cpp */; };
 		25DE0E9E1CAA8C980076F669 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E771CAA8C980076F669 /* btAlignedAllocator.cpp */; };
 		25DE0E9F1CAA8C980076F669 /* btConvexHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E7A1CAA8C980076F669 /* btConvexHull.cpp */; };
@@ -2718,7 +2722,6 @@
 		E20674001B049AA6006DD2F7 /* home-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9009A1A0A01460051B941 /* home-phone@2x.png */; };
 		E20674011B049AA6006DD2F7 /* topbarView.png in Resources */ = {isa = PBXBuildFile; fileRef = 62D28EE719DFDD74002F90AE /* topbarView.png */; };
 		E20674021B049AA6006DD2F7 /* vertexColorToon.frag in Resources */ = {isa = PBXBuildFile; fileRef = E2F556A91AFA1D8300079118 /* vertexColorToon.frag */; };
-		E211247D1AF20A0D00C23624 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		E21A893C1B08757E00435C87 /* ShaderCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */; };
 		E21A893D1B0877CC00435C87 /* ShaderCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */; };
 		E21A89401B08939600435C87 /* normalShader.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A893E1B08939600435C87 /* normalShader.png */; };
@@ -9410,6 +9413,7 @@
 				25EC6BC31C7F066B002CF5D2 /* wm8.png in Resources */,
 				01F872E71C3A6C4E009AA31E /* Import-Light_IPhone@2x.png in Resources */,
 				E20672AF1B049AA6006DD2F7 /* back-img@2x.png in Resources */,
+				25DC3E951D49F81F00D6F26C /* mesh.vsh in Resources */,
 				01B4CFF11C29219A0091E19B /* Next-Frame.png in Resources */,
 				25F80AFA1CFDB6E700CF331B /* Subscribe button ipad.psd in Resources */,
 				25EC6BBD1C7F066B002CF5D2 /* wm5.png in Resources */,
@@ -9737,6 +9741,7 @@
 				E206736F1B049AA6006DD2F7 /* clone-img-phone.png in Resources */,
 				E20673701B049AA6006DD2F7 /* clone-img@2x.png in Resources */,
 				256ED8E41B1FEDED008ADEF8 /* Bernstein Regular.ttf in Resources */,
+				25DC3E971D49F82A00D6F26C /* common.fsh in Resources */,
 				25EC6CC31C7F39DD002CF5D2 /* wm98.png in Resources */,
 				E20673771B049AA6006DD2F7 /* last.png in Resources */,
 				E206737C1B049AA6006DD2F7 /* add-frame-phone@3x.png in Resources */,
@@ -9926,6 +9931,7 @@
 				25EC6BB91C7F066B002CF5D2 /* wm3.png in Resources */,
 				3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */,
 				E20673FB1B049AA6006DD2F7 /* AssetCellViewPhone.xib in Resources */,
+				25DC3E961D49F82500D6F26C /* skin.vsh in Resources */,
 				25EC6BC51C7F066B002CF5D2 /* wm9.png in Resources */,
 				25EC6CE31C7F39DD002CF5D2 /* wm114.png in Resources */,
 				256ACDAC1CABAEF60080014E /* indicator.sgm in Resources */,
@@ -10230,6 +10236,7 @@
 				25730E611AFD3C7B0042F81A /* BitmapContextRep.m in Sources */,
 				256F6B8D1BF6246300154622 /* exportSGR.cpp in Sources */,
 				25730E6B1AFD3C7B0042F81A /* BitmapScaleManipulator.m in Sources */,
+				250F58C11D4C9BDC006EB24A /* Shaders.metal in Sources */,
 				25DE10BF1CAA8D6D0076F669 /* gim_contact.cpp in Sources */,
 				25DE10BD1CAA8D6D0076F669 /* gim_box_set.cpp in Sources */,
 				25DE111F1CAA8D6D0076F669 /* btRaycastVehicle.cpp in Sources */,
@@ -10286,7 +10293,6 @@
 				251BF4751C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
 				25D7DA661D06F6DC00E84D2F /* JDFTooltipView.m in Sources */,
 				25DE110B1CAA8D6D0076F669 /* btMultiBodyConstraint.cpp in Sources */,
-				E211247D1AF20A0D00C23624 /* Shaders.metal in Sources */,
 				25D7DA641D06F6DC00E84D2F /* JDFTooltipManager.m in Sources */,
 				25DE106D1CAA8D6D0076F669 /* btCapsuleShape.cpp in Sources */,
 				25DE11191CAA8D6D0076F669 /* btLemkeAlgorithm.cpp in Sources */,

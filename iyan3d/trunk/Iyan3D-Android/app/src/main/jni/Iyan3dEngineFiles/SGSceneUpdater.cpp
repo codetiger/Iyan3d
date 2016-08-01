@@ -67,7 +67,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 updatingScene->updateDirectionLine();
 			#endif
             if(sgNode->scaleKeys.size() > 0) {
-                sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(scale.x, scale.y, scale.z, 0), UNDEFINED);
+                sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(scale.x, scale.y, scale.z, 0), MATERIAL_PROPS);
                 lightChanged = true;
             }
         } else {
@@ -170,8 +170,10 @@ void SGSceneUpdater::updateControlsMaterial()
     for(int i = controlStartToVisible;i <= controlEndToVisible;i++){
         if(i == updatingScene->selectedControlId)
             updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-        else
-            updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        else {
+            updatingScene->sceneControls[i]->getProperty(VERTEX_COLOR).value = Vector4(Vector3(-1.0), 0.0);
+            updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH_mvp));
+        }
     }
 }
 
@@ -362,7 +364,7 @@ void SGSceneUpdater::updateLightProperties(int frameId)
             else
                 ShaderManager::lightTypes.push_back(sgNode->options[LIGHT_TYPE].value.x);
             
-            sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(lightColor.x, lightColor.y, lightColor.z, 1.0), UNDEFINED);
+            sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(lightColor.x, lightColor.y, lightColor.z, 1.0), MATERIAL_PROPS);
             index++;
         }
     }
@@ -387,46 +389,10 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
 
     int count = (int)ShaderManager::lightPosition.size();
     
-    switch (count) {
-            
-        case 1: {
-            commonType = SHADER_COMMON_L1;
-            commonSkinType = SHADER_COMMON_SKIN_L1;
-            vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L1;
-            vertexColorType = SHADER_VERTEX_COLOR_L1;
-            break;
-        }
-        case 2: {
-            commonType = SHADER_COMMON_L2;
-            commonSkinType = SHADER_COMMON_SKIN_L2;
-            vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L2;
-            vertexColorType = SHADER_VERTEX_COLOR_L2;
-            break;
-        }
-        case 3: {
-            commonType = SHADER_COMMON_L3;
-            commonSkinType = SHADER_COMMON_SKIN_L3;
-            vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L3;
-            vertexColorType = SHADER_VERTEX_COLOR_L3;
-            break;
-        }
-        case 4: {
-            commonType = SHADER_COMMON_L4;
-            commonSkinType = SHADER_COMMON_SKIN_L4;
-            vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L4;
-            vertexColorType = SHADER_VERTEX_COLOR_L4;
-            break;
-        }
-        case 5: {
-            commonType = SHADER_COMMON_L5;
-            commonSkinType = SHADER_COMMON_SKIN_L5;
-            vertexColorTextType = SHADER_VERTEX_COLOR_SHADOW_SKIN_L5;
-            vertexColorType = SHADER_VERTEX_COLOR_L5;
-            break;
-        }
-        default:
-            break;
-    }
+    commonType = SHADER_MESH;
+    commonSkinType = SHADER_SKIN;
+    vertexColorTextType = SHADER_TEXT_SKIN;
+    vertexColorType = SHADER_MESH;
     
     for(int index = 0; index < updatingScene->nodes.size(); index++)
     {
@@ -436,7 +402,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
         } else {
                 switch (sgNode->getType()) {
                     case NODE_CAMERA: {
-                        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_VERTEX_COLOR_L1));
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
                         break;
                     }
                     case NODE_OBJ:
@@ -444,7 +410,7 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     case NODE_IMAGE:
                     case NODE_TEXT:
                     case NODE_VIDEO:{
-                        sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex(commonType));
                         break;
                     }
                         
@@ -455,13 +421,13 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     }
                     case NODE_RIG: {
                         if(sgNode->node->skinType == CPU_SKIN)
-                            sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
+                            sgNode->node->setMaterial(smgr->getMaterialByIndex(commonType));
                         else
-                            sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_TOON_SKIN :commonSkinType));
+                            sgNode->node->setMaterial(smgr->getMaterialByIndex(commonSkinType));
                         break;
                     }
                     case NODE_TEXT_SKIN: {
-                        sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader) ? SHADER_VERTEX_COLOR_SKIN_TOON: vertexColorTextType));
+                        sgNode->node->setMaterial(smgr->getMaterialByIndex(vertexColorTextType));
                         break;
                     }
                     case NODE_PARTICLES: {

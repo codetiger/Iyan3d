@@ -12,7 +12,8 @@ attribute vec4 optionalData3;
 attribute vec4 optionalData4;
 
 uniform vec3 eyePos;
-uniform mat4 vp, lvp, model[1], jointTransforms[161];
+uniform vec3 meshColor[1];
+uniform mat4 mvp, lvp, model[1], jointTransforms[jointsSize];
 uniform float hasLighting[1], reflectionValue[1], hasMeshColor[1], uvScaleValue[1], transparencyValue[1];
 uniform float ambientLight;
 
@@ -22,31 +23,39 @@ varying vec3 vMeshColor;
 varying vec3 vEyeVec, vVertexPosition;
 varying mat3 vTBNMatrix;
 
+
 void main()
 {
-    vMeshColor = (meshColor[0].x == -1.0) ? optionalData1.xyz : meshColor[0];
+    vHasMeshColor = hasMeshColor[0];
+    vMeshColor = (meshColor[0].x == -1.0) ? optionalData4.xyz : meshColor[0];
     vTexCoord = texCoord1 * uvScaleValue[0];
+    vReflectionValue = reflectionValue[0];
+    vHasLighting = hasLighting[0];
+    vTransparencyValue = transparencyValue[0];
     
     vec4 pos = vec4(0.0);
     vec4 nor = vec4(0.0);
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
-    pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-    nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    
-    vMeshColor = hasMeshColor[0];
-    vTexCoord = texCoord1 * uvScaleValue[0];
+    if(jointId > 0){
+        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
+        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
+    }else{
+        pos = vec4(vertPosition,1.0);
+        nor = vec4(vertNormal,0.0);
+    }
     
     vec3 T = normalize(vec3(model[0] * vec4(vertTangent, 0.0)));
     vec3 B = normalize(vec3(model[0] * vec4(vertBitangent, 0.0)));
-    vec3 N = normalize(vec3(model[0] * vec4(nor,  0.0)));
+    vec3 N = normalize(vec3(model[0] * nor));
     vTBNMatrix = mat3(T, B, N);
     
-    vVertexPosition = (model[0] * vec4(pos, 1.0)).xyz;
+    vec4 vertex_position_model = model[0] * pos;
+    vVertexPosition = (vertex_position_model).xyz;
     vEyeVec = normalize(eyePos - vVertexPosition);
     
     if(bool(hasLighting[0])) {
-        vec4 vertexLightCoord = lvp * vVertexPosition;
+        vec4 vertexLightCoord = lvp * vertex_position_model;
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         vTexCoordBias = ((texCoords / 2.0) + 0.5).xy;
         
@@ -60,12 +69,12 @@ void main()
     }
     
     if(reflectionValue[0] > 0.0) {
-        vec3 r = reflect( -eyeVec, N );
+        vec3 r = reflect( -vEyeVec, N );
         float m = 2. * sqrt(pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2.0));
         vReflectionCoord = r.xy / m + .5;
         vReflectionCoord.y = -vReflectionCoord.y;
     }
     
-    gl_Position = vp * vVertexPosition;
+    gl_Position = mvp * pos;
 }
 

@@ -22,49 +22,45 @@
 #define SHADER_PARTICLE_texture1 8
 #define SHADER_PARTICLE_world 9
 
-#define SHADER_COMMON_SKIN_mvp 1
-#define SHADER_COMMON_SKIN_transparency 2
-#define SHADER_COMMON_SKIN_world 3
-#define SHADER_COMMON_SKIN_isLighting 4
-#define SHADER_COMMON_SKIN_refraction 5
-#define SHADER_COMMON_SKIN_reflection 6
-#define SHADER_COMMON_SKIN_shadowDarkness 7
-#define SHADER_COMMON_SKIN_lightPos 8
-#define SHADER_COMMON_SKIN_eyePos 9
-#define SHADER_COMMON_SKIN_lightColor 10
-#define SHADER_COMMON_SKIN_lightViewProjMatrix 11
-#define SHADER_COMMON_SKIN_jointData 12
-#define SHADER_COMMON_SKIN_ViewMatrix 13
-#define SHADER_COMMON_SKIN_VertexColor 14
-
-
-
-
-#define SHADER_COMMON_mvp 1
-#define SHADER_COMMON_transparency 2
-#define SHADER_COMMON_world 3
-#define SHADER_COMMON_isLighting 4
-#define SHADER_COMMON_refraction 5
-#define SHADER_COMMON_reflection 6
-#define SHADER_COMMON_shadowDarkness 7
-#define SHADER_COMMON_lightPos 8
-#define SHADER_COMMON_eyePos 9
-#define SHADER_COMMON_lightColor 10
-#define SHADER_COMMON_lightViewProjMatrix 11
-#define SHADER_COMMON_viewMatrix 12
-#define SHADER_COMMON_lightFadeDistance 20
-#define SHADER_COMMON_isVertexColored 21
-#define SHADER_COMMON_lightType 22
-#define SHADER_COMMON_samplerType 23
-#define SHADER_COMMON_ambientLight 24
-#define SHADER_COMMON_hasReflectionMap 25
-#define SHADER_COMMON_hasNormalMap 26
-#define SHADER_COMMON_uvScale 27
 
 #define SHADER_COMMON_colorMap 0
 #define SHADER_COMMON_shadowMap 1
 #define SHADER_COMMON_normalMap 2
 #define SHADER_COMMON_reflectionMap 3
+#define SHADER_COMMON_lightPos 4
+#define SHADER_COMMON_lightColor 5
+#define SHADER_COMMON_lightFadeDistance 6
+#define SHADER_COMMON_lightType 7
+#define SHADER_COMMON_lightCount 8
+#define SHADER_COMMON_hasReflectionMap 9
+#define SHADER_COMMON_hasNormalMap 10
+#define SHADER_COMMON_ambientLight 11
+#define SHADER_COMMON_samplerType 12
+
+#define SHADER_MESH_mvp 1
+#define SHADER_MESH_model 2
+#define SHADER_MESH_lightViewProjMatrix 3
+#define SHADER_MESH_eyePos 4
+#define SHADER_MESH_shadowDarkness 5
+#define SHADER_MESH_hasMeshColor 6
+#define SHADER_MESH_meshColor 7
+#define SHADER_MESH_reflectionValue 8
+#define SHADER_MESH_transparency 9
+#define SHADER_MESH_hasLighting 10
+#define SHADER_MESH_uvScale 11
+
+#define SHADER_COMMON_SKIN_mvp 12
+#define SHADER_COMMON_SKIN_jointData 13
+#define SHADER_COMMON_SKIN_model 14
+#define SHADER_COMMON_SKIN_shadowDarkness 15
+#define SHADER_COMMON_SKIN_eyePos 16
+#define SHADER_COMMON_SKIN_lightViewProjMatrix 17
+#define SHADER_COMMON_SKIN_hasMeshColor 18
+#define SHADER_COMMON_SKIN_reflectionValue 19
+#define SHADER_COMMON_SKIN_transparency 20
+#define SHADER_COMMON_SKIN_hasLighting 21
+#define SHADER_COMMON_SKIN_uvScale 22
+#define SHADER_COMMON_SKIN_meshColor 23
 
 
 #define SHADER_COLOR_mvp 1

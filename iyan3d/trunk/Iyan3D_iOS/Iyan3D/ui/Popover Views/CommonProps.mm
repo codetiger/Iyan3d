@@ -99,14 +99,20 @@
 - (void)pixelDemoGotPixel:(BMPixel)pixel
 {
     colorValue = Vector4(pixel.red, pixel.green, pixel.blue, 1.0); //TODO
-    [self.selectedColorView setBackgroundColor:[UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha]];
+    UIColor *selectedColor = [UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha];
+    [self.selectedColorView setBackgroundColor:selectedColor];
+    ((TexturePropCell*)selectedCell).texImageView.backgroundColor = selectedColor;
+    groupedData[""][0].value = colorValue;
     [self.delegate changedPropertyAtIndex:selectedParentProp.index WithValue:colorValue AndStatus:NO];
 }
 
 - (void)pixelDemoTouchEnded:(BMPixel)pixel
 {
     colorValue = Vector4(pixel.red, pixel.green, pixel.blue, 1.0); //TODO
-    [self.selectedColorView setBackgroundColor:[UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha]];
+    UIColor *selectedColor = [UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha];
+    [self.selectedColorView setBackgroundColor:selectedColor];
+    ((TexturePropCell*)selectedCell).texImageView.backgroundColor = selectedColor;
+    groupedData[""][0].value = colorValue;
     [self.delegate changedPropertyAtIndex:selectedParentProp.index WithValue:colorValue AndStatus:YES];
 }
 
@@ -172,6 +178,19 @@
                     cell.tableIndex = tIndex;
                     cell.title.text =   [NSString stringWithCString:property.title.c_str() encoding:NSUTF8StringEncoding];
                     cell.slider.value =  property.value.x;
+                    
+                    if(property.value.w == 1) {
+                        cell.dynamicSlider = YES;
+                        [cell.xValue setHidden:NO];
+                        cell.xValue.text = [NSString stringWithFormat:@"%.1f", property.value.x];
+                        cell.slider.minimumValue = property.value.x - 0.5;
+                        cell.slider.maximumValue = property.value.x + 0.5;
+                        cell.slider.value = property.value.x;
+                    } else {
+                        [cell.xValue setHidden:YES];
+                        cell.dynamicSlider = NO;
+                    }
+                    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     return cell;
                     
@@ -289,11 +308,12 @@
     
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
+    selectedCell = cell;
     
-    std::map< string, vector<Property> > tempMap = (tIndex == PROP_TABLE) ? groupedData : subGroupedData;
+    std::map< string, vector<Property> > &tempMap = (tIndex == PROP_TABLE) ? groupedData : subGroupedData;
     NSMutableArray* tempHeaders = (tIndex == PROP_TABLE) ? sectionHeaders : subSectionHeaders;
     if(indexPath.section < (int)tempMap.size()) {
-        vector<Property> tempVec = tempMap[[tempHeaders[indexPath.section] UTF8String]];
+        vector<Property> &tempVec = tempMap[[tempHeaders[indexPath.section] UTF8String]];
         Property property = tempVec[indexPath.row];
         
         if((int)indexPath.row < (int)tempVec.size()) {
@@ -345,13 +365,24 @@
                     [self.colorView setFrame:frame];
                 }];
             } else if(property.type == LIST_TYPE) {
+                
+                for(int i = 0; i < tempVec.size(); i++) {
+                    if(tempVec[i].type == LIST_TYPE && tempVec[i].groupName == property.groupName && tempVec[i].index != property.index)
+                        tempVec[i].value = Vector4(0);
+                    else if (tempVec[i].index == property.index)
+                        tempVec[i].value = Vector4(1, 0, 0, 0);
+                }
+                
                 selectedListProp = property;
                 if(property.parentIndex == HAS_PHYSICS)
                     physicsProperty.subProps[PHYSICS_KIND].value = Vector4(property.index);
-                    
+                else if (property.groupName == "Resolution") {
+                    [self.delegate changedPropertyAtIndex:CAM_RESOLUTION WithValue:Vector4(property.index - 12) AndStatus:YES];
+                } else {
+                    [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:NO];
+                    [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:YES];
+                }
                 [tableView reloadData];
-                [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:NO];
-                [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:YES];
             } else if (property.type == ICON_TYPE || property.type == IMAGE_TYPE || property.type == BUTTON_TYPE) {
                 [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:YES];
                 [self.delegate dismissView:self WithProperty:physicsProperty];
@@ -365,6 +396,7 @@
 }
 
 - (IBAction)backPressed:(id)sender {
+    [self.propTableView reloadData];
     CGRect frame = [sender superview].frame;
     frame.origin.x = self.view.frame.size.width;
     [UIView animateWithDuration:0.4 animations:^{
@@ -380,11 +412,12 @@
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
     
-    std::map< string, vector<Property> > tempMap = (tableIndex == PROP_TABLE) ? groupedData : subGroupedData;
+    std::map< string, vector<Property> > &tempMap = (tableIndex == PROP_TABLE) ? groupedData : subGroupedData;
     NSMutableArray* tempHeaders = (tableIndex == PROP_TABLE) ? sectionHeaders : subSectionHeaders;
     if(indexPath.section < (int)tempMap.size()) {
-        vector<Property> tempVec = tempMap[[tempHeaders[indexPath.section] UTF8String]];
-        Property property = tempVec[indexPath.row];
+        vector<Property> &tempVec = tempMap[[tempHeaders[indexPath.section] UTF8String]];
+        Property &property = tempVec[indexPath.row];
+        property.value.x = value.x;
         
         if(property.parentIndex == HAS_PHYSICS) {
             physicsProperty.subProps[property.index].value = value;

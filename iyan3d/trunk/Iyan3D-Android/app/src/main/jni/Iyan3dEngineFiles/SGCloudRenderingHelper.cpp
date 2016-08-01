@@ -99,7 +99,7 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
      SGNode *thisNode = scene->nodes[nodeId];
 
      if(thisNode->options[VISIBILITY].value.x) {
-         Vector4 vertColor = thisNode->options[VERTEX_COLOR].value;
+         Vector4 vertColor = thisNode->getProperty(VERTEX_COLOR).value;
 
          Vector3 lightDir = Vector3(0.0, -1.0, 0.0);
          if(nodeType == NODE_ADDITIONAL_LIGHT) {

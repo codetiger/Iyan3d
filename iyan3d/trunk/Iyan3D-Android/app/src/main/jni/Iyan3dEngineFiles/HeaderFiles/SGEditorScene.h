@@ -142,14 +142,14 @@ public:
     std::map<int,vector<Vector3> > textJointsBasePos;
     CollisionManager *cmgr;
     
-    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms = 0);
+    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms = 0, int maxJoints = 0);
     ~SGEditorScene();
     
     void removeAllNodes();
     
     void initTextures();
     void enterOrExitAutoRigMode(bool rigMode);
-    void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType, int maxUniforms);
+    void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType, int maxUniforms, int maxJoints);
     void initLightCamera(Vector3 position);
     
     void renderAll();

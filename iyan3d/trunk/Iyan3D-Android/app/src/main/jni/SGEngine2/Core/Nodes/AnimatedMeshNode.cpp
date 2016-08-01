@@ -34,11 +34,12 @@ AnimatedMeshNode::~AnimatedMeshNode()
     jointNodes.clear();
 }
 
-void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, rig_type rigType)
+void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, int maxJoints, rig_type rigType)
 {
     this->mesh = mesh;
     SkinMesh* SMesh = (SkinMesh*)mesh;
-    for (int i = 0; i < SMesh->joints->size(); i++) {
+    int jointsCount = SMesh->joints->size();
+    for (int i = 0; i < jointsCount; i++) {
         shared_ptr<JointNode> node = make_shared<JointNode>();
         if ((*SMesh->joints)[i]->Parent) {
             unsigned short parentId = (*SMesh->joints)[i]->Parent->Index;
@@ -88,8 +89,10 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, rig_type rigType)
     }
     SMesh->recoverJointsFromMesh(jointNodes);
     
-    if (skinType == CPU_SKIN)
+    if (jointsCount > maxJoints || skinType == CPU_SKIN) {
+        skinType = CPU_SKIN;
         initializeMeshCache();
+    }
 }
 
 void AnimatedMeshNode::initializeMeshCache()

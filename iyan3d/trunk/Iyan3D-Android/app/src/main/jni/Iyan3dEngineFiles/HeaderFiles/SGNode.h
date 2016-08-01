@@ -109,7 +109,7 @@ public:
     NODE_TYPE getType();
     void setType(NODE_TYPE type);
     
-    Property getProperty(PROP_INDEX pIndex);
+    Property& getProperty(PROP_INDEX pIndex);
     void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
     void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
 };

@@ -17,7 +17,6 @@
 
 #define OBJ_BOUNDINGBOX_MAX_LIMIT 24.0
 #define RIG_BONE_SCALE_TEMP_FIX 0.85
-#define RIG_MAX_BONES 57
 
 enum SKELETON_TYPE{
     SKELETON_HUMAN,
@@ -80,7 +79,6 @@ public:
     SGNode* getRiggedNode();
     
     /* Call Backs */
-    void (*boneLimitsCallBack)();
     void (*objLoaderCallBack)(int);
     
     bool setSceneMode(AUTORIG_SCENE_MODE mode);

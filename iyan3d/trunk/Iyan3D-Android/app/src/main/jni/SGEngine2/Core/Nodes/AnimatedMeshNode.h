@@ -36,7 +36,7 @@ public:
     void updateMeshCache();
     void updatePartOfMeshCache(int jointId = 0);
     void getAllPaintedVertices(SkinMesh *skinMesh , vector<int> &paintedVertices , int jointId);
-    void setMesh(AnimatedMesh *mesh, rig_type rigType = NO_RIG);
+    void setMesh(AnimatedMesh *mesh, int maxJoints, rig_type rigType = NO_RIG);
     void updateBoundingBox();
     void update();
     virtual short getActiveMeshIndex(int index);

@@ -18,8 +18,11 @@
 @interface SliderPropCell : UITableViewCell
 
 @property (assign) int tableIndex;
+@property (assign) BOOL dynamicSlider;
 @property (weak, nonatomic) id < SliderPropDelegate > delegate;
 @property (strong, nonatomic) NSIndexPath* indexPath;
+
+@property (weak, nonatomic) IBOutlet UILabel *xValue;
 
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UISlider *slider;

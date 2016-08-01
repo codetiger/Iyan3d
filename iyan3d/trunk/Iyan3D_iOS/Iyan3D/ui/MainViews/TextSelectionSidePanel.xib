@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -17,7 +17,6 @@
                 <outlet property="colorWheelbtn" destination="4to-JM-G7I" id="0Qw-jw-mg4"/>
                 <outlet property="dummyLeft" destination="uZZ-do-Rny" id="aXj-XJ-QJT"/>
                 <outlet property="dummyRight" destination="LPq-bb-X0L" id="9Vh-sm-Lnk"/>
-                <outlet property="fontStoreTab" destination="X3h-3Z-EP7" id="wPg-bu-Tk8"/>
                 <outlet property="fontTab" destination="X3h-3Z-EP7" id="Zpy-ye-qkS"/>
                 <outlet property="inputText" destination="CyO-w9-dd0" id="Y4K-HK-YZu"/>
                 <outlet property="noFontMessageLable" destination="WZA-PG-YhB" id="2zP-YN-X2R"/>

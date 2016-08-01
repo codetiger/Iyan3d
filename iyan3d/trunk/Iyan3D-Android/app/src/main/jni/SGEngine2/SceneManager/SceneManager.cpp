@@ -400,10 +400,10 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh, string callbac
     return node;
 }
 
-shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMesh* mesh, string callbackFuncName, rig_type rigType, MESH_TYPE meshType)
+shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMesh* mesh, string callbackFuncName, int maxJoints, rig_type rigType, MESH_TYPE meshType)
 {
     shared_ptr<AnimatedMeshNode> node = make_shared<AnimatedMeshNode>();
-    node->setMesh(mesh , rigType);
+    node->setMesh(mesh, maxJoints, rigType);
     node->callbackFuncName = callbackFuncName;
     node->mesh->Commit();
     node->mesh->meshType = meshType;
@@ -554,8 +554,10 @@ AnimatedMesh* SceneManager::LoadMesh(string filePath)
 
 bool SceneManager::LoadShaders(string materialName, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
 {
-    if(device == OPENGLES2)
-        renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
+    if(device == OPENGLES2) {
+        if(shadersStr.find("uniSize") != shadersStr.end())
+            renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
+    }
     return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass, isTest);
 }
 
