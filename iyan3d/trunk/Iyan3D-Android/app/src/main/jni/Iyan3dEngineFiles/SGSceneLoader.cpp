@@ -277,7 +277,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 
     currentScene->freezeRendering = true;
     Vector4 nodeSpecificColor = Vector4(sgNode->getProperty(VERTEX_COLOR).value.x,sgNode->getProperty(VERTEX_COLOR).value.y,sgNode->getProperty(VERTEX_COLOR).value.z,1.0);
-    sgNode->node = sgNode->loadNode(sgNode->assetId, sgNode->textureName, sgNode->getType(), smgr, sgNode->name, sgNode->options[FONT_SIZE].value.x, sgNode->options[SPECIFIC_FLOAT].value.x, nodeSpecificColor,sgNode->optionalFilePath);
+    sgNode->node = sgNode->loadNode(sgNode->assetId, sgNode->textureName, sgNode->getType(), smgr, sgNode->name, sgNode->getProperty(FONT_SIZE).value.x, sgNode->getProperty(SPECIFIC_FLOAT).value.x, nodeSpecificColor,sgNode->optionalFilePath);
     if(!sgNode->node){
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         currentScene->freezeRendering = false;
@@ -355,10 +355,10 @@ void SGSceneLoader::addLight(SGNode *light)
     Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(currentScene->currentFrame,light->rotationKeys,true);
     Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(currentScene->currentFrame, light->scaleKeys);
     Vector3 lightColor = Vector3(scale.x,scale.y,scale.z);
-    float fadeDistance = (light->getType() == NODE_LIGHT) ? 999.0 : light->options[SPECIFIC_FLOAT].value.x;
+    float fadeDistance = (light->getType() == NODE_LIGHT) ? 999.0 : light->getProperty(SPECIFIC_FLOAT).value.x;
     
     Vector3 posOrDir;
-    if(light->options[LIGHT_TYPE].value.x == (int)DIRECTIONAL_LIGHT) {
+    if(light->getProperty(LIGHT_TYPE).value.x == (int)DIRECTIONAL_LIGHT) {
         posOrDir = Vector3(0.0, -1.0, 0.0);
         Mat4 rotMat;
         rotMat.setRotation(rotation);
@@ -370,7 +370,7 @@ void SGSceneLoader::addLight(SGNode *light)
     ShaderManager::lightPosition.push_back(posOrDir);
     ShaderManager::lightColor.push_back(Vector3(lightColor.x,lightColor.y,lightColor.z));
     ShaderManager::lightFadeDistances.push_back(fadeDistance);
-    ShaderManager::lightTypes.push_back(light->options[LIGHT_TYPE].value.x);
+    ShaderManager::lightTypes.push_back(light->getProperty(LIGHT_TYPE).value.x);
 }
 
 void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)

@@ -31,12 +31,12 @@
     {
         refractionValue = sgNode->getProperty(REFRACTION).value.x;
         reflectionValue = sgNode->getProperty(REFLECTION).value.x;
-        isLightningValue = sgNode->options[LIGHTING].value.x;
-        isVisibleValue = sgNode->options[VISIBILITY].value.x;
+        isLightningValue = sgNode->getProperty(LIGHTING).value.x;
+        isVisibleValue = sgNode->getProperty(VISIBILITY).value.x;
         mirrorStatus = mirror;
-        isHaveLightOption = sgNode->options[LIGHTING].value.x;
-        physicsType = (sgNode->options[HAS_PHYSICS].value.x) ? sgNode->options[PHYSICS_KIND].value.x : NONE;
-        velocity = sgNode->options[FORCE_MAGNITUDE].value.x;
+        isHaveLightOption = sgNode->getProperty(LIGHTING).value.x;
+        physicsType = (sgNode->getProperty(HAS_PHYSICS).value.x) ? sgNode->getProperty(PHYSICS_KIND).value.x : NONE;
+        velocity = sgNode->getProperty(FORCE_MAGNITUDE).value.x;
         smoothTexture = smoothTex;
         
         canApplyPhysics = (sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_OBJ || sgNode->getType() == NODE_TEXT);

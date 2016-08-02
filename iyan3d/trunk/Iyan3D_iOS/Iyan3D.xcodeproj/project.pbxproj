@@ -1053,6 +1053,8 @@
 		25DC3E951D49F81F00D6F26C /* mesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE841D486E5100C842C6 /* mesh.vsh */; };
 		25DC3E961D49F82500D6F26C /* skin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE881D48807400C842C6 /* skin.vsh */; };
 		25DC3E971D49F82A00D6F26C /* common.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3DA6EE861D4870C000C842C6 /* common.fsh */; };
+		25DD33FD1D4F6CFC0008778C /* MaterialProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DD33FC1D4F6CFC0008778C /* MaterialProperty.cpp */; };
+		25DD33FE1D4F6CFC0008778C /* MaterialProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DD33FC1D4F6CFC0008778C /* MaterialProperty.cpp */; };
 		25DE0E9D1CAA8C980076F669 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E771CAA8C980076F669 /* btAlignedAllocator.cpp */; };
 		25DE0E9E1CAA8C980076F669 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E771CAA8C980076F669 /* btAlignedAllocator.cpp */; };
 		25DE0E9F1CAA8C980076F669 /* btConvexHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25DE0E7A1CAA8C980076F669 /* btConvexHull.cpp */; };
@@ -3569,6 +3571,8 @@
 		25D96E651CCF7B9900A5AEED /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
 		25DAD21C1C2D48F00050BC88 /* SGSelectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSelectionManager.h; sourceTree = "<group>"; };
 		25DAD21D1C2D49090050BC88 /* SGSelectionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSelectionManager.cpp; sourceTree = "<group>"; };
+		25DD33FB1D4F67360008778C /* MaterialProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterialProperty.h; sourceTree = "<group>"; };
+		25DD33FC1D4F6CFC0008778C /* MaterialProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MaterialProperty.cpp; sourceTree = "<group>"; };
 		25DE0E761CAA8C980076F669 /* btAabbUtil2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btAabbUtil2.h; sourceTree = "<group>"; };
 		25DE0E771CAA8C980076F669 /* btAlignedAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btAlignedAllocator.cpp; sourceTree = "<group>"; };
 		25DE0E781CAA8C980076F669 /* btAlignedAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btAlignedAllocator.h; sourceTree = "<group>"; };
@@ -5537,6 +5541,7 @@
 				25FCAB4C1C3003330051DBBA /* SGMovementManager.cpp */,
 				25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */,
 				25DE11501CAA98C90076F669 /* PhysicsHelper.cpp */,
+				25DD33FC1D4F6CFC0008778C /* MaterialProperty.cpp */,
 			);
 			name = Iyan3DEngineFiles;
 			path = "../../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles";
@@ -5593,6 +5598,7 @@
 				25FCAB4B1C3003220051DBBA /* SGMovementManager.h */,
 				25BC0FAE1C47666F00721B5E /* SGOBJManager.h */,
 				25DE114F1CAA98AE0076F669 /* PhysicsHelper.h */,
+				25DD33FB1D4F67360008778C /* MaterialProperty.h */,
 			);
 			path = HeaderFiles;
 			sourceTree = "<group>";
@@ -10111,6 +10117,7 @@
 				256F6E961BF624FB00154622 /* pngtrans.c in Sources */,
 				256F6EB81BF624FB00154622 /* Logger.cpp in Sources */,
 				C8E6173818C5DD7100BC5342 /* FPPopoverView.m in Sources */,
+				25DD33FD1D4F6CFC0008778C /* MaterialProperty.cpp in Sources */,
 				0184EC881C35406A006F0B57 /* RenderTableViewCell.m in Sources */,
 				25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */,
 				25DE105D1CAA8D6D0076F669 /* btSphereBoxCollisionAlgorithm.cpp in Sources */,
@@ -10335,6 +10342,7 @@
 				25DE106C1CAA8D6D0076F669 /* btBvhTriangleMeshShape.cpp in Sources */,
 				E20670DE1B049AA6006DD2F7 /* Reachability.mm in Sources */,
 				25DE109A1CAA8D6D0076F669 /* btSphereShape.cpp in Sources */,
+				25DD33FE1D4F6CFC0008778C /* MaterialProperty.cpp in Sources */,
 				25DE105E1CAA8D6D0076F669 /* btSphereBoxCollisionAlgorithm.cpp in Sources */,
 				2516DC0A1C5F52FD0034145D /* ParticleManager.cpp in Sources */,
 				25EFBEBD1BE25D2800DB300C /* RenderItem.m in Sources */,

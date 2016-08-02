@@ -297,7 +297,7 @@ void SGEditorScene::updateDirectionLine()
         return;
     }
     
-     bool isDirectionLight = (nodes[selectedNodeId]->options[LIGHT_TYPE].value.x == (int)DIRECTIONAL_LIGHT);
+     bool isDirectionLight = (nodes[selectedNodeId]->getProperty(LIGHT_TYPE).value.x == (int)DIRECTIONAL_LIGHT);
         
         directionLine->node->setVisible(isDirectionLight);
         lightCircles->node->setVisible(!isDirectionLight);
@@ -311,7 +311,7 @@ void SGEditorScene::updateDirectionLine()
         directionLine->node->setRotation(rotation);
     } else {
         lightCircles->node->setPosition(position);
-        lightCircles->node->setScale(Vector3(nodes[selectedNodeId]->options[SPECIFIC_FLOAT].value.x));
+        lightCircles->node->setScale(Vector3(nodes[selectedNodeId]->getProperty(SPECIFIC_FLOAT).value.x));
         lightCircles->node->updateAbsoluteTransformation();
     }
 #endif
@@ -327,14 +327,14 @@ void SGEditorScene::setTransparencyForObjects()
         int excludeNodeId = (isRigMode) ? riggingNodeId : (int)nodes.size()-1;
         for(int index = 0; index < nodes.size(); index++) {
             if(index != excludeNodeId){
-                nodes[index]->options[TRANSPARENCY].value.x = (isRigMode) ? 0.0 : 0.2;
+                nodes[index]->getProperty(TRANSPARENCY).value.x = (isRigMode) ? 0.0 : 0.2;
             }
         }
     } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
         isPreviewMode = false;
         for(int index = 0; index < nodes.size(); index++) {
-            if(nodes[index]->options[VISIBILITY].value.x)
-                nodes[index]->options[TRANSPARENCY].value.x = 1.0;
+            if(nodes[index]->getProperty(VISIBILITY).value.x)
+                nodes[index]->getProperty(TRANSPARENCY).value.x = 1.0;
         }
     }
 }
@@ -451,7 +451,7 @@ float SGEditorScene::getNodeTransparency(int nodeId)
 {
     for(int i = 0; i < nodes.size();i++){
         if(nodes[i]->node->getID() == nodeId){
-            return nodes[i]->options[TRANSPARENCY].value.x;
+            return nodes[i]->getProperty(TRANSPARENCY).value.x;
             break;
         }
     }
@@ -468,7 +468,7 @@ bool SGEditorScene::isNodeTransparent(int nodeId)
                 if(nodes[i]->getType() == NODE_PARTICLES || nodes[i]->node->hasTransparency)
                     return true;
                 
-                return (nodes[i]->options[TRANSPARENCY].value.x < 1.0) || nodes[i]->options[SELECTED].value.x || (!nodes[i]->options[VISIBILITY].value.x);
+                return (nodes[i]->getProperty(TRANSPARENCY).value.x < 1.0) || nodes[i]->getProperty(SELECTED).value.x || (!nodes[i]->getProperty(VISIBILITY).value.x);
                 break;
             }
         }
@@ -497,7 +497,7 @@ void SGEditorScene::setGridLinesUniforms(int nodeId, int rgb, string matName)
 
 bool SGEditorScene::isJointTransparent(int nodeID,string matName)
 {
-    return (jointSpheres[nodeID - JOINT_SPHERES_START_ID]->options[TRANSPARENCY].value.x < 1.0);
+    return (jointSpheres[nodeID - JOINT_SPHERES_START_ID]->getProperty(TRANSPARENCY).value.x < 1.0);
 }
 
 void SGEditorScene::setControlsUniforms(int nodeID,string matName)
@@ -512,7 +512,7 @@ bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 {
     if(nodeID == FORCE_INDICATOR_ID)
         return false;
-    return true;//(sceneControls[nodeID - CONTROLS_START_ID]->options[TRANSPARENCY].value.x < 1.0);
+    return true;//(sceneControls[nodeID - CONTROLS_START_ID]->getProperty(TRANSPARENCY).value.x < 1.0);
 }
 
 bool SGEditorScene::hasNodeSelected()
@@ -580,7 +580,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     rotationCircle->node->setVisible(false);
     //jointSpheres.clear();
     for(unsigned long i = NODE_CAMERA; i < nodes.size(); i++) {
-        if(!(nodes[i]->options[VISIBILITY].value.x))
+        if(!(nodes[i]->getProperty(VISIBILITY).value.x))
             nodes[i]->node->setVisible(false);
     }
     
@@ -597,12 +597,12 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     smgr->setRenderTarget(NULL,true,true,false,Vector4(255,255,255,255));
     
     for(unsigned long i = NODE_CAMERA; i < nodes.size(); i++) {
-        if(!(nodes[i]->options[VISIBILITY].value.x))
+        if(!(nodes[i]->getProperty(VISIBILITY).value.x))
             nodes[i]->node->setVisible(true);
     }
     
     if(selectedNodeId != NOT_SELECTED)
-        nodes[selectedNodeId]->options[SELECTED].value.x = true;
+        nodes[selectedNodeId]->getProperty(SELECTED).value.x = true;
     
     selectMan->selectObject(selectedNodeId,false);
     renHelper->setControlsVisibility(true);
@@ -715,7 +715,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         actionMan->storeAddOrRemoveAssetAction(ACTION_TEXTURE_CHANGE, 0);
     if(!isTemp || isUndoRedo){
         nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->textureName;
-        nodes[selectedNodeId]->options[ORIG_VERTEX_COLOR].value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value;
+        nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value;
     }
 }
 
@@ -752,7 +752,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
         nodes[selectedNode]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     } else {
         nodes[selectedNode]->textureName = "-1";
-        nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->options[ORIG_VERTEX_COLOR].value;
+        nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
         nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
     }
 }

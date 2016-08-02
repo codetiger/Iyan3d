@@ -297,7 +297,7 @@ void SGSceneUpdater::updateLightCam(Vector3 position)
     
     if(updatingScene->nodes.size() <= 2)
         return;
-    if(updatingScene->nodes[NODE_LIGHT]->options[LIGHT_TYPE].value.x == (int)DIRECTIONAL_LIGHT) {
+    if(updatingScene->nodes[NODE_LIGHT]->getProperty(LIGHT_TYPE).value.x == (int)DIRECTIONAL_LIGHT) {
         
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(updatingScene->currentFrame, updatingScene->nodes[NODE_LIGHT]->rotationKeys,true);
 
@@ -332,7 +332,7 @@ void SGSceneUpdater::updateLightProperties(int frameId)
 
             Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId,sgNode->rotationKeys,true);
             
-            if(sgNode->options[LIGHT_TYPE].value.x == (int)DIRECTIONAL_LIGHT) {
+            if(sgNode->getProperty(LIGHT_TYPE).value.x == (int)DIRECTIONAL_LIGHT) {
                 posOrDir = Vector3(0.0, -1.0, 0.0);
                 Mat4 rotMat;
                 rotMat.setRotation(rotation);
@@ -342,7 +342,7 @@ void SGSceneUpdater::updateLightProperties(int frameId)
             Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frameId, sgNode->scaleKeys);
             
             Vector3 lightColor = Vector3(scale.x,scale.y,scale.z);
-            float fadeDistance = (sgNode->getType() == NODE_LIGHT) ? 999.0 : sgNode->options[SPECIFIC_FLOAT].value.x;
+            float fadeDistance = (sgNode->getType() == NODE_LIGHT) ? 999.0 : sgNode->getProperty(SPECIFIC_FLOAT).value.x;
             
             if(index < ShaderManager::lightPosition.size())
                 ShaderManager::lightPosition[index] = posOrDir;
@@ -360,9 +360,9 @@ void SGSceneUpdater::updateLightProperties(int frameId)
                 ShaderManager::lightFadeDistances.push_back(fadeDistance);
             
             if(index < ShaderManager::lightTypes.size())
-                ShaderManager::lightTypes[index] = sgNode->options[LIGHT_TYPE].value.x;
+                ShaderManager::lightTypes[index] = sgNode->getProperty(LIGHT_TYPE).value.x;
             else
-                ShaderManager::lightTypes.push_back(sgNode->options[LIGHT_TYPE].value.x);
+                ShaderManager::lightTypes.push_back(sgNode->getProperty(LIGHT_TYPE).value.x);
             
             sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(lightColor.x, lightColor.y, lightColor.z, 1.0), MATERIAL_PROPS);
             index++;

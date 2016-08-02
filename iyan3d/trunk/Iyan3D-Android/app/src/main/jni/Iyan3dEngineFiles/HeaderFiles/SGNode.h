@@ -1,7 +1,7 @@
 #ifndef Iyan3D_SGNode_h
 #define Iyan3D_SGNode_h
 
-#include "Constants.h"
+#include "MaterialProperty.h"
 
 #include <vector>
 #include "json_json.h"
@@ -39,6 +39,7 @@ private:
 public:
     
     std::map< PROP_INDEX, Property > options;
+    std::vector< MaterialProperty* > materialProps;
     bool isRigged;
     bool isMirrorEnabled;
     bool isTempNode;
@@ -109,7 +110,9 @@ public:
     NODE_TYPE getType();
     void setType(NODE_TYPE type);
     
-    Property& getProperty(PROP_INDEX pIndex);
+    std::map< PROP_INDEX, Property > getAllProperties(int meshBufferIndex = NOT_SELECTED);
+    Property& getProperty(PROP_INDEX pIndex, int meshBufferIndex = NOT_SELECTED);
+    PROP_INDEX checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex);
     void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
     void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
 };

@@ -316,7 +316,7 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         return;
     
     SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
-    std::map<PROP_INDEX, Property> physicsProps = selectedNode->options[HAS_PHYSICS].subProps;
+    std::map<PROP_INDEX, Property> physicsProps = selectedNode->getProperty(HAS_PHYSICS).subProps;
 
     if(propertyAction.actionType == ACTION_EMPTY){
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_MESH;
@@ -324,21 +324,21 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         propertyAction.frameId = actionScene->currentFrame;
         propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(REFRACTION).value.x);
         propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(REFLECTION).value.x);
-        propertyAction.actionSpecificFlags.push_back(selectedNode->options[LIGHTING].value.x);
-        propertyAction.actionSpecificFlags.push_back(selectedNode->options[VISIBILITY].value.x);
-        propertyAction.actionSpecificFlags.push_back(selectedNode->options[HAS_PHYSICS].value.x);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(LIGHTING).value.x);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(VISIBILITY).value.x);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(HAS_PHYSICS).value.x);
         propertyAction.actionSpecificFloats.push_back(physicsProps[FORCE_MAGNITUDE].value.x);
         propertyAction.actionSpecificIntegers.push_back((int)physicsProps[PHYSICS_KIND].value.x);
     }
     
-    selectedNode->setMeshProperties(refraction, reflection, isLighting, isVisible, selectedNode->options[HAS_PHYSICS].value.x, physicsProps[PHYSICS_KIND].value.x, physicsProps[FORCE_MAGNITUDE].value.x, actionScene->currentFrame);
+    selectedNode->setMeshProperties(refraction, reflection, isLighting, isVisible, selectedNode->getProperty(HAS_PHYSICS).value.x, physicsProps[PHYSICS_KIND].value.x, physicsProps[FORCE_MAGNITUDE].value.x, actionScene->currentFrame);
     
     if(isChanged) {
         propertyAction.actionSpecificFloats.push_back(refraction);
         propertyAction.actionSpecificFloats.push_back(reflection);
         propertyAction.actionSpecificFlags.push_back(isLighting);
         propertyAction.actionSpecificFlags.push_back(isVisible);
-        propertyAction.actionSpecificFlags.push_back(selectedNode->options[HAS_PHYSICS].value.x);
+        propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(HAS_PHYSICS).value.x);
         propertyAction.actionSpecificFloats.push_back(physicsProps[FORCE_MAGNITUDE].value.x);
         propertyAction.actionSpecificIntegers.push_back((int)physicsProps[PHYSICS_KIND].value.x);
         finalizeAndAddAction(propertyAction);
@@ -387,8 +387,8 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
         
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_LIGHT;
         propertyAction.actionSpecificFloats.push_back(ShaderManager::shadowDensity);
-        propertyAction.actionSpecificIntegers.push_back(selectedNode->options[LIGHT_TYPE].value.x);
-        propertyAction.actionSpecificFloats.push_back(selectedNode->options[SPECIFIC_FLOAT].value.x);
+        propertyAction.actionSpecificIntegers.push_back(selectedNode->getProperty(LIGHT_TYPE).value.x);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(SPECIFIC_FLOAT).value.x);
         propertyAction.objectIndex = actionScene->nodes[actionScene->selectedNodeId]->actionId;
         changeKeysAction.drop();
         changeKeysAction.actionType = ACTION_CHANGE_NODE_KEYS;
@@ -397,12 +397,12 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     
     if(selectedNode->getType() == NODE_LIGHT){
         ShaderManager::shadowDensity = shadow;
-        selectedNode->options[LIGHT_TYPE].value.x = (int)lightType;
+        selectedNode->getProperty(LIGHT_TYPE).value.x = (int)lightType;
     }
     else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
         ShaderManager::shadowDensity = shadow;
-        selectedNode->options[SPECIFIC_FLOAT].value.x = (distance + 0.001) * 300.0;
-        selectedNode->options[LIGHT_TYPE].value.x = (int)lightType;
+        selectedNode->getProperty(SPECIFIC_FLOAT).value.x = (distance + 0.001) * 300.0;
+        selectedNode->getProperty(LIGHT_TYPE).value.x = (int)lightType;
     }
     
     //nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value = Vector3(red,green,blue);
@@ -431,7 +431,7 @@ void SGActionManager::storeLightPropertyChangeAction(float red , float green , f
     } else
         finalizeAndAddAction(changeKeysAction);
     
-    if(actionScene->nodes[actionScene->selectedNodeId]->options[LIGHT_TYPE].value.x == POINT_LIGHT)
+    if(actionScene->nodes[actionScene->selectedNodeId]->getProperty(LIGHT_TYPE).value.x == POINT_LIGHT)
         actionScene->updateDirectionLine();
     
     changeKeysAction.drop();
@@ -478,9 +478,9 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.objectIndex =  actionScene->actionObjectsSize;
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->oriTextureName));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->textureName));
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->options[ORIG_VERTEX_COLOR].value.x);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->options[ORIG_VERTEX_COLOR].value.y);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->options[ORIG_VERTEX_COLOR].value.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(ORIG_VERTEX_COLOR).value.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(ORIG_VERTEX_COLOR).value.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(ORIG_VERTEX_COLOR).value.z);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(VERTEX_COLOR).value.z);
@@ -507,14 +507,14 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         StoreDeleteObjectKeys(selectedNodeId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->oriTextureName));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->textureName));
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->options[ORIG_VERTEX_COLOR].value.x);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->options[ORIG_VERTEX_COLOR].value.y);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->options[ORIG_VERTEX_COLOR].value.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.z);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value.z);
         assetAction.actionSpecificFlags.push_back(actionScene->nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x);
-        assetAction.options = actionScene->nodes[selectedNodeId]->options;
+        assetAction.options = actionScene->nodes[selectedNodeId]->getAllProperties();
 
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[selectedNodeId]->node->type);
         if(actionScene->nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
@@ -541,10 +541,10 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(VERTEX_COLOR).value.z);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->options[SPECIFIC_FLOAT].value.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(SPECIFIC_FLOAT).value.x);
         assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->getType());
-        assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->options[FONT_SIZE].value.x);
-        assetAction.actionSpecificFlags.push_back(actionScene->nodes[indexOfAsset]->options[LIGHTING].value.x);
+        assetAction.actionSpecificIntegers.push_back(actionScene->nodes[indexOfAsset]->getProperty(FONT_SIZE).value.x);
+        assetAction.actionSpecificFlags.push_back(actionScene->nodes[indexOfAsset]->getProperty(LIGHTING).value.x);
         assetAction.options = actionScene->nodes[indexOfAsset]->options;
         StoreDeleteObjectKeys(indexOfAsset);
         addAction(assetAction);
@@ -567,9 +567,9 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         StoreDeleteObjectKeys(actionScene->selectedNodeId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->textureName));
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->options[ORIG_VERTEX_COLOR].value.x);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->options[ORIG_VERTEX_COLOR].value.y);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->options[ORIG_VERTEX_COLOR].value.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.z);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.z);
@@ -596,9 +596,9 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.objectIndex = (actionScene->nodes[actionScene->selectedNodeId]->actionId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->textureName));
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->options[ORIG_VERTEX_COLOR].value.x);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->options[ORIG_VERTEX_COLOR].value.y);
-        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->options[ORIG_VERTEX_COLOR].value.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.z);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.z);
@@ -748,8 +748,8 @@ int SGActionManager::undo(int &returnValue2)
             //TODO to do for all lights
             
             ShaderManager::shadowDensity = recentAction.actionSpecificFloats[0];
-            actionScene->nodes[indexOfAction]->options[SPECIFIC_FLOAT].value.x = recentAction.actionSpecificFloats[1];
-            actionScene->nodes[indexOfAction]->options[LIGHT_TYPE].value.x = recentAction.actionSpecificIntegers[0];
+            actionScene->nodes[indexOfAction]->getProperty(SPECIFIC_FLOAT).value.x = recentAction.actionSpecificFloats[1];
+            actionScene->nodes[indexOfAction]->getProperty(LIGHT_TYPE).value.x = recentAction.actionSpecificIntegers[0];
             break;
         }
         case ACTION_CHANGE_PROPERTY_CAMERA:{
@@ -912,8 +912,8 @@ int SGActionManager::redo()
         case ACTION_CHANGE_PROPERTY_LIGHT:
             
             ShaderManager::shadowDensity = recentAction.actionSpecificFloats[2];
-            sgNode->options[SPECIFIC_FLOAT].value.x = recentAction.actionSpecificFloats[3];
-            sgNode->options[LIGHT_TYPE].value.x = recentAction.actionSpecificIntegers[1];
+            sgNode->getProperty(SPECIFIC_FLOAT).value.x = recentAction.actionSpecificFloats[3];
+            sgNode->getProperty(LIGHT_TYPE).value.x = recentAction.actionSpecificIntegers[1];
 
             break;
         case ACTION_CHANGE_PROPERTY_CAMERA:

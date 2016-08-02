@@ -41,9 +41,9 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
 
     short nodesCount = (short)scene->nodes.size()-1;
     for (int i = 0; i < (int)scene->nodes.size(); i++) {
-        if (!scene->nodes[i]->options[VISIBILITY].value.x) {
+        if (!scene->nodes[i]->getProperty(VISIBILITY).value.x) {
             nodesCount--;
-        } else if(scene->nodes[i]->options[VISIBILITY].value.x && scene->nodes[i]->getType() == NODE_PARTICLES) {
+        } else if(scene->nodes[i]->getProperty(VISIBILITY).value.x && scene->nodes[i]->getType() == NODE_PARTICLES) {
         	shared_ptr< ParticleManager > pNode = dynamic_pointer_cast<ParticleManager>(scene->nodes[i]->node);
 			nodesCount += pNode->getParticlesCount() - 1;
         }
@@ -98,18 +98,18 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
     NODE_TYPE nodeType = scene->nodes[nodeId]->getType();
      SGNode *thisNode = scene->nodes[nodeId];
 
-     if(thisNode->options[VISIBILITY].value.x) {
+     if(thisNode->getProperty(VISIBILITY).value.x) {
          Vector4 vertColor = thisNode->getProperty(VERTEX_COLOR).value;
 
          Vector3 lightDir = Vector3(0.0, -1.0, 0.0);
          if(nodeType == NODE_ADDITIONAL_LIGHT) {
-             FileHelper::writeFloat(frameFilePtr, thisNode->options[SPECIFIC_FLOAT].value.x/DEFAULT_FADE_DISTANCE); // Emission
+             FileHelper::writeFloat(frameFilePtr, thisNode->getProperty(SPECIFIC_FLOAT).value.x/DEFAULT_FADE_DISTANCE); // Emission
          } else
              FileHelper::writeFloat(frameFilePtr, (nodeType == NODE_LIGHT) ? 1.0 : 0.0); // Emission
 
          Vector3 lightColor = Vector3(0.0);
          if(nodeType == NODE_ADDITIONAL_LIGHT || nodeType == NODE_LIGHT) {
-             FileHelper::writeInt(frameFilePtr, thisNode->options[LIGHT_TYPE].value.x);
+             FileHelper::writeInt(frameFilePtr, thisNode->getProperty(LIGHT_TYPE).value.x);
              Quaternion lightRot = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frameId, scene->nodes[nodeId]->rotationKeys);
              Mat4 rotMat;
              rotMat.setRotation(lightRot);
@@ -150,8 +150,8 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
          FileHelper::writeString(frameFilePtr, textureFileName); // Texture File Name with extension
          FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->getProperty(REFLECTION).value.x);
          FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->getProperty(REFRACTION).value.x);
-         FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->options[TRANSPARENCY].value.x);
-         FileHelper::writeBool(frameFilePtr, (nodeType == NODE_PARTICLES) ? false : scene->nodes[nodeId]->options[LIGHTING].value.x); // node lighting
+         FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->getProperty(TRANSPARENCY).value.x);
+         FileHelper::writeBool(frameFilePtr, (nodeType == NODE_PARTICLES) ? false : scene->nodes[nodeId]->getProperty(LIGHTING).value.x); // node lighting
          FileHelper::writeBool(frameFilePtr, scene->nodes[nodeId]->smoothTexture);
 
          vector<TriangleData> trianglesData;

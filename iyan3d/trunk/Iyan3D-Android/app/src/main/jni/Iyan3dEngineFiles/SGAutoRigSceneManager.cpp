@@ -461,14 +461,14 @@ bool SGAutoRigSceneManager::isSGRTransparent(int jointId,string matName)
 {
     if(!rigScene || !smgr)
         return false;
-    return sgrSGNode->options[TRANSPARENCY].value.x < 1.0;
+    return sgrSGNode->getProperty(TRANSPARENCY).value.x < 1.0;
 }
 
 bool SGAutoRigSceneManager::isOBJTransparent(string materialName)
 {
     if(!rigScene || !smgr)
         return false;
-    return nodeToRig->options[TRANSPARENCY].value.x < 1.0;
+    return nodeToRig->getProperty(TRANSPARENCY).value.x < 1.0;
 }
 
 SGNode* SGAutoRigSceneManager::getRiggedNode()

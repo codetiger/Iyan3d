@@ -36,15 +36,6 @@ void SGNode::setPropertiesOfNode()
         addOrUpdateProperty(THREE_SIXTY, Vector4(0), UNDEFINED, LIST_TYPE, "360p", "Resolution");
         addOrUpdateProperty(TWO_FORTY, Vector4(0), UNDEFINED, LIST_TYPE, "240p", "Resolution");
         
-        addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
-        addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
-        addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Visible");
-        addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
-        addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Lighting");
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "IsVertexColor");
-        addOrUpdateProperty(REFLECTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Reflection");
-        addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Glassy");
-        addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, TYPE_NONE, "Color");
     } else if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT) {
         
         addOrUpdateProperty(SHADOW_DARKNESS, Vector4(0, 0, 0, 0), UNDEFINED, (type == NODE_LIGHT) ? SLIDER_TYPE : TYPE_NONE, "Shadow Darkness");
@@ -55,16 +46,6 @@ void SGNode::setPropertiesOfNode()
         addOrUpdateProperty(LIGHT_DIRECTIONAL, Vector4(1, 0, 0, 0), UNDEFINED, LIST_TYPE, "Directional", "LIGHT TYPE");
         addOrUpdateProperty(LIGHT_POINT, Vector4(0, 0, 0, 0), UNDEFINED, LIST_TYPE, "Point", "LIGHT TYPE");
         
-        addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
-        addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
-        addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Visible");
-        addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
-        addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Lighting");
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "IsVertexColor");
-        addOrUpdateProperty(REFLECTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Reflection");
-        addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Glassy");
-        addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, COLOR_TYPE, "Light Color");
-
     } else if(type == NODE_SGM || type == NODE_OBJ || type == NODE_TEXT || type == NODE_RIG || type == NODE_TEXT_SKIN) {
         
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
@@ -86,33 +67,9 @@ void SGNode::setPropertiesOfNode()
             addOrUpdateProperty(IS_SOFT, Vector4(0, 0, 0, 0), HAS_PHYSICS, TYPE_NONE, "Soft");
             addOrUpdateProperty(PHYSICS_KIND, Vector4(PHYSICS_NONE), HAS_PHYSICS, TYPE_NONE, "Physics Type");
         }
-        
-        addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, PARENT_TYPE, "Material Properties", "PROPERTIES");
-        addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
-        addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
-        addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
-        addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
-        addOrUpdateProperty(FONT_SIZE, Vector4(20.0, 0, 0, 0), UNDEFINED, TYPE_NONE, "FontSize");
-        addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "SpecificFloat");
-        addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, TYPE_NONE, "Color");
-        addOrUpdateProperty(ORIG_VERTEX_COLOR, Vector4(1.0), UNDEFINED, TYPE_NONE, "Color");
-        addOrUpdateProperty(TEXT_COLOR, Vector4(1.0), UNDEFINED, TYPE_NONE, "Color");
-        
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "IsVertexColor");
-        addOrUpdateProperty(REFLECTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, SLIDER_TYPE, "Reflection", "SAMPLE");
-        addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, SLIDER_TYPE, "Glassy", "SAMPLE");
-        addOrUpdateProperty(TEXTURE, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
-        addOrUpdateProperty(TEXTURE_SCALE, Vector4(1, 0, 0, true), MATERIAL_PROPS, SLIDER_TYPE, "Scale", "SKIN");
-        addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Smooth", "SKIN");
-        addOrUpdateProperty(BUMP_MAP, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Bump Map", "SKIN", "");
-        addOrUpdateProperty(BUMP_DEPTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SLIDER_TYPE, "Depth", "SKIN");
-
     } else if(type == NODE_IMAGE || type == NODE_VIDEO || type == NODE_PARTICLES) {
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
-
-        if(type != NODE_PARTICLES)
-            addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
     }
 }
 
@@ -927,7 +884,7 @@ void SGNode::setInitialKeyValues(int actionType)
         
         if(type == NODE_ADDITIONAL_LIGHT || type == NODE_LIGHT) {
             
-            if(options[LIGHT_TYPE].value.x == -1) {
+            if(getProperty(LIGHT_TYPE).value.x == -1) {
                 
                 if(rotationKeys.size() > 0 && type == NODE_ADDITIONAL_LIGHT) {
                     for(int i = 0; i < rotationKeys.size(); i++) {
@@ -952,7 +909,7 @@ void SGNode::setInitialKeyValues(int actionType)
                 
             }
             
-            if(options[SPECIFIC_FLOAT].value.x == 0.0)
+            if(getProperty(SPECIFIC_FLOAT).value.x == 0.0)
                 addOrUpdateProperty(SPECIFIC_FLOAT, Vector4((type == NODE_LIGHT) ? 300.0 : 50.0, 0, 0, 0), UNDEFINED);
         }
         
@@ -1253,7 +1210,7 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
     if(sgbVersion == SGB_VERSION_CURRENT) {
         addOrUpdateProperty(HAS_PHYSICS, Vector4(hasPhysics, 0, 0, 0), UNDEFINED);
         addOrUpdateProperty(PHYSICS_KIND, Vector4((physicsType < PHYSICS_CONST) ? physicsType + PHYSICS_CONST : physicsType), HAS_PHYSICS);
-        std::map<PROP_INDEX, Property> physicsProps = options[HAS_PHYSICS].subProps;
+        std::map<PROP_INDEX, Property> physicsProps = getProperty(HAS_PHYSICS).subProps;
 
         for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
             addOrUpdateProperty((PROP_INDEX)pI, Vector4((physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0), HAS_PHYSICS);
@@ -1337,10 +1294,10 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
     if(type == NODE_SGM || type == NODE_TEXT)
         addOrUpdateProperty(TEXT_COLOR,textColor, UNDEFINED, TYPE_NONE);
 
-    if(type == NODE_IMAGE && options[TEXT_COLOR].value.x == 0.0) options[TEXT_COLOR].value.x = 2.0;
-    if(type == NODE_IMAGE && options[TEXT_COLOR].value.y == 0.0) options[TEXT_COLOR].value.y = 1.0;
+    if(type == NODE_IMAGE && getProperty(TEXT_COLOR).value.x == 0.0) getProperty(TEXT_COLOR).value.x = 2.0;
+    if(type == NODE_IMAGE && getProperty(TEXT_COLOR).value.y == 0.0) getProperty(TEXT_COLOR).value.y = 1.0;
     
-    addOrUpdateProperty(VERTEX_COLOR, options[TEXT_COLOR].value, MATERIAL_PROPS);
+    addOrUpdateProperty(VERTEX_COLOR, getProperty(TEXT_COLOR).value, MATERIAL_PROPS);
     int keysCount = FileHelper::readInt(filePointer);
     KeyHelper::readData(filePointer,keysCount,positionKeys, rotationKeys, scaleKeys, visibilityKeys);
     joints.clear();
@@ -1355,11 +1312,11 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
 
 void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
 {
-    std::map<PROP_INDEX, Property> physicsProps = options[HAS_PHYSICS].subProps;
+    std::map<PROP_INDEX, Property> physicsProps = getProperty(HAS_PHYSICS).subProps;
 
     FileHelper::writeInt(filePointer,assetId);
     FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
-    FileHelper::writeInt(filePointer, options[HAS_PHYSICS].value.x);
+    FileHelper::writeInt(filePointer, getProperty(HAS_PHYSICS).value.x);
     FileHelper::writeInt(filePointer, (int)physicsProps[PHYSICS_KIND].value.x);
     
     int nodeIndex = 0;
@@ -1372,14 +1329,14 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     }
     
     FileHelper::writeInt(filePointer, nodeIndex); //Node Index of Original Node if Instanced
-    FileHelper::writeInt(filePointer, options[LIGHT_TYPE].value.x + 1); // Light Type + 1
+    FileHelper::writeInt(filePointer, getProperty(LIGHT_TYPE).value.x + 1); // Light Type + 1
     FileHelper::writeInt(filePointer, (int)smoothTexture + 1);
     FileHelper::writeFloat(filePointer, physicsProps[WEIGHT].value.x);
     FileHelper::writeFloat(filePointer, physicsProps[FORCE_MAGNITUDE].value.x);
     FileHelper::writeFloat(filePointer, physicsProps[FORCE_DIRECTION].value.x);
     FileHelper::writeFloat(filePointer, physicsProps[FORCE_DIRECTION].value.y);
     FileHelper::writeFloat(filePointer, physicsProps[FORCE_DIRECTION].value.z);
-    FileHelper::writeFloat(filePointer, options[SPECIFIC_FLOAT].value.x);
+    FileHelper::writeFloat(filePointer, getProperty(SPECIFIC_FLOAT).value.x);
     FileHelper::writeFloat(filePointer, physicsProps[IS_SOFT].value.x);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
@@ -1389,13 +1346,13 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     FileHelper::writeString(filePointer, textureName);
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeBool(filePointer,isRigged);
-    FileHelper::writeBool(filePointer, options[LIGHTING].value.x);
+    FileHelper::writeBool(filePointer, getProperty(LIGHTING).value.x);
     FileHelper::writeFloat(filePointer,getProperty(REFRACTION).value.x);
     FileHelper::writeFloat(filePointer,getProperty(REFLECTION).value.x);
     
     std::wstring nodeSpecificString;
     if(type == NODE_TEXT_SKIN || type == NODE_TEXT) {
-        nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(options[FONT_SIZE].value.x) + L"$_@" + to_wstring(options[SPECIFIC_FLOAT].value.x) + L"$_@";
+        nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(getProperty(FONT_SIZE).value.x) + L"$_@" + to_wstring(getProperty(SPECIFIC_FLOAT).value.x) + L"$_@";
     } else
         nodeSpecificString = name;
     
@@ -1456,19 +1413,62 @@ void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame)
     node->setRotation(rotQ, true);
 }
 
-Property& SGNode::getProperty(PROP_INDEX pIndex)
+std::map< PROP_INDEX, Property > SGNode::getAllProperties(int meshBufferIndex)
+{
+    std::map< PROP_INDEX, Property > allProps;
+    
+    if(meshBufferIndex == NOT_SELECTED || materialProps.size() == 1) {
+        allProps.insert(options.begin(), options.end());
+        std::map< PROP_INDEX, Property > matProps = materialProps[0]->getProps();
+        allProps.insert(matProps.begin(), matProps.end());
+    }
+    
+    if(materialProps.size() > 1 && meshBufferIndex != NOT_SELECTED) {
+        std::map< PROP_INDEX, Property > matProps = materialProps[meshBufferIndex]->getProps();
+        allProps.insert(matProps.begin(), matProps.end());
+    }
+    return allProps;
+}
+
+Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
 {
     if(options.find(pIndex) == options.end()) {
         std::map<PROP_INDEX, Property>::iterator pIt;
-        for(pIt = options.begin(); pIt != options.end(); pIt++) {
-            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end())
-                return pIt->second.subProps[pIndex];
+        
+        int matIndex = 0;
+        if(meshBufferIndex != NOT_SELECTED)
+            matIndex = meshBufferIndex;
+        
+        if(materialProps.size() > 0) {
+            std::map<PROP_INDEX, Property>& matProps = materialProps[matIndex]->getProps();
+            if(matProps.find(pIndex) != matProps.end())
+                return matProps[pIndex];
+            else {
+                PROP_INDEX ind = checkPropertyInSubProps(matProps, pIndex);
+                if(ind != UNDEFINED)
+                    return matProps[ind].subProps[pIndex];
+            }
         }
         
+        PROP_INDEX pI = checkPropertyInSubProps(options, pIndex);
+        if(pI != UNDEFINED)
+            return options[pI].subProps[pIndex];
+
     } else {
         return options[pIndex];
     }
 }
+
+PROP_INDEX SGNode::checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex)
+{
+    std::map<PROP_INDEX, Property>::iterator pIt;
+    for(pIt = propsMap.begin(); pIt != propsMap.end(); pIt++) {
+        if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end())
+            return pIt->first;
+    }
+    return UNDEFINED;
+}
+
 
 void SGNode::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE propType, string title, string groupName, string fileName, ICON_INDEX iconId)
 {

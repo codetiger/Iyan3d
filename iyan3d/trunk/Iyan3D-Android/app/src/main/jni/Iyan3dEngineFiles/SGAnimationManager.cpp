@@ -124,9 +124,9 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
         if(addAction.actionType == ACTION_NODE_ADDED) {
             addAction.actionSpecificStrings[0] = (ConversionHelper::getWStringForString(sgNode->oriTextureName));
             addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->textureName));
-            addAction.actionSpecificFloats[0] = (sgNode->options[ORIG_VERTEX_COLOR].value.x);
-            addAction.actionSpecificFloats[1] = (sgNode->options[ORIG_VERTEX_COLOR].value.y);
-            addAction.actionSpecificFloats[2] = (sgNode->options[ORIG_VERTEX_COLOR].value.z);
+            addAction.actionSpecificFloats[0] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.x);
+            addAction.actionSpecificFloats[1] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.y);
+            addAction.actionSpecificFloats[2] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.z);
             addAction.actionSpecificFloats[3] = (sgNode->getProperty(VERTEX_COLOR).value.x);
             addAction.actionSpecificFloats[4] = (sgNode->getProperty(VERTEX_COLOR).value.y);
             addAction.actionSpecificFloats[5] = (sgNode->getProperty(VERTEX_COLOR).value.z);

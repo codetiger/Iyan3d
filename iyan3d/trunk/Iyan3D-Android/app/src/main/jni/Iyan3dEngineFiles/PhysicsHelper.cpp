@@ -54,7 +54,7 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
 {
     double density = 0.0;
     sgNode->addOrUpdateProperty(PHYSICS_KIND, Vector4(pType), HAS_PHYSICS);
-    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
     for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
         sgNode->addOrUpdateProperty((PROP_INDEX)pI, Vector4((physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0), HAS_PHYSICS);
@@ -109,12 +109,12 @@ void PhysicsHelper::syncPhysicsWorld()
     sBodies.clear();
     
     for (int i = 0; i < scene->nodes.size(); i++) {
-        std::map<PROP_INDEX, Property> physicsProps = scene->nodes[i]->options[HAS_PHYSICS].subProps;
-        if(scene->nodes[i]->options[HAS_PHYSICS].value.x && !(bool)physicsProps[IS_SOFT].value.x) {
+        std::map<PROP_INDEX, Property> physicsProps = scene->nodes[i]->getProperty(HAS_PHYSICS).subProps;
+        if(scene->nodes[i]->getProperty(HAS_PHYSICS).value.x && !(bool)physicsProps[IS_SOFT].value.x) {
             btRigidBody *body = getRigidBody(scene->nodes[i]);
             world->addRigidBody(body);
             rBodies.push_back(body);
-        } else if(scene->nodes[i]->options[HAS_PHYSICS].value.x && (bool)physicsProps[IS_SOFT].value.x) {
+        } else if(scene->nodes[i]->getProperty(HAS_PHYSICS).value.x && (bool)physicsProps[IS_SOFT].value.x) {
             btSoftBody *body = getSoftBody(scene->nodes[i]);
             ((btSoftRigidDynamicsWorld*)world)->addSoftBody(body);
             if(dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache) {
@@ -217,7 +217,7 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
 
 btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
 {
-    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
     ActionKey key = sgNode->getKeyForFrame(0);
     Vector3 nodePos = key.position;
@@ -363,7 +363,7 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     sBody->scale(btVector3(sgNode->getNodeScale().x, sgNode->getNodeScale().y, sgNode->getNodeScale().x));
     sBody->setUserPointer((void*)sgNode);
     
-    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
     if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_CLOTH) {
         sBody->generateBendingConstraints(2);
@@ -387,7 +387,7 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
     shared_ptr<MeshNode> node = dynamic_pointer_cast<MeshNode>(sgNode->node);
     Mesh* mesh = node->getMesh();
     
-    std::map<PROP_INDEX, Property> physicsProps = sgNode->options[HAS_PHYSICS].subProps;
+    std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
 
     if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_STATIC) {
         btTriangleMesh *m = new btTriangleMesh();

@@ -383,9 +383,9 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     SGNode* currentSelectedNode = selectionScene->nodes[selectedNodeId];
     
     //currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
-    currentSelectedNode->options[SELECTED].value.x = true;
+    currentSelectedNode->getProperty(SELECTED).value.x = true;
     
-    currentSelectedNode->options[TRANSPARENCY].value.x = NODE_SELECTION_TRANSPARENCY;
+    currentSelectedNode->getProperty(TRANSPARENCY).value.x = NODE_SELECTION_TRANSPARENCY;
     selectionScene->selectedNode = currentSelectedNode;
     
     bool status = true;
@@ -393,7 +393,7 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
         if(currentSelectedNode->getType() == NODE_RIG)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
         else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
-            status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->options[FONT_SIZE].value.x/3.0);
+            status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node), currentSelectedNode->getProperty(FONT_SIZE).value.x/3.0);
         else if (currentSelectedNode->getType() == NODE_LIGHT || currentSelectedNode->getType() == NODE_ADDITIONAL_LIGHT)
             selectionScene->updateDirectionLine();
     }
@@ -410,9 +410,9 @@ void SGSelectionManager::unHightlightSelectedNode()
     
     SGNode* currentSelectedNode = selectionScene->nodes[selectedNodeId];
     
-    currentSelectedNode->options[SELECTED].value.x = false;
+    currentSelectedNode->getProperty(SELECTED).value.x = false;
     
-    currentSelectedNode->options[TRANSPARENCY].value.x = 1.0;
+    currentSelectedNode->getProperty(TRANSPARENCY).value.x = 1.0;
     
     if(selectionScene->selectedNodeIds.size() <= 0) {
         if(currentSelectedNode->getType() == NODE_RIG)
@@ -466,15 +466,15 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     selectionScene->selectedNodeId = objectId;
     selectionScene->selectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
 
-    selectionScene->isNodeSelected = selectionScene->selectedNode->options[SELECTED].value.x = true;
+    selectionScene->isNodeSelected = selectionScene->selectedNode->getProperty(SELECTED).value.x = true;
         
-    selectionScene->selectedNode->options[TRANSPARENCY].value.x = NODE_SELECTION_TRANSPARENCY;
+    selectionScene->selectedNode->getProperty(TRANSPARENCY).value.x = NODE_SELECTION_TRANSPARENCY;
     
     bool status = true;
     if(selectionScene->selectedNode->getType() == NODE_RIG)
         status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node));
     else if (selectionScene->selectedNode->getType() == NODE_TEXT_SKIN)
-        status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node), selectionScene->selectedNode->options[FONT_SIZE].value.x/3.0);
+        status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(selectionScene->selectedNode->node), selectionScene->selectedNode->getProperty(FONT_SIZE).value.x/3.0);
     if(!status)
         unselectObject(selectionScene->selectedNodeId);
     
@@ -501,8 +501,8 @@ void SGSelectionManager::unselectObject(int objectId)
     
     if(objectId >= 0 && objectId < selectionScene->nodes.size())
     {
-        selectionScene->nodes[objectId]->options[TRANSPARENCY].value.x = 1.0;
-        selectionScene->nodes[objectId]->options[SELECTED].value.x = false;
+        selectionScene->nodes[objectId]->getProperty(TRANSPARENCY).value.x = 1.0;
+        selectionScene->nodes[objectId]->getProperty(SELECTED).value.x = false;
         selectionScene->selectedJoint = NULL;
         selectionScene->selectedNode = NULL;
         selectionScene->selectedJointId = NOT_EXISTS;
@@ -688,11 +688,11 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
 {
     if(selectedNodeColor != 255){
         if(selectionScene->rigMan->getRiggedNode())
-            selectionScene->rigMan->getRiggedNode()->options[SELECTED].value.x = true;
+            selectionScene->rigMan->getRiggedNode()->getProperty(SELECTED).value.x = true;
         selectionScene->rigMan->isNodeSelected = true;
         selectionScene->rigMan->selectedNodeId = selectedNodeColor;
         selectionScene->rigMan->selectedNode = selectionScene->rigMan->getRiggedNode();
-        selectionScene->rigMan->selectedNode->options[TRANSPARENCY].value.x = NODE_SELECTION_TRANSPARENCY;
+        selectionScene->rigMan->selectedNode->getProperty(TRANSPARENCY).value.x = NODE_SELECTION_TRANSPARENCY;
         if(selectedJointColor >= 1 && selectedJointColor < animNode->getJointCount()){
             selectionScene->rigMan->selectedJointId = selectedJointColor;
             selectionScene->rigMan->isSGRJointSelected = true;
@@ -706,10 +706,10 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
             updateSGRSelection(255, 0, animNode);
     }else{
         if(selectionScene->rigMan->getRiggedNode())
-            selectionScene->rigMan->getRiggedNode()->options[SELECTED].value.x = false;
+            selectionScene->rigMan->getRiggedNode()->getProperty(SELECTED).value.x = false;
 
         if(selectionScene->rigMan->selectedNode)
-            selectionScene->rigMan->selectedNode->options[TRANSPARENCY].value.x = 1.0;
+            selectionScene->rigMan->selectedNode->getProperty(TRANSPARENCY).value.x = 1.0;
         selectionScene->rigMan->clearNodeSelections();
         selectionScene->renHelper->setJointSpheresVisibility(false);
         selectionScene->rigMan->selectedNodeId = 0;
