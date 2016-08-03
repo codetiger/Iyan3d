@@ -397,10 +397,12 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     
     if(selectedNode->getType() == NODE_LIGHT){
         ShaderManager::shadowDensity = shadow;
+        selectedNode->getProperty(SHADOW_DARKNESS).value.x = shadow;
         selectedNode->getProperty(LIGHT_TYPE).value.x = (int)lightType;
     }
     else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
         ShaderManager::shadowDensity = shadow;
+        selectedNode->getProperty(SHADOW_DARKNESS).value.x = shadow;
         selectedNode->getProperty(SPECIFIC_FLOAT).value.x = (distance + 0.001) * 300.0;
         selectedNode->getProperty(LIGHT_TYPE).value.x = (int)lightType;
     }

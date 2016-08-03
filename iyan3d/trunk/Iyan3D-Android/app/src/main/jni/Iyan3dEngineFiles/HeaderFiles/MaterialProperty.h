@@ -16,6 +16,7 @@ class MaterialProperty
 {
     Texture* textures[MAX_TEXTURE_PER_NODE];
     std::map< PROP_INDEX, Property > props;
+    NODE_TYPE nodeType;
     
 public:
     

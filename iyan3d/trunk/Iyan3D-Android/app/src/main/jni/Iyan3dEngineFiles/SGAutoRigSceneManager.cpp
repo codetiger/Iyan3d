@@ -117,7 +117,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     sgmNode->setPosition(Vector3(0.0));
     sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     nodeToRig->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
-    nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+//    nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgmNode->setID(SGM_ID);
     nodeToRig->node->updateAbsoluteTransformation();
 }
@@ -233,7 +233,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->node->setID(SGR_ID);
                     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN));
                     sgrSGNode->node->setTexture(nodeToRig->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
-                    sgrSGNode->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+//                    sgrSGNode->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
                     sgrSGNode->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0, 0, 0), UNDEFINED);
                     sgrSGNode->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
                     sgrSGNode->addOrUpdateProperty(IS_VERTEX_COLOR, nodeToRig->getProperty(IS_VERTEX_COLOR).value, MATERIAL_PROPS);
@@ -562,7 +562,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             animNode->setVisible(true);
             shared_ptr<MeshNode> meshNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
             nodeToRig->node = animNode;
-            nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+//            nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
             smgr->RemoveNode(meshNode);
         }
         nodeToRig->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(isVertexColoredNode, 0, 0, 0), MATERIAL_PROPS);

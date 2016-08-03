@@ -24,8 +24,8 @@
 
 
 #define SHADER_COMMON_colorMap 0
-#define SHADER_COMMON_shadowMap 1
-#define SHADER_COMMON_normalMap 2
+#define SHADER_COMMON_normalMap 1
+#define SHADER_COMMON_shadowMap 2
 #define SHADER_COMMON_reflectionMap 3
 #define SHADER_COMMON_lightPos 4
 #define SHADER_COMMON_lightColor 5

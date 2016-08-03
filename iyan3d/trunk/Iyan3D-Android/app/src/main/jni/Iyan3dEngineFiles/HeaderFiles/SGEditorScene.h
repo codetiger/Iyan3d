@@ -125,8 +125,8 @@ public:
     PhysicsHelper * physicsHelper;
 
     std::map<int,Texture*> renderingTextureMap;
-    Texture *bgTexture, *watermarkTexture, *whiteBorderTexture, *touchTexture;
-    Texture *previewTexture, *thumbnailTexture, *shadowTexture, *alphaTexture;
+    Texture *watermarkTexture, *whiteBorderTexture, *touchTexture;
+    Texture *previewTexture, *thumbnailTexture, *alphaTexture;
     Plane3D *controlsPlane;
     Vector2 nodeJointPickerPosition;
     Vector3 circleTouchPoint, cameraAngle;
@@ -176,6 +176,8 @@ public:
     SGNode* getSelectedNode();
     SGJoint* getSelectedJoint();
     shared_ptr<Node> getParentNode();
+    
+    void setEnvironmentTexture(std::string textureFilePath);
     
     void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo);
     void removeTempTextureAndVertex(int selectedNode);

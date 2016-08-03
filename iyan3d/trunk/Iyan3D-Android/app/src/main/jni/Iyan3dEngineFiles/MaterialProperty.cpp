@@ -8,8 +8,9 @@
 
 #include "MaterialProperty.h"
 
-MaterialProperty::MaterialProperty(NODE_TYPE nodeType)
+MaterialProperty::MaterialProperty(NODE_TYPE nType)
 {
+    nodeType = nType;
     if(nodeType == NODE_CAMERA) {
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
         addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
@@ -26,10 +27,8 @@ MaterialProperty::MaterialProperty(NODE_TYPE nodeType)
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Visible");
         addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
         addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Lighting");
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "IsVertexColor");
         addOrUpdateProperty(REFLECTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Reflection");
         addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Glassy");
-        addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, COLOR_TYPE, "Light Color");
         
     } else if(nodeType == NODE_SGM || nodeType == NODE_OBJ || nodeType == NODE_TEXT || nodeType == NODE_RIG || nodeType == NODE_TEXT_SKIN) {
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, PARENT_TYPE, "Material Properties", "PROPERTIES");
@@ -112,7 +111,7 @@ void MaterialProperty::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP
 {
     Property property;
     property.index = index;
-    property.parentIndex = parentProp;
+    property.parentIndex = (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) ? UNDEFINED : parentProp;
     property.value = value;
     property.iconId = iconId;
     
@@ -126,7 +125,7 @@ void MaterialProperty::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP
     if(fileName.length() > 5 || propType == IMAGE_TYPE)
         property.fileName = fileName;
     
-    if(parentProp != UNDEFINED && props.find(parentProp) != props.end())
+    if(property.parentIndex != UNDEFINED && props.find(property.parentIndex) != props.end())
         checkAndUpdatePropsMap(props[parentProp].subProps, property);
     else if(props.find(index) == props.end()) {
         property.type = propType;

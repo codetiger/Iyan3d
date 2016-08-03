@@ -438,29 +438,17 @@ void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex)
 
 void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex)
 {
-    string textureNames[] = {"colorMap", "shadowMap", "normalMap", "reflectionMap"};
+    string textureNames[] = {"colorMap", "normalMap"};
     
-    for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_REFLECTIONMAP; i++) {
-        int textureValue = 0;
-        
-        if(deviceType == OPENGLES2) {
-            OGLTexture* tex = (OGLTexture*)sgNode->node->getTextureByIndex(i);
-            if(tex != NULL) {
-                textureValue = tex->OGLTextureName;
-                smgr->setPropertyValue(sgNode->node->material, textureNames[i], &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + i, smgr->getNodeIndexByID(sgNode->node->getID()), tex, i);
-            }
-        } else if(deviceType == METAL) {
-            textureValue =  i;
-            Texture* tex = sgNode->node->getTextureByIndex(i);
-            if(tex != NULL) {
-                smgr->setPropertyValue(sgNode->node->material, textureNames[i], &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + i, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (i == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
-            } else {
-                smgr->setPropertyValue(sgNode->node->material, textureNames[i], &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + i, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (i == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
-            }
-        }
+    for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_NORMALMAP; i++) {
+        setTextureForNode(sgNode, sgNode->node->getTextureByIndex(i), textureNames[i], paramIndex, i);
     }
     
-    float hasReflectionMap = sgNode->node->hasReflectionMap;
+    setTextureForNode(sgNode, shadowTexture, "shadowMap", paramIndex, NODE_TEXTURE_TYPE_SHADOWMAP);
+    setTextureForNode(sgNode, environmentTex, "reflectionMap", paramIndex, NODE_TETXURE_TYPE_REFLECTIONMAP);
+    
+    
+    float hasReflectionMap = (environmentTex) ? 1.0 : 0.0;
     smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()));
     
     float hasNormalMap = sgNode->node->hasNormalMap;
@@ -468,6 +456,28 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex)
     
     setSamplerType(sgNode, SHADER_COMMON_samplerType);
     
+}
+
+void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue)
+{
+    int textureValue = 0;
+    
+    if(deviceType == OPENGLES2) {
+        OGLTexture* tex = (OGLTexture*)texture;
+        if(tex != NULL) {
+            textureValue = tex->OGLTextureName;
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), tex, userValue);
+        }
+    } else if(deviceType == METAL) {
+        textureValue =  userValue;
+        Texture* tex = sgNode->node->getTextureByIndex(userValue);
+        if(tex != NULL) {
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
+        } else {
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
+        }
+    }
+
 }
 
 void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex)

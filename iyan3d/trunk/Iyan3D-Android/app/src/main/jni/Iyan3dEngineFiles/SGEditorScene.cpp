@@ -202,19 +202,22 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
 
 void SGEditorScene::initTextures()
 {
-    bgTexture = smgr->loadTexture("bgtex",constants::BundlePath +  "/bgImageforall.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
     touchTexture = smgr->createRenderTargetTexture("TouchTexture", TEXTURE_RGBA8, TEXTURE_BYTE, TOUCH_TEXTURE_WIDTH, TOUCH_TEXTURE_HEIGHT);
 
     previewTexture = smgr->createRenderTargetTexture("previewTexture", TEXTURE_RGBA8, TEXTURE_BYTE, PREVIEW_TEXTURE_WIDTH, PREVIEW_TEXTURE_HEIGHT);
     thumbnailTexture = smgr->createRenderTargetTexture("thumbnailTexture", TEXTURE_RGBA8, TEXTURE_BYTE, THUMBNAIL_TEXTURE_WIDTH, THUMBNAIL_TEXTURE_HEIGHT);
-    shadowTexture = smgr->createRenderTargetTexture("shadowTexture", TEXTURE_DEPTH32, TEXTURE_BYTE, SHADOW_TEXTURE_WIDTH, SHADOW_TEXTURE_HEIGHT);
     whiteBorderTexture = smgr->loadTexture("whiteborder",constants::BundlePath + "/whiteborder.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
+    
+    shaderMGR->shadowTexture = smgr->createRenderTargetTexture("shadowTexture", TEXTURE_DEPTH32, TEXTURE_BYTE, SHADOW_TEXTURE_WIDTH, SHADOW_TEXTURE_HEIGHT);
+    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
     
     renderingTextureMap[RESOLUTION[0][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[0][0] , RESOLUTION[0][1]);
     renderingTextureMap[RESOLUTION[1][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[1][0] , RESOLUTION[1][1]);
     renderingTextureMap[RESOLUTION[2][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[2][0] , RESOLUTION[2][1]);
     renderingTextureMap[RESOLUTION[3][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[3][0] , RESOLUTION[3][1]);
     renderingTextureMap[RESOLUTION[4][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[4][0] , RESOLUTION[4][1]);
+    
+//    setEnvironmentTexture(FileHelper::getDocumentsDirectory() + "env2.png");
 }
 
 void SGEditorScene::renderAll()
@@ -548,6 +551,17 @@ shared_ptr<Node> SGEditorScene::getParentNode()
     return selectMan->getParentNode();
 }
 
+void SGEditorScene::setEnvironmentTexture(std::string textureFilePath)
+{
+    freezeRendering = true;
+    //smgr->RemoveTexture(shaderMGR->environmentTex);
+    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", textureFilePath, TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
+    if(shaderMGR->environmentTex)
+        printf("\n Texture exists %d ", shaderMGR->environmentTex->width);
+    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", textureFilePath);
+    freezeRendering = false;
+}
+
 bool SGEditorScene::loadSceneData(std::string *filePath)
 {
     return loader->loadSceneData(filePath);
@@ -587,7 +601,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
    selectMan->unselectObject(selectedNodeId);
     
     smgr->setRenderTarget(thumbnailTexture,true,true,false,Vector4(255,255,255,255));
-    smgr->draw2DImage(bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+//    smgr->draw2DImage(bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     renHelper->drawGrid();
     
     smgr->Render(false);

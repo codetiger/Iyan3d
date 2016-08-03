@@ -235,7 +235,7 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         
         Texture *nodeTex = smgr->loadTexture("Dummy Texture", constants::BundlePath + "/dummy.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
         sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
+//        sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
 
         sceneControls.push_back(sgNode);
         sgNode->node->setID(CONTROLS_START_ID + (int)sceneControls.size() - 1);
@@ -271,7 +271,7 @@ SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
     
     Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
     sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-    sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
+//    sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgNode->node->setScale(Vector3(0.5,2.0,0.5));
     sgNode->node->setVisible(false);
 

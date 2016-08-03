@@ -34,6 +34,9 @@ public:
     static string BundlePath;
     static DEVICE_TYPE deviceType;
     static float ambientLight;
+    
+    Texture* shadowTexture;
+    Texture* environmentTex;
     SceneManager *smgr;
     
     std::map< PROP_INDEX, Property > sceneProps;
@@ -65,6 +68,7 @@ public:
     void setModelMatrix(SGNode *node,u16 paramIndex);
     void setProjectionMatrix(SGNode *node,u16 paramIndex);
     void setViewMatrix(SGNode *node,u16 paramIndex);
+    void setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue);
     void setLightViewProjMatrix(SGNode *node,u16 paramIndex);
     void setVertexColorUniforms(SGNode *node,u16 paramIndex);
     void setTexturesUniforms(SGNode *node,u16 paramIndex);

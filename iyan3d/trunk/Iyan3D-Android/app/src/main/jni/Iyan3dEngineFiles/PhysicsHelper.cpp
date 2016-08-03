@@ -108,7 +108,7 @@ void PhysicsHelper::syncPhysicsWorld()
     rBodies.clear();
     sBodies.clear();
     
-    for (int i = 0; i < scene->nodes.size(); i++) {
+    for (int i = 2; i < scene->nodes.size(); i++) {
         std::map<PROP_INDEX, Property> physicsProps = scene->nodes[i]->getProperty(HAS_PHYSICS).subProps;
         if(scene->nodes[i]->getProperty(HAS_PHYSICS).value.x && !(bool)physicsProps[IS_SOFT].value.x) {
             btRigidBody *body = getRigidBody(scene->nodes[i]);

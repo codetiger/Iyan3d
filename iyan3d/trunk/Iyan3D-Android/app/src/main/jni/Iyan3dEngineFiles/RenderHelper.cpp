@@ -870,7 +870,7 @@ void RenderHelper::rttShadowMap()
     Vector3 posn = renderingScene->lightCamera->getAbsolutePosition();
     
     smgr->setActiveCamera(renderingScene->lightCamera);
-    smgr->setRenderTarget(renderingScene->shadowTexture,true,true,true,Vector4(255,255,255,255));
+    smgr->setRenderTarget(renderingScene->shaderMGR->shadowTexture,true,true,true,Vector4(255,255,255,255));
     setJointSpheresVisibility(false); //hide joints
     renderingScene->nodes[NODE_CAMERA]->node->setVisible(false);//hide camera
     renderingScene->nodes[NODE_LIGHT]->node->setVisible(false);//hide light

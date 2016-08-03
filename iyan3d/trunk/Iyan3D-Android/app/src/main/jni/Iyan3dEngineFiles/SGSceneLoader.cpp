@@ -237,8 +237,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         addLight(sgnode);
     }
 
-    //if (type >= NODE_LIGHT && type != NODE_ADDITIONAL_LIGHT)
-    sgnode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+//    sgnode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
 
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
@@ -292,7 +291,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     sgNode->node->updateAbsoluteTransformation();
     sgNode->node->updateAbsoluteTransformationOfChildren();
     //if(sgNode->getType() >= NODE_LIGHT)
-    sgNode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+//    sgNode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgNode->node->setVisible(true);
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgNode->actionId = ++currentScene->actionObjectsSize;
@@ -708,7 +707,7 @@ void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType a
         return;
     
     SGNode* iNode = new SGNode(nType);
-    
+    iNode->materialProps.push_back(new MaterialProperty(nType)); //TODO
     shared_ptr<Node> original = (sgNode->node->type == NODE_TYPE_INSTANCED) ? sgNode->node->original : sgNode->node;
     if(sgNode->node->type != NODE_TYPE_INSTANCED)
         original->setUserPointer(sgNode);

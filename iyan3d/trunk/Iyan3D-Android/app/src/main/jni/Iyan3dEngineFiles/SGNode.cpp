@@ -24,6 +24,7 @@ SGNode::SGNode(NODE_TYPE type)
 
 void SGNode::setPropertiesOfNode()
 {
+    
     addOrUpdateProperty(DELETE, Vector4(1, 0, 0, 0), UNDEFINED, ICON_TYPE, "Delete", "GENERAL", "", DELETE_ICON);
 
     if(type == NODE_CAMERA) {
@@ -45,6 +46,8 @@ void SGNode::setPropertiesOfNode()
         addOrUpdateProperty(LIGHT_TYPE, Vector4(lightType, 0, 0, 0), UNDEFINED, TYPE_NONE, "Light Type");
         addOrUpdateProperty(LIGHT_DIRECTIONAL, Vector4(1, 0, 0, 0), UNDEFINED, LIST_TYPE, "Directional", "LIGHT TYPE");
         addOrUpdateProperty(LIGHT_POINT, Vector4(0, 0, 0, 0), UNDEFINED, LIST_TYPE, "Point", "LIGHT TYPE");
+        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), UNDEFINED, TYPE_NONE, "IsVertexColor");
+        addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), UNDEFINED, COLOR_TYPE, "Light Color");
         
     } else if(type == NODE_SGM || type == NODE_OBJ || type == NODE_TEXT || type == NODE_RIG || type == NODE_TEXT_SKIN) {
         
@@ -71,6 +74,7 @@ void SGNode::setPropertiesOfNode()
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
     }
+    
 }
 
 SGNode::~SGNode(){
@@ -199,13 +203,12 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             break;
     }
     
-    if(node) {
-        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
-        node->setTexture(nodeEnvTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
-
-//        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-//        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
-    }
+//    if(node) {
+//        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
+//        node->setTexture(nodeEnvTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
+////        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+////        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
+//    }
 
     return node;
 }
@@ -1206,6 +1209,7 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
     else
         textureName = to_string(assetId)+"-cm";
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
+    materialProps.push_back(new MaterialProperty(type));
     setPropertiesOfNode();
     if(sgbVersion == SGB_VERSION_CURRENT) {
         addOrUpdateProperty(HAS_PHYSICS, Vector4(hasPhysics, 0, 0, 0), UNDEFINED);
@@ -1312,11 +1316,15 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
 
 void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
 {
-    std::map<PROP_INDEX, Property> physicsProps = getProperty(HAS_PHYSICS).subProps;
+    Property emptyProp;
+    emptyProp.index = UNDEFINED;
+    emptyProp.value = Vector4(0);
+    std::map<PROP_INDEX, Property> physicsProps = (type == NODE_SGM || NODE_OBJ || NODE_TEXT) ? getProperty(HAS_PHYSICS).subProps : emptyProp.subProps;
+    Property hasPhysicsProp = (type == NODE_SGM || NODE_OBJ || NODE_TEXT) ? getProperty(HAS_PHYSICS) : emptyProp;
 
     FileHelper::writeInt(filePointer,assetId);
     FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
-    FileHelper::writeInt(filePointer, getProperty(HAS_PHYSICS).value.x);
+    FileHelper::writeInt(filePointer, hasPhysicsProp.value.x);
     FileHelper::writeInt(filePointer, (int)physicsProps[PHYSICS_KIND].value.x);
     
     int nodeIndex = 0;
@@ -1329,13 +1337,13 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     }
     
     FileHelper::writeInt(filePointer, nodeIndex); //Node Index of Original Node if Instanced
-    FileHelper::writeInt(filePointer, getProperty(LIGHT_TYPE).value.x + 1); // Light Type + 1
+    FileHelper::writeInt(filePointer, (type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT) ? getProperty(LIGHT_TYPE).value.x + 1 : 0); // Light Type + 1
     FileHelper::writeInt(filePointer, (int)smoothTexture + 1);
-    FileHelper::writeFloat(filePointer, physicsProps[WEIGHT].value.x);
-    FileHelper::writeFloat(filePointer, physicsProps[FORCE_MAGNITUDE].value.x);
-    FileHelper::writeFloat(filePointer, physicsProps[FORCE_DIRECTION].value.x);
-    FileHelper::writeFloat(filePointer, physicsProps[FORCE_DIRECTION].value.y);
-    FileHelper::writeFloat(filePointer, physicsProps[FORCE_DIRECTION].value.z);
+    FileHelper::writeFloat(filePointer, (physicsProps.find(WEIGHT) != physicsProps.end()) ? physicsProps[WEIGHT].value.x : 0.0);
+    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_MAGNITUDE) != physicsProps.end()) ? physicsProps[FORCE_MAGNITUDE].value.x : 0.0);
+    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_DIRECTION) != physicsProps.end()) ? physicsProps[FORCE_DIRECTION].value.x : 0.0);
+    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_DIRECTION) != physicsProps.end()) ? physicsProps[FORCE_DIRECTION].value.y : 0.0);
+    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_DIRECTION) != physicsProps.end()) ? physicsProps[FORCE_DIRECTION].value.z : 0.0);
     FileHelper::writeFloat(filePointer, getProperty(SPECIFIC_FLOAT).value.x);
     FileHelper::writeFloat(filePointer, physicsProps[IS_SOFT].value.x);
     FileHelper::writeFloat(filePointer, 0.0);
@@ -1448,11 +1456,23 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
                 if(ind != UNDEFINED)
                     return matProps[ind].subProps[pIndex];
             }
+        } else {
+            printf("\n Material Props 0 prop Index %d ", pIndex);
         }
         
         PROP_INDEX pI = checkPropertyInSubProps(options, pIndex);
         if(pI != UNDEFINED)
             return options[pI].subProps[pIndex];
+        else {
+            Property emptyProp;
+            emptyProp.index = pIndex;
+            emptyProp.value = Vector4(0.0);
+            emptyProp.parentIndex = UNDEFINED;
+            emptyProp.type = TYPE_NONE;
+            emptyProp.isEnabled = false;
+            options.insert(std::pair<PROP_INDEX, Property>(pIndex, emptyProp));
+            return options[pIndex];
+            }
 
     } else {
         return options[pIndex];
@@ -1473,9 +1493,10 @@ void SGNode::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX par
 {
     Property property;
     property.index = index;
-    property.parentIndex = parentProp;
+    property.parentIndex = (type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT) ? UNDEFINED : parentProp;
     property.value = value;
     property.iconId = iconId;
+    property.isEnabled = true;
     
     if(title.length() > 2) {
         property.title = title;
@@ -1487,16 +1508,20 @@ void SGNode::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX par
     if(fileName.length() > 5 || propType == IMAGE_TYPE)
         property.fileName = fileName;
     
-    if(parentProp != UNDEFINED && options.find(parentProp) != options.end())
+    if(property.parentIndex != UNDEFINED && options.find(property.parentIndex) != options.end())
         checkAndUpdatePropsMap(options[parentProp].subProps, property);
     else if(options.find(index) == options.end()) {
         property.type = propType;
         options.insert(pair<PROP_INDEX, Property>( index, property));
     }
     else {
-        options.find(index)->second.value = property.value;
-        if(property.fileName.length() > 5 || propType == IMAGE_TYPE)
-            options.find(index)->second.fileName = property.fileName;
+        if(options.find(index)->second.isEnabled == false) {
+            options[index] = property;
+        } else {
+            options.find(index)->second.value = property.value;
+            if(property.fileName.length() > 5 || propType == IMAGE_TYPE)
+                options.find(index)->second.fileName = property.fileName;
+        }
     }
 
 }

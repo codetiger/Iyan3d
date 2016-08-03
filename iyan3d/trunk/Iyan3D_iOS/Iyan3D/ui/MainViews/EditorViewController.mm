@@ -317,8 +317,8 @@ BOOL missingAlertShown;
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         [self getMaxUniformsForOpenGL];
         [self getMaximumJointsSize];
-        int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms"] intValue];
-        int maxJoints = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints"] intValue];
+        int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms1"] intValue];
+        int maxJoints = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints1"] intValue];
         editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale, maxUnis, maxJoints);
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
@@ -344,7 +344,7 @@ BOOL missingAlertShown;
     ShaderManager::BundlePath = constants::BundlePath;
     ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
     
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms"]) {
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms1"]) {
         
         int lowerLimit = 0;
         int upperLimit = 512;
@@ -359,7 +359,7 @@ BOOL missingAlertShown;
         printf("\n Max Uniforms %d ", lowerLimit);
         
         smgr->clearMaterials();
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxuniforms"];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxuniforms1"];
     }
 }
 
@@ -368,7 +368,7 @@ BOOL missingAlertShown;
     ShaderManager::BundlePath = constants::BundlePath;
     ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
     
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints"]) {
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints1"]) {
         
         int lowerLimit = 0;
         int upperLimit = 512;
@@ -383,7 +383,7 @@ BOOL missingAlertShown;
         printf("\n Max Joints %d ", lowerLimit);
         
         smgr->clearMaterials();
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxjoints"];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxjoints1"];
     }
 }
 

@@ -34,6 +34,7 @@ SGOBJManager::~SGOBJManager()
 bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int assetId, bool isVertexColor, Vector3 vColor)
 {
     SGNode* objSGNode = new SGNode(NODE_OBJ);
+    objSGNode->materialProps.push_back(new MaterialProperty(NODE_SGM)); //TODO
     int objLoadStatus = 0;
     string finalPath="";
     
@@ -76,7 +77,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
 #endif
         Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
         objNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        objNode->setTexture(objScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+//        objNode->setTexture(objScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     }
     // scale to fit all obj in same proportion-----
     float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();

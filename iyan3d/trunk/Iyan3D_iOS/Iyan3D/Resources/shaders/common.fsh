@@ -105,7 +105,7 @@ void main()
     vec4 finalColor = vec4(diffuse_color + specular) * colorOfLight;
 
     if(hasReflectionMap > 0.5)
-        finalColor = mix(diffuse_color, specular, vReflectionValue) * colorOfLight;
+        finalColor = vec4(diffuse_color * (1.0 - vReflectionValue) + specular * vReflectionValue) * colorOfLight;
     
     finalColor -= (finalColor * shadowValue);
     
