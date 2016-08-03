@@ -33,10 +33,13 @@ class RenderManager {
 protected:
     shared_ptr<CameraNode> camera;
 public:
-    RenderManager(){
+    RenderManager()
+    {
         
     }
-    virtual ~RenderManager(){
+    
+    virtual ~RenderManager()
+    {
         
     }
     

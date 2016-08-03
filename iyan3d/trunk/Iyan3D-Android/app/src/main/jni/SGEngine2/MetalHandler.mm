@@ -17,21 +17,30 @@ static CAMetalLayer* MTLLayer;
 static id <MTLLibrary> MTLLib;
 
 
-void MetalHandler::setDevice(id <MTLDevice> metalDevice){
+void MetalHandler::setDevice(id <MTLDevice> metalDevice)
+{
     device = metalDevice;
 }
-id <MTLDevice> MetalHandler::getMTLDevice(){
+
+id <MTLDevice> MetalHandler::getMTLDevice()
+{
     if(!device)
         Logger::log(ERROR,"MetalHandler" , "Metal Device is null,not from metal view");
     return device;
 }
-void MetalHandler::setMTLLayer(CAMetalLayer* mtlLayer){
+
+void MetalHandler::setMTLLayer(CAMetalLayer* mtlLayer)
+{
     MTLLayer = mtlLayer;
 }
-void MetalHandler::setMTLLibrary(id <MTLLibrary> mtlLib){
+
+void MetalHandler::setMTLLibrary(id <MTLLibrary> mtlLib)
+{
     MTLLib = mtlLib;
 }
-Material* LoadMetalShaders(string vertexFuncName,string fragFuncName,bool isDepthPass){
+
+Material* LoadMetalShaders(string vertexFuncName,string fragFuncName,bool isDepthPass)
+{
     
     Material *newMat = new MTLMaterial();
     NSString *vertFuncName = [NSString stringWithUTF8String:vertexFuncName.c_str()];

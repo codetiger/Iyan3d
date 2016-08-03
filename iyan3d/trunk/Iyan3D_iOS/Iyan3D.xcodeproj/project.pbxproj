@@ -3445,8 +3445,8 @@
 		256F6D491BF624FB00154622 /* CSGRMeshFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSGRMeshFileLoader.h; sourceTree = "<group>"; };
 		256F6D4A1BF624FB00154622 /* OBJMeshFileLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OBJMeshFileLoader.cpp; sourceTree = "<group>"; };
 		256F6D4B1BF624FB00154622 /* OBJMeshFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJMeshFileLoader.h; sourceTree = "<group>"; };
-		256F6D4C1BF624FB00154622 /* MetalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalHandler.h; sourceTree = "<group>"; };
-		256F6D4D1BF624FB00154622 /* MetalHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHandler.mm; sourceTree = "<group>"; };
+		256F6D4C1BF624FB00154622 /* MetalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHandler.h; path = ../MetalHandler.h; sourceTree = "<group>"; };
+		256F6D4D1BF624FB00154622 /* MetalHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHandler.mm; path = ../MetalHandler.mm; sourceTree = "<group>"; };
 		256F6D4F1BF624FB00154622 /* ImageLoaderOBJC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoaderOBJC.h; sourceTree = "<group>"; };
 		256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageLoaderOBJC.mm; sourceTree = "<group>"; };
 		256F6D511BF624FB00154622 /* ImageLoaderOBJCWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoaderOBJCWrapper.h; sourceTree = "<group>"; };
@@ -5610,8 +5610,6 @@
 				256F6BB61BF624FB00154622 /* Core */,
 				256F6D2D1BF624FB00154622 /* libpng */,
 				256F6D471BF624FB00154622 /* Loaders */,
-				256F6D4C1BF624FB00154622 /* MetalHandler.h */,
-				256F6D4D1BF624FB00154622 /* MetalHandler.mm */,
 				256F6D4E1BF624FB00154622 /* RenderManager */,
 				256F6D5E1BF624FB00154622 /* SceneManager */,
 				256F6D611BF624FB00154622 /* SGEngineCommon.h */,
@@ -5796,6 +5794,8 @@
 		256F6D4E1BF624FB00154622 /* RenderManager */ = {
 			isa = PBXGroup;
 			children = (
+				256F6D4C1BF624FB00154622 /* MetalHandler.h */,
+				256F6D4D1BF624FB00154622 /* MetalHandler.mm */,
 				256F6D4F1BF624FB00154622 /* ImageLoaderOBJC.h */,
 				256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */,
 				256F6D511BF624FB00154622 /* ImageLoaderOBJCWrapper.h */,

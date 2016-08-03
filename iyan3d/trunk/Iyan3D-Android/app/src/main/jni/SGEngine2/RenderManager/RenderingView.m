@@ -12,6 +12,7 @@
 {
     
 }
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -21,6 +22,7 @@
     }
    return self;
 }
+
 + (Class)layerClass
 {
 #if !(TARGET_IPHONE_SIMULATOR)
@@ -39,4 +41,5 @@
         return [CAEAGLLayer class];
 #endif
 }
+
 @end
