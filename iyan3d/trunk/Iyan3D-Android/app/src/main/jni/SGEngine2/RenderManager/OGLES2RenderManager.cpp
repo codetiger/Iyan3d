@@ -328,8 +328,8 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
 {
     uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
 
-//    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
-//        return;
+    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
+        return;
     
     switch (uni.type) {
         case DATA_FLOAT:
@@ -361,11 +361,9 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
         case DATA_TEXTURE_2D:
         case DATA_TEXTURE_CUBE:{
             u_int32_t *textureName = (u_int32_t*)uni.values;
-            glActiveTexture(GL_TEXTURE0 + userValue);
-            glBindTexture(GL_TEXTURE_2D, *textureName);
-            //bindTexture(GL_TEXTURE0 + userValue, *textureName);
+            bindTexture(GL_TEXTURE0 + userValue, *textureName);
             
-            //if(uni.isUpdated)
+            if(uni.isUpdated)
                 glUniform1i(uni.location, userValue);
         }
             break;
@@ -593,7 +591,7 @@ Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *textu
 {
     float mid = texture->height / 2.0;
     float difFromMid = touchPosition.y - mid;
-    glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)texture)->OGLTextureName);
+    bindTexture(GL_TEXTURE0, ((OGLTexture*)texture)->OGLTextureName);
     GLubyte pixelColor[4];
     glReadPixels((int)touchPosition.x,(int)(mid - difFromMid),1,1,GL_RGBA,GL_UNSIGNED_BYTE,&pixelColor[0]);
     return Vector4((int)pixelColor[0],(int)pixelColor[1],(int)pixelColor[2],(int)pixelColor[3]);
