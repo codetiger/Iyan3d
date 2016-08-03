@@ -222,15 +222,14 @@ const int IK_JOINTS[] = {JOINT_R_HAND, JOINT_L_HAND, JOINT_R_LEG, JOINT_L_LEG};
 
 enum NODE_TYPE
 {
+    NODE_UNDEFINED = -1,
     NODE_CAMERA = 0,
     NODE_LIGHT = 1,
     NODE_SGM = 2,
+    NODE_RIG = 3,
     NODE_TEXT_SKIN = 4,
     NODE_IMAGE = 5,
     NODE_OBJ = 6,
-    NODE_RIG = 3,
-    NODE_UNDEFINED = -1,
-    NODE_BITS = 4,
     NODE_ADDITIONAL_LIGHT = 7,
     NODE_TEXT = 8,
     NODE_VIDEO = 9,

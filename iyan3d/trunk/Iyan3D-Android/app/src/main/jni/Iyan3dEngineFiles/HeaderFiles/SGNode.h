@@ -32,7 +32,7 @@ struct properties{
     bool isSoft;
 };
 
-class SGNode{
+class SGNode {
 private:
     NODE_TYPE type;
     
@@ -115,5 +115,8 @@ public:
     PROP_INDEX checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex);
     void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
     void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
+    
+    void addAINodeToSave(aiScene &scene, vector< aiNode* > &nodes, vector< aiMesh* > &meshes, vector< aiMaterial* > &materials, vector< aiTexture* > &textures, vector< aiLight* > &lights);
+    void LoadNodeFromAINode(aiNode *n);
 };
 #endif

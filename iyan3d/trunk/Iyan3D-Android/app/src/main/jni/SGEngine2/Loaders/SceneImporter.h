@@ -15,6 +15,7 @@
 #include "../Core/Nodes/MeshNode.h"
 #include "../Core/Nodes/AnimatedMeshNode.h"
 #include "../Core/Meshes/SkinMesh.h"
+#include "SGEditorScene.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
@@ -28,14 +29,14 @@ public:
     SceneImporter();
     ~SceneImporter();
     
-    vector< shared_ptr<Node> > importNodesFromFile(string fileName);
+    void importNodesFromFile(string fileName, SGEditorScene *sgScene);
     
 private:
     const aiScene* scene = NULL;
     Assimp::Importer *importer = NULL;
 
+    void loadNodes(aiNode *n, SGEditorScene *sgScene);
     void loadJoints(aiMesh *aiM, SkinMesh *m, aiNode* aiN, Joint* parent);
-    void loadNodes(vector< shared_ptr<Node> > *nodes, aiNode *n);
     SkinMesh* getSkinMeshFrom(aiMesh *aiM, aiNode*aiN);
     Mesh *getMeshFrom(aiMesh *aiM);
 };

@@ -198,6 +198,8 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->selectMan->unselectObject(currentScene->selectedNodeId);
     currentScene->freezeRendering = true;
     SGNode *sgnode = new SGNode(type);
+    sgnode->materialProps.push_back(new MaterialProperty(type));
+
     sgnode->node = sgnode->loadNode(assetId,textureName,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
     if(!sgnode->node) {
         delete sgnode;

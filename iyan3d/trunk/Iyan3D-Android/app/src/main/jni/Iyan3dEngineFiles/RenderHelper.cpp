@@ -784,6 +784,8 @@ bool RenderHelper::createJointSpheres(int additionalJoints)
     int maxCount = (int)renderingScene->jointSpheres.size() + additionalJoints;
     for(int i = (int)renderingScene->jointSpheres.size();i < maxCount;i++){
         SGNode *sgNode = new SGNode(NODE_SGM);
+        sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
+
         Mesh *jointSphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
         if(jointSphereMesh == NULL) {
             delete sgNode;

@@ -19,27 +19,25 @@ SceneImporter::~SceneImporter()
     delete importer;
 }
 
-vector< shared_ptr<Node> > SceneImporter::importNodesFromFile(string filepath)
+void SceneImporter::importNodesFromFile(string filepath, SGEditorScene *sgScene)
 {
     scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Fast);
     if(!scene) {
         printf("Error in Loading: %s\n", importer->GetErrorString());
-        return vector< shared_ptr<Node> >();
+        return;
     }
     
-    vector< shared_ptr<Node> > nodes;
-    loadNodes(&nodes, scene->mRootNode);
-    return nodes;
+    loadNodes(scene->mRootNode, sgScene);
+    return;
 }
 
-void SceneImporter::loadNodes(vector< shared_ptr<Node> > *nodes, aiNode *n)
+void SceneImporter::loadNodes(aiNode *n, SGEditorScene *sgScene)
 {
     if (n->mNumMeshes) {
         for (int i = 0; i < n->mNumMeshes; i++) {
             aiMesh *aiM = scene->mMeshes[n->mMeshes[i]];
             if(aiM->HasBones()) {
                 shared_ptr<AnimatedMeshNode> sgn = make_shared<AnimatedMeshNode>();
-                sgn->setMesh(getSkinMeshFrom(aiM, scene->mRootNode), 100);
 
                 Mat4 mat = Mat4();
                 for (int j = 0; j < 16; j++)
@@ -60,21 +58,17 @@ void SceneImporter::loadNodes(vector< shared_ptr<Node> > *nodes, aiNode *n)
                 aiColor4D color;
                 if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
                 }
-
-                nodes->push_back(sgn);
             } else {
                 shared_ptr<MeshNode> sgn = make_shared<MeshNode>();
                 sgn->mesh = getMeshFrom(aiM);
 
                 sgn->setScale(Vector3(1.0));
                 sgn->updateAbsoluteTransformation();
-
-                nodes->push_back(sgn);
             }
         }
     } else {
         for (int i = 0; i < n->mNumChildren; i++) {
-            loadNodes(nodes, n->mChildren[i]);
+            loadNodes(n->mChildren[i], sgScene);
         }
     }
 }

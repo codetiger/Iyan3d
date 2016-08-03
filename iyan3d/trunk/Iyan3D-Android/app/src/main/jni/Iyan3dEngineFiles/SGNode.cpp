@@ -1469,7 +1469,6 @@ PROP_INDEX SGNode::checkPropertyInSubProps(std::map< PROP_INDEX, Property > prop
     return UNDEFINED;
 }
 
-
 void SGNode::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE propType, string title, string groupName, string fileName, ICON_INDEX iconId)
 {
     Property property;
@@ -1513,4 +1512,99 @@ void SGNode::checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap,
     }
 }
 
+void SGNode::addAINodeToSave(aiScene &scene, vector< aiNode* > &nodes, vector< aiMesh* > &meshes, vector< aiMaterial* > &materials, vector< aiTexture* > &textures, vector< aiLight* > &lights) {
+
+    if(type == NODE_SGM) {
+        aiNode *n = new aiNode();
+
+        Mesh *mesh = dynamic_pointer_cast<MeshNode>(node)->getMesh();
+        n->mNumMeshes = mesh->getMeshBufferCount();
+        n->mMeshes = new unsigned int[n->mNumMeshes];
+        
+        for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
+            aiMesh *m = new aiMesh();
+            m->mMaterialIndex = 0;
+            m->mVertices = new aiVector3D[mesh->getVerticesCountInMeshBuffer(i)];
+            m->mNormals = new aiVector3D[mesh->getVerticesCountInMeshBuffer(i)];
+            m->mTextureCoords[0] = new aiVector3D[mesh->getVerticesCountInMeshBuffer(i)];
+            m->mColors[0] = new aiColor4D[mesh->getVerticesCountInMeshBuffer(i)];
+            
+            m->mNumVertices = mesh->getVerticesCountInMeshBuffer(i);
+            m->mNumUVComponents[0] = mesh->getVerticesCountInMeshBuffer(i);
+            
+            for (int v = 0; v < mesh->getVerticesCountInMeshBuffer(i); v++) {
+                vertexData *vert = mesh->getLiteVertexByIndex(v);
+                m->mVertices[v] = aiVector3D(vert->vertPosition.x, vert->vertPosition.y, vert->vertPosition.z);
+                m->mNormals[v] = aiVector3D(vert->vertNormal.x, vert->vertNormal.y, vert->vertNormal.z);
+                m->mTextureCoords[0][v] = aiVector3D(vert->texCoord1.x, vert->texCoord1.y, 0.0);
+                m->mColors[0][v] = aiColor4D(vert->optionalData1.x, vert->optionalData1.y, vert->optionalData1.z, vert->optionalData1.w);
+            }
+            
+            m->mFaces = new aiFace[ mesh->getIndicesCount(i) / 3 ];
+            m->mNumFaces = (unsigned int)(mesh->getIndicesCount(i) / 3);
+            
+            int faceCount = 0;
+            for(int ind = 0; ind < mesh->getIndicesCount(i); ind += 3) {
+                aiFace &face = m->mFaces[faceCount++];
+                face.mIndices = new unsigned int[3];
+                face.mNumIndices = 3;
+                
+                face.mIndices[0] = mesh->getIndicesArray(i)[ind+0];
+                face.mIndices[1] = mesh->getIndicesArray(i)[ind+1];
+                face.mIndices[2] = mesh->getIndicesArray(i)[ind+2];
+            }
+
+            meshes.push_back(m);
+            n->mMeshes[i] = meshes.size() - 1;
+        }
+        n->mNumChildren = 0;
+        
+        Mat4 mat = node->getAbsoluteTransformation();
+        n->mTransformation = aiMatrix4x4(mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], mat[12], mat[13], mat[14], mat[15]);
+//        printf("MAtrix: \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f", mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], mat[12], mat[13], mat[14], mat[15]);
+        
+        nodes.push_back(n);
+        
+        aiMaterial *material = new aiMaterial();
+        materials.push_back(material);
+        
+    } else if(type == NODE_CAMERA) {
+
+        scene.mCameras = new aiCamera*[1];
+        scene.mNumCameras = 1;
+        scene.mCameras[0] = new aiCamera();
+        
+        Vector3 camPosition = node->getPosition();
+        Vector3 camLookAt = ((CameraNode*)node.get())->getTarget();
+        Vector3 camUp = ((CameraNode*)node.get())->getUpVector();
+
+        scene.mCameras[0]->mPosition = aiVector3D(camPosition.x, camPosition.y, camPosition.z);
+        scene.mCameras[0]->mLookAt = aiVector3D(camLookAt.x, camLookAt.y, camLookAt.z);
+        scene.mCameras[0]->mUp = aiVector3D(camUp.x, camUp.y, camUp.z);
+
+    } else if(type == NODE_LIGHT) {
+       
+        aiLight *light = new aiLight();
+
+        Vector3 lightPosition = node->getPosition();
+        Vector3 lightColor = ((LightNode*)node.get())->lightColor;
+        
+        light->mPosition = aiVector3D(lightPosition.x, lightPosition.y, lightPosition.z);
+        light->mColorDiffuse = aiColor3D(lightColor.x, lightColor.y, lightColor.z);
+        
+        if(((LightNode*)node.get())->type == LIGHT_TYPE_POINT) {
+            light->mType = aiLightSource_POINT;
+            light->mAttenuationConstant = ((LightNode*)node.get())->decayStartDistance;
+            light->mAttenuationLinear = ((LightNode*)node.get())->decayEndDistance;
+        } else if(((LightNode*)node.get())->type == LIGHT_TYPE_DIRECTIONAL) {
+            light->mType = aiLightSource_DIRECTIONAL;
+        }
+        
+        lights.push_back(light);
+    }
+}
+
+void SGNode::LoadNodeFromAINode(aiNode *n) {
+    
+}
 

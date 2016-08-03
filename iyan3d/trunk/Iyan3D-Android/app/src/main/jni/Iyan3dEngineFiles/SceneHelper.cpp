@@ -74,6 +74,8 @@ Vector3 SceneHelper::controlDirection(int controlType)
 
 SGNode* SceneHelper::createCircle(SceneManager *smgr){
     SGNode* rotationCircle = new SGNode(NODE_SGM);
+    rotationCircle->materialProps.push_back(new MaterialProperty(NODE_SGM));
+
     rotationCircle->node = smgr->createCircleNode(100,1.0,"RotationCircle");
     rotationCircle->node->setID(CIRCLE_NODE_ID);
     rotationCircle->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -86,6 +88,8 @@ SGNode* SceneHelper::createCircle(SceneManager *smgr){
 SGNode* SceneHelper::createLightCircles(SceneManager *smgr)
 {
     SGNode* circles = new SGNode(NODE_SGM);
+    circles->materialProps.push_back(new MaterialProperty(NODE_SGM));
+
     circles->node = smgr->createCircleNode(50, 1.0, "LightCircles", true);
     circles->node->setID(LIGHT_CIRCLES);
     circles->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
@@ -111,7 +115,8 @@ SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
     
   
     SGNode* gridLines = new SGNode(NODE_SGM);
-    
+    gridLines->materialProps.push_back(new MaterialProperty(NODE_SGM));
+
     Mesh * mesh = new Mesh();
     
     for(int i = 0; i < vPositions.size(); i++) {
@@ -178,7 +183,8 @@ SGNode* SceneHelper::createBlueLines(SceneManager *smgr)
 SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, Vector3 color, string callbackName, int nodeId) {
     
     SGNode* gridLines = new SGNode(NODE_SGM);
-    
+    gridLines->materialProps.push_back(new MaterialProperty(NODE_SGM));
+
     Mesh * mesh = new Mesh();
     
     for(int i = 0; i < positions.size(); i++) {
@@ -210,6 +216,7 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
     vector<SGNode*> sceneControls;
     for(int i = 0;i < TOTAL_CONTROLS;i++){
         SGNode *sgNode = new SGNode(NODE_SGM);
+        sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
         sgNode->getProperty(IS_VERTEX_COLOR).value = Vector4(true, 0, 0, 0);
         sgNode->getProperty(VERTEX_COLOR).value = Vector4(Vector3(-1.0), 0.0);
         Mesh *ctrlMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/controls" + to_string(i+1) + ".sgm",smgr->device);
@@ -243,6 +250,8 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
 SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
 {
     SGNode *sgNode = new SGNode(NODE_SGM);
+    sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
+
     Mesh *indMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/indicator.sgm",smgr->device);
     if(indMesh == NULL){
         Logger::log(ERROR,"SGScene", "Indicator Mesh Not Loaded");

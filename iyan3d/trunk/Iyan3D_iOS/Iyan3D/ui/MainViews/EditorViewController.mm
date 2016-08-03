@@ -1408,9 +1408,9 @@ BOOL missingAlertShown;
 {
     /*
     SceneImporter *loader = new SceneImporter();
-    vector< shared_ptr<Node> > nds = loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "bonetest.dae");
+    vector< shared_ptr<Node> > nds = loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "bonetest.dae", currentScene);
     for (int i = 0; i < nds.size(); i++) {
-        nds[i]->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_SKIN_L1));
+        nds[i]->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN));
         nds[i]->callbackFuncName = "setUniforms";
         
         smgr->AddNode(nds[i], MESH_TYPE_HEAVY);

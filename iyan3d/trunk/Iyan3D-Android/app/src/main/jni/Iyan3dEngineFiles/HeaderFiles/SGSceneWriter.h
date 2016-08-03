@@ -11,10 +11,18 @@
 
 #include "Constants.h"
 
+#include "assimp/Exporter.hpp"
+#include "assimp/postprocess.h"
+#include "assimp/scene.h"
+#include "assimp/DefaultLogger.hpp"
+#include "assimp/LogStream.hpp"
+
 class SGSceneWriter
 {
 private:
+    Assimp::Exporter *exporter = NULL;
     SceneManager* smgr;
+
 public:
     SGSceneWriter(SceneManager* smgr, void* scene);
     ~SGSceneWriter();
