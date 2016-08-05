@@ -584,7 +584,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     if(!checkNodeSize())
         return;
     
-    bool displayPrepared = smgr->PrepareDisplay(thumbnailTexture->width,thumbnailTexture->height,false,true,false,Vector4(255,255,255,255));
+    bool displayPrepared = smgr->PrepareDisplay(thumbnailTexture->width, thumbnailTexture->height, false, true, false, Vector4(0.0));
     if(!displayPrepared)
         return;
     
@@ -592,23 +592,21 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     renHelper->setControlsVisibility(false);
     renHelper->setJointSpheresVisibility(false);
     rotationCircle->node->setVisible(false);
-    //jointSpheres.clear();
+
     for(unsigned long i = NODE_CAMERA; i < nodes.size(); i++) {
         if(!(nodes[i]->getProperty(VISIBILITY).value.x))
             nodes[i]->node->setVisible(false);
     }
     
-   selectMan->unselectObject(selectedNodeId);
-    
-    smgr->setRenderTarget(thumbnailTexture,true,true,false,Vector4(255,255,255,255));
-//    smgr->draw2DImage(bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    selectMan->unselectObject(selectedNodeId);
+    smgr->setRenderTarget(thumbnailTexture, true, true, false, Vector4(0.0));
     renHelper->drawGrid();
     
     smgr->Render(false);
     smgr->EndDisplay();
-    smgr->writeImageToFile(thumbnailTexture, targetPath , (shaderMGR->deviceType == OPENGLES2) ? FLIP_VERTICAL : NO_FLIP);
+    smgr->writeImageToFile(thumbnailTexture, targetPath, (shaderMGR->deviceType == OPENGLES2) ? FLIP_VERTICAL : NO_FLIP);
     
-    smgr->setRenderTarget(NULL,true,true,false,Vector4(255,255,255,255));
+    smgr->setRenderTarget(NULL, true, true, false, Vector4(0.0));
     
     for(unsigned long i = NODE_CAMERA; i < nodes.size(); i++) {
         if(!(nodes[i]->getProperty(VISIBILITY).value.x))

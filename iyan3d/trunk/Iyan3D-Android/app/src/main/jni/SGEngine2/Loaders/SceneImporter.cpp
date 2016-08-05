@@ -124,10 +124,8 @@ void SceneImporter::loadJoints(aiMesh *aiM, SkinMesh *m, aiNode* aiN, Joint* par
                 sgBone->PaintedVertices->push_back(pvInfo);
             }
             
-//            for (int j = 0; j < 16; j++)
-//                sgBone->LocalAnimatedMatrix.setElement(j, *b->mOffsetMatrix[j]);
-
-            sgBone->LocalAnimatedMatrix = Mat4();
+            for (int j = 0; j < 16; j++)
+                sgBone->LocalAnimatedMatrix.setElement(j, *b->mOffsetMatrix[j]);
 
             for (int j = 0; j < aiN->mNumChildren; j++) {
                 loadJoints(aiM, m, aiN->mChildren[j], sgBone);
