@@ -289,7 +289,6 @@
         }
         else
             fontFileName = [fontListArray objectAtIndex:indexPath.row];
-        NSLog(@"Font File Name : %@ " , fontFileName);
         [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
         [self unselectAll];
         UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];

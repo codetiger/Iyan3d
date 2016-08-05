@@ -672,8 +672,6 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
 
-    Logger::log(INFO,"SGEDITOR","Change Texture Called ");
-
     string texturePath = "";
     #ifdef IOS
         texturePath = FileHelper::getDocumentsDirectory() + "Resources/Textures/" + textureFileName+".png";
@@ -694,8 +692,6 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
                 texturePath = constants::DocumentsStoragePath+"/mesh/"+textureFileName+".png";
             }
     #endif
-
-    Logger::log(INFO,"SGEDITOR","Texture Path " + texturePath);
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);

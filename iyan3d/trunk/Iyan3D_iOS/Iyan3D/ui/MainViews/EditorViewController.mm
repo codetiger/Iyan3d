@@ -3695,8 +3695,6 @@ void downloadFile(NSString* url, NSString* fileName)
         bool prevLighting = selectedNode->getProperty(LIGHTING).value.x;
         bool prevVisibility = selectedNode->getProperty(VISIBILITY).value.x;
         
-        NSLog(@" Prev type %f new Type %f ", currentPhysics[PHYSICS_KIND].value.x, newPhysics[PHYSICS_KIND].value.x);
-        
         if(currentPhysics[FORCE_MAGNITUDE].value.x != newPhysics[FORCE_MAGNITUDE].value.x) {
             [self velocityChanged:newPhysics[FORCE_MAGNITUDE].value.x];
             [self meshPropertyChanged:prevRefraction Reflection:prevReflection Lighting:prevLighting Visible:prevVisibility storeInAction:YES];
@@ -4018,7 +4016,6 @@ void downloadFile(NSString* url, NSString* fileName)
 -(void)cameraPreviewPosition
 {
     int selctedIndex = [[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewPosition"]intValue];
-    NSLog(@"Camera Position : %d " , selctedIndex);
     float camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
     if(selctedIndex==PREVIEW_LEFTBOTTOM){
         camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);

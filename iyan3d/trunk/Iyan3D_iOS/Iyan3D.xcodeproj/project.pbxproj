@@ -2371,6 +2371,8 @@
 		C8AA47041C227D3600C4AB53 /* New-scene.png in Resources */ = {isa = PBXBuildFile; fileRef = C8AA46FB1C227D3600C4AB53 /* New-scene.png */; };
 		C8AA47051C227D3600C4AB53 /* New.png in Resources */ = {isa = PBXBuildFile; fileRef = C8AA46FC1C227D3600C4AB53 /* New.png */; };
 		C8AA47061C227D3600C4AB53 /* New.png in Resources */ = {isa = PBXBuildFile; fileRef = C8AA46FC1C227D3600C4AB53 /* New.png */; };
+		C8CBD7961D537C04002EE2EC /* MeshOptimizeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C8CBD7941D537C04002EE2EC /* MeshOptimizeHelper.cpp */; };
+		C8CBD7971D537C04002EE2EC /* MeshOptimizeHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C8CBD7941D537C04002EE2EC /* MeshOptimizeHelper.cpp */; };
 		C8DF1FE11C242DBD00F689D6 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = C8DF1FE01C242DBD00F689D6 /* close.png */; };
 		C8DF1FE21C242DBD00F689D6 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = C8DF1FE01C242DBD00F689D6 /* close.png */; };
 		C8E1799E1C2060FB00C78C07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8E1799D1C2060FB00C78C07 /* Images.xcassets */; };
@@ -4662,6 +4664,8 @@
 		C8AA46FA1C227D3600C4AB53 /* Mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mail.png; sourceTree = "<group>"; };
 		C8AA46FB1C227D3600C4AB53 /* New-scene.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "New-scene.png"; sourceTree = "<group>"; };
 		C8AA46FC1C227D3600C4AB53 /* New.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = New.png; sourceTree = "<group>"; };
+		C8CBD7941D537C04002EE2EC /* MeshOptimizeHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshOptimizeHelper.cpp; sourceTree = "<group>"; };
+		C8CBD7951D537C04002EE2EC /* MeshOptimizeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshOptimizeHelper.h; sourceTree = "<group>"; };
 		C8DF1FE01C242DBD00F689D6 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		C8E1799D1C2060FB00C78C07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C8E6173018C5DD7100BC5342 /* ARCMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARCMacros.h; path = 3rdParty/FPPopOver/ARCMacros.h; sourceTree = "<group>"; };
@@ -5695,6 +5699,8 @@
 				256F6BE31BF624FB00154622 /* SkinMesh.cpp */,
 				256F6BE41BF624FB00154622 /* SkinMesh.h */,
 				3D0CA0BC1D2D042B005B4838 /* md5.h */,
+				C8CBD7941D537C04002EE2EC /* MeshOptimizeHelper.cpp */,
+				C8CBD7951D537C04002EE2EC /* MeshOptimizeHelper.h */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -10002,6 +10008,7 @@
 				25B5B1681BE33EFB00AC2525 /* ioapi.c in Sources */,
 				25DE10EB1CAA8D6D0076F669 /* btGeneric6DofConstraint.cpp in Sources */,
 				25DE11031CAA8D6D0076F669 /* btDiscreteDynamicsWorld.cpp in Sources */,
+				C8CBD7961D537C04002EE2EC /* MeshOptimizeHelper.cpp in Sources */,
 				25DE10D51CAA8D6D0076F669 /* btPolyhedralContactClipping.cpp in Sources */,
 				25DE10751CAA8D6D0076F669 /* btConeShape.cpp in Sources */,
 				25D96E591CCF2F0F00A5AEED /* Vector2.cpp in Sources */,
@@ -10452,6 +10459,7 @@
 				018501DD1C2BDA730090FA65 /* EditorViewController.mm in Sources */,
 				2512BFED1CB270E3006E19A3 /* DataPickerViewController.m in Sources */,
 				256F6DA31BF624FB00154622 /* InstanceNode.cpp in Sources */,
+				C8CBD7971D537C04002EE2EC /* MeshOptimizeHelper.cpp in Sources */,
 				25DE10D01CAA8D6D0076F669 /* btGjkPairDetector.cpp in Sources */,
 				3D58CD5F1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */,
 				25D7DA691D06F6DC00E84D2F /* UILabel+JDFTooltips.m in Sources */,

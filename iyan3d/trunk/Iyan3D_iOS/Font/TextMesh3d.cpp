@@ -140,7 +140,7 @@ void TextMesh3d::AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short b
     
     prev_rsb_delta = face->glyph->rsb_delta;
     
-    Vectoriser* vectoriser = generateVertices(face, ch, bezierSteps, bevelRadius);
+    Vectoriser* vectoriser = generateVertices(face, ch, bezierSteps, bevelRadius * 1.5);
     for(size_t c = 0; c < vectoriser->ContourCount(); c++) {
         const Contour* contour = vectoriser->GetContour(c);
         
@@ -310,11 +310,11 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
     prev_rsb_delta = face->glyph->rsb_delta;
     
     for (int i = 0; i < bevelSegments; i++) {
-        double bevelX = bevelRadius - (bevelRadius * sinf(i * 90.0 * (PI / 180.0) / (double)bevelSegments));
-        double nextBevelX = bevelRadius - (bevelRadius * sinf((i+1) * 90.0 * (PI / 180.0) / (double)bevelSegments));
+        double bevelX = bevelRadius * 1.5 * sinf(PI * 0.5 * i / (double)bevelSegments);
+        double nextBevelX = bevelRadius * 1.5  * sinf(PI * 0.5 * (i+1) / (double)bevelSegments);
 
-        Vectoriser* vectoriser1 = generateVertices(face, ch, bevelSegments, bevelRadius - bevelX);
-        Vectoriser* vectoriser2 = generateVertices(face, ch, bevelSegments, bevelRadius - nextBevelX);
+        Vectoriser* vectoriser1 = generateVertices(face, ch, bevelSegments, bevelX);
+        Vectoriser* vectoriser2 = generateVertices(face, ch, bevelSegments, nextBevelX);
 
         for(size_t c = 0; c < vectoriser1->ContourCount(); c++) {
             const Contour* contour1 = vectoriser1->GetContour(c);
@@ -339,8 +339,8 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
                 Vector4 v3 = Vector4(d3[0]/64.0, d3[1]/64.0, 0.0, 0.0);
                 Vector4 v4 = Vector4(d4[0]/64.0, d4[1]/64.0, 0.0, 0.0);
 
-                double bevelY = bevelRadius * cosf(i * 90.0 * (PI / 180.0)/ (double)bevelSegments);
-                double nextBevelY = bevelRadius * cosf((i+1) * 90.0 * (PI / 180.0)/ (double)bevelSegments);
+                double bevelY = bevelRadius * cosf(PI * 0.5 * i / (double)bevelSegments);
+                double nextBevelY = bevelRadius * cosf(PI * 0.5 * (i+1) / (double)bevelSegments);
 
                 AddMeshVertex(mesh, Vector4(v1.x + offset, v1.y, bevelY, 0.0));
                 AddMeshVertex(mesh, Vector4(v3.x + offset, v3.y, nextBevelY, 0.0));
@@ -349,8 +349,8 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
                 AddMeshVertex(mesh, Vector4(v4.x + offset, v4.y, nextBevelY, 0.0));
                 AddMeshVertex(mesh, Vector4(v2.x + offset, v2.y, bevelY, 0.0));
 
-                double eBevelY = extrude - (bevelRadius * cosf(i * 90.0 * (PI / 180.0)/ (double)bevelSegments));
-                double eNextBevelY = extrude - (bevelRadius * cosf((i+1) * 90.0 * (PI / 180.0)/ (double)bevelSegments));
+                double eBevelY = extrude - (bevelRadius * cosf(PI * 0.5 * i / (double)bevelSegments));
+                double eNextBevelY = extrude - (bevelRadius * cosf(PI * 0.5 * (i+1) / (double)bevelSegments));
                 
                 AddMeshVertex(mesh, Vector4(v1.x + offset, v1.y, eBevelY, 0.0));
                 AddMeshVertex(mesh, Vector4(v2.x + offset, v2.y, eBevelY, 0.0));
@@ -489,7 +489,7 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         delete tempMesh;
         
        	offset = AddCharacter(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
-        
+
         if(offset == -10000.0)
             return NULL;
         
@@ -500,6 +500,10 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
     
     if(mesh->getVerticesCount() <= 0)
         return NULL;
+
+    mesh->fixOrientation();
+    mesh->moveVertices(Vector3(offset, -height, extrude) / 2.0);
+    mesh->recalculateNormals();
     
     Mesh* m = new Mesh();
     for (int i = 0; i < mesh->getVerticesCount(); i++) {
@@ -511,13 +515,14 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         v.optionalData1 = vtx->optionalData4;
         m->addVertex(&v);
     }
-    for (int i = 0; i < mesh->getTotalIndicesCount(); i++) {
-        unsigned int in = mesh->getHighPolyIndicesArray()[i];
-        m->addToIndicesArray(in);
-    }
-    m->fixOrientation();
-    m->moveVertices(Vector3(offset / 2, -height/2, extrude/2));
-    m->recalculateNormals();
+    
+    MeshOptimizeHelper *optimizer = new MeshOptimizeHelper();
+    unsigned int *optimizedIndices = new unsigned int[mesh->getTotalIndicesCount()];
+    optimizer->OptimizeFaces(mesh->getHighPolyIndicesArray(), mesh->getTotalIndicesCount(), mesh->getVerticesCount(), optimizedIndices, 32);
+    
+    for (int i = 0; i < mesh->getTotalIndicesCount(); i++)
+        m->addToIndicesArray(optimizedIndices[i]);
+
     m->generateUV();
     m->Commit();
 

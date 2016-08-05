@@ -457,40 +457,33 @@ void Mesh::clearIndices()
     tempIndicesData.clear();
 }
 
+string getVertexDataString(Vector3 vertPosition, Vector2 texCoord1) {
+    string unique = "";
+    unique += to_string(floor(vertPosition.x * 100.0) / 100.0);
+    unique += to_string(floor(vertPosition.y * 100.0) / 100.0);
+    unique += to_string(floor(vertPosition.z * 100.0) / 100.0);
+    
+    unique += to_string(texCoord1.x);
+    unique += to_string(texCoord1.y);
+
+    MD5 md5;
+    unique = md5.digestString((char*)unique.c_str());
+    
+    return unique;
+}
+
 void Mesh::removeDoublesInMesh()
 {
     std::map<std::string, unsigned int> vertMap;
     vector<unsigned int> tIndicesData;
     
     if(meshType == MESH_TYPE_LITE) {
+        
         vector<vertexData> verticesDataDup;
 
         for(u32 i = 0; i < tempIndicesData.size(); i++) {
             vertexData *vert =  getLiteVertexByIndex(tempIndicesData[i]);
-            string unique = to_string(vert->vertPosition.x) + to_string(vert->vertPosition.y) + to_string(vert->vertPosition.z) + to_string(vert->texCoord1.x) + to_string(vert->texCoord1.y) + to_string(vert->vertNormal.x) + to_string(vert->vertNormal.y) + to_string(vert->vertNormal.z) + to_string(vert->optionalData1.x) + to_string(vert->optionalData1.y) + to_string(vert->optionalData1.z) + to_string(vert->optionalData1.w);
-            MD5 md5;
-            unique = md5.digestString((char*)unique.c_str());
-
-            if(vertMap.find(unique) != vertMap.end()) {
-                tIndicesData.push_back((unsigned int)vertMap[unique]);
-            } else {
-                verticesDataDup.push_back(*vert);
-                vertMap.insert(std::pair<std::string, unsigned int>(unique, (unsigned int)verticesDataDup.size() - 1));
-                tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
-            }
-        }
-        tempVerticesData.clear();
-        tempVerticesData = verticesDataDup;
-        tempIndicesData.clear();
-        tempIndicesData = tIndicesData;
-    } else {
-        vector<vertexDataHeavy> verticesDataDup;
-        
-        for(u32 i = 0; i < tempIndicesData.size(); i++) {
-            vertexDataHeavy *vert =  getHeavyVertexByIndex(tempIndicesData[i]);
-            string unique = to_string(vert->vertPosition.x) + to_string(vert->vertPosition.y) + to_string(vert->vertPosition.z) + to_string(vert->texCoord1.x) + to_string(vert->texCoord1.y) + to_string(vert->vertNormal.x) + to_string(vert->vertNormal.y) + to_string(vert->vertNormal.z) + to_string(vert->optionalData1.x) + to_string(vert->optionalData1.y) + to_string(vert->optionalData1.z) + to_string(vert->optionalData1.w);
-            MD5 md5;
-            unique = md5.digestString((char*)unique.c_str());
+            string unique = getVertexDataString(vert->vertPosition, vert->texCoord1);
             
             if(vertMap.find(unique) != vertMap.end()) {
                 tIndicesData.push_back((unsigned int)vertMap[unique]);
@@ -500,11 +493,33 @@ void Mesh::removeDoublesInMesh()
                 tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
             }
         }
+        
+        tempVerticesData.clear();
+        tempVerticesData = verticesDataDup;
+
+    } else {
+
+        vector<vertexDataHeavy> verticesDataDup;
+        
+        for(u32 i = 0; i < tempIndicesData.size(); i++) {
+            vertexDataHeavy *vert =  getHeavyVertexByIndex(tempIndicesData[i]);
+            string unique = getVertexDataString(vert->vertPosition, vert->texCoord1);
+            
+            if(vertMap.find(unique) != vertMap.end()) {
+                tIndicesData.push_back((unsigned int)vertMap[unique]);
+            } else {
+                verticesDataDup.push_back(*vert);
+                vertMap.insert(std::pair<std::string, unsigned int>(unique, (unsigned int)verticesDataDup.size() - 1));
+                tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
+            }
+        }
+        
         tempVerticesDataHeavy.clear();
         tempVerticesDataHeavy = verticesDataDup;
-        tempIndicesData.clear();
-        tempIndicesData = tIndicesData;
     }
+
+    tempIndicesData.clear();
+    tempIndicesData = tIndicesData;
 }
 
 void Mesh::fixOrientation()

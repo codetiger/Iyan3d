@@ -11,8 +11,6 @@
 PlaneMeshNode::PlaneMeshNode(float aspectRatio)
 {
     this->mesh = new Mesh();
-    Logger::log(INFO, "PLANEMESHNODE", "aspectratio "+ to_string(aspectRatio));
-    // Front
     vector<Vector3> vertPosition;
     vector<Vector3> vertNormal;
     vector<Vector2> texCoord1;

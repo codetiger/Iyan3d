@@ -14,6 +14,7 @@
 #include "ftgl/Vectoriser.h"
 #include "SkinMesh.h"
 #include "Mesh.h"
+#include "MeshOptimizeHelper.h"
 
 using namespace std;
 typedef unsigned short u16;

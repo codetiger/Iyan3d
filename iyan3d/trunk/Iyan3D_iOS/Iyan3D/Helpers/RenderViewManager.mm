@@ -242,7 +242,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 {
     // TODO a lot to implement
    
-    NSLog(@"Texture Name : %@ " , textureName);
     string textureNameStr = std::string([textureName UTF8String]);
     
     if(editorScene) {

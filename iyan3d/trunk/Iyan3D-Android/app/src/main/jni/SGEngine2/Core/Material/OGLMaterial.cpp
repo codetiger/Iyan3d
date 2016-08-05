@@ -153,8 +153,6 @@ bool OGLMaterial::LoadShaders(string vShaderName, string fShaderName, std::map< 
     if(vShaderHandle == -1 || fShaderHandle == -1 || shaderProgram == -1)
             return false;
     
-    Logger::log(INFO, "OGLMaterial", vShaderName + "  " + fShaderName + "  Shaders Loaded Succesfully");
-
     return true;
 }
 
@@ -220,10 +218,10 @@ GLuint OGLMaterial::CompileShader(string shaderName,GLenum shaderType, std::map<
     if (compileSuccess == GL_FALSE) {
         GLchar messages[256];
         glGetShaderInfoLog(shaderHandle, sizeof(messages), 0, &messages[0]);
-        Logger::log(ERROR,"OGLMaterial",messages);
+        Logger::log(ERROR, "OGLMaterial", shaderName);
+        Logger::log(ERROR, "OGLMaterial", messages);
         return -1;
     }
-    Logger::log(INFO,"OGLMaterial",shaderName + " Compiled");
     return shaderHandle;
 }
 

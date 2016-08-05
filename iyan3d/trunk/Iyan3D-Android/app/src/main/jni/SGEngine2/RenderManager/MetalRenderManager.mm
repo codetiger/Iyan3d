@@ -64,7 +64,6 @@ void MetalRenderManager::setupMetalLayer()
     drawableSize.width  *= screenScale;
     drawableSize.height *= screenScale;
     _metalLayer.drawableSize = drawableSize;
-    Logger::log(INFO,"MetalRendermanager","SetupMetal");
     [_metalLayer nextDrawable];
     renderView.opaque = YES;
     renderView.backgroundColor = nil;

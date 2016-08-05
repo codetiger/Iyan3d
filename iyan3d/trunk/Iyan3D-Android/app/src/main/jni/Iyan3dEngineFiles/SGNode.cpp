@@ -415,8 +415,6 @@ Json::Value SGNode::parseParticlesJson(int assetId)
         jsonPath = constants::DocumentsStoragePath + "/mesh/"+jsonFileName;
 #endif
 
-    Logger::log(INFO,"SGNODE","Particle Path " + jsonPath);
-
     ifstream jsonFile(jsonPath);
     Json::Reader reader;
     if(!reader.parse(jsonFile, particlesData, false)){
@@ -656,7 +654,6 @@ textureFileName=(path).c_str();
 sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
 #endif
     Texture *nodeTex = smgr->loadTexture(textureFileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-    Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     planeNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
@@ -672,12 +669,9 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
      #else
          nodeTex = smgr->loadTextureFromVideo(videoFileName, TEXTURE_RGBA8, TEXTURE_BYTE);
      #endif
-    //Texture *nodeTex = smgr->loadTextureFromVideo(videoFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
-    Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     planeNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-    //delete [] textureFileName; //TODO TEST
     return planeNode;
 }
 

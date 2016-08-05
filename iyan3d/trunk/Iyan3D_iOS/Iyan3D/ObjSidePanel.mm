@@ -163,7 +163,6 @@
             cell.layer.borderColor = [UIColor grayColor].CGColor;
             NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
             cell.assetImageView.image =[UIImage imageNamed:imageName];
-            NSLog(@"\nImage Name : %@",imageName);
             return cell;
         }
     }

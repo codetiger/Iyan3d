@@ -134,7 +134,6 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
             addAction.options = animScene->nodes[fromNodeId]->options;
         }
     }
-    Logger::log(INFO,"SgAnimationManager", "Texture Name ; " + animScene->nodes[toNodeId]->textureName);
 }
 
 void SGAnimationManager::applySGRAnimations(string filePath, SGNode *sgNode, int &totalFrames , int currentFrame , int &animFrames)

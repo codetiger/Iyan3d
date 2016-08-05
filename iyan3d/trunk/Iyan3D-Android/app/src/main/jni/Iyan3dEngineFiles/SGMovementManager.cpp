@@ -120,8 +120,6 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos) {
         else if(moveScene->controlType == SCALE && moveScene->selectedNodeId != NOT_SELECTED)
             moveScene->actionMan->changeObjectScale(moveScene->nodes[moveScene->selectedNodeId]->getNodeScale(), true);
         
-        Logger::log(INFO , "SGScene diff ", "touch end");
-        
         if(moveScene->selectedNodeIds.size() > 0 && moveScene->controlType != SCALE){
             moveScene->actionMan->storeActionKeysForMulti(true);
         } else if (moveScene->controlType == ROTATE && moveScene->directionIndicator->node->getVisible()) {

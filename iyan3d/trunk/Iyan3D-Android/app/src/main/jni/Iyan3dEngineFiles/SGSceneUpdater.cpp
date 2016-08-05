@@ -43,7 +43,6 @@ void SGSceneUpdater::setDataForFrame(int frame)
 #ifdef ANDROID
             unsigned char* imageData = updatingScene->getVideoFrameCallBack(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame, 256, 256); //TODO give correct width and height
             nodeTex->updateTexture(imageData);
-            Logger::log(INFO,"Updater ", "Video Frame Changed " + to_string(frame));
 #else
             nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
 #endif

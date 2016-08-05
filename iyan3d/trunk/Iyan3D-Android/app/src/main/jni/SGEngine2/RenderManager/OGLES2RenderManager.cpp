@@ -22,12 +22,11 @@ PFNGLISVERTEXARRAYOESPROC glIsVertexArrayOES;
 
 void OGLES2RenderManager::initialiseOtherVAOFunc ()
 {
-    Logger::log(INFO, "RenderMan ", "initialize VAO");
     glGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress ( "glGenVertexArraysOES" );
     glBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress ( "glBindVertexArrayOES" );
     glIsVertexArrayOES = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress ( "glIsVertexArrayOES" );
     if(glGenVertexArraysOES == NULL){
-        Logger::log(INFO,"OGLRenderManager", "glGenVertexArraysOES is null");
+        Logger::log(INFO, "OGLRenderManager", "glGenVertexArraysOES is null");
     }
 }
 #endif

@@ -6,11 +6,9 @@ void AutoRigJointsDataHelper::getTPoseJointsData(vector<TPoseJoint> & tPoseJoint
     tPoseJoints.clear();
     
     Json::Value jointsData;
-    Logger::log(INFO, "Autorig joints data", "Tjoints.clear");
 
     //std::string documentsDir = FileHelper::getDocumentsDirectory();
     ifstream jsonFile( constants::BundlePath + "/jointsData.json");
-    Logger::log(INFO, "Autorig joints data", "Bundlepath:"+constants::BundlePath);
     Json::Reader reader;
     if(!reader.parse(jsonFile, jointsData, false)){
         Logger::log(ERROR, "Unable to parse jointsData.json", "AutoRigHelper");

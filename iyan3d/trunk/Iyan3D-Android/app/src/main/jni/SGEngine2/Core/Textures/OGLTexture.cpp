@@ -50,7 +50,6 @@ bool OGLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
 
     unsigned char *imageData;
 #ifndef IOS
-    Logger::log(INFO, "OGLTexture.cpp", "loadTexture " + texturePath);
     imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
 #else
     imageData = loadPNGImage(texturePath, width, height, hasTransparency, blurRadius);
