@@ -524,7 +524,6 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         m->addToIndicesArray(optimizedIndices[i]);
 
     m->generateUV();
-    m->Commit();
 
     return m;
 }

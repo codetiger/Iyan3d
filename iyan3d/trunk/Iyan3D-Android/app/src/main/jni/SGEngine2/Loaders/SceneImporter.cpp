@@ -106,7 +106,6 @@ SkinMesh* SceneImporter::getSkinMeshFrom(aiMesh *aiM, aiNode* aiN)
     loadJoints(aiM, mesh, aiN, NULL);
     printf("JointCount: %d\n", (int)mesh->joints->size());
     mesh->finalize();
-    mesh->Commit();
     return mesh;
 }
 
@@ -169,6 +168,5 @@ Mesh* SceneImporter::getMeshFrom(aiMesh *aiM)
         }
     }
     
-    mesh->Commit();
     return mesh;
 }

@@ -23,7 +23,7 @@ shared_ptr<CameraNode> SceneHelper::initViewCamera(SceneManager *smgr, Vector3& 
     shared_ptr<CameraNode> viewCamera = smgr->createCameraNode("NoUniformCallbackFunctions");
     smgr->setActiveCamera(viewCamera);
 
-    viewCamera->setPosition(Vector3(VIEW_CAM_INIT_POS_X,VIEW_CAM_INIT_POS_Y,VIEW_CAM_INIT_POS_Z));
+    viewCamera->setPosition(Vector3(VIEW_CAM_INIT_POS_X, VIEW_CAM_INIT_POS_Y, VIEW_CAM_INIT_POS_Z));
     viewCamera->updateAbsoluteTransformation();
     //TODO: viewCamera->setID(3);
     cameraTarget = Vector3(0.0);
@@ -49,7 +49,6 @@ shared_ptr<CameraNode> SceneHelper::initRenderCamera(SceneManager *smgr, float f
 void SceneHelper::initLightMesh(SceneManager *smgr)
 {
     SceneHelper::pointLightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm",smgr->device);
-    SceneHelper::pointLightMesh->Commit();
 }
 
 Vector3 SceneHelper::planeFacingDirection(int controlType)
@@ -72,7 +71,8 @@ Vector3 SceneHelper::controlDirection(int controlType)
         return Vector3(0,0,1);
 }
 
-SGNode* SceneHelper::createCircle(SceneManager *smgr){
+SGNode* SceneHelper::createCircle(SceneManager *smgr)
+{
     SGNode* rotationCircle = new SGNode(NODE_SGM);
     rotationCircle->materialProps.push_back(new MaterialProperty(NODE_SGM));
 
@@ -101,23 +101,21 @@ SGNode* SceneHelper::createLightCircles(SceneManager *smgr)
     return circles;
 }
 
-
 SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
 {
     float ld = 0.75;
     vector< Vector3 > vPositions;
-    vPositions.push_back(Vector3(0.0, 0.0, 0.0));vPositions.push_back(Vector3(0.0, 10.0, 0.0));
-    vPositions.push_back(Vector3(ld, 0.0, ld));vPositions.push_back(Vector3(ld, 10.0, ld));
-    vPositions.push_back(Vector3(-ld, 0.0, -ld));vPositions.push_back(Vector3(-ld, 10.0, -ld));
-    vPositions.push_back(Vector3(ld, 0.0, -ld));vPositions.push_back(Vector3(ld, 10.0, -ld));
-    vPositions.push_back(Vector3(-ld, 0.0, ld));vPositions.push_back(Vector3(-ld, 10.0, ld));
-    vPositions.push_back(Vector3(-ld, 0.0, ld));vPositions.push_back(Vector3(-ld, 10.0, ld));
+    vPositions.push_back(Vector3(0.0, 0.0, 0.0)); vPositions.push_back(Vector3(0.0, 10.0, 0.0));
+    vPositions.push_back(Vector3( ld, 0.0,  ld)); vPositions.push_back(Vector3( ld, 10.0,  ld));
+    vPositions.push_back(Vector3(-ld, 0.0, -ld)); vPositions.push_back(Vector3(-ld, 10.0, -ld));
+    vPositions.push_back(Vector3( ld, 0.0, -ld)); vPositions.push_back(Vector3( ld, 10.0, -ld));
+    vPositions.push_back(Vector3(-ld, 0.0,  ld)); vPositions.push_back(Vector3(-ld, 10.0,  ld));
+    vPositions.push_back(Vector3(-ld, 0.0,  ld)); vPositions.push_back(Vector3(-ld, 10.0,  ld));
     
-  
     SGNode* gridLines = new SGNode(NODE_SGM);
     gridLines->materialProps.push_back(new MaterialProperty(NODE_SGM));
 
-    Mesh * mesh = new Mesh();
+    Mesh* mesh = new Mesh();
     
     for(int i = 0; i < vPositions.size(); i++) {
         vertexData *v = new vertexData();
@@ -127,7 +125,7 @@ SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
         delete v;
     }
     
-    mesh->Commit();
+    mesh->setOptimization(false, false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, "LightLine");
     node->setID(LIGHT_DIRECTION_ID);
@@ -149,7 +147,6 @@ SGNode* SceneHelper::createRedLines(SceneManager *smgr)
     vector< Vector3 > vPositions;
     vPositions.push_back(Vector3(-gridSize, 0, 0));
     vPositions.push_back(Vector3(gridSize, 0, 0));
-    vPositions.push_back(Vector3(gridSize, 0, 0));
     return createLines(smgr, vPositions, Vector3(1.0,0.2,0.2), "RedLines", RED_LINES_ID);
 }
 
@@ -158,7 +155,6 @@ SGNode* SceneHelper::createGreenLines(SceneManager *smgr)
     int gridSize = 100;
     vector< Vector3 > vPositions;
     vPositions.push_back(Vector3(0, 0, -gridSize));
-    vPositions.push_back(Vector3(0, 0, gridSize));
     vPositions.push_back(Vector3(0, 0, gridSize));
     return createLines(smgr, vPositions, Vector3(0.2,1.0,0.2), "GreenLines", GREEN_LINES_ID);
 
@@ -169,19 +165,18 @@ SGNode* SceneHelper::createBlueLines(SceneManager *smgr)
     int gridSize = 100;
 
     vector<Vector3> vPositionsGrid;
-    int i = 0;
-    for (i = -gridSize; i <= gridSize; i+= 5) {
+    for (int i = -gridSize; i <= gridSize; i+= 5) {
         vPositionsGrid.push_back(Vector3(i, 0, -gridSize));
-        vPositionsGrid.push_back(Vector3(i, 0, gridSize));
+        vPositionsGrid.push_back(Vector3(i, 0,  gridSize));
         vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
-        vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
+        vPositionsGrid.push_back(Vector3( gridSize, 0, i));
     }
-    vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
+//    vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
     return createLines(smgr, vPositionsGrid, Vector3(0.6, 0.6, 1.0), "BlueLines", BLUE_LINES_ID);
 }
 
-SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, Vector3 color, string callbackName, int nodeId) {
-    
+SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, Vector3 color, string callbackName, int nodeId)
+{
     SGNode* gridLines = new SGNode(NODE_SGM);
     gridLines->materialProps.push_back(new MaterialProperty(NODE_SGM));
 
@@ -195,7 +190,7 @@ SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, 
         delete v;
     }
     
-    mesh->Commit();
+    mesh->setOptimization(false, false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, callbackName);
     node->setID(nodeId);

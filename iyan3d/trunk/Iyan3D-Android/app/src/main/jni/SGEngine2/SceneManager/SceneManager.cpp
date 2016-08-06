@@ -5,6 +5,7 @@
 //  Created by Harishankar on 15/11/14.
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
+
 #include "SceneManager.h"
 
 #ifdef IOS
@@ -50,9 +51,9 @@ SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_
     mtlManger = new MaterialManager(type);
     renderTargetIndex = 0;
     
-    if(device == METAL) {
+    if(device == METAL)
         renderMan->maxInstances = 4000;
-    }
+
 #endif
     
     renderMan->emptyTexture = loadTexture("Env Texture", bundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
@@ -82,7 +83,7 @@ Vector2 SceneManager::getViewPort()
 
 void SceneManager::RemoveAllTextures()
 {
-    for(int i = 0; i < textures.size(); i++){
+    for(int i = 0; i < textures.size(); i++) {
         if(textures[i])
             delete textures[i];
     }
@@ -110,6 +111,7 @@ void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node, MESH_TYPE 
 #ifndef UBUNTU
     if(device == METAL || !renderMan->supportsVAO)
         renderMan->createVertexAndIndexBuffers(node,meshType, true);
+    
     if(device == OPENGLES2 && node->type == NODE_TYPE_PARTICLES) {
         for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount(); i++) {
             if(renderMan->supportsVAO)
@@ -125,15 +127,17 @@ void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node, MESH_TYPE 
 void SceneManager::RemoveNode(shared_ptr<Node> node)
 {
     int sameNodeIdcount = 0;
-    for(int i = 0;i < nodes.size();i++){
-        if(nodes[i]->getID() == node->getID()){
+    for(int i = 0; i < nodes.size(); i++) {
+        if(nodes[i]->getID() == node->getID()) {
             sameNodeIdcount++;
         }
     }
+    
     if(sameNodeIdcount > 1)
         Logger::log(ERROR,"SceneManager::RemoveNode","Node id repeats");
-    for(int i = 0;i < nodes.size();i++){
-        if(nodes[i]->getID() == node->getID()){
+
+    for(int i = 0; i < nodes.size(); i++) {
+        if(nodes[i]->getID() == node->getID()) {
             nodes[i]->detachFromParent();
             nodes[i]->detachAllChildren();
             if(nodes[i])
@@ -143,20 +147,19 @@ void SceneManager::RemoveNode(shared_ptr<Node> node)
             break;
         }
     }
-    //node.reset();
 }
 
 void SceneManager::RemoveTexture(Texture *texture)
 {
-    for(int i = 0;i < textures.size();i++){
-        if(textures[i] == texture){
-            if(device == OPENGLES2){
-                if(((OGLTexture*)textures[i])->OGLTextureName == ((OGLTexture*)texture)->OGLTextureName){
+    for(int i = 0; i < textures.size(); i++) {
+        if(textures[i] == texture) {
+            if(device == OPENGLES2) {
+                if(((OGLTexture*)textures[i])->OGLTextureName == ((OGLTexture*)texture)->OGLTextureName) {
                     delete textures[i];
                     textures.erase(textures.begin() + i);
                     break;
                 }
-            }else if(device == METAL){
+            } else if(device == METAL) {
                 // TODO: Implement Texture removal for metal
                 if(textures[i] == texture)
                     delete textures[i];
@@ -169,15 +172,14 @@ void SceneManager::RemoveTexture(Texture *texture)
 
 void SceneManager::RemoveAllNodes()
 {
-    for(int i = 0;i < nodes.size();i++){
-        if (nodes[i])
-        {
+    for(int i = 0; i < nodes.size(); i++) {
+        if (nodes[i]) {
             nodes[i]->detachFromParent();
             nodes[i]->detachAllChildren();
             nodes[i].reset();
             nodes.erase(nodes.begin() + i);
         }
-        }
+    }
     nodes.clear();
 }
 
@@ -221,7 +223,7 @@ void SceneManager::EndDisplay()
 
 void SceneManager::clearDepthBuffer()
 {
-    renderMan->setUpDepthState(CompareFunctionLessEqual,false,true); // ToDo change in depthstate for each render, may need
+    renderMan->setUpDepthState(CompareFunctionLessEqual, false, true); // ToDo change in depthstate for each render, may need
 }
 
 void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
@@ -249,11 +251,11 @@ void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
         
         if(nodes[index]->instancedNodes.size() > 0) {
             for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
-                ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
-                renderMan->Render(nodes[index], false, index,meshBufferIndex);
+                ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, nodes[index]->callbackFuncName);
+                renderMan->Render(nodes[index], false, index, meshBufferIndex);
             }
         } else {
-            ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+            ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, nodes[index]->callbackFuncName);
             renderMan->Render(nodes[index], false, index,meshBufferIndex);
         }
         
@@ -315,9 +317,8 @@ void SceneManager::setShaderState(int nodeIndex)
 {
     if(nodes[nodeIndex]->type <= NODE_TYPE_CAMERA)
          return;
-    if(device == OPENGLES2){
-        
-    }else if(device == METAL){
+    
+    if(device == METAL) {
         MTLPipelineStateCallBack(nodeIndex);
     }
 }
@@ -491,7 +492,7 @@ void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 en
     renderMan->useMaterialToRender(material);
     int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
     setPropertyValue(material,"texture1",&textureValue,DATA_TEXTURE_2D,1,true,0,NOT_EXISTS,texture);
-    renderMan->draw2DImage(texture,originCoord,endCoord,isBGImage,material,isRTT);
+    renderMan->draw2DImage(texture, originCoord, endCoord, isBGImage, material, isRTT);
     
 }
 
@@ -505,7 +506,7 @@ void SceneManager::draw3DLine(Vector3 start, Vector3 end, Vector3 color, Materia
     setPropertyValue(material,"mvp",mat.pointer(),DATA_FLOAT_MAT4,16,false,mvpUniParamIndex);
     setPropertyValue(material,"perVertexColor",&vertColor[0],DATA_FLOAT_VEC3,3,false,vertexColorUniParamIndex);
     setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1,false,transparencyUniParamIndex);
-    renderMan->draw3DLine(start,end,material);
+    renderMan->draw3DLine(start, end, material);
 }
 
 void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex, int vertexColorUniParamIndex, int transparencyUniParamIndex)

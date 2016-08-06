@@ -39,7 +39,6 @@ CubeMeshNode::CubeMeshNode()
     vertNormal.push_back(Vector3(  -1.0, 0.0, 0.0 ));
     vertNormal.push_back(Vector3(  -1.0, 0.0,  0.0 ));
 
-    
     //Left
     vertPosition.push_back(Vector3(2.0, 2.0, 2.0));
     vertPosition.push_back(Vector3(2.0, -2.0, 2.0));
@@ -51,7 +50,6 @@ CubeMeshNode::CubeMeshNode()
     vertNormal.push_back(Vector3( 1.0, 0.0,  0.0 ));
     vertNormal.push_back(Vector3( 1.0, 0.0,  0.0 ));
 
-    
     //Rear
     vertPosition.push_back(Vector3(2.0, 2.0, -2.0));
     vertPosition.push_back(Vector3(-2.0, 2.0, -2.0));
@@ -74,7 +72,6 @@ CubeMeshNode::CubeMeshNode()
     vertNormal.push_back(Vector3(  0.0, 1.0,  0.0 ));
     vertNormal.push_back(Vector3(  0.0, 1.0,  0.0 ));
 
-
     //Bottom
     vertPosition.push_back(Vector3(2.0, -2.0, 2.0));
     vertPosition.push_back(Vector3(-2.0, -2.0, 2.0));
@@ -85,7 +82,6 @@ CubeMeshNode::CubeMeshNode()
     vertNormal.push_back(Vector3( 0.0, -1.0, 0.0));
     vertNormal.push_back(Vector3( 0.0, -1.0, 0.0));
     vertNormal.push_back(Vector3( 0.0, -1.0, 0.0));
-
 
     texCoord1.push_back(Vector2(0.0, 1.0));
     texCoord1.push_back(Vector2(0.0, 0.0));

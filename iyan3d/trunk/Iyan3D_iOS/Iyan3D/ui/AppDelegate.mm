@@ -37,7 +37,7 @@ SceneManager *scenemgr;
 
 static NSString *const kTrackingId = @"UA-49819146-1";
 static NSString *const kAllowTracking = @"allowTracking";
-static NSString * const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm.apps.googleusercontent.com";
+static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm.apps.googleusercontent.com";
 
 @implementation AppDelegate
 

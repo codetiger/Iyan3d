@@ -87,7 +87,8 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
 {
     shared_ptr<Node> node;
     switch (objectType){
-        case NODE_CAMERA:{
+        case NODE_CAMERA:
+        {
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/camera.sgm",smgr->device);
             node = smgr->createNodeFromMesh(mesh,"setUniforms");
             node->setPosition(Vector3(RENDER_CAM_INIT_POS_X,RENDER_CAM_INIT_POS_Y,RENDER_CAM_INIT_POS_Z));
@@ -95,14 +96,16 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
             break;
         }
-        case NODE_LIGHT:{
+        case NODE_LIGHT:
+        {
             node = initLightSceneNode(smgr);
             addOrUpdateProperty(VERTEX_COLOR, DEFAULT_LIGHT_COLOR, MATERIAL_PROPS);
             addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(DEFAULT_FADE_DISTANCE, 0, 0, 0), UNDEFINED);
             break;
         }
         case NODE_OBJ:
-        case NODE_SGM:{
+        case NODE_SGM:
+        {
             textureName = texturePath;
             oriTextureName = textureName;
             addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
@@ -110,7 +113,8 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node = loadSGMandOBJ(assetId, objectType, smgr);
             break;
         }
-        case NODE_TEXT:{
+        case NODE_TEXT:
+        {
             textureName = texturePath;
             oriTextureName = textureName;
             addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
@@ -123,7 +127,8 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             optionalFilePath = specificFilePath;
             break;
         }
-        case NODE_RIG:{
+        case NODE_RIG:
+        {
             textureName = texturePath;
             oriTextureName = textureName;
             addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
@@ -132,21 +137,24 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             isMirrorEnabled = joints.size() == HUMAN_JOINTS_SIZE ? true : false;
             break;
         }
-        case NODE_IMAGE:{
+        case NODE_IMAGE:
+        {
             float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
             textureName = ConversionHelper::getStringForWString(objectName);
             addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
             node = loadImage(ConversionHelper::getStringForWString(objectName) + ".png", smgr , aspectRatio);
             break;
         }
-        case NODE_VIDEO:{
+        case NODE_VIDEO:
+        {
             float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
             addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
             textureName = ConversionHelper::getStringForWString(objectName);
             node = loadVideo(ConversionHelper::getStringForWString(objectName), smgr , aspectRatio);
             break;
         }
-        case NODE_TEXT_SKIN:{
+        case NODE_TEXT_SKIN:
+        {
             // 'width' here is font size and 'height' is bevel value
             textureName = texturePath;
             oriTextureName = textureName;
@@ -159,14 +167,16 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             addOrUpdateProperty(FONT_SIZE, Vector4(width, 0, 0, 0), UNDEFINED);
             break;
         }
-        case NODE_ADDITIONAL_LIGHT:{
+        case NODE_ADDITIONAL_LIGHT:
+        {
             this->assetId = assetId;
             node = addAdittionalLight(smgr, width, Vector3(objSpecificColor.x,objSpecificColor.y,objSpecificColor.z) , height);
             addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
             addOrUpdateProperty(SPECIFIC_FLOAT, Vector4((height == 0) ? 50.0 : height, 0, 0, 0), UNDEFINED);
             break;
         }
-        case NODE_PARTICLES:{
+        case NODE_PARTICLES:
+        {
             textureName = to_string(assetId) + "-cm";
 
             string meshPath = "";
@@ -292,7 +302,6 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
         node->getMeshCache()->fixOrientation();
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_TEXT_SKIN));
-    node->getMesh()->Commit();
     string textureFileName = "";
     textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
     if(!checkFileExists(textureFileName)){

@@ -14,6 +14,7 @@
 #include <iostream>
 #include <map>
 #include "md5.h"
+#include "MeshOptimizeHelper.h"
 
 typedef enum {
     MESH_FORMAT_TRIANGLES = 0,
@@ -78,6 +79,8 @@ private:
     vector<vertexDataHeavy> tempVerticesDataHeavy;
     vector<unsigned int> tempIndicesData;
     
+    bool removeDoubles, optimizeIndicesOrder, calculateTangents;
+    
 public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
@@ -120,6 +123,8 @@ public:
     BoundingBox* getBoundingBox();
     Vector3 getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3);
     void removeDoublesInMesh();
+    void reOrderMeshIndices();
+    void setOptimization(bool removeDoubles, bool optimizeIndicesOrder, bool calculateTangents);
     Mesh();
     ~Mesh();
 };

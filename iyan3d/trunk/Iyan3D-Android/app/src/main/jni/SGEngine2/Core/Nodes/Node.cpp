@@ -284,8 +284,10 @@ void Node::setParent(shared_ptr<Node> parent)
             }
         }
     }
+    
     if(this->Parent && parent && this->Parent->getID() == parent->getID()) // returns if present parent is same
            return;
+    
     this->Parent = parent;
     if(parent)
         this->Parent->Children->push_back(shared_from_this());
@@ -313,9 +315,9 @@ bool Node::getVisible()
 
 void Node::detachFromParent()
 {
-    if(getParent()){
-        for(int c = 0;c < getParent()->Children->size();c++){
-            if((*getParent()->Children)[c]->getID() == getID()){
+    if(getParent()) {
+        for(int c = 0; c < getParent()->Children->size(); c++) {
+            if((*getParent()->Children)[c]->getID() == getID()) {
                 getParent()->Children->erase(getParent()->Children->begin() + c);
                 return;
             }
@@ -327,6 +329,7 @@ void Node::detachAllChildren()
 {
     for(int c = 0;c < Children->size();c++)
         (*Children)[c]->setParent(shared_ptr<Node>());
+    
     Children->clear();
 }
 

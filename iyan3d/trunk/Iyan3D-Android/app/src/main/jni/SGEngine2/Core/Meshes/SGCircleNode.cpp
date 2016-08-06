@@ -10,7 +10,7 @@
 
 SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis)
 {
-    drawMode = DRAW_MODE_LINES;
+    drawMode = DRAW_MODE_LINE_LOOP;
     this->mesh = new Mesh();
     
     addCircleWithAxis(mesh, 1, noOfVertices, radius);
@@ -24,9 +24,10 @@ SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis)
 
 void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float radius)
 {
-    int vertexCount = m->getVerticesCount();
+    int prevVertexCount = m->getVerticesCount();
     double theta = 0.0;
-    for(int i = 0; i < noOfVertices+1; i++){
+    
+    for(int i = 0; i < noOfVertices + 1; i++) {
         vertexData vert;
         Vector3 direction;
         
@@ -41,12 +42,12 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
         m->addVertex(&vert);
         theta += 360.0 / noOfVertices;
     }
-    for(int i = 0; i < noOfVertices+1; i++){
-        m->addToIndicesArray(vertexCount + i);
-        if(i > 0)
-            m->addToIndicesArray(vertexCount + i);
+
+    for(int i = 0; i < noOfVertices + 1; i++) {
+        m->addToIndicesArray(prevVertexCount + i);
     }
-    m->addToIndicesArray(vertexCount);
+    
+    m->setOptimization(false, false, false);
 }
 
 SGCircleNode::~SGCircleNode()

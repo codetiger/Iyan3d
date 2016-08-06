@@ -76,6 +76,5 @@ Mesh* OBJMeshFileLoader::createMesh(string filepath, int& status, DEVICE_TYPE de
         count += aiM->mNumVertices;
     }
     
-    m->Commit();
     return m;
 }

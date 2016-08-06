@@ -124,7 +124,7 @@ void RenderHelper::drawCircle()
         lineVect.normalize();
         lineVect = lineVect * Vector3(radius);
         Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
-        smgr->draw3DLine(nodePos,nodePos - lineVect,Vector3(0.0,1.0,0.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+        smgr->draw3DLine(nodePos, nodePos - lineVect, Vector3(0.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
         
         double theta = 0.0;
         Vector3 rotVect = Vector3(0.0);
@@ -140,7 +140,7 @@ void RenderHelper::drawCircle()
             float lineLenght = (int(theta) % 45 == 0) ? longLineLength:shorLineLength;
             Vector3 vertexPos1 = nodePos + (dir * Vector3((circleAxis.x * radius),(circleAxis.y * radius),(circleAxis.z * radius)));
             Vector3 vertexPos2 = nodePos + (dir * Vector3((circleAxis.x * radius - lineLenght),(circleAxis.y * radius - lineLenght),(circleAxis.z * radius - lineLenght)));
-            smgr->draw3DLine(vertexPos1,vertexPos2,Vector3(0.0,1.0,0.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+            smgr->draw3DLine(vertexPos1, vertexPos2, Vector3(0.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
             theta += 5.0;
         }
         

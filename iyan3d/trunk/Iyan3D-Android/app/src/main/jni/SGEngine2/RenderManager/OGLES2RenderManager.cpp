@@ -207,9 +207,9 @@ void OGLES2RenderManager::endDisplay()
 
 void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex)
 {
-//    setDepthFunction(GL_LEQUAL);
     if(!node || node->type <= NODE_TYPE_CAMERA)
         return;
+
     Mesh *nodeMes;
     if(node->type == NODE_TYPE_SKINNED) {
         if(node->skinType == GPU_SKIN)
@@ -236,7 +236,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
         unsigned int indicesSize = nodeMes->getIndicesCount(meshBufferIndex);
         shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
         if(nodeMes)
-            drawElements(getOGLDrawMode(DRAW_MODE_POINTS),(GLsizei)indicesSize,indicesDataType, 0, 0);
+            drawElements(getOGLDrawMode(DRAW_MODE_POINTS), (GLsizei)indicesSize, indicesDataType, 0, 0);
         
         if(!isRTT) {
             setDepthMask(true);
@@ -244,6 +244,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
         }
     } else {
         int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) : maxInstances;
+        
         drawElements(getOGLDrawMode(node->drawMode), (GLsizei)nodeMes->getIndicesCount(meshBufferIndex), indicesDataType, 0, !supportsInstancing ? 0 : (GLsizei)instancingCount+1);
     }
     
@@ -258,15 +259,12 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
 
 void OGLES2RenderManager::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount)
 {
-#ifdef ANDROID
-    glDrawElements(mode, count, type, data);
-#elif IOS
-    
+#ifdef IOS
     if(instanceCount > 1)
         glDrawElementsInstancedEXT(mode, count, type, data, instanceCount);
     else
-        glDrawElements(mode, count, type, data);
 #endif
+        glDrawElements(mode, count, type, data);
 }
 
 void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType)
@@ -414,10 +412,9 @@ void OGLES2RenderManager::blendFunction(GLenum func)
 
 void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
-//    setDepthFunction(GL_ALWAYS);
     // to flip horizontally for opengl textures
-    Vector2 bottomRight = Helper::screenToOpenglCoords(originCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
-    Vector2 upperLeft = Helper::screenToOpenglCoords(endCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
+    Vector2 bottomRight = Helper::screenToOpenglCoords(originCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
+    Vector2 upperLeft = Helper::screenToOpenglCoords(endCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
     vector<Vector3> vertPosition;
     vertPosition.push_back(Vector3(upperLeft.x,upperLeft.y,0.0));
     vertPosition.push_back(Vector3(upperLeft.x,bottomRight.y,0.0));
@@ -442,13 +439,14 @@ void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vecto
         0,3,1,
         2,1,3
     };
-    u_int32_t _vertexBuffer = createAndBindBuffer(GL_ARRAY_BUFFER, (GLuint)(vertices.size() * sizeof(vertexData)),&vertices[0], GL_STATIC_DRAW);
-    u_int32_t _indexBuffer = createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (6 * sizeof(unsigned short)) ,&indices[0], GL_STATIC_DRAW);
+    u_int32_t _vertexBuffer = createAndBindBuffer(GL_ARRAY_BUFFER, (GLuint)(vertices.size() * sizeof(vertexData)), &vertices[0], GL_STATIC_DRAW);
+    u_int32_t _indexBuffer = createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (6 * sizeof(unsigned short)), &indices[0], GL_STATIC_DRAW);
     BindAttributes(material);
-    drawElements(GL_TRIANGLES,6,GL_UNSIGNED_SHORT,0,0);
+    drawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0, 0);
     UnBindAttributes(material);
     deleteAndUnbindBuffer(GL_ARRAY_BUFFER, 1, &_vertexBuffer);
     deleteAndUnbindBuffer(GL_ELEMENT_ARRAY_BUFFER, 1, &_indexBuffer);
+    
     if(isBGImage)
         glClear(GL_DEPTH_BUFFER_BIT);
 }
@@ -461,7 +459,7 @@ void OGLES2RenderManager::draw3DLine(Vector3 start,Vector3 end,Material *materia
     u16 indices[] = {0, 1};
     
     u_int32_t _vertexBuffer = createAndBindBuffer(GL_ARRAY_BUFFER, (GLuint)(2 * sizeof(vertexData)), &vertData[0], GL_STATIC_DRAW);
-    u_int32_t _indexBuffer = createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (2 * sizeof(unsigned short)) ,&indices[0], GL_STATIC_DRAW);
+    u_int32_t _indexBuffer = createAndBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (2 * sizeof(unsigned short)), &indices[0], GL_STATIC_DRAW);
     BindAttributes(material);
     drawElements(GL_LINES, 2, GL_UNSIGNED_SHORT, 0, 0);
     UnBindAttributes(material);
@@ -612,6 +610,7 @@ void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH
 {
     if(node->type <= NODE_TYPE_CAMERA || node->type == NODE_TYPE_INSTANCED)
         return;
+    
     shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     
     u16 meshBufferCount = 1;
@@ -732,11 +731,6 @@ u_int32_t OGLES2RenderManager::updateBuffer(GLenum target, GLsizeiptr size, GLvo
     
     glBindBuffer(target, _bufferToBind);
     glBufferData(target,size, data, usage);
-    //glBufferSubData(target, 0, size, data);
-    //GLvoid *currentData = glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
-    //memcpy(currentData, data, sizeof(currentData));
-    //currentData = data;
-    //glUnmapBufferOES(GL_ARRAY_BUFFER);
     return _bufferToBind;
 }
 
@@ -749,10 +743,6 @@ void OGLES2RenderManager::deleteAndUnbindBuffer(GLenum target,GLsizei size,const
 void OGLES2RenderManager::resetToMainBuffers()
 {
     glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
-    //    glBindRenderbuffer(GL_RENDERBUFFER,colorBuffer);
-    //    glBindRenderbuffer(GL_RENDERBUFFER,depthBuffer);
-    //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);
-    //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
 }
 
 GLenum OGLES2RenderManager::getOGLDrawMode(DRAW_MODE mode)
@@ -785,7 +775,8 @@ void OGLES2RenderManager::setDepthMask(bool enable)
     }
 }
 
-void OGLES2RenderManager::setDepthFunction(GLenum func) {
+void OGLES2RenderManager::setDepthFunction(GLenum func)
+{
     if(currentDepthFunction != func) {
         glDepthFunc(func);
         currentDepthFunction = func;

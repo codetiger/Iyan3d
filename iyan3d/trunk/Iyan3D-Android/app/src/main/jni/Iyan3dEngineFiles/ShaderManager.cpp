@@ -110,7 +110,6 @@ Property& ShaderManager::getProperty(PROP_INDEX pIndex)
 
 void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints)
 {
-    
     std::map< string, string > strsToReplace;
     
     if(deviceType == OPENGLES2) {
@@ -158,7 +157,6 @@ std::map<string, string> ShaderManager::getStringsForRiggedObjects(int maxJoints
     
     return strsToReplace;
 }
-
 
 bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest)
 {
@@ -561,7 +559,6 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
     Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
     shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
-    //pNode->sortParticles(smgr->getActiveCamera()->getPosition());
     
     bool meshCacheCreated = false;
     if(!renderingPreview) {

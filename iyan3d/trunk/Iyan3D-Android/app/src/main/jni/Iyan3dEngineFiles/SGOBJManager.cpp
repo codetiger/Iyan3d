@@ -59,7 +59,6 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
             Vector4 *optionalData1 = &(objMes->getLiteVertexByIndex(i)->optionalData1);
             (*optionalData1) = Vector4(vColor.x, vColor.y, vColor.z,0.0);
         }
-        objMes->Commit();
     }
     
     shared_ptr<MeshNode> objNode = smgr->createNodeFromMesh(objMes, "ObjUniforms");

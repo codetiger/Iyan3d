@@ -76,7 +76,6 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     for(int j = 0; j <  animNode->mesh->getTotalIndicesCount(); j++) {
         mesh->addToIndicesArray(animNode->mesh->getTotalIndicesArray()[j]);
     }
-    mesh->Commit();
     animNode->setVisible(false);
     shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
     meshNode->setTexture(rigNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);

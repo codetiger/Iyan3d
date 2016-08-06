@@ -229,6 +229,5 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
         delete[] texs;
         delete[] col;
     }
-    sgmMesh->Commit();
     return sgmMesh;
 }
