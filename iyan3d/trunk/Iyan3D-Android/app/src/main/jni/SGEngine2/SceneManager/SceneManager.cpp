@@ -248,14 +248,16 @@ void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
         
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, false, index))
             return;
-        
+
+        int materialIndex = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh()->getMeshBufferMaterialIndices(meshBufferIndex);
+
         if(nodes[index]->instancedNodes.size() > 0) {
             for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
-                ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, nodes[index]->callbackFuncName);
+                ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, materialIndex, nodes[index]->callbackFuncName);
                 renderMan->Render(nodes[index], false, index, meshBufferIndex);
             }
         } else {
-            ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, nodes[index]->callbackFuncName);
+            ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, materialIndex, nodes[index]->callbackFuncName);
             renderMan->Render(nodes[index], false, index,meshBufferIndex);
         }
         
@@ -295,16 +297,18 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index))
             return;
         
+        int materialIndex = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh()->getMeshBufferMaterialIndices(meshBufferIndex);
         if(nodes[index]->instancedNodes.size() > 0) {
             for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
 
                 if(!renderMan->supportsVAO && nodes[index]->instancingRenderIt > 0)
                     renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index);
-                ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+                
+                ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, materialIndex, nodes[index]->callbackFuncName);
                 renderMan->Render(nodes[index],isRTT, index,meshBufferIndex);
             }
         } else {
-            ShaderCallBackForNode(nodes[index]->getID(),nodes[index]->material->name,nodes[index]->callbackFuncName);
+            ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, materialIndex, nodes[index]->callbackFuncName);
             renderMan->Render(nodes[index], isRTT, index, meshBufferIndex);
         }
         
@@ -580,7 +584,7 @@ Material* SceneManager::getMaterialByName(string name)
         if((*mtlManger->materials)[i]->name.compare(name) == 0)
             return (*mtlManger->materials)[i];
     }
-    Logger::log(ERROR,"SceneManager::getMaterialByName","No Material with the" + name + "exists");
+    Logger::log(ERROR,"SceneManager::getMaterialByName", "No Material with the name " + name + " exists");
     return NULL;
 }
 

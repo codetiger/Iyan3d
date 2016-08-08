@@ -21,6 +21,7 @@ Mesh::Mesh()
     removeDoubles = true;
     optimizeIndicesOrder = true;
     calculateTangents = true;
+    shouldSplitBuffers = false;
 }
 
 Mesh::~Mesh()
@@ -33,9 +34,18 @@ Mesh::~Mesh()
     instanceCount = 0;
 }
 
-void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi) {
+void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex)
+{
     meshBufferVerticesData.push_back(mbvd);
     meshBufferIndices.push_back(mbi);
+    meshBufferMaterialIndices.push_back(materialIndex);
+}
+
+void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex)
+{
+    meshBufferVerticesDataHeavy.push_back(mbvd);
+    meshBufferIndices.push_back(mbi);
+    meshBufferMaterialIndices.push_back(materialIndex);
 }
 
 void Mesh::copyDataFromMesh(Mesh* otherMesh)
@@ -100,6 +110,7 @@ void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount)
 
 void Mesh::addVertex(vertexData* vertex, bool updateBB)
 {
+    shouldSplitBuffers = true;
     vertexData vtx;
     vtx.vertPosition = vertex->vertPosition;
     vtx.vertNormal = vertex->vertNormal;
@@ -112,6 +123,7 @@ void Mesh::addVertex(vertexData* vertex, bool updateBB)
 
 void Mesh::addHeavyVertex(vertexDataHeavy* vertex)
 {
+    shouldSplitBuffers = true;
     vertexDataHeavy vtx;
     vtx.vertPosition = vertex->vertPosition;
     vtx.vertNormal = vertex->vertNormal;
@@ -126,6 +138,7 @@ void Mesh::addHeavyVertex(vertexDataHeavy* vertex)
 
 void Mesh::addToIndicesArray(unsigned int index)
 {
+    shouldSplitBuffers = true;
     tempIndicesData.push_back(index);
 }
 
@@ -146,137 +159,149 @@ void Mesh::Commit()
     if (calculateTangents)
         reCalculateTangents();
     
-    clearVerticesArray();
-    clearIndicesArray();
-    vector<unsigned int> indicesDataCopy;
-    std::map<string, int> indicesDataMap;
-    
-    if(meshType == MESH_TYPE_LITE) {
-        if(tempVerticesData.size() > MAX_VERTICES_COUNT) {
-            int meshBufferCount = (int)((tempVerticesData.size() - 1) / MAX_VERTICES_COUNT) + 1;
-            
-            for (int meshBufferIndex = 0; meshBufferIndex < meshBufferCount; meshBufferIndex++) {
-                meshBufferIndices.push_back(vector< unsigned short >());
+    if(shouldSplitBuffers) {
+        clearVerticesArray();
+        clearIndicesArray();
+        vector<unsigned int> indicesDataCopy;
+        std::map<string, int> indicesDataMap;
+        
+        if(meshType == MESH_TYPE_LITE) {
+            if(tempVerticesData.size() > MAX_VERTICES_COUNT) {
+                int meshBufferCount = (int)((tempVerticesData.size() - 1) / MAX_VERTICES_COUNT) + 1;
                 
-                int vertexCount = (tempVerticesData.size() >= (meshBufferIndex+1)*MAX_VERTICES_COUNT) ? MAX_VERTICES_COUNT : (int)tempVerticesData.size() - meshBufferIndex*MAX_VERTICES_COUNT;
-                
-                vector< vertexData > vData(tempVerticesData.begin() + (meshBufferIndex * MAX_VERTICES_COUNT), tempVerticesData.begin() + (meshBufferIndex * MAX_VERTICES_COUNT) + vertexCount);
-                meshBufferVerticesData.push_back(vData);
-                
-                for (int i = 0; i < (int)tempIndicesData.size() - 2; i += 3) {
-                    if((tempIndicesData[i] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) &&
-                       (tempIndicesData[i+1] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+1] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) &&
-                       (tempIndicesData[i+2] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+2] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT))) {
-                        meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i] - (meshBufferIndex)*MAX_VERTICES_COUNT);
-                        meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+1] - (meshBufferIndex)*MAX_VERTICES_COUNT);
-                        meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+2] - (meshBufferIndex)*MAX_VERTICES_COUNT);
-                    } else if((tempIndicesData[i] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) ||
-                              (tempIndicesData[i+1] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+1] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) ||
-                              (tempIndicesData[i+2] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+2] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT))) {
-                        string uniqueid = to_string(tempIndicesData[i]) + to_string(tempIndicesData[i+1]) + to_string(tempIndicesData[i+2]);
-                        if(indicesDataMap.find(uniqueid) == indicesDataMap.end()) {
-                            indicesDataCopy.push_back(tempIndicesData[i]);
-                            indicesDataCopy.push_back(tempIndicesData[i+1]);
-                            indicesDataCopy.push_back(tempIndicesData[i+2]);
-                            indicesDataMap.insert(std::pair<string,int> (uniqueid, i));
+                for (int meshBufferIndex = 0; meshBufferIndex < meshBufferCount; meshBufferIndex++) {
+                    meshBufferIndices.push_back(vector< unsigned short >());
+                    meshBufferMaterialIndices.push_back(0);
+                    
+                    int vertexCount = (tempVerticesData.size() >= (meshBufferIndex+1)*MAX_VERTICES_COUNT) ? MAX_VERTICES_COUNT : (int)tempVerticesData.size() - meshBufferIndex*MAX_VERTICES_COUNT;
+                    
+                    vector< vertexData > vData(tempVerticesData.begin() + (meshBufferIndex * MAX_VERTICES_COUNT), tempVerticesData.begin() + (meshBufferIndex * MAX_VERTICES_COUNT) + vertexCount);
+                    meshBufferVerticesData.push_back(vData);
+                    
+                    for (int i = 0; i < (int)tempIndicesData.size() - 2; i += 3) {
+                        if((tempIndicesData[i] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) &&
+                           (tempIndicesData[i+1] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+1] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) &&
+                           (tempIndicesData[i+2] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+2] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT))) {
+                            meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i] - (meshBufferIndex)*MAX_VERTICES_COUNT);
+                            meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+1] - (meshBufferIndex)*MAX_VERTICES_COUNT);
+                            meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+2] - (meshBufferIndex)*MAX_VERTICES_COUNT);
+                        } else if((tempIndicesData[i] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) ||
+                                  (tempIndicesData[i+1] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+1] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT)) ||
+                                  (tempIndicesData[i+2] >= ((meshBufferIndex)*MAX_VERTICES_COUNT) && tempIndicesData[i+2] < ((meshBufferIndex+1)*MAX_VERTICES_COUNT))) {
+                            string uniqueid = to_string(tempIndicesData[i]) + to_string(tempIndicesData[i+1]) + to_string(tempIndicesData[i+2]);
+                            if(indicesDataMap.find(uniqueid) == indicesDataMap.end()) {
+                                indicesDataCopy.push_back(tempIndicesData[i]);
+                                indicesDataCopy.push_back(tempIndicesData[i+1]);
+                                indicesDataCopy.push_back(tempIndicesData[i+2]);
+                                indicesDataMap.insert(std::pair<string,int> (uniqueid, i));
+                            }
                         }
                     }
                 }
-            }
-            
-            int meshBufferIndex = meshBufferCount - 1;
-            if((meshBufferVerticesData[meshBufferIndex].size() + indicesDataCopy.size()) > MAX_VERTICES_COUNT) {
-                meshBufferVerticesData.push_back(vector< vertexData >());
-                meshBufferIndices.push_back(vector< unsigned short >());
-                meshBufferIndex++;
-            }
-            
-            for(int i = 0; i < (int)indicesDataCopy.size(); i++) {
-                if((int)meshBufferVerticesData[meshBufferIndex].size() == MAX_VERTICES_COUNT) {
+                
+                int meshBufferIndex = meshBufferCount - 1;
+                if((meshBufferVerticesData[meshBufferIndex].size() + indicesDataCopy.size()) > MAX_VERTICES_COUNT) {
                     meshBufferVerticesData.push_back(vector< vertexData >());
                     meshBufferIndices.push_back(vector< unsigned short >());
+                    meshBufferMaterialIndices.push_back(0);
                     meshBufferIndex++;
                 }
                 
-                meshBufferVerticesData[meshBufferIndex].push_back(tempVerticesData[indicesDataCopy[i]]);
-                meshBufferIndices[meshBufferIndex].push_back(meshBufferVerticesData[meshBufferIndex].size()-1);
+                for(int i = 0; i < (int)indicesDataCopy.size(); i++) {
+                    if((int)meshBufferVerticesData[meshBufferIndex].size() == MAX_VERTICES_COUNT) {
+                        meshBufferVerticesData.push_back(vector< vertexData >());
+                        meshBufferIndices.push_back(vector< unsigned short >());
+                        meshBufferMaterialIndices.push_back(0);
+                        meshBufferIndex++;
+                    }
+                    
+                    meshBufferVerticesData[meshBufferIndex].push_back(tempVerticesData[indicesDataCopy[i]]);
+                    meshBufferIndices[meshBufferIndex].push_back(meshBufferVerticesData[meshBufferIndex].size()-1);
+                }
+                
+                indicesDataCopy.clear();
+                indicesDataMap.clear();
+            } else {
+                vector< vertexData > vData(tempVerticesData.begin(), tempVerticesData.end());
+                meshBufferVerticesData.push_back(vData);
+                
+                vector< unsigned short > indData(tempIndicesData.begin(), tempIndicesData.end());
+                meshBufferIndices.push_back(indData);
+                
+                meshBufferMaterialIndices.push_back(0);
             }
             
-            indicesDataCopy.clear();
-            indicesDataMap.clear();
         } else {
-            vector< vertexData > vData(tempVerticesData.begin(), tempVerticesData.end());
-            meshBufferVerticesData.push_back(vData);
             
-            vector< unsigned short > indData(tempIndicesData.begin(), tempIndicesData.end());
-            meshBufferIndices.push_back(indData);
-        }
-        
-    } else {
-        
-        if(tempVerticesData.size() > MAX_VERTICES_COUNT) {
-            int meshBufferCount = (int)((tempVerticesDataHeavy.size() - 1) / MAX_VERTICES_COUNT) + 1;
-            for (int meshBufferIndex = 0; meshBufferIndex < meshBufferCount; meshBufferIndex++) {
-                meshBufferIndices.push_back(vector< unsigned short >());
-                
-                int vertexCount = (tempVerticesDataHeavy.size() >= (meshBufferIndex+1)*MAX_VERTICES_COUNT) ? MAX_VERTICES_COUNT : (int)tempVerticesDataHeavy.size() - meshBufferIndex*MAX_VERTICES_COUNT;
-                
-                vector< vertexDataHeavy > vData(tempVerticesDataHeavy.begin() + (meshBufferIndex * MAX_VERTICES_COUNT), tempVerticesDataHeavy.begin() + (meshBufferIndex * MAX_VERTICES_COUNT) + vertexCount);
-                meshBufferVerticesDataHeavy.push_back(vData);
-                
-                for (int i = 0; i < (int)tempIndicesData.size() - 2; i += 3) {
-                    if(tempIndicesData[i] >= (meshBufferIndex)*MAX_VERTICES_COUNT &&
-                       tempIndicesData[i+1] >= (meshBufferIndex)*MAX_VERTICES_COUNT &&
-                       tempIndicesData[i+2] >= (meshBufferIndex)*MAX_VERTICES_COUNT &&
-                       tempIndicesData[i] < (meshBufferIndex+1)*MAX_VERTICES_COUNT &&
-                       tempIndicesData[i+1] < (meshBufferIndex+1)*MAX_VERTICES_COUNT &&
-                       tempIndicesData[i+2] < (meshBufferIndex+1)*MAX_VERTICES_COUNT) {
-                        meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i] - (meshBufferIndex)*MAX_VERTICES_COUNT);
-                        meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+1] - (meshBufferIndex)*MAX_VERTICES_COUNT);
-                        meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+2] - (meshBufferIndex)*MAX_VERTICES_COUNT);
-                    } else if((tempIndicesData[i] >= (meshBufferIndex)*MAX_VERTICES_COUNT && tempIndicesData[i] < (meshBufferIndex+1)*MAX_VERTICES_COUNT) ||
-                              (tempIndicesData[i+1] >= (meshBufferIndex)*MAX_VERTICES_COUNT && tempIndicesData[i+1] < (meshBufferIndex+1)*MAX_VERTICES_COUNT) ||
-                              (tempIndicesData[i+2] >= (meshBufferIndex)*MAX_VERTICES_COUNT && tempIndicesData[i+2] < (meshBufferIndex+1)*MAX_VERTICES_COUNT)) {
-                        string uniqueid = to_string(tempIndicesData[i]) + to_string(tempIndicesData[i+1]) + to_string(tempIndicesData[i+2]);
-                        if(indicesDataMap.find(uniqueid) == indicesDataMap.end()) {
-                            indicesDataCopy.push_back(tempIndicesData[i]);
-                            indicesDataCopy.push_back(tempIndicesData[i+1]);
-                            indicesDataCopy.push_back(tempIndicesData[i+2]);
-                            indicesDataMap.insert(std::pair<string,int> (uniqueid, i));
+            if(tempVerticesData.size() > MAX_VERTICES_COUNT) {
+                int meshBufferCount = (int)((tempVerticesDataHeavy.size() - 1) / MAX_VERTICES_COUNT) + 1;
+                for (int meshBufferIndex = 0; meshBufferIndex < meshBufferCount; meshBufferIndex++) {
+                    meshBufferIndices.push_back(vector< unsigned short >());
+                    meshBufferMaterialIndices.push_back(0);
+                    
+                    int vertexCount = (tempVerticesDataHeavy.size() >= (meshBufferIndex+1)*MAX_VERTICES_COUNT) ? MAX_VERTICES_COUNT : (int)tempVerticesDataHeavy.size() - meshBufferIndex*MAX_VERTICES_COUNT;
+                    
+                    vector< vertexDataHeavy > vData(tempVerticesDataHeavy.begin() + (meshBufferIndex * MAX_VERTICES_COUNT), tempVerticesDataHeavy.begin() + (meshBufferIndex * MAX_VERTICES_COUNT) + vertexCount);
+                    meshBufferVerticesDataHeavy.push_back(vData);
+                    
+                    for (int i = 0; i < (int)tempIndicesData.size() - 2; i += 3) {
+                        if(tempIndicesData[i] >= (meshBufferIndex)*MAX_VERTICES_COUNT &&
+                           tempIndicesData[i+1] >= (meshBufferIndex)*MAX_VERTICES_COUNT &&
+                           tempIndicesData[i+2] >= (meshBufferIndex)*MAX_VERTICES_COUNT &&
+                           tempIndicesData[i] < (meshBufferIndex+1)*MAX_VERTICES_COUNT &&
+                           tempIndicesData[i+1] < (meshBufferIndex+1)*MAX_VERTICES_COUNT &&
+                           tempIndicesData[i+2] < (meshBufferIndex+1)*MAX_VERTICES_COUNT) {
+                            meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i] - (meshBufferIndex)*MAX_VERTICES_COUNT);
+                            meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+1] - (meshBufferIndex)*MAX_VERTICES_COUNT);
+                            meshBufferIndices[meshBufferIndex].push_back(tempIndicesData[i+2] - (meshBufferIndex)*MAX_VERTICES_COUNT);
+                        } else if((tempIndicesData[i] >= (meshBufferIndex)*MAX_VERTICES_COUNT && tempIndicesData[i] < (meshBufferIndex+1)*MAX_VERTICES_COUNT) ||
+                                  (tempIndicesData[i+1] >= (meshBufferIndex)*MAX_VERTICES_COUNT && tempIndicesData[i+1] < (meshBufferIndex+1)*MAX_VERTICES_COUNT) ||
+                                  (tempIndicesData[i+2] >= (meshBufferIndex)*MAX_VERTICES_COUNT && tempIndicesData[i+2] < (meshBufferIndex+1)*MAX_VERTICES_COUNT)) {
+                            string uniqueid = to_string(tempIndicesData[i]) + to_string(tempIndicesData[i+1]) + to_string(tempIndicesData[i+2]);
+                            if(indicesDataMap.find(uniqueid) == indicesDataMap.end()) {
+                                indicesDataCopy.push_back(tempIndicesData[i]);
+                                indicesDataCopy.push_back(tempIndicesData[i+1]);
+                                indicesDataCopy.push_back(tempIndicesData[i+2]);
+                                indicesDataMap.insert(std::pair<string,int> (uniqueid, i));
+                            }
                         }
                     }
                 }
-            }
-            
-            int meshBufferIndex = meshBufferCount - 1;
-            if((meshBufferVerticesDataHeavy[meshBufferIndex].size() + indicesDataCopy.size()) > MAX_VERTICES_COUNT) {
-                meshBufferVerticesDataHeavy.push_back(vector< vertexDataHeavy >());
-                meshBufferIndices.push_back(vector< unsigned short >());
-                meshBufferIndex++;
-            }
-            
-            for(int i = 0; i < (int)indicesDataCopy.size(); i++) {
-                if((int)meshBufferVerticesDataHeavy[meshBufferIndex].size() == MAX_VERTICES_COUNT) {
+                
+                int meshBufferIndex = meshBufferCount - 1;
+                if((meshBufferVerticesDataHeavy[meshBufferIndex].size() + indicesDataCopy.size()) > MAX_VERTICES_COUNT) {
                     meshBufferVerticesDataHeavy.push_back(vector< vertexDataHeavy >());
                     meshBufferIndices.push_back(vector< unsigned short >());
+                    meshBufferMaterialIndices.push_back(0);
                     meshBufferIndex++;
                 }
                 
-                meshBufferVerticesDataHeavy[meshBufferIndex].push_back(tempVerticesDataHeavy[indicesDataCopy[i]]);
-                meshBufferIndices[meshBufferIndex].push_back(meshBufferVerticesDataHeavy[meshBufferIndex].size()-1);
+                for(int i = 0; i < (int)indicesDataCopy.size(); i++) {
+                    if((int)meshBufferVerticesDataHeavy[meshBufferIndex].size() == MAX_VERTICES_COUNT) {
+                        meshBufferVerticesDataHeavy.push_back(vector< vertexDataHeavy >());
+                        meshBufferIndices.push_back(vector< unsigned short >());
+                        meshBufferIndex++;
+                    }
+                    
+                    meshBufferVerticesDataHeavy[meshBufferIndex].push_back(tempVerticesDataHeavy[indicesDataCopy[i]]);
+                    meshBufferIndices[meshBufferIndex].push_back(meshBufferVerticesDataHeavy[meshBufferIndex].size()-1);
+                }
+                
+                indicesDataCopy.clear();
+                indicesDataMap.clear();
+                
+            } else {
+                vector< vertexDataHeavy > vData(tempVerticesDataHeavy.begin(), tempVerticesDataHeavy.end());
+                meshBufferVerticesDataHeavy.push_back(vData);
+                
+                vector< unsigned short > indData(tempIndicesData.begin(), tempIndicesData.end());
+                meshBufferIndices.push_back(indData);
+                
+                meshBufferMaterialIndices.push_back(0);
             }
-            
-            indicesDataCopy.clear();
-            indicesDataMap.clear();
-            
-        } else {
-            vector< vertexDataHeavy > vData(tempVerticesDataHeavy.begin(), tempVerticesDataHeavy.end());
-            meshBufferVerticesDataHeavy.push_back(vData);
-            
-            vector< unsigned short > indData(tempIndicesData.begin(), tempIndicesData.end());
-            meshBufferIndices.push_back(indData);
         }
     }
+    shouldSplitBuffers = false;
     BBox.calculateEdges();
     
 //    printf("\nMesh Info: ");
@@ -488,6 +513,10 @@ vector< unsigned int > Mesh::getTotalIndicesArray()
 int Mesh::getMeshBufferCount()
 {
     return (int)meshBufferIndices.size();
+}
+
+int Mesh::getMeshBufferMaterialIndices(int meshBufferIndex) {
+    return meshBufferMaterialIndices[meshBufferIndex];
 }
 
 void Mesh::clearVertices()

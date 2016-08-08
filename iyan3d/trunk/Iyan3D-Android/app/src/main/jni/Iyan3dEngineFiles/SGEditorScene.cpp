@@ -440,11 +440,11 @@ void SGEditorScene::clearSelections()
     selectedNodeId = selectedJointId = NOT_SELECTED;
 }
 
-void SGEditorScene::shaderCallBackForNode(int nodeID,string matName)
+void SGEditorScene::shaderCallBackForNode(int nodeID, string matName, int materialIndex)
 {
-    for(int i = 0; i < nodes.size();i++){
-        if(nodes[i]->node->getID() == nodeID){
-            shaderMGR->setUniforms(nodes[i],matName);
+    for(int i = 0; i < nodes.size(); i++) {
+        if(nodes[i]->node->getID() == nodeID) {
+            shaderMGR->setUniforms(nodes[i], matName, materialIndex);
             break;
         }
     }
@@ -885,4 +885,8 @@ bool SGEditorScene::switchMirrorState()
     if(isJointSelected || (isRigMode && (rigMan->isSGRJointSelected || rigMan->isSkeletonJointSelected)))
       selectMan->highlightJointSpheres();
     return getMirrorState();
+}
+
+SceneManager* SGEditorScene::getSceneManager() {
+    return smgr;
 }

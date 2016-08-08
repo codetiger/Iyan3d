@@ -74,18 +74,21 @@ private:
     vector< vector<vertexData> > meshBufferVerticesData;
     vector< vector<vertexDataHeavy> > meshBufferVerticesDataHeavy;
     vector< vector<unsigned short> > meshBufferIndices;
+    vector< unsigned short > meshBufferMaterialIndices;
 
     vector<vertexData> tempVerticesData;
     vector<vertexDataHeavy> tempVerticesDataHeavy;
     vector<unsigned int> tempIndicesData;
     
     bool removeDoubles, optimizeIndicesOrder, calculateTangents;
+    bool shouldSplitBuffers;
     
 public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
 
-    void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi);
+    void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
+    void addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
     void copyDataFromMesh(Mesh* otherMesh);
     void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
     void removeVerticesOfAnInstance(int verticesCount, int indicesCount);
@@ -110,6 +113,7 @@ public:
     vector<vertexDataHeavy> getHeavyVerticesArray(int index);
     vector<vertexData> getTotalLiteVerticesArray();
     vector<vertexDataHeavy> getTotalHeavyVerticesArray();
+
     unsigned short* getIndicesArray(int index);
     unsigned int * getHighPolyIndicesArray();
     unsigned int getIndicesCount(int index);
@@ -118,6 +122,8 @@ public:
     unsigned int getVerticesCountInMeshBuffer(int index);
     unsigned int getVerticesCount();
     int getMeshBufferCount();
+    int getMeshBufferMaterialIndices(int meshBufferIndex);
+
     void clearVertices();
     void clearIndices();
     BoundingBox* getBoundingBox();

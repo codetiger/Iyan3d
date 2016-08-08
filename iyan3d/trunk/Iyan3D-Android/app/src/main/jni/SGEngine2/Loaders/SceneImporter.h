@@ -37,8 +37,9 @@ private:
 
     void loadNodes(aiNode *n, SGEditorScene *sgScene);
     void loadJoints(aiMesh *aiM, SkinMesh *m, aiNode* aiN, Joint* parent);
-    SkinMesh* getSkinMeshFrom(aiMesh *aiM, aiNode*aiN);
-    Mesh *getMeshFrom(aiMesh *aiM);
+
+    void getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM);
+    void getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM);
 };
 
 #endif /* ObjectImporter_hpp */

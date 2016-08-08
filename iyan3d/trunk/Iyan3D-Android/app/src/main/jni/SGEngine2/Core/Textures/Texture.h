@@ -12,14 +12,16 @@
 #include <iostream>
 #include "../common/common.h"
 
-class Texture{
+class Texture {
 public:
-    Texture(){
+    Texture() {
         
     }
-    virtual ~Texture(){
+    
+    virtual ~Texture() {
         
     }
+    
     int width,height;
     TEXTURE_DATA_FORMAT texelFormat;
     TEXTURE_DATA_TYPE texelType;

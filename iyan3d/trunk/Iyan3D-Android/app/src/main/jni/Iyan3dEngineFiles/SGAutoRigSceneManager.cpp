@@ -429,32 +429,32 @@ void SGAutoRigSceneManager::setEnvelopeUniforms(int nodeID,string matName)
 {
     if(!rigScene || !smgr)
         return;
-    rigScene->shaderMGR->setUniforms(envelopes.find(nodeID - ENVELOPE_START_ID)->second,matName);
+    rigScene->shaderMGR->setUniforms(envelopes.find(nodeID - ENVELOPE_START_ID)->second, matName);
 }
 void SGAutoRigSceneManager::objNodeCallBack(string materialName)
 {
     if(!rigScene || !smgr)
         return;
-    rigScene->shaderMGR->setUniforms(nodeToRig,materialName);
+    rigScene->shaderMGR->setUniforms(nodeToRig, materialName);
 }
 
-void SGAutoRigSceneManager::boneNodeCallBack(int id,string materialName)
+void SGAutoRigSceneManager::boneNodeCallBack(int id, string materialName)
 {
     if(!rigScene || !smgr)
         return;
-    rigScene->shaderMGR->setUniforms(rigKeys[id - BONE_START_ID].bone,materialName);
+    rigScene->shaderMGR->setUniforms(rigKeys[id - BONE_START_ID].bone, materialName);
 }
-void SGAutoRigSceneManager::jointNodeCallBack(int id,string materialName)
+void SGAutoRigSceneManager::jointNodeCallBack(int id, string materialName)
 {
     if(!rigScene || !smgr)
         return;
-    rigScene->shaderMGR->setUniforms(rigKeys[id - JOINT_START_ID].sphere,materialName);
+    rigScene->shaderMGR->setUniforms(rigKeys[id - JOINT_START_ID].sphere, materialName);
 }
-void SGAutoRigSceneManager::setSGRUniforms(int jointId,string matName)
+void SGAutoRigSceneManager::setSGRUniforms(int jointId, string matName)
 {
     if(!rigScene || !smgr)
         return;
-    rigScene->shaderMGR->setUniforms(sgrSGNode,matName);
+    rigScene->shaderMGR->setUniforms(sgrSGNode, matName);
 }
 bool SGAutoRigSceneManager::isSGRTransparent(int jointId,string matName)
 {

@@ -154,13 +154,13 @@ void objLoaderCallBack(int status)
      */
 }
 
-void shaderCallBackForNode(int nodeID, string matName, string callbackFuncName)
+void shaderCallBackForNode(int nodeID, string matName, int materialIndex, string callbackFuncName)
 {
     if(!editorScene)
         return;
         
     if (callbackFuncName.compare("setUniforms") == 0)
-        editorScene->shaderCallBackForNode(nodeID, matName);
+        editorScene->shaderCallBackForNode(nodeID, matName, materialIndex);
     else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
         editorScene->setJointsUniforms(nodeID, matName);
     else if (callbackFuncName.compare("setCtrlUniforms") == 0)

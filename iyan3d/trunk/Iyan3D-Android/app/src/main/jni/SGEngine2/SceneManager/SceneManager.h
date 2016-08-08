@@ -73,8 +73,8 @@ public:
     shared_ptr<LightNode> createLightNode(Mesh *mesh, string callBackFuncName);
     shared_ptr<Node> createInstancedNode(shared_ptr<Node> original, string callBackFuncName);
     
-    void (*ShaderCallBackForNode)(int,std::string mateialName,std::string callbackFuncName);
-    bool (*isTransparentCallBack)(int nodeId,string callbackFuncName);
+    void (*ShaderCallBackForNode)(int nodeId, std::string mateialName, int materialIndex, std::string callbackFuncName);
+    bool (*isTransparentCallBack)(int nodeId, string callbackFuncName);
     void setMaterialProperty(Material *mat,string name,float* values,DATA_TYPE type,unsigned short count,u16 paramIndex = 0);
     AnimatedMesh* LoadMesh(string filePath);
     void (*MTLPipelineStateCallBack)(int);

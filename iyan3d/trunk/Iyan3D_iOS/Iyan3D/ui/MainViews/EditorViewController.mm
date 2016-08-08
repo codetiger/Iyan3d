@@ -1406,32 +1406,8 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-    /*
-    SceneImporter *loader = new SceneImporter();
-    vector< shared_ptr<Node> > nds = loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "bonetest.dae", currentScene);
-    for (int i = 0; i < nds.size(); i++) {
-        nds[i]->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN));
-        nds[i]->callbackFuncName = "setUniforms";
-        
-        smgr->AddNode(nds[i], MESH_TYPE_HEAVY);
-        SGNode* sgn = new SGNode(NODE_RIG);
-        sgn->setSkinningData((SkinMesh*)dynamic_pointer_cast<AnimatedMeshNode>(nds[i])->getMesh());
-        sgn->node = nds[i];
-
-        bool isSGJointsCreated = (sgn->joints.size() > 0) ? true : false;
-        for(int i = 0;i < dynamic_pointer_cast<AnimatedMeshNode>(sgn->node)->getJointCount();i++){
-            dynamic_pointer_cast<AnimatedMeshNode>(sgn->node)->getJointNode(i)->setID(i);
-            if(!isSGJointsCreated){
-                SGJoint *joint = new SGJoint();
-                joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sgn->node)->getJointNode(i);
-                sgn->joints.push_back(joint);
-            }
-        }
-
-        sgn->setInitialKeyValues(IMPORT_ASSET_ACTION);
-        editorScene->nodes.push_back(sgn);
-    }
-    */
+//    SceneImporter *loader = new SceneImporter();
+//    loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "Robotic_Arm_03.obj", editorScene);
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];

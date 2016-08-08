@@ -161,7 +161,7 @@ public:
     
     void (*fileWriteCallBack)();
     bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture, string textureName);
-    void shaderCallBackForNode(int nodeID,string matName);
+    void shaderCallBackForNode(int nodeID, string matName, int materialIndex);
     float getNodeTransparency(int nodeId);
     bool isNodeTransparent(int nodeId);
     void setJointsUniforms(int nodeID,string matName);
@@ -219,6 +219,7 @@ public:
     void setPropsOfObject(SGNode *sgNode, int pType);
     void syncSceneWithPhysicsWorld();
 
+    SceneManager* getSceneManager();
 };
 
 #endif
