@@ -545,7 +545,8 @@ void ShaderManager::setModelViewProjMatrix(SGNode *sgNode,u16 paramIndex, bool i
     
     Mat4 mvp;
     std::string uniformName = "mvp";
-    if((sgNode->node->getID() != CIRCLE_NODE_ID && sgNode->node->getID() != LIGHT_CIRCLES && sgNode->node->getID() != LIGHT_DIRECTION_ID && sgNode->node->drawMode == DRAW_MODE_LINES) || sgNode->node->material->name == "SHADER_MESH") {
+
+    if(sgNode->node->getID() == GREEN_LINES_ID || sgNode->node->getID() == BLUE_LINES_ID || sgNode->node->getID() == RED_LINES_ID || sgNode->node->material->name == "SHADER_MESH") {
         uniformName = (sgNode->node->drawMode == DRAW_MODE_LINES) ? "mvp" : "vp";
         mvp = projMat * viewMat;
     } else
