@@ -19,13 +19,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Iyan3D/Helpers/AppHelper.mm"
-            timestampString = "476616307.540222"
+            filePath = "../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGSceneLoader.cpp"
+            timestampString = "492417995.589718"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "517"
-            endingLineNumber = "517"
-            landmarkName = "-callPaymentGateWayForProduct:"
+            startingLineNumber = "575"
+            endingLineNumber = "575"
+            landmarkName = "SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -35,29 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationManager.cpp"
-            timestampString = "484823963.402478"
+            filePath = "../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGSceneLoader.cpp"
+            timestampString = "492418000.440252"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "443"
-            endingLineNumber = "443"
-            landmarkName = "SGAnimationManager::storeAnimations(int assetId)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationManager.cpp"
-            timestampString = "484823963.402478"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
-            landmarkName = "SGAnimationManager::storeAnimations(int assetId)"
+            startingLineNumber = "596"
+            endingLineNumber = "596"
+            landmarkName = "SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

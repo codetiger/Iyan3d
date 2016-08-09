@@ -238,10 +238,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     
 }
 
-- (bool)loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name TextureName:(NSString*)textureName Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
+- (bool) loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name TextureName:(NSString*)textureName Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
 {
-    // TODO a lot to implement
    
+    NSLog(@" Texture Name %@ ", textureName);
     string textureNameStr = std::string([textureName UTF8String]);
     
     if(editorScene) {
@@ -252,17 +252,18 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     
     switch (type) {
         case ASSET_CAMERA: {
-            editorScene->loader->loadNode(NODE_CAMERA, assetId, "", name, 0, 0, assetAddType,vertexColor, "", isTempNode);
+            editorScene->loader->loadNode(NODE_CAMERA, assetId, "", "", name, 0, 0, assetAddType,vertexColor, "", isTempNode);
             break;
         }
         case ASSET_LIGHT: {
-            editorScene->loader->loadNode(NODE_LIGHT, assetId, "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
+            editorScene->loader->loadNode(NODE_LIGHT, assetId, "", "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             break;
         }
         case ASSET_BACKGROUNDS:
         case ASSET_ACCESSORIES: {
-//            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
+            
+            string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgm";
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, meshPath, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -273,8 +274,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         case ASSET_RIGGED: {
-//            [self showTipsViewForAction:OBJECT_IMPORTED_HUMAN];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
+            string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgr";
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, meshPath, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -285,8 +286,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         case ASSET_OBJ: {
-//            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
+            string meshPath = FileHelper::getDocumentsDirectory() + "Resources/Obj/" + to_string(assetId) + ".obj";
+            SGNode* sgNode = editorScene->loader->loadNode(NODE_OBJ, assetId, meshPath, "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -298,8 +299,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_VIDEO:
         case ASSET_IMAGE: {
             NODE_TYPE nType = (type == ASSET_VIDEO) ? NODE_VIDEO : NODE_IMAGE;
-//            [self showTipsViewForAction:OBJECT_IMPORTED];
-            SGNode* sgNode = editorScene->loader->loadNode(nType, 0, "", name, imgWidth, imgHeight, assetAddType, Vector4(imgWidth, imgHeight, 0, 0), "", isTempNode);
+            SGNode* sgNode = editorScene->loader->loadNode(nType, 0, "", "", name, imgWidth, imgHeight, assetAddType, Vector4(imgWidth, imgHeight, 0, 0), "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
@@ -326,7 +326,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
         case ASSET_TEXT:
         case ASSET_TEXT_RIG: {
-//            [self showTipsViewForAction:OBJECT_IMPORTED];
             float red = [[moreDetail objectForKey:@"red"]floatValue];
             float green = [[moreDetail objectForKey:@"green"]floatValue];
             float blue = [[moreDetail objectForKey:@"blue"]floatValue];
@@ -334,7 +333,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
-            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
+            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0, "", textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"fontstyle_char_unsupported", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                 [loadNodeAlert show];
@@ -355,7 +354,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_ADDITIONAL_LIGHT: {
             //TODO enum for max lights
             if(ShaderManager::lightPosition.size() < 5) {
-                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId, "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
+                editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId, "",  "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId , "Light"+ to_string(assetId-ASSET_ADDITIONAL_LIGHT));
 
@@ -367,7 +366,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             break;
         }
         case ASSET_PARTICLES: {
-           SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId, "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
+           SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId, "",  "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
             if(particle)
                 particle->isTempNode = isTempNode;
             if(!isTempNode){

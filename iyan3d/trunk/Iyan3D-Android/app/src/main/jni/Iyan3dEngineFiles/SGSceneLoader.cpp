@@ -41,6 +41,92 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
 {
     if(!currentScene || !smgr)
         return false;
+    
+    int nodeCount = 0;
+    int sgbVersion = readSceneGlobalInfo(filePointer, nodeCount);
+    currentScene->totalFrames = (currentScene->totalFrames < 24) ? 24 : currentScene->totalFrames;
+    currentScene->nodes.clear();
+    if(nodeCount < NODE_LIGHT+1)
+        return false;
+    
+    vector<SGNode*> tempNodes;
+    
+    if(sgbVersion == SGB_VERSION_CURRENT) {
+        for(int i = 0; i < nodeCount; i++) {
+            SGNode *sgNode = new SGNode(NODE_UNDEFINED);
+            int origId = 0;
+            Mesh* mesh = sgNode->readData(filePointer, origId);
+            sgNode->materialProps.push_back(new MaterialProperty(sgNode->getType()));
+
+            if(sgNode->getType() == NODE_CAMERA || sgNode->getType() == NODE_LIGHT) {
+                loadNode(sgNode, OPEN_SAVED_FILE);
+                sgNode->setPropertiesOfNode();
+                
+            } else {
+                if(mesh->meshType == MESH_TYPE_LITE)
+                    sgNode->node = smgr->createNodeFromMesh(mesh, "setUniforms");
+                else
+                    sgNode->node = smgr->createAnimatedNodeFromMesh((AnimatedMesh*)mesh, "setUniforms", ShaderManager::maxJoints, CHARACTER_RIG, mesh->meshType);
+                
+                sgNode->node->setMaterial(smgr->getMaterialByIndex((mesh->meshType == MESH_TYPE_LITE) ? SHADER_MESH : SHADER_SKIN));
+                sgNode->setPropertiesOfNode();
+                string textureName = sgNode->getProperty(TEXTURE).fileName;
+                Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
+                sgNode->materialProps[0]->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+                currentScene->nodes.push_back(sgNode);
+            }
+            sgNode->setInitialKeyValues(OPEN_SAVED_FILE);
+            
+        }
+    } else {
+        for(int i = 0;i < nodeCount;i++) {
+            SGNode *sgNode = new SGNode(NODE_UNDEFINED);
+            int origId = 0;
+            sgNode->readData(filePointer, origId);
+            bool status = true;
+            
+            if(origId > 0) {
+                sgNode->setType(NODE_TEMP_INST);
+                sgNode->assetId = origId;
+            } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ) {
+                status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
+            } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
+                status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
+            } else if (sgNode->getType() == NODE_IMAGE) {
+                status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x), sgNode->getProperty(TEXTURE).fileName);
+            } else if (sgNode->getType() == NODE_PARTICLES) {
+                status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true, sgNode->getProperty(TEXTURE).fileName);
+            }
+            
+            if(!status)
+                sgNode = NULL;
+            tempNodes.push_back(sgNode);
+        }
+        currentScene->syncSceneWithPhysicsWorld();
+    }
+    
+    for (int i = 0; i < tempNodes.size(); i++) {
+        SGNode *sgNode = tempNodes[i];
+        bool nodeLoaded = false;
+        
+        if(sgNode && sgNode->getType() == NODE_TEMP_INST) {
+            nodeLoaded = loadInstance(sgNode, sgNode->assetId, OPEN_SAVED_FILE);
+        } else if(sgNode)
+            nodeLoaded = loadNode(sgNode, OPEN_SAVED_FILE);
+        
+        if(!nodeLoaded)
+            delete sgNode;
+    }
+    
+    currentScene->syncSceneWithPhysicsWorld();
+    
+    return true;
+}
+
+bool SGSceneLoader::legacyReadScene(ifstream *filePointer)
+{
+    if(!currentScene || !smgr)
+        return false;
 
     int nodeCount = 0;
     readSceneGlobalInfo(filePointer, nodeCount);
@@ -48,7 +134,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     currentScene->nodes.clear();
     if(nodeCount < NODE_LIGHT+1)
         return false;
-
+    
     vector<SGNode*> tempNodes;
     for(int i = 0;i < nodeCount;i++) {
         SGNode *sgNode = new SGNode(NODE_UNDEFINED);
@@ -60,13 +146,13 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             sgNode->setType(NODE_TEMP_INST);
             sgNode->assetId = origId;
         } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ) {
-            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->textureName == "" || sgNode->textureName == "-1"), sgNode->textureName);
+            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
         } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
-            status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->textureName == "" || sgNode->textureName == "-1"), sgNode->textureName);
+            status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
         } else if (sgNode->getType() == NODE_IMAGE) {
-            status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x), sgNode->textureName);
+            status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x), sgNode->getProperty(TEXTURE).fileName);
         } else if (sgNode->getType() == NODE_PARTICLES) {
-            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true, sgNode->textureName);
+            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true, sgNode->getProperty(TEXTURE).fileName);
         }
 
         if(!status)
@@ -127,9 +213,9 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type,jo
                     sgNode->setType(NODE_TEMP_INST);
                     sgNode->assetId = origId;
                 } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ){
-            status = currentScene->downloadMissingAssetsCallBack(object,to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env, type);
+            status = currentScene->downloadMissingAssetsCallBack(object,to_string(sgNode->assetId),sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), env, type);
         } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
-            status = currentScene->downloadMissingAssetsCallBack(object,sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->textureName == "" || sgNode->textureName == "-1"), env,type);
+            status = currentScene->downloadMissingAssetsCallBack(object,sgNode->optionalFilePath,sgNode->getType(), !(sgNode->props.perVertexColor || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), env,type);
         } else if (sgNode->getType() == NODE_IMAGE) {
             status = currentScene->downloadMissingAssetsCallBack(object,ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->props.perVertexColor), env, type);
         } else if (sgNode->getType() == NODE_PARTICLES) {
@@ -158,12 +244,12 @@ bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type,jo
 }
 #endif
 
-void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
+int SGSceneLoader::legacyReadSceneGlobalInfo(ifstream *filePointer, int sgbVersion, int& nodeCount)
 {
     if(!currentScene || !smgr)
         return;
-    int sgbVersion = FileHelper::readInt(filePointer);
-    if(sgbVersion == SGB_VERSION_CURRENT) {
+
+    if(sgbVersion >= SGB_VERSION_3) {
         FileHelper::readInt(filePointer); // dofNear
         FileHelper::readInt(filePointer); // dofFar
         FileHelper::readInt(filePointer); // Empty Data for future use
@@ -178,7 +264,7 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
         currentScene->totalFrames = FileHelper::readInt(filePointer);
     } else
         currentScene->totalFrames = sgbVersion;
-
+    
     Vector3 lightColor;
     lightColor.x = FileHelper::readFloat(filePointer);
     lightColor.y = FileHelper::readFloat(filePointer);
@@ -188,9 +274,52 @@ void SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
     currentScene->cameraFOV = FileHelper::readFloat(filePointer);
     nodeCount = FileHelper::readInt(filePointer);
     
+    return sgbVersion;
 }
 
-SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,std::wstring name,int imgwidth,int imgheight,int actionType, Vector4 textColor, string fontFilePath ,bool isTempNode)
+int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
+{
+    if(!currentScene || !smgr)
+        return;
+    
+    int sgbVersion = FileHelper::readInt(filePointer);
+    if(sgbVersion != SGB_VERSION_CURRENT)
+        return legacyReadSceneGlobalInfo(filePointer, sgbVersion, nodeCount);
+    
+    FileHelper::readInt(filePointer); // dofNear
+    FileHelper::readInt(filePointer); // dofFar
+    currentScene->totalFrames = FileHelper::readInt(filePointer);
+    Vector3 lightColor;
+    lightColor.x = FileHelper::readFloat(filePointer);
+    lightColor.y = FileHelper::readFloat(filePointer);
+    lightColor.z = FileHelper::readFloat(filePointer);
+    ShaderManager::shadowDensity = FileHelper::readFloat(filePointer);
+    currentScene->cameraFOV = FileHelper::readFloat(filePointer);
+
+    FileHelper::readFloat(filePointer); // Ambient Light
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readVector4(filePointer);
+    FileHelper::readVector4(filePointer);
+    FileHelper::readVector4(filePointer);
+    Vector4 test = FileHelper::readVector4(filePointer);
+    
+    string env = FileHelper::readString(filePointer, sgbVersion); // Environment Texture Name
+    FileHelper::readString(filePointer, sgbVersion);
+    FileHelper::readString(filePointer, sgbVersion);
+    FileHelper::readString(filePointer, sgbVersion);
+    FileHelper::readString(filePointer, sgbVersion);
+
+    ShaderManager::lightColor.push_back(lightColor);
+    nodeCount = FileHelper::readInt(filePointer);
+    printf("\n Node Count %d ", nodeCount);
+    
+    return sgbVersion;
+}
+
+SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, string textureName, std::wstring name, int imgwidth, int imgheight, int actionType, Vector4 textColor, string fontFilePath, bool isTempNode)
 {
     if(!currentScene || !smgr)
         return NULL;
@@ -200,7 +329,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     SGNode *sgnode = new SGNode(type);
     sgnode->materialProps.push_back(new MaterialProperty(type));
 
-    sgnode->node = sgnode->loadNode(assetId,textureName,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
+    sgnode->node = sgnode->loadNode(assetId, meshPath, textureName, type, smgr, name, imgwidth, imgheight, textColor, fontFilePath);
     if(!sgnode->node) {
         delete sgnode;
         Logger::log(INFO,"SGANimationScene","Node not loaded");
@@ -208,9 +337,9 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         return NULL;
     }
     if(sgnode->getType() == NODE_PARTICLES && isTempNode)
-        sgnode->addOrUpdateProperty(SELECTED, Vector4(true, 0, 0, 0), UNDEFINED);
+        sgnode->getProperty(SELECTED).value.x = true; // Vector4(true, 0, 0, 0), UNDEFINED);
     else if(sgnode->getType() == NODE_PARTICLES && !isTempNode)
-        sgnode->addOrUpdateProperty(SELECTED, Vector4(false, 0, 0, 0), UNDEFINED);
+        sgnode->getProperty(SELECTED).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
     
     if(sgnode->getType() == NODE_TEXT_SKIN)
         currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgnode);
@@ -227,7 +356,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         addLight(sgnode);
 #endif
     }else if(type == NODE_IMAGE || type == NODE_VIDEO){
-        sgnode->addOrUpdateProperty(LIGHTING, Vector4(false, 0, 0, 0), UNDEFINED);
+        sgnode->getProperty(LIGHTING).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
     } else if (type == NODE_RIG) {
         setJointsScale(sgnode);
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache();
@@ -278,7 +407,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 
     currentScene->freezeRendering = true;
     Vector4 nodeSpecificColor = Vector4(sgNode->getProperty(VERTEX_COLOR).value.x,sgNode->getProperty(VERTEX_COLOR).value.y,sgNode->getProperty(VERTEX_COLOR).value.z,1.0);
-    sgNode->node = sgNode->loadNode(sgNode->assetId, sgNode->textureName, sgNode->getType(), smgr, sgNode->name, sgNode->getProperty(FONT_SIZE).value.x, sgNode->getProperty(SPECIFIC_FLOAT).value.x, nodeSpecificColor,sgNode->optionalFilePath);
+    sgNode->node = sgNode->loadNode(sgNode->assetId, "", sgNode->getProperty(TEXTURE).fileName, sgNode->getType(), smgr, sgNode->name, sgNode->getProperty(FONT_SIZE).value.x, sgNode->getProperty(SPECIFIC_FLOAT).value.x, nodeSpecificColor,sgNode->optionalFilePath);
     if(!sgNode->node){
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         currentScene->freezeRendering = false;
@@ -308,7 +437,7 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
         addLight(sgNode);
     } else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
-        sgNode->addOrUpdateProperty(LIGHTING, Vector4(false, 0, 0, 0), UNDEFINED);
+        sgNode->getProperty(LIGHTING).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
     else if (sgNode->getType() == NODE_RIG)
         setJointsScale(sgNode);
     
@@ -324,7 +453,7 @@ bool SGSceneLoader::loadNodeOnUndoORedo(SGAction action, int actionType)
     SGNode *sgNode = new SGNode(NODE_UNDEFINED);
     sgNode->setType((NODE_TYPE)action.actionSpecificIntegers[0]);
     sgNode->setPropertiesOfNode();
-    sgNode->addOrUpdateProperty(FONT_SIZE, Vector4(action.actionSpecificIntegers[1], 0, 0, 0), UNDEFINED);
+    sgNode->getProperty(FONT_SIZE).value.x = action.actionSpecificIntegers[1];
     //            node->props.shaderType = recentAction.actionSpecificIntegers[1];
     
     Vector4 vertColor;
@@ -333,14 +462,14 @@ bool SGSceneLoader::loadNodeOnUndoORedo(SGAction action, int actionType)
     vertColor.z = action.actionSpecificFloats[2];
     vertColor.w = 1.0;
     
-    sgNode->addOrUpdateProperty(VERTEX_COLOR, vertColor, MATERIAL_PROPS);
-    sgNode->addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(action.actionSpecificFloats[3], 0, 0, 0), UNDEFINED);
+    sgNode->getProperty(VERTEX_COLOR).value = vertColor;
+    sgNode->getProperty(SPECIFIC_FLOAT).value.x = action.actionSpecificFloats[3];
     //sgNode->props.prevMatName = ConversionHelper::getStringForWString(action.actionSpecificStrings[0]);
     sgNode->optionalFilePath = ConversionHelper::getStringForWString(action.actionSpecificStrings[1]);
     sgNode->name = action.actionSpecificStrings[2];
     sgNode->oriTextureName = ConversionHelper::getStringForWString(action.actionSpecificStrings[3]);
-    sgNode->textureName = ConversionHelper::getStringForWString(action.actionSpecificStrings[4]);
-    sgNode->addOrUpdateProperty(LIGHTING, Vector4(action.actionSpecificFlags[0], 0, 0, 0), UNDEFINED);
+    sgNode->getProperty(TEXTURE).fileName = ConversionHelper::getStringForWString(action.actionSpecificStrings[4]);
+    sgNode->getProperty(LIGHTING).value.x = action.actionSpecificFlags[0];
     if(!loadNode(sgNode, actionType)) {
         delete sgNode;
         return false;
@@ -427,7 +556,7 @@ void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
     
     if(actionType == UNDO_ACTION){
         meshObject->oriTextureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificStrings[1]);
-        meshObject->textureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificStrings[2]);
+        meshObject->getProperty(TEXTURE).fileName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificStrings[2]);
         
         Vector4 oriVertColor;
         oriVertColor.x = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[0];
@@ -441,15 +570,15 @@ void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
         vertColor.z =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[5];
         vertColor.w = 0.0;
         
-        meshObject->addOrUpdateProperty(ORIG_VERTEX_COLOR, oriVertColor, UNDEFINED);
-        meshObject->addOrUpdateProperty(VERTEX_COLOR, vertColor, MATERIAL_PROPS);
-        meshObject->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFlags[0], 0, 0, 0), MATERIAL_PROPS);
+        meshObject->getProperty(ORIG_VERTEX_COLOR).value = oriVertColor;
+        meshObject->getProperty(VERTEX_COLOR).value = vertColor;
+        meshObject->getProperty(IS_VERTEX_COLOR).value.x = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFlags[0];
 
         currentScene->actionMan->currentAction--;
     }
     if(actionType == REDO_ACTION) {
         meshObject->oriTextureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificStrings[0]);
-        meshObject->textureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificStrings[1]);
+        meshObject->getProperty(TEXTURE).fileName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction].actionSpecificStrings[1]);
         Vector4 oriVertColor;
         oriVertColor.x = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[0];
         oriVertColor.y =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[1];
@@ -462,16 +591,16 @@ void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
         vertColor.z =currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFloats[5];
         vertColor.w = 0.0;
         
-        meshObject->addOrUpdateProperty(ORIG_VERTEX_COLOR, oriVertColor, UNDEFINED);
-        meshObject->addOrUpdateProperty(VERTEX_COLOR, vertColor, MATERIAL_PROPS);
-        meshObject->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFlags[0], 0, 0, 0), MATERIAL_PROPS);
+        meshObject->getProperty(ORIG_VERTEX_COLOR).value = oriVertColor;
+        meshObject->getProperty(VERTEX_COLOR).value = vertColor;
+        meshObject->getProperty(IS_VERTEX_COLOR).value.x = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificFlags[0];
 
         currentScene->actionMan->currentAction++;
     }
     if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->getProperty(IS_VERTEX_COLOR).value.x && meshObject->node->type != NODE_TYPE_INSTANCED){
         Vector4 vertColor = meshObject->getProperty(VERTEX_COLOR).value;
         currentScene->selectMan->selectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId), false);
-        currentScene->changeTexture(meshObject->textureName, Vector3(vertColor.x, vertColor.y, vertColor.z), true, true);
+        currentScene->changeTexture(meshObject->getProperty(TEXTURE).fileName, Vector3(vertColor.x, vertColor.y, vertColor.z), true, true);
         currentScene->selectMan->unselectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId));
     }
 }
@@ -675,8 +804,8 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
         envelopeNode->setParent(rigKeys[parentId].referenceNode->node);
         envelopeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
         envelopeSgNod->node = envelopeNode;
-        envelopeSgNod->addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS);
-        envelopeSgNod->addOrUpdateProperty(TRANSPARENCY, Vector4(0.4, 0.0, 0.0, 0.0), UNDEFINED);
+        envelopeSgNod->getProperty(VERTEX_COLOR).value = Vector4(1.0);
+        envelopeSgNod->getProperty(TRANSPARENCY).value.x = 0.4; // Vector4(0.4, 0.0, 0.0, 0.0), UNDEFINED);
     }
     if(envelopeSgNod->node) {
         envelopeSgNod->node->updateAbsoluteTransformation();
@@ -783,8 +912,8 @@ bool SGSceneLoader::loadInstance(SGNode* iNode, int origId, ActionType actionTyp
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->selectMan->updateParentPosition();
 
-    if(iNode->textureName == "" || iNode->textureName == "-1")
-        iNode->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+    if(iNode->getProperty(TEXTURE).fileName == "" || iNode->getProperty(TEXTURE).fileName == "-1")
+        iNode->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
 
     return true;
 }

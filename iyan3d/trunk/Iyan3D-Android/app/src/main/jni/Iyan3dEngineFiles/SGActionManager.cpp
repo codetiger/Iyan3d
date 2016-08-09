@@ -351,7 +351,7 @@ void SGActionManager::changeUVScale(int nodeIndex, float scale)
 {
     if(actionScene && nodeIndex < actionScene->nodes.size()) {
         actionScene->nodes[nodeIndex]->node->uvScale = scale;
-        actionScene->nodes[nodeIndex]->addOrUpdateProperty(TEXTURE_SCALE, Vector4(scale, 0, 0, true), MATERIAL_PROPS);
+        actionScene->nodes[nodeIndex]->getProperty(TEXTURE_SCALE).value.x = scale;//Vector4(scale, 0, 0, true), MATERIAL_PROPS);
     }
 }
 
@@ -479,7 +479,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.frameId = assetId;
         assetAction.objectIndex =  actionScene->actionObjectsSize;
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->oriTextureName));
-        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->textureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(TEXTURE).fileName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(ORIG_VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(ORIG_VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->nodes.size()-1]->getProperty(ORIG_VERTEX_COLOR).value.z);
@@ -508,7 +508,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         int selectedNodeId = (actionScene->selectedNodeIds.size() > 0 ) ? assetId : actionScene->selectedNodeId;
         StoreDeleteObjectKeys(selectedNodeId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->oriTextureName));
-        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->textureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[selectedNodeId]->getProperty(TEXTURE).fileName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.z);
@@ -539,7 +539,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->optionalFilePath));
         assetAction.actionSpecificStrings.push_back(actionScene->nodes[indexOfAsset]->name);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->oriTextureName));
-        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->textureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[indexOfAsset]->getProperty(TEXTURE).fileName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[indexOfAsset]->getProperty(VERTEX_COLOR).value.z);
@@ -568,7 +568,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
         StoreDeleteObjectKeys(actionScene->selectedNodeId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
-        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->textureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->getProperty(TEXTURE).fileName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.z);
@@ -597,7 +597,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.actionType = ACTION_TEXTURE_CHANGE;
         assetAction.objectIndex = (actionScene->nodes[actionScene->selectedNodeId]->actionId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
-        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->textureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->getProperty(TEXTURE).fileName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.y);
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.z);

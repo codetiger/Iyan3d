@@ -77,10 +77,10 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
     
     animScene->selectMan->unselectObject(fromNodeId);
     animScene->nodes[toNodeId]->options = animScene->nodes[fromNodeId]->options;
-    animScene->nodes[toNodeId]->textureName = animScene->nodes[fromNodeId]->textureName;
+    animScene->nodes[toNodeId]->getProperty(TEXTURE).fileName = animScene->nodes[fromNodeId]->getProperty(TEXTURE).fileName;
     animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
-    animScene->nodes[toNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(animScene->nodes[fromNodeId]->getProperty(IS_VERTEX_COLOR).value.x), MATERIAL_PROPS);
-    animScene->nodes[toNodeId]->addOrUpdateProperty(VERTEX_COLOR, animScene->nodes[fromNodeId]->getProperty(VERTEX_COLOR).value, MATERIAL_PROPS);
+    animScene->nodes[toNodeId]->getProperty(IS_VERTEX_COLOR).value.x = animScene->nodes[fromNodeId]->getProperty(IS_VERTEX_COLOR).value.x;
+    animScene->nodes[toNodeId]->getProperty(VERTEX_COLOR).value = animScene->nodes[fromNodeId]->getProperty(VERTEX_COLOR).value;
     
 //    if(animScene->selectedNodeIds.size() > 0) {
 //        animScene->selectMan->unselectObjects();
@@ -123,7 +123,7 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
 
         if(addAction.actionType == ACTION_NODE_ADDED) {
             addAction.actionSpecificStrings[0] = (ConversionHelper::getWStringForString(sgNode->oriTextureName));
-            addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->textureName));
+            addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->getProperty(TEXTURE).fileName));
             addAction.actionSpecificFloats[0] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.x);
             addAction.actionSpecificFloats[1] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.y);
             addAction.actionSpecificFloats[2] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.z);

@@ -1209,7 +1209,7 @@ BOOL missingAlertShown;
         vertexColor = Vector3(vColor.x, vColor.y, vColor.z);
     }
     
-    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"] VertexColor:vertexColor];
+    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->getProperty(TEXTURE).fileName.c_str(),@".png"] VertexColor:vertexColor];
     
     [self performSelectorOnMainThread:@selector(deallocateAutoRigOnMainThread:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
 }
@@ -2567,7 +2567,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+        assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->getProperty(TEXTURE).fileName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
         assetItem.isTempAsset = YES;
         [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
@@ -2583,7 +2583,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         float bevalValue = editorScene->nodes[editorScene->selectedNodeId]->getProperty(SPECIFIC_FLOAT).value.x;
         int fontSize = editorScene->nodes[editorScene->selectedNodeId]->getProperty(FONT_SIZE).value.x;
         
-        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->textureName.c_str()
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:editorScene->nodes[selectedNode]->getProperty(TEXTURE).fileName.c_str()
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
     }
 }
@@ -2653,7 +2653,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     {
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithCString:sgNode->textureName.c_str()
+        assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
         [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNodeIndex];
         
@@ -2668,7 +2668,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         float bevalValue = sgNode->getProperty(SPECIFIC_FLOAT).value.x;
         int fontSize = sgNode->getProperty(FONT_SIZE).value.x;
-        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->textureName.c_str()
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
                                                                                                                                encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
@@ -2678,7 +2678,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
         [imageDetails setObject:[NSNumber numberWithInt:assetType] forKey:@"type"];
         [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
-        [imageDetails setObject:[NSString stringWithFormat:@"%s", sgNode->textureName.c_str()] forKey:@"AssetName"];
+        [imageDetails setObject:[NSString stringWithFormat:@"%s", sgNode->getProperty(TEXTURE).fileName.c_str()] forKey:@"AssetName"];
         [imageDetails setObject:[NSNumber numberWithFloat:sgNode->getProperty(VERTEX_COLOR).value.x] forKey:@"Width"];
         [imageDetails setObject:[NSNumber numberWithFloat:sgNode->getProperty(VERTEX_COLOR).value.y] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:NO] forKey:@"isTempNode"];
@@ -3559,7 +3559,7 @@ void downloadFile(NSString* url, NSString* fileName)
         case TEXTURE_SMOOTH: {
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
                 editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
-                editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(TEXTURE_SMOOTH, value, MATERIAL_PROPS);
+                editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH).value.x = value.x;
                 if(smgr->device == OPENGLES2)
                     [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
             }
@@ -3625,7 +3625,7 @@ void downloadFile(NSString* url, NSString* fileName)
             break;
         }
         case AMBIENT_LIGHT: {
-            editorScene->shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, value, UNDEFINED);
+            editorScene->shaderMGR->getProperty(AMBIENT_LIGHT).value.x = value.x;
             break;
         }
         default:
@@ -3720,7 +3720,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) reloadTexture
 {
-    editorScene->changeTexture(editorScene->nodes[editorScene->selectedNodeId]->textureName, Vector3(1.0), false, false);
+    editorScene->changeTexture(editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE).fileName, Vector3(1.0), false, false);
 }
 
 - (void) switchMirror
@@ -3737,7 +3737,7 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     bool status = [object boolValue];
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(HAS_PHYSICS, Vector4(status, 0, 0, 0), UNDEFINED);
+        editorScene->nodes[editorScene->selectedNodeId]->getProperty(HAS_PHYSICS).value = Vector4(status, 0, 0, 0);
         if(!status) {
             [self showLoadingActivity];
             [self syncSceneWithPhysicsWorld];
@@ -3758,7 +3758,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) velocityChanged:(double)vel
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-        editorScene->nodes[editorScene->selectedNodeId]->addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(vel, 0, 0, true), HAS_PHYSICS);
+        editorScene->nodes[editorScene->selectedNodeId]->getProperty(FORCE_MAGNITUDE).value = Vector4(vel, 0, 0, true);
         [self showLoadingActivity];
         [self syncSceneWithPhysicsWorld];
     }
@@ -4293,7 +4293,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [cache UpdateAsset:objAsset];
     [cache AddDownloadedAsset:objAsset];
     [self storeRiginCachesDirectory:objAsset.name assetId:objAsset.assetId];
-    [self storeRigTextureinCachesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
+    [self storeRigTextureinTexturesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
     assetAddType = IMPORT_ASSET_ACTION;
     objAsset.isTempAsset = NO;
     objAsset.textureName = (vertexColor == -1) ? [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"] : @"-1";
@@ -4315,7 +4315,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [objData writeToFile:desFilePath atomically:YES];
 }
 
--(void) storeRigTextureinCachesDirectory:(NSString*)fileName assetId:(int)localAssetId
+-(void) storeRigTextureinTexturesDirectory:(NSString*)fileName assetId:(int)localAssetId
 {
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
@@ -4337,8 +4337,8 @@ void downloadFile(NSString* url, NSString* fileName)
         }
     }
     
-    NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d-cm.png",docDirPath,localAssetId];
-    NSString* desFilePathForDisplay = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.png",docDirPath,localAssetId];
+    NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,localAssetId];
+    NSString* desFilePathForDisplay = [NSString stringWithFormat:@"%@/Resources/Textures/%d.png",docDirPath,localAssetId];
     
     UIImage *image =[UIImage imageWithContentsOfFile:srcTextureFilePath];
     NSData *imageData = [self convertAndScaleImage:image size:-1];

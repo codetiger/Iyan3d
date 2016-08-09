@@ -47,7 +47,7 @@ public:
     int assetId,actionId;
     shared_ptr<Node> node;
     std::wstring name;
-    std::string textureName,oriTextureName;
+    std::string oriTextureName;
     string optionalFilePath;
     //properties props;
     Quaternion nodeInitialRotation;
@@ -65,20 +65,22 @@ public:
     ~SGNode();
     bool checkFileExists(std::string fileName);
     void setSkinningData(SkinMesh *mesh);
-    shared_ptr<Node> loadNode(int assetId,std::string texturePath,NODE_TYPE objectType,SceneManager *smgr, std::wstring imagePath,int width,int height,Vector4 textColor, string &filePath);
+    shared_ptr<Node> loadNode(int assetId, std::string meshPath, std::string texturePath, NODE_TYPE objectType, SceneManager *smgr, std::wstring imagePath, int width, int height, Vector4 textColor, string &filePath);
     shared_ptr<Node> load3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments);
     shared_ptr<Node> loadSkin3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments);
     shared_ptr<Node> addAdittionalLight(SceneManager *smgr, float distance , Vector3 lightColor, float attenuation = 1.0);
     Json::Value parseParticlesJson(int assetId);
     void setParticlesData(shared_ptr<Node> node, Json::Value pData);
-    shared_ptr<Node> loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr);
-    shared_ptr<Node> loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr);
+    shared_ptr<Node> loadSGMandOBJ(std::string meshPath, NODE_TYPE objectType, SceneManager *smgr);
+    shared_ptr<Node> loadSGR(std::string meshPath, NODE_TYPE objectType, SceneManager *smgr);
     shared_ptr<Node> loadImage(string imageName,SceneManager *smgr , float aspectRatio = 1.0);
     shared_ptr<Node> loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio = 1.0);
     shared_ptr<Node> initLightSceneNode(SceneManager *smgr);
     
     void writeData(ofstream* filePointer, vector<SGNode*> &nodes);
-    void readData(ifstream* filePointer, int &origIndex);
+    void leagcyWrite(ofstream* filePointer, vector<SGNode*> &nodes);
+    Mesh* readData(ifstream* filePointer, int &origIndex);
+    void legacyReadData(ifstream* filePointer, int sgbVersion, int &origIndex);
     ActionKey getKeyForFrame(int frameId);
     void setKeyForFrame(int frameId, ActionKey& key);
     void removeAnimationInCurrentFrame(int currentFrame);
@@ -110,6 +112,8 @@ public:
     NODE_TYPE getType();
     void setType(NODE_TYPE type);
     
+    
+    bool IsPropertyExists(PROP_INDEX pIndex);
     std::map< PROP_INDEX, Property > getAllProperties(int meshBufferIndex = NOT_SELECTED);
     Property& getProperty(PROP_INDEX pIndex, int meshBufferIndex = NOT_SELECTED);
     PROP_INDEX checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex);

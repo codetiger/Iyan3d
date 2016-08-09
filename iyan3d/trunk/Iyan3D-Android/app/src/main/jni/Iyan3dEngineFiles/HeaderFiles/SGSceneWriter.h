@@ -31,6 +31,7 @@ public:
     void saveSceneDataAssImp(std::string *filePath);
     void writeScene(ofstream *filePointer);
     void writeGlobalInfo(ofstream *filePointer);
+    
 };
 
 #endif /* SGSceneWriter_h */

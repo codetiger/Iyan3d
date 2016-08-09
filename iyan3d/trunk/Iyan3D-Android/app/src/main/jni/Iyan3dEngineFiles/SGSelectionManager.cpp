@@ -483,7 +483,7 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
             highlightJointSpheres();
         
     }else if(selectionScene->selectedNode->getType() == NODE_CAMERA){
-        selectionScene->selectedNode->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+        selectionScene->selectedNode->getProperty(IS_VERTEX_COLOR).value.x = false;
     }
     if(!selectionScene->isNodeSelected || (selectionScene->selectedNode->getType() != NODE_RIG && selectionScene->selectedNode->getType() != NODE_TEXT_SKIN))
         selectionScene->renHelper->setJointSpheresVisibility(false);
@@ -512,7 +512,7 @@ void SGSelectionManager::unselectObject(int objectId)
         selectionScene->renHelper->setJointSpheresVisibility(false);
         
         if(selectionScene->nodes[objectId]->getType() == NODE_CAMERA)
-            selectionScene->nodes[objectId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+            selectionScene->nodes[objectId]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
     }
     selectionScene->clearSelections();
     if(selectionScene->directionIndicator->node->getVisible() && selectionScene->directionIndicator->assetId != selectionScene->selectedNodeId)

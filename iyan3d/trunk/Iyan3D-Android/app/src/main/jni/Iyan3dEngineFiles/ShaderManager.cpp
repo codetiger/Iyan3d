@@ -103,6 +103,8 @@ Property& ShaderManager::getProperty(PROP_INDEX pIndex)
                 return pIt->second.subProps[pIndex];
         }
         
+        addOrUpdateProperty(pIndex, Vector4(0), UNDEFINED);
+        
     } else {
         return sceneProps[pIndex];
     }
@@ -437,7 +439,7 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
     string textureNames[] = {"colorMap", "normalMap"};
     
     for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_NORMALMAP; i++) {
-        setTextureForNode(sgNode, sgNode->node->getTextureByIndex(i), textureNames[i], paramIndex, i);
+        setTextureForNode(sgNode, sgNode->materialProps[materialIndex]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP), textureNames[i], paramIndex, i);
     }
     
     setTextureForNode(sgNode, shadowTexture, "shadowMap", paramIndex, NODE_TEXTURE_TYPE_SHADOWMAP);
@@ -458,7 +460,7 @@ void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string t
     
     if(deviceType == OPENGLES2) {
         OGLTexture* tex = (OGLTexture*)texture;
-        if(tex != NULL) {
+        if(texture != NULL) {
             textureValue = tex->OGLTextureName;
             smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), tex, userValue);
         }

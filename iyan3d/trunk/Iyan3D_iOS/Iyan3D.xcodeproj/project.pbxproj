@@ -779,8 +779,6 @@
 		251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */; };
 		251BF4821C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
 		251BF4831C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
-		253B52811BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
-		253B52821BDBBD9100E93208 /* commonL1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 253B52801BDBBD9100E93208 /* commonL1.fsh */; };
 		2544C2751CCE2CF8009A3620 /* Mat4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2544C2731CCE2CF8009A3620 /* Mat4.cpp */; };
 		2544C2761CCE2CF8009A3620 /* Mat4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2544C2731CCE2CF8009A3620 /* Mat4.cpp */; };
 		254A4B2C1D34C93700D23D6D /* SliderPropCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 254A4B2B1D34C93700D23D6D /* SliderPropCell.mm */; };
@@ -798,9 +796,6 @@
 		2567B0571B179CAD008D25E9 /* depthPassSkin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */; };
 		2567B0581B179CAD008D25E9 /* draw2dImage.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED81B1484AE00DCD585 /* draw2dImage.fsh */; };
 		2567B0591B179CAD008D25E9 /* draw2dImage.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED91B1484AE00DCD585 /* draw2dImage.vsh */; };
-		2567B05B1B179CAD008D25E9 /* GPUSkinShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */; };
-		2567B05D1B179CAD008D25E9 /* shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDD1B1484AE00DCD585 /* shader.vsh */; };
-		2567B05E1B179CAD008D25E9 /* toon.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDE1B1484AE00DCD585 /* toon.fsh */; };
 		256ACDAB1CABAEF60080014E /* indicator.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 256ACDAA1CABAEF60080014E /* indicator.sgm */; };
 		256ACDAC1CABAEF60080014E /* indicator.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 256ACDAA1CABAEF60080014E /* indicator.sgm */; };
 		256F6B851BF6246300154622 /* AutoRigHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B471BF6246200154622 /* AutoRigHelper.cpp */; };
@@ -973,14 +968,6 @@
 		2593C41D1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */; };
 		2593C41E1CB27A2300703DDE /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41B1CB27A2300703DDE /* libFreetype2.a */; };
 		2593C41F1CB27A2300703DDE /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41B1CB27A2300703DDE /* libFreetype2.a */; };
-		259EE14A1BDE081200C99784 /* commonL2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1461BDE081200C99784 /* commonL2.fsh */; };
-		259EE14B1BDE081200C99784 /* commonL2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1461BDE081200C99784 /* commonL2.fsh */; };
-		259EE14C1BDE081200C99784 /* commonL3.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1471BDE081200C99784 /* commonL3.fsh */; };
-		259EE14D1BDE081200C99784 /* commonL3.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1471BDE081200C99784 /* commonL3.fsh */; };
-		259EE14E1BDE081200C99784 /* commonL4.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1481BDE081200C99784 /* commonL4.fsh */; };
-		259EE14F1BDE081200C99784 /* commonL4.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1481BDE081200C99784 /* commonL4.fsh */; };
-		259EE1501BDE081200C99784 /* commonL5.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1491BDE081200C99784 /* commonL5.fsh */; };
-		259EE1511BDE081200C99784 /* commonL5.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1491BDE081200C99784 /* commonL5.fsh */; };
 		259EE1531BDE342800C99784 /* dummy.png in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1521BDE342800C99784 /* dummy.png */; };
 		259EE1541BDE342800C99784 /* dummy.png in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1521BDE342800C99784 /* dummy.png */; };
 		25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */; };
@@ -1002,6 +989,8 @@
 		25BBCB141C203F200039DA5C /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB101C203D6A0039DA5C /* Splash.png */; };
 		25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */; };
 		25BC0FB11C4768FA00721B5E /* SGOBJManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */; };
+		25C05D3F1D536BB4008F06AA /* MeshRW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25C05D3E1D536BB4008F06AA /* MeshRW.cpp */; };
+		25C05D401D536BB4008F06AA /* MeshRW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25C05D3E1D536BB4008F06AA /* MeshRW.cpp */; };
 		25C90F451B3616B400D803DB /* bevel-on-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3D1B3616B400D803DB /* bevel-on-phone.png */; };
 		25C90F461B3616B400D803DB /* bevel-on-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3E1B3616B400D803DB /* bevel-on-phone@2x.png */; };
 		25C90F471B3616B400D803DB /* bevel-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3F1B3616B400D803DB /* bevel-on.png */; };
@@ -1961,9 +1950,6 @@
 		6231CEE11B1484AE00DCD585 /* depthPassSkin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */; };
 		6231CEE21B1484AE00DCD585 /* draw2dImage.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED81B1484AE00DCD585 /* draw2dImage.fsh */; };
 		6231CEE31B1484AE00DCD585 /* draw2dImage.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED91B1484AE00DCD585 /* draw2dImage.vsh */; };
-		6231CEE51B1484AE00DCD585 /* GPUSkinShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */; };
-		6231CEE71B1484AE00DCD585 /* shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDD1B1484AE00DCD585 /* shader.vsh */; };
-		6231CEE81B1484AE00DCD585 /* toon.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CEDE1B1484AE00DCD585 /* toon.fsh */; };
 		624641CE19939BB700CE8547 /* Animation-topviewBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 624641CC19939BB700CE8547 /* Animation-topviewBg.png */; };
 		624641CF19939BB700CE8547 /* Scene-topviewBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 624641CD19939BB700CE8547 /* Scene-topviewBg.png */; };
 		627A5F3E19ED342F00CB545C /* objfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 627A5F3C19ED342F00CB545C /* objfile.png */; };
@@ -2670,7 +2656,6 @@
 		E20673C91B049AA6006DD2F7 /* scale-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901161A0A07860051B941 /* scale-img@2x.png */; };
 		E20673CA1B049AA6006DD2F7 /* Menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901081A0A07860051B941 /* Menu@2x.png */; };
 		E20673CB1B049AA6006DD2F7 /* MenuReverse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F1D56A21A0CF9F70060D4DD /* MenuReverse@2x.png */; };
-		E20673CF1B049AA6006DD2F7 /* vertexColor.vert in Resources */ = {isa = PBXBuildFile; fileRef = E24975EE196BDD590025D442 /* vertexColor.vert */; };
 		E20673D01B049AA6006DD2F7 /* rotate-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901141A0A07860051B941 /* rotate-img@2x.png */; };
 		E20673D11B049AA6006DD2F7 /* save-img-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F31A72B1AA4960300A6E7B1 /* save-img-phone@3x.png */; };
 		E20673D41B049AA6006DD2F7 /* Animation-topviewBg-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9013C1A0A54840051B941 /* Animation-topviewBg-phone.png */; };
@@ -2702,7 +2687,6 @@
 		E20673FF1B049AA6006DD2F7 /* picture-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9010E1A0A07860051B941 /* picture-img@2x.png */; };
 		E20674001B049AA6006DD2F7 /* home-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9009A1A0A01460051B941 /* home-phone@2x.png */; };
 		E20674011B049AA6006DD2F7 /* topbarView.png in Resources */ = {isa = PBXBuildFile; fileRef = 62D28EE719DFDD74002F90AE /* topbarView.png */; };
-		E20674021B049AA6006DD2F7 /* vertexColorToon.frag in Resources */ = {isa = PBXBuildFile; fileRef = E2F556A91AFA1D8300079118 /* vertexColorToon.frag */; };
 		E21A893C1B08757E00435C87 /* ShaderCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */; };
 		E21A893D1B0877CC00435C87 /* ShaderCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */; };
 		E21A89401B08939600435C87 /* normalShader.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A893E1B08939600435C87 /* normalShader.png */; };
@@ -2737,7 +2721,6 @@
 		E24974DF196BDC8E0025D442 /* jointsData.json in Resources */ = {isa = PBXBuildFile; fileRef = E24974DC196BDC8E0025D442 /* jointsData.json */; };
 		E24975F1196BDD590025D442 /* color.frag in Resources */ = {isa = PBXBuildFile; fileRef = E24975C2196BDD590025D442 /* color.frag */; };
 		E24975FA196BDD590025D442 /* color.vert in Resources */ = {isa = PBXBuildFile; fileRef = E24975CB196BDD590025D442 /* color.vert */; };
-		E249761D196BDD590025D442 /* vertexColor.vert in Resources */ = {isa = PBXBuildFile; fileRef = E24975EE196BDD590025D442 /* vertexColor.vert */; };
 		E2497622196BDD9D0025D442 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497621196BDD9D0025D442 /* AppDelegate.mm */; };
 		E2497653196BE0190025D442 /* AssetCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497624196BE0190025D442 /* AssetCellView.mm */; };
 		E2497654196BE0190025D442 /* AssetCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497625196BE0190025D442 /* AssetCellView.xib */; };
@@ -2753,8 +2736,6 @@
 		E249769A196BE0310025D442 /* LoadingViewControllerPad.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */; };
 		E249769B196BE0310025D442 /* LoadingViewControllerPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */; };
 		E249769C196BE0310025D442 /* LoadingViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */; };
-		E252859A1B340319007C50F8 /* vertexColorSkin.vert in Resources */ = {isa = PBXBuildFile; fileRef = E25285991B340319007C50F8 /* vertexColorSkin.vert */; };
-		E252859B1B340319007C50F8 /* vertexColorSkin.vert in Resources */ = {isa = PBXBuildFile; fileRef = E25285991B340319007C50F8 /* vertexColorSkin.vert */; };
 		E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744119234C540036F8E3 /* OpenGLES.framework */; };
 		E262744419234C890036F8E3 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744319234C890036F8E3 /* GameKit.framework */; };
 		E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E27E71C41AD27A8200B5DE77 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -2762,7 +2743,6 @@
 		E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B31876EF8900966179 /* libsqlite3.dylib */; };
 		E2C4DB5A1A9F5FFC00F0AD12 /* light.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB591A9F5FFC00F0AD12 /* light.sgm */; };
 		E2C4DB5C1A9F602000F0AD12 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB5B1A9F602000F0AD12 /* light.png */; };
-		E2F556AA1AFA1D8300079118 /* vertexColorToon.frag in Resources */ = {isa = PBXBuildFile; fileRef = E2F556A91AFA1D8300079118 /* vertexColorToon.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -3291,7 +3271,6 @@
 		251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGEditorScene.cpp; sourceTree = "<group>"; };
 		251BF4801C2C20A300A5D41D /* RenderViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderViewManager.h; sourceTree = "<group>"; };
 		251BF4811C2C20A300A5D41D /* RenderViewManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderViewManager.mm; sourceTree = "<group>"; };
-		253B52801BDBBD9100E93208 /* commonL1.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL1.fsh; path = Resources/shaders/commonL1.fsh; sourceTree = "<group>"; };
 		253DE8421B545CCB00FE59FE /* PreviewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewHelper.h; sourceTree = "<group>"; };
 		253DE8431B545CCB00FE59FE /* PreviewHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreviewHelper.mm; sourceTree = "<group>"; };
 		2544C2731CCE2CF8009A3620 /* Mat4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mat4.cpp; sourceTree = "<group>"; };
@@ -3512,10 +3491,6 @@
 		25895B771B4F056700E833F8 /* AnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationItem.m; path = Core/AnimationItem.m; sourceTree = "<group>"; };
 		2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2_sim.a; path = FrameWorks/libFreetype2_sim.a; sourceTree = "<group>"; };
 		2593C41B1CB27A2300703DDE /* libFreetype2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2.a; path = FrameWorks/libFreetype2.a; sourceTree = "<group>"; };
-		259EE1461BDE081200C99784 /* commonL2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL2.fsh; path = Resources/shaders/commonL2.fsh; sourceTree = "<group>"; };
-		259EE1471BDE081200C99784 /* commonL3.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL3.fsh; path = Resources/shaders/commonL3.fsh; sourceTree = "<group>"; };
-		259EE1481BDE081200C99784 /* commonL4.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL4.fsh; path = Resources/shaders/commonL4.fsh; sourceTree = "<group>"; };
-		259EE1491BDE081200C99784 /* commonL5.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = commonL5.fsh; path = Resources/shaders/commonL5.fsh; sourceTree = "<group>"; };
 		259EE1521BDE342800C99784 /* dummy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dummy.png; path = Resources/images/dummy.png; sourceTree = "<group>"; };
 		25B5B15D1BE33EFB00AC2525 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		25B5B15E1BE33EFB00AC2525 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
@@ -3535,6 +3510,8 @@
 		25BBCB101C203D6A0039DA5C /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/imgs/Splash.png; sourceTree = "<group>"; };
 		25BC0FAE1C47666F00721B5E /* SGOBJManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGOBJManager.h; sourceTree = "<group>"; };
 		25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGOBJManager.cpp; sourceTree = "<group>"; };
+		25C05D3D1D536B9E008F06AA /* MeshRW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshRW.h; sourceTree = "<group>"; };
+		25C05D3E1D536BB4008F06AA /* MeshRW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshRW.cpp; sourceTree = "<group>"; };
 		25C90F3D1B3616B400D803DB /* bevel-on-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on-phone.png"; path = "Resources/imgs/bevel-on-phone.png"; sourceTree = "<group>"; };
 		25C90F3E1B3616B400D803DB /* bevel-on-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on-phone@2x.png"; path = "Resources/imgs/bevel-on-phone@2x.png"; sourceTree = "<group>"; };
 		25C90F3F1B3616B400D803DB /* bevel-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on.png"; path = "Resources/imgs/bevel-on.png"; sourceTree = "<group>"; };
@@ -4304,9 +4281,6 @@
 		6231CED71B1484AE00DCD585 /* depthPassSkin.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPassSkin.vsh; path = Resources/shaders/depthPassSkin.vsh; sourceTree = "<group>"; };
 		6231CED81B1484AE00DCD585 /* draw2dImage.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = draw2dImage.fsh; path = Resources/shaders/draw2dImage.fsh; sourceTree = "<group>"; };
 		6231CED91B1484AE00DCD585 /* draw2dImage.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = draw2dImage.vsh; path = Resources/shaders/draw2dImage.vsh; sourceTree = "<group>"; };
-		6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = GPUSkinShader.vsh; path = Resources/shaders/GPUSkinShader.vsh; sourceTree = "<group>"; };
-		6231CEDD1B1484AE00DCD585 /* shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.vsh; path = Resources/shaders/shader.vsh; sourceTree = "<group>"; };
-		6231CEDE1B1484AE00DCD585 /* toon.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = toon.fsh; path = Resources/shaders/toon.fsh; sourceTree = "<group>"; };
 		624641CC19939BB700CE8547 /* Animation-topviewBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Animation-topviewBg.png"; path = "Resources/imgs/Animation-topviewBg.png"; sourceTree = "<group>"; };
 		624641CD19939BB700CE8547 /* Scene-topviewBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Scene-topviewBg.png"; path = "Resources/imgs/Scene-topviewBg.png"; sourceTree = "<group>"; };
 		627A5F3C19ED342F00CB545C /* objfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = objfile.png; path = Resources/imgs/objfile.png; sourceTree = "<group>"; };
@@ -4704,7 +4678,6 @@
 		E24974DC196BDC8E0025D442 /* jointsData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = jointsData.json; path = Resources/jsonFiles/jointsData.json; sourceTree = "<group>"; };
 		E24975C2196BDD590025D442 /* color.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = color.frag; path = Resources/shaders/color.frag; sourceTree = "<group>"; };
 		E24975CB196BDD590025D442 /* color.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = color.vert; path = Resources/shaders/color.vert; sourceTree = "<group>"; };
-		E24975EE196BDD590025D442 /* vertexColor.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vertexColor.vert; path = Resources/shaders/vertexColor.vert; sourceTree = "<group>"; };
 		E2497620196BDD9D0025D442 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ui/AppDelegate.h; sourceTree = "<group>"; };
 		E2497621196BDD9D0025D442 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ui/AppDelegate.mm; sourceTree = "<group>"; };
 		E2497623196BE0190025D442 /* AssetCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetCellView.h; path = "ui/Popover Views/AssetCellView.h"; sourceTree = "<group>"; };
@@ -4727,14 +4700,12 @@
 		E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LoadingViewControllerPad.mm; path = ui/MainViews/LoadingViewControllerPad.mm; sourceTree = "<group>"; };
 		E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPad.xib; path = ui/MainViews/LoadingViewControllerPad.xib; sourceTree = "<group>"; };
 		E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPhone.xib; path = ui/MainViews/LoadingViewControllerPhone.xib; sourceTree = "<group>"; };
-		E25285991B340319007C50F8 /* vertexColorSkin.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vertexColorSkin.vert; path = Resources/shaders/vertexColorSkin.vert; sourceTree = "<group>"; };
 		E262744119234C540036F8E3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E262744319234C890036F8E3 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E27E71C41AD27A8200B5DE77 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		E2A343B019F123F8000EF7C2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		E2C4DB591A9F5FFC00F0AD12 /* light.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = light.sgm; path = Resources/mesh/light.sgm; sourceTree = "<group>"; };
 		E2C4DB5B1A9F602000F0AD12 /* light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light.png; path = Resources/images/light.png; sourceTree = "<group>"; };
-		E2F556A91AFA1D8300079118 /* vertexColorToon.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vertexColorToon.frag; path = Resources/shaders/vertexColorToon.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5542,6 +5513,7 @@
 				25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */,
 				25DE11501CAA98C90076F669 /* PhysicsHelper.cpp */,
 				25DD33FC1D4F6CFC0008778C /* MaterialProperty.cpp */,
+				25C05D3E1D536BB4008F06AA /* MeshRW.cpp */,
 			);
 			name = Iyan3DEngineFiles;
 			path = "../../Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles";
@@ -5599,6 +5571,7 @@
 				25BC0FAE1C47666F00721B5E /* SGOBJManager.h */,
 				25DE114F1CAA98AE0076F669 /* PhysicsHelper.h */,
 				25DD33FB1D4F67360008778C /* MaterialProperty.h */,
+				25C05D3D1D536B9E008F06AA /* MeshRW.h */,
 			);
 			path = HeaderFiles;
 			sourceTree = "<group>";
@@ -7542,17 +7515,6 @@
 				E22678851AC4557A001C8C66 /* colorskin.vert */,
 				3DA6EE8D1D48892700C842C6 /* colortext.vsh */,
 				E24975C2196BDD590025D442 /* color.frag */,
-				253B52801BDBBD9100E93208 /* commonL1.fsh */,
-				259EE1461BDE081200C99784 /* commonL2.fsh */,
-				259EE1471BDE081200C99784 /* commonL3.fsh */,
-				259EE1481BDE081200C99784 /* commonL4.fsh */,
-				259EE1491BDE081200C99784 /* commonL5.fsh */,
-				E2F556A91AFA1D8300079118 /* vertexColorToon.frag */,
-				E25285991B340319007C50F8 /* vertexColorSkin.vert */,
-				E24975EE196BDD590025D442 /* vertexColor.vert */,
-				6231CEDB1B1484AE00DCD585 /* GPUSkinShader.vsh */,
-				6231CEDD1B1484AE00DCD585 /* shader.vsh */,
-				6231CEDE1B1484AE00DCD585 /* toon.fsh */,
 				E211247C1AF20A0D00C23624 /* Shaders.metal */,
 				25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */,
 				2516DC0B1C5F90C70034145D /* particles.vsh */,
@@ -8078,7 +8040,6 @@
 				7FED9E811A8E0F780089869B /* AutoRigHelp1.png in Resources */,
 				7F31A7451AA4960300A6E7B1 /* new-img-phone@3x.png in Resources */,
 				01B4D06F1C2937000091E19B /* Undo_Pad.png in Resources */,
-				259EE14A1BDE081200C99784 /* commonL2.fsh in Resources */,
 				25EC6BA21C7F066B002CF5D2 /* wm11.png in Resources */,
 				7F0087911ADFC15400764DDE /* right-align@3x.png in Resources */,
 				01F872FE1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
@@ -8126,7 +8087,6 @@
 				25F80AEB1CFDB6E700CF331B /* fbFollow.png in Resources */,
 				6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */,
 				01ACD0E01C3D3AE20096AD14 /* Frame-Count-Display_Duration@2x.png in Resources */,
-				6231CEE71B1484AE00DCD585 /* shader.vsh in Resources */,
 				0169C4811C33ED5A00132FF6 /* popoverBgSimple.png in Resources */,
 				7F22BB5A1AC54C96006B44C6 /* right-align.png in Resources */,
 				7F31EDAA1A109550003B8A66 /* unlock.png in Resources */,
@@ -8279,7 +8239,6 @@
 				7FC9011E1A0A07860051B941 /* back-img@2x.png in Resources */,
 				7FC900D41A0A01470051B941 /* info-phone.png in Resources */,
 				629A7D5E19892072006B2A15 /* move-first.png in Resources */,
-				259EE14E1BDE081200C99784 /* commonL4.fsh in Resources */,
 				01B02CDA1C61CAB400C9102A /* Next-Frame_IPhone@3x.png in Resources */,
 				25EC3D491D365847006AE211 /* SegmentCell.xib in Resources */,
 				7F0087901ADFC15400764DDE /* right-align@2x.png in Resources */,
@@ -8346,7 +8305,6 @@
 				E249769B196BE0310025D442 /* LoadingViewControllerPad.xib in Resources */,
 				01B02CBA1C61CAB400C9102A /* Google_IPhone@3x.png in Resources */,
 				01F8730C1C3A6C4E009AA31E /* Redo_IPhone@2x.png in Resources */,
-				6231CEE81B1484AE00DCD585 /* toon.fsh in Resources */,
 				3DA6EE891D48807400C842C6 /* skin.vsh in Resources */,
 				7F31A7541AA4960300A6E7B1 /* topbarView-phone@3x.png in Resources */,
 				01ACD09F1C3CEEE70096AD14 /* No-Bevel_IPhone.png in Resources */,
@@ -8459,7 +8417,6 @@
 				25EC6C881C7F39DD002CF5D2 /* wm69.png in Resources */,
 				7F32A01F1AA1ACF7003FEFF9 /* playing.png in Resources */,
 				7F31A74C1AA4960300A6E7B1 /* render_video-phone@3x.png in Resources */,
-				259EE1501BDE081200C99784 /* commonL5.fsh in Resources */,
 				7FC900DB1A0A01470051B941 /* move-first-phone@2x.png in Resources */,
 				7FC901311A0A07860051B941 /* render_video@2x.png in Resources */,
 				01F8730E1C3A6C4E009AA31E /* Rotate_IPhone@2x.png in Resources */,
@@ -8500,7 +8457,6 @@
 				3DC418371C85DEBF00E4EF46 /* render2.png in Resources */,
 				25EC6CAE1C7F39DD002CF5D2 /* wm88.png in Resources */,
 				01E9E7581C5F6204002FCA03 /* property-icon@2x.png in Resources */,
-				E252859A1B340319007C50F8 /* vertexColorSkin.vert in Resources */,
 				7FC901671A0A54850051B941 /* Scene-topviewBg-phone.png in Resources */,
 				25EA8EDB1BD90506005DBA15 /* light_ipad.png in Resources */,
 				0169C47B1C33ED5A00132FF6 /* popoverBg-white@2x.png in Resources */,
@@ -8651,7 +8607,6 @@
 				01ACD0C61C3D1AAA0096AD14 /* Render-Preview-position_Right-Bottom.png in Resources */,
 				62FA5F471990DE95003B0893 /* stop-img.png in Resources */,
 				25EC6CE81C7F39DD002CF5D2 /* wm117.png in Resources */,
-				253B52811BDBBD9100E93208 /* commonL1.fsh in Resources */,
 				7F2104E61A7A0F13000E1C26 /* iphoneband@2x.png in Resources */,
 				01F872F81C3A6C4E009AA31E /* My-objects-Image_IPhone@2x.png in Resources */,
 				7F2104E41A7A0F13000E1C26 /* ipadband@2x.png in Resources */,
@@ -8676,7 +8631,6 @@
 				01B02CD41C61CAB400C9102A /* My-objects-Models_IPhone@3x.png in Resources */,
 				7FC524DC1B6F6F3600C5D26D /* Minimize-Full-screen-phone@3x.png in Resources */,
 				25E364491B38DDE10039A8C5 /* wheel2.png in Resources */,
-				259EE14C1BDE081200C99784 /* commonL3.fsh in Resources */,
 				25F748CF1D08085400FB0AFD /* gPlus_Pad@2x.png in Resources */,
 				01B4D0651C2937000091E19B /* Redo_Pad@2x.png in Resources */,
 				C8AA46F51C227D1000C4AB53 /* SceneSelectionControllerNew.xib in Resources */,
@@ -8706,7 +8660,6 @@
 				C8DF1FE11C242DBD00F689D6 /* close.png in Resources */,
 				01F872DE1C3A6C4E009AA31E /* Export-image_IPhone@2x.png in Resources */,
 				7F31A70B1AA469EA00A6E7B1 /* animate-img-phone@3x.png in Resources */,
-				6231CEE51B1484AE00DCD585 /* GPUSkinShader.vsh in Resources */,
 				7F00878D1ADFC15400764DDE /* justify@3x.png in Resources */,
 				7FC900E61A0A01470051B941 /* properties-img-phone.png in Resources */,
 				7F0C02D21A932CE000E2E09D /* youtubeUpload@2x.png in Resources */,
@@ -8811,7 +8764,6 @@
 				7F307CED1B58FBF10065BBC1 /* like-phone@3x.png in Resources */,
 				25EC6BB41C7F066B002CF5D2 /* wm2.png in Resources */,
 				01ACD0C81C3D1AAA0096AD14 /* Render-Preview-position_Right-Top.png in Resources */,
-				E249761D196BDD590025D442 /* vertexColor.vert in Resources */,
 				25034FE01D24F9960036F201 /* BeginViewPhone.xib in Resources */,
 				7FC901321A0A07860051B941 /* rotate-img@2x.png in Resources */,
 				7F31A74E1AA4960300A6E7B1 /* save-img-phone@3x.png in Resources */,
@@ -8892,7 +8844,6 @@
 				7FC9012C1A0A07860051B941 /* picture-img@2x.png in Resources */,
 				7FC900D31A0A01470051B941 /* home-phone@2x.png in Resources */,
 				62D28EE819DFDD75002F90AE /* topbarView.png in Resources */,
-				E2F556AA1AFA1D8300079118 /* vertexColorToon.frag in Resources */,
 				25034FE81D24F9960036F201 /* OnBoardVCPhone.xib in Resources */,
 				7FC524D91B6F6F3600C5D26D /* Full-screen@2x.png in Resources */,
 				01B4D04D1C2937000091E19B /* Move_Pad@2x.png in Resources */,
@@ -9065,11 +9016,8 @@
 				01B6C8BA1C3B94590050D2F9 /* AnimationSelectionCollectionViewCellPhone.xib in Resources */,
 				2567B0591B179CAD008D25E9 /* draw2dImage.vsh in Resources */,
 				25EC6CD51C7F39DD002CF5D2 /* wm107.png in Resources */,
-				2567B05B1B179CAD008D25E9 /* GPUSkinShader.vsh in Resources */,
 				25EC6BA71C7F066B002CF5D2 /* wm13.png in Resources */,
 				25EC6CAD1C7F39DD002CF5D2 /* wm87.png in Resources */,
-				2567B05D1B179CAD008D25E9 /* shader.vsh in Resources */,
-				2567B05E1B179CAD008D25E9 /* toon.fsh in Resources */,
 				E21A894E1B08A6E200435C87 /* clock.png in Resources */,
 				259EE1541BDE342800C99784 /* dummy.png in Resources */,
 				E21A894F1B08A6E200435C87 /* clock-phone.png in Resources */,
@@ -9293,7 +9241,6 @@
 				01B4D05A1C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
 				3D04EAF61C25830F00C18E1A /* No-Bevel.png in Resources */,
 				25EC6C2B1C7F39DD002CF5D2 /* wm22.png in Resources */,
-				259EE1511BDE081200C99784 /* commonL5.fsh in Resources */,
 				01F872A31C3A5A06009AA31E /* Play_IPhone.png in Resources */,
 				E206727C1B049AA6006DD2F7 /* model@2x.png in Resources */,
 				0184EC721C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png in Resources */,
@@ -9397,7 +9344,6 @@
 				E20672C61B049AA6006DD2F7 /* bonelimits.json in Resources */,
 				3D5F99211C4D04EB00DD47F5 /* Plane@2x.png in Resources */,
 				E20672CB1B049AA6006DD2F7 /* Envelop.sgr in Resources */,
-				253B52821BDBBD9100E93208 /* commonL1.fsh in Resources */,
 				01F872981C3A42EF009AA31E /* Scale_IPhone.png in Resources */,
 				250FEC891D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
 				25EC3D191D360CFF006AE211 /* Help_iphone@2x.png in Resources */,
@@ -9479,7 +9425,6 @@
 				3DC418381C85DEBF00E4EF46 /* render2.png in Resources */,
 				25F80AB11CFDAC9F00CF331B /* FollowUsVC.xib in Resources */,
 				01E9E7591C5F6204002FCA03 /* property-icon@2x.png in Resources */,
-				259EE14D1BDE081200C99784 /* commonL3.fsh in Resources */,
 				01F8726A1C3A42EF009AA31E /* Export-video_IPhone.png in Resources */,
 				0169C47C1C33ED5A00132FF6 /* popoverBg-white@2x.png in Resources */,
 				3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
@@ -9570,7 +9515,6 @@
 				01B02CC11C61CAB400C9102A /* Import-model_IPhone@3x.png in Resources */,
 				E20673261B049AA6006DD2F7 /* texts-phone@3x.png in Resources */,
 				E20673271B049AA6006DD2F7 /* render_image-phone.png in Resources */,
-				E252859B1B340319007C50F8 /* vertexColorSkin.vert in Resources */,
 				E206732A1B049AA6006DD2F7 /* animate-img-phone@2x.png in Resources */,
 				25EC6C751C7F39DD002CF5D2 /* wm59.png in Resources */,
 				E206732C1B049AA6006DD2F7 /* new-img@2x.png in Resources */,
@@ -9588,7 +9532,6 @@
 				01ACD0EF1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png in Resources */,
 				256F6B921BF6246300154622 /* json_internalarray.inl in Resources */,
 				250FEC4B1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
-				259EE14F1BDE081200C99784 /* commonL4.fsh in Resources */,
 				25D6719D1C46930900BE685D /* controls9.sgm in Resources */,
 				0169C4801C33ED5A00132FF6 /* popoverBg@2x.png in Resources */,
 				3DAEFFF11C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */,
@@ -9739,7 +9682,6 @@
 				25EC6C7F1C7F39DD002CF5D2 /* wm64.png in Resources */,
 				E20673AB1B049AA6006DD2F7 /* AutoRigHelp7.png in Resources */,
 				25F80B121CFDB6E700CF331B /* gplusFollowPhone@3x.png in Resources */,
-				259EE14B1BDE081200C99784 /* commonL2.fsh in Resources */,
 				25EC6C851C7F39DD002CF5D2 /* wm67.png in Resources */,
 				E20673AC1B049AA6006DD2F7 /* jointsData.json in Resources */,
 				E20673AD1B049AA6006DD2F7 /* MenuReverse.png in Resources */,
@@ -9804,7 +9746,6 @@
 				01B4D0601C2937000091E19B /* Options_Pad.png in Resources */,
 				25EA8EE01BD90506005DBA15 /* light_Phone.png in Resources */,
 				E20673CB1B049AA6006DD2F7 /* MenuReverse@2x.png in Resources */,
-				E20673CF1B049AA6006DD2F7 /* vertexColor.vert in Resources */,
 				E20673D01B049AA6006DD2F7 /* rotate-img@2x.png in Resources */,
 				E20673D11B049AA6006DD2F7 /* save-img-phone@3x.png in Resources */,
 				25EC6C531C7F39DD002CF5D2 /* wm42.png in Resources */,
@@ -9876,7 +9817,6 @@
 				E20674011B049AA6006DD2F7 /* topbarView.png in Resources */,
 				25034FE91D24F9960036F201 /* OnBoardVCPhone.xib in Resources */,
 				01B4D03E1C2937000091E19B /* Animation_Pad.png in Resources */,
-				E20674021B049AA6006DD2F7 /* vertexColorToon.frag in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10138,6 +10078,7 @@
 				256F6DA21BF624FB00154622 /* InstanceNode.cpp in Sources */,
 				3D3F591A1C2801C600713C79 /* TextFrameCell.m in Sources */,
 				256F6D841BF624FB00154622 /* MaterialManager.cpp in Sources */,
+				25C05D3F1D536BB4008F06AA /* MeshRW.cpp in Sources */,
 				256F6B8F1BF6246300154622 /* FileHelper.cpp in Sources */,
 				25DE10911CAA8D6D0076F669 /* btOptimizedBvh.cpp in Sources */,
 				256F6E821BF624FB00154622 /* pngerror.c in Sources */,
@@ -10401,6 +10342,7 @@
 				25F51F7E1C3291940021D3F5 /* SGCloudRenderingHelper.cpp in Sources */,
 				25DE10EE1CAA8D6D0076F669 /* btGeneric6DofSpring2Constraint.cpp in Sources */,
 				25DE11401CAA91310076F669 /* btSoftBodyConcaveCollisionAlgorithm.cpp in Sources */,
+				25C05D401D536BB4008F06AA /* MeshRW.cpp in Sources */,
 				E20670FE1B049AA6006DD2F7 /* ObjCellView.mm in Sources */,
 				25DE10261CAA8D6D0076F669 /* btDbvtBroadphase.cpp in Sources */,
 				3D58CD611C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */,

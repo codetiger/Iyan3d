@@ -7,9 +7,13 @@
 //
 
 #include "MaterialProperty.h"
+#include "FileHelper.h"
 
 MaterialProperty::MaterialProperty(NODE_TYPE nType)
 {
+    for(int i = 0; i < MAX_TEXTURE_PER_NODE; i ++)
+        textures[i] = NULL;
+    
     nodeType = nType;
     if(nodeType == NODE_CAMERA) {
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
@@ -36,7 +40,6 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
         addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
         addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
-        addOrUpdateProperty(FONT_SIZE, Vector4(20.0, 0, 0, 0), UNDEFINED, TYPE_NONE, "FontSize");
         addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "SpecificFloat");
         addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, TYPE_NONE, "Color");
         addOrUpdateProperty(ORIG_VERTEX_COLOR, Vector4(1.0), UNDEFINED, TYPE_NONE, "Color");
@@ -148,5 +151,113 @@ void MaterialProperty::checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > 
         if(property.fileName.length() > 5 || property.type == IMAGE_TYPE)
             propsMap.find(property.index)->second.fileName = property.fileName;
     }
+}
+
+bool MaterialProperty::IsPropertyExists(PROP_INDEX pIndex)
+{
+    if(props.find(pIndex) != props.end())
+        return true;
+    else {
+        std::map<PROP_INDEX, Property>::iterator pIt;
+        for(pIt = props.begin(); pIt != props.end(); pIt++) {
+            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end())
+                return true;
+        }
+        
+        return false;
+    }
+}
+
+void MaterialProperty::writeProperties(ofstream *filePointer)
+{
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(LIGHTING)) ? getProperty(LIGHTING).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(IS_VERTEX_COLOR)) ? getProperty(IS_VERTEX_COLOR).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(REFLECTION)) ? getProperty(REFLECTION).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(REFRACTION)) ? getProperty(REFRACTION).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(TEXTURE_SCALE)) ? getProperty(TEXTURE_SCALE).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(TEXTURE_SMOOTH) ? getProperty(TEXTURE_SMOOTH).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeVector4(filePointer, (IsPropertyExists(VERTEX_COLOR)) ? getProperty(VERTEX_COLOR).value : Vector4(-1.0));
+    FileHelper::writeVector4(filePointer, (IsPropertyExists(TEXT_COLOR)) ? getProperty(TEXT_COLOR).value : Vector4(-1.0));
+    FileHelper::writeVector4(filePointer, Vector4(-1.0));
+    FileHelper::writeVector4(filePointer, Vector4(-1.0));
+    FileHelper::writeString(filePointer, (IsPropertyExists(TEXTURE)) ? getProperty(TEXTURE).fileName : " ");
+    FileHelper::writeString(filePointer, (IsPropertyExists(BUMP_MAP)) ? getProperty(BUMP_MAP).fileName : " ");
+    FileHelper::writeString(filePointer, " ");
+    FileHelper::writeString(filePointer, " ");
+    FileHelper::writeString(filePointer, " ");
+    FileHelper::writeString(filePointer, " ");
+}
+
+void MaterialProperty::readProperties(ifstream *filePointer)
+{
+    if(IsPropertyExists(LIGHTING))
+        getProperty(LIGHTING).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(IS_VERTEX_COLOR)) {
+        getProperty(IS_VERTEX_COLOR).value.x = FileHelper::readFloat(filePointer);
+        printf("\n IS_VERTEX_COLOR %f ", getProperty(IS_VERTEX_COLOR).value.x);
+    } else
+        FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(REFLECTION))
+        getProperty(REFLECTION).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(REFRACTION))
+        getProperty(REFRACTION).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(SPECIFIC_FLOAT))
+        getProperty(SPECIFIC_FLOAT).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(TEXTURE_SCALE))
+        getProperty(TEXTURE_SCALE).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(VERTEX_COLOR))
+        getProperty(VERTEX_COLOR).value = FileHelper::readVector4(filePointer);
+    else
+        FileHelper::readVector4(filePointer);
+    
+    if(IsPropertyExists(TEXT_COLOR))
+        getProperty(TEXT_COLOR).value = FileHelper::readVector4(filePointer);
+    else
+        FileHelper::readVector4(filePointer);
+    
+    FileHelper::readVector4(filePointer);
+    FileHelper::readVector4(filePointer);
+    
+    if(IsPropertyExists(TEXTURE))
+        getProperty(TEXTURE).fileName = FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    else
+        FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    
+    if(IsPropertyExists(BUMP_MAP))
+        getProperty(BUMP_MAP).fileName = FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    else
+        FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    
+    FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
+    FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
 }
 

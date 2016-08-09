@@ -56,7 +56,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
         SGNode* sgNode = updatingScene->nodes[i];
 
         if(visibilityKeyindex != -1)
-            sgNode->addOrUpdateProperty(VISIBILITY, Vector4(sgNode->visibilityKeys[visibilityKeyindex].visibility), UNDEFINED);
+            sgNode->getProperty(VISIBILITY).value.x = sgNode->visibilityKeys[visibilityKeyindex].visibility;
 
         sgNode->setPositionOnNode(position, !updatingScene->isPlaying);
         
@@ -66,7 +66,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 updatingScene->updateDirectionLine();
 			#endif
             if(sgNode->scaleKeys.size() > 0) {
-                sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(scale.x, scale.y, scale.z, 0), MATERIAL_PROPS);
+                sgNode->getProperty(VERTEX_COLOR).value = Vector4(scale.x, scale.y, scale.z, 0);
                 lightChanged = true;
             }
         } else {
@@ -125,7 +125,7 @@ void SGSceneUpdater::setKeysForFrame(int frame)
             
             int visibilityKeyindex = KeyHelper::getKeyIndex(sgNode->visibilityKeys, frame);
             if(visibilityKeyindex != -1){
-                sgNode->addOrUpdateProperty(VISIBILITY, Vector4(sgNode->visibilityKeys[visibilityKeyindex].visibility), UNDEFINED);
+                sgNode->getProperty(VISIBILITY).value.x = sgNode->visibilityKeys[visibilityKeyindex].visibility;
             }
         }
         
@@ -363,7 +363,7 @@ void SGSceneUpdater::updateLightProperties(int frameId)
             else
                 ShaderManager::lightTypes.push_back(sgNode->getProperty(LIGHT_TYPE).value.x);
             
-            sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(lightColor.x, lightColor.y, lightColor.z, 1.0), MATERIAL_PROPS);
+            sgNode->getProperty(VERTEX_COLOR).value = Vector4(lightColor.x, lightColor.y, lightColor.z, 1.0);
             index++;
         }
     }

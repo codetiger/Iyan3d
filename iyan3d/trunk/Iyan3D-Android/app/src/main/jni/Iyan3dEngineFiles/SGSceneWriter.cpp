@@ -52,21 +52,30 @@ void SGSceneWriter::writeGlobalInfo(ofstream *filePointer)
     FileHelper::writeInt(filePointer, SGB_VERSION_CURRENT);
     FileHelper::writeInt(filePointer, 0); // dofNear
     FileHelper::writeInt(filePointer, 5000); // dofFar
-    FileHelper::writeInt(filePointer, 0); // Empty Data for future use
-    FileHelper::writeInt(filePointer, 0);
-    FileHelper::writeInt(filePointer, 0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeInt(filePointer, writingScene->totalFrames);
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].x);
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].y);
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].z);
     FileHelper::writeFloat(filePointer,ShaderManager::shadowDensity);
     FileHelper::writeFloat(filePointer, writingScene->cameraFOV);
+    
+    //SCENE PROPERTIES
+    
+    FileHelper::writeFloat(filePointer, writingScene->shaderMGR->getProperty(AMBIENT_LIGHT).value.x);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeVector4(filePointer, Vector4(-1.0));
+    FileHelper::writeVector4(filePointer, Vector4(-1.0));
+    FileHelper::writeVector4(filePointer, Vector4(-1.0));
+    FileHelper::writeVector4(filePointer, Vector4(-1.0));
+    FileHelper::writeString(filePointer, writingScene->shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName);
+    FileHelper::writeString(filePointer, " ");
+    FileHelper::writeString(filePointer, " ");
+    FileHelper::writeString(filePointer, " ");
+    FileHelper::writeString(filePointer, " ");
+    
     FileHelper::writeInt(filePointer, (int)writingScene->nodes.size());
 }
 
@@ -129,3 +138,4 @@ void SGSceneWriter::saveSceneDataAssImp(std::string *filePath)
     if(r != AI_SUCCESS)
         printf("Error in Loading: %s\n", exporter->GetErrorString());
 }
+

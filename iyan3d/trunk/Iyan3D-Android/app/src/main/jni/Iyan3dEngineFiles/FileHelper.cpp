@@ -82,7 +82,6 @@ std::string FileHelper::readString(ifstream *file,int sgbVersion)
     dataToRead[stringSize] = '\0';
     std::string stringRead(dataToRead);
     seekPosition += stringSize;
-    
     return stringRead;
 }
 
@@ -146,6 +145,63 @@ void FileHelper::writeWString(ofstream *file , std::wstring data)
     for (int i = 0; i < len; i++) {
         writeShort(file, (short)data[i]);
     }
+}
+
+void FileHelper::writeVector4(ofstream *file, Vector4 value)
+{
+    writeFloat(file, value.x);
+    writeFloat(file, value.y);
+    writeFloat(file, value.z);
+    writeFloat(file, value.w);
+}
+
+void FileHelper::writeVector3(ofstream *file, Vector3 value)
+{
+    writeFloat(file, value.x);
+    writeFloat(file, value.y);
+    writeFloat(file, value.z);
+}
+
+void FileHelper::writeVector2(ofstream *file, Vector2 value)
+{
+    writeFloat(file, value.x);
+    writeFloat(file, value.y);
+}
+
+
+Vector4 FileHelper::readVector4(ifstream *file)
+{
+    Vector4 value;
+    value.x = readFloat(file);
+    value.y = readFloat(file);
+    value.z = readFloat(file);
+    value.w = readFloat(file);
+    
+    return value;
+}
+
+Vector3 FileHelper::readVector3(ifstream *file)
+{
+    Vector3 value;
+    value.x = readFloat(file);
+    value.y = readFloat(file);
+    value.z = readFloat(file);
+    
+    return value;
+}
+
+Vector2 FileHelper::readVector2(ifstream *file)
+{
+    Vector2 value;
+    value.x = readFloat(file);
+    value.y = readFloat(file);
+    
+    return value;
+}
+
+std::string FileHelper::getTexturesDirectory()
+{
+    return FileHelper::getDocumentsDirectory() + "Resources/Textures/";
 }
 
 std::string FileHelper::getCachesDirectory()

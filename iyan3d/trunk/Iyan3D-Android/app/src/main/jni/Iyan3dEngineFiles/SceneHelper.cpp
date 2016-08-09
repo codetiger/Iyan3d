@@ -80,8 +80,8 @@ SGNode* SceneHelper::createCircle(SceneManager *smgr)
     rotationCircle->node->setID(CIRCLE_NODE_ID);
     rotationCircle->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     Vector4 vColor = Vector4(0.0, 1.0, 0.0, 1.0);
-    rotationCircle->addOrUpdateProperty(VERTEX_COLOR, vColor, MATERIAL_PROPS);
-    rotationCircle->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED);
+    rotationCircle->getProperty(VERTEX_COLOR).value = vColor;
+    rotationCircle->getProperty(TRANSPARENCY).value.x = 1.0;
     return rotationCircle;
 }
 
@@ -94,8 +94,8 @@ SGNode* SceneHelper::createLightCircles(SceneManager *smgr)
     circles->node->setID(LIGHT_CIRCLES);
     circles->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     Vector4 vColor = Vector4(1.0, 1.0, 0.0, 1.0);
-    circles->addOrUpdateProperty(VERTEX_COLOR, vColor, MATERIAL_PROPS);
-    circles->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED);
+    circles->getProperty(VERTEX_COLOR).value = vColor;
+    circles->getProperty(TRANSPARENCY).value.x = 1.0;
 
     circles->node->setVisible(false);
     return circles;
@@ -132,11 +132,11 @@ SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
     node->type = NODE_TYPE_LINES;
     node->drawMode = DRAW_MODE_LINES;
     gridLines->node = node;
-    gridLines->addOrUpdateProperty(LIGHTING, Vector4(false, 0.0, 0.0, 0.0), UNDEFINED);
+    gridLines->getProperty(LIGHTING).value.x = false;
     gridLines->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     Vector4 vColor = Vector4(1.0, 1.0, 0.0, 1.0);
-    gridLines->addOrUpdateProperty(VERTEX_COLOR, vColor, MATERIAL_PROPS);
-    gridLines->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED);
+    gridLines->getProperty(VERTEX_COLOR).value = vColor;
+    gridLines->getProperty(TRANSPARENCY).value.x = 1.0;
     gridLines->node->setVisible(false);
     return gridLines;
 }
@@ -197,11 +197,11 @@ SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, 
     node->type = NODE_TYPE_LINES;
     node->drawMode = DRAW_MODE_LINES;
     gridLines->node = node;
-    gridLines->addOrUpdateProperty(LIGHTING, Vector4(false, 0.0, 0.0, 0.0), UNDEFINED);
+    gridLines->getProperty(LIGHTING).value.x = false;
     gridLines->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     Vector4 vColor = Vector4(color, 1.0);
-    gridLines->addOrUpdateProperty(VERTEX_COLOR, vColor, MATERIAL_PROPS);
-    gridLines->addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED);
+    gridLines->getProperty(VERTEX_COLOR).value = vColor;
+    gridLines->getProperty(TRANSPARENCY).value.x = 1.0;
     
     return gridLines;
 }
@@ -225,7 +225,7 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
             return sceneControls;
         }
         sgNode->node = ctrlNode;
-        sgNode->addOrUpdateProperty(LIGHTING, Vector4(false, 0, 0, 0), UNDEFINED);
+        sgNode->getProperty(LIGHTING).value.x = false;
         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         
         Texture *nodeTex = smgr->loadTexture("Dummy Texture", constants::BundlePath + "/dummy.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
@@ -257,9 +257,9 @@ SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
     }
     sgNode->node = indNode;
     
-    sgNode->addOrUpdateProperty(LIGHTING, Vector4(false, 0, 0, 0), UNDEFINED);
+    sgNode->getProperty(LIGHTING).value.x = false;// Vector4(false, 0, 0, 0), UNDEFINED);
     Vector4 vColor = Vector4(1.0, 1.0, 0.3, 1.0);
-    sgNode->addOrUpdateProperty(VERTEX_COLOR, vColor, MATERIAL_PROPS);
+    sgNode->getProperty(VERTEX_COLOR).value = vColor;
     
     sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     sgNode->node->setID(FORCE_INDICATOR_ID);

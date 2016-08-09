@@ -4,6 +4,7 @@
 #include "HeaderFiles/SGNode.h"
 #include "HeaderFiles/ShaderManager.h"
 #include "TextMesh3d.h"
+#include "MeshRW.h"
 
 #ifdef ANDROID
 #include "../opengl.h"
@@ -53,6 +54,7 @@ void SGNode::setPropertiesOfNode()
         
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
         addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(300.0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Distance");
+        addOrUpdateProperty(FONT_SIZE, Vector4(20.0, 0, 0, 0), UNDEFINED, TYPE_NONE, "FontSize");
         
         if(type != NODE_RIG && type != NODE_TEXT_SKIN) {
             addOrUpdateProperty(HAS_PHYSICS, Vector4(0, 0, 0, 0), UNDEFINED, PARENT_TYPE, "Physics Properties", "PROPERTIES");
@@ -83,7 +85,7 @@ SGNode::~SGNode(){
     node.reset();
 }
 
-shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE objectType,SceneManager *smgr, std::wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
+shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string texturePath,NODE_TYPE objectType,SceneManager *smgr, std::wstring objectName,int width,int height, Vector4 objSpecificColor , string &specificFilePath)
 {
     shared_ptr<Node> node;
     switch (objectType){
@@ -92,92 +94,92 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/camera.sgm",smgr->device);
             node = smgr->createNodeFromMesh(mesh,"setUniforms");
             node->setPosition(Vector3(RENDER_CAM_INIT_POS_X,RENDER_CAM_INIT_POS_Y,RENDER_CAM_INIT_POS_Z));
-            addOrUpdateProperty(LIGHTING, Vector4(0, 0, 0, 0), UNDEFINED);
+            getProperty(LIGHTING).value.x = false;
             node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
             break;
         }
         case NODE_LIGHT:
         {
             node = initLightSceneNode(smgr);
-            addOrUpdateProperty(VERTEX_COLOR, DEFAULT_LIGHT_COLOR, MATERIAL_PROPS);
-            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(DEFAULT_FADE_DISTANCE, 0, 0, 0), UNDEFINED);
+            getProperty(VERTEX_COLOR).value = DEFAULT_LIGHT_COLOR;
+            getProperty(SPECIFIC_FLOAT).value.x = DEFAULT_FADE_DISTANCE;
             break;
         }
         case NODE_OBJ:
         case NODE_SGM:
         {
-            textureName = texturePath;
-            oriTextureName = textureName;
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
-            addOrUpdateProperty(ORIG_VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), UNDEFINED);
-            node = loadSGMandOBJ(assetId, objectType, smgr);
+            getProperty(TEXTURE).fileName = texturePath;
+            oriTextureName = texturePath;
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            node = loadSGMandOBJ(meshPath, objectType, smgr);
             break;
         }
         case NODE_TEXT:
         {
-            textureName = texturePath;
-            oriTextureName = textureName;
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
-            addOrUpdateProperty(ORIG_VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), UNDEFINED);
-            addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED);
+            getProperty(TEXTURE).fileName = texturePath;
+            oriTextureName = texturePath;
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(TRANSPARENCY).value = Vector4(1.0, 0.0, 0.0, 0.0);
 
             node = load3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
-            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(height, 0, 0, 0), UNDEFINED);
-            addOrUpdateProperty(FONT_SIZE, Vector4(width, 0, 0, 0), UNDEFINED);
+            getProperty(SPECIFIC_FLOAT).value = Vector4(height, 0, 0, 0);
+            getProperty(FONT_SIZE).value = Vector4(width, 0, 0, 0);
             optionalFilePath = specificFilePath;
             break;
         }
         case NODE_RIG:
         {
-            textureName = texturePath;
-            oriTextureName = textureName;
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
-            addOrUpdateProperty(ORIG_VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), UNDEFINED);
-            node = loadSGR(assetId,objectType,smgr);
+            getProperty(TEXTURE).fileName = texturePath;
+            oriTextureName = texturePath;
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            node = loadSGR(meshPath, objectType,smgr);
             isMirrorEnabled = joints.size() == HUMAN_JOINTS_SIZE ? true : false;
             break;
         }
         case NODE_IMAGE:
         {
             float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
-            textureName = ConversionHelper::getStringForWString(objectName);
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
+            getProperty(TEXTURE).fileName = ConversionHelper::getStringForWString(objectName);
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
             node = loadImage(ConversionHelper::getStringForWString(objectName) + ".png", smgr , aspectRatio);
             break;
         }
         case NODE_VIDEO:
         {
             float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
-            textureName = ConversionHelper::getStringForWString(objectName);
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(TEXTURE).fileName = ConversionHelper::getStringForWString(objectName);
             node = loadVideo(ConversionHelper::getStringForWString(objectName), smgr , aspectRatio);
             break;
         }
         case NODE_TEXT_SKIN:
         {
             // 'width' here is font size and 'height' is bevel value
-            textureName = texturePath;
-            oriTextureName = textureName;
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
-            addOrUpdateProperty(ORIG_VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), UNDEFINED);
+            getProperty(TEXTURE).fileName = texturePath;
+            oriTextureName = texturePath;
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
             node = loadSkin3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
-            addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0, 0, 0), UNDEFINED);
-            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(width, 0, 0, 0), UNDEFINED);
+            getProperty(TRANSPARENCY).value.x = 1.0; // Vector4(1.0, 0, 0, 0), UNDEFINED);
+            getProperty(SPECIFIC_FLOAT).value.x = width; // Vector4(width, 0, 0, 0), UNDEFINED);
             optionalFilePath = specificFilePath;
-            addOrUpdateProperty(FONT_SIZE, Vector4(width, 0, 0, 0), UNDEFINED);
+            getProperty(FONT_SIZE).value.x = width; // Vector4(width, 0, 0, 0), UNDEFINED);
             break;
         }
         case NODE_ADDITIONAL_LIGHT:
         {
             this->assetId = assetId;
             node = addAdittionalLight(smgr, width, Vector3(objSpecificColor.x,objSpecificColor.y,objSpecificColor.z) , height);
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0), MATERIAL_PROPS);
-            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4((height == 0) ? 50.0 : height, 0, 0, 0), UNDEFINED);
+            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
+            getProperty(SPECIFIC_FLOAT).value.x = (height == 0) ? 50.0 : height;
             break;
         }
         case NODE_PARTICLES:
         {
-            textureName = to_string(assetId) + "-cm";
+            getProperty(TEXTURE).fileName = to_string(assetId) + "-cm";
 
             string meshPath = "";
             string texPath = "";
@@ -205,7 +207,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
             Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
             node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-            addOrUpdateProperty(TRANSPARENCY, Vector4(0.7, 0, 0, 0), UNDEFINED);
+            getProperty(TRANSPARENCY).value.x = 0.7 ;// Vector4(0.7, 0, 0, 0), UNDEFINED);
             break;
         }
         default:
@@ -302,31 +304,14 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
         node->getMeshCache()->fixOrientation();
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_TEXT_SKIN));
-    string textureFileName = "";
-    textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
-    if(!checkFileExists(textureFileName)){
-    #ifndef ANDROID
-        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-        if(!checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-            if(!checkFileExists(textureFileName))
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
-        }
-         #elif ANDROID
-                            textureFileName = constants::BundlePath+"/"+textureName+".png";
-                            if(!checkFileExists(textureFileName))
-                                textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
-                        #endif
-    }
 
-    printf("Texture File Path : %s " , textureFileName.c_str());
-    
-    if(textureName != "" && checkFileExists(textureFileName)) {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(0, 0, 0, 0), MATERIAL_PROPS);
-        Texture *nodeTex = smgr->loadTexture(textureFileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+    std::string textureName = getProperty(TEXTURE).fileName;
+    if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
+        getProperty(IS_VERTEX_COLOR).value.x = false;
+        Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     } else
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(1, 0, 0, 0), MATERIAL_PROPS);
+        getProperty(IS_VERTEX_COLOR).value.x = true;
     
     return node;
 }
@@ -380,32 +365,19 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     if(mesh == NULL)
         return shared_ptr<Node>();
 
+    std:string textureName = getProperty(TEXTURE).fileName;
+    
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh, "setUniforms",MESH_TYPE_LITE);
     node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-    string textureFileName = "";
-    textureFileName = FileHelper::getDocumentsDirectory() +"Resources/Textures/"+ textureName + ".png";
-    if(!checkFileExists(textureFileName)){
-    #ifndef ANDROID
-        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-        if(!checkFileExists(textureFileName)){
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-            if(!checkFileExists(textureFileName))
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
-        }
-         #elif ANDROID
-                    textureFileName = constants::BundlePath+"/"+textureName+".png";
-                    if(!checkFileExists(textureFileName))
-                        textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
-                #endif
-    }
-    if(textureName != "" && checkFileExists(textureFileName)) {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(0, 0, 0, 0), MATERIAL_PROPS);
-        Texture *nodeTex = smgr->loadTexture(textureFileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+
+    if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
+        getProperty(IS_VERTEX_COLOR).value.x = false;
+        Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        addOrUpdateProperty(TEXTURE, getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", textureFileName);
+        getProperty(TEXTURE).fileName = textureName;
     } else {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(1, 0, 0, 0), MATERIAL_PROPS);
-        addOrUpdateProperty(TEXTURE, getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
+        getProperty(IS_VERTEX_COLOR).value.x = true;
+        getProperty(TEXTURE).fileName = "";
     }
     
     node->updateBoundingBox();
@@ -447,7 +419,7 @@ void SGNode::setParticlesData(shared_ptr<Node> particleNode, Json::Value pData)
 
 }
 
-shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId, NODE_TYPE objectType, SceneManager *smgr)
+shared_ptr<Node> SGNode::loadSGMandOBJ(std::string meshPath, NODE_TYPE objectType, SceneManager *smgr)
 {
     string StoragePath;
     OBJMeshFileLoader *objLoader;
@@ -466,50 +438,28 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId, NODE_TYPE objectType, SceneM
     StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
 
-    string meshPath = StoragePath + to_string(assetId) + fileExt;
-    string textureFileName = StoragePath + textureName+".png";
     
-    if(!checkFileExists(meshPath)) {
-#ifdef IOS
-        meshPath = FileHelper::getDocumentsDirectory() + to_string(assetId) + fileExt;
-        if(!checkFileExists(meshPath)){
-            meshPath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + to_string(assetId) + fileExt;
-        }
-#else
-            meshPath = constants::BundlePath+"/"+to_string(assetId)+fileExt;
-#endif
         if(!checkFileExists(meshPath))
             return shared_ptr<Node>();
-    }
-    if(!checkFileExists(textureFileName)){
-        #ifdef IOS
-        textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-        if(!checkFileExists(textureFileName))
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-        if(!checkFileExists(textureFileName))
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
-        #elif ANDROID
-            textureFileName = constants::BundlePath+"/"+textureName+".png";
-            if(!checkFileExists(textureFileName))
-                textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
-        #endif
-    }
-
+    
+    std::string textureName = getProperty(TEXTURE).fileName;
+    
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
     
     node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
 
-    if(textureName != "" && checkFileExists(textureFileName))
+    printf(" \n Texture Path %s ", textureName.c_str());
+    if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png"))
     {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(0, 0, 0, 0), MATERIAL_PROPS);
-        Texture *nodeTex = smgr->loadTexture(textureFileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+        getProperty(IS_VERTEX_COLOR).value.x = false;
+        Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        addOrUpdateProperty(TEXTURE, getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", textureFileName);
+        getProperty(TEXTURE).fileName = textureName;
     } else {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(1, 0, 0, 0), MATERIAL_PROPS);
-        addOrUpdateProperty(TEXTURE, getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
+        getProperty(IS_VERTEX_COLOR).value.x = true;
+        getProperty(TEXTURE).fileName = "";
     }
     
     if(objectType == NODE_OBJ && objLoader != NULL)
@@ -529,43 +479,13 @@ bool SGNode::checkFileExists(std::string fileName)
     }
 }
 
-shared_ptr<Node> SGNode::loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr)
+shared_ptr<Node> SGNode::loadSGR(std::string meshPath,NODE_TYPE objectType,SceneManager *smgr)
 {
-string StoragePath;
-
-#ifdef IOS
-if (assetId >= 40000 && assetId < 50000)
-StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Rigs/";
-else
-StoragePath = constants::CachesStoragePath + "/";
-#endif
-
-#ifdef ANDROID
-StoragePath = constants::DocumentsStoragePath + "/mesh/";
-#endif
-    
-    string meshPath = StoragePath + to_string(assetId) + ".sgr";
-    string textureFileName = StoragePath + textureName+".png";
     if (!checkFileExists(meshPath)) {
         return shared_ptr<Node>();
     }
-    
-    if(!checkFileExists(textureFileName)){
-        #ifndef ANDROID
-            textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-            if(!checkFileExists(textureFileName)){
-                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
-                if(!checkFileExists(textureFileName))
-                    textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureName+".png";
-                    if(!checkFileExists(textureFileName))
-                        textureFileName = constants::CachesStoragePath + "/"+textureName+".png";
-            }
-         #elif ANDROID
-                    textureFileName = constants::BundlePath+"/"+textureName+".png";
-                    if(!checkFileExists(textureFileName))
-                        textureFileName = constants::DocumentsStoragePath+"/importedImages/"+textureName+".png";
-            #endif
-    }
+
+    std::string textureName = getProperty(TEXTURE).fileName;
     
     AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);
     setSkinningData((SkinMesh*)mesh);
@@ -583,14 +503,14 @@ StoragePath = constants::DocumentsStoragePath + "/mesh/";
     }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN),true);
     
-    if(textureName != "" && checkFileExists(textureFileName)) {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(0, 0, 0, 0), MATERIAL_PROPS);
-        Texture *nodeTex = smgr->loadTexture(textureFileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+    if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
+        getProperty(IS_VERTEX_COLOR).value.x = false;
+        Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        addOrUpdateProperty(TEXTURE, getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", textureFileName);
+        getProperty(TEXTURE).fileName = textureName;
     } else {
-        addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(1, 0, 0, 0), MATERIAL_PROPS);
-        addOrUpdateProperty(TEXTURE, getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
+        getProperty(IS_VERTEX_COLOR).value.x = true;
+        getProperty(TEXTURE).fileName = "";
     }
     
     return node;
@@ -662,7 +582,7 @@ textureFileName=(path).c_str();
 #else
 sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
 #endif
-    Texture *nodeTex = smgr->loadTexture(textureFileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+    Texture *nodeTex = smgr->loadTexture(textureName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     planeNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
@@ -698,7 +618,7 @@ shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
     lightNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     lightNode->setScale(Vector3(3.0));
     //lightNode->setScale(Vector3(4.0));
-    addOrUpdateProperty(LIGHTING, Vector4(0, 0, 0, 0), UNDEFINED);
+    getProperty(LIGHTING).value.x = false; // Vector4(0, 0, 0, 0), UNDEFINED);
     return lightNode;
 }
 
@@ -836,7 +756,7 @@ void SGNode::setInitialKeyValues(int actionType)
             if((assetId - LIGHT_STARTING_ID) % 4 == 0){
                 red = green = blue = 1.0;
             }
-            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(distance, 0, 0, 0), UNDEFINED);
+            getProperty(SPECIFIC_FLOAT).value.x = distance; // Vector4(distance, 0, 0, 0), UNDEFINED);
 
             rotationKey.rotation = Quaternion(0.8, 0.09, 0.3, -0.5);
             
@@ -899,7 +819,7 @@ void SGNode::setInitialKeyValues(int actionType)
                         scaleKey.id = rotationKeys[i].id;
                         KeyHelper::addKey(scaleKeys, scaleKey);
                     }
-                    addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(rotationKeys[0].rotation.w, 0, 0, 0), UNDEFINED);
+                    getProperty(SPECIFIC_FLOAT).value.x = rotationKeys[0].rotation.w;
                 }
                 rotationKeys.clear();
                 
@@ -911,12 +831,12 @@ void SGNode::setInitialKeyValues(int actionType)
                 rotationKey.rotation = MathHelper::RotateNodeInWorld(lineRot, delta);
                 rotationKey.id = 0;
                 KeyHelper::addKey(rotationKeys, rotationKey);
-                addOrUpdateProperty(LIGHT_TYPE, Vector4(0, 0, 0, 0), UNDEFINED);
+                getProperty(LIGHT_TYPE).value.x = false; // Vector4(0, 0, 0, 0), UNDEFINED);
                 
             }
             
             if(getProperty(SPECIFIC_FLOAT).value.x == 0.0)
-                addOrUpdateProperty(SPECIFIC_FLOAT, Vector4((type == NODE_LIGHT) ? 300.0 : 50.0, 0, 0, 0), UNDEFINED);
+                getProperty(SPECIFIC_FLOAT).value.x = (type == NODE_LIGHT) ? 300.0 : 50.0;
         }
         
         for (int i = 0; i < jointCount; i++) {
@@ -1175,18 +1095,94 @@ int toString(const char a[])
     return n;
 }
 
-void SGNode::readData(ifstream *filePointer, int &origIndex)
+Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
+{
+    assetId = FileHelper::readInt(filePointer);
+    int sgbVersion = FileHelper::readInt(filePointer);
+    if(sgbVersion < SGB_VERSION_CURRENT)
+        legacyReadData(filePointer, sgbVersion, origIndex);
+    
+    type = (NODE_TYPE)FileHelper::readInt(filePointer);
+    setPropertiesOfNode();
+    (IsPropertyExists(HAS_PHYSICS)) ? getProperty(HAS_PHYSICS).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(PHYSICS_KIND)) ? getProperty(PHYSICS_KIND).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(WEIGHT)) ? getProperty(WEIGHT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(FORCE_MAGNITUDE)) ? getProperty(FORCE_MAGNITUDE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(IS_SOFT)) ? getProperty(IS_SOFT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(LIGHT_TYPE)) ? getProperty(LIGHT_TYPE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(SPECIFIC_FLOAT)) ? getProperty(SPECIFIC_FLOAT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    (IsPropertyExists(FONT_SIZE)) ? getProperty(FONT_SIZE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(FORCE_DIRECTION))
+        (getProperty(FORCE_DIRECTION).value = Vector4(FileHelper::readVector3(filePointer), 0.0));
+    else
+        FileHelper::readVector3(filePointer);
+ 
+    if(IsPropertyExists(VERTEX_COLOR)) {
+        (getProperty(VERTEX_COLOR).value = Vector4(FileHelper::readVector3(filePointer), 0.0));
+        Vector4 value = getProperty(VERTEX_COLOR).value;
+        printf("\n Light Color %f %f %f %f ", value.x, value.y, value.z, value.w);
+    } else
+        FileHelper::readVector3(filePointer);
+    
+    
+    FileHelper::readVector3(filePointer);
+    FileHelper::readVector3(filePointer);
+    FileHelper::readVector3(filePointer);
+    FileHelper::readVector3(filePointer);
+    
+    int materialPropsCount = FileHelper::readInt(filePointer);
+    
+    for(int i = 0; i < materialPropsCount; i++) {
+        MaterialProperty* mP = new MaterialProperty(type);
+        mP->readProperties(filePointer);
+        materialProps.push_back(mP);
+    }
+    
+    Mesh * mesh = NULL;
+    if(type != NODE_CAMERA && type != NODE_LIGHT) {
+        MESH_TYPE meshType = (MESH_TYPE)FileHelper::readInt(filePointer);
+        if(meshType == MESH_TYPE_LITE) {
+            mesh = MeshRW::readMeshData(filePointer);
+        } else {
+            mesh = MeshRW::readSkinMeshData(filePointer);
+        }
+    }
+    
+    origIndex = FileHelper::readInt(filePointer);
+    isRigged = FileHelper::readBool(filePointer);
+    name = FileHelper::readWString(filePointer);
+    int keysCount = FileHelper::readInt(filePointer);
+    KeyHelper::readData(filePointer,keysCount,positionKeys, rotationKeys, scaleKeys, visibilityKeys);
+    joints.clear();
+    int jointsCount = FileHelper::readInt(filePointer);
+    for(int i = 0; i < jointsCount; i++)
+    {
+        SGJoint *joint = new SGJoint();
+        joint->readData(filePointer);
+        joints.push_back(joint);
+    }
+    
+    return mesh;
+}
+
+void SGNode::legacyReadData(ifstream *filePointer, int sgbVersion, int &origIndex)
 {
     joints.clear();
-    assetId = FileHelper::readInt(filePointer);
-    
-    int sgbVersion = FileHelper::readInt(filePointer);
+//    assetId = FileHelper::readInt(filePointer);
+//    
+//    int sgbVersion = FileHelper::readInt(filePointer);
     int hasPhysics, physicsType, lightType, isSoft;
     float weight, forceMagnitude;
     Vector4 forceDir;
     float specificFloat;
     
-    if(sgbVersion == SGB_VERSION_CURRENT) { // Empty Data for future use
+    if(sgbVersion == SGB_VERSION_3) { // Empty Data for future use
         hasPhysics = FileHelper::readInt(filePointer);
         physicsType = FileHelper::readInt(filePointer);
         origIndex = FileHelper::readInt(filePointer);
@@ -1207,34 +1203,36 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
         FileHelper::readFloat(filePointer);
         FileHelper::readFloat(filePointer);
     }
+    
     if(sgbVersion >= SGB_VERSION_2)
-        textureName = FileHelper::readString(filePointer,sgbVersion);
+        getProperty(TEXTURE).fileName = FileHelper::readString(filePointer,sgbVersion);
     else
-        textureName = to_string(assetId)+"-cm";
+        getProperty(TEXTURE).fileName = to_string(assetId)+"-cm";
+    
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     materialProps.push_back(new MaterialProperty(type));
     setPropertiesOfNode();
-    if(sgbVersion == SGB_VERSION_CURRENT) {
-        addOrUpdateProperty(HAS_PHYSICS, Vector4(hasPhysics, 0, 0, 0), UNDEFINED);
-        addOrUpdateProperty(PHYSICS_KIND, Vector4((physicsType < PHYSICS_CONST) ? physicsType + PHYSICS_CONST : physicsType), HAS_PHYSICS);
+    if(sgbVersion == SGB_VERSION_3) {
+        getProperty(HAS_PHYSICS).value.x = hasPhysics; // Vector4(hasPhysics, 0, 0, 0), UNDEFINED);
+        getProperty(PHYSICS_KIND).value.x = (physicsType < PHYSICS_CONST) ? physicsType + PHYSICS_CONST : physicsType;
         std::map<PROP_INDEX, Property> physicsProps = getProperty(HAS_PHYSICS).subProps;
 
         for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
-            addOrUpdateProperty((PROP_INDEX)pI, Vector4((physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0), HAS_PHYSICS);
+            getProperty((PROP_INDEX)pI).value.x = (physicsProps[PHYSICS_KIND].value.x == pI);
         
         if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
-            addOrUpdateProperty(LIGHT_TYPE, Vector4(lightType - 1, 0, 0, 0), UNDEFINED);
-        addOrUpdateProperty(WEIGHT, Vector4(weight, 0, 0, 0), HAS_PHYSICS);
-        addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(forceMagnitude, 0, 0, true), HAS_PHYSICS);
-        addOrUpdateProperty(FORCE_DIRECTION, forceDir, HAS_PHYSICS);
-        addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(specificFloat, 0, 0, 0), UNDEFINED);
-        addOrUpdateProperty(IS_SOFT, Vector4(isSoft), HAS_PHYSICS);
+            getProperty(LIGHT_TYPE).value.x = lightType - 1; // Vector4(lightType - 1, 0, 0, 0), UNDEFINED);
+        getProperty(WEIGHT).value.x = weight; // Vector4(weight, 0, 0, 0), HAS_PHYSICS);
+        getProperty(FORCE_MAGNITUDE).value.x = forceMagnitude; // Vector4(forceMagnitude, 0, 0, true), HAS_PHYSICS);
+        getProperty(FORCE_DIRECTION).value = forceDir;
+        getProperty(SPECIFIC_FLOAT).value.x = specificFloat; // Vector4(specificFloat, 0, 0, 0), UNDEFINED);
+        getProperty(IS_SOFT).value.x = isSoft; // Vector4(isSoft), HAS_PHYSICS);
     }
 
     isRigged = FileHelper::readBool(filePointer);
-    addOrUpdateProperty(LIGHTING, Vector4(FileHelper::readBool(filePointer), 0, 0, 0), UNDEFINED);
-    addOrUpdateProperty(REFRACTION, Vector4(FileHelper::readFloat(filePointer), 0, 0, 0), MATERIAL_PROPS);
-    addOrUpdateProperty(REFLECTION, Vector4(FileHelper::readFloat(filePointer), 0, 0, 0), MATERIAL_PROPS);
+    getProperty(LIGHTING).value.x = FileHelper::readBool(filePointer);
+    getProperty(REFRACTION).value.x = FileHelper::readFloat(filePointer);
+    getProperty(REFLECTION).value.x = FileHelper::readFloat(filePointer);
     
     if(sgbVersion > SGB_VERSION_1) {
 
@@ -1256,11 +1254,11 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
             name = fontProperties[0];
             optionalFilePath = ConversionHelper::getStringForWString(fontProperties[1]);//string(fontProperties[1].begin(), fontProperties[1].end());
             int fontSize = stoi(ConversionHelper::getStringForWString(fontProperties[2]).c_str());
-            addOrUpdateProperty(FONT_SIZE, Vector4(fontSize, 0, 0, 0), UNDEFINED);
+            getProperty(FONT_SIZE).value.x = fontSize; // Vector4(fontSize, 0, 0, 0), UNDEFINED);
 
             if(separator != std::wstring::npos) {
                 float specificFloat = stof(ConversionHelper::getStringForWString(fontProperties[3]).c_str());
-                addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(specificFloat, 0, 0, 0), UNDEFINED);
+                getProperty(SPECIFIC_FLOAT).value.x = specificFloat; // Vector4(specificFloat, 0, 0, 0), UNDEFINED);
             }
             
         } else
@@ -1283,10 +1281,10 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
             }
             name = ConversionHelper::getWStringForString(fontProperties[0]) ;//wstring(fontProperties[0].begin(), fontProperties[0].end());
             optionalFilePath = fontProperties[1];
-            addOrUpdateProperty(FONT_SIZE, Vector4(stoi(fontProperties[2].c_str()), 0, 0, 0), UNDEFINED);
+            getProperty(FONT_SIZE).value.x = stoi(fontProperties[2].c_str());
             
             if(separator != std::string::npos) {
-                addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(stof(fontProperties[3].c_str()), 0, 0, 0), UNDEFINED);
+                getProperty(SPECIFIC_FLOAT).value.x = stof(fontProperties[3].c_str());
             }
             
         } else
@@ -1299,12 +1297,12 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
     textColor.z = FileHelper::readFloat(filePointer);
     textColor.w = 0.0;
     if(type == NODE_SGM || type == NODE_TEXT)
-        addOrUpdateProperty(TEXT_COLOR,textColor, UNDEFINED, TYPE_NONE);
+        getProperty(TEXT_COLOR).value = textColor;
 
     if(type == NODE_IMAGE && getProperty(TEXT_COLOR).value.x == 0.0) getProperty(TEXT_COLOR).value.x = 2.0;
     if(type == NODE_IMAGE && getProperty(TEXT_COLOR).value.y == 0.0) getProperty(TEXT_COLOR).value.y = 1.0;
     
-    addOrUpdateProperty(VERTEX_COLOR, getProperty(TEXT_COLOR).value, MATERIAL_PROPS);
+    getProperty(VERTEX_COLOR).value = getProperty(TEXT_COLOR).value;
     int keysCount = FileHelper::readInt(filePointer);
     KeyHelper::readData(filePointer,keysCount,positionKeys, rotationKeys, scaleKeys, visibilityKeys);
     joints.clear();
@@ -1318,6 +1316,79 @@ void SGNode::readData(ifstream *filePointer, int &origIndex)
 }
 
 void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
+{
+    
+    FileHelper::writeInt(filePointer, -1); // Asset Id in Previous version
+    FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
+    FileHelper::writeInt(filePointer,(int)type);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(HAS_PHYSICS) ? getProperty(HAS_PHYSICS).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(PHYSICS_KIND) ? getProperty(PHYSICS_KIND).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(WEIGHT) ? getProperty(WEIGHT).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(FORCE_MAGNITUDE) ? getProperty(FORCE_MAGNITUDE).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(IS_SOFT) ? getProperty(IS_SOFT).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, IsPropertyExists(LIGHT_TYPE) ? getProperty(LIGHT_TYPE).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(SPECIFIC_FLOAT)) ? getProperty(SPECIFIC_FLOAT).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(FONT_SIZE)) ? getProperty(FONT_SIZE).value.x : -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, -1.0);
+    
+    Vector4 forceDir = (IsPropertyExists(FORCE_DIRECTION)) ? getProperty(FORCE_DIRECTION).value : Vector4(-1.0);
+    FileHelper::writeVector3(filePointer, Vector3(forceDir.x, forceDir.y, forceDir.z));
+    Vector4 lightColor = (IsPropertyExists(VERTEX_COLOR)) ? getProperty(VERTEX_COLOR).value : Vector4(1.0);
+    FileHelper::writeVector3(filePointer, Vector3(lightColor.x, lightColor.y, lightColor.z));
+    FileHelper::writeVector3(filePointer, Vector3(-1.0));
+    FileHelper::writeVector3(filePointer, Vector3(-1.0));
+    FileHelper::writeVector3(filePointer, Vector3(-1.0));
+    FileHelper::writeVector3(filePointer, Vector3(-1.0));
+    
+    FileHelper::writeInt(filePointer, (int)materialProps.size());
+    for( int i = 0; i < materialProps.size(); i++) {
+        materialProps[i]->writeProperties(filePointer);
+    }
+    
+    if(type != NODE_CAMERA && type != NODE_LIGHT) {
+        int meshType = (int)dynamic_pointer_cast<MeshNode>(node)->getMesh()->meshType;
+        FileHelper::writeInt(filePointer, meshType);
+        printf(" \n Mesh Type %d ", meshType);
+        if(meshType == MESH_TYPE_LITE)
+            MeshRW::writeMeshData(filePointer, dynamic_pointer_cast<MeshNode>(node)->getMesh());
+        else
+            MeshRW::writeSkinMeshData(filePointer, dynamic_pointer_cast<AnimatedMeshNode>(node)->getMesh(), dynamic_pointer_cast<AnimatedMeshNode>(node));
+    }
+    
+    int nodeIndex = 0;
+    if(node->type == NODE_TYPE_INSTANCED) {
+        int actionId = ((SGNode*)node->original->getUserPointer())->actionId;
+        for (int i = 0; i < nodes.size(); i++) {
+            if(actionId == nodes[i]->actionId)
+                nodeIndex = i;
+        }
+    }
+    
+    FileHelper::writeInt(filePointer, nodeIndex); //Node Index of Original Node if Instanced
+    
+    FileHelper::writeBool(filePointer,isRigged);
+    
+    /*
+    std::wstring nodeSpecificString;
+    if(type == NODE_TEXT_SKIN || type == NODE_TEXT) {
+        nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(getProperty(FONT_SIZE).value.x) + L"$_@" + to_wstring(getProperty(SPECIFIC_FLOAT).value.x) + L"$_@";
+    } else
+        nodeSpecificString = name;
+    */
+    FileHelper::writeWString(filePointer,name);
+    KeyHelper::writeData(filePointer, positionKeys, rotationKeys, scaleKeys, visibilityKeys);
+    FileHelper::writeInt(filePointer, int(joints.size()));
+    int i;
+    for(i = 0; i < joints.size(); i++)
+        joints[i]->writeData(filePointer);
+}
+
+
+void SGNode::leagcyWrite(ofstream *filePointer, vector<SGNode*> &nodes)
 {
     Property emptyProp;
     emptyProp.index = UNDEFINED;
@@ -1354,7 +1425,7 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
     FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeString(filePointer, textureName);
+    FileHelper::writeString(filePointer, getProperty(TEXTURE).fileName);
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeBool(filePointer,isRigged);
     FileHelper::writeBool(filePointer, getProperty(LIGHTING).value.x);
@@ -1380,13 +1451,13 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
 
 void SGNode::setMeshProperties(float refraction, float reflection, bool isLighting, bool isVisible , bool isPhysicsObj, int physicsType, float fMagnitude, float currentFrame)
 {
-    addOrUpdateProperty(LIGHTING, Vector4(isLighting, 0, 0, 0), UNDEFINED);
-    addOrUpdateProperty(REFRACTION, Vector4(refraction, 0, 0, 0), MATERIAL_PROPS);
-    addOrUpdateProperty(REFLECTION, Vector4(reflection, 0, 0, 0), MATERIAL_PROPS);
-    addOrUpdateProperty(VISIBILITY, Vector4(isVisible, 0, 0, 0), UNDEFINED);
-    addOrUpdateProperty(HAS_PHYSICS, Vector4(isPhysicsObj, 0, 0, 0), UNDEFINED);
-    addOrUpdateProperty(PHYSICS_KIND, Vector4(physicsType), HAS_PHYSICS);
-    addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(fMagnitude, 0, 0, true), HAS_PHYSICS);
+    getProperty(LIGHTING).value.x = isLighting;
+    getProperty(REFRACTION).value.x = refraction;
+    getProperty(REFLECTION).value.x = reflection;
+    getProperty(VISIBILITY).value.x = isVisible;
+    getProperty(HAS_PHYSICS).value.x = isPhysicsObj;
+    getProperty(PHYSICS_KIND).value.x = physicsType;
+    getProperty(FORCE_MAGNITUDE).value.x = fMagnitude;
     setVisibility(isVisible, currentFrame);
 }
 
@@ -1424,6 +1495,21 @@ void SGNode::faceUserCamera(shared_ptr<CameraNode> viewCamera, int currentFrame)
     node->setRotation(rotQ, true);
 }
 
+bool SGNode::IsPropertyExists(PROP_INDEX pIndex)
+{
+    if(options.find(pIndex) != options.end())
+        return true;
+    else {
+        std::map<PROP_INDEX, Property>::iterator pIt;
+        for(pIt = options.begin(); pIt != options.end(); pIt++) {
+            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end())
+                return true;
+        }
+        
+        return false;
+    }
+}
+
 std::map< PROP_INDEX, Property > SGNode::getAllProperties(int meshBufferIndex)
 {
     std::map< PROP_INDEX, Property > allProps;
@@ -1443,6 +1529,7 @@ std::map< PROP_INDEX, Property > SGNode::getAllProperties(int meshBufferIndex)
 
 Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
 {
+
     if(options.find(pIndex) == options.end()) {
         std::map<PROP_INDEX, Property>::iterator pIt;
         
@@ -1452,9 +1539,9 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
         
         if(materialProps.size() > 0) {
             std::map<PROP_INDEX, Property>& matProps = materialProps[matIndex]->getProps();
-            if(matProps.find(pIndex) != matProps.end())
+            if(matProps.find(pIndex) != matProps.end()) {
                 return matProps[pIndex];
-            else {
+            } else {
                 PROP_INDEX ind = checkPropertyInSubProps(matProps, pIndex);
                 if(ind != UNDEFINED)
                     return matProps[ind].subProps[pIndex];
@@ -1464,8 +1551,9 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
         }
         
         PROP_INDEX pI = checkPropertyInSubProps(options, pIndex);
-        if(pI != UNDEFINED)
+        if(pI != UNDEFINED) {
             return options[pI].subProps[pIndex];
+        }
         else {
             Property emptyProp;
             emptyProp.index = pIndex;

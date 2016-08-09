@@ -23,7 +23,9 @@ public:
     
     bool loadSceneData(std::string *filePath);
     bool readScene(ifstream *filePointer);
-    void readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
+    bool legacyReadScene(ifstream *filePointer);
+    int readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
+    int legacyReadSceneGlobalInfo(ifstream *filePointer, int sgbVersion, int& nodeCount);
     void restoreTexture(SGNode* meshObject,int actionType);
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);
     void removeNodeFromInstances(SGNode* sgNode);
@@ -39,7 +41,7 @@ public:
 	bool readScene(ifstream *filePointer, JNIEnv *env, jclass type,jobject object);
     #endif
     
-    SGNode* loadNode(NODE_TYPE type,int assetId,string textureName ,std::wstring imagePath = L" ",int imgWidth = 0,int imgHeight = 0,int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0),string fontFilePath = "",bool isTempNode = false);
+    SGNode* loadNode(NODE_TYPE type,int assetId, string meshPath, string textureName, std::wstring imagePath = L" ", int imgWidth = 0, int imgHeight = 0, int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0), string fontFilePath = "", bool isTempNode = false);
     bool loadNode(SGNode *sgNode,int actionType,bool isTempNode = false);
     bool loadNodeOnUndoORedo(SGAction action, int actionType);
     

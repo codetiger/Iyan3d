@@ -53,15 +53,15 @@ PhysicsHelper::~PhysicsHelper()
 void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
 {
     double density = 0.0;
-    sgNode->addOrUpdateProperty(PHYSICS_KIND, Vector4(pType), HAS_PHYSICS);
+    sgNode->getProperty(PHYSICS_KIND).value.x = pType;
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
     for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
-        sgNode->addOrUpdateProperty((PROP_INDEX)pI, Vector4((physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0), HAS_PHYSICS);
+        sgNode->getProperty((PROP_INDEX)pI).value.x = (physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0;
 
     switch (pType) {
         case PHYSICS_STATIC:
-            sgNode->addOrUpdateProperty(WEIGHT, Vector4(0.0), HAS_PHYSICS);
+            sgNode->getProperty(WEIGHT).value.x = 0.0;
             return;
             break;
         case PHYSICS_LIGHT:
@@ -75,7 +75,7 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
             break;
         case PHYSICS_CLOTH:
         case PHYSICS_JELLY:
-            sgNode->addOrUpdateProperty(IS_SOFT, Vector4(1.0), HAS_PHYSICS);
+            sgNode->getProperty(IS_SOFT).value.x = 1.0;
             break;
         default:
             break;
@@ -83,7 +83,7 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
     sgNode->node->updateBoundingBox();
     BoundingBox b = sgNode->node->getBoundingBox();
     double volume = b.getXExtend() * b.getYExtend() * b.getZExtend();
-    sgNode->addOrUpdateProperty(WEIGHT, Vector4(volume * density), HAS_PHYSICS);
+    sgNode->getProperty(WEIGHT).value.x = (volume * density);
 }
 
 void PhysicsHelper::syncPhysicsWorld()

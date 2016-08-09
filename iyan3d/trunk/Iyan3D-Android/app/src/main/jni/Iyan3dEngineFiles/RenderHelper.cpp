@@ -195,18 +195,18 @@ void RenderHelper::renderControls()
         float angle = fabs(ctrlToCam.dotProduct(SceneHelper::controlDirection(i%3)));
         float ctrlTransparency = (angle > 0.9) ? (0.95 - angle) * 20.0 : 1.0;
         ctrlTransparency = (ctrlTransparency < 0.0) ? 0.0 : ctrlTransparency;
-        renderingScene->sceneControls[i]->addOrUpdateProperty(TRANSPARENCY, Vector4(ctrlTransparency), UNDEFINED);
+        renderingScene->sceneControls[i]->getProperty(TRANSPARENCY).value.x = ctrlTransparency;
         
         if(renderingScene->selectedControlId == NOT_SELECTED) {
             renderingScene->sceneControls[i]->getProperty(VERTEX_COLOR).value = Vector4(Vector3(-1.0), 0.0);
-            renderingScene->sceneControls[i]->addOrUpdateProperty(VISIBILITY, Vector4(true), UNDEFINED);
+            renderingScene->sceneControls[i]->getProperty(VISIBILITY).value.x = true;
             renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
         } else if(i == renderingScene->selectedControlId) {
-            renderingScene->sceneControls[i]->addOrUpdateProperty(VISIBILITY, Vector4(true), UNDEFINED);
-            renderingScene->sceneControls[i]->addOrUpdateProperty(VERTEX_COLOR, Vector4(SELECTION_COLOR_R, SELECTION_COLOR_G, SELECTION_COLOR_B, 1.0), MATERIAL_PROPS);
+            renderingScene->sceneControls[i]->getProperty(VISIBILITY).value.x = true;
+            renderingScene->sceneControls[i]->getProperty(VERTEX_COLOR).value = Vector4(SELECTION_COLOR_R, SELECTION_COLOR_G, SELECTION_COLOR_B, 1.0);
             renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         } else {
-            renderingScene->sceneControls[i]->addOrUpdateProperty(VISIBILITY, Vector4(false), UNDEFINED);
+            renderingScene->sceneControls[i]->getProperty(VISIBILITY).value.x = false;
         }
         
         int nodeIndex = smgr->getNodeIndexByID(renderingScene->sceneControls[i]->node->getID());
@@ -477,10 +477,10 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
             renderingScene->nodes[i]->getProperty(SELECTED).value.x = false;
         
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-                renderingScene->nodes[i]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+                renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = true;
         renderingScene->nodes[i]->getProperty(VISIBILITY).value.x = renderingScene->nodes[i]->isTempNode ? false : true;
         Vector3 packed = MathHelper::packInterger(i);
-        renderingScene->nodes[i]->addOrUpdateProperty(VERTEX_COLOR, Vector4(packed/255.0 ,1.0), MATERIAL_PROPS);
+        renderingScene->nodes[i]->getProperty(VERTEX_COLOR).value = Vector4(packed/255.0 ,1.0);
         
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(renderingScene->nodes[i]->node->skinType == CPU_SKIN ? SHADER_COLOR : SHADER_COLOR_SKIN));
@@ -489,7 +489,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         else {
             if(renderingScene->nodes[i]->getType() == NODE_CAMERA)
                 renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-            renderingScene->nodes[i]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+            renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = true;
             renderingScene->nodes[i]->getProperty(LIGHTING).value.x = false;
         }
     }
@@ -501,14 +501,16 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+            renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = false;
 
         renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByName(previousMaterialNames[i]));
-        renderingScene->nodes[i]->addOrUpdateProperty(VERTEX_COLOR, vertexColors[i], MATERIAL_PROPS);
+        renderingScene->nodes[i]->getProperty(VERTEX_COLOR).value = vertexColors[i];
         renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x = transparency[i];
         renderingScene->nodes[i]->getProperty(VISIBILITY).value.x = nodesVisibility[i];
         renderingScene->nodes[i]->getProperty(SELECTED).value.x = nodeSelection[i];
-        renderingScene->nodes[i]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(isVcolored[i], 0, 0, 0), MATERIAL_PROPS);
+        renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = isVcolored[i];
+        if(i > NODE_LIGHT)
+            printf(" \n RTT node joint %d ", (int)isVcolored[i]);
         renderingScene->nodes[i]->getProperty(LIGHTING).value.x = isLighting[i];
     }
     previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();
@@ -536,12 +538,12 @@ void RenderHelper::drawJointsSpheresForRTT(bool enableDepthTest)
         renderingScene->jointSpheres[j]->setScaleOnNode(scaleValues[j] * 1.3);
         Vector3 packed = MathHelper::packInterger(renderingScene->selectedNodeId);
         packed.z = j;
-        renderingScene->jointSpheres[j]->addOrUpdateProperty(VERTEX_COLOR, Vector4( packed/255.0, 1.0 ), MATERIAL_PROPS);
+        renderingScene->jointSpheres[j]->getProperty(VERTEX_COLOR).value = Vector4( packed/255.0, 1.0 );
         smgr->RenderNode(false, smgr->getNodeIndexByID(renderingScene->jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
     }
     // Reset joints
     for(int j = 0;j < (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getJointCount();j++) {
-        renderingScene->jointSpheres[j]->addOrUpdateProperty(VERTEX_COLOR, vertexColors[j], MATERIAL_PROPS);
+        renderingScene->jointSpheres[j]->getProperty(VERTEX_COLOR).value = vertexColors[j];
         renderingScene->jointSpheres[j]->setScaleOnNode(scaleValues[j]);
     }
     vertexColors.clear();
@@ -801,7 +803,7 @@ bool RenderHelper::createJointSpheres(int additionalJoints)
         sphereNode->updateAbsoluteTransformation();
         sphereNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         sgNode->node = sphereNode;
-        sgNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(constants::sgrJointDefaultColor, 1.0), MATERIAL_PROPS);
+        sgNode->getProperty(VERTEX_COLOR).value = Vector4(constants::sgrJointDefaultColor, 1.0);
         renderingScene->jointSpheres.push_back(sgNode);
         sgNode->node->setID(JOINT_SPHERES_START_ID + (int)renderingScene->jointSpheres.size() - 1);
     }
@@ -940,7 +942,7 @@ bool RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
     renderingScene->updater->updateControlsOrientaion(true);
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
         renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-        renderingScene->sceneControls[i]->addOrUpdateProperty(VERTEX_COLOR, Vector4(i/255.0, 1.0, 1.0, 1.0), MATERIAL_PROPS);
+        renderingScene->sceneControls[i]->getProperty(VERTEX_COLOR).value = Vector4(i/255.0, 1.0, 1.0, 1.0);
         renderingScene->sceneControls[i]->getProperty(TRANSPARENCY).value.x = 1.0;
         Vector3 ctrlToCam = (renderingScene->viewCamera->getPosition() - renderingScene->sceneControls[i]->node->getPosition()).normalize();
         float angle = fabs(ctrlToCam.dotProduct(SceneHelper::controlDirection(i%3)));
@@ -981,12 +983,12 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
             float transparency = rigKeys[renderingScene->tPoseJoints[i].id].bone->getProperty(TRANSPARENCY).value.x;
             Material *mat = smgr->getMaterialByIndex(SHADER_COLOR);
             rigKeys[renderingScene->tPoseJoints[i].id].bone->node->setMaterial(mat);
-            rigKeys[renderingScene->tPoseJoints[i].id].bone->addOrUpdateProperty(VERTEX_COLOR, Vector4(i/255.0, 255/255.0, 255/255.0, 1.0), MATERIAL_PROPS);
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->getProperty(VERTEX_COLOR).value = Vector4(i/255.0, 255/255.0, 255/255.0, 1.0);
             rigKeys[renderingScene->tPoseJoints[i].id].bone->getProperty(TRANSPARENCY).value.x = 1.0;
             int nodeId = smgr->getNodeIndexByID(rigKeys[renderingScene->tPoseJoints[i].id].bone->node->getID());
             smgr->RenderNode(true, nodeId);
             rigKeys[renderingScene->tPoseJoints[i].id].bone->getProperty(TRANSPARENCY).value.x = transparency;
-            rigKeys[renderingScene->tPoseJoints[i].id].bone->addOrUpdateProperty(VERTEX_COLOR, vertColor, MATERIAL_PROPS);
+            rigKeys[renderingScene->tPoseJoints[i].id].bone->getProperty(VERTEX_COLOR).value = vertColor;
         }
         
         if(renderingScene->tPoseJoints[i].id != 0){
@@ -996,11 +998,11 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
             //scaleValues.push_back(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale());
             //rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->getScale() * 1.3);
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-            rigKeys[renderingScene->tPoseJoints[i].id].sphere->addOrUpdateProperty(VERTEX_COLOR, Vector4(i/255.0, 255/255.0, 255/255.0, 1.0), MATERIAL_PROPS);
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->getProperty(VERTEX_COLOR).value = Vector4(i/255.0, 255/255.0, 255/255.0, 1.0);
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->getProperty(TRANSPARENCY).value.x = 1.0;
             smgr->RenderNode(true, nodeId);
             rigKeys[renderingScene->tPoseJoints[i].id].sphere->getProperty(TRANSPARENCY).value.x = transparency;
-            rigKeys[renderingScene->tPoseJoints[i].id].sphere->addOrUpdateProperty(VERTEX_COLOR, vertColor, MATERIAL_PROPS);
+            rigKeys[renderingScene->tPoseJoints[i].id].sphere->getProperty(VERTEX_COLOR).value = vertColor;
         }
     }
     /*
@@ -1036,13 +1038,13 @@ void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
     Vector4 vertexColor = sgrSGNode->getProperty(VERTEX_COLOR).value;
     sgrSGNode->getProperty(TRANSPARENCY).value.x = 1.0;
-    sgrSGNode->addOrUpdateProperty(VERTEX_COLOR, Vector4(0.0, 1.0, 1.0, 1.0), MATERIAL_PROPS);
+    sgrSGNode->getProperty(VERTEX_COLOR).value = Vector4(0.0, 1.0, 1.0, 1.0);
     
     smgr->RenderNode(true, smgr->getNodeIndexByID(sgrSGNode->node->getID()));
     
     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN));
     sgrSGNode->getProperty(TRANSPARENCY).value.x = 1.0;
-    sgrSGNode->addOrUpdateProperty(VERTEX_COLOR, vertexColor, MATERIAL_PROPS);
+    sgrSGNode->getProperty(VERTEX_COLOR).value = vertexColor;
     
     // render Joints
     if(renderingScene->rigMan->isNodeSelected){
@@ -1053,10 +1055,10 @@ void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
             Vector4 vertexColors = jointSphere->getProperty(VERTEX_COLOR).value;
             float transparency = jointSphere->getProperty(TRANSPARENCY).value.x;
             jointSphere->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
-            jointSphere->addOrUpdateProperty(VERTEX_COLOR, Vector4(0.0, i/255.0, 1.0, 1.0), MATERIAL_PROPS);
+            jointSphere->getProperty(VERTEX_COLOR).value = Vector4(0.0, i/255.0, 1.0, 1.0);
             jointSphere->getProperty(TRANSPARENCY).value.x = 1.0;
             smgr->RenderNode(true, smgr->getNodeIndexByID(jointSphere->node->getID()),(i == 1) ? true:false);
-            jointSphere->addOrUpdateProperty(VERTEX_COLOR, vertexColors, MATERIAL_PROPS);
+            jointSphere->getProperty(VERTEX_COLOR).value = vertexColors;
             jointSphere->getProperty(TRANSPARENCY).value.x = transparency;
         }
         if(!renderingScene->rigMan->isSGRJointSelected)

@@ -197,7 +197,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     moveNodeId = NOT_SELECTED;
     
     shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, Vector4(0), UNDEFINED, SLIDER_TYPE, "Ambient Light", "Scene Properties");
-    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", constants::BundlePath + "/envmap.png");
+    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", "envmap.png");
 }
 
 void SGEditorScene::initTextures()
@@ -379,28 +379,28 @@ vector<string> SGEditorScene::getUserFileNames(bool forBackup)
         SGNode *sgNode = nodes[index];
         NODE_TYPE nType = sgNode->getType();
         
-        if((sgNode->assetId > 0 && sgNode->textureName.find(to_string(sgNode->assetId)) ==  string::npos) || (sgNode->assetId == 0 && sgNode->textureName.length() > 0))
-            userFileNames.push_back(sgNode->textureName + ".png");
+        if((sgNode->assetId > 0 && sgNode->getProperty(TEXTURE).fileName.find(to_string(sgNode->assetId)) ==  string::npos) || (sgNode->assetId == 0 && sgNode->getProperty(TEXTURE).fileName.length() > 0))
+            userFileNames.push_back(sgNode->getProperty(TEXTURE).fileName + ".png");
         
         if(sgNode->assetId >= 40000 && sgNode->assetId < 50000) {
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgr");
-            if(sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos)
+            if(sgNode->getProperty(TEXTURE).fileName.find(to_string(sgNode->assetId)) !=  string::npos)
                 userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
         } else if (sgNode->assetId >= 20000 && sgNode->assetId < 30000) {
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
             userFileNames.push_back(to_string(sgNode->assetId) + ".obj");
-            if(sgNode->textureName.find(to_string(sgNode->assetId)) !=  string::npos)
+            if(sgNode->getProperty(TEXTURE).fileName.find(to_string(sgNode->assetId)) !=  string::npos)
                 userFileNames.push_back(to_string(sgNode->assetId) + "-cm.png");
         } else if ((nType == NODE_TEXT || nType == NODE_TEXT_SKIN)) {
             userFileNames.push_back(sgNode->optionalFilePath);
         } else if (sgNode->assetId >= 60001 && sgNode->assetId < 60007)
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
         else if (sgNode->getType() == NODE_IMAGE)
-            userFileNames.push_back(sgNode->textureName + ".png");
+            userFileNames.push_back(sgNode->getProperty(TEXTURE).fileName + ".png");
         else if (sgNode->getType() == NODE_PARTICLES) {
             userFileNames.push_back(to_string(sgNode->assetId) + ".json");
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
-            userFileNames.push_back(sgNode->textureName + ".png");
+            userFileNames.push_back(sgNode->getProperty(TEXTURE).fileName + ".png");
         } else if (sgNode->getType() == NODE_VIDEO && forBackup) {
             userFileNames.push_back(ConversionHelper::getStringForWString(sgNode->name));
         }
@@ -599,7 +599,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     }
     
     selectMan->unselectObject(selectedNodeId);
-    smgr->setRenderTarget(thumbnailTexture, true, true, false, Vector4(0.0));
+    smgr->setRenderTarget(thumbnailTexture, true, true, false, Vector4(0.1, 0.1, 0.1, 1.0));
     renHelper->drawGrid();
     
     smgr->Render(false);
@@ -670,29 +670,10 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
 
-    string texturePath = "";
-    #ifdef IOS
-        texturePath = FileHelper::getDocumentsDirectory() + "Resources/Textures/" + textureFileName+".png";
-        if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-            texturePath = FileHelper::getCachesDirectory()+textureFileName+".png";
-            if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-                texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureFileName+".png";
-                if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-                    texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureFileName+".png";
-                    if(!nodes[selectedNodeId]->checkFileExists(texturePath))
-                        texturePath = FileHelper::getDocumentsDirectory()+ "/Resources/Rigs/" + textureFileName+".png";
-                }
-            }
-        }
-    #else
-        texturePath = constants::DocumentsStoragePath+"/importedImages/"+textureFileName+".png";
-            if(!nodes[selectedNodeId]->checkFileExists(texturePath)){
-                texturePath = constants::DocumentsStoragePath+"/mesh/"+textureFileName+".png";
-            }
-    #endif
+    string texturePath = FileHelper::getTexturesDirectory() + textureFileName+ ".png";
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
-        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         
         if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
             loader->copyMeshFromOriginalNode(nodes[selectedNodeId]);
@@ -704,25 +685,25 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         }
         
         bool blurTex = (nodes[selectedNodeId]->smoothTexture);
-        Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, blurTex);
+        Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, blurTex);
         nodes[selectedNodeId]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->textureName = textureFileName;
-            nodes[selectedNodeId]->addOrUpdateProperty(TEXTURE, nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", texturePath);
+            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName;
+            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName + ".png";
         }
     } else {
         nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value = Vector4(vertexColor, 0);
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->textureName = "-1";
-            nodes[selectedNodeId]->addOrUpdateProperty(TEXTURE, nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value, MATERIAL_PROPS, IMAGE_TYPE, "Texture", "SKIN", "");
+            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = "-1";
+            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = "";
         }
-        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value = Vector4(true, 0, 0, 0);
     }
     
     if(!isTemp)
         actionMan->storeAddOrRemoveAssetAction(ACTION_TEXTURE_CHANGE, 0);
     if(!isTemp || isUndoRedo){
-        nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->textureName;
+        nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->getProperty(TEXTURE).fileName;
         nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value;
     }
 }
@@ -739,29 +720,16 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
 #ifdef ANDROID
     StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
-    string textureFileName = StoragePath + nodes[selectedNode]->textureName+".png";
-    #ifdef IOS
-	if(!nodes[selectedNode]->checkFileExists(textureFileName)){
-		textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Sgm/" + nodes[selectedNode]->textureName+".png";
-		if(!nodes[selectedNode]->checkFileExists(textureFileName))
-			textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Textures/" + nodes[selectedNode]->textureName+".png";
-			if(!nodes[selectedNode]->checkFileExists(textureFileName))
-				textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Rigs/" + nodes[selectedNode]->textureName+".png";
-	}
-	#endif
-    #ifdef ANDROID
-        if(!nodes[selectedNode]->checkFileExists(textureFileName))
-            textureFileName = constants::DocumentsStoragePath+"/importedImages/"+nodes[selectedNode]->textureName+".png";
-    #endif
+    string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName + ".png";
 
-    if(nodes[selectedNode]->textureName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
-        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(false, 0, 0, 0), MATERIAL_PROPS);
-        Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
+    if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+        Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
         nodes[selectedNode]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     } else {
-        nodes[selectedNode]->textureName = "-1";
+        nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
         nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
-        nodes[selectedNodeId]->addOrUpdateProperty(IS_VERTEX_COLOR, Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
     }
 }
 

@@ -137,15 +137,15 @@ void SGCloudRenderingHelper::writeNodeData(SGEditorScene *scene, int nodeId, int
              FileHelper::writeFloat(frameFilePtr, lightDir.z);
          }
          
-         bool hasTexture = (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->textureName == "-1" || thisNode->textureName == "") ? false : true;
+         bool hasTexture = (nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT || thisNode->getProperty(TEXTURE).fileName == "-1" || thisNode->getProperty(TEXTURE).fileName == "") ? false : true;
          FileHelper::writeBool(frameFilePtr, hasTexture); // Has Texture
 
-         unsigned long lastSlashPos  = (thisNode->textureName).find_last_of("\\/");
+         unsigned long lastSlashPos  = (thisNode->getProperty(TEXTURE).fileName).find_last_of("\\/");
          string textureFileName;
          if(string::npos != lastSlashPos)
-             textureFileName = (thisNode->textureName).substr( lastSlashPos + 1) + ".png";
+             textureFileName = (thisNode->getProperty(TEXTURE).fileName).substr( lastSlashPos + 1) + ".png";
          else
-         	textureFileName = thisNode->textureName + ".png";
+         	textureFileName = thisNode->getProperty(TEXTURE).fileName + ".png";
 
          FileHelper::writeString(frameFilePtr, textureFileName); // Texture File Name with extension
          FileHelper::writeFloat(frameFilePtr, scene->nodes[nodeId]->getProperty(REFLECTION).value.x);

@@ -65,16 +65,8 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     objSGNode->node = objNode;
     
     if(!isVertexColor) {
-        string texturePath = "";
-        
-#ifdef ANDROID
-        texturePath = constants::DocumentsStoragePath+ "/importedImages/"+textureName+".png";
-        if(!FileHelper::checkFileExists(texturePath))
-            texturePath = constants::BundlePath+"/white_texture.png";
-#else
-        texturePath = FileHelper::getDocumentsDirectory() + textureName + ".png";
-#endif
-        Texture *nodeTex = smgr->loadTexture(texturePath,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
+        string texturePath = FileHelper::getTexturesDirectory() + textureName + ".png";
+        Texture *nodeTex = smgr->loadTexture(textureName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
         objNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
 //        objNode->setTexture(objScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     }
@@ -91,7 +83,7 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     //-----------
     
     objNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-    objSGNode->addOrUpdateProperty(LIGHTING, Vector4(true, 0, 0, 0), UNDEFINED);
+    objSGNode->getProperty(LIGHTING).value = true; // Vector4(true, 0, 0, 0), UNDEFINED);
     
     objNode->setID(OBJ_ID);
     objSGNode->node->updateAbsoluteTransformation();
