@@ -131,7 +131,7 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
         }
     }
     
-    return (glGetError() == GL_NO_ERROR);
+    return true;
 }
 
 void OGLES2RenderManager::createVAO(shared_ptr<Node> node, short meshBufferIndex)
@@ -272,17 +272,17 @@ void OGLES2RenderManager::BindAttributes(Material *material, MESH_TYPE meshType)
     int valueIndex = 0;
     OGLMaterial *mat = (OGLMaterial*)material;
     if (meshType == MESH_TYPE_LITE) {
-        for(int i = 0; i < MAX_VERTEX_DATA;i++){
+        for(int i = 0; i < MAX_VERTEX_DATA;i++) {
             GLenum type = Helper::getOGLES2DataType(attributesType[i]);
             int attributeIndex = mat->getMaterialAttribIndexByName(attributesName[i]);
-            if(attributeIndex != NOT_EXISTS){
+            if(attributeIndex != NOT_EXISTS) {
                 glVertexAttribPointer((GLuint)mat->attributes[attributeIndex].location, attributesTotalValues[i], type, GL_FALSE, sizeof(vertexData), (GLvoid*)valueIndex);
                 glEnableVertexAttribArray((GLuint)mat->attributes[attributeIndex].location);
             }
             valueIndex += sizeof(type) * attributesTotalValues[i];
         }
     } else {
-        for(int i = 0; i < MAX_VERTEX_DATA_SKINNED;i++){
+        for(int i = 0; i < MAX_VERTEX_DATA_SKINNED;i++) {
             GLenum type = Helper::getOGLES2DataType(attributesTypeSkinned[i]);
             int attributeIndex = mat->getMaterialAttribIndexByName(attributesNameSkinned[i]);
             if(attributeIndex != NOT_EXISTS){

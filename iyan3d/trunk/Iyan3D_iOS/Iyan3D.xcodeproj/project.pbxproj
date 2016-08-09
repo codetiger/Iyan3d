@@ -1955,8 +1955,6 @@
 		3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065371C7C28B600CB7158 /* My-objects-Particles.png */; };
 		3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
 		3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
-		3DF40F471D4B2D6F0067F673 /* SceneExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DF40F451D4B2D6F0067F673 /* SceneExporter.cpp */; };
-		3DF40F481D4B2D6F0067F673 /* SceneExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DF40F451D4B2D6F0067F673 /* SceneExporter.cpp */; };
 		62044E3419920D8F0067E21E /* button-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 62044E3319920D8F0067E21E /* button-background.png */; };
 		6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED51B1484AE00DCD585 /* depthPass.fsh */; };
 		6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED61B1484AE00DCD585 /* depthPass.vsh */; };
@@ -4300,8 +4298,6 @@
 		3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
 		3DE065371C7C28B600CB7158 /* My-objects-Particles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles.png"; sourceTree = "<group>"; };
 		3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightAndVideoProperties.xib; path = "ui/Popover Views/LightAndVideoProperties.xib"; sourceTree = "<group>"; };
-		3DF40F451D4B2D6F0067F673 /* SceneExporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneExporter.cpp; sourceTree = "<group>"; };
-		3DF40F461D4B2D6F0067F673 /* SceneExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneExporter.h; sourceTree = "<group>"; };
 		62044E3319920D8F0067E21E /* button-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-background.png"; path = "Resources/imgs/button-background.png"; sourceTree = "<group>"; };
 		6231CED51B1484AE00DCD585 /* depthPass.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.fsh; path = Resources/shaders/depthPass.fsh; sourceTree = "<group>"; };
 		6231CED61B1484AE00DCD585 /* depthPass.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.vsh; path = Resources/shaders/depthPass.vsh; sourceTree = "<group>"; };
@@ -5791,8 +5787,6 @@
 				256F6D4B1BF624FB00154622 /* OBJMeshFileLoader.h */,
 				3DBA6FE81D49CDA8003F8D03 /* SceneImporter.cpp */,
 				3DBA6FE91D49CDA8003F8D03 /* SceneImporter.h */,
-				3DF40F451D4B2D6F0067F673 /* SceneExporter.cpp */,
-				3DF40F461D4B2D6F0067F673 /* SceneExporter.h */,
 			);
 			path = Loaders;
 			sourceTree = "<group>";
@@ -7899,7 +7893,7 @@
 				ORGANIZATIONNAME = "Smackall Games";
 				TargetAttributes = {
 					C885D77A1876BE6100A45D71 = {
-						DevelopmentTeam = 3MT93EVK96;
+						DevelopmentTeam = D85GHYVU2W;
 					};
 				};
 			};
@@ -10269,7 +10263,6 @@
 				3D58CD621C3D43C2006371DE /* WEPopoverContainerView.m in Sources */,
 				256F6EB61BF624FB00154622 /* Helper.cpp in Sources */,
 				256F6EAA1BF624FB00154622 /* OGLES2RenderManager.cpp in Sources */,
-				3DF40F471D4B2D6F0067F673 /* SceneExporter.cpp in Sources */,
 				25DE11491CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp in Sources */,
 				25DE10B31CAA8D6D0076F669 /* btGImpactBvh.cpp in Sources */,
 				0184EC7A1C3512BA006F0B57 /* LoginViewController.m in Sources */,
@@ -10489,7 +10482,6 @@
 				01CCD1C41C3F927D00565664 /* ObjSidePanel.mm in Sources */,
 				25DE11041CAA8D6D0076F669 /* btDiscreteDynamicsWorld.cpp in Sources */,
 				256F6EAB1BF624FB00154622 /* OGLES2RenderManager.cpp in Sources */,
-				3DF40F481D4B2D6F0067F673 /* SceneExporter.cpp in Sources */,
 				25DE0EA21CAA8C980076F669 /* btConvexHullComputer.cpp in Sources */,
 				25DE114A1CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp in Sources */,
 				E20671551B049AA6006DD2F7 /* ANImageBitmapRep.m in Sources */,
@@ -10717,7 +10709,7 @@
 				MTL_OPTIMIZATION_LEVEL = s;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "2c7c0707-8b40-45be-9061-2ca8eae4a063";
+				PROVISIONING_PROFILE = "d497e3b2-cd4c-4be3-bdc2-37bc783cdc1d";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -10761,7 +10753,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				MTL_OPTIMIZATION_LEVEL = s;
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "2c7c0707-8b40-45be-9061-2ca8eae4a063";
+				PROVISIONING_PROFILE = "d497e3b2-cd4c-4be3-bdc2-37bc783cdc1d";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";

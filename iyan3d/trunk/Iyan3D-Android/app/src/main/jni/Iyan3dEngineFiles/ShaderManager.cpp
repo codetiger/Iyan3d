@@ -386,7 +386,7 @@ void ShaderManager::setNodeLighting(SGNode *sgNode, int paramIndex, int material
     delete [] lighting;
 }
 
-void ShaderManager::setShadowDakness(SGNode *sgNode,int paramIndex)
+void ShaderManager::setShadowDakness(SGNode *sgNode, int paramIndex)
 {
     float finalShadow = (shadowsOff || sgNode->getProperty(SELECTED).value.x) ? 0.0 : shadowDensity;
     smgr->setPropertyValue(sgNode->node->material, "shadowDarkness", &finalShadow, DATA_FLOAT, 1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
@@ -442,7 +442,6 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
     
     setTextureForNode(sgNode, shadowTexture, "shadowMap", paramIndex, NODE_TEXTURE_TYPE_SHADOWMAP);
     setTextureForNode(sgNode, environmentTex, "reflectionMap", paramIndex, NODE_TETXURE_TYPE_REFLECTIONMAP);
-    
     
     float hasReflectionMap = (environmentTex) ? 1.0 : 0.0;
     smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()));

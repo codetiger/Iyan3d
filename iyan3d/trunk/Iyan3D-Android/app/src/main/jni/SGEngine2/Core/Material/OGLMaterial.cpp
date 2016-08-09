@@ -160,18 +160,20 @@ string OGLMaterial::getShaderAttributeNameByIndex(int i)
 {
     int maxAttrib = NOT_EXISTS;
     glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTES, &maxAttrib);
+
     if(i >= maxAttrib)
         Logger::log(ERROR,"OGLMaterial:getAttributeNameByIndex","Index > than maxAttrib");
     
     GLint maxNameLength = 0;
     glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxNameLength);
-    GLint length = 0,size = 0;
-    GLenum type; char attribName[maxNameLength];
+
+    GLint length = 0, size = 0;
+    GLenum type;
+    char attribName[maxNameLength];
+    
     glGetActiveAttrib(shaderProgram,i,maxNameLength,&length,&size,&type,attribName);
     attribName[length] = '\0';
-    if(glGetError() == GL_INVALID_VALUE)
-        Logger::log(ERROR,"OGLMaterial:getAttributeNameByIndex","GL_INVALID_VALUE");
-
+    
     return string(attribName);
 }
 
