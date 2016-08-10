@@ -17,6 +17,8 @@
 #include "../Core/Meshes/SkinMesh.h"
 #include "SGEditorScene.h"
 
+#include "CSGRMeshFileLoader.h"
+
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 #include "assimp/scene.h"
@@ -33,7 +35,6 @@ public:
     
 private:
     const aiScene* scene = NULL;
-    Assimp::Importer *importer = NULL;
 
     void loadNodes(aiNode *n, SGEditorScene *sgScene);
     void loadJoints(aiMesh *aiM, SkinMesh *m, aiNode* aiN, Joint* parent);

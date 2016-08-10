@@ -91,7 +91,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
     switch (objectType){
         case NODE_CAMERA:
         {
-            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/camera.sgm",smgr->device);
+            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/camera.sgm");
             node = smgr->createNodeFromMesh(mesh,"setUniforms");
             node->setPosition(Vector3(RENDER_CAM_INIT_POS_X,RENDER_CAM_INIT_POS_Y,RENDER_CAM_INIT_POS_Z));
             getProperty(LIGHTING).value.x = false;
@@ -201,7 +201,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
                 }
             #endif
             Json::Value pData = parseParticlesJson(assetId);
-            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath ,smgr->device);
+            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath);
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
             setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
@@ -445,7 +445,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(std::string meshPath, NODE_TYPE objectTyp
     std::string textureName = getProperty(TEXTURE).fileName;
     
     int objLoadStatus = 0;
-    Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
+    Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath) : objLoader->createMesh(meshPath,objLoadStatus);
     shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
     
     node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
@@ -487,7 +487,7 @@ shared_ptr<Node> SGNode::loadSGR(std::string meshPath,NODE_TYPE objectType,Scene
 
     std::string textureName = getProperty(TEXTURE).fileName;
     
-    AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath,smgr->device);
+    AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath);
     setSkinningData((SkinMesh*)mesh);
     shared_ptr<AnimatedMeshNode> node = smgr->createAnimatedNodeFromMesh(mesh,"setUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
     bool isSGJointsCreated = (joints.size() > 0) ? true : false;

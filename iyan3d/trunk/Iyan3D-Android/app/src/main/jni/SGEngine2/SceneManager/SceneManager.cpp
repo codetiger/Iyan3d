@@ -554,7 +554,7 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
 
 AnimatedMesh* SceneManager::LoadMesh(string filePath)
 {
-    return CSGRMeshFileLoader::LoadMesh(filePath,device);
+    return CSGRMeshFileLoader::LoadMesh(filePath);
 }
 
 bool SceneManager::LoadShaders(string materialName, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)

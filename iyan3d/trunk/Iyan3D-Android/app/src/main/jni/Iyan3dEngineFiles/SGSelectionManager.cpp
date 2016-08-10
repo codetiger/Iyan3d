@@ -253,7 +253,7 @@ void SGSelectionManager::updateParentPosition()
         prevScale = parentNode->getScale();
         smgr->RemoveNode(parentNode);
     }
-    sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm", selectionScene->shaderMGR->deviceType);
+    sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm");
     parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
     getParentNode()->setVisible(false);
     getParentNode()->setID(PIVOT_ID);

@@ -4,11 +4,8 @@
 #include "CSGRMeshFileLoader.h"
 #define UV_MAPPED 1
 #define VERTEX_COLORED 2
-//! creates/loads an animated mesh from the file.
-//! \return Pointer to the created mesh. Returns 0 if loading failed.
-//! If you no longer nthe mesh, you should call IAnimatedMesh::drop().
-//! See IReferenceCounted::drop() for more information.
-AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
+
+AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath)
 {
 
     ifstream f(filepath, ios::in | ios::binary);
@@ -127,7 +124,7 @@ AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath, DEVICE_TYPE device)
     return animMesh;
 }
 
-Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath, DEVICE_TYPE device)
+Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath)
 {
 
     ifstream f(filepath, ios::in | ios::binary);

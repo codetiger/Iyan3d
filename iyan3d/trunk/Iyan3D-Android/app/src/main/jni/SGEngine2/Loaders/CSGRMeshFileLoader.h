@@ -53,8 +53,8 @@ struct SSGMColHeader {
 class CSGRMeshFileLoader {
 
 public:
-    static AnimatedMesh* LoadMesh(string filepath, DEVICE_TYPE device = OPENGLES2);
-    static Mesh* createSGMMesh(string filepath, DEVICE_TYPE device = OPENGLES2);
+    static AnimatedMesh* LoadMesh(string filepath);
+    static Mesh* createSGMMesh(string filepath);
 };
 
 #endif // __C_SGR_MESH_LOADER_H_INCLUDED__
