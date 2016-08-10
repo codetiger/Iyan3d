@@ -509,8 +509,6 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         renderingScene->nodes[i]->getProperty(VISIBILITY).value.x = nodesVisibility[i];
         renderingScene->nodes[i]->getProperty(SELECTED).value.x = nodeSelection[i];
         renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = isVcolored[i];
-        if(i > NODE_LIGHT)
-            printf(" \n RTT node joint %d ", (int)isVcolored[i]);
         renderingScene->nodes[i]->getProperty(LIGHTING).value.x = isLighting[i];
     }
     previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();

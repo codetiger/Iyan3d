@@ -50,7 +50,7 @@ void SceneImporter::importNodesFromFile(string filepath, SGEditorScene *sgScene)
     printf("Ext: %s\n", ext.c_str());
     if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds" || ext == "blend") {
         Assimp::Importer *importer = new Assimp::Importer();
-        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Quality);
+        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Fast);
         if(!scene) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
@@ -145,11 +145,12 @@ void SceneImporter::loadNodes(aiNode *n, SGEditorScene *sgScene)
                     mesh = new Mesh();
                     sgn = make_shared<MeshNode>();
                 }
+                
+                sgn->callbackFuncName = "setUniforms";
             }
             MaterialProperty *materialProps = new MaterialProperty(aiM->HasBones() ? NODE_RIG : NODE_SGM);
             sceneNode->materialProps.push_back(materialProps);
             unsigned short materialIndex = sceneNode->materialProps.size() - 1;
-            printf("Material Index: %d\n", materialIndex);
 
             if(aiM->HasBones()) {
                 
@@ -162,14 +163,6 @@ void SceneImporter::loadNodes(aiNode *n, SGEditorScene *sgScene)
                 loadJoints(aiM, (SkinMesh*)mesh, n, NULL);
                 printf("JointCount: %d\n", (int)((SkinMesh*)mesh)->joints->size());
 
-                Mat4 mat = Mat4();
-                for (int j = 0; j < 16; j++)
-                    mat.setElement(j, *n->mTransformation[j]);
-                
-                sgn->setPosition(mat.getTranslation());
-                sgn->setRotation(mat.getRotation());
-                sgn->setScale(mat.getScale());
-                sgn->updateAbsoluteTransformation();
                 sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
                 
             } else {
@@ -182,26 +175,26 @@ void SceneImporter::loadNodes(aiNode *n, SGEditorScene *sgScene)
                 sgn->setScale(Vector3(1.0));
                 sgn->updateAbsoluteTransformation();
                 
-                Mat4 mat = Mat4();
-                for (int j = 0; j < 16; j++)
-                    mat.setElement(j, *n->mTransformation[j]);
-
-                sgn->setPosition(mat.getTranslation());
-                sgn->setRotation(mat.getRotation());
-                sgn->setScale(mat.getScale());
-                sgn->updateAbsoluteTransformation();
                 sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
 
             }
 
+            Mat4 mat = Mat4();
+            for (int j = 0; j < 16; j++)
+                mat.setElement(j, *n->mTransformation[j]);
+            
+            //sgn->setAbsoluteTransformation(mat);
+            sgn->updateAbsoluteTransformation();
+
             aiColor4D color;
             aiMaterial *material = scene->mMaterials[aiM->mMaterialIndex];
-            
+            printf("Material Index: %d\n", aiM->mMaterialIndex);
+
             if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
-                Property p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+                Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
                 p1.value = Vector4(color.r, color.g, color.b, color.a);
                 printf("DiffuseColor: %f, %f, %f, %f\n", color.r, color.g, color.b, color.a);
-                Property p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+                Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
                 p2.value.x = 1.0;
             }
             
