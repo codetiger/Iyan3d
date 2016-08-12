@@ -686,7 +686,8 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         
         bool blurTex = (nodes[selectedNodeId]->smoothTexture);
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, blurTex);
-        nodes[selectedNodeId]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        nodes[selectedNodeId]->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
+        
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName;
             nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName + ".png";
@@ -725,7 +726,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
     if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
-        nodes[selectedNode]->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        nodes[selectedNodeId]->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
     } else {
         nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
         nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;

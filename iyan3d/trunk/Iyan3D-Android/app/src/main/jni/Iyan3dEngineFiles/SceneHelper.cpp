@@ -229,8 +229,8 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         
         Texture *nodeTex = smgr->loadTexture("Dummy Texture", constants::BundlePath + "/dummy.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-        sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
+        sgNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        sgNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
 
         sceneControls.push_back(sgNode);
         sgNode->node->setID(CONTROLS_START_ID + (int)sceneControls.size() - 1);
@@ -265,8 +265,8 @@ SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
     sgNode->node->setID(FORCE_INDICATOR_ID);
     
     Texture *nodeTex = smgr->loadTexture("Dummy Texture",constants::BundlePath + "/dummy.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
-    sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-    sgNode->node->setTexture(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
+    sgNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+    sgNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgNode->node->setScale(Vector3(0.5,2.0,0.5));
     sgNode->node->setVisible(false);
 

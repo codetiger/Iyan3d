@@ -313,23 +313,26 @@ void OGLES2RenderManager::useMaterialToRender(Material *material)
     }
 }
 
-void OGLES2RenderManager::bindTexture(int index, uint32_t texture)
+bool OGLES2RenderManager::bindTexture(int index, uint32_t texture)
 {
     if(currentTextures[index] != texture) {
         if(currentTextureIndex != index) {
-            glActiveTexture(index);
+            glActiveTexture(GL_TEXTURE0 + index);
             currentTextureIndex = index;
         }
         glBindTexture(GL_TEXTURE_2D, texture);
         currentTextures[index] = texture;
+        return true;
     }
+    return false;
+    
 }
 
 void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
 {
     uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
 
-    if(!uni.isUpdated)
+    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
         return;
     
     switch (uni.type) {
@@ -362,8 +365,8 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
         case DATA_TEXTURE_2D:
         case DATA_TEXTURE_CUBE:{
             u_int32_t *textureName = (u_int32_t*)uni.values;
-            bindTexture(GL_TEXTURE0 + userValue, *textureName);
-            glUniform1i(uni.location, userValue);
+            if(bindTexture(userValue, *textureName))
+                glUniform1i(uni.location, userValue);
         }
             break;
         default:
@@ -531,6 +534,8 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
         glBindFramebuffer(GL_FRAMEBUFFER,((OGLTexture*)renderTexture)->rttFrameBuffer);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)renderTexture)->OGLTextureName);
+        currentTextures[0] = -1;
+        currentTextureIndex = -1;
         PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer, isDepthPass, color);
     }
     else
@@ -592,6 +597,7 @@ Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *textu
     float mid = texture->height / 2.0;
     float difFromMid = touchPosition.y - mid;
     glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)texture)->OGLTextureName);
+    currentTextureIndex = -1;
     GLubyte pixelColor[4];
     glReadPixels((int)touchPosition.x,(int)(mid - difFromMid),1,1,GL_RGBA,GL_UNSIGNED_BYTE,&pixelColor[0]);
     return Vector4((int)pixelColor[0],(int)pixelColor[1],(int)pixelColor[2],(int)pixelColor[3]);

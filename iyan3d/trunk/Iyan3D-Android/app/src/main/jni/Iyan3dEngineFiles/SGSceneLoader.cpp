@@ -683,8 +683,10 @@ void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
     
     copyMeshFromOriginalNode(it->second);
     
-    Texture* oldTex = currentNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP);
-    it->second->node->setTexture(oldTex, NODE_TEXTURE_TYPE_COLORMAP);
+    for(int i = 0; i < currentNode->materialProps.size(); i++) {
+        Texture* oldTex = currentNode->materialProps[0]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP);
+        it->second->materialProps[0]->setTextureForType(oldTex, NODE_TEXTURE_TYPE_COLORMAP);
+    }
     
     std::map< int, SGNode* >::iterator newIt = it->second->instanceNodes.begin();
     it->second->instanceNodes.erase(newIt);

@@ -75,7 +75,7 @@ public:
     void BindAttributes(Material *material,MESH_TYPE meshType = MESH_TYPE_LITE);
     void UnBindAttributes(Material *material);
     void useMaterialToRender(Material *material);
-    void bindTexture(int index, uint32_t texture);
+    bool bindTexture(int index, uint32_t texture);
     void draw3DLine(Vector3 start,Vector3 end,Material *material);
     void draw3DLines(vector<Vector3> vPositions,Material *material);
     void clearDepthBuffer();

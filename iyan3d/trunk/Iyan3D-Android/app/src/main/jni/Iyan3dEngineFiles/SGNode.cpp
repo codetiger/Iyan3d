@@ -206,7 +206,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
             Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
-            node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+            node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO modify for particles
             getProperty(TRANSPARENCY).value.x = 0.7 ;// Vector4(0.7, 0, 0, 0), UNDEFINED);
             break;
         }
@@ -309,7 +309,8 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
     if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
         getProperty(IS_VERTEX_COLOR).value.x = false;
         Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
+
     } else
         getProperty(IS_VERTEX_COLOR).value.x = true;
     
@@ -373,7 +374,7 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
         getProperty(IS_VERTEX_COLOR).value.x = false;
         Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
         getProperty(TEXTURE).fileName = textureName;
     } else {
         getProperty(IS_VERTEX_COLOR).value.x = true;
@@ -455,7 +456,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(std::string meshPath, NODE_TYPE objectTyp
     {
         getProperty(IS_VERTEX_COLOR).value.x = false;
         Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
         getProperty(TEXTURE).fileName = textureName;
     } else {
         getProperty(IS_VERTEX_COLOR).value.x = true;
@@ -506,7 +507,7 @@ shared_ptr<Node> SGNode::loadSGR(std::string meshPath,NODE_TYPE objectType,Scene
     if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
         getProperty(IS_VERTEX_COLOR).value.x = false;
         Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+        materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
         getProperty(TEXTURE).fileName = textureName;
     } else {
         getProperty(IS_VERTEX_COLOR).value.x = true;
@@ -585,7 +586,7 @@ sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureNa
     Texture *nodeTex = smgr->loadTexture(textureName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-    planeNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+    materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
     //delete [] textureFileName; //TODO TEST
     return planeNode;
 }
@@ -600,7 +601,7 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
      #endif
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-    planeNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+    materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
     return planeNode;
 }
 

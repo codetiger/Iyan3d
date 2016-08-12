@@ -67,8 +67,8 @@ bool SGOBJManager::loadAndSaveAsSGM(string objPath,string textureName, int asset
     if(!isVertexColor) {
         string texturePath = FileHelper::getTexturesDirectory() + textureName + ".png";
         Texture *nodeTex = smgr->loadTexture(textureName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-        objNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-        objNode->setTexture(objScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+        objSGNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
+        objSGNode->materialProps[0]->setTextureForType(objScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP); //TODO for all meshbuffers
     }
     // scale to fit all obj in same proportion-----
     float extendX = objNode->getMesh()->getBoundingBox()->getXExtend();
