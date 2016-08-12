@@ -1407,7 +1407,8 @@ BOOL missingAlertShown;
 - (IBAction)importBtnAction:(id)sender
 {
 //    SceneImporter *loader = new SceneImporter();
-//    loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "Robotic_Arm_03.obj", editorScene);
+//    loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "test.dae", editorScene);
+//    [self reloadSceneObjects];
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];

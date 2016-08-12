@@ -314,7 +314,6 @@ int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
 
     ShaderManager::lightColor.push_back(lightColor);
     nodeCount = FileHelper::readInt(filePointer);
-    printf("\n Node Count %d ", nodeCount);
     
     return sgbVersion;
 }
@@ -366,7 +365,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
         addLight(sgnode);
     }
 
-//    sgnode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+    sgnode->materialProps[0]->setTextureForType(currentScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
 
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
@@ -419,8 +418,9 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     sgNode->setInitialKeyValues(actionType);
     sgNode->node->updateAbsoluteTransformation();
     sgNode->node->updateAbsoluteTransformationOfChildren();
-    //if(sgNode->getType() >= NODE_LIGHT)
-//    sgNode->node->setTexture(currentScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+
+    sgNode->materialProps[0]->setTextureForType(currentScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+
     sgNode->node->setVisible(true);
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgNode->actionId = ++currentScene->actionObjectsSize;

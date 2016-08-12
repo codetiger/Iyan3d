@@ -68,7 +68,7 @@ MaterialProperty::~MaterialProperty()
 
 Texture* MaterialProperty::getTextureOfType(node_texture_type texType)
 {
-    if(texType > NODE_TEXTURE_TYPE_NORMALMAP || texType < NODE_TEXTURE_TYPE_COLORMAP)
+    if(texType > NODE_TEXTURE_TYPE_REFLECTIONMAP || texType < NODE_TEXTURE_TYPE_COLORMAP)
         return NULL;
     
     return textures[texType];
@@ -77,7 +77,7 @@ Texture* MaterialProperty::getTextureOfType(node_texture_type texType)
 
 void MaterialProperty::setTextureForType(Texture* texture, node_texture_type texType)
 {
-    if(texType > NODE_TEXTURE_TYPE_NORMALMAP || texType < NODE_TEXTURE_TYPE_COLORMAP)
+    if(texType > NODE_TEXTURE_TYPE_REFLECTIONMAP || texType < NODE_TEXTURE_TYPE_COLORMAP)
         return;
     
     textures[texType] = texture;
@@ -202,7 +202,6 @@ void MaterialProperty::readProperties(ifstream *filePointer)
     
     if(IsPropertyExists(IS_VERTEX_COLOR)) {
         getProperty(IS_VERTEX_COLOR).value.x = FileHelper::readFloat(filePointer);
-        printf("\n IS_VERTEX_COLOR %f ", getProperty(IS_VERTEX_COLOR).value.x);
     } else
         FileHelper::readFloat(filePointer);
     

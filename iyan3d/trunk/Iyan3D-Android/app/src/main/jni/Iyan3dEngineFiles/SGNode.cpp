@@ -1126,10 +1126,8 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
     if(IsPropertyExists(VERTEX_COLOR)) {
         (getProperty(VERTEX_COLOR).value = Vector4(FileHelper::readVector3(filePointer), 0.0));
         Vector4 value = getProperty(VERTEX_COLOR).value;
-        printf("\n Light Color %f %f %f %f ", value.x, value.y, value.z, value.w);
     } else
         FileHelper::readVector3(filePointer);
-    
     
     FileHelper::readVector3(filePointer);
     FileHelper::readVector3(filePointer);

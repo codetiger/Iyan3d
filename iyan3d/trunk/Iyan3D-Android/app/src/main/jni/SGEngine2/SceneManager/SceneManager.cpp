@@ -56,7 +56,7 @@ SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_
 
 #endif
     
-    renderMan->emptyTexture = loadTexture("Env Texture", bundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
+    renderMan->emptyTexture = loadTexture("Env Texture", bundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 0);
 }
 
 SceneManager::~SceneManager()

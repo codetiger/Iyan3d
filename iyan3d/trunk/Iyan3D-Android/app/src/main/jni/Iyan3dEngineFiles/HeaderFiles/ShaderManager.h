@@ -17,7 +17,7 @@
 
 // Functio Name Should be Shader Material Name With Parameter of the Node Index in SMGR.
 
-class ShaderManager{
+class ShaderManager {
 public:
     Mat4 ortho2d_oc(float left,float right,float bottom,float top,float near,float far);
     static bool isRenderingDepthPass,isRendering , renderingPreview, sceneLighting;

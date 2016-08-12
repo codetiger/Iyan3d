@@ -436,14 +436,11 @@ void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex)
 
 void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int materialIndex)
 {
-    string textureNames[] = {"colorMap", "normalMap"};
+    string textureNames[] = {"colorMap", "normalMap", "shadowMap", "reflectionMap"};
     
-    for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_NORMALMAP; i++) {
-        setTextureForNode(sgNode, sgNode->materialProps[materialIndex]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP), textureNames[i], paramIndex, i);
+    for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_REFLECTIONMAP; i++) {
+        setTextureForNode(sgNode, sgNode->materialProps[materialIndex]->getTextureOfType((node_texture_type)i), textureNames[i], paramIndex, i);
     }
-    
-    setTextureForNode(sgNode, shadowTexture, "shadowMap", paramIndex, NODE_TEXTURE_TYPE_SHADOWMAP);
-    setTextureForNode(sgNode, environmentTex, "reflectionMap", paramIndex, NODE_TETXURE_TYPE_REFLECTIONMAP);
     
     float hasReflectionMap = (environmentTex) ? 1.0 : 0.0;
     smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()));

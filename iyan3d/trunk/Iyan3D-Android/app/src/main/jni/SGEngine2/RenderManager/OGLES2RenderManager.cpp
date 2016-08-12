@@ -41,6 +41,10 @@ OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,fl
     depthBuffer = colorBuffer = frameBuffer = 0;
     shaderPrograms.clear();
     Initialize();
+    for (int i = 0; i < 32; i++) {
+        currentTextures[i] = -1;
+    }
+    currentTextureIndex = -1;
 }
 
 OGLES2RenderManager::~OGLES2RenderManager()
@@ -325,7 +329,7 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
 {
     uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
 
-    if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
+    if(!uni.isUpdated)
         return;
     
     switch (uni.type) {
@@ -359,9 +363,7 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
         case DATA_TEXTURE_CUBE:{
             u_int32_t *textureName = (u_int32_t*)uni.values;
             bindTexture(GL_TEXTURE0 + userValue, *textureName);
-            
-            if(uni.isUpdated)
-                glUniform1i(uni.location, userValue);
+            glUniform1i(uni.location, userValue);
         }
             break;
         default:
@@ -527,7 +529,8 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
 {
     if(renderTexture){
         glBindFramebuffer(GL_FRAMEBUFFER,((OGLTexture*)renderTexture)->rttFrameBuffer);
-        bindTexture(GL_TEXTURE0, ((OGLTexture*)renderTexture)->OGLTextureName);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)renderTexture)->OGLTextureName);
         PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer, isDepthPass, color);
     }
     else
@@ -588,7 +591,7 @@ Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *textu
 {
     float mid = texture->height / 2.0;
     float difFromMid = touchPosition.y - mid;
-    bindTexture(GL_TEXTURE0, ((OGLTexture*)texture)->OGLTextureName);
+    glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)texture)->OGLTextureName);
     GLubyte pixelColor[4];
     glReadPixels((int)touchPosition.x,(int)(mid - difFromMid),1,1,GL_RGBA,GL_UNSIGNED_BYTE,&pixelColor[0]);
     return Vector4((int)pixelColor[0],(int)pixelColor[1],(int)pixelColor[2],(int)pixelColor[3]);

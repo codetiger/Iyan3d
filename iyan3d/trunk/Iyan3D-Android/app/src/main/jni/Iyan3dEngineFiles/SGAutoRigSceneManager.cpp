@@ -116,7 +116,7 @@ void SGAutoRigSceneManager::sgmForRig(SGNode* sgNode)
     sgmNode->setPosition(Vector3(0.0));
     sgmNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     nodeToRig->getProperty(LIGHTING).value.x = true;
-//    nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+    nodeToRig->node->setTexture(rigScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
     sgmNode->setID(SGM_ID);
     nodeToRig->node->updateAbsoluteTransformation();
 }
@@ -232,7 +232,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->node->setID(SGR_ID);
                     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN));
                     sgrSGNode->node->setTexture(nodeToRig->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
-//                    sgrSGNode->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+                    sgrSGNode->node->setTexture(rigScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
                     sgrSGNode->getProperty(TRANSPARENCY).value.x = 1.0; // Vector4(1.0, 0, 0, 0), UNDEFINED);
                     sgrSGNode->getProperty(LIGHTING).value.x = true; // Vector4(true, 0, 0, 0), UNDEFINED);
                     sgrSGNode->getProperty(IS_VERTEX_COLOR).value.x = nodeToRig->getProperty(IS_VERTEX_COLOR).value.x;
@@ -561,7 +561,7 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
             animNode->setVisible(true);
             shared_ptr<MeshNode> meshNode = dynamic_pointer_cast<MeshNode>(nodeToRig->node);
             nodeToRig->node = animNode;
-//            nodeToRig->node->setTexture(rigScene->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+            nodeToRig->node->setTexture(rigScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
             smgr->RemoveNode(meshNode);
         }
         nodeToRig->getProperty(IS_VERTEX_COLOR).value.x = isVertexColoredNode; // Vector4(isVertexColoredNode, 0, 0, 0), MATERIAL_PROPS);
