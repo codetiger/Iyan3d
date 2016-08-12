@@ -104,9 +104,12 @@ Property& MaterialProperty::getProperty(PROP_INDEX pIndex)
         std::map< PROP_INDEX, Property >::iterator pIt;
         
         for(pIt = props.begin(); pIt != props.end(); pIt++) {
-            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end())
+            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end()) {
                 return pIt->second.subProps[pIndex];
+            }
         }
+        
+        printf("\n No such material property ..");
     }
 }
 
@@ -128,9 +131,9 @@ void MaterialProperty::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP
     if(fileName.length() > 5 || propType == IMAGE_TYPE)
         property.fileName = fileName;
     
-    if(property.parentIndex != UNDEFINED && props.find(property.parentIndex) != props.end())
+    if(property.parentIndex != UNDEFINED && props.find(property.parentIndex) != props.end()) {
         checkAndUpdatePropsMap(props[parentProp].subProps, property);
-    else if(props.find(index) == props.end()) {
+    } else if(props.find(index) == props.end()) {
         property.type = propType;
         props.insert(pair<PROP_INDEX, Property>( index, property));
     }

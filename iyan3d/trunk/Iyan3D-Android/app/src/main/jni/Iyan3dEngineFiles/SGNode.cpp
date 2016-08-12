@@ -1541,8 +1541,11 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
                 return matProps[pIndex];
             } else {
                 PROP_INDEX ind = checkPropertyInSubProps(matProps, pIndex);
-                if(ind != UNDEFINED)
-                    return matProps[ind].subProps[pIndex];
+                if(ind != UNDEFINED) {
+                    if(matProps.size() > 0 && matProps.find(ind) != matProps.end()) {
+                        return matProps.find(ind)->second.subProps.find(pIndex)->second;
+                    }
+                }
             }
         } else {
             printf("\n Material Props 0 prop Index %d ", pIndex);
@@ -1564,7 +1567,12 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
             }
 
     } else {
-        return options[pIndex];
+        if(options.size() > 0 && options.find(pIndex) != options.end()) {
+            return options.find(pIndex)->second;
+        } else {
+            addOrUpdateProperty(pIndex, Vector4(0.0), UNDEFINED, TYPE_NONE);
+            return options[pIndex];
+        }
     }
 }
 
@@ -1597,9 +1605,9 @@ void SGNode::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX par
     if(fileName.length() > 5 || propType == IMAGE_TYPE)
         property.fileName = fileName;
     
-    if(property.parentIndex != UNDEFINED && options.find(property.parentIndex) != options.end())
+    if(property.parentIndex != UNDEFINED && options.find(property.parentIndex) != options.end()) {
         checkAndUpdatePropsMap(options[parentProp].subProps, property);
-    else if(options.find(index) == options.end()) {
+    } else if(options.find(index) == options.end()) {
         property.type = propType;
         options.insert(pair<PROP_INDEX, Property>( index, property));
     }

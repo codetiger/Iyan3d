@@ -226,9 +226,9 @@
         }
     }
     
-    if(viewType == IMPORT_OBJFILE)
-        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
-    else
+    if(viewType == IMPORT_OBJFILE) {
+        [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:YES];
+    } else
         [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES];
 }
 
@@ -271,9 +271,10 @@
         [_colorWheelBtn setHidden:NO];
     }
    else if(self.addBtn.tag == Texture){
-       if(viewType == IMPORT_OBJFILE)
-           [self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
-       else
+       if(viewType == IMPORT_OBJFILE) {
+           //[self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
+           [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:NO];
+       } else
            [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
        [self.view removeFromSuperview];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
@@ -309,10 +310,10 @@
     [self.importFilesCollectionView reloadData];
     if(isDragFinish){
         [self.objSlideDelegate showOrHideProgress:1];
-        if(viewType == IMPORT_OBJFILE){
-        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
-        }
-        else
+        if(viewType == IMPORT_OBJFILE) {
+            //[_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
+            [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:YES];
+        } else
             [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES];
     }
 }

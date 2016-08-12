@@ -20,6 +20,8 @@
 
 @implementation EditorViewController
 
+#define BASIC_SHAPES_COUNT 6
+
 #define EXPORT_POPUP 1
 #define ANIMATION_POPUP 2
 #define IMPORT_POPUP 3
@@ -692,7 +694,7 @@ BOOL missingAlertShown;
 - (void) loadNodeInScene:(AssetItem*)assetItem ActionType:(ActionType)actionType
 {
     assetAddType = actionType;
-    assetItem.textureName = [NSString stringWithFormat:@"%d%@",assetItem.assetId,@"-cm"];
+    assetItem.textureName = [NSString stringWithFormat:@"%d%@",  assetItem.assetId, @"-cm"];
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
 }
 
@@ -4171,6 +4173,90 @@ void downloadFile(NSString* url, NSString* fileName)
     [_rigCancelBtn setHidden:disable];
 }
 
+- (void) importObjWithIndexPath:(int) indexPath TextureName:(NSString*) textureFileName MeshColor:(Vector3) color HasTexture:(BOOL) hasTexture IsTempNode:(BOOL) isTempNode
+{
+    
+    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+
+    NSString * displayName;
+    NSString * finalMeshName;
+    NSString * finalTextureName;
+    NSString * extension;
+    int finalNodeType;
+    NSString * destDirectory;
+    NSString* sourcePath;
+    
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
+    NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", nil]]];
+    NSFileManager* fm = [[NSFileManager alloc]init];
+
+    NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone", @"Cube", @"Cylinder", @"Plane", @"Sphere", @"Torus", nil];
+    NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001", @"60002", @"60003", @"60004", @"60005", @"60006", nil];
+
+    if(indexPath < 6) {
+        displayName = [basicShapes objectAtIndex:indexPath];
+        finalMeshName = [basicShapesId objectAtIndex:indexPath];
+        finalNodeType = (int)NODE_SGM;
+        extension = @"sgm";
+        destDirectory = @"Resources/Sgm";
+        sourcePath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/Sgm/%@.%@", finalMeshName, extension]];
+        
+    } else {
+        displayName = finalMeshName;
+        finalMeshName = [filesList objectAtIndex:indexPath - BASIC_SHAPES_COUNT];
+        finalNodeType = (int)NODE_OBJ;
+        extension = @"obj";
+        destDirectory = @"Resources/Objs";
+        sourcePath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", finalMeshName, extension]];
+
+    }
+    
+    NSString* destPath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/%@.%@", destDirectory, finalMeshName, extension]];
+    
+    if([fm fileExistsAtPath:sourcePath])
+        [fm copyItemAtPath:sourcePath toPath:destPath error:nil];
+    else
+        return;
+    
+    finalTextureName = (hasTexture) ? textureFileName :  @"White-Texture";
+    
+    if(hasTexture) {
+        NSString* sourceTexPath = [NSString stringWithFormat:@"%@/%@.png", docDirPath, textureFileName];
+        NSString* destTexPath = [NSString stringWithFormat:@"%@/Resources/Textures/%@.png", docDirPath, textureFileName];
+        
+        if([fm fileExistsAtPath:sourceTexPath]) {
+            if([fm fileExistsAtPath:destTexPath])
+                [fm removeItemAtPath:destTexPath error:nil];
+
+            UIImage *image =[UIImage imageWithContentsOfFile:sourceTexPath];
+            NSData *imageData = [self convertAndScaleImage:image size:-1];
+            [imageData writeToFile:destTexPath atomically:YES];
+            
+         } else {
+            if(![fm fileExistsAtPath:destTexPath])
+                finalTextureName = @"White-Texture";
+        }
+    }
+    
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
+    [dict setObject:displayName forKey:@"name"];
+    [dict setObject:finalMeshName forKey:@"meshName"];
+    [dict setObject:finalTextureName forKey:@"textureName"];
+    [dict setObject:[NSNumber numberWithInt:finalNodeType] forKey:@"nodeType"];
+    [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
+    [dict setObject:[NSNumber numberWithBool:hasTexture] forKey:@"hasTexture"];
+    [dict setObject:[NSNumber numberWithFloat:color.x] forKey:@"x"];
+    [dict setObject:[NSNumber numberWithFloat:color.y] forKey:@"y"];
+    [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
+    
+    [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
+    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    
+}
+
+/*
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode
 {
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
@@ -4247,6 +4333,7 @@ void downloadFile(NSString* url, NSString* fileName)
     delete textureStr;
     delete texture;
 }
+*/
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
 {
@@ -4388,9 +4475,45 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) loadObjOrSGM:(NSMutableDictionary*)dict
 {
+    NSString * name = [dict objectForKey:@"name"];
+    NSString * meshName = [dict objectForKey:@"meshName"];
+    NSString * textureName = [dict objectForKey:@"textureName"];
+    int nodeType = [[dict objectForKey:@"nodeType"] intValue];
+    bool isTempNode = [[dict objectForKey:@"isTempNode"] boolValue];
+    bool hasTexture = [[dict objectForKey:@"hasTexture"] boolValue];
+    float x = [[dict objectForKey:@"x"] floatValue];
+    float y = [[dict objectForKey:@"y"] floatValue];
+    float z = [[dict objectForKey:@"z"] floatValue];
+    
+    Vector3 mColor = Vector3(x, y, z);
+    
+    std::string meshPath = "";
+    
+    if(nodeType == NODE_SGM) {
+        std::string meshDir = FileHelper::getDocumentsDirectory() + "Resources/Sgm/";
+        meshPath = meshDir + [meshName UTF8String] + ".sgm";
+    } else {
+        std::string meshDir = FileHelper::getDocumentsDirectory() + "Resources/Objs/";
+        meshPath = meshDir + [meshName UTF8String] + ".obj";
+    }
+    
+    editorScene->loader->removeTempNodeIfExists();
+    SceneImporter *loader = new SceneImporter();
+    loader->importNodesFromFile(editorScene, [name UTF8String], meshPath, [textureName UTF8String], !hasTexture, mColor, isTempNode);
+    if(!isTempNode)
+        [self reloadSceneObjects];
+}
+
+- (void) loadStoreSGM:(NSMutableDictionary*) dict
+{
+    
+}
+
+- (void) legacyLoadObjOrSGM:(NSMutableDictionary*)dict
+{
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue],[[dict objectForKey:@"y"]floatValue],[[dict objectForKey:@"z"]floatValue],1.0);
+    Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue], [[dict objectForKey:@"y"]floatValue], [[dict objectForKey:@"z"]floatValue], 1.0);
     int assetId = [[dict objectForKey:@"assetId"]intValue];
     wstring assetName = [self getwstring:[dict objectForKey:@"name"]];
     BOOL isTempNode = [[dict objectForKey:@"isTempNode"]boolValue];
@@ -4432,6 +4555,7 @@ void downloadFile(NSString* url, NSString* fileName)
         }
     }
 }
+
 
 - (void) scalePropertyChangedInRigView:(float)scaleValue
 {

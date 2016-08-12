@@ -226,5 +226,6 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath)
         delete[] texs;
         delete[] col;
     }
+    
     return sgmMesh;
 }

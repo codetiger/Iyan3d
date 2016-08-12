@@ -44,10 +44,12 @@ string getFileName(const string& s)
     return("");
 }
 
-void SceneImporter::importNodesFromFile(string filepath, SGEditorScene *sgScene)
+void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filepath, string textureName, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
     string ext = getFileExtention(filepath);
     printf("Ext: %s\n", ext.c_str());
+    printf(" \n Mesh at %s ", filepath.c_str());
+    printf("\n Texture Path %s ", textureName.c_str());
     if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds" || ext == "blend") {
         Assimp::Importer *importer = new Assimp::Importer();
         scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Fast);
@@ -60,24 +62,47 @@ void SceneImporter::importNodesFromFile(string filepath, SGEditorScene *sgScene)
         
         delete importer;
     } else if(ext == "sgr") {
+        
+        
         SGNode *sceneNode = new SGNode(NODE_RIG);
+        sceneNode->isTempNode = isTempNode;
+        sceneNode->name = ConversionHelper::getWStringForString(name);
         MaterialProperty *materialProps = new MaterialProperty(NODE_RIG);
         sceneNode->materialProps.push_back(materialProps);
         unsigned short materialIndex = sceneNode->materialProps.size() - 1;
         
-        shared_ptr<AnimatedMeshNode> sgn = make_shared<AnimatedMeshNode>();
         SkinMesh *mesh = (SkinMesh*)CSGRMeshFileLoader::LoadMesh(filepath);
         sceneNode->setSkinningData(mesh);
-        sgn->setMesh(mesh, ShaderManager::maxJoints);
+        mesh->setOptimization(false, false, false);
         
-        sgScene->getSceneManager()->AddNode(sgn, MESH_TYPE_HEAVY);
+        shared_ptr<AnimatedMeshNode> sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh(mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
-
-        Property p1 = sceneNode->getProperty(TEXTURE, materialIndex);
-        p1.fileName = getFileName(string(filepath));
-        Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-        materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
-
+        bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
+        int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointCount();
+        
+        for(int i = 0;i < jointsCount;i++){
+            dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointNode(i)->setID(i);
+            if(!isSGJointsCreated){
+                SGJoint *joint = new SGJoint();
+                joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointNode(i);
+                sceneNode->joints.push_back(joint);
+            }
+        }
+        
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
+        
+        if(hasMeshColor) {
+            Property &p1 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p1.value.x = true;
+            Property &p2 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+            p2.value = Vector4(meshColor, 1.0);
+        } else {
+            Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
+            p1.fileName = textureName;
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+        }
+        
         sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
         sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
@@ -90,28 +115,32 @@ void SceneImporter::importNodesFromFile(string filepath, SGEditorScene *sgScene)
         sgScene->updater->resetMaterialTypes(false);
         
         sgScene->nodes.push_back(sceneNode);
-
     } else if(ext == "sgm") {
+        
         SGNode *sceneNode = new SGNode(NODE_SGM);
+        sceneNode->isTempNode = isTempNode;
+        sceneNode->name = ConversionHelper::getWStringForString(name);
         MaterialProperty *materialProps = new MaterialProperty(NODE_SGM);
         sceneNode->materialProps.push_back(materialProps);
         unsigned short materialIndex = sceneNode->materialProps.size() - 1;
-        
-        shared_ptr<MeshNode> sgn = make_shared<MeshNode>();
         Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(filepath);
-        sgn->mesh = mesh;
-        
-        sgScene->getSceneManager()->AddNode(sgn, MESH_TYPE_LITE);
+        mesh->setOptimization(false, false, false);
+        shared_ptr<MeshNode> sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_MESH);
         sceneNode->node = sgn;
         
-        Property p1 = sceneNode->getProperty(TEXTURE, materialIndex);
-        p1.fileName = getFileName(string(filepath));
-        Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-        materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+        if(hasMeshColor) {
+            Property &p1 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p1.value.x = true;
+            Property &p2 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+            p2.value = Vector4(meshColor, 1.0);
+        } else {
+            Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
+            p1.fileName = textureName;
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+        }
         
         sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
-        sgScene->loader->setJointsScale(sceneNode);
-        dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
         sceneNode->actionId = ++sgScene->actionObjectsSize;
         
         sceneNode->node->setID(sgScene->assetIDCounter++);

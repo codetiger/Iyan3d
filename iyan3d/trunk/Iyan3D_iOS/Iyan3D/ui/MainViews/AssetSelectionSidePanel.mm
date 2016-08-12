@@ -552,7 +552,7 @@
     
 }
 
-- (void)downloadAsset:(AssetItem*)assetvalue ForActivity:(int)activity isTempAsset:(bool)isTempAsset
+- (void) downloadAsset:(AssetItem*)assetvalue ForActivity:(int)activity isTempAsset:(bool)isTempAsset
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
@@ -602,7 +602,7 @@
             }
         }
         else {
-            fileName = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", docDirPath, assetvalue.assetId];
+            fileName = [NSString stringWithFormat:@"%@/%d.sgr", cacheDirectory, assetvalue.assetId];
             NSString* textureFile = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, assetvalue.assetId];
 
             NSLog(@"File Path : %@",fileName);
@@ -628,8 +628,8 @@
     }
     else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES || assetvalue.type == OBJ_FILE) {
         
-        fileName = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", docDirPath, assetvalue.assetId];
-        NSString* textureFile = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, assetvalue.assetId];
+        fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
+        NSString* textureFile = [NSString stringWithFormat:@"%@/Resources/Textures/%d.png", docDirPath, assetvalue.assetId];
         url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
         
         if (assetvalue.assetId >= 20000 && assetvalue.assetId <= 30000) {

@@ -20,6 +20,7 @@ Node::Node()
     rotation = Vector3(0.0);
     scale = Vector3(1.0);
     uvScale = 1.0f;
+    instancingRenderIt = 0;
     
     for(int i = 0; i < MAX_TEXTURE_PER_NODE; i++)
         textures[i] = NULL;

@@ -31,7 +31,7 @@ public:
     SceneImporter();
     ~SceneImporter();
     
-    void importNodesFromFile(string fileName, SGEditorScene *sgScene);
+    void importNodesFromFile(SGEditorScene *sgScene, string name, string filepath, string textureName, bool hasMeshColor, Vector3 meshColor, bool isTempNode);
     
 private:
     const aiScene* scene = NULL;

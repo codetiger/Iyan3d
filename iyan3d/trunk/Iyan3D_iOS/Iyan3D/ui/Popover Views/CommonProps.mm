@@ -374,9 +374,9 @@
                 }
                 
                 selectedListProp = property;
-                if(property.parentIndex == HAS_PHYSICS)
+                if(property.parentIndex == HAS_PHYSICS) {
                     physicsProperty.subProps[PHYSICS_KIND].value = Vector4(property.index);
-                else if (property.groupName == "Resolution") {
+                }else if (property.groupName == "Resolution") {
                     [self.delegate changedPropertyAtIndex:CAM_RESOLUTION WithValue:Vector4(property.index - 12) AndStatus:YES];
                 } else {
                     [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:NO];

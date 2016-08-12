@@ -69,9 +69,9 @@ void ShaderManager::addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_IN
     if(fileName.length() > 5 || propType == IMAGE_TYPE)
         property.fileName = fileName;
     
-    if(parentProp != UNDEFINED && sceneProps.find(parentProp) != sceneProps.end())
+    if(parentProp != UNDEFINED && sceneProps.find(parentProp) != sceneProps.end()) {
         checkAndUpdatePropsMap(sceneProps[parentProp].subProps, property);
-    else if(sceneProps.find(index) == sceneProps.end()) {
+    } else if(sceneProps.find(index) == sceneProps.end()) {
         property.type = propType;
         sceneProps.insert(pair<PROP_INDEX, Property>( index, property));
     }
@@ -99,14 +99,23 @@ Property& ShaderManager::getProperty(PROP_INDEX pIndex)
     if(sceneProps.find(pIndex) == sceneProps.end()) {
         std::map<PROP_INDEX, Property>::iterator pIt;
         for(pIt = sceneProps.begin(); pIt != sceneProps.end(); pIt++) {
-            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end())
+            if(pIt->second.subProps.find(pIndex) != pIt->second.subProps.end()) {
                 return pIt->second.subProps[pIndex];
+            }
         }
         
         addOrUpdateProperty(pIndex, Vector4(0), UNDEFINED);
-        
-    } else {
+        printf("\n No such scene property ..");
         return sceneProps[pIndex];
+
+    } else {
+        if(sceneProps.size() > 0 && sceneProps.find(pIndex) != sceneProps.end()) {
+            return sceneProps.find(pIndex)->second;
+        } else {
+            addOrUpdateProperty(pIndex, Vector4(0), UNDEFINED);
+            printf("\n No such scene property 2..");
+            return sceneProps[pIndex];
+        }
     }
 }
 
@@ -239,7 +248,6 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *vertColor = new float[((endIndex - startIndex)+1) * 3];
-    
     Vector4 vertexColor = sgNode->getProperty(SELECTED, materialIndex).value.x ? Vector4(0.0, 1.0, 0.0, 0) : color;
     vertColor[0] = vertexColor.x;
     vertColor[1] = vertexColor.y;

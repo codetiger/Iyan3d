@@ -13,6 +13,7 @@
 #import "SGEditorScene.h"
 #import "AppHelper.h"
 #import "AppDelegate.h"
+#import "SceneImporter.h"
 
 #define UNDEFINED_OBJECT -1
 #define ASSET_RIGGED 1
@@ -263,6 +264,18 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_ACCESSORIES: {
             
             string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgm";
+            Vector3 mColor = Vector3(vertexColor.x, vertexColor.y, vertexColor.z);
+            editorScene->loader->removeTempNodeIfExists();
+            SceneImporter *loader = new SceneImporter();
+            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, [textureName UTF8String], false, mColor, isTempNode);
+            
+            if(!isTempNode){
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+                [self.delegate updateAssetListInScenes];
+            }
+
+            /*
             SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, meshPath, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
@@ -271,9 +284,24 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
               [self.delegate updateAssetListInScenes];
             }
+             */
             break;
         }
         case ASSET_RIGGED: {
+            
+            string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgr";
+            Vector3 mColor = Vector3(vertexColor.x, vertexColor.y, vertexColor.z);
+            editorScene->loader->removeTempNodeIfExists();
+            SceneImporter *loader = new SceneImporter();
+            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, [textureName UTF8String], false, mColor, isTempNode);
+            
+            if(!isTempNode){
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+                [self.delegate updateAssetListInScenes];
+            }
+
+            /*
             string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgr";
             SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, meshPath, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             if(sgNode)
@@ -283,6 +311,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
+             */
+            
             break;
         }
         case ASSET_OBJ: {
