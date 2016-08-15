@@ -87,6 +87,7 @@ public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
 
+    Mesh* clone();
     void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
     void addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
     void copyDataFromMesh(Mesh* otherMesh);
@@ -95,7 +96,7 @@ public:
     void addVertex(vertexData* vertex, bool updateBB = true);
     void addHeavyVertex(vertexDataHeavy* vertex);
     void addToIndicesArray(unsigned int index);
-    void Commit();
+    void Commit(bool forceSplitBuffers = false);
 
     void clearVerticesArray();
     void clearIndicesArray();

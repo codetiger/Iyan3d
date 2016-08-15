@@ -176,42 +176,23 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
 {
     shared_ptr<MeshNode> n = dynamic_pointer_cast<MeshNode>(sgNode->node);
 
-    if(!dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache) {
-        Mesh *mesh = n->getMesh();
-        dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache = new Mesh();
-        dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->meshformat = mesh->meshformat;
-        dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->meshType = mesh->meshType;
-
-        for (int i = 0; i < mesh->getVerticesCount(); i++) {
-            vertexData *v = mesh->getLiteVertexByIndex(i);
-            vertexData vc;
-            vc.vertNormal = v->vertNormal;
-            vc.texCoord1 = v->texCoord1;
-            int index = n->MeshMap.find(i)->second;
-            if(n->m_vertices.find(index) != n->m_vertices.end()) {
-                btSoftBody::Node* node = n->m_vertices.find(index)->second;
-                vc.vertPosition.x = node->m_x.x();
-                vc.vertPosition.y = node->m_x.y();
-                vc.vertPosition.z = node->m_x.z();
-            }
-            dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->addVertex(&vc);
-            dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->addToIndicesArray(i);
-        }
+    if(!n->meshCache) {
+        n->meshCache = n->getMesh()->clone();
         sgNode->node->memtype = NODE_GPUMEM_TYPE_DYNAMIC;
-    } else {
-        for (int i = 0; i < dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->getVerticesCount(); i++) {
-            vertexData *v = dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->getLiteVertexByIndex(i);
-            int index = n->MeshMap.find(i)->second;
-            if(n->m_vertices.find(index) != n->m_vertices.end()) {
-                btSoftBody::Node* node = n->m_vertices.find(index)->second;
-                v->vertPosition.x = node->m_x.x();
-                v->vertPosition.y = node->m_x.y();
-                v->vertPosition.z = node->m_x.z();
-            }
+    }
+
+    for (int i = 0; i < n->meshCache->getVerticesCount(); i++) {
+        vertexData *v = n->meshCache->getLiteVertexByIndex(i);
+        int index = n->MeshMap.find(i)->second;
+        if(n->m_vertices.find(index) != n->m_vertices.end()) {
+            btSoftBody::Node* node = n->m_vertices.find(index)->second;
+            v->vertPosition.x = node->m_x.x();
+            v->vertPosition.y = node->m_x.y();
+            v->vertPosition.z = node->m_x.z();
         }
     }
     
-    dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->Commit();
+    n->meshCache->Commit(true);
     sgNode->node->shouldUpdateMesh = true;
 }
 
@@ -263,7 +244,7 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     std::map<int, Vector3> vertex_map;
     int count = 0;
 
-    Mesh* mesh = dynamic_pointer_cast<MeshNode>(sgNode->node)->getMesh();
+    Mesh* mesh = n->getMesh();
 
     int indicesCount = mesh->getTotalIndicesCount();
     unsigned int indicesArray[indicesCount];

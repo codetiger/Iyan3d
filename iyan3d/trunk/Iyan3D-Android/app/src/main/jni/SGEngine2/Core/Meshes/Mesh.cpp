@@ -142,13 +142,28 @@ void Mesh::addToIndicesArray(unsigned int index)
     tempIndicesData.push_back(index);
 }
 
+Mesh* Mesh::clone() {
+    Mesh *m = new Mesh();
+    m->meshType = meshType;
+    m->meshformat = meshformat;
+    m->setOptimization(false, false, false);
+    
+    m->tempIndicesData = tempIndicesData;
+    m->tempVerticesData = tempVerticesData;
+    m->tempVerticesDataHeavy = tempVerticesDataHeavy;
+    
+    m->Commit();
+    
+    return m;
+}
+
 void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents) {
     removeDoubles = rmDoubles;
     optimizeIndicesOrder = optimIndOrd;
     calculateTangents = calcTangents;
 }
 
-void Mesh::Commit()
+void Mesh::Commit(bool forceSplitBuffers)
 {
     if (removeDoubles)
         removeDoublesInMesh();
@@ -159,7 +174,7 @@ void Mesh::Commit()
     if (calculateTangents)
         reCalculateTangents();
     
-    if(shouldSplitBuffers) {
+    if(shouldSplitBuffers || forceSplitBuffers) {
         clearVerticesArray();
         clearIndicesArray();
         vector<unsigned int> indicesDataCopy;
