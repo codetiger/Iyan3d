@@ -36,8 +36,9 @@ public:
 private:
     const aiScene* scene = NULL;
 
-    void loadNodes(aiNode *n, SGEditorScene *sgScene);
-    void loadJoints(aiMesh *aiM, SkinMesh *m, aiNode* aiN, Joint* parent);
+    void loadNodes(SGEditorScene *sgScene, string path);
+    void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
+    void loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones);
 
     void getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM);
     void getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM);

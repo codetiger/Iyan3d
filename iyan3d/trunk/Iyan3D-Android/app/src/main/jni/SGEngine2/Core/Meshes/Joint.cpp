@@ -14,6 +14,7 @@ Joint::Joint()
     envelopeRadius = 0.5;
     sphereRadius = 1.0;
     Index = 0;
+    Parent = NULL;
 }
 
 Joint::~Joint()

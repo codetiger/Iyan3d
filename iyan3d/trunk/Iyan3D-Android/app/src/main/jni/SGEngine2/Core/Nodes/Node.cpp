@@ -25,7 +25,7 @@ Node::Node()
     for(int i = 0; i < MAX_TEXTURE_PER_NODE; i++)
         textures[i] = NULL;
 
-    //Parent = NULL;
+    Parent = shared_ptr<Node>();
     Children = make_shared< vector< shared_ptr<Node> > >();
     isVisible = true;
     hasTransparency = hasNormalMap = hasReflectionMap = false;

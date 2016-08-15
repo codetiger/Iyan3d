@@ -81,14 +81,6 @@ void MaterialProperty::setTextureForType(Texture* texture, node_texture_type tex
         return;
     
     textures[texType] = texture;
-    
-//    if(texType == NODE_TEXTURE_TYPE_COLORMAP)
-//        hasTransparency = texture->hasTransparency;
-//    else if(texType == NODE_TEXTURE_TYPE_REFLECTIONMAP)
-//        hasReflectionMap = (texture != NULL);
-//    else if(texType == NODE_TEXTURE_TYPE_NORMALMAP)
-//        hasNormalMap = (texture != NULL);
-
 }
 
 std::map< PROP_INDEX, Property >& MaterialProperty::getProps()

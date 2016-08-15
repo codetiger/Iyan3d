@@ -33,17 +33,21 @@ SkinMesh::~SkinMesh()
 void SkinMesh::buildAllGlobalAnimatedMatrices(Joint *joint, Joint *parentJoint)
 {
     if (!joint) {
-        for (int i=0; i<RootJoints->size(); ++i)
+        
+        for (int i = 0; i < RootJoints->size(); ++i)
             buildAllGlobalAnimatedMatrices((*RootJoints)[i], 0);
+
         return;
+        
     } else {
+        
         if (!parentJoint)
             joint->GlobalAnimatedMatrix = joint->LocalAnimatedMatrix;
         else
             joint->GlobalAnimatedMatrix = parentJoint->GlobalAnimatedMatrix * joint->LocalAnimatedMatrix;
     }
     
-    for (int j=0; j<joint->childJoints->size(); ++j)
+    for (int j = 0; j < joint->childJoints->size(); ++j)
         buildAllGlobalAnimatedMatrices((*joint->childJoints)[j], joint);
 }
 
@@ -87,14 +91,7 @@ Joint* SkinMesh::addJoint(Joint *parent)
 void SkinMesh::finalize()
 {
     for(int CheckingIdx = 0; CheckingIdx < joints->size(); CheckingIdx++) {
-        bool foundParent = false;
-        for(int i = 0; i < joints->size() && (i != CheckingIdx); i++) {
-            for(int n = 0; n < (*joints)[i]->childJoints->size(); n++) {
-                if ((*(*joints)[i]->childJoints)[n] == (*joints)[CheckingIdx])
-                    foundParent = true;
-            }
-        }
-        if (!foundParent)
+        if(!(*joints)[CheckingIdx]->Parent)
             RootJoints->push_back((*joints)[CheckingIdx]);
     }
     buildAllGlobalAnimatedMatrices(NULL,NULL);

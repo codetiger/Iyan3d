@@ -10,7 +10,7 @@
 
 JointNode::JointNode()
 {
-    
+    Parent = shared_ptr<JointNode>();
 }
 
 JointNode::~JointNode()

@@ -44,25 +44,51 @@ string getFileName(const string& s)
     return("");
 }
 
+Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
+{
+    Mat4 mtrix;
+    
+    mtrix[0] = assimpMatrix.a1;
+    mtrix[1] = assimpMatrix.b1;
+    mtrix[2] = assimpMatrix.c1;
+    mtrix[3] = assimpMatrix.d1;
+    
+    mtrix[4] = assimpMatrix.a2;
+    mtrix[5] = assimpMatrix.b2;
+    mtrix[6] = assimpMatrix.c2;
+    mtrix[7] = assimpMatrix.d2;
+    
+    mtrix[8] = assimpMatrix.a3;
+    mtrix[9] = assimpMatrix.b3;
+    mtrix[10] = assimpMatrix.c3;
+    mtrix[11] = assimpMatrix.d3;
+    
+    mtrix[12] = assimpMatrix.a4;
+    mtrix[13] = assimpMatrix.b4;
+    mtrix[14] = assimpMatrix.c4;
+    mtrix[15] = assimpMatrix.d4;
+    
+    return mtrix;
+}
+
 void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filepath, string textureName, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
     string ext = getFileExtention(filepath);
-    printf("Ext: %s\n", ext.c_str());
     printf(" \n Mesh at %s ", filepath.c_str());
     printf("\n Texture Path %s ", textureName.c_str());
     if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds" || ext == "blend") {
         Assimp::Importer *importer = new Assimp::Importer();
-        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Fast);
+        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Quality);
         if(!scene) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
         }
         
-        loadNodes(scene->mRootNode, sgScene);
+        loadNodes(sgScene, textureName);
         
         delete importer;
+
     } else if(ext == "sgr") {
-        
         
         SGNode *sceneNode = new SGNode(NODE_RIG);
         sceneNode->isTempNode = isTempNode;
@@ -115,6 +141,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         sgScene->updater->resetMaterialTypes(false);
         
         sgScene->nodes.push_back(sceneNode);
+        
     } else if(ext == "sgm") {
         
         SGNode *sceneNode = new SGNode(NODE_SGM);
@@ -154,143 +181,140 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
     }
 }
 
-void SceneImporter::loadNodes(aiNode *n, SGEditorScene *sgScene)
+void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
 {
-    if (n->mNumMeshes) {
-        SGNode *sceneNode = new SGNode(NODE_UNDEFINED);
-        shared_ptr<Node> sgn;
-        Mesh* mesh;
-        
-        for (int i = 0; i < n->mNumMeshes; i++) {
-            aiMesh *aiM = scene->mMeshes[n->mMeshes[i]];
-            if(i == 0) {
-                sceneNode->setType(aiM->HasBones() ? NODE_RIG : NODE_SGM);
-                sceneNode->setPropertiesOfNode();
-                
-                if(aiM->HasBones()) {
-                    mesh = new SkinMesh();
-                    sgn = make_shared<AnimatedMeshNode>();
-                } else {
-                    mesh = new Mesh();
-                    sgn = make_shared<MeshNode>();
-                }
-                
-                sgn->callbackFuncName = "setUniforms";
-            }
-            MaterialProperty *materialProps = new MaterialProperty(aiM->HasBones() ? NODE_RIG : NODE_SGM);
-            sceneNode->materialProps.push_back(materialProps);
-            unsigned short materialIndex = sceneNode->materialProps.size() - 1;
+    Mesh* mesh;
+    map< string, Joint* > *bones = new map< string, Joint* >();
+    bool hasBones = false;
+    
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh *aiM = scene->mMeshes[i];
+        if(!hasBones)
+            hasBones = aiM->HasBones();
+    }
 
-            if(aiM->HasBones()) {
-                
-                vector<vertexDataHeavy> mbvd;
-                vector<unsigned short> mbi;
-                getSkinMeshFrom(mbvd, mbi, aiM);
-
-                mesh->addMeshBuffer(mbvd, mbi, materialIndex);
-                
-                loadJoints(aiM, (SkinMesh*)mesh, n, NULL);
-                printf("JointCount: %d\n", (int)((SkinMesh*)mesh)->joints->size());
-
-                sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
-                
-            } else {
-
-                vector<vertexData> mbvd;
-                vector<unsigned short> mbi;
-                getMeshFrom(mbvd, mbi, aiM);
-                mesh->addMeshBuffer(mbvd, mbi, materialIndex);
-
-                sgn->setScale(Vector3(1.0));
-                sgn->updateAbsoluteTransformation();
-                
-                sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
-
-            }
-
-            Mat4 mat = Mat4();
-            for (int j = 0; j < 16; j++)
-                mat.setElement(j, *n->mTransformation[j]);
-            
-            //sgn->setAbsoluteTransformation(mat);
-            sgn->updateAbsoluteTransformation();
-
-            aiColor4D color;
-            aiMaterial *material = scene->mMaterials[aiM->mMaterialIndex];
-            printf("Material Index: %d\n", aiM->mMaterialIndex);
-
-            if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
-                Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
-                p1.value = Vector4(color.r, color.g, color.b, color.a);
-                printf("DiffuseColor: %f, %f, %f, %f\n", color.r, color.g, color.b, color.a);
-                Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
-                p2.value.x = 1.0;
-            }
-            
-            float shininess = 0.0;
-            if(aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess) == AI_SUCCESS) {
-                Property p1 = sceneNode->getProperty(REFLECTION, materialIndex);
-                p1.value.x = shininess;
-            }
-            
-            shininess = 0.0;
-            if(aiGetMaterialFloat(material, AI_MATKEY_REFLECTIVITY, &shininess) == AI_SUCCESS) {
-                Property p1 = sceneNode->getProperty(REFLECTION, materialIndex);
-                p1.value.x = shininess;
-            }
-            
-            if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
-                aiString path;
-                material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-                Property p1 = sceneNode->getProperty(TEXTURE, materialIndex);
-                p1.fileName = getFileName(string(path.data));
-                Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-                materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
-                printf("Diffuse Texture: %s\n", p1.fileName.c_str());
-            }
-
-            if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
-                aiString path;
-                material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-                Property p1 = sceneNode->getProperty(TEXTURE, materialIndex);
-                p1.fileName = getFileName(string(path.data));
-                Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-                materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
-                printf("Normal Texture: %s\n", p1.fileName.c_str());
-            }
-            
-        }
-        
-        if(sceneNode->getType() == NODE_RIG)
-            dynamic_pointer_cast<AnimatedMeshNode>(sgn)->setMesh((SkinMesh*)mesh, ShaderManager::maxJoints);
-        else
-            dynamic_pointer_cast<MeshNode>(sgn)->mesh = mesh;
-
-        sgScene->getSceneManager()->AddNode(sgn, sceneNode->getType() == NODE_RIG ? MESH_TYPE_HEAVY : MESH_TYPE_LITE);
-        sceneNode->node = sgn;
-
-        sceneNode->name = ConversionHelper::getWStringForString(string(n->mName.C_Str()));
-        printf("Loaded Node Name: %s\n", n->mName.C_Str());
-        sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
-        if(sceneNode->getType() == NODE_RIG) {
-            sgScene->loader->setJointsScale(sceneNode);
-            dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
-        }
-        sceneNode->actionId = ++sgScene->actionObjectsSize;
-        
-        sceneNode->node->setID(sgScene->assetIDCounter++);
-        sgScene->selectMan->removeChildren(sgScene->getParentNode());
-        sgScene->updater->setDataForFrame(sgScene->currentFrame);
-        sgScene->selectMan->updateParentPosition();
-        sgScene->updater->resetMaterialTypes(false);
-        
-        sgScene->nodes.push_back(sceneNode);
-
+    SGNode *sceneNode = new SGNode(hasBones ? NODE_RIG : NODE_SGM);
+    
+    if(hasBones) {
+        mesh = new SkinMesh();
     } else {
-        for (int i = 0; i < n->mNumChildren; i++) {
-            loadNodes(n->mChildren[i], sgScene);
+        mesh = new Mesh();
+    }
+
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh *aiM = scene->mMeshes[i];
+        
+        MaterialProperty *materialProps = new MaterialProperty(hasBones ? NODE_RIG : NODE_SGM);
+        sceneNode->materialProps.push_back(materialProps);
+        unsigned short materialIndex = sceneNode->materialProps.size() - 1;
+        
+        if(hasBones) {
+            
+            vector< vertexDataHeavy > mbvd;
+            vector< unsigned short > mbi;
+            getSkinMeshFrom(mbvd, mbi, aiM);
+            mesh->addMeshBuffer(mbvd, mbi, materialIndex);
+            
+            if(aiM->HasBones())
+                loadBonesFromMesh(aiM, (SkinMesh*)mesh, bones);
+
+        } else {
+            
+            vector< vertexData > mbvd;
+            vector< unsigned short > mbi;
+            getMeshFrom(mbvd, mbi, aiM);
+            mesh->addMeshBuffer(mbvd, mbi, materialIndex);
+        }
+        
+        aiColor4D color;
+        aiMaterial *material = scene->mMaterials[aiM->mMaterialIndex];
+        
+        if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
+            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+            p1.value = Vector4(color.r, color.g, color.b, color.a);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p2.value.x = 1.0;
+        }
+        
+        if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+            aiString path;
+            material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+            
+            Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
+            p1.fileName = getFileName(string(path.data));
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, folderPath + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+            printf("Diffuse Texture: %s\n", p1.fileName.c_str());
+        }
+        
+        if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
+            aiString path;
+            material->GetTexture(aiTextureType_NORMALS, 0, &path);
+            
+            Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
+            p1.fileName = getFileName(string(path.data));
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, folderPath + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
+            printf("Normal Texture: %s\n", p1.fileName.c_str());
         }
     }
+
+    shared_ptr<Node> sgn;
+    
+    if(sceneNode->getType() == NODE_RIG) {
+        loadBoneHierarcy((SkinMesh*)mesh, bones);
+        ((SkinMesh*)mesh)->finalize();
+        sceneNode->setSkinningData((SkinMesh*)mesh);
+        mesh->setOptimization(false, false, false);
+
+        sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
+        sceneNode->node = sgn;
+
+        bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
+        int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointCount();
+        
+        for(int i = 0;i < jointsCount;i++) {
+            dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i)->setID(i);
+            if(!isSGJointsCreated){
+                SGJoint *joint = new SGJoint();
+                joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i);
+                sceneNode->joints.push_back(joint);
+            }
+        }
+
+        sgn->setScale(Vector3(1.0));
+        sgn->updateAbsoluteTransformation();
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
+
+    } else {
+        mesh->setOptimization(false, false, false);
+        sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms");
+        sceneNode->node = sgn;
+
+        sgn->setScale(Vector3(1.0));
+        sgn->updateAbsoluteTransformation();
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
+    }
+    
+    sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
+    if(sceneNode->getType() == NODE_RIG) {
+        sgScene->loader->setJointsScale(sceneNode);
+        dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
+    }
+
+    sceneNode->name = ConversionHelper::getWStringForString(string(scene->mRootNode->mName.C_Str()));
+    printf("Loaded Node Name: %s\n", scene->mRootNode->mName.C_Str());
+
+    sceneNode->node = sgn;
+    sceneNode->actionId = ++sgScene->actionObjectsSize;
+    sceneNode->node->setID(sgScene->assetIDCounter++);
+    
+    sgScene->selectMan->removeChildren(sgScene->getParentNode());
+    sgScene->updater->setDataForFrame(sgScene->currentFrame);
+    sgScene->selectMan->updateParentPosition();
+    sgScene->updater->resetMaterialTypes(false);
+    
+    sgScene->nodes.push_back(sceneNode);
 }
 
 void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
@@ -300,15 +324,12 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
         vd.vertPosition = Vector3(aiM->mVertices[i].x, aiM->mVertices[i].y, aiM->mVertices[i].z);
         vd.vertNormal = Vector3(aiM->mNormals[i].x, aiM->mNormals[i].y, aiM->mNormals[i].z);
         
-        if(aiM->mColors[0])
-            vd.optionalData1 = Vector4(aiM->mColors[0][i].r, aiM->mColors[0][i].g, aiM->mColors[0][i].b, aiM->mColors[0][i].a);
-        else
-            vd.optionalData1 = Vector4(-1.0);
-        
         if(aiM->mTextureCoords[0])
             vd.texCoord1 = Vector2(aiM->mTextureCoords[0][i].x, aiM->mTextureCoords[0][i].y);
         else
             vd.texCoord1 = Vector2(0.0, 0.0);
+        
+        vd.optionalData1 = vd.optionalData2 = vd.optionalData3 = vd.optionalData4 = Vector4(0.0);
         
         mbvd.push_back(vd);
     }
@@ -322,32 +343,97 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
     }
 }
 
-void SceneImporter::loadJoints(aiMesh *aiM, SkinMesh *m, aiNode* aiN, Joint* parent)
+void getLocalMatrix(Joint* bone) {
+    for (int i = 0; i < bone->childJoints->size(); i++) {
+        Joint *child = (*bone->childJoints)[i];
+
+        Mat4 invParentMatrix = bone->GlobalAnimatedMatrix;
+        invParentMatrix.invert();
+        
+        child->LocalAnimatedMatrix = invParentMatrix * child->GlobalAnimatedMatrix;
+        getLocalMatrix(child);
+    }
+}
+
+void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
+{
+    typedef map< string, Joint* >::iterator it_type;
+
+    map< string, Joint*> *newBones = new map< string, Joint*>();
+    
+    do {
+        if(newBones->size() > 0) {
+            bones->insert(newBones->begin(), newBones->end());
+            newBones->clear();
+        }
+        
+        for(it_type iterator = bones->begin(); iterator != bones->end(); iterator++) {
+            if(!iterator->second->Parent) {
+                aiNode *n = scene->mRootNode->FindNode(iterator->first.c_str());
+                
+                if(n && n->mParent && n->mParent != scene->mRootNode) {
+                    if(bones->find(string(n->mParent->mName.C_Str())) == bones->end() &&
+                       newBones->find(string(n->mParent->mName.C_Str())) == newBones->end()) {
+                        Joint* sgBone = m->addJoint(NULL);
+                        sgBone->name = string(n->mParent->mName.C_Str());
+                        
+                        iterator->second->Parent = sgBone;
+                        sgBone->childJoints->push_back(iterator->second);
+                        
+                        newBones->insert(pair<string, Joint*>(string(n->mParent->mName.C_Str()), sgBone));
+                        
+                        sgBone->GlobalAnimatedMatrix = AssimpToMat4(n->mParent->mTransformation);
+                    } else {
+                        it_type parentIterator = bones->find(string(n->mParent->mName.C_Str()));
+                        if(parentIterator == bones->end())
+                            parentIterator = newBones->find(string(n->mParent->mName.C_Str()));
+                        
+                        iterator->second->Parent = parentIterator->second;
+                        parentIterator->second->childJoints->push_back(iterator->second);
+                    }
+                }
+            }
+        }
+    } while(newBones->size() > 0);
+
+    Joint *rootBone;
+    for(it_type iterator = bones->begin(); iterator != bones->end(); iterator++) {
+        if(!iterator->second->Parent)
+            rootBone = iterator->second;
+    }
+   
+    rootBone->LocalAnimatedMatrix = Mat4();
+    getLocalMatrix(rootBone);
+    
+//    printf("Total Joints in Mesh %d\n", (int)((SkinMesh*)m)->joints->size());
+//    for(it_type iterator = bones->begin(); iterator != bones->end(); iterator++) {
+//        string parent;
+//        if(iterator->second->Parent)
+//            parent = iterator->second->Parent->name;
+//        printf("Bone: %s Has Parent: %s\n", iterator->first.c_str(), parent.c_str());
+//    }
+}
+
+void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones)
 {
     for (int i = 0; i < aiM->mNumBones; i++) {
-        if(aiM->mBones[i]->mName == aiN->mName) {
-            Joint* sgBone = m->addJoint(parent);
+        aiBone* bone = aiM->mBones[i];
+        if(bones->find(string(bone->mName.C_Str())) == bones->end()) {
+            Joint* sgBone = m->addJoint(NULL);
+            sgBone->name = string(bone->mName.C_Str());
             
-            aiBone* b = aiM->mBones[i];
-            for (int j = 0; j < b->mNumWeights; j++) {
+            bones->insert(pair<string, Joint*>(string(bone->mName.C_Str()), sgBone));
+            
+            for (int j = 0; j < bone->mNumWeights; j++) {
                 shared_ptr<PaintedVertex> pvInfo = make_shared<PaintedVertex>();
-                pvInfo->vertexId = b->mWeights[j].mVertexId;
-                pvInfo->weight = b->mWeights[j].mWeight;
+                pvInfo->vertexId = bone->mWeights[j].mVertexId;
+                pvInfo->weight = bone->mWeights[j].mWeight;
+                pvInfo->meshBufferIndex = m->getMeshBufferCount() - 1;
                 sgBone->PaintedVertices->push_back(pvInfo);
             }
             
-            for (int j = 0; j < 16; j++)
-                sgBone->LocalAnimatedMatrix.setElement(j, *b->mOffsetMatrix[j]);
-
-            for (int j = 0; j < aiN->mNumChildren; j++) {
-                loadJoints(aiM, m, aiN->mChildren[j], sgBone);
-            }
-            return;
+            sgBone->GlobalAnimatedMatrix = AssimpToMat4(bone->mOffsetMatrix);
         }
-    }
-
-    for (int j = 0; j < aiN->mNumChildren; j++) {
-        loadJoints(aiM, m, aiN->mChildren[j], parent);
     }
 }
 

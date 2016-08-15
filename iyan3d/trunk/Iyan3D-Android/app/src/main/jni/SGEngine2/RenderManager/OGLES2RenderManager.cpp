@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "../Core/Nodes/ParticleManager.h"
 #include "OGLES2RenderManager.h"
+#include <OpenGLES/ES2/glext.h>
 
 #ifdef ANDROID
 //#include "../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/stdint.h"
@@ -373,6 +374,10 @@ void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 
             Logger::log(ERROR, "OGLES2RenderManager", "Uniform: " + uni.name + " Type Not Matched");
             break;
     }
+//    GLenum err = GL_NO_ERROR;
+//    while((err = glGetError()) != GL_NO_ERROR)
+//        printf("GL Error on unfirm: %d\n", err);
+
     ((OGLMaterial*)mat)->uniforms[uIndex].isUpdated = false;
 }
 
@@ -507,6 +512,8 @@ bool OGLES2RenderManager::PrepareDisplay(int width, int height, bool clearColorB
     if(clearDepthBuf)
         mask |= GL_DEPTH_BUFFER_BIT;
     
+    const GLenum discards[]  = {GL_DEPTH_ATTACHMENT, GL_COLOR_ATTACHMENT0};
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
     setDepthMask(true);
     glClear(mask);
     

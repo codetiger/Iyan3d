@@ -41,11 +41,13 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, int maxJoints, rig_type rigTy
     int jointsCount = SMesh->joints->size();
     for (int i = 0; i < jointsCount; i++) {
         shared_ptr<JointNode> node = make_shared<JointNode>();
+        jointNodes.push_back(node);
+    }
+    for (int i = 0; i < jointsCount; i++) {
         if ((*SMesh->joints)[i]->Parent) {
             unsigned short parentId = (*SMesh->joints)[i]->Parent->Index;
-            node->Parent = jointNodes[parentId];
+            jointNodes[i]->Parent = jointNodes[parentId];
         }
-        jointNodes.push_back(node);
     }
     
     if(this->mesh) {

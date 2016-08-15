@@ -521,35 +521,45 @@ void SGNode::setSkinningData(SkinMesh *mesh)
 {
     for(int j = 0; j < mesh->joints->size();j++){
         Joint *meshJoint = (*mesh->joints)[j];
-        for(int v = 0;v < meshJoint->PaintedVertices->size();v++){
+        for(int v = 0; v < meshJoint->PaintedVertices->size(); v++) {
+            
             int vertexId = (*meshJoint->PaintedVertices)[v]->vertexId;
             float weight = (*meshJoint->PaintedVertices)[v]->weight;
-            Vector4 *optionalData1 = &(mesh->getHeavyVertexByIndex(vertexId)->optionalData1);
-            Vector4 *optionalData2 = &(mesh->getHeavyVertexByIndex(vertexId)->optionalData2);
-            Vector4 *optionalData3 = &(mesh->getHeavyVertexByIndex(vertexId)->optionalData3);
-            Vector4 *optionalData4 = &(mesh->getHeavyVertexByIndex(vertexId)->optionalData4);
-            if((*optionalData1).x == 0.0f){
+            int meshBufferIndex = (*meshJoint->PaintedVertices)[v]->meshBufferIndex;
+            
+            vertexDataHeavy *vts;
+            if(meshBufferIndex == -1)
+                vts = mesh->getHeavyVertexByIndex(vertexId);
+            else
+                vts = &(mesh->getHeavyVerticesArray(meshBufferIndex))[vertexId];
+            
+            Vector4 *optionalData1 = &(vts->optionalData1);
+            Vector4 *optionalData2 = &(vts->optionalData2);
+            Vector4 *optionalData3 = &(vts->optionalData3);
+            Vector4 *optionalData4 = &(vts->optionalData4);
+            
+            if((*optionalData1).x == 0.0f) {
                 (*optionalData1).x = j + 1;
                 (*optionalData2).x = weight;
-            }else if((*optionalData1).y == 0.0f){
+            } else if((*optionalData1).y == 0.0f) {
                 (*optionalData1).y = j + 1;
                 (*optionalData2).y = weight;
-            }else if((*optionalData1).z == 0.0f){
+            } else if((*optionalData1).z == 0.0f) {
                 (*optionalData1).z = j + 1;
                 (*optionalData2).z = weight;
-            }else if((*optionalData1).w == 0.0f){
+            } else if((*optionalData1).w == 0.0f) {
                 (*optionalData1).w = j + 1;
                 (*optionalData2).w = weight;
-            }else if((*optionalData3).x == 0.0f){
+            } else if((*optionalData3).x == 0.0f) {
                 (*optionalData3).x = j + 1;
                 (*optionalData4).x = weight;
-            }else if((*optionalData3).y == 0.0f){
+            } else if((*optionalData3).y == 0.0f) {
                 (*optionalData3).y = j + 1;
                 (*optionalData4).y = weight;
-            }else if((*optionalData3).z == 0.0f){
+            } else if((*optionalData3).z == 0.0f) {
                 (*optionalData3).z = j + 1;
                 (*optionalData4).z = weight;
-            }else if((*optionalData3).w == 0.0f){
+            } else if((*optionalData3).w == 0.0f) {
                 (*optionalData3).w = j + 1;
                 (*optionalData4).w = weight;
             }
@@ -558,18 +568,24 @@ void SGNode::setSkinningData(SkinMesh *mesh)
         }
     }
     // equalize the weights sum to 1.0
-    for(int j = 0; j < mesh->getVerticesCount();j++){
-        Vector4 od2 = (mesh->getHeavyVertexByIndex(j)->optionalData2);
-        Vector4 od4 = (mesh->getHeavyVertexByIndex(j)->optionalData4);
-        float sum = od2.x + od2.y + od2.z + od2.w + od4.x + od4.y + od4.z + od4.w;
-        if(sum != 1.0){
-            double dif = 1.0 - sum;
-            mesh->getHeavyVertexByIndex(j)->optionalData2 = Vector4(od2.x + ((od2.x/sum) * dif),od2.y + ((od2.y/sum) * dif),od2.z + ((od2.z/sum) * dif),od2.w + ((od2.w/sum) * dif));
-            mesh->getHeavyVertexByIndex(j)->optionalData4 = Vector4(od4.x + ((od4.x/sum) * dif),od4.y + ((od4.y/sum) * dif),od4.z + ((od4.z/sum) * dif),od4.w + ((od4.w/sum) * dif));
+    
+    for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
+        for(int j = 0; j < mesh->getVerticesCountInMeshBuffer(i); j++) {
+            Vector4 od2 = (mesh->getHeavyVerticesArray(i)[j].optionalData2);
+            Vector4 od4 = (mesh->getHeavyVerticesArray(i)[j].optionalData4);
+            
+            float sum = od2.x + od2.y + od2.z + od2.w + od4.x + od4.y + od4.z + od4.w;
+            if(sum != 1.0) {
+                double dif = 1.0 - sum;
+                mesh->getHeavyVerticesArray(i)[j].optionalData2 = Vector4(od2.x + ((od2.x/sum) * dif), od2.y + ((od2.y/sum) * dif), od2.z + ((od2.z/sum) * dif), od2.w + ((od2.w/sum) * dif));
+                mesh->getHeavyVerticesArray(i)[j].optionalData4 = Vector4(od4.x + ((od4.x/sum) * dif), od4.y + ((od4.y/sum) * dif), od4.z + ((od4.z/sum) * dif), od4.w + ((od4.w/sum) * dif));
+            }
+            
+            Vector4 od21 = (mesh->getHeavyVerticesArray(i)[j].optionalData2);
+            Vector4 od41 = (mesh->getHeavyVerticesArray(i)[j].optionalData4);
+            sum = od21.x + od21.y + od21.z + od21.w + od41.x + od41.y + od41.z + od41.w;
+            
         }
-        Vector4 od21 = (mesh->getHeavyVertexByIndex(j)->optionalData2);
-        Vector4 od41 = (mesh->getHeavyVertexByIndex(j)->optionalData4);
-        sum = od21.x + od21.y + od21.z + od21.w + od41.x + od41.y + od41.z + od41.w;
     }
 }
 

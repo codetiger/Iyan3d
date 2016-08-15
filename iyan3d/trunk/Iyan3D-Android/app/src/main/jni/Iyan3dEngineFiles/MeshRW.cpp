@@ -211,6 +211,7 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
             shared_ptr<PaintedVertex> PaintedVertexInfo = make_shared<PaintedVertex>();
             PaintedVertexInfo->vertexId = vertexIndex;
             PaintedVertexInfo->weight = ((float)vertWeight) / 255.0f;
+            PaintedVertexInfo->meshBufferIndex = -1;
             ibone->PaintedVertices->push_back(PaintedVertexInfo);
         }
         

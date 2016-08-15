@@ -204,15 +204,18 @@ void SceneManager::Render(bool isRTT)
         RenderNode(isRTT, i);
     }
     
-    renderMan->setTransparencyBlending(true);
-    for (int i = 0; i < nodeIndex.size(); i++) {
-        int nodeId = nodeIndex[i];
-        if((nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010) || (nodes[nodeId]->getID() >= 300000 && nodes[nodeId]->getID() <= 301000))
-            continue;
-        
-        RenderNode(isRTT, nodeId);
+    if(nodeIndex.size()) {
+        renderMan->setTransparencyBlending(true);
+    
+        for (int i = 0; i < nodeIndex.size(); i++) {
+            int nodeId = nodeIndex[i];
+            if((nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010) || (nodes[nodeId]->getID() >= 300000 && nodes[nodeId]->getID() <= 301000))
+                continue;
+            
+            RenderNode(isRTT, nodeId);
+        }
+        nodeIndex.clear();
     }
-    nodeIndex.clear();
 }
 
 void SceneManager::EndDisplay()
@@ -293,7 +296,6 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
         return;
     
     for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {
-
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index))
             return;
         
@@ -533,8 +535,8 @@ void SceneManager::setPropertyValue(Material *material, string name, float* valu
     if(nodeIndex == NOT_EXISTS && device == METAL){
         renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
     }else{
-        short uIndex = material->setPropertyValue(name,values,type,count,paramIndex,nodeIndex,renderTargetIndex);
-        renderMan->BindUniform(material,nod,uIndex,isFragmentData,userValue);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, renderTargetIndex);
+        renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue);
     }
 }
 

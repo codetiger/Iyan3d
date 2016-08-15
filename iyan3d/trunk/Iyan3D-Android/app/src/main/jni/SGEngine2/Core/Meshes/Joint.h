@@ -21,6 +21,7 @@ using std::vector;
 struct PaintedVertex {
     int vertexId;
     float weight;
+    int meshBufferIndex;
 };
 
 class Joint {
@@ -32,12 +33,16 @@ public:
     double envelopeRadius;
     double sphereRadius;
     unsigned short Index;
+    
     Mat4 LocalAnimatedMatrix; //  filed from jointnode local transformation and ,esh file loader
     Mat4 GlobalAnimatedMatrix; // calculated from the local matrix
     Mat4 GlobalInversedMatrix; // from GlobalAnimatedMatrix
+    
     Joint *Parent;
     shared_ptr< vector< shared_ptr<PaintedVertex> > > PaintedVertices;
     vector<Joint*> *childJoints;
+    
+    string name;
 };
 
 #endif /* defined(__SGEngine2__Joint__) */
