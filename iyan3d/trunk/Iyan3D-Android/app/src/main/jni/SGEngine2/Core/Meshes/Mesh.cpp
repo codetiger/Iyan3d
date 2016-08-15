@@ -426,22 +426,12 @@ void Mesh::generateUV()
     const u32 vtxcnt = getVerticesCount();
     for (int i = 0; i != vtxcnt; i++) {
         Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
-        Vector3 normal = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal;
+        Vector3 diff = (pos - bb->getCenter()).normalize();
 
-        Vector3 r = Vector3(fabs(normal.x), fabs(normal.y), fabs(normal.z));
-        
         Vector2 tex;
-        tex.x = 0.0;
-        tex.y = 0.0;
+        tex.x = (atan2 (diff.z, diff.y) + M_PI ) / (2.0 * M_PI);
+        tex.y = (asin(diff.x) + (M_PI / 2.0)) / M_PI;
 
-        if(r.z <= 0.1) {
-            tex.x = (pos.z - bb->getMinEdge().z) / largeExtend;
-            tex.y = atan2f(r.y, r.x);
-        } else {
-            tex.x = (pos.x - bb->getMinEdge().x) / largeExtend;
-            tex.y = (pos.y - bb->getMinEdge().y) / largeExtend;
-        }
-        
         if (meshType == MESH_TYPE_LITE)
             getLiteVertexByIndex(i)->texCoord1 = tex;
         else
