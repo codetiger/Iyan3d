@@ -179,8 +179,8 @@ public:
     
     void setEnvironmentTexture(std::string textureFilePath);
     
-    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo);
-    void removeTempTextureAndVertex(int selectedNode);
+    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo, int materialIndex = 0); //TODO pass material index after RTT
+    void removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex = 0); //TODO pass material index after RTT
     bool canEditRigBones(SGNode *sgNode);
     bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();

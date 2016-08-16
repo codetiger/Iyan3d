@@ -79,7 +79,6 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     animNode->setVisible(false);
     shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
     rigNode->node = meshNode;
-    rigNode->materialProps[0]->setTextureForType(rigNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
     rigNode->node->setID(SGM_ID);
     rigNode->node->setPosition(rigNode->node->getAbsolutePosition());
     rigNode->node->setRotation(rigNode->node->getRotation());

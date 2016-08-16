@@ -181,6 +181,51 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
     }
 }
 
+void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode, Mesh* lMesh)
+{
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
+        
+        SkinMesh *mesh = (SkinMesh*)lMesh;
+        //sceneNode->setSkinningData(mesh);
+        mesh->setOptimization(false, false, false);
+        
+        shared_ptr<AnimatedMeshNode> sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh(mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
+        sceneNode->node = sgn;
+        bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
+        int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointCount();
+        
+        for(int i = 0;i < jointsCount;i++){
+            dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointNode(i)->setID(i);
+            if(!isSGJointsCreated){
+                SGJoint *joint = new SGJoint();
+                joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointNode(i);
+                sceneNode->joints.push_back(joint);
+            }
+        }
+        
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
+        sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
+        sgScene->loader->setJointsScale(sceneNode);
+        dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
+            
+    } else { //TODO for all other types
+        
+        Mesh *mesh = lMesh;
+        mesh->setOptimization(false, false, false);
+        shared_ptr<MeshNode> sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_MESH);
+        sceneNode->node = sgn;
+        sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
+    }
+    
+    sceneNode->actionId = ++sgScene->actionObjectsSize;
+    
+    sceneNode->node->setID(sgScene->assetIDCounter++);
+    sgScene->selectMan->removeChildren(sgScene->getParentNode());
+    sgScene->updater->setDataForFrame(sgScene->currentFrame);
+    sgScene->selectMan->updateParentPosition();
+    sgScene->updater->resetMaterialTypes(false);
+}
+
 void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
 {
     Mesh* mesh;

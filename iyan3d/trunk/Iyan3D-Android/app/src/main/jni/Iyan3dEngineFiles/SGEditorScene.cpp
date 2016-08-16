@@ -665,7 +665,7 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
-void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo)
+void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo, int materialIndex)
 {
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
@@ -686,7 +686,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         
         bool blurTex = (nodes[selectedNodeId]->smoothTexture);
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, blurTex);
-        nodes[selectedNodeId]->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
+        nodes[selectedNodeId]->materialProps[materialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
         
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName;
@@ -709,7 +709,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     }
 }
 
-void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
+void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex)
 {
     if(selectedNode == NOT_EXISTS)
         return;
@@ -726,7 +726,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode)
     if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
         nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
-        nodes[selectedNodeId]->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
+        nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
     } else {
         nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
         nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;

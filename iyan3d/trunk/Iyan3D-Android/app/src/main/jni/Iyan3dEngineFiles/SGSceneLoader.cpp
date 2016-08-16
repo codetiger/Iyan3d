@@ -8,6 +8,7 @@
 
 #include "HeaderFiles/SGSceneLoader.h"
 #include "HeaderFiles/SGEditorScene.h"
+#include "SceneImporter.h"
 
 SGEditorScene *currentScene;
 
@@ -56,23 +57,22 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             SGNode *sgNode = new SGNode(NODE_UNDEFINED);
             int origId = 0;
             Mesh* mesh = sgNode->readData(filePointer, origId);
-            sgNode->materialProps.push_back(new MaterialProperty(sgNode->getType()));
 
             if(sgNode->getType() == NODE_CAMERA || sgNode->getType() == NODE_LIGHT) {
                 loadNode(sgNode, OPEN_SAVED_FILE);
                 sgNode->setPropertiesOfNode();
                 
             } else {
-                if(mesh->meshType == MESH_TYPE_LITE)
-                    sgNode->node = smgr->createNodeFromMesh(mesh, "setUniforms");
-                else
-                    sgNode->node = smgr->createAnimatedNodeFromMesh((AnimatedMesh*)mesh, "setUniforms", ShaderManager::maxJoints, CHARACTER_RIG, mesh->meshType);
                 
-                sgNode->node->setMaterial(smgr->getMaterialByIndex((mesh->meshType == MESH_TYPE_LITE) ? SHADER_MESH : SHADER_SKIN));
-                sgNode->setPropertiesOfNode();
-                string textureName = sgNode->getProperty(TEXTURE).fileName;
-                Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
-                sgNode->materialProps[0]->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+                SceneImporter* importer = new SceneImporter();
+                importer->importNodeFromMesh(currentScene, sgNode, mesh);
+                
+                for(int j = 0; j < sgNode->materialProps.size(); j++) {
+                    string textureName = sgNode->getProperty(TEXTURE).fileName;
+                    Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
+                    sgNode->materialProps[j]->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+                }
+                
                 currentScene->nodes.push_back(sgNode);
             }
             sgNode->setInitialKeyValues(OPEN_SAVED_FILE);
@@ -684,8 +684,8 @@ void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
     copyMeshFromOriginalNode(it->second);
     
     for(int i = 0; i < currentNode->materialProps.size(); i++) {
-        Texture* oldTex = currentNode->materialProps[0]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP);
-        it->second->materialProps[0]->setTextureForType(oldTex, NODE_TEXTURE_TYPE_COLORMAP);
+        Texture* oldTex = currentNode->materialProps[i]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP);
+        it->second->materialProps[i]->setTextureForType(oldTex, NODE_TEXTURE_TYPE_COLORMAP);
     }
     
     std::map< int, SGNode* >::iterator newIt = it->second->instanceNodes.begin();

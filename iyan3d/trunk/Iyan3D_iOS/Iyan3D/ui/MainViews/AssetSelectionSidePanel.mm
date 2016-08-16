@@ -629,7 +629,7 @@
     else if (assetvalue.type == BACKGROUNDS || assetvalue.type == ACCESSORIES || assetvalue.type == OBJ_FILE) {
         
         fileName = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, assetvalue.assetId];
-        NSString* textureFile = [NSString stringWithFormat:@"%@/Resources/Textures/%d.png", docDirPath, assetvalue.assetId];
+        NSString* textureFile = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, assetvalue.assetId];
         url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", assetvalue.assetId];
         
         if (assetvalue.assetId >= 20000 && assetvalue.assetId <= 30000) {
@@ -730,7 +730,8 @@
     NSString* fileName = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, [returnId intValue]];
     NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%d.png", [returnId intValue]];
     AssetItem *downloadingAsset = [cache GetAsset:[returnId intValue]];
-    if ([assetArray count] > 0  && downloadingAsset && [cache checkDownloadedAsset:downloadingAsset.assetId])
+    
+    if ([assetArray count] > 0  && downloadingAsset)// && [cache checkDownloadedAsset:downloadingAsset.assetId])
         [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(proceedToFileVerification:) priority:NSOperationQueuePriorityHigh];
     else
         [self addDownloadTaskWithFileName:fileName URL:url returnId:returnId andSelector:@selector(downloadCompleted:) priority:NSOperationQueuePriorityHigh];
