@@ -104,6 +104,7 @@ public:
     void reCalculateTangents();
     void calculateTanget(Vector3 &tangent, Vector3 &bitangent, Vector3 vt1, Vector3 vt2, Vector3 vt3, Vector2 tc1, Vector2 tc2, Vector2 tc3);
 
+    void checkUVSeam();
     void generateUV();
     void recalculateNormals();
     void fixOrientation();

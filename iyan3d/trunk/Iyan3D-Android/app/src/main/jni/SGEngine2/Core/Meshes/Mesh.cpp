@@ -142,7 +142,8 @@ void Mesh::addToIndicesArray(unsigned int index)
     tempIndicesData.push_back(index);
 }
 
-Mesh* Mesh::clone() {
+Mesh* Mesh::clone()
+{
     Mesh *m = new Mesh();
     m->meshType = meshType;
     m->meshformat = meshformat;
@@ -157,7 +158,8 @@ Mesh* Mesh::clone() {
     return m;
 }
 
-void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents) {
+void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents)
+{
     removeDoubles = rmDoubles;
     optimizeIndicesOrder = optimIndOrd;
     calculateTangents = calcTangents;
@@ -424,7 +426,7 @@ void Mesh::generateUV()
     largeExtend = largeExtend > bb->getZExtend() ? largeExtend : bb->getZExtend();
     
     const u32 vtxcnt = getVerticesCount();
-    for (int i = 0; i != vtxcnt; i++) {
+    for (int i = 0; i < vtxcnt; i++) {
         Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
         Vector3 diff = (pos - bb->getCenter()).normalize();
 
@@ -436,6 +438,65 @@ void Mesh::generateUV()
             getLiteVertexByIndex(i)->texCoord1 = tex;
         else
             getHeavyVertexByIndex(i)->texCoord1 = tex;
+    }
+    
+    checkUVSeam();
+}
+
+void Mesh::checkUVSeam() {
+    const static float LOWER_LIMIT = 0.1;
+    const static float UPPER_LIMIT = 0.9;
+    const static float LOWER_EPSILON = 10e-3;
+    const static float UPPER_EPSILON = 1.0-10e-3;
+
+    for (int i = 0; i < getTotalIndicesCount() - 2; i += 3) {
+        unsigned int small = 3, large = small;
+        bool zero = false, one = false, round_to_zero = false;
+
+        for(int j = 0; j < 3; j++) {
+            Vector2* tex;
+            if(meshType == MESH_TYPE_LITE)
+                tex = &tempVerticesData[tempIndicesData[i+j]].texCoord1;
+            else
+                tex = &tempVerticesDataHeavy[tempIndicesData[i+j]].texCoord1;
+            
+            if (tex->x < LOWER_LIMIT) {
+                small = j;
+                
+                if (tex->x <= LOWER_EPSILON)
+                    zero = true;
+                else
+                    round_to_zero = true;
+            }
+            
+            if (tex->x > UPPER_LIMIT) {
+                large = j;
+                
+                if (tex->x >= UPPER_EPSILON)
+                    one = true;
+            }
+        }
+        
+        if (small != 3 && large != 3) {
+            for(int j = 0; j < 3; ++j) {
+                Vector2* tex;
+                if(meshType == MESH_TYPE_LITE)
+                    tex = &tempVerticesData[tempIndicesData[i+j]].texCoord1;
+                else
+                    tex = &tempVerticesDataHeavy[tempIndicesData[i+j]].texCoord1;
+
+                if (tex->x > UPPER_LIMIT && !zero)
+                    tex->x = 0.0;
+                else if (tex->x < LOWER_LIMIT && !one)
+                    tex->x = 1.0;
+                else if (one && zero) {
+                    if (round_to_zero && tex->x >=  UPPER_EPSILON)
+                        tex->x = 0.0;
+                    else if (!round_to_zero && tex->x <= LOWER_EPSILON)
+                        tex->x = 1.0;
+                }
+            }
+        }
     }
 }
 
