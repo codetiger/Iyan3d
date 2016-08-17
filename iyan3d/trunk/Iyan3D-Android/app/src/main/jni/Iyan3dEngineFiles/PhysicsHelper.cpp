@@ -212,7 +212,7 @@ btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
     btCollisionShape* shape = getShapeForNode(sgNode);
     shape->setLocalScaling(btVector3(key.scale.x, key.scale.y, key.scale.z));
     shape->calculateLocalInertia(bodyMass, bodyInertia);
-    shape->setMargin(0);
+    shape->setMargin(0.05);
 
     btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
     bodyCI.m_restitution = 0.6f;
@@ -337,7 +337,10 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     sBody->m_cfg.kCHR = 1.0f; // Rigid contacts hardness [0,1]
     sBody->m_cfg.kKHR = 0.8f; // Kinetic contacts hardness [0,1]
     sBody->m_cfg.kSHR = 1.0f; // Soft contacts hardness [0,1]
-    sBody->m_cfg.piterations=2;
+    sBody->m_cfg.piterations = 2;
+    
+    sBody->m_cfg.collisions |= btSoftBody::fCollision::VF_SS;
+    
     sBody->m_materials[0]->m_kLST = 0.8f;
     sBody->m_materials[0]->m_kAST = 0.8f;
     sBody->m_materials[0]->m_kVST = 0.8f;
@@ -347,12 +350,8 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
     if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_CLOTH) {
-        sBody->generateBendingConstraints(2);
-        sBody->m_cfg.piterations = 2;
-        sBody->randomizeConstraints();
     } else if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_JELLY) {
         sBody->generateBendingConstraints(2);
-        sBody->m_cfg.piterations = 2;
         sBody->randomizeConstraints();
     }
     
