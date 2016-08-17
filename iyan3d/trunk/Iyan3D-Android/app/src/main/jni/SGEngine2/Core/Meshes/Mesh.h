@@ -82,7 +82,7 @@ private:
     
     bool removeDoubles, optimizeIndicesOrder, calculateTangents;
     bool shouldSplitBuffers;
-    
+    float normalSmoothThreshold;
 public:
     mesh_format_t meshformat;
     MESH_TYPE meshType;
@@ -130,9 +130,11 @@ public:
     void clearIndices();
     BoundingBox* getBoundingBox();
     Vector3 getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3);
+    
     void removeDoublesInMesh();
     void reOrderMeshIndices();
-    void setOptimization(bool removeDoubles, bool optimizeIndicesOrder, bool calculateTangents);
+    void setOptimization(bool removeDoubles, bool optimizeIndicesOrder, bool calculateTangents, float smoothThreshold = 1.0);
+    
     Mesh();
     ~Mesh();
 };

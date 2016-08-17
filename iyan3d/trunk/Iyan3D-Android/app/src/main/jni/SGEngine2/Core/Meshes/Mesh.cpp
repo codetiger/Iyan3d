@@ -22,6 +22,7 @@ Mesh::Mesh()
     optimizeIndicesOrder = true;
     calculateTangents = true;
     shouldSplitBuffers = false;
+    normalSmoothThreshold = 1.0;
 }
 
 Mesh::~Mesh()
@@ -110,7 +111,6 @@ void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount)
 
 void Mesh::addVertex(vertexData* vertex, bool updateBB)
 {
-    shouldSplitBuffers = true;
     vertexData vtx;
     vtx.vertPosition = vertex->vertPosition;
     vtx.vertNormal = vertex->vertNormal;
@@ -119,11 +119,14 @@ void Mesh::addVertex(vertexData* vertex, bool updateBB)
     tempVerticesData.push_back(vtx);
     if(updateBB)
         BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
+    
+    removeDoubles = true;
+    calculateTangents = true;
+    shouldSplitBuffers = true;
 }
 
 void Mesh::addHeavyVertex(vertexDataHeavy* vertex)
 {
-    shouldSplitBuffers = true;
     vertexDataHeavy vtx;
     vtx.vertPosition = vertex->vertPosition;
     vtx.vertNormal = vertex->vertNormal;
@@ -134,12 +137,18 @@ void Mesh::addHeavyVertex(vertexDataHeavy* vertex)
     vtx.optionalData4 = vertex->optionalData4;
     tempVerticesDataHeavy.push_back(vtx);
     BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
+
+    removeDoubles = true;
+    calculateTangents = true;
+    shouldSplitBuffers = true;
 }
 
 void Mesh::addToIndicesArray(unsigned int index)
 {
-    shouldSplitBuffers = true;
     tempIndicesData.push_back(index);
+    
+    optimizeIndicesOrder = true;
+    shouldSplitBuffers = true;
 }
 
 Mesh* Mesh::clone()
@@ -158,11 +167,12 @@ Mesh* Mesh::clone()
     return m;
 }
 
-void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents)
+void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents, float smoothThreshold)
 {
     removeDoubles = rmDoubles;
     optimizeIndicesOrder = optimIndOrd;
     calculateTangents = calcTangents;
+    normalSmoothThreshold = smoothThreshold;
 }
 
 void Mesh::Commit(bool forceSplitBuffers)
@@ -443,7 +453,8 @@ void Mesh::generateUV()
     checkUVSeam();
 }
 
-void Mesh::checkUVSeam() {
+void Mesh::checkUVSeam()
+{
     const static float LOWER_LIMIT = 0.1;
     const static float UPPER_LIMIT = 0.9;
     const static float LOWER_EPSILON = 10e-3;
@@ -581,7 +592,8 @@ int Mesh::getMeshBufferCount()
     return (int)meshBufferIndices.size();
 }
 
-int Mesh::getMeshBufferMaterialIndices(int meshBufferIndex) {
+int Mesh::getMeshBufferMaterialIndices(int meshBufferIndex)
+{
     return meshBufferMaterialIndices[meshBufferIndex];
 }
 
@@ -595,82 +607,56 @@ void Mesh::clearIndices()
     tempIndicesData.clear();
 }
 
-string getVertexDataString(Vector3 vertPosition, Vector3 vertNormals, Vector2 texCoord1, Vector4 optionalData1) {
-    string unique = "";
-    unique += to_string(floor(vertPosition.x * 1000.0) / 1000.0);
-    unique += to_string(floor(vertPosition.y * 1000.0) / 1000.0);
-    unique += to_string(floor(vertPosition.z * 1000.0) / 1000.0);
-
-    unique += to_string(floor(vertNormals.x * 100.0) / 100.0);
-    unique += to_string(floor(vertNormals.y * 100.0) / 100.0);
-    unique += to_string(floor(vertNormals.z * 100.0) / 100.0);
-
-    unique += to_string(texCoord1.x);
-    unique += to_string(texCoord1.y);
-
-    unique += to_string(floor(optionalData1.x * 100.0) / 100.0);
-    unique += to_string(floor(optionalData1.y * 100.0) / 100.0);
-    unique += to_string(floor(optionalData1.z * 100.0) / 100.0);
-    unique += to_string(floor(optionalData1.w * 100.0) / 100.0);
-
-    MD5 md5;
-    unique = md5.digestString((char*)unique.c_str());
-    
-    return unique;
-}
-
 void Mesh::removeDoublesInMesh()
 {
-    std::map<std::string, unsigned int> vertMap;
-    vector<unsigned int> tIndicesData;
-    
-//    printf("Original Vertices Count: %d ", getVerticesCount());
-    
-    if(meshType == MESH_TYPE_LITE) {
-        
-        vector<vertexData> verticesDataDup;
+    printf("Original Vertices Count: %d ", getVerticesCount());
 
-        for(u32 i = 0; i < tempIndicesData.size(); i++) {
-            vertexData *vert =  getLiteVertexByIndex(tempIndicesData[i]);
-            string unique = getVertexDataString(vert->vertPosition, vert->vertNormal, vert->texCoord1, vert->optionalData1);
-            
-            if(vertMap.find(unique) != vertMap.end()) {
-                tIndicesData.push_back((unsigned int)vertMap[unique]);
-            } else {
-                verticesDataDup.push_back(*vert);
-                vertMap.insert(std::pair<std::string, unsigned int>(unique, (unsigned int)verticesDataDup.size() - 1));
-                tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
+    vector<vertexData> verticesData;
+
+    for(int i = 0; i < tempVerticesData.size(); i++) {
+        vertexData v1 = tempVerticesData[i];
+        unsigned int newIndices = i;
+        bool alreadyInserted = false;
+        
+        for(int j = 0; j < verticesData.size(); j++) {
+            vertexData v2 = verticesData[j];
+
+            if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.optionalData1 == v2.optionalData1) {
+                if(v1.vertNormal == v2.vertNormal) {
+                    newIndices = j;
+                    alreadyInserted = true;
+                } else {
+                    v1.vertNormal.normalize();
+                    v2.vertNormal.normalize();
+
+                    float diff = v1.vertNormal.dotProduct(v2.vertNormal);
+                    
+                    if(diff >= normalSmoothThreshold) {
+                        newIndices = j;
+                        alreadyInserted = true;
+                    }
+                }
             }
         }
-        
-        tempVerticesData.clear();
-        tempVerticesData = verticesDataDup;
 
-    } else {
+        if(!alreadyInserted) {
+            newIndices = verticesData.size();
+            verticesData.push_back(v1);
+        }
 
-        vector<vertexDataHeavy> verticesDataDup;
-        
-        for(u32 i = 0; i < tempIndicesData.size(); i++) {
-            vertexDataHeavy *vert =  getHeavyVertexByIndex(tempIndicesData[i]);
-            string unique = getVertexDataString(vert->vertPosition, vert->vertNormal, vert->texCoord1, vert->optionalData1);
-            
-            if(vertMap.find(unique) != vertMap.end()) {
-                tIndicesData.push_back((unsigned int)vertMap[unique]);
-            } else {
-                verticesDataDup.push_back(*vert);
-                vertMap.insert(std::pair<std::string, unsigned int>(unique, (unsigned int)verticesDataDup.size() - 1));
-                tIndicesData.push_back((unsigned int)verticesDataDup.size() - 1);
+        for(int k = 0; k < tempIndicesData.size(); k++) {
+            if (tempIndicesData[k] == i) {
+                tempIndicesData[k] = newIndices;
             }
         }
-        
-        tempVerticesDataHeavy.clear();
-        tempVerticesDataHeavy = verticesDataDup;
     }
-
-//    printf(" after RemoveDoubles: %d\n", getVerticesCount());
-
-    tempIndicesData.clear();
-    tempIndicesData = tIndicesData;
+    
+    tempVerticesData.clear();
+    tempVerticesData = verticesData;
+    
+    printf(" after RemoveDoubles: %d\n", getVerticesCount());
+    
+    removeDoubles = false;
 }
 
 void Mesh::reOrderMeshIndices()
@@ -690,6 +676,7 @@ void Mesh::reOrderMeshIndices()
     for (int i = 0; i < indicesCount; i++)
         addToIndicesArray(optimizedIndices[i]);
 
+    optimizeIndicesOrder = false;
 //    printf("\nAfter Optimization\n");
 //    for (int i = 0; i < indicesCount; i++)
 //        printf("%d ", getHighPolyIndicesArray()[i]);

@@ -470,24 +470,8 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
     vertexColor = color;
     
     for(int i = 0; i < text.length(); i++){
-        SkinMesh *tempMesh = new SkinMesh();
-       	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius);
-       	AddBevel(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius, bevelSegments, height);
-        tempMesh->removeDoublesInMesh();
-        unsigned int oldVertCount = mesh->getVerticesCount();
-        
-        for (int j = 0; j < tempMesh->getVerticesCount(); j++) {
-            vertexDataHeavy *vtx = tempMesh->getHeavyVertexByIndex(j);
-            mesh->addHeavyVertex(vtx);
-        }
-        
-        for (int j = 0; j < tempMesh->getTotalIndicesCount(); j++) {
-            unsigned int in = tempMesh->getHighPolyIndicesArray()[j];
-            mesh->addToIndicesArray(in + oldVertCount);
-        }
-        
-        delete tempMesh;
-        
+       	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
+       	AddBevel(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius, bevelSegments, height);
        	offset = AddCharacter(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
 
         if(offset == -10000.0)
@@ -504,7 +488,7 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
     mesh->fixOrientation();
     mesh->moveVertices(Vector3(offset, -height, extrude) / 2.0);
     mesh->recalculateNormals();
-    
+
     Mesh* m = new Mesh();
     for (int i = 0; i < mesh->getVerticesCount(); i++) {
         vertexDataHeavy *vtx = mesh->getHeavyVertexByIndex(i);
@@ -516,13 +500,15 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         m->addVertex(&v);
     }
     
-    MeshOptimizeHelper *optimizer = new MeshOptimizeHelper();
-    unsigned int *optimizedIndices = new unsigned int[mesh->getTotalIndicesCount()];
-    optimizer->OptimizeFaces(mesh->getHighPolyIndicesArray(), mesh->getTotalIndicesCount(), mesh->getVerticesCount(), optimizedIndices, 32);
-    
     for (int i = 0; i < mesh->getTotalIndicesCount(); i++)
-        m->addToIndicesArray(optimizedIndices[i]);
+        m->addToIndicesArray(mesh->getHighPolyIndicesArray()[i]);
 
+    m->setOptimization(false, false, false, 0.7);
+    m->removeDoublesInMesh();
+    m->reOrderMeshIndices();
+    m->reCalculateTangents();
+    m->setOptimization(false, false, false, 1.0);
+    m->recalculateNormals();
     m->generateUV();
 
     return m;
