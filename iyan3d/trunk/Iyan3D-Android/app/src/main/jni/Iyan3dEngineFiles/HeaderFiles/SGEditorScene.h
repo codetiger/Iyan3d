@@ -38,7 +38,6 @@
 #include "SGAction.h"
 #include "BoneLimitsHelper.h"
 #include "CameraViewHelper.h"
-#include "../../SGEngine2/Loaders/OBJMeshFileLoader.h"
 #include "SceneHelper.h"
 #include "SGAutoRigSceneManager.h"
 #include "RenderHelper.h"
@@ -49,7 +48,6 @@
 #include "SGSceneLoader.h"
 #include "SGSceneWriter.h"
 #include "SGAnimationManager.h"
-#include "SGOBJManager.h"
 
 #include "PhysicsHelper.h"
 
@@ -121,7 +119,6 @@ public:
     SGSceneWriter *writer;
     SGAnimationManager *animMan;
     SGAutoRigSceneManager *rigMan;
-    SGOBJManager *objMan;
     PhysicsHelper * physicsHelper;
 
     std::map<int,Texture*> renderingTextureMap;

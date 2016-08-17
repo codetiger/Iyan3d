@@ -609,22 +609,25 @@ void Mesh::clearIndices()
 
 void Mesh::removeDoublesInMesh()
 {
-    printf("Original Vertices Count: %d ", getVerticesCount());
-
+//    printf("Original Vertices Count: %d ", getVerticesCount());
+    map< unsigned int, unsigned int > remapIndices;
     vector<vertexData> verticesData;
 
-    for(int i = 0; i < tempVerticesData.size(); i++) {
+    int totalVertCount = tempVerticesData.size();
+    for(int i = 0; i < totalVertCount; i++) {
         vertexData v1 = tempVerticesData[i];
         unsigned int newIndices = i;
         bool alreadyInserted = false;
         
-        for(int j = 0; j < verticesData.size(); j++) {
+        int vertDataCount = verticesData.size();
+        for(int j = 0; j < vertDataCount; j++) {
             vertexData v2 = verticesData[j];
 
             if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.optionalData1 == v2.optionalData1) {
                 if(v1.vertNormal == v2.vertNormal) {
                     newIndices = j;
                     alreadyInserted = true;
+                    j = vertDataCount;
                 } else {
                     v1.vertNormal.normalize();
                     v2.vertNormal.normalize();
@@ -634,6 +637,7 @@ void Mesh::removeDoublesInMesh()
                     if(diff >= normalSmoothThreshold) {
                         newIndices = j;
                         alreadyInserted = true;
+                        j = vertDataCount;
                     }
                 }
             }
@@ -644,17 +648,18 @@ void Mesh::removeDoublesInMesh()
             verticesData.push_back(v1);
         }
 
-        for(int k = 0; k < tempIndicesData.size(); k++) {
-            if (tempIndicesData[k] == i) {
-                tempIndicesData[k] = newIndices;
-            }
-        }
+        remapIndices.insert(pair<unsigned int, unsigned int > (i, newIndices));
+    }
+    
+    for(int k = 0; k < tempIndicesData.size(); k++) {
+        if(remapIndices.find(tempIndicesData[k]) != remapIndices.end())
+            tempIndicesData[k] = remapIndices[tempIndicesData[k]];
     }
     
     tempVerticesData.clear();
     tempVerticesData = verticesData;
-    
-    printf(" after RemoveDoubles: %d\n", getVerticesCount());
+
+//    printf(" after RemoveDoubles: %d\n", getVerticesCount());
     
     removeDoubles = false;
 }

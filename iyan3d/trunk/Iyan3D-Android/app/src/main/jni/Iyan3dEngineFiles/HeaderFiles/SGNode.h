@@ -14,7 +14,6 @@
 #include "SGScaleKey.h"
 #include "SGVisibilityKey.h"
 #include "ActionKey.h"
-#include "../../SGEngine2/Loaders/OBJMeshFileLoader.h"
 
 struct properties{
     int isLighting,isSelected,fontSize, specificInt;
@@ -71,7 +70,6 @@ public:
     shared_ptr<Node> addAdittionalLight(SceneManager *smgr, float distance , Vector3 lightColor, float attenuation = 1.0);
     Json::Value parseParticlesJson(int assetId);
     void setParticlesData(shared_ptr<Node> node, Json::Value pData);
-    shared_ptr<Node> loadSGMandOBJ(std::string meshPath, NODE_TYPE objectType, SceneManager *smgr);
     shared_ptr<Node> loadSGR(std::string meshPath, NODE_TYPE objectType, SceneManager *smgr);
     shared_ptr<Node> loadImage(string imageName,SceneManager *smgr , float aspectRatio = 1.0);
     shared_ptr<Node> loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio = 1.0);
@@ -119,8 +117,5 @@ public:
     PROP_INDEX checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex);
     void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
     void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
-    
-    void addAINodeToSave(aiScene &scene, vector< aiNode* > &nodes, vector< aiMesh* > &meshes, vector< aiMaterial* > &materials, vector< aiTexture* > &textures, vector< aiLight* > &lights);
-    void LoadNodeFromAINode(aiNode *n);
 };
 #endif

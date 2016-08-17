@@ -921,8 +921,6 @@
 		256F6E9F1BF624FB00154622 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D461BF624FB00154622 /* pngwutil.c */; };
 		256F6EA01BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */; };
 		256F6EA11BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */; };
-		256F6EA21BF624FB00154622 /* OBJMeshFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D4A1BF624FB00154622 /* OBJMeshFileLoader.cpp */; };
-		256F6EA31BF624FB00154622 /* OBJMeshFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D4A1BF624FB00154622 /* OBJMeshFileLoader.cpp */; };
 		256F6EA41BF624FB00154622 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D4D1BF624FB00154622 /* MetalHandler.mm */; };
 		256F6EA61BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */; };
 		256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */; };
@@ -987,8 +985,6 @@
 		25BBCB121C203D6A0039DA5C /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB101C203D6A0039DA5C /* Splash.png */; };
 		25BBCB131C203F1D0039DA5C /* Splash-6+1.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */; };
 		25BBCB141C203F200039DA5C /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 25BBCB101C203D6A0039DA5C /* Splash.png */; };
-		25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */; };
-		25BC0FB11C4768FA00721B5E /* SGOBJManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */; };
 		25C05D3F1D536BB4008F06AA /* MeshRW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25C05D3E1D536BB4008F06AA /* MeshRW.cpp */; };
 		25C05D401D536BB4008F06AA /* MeshRW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25C05D3E1D536BB4008F06AA /* MeshRW.cpp */; };
 		25C90F451B3616B400D803DB /* bevel-on-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25C90F3D1B3616B400D803DB /* bevel-on-phone.png */; };
@@ -3422,8 +3418,6 @@
 		256F6D461BF624FB00154622 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwutil.c; sourceTree = "<group>"; };
 		256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSGRMeshFileLoader.cpp; sourceTree = "<group>"; };
 		256F6D491BF624FB00154622 /* CSGRMeshFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSGRMeshFileLoader.h; sourceTree = "<group>"; };
-		256F6D4A1BF624FB00154622 /* OBJMeshFileLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OBJMeshFileLoader.cpp; sourceTree = "<group>"; };
-		256F6D4B1BF624FB00154622 /* OBJMeshFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJMeshFileLoader.h; sourceTree = "<group>"; };
 		256F6D4C1BF624FB00154622 /* MetalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHandler.h; path = ../MetalHandler.h; sourceTree = "<group>"; };
 		256F6D4D1BF624FB00154622 /* MetalHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHandler.mm; path = ../MetalHandler.mm; sourceTree = "<group>"; };
 		256F6D4F1BF624FB00154622 /* ImageLoaderOBJC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoaderOBJC.h; sourceTree = "<group>"; };
@@ -3508,8 +3502,6 @@
 		25BA85E81CCB81F500E68A58 /* particlesRTT.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = particlesRTT.vsh; path = Resources/shaders/particlesRTT.vsh; sourceTree = "<group>"; };
 		25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Splash-6+1.png"; path = "Resources/imgs/Splash-6+1.png"; sourceTree = "<group>"; };
 		25BBCB101C203D6A0039DA5C /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/imgs/Splash.png; sourceTree = "<group>"; };
-		25BC0FAE1C47666F00721B5E /* SGOBJManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGOBJManager.h; sourceTree = "<group>"; };
-		25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGOBJManager.cpp; sourceTree = "<group>"; };
 		25C05D3D1D536B9E008F06AA /* MeshRW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshRW.h; sourceTree = "<group>"; };
 		25C05D3E1D536BB4008F06AA /* MeshRW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshRW.cpp; sourceTree = "<group>"; };
 		25C90F3D1B3616B400D803DB /* bevel-on-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bevel-on-phone.png"; path = "Resources/imgs/bevel-on-phone.png"; sourceTree = "<group>"; };
@@ -5510,7 +5502,6 @@
 				25F0C2691C2E931700C8EC85 /* SGSceneUpdater.cpp */,
 				25F0C26D1C2EB27800C8EC85 /* SGSceneWriter.cpp */,
 				25FCAB4C1C3003330051DBBA /* SGMovementManager.cpp */,
-				25BC0FAF1C4768FA00721B5E /* SGOBJManager.cpp */,
 				25DE11501CAA98C90076F669 /* PhysicsHelper.cpp */,
 				25DD33FC1D4F6CFC0008778C /* MaterialProperty.cpp */,
 				25C05D3E1D536BB4008F06AA /* MeshRW.cpp */,
@@ -5568,7 +5559,6 @@
 				25F0C2681C2E930400C8EC85 /* SGSceneUpdater.h */,
 				25F0C26C1C2EB26500C8EC85 /* SGSceneWriter.h */,
 				25FCAB4B1C3003220051DBBA /* SGMovementManager.h */,
-				25BC0FAE1C47666F00721B5E /* SGOBJManager.h */,
 				25DE114F1CAA98AE0076F669 /* PhysicsHelper.h */,
 				25DD33FB1D4F67360008778C /* MaterialProperty.h */,
 				25C05D3D1D536B9E008F06AA /* MeshRW.h */,
@@ -5756,8 +5746,6 @@
 			children = (
 				256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */,
 				256F6D491BF624FB00154622 /* CSGRMeshFileLoader.h */,
-				256F6D4A1BF624FB00154622 /* OBJMeshFileLoader.cpp */,
-				256F6D4B1BF624FB00154622 /* OBJMeshFileLoader.h */,
 				3DBA6FE81D49CDA8003F8D03 /* SceneImporter.cpp */,
 				3DBA6FE91D49CDA8003F8D03 /* SceneImporter.h */,
 			);
@@ -10060,7 +10048,6 @@
 				C8E6173818C5DD7100BC5342 /* FPPopoverView.m in Sources */,
 				25DD33FD1D4F6CFC0008778C /* MaterialProperty.cpp in Sources */,
 				0184EC881C35406A006F0B57 /* RenderTableViewCell.m in Sources */,
-				25BC0FB01C4768FA00721B5E /* SGOBJManager.cpp in Sources */,
 				25DE105D1CAA8D6D0076F669 /* btSphereBoxCollisionAlgorithm.cpp in Sources */,
 				25DE10F91CAA8D6D0076F669 /* btSequentialImpulseConstraintSolver.cpp in Sources */,
 				25069F5F1D2BDAC900DBAE44 /* CommonProps.mm in Sources */,
@@ -10136,7 +10123,6 @@
 				25DE103D1CAA8D6D0076F669 /* btCollisionObject.cpp in Sources */,
 				25DE11451CAA91310076F669 /* btSoftRigidCollisionAlgorithm.cpp in Sources */,
 				251424841C9698F90012CA68 /* sweep.c in Sources */,
-				256F6EA21BF624FB00154622 /* OBJMeshFileLoader.cpp in Sources */,
 				256F6EBA1BF624FB00154622 /* Maths.cpp in Sources */,
 				25DE110F1CAA8D6D0076F669 /* btMultiBodyDynamicsWorld.cpp in Sources */,
 				25DE10C71CAA8D6D0076F669 /* btConvexCast.cpp in Sources */,
@@ -10353,7 +10339,6 @@
 				25DE10A21CAA8D6D0076F669 /* btTriangleBuffer.cpp in Sources */,
 				25DE10E01CAA8D6D0076F669 /* btKinematicCharacterController.cpp in Sources */,
 				25DE10A01CAA8D6D0076F669 /* btTetrahedronShape.cpp in Sources */,
-				256F6EA31BF624FB00154622 /* OBJMeshFileLoader.cpp in Sources */,
 				251424771C9698F90012CA68 /* memalloc.c in Sources */,
 				E20671081B049AA6006DD2F7 /* Utility.m in Sources */,
 				25F0C25F1C2E6F0D00C8EC85 /* SGSceneLoader.cpp in Sources */,
@@ -10429,7 +10414,6 @@
 				E20671551B049AA6006DD2F7 /* ANImageBitmapRep.m in Sources */,
 				E20671561B049AA6006DD2F7 /* OSCommonImage.m in Sources */,
 				E20671571B049AA6006DD2F7 /* BitmapCropManipulator.m in Sources */,
-				25BC0FB11C4768FA00721B5E /* SGOBJManager.cpp in Sources */,
 				251BF4761C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */,
 				25DE11441CAA91310076F669 /* btSoftBodyRigidBodyCollisionConfiguration.cpp in Sources */,
 				01ACD0D41C3D38D90096AD14 /* SGAutoRigSceneManager.cpp in Sources */,

@@ -20,7 +20,6 @@
 class SGSceneWriter
 {
 private:
-    Assimp::Exporter *exporter = NULL;
     SceneManager* smgr;
 
 public:
@@ -28,7 +27,6 @@ public:
     ~SGSceneWriter();
     
     void saveSceneData(std::string *filePath);
-    void saveSceneDataAssImp(std::string *filePath);
     void writeScene(ofstream *filePointer);
     void writeGlobalInfo(ofstream *filePointer);
     

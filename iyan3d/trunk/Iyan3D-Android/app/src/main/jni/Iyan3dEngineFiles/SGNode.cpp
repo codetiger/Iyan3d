@@ -112,7 +112,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             oriTextureName = texturePath;
             getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
             getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            node = loadSGMandOBJ(meshPath, objectType, smgr);
+//            node = loadSGMandOBJ(meshPath, objectType, smgr);
             break;
         }
         case NODE_TEXT:
@@ -418,55 +418,6 @@ void SGNode::setParticlesData(shared_ptr<Node> particleNode, Json::Value pData)
     
     printf(" Counnt %d gravity %d sAngle %f sMag %f magRand %f emSpeed %d maxLife %d perce %d scale %f delta %f ",pData["Count"].asInt(), pData["Gravity"].asBool(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
 
-}
-
-shared_ptr<Node> SGNode::loadSGMandOBJ(std::string meshPath, NODE_TYPE objectType, SceneManager *smgr)
-{
-    string StoragePath;
-    OBJMeshFileLoader *objLoader;
-    string fileExt = (objectType == NODE_SGM) ? ".sgm" : ".obj";
-    
-    if(objectType == NODE_OBJ)
-        objLoader = new OBJMeshFileLoader();
-#ifdef IOS
-    if (fileExt == ".sgm")
-        StoragePath = constants::CachesStoragePath + "/";
-    else if(fileExt == ".obj") {
-        StoragePath = FileHelper::getDocumentsDirectory() + "/Resources/Objs/";
-    }
-#endif
-#ifdef ANDROID
-    StoragePath = constants::DocumentsStoragePath + "/mesh/";
-#endif
-
-    
-        if(!checkFileExists(meshPath))
-            return shared_ptr<Node>();
-    
-    std::string textureName = getProperty(TEXTURE).fileName;
-    
-    int objLoadStatus = 0;
-    Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath) : objLoader->createMesh(meshPath,objLoadStatus);
-    shared_ptr<MeshNode> node = smgr->createNodeFromMesh(mesh,"setUniforms");
-    
-    node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-
-    printf(" \n Texture Path %s ", textureName.c_str());
-    if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png"))
-    {
-        getProperty(IS_VERTEX_COLOR).value.x = false;
-        Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
-        getProperty(TEXTURE).fileName = textureName;
-    } else {
-        getProperty(IS_VERTEX_COLOR).value.x = true;
-        getProperty(TEXTURE).fileName = "";
-    }
-    
-    if(objectType == NODE_OBJ && objLoader != NULL)
-        delete objLoader;
-    
-    return node;
 }
 
 bool SGNode::checkFileExists(std::string fileName)
@@ -1650,100 +1601,3 @@ void SGNode::checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap,
             propsMap.find(property.index)->second.fileName = property.fileName;
     }
 }
-
-void SGNode::addAINodeToSave(aiScene &scene, vector< aiNode* > &nodes, vector< aiMesh* > &meshes, vector< aiMaterial* > &materials, vector< aiTexture* > &textures, vector< aiLight* > &lights) {
-
-    if(type == NODE_SGM) {
-        aiNode *n = new aiNode();
-
-        Mesh *mesh = dynamic_pointer_cast<MeshNode>(node)->getMesh();
-        n->mNumMeshes = mesh->getMeshBufferCount();
-        n->mMeshes = new unsigned int[n->mNumMeshes];
-        
-        for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
-            aiMesh *m = new aiMesh();
-            m->mMaterialIndex = 0;
-            m->mVertices = new aiVector3D[mesh->getVerticesCountInMeshBuffer(i)];
-            m->mNormals = new aiVector3D[mesh->getVerticesCountInMeshBuffer(i)];
-            m->mTextureCoords[0] = new aiVector3D[mesh->getVerticesCountInMeshBuffer(i)];
-            m->mColors[0] = new aiColor4D[mesh->getVerticesCountInMeshBuffer(i)];
-            
-            m->mNumVertices = mesh->getVerticesCountInMeshBuffer(i);
-            m->mNumUVComponents[0] = mesh->getVerticesCountInMeshBuffer(i);
-            
-            for (int v = 0; v < mesh->getVerticesCountInMeshBuffer(i); v++) {
-                vertexData *vert = mesh->getLiteVertexByIndex(v);
-                m->mVertices[v] = aiVector3D(vert->vertPosition.x, vert->vertPosition.y, vert->vertPosition.z);
-                m->mNormals[v] = aiVector3D(vert->vertNormal.x, vert->vertNormal.y, vert->vertNormal.z);
-                m->mTextureCoords[0][v] = aiVector3D(vert->texCoord1.x, vert->texCoord1.y, 0.0);
-                m->mColors[0][v] = aiColor4D(vert->optionalData1.x, vert->optionalData1.y, vert->optionalData1.z, vert->optionalData1.w);
-            }
-            
-            m->mFaces = new aiFace[ mesh->getIndicesCount(i) / 3 ];
-            m->mNumFaces = (unsigned int)(mesh->getIndicesCount(i) / 3);
-            
-            int faceCount = 0;
-            for(int ind = 0; ind < mesh->getIndicesCount(i); ind += 3) {
-                aiFace &face = m->mFaces[faceCount++];
-                face.mIndices = new unsigned int[3];
-                face.mNumIndices = 3;
-                
-                face.mIndices[0] = mesh->getIndicesArray(i)[ind+0];
-                face.mIndices[1] = mesh->getIndicesArray(i)[ind+1];
-                face.mIndices[2] = mesh->getIndicesArray(i)[ind+2];
-            }
-
-            meshes.push_back(m);
-            n->mMeshes[i] = meshes.size() - 1;
-        }
-        n->mNumChildren = 0;
-        
-        Mat4 mat = node->getAbsoluteTransformation();
-        n->mTransformation = aiMatrix4x4(mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], mat[12], mat[13], mat[14], mat[15]);
-//        printf("MAtrix: \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f", mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], mat[12], mat[13], mat[14], mat[15]);
-        
-        nodes.push_back(n);
-        
-        aiMaterial *material = new aiMaterial();
-        materials.push_back(material);
-        
-    } else if(type == NODE_CAMERA) {
-
-        scene.mCameras = new aiCamera*[1];
-        scene.mNumCameras = 1;
-        scene.mCameras[0] = new aiCamera();
-        
-        Vector3 camPosition = node->getPosition();
-        Vector3 camLookAt = ((CameraNode*)node.get())->getTarget();
-        Vector3 camUp = ((CameraNode*)node.get())->getUpVector();
-
-        scene.mCameras[0]->mPosition = aiVector3D(camPosition.x, camPosition.y, camPosition.z);
-        scene.mCameras[0]->mLookAt = aiVector3D(camLookAt.x, camLookAt.y, camLookAt.z);
-        scene.mCameras[0]->mUp = aiVector3D(camUp.x, camUp.y, camUp.z);
-
-    } else if(type == NODE_LIGHT) {
-       
-        aiLight *light = new aiLight();
-
-        Vector3 lightPosition = node->getPosition();
-        Vector3 lightColor = ((LightNode*)node.get())->lightColor;
-        
-        light->mPosition = aiVector3D(lightPosition.x, lightPosition.y, lightPosition.z);
-        light->mColorDiffuse = aiColor3D(lightColor.x, lightColor.y, lightColor.z);
-        
-        if(((LightNode*)node.get())->type == LIGHT_TYPE_POINT) {
-            light->mType = aiLightSource_POINT;
-            light->mAttenuationConstant = ((LightNode*)node.get())->decayStartDistance;
-            light->mAttenuationLinear = ((LightNode*)node.get())->decayEndDistance;
-        } else if(((LightNode*)node.get())->type == LIGHT_TYPE_DIRECTIONAL) {
-            light->mType = aiLightSource_DIRECTIONAL;
-        }
-        
-        lights.push_back(light);
-    }
-}
-
-void SGNode::LoadNodeFromAINode(aiNode *n) {
-    
-}
-

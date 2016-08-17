@@ -108,8 +108,6 @@ SGEditorScene::~SGEditorScene()
         delete writer;
     if(animMan)
         delete animMan;
-    if(objMan)
-        delete objMan;
     if(physicsHelper)
         delete physicsHelper;
     if(cmgr)
@@ -163,7 +161,6 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     actionMan = new SGActionManager(sceneMngr, this);
     writer = new SGSceneWriter(sceneMngr, this);
     animMan = new SGAnimationManager(sceneMngr, this);
-    objMan = new SGOBJManager(sceneMngr, this);
     physicsHelper = new PhysicsHelper(this);
 
     camPreviewOrigin = camPreviewEnd = Vector2(0.0, 0.0);

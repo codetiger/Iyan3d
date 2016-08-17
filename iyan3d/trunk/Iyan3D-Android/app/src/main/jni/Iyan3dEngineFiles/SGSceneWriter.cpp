@@ -15,12 +15,10 @@ SGSceneWriter::SGSceneWriter(SceneManager* smgr, void* scene)
 {
     this->smgr = smgr;
     writingScene = (SGEditorScene*)scene;
-    exporter = new Assimp::Exporter();
 }
 
 SGSceneWriter::~SGSceneWriter()
 {
-    delete exporter;
 }
 
 void SGSceneWriter::saveSceneData(std::string *filePath)
@@ -78,64 +76,3 @@ void SGSceneWriter::writeGlobalInfo(ofstream *filePointer)
     
     FileHelper::writeInt(filePointer, (int)writingScene->nodes.size());
 }
-
-void SGSceneWriter::saveSceneDataAssImp(std::string *filePath)
-{
-    if(!writingScene || !smgr)
-        return;
-    
-    printf("Saving File: %s\n", filePath->c_str());
-    printf("\nExport File Format Support:\n");
-    for(int i = 0; i < exporter->GetExportFormatCount(); i++) {
-        printf("%s - %s - %s\n", exporter->GetExportFormatDescription(i)->id, exporter->GetExportFormatDescription(i)->fileExtension, exporter->GetExportFormatDescription(i)->description);
-    }
-
-    vector< aiNode* > nodes;
-    vector< aiMesh* > meshes;
-    vector< aiMaterial* > materials;
-    vector< aiTexture* > textures;
-    vector< aiLight* > lights;
-
-    aiScene scene;
-
-    for(int i = 0; i < writingScene->nodes.size(); i++) {
-        writingScene->nodes[i]->addAINodeToSave(scene, nodes, meshes, materials, textures, lights);
-    }
-
-    scene.mRootNode = new aiNode();
-    scene.mRootNode->mNumChildren = nodes.size();
-    scene.mRootNode->mChildren = new aiNode*[nodes.size()];
-    
-    scene.mNumLights = lights.size();
-    scene.mLights = new aiLight*[lights.size()];
-
-    for(int i = 0; i < lights.size(); i++) {
-        scene.mLights[i] = lights[i];
-    }
-    
-    for(int i = 0; i < nodes.size(); i++) {
-        aiNode *child = nodes[i];
-        child->mParent = scene.mRootNode;
-        scene.mRootNode->mChildren[i] = nodes[i];
-    }
-    
-    scene.mNumMaterials = materials.size();
-    scene.mMaterials = new aiMaterial*[materials.size()];
-
-    for(int i = 0; i < materials.size(); i++) {
-        scene.mMaterials[i] = new aiMaterial();
-    }
-
-    scene.mNumMeshes = meshes.size();
-    scene.mMeshes = new aiMesh*[meshes.size()];
-    
-    for(int i = 0; i < meshes.size(); i++) {
-        scene.mMeshes[i] = meshes[i];
-        scene.mMeshes[i]->mMaterialIndex = 0;
-    }
-    
-    aiReturn r = exporter->Export(&scene, exporter->GetExportFormatDescription(1)->id, *filePath);
-    if(r != AI_SUCCESS)
-        printf("Error in Loading: %s\n", exporter->GetErrorString());
-}
-
