@@ -39,7 +39,8 @@ string getFileName(const string& s)
     size_t i = s.rfind(sep, s.length());
     if (i != string::npos) {
         return(s.substr(i+1, s.length() - i));
-    }
+    } else
+        return s;
     
     return("");
 }
@@ -289,6 +290,9 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
             p1.fileName = getFileName(string(path.data));
             Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, folderPath + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
             materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p2.value.x = 0.0;
+
             printf("Diffuse Texture: %s\n", p1.fileName.c_str());
         }
         
@@ -300,6 +304,9 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
             p1.fileName = getFileName(string(path.data));
             Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, folderPath + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
             materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p2.value.x = 0.0;
+
             printf("Normal Texture: %s\n", p1.fileName.c_str());
         }
     }
@@ -370,7 +377,7 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
         vd.vertNormal = Vector3(aiM->mNormals[i].x, aiM->mNormals[i].y, aiM->mNormals[i].z);
         
         if(aiM->mTextureCoords[0])
-            vd.texCoord1 = Vector2(aiM->mTextureCoords[0][i].x, aiM->mTextureCoords[0][i].y);
+            vd.texCoord1 = Vector2(aiM->mTextureCoords[0][i].x, 1 - aiM->mTextureCoords[0][i].y);
         else
             vd.texCoord1 = Vector2(0.0, 0.0);
         

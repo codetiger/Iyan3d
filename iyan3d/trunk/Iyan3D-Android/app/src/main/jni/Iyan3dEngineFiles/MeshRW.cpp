@@ -22,6 +22,8 @@ void MeshRW::writeMeshData(ofstream *filePointer, Mesh *mesh)
         int verticesCount = (int)vertices.size();
         int indicesCount = mesh->getIndicesCount(i);
 
+        FileHelper::writeInt(filePointer, mesh->getMeshBufferMaterialIndices(i));
+
         FileHelper::writeInt(filePointer, verticesCount);
         
         for(int j = 0; j < verticesCount; j++) {
@@ -56,6 +58,8 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, Mesh* mesh, shared_ptr< An
         unsigned short* indices = mesh->getIndicesArray(i);
         int verticesCount = (int)vertices.size();
         int indicesCount = mesh->getIndicesCount(i);
+        
+        FileHelper::writeInt(filePointer, mesh->getMeshBufferMaterialIndices(i));
         
         FileHelper::writeInt(filePointer, verticesCount);
         
@@ -121,6 +125,9 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
     
     for(int i = 0; i < meshBufferCount; i++) {
         
+        vector<vertexData> mbvd;
+        vector<unsigned short> mbi;
+        int materialIndex = FileHelper::readInt(filePointer);
         int verticesCount = FileHelper::readInt(filePointer);
         for(int j = 0; j < verticesCount; j++) {
             vertexData v;
@@ -130,15 +137,17 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
             v.vertTangent = FileHelper::readVector3(filePointer);
             v.vertBitangent = FileHelper::readVector3(filePointer);
             v.optionalData1 = FileHelper::readVector4(filePointer);
-            mesh->addVertex(&v); //TODO add directly to mesh buffer vertices
+            //mesh->addVertex(&v); //TODO add directly to mesh buffer vertices
+            mbvd.push_back(v);
         }
         
         int indicesCount = FileHelper::readInt(filePointer);
         for(int j = 0; j < indicesCount; j++) {
             unsigned short index = FileHelper::readInt(filePointer);
-            mesh->addToIndicesArray(index); //TODO add directly to mesh buffer indices
+            //mesh->addToIndicesArray(index); //TODO add directly to mesh buffer indices
+            mbi.push_back(index);
         }
-        
+        mesh->addMeshBuffer(mbvd, mbi, materialIndex);
     }
     
     mesh->Commit();
@@ -152,9 +161,12 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
     mesh->meshType = MESH_TYPE_HEAVY;
     
     int meshBufferCount = FileHelper::readInt(filePointer);
-    
+    vector<vertexDataHeavy> mbvd;
+    vector<unsigned short> mbi;
+
     for(int i = 0; i < meshBufferCount; i++) {
         
+        int materialIndex = FileHelper::readInt(filePointer);
         int verticesCount = FileHelper::readInt(filePointer);
         
         for(int j = 0; j < verticesCount; j++) {
@@ -169,15 +181,19 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
             v.optionalData3 = FileHelper::readVector4(filePointer);
             v.optionalData4 = FileHelper::readVector4(filePointer);
             
-            mesh->addHeavyVertex(&v); //TODO add directly to mesh buffer vertices
+            //mesh->addHeavyVertex(&v); //TODO add directly to mesh buffer vertices
+            mbvd.push_back(v);
         }
         
         int indicesCount = FileHelper::readInt(filePointer);
         
         for(int j = 0; j < indicesCount; j++) {
             unsigned short index = FileHelper::readInt(filePointer);
-            mesh->addToIndicesArray(index); //TODO add directly to mesh buffer indices
+            //mesh->addToIndicesArray(index); //TODO add directly to mesh buffer indices
+            mbi.push_back(index);
         }
+        
+        mesh->addMeshBuffer(mbvd, mbi, materialIndex);
         
     }
 
