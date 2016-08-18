@@ -327,7 +327,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
         
         for(int i = 0;i < jointsCount;i++) {
             dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i)->setID(i);
-            if(!isSGJointsCreated){
+            if(!isSGJointsCreated) {
                 SGJoint *joint = new SGJoint();
                 joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i);
                 sceneNode->joints.push_back(joint);
@@ -371,9 +371,18 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
 
 void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
 {
+    float arr[16] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 1.0,
+    };
+    Mat4 fixHandedness = Mat4(arr);
+
     for (int i = 0; i < aiM->mNumVertices; i++) {
         vertexDataHeavy vd;
-        vd.vertPosition = Vector3(aiM->mVertices[i].x, aiM->mVertices[i].y, aiM->mVertices[i].z);
+        Vector4 v = fixHandedness * Vector4(aiM->mVertices[i].x, aiM->mVertices[i].y, aiM->mVertices[i].z, 0.0);
+        vd.vertPosition = Vector3(v.x, v.y, v.z);
         vd.vertNormal = Vector3(aiM->mNormals[i].x, aiM->mNormals[i].y, aiM->mNormals[i].z);
         
         if(aiM->mTextureCoords[0])
@@ -395,7 +404,8 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
     }
 }
 
-void getLocalMatrix(Joint* bone) {
+void getLocalMatrix(Joint* bone)
+{
     for (int i = 0; i < bone->childJoints->size(); i++) {
         Joint *child = (*bone->childJoints)[i];
 
@@ -434,7 +444,7 @@ void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
                         
                         newBones->insert(pair<string, Joint*>(string(n->mParent->mName.C_Str()), sgBone));
                         
-                        sgBone->GlobalAnimatedMatrix = AssimpToMat4(n->mParent->mTransformation);
+                        sgBone->LocalAnimatedMatrix = AssimpToMat4(n->mParent->mTransformation);
                     } else {
                         it_type parentIterator = bones->find(string(n->mParent->mName.C_Str()));
                         if(parentIterator == bones->end())
@@ -454,16 +464,8 @@ void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
             rootBone = iterator->second;
     }
    
-    rootBone->LocalAnimatedMatrix = Mat4();
+    rootBone->LocalAnimatedMatrix = rootBone->GlobalAnimatedMatrix;
     getLocalMatrix(rootBone);
-    
-//    printf("Total Joints in Mesh %d\n", (int)((SkinMesh*)m)->joints->size());
-//    for(it_type iterator = bones->begin(); iterator != bones->end(); iterator++) {
-//        string parent;
-//        if(iterator->second->Parent)
-//            parent = iterator->second->Parent->name;
-//        printf("Bone: %s Has Parent: %s\n", iterator->first.c_str(), parent.c_str());
-//    }
 }
 
 void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones)
@@ -484,16 +486,25 @@ void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joi
                 sgBone->PaintedVertices->push_back(pvInfo);
             }
             
-            sgBone->GlobalAnimatedMatrix = AssimpToMat4(bone->mOffsetMatrix);
+            sgBone->LocalAnimatedMatrix = AssimpToMat4(bone->mOffsetMatrix);
         }
     }
 }
 
 void SceneImporter::getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
 {
+    float arr[16] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 1.0,
+    };
+    Mat4 fixHandedness = Mat4(arr);
+
     for (int j = 0; j < aiM->mNumVertices; j++) {
         vertexData vd;
-        vd.vertPosition = Vector3(aiM->mVertices[j].x, aiM->mVertices[j].y, aiM->mVertices[j].z);
+        Vector4 v = fixHandedness * Vector4(aiM->mVertices[j].x, aiM->mVertices[j].y, aiM->mVertices[j].z, 0.0);
+        vd.vertPosition = Vector3(v.x, v.y, v.z);
         vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
         
         if(aiM->mColors[0])

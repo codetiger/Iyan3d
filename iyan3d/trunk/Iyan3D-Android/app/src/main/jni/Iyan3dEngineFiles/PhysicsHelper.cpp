@@ -68,7 +68,7 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
             density = 3.0;
             break;
         case PHYSICS_MEDIUM:
-            density = 3.0;
+            density = 9.0;
             break;
         case PHYSICS_HEAVY:
             density = 27.0;
@@ -110,20 +110,18 @@ void PhysicsHelper::syncPhysicsWorld()
     
     for (int i = 2; i < scene->nodes.size(); i++) {
         std::map<PROP_INDEX, Property> physicsProps = scene->nodes[i]->getProperty(HAS_PHYSICS).subProps;
-        if(scene->nodes[i]->getProperty(HAS_PHYSICS).value.x && !(bool)physicsProps[IS_SOFT].value.x) {
-            btRigidBody *body = getRigidBody(scene->nodes[i]);
-            world->addRigidBody(body);
-            rBodies.push_back(body);
-        } else if(scene->nodes[i]->getProperty(HAS_PHYSICS).value.x && (bool)physicsProps[IS_SOFT].value.x) {
-            btSoftBody *body = getSoftBody(scene->nodes[i]);
-            ((btSoftRigidDynamicsWorld*)world)->addSoftBody(body);
-            if(dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache) {
-                delete dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache;
-                dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache = NULL;
-                scene->nodes[i]->node->memtype = NODE_GPUMEM_TYPE_STATIC;
+        if(scene->nodes[i]->getProperty(HAS_PHYSICS).value.x) {
+            if(!(bool)physicsProps[IS_SOFT].value.x) {
+                addRigidBody(scene->nodes[i], world, rBodies);
+            } else {
+                addSoftBody(scene->nodes[i], world, sBodies);
+                if(dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache) {
+                    delete dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache;
+                    dynamic_pointer_cast<MeshNode>(scene->nodes[i]->node)->meshCache = NULL;
+                    scene->nodes[i]->node->memtype = NODE_GPUMEM_TYPE_STATIC;
+                }
+                scene->nodes[i]->node->shouldUpdateMesh = true;
             }
-            scene->nodes[i]->node->shouldUpdateMesh = true;
-            sBodies.push_back(body);
         }
     }
 }
@@ -148,10 +146,24 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                 btQuaternion r = transform.getRotation();
                 Vector3 nodePos = Vector3(p.x(), p.y(), p.z());
                 Quaternion nodeRot = Quaternion(r.x(), r.y(), r.z(), r.w());
-                SGNode* sgNode = (SGNode*)rBodies[j]->getUserPointer();
-                sgNode->setPosition(nodePos, frame);
-                sgNode->setRotation(nodeRot, frame);
-                sgNode->setScale(sgNode->scaleKeys[0].scale, frame);
+                
+                PhysicsReference* pr = (PhysicsReference*)rBodies[j]->getUserPointer();
+                if(!pr->isJoint) {
+                    SGNode* sgNode = (SGNode*)pr->nodeReference;
+                    sgNode->setPosition(nodePos, frame);
+                    sgNode->setRotation(nodeRot, frame);
+                    sgNode->setScale(sgNode->scaleKeys[0].scale, frame);
+                } else {
+                    SGNode* sgNode = (SGNode*)pr->nodeReference;
+                    
+                    Quaternion oldInv = pr->initialOrientation;
+                    oldInv.makeInverse();
+                    
+                    Quaternion r = sgNode->getKeyForFrame(0).rotation.makeInverse() * nodeRot * oldInv * pr->initialOrientation;
+                   
+                    sgNode->joints[pr->jointIndex]->setRotation(r, frame);
+                    sgNode->joints[pr->jointIndex]->setScale(sgNode->scaleKeys[0].scale, frame);
+                }
             }
             
             for(int k = 0; k < sBodies.size(); k++) {
@@ -161,7 +173,8 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                 Vector3 nodePos = Vector3(p.x(), p.y(), p.z());
                 Quaternion nodeRot = Quaternion(r.x(), r.y(), r.z(), r.w());
                 
-                SGNode *sgNode = (SGNode*)sBodies[k]->getUserPointer();
+                PhysicsReference* pr = (PhysicsReference*)sBodies[k]->getUserPointer();
+                SGNode* sgNode = (SGNode*)pr->nodeReference;
                 sgNode->setPosition(nodePos, frame);
                 sgNode->setRotation(nodeRot, frame);
                 sgNode->setScale(Vector3(1.0), frame);
@@ -196,44 +209,128 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
     sgNode->node->shouldUpdateMesh = true;
 }
 
-btRigidBody* PhysicsHelper::getRigidBody(SGNode* sgNode)
+void PhysicsHelper::addRigidBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies)
 {
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
-    ActionKey key = sgNode->getKeyForFrame(0);
-    Vector3 nodePos = key.position;
-    Quaternion nodeRot = key.rotation;
-    btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
-    btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
-    btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
-    btScalar bodyMass = physicsProps[WEIGHT].value.x;
-    btVector3 bodyInertia;
-    
-    btCollisionShape* shape = getShapeForNode(sgNode);
-    shape->setLocalScaling(btVector3(key.scale.x, key.scale.y, key.scale.z));
-    shape->calculateLocalInertia(bodyMass, bodyInertia);
-    shape->setMargin(0.05);
+    if(sgNode->joints.size() > 0) {
+        shared_ptr<JointNode> rootJointNode = make_shared<JointNode>();
+        for (int i = 0; i < sgNode->joints.size(); i++) {
+            shared_ptr<AnimatedMeshNode> meshNode = dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node);
+            SkinMesh *skinMesh = (SkinMesh*)meshNode->getMesh();
+            
+            if(! (*skinMesh->joints)[i]->Parent) {
+                rootJointNode = sgNode->joints[i]->jointNode;
+                break;
+            }
+        }
 
-    btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
-    bodyCI.m_restitution = 0.6f;
-    bodyCI.m_friction = 0.5f;
-    bodyCI.m_rollingFriction = 0.5f;
-    
-    btRigidBody *body = new btRigidBody(bodyCI);
-    body->setUserPointer((void*)sgNode);
-    body->setLinearFactor(btVector3(1,1,1));
-    
-    if(physicsProps[FORCE_MAGNITUDE].value.x > 0.0) {
-        Vector4 fDir = physicsProps[FORCE_DIRECTION].value;
-        Vector3 v = Vector3(fDir.x, fDir.y, fDir.z) * (physicsProps[FORCE_MAGNITUDE].value.x * 100.0);
-        btVector3 velocity = btVector3(v.x, v.y, v.z);
-        body->setLinearVelocity(velocity);
+        addChildBody(sgNode, world, rBodies, NULL, rootJointNode);
+
+    } else {
+        ActionKey key = sgNode->getKeyForFrame(0);
+        Vector3 nodePos = key.position;
+        Quaternion nodeRot = key.rotation;
+        btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
+        btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
+        btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
+        btScalar bodyMass = physicsProps[WEIGHT].value.x;
+        btVector3 bodyInertia;
+
+        btCollisionShape* shape = getShapeForNode(sgNode);
+        shape->setLocalScaling(btVector3(key.scale.x, key.scale.y, key.scale.z));
+        shape->calculateLocalInertia(bodyMass, bodyInertia);
+        shape->setMargin(0.05);
+        
+        btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
+        bodyCI.m_restitution = 0.6f;
+        bodyCI.m_friction = 0.5f;
+        bodyCI.m_rollingFriction = 0.5f;
+        
+        btRigidBody *body = new btRigidBody(bodyCI);
+        
+        PhysicsReference *pr = new PhysicsReference();
+        pr->nodeReference = sgNode;
+        pr->isJoint = false;
+        pr->jointIndex = -1;
+        
+        body->setUserPointer(pr);
+        body->setLinearFactor(btVector3(1,1,1));
+        
+        if(physicsProps[FORCE_MAGNITUDE].value.x > 0.0) {
+            Vector4 fDir = physicsProps[FORCE_DIRECTION].value;
+            Vector3 v = Vector3(fDir.x, fDir.y, fDir.z) * (physicsProps[FORCE_MAGNITUDE].value.x * 100.0);
+            btVector3 velocity = btVector3(v.x, v.y, v.z);
+            body->setLinearVelocity(velocity);
+        }
+        
+        world->addRigidBody(body);
+        rBodies.push_back(body);
     }
-    
-    return body;
 }
 
-btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
+void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies, btRigidBody* pbody, shared_ptr<JointNode> parentJointNode) {
+    for (int i = 0; i < parentJointNode->Children->size(); i++) {
+        shared_ptr<JointNode> child = dynamic_pointer_cast<JointNode>((*parentJointNode->Children)[i]);
+        if(child) {
+            Vector3 nodePos = child->getPosition();
+            Quaternion nodeRot = child->getRotation();
+            
+            btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
+            btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
+            btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
+            btScalar bodyMass = sgNode->getProperty(HAS_PHYSICS).subProps[WEIGHT].value.x;
+            btVector3 bodyInertia;
+            
+            btCollisionShape* shape = new btSphereShape(1.0);
+            shape->setLocalScaling(btVector3(child->getScale().x, child->getScale().y, child->getScale().z));
+            shape->calculateLocalInertia(bodyMass, bodyInertia);
+            shape->setMargin(0.05);
+            
+            btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
+            bodyCI.m_restitution = 0.6f;
+            bodyCI.m_friction = 0.5f;
+            bodyCI.m_rollingFriction = 0.5f;
+            
+            btRigidBody *body = new btRigidBody(bodyCI);
+            
+            PhysicsReference *pr = new PhysicsReference();
+            pr->nodeReference = sgNode;
+            pr->isJoint = true;
+            pr->jointIndex = i;
+            
+            shared_ptr<Node> parent = sgNode->joints[i]->jointNode->getParent();
+            if(parent)
+                pr->parentIndex = parent->getID();
+            else
+                pr->parentIndex = -1;
+            
+            pr->initialPosition = nodePos;
+            pr->initialOrientation = nodeRot;
+            
+            btTransform &t = body->getWorldTransform();
+            Quaternion r = (sgNode->getKeyForFrame(0).rotation * nodeRot * nodeRot.makeInverse()) * Quaternion(t.getRotation().x(), t.getRotation().y(), t.getRotation().z(), t.getRotation().w());
+            t.setRotation(btQuaternion(r.x, r.y, r.z, r.w));
+            Vector3 p = sgNode->getKeyForFrame(0).position + sgNode->getKeyForFrame(0).rotation * nodePos * sgNode->getKeyForFrame(0).scale;
+            t.setOrigin(btVector3(p.x, p.y, p.z));
+            
+            body->setUserPointer(pr);
+            body->setLinearFactor(btVector3(1,1,1));
+            
+            world->addRigidBody(body);
+            rBodies.push_back(body);
+            
+            if(pbody) {
+                btPoint2PointConstraint *constraint = new btPoint2PointConstraint(*body, *pbody, btVector3(p.x, p.y, p.z), btVector3(0.0, 0.0, 0.0));
+                world->addConstraint(constraint);
+            }
+            
+            addChildBody(sgNode, world, rBodies, body, child);
+        }
+    }
+}
+
+void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btSoftBody* > &sBodies)
 {
     shared_ptr<MeshNode> n = dynamic_pointer_cast<MeshNode>(sgNode->node);
     n->MeshMap.clear();
@@ -345,6 +442,12 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     sBody->m_materials[0]->m_kAST = 0.8f;
     sBody->m_materials[0]->m_kVST = 0.8f;
     sBody->scale(btVector3(sgNode->getNodeScale().x, sgNode->getNodeScale().y, sgNode->getNodeScale().x));
+    
+    PhysicsReference *pr = new PhysicsReference();
+    pr->nodeReference = sgNode;
+    pr->isJoint = false;
+    pr->jointIndex = -1;
+
     sBody->setUserPointer((void*)sgNode);
     
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
@@ -359,7 +462,8 @@ btSoftBody* PhysicsHelper::getSoftBody(SGNode* sgNode)
     m.setIdentity();
     sBody->transform(btTransform(rotation, position));
     
-    return sBody;
+    ((btSoftRigidDynamicsWorld*)world)->addSoftBody(sBody);
+    sBodies.push_back(sBody);
 }
 
 btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
@@ -374,12 +478,21 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
         
         vector< unsigned int > indices = mesh->getTotalIndicesArray();
         for (int i = 0; i < indices.size(); i += 3) {
-            vertexData *v1 = mesh->getLiteVertexByIndex(indices[i+0]);
-            btVector3 btv1 = btVector3(v1->vertPosition.x, v1->vertPosition.y, v1->vertPosition.z);
-            vertexData *v2 = mesh->getLiteVertexByIndex(indices[i+1]);
-            btVector3 btv2 = btVector3(v2->vertPosition.x, v2->vertPosition.y, v2->vertPosition.z);
-            vertexData *v3 = mesh->getLiteVertexByIndex(indices[i+2]);
-            btVector3 btv3 = btVector3(v3->vertPosition.x, v3->vertPosition.y, v3->vertPosition.z);
+            Vector3 vpos1, vpos2, vpos3;
+            
+            if(mesh->meshType == MESH_TYPE_LITE) {
+                vpos1 = mesh->getLiteVertexByIndex(indices[i+0])->vertPosition;
+                vpos2 = mesh->getLiteVertexByIndex(indices[i+1])->vertPosition;
+                vpos3 = mesh->getLiteVertexByIndex(indices[i+2])->vertPosition;
+            } else {
+                vpos1 = mesh->getHeavyVertexByIndex(indices[i+0])->vertPosition;
+                vpos2 = mesh->getHeavyVertexByIndex(indices[i+1])->vertPosition;
+                vpos3 = mesh->getHeavyVertexByIndex(indices[i+2])->vertPosition;
+            }
+
+            btVector3 btv1 = btVector3(vpos1.x, vpos1.y, vpos1.z);
+            btVector3 btv2 = btVector3(vpos2.x, vpos2.y, vpos2.z);
+            btVector3 btv3 = btVector3(vpos3.x, vpos3.y, vpos3.z);
             
             m->addTriangle(btv1, btv2, btv3);
         }
@@ -391,8 +504,13 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
     } else {
         btConvexHullShape* _shape = new btConvexHullShape();
         for (int j = 0; j < mesh->getVerticesCount(); j++) {
-            vertexData *v = mesh->getLiteVertexByIndex(j);
-            btVector3 btv = btVector3(v->vertPosition.x, v->vertPosition.y, v->vertPosition.z);
+            Vector3 vpos;
+            if(mesh->meshType == MESH_TYPE_LITE)
+                vpos = mesh->getLiteVertexByIndex(j)->vertPosition;
+            else
+                vpos = mesh->getHeavyVertexByIndex(j)->vertPosition;
+            
+            btVector3 btv = btVector3(vpos.x, vpos.y, vpos.z);
             _shape->addPoint(btv);
         }
         

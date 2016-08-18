@@ -115,7 +115,8 @@ public:
     vector<vertexDataHeavy> getHeavyVerticesArray(int index);
     vector<vertexData> getTotalLiteVerticesArray();
     vector<vertexDataHeavy> getTotalHeavyVerticesArray();
-
+    vertexDataHeavy* getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
+    
     unsigned short* getIndicesArray(int index);
     unsigned int * getHighPolyIndicesArray();
     unsigned int getIndicesCount(int index);

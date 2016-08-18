@@ -531,6 +531,11 @@ vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int index)
     return meshBufferVerticesDataHeavy[index];
 }
 
+vertexDataHeavy* Mesh::getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex)
+{
+    return &(meshBufferVerticesDataHeavy[meshBufferIndex])[vertexIndex];
+}
+
 vector<vertexData> Mesh::getTotalLiteVerticesArray()
 {
     return tempVerticesData;
