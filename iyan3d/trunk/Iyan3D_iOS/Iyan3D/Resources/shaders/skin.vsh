@@ -65,10 +65,10 @@ void main()
     if(jointId > 0)
         finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData4.w);
     
-    gl_Position = mvp * finalMatrix * vec4(vertPosition, 0.0);
+    gl_Position = mvp * finalMatrix * vec4(vertPosition, 1.0);
     
     finalMatrix = model[0] * finalMatrix;
-    vec4 pos = finalMatrix * vec4(vertPosition, 0.0);
+    vec4 pos = finalMatrix * vec4(vertPosition, 1.0);
     vec4 nor = finalMatrix * vec4(vertNormal, 0.0);
 
     vec3 T = normalize(vec3(finalMatrix * vec4(vertTangent, 0.0)));
