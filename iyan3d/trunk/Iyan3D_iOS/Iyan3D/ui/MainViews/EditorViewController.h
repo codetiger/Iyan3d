@@ -74,6 +74,9 @@
     int ScreenWidth;
     int ScreenHeight;
     BOOL isAppInBG;
+    
+    NSString* maxUnisKey;
+    NSString* maxJointsKey;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;

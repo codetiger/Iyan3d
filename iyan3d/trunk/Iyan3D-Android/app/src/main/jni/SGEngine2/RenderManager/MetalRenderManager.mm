@@ -477,7 +477,7 @@ void MetalRenderManager::bindDynamicUniform(Material *material, string name, voi
 {
     int dataTypeSize = (type == DATA_INTEGER) ? sizeof(int) : sizeof(float);
     int bufIndex = getAvailableBfferWithSize(count * dataTypeSize);
-    id<MTLTexture> texture = (tex) ? ((MTLTexture*)tex)->texture : NULL;
+    id<MTLTexture> texture = (tex) ? ((MTLTexture*)tex)->texture : ((MTLTexture*)emptyTexture)->texture;
     BindUniform(type, MTLBuffersMap[count * dataTypeSize][bufIndex].buf, values, count, paramIndex, texture, name, NOT_EXISTS, isFragmentData, blurTex);
 }
 

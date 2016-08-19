@@ -93,8 +93,10 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, Mesh* mesh, shared_ptr< An
             FileHelper::writeInt(filePointer, -1); // write -1 for pivot bone
         else if(j == 1)
             FileHelper::writeInt(filePointer, 0); // write 0 for hip bone
-        else
+        else if(aNode->getJointNode(j)->getParent())
             FileHelper::writeInt(filePointer, aNode->getJointNode(j)->getParent()->getID()); // write bone ParentId
+        else
+            FileHelper::writeInt(filePointer, -1); // Invalid
         
         Mat4 jointMatrix = (*skinnedMesh->joints)[j]->LocalAnimatedMatrix;
         for(int k = 0;k < 16;k++) // write jointMatrix

@@ -314,14 +314,19 @@ BOOL missingAlertShown;
         editorScene->screenScale = screenScale;
     }
     else {
+        
+        maxUnisKey = [NSString stringWithFormat:@"maxUniforms%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
+        maxJointsKey = [NSString stringWithFormat:@"maxJoints%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
+        
         [renderViewMan setupContext];
         [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
         [self getMaxUniformsForOpenGL];
         [self getMaximumJointsSize];
-        int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms1"] intValue];
-        int maxJoints = [[[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints1"] intValue];
+        int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey: maxUnisKey] intValue];
+        int maxJoints = [[[AppHelper getAppHelper] userDefaultsForKey: maxJointsKey] intValue];
         editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale, maxUnis, maxJoints);
+        NSLog(@" \n Max joints %d ", maxJoints);
         editorScene->screenScale = screenScale;
         [renderViewMan setUpPaths:smgr];
         [renderViewMan setupDepthBuffer:_renderView];
@@ -346,7 +351,7 @@ BOOL missingAlertShown;
     ShaderManager::BundlePath = constants::BundlePath;
     ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
     
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxuniforms1"]) {
+    if(![[AppHelper getAppHelper] userDefaultsForKey:maxUnisKey]) {
         
         int lowerLimit = 0;
         int upperLimit = 512;
@@ -361,7 +366,7 @@ BOOL missingAlertShown;
         printf("\n Max Uniforms %d ", lowerLimit);
         
         smgr->clearMaterials();
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxuniforms1"];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:maxUnisKey];
     }
 }
 
@@ -370,7 +375,7 @@ BOOL missingAlertShown;
     ShaderManager::BundlePath = constants::BundlePath;
     ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
     
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"maxjoints1"]) {
+    if(![[AppHelper getAppHelper] userDefaultsForKey:maxJointsKey]) {
         
         int lowerLimit = 0;
         int upperLimit = 512;
@@ -385,7 +390,7 @@ BOOL missingAlertShown;
         printf("\n Max Joints %d ", lowerLimit);
         
         smgr->clearMaterials();
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:@"maxjoints1"];
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:maxJointsKey];
     }
 }
 
@@ -1409,9 +1414,10 @@ BOOL missingAlertShown;
 - (IBAction)importBtnAction:(id)sender
 {
 //    SceneImporter *loader = new SceneImporter();
-//    loader->importNodesFromFile(editorScene, "Import", FileHelper::getDocumentsDirectory() + "cylinder.dae", FileHelper::getDocumentsDirectory(), false, Vector3(0.0), false);
+//    loader->importNodesFromFile(editorScene, "kim", FileHelper::getDocumentsDirectory() + "kim.dae", FileHelper::getDocumentsDirectory(), false, Vector3(1.0), false);
 //    [self reloadSceneObjects];
     
+
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
     

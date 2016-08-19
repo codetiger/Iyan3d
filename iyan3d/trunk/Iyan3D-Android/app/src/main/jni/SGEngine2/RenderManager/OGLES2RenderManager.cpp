@@ -316,7 +316,7 @@ void OGLES2RenderManager::useMaterialToRender(Material *material)
 
 bool OGLES2RenderManager::bindTexture(int index, uint32_t texture)
 {
-    if(currentTextures[index] != texture) {
+    if(currentTextures[index] != texture || currentTextureIndex == -1) {
         if(currentTextureIndex != index) {
             glActiveTexture(GL_TEXTURE0 + index);
             currentTextureIndex = index;
@@ -545,8 +545,11 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
         currentTextureIndex = -1;
         PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer, isDepthPass, color);
     }
-    else
+    else {
+        currentTextures[0] = -1;
+        currentTextureIndex = -1;
         resetToMainBuffers();
+    }
 }
 
 void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath , IMAGE_FLIP flipType)

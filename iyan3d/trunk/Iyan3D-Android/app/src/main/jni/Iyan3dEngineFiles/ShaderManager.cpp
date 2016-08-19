@@ -471,9 +471,8 @@ void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string t
         }
     } else if(deviceType == METAL) {
         textureValue =  userValue;
-        Texture* tex = sgNode->node->getTextureByIndex(userValue);
-        if(tex != NULL) {
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
+        if(texture != NULL) {
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), texture, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
         } else {
             smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
         }
@@ -520,12 +519,11 @@ void ShaderManager::setUVScaleValue(SGNode *sgNode, u16 paramIndex, int material
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *uvScale = new float[((endIndex - startIndex)+1)];
-    uvScale[0] = sgNode->node->uvScale;
-    
+    uvScale[0] = sgNode->getProperty(TEXTURE_SCALE, materialIndex).value.x;
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        uvScale[i+1] = sgNode->node->uvScale;// v[j].second->getProperty(TRANSPARENCY).value.x;
+        uvScale[i+1] = sgNode->getProperty(TEXTURE_SCALE, materialIndex).value.x; // v[j].second->getProperty(TRANSPARENCY).value.x;
         i++;
     }
     

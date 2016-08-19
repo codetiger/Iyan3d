@@ -74,6 +74,8 @@ Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
 
 void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filepath, string textureName, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
+    sgScene->freezeRendering = true;
+
     string ext = getFileExtention(filepath);
     printf(" \n Mesh at %s ", filepath.c_str());
     printf("\n Texture Path %s ", textureName.c_str());
@@ -180,10 +182,14 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         sgScene->nodes.push_back(sceneNode);
 
     }
+    sgScene->freezeRendering = false;
+
 }
 
 void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode, Mesh* lMesh)
 {
+    sgScene->freezeRendering = true;
+
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         
         SkinMesh *mesh = (SkinMesh*)lMesh;
@@ -225,6 +231,9 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
     sgScene->updater->setDataForFrame(sgScene->currentFrame);
     sgScene->selectMan->updateParentPosition();
     sgScene->updater->resetMaterialTypes(false);
+    
+    sgScene->freezeRendering = false;
+
 }
 
 void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)

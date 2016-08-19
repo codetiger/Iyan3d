@@ -169,6 +169,9 @@ void MaterialProperty::writeProperties(ofstream *filePointer)
     FileHelper::writeFloat(filePointer, (IsPropertyExists(IS_VERTEX_COLOR)) ? getProperty(IS_VERTEX_COLOR).value.x : -1.0);
     FileHelper::writeFloat(filePointer, (IsPropertyExists(REFLECTION)) ? getProperty(REFLECTION).value.x : -1.0);
     FileHelper::writeFloat(filePointer, (IsPropertyExists(REFRACTION)) ? getProperty(REFRACTION).value.x : -1.0);
+    
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(SPECIFIC_FLOAT)) ? getProperty(SPECIFIC_FLOAT).value.x : -1.0);
+    
     FileHelper::writeFloat(filePointer, (IsPropertyExists(TEXTURE_SCALE)) ? getProperty(TEXTURE_SCALE).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(TEXTURE_SMOOTH) ? getProperty(TEXTURE_SMOOTH).value.x : -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
@@ -190,9 +193,9 @@ void MaterialProperty::writeProperties(ofstream *filePointer)
 
 void MaterialProperty::readProperties(ifstream *filePointer)
 {
-    if(IsPropertyExists(LIGHTING))
+    if(IsPropertyExists(LIGHTING)) {
         getProperty(LIGHTING).value.x = FileHelper::readFloat(filePointer);
-    else
+    } else
         FileHelper::readFloat(filePointer);
     
     if(IsPropertyExists(IS_VERTEX_COLOR)) {
@@ -200,24 +203,29 @@ void MaterialProperty::readProperties(ifstream *filePointer)
     } else
         FileHelper::readFloat(filePointer);
     
-    if(IsPropertyExists(REFLECTION))
+    if(IsPropertyExists(REFLECTION)) {
         getProperty(REFLECTION).value.x = FileHelper::readFloat(filePointer);
-    else
+    } else
         FileHelper::readFloat(filePointer);
     
-    if(IsPropertyExists(REFRACTION))
+    if(IsPropertyExists(REFRACTION)) {
         getProperty(REFRACTION).value.x = FileHelper::readFloat(filePointer);
-    else
+    } else
         FileHelper::readFloat(filePointer);
     
-    if(IsPropertyExists(SPECIFIC_FLOAT))
+    if(IsPropertyExists(SPECIFIC_FLOAT)) {
         getProperty(SPECIFIC_FLOAT).value.x = FileHelper::readFloat(filePointer);
-    else
+    } else
         FileHelper::readFloat(filePointer);
     
-    if(IsPropertyExists(TEXTURE_SCALE))
+    if(IsPropertyExists(TEXTURE_SCALE)) {
         getProperty(TEXTURE_SCALE).value.x = FileHelper::readFloat(filePointer);
-    else
+   } else
+        FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(TEXTURE_SMOOTH)) {
+        getProperty(TEXTURE_SMOOTH).value.x = FileHelper::readFloat(filePointer);
+    } else
         FileHelper::readFloat(filePointer);
     
     FileHelper::readFloat(filePointer);

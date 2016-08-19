@@ -172,9 +172,9 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     out.uv.x = uv.x * uvScaleValue[0];
     out.uv.y = uv.y * uvScaleValue[0];
 
-    out.T = normalize(float3(model[0].data * float4(tangent, 0.0)));
-    out.B = normalize(float3(model[0].data * float4(bitangent, 0.0)));
-    out.N = normalize(float3(model[0].data * nor));
+    out.T = normalize(float3(finalMatrix * float4(tangent, 0.0)));
+    out.B = normalize(float3(finalMatrix * float4(bitangent, 0.0)));
+    out.N = normalize(float3(nor));
     
     float4 vertexLightCoord = lvp * pos;
     float4 texCoords = vertexLightCoord / vertexLightCoord.w;
@@ -247,9 +247,9 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     out.uv.x = uv.x * uvScaleValue[0];
     out.uv.y = uv.y * uvScaleValue[0];
     
-    out.T = normalize(float3(model[0].data * float4(tangent, 0.0)));
-    out.B = normalize(float3(model[0].data * float4(bitangent, 0.0)));
-    out.N = normalize(float3(model[0].data * nor));
+    out.T = normalize(float3(finalMatrix * float4(tangent, 0.0)));
+    out.B = normalize(float3(finalMatrix * float4(bitangent, 0.0)));
+    out.N = normalize(float3(nor));
     
     float4 vertexLightCoord = lvp * vertex_position_cameraspace;
     float4 texCoords = vertexLightCoord / vertexLightCoord.w;

@@ -260,7 +260,7 @@ void Mesh::Commit(bool forceSplitBuffers)
             
         } else {
             
-            if(tempVerticesData.size() > MAX_VERTICES_COUNT) {
+            if(tempVerticesDataHeavy.size() > MAX_VERTICES_COUNT) {
                 int meshBufferCount = (int)((tempVerticesDataHeavy.size() - 1) / MAX_VERTICES_COUNT) + 1;
                 for (int meshBufferIndex = 0; meshBufferIndex < meshBufferCount; meshBufferIndex++) {
                     meshBufferIndices.push_back(vector< unsigned short >());

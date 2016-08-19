@@ -550,7 +550,10 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     } else {
         short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, renderTargetIndex);
-        renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue, blurTex);
+        if(device == METAL)
+            renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
+        else
+            renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue, blurTex);
     }
 }
 
