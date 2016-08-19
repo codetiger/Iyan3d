@@ -1409,7 +1409,7 @@ BOOL missingAlertShown;
 - (IBAction)importBtnAction:(id)sender
 {
 //    SceneImporter *loader = new SceneImporter();
-//    loader->importNodesFromFile(FileHelper::getDocumentsDirectory() + "test.dae", editorScene);
+//    loader->importNodesFromFile(editorScene, "Import", FileHelper::getDocumentsDirectory() + "cylinder.dae", FileHelper::getDocumentsDirectory(), false, Vector3(0.0), false);
 //    [self reloadSceneObjects];
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])

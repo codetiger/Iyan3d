@@ -371,18 +371,9 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
 
 void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
 {
-    float arr[16] = {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 1.0,
-    };
-    Mat4 fixHandedness = Mat4(arr);
-
     for (int i = 0; i < aiM->mNumVertices; i++) {
         vertexDataHeavy vd;
-        Vector4 v = fixHandedness * Vector4(aiM->mVertices[i].x, aiM->mVertices[i].y, aiM->mVertices[i].z, 0.0);
-        vd.vertPosition = Vector3(v.x, v.y, v.z);
+        vd.vertPosition = Vector3(aiM->mVertices[i].x, aiM->mVertices[i].y, aiM->mVertices[i].z);
         vd.vertNormal = Vector3(aiM->mNormals[i].x, aiM->mNormals[i].y, aiM->mNormals[i].z);
         
         if(aiM->mTextureCoords[0])
@@ -401,19 +392,6 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
         for (int j = 0; j < face.mNumIndices; j++) {
             mbi.push_back(face.mIndices[j]);
         }
-    }
-}
-
-void getLocalMatrix(Joint* bone)
-{
-    for (int i = 0; i < bone->childJoints->size(); i++) {
-        Joint *child = (*bone->childJoints)[i];
-
-        Mat4 invParentMatrix = bone->GlobalAnimatedMatrix;
-        invParentMatrix.invert();
-        
-        child->LocalAnimatedMatrix = invParentMatrix * child->GlobalAnimatedMatrix;
-        getLocalMatrix(child);
     }
 }
 
@@ -457,15 +435,6 @@ void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
             }
         }
     } while(newBones->size() > 0);
-
-    Joint *rootBone;
-    for(it_type iterator = bones->begin(); iterator != bones->end(); iterator++) {
-        if(!iterator->second->Parent)
-            rootBone = iterator->second;
-    }
-   
-    rootBone->LocalAnimatedMatrix = rootBone->GlobalAnimatedMatrix;
-    getLocalMatrix(rootBone);
 }
 
 void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones)
@@ -486,25 +455,17 @@ void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joi
                 sgBone->PaintedVertices->push_back(pvInfo);
             }
             
-            sgBone->LocalAnimatedMatrix = AssimpToMat4(bone->mOffsetMatrix);
+            aiNode *n = scene->mRootNode->FindNode(bone->mName);
+            sgBone->LocalAnimatedMatrix = AssimpToMat4(n->mTransformation);
         }
     }
 }
 
 void SceneImporter::getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
 {
-    float arr[16] = {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 1.0,
-    };
-    Mat4 fixHandedness = Mat4(arr);
-
     for (int j = 0; j < aiM->mNumVertices; j++) {
         vertexData vd;
-        Vector4 v = fixHandedness * Vector4(aiM->mVertices[j].x, aiM->mVertices[j].y, aiM->mVertices[j].z, 0.0);
-        vd.vertPosition = Vector3(v.x, v.y, v.z);
+        vd.vertPosition = Vector3(aiM->mVertices[j].x, aiM->mVertices[j].y, aiM->mVertices[j].z);
         vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
         
         if(aiM->mColors[0])
