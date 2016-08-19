@@ -117,8 +117,6 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     float4 optionalData4 = vertex_array[vid].optionalData4;
     float3 tangent = vertex_array[vid].tangent;
     float3 bitangent = vertex_array[vid].bitagent;
-    float4 pos = float4(0.0);
-    float4 nor = float4(0.0);
     
     out.hasMeshColor = hasMeshColor[0];
     out.meshColor = (meshColor[0].data[0] == -1.0) ? optionalData4.xyz : float3(meshColor[0].data);
@@ -126,89 +124,66 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     out.transparency = transparencyValue[0];
     out.hasLighting = hasLighting[0];
 
+    float4x4 finalMatrix;
     
     int jointId = int(optionalData1.x);
-    float strength = optionalData2.x ;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }else{
-        pos = in_position;
-        nor = in_normal;
-    }
+    if(jointId > 0)
+        finalMatrix = Joint_Data[jointId - 1].JointTransform * optionalData2.x;
     
     jointId = int(optionalData1.y);
-    strength = optionalData2.y ;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.y);
     
     jointId = int(optionalData1.z);
-    strength = optionalData2.z ;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.z);
     
     jointId = int(optionalData1.w);
-    strength = optionalData2.w;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.w);
     
     jointId = int(optionalData3.x);
-    strength = optionalData4.x;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.x);
     
     jointId = int(optionalData3.y);
-    strength = optionalData4.y;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.y);
     
     jointId = int(optionalData3.z);
-    strength = optionalData4.z;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.z);
     
     jointId = int(optionalData3.w);
-    strength = optionalData4.w;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.w);
+    
+    out.position = mvp * finalMatrix * in_position;
+
+    finalMatrix = model[0].data * finalMatrix;
+    float4 pos = finalMatrix * in_position;
+    float4 nor = finalMatrix * in_normal;
+
     nor = normalize(nor);
     
-    float4 vertex_position_objectspace = pos;
-    float4 vertex_position_cameraspace = model[0].data * pos;
-    out.vertexPosCam = vertex_position_cameraspace;
+    out.vertexPosCam = pos;
     
-    out.position = mvp * vertex_position_objectspace;
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x * uvScaleValue[0];
     out.uv.y = uv.y * uvScaleValue[0];
 
-    
     out.T = normalize(float3(model[0].data * float4(tangent, 0.0)));
     out.B = normalize(float3(model[0].data * float4(bitangent, 0.0)));
     out.N = normalize(float3(model[0].data * nor));
     
-    float4 vertexLightCoord = lvp * vertex_position_cameraspace;
+    float4 vertexLightCoord = lvp * pos;
     float4 texCoords = vertexLightCoord / vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
     out.vertexDepth = texCoords.z;
     
     float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
-    out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
+    out.eyeVec = normalize(eye_position_cameraspace - pos);
     
     if(int(hasLighting[0]) == 1){
         out.shadowDarkness = shadowDarkness;
@@ -244,8 +219,6 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     float4 optionalData4 = vertex_array[vid].optionalData4;
     float3 tangent = vertex_array[vid].tangent;
     float3 bitangent = vertex_array[vid].bitagent;
-    float4 pos = float4(0.0);
-    float4 nor = float4(0.0);
     
     out.hasMeshColor = hasMeshColor[0];
     out.meshColor = (meshColor[0].data[0] == -1.0) ? optionalData4.xyz : float3(meshColor[0].data);
@@ -253,16 +226,16 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     out.transparency = transparencyValue[0];
     out.hasLighting = hasLighting[0];
     
-    
+    float4x4 finalMatrix;
+
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
-    if(jointId > 0){
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-        nor = nor + (Joint_Data[jointId - 1].JointTransform * in_normal) * strength;
-    }else{
-        pos = in_position;
-        nor = in_normal;
-    }
+    if(jointId > 0)
+        finalMatrix = Joint_Data[jointId - 1].JointTransform * strength;
+
+    float4 pos = finalMatrix * in_position;
+    float4 nor = finalMatrix * in_normal;
+
     nor = normalize(nor);
     
     float4 vertex_position_objectspace = pos;
@@ -273,7 +246,6 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x * uvScaleValue[0];
     out.uv.y = uv.y * uvScaleValue[0];
-    
     
     out.T = normalize(float3(model[0].data * float4(tangent, 0.0)));
     out.B = normalize(float3(model[0].data * float4(bitangent, 0.0)));

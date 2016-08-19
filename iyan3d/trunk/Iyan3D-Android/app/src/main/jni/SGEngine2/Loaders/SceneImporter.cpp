@@ -107,7 +107,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
         int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointCount();
         
-        for(int i = 0;i < jointsCount;i++){
+        for(int i = 0; i < jointsCount;i++) {
             dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->getJointNode(i)->setID(i);
             if(!isSGJointsCreated){
                 SGJoint *joint = new SGJoint();

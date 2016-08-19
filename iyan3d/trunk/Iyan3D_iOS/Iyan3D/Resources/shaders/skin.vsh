@@ -31,79 +31,56 @@ void main()
     vTransparencyValue = transparencyValue[0];
     vHasLighting = hasLighting[0];
 
-    
-    vec4 pos = vec4(0.0);
-    vec4 nor = vec4(0.0);
+    mat4 finalMatrix;
+
     int jointId = int(optionalData1.x);
-    float strength = optionalData2.x ;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }else{
-        pos = vec4(vertPosition,1.0);
-        nor = vec4(vertNormal,0.0);
-    }
-    
+    if(jointId > 0)
+        finalMatrix = jointTransforms[jointId - 1] * optionalData2.x;
+
     jointId = int(optionalData1.y);
-    strength = optionalData2.y;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData2.y);
     
     jointId = int( optionalData1.z);
-    strength = optionalData2.z;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData2.z);
     
     jointId = int( optionalData1.w);
-    strength = optionalData2.w;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData2.w);
     
     jointId = int( optionalData3.x);
-    strength = optionalData4.x;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData4.x);
     
     jointId = int( optionalData3.y);
-    strength = optionalData4.y;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData4.y);
     
     jointId = int( optionalData3.z);
-    strength = optionalData4.z;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData4.z);
     
     jointId = int( optionalData3.w);
-    strength = optionalData4.w;
-    if(jointId > 0){
-        pos = pos + (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * vec4(vertNormal,0.0)) * strength;
-    }
+    if(jointId > 0)
+        finalMatrix = finalMatrix + (jointTransforms[jointId - 1] * optionalData4.w);
     
-    vec3 T = normalize(vec3(model[0] * vec4(vertTangent, 0.0)));
-    vec3 B = normalize(vec3(model[0] * vec4(vertBitangent, 0.0)));
-    vec3 N = normalize(vec3(model[0] * nor));
+    gl_Position = mvp * finalMatrix * vec4(vertPosition, 0.0);
+    
+    finalMatrix = model[0] * finalMatrix;
+    vec4 pos = finalMatrix * vec4(vertPosition, 0.0);
+    vec4 nor = finalMatrix * vec4(vertNormal, 0.0);
+
+    vec3 T = normalize(vec3(finalMatrix * vec4(vertTangent, 0.0)));
+    vec3 B = normalize(vec3(finalMatrix * vec4(vertBitangent, 0.0)));
+    vec3 N = normalize(vec3(nor));
     vTBNMatrix = mat3(T, B, N);
     
-    vec4 vertex_position_model = model[0] * pos;
-    vVertexPosition = vertex_position_model.xyz;
+    vVertexPosition = pos.xyz;
     vEyeVec = normalize(eyePos - vVertexPosition);
     
     if(bool(hasLighting[0])) {
-        vec4 vertexLightCoord = lvp * vertex_position_model;
+        vec4 vertexLightCoord = lvp * pos;
         vec4 texCoords = vertexLightCoord / vertexLightCoord.w;
         vTexCoordBias = ((texCoords / 2.0) + 0.5).xy;
         
@@ -122,7 +99,5 @@ void main()
         vReflectionCoord = r.xy / m + .5;
         vReflectionCoord.y = -vReflectionCoord.y;
     }
-    
-    gl_Position = mvp * pos;
 }
 
