@@ -616,53 +616,102 @@ void Mesh::removeDoublesInMesh()
 {
 //    printf("Original Vertices Count: %d ", getVerticesCount());
     map< unsigned int, unsigned int > remapIndices;
-    vector<vertexData> verticesData;
 
-    int totalVertCount = tempVerticesData.size();
-    for(int i = 0; i < totalVertCount; i++) {
-        vertexData v1 = tempVerticesData[i];
-        unsigned int newIndices = i;
-        bool alreadyInserted = false;
+    if(meshType == MESH_TYPE_LITE) {
+        vector<vertexData> verticesData;
         
-        int vertDataCount = verticesData.size();
-        for(int j = 0; j < vertDataCount; j++) {
-            vertexData v2 = verticesData[j];
-
-            if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.optionalData1 == v2.optionalData1) {
-                if(v1.vertNormal == v2.vertNormal) {
-                    newIndices = j;
-                    alreadyInserted = true;
-                    j = vertDataCount;
-                } else {
-                    v1.vertNormal.normalize();
-                    v2.vertNormal.normalize();
-
-                    float diff = v1.vertNormal.dotProduct(v2.vertNormal);
-                    
-                    if(diff >= normalSmoothThreshold) {
+        int totalVertCount = tempVerticesData.size();
+        for(int i = 0; i < totalVertCount; i++) {
+            vertexData v1 = tempVerticesData[i];
+            unsigned int newIndices = i;
+            bool alreadyInserted = false;
+            
+            int vertDataCount = verticesData.size();
+            for(int j = 0; j < vertDataCount; j++) {
+                vertexData v2 = verticesData[j];
+                
+                if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.optionalData1 == v2.optionalData1) {
+                    if(v1.vertNormal == v2.vertNormal) {
                         newIndices = j;
                         alreadyInserted = true;
                         j = vertDataCount;
+                    } else {
+                        v1.vertNormal.normalize();
+                        v2.vertNormal.normalize();
+                        
+                        float diff = v1.vertNormal.dotProduct(v2.vertNormal);
+                        
+                        if(diff >= normalSmoothThreshold) {
+                            newIndices = j;
+                            alreadyInserted = true;
+                            j = vertDataCount;
+                        }
                     }
                 }
             }
+            
+            if(!alreadyInserted) {
+                newIndices = verticesData.size();
+                verticesData.push_back(v1);
+            }
+            
+            remapIndices.insert(pair<unsigned int, unsigned int > (i, newIndices));
         }
 
-        if(!alreadyInserted) {
-            newIndices = verticesData.size();
-            verticesData.push_back(v1);
+        tempVerticesData.clear();
+        tempVerticesData = verticesData;
+
+    } else {
+        vector<vertexDataHeavy> verticesData;
+        
+        int totalVertCount = tempVerticesDataHeavy.size();
+        for(int i = 0; i < totalVertCount; i++) {
+            vertexDataHeavy v1 = tempVerticesDataHeavy[i];
+            unsigned int newIndices = i;
+            bool alreadyInserted = false;
+            
+            int vertDataCount = verticesData.size();
+            for(int j = 0; j < vertDataCount; j++) {
+                vertexDataHeavy v2 = verticesData[j];
+                
+                if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.optionalData1 == v2.optionalData1 && v1.optionalData2 == v2.optionalData2 && v1.optionalData3 == v2.optionalData3 && v1.optionalData4 == v2.optionalData4) {
+                    if(v1.vertNormal == v2.vertNormal) {
+                        newIndices = j;
+                        alreadyInserted = true;
+                        j = vertDataCount;
+                    } else {
+                        v1.vertNormal.normalize();
+                        v2.vertNormal.normalize();
+                        
+                        float diff = v1.vertNormal.dotProduct(v2.vertNormal);
+                        
+                        if(diff >= normalSmoothThreshold) {
+                            newIndices = j;
+                            alreadyInserted = true;
+                            j = vertDataCount;
+                        }
+                    }
+                }
+            }
+            
+            if(!alreadyInserted) {
+                newIndices = verticesData.size();
+                verticesData.push_back(v1);
+            }
+            
+            remapIndices.insert(pair<unsigned int, unsigned int > (i, newIndices));
         }
 
-        remapIndices.insert(pair<unsigned int, unsigned int > (i, newIndices));
+        tempVerticesDataHeavy.clear();
+        tempVerticesDataHeavy = verticesData;
     }
+    
     
     for(int k = 0; k < tempIndicesData.size(); k++) {
         if(remapIndices.find(tempIndicesData[k]) != remapIndices.end())
             tempIndicesData[k] = remapIndices[tempIndicesData[k]];
     }
     
-    tempVerticesData.clear();
-    tempVerticesData = verticesData;
 
 //    printf(" after RemoveDoubles: %d\n", getVerticesCount());
     
