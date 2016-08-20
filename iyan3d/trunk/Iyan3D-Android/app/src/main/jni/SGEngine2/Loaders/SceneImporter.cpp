@@ -81,7 +81,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
     printf("\n Texture Path %s ", textureName.c_str());
     if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds" || ext == "blend") {
         Assimp::Importer *importer = new Assimp::Importer();
-        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Quality);
+        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
         if(!scene) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
@@ -356,7 +356,23 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
         sgn->updateAbsoluteTransformation();
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
     }
-    
+
+    Quaternion r1 = Quaternion();
+    Quaternion r2 = Quaternion();
+
+    // DAE & FBX Default Rotation
+    r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+    r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+
+    /* OBJ Default Rotation
+    r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+    r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+     */
+
+    Quaternion r = r1 * r2;
+    sceneNode->setRotation(r, 0);
+    sgn->setRotation(r);
+
     sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
     if(sceneNode->getType() == NODE_RIG) {
         sgScene->loader->setJointsScale(sceneNode);
