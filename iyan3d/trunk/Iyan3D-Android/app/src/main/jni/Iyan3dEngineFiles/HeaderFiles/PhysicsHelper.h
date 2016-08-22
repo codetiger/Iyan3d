@@ -22,8 +22,6 @@ struct PhysicsReference {
     void* nodeReference;
     bool isJoint;
     int jointIndex, parentIndex;
-    Quaternion initialOrientation;
-    Vector3 initialPosition;
 };
 
 class PhysicsHelper
@@ -39,6 +37,7 @@ class PhysicsHelper
     
     vector < btRigidBody* > rBodies;
     vector < btSoftBody* > sBodies;
+    vector < btTypedConstraint* > constraints;
 
 public:
     

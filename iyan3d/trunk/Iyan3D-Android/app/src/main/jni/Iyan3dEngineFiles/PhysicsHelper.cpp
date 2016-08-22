@@ -105,6 +105,12 @@ void PhysicsHelper::syncPhysicsWorld()
 //            delete sBodies[i];
     }
     
+    for( int i = 0; i < constraints.size(); i++) {
+        world->removeConstraint(constraints[i]);
+        delete constraints[i];
+    }
+    
+    constraints.clear();
     rBodies.clear();
     sBodies.clear();
     
@@ -155,14 +161,11 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                     sgNode->setScale(sgNode->scaleKeys[0].scale, frame);
                 } else {
                     SGNode* sgNode = (SGNode*)pr->nodeReference;
-                    
-                    Quaternion oldInv = pr->initialOrientation;
-                    oldInv.makeInverse();
-                    
-                    Quaternion r = sgNode->getKeyForFrame(0).rotation.makeInverse() * nodeRot * oldInv * pr->initialOrientation;
-                   
-                    sgNode->joints[pr->jointIndex]->setRotation(r, frame);
-                    sgNode->joints[pr->jointIndex]->setScale(sgNode->scaleKeys[0].scale, frame);
+
+                    if(pr->parentIndex != -1)
+                        sgNode->CCD(sgNode->joints[pr->jointIndex]->jointNode, nodePos, 0, frame);
+                    else
+                        sgNode->setPosition(nodePos, frame);
                 }
             }
             
@@ -269,62 +272,59 @@ void PhysicsHelper::addRigidBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
     }
 }
 
-void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies, btRigidBody* pbody, shared_ptr<JointNode> parentJointNode) {
-    for (int i = 0; i < parentJointNode->Children->size(); i++) {
-        shared_ptr<JointNode> child = dynamic_pointer_cast<JointNode>((*parentJointNode->Children)[i]);
+void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies, btRigidBody* pbody, shared_ptr<JointNode> jointNode) {
+    
+    Vector3 nodePos = jointNode->getAbsolutePosition();
+    Quaternion nodeRot = jointNode->getAbsoluteTransformation().getRotation();
+    
+    btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
+    btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
+    btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
+    btScalar bodyMass = sgNode->getProperty(HAS_PHYSICS).subProps[WEIGHT].value.x;
+    btVector3 bodyInertia;
+    
+    btCollisionShape* shape = new btSphereShape(0.05);
+    shape->setLocalScaling(btVector3(1.0, 1.0, 1.0));
+    shape->calculateLocalInertia(bodyMass, bodyInertia);
+    shape->setMargin(0.05);
+    
+    btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
+    bodyCI.m_restitution = 0.6f;
+    bodyCI.m_friction = 0.5f;
+    bodyCI.m_rollingFriction = 0.5f;
+    
+    btRigidBody *body = new btRigidBody(bodyCI);
+    
+    PhysicsReference *pr = new PhysicsReference();
+    pr->nodeReference = sgNode;
+    pr->isJoint = true;
+    pr->jointIndex = jointNode->getID();
+    
+    shared_ptr<Node> parent = jointNode->getParent();
+    SkinMesh* sMesh = (SkinMesh*)dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node)->getMesh();
+    
+    if((*sMesh->joints)[jointNode->getID()]->Parent)
+        pr->parentIndex = parent->getID();
+    else
+        pr->parentIndex = -1;
+    
+    body->setUserPointer(pr);
+    body->setLinearFactor(btVector3(1,1,1));
+    
+    world->addRigidBody(body);
+    rBodies.push_back(body);
+    
+    if(pbody) {
+        Vector3 pos = jointNode->getPosition();
+        btVector3 childPos = btVector3(pos.x, pos.y, pos.z);
+        btPoint2PointConstraint *constraint = new btPoint2PointConstraint(*pbody, *body, btVector3(0.0, 0.0, 0.0), childPos);
+        world->addConstraint(constraint, true);
+        constraints.push_back(constraint);
+    }
+    
+    for (int i = 0; i < jointNode->Children->size(); i++) {
+        shared_ptr<JointNode> child = dynamic_pointer_cast<JointNode>((*jointNode->Children)[i]);
         if(child) {
-            Vector3 nodePos = child->getPosition();
-            Quaternion nodeRot = child->getRotation();
-            
-            btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
-            btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
-            btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
-            btScalar bodyMass = sgNode->getProperty(HAS_PHYSICS).subProps[WEIGHT].value.x;
-            btVector3 bodyInertia;
-            
-            btCollisionShape* shape = new btSphereShape(1.0);
-            shape->setLocalScaling(btVector3(child->getScale().x, child->getScale().y, child->getScale().z));
-            shape->calculateLocalInertia(bodyMass, bodyInertia);
-            shape->setMargin(0.05);
-            
-            btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, shape, bodyInertia);
-            bodyCI.m_restitution = 0.6f;
-            bodyCI.m_friction = 0.5f;
-            bodyCI.m_rollingFriction = 0.5f;
-            
-            btRigidBody *body = new btRigidBody(bodyCI);
-            
-            PhysicsReference *pr = new PhysicsReference();
-            pr->nodeReference = sgNode;
-            pr->isJoint = true;
-            pr->jointIndex = i;
-            
-            shared_ptr<Node> parent = sgNode->joints[i]->jointNode->getParent();
-            if(parent)
-                pr->parentIndex = parent->getID();
-            else
-                pr->parentIndex = -1;
-            
-            pr->initialPosition = nodePos;
-            pr->initialOrientation = nodeRot;
-            
-            btTransform &t = body->getWorldTransform();
-            Quaternion r = (sgNode->getKeyForFrame(0).rotation * nodeRot * nodeRot.makeInverse()) * Quaternion(t.getRotation().x(), t.getRotation().y(), t.getRotation().z(), t.getRotation().w());
-            t.setRotation(btQuaternion(r.x, r.y, r.z, r.w));
-            Vector3 p = sgNode->getKeyForFrame(0).position + sgNode->getKeyForFrame(0).rotation * nodePos * sgNode->getKeyForFrame(0).scale;
-            t.setOrigin(btVector3(p.x, p.y, p.z));
-            
-            body->setUserPointer(pr);
-            body->setLinearFactor(btVector3(1,1,1));
-            
-            world->addRigidBody(body);
-            rBodies.push_back(body);
-            
-            if(pbody) {
-                btPoint2PointConstraint *constraint = new btPoint2PointConstraint(*body, *pbody, btVector3(p.x, p.y, p.z), btVector3(0.0, 0.0, 0.0));
-                world->addConstraint(constraint);
-            }
-            
             addChildBody(sgNode, world, rBodies, body, child);
         }
     }

@@ -40,6 +40,11 @@ void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, un
     meshBufferVerticesData.push_back(mbvd);
     meshBufferIndices.push_back(mbi);
     meshBufferMaterialIndices.push_back(materialIndex);
+    
+    for(int i = 0; i < meshBufferVerticesData[meshBufferVerticesData.size() - 1].size(); i++) {
+        vertexData v = meshBufferVerticesData[meshBufferVerticesData.size() - 1][i];
+        BBox.addPointsToCalculateBoundingBox(v.vertPosition);
+    }
 }
 
 void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex)
@@ -47,6 +52,11 @@ void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mb
     meshBufferVerticesDataHeavy.push_back(mbvd);
     meshBufferIndices.push_back(mbi);
     meshBufferMaterialIndices.push_back(materialIndex);
+    
+    for(int i = 0; i < meshBufferVerticesDataHeavy[meshBufferVerticesDataHeavy.size() - 1].size(); i++) {
+        vertexDataHeavy v = meshBufferVerticesDataHeavy[meshBufferVerticesDataHeavy.size() - 1][i];
+        BBox.addPointsToCalculateBoundingBox(v.vertPosition);
+    }
 }
 
 void Mesh::copyDataFromMesh(Mesh* otherMesh)

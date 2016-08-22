@@ -3666,7 +3666,7 @@ void downloadFile(NSString* url, NSString* fileName)
         return;
     
     SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
-    if(selectedNode->getType() == NODE_SGM || selectedNode->getType() == NODE_OBJ || selectedNode->getType() == NODE_TEXT) {
+    if(selectedNode->getType() == NODE_SGM || selectedNode->getType() == NODE_OBJ || selectedNode->getType() == NODE_TEXT || selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT_SKIN) {
         std::map<PROP_INDEX, Property> currentPhysics = selectedNode->getProperty(HAS_PHYSICS).subProps;
         std::map<PROP_INDEX, Property> newPhysics = property.subProps;
         

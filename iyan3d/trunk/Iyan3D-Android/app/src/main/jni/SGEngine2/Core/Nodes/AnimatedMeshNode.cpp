@@ -47,7 +47,8 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, int maxJoints, rig_type rigTy
         if ((*SMesh->joints)[i]->Parent) {
             unsigned short parentId = (*SMesh->joints)[i]->Parent->Index;
             jointNodes[i]->Parent = jointNodes[parentId];
-        }
+        } else
+            jointNodes[i]->Parent = shared_ptr<Node>();
     }
     
     if(this->mesh) {
@@ -81,7 +82,7 @@ void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, int maxJoints, rig_type rigTy
     for (int i = 0; i < jointNodes.size(); i++) {
         jointNodes[i]->bBox.calculateEdges();
         shared_ptr<JointNode> node = jointNodes[i];
-        if (i == 0)
+        if (!jointNodes[i]->Parent)
             node->setParent(shared_from_this());
         for (int j = 0; j < (*SMesh->joints)[i]->childJoints->size(); j++) {
             unsigned short childIndex = (*(*SMesh->joints)[i]->childJoints)[j]->Index;
