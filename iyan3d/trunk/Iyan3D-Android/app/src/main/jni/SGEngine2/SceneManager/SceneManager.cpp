@@ -49,7 +49,6 @@ SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_
         renderMan->supportsInstancing = true;
 
     mtlManger = new MaterialManager(type);
-    renderTargetIndex = 0;
     
     if(device == METAL)
         renderMan->maxInstances = 4000;
@@ -185,7 +184,6 @@ void SceneManager::RemoveAllNodes()
 
 bool SceneManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color)
 {
-    renderTargetIndex++;
     return renderMan->PrepareDisplay(width,height,clearColorBuf,clearDepthBuf,isDepthPass,color);
 }
 
@@ -220,7 +218,6 @@ void SceneManager::Render(bool isRTT)
 
 void SceneManager::EndDisplay()
 {
-    renderTargetIndex = 0;
     renderMan->endDisplay();
 }
 
@@ -535,7 +532,7 @@ void SceneManager::setPropertyValue(Material *material, string name, float* valu
     if(nodeIndex == NOT_EXISTS && device == METAL){
         renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
     }else{
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, renderTargetIndex);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex);
         renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue);
     }
 }
@@ -549,7 +546,7 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
     if(nodeIndex == NOT_EXISTS && device == METAL) {
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     } else {
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, renderTargetIndex);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex);
         if(device == METAL)
             renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
         else
@@ -612,8 +609,6 @@ Texture* SceneManager::createRenderTargetTexture(string textureName, TEXTURE_DAT
 
 void SceneManager::setRenderTarget(Texture *renderTexture, bool clearBackBuffer, bool clearZBuffer, bool isDepthPass, Vector4 color)
 {
-    if(renderTexture)
-        renderTargetIndex++;
     renderMan->setRenderTarget(renderTexture,clearBackBuffer,clearZBuffer,isDepthPass,color);
 }
 

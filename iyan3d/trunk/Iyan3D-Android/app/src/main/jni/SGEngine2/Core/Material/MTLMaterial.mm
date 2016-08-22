@@ -21,7 +21,7 @@ MTLMaterial::~MTLMaterial()
     uniforms.clear();
 }
 
-void MTLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex,u16 count,uint32_t location,int nodeIndex,short renderTargetIndex)
+void MTLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, int nodeIndex)
 {
     MTLUniform uni;
     uni.name = propertyName;
@@ -32,22 +32,21 @@ void MTLMaterial::AddProperty(string propertyName,NODE_PROPERTY property,DATA_TY
     uni.parameterIndex = paramIndex;
     uni.nodeIndex = nodeIndex;
     uni.buf = nil;
-    uni.renderTargetIndex = renderTargetIndex;
     this->uniforms.push_back(uni);
 }
 
-short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex,int renderTargetIndex)
+short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex,int nodeIndex)
 {
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){ //ToDo search optimisation
-        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].renderTargetIndex == renderTargetIndex && uniforms[i].count == count){
+        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].count == count){
             uniforms[i].values = values;
             uIndex = i;
             break;
         }
     }
     if(uIndex == NOT_EXISTS){
-        AddProperty(name,NODE_PROPERTY_USER_DEFINED,type,paramIndex,count,0,nodeIndex,renderTargetIndex);
+        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex);
         uIndex = uniforms.size()-1;
         int bufSize = count * sizeof(float);
         uniforms[uIndex].values = values;
@@ -58,19 +57,19 @@ short MTLMaterial::setPropertyValue(string name,float *values,DATA_TYPE type,u16
     return uIndex;
 }
 
-short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int renderTargetIndex)
+short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex)
 {
     
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size();i++){
-        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].renderTargetIndex == renderTargetIndex){
+        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex) {
             uniforms[i].values = values;
             uIndex = i;
             break;
         }
     }
-    if(uIndex == NOT_EXISTS){
-        AddProperty(name,NODE_PROPERTY_USER_DEFINED,type,paramIndex,count,0,nodeIndex,renderTargetIndex);
+    if(uIndex == NOT_EXISTS) {
+        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex);
         uIndex = uniforms.size()-1;
         int bufSize = count * sizeof(int);
         uniforms[uIndex].values = values;

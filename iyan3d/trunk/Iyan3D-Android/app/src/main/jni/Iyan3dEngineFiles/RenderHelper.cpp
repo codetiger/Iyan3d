@@ -364,7 +364,7 @@ void RenderHelper::drawCameraPreview()
     renderingScene->blueGrid->node->setVisible(false);
     renderingScene->redGrid->node->setVisible(false);
     
-    smgr->setRenderTarget(renderingScene->previewTexture,true,true,false,Vector4(0.1,0.1,0.1,1.0));
+    smgr->setRenderTarget(renderingScene->previewTexture, true, true, false, Vector4(0.1, 0.1, 0.1, 1.0));
     Vector4 camprevlay = renderingScene->getCameraPreviewLayout();
     std::map< int, Vector3 > nPositions;
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
@@ -381,14 +381,14 @@ void RenderHelper::drawCameraPreview()
     }
     setControlsVisibility(false);
     
-    
     smgr->Render(false);
     if(renderingScene->whiteBorderTexture)
-        smgr->draw2DImage(renderingScene->whiteBorderTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight ),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0,0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    
     smgr->setRenderTarget(NULL,false,false);
     smgr->setActiveCamera(renderingScene->viewCamera);
     
-    for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
+    for(unsigned long i = 1; i < renderingScene->nodes.size(); i++) {
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
         
@@ -402,12 +402,11 @@ void RenderHelper::drawCameraPreview()
         if(!isLightOn)
             renderingScene->setLightingOff();
     }
+    
     ShaderManager::renderingPreview = false;
     renderingScene->greenGrid->node->setVisible(true);
     renderingScene->blueGrid->node->setVisible(true);
     renderingScene->redGrid->node->setVisible(true);
-
-    
 }
 
 void RenderHelper::setRenderCameraOrientation()

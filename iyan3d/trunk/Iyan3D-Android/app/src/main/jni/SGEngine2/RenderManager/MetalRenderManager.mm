@@ -558,19 +558,19 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
     if(isCmdBufferCommited)
         return;
     
-    if(renderTexture){
+    if(renderTexture) {
         endEncoding();
         changeViewport(renderTexture->width, renderTexture->height);
         _renderPassDescriptor = nil;
         _renderPassDescriptor = [MTLRenderPassDescriptor new];
         int sampleCount = 1,colorTextureType = MTLTextureType2D;
         if(!isDepthPass) {
-            if(ANTI_ALIASING_SAMPLE_COUNT > 1){
+            if(ANTI_ALIASING_SAMPLE_COUNT > 1) {
                 sampleCount = ANTI_ALIASING_SAMPLE_COUNT;colorTextureType = MTLTextureType2DMultisample;
                 _renderPassDescriptor.colorAttachments[0].texture = getMSATexture(sampleCount,(int)((MTLTexture*)renderTexture)->texture.width,(int)((MTLTexture*)renderTexture)->texture.height);
                 _renderPassDescriptor.colorAttachments[0].resolveTexture = ((MTLTexture*)renderTexture)->texture;
                 _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionMultisampleResolve;
-            }else{
+            } else {
                 _renderPassDescriptor.colorAttachments[0].texture = ((MTLTexture*)renderTexture)->texture;
                 _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
             }
@@ -602,14 +602,14 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
             RenderCMDBuffer = rttRenderCMDBuffer;
         }
         isEncodingEnded = false;
-    }else{
+    } else {
         endEncoding();
     }
 }
 
 void MetalRenderManager::endEncoding()
 {
-    if(!isEncodingEnded){
+    if(!isEncodingEnded) {
         [RenderCMDBuffer popDebugGroup];
         [RenderCMDBuffer endEncoding];
         isEncodingEnded = true;
