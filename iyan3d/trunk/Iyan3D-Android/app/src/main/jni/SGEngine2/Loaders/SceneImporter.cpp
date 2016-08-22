@@ -75,11 +75,9 @@ Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
 void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filepath, string textureName, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
     sgScene->freezeRendering = true;
-
     string ext = getFileExtention(filepath);
-    printf(" \n Mesh at %s ", filepath.c_str());
-    printf("\n Texture Path %s ", textureName.c_str());
-    if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds" || ext == "blend") {
+
+    if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds") {
         Assimp::Importer *importer = new Assimp::Importer();
         scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
         if(!scene) {
@@ -87,8 +85,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             return;
         }
         
-        loadNodes(sgScene, textureName);
-        
+        loadNodes(sgScene, textureName, isTempNode);
         delete importer;
 
     } else if(ext == "sgr") {
@@ -236,7 +233,7 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
 
 }
 
-void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
+void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool isTempNode)
 {
     Mesh* mesh;
     map< string, Joint* > *bones = new map< string, Joint* >();
@@ -249,12 +246,12 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
     }
 
     SGNode *sceneNode = new SGNode(hasBones ? NODE_RIG : NODE_SGM);
+    sceneNode->isTempNode = isTempNode;
     
-    if(hasBones) {
+    if(hasBones)
         mesh = new SkinMesh();
-    } else {
+    else
         mesh = new Mesh();
-    }
 
     for (int i = 0; i < scene->mNumMeshes; i++) {
         aiMesh *aiM = scene->mMeshes[i];

@@ -4184,69 +4184,56 @@ void downloadFile(NSString* url, NSString* fileName)
     
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
 
-    NSString * displayName;
-    NSString * finalMeshName;
-    NSString * finalTextureName;
-    NSString * extension;
+    NSString *displayName, *finalMeshName, *finalTextureName;
     int finalNodeType;
-    NSString * destDirectory;
-    NSString* sourcePath;
     
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-    NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", nil]]];
-    NSFileManager* fm = [[NSFileManager alloc]init];
+    NSArray *filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil]]];
 
-    NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone", @"Cube", @"Cylinder", @"Plane", @"Sphere", @"Torus", nil];
-    NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001", @"60002", @"60003", @"60004", @"60005", @"60006", nil];
+    NSArray *basicShapes = [NSArray arrayWithObjects:@"Cone", @"Cube", @"Cylinder", @"Plane", @"Sphere", @"Torus", nil];
+    NSArray *basicShapesId = [NSArray arrayWithObjects:@"60001.sgm", @"60002.sgm", @"60003.sgm", @"60004.sgm", @"60005.sgm", @"60006.sgm", nil];
+    NSString *sourcePath;
 
     if(indexPath < 6) {
+        
         displayName = [basicShapes objectAtIndex:indexPath];
         finalMeshName = [basicShapesId objectAtIndex:indexPath];
         finalNodeType = (int)NODE_SGM;
-        extension = @"sgm";
-        destDirectory = @"Resources/Sgm";
-        sourcePath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/Sgm/%@.%@", finalMeshName, extension]];
+        sourcePath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/Sgm/%@", finalMeshName]];
         
     } else {
-        displayName = finalMeshName;
+        
         finalMeshName = [filesList objectAtIndex:indexPath - BASIC_SHAPES_COUNT];
+        displayName = finalMeshName;
         finalNodeType = (int)NODE_OBJ;
-        extension = @"obj";
-        destDirectory = @"Resources/Objs";
-        sourcePath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", finalMeshName, extension]];
-
+        sourcePath = [docDirPath stringByAppendingPathComponent:finalMeshName];
     }
     
-    NSString* destPath = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/%@.%@", destDirectory, finalMeshName, extension]];
-    
-    if([fm fileExistsAtPath:sourcePath])
-        [fm copyItemAtPath:sourcePath toPath:destPath error:nil];
-    else
-        return;
-    
-    finalTextureName = (hasTexture) ? textureFileName :  @"White-Texture";
+    finalTextureName = @"White-Texture";
     
     if(hasTexture) {
+        finalTextureName = textureFileName;
+        
         NSString* sourceTexPath = [NSString stringWithFormat:@"%@/%@.png", docDirPath, textureFileName];
         NSString* destTexPath = [NSString stringWithFormat:@"%@/Resources/Textures/%@.png", docDirPath, textureFileName];
         
+        NSFileManager* fm = [[NSFileManager alloc] init];
         if([fm fileExistsAtPath:sourceTexPath]) {
             if([fm fileExistsAtPath:destTexPath])
                 [fm removeItemAtPath:destTexPath error:nil];
 
-            UIImage *image =[UIImage imageWithContentsOfFile:sourceTexPath];
+            UIImage *image = [UIImage imageWithContentsOfFile:sourceTexPath];
             NSData *imageData = [self convertAndScaleImage:image size:-1];
             [imageData writeToFile:destTexPath atomically:YES];
             
-         } else {
+        } else {
             if(![fm fileExistsAtPath:destTexPath])
                 finalTextureName = @"White-Texture";
         }
     }
     
-    NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
     [dict setObject:displayName forKey:@"name"];
     [dict setObject:finalMeshName forKey:@"meshName"];
     [dict setObject:finalTextureName forKey:@"textureName"];
@@ -4259,103 +4246,23 @@ void downloadFile(NSString* url, NSString* fileName)
     
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
     [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
-    
 }
-
-/*
-- (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode
-{
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
-    NSArray* basicShapes = [NSArray arrayWithObjects:@"Cone", @"Cube", @"Cylinder", @"Plane", @"Sphere", @"Torus", nil];
-    
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-    NSArray* filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", nil]]];
-    NSFileManager* fm = [[NSFileManager alloc]init];
-    std::string *objStr = NULL;
-    std::string *textureStr = new std::string([(!isHaveTexture) ? @"White-texture" : textureFileName UTF8String]);
-    NSString* assetName = (indexPathOfOBJ < 6 ) ? [basicShapes objectAtIndex:indexPathOfOBJ] : [[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension];
-    assetName = NSLocalizedString(assetName, nil);
-    
-    int assetId = (!isTempNode) ? -1 : 123456;
-    int assetIdReturn = 0;
-    NSArray* basicShapesId = [NSArray arrayWithObjects:@"60001", @"60002", @"60003", @"60004", @"60005", @"60006", nil];
-    
-    if(indexPathOfOBJ < 6) {//Total Basic Shapes 6
-        assetId = [[basicShapesId objectAtIndex:indexPathOfOBJ]intValue];
-    } else {
-        objStr = new std::string([[[filesList objectAtIndex:indexPathOfOBJ - 6]stringByDeletingPathExtension] UTF8String]);
-        editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 123456, !isHaveTexture, color);
-        delete objStr;
-    }
-    
-    NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetId];
-    [fm removeItemAtPath:texTo error:nil];
-    
-    if(!isTempNode)
-        assetIdReturn =  [self addSgmFileToCacheDirAndDatabase:assetName];
-    
-    NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Textures/White-texture":textureFileName];
-    std::string *texture = new std::string([textureFileName UTF8String]);
-    if ([[NSFileManager defaultManager] fileExistsAtPath:texFrom]){
-        NSString* desFilePath;
-        if(isTempNode)
-            desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@.png",docDirPath,@"temp"];
-        else
-            desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetIdReturn];
-        [fm removeItemAtPath:texTo error:nil];
-        UIImage *image =[UIImage imageWithContentsOfFile:texFrom];
-        NSData *imageData = [self convertAndScaleImage:image size:-1];
-        [imageData writeToFile:desFilePath atomically:YES];
-        *texture = std::string([(isTempNode)?@"temp" : textureFileName UTF8String]);
-    }
-    
-    if (!isTempNode) {
-        NSString* sgmFrom = [NSString stringWithFormat:@"%@%@%d.sgm",docDirPath,@"/Resources/Sgm/",(indexPathOfOBJ < 6) ? assetId : 123456];
-        NSString* sgmTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm",docDirPath,assetIdReturn];
-        [fm copyItemAtPath:sgmFrom toPath:sgmTo error:nil];
-    }
-    
-    NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
-    [dict setObject:assetName forKey:@"name"];
-    [dict setObject:[NSNumber numberWithInt:(isTempNode) ? assetId : assetIdReturn] forKey:@"assetId"];
-    [dict setObject:[NSNumber numberWithFloat:color.x] forKey:@"x"];
-    [dict setObject:[NSNumber numberWithFloat:color.y] forKey:@"y"];
-    [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
-    
-    NSString *textureName;
-    if(isTempNode)
-        textureName = @"temp";
-    else
-        textureName = [NSString stringWithFormat:@"%d%@",assetIdReturn,@"-cm"];
-
-    [dict setObject:[NSString stringWithFormat:@"%@",(isHaveTexture) ? textureName : @"-1"] forKey:@"textureName"];
-    [dict setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
-    [dict setObject:[NSNumber numberWithBool:isHaveTexture] forKey:@"isHaveTexture"];
-    [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
-    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
-    
-    delete textureStr;
-    delete texture;
-}
-*/
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName
 {
     NSArray* directoryPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectoryPath = [directoryPath objectAtIndex:0];
     NSDate *currDate = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"YY-MM-DD HH:mm:ss"];
     NSString *dateString = [dateFormatter stringFromDate:currDate];
     
     AssetItem* sgmAsset = [[AssetItem alloc] init];
     sgmAsset.assetId = 20000 + [cache getNextObjAssetId];
     sgmAsset.type = NODE_SGM;
-    sgmAsset.name = [NSString stringWithFormat:@"%@%d",fileName,[cache getNextObjAssetId]];
+    sgmAsset.name = [NSString stringWithFormat:@"%@%d", fileName, [cache getNextObjAssetId]];
     sgmAsset.iap = 0;
-    sgmAsset.keywords = [NSString stringWithFormat:@" %@",fileName];
+    sgmAsset.keywords = [NSString stringWithFormat:@" %@", fileName];
     sgmAsset.boneCount = 0;
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath, fileName];
     sgmAsset.hash = [self getMD5ForNonReadableFile:filePath];
@@ -4384,6 +4291,7 @@ void downloadFile(NSString* url, NSString* fileName)
     objAsset.hash = [self getMD5ForNonReadableFile:sgrFilePath];
     objAsset.modifiedDate = dateString;
     objAsset.price = @"FREE";
+    
     [cache UpdateAsset:objAsset];
     [cache AddDownloadedAsset:objAsset];
     [self storeRiginCachesDirectory:objAsset.name assetId:objAsset.assetId];
@@ -4493,26 +4401,20 @@ void downloadFile(NSString* url, NSString* fileName)
     
     Vector3 mColor = Vector3(x, y, z);
     
-    std::string meshPath = "";
+    string meshPath = "";
     
     if(nodeType == NODE_SGM) {
-        std::string meshDir = FileHelper::getDocumentsDirectory() + "Resources/Sgm/";
-        meshPath = meshDir + [meshName UTF8String] + ".sgm";
+        meshPath = FileHelper::getDocumentsDirectory() + "Resources/Sgm/" + [meshName UTF8String];
     } else {
-        std::string meshDir = FileHelper::getDocumentsDirectory() + "Resources/Objs/";
-        meshPath = meshDir + [meshName UTF8String] + ".obj";
+        meshPath = FileHelper::getDocumentsDirectory() + [meshName UTF8String];
     }
-    
+   
     editorScene->loader->removeTempNodeIfExists();
+    
     SceneImporter *loader = new SceneImporter();
     loader->importNodesFromFile(editorScene, [name UTF8String], meshPath, [textureName UTF8String], !hasTexture, mColor, isTempNode);
     if(!isTempNode)
         [self reloadSceneObjects];
-}
-
-- (void) loadStoreSGM:(NSMutableDictionary*) dict
-{
-    
 }
 
 - (void) legacyLoadObjOrSGM:(NSMutableDictionary*)dict

@@ -55,8 +55,7 @@
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-//    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
-    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", nil]]];
+    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil]]];
 
     self.importBtn.layer.cornerRadius=8.0;
     self.addBtn.layer.cornerRadius=8.0;
@@ -96,7 +95,7 @@
     if(caseNum == 1)
         extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
     else
-        extensions = [NSArray arrayWithObjects:@"obj", @"fbx", nil];
+        extensions = [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil];
     
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
@@ -149,11 +148,11 @@
         _ObjInfoLable.text = NSLocalizedString(@"add_obj_document_dir", nil);
         if(indexPath.row > basicShapes.count-1){
             NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
-            if([extension isEqualToString:@"obj"] || [extension isEqualToString:@"fbx"]) {
+            if([extension isEqualToString:@"obj"] || [extension isEqualToString:@"fbx"] || [extension isEqualToString:@"dae"] || [extension isEqualToString:@"3ds"]) {
                 [cell.propsBtn setHidden:NO];
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
                 cell.layer.borderColor = [UIColor grayColor].CGColor;
-                cell.assetImageView.image =[UIImage imageNamed:@"objfile.png"];
+                cell.assetImageView.image = [UIImage imageNamed:[extension stringByAppendingString:@"file.png"]];
                 return cell;
             }
         }
@@ -275,7 +274,8 @@
            //[self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
            [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:NO];
        } else
-           [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+           [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+
        [self.view removeFromSuperview];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
        [self.objSlideDelegate deallocSubViews];

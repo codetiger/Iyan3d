@@ -37,7 +37,7 @@ public:
 private:
     const aiScene* scene = NULL;
 
-    void loadNodes(SGEditorScene *sgScene, string path);
+    void loadNodes(SGEditorScene *sgScene, string path, bool isTempNode);
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
     void loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones);
 

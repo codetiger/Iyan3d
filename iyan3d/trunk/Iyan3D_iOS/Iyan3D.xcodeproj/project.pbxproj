@@ -1940,6 +1940,12 @@
 		3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065371C7C28B600CB7158 /* My-objects-Particles.png */; };
 		3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
 		3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
+		4EB39D5C1D6AC06500C31179 /* 3dsfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D591D6AC06500C31179 /* 3dsfile.png */; };
+		4EB39D5D1D6AC06500C31179 /* 3dsfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D591D6AC06500C31179 /* 3dsfile.png */; };
+		4EB39D5E1D6AC06500C31179 /* daefile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D5A1D6AC06500C31179 /* daefile.png */; };
+		4EB39D5F1D6AC06500C31179 /* daefile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D5A1D6AC06500C31179 /* daefile.png */; };
+		4EB39D601D6AC06500C31179 /* fbxfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D5B1D6AC06500C31179 /* fbxfile.png */; };
+		4EB39D611D6AC06500C31179 /* fbxfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D5B1D6AC06500C31179 /* fbxfile.png */; };
 		62044E3419920D8F0067E21E /* button-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 62044E3319920D8F0067E21E /* button-background.png */; };
 		6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED51B1484AE00DCD585 /* depthPass.fsh */; };
 		6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED61B1484AE00DCD585 /* depthPass.vsh */; };
@@ -4267,6 +4273,9 @@
 		3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
 		3DE065371C7C28B600CB7158 /* My-objects-Particles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles.png"; sourceTree = "<group>"; };
 		3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightAndVideoProperties.xib; path = "ui/Popover Views/LightAndVideoProperties.xib"; sourceTree = "<group>"; };
+		4EB39D591D6AC06500C31179 /* 3dsfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 3dsfile.png; path = Resources/imgs/3dsfile.png; sourceTree = "<group>"; };
+		4EB39D5A1D6AC06500C31179 /* daefile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = daefile.png; path = Resources/imgs/daefile.png; sourceTree = "<group>"; };
+		4EB39D5B1D6AC06500C31179 /* fbxfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fbxfile.png; path = Resources/imgs/fbxfile.png; sourceTree = "<group>"; };
 		62044E3319920D8F0067E21E /* button-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-background.png"; path = "Resources/imgs/button-background.png"; sourceTree = "<group>"; };
 		6231CED51B1484AE00DCD585 /* depthPass.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.fsh; path = Resources/shaders/depthPass.fsh; sourceTree = "<group>"; };
 		6231CED61B1484AE00DCD585 /* depthPass.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = depthPass.vsh; path = Resources/shaders/depthPass.vsh; sourceTree = "<group>"; };
@@ -7352,6 +7361,9 @@
 				627A5F7F19ED438600CB545C /* last.png */,
 				627A5F4019ED346600CB545C /* stage.png */,
 				627A5F3C19ED342F00CB545C /* objfile.png */,
+				4EB39D591D6AC06500C31179 /* 3dsfile.png */,
+				4EB39D5A1D6AC06500C31179 /* daefile.png */,
+				4EB39D5B1D6AC06500C31179 /* fbxfile.png */,
 				627A5F3D19ED342F00CB545C /* rating.png */,
 				62FA5F7519A3696900F137C8 /* fatman_joints_poseA (ALPHA).png */,
 				62FA5F7619A3696900F137C8 /* fatman_poseA (ALPHA).png */,
@@ -8256,6 +8268,7 @@
 				25BBCB121C203D6A0039DA5C /* Splash.png in Resources */,
 				7F32A01D1AA1ACF7003FEFF9 /* playing-pad.png in Resources */,
 				7F32A01E1AA1ACF7003FEFF9 /* playing-pad@2x.png in Resources */,
+				4EB39D601D6AC06500C31179 /* fbxfile.png in Resources */,
 				7FC524D61B6F6F3600C5D26D /* Full-screen-phone@2x.png in Resources */,
 				01B4D0711C2937000091E19B /* Undo_Pad@2x.png in Resources */,
 				01B4CF841C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
@@ -8552,6 +8565,7 @@
 				E24975FA196BDD590025D442 /* color.vert in Resources */,
 				01ACD0EE1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png in Resources */,
 				250FEC4A1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
+				4EB39D5E1D6AC06500C31179 /* daefile.png in Resources */,
 				3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				7F0C02CC1A931B0300E2E09D /* cancelButton.png in Resources */,
 				7FC900CC1A0A01470051B941 /* clone-img-phone.png in Resources */,
@@ -8652,6 +8666,7 @@
 				7FC900E61A0A01470051B941 /* properties-img-phone.png in Resources */,
 				7F0C02D21A932CE000E2E09D /* youtubeUpload@2x.png in Resources */,
 				7FC901661A0A54850051B941 /* last-phone@2x.png in Resources */,
+				4EB39D5C1D6AC06500C31179 /* 3dsfile.png in Resources */,
 				7FED9E871A8E0F780089869B /* AutoRigHelp7.png in Resources */,
 				01F872E41C3A6C4E009AA31E /* Import-image_IPhone@2x.png in Resources */,
 				E24974DF196BDC8E0025D442 /* jointsData.json in Resources */,
@@ -9226,6 +9241,7 @@
 				E20672741B049AA6006DD2F7 /* Scene-topviewBg-phone@2x.png in Resources */,
 				25EA8EE21BD90506005DBA15 /* light_Phone@2x.png in Resources */,
 				E20672751B049AA6006DD2F7 /* topbarView@2x.png in Resources */,
+				4EB39D611D6AC06500C31179 /* fbxfile.png in Resources */,
 				01B4D05A1C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
 				3D04EAF61C25830F00C18E1A /* No-Bevel.png in Resources */,
 				25EC6C2B1C7F39DD002CF5D2 /* wm22.png in Resources */,
@@ -9522,6 +9538,7 @@
 				250FEC4B1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
 				25D6719D1C46930900BE685D /* controls9.sgm in Resources */,
 				0169C4801C33ED5A00132FF6 /* popoverBg@2x.png in Resources */,
+				4EB39D5F1D6AC06500C31179 /* daefile.png in Resources */,
 				3DAEFFF11C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */,
 				01F8730B1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
 				3DA6EE8F1D48892700C842C6 /* colortext.vsh in Resources */,
@@ -9622,6 +9639,7 @@
 				E20673811B049AA6006DD2F7 /* stop-img.png in Resources */,
 				E20673831B049AA6006DD2F7 /* iphoneband@2x.png in Resources */,
 				E20673851B049AA6006DD2F7 /* ipadband@2x.png in Resources */,
+				4EB39D5D1D6AC06500C31179 /* 3dsfile.png in Resources */,
 				01B4D04A1C2937000091E19B /* Import_Pad@2x.png in Resources */,
 				25E3644A1B38DDE10039A8C5 /* wheel2.png in Resources */,
 				01F872E51C3A6C4E009AA31E /* Import-image_IPhone@2x.png in Resources */,
