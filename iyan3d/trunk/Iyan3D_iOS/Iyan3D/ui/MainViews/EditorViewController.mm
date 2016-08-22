@@ -1413,11 +1413,6 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-//    SceneImporter *loader = new SceneImporter();
-//    loader->importNodesFromFile(editorScene, "kim", FileHelper::getDocumentsDirectory() + "kim.dae", FileHelper::getDocumentsDirectory(), false, Vector3(1.0), false);
-//    [self reloadSceneObjects];
-    
-
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
     

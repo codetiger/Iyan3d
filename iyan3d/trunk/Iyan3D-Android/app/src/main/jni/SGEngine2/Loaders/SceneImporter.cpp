@@ -79,13 +79,13 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
 
     if(ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds") {
         Assimp::Importer *importer = new Assimp::Importer();
-        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_ConvertToLeftHanded);
+        scene = importer->ReadFile(filepath, aiProcessPreset_TargetRealtime_Fast | aiProcess_ConvertToLeftHanded);
         if(!scene) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
         }
         
-        loadNodes(sgScene, textureName, isTempNode);
+        loadNodes(sgScene, textureName, isTempNode, ext);
         delete importer;
 
     } else if(ext == "sgr") {
@@ -233,7 +233,7 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
 
 }
 
-void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool isTempNode)
+void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext)
 {
     Mesh* mesh;
     map< string, Joint* > *bones = new map< string, Joint* >();
@@ -345,30 +345,29 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
 
     } else {
-        mesh->setOptimization(false, false, false);
+        mesh->setOptimization(true, true, true);
         sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms");
         sceneNode->node = sgn;
-
+        
         sgn->setScale(Vector3(1.0));
         sgn->updateAbsoluteTransformation();
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
+
+        Quaternion r1 = Quaternion();
+        Quaternion r2 = Quaternion();
+        
+        if(ext == "dae" || ext == "fbx") {
+            r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+        } else if(ext == "obj") {
+            r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+        }
+        
+        Quaternion r = r1 * r2;
+        sceneNode->setRotation(r, 0);
+        sgn->setRotation(r);
     }
-
-    Quaternion r1 = Quaternion();
-    Quaternion r2 = Quaternion();
-
-    // DAE & FBX Default Rotation
-    r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-    r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
-
-    /* OBJ Default Rotation
-    r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-    r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
-     */
-
-    Quaternion r = r1 * r2;
-    sceneNode->setRotation(r, 0);
-    sgn->setRotation(r);
 
     sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
     if(sceneNode->getType() == NODE_RIG) {
