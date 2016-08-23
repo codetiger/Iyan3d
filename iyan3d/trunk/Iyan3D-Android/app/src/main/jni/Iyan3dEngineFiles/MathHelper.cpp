@@ -28,8 +28,9 @@ Quaternion MathHelper::rotationBetweenVectors(Vector3 targetDirection, Vector3 i
 
 Quaternion MathHelper::getGlobalQuaternion(shared_ptr<Node> bone)
 {
-    Quaternion junk;
-    if(!bone)    return junk;
+    Quaternion modelQuaernion = Quaternion();
+    if(!bone)
+        return modelQuaernion;
     
     shared_ptr<Node> parent = (bone->Parent);
     if(parent)
@@ -40,9 +41,10 @@ Quaternion MathHelper::getGlobalQuaternion(shared_ptr<Node> bone)
 
 Quaternion MathHelper::irrGetLocalQuaternion(shared_ptr<Node> node, Quaternion q)
 {
-    Quaternion junk;
+    Quaternion modelQuaernion = Quaternion();
     if(!node)
-        return junk;
+        return modelQuaernion;
+
     shared_ptr<Node> parent = node->Parent;
     return q * getGlobalQuaternion((parent)).makeInverse();
 }

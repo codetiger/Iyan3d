@@ -89,14 +89,21 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
 void PhysicsHelper::syncPhysicsWorld()
 {
     for(int i = 0; i < rBodies.size(); i++) {
+        PhysicsReference *pr = (PhysicsReference*)rBodies[i]->getUserPointer();
+        delete pr;
+        
         world->removeRigidBody(rBodies[i]);
+
         if(rBodies[i]->getMotionState())
             delete rBodies[i]->getMotionState();
+
         if(rBodies[i]->getCollisionShape())
             delete rBodies[i]->getCollisionShape();
+
         if(rBodies[i])
             delete rBodies[i];
     }
+    
     for(int i = 0; i < sBodies.size(); i++) {
         ((btSoftRigidDynamicsWorld*)world)->removeSoftBody(sBodies[i]);
         if(sBodies[i]->getCollisionShape())
@@ -154,15 +161,16 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                 Quaternion nodeRot = Quaternion(r.x(), r.y(), r.z(), r.w());
                 
                 PhysicsReference* pr = (PhysicsReference*)rBodies[j]->getUserPointer();
+                SGNode* sgNode = (SGNode*)pr->nodeReference;
+
                 if(!pr->isJoint) {
-                    SGNode* sgNode = (SGNode*)pr->nodeReference;
                     sgNode->setPosition(nodePos, frame);
                     sgNode->setRotation(nodeRot, frame);
                     sgNode->setScale(sgNode->scaleKeys[0].scale, frame);
                 } else {
-                    SGNode* sgNode = (SGNode*)pr->nodeReference;
-
-                    if(pr->parentIndex != -1)
+                    sgNode->joints[pr->jointIndex]->removeAnimationInCurrentFrame(frame);
+                    shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(sgNode->joints[pr->jointIndex]->jointNode->getParent());
+                    if(parent)
                         sgNode->CCD(sgNode->joints[pr->jointIndex]->jointNode, nodePos, 0, frame);
                     else
                         sgNode->setPosition(nodePos, frame);
@@ -272,18 +280,42 @@ void PhysicsHelper::addRigidBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
     }
 }
 
-void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies, btRigidBody* pbody, shared_ptr<JointNode> jointNode) {
-    
+void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies, btRigidBody* pbody, shared_ptr<JointNode> jointNode)
+{
     Vector3 nodePos = jointNode->getAbsolutePosition();
+
+    float shortDist2Child = 2.0;
+    
+    for (int i = 0; i < jointNode->Children->size(); i++) {
+        shared_ptr<JointNode> child = dynamic_pointer_cast<JointNode>((*jointNode->Children)[i]);
+        if(child) {
+            if(nodePos != child->getAbsolutePosition()) {
+                float dist = nodePos.getDistanceFrom(child->getAbsolutePosition());
+                if(shortDist2Child > dist)
+                    shortDist2Child = dist;
+            }
+        }
+    }
+
+    shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(jointNode->getParent());
+    if(parent) {
+        if(nodePos != parent->getAbsolutePosition()) {
+            float dist = nodePos.getDistanceFrom(parent->getAbsolutePosition());
+            if(shortDist2Child > dist)
+                shortDist2Child = dist;
+        }
+    }
+    printf("ShortDst: %f\n", shortDist2Child);
+    
     Quaternion nodeRot = jointNode->getAbsoluteTransformation().getRotation();
     
     btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
     btVector3 position = btVector3(nodePos.x, nodePos.y, nodePos.z);
     btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
-    btScalar bodyMass = sgNode->getProperty(HAS_PHYSICS).subProps[WEIGHT].value.x;
+    btScalar bodyMass = 0.25;
     btVector3 bodyInertia;
-    
-    btCollisionShape* shape = new btSphereShape(0.05);
+
+    btCollisionShape* shape = new btSphereShape(0.5);
     shape->setLocalScaling(btVector3(1.0, 1.0, 1.0));
     shape->calculateLocalInertia(bodyMass, bodyInertia);
     shape->setMargin(0.05);
@@ -299,25 +331,20 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
     pr->nodeReference = sgNode;
     pr->isJoint = true;
     pr->jointIndex = jointNode->getID();
-    
-    shared_ptr<Node> parent = jointNode->getParent();
-    SkinMesh* sMesh = (SkinMesh*)dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node)->getMesh();
-    
-    if((*sMesh->joints)[jointNode->getID()]->Parent)
-        pr->parentIndex = parent->getID();
-    else
-        pr->parentIndex = -1;
-    
+
     body->setUserPointer(pr);
-    body->setLinearFactor(btVector3(1,1,1));
+    body->setLinearFactor(btVector3(1, 1, 1));
     
     world->addRigidBody(body);
     rBodies.push_back(body);
     
     if(pbody) {
-        Vector3 pos = jointNode->getPosition();
-        btVector3 childPos = btVector3(pos.x, pos.y, pos.z);
-        btPoint2PointConstraint *constraint = new btPoint2PointConstraint(*pbody, *body, btVector3(0.0, 0.0, 0.0), childPos);
+        Vector3 localPos = jointNode->getPosition();
+        float distance = localPos.getDistanceFrom(Vector3(0.0));
+
+        Vector3 pos1 = localPos.normalize() * (distance / 2.0);
+        Vector3 pos2 = localPos.normalize() * (-distance / 2.0);
+        btPoint2PointConstraint *constraint = new btPoint2PointConstraint(*pbody, *body, btVector3(pos1.x, pos1.y, pos1.z), btVector3(pos2.x, pos2.y, pos2.z));
         world->addConstraint(constraint, true);
         constraints.push_back(constraint);
     }

@@ -593,7 +593,7 @@ shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
 
 void SGNode::setPosition(Vector3 position, int frameId)
 {
-    int keyIndex = KeyHelper::getKeyIndex(positionKeys,frameId);
+    int keyIndex = KeyHelper::getKeyIndex(positionKeys, frameId);
     
     if(keyIndex == -1 || positionKeys[keyIndex].id != frameId){
         SGPositionKey positionKey;
@@ -936,22 +936,22 @@ Quaternion SGNode::getGlobalQuaternion(shared_ptr<JointNode> bone)
 void SGNode::removeAnimationInCurrentFrame(int currentFrame)
 {
     for(int i = 0; i < joints.size(); i++)
-    {
         joints[i]->removeAnimationInCurrentFrame(currentFrame);
-    }
+    
     int keyIndex = KeyHelper::getKeyIndex(positionKeys, currentFrame);
     if(keyIndex != -1 && positionKeys[keyIndex].id == currentFrame)
         positionKeys.erase(positionKeys.begin()+keyIndex);
+    
     keyIndex = KeyHelper::getKeyIndex(rotationKeys, currentFrame);
     if(keyIndex != -1 && rotationKeys[keyIndex].id == currentFrame)
         rotationKeys.erase(rotationKeys.begin()+keyIndex);
+    
     keyIndex = KeyHelper::getKeyIndex(scaleKeys, currentFrame);
     if(keyIndex != -1 && scaleKeys[keyIndex].id == currentFrame)
         scaleKeys.erase(scaleKeys.begin()+keyIndex);
-    
 }
 
-void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,int currentFrame)
+void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target, int parentHeirarchy, int currentFrame)
 {
     
     shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(bone->getParent());
@@ -966,13 +966,13 @@ void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target,int parentHeirarchy,
     Vector3 targetDir = target - parent->getAbsolutePosition();
     targetDir.normalize();
     
-    float dot = currentDir.dotProduct(targetDir);
+    double dot = currentDir.dotProduct(targetDir);
     
-    if(dot < 0.9999) {
+    if(dot < 1.0) {
         Vector3 cross = currentDir.crossProduct(targetDir);
         cross.normalize();
         
-        float turnAngle = acos(dot);
+        double turnAngle = acos(dot);
         Quaternion delta;
         delta.fromAngleAxis(turnAngle, cross);
         delta.normalize();

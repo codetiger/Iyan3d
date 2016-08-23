@@ -21,7 +21,7 @@
 struct PhysicsReference {
     void* nodeReference;
     bool isJoint;
-    int jointIndex, parentIndex;
+    int jointIndex;
 };
 
 class PhysicsHelper
