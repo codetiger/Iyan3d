@@ -496,7 +496,7 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
         v.vertPosition = vtx->vertPosition;
         v.vertNormal = vtx->vertNormal;
         v.texCoord1 = vtx->texCoord1;
-        v.optionalData1 = vtx->optionalData4;
+        v.vertColor = vtx->optionalData4;
         m->addVertex(&v);
     }
     

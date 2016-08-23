@@ -490,9 +490,9 @@ void SceneImporter::getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short>
         vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
         
         if(aiM->mColors[0])
-            vd.optionalData1 = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, aiM->mColors[0][j].a);
+            vd.vertColor = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, aiM->mColors[0][j].a);
         else
-            vd.optionalData1 = Vector4(-1.0);
+            vd.vertColor = Vector4(-1.0);
         
         if(aiM->mTextureCoords[0])
             vd.texCoord1 = Vector2(aiM->mTextureCoords[0][j].x, aiM->mTextureCoords[0][j].y);

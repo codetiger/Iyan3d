@@ -91,7 +91,7 @@ void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
             v.vertPosition = vertx->vertPosition;
             v.vertNormal = vertx->vertNormal;
             v.texCoord1 = vertx->texCoord1;
-            v.optionalData1 = Vector4(vertx->optionalData1.x, vertx->optionalData1.y, vertx->optionalData1.z, instanceIndex);
+            v.vertColor = Vector4(vertx->vertColor.x, vertx->vertColor.y, vertx->vertColor.z, instanceIndex);
             addVertex(&v);
         }
         
@@ -125,7 +125,7 @@ void Mesh::addVertex(vertexData* vertex, bool updateBB)
     vtx.vertPosition = vertex->vertPosition;
     vtx.vertNormal = vertex->vertNormal;
     vtx.texCoord1 = vertex->texCoord1;
-    vtx.optionalData1 = vertex->optionalData1;
+    vtx.vertColor = vertex->vertColor;
     tempVerticesData.push_back(vtx);
     if(updateBB)
         BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
@@ -639,7 +639,7 @@ void Mesh::removeDoublesInMesh()
             for(int j = 0; j < vertDataCount; j++) {
                 vertexData v2 = verticesData[j];
                 
-                if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.optionalData1 == v2.optionalData1) {
+                if(v1.vertPosition == v2.vertPosition && v1.texCoord1 == v2.texCoord1 && v1.vertColor == v2.vertColor) {
                     if(v1.vertNormal == v2.vertNormal) {
                         newIndices = j;
                         alreadyInserted = true;

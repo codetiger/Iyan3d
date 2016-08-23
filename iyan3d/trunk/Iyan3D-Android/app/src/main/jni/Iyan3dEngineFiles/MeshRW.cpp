@@ -33,7 +33,7 @@ void MeshRW::writeMeshData(ofstream *filePointer, Mesh *mesh)
             FileHelper::writeVector2(filePointer, v.texCoord1);
             FileHelper::writeVector3(filePointer, v.vertTangent);
             FileHelper::writeVector3(filePointer, v.vertBitangent);
-            FileHelper::writeVector4(filePointer, v.optionalData1);
+            FileHelper::writeVector4(filePointer, v.vertColor);
         }
         
         FileHelper::writeInt(filePointer, indicesCount);
@@ -138,7 +138,7 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
             v.texCoord1 = FileHelper::readVector2(filePointer);
             v.vertTangent = FileHelper::readVector3(filePointer);
             v.vertBitangent = FileHelper::readVector3(filePointer);
-            v.optionalData1 = FileHelper::readVector4(filePointer);
+            v.vertColor = FileHelper::readVector4(filePointer);
             //mesh->addVertex(&v); //TODO add directly to mesh buffer vertices
             mbvd.push_back(v);
         }

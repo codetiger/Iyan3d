@@ -172,10 +172,10 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath)
             if (hasUV == UV_MAPPED) {
                 vts.texCoord1.x = texs[ind.colInd].s;
                 vts.texCoord1.y = 1 - texs[ind.colInd].t;
-                vts.optionalData1 = Vector4(255, 255, 255, 0);
+                vts.vertColor = Vector4(255, 255, 255, 0);
             }
             else if (hasUV == VERTEX_COLORED) {
-                vts.optionalData1 = Vector4(col[ind.colInd].r / 255.0, col[ind.colInd].g / 255.0, col[ind.colInd].b / 255.0, 0);
+                vts.vertColor = Vector4(col[ind.colInd].r / 255.0, col[ind.colInd].g / 255.0, col[ind.colInd].b / 255.0, 0);
             }
             sgmMesh->addVertex(&vts);
             sgmMesh->addToIndicesArray(i);
@@ -215,10 +215,10 @@ Mesh* CSGRMeshFileLoader::createSGMMesh(string filepath)
             if (hasUV == UV_MAPPED) {
                 vts.texCoord1.x = texs[ind.colInd].s;
                 vts.texCoord1.y = 1 - texs[ind.colInd].t;
-                vts.optionalData1 = Vector4(255, 255, 255, 0);
+                vts.vertColor = Vector4(255, 255, 255, 0);
             }
             else if (hasUV == VERTEX_COLORED) {
-                vts.optionalData1 = Vector4(col[ind.colInd].r / 255.0, col[ind.colInd].g / 255.0, col[ind.colInd].b / 255.0, 0);
+                vts.vertColor = Vector4(col[ind.colInd].r / 255.0, col[ind.colInd].g / 255.0, col[ind.colInd].b / 255.0, 0);
             }
             sgmMesh->addVertex(&vts);
             sgmMesh->addToIndicesArray(i);

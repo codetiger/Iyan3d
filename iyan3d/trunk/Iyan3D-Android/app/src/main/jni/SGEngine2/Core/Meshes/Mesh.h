@@ -29,7 +29,7 @@ struct vertexData {
     Vector2 texCoord1;
     Vector3 vertTangent;
     Vector3 vertBitangent;
-    Vector4 optionalData1;
+    Vector4 vertColor;
     bool operator==(const vertexData& rhs) {
         return (vertPosition == rhs.vertPosition && vertNormal == rhs.vertNormal && texCoord1 == rhs.texCoord1);
     }

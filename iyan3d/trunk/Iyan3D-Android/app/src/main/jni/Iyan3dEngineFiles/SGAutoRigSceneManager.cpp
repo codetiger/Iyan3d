@@ -69,7 +69,7 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
         vData.vertPosition = vHData->vertPosition;
         vData.vertNormal = vHData->vertNormal;
         vData.texCoord1 = vHData->texCoord1;
-        vData.optionalData1 = Vector4(1.0, 1.0, 1.0, 0.0); //TODO
+        vData.vertColor = Vector4(1.0, 1.0, 1.0, 0.0); //TODO
         mesh->addVertex(&vData);
     }
     

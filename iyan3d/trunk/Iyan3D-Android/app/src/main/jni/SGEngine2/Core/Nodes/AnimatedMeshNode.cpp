@@ -109,7 +109,7 @@ void AnimatedMeshNode::initializeMeshCache()
         finalVertData.vertPosition = vertex->vertPosition;
         finalVertData.vertNormal = vertex->vertNormal;
         finalVertData.texCoord1 = vertex->texCoord1;
-        finalVertData.optionalData1 = vertex->optionalData4;
+        finalVertData.vertColor = vertex->optionalData4;
         finalVertData.vertTangent = vertex->vertTangent;
         finalVertData.vertBitangent = vertex->vertBitangent;
 
@@ -187,7 +187,7 @@ void AnimatedMeshNode::updateMeshCache()
         finalVertData->vertPosition = vertex->vertPosition;
         finalVertData->vertNormal = vertex->vertNormal;
         finalVertData->texCoord1 = vertex->texCoord1;
-        finalVertData->optionalData1 = vertex->optionalData4;
+        finalVertData->vertColor = vertex->optionalData4;
         finalVertData->vertTangent = vertex->vertTangent;
         finalVertData->vertBitangent = vertex->vertBitangent;
 
@@ -224,7 +224,7 @@ void AnimatedMeshNode::updatePartOfMeshCache(int jointId)
         finalVertData->vertPosition = vertex->vertPosition;
         finalVertData->vertNormal = vertex->vertNormal;
         finalVertData->texCoord1 = vertex->texCoord1;
-        finalVertData->optionalData1 = vertex->optionalData4;
+        finalVertData->vertColor = vertex->optionalData4;
         
         calculateJointTransforms(vertex, jointTransforms, finalVertData->vertPosition, finalVertData->vertNormal);
     }

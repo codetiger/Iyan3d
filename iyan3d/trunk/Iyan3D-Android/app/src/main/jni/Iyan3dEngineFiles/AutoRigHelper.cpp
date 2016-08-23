@@ -141,7 +141,7 @@ void AutoRigHelper::updateOBJVertexColors(shared_ptr<MeshNode> objNode, std::map
     int verticesCount = objNode->getMesh()->getVerticesCount();
     for(int i = 0; i < verticesCount; i++){
         vertexData *vertex = objNode->getMesh()->getLiteVertexByIndex(i);
-        vertex->optionalData1 = Vector4(255/255.0,0,0,0.0);
+        vertex->vertColor = Vector4(255/255.0,0,0,0.0);
     }
     for(int i = 0; i < verticesCount; i++){
         vertexData *vertex = objNode->getMesh()->getLiteVertexByIndex(i);
@@ -149,14 +149,14 @@ void AutoRigHelper::updateOBJVertexColors(shared_ptr<MeshNode> objNode, std::map
         {
             if(it->first == selectedJointId || selectedJointId == rigKeys[it->first].parentId){
                 if(isInsideEnvelope(getVertexGlobalPosition(vertex->vertPosition, objNode),it->first, rigKeys)){
-                    vertex->optionalData1 = Vector4(0, 0, 255/255.0,0.0);
+                    vertex->vertColor = Vector4(0, 0, 255/255.0,0.0);
                     break;
                 }
             }
             
             if(mirrorJointId != NOT_EXISTS && (it->first == mirrorJointId || mirrorJointId == rigKeys[it->first].parentId)){
                 if(isInsideEnvelope(getVertexGlobalPosition(vertex->vertPosition, objNode),it->first, rigKeys)){
-                    vertex->optionalData1 = Vector4(0, 0, 255/255.0,0.0);
+                    vertex->vertColor = Vector4(0, 0, 255/255.0,0.0);
                     break;
                 }
             }
