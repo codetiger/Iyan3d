@@ -877,8 +877,6 @@ Quaternion SGNode::GetLocalQuaternion(int boneIndex, Quaternion q)
     shared_ptr<AnimatedMeshNode> selectedNode = dynamic_pointer_cast<AnimatedMeshNode>(node);
     shared_ptr<JointNode> bone = selectedNode->getJointNode(boneIndex);
     shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(bone->Parent);
-    //selectedNode.reset();
-    //bone.reset();
     return q * getGlobalQuaternion(parent).makeInverse();
 }
 
@@ -886,22 +884,23 @@ ActionKey SGNode::getKeyForFrame(int frameId)
 {
     ActionKey key;
     int index = KeyHelper::getKeyIndex(positionKeys, frameId);
-    if(index!=-1 && index < positionKeys.size() &&  positionKeys[index].id == frameId){
+    if(index != -1 && index < positionKeys.size() && positionKeys[index].id == frameId){
         key.position = positionKeys[index].position;
         key.isPositionKey = true;
     }
     
     index = KeyHelper::getKeyIndex(rotationKeys, frameId);
-    if(index!=-1 && index < rotationKeys.size() && rotationKeys[index].id == frameId){
+    if(index != -1 && index < rotationKeys.size() && rotationKeys[index].id == frameId){
         key.rotation = rotationKeys[index].rotation;
         key.isRotationKey = true;
     }
     
     index = KeyHelper::getKeyIndex(scaleKeys, frameId);
-    if(index!=-1 && index < scaleKeys.size() && scaleKeys[index].id == frameId){
+    if(index != -1 && index < scaleKeys.size() && scaleKeys[index].id == frameId){
         key.scale = scaleKeys[index].scale;
         key.isScaleKey = true;
     }
+    
     return key;
 }
 

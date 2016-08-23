@@ -24,10 +24,11 @@ private:
     static int getKeyIndex(vector<T> &keys, T2 &id, int start, int end)
     {
         //returns the last index with frameId<= search frameId. Returns -1 if no such index exist.
-        if(end < start){
+        if(end < start)
             return -1;
-        }
+
         int mid = (start+end)/2;
+
         if(keys[mid].id == id)
             return mid;
         else if(keys[mid].id > id)

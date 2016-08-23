@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class SGJoint{
+class SGJoint {
     
 public:
     
