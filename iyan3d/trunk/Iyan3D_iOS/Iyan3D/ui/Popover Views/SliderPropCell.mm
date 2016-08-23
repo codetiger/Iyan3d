@@ -12,6 +12,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    sliderMoving = false;
     // Initialization code
 }
 
@@ -22,18 +23,31 @@
 }
 
 - (IBAction)sliderValueChanged:(id)sender {
+    
+    if(_slider.value < 0.0) {
+        _slider.value = 0.0;
+        return;
+    }
+    
     [self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:NO];
     if(_dynamicSlider) {
         _xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
+        if(!sliderMoving && _slider.value > 0.0 && (_slider.value == _slider.minimumValue || _slider.value == _slider.maximumValue)) {
+            sliderMoving = true;
+            _slider.minimumValue = _slider.value - _offsetValue;
+            _slider.maximumValue = _slider.value + _offsetValue;
+            [_slider setValue:_slider.maximumValue - _offsetValue animated:YES];
+            sliderMoving = false;
+        }
     }
 }
 
 - (IBAction)sliderChangeEnds:(id)sender {
     [self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:YES];
-    if(_dynamicSlider) {
+    if(_dynamicSlider && _slider.value > 0.0) {
         _xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
-        _slider.minimumValue = _slider.value - 0.5;
-        _slider.maximumValue = _slider.value + 0.5;
+        _slider.minimumValue = (_slider.value > _offsetValue) ? _slider.value - _offsetValue : 0.0;
+        _slider.maximumValue = _slider.value + _offsetValue;
     }
 }
 @end

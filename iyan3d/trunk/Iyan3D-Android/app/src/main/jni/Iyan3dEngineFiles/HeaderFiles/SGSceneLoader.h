@@ -24,7 +24,7 @@ public:
     bool loadSceneData(std::string *filePath);
     bool readScene(ifstream *filePointer);
     bool legacyReadScene(ifstream *filePointer);
-    int readSceneGlobalInfo(ifstream *filePointer, int& nodeCount);
+    int readSceneGlobalInfo(ifstream *filePointer, int& nodeCount, float& cameraFov, int& cameraResolution);
     int legacyReadSceneGlobalInfo(ifstream *filePointer, int sgbVersion, int& nodeCount);
     void restoreTexture(SGNode* meshObject,int actionType);
     bool removeObject(u16 nodeIndex,bool deAllocScene = false);

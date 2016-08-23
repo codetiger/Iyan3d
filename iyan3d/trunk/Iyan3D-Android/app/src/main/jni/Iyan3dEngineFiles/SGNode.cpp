@@ -30,9 +30,9 @@ void SGNode::setPropertiesOfNode()
 
     if(type == NODE_CAMERA) {
         //TODO
-        addOrUpdateProperty(FOV, Vector4(72.0, 0, 0, 0), UNDEFINED, SLIDER_TYPE, "Field Of View");
+        addOrUpdateProperty(FOV, Vector4(72.0, 0, 5.0, true), UNDEFINED, SLIDER_TYPE, "Field Of View");
         addOrUpdateProperty(CAM_RESOLUTION, Vector4(0), UNDEFINED, TYPE_NONE, "Resolution");
-        addOrUpdateProperty(THOUSAND_EIGHTY, Vector4(0), UNDEFINED, LIST_TYPE, "1080p", "Resolution");
+        addOrUpdateProperty(THOUSAND_EIGHTY, Vector4(1.0, 0, 0, 0), UNDEFINED, LIST_TYPE, "1080p", "Resolution");
         addOrUpdateProperty(SEVEN_TWENTY, Vector4(0), UNDEFINED, LIST_TYPE, "720p", "Resolution");
         addOrUpdateProperty(FOUR_EIGHTY, Vector4(0), UNDEFINED, LIST_TYPE, "480p", "Resolution");
         addOrUpdateProperty(THREE_SIXTY, Vector4(0), UNDEFINED, LIST_TYPE, "360p", "Resolution");
@@ -1075,6 +1075,8 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
     setPropertiesOfNode();
     (IsPropertyExists(HAS_PHYSICS)) ? getProperty(HAS_PHYSICS).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
     (IsPropertyExists(PHYSICS_KIND)) ? getProperty(PHYSICS_KIND).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(PHYSICS_KIND))
+        printf("\n Physics Type %f ", getProperty(PHYSICS_KIND).value.x);
     (IsPropertyExists(WEIGHT)) ? getProperty(WEIGHT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
     (IsPropertyExists(FORCE_MAGNITUDE)) ? getProperty(FORCE_MAGNITUDE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
     (IsPropertyExists(IS_SOFT)) ? getProperty(IS_SOFT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
@@ -1290,6 +1292,8 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeFloat(filePointer, IsPropertyExists(HAS_PHYSICS) ? getProperty(HAS_PHYSICS).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(PHYSICS_KIND) ? getProperty(PHYSICS_KIND).value.x : -1.0);
+    if(IsPropertyExists(PHYSICS_KIND))
+        printf("\n Physics Type %f ", getProperty(PHYSICS_KIND).value.x);
     FileHelper::writeFloat(filePointer, IsPropertyExists(WEIGHT) ? getProperty(WEIGHT).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(FORCE_MAGNITUDE) ? getProperty(FORCE_MAGNITUDE).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(IS_SOFT) ? getProperty(IS_SOFT).value.x : -1.0);
@@ -1517,7 +1521,7 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
                 }
             }
         } else {
-            printf("\n Material Props 0 prop Index %d ", pIndex);
+            //printf("\n Material Props 0 prop Index %d ", pIndex);
         }
         
         PROP_INDEX pI = checkPropertyInSubProps(options, pIndex);

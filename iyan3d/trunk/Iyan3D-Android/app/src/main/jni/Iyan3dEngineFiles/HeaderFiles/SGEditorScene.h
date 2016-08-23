@@ -72,13 +72,12 @@ public:
     int selectedJointId,selectedNodeId,selectedControlId,controlType;
     int riggingNodeId;
     int moveNodeId;
-    int totalFrames, cameraResolutionType;
+    int totalFrames;
     int currentFrame, previousFrame;
     int actionObjectsSize;
     int assetIDCounter;
     
     float screenScale;
-    float cameraFOV;
     float cameraRadius;
     float camPreviewScale;
     Vector2 topLeft;

@@ -441,13 +441,13 @@ bool SGAnimationManager::storeAnimations(int assetId)
     string filePath =  "/animations/" + to_string(assetId) + extension;
     string thumbnailPath = "/animations/" + to_string(assetId) + ".png";
 #endif
-    int oldResolution = animScene->cameraResolutionType;
+    int oldResolution = animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
 
-    animScene->cameraResolutionType = 2;
+    animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = 2;
     animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true, animScene->currentFrame);
     if(animScene->shaderMGR->deviceType == METAL)
         animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true, animScene->currentFrame);
-    animScene->cameraResolutionType = oldResolution;
+    animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = oldResolution;
     
     vector<int> totalKeyFrames;
     for (int frame = 0; frame < animScene->totalFrames; frame++) {

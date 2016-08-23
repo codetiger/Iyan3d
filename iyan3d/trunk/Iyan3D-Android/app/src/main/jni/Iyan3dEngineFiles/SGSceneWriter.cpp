@@ -55,12 +55,12 @@ void SGSceneWriter::writeGlobalInfo(ofstream *filePointer)
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].y);
     FileHelper::writeFloat(filePointer,ShaderManager::lightColor[0].z);
     FileHelper::writeFloat(filePointer,ShaderManager::shadowDensity);
-    FileHelper::writeFloat(filePointer, writingScene->cameraFOV);
+    FileHelper::writeFloat(filePointer, writingScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x);
     
     //SCENE PROPERTIES
     
     FileHelper::writeFloat(filePointer, writingScene->shaderMGR->getProperty(AMBIENT_LIGHT).value.x);
-    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, writingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);

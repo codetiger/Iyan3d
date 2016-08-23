@@ -46,7 +46,7 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
 #endif
 
-    renderCamera = SceneHelper::initRenderCamera(smgr, cameraFOV);
+    renderCamera = SceneHelper::initRenderCamera(smgr, DEFAULT_CAMERA_FOV);
 }
 
 SGEditorScene::~SGEditorScene()
@@ -180,14 +180,12 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     totalFrames = 24;
     assetIDCounter = 0;
     currentFrame = previousFrame = 0;
-    cameraFOV = 72.0;
-    cameraResolutionType = 0;
     
     camPreviewOrigin.x = 0.0;
     camPreviewOrigin.y = SceneHelper::screenHeight - (SceneHelper::screenHeight * CAM_PREV_PERCENT);
-    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT);
-    camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
-    camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
+    float camPrevRatio = RESOLUTION[0][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT);
+    camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[0][0] / camPrevRatio;
+    camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[0][1] / camPrevRatio;
     camPreviewScale = 1.0;
     previousDistance = Vector2(0.0, 0.0);
     actionObjectsSize = 0;
@@ -341,9 +339,10 @@ void SGEditorScene::setTransparencyForObjects()
 
 Vector4 SGEditorScene::getCameraPreviewLayout()
 {
-    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * camPreviewScale);
-    float limitX = topRight.x - (RESOLUTION[cameraResolutionType][0] / camPrevRatio);
-    float limitY = SceneHelper::screenHeight - (RESOLUTION[cameraResolutionType][1] / camPrevRatio);
+    int cRT = nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    float camPrevRatio = RESOLUTION[cRT][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * camPreviewScale);
+    float limitX = topRight.x - (RESOLUTION[cRT][0] / camPrevRatio);
+    float limitY = SceneHelper::screenHeight - (RESOLUTION[cRT][1] / camPrevRatio);
     
     if(previousDistance != renHelper->cameraPreviewMoveDist && camPreviewOrigin.x >= topLeft.x && camPreviewOrigin.y >= topLeft.y && camPreviewOrigin.x <= limitX && camPreviewOrigin.y <= limitY) {
         camPreviewOrigin.x -= renHelper->cameraPreviewMoveDist.x;
@@ -354,8 +353,8 @@ Vector4 SGEditorScene::getCameraPreviewLayout()
         camPreviewOrigin.x = (camPreviewOrigin.x > limitX) ? limitX : camPreviewOrigin.x;
         camPreviewOrigin.y = (camPreviewOrigin.y > limitY) ? limitY : camPreviewOrigin.y;
     }
-    camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
-    camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
+    camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[cRT][0] / camPrevRatio;
+    camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cRT][1] / camPrevRatio;
     previousDistance = renHelper->cameraPreviewMoveDist;
     return Vector4(camPreviewOrigin.x, camPreviewOrigin.y, camPreviewEnd.x, camPreviewEnd.y);
 }

@@ -425,8 +425,9 @@ void RenderHelper::setRenderCameraOrientation()
     rotmat.rotateVect(upReal);
     renderingScene->renderCamera->setUpVector(upReal);
 #ifndef UBUNTU
-    float texWidth = (float)renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->width;
-    float texHeight = renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->height;
+    int rT = renderingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    float texWidth = (float)renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->width;
+    float texHeight = renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->height;
     float aspectRatio = texWidth/ texHeight;
     renderingScene->renderCamera->setAspectRatio(aspectRatio);
     smgr->setActiveCamera(renderingScene->renderCamera);
@@ -649,8 +650,8 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     
     if(smgr->device == OPENGLES2)
         rttShadowMap();
-    
-    bool displayPrepared = smgr->PrepareDisplay(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->width, renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]]->height,false,true,false,Vector4(bgColor));
+    int rT = renderingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    bool displayPrepared = smgr->PrepareDisplay(renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->width, renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->height,false,true,false,Vector4(bgColor));
     if(!displayPrepared)
         return;
     setRenderCameraOrientation();
@@ -686,7 +687,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(false);
     }
     
-    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],true,true,false,Vector4(bgColor));
+    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[rT][0]],true,true,false,Vector4(bgColor));
     
     smgr->Render(false);
     
@@ -709,7 +710,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
         rttShadowMap();
     
     smgr->EndDisplay();
-    smgr->writeImageToFile(renderingScene->renderingTextureMap[RESOLUTION[renderingScene->cameraResolutionType][0]],imagePath,(renderingScene->shaderMGR->deviceType == OPENGLES2) ?FLIP_VERTICAL : NO_FLIP);
+    smgr->writeImageToFile(renderingScene->renderingTextureMap[RESOLUTION[rT][0]],imagePath,(renderingScene->shaderMGR->deviceType == OPENGLES2) ?FLIP_VERTICAL : NO_FLIP);
     
     smgr->setActiveCamera(renderingScene->viewCamera);
     smgr->setRenderTarget(NULL,true,true,false,Vector4(bgColor));

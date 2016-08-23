@@ -183,8 +183,9 @@
                         cell.dynamicSlider = YES;
                         [cell.xValue setHidden:NO];
                         cell.xValue.text = [NSString stringWithFormat:@"%.1f", property.value.x];
-                        cell.slider.minimumValue = property.value.x - 0.5;
-                        cell.slider.maximumValue = property.value.x + 0.5;
+                        cell.slider.minimumValue = property.value.x - ((property.value.z == 1.0) ? property.value.x : 0.5);
+                        cell.slider.maximumValue = property.value.x + ((property.value.z == 1.0) ? property.value.x : 0.5);
+                        cell.offsetValue = ((property.value.z == 1.0) ? property.value.x : 0.5);
                         cell.slider.value = property.value.x;
                     } else {
                         [cell.xValue setHidden:YES];
@@ -375,9 +376,9 @@
                 
                 selectedListProp = property;
                 if(property.parentIndex == HAS_PHYSICS) {
-                    physicsProperty.subProps[PHYSICS_KIND].value = Vector4(property.index);
+                    physicsProperty.subProps[PHYSICS_KIND].value.x = (property.index < PHYSICS_CONST) ? property.index + PHYSICS_CONST : property.index;
                 }else if (property.groupName == "Resolution") {
-                    [self.delegate changedPropertyAtIndex:CAM_RESOLUTION WithValue:Vector4(property.index - 12) AndStatus:YES];
+                    [self.delegate changedPropertyAtIndex:CAM_RESOLUTION WithValue:Vector4(property.index - CAM_CONSTANT) AndStatus:YES];
                 } else {
                     [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:NO];
                     [self.delegate changedPropertyAtIndex:property.index WithValue:property.value AndStatus:YES];

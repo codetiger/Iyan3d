@@ -362,13 +362,13 @@ void SGActionManager::changeCameraProperty(float fov , int resolutionType, bool 
 
     if(propertyAction.actionType == ACTION_EMPTY){
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_CAMERA;
-        propertyAction.actionSpecificFloats.push_back(actionScene->cameraFOV);
-        propertyAction.actionSpecificIntegers.push_back(actionScene->cameraResolutionType);
+        propertyAction.actionSpecificFloats.push_back(actionScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x);
+        propertyAction.actionSpecificIntegers.push_back(actionScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x);
     }
     actionScene->updater->setCameraProperty(fov, resolutionType);
     if(isChanged){
-        propertyAction.actionSpecificFloats.push_back(actionScene->cameraFOV);
-        propertyAction.actionSpecificIntegers.push_back(actionScene->cameraResolutionType);
+        propertyAction.actionSpecificFloats.push_back(actionScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x);
+        propertyAction.actionSpecificIntegers.push_back(actionScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x);
         finalizeAndAddAction(propertyAction);
         propertyAction.drop();
     }

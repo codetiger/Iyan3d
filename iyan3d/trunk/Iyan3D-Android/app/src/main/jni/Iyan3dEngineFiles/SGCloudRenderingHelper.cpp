@@ -37,7 +37,7 @@ bool SGCloudRenderingHelper::writeFrameData(SGEditorScene *scene , SceneManager 
     FileHelper::writeFloat(&frameFilePtr, camRotation.y);
     FileHelper::writeFloat(&frameFilePtr, camRotation.z);
     
-    FileHelper::writeFloat(&frameFilePtr, scene->cameraFOV);  // Camera FOV
+    FileHelper::writeFloat(&frameFilePtr, scene->nodes[NODE_CAMERA]->getProperty(FOV).value.x);  // Camera FOV
 
     short nodesCount = (short)scene->nodes.size()-1;
     for (int i = 0; i < (int)scene->nodes.size(); i++) {

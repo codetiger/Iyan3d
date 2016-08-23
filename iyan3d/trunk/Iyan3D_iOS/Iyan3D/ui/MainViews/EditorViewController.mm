@@ -791,8 +791,8 @@ BOOL missingAlertShown;
             [renderViewMan addCameraLight];
         }
     }
-    cameraResoultionType = editorScene->cameraResolutionType;
-    editorScene->updater->setCameraProperty(editorScene->cameraFOV, editorScene->cameraResolutionType);
+    cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    editorScene->updater->setCameraProperty(editorScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x, editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"]) {
@@ -1413,20 +1413,25 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
-        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
-    
-    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
-    [_popUpVc.view setClipsToBounds:YES];
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*8) : CGSizeMake(205.0, 39*8);
-    self.popoverController.delegate =self;
-    self.popUpVc.delegate=self;
-    CGRect rect = _importBtn.frame;
-    rect = [self.view convertRect:rect fromView:_importBtn.superview];
-    [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
+//    if(editorScene->nodes.size() == 2) {
+//        SceneImporter *loader = new SceneImporter();
+//        loader->importNodesFromFile(editorScene, "dsfds", FileHelper::getDocumentsDirectory() + "cylinder.dae", FileHelper::getDocumentsDirectory(), false, Vector3(0), false);
+//        [self reloadSceneObjects];
+//    } else {
+        if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
+            [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*8) : CGSizeMake(205.0, 39*8);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _importBtn.frame;
+        rect = [self.view convertRect:rect fromView:_importBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
+//    }
 }
 
 - (IBAction)infoBtnAction:(id)sender
@@ -1624,10 +1629,10 @@ BOOL missingAlertShown;
     }
     else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
     {
+        /*
         float fovValue = editorScene->cameraFOV;
         NSInteger resolutionType = editorScene->cameraResolutionType;
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        /*
+
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
@@ -1643,6 +1648,9 @@ BOOL missingAlertShown;
                                               animated:NO];
          */
         
+        
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+
         CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties()];
         commonProps.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
@@ -1673,6 +1681,9 @@ BOOL missingAlertShown;
 //        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
 //        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
 //        _meshProp.delegate = self;
+        
+        if(editorScene->nodes[editorScene->selectedNodeId]->IsPropertyExists(PHYSICS_KIND))
+            printf("\n Physics Type %f ", editorScene->nodes[editorScene->selectedNodeId]->getProperty(PHYSICS_KIND).value.x);
         
         CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties()];
         commonProps.delegate = self;
@@ -2147,9 +2158,9 @@ BOOL missingAlertShown;
     CGPoint resolution = CGPointMake(0.0, 0.0);
     if(!editorScene)
         return resolution;
-    
-    float resWidth = RESOLUTION[editorScene->cameraResolutionType][0];
-    float resHeight = RESOLUTION[editorScene->cameraResolutionType][1];
+    int camResolnType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    float resWidth = RESOLUTION[camResolnType][0];
+    float resHeight = RESOLUTION[camResolnType][1];
     
     return CGPointMake(resWidth, resHeight);
 }
@@ -2510,8 +2521,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
     {
-        float fovValue = editorScene->cameraFOV;
-        NSInteger resolutionType = editorScene->cameraResolutionType;
+        
+        float fovValue = editorScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x;
+        NSInteger resolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
@@ -3047,12 +3059,16 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     
     [self addFabricEvent:@"ExportAction" WithAttribute:IMPORT_PARTICLE+indexValue+1];
+    cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+
     if(indexValue==EXPORT_IMAGE) {
         renderBgColor = Vector4(0.1,0.1,0.1,1.0);
         if([Utility IsPadDevice]) {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:editorScene->currentFrame EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+            
+            
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:editorScene->currentFrame EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
             renderingView.delegate = self;
             renderingView.projectName = currentScene.name;
             renderingView.sgbPath = [self getSGBPath];
@@ -3067,7 +3083,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             RenderingViewController* renderingView;
             
             renderingView = [[RenderingViewController alloc]initWithNibName:([self iPhone6Plus]) ? @"RenderingViewControllerPhone@2x" :
-                             @"RenderingViewControllerPhone" bundle:nil StartFrame:editorScene->currentFrame EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+                             @"RenderingViewControllerPhone" bundle:nil StartFrame:editorScene->currentFrame EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
             renderingView.delegate = self;
             BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
             renderingView.projectName = currentScene.name;
@@ -3093,10 +3109,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.popoverController dismissPopoverAnimated:YES];
         RenderingViewController* renderingView;
         if ([Utility IsPadDevice])
-            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+            renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         else
             renderingView = [[RenderingViewController alloc]initWithNibName:(ScreenHeight>320) ? @"RenderingViewControllerPhone@2x" :
-                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:editorScene->cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+                             @"RenderingViewControllerPhone" bundle:nil StartFrame:0 EndFrame:editorScene->totalFrames renderOutput:RENDER_VIDEO caMresolution:cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
         renderingView.delegate = self;
         renderingView.projectName = currentScene.name;
         renderingView.sgbPath = [self getSGBPath];
@@ -3528,7 +3544,9 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void)cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution
 {
     NSLog(@"Fov value : %f Resolution type: %ld",fov,(long)resolution);
-    if (editorScene->cameraResolutionType != resolution) {
+    cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    
+    if (cameraResolutionType != resolution) {
         
         editorScene->actionMan->changeCameraProperty(fov, (int)resolution, true);
     } //switch action
@@ -3995,38 +4013,40 @@ void downloadFile(NSString* url, NSString* fileName)
 
 -(void)cameraPreviewPosition
 {
+    cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    
     int selctedIndex = [[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewPosition"]intValue];
-    float camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
     if(selctedIndex==PREVIEW_LEFTBOTTOM){
-        camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+        camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0){
             editorScene->camPreviewOrigin.x=0;
             editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             
         }
         if(editorScene->camPreviewScale==2.0){
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             
         }
     }
     if(selctedIndex==PREVIEW_LEFTTOP){
-        camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+        camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0){
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
         if(editorScene->camPreviewScale==2.0){
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
@@ -4034,20 +4054,20 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if(selctedIndex==PREVIEW_RIGHTBOTTOM){
         if(editorScene->camPreviewScale==1.0){
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=self.renderView.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale-camPrevRatio;
             editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             
             
         }
         if(editorScene->camPreviewScale==2.0){
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=self.renderView.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             NSLog(@"Camera preview orgin.x : %f",editorScene->camPreviewOrigin.x);
             
         }
@@ -4055,16 +4075,16 @@ void downloadFile(NSString* url, NSString* fileName)
     if(selctedIndex==PREVIEW_RIGHTTOP){
         
         if(editorScene->camPreviewScale==1.0){
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=self.view.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
         if(editorScene->camPreviewScale==2.0){
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=self.view.frame.size.width*editorScene->screenScale-self.rightView.frame.size.width*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=self.topView.frame.size.height*editorScene->screenScale;
         }
@@ -4507,8 +4527,8 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void)cameraResolutionChanged:(int)changedResolutionType
 {
-    cameraResoultionType = changedResolutionType;
-    [self cameraPropertyChanged:editorScene->cameraFOV Resolution:cameraResoultionType];
+    cameraResolutionType = changedResolutionType;
+    [self cameraPropertyChanged:editorScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x Resolution:cameraResolutionType];
 }
 
 -(BOOL)iPhone6Plus

@@ -486,9 +486,17 @@ void SGSceneUpdater::setCameraProperty(float fov , int resolutionType)
 {
     if(!updatingScene || !smgr)
         return;
-    updatingScene->cameraFOV = fov;
-    updatingScene->cameraResolutionType = resolutionType;
-    updatingScene->renderCamera->setFOVInRadians(updatingScene->cameraFOV * PI / 180.0f);
+    updatingScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x = fov;
+    updatingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = resolutionType;
+    
+    for(int pI = THOUSAND_EIGHTY; pI < TWO_FORTY; pI++) {
+        if(pI - CAM_CONSTANT == resolutionType)
+            updatingScene->nodes[NODE_CAMERA]->getProperty((PROP_INDEX)pI).value.x = 1.0;
+        else
+            updatingScene->nodes[NODE_CAMERA]->getProperty((PROP_INDEX)pI).value.x = 0.0;
+    }
+    
+    updatingScene->renderCamera->setFOVInRadians(updatingScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x * PI / 180.0f);
 }
 
 void SGSceneUpdater::updateEnvelopes()

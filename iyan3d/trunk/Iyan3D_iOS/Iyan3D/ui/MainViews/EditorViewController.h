@@ -58,7 +58,7 @@
     SGEditorScene *editorScene;
     SceneItem *currentScene;
     int IndexOfSelected;
-    int cameraResoultionType;
+    int cameraResolutionType;
     CacheSystem *cache;
     bool isViewLoaded , isPlaying;
     int previousAction , lightCount,selectedNodeId;

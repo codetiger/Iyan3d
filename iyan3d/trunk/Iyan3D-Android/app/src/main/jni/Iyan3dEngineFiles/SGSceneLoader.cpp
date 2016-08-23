@@ -44,7 +44,9 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         return false;
     
     int nodeCount = 0;
-    int sgbVersion = readSceneGlobalInfo(filePointer, nodeCount);
+    float cameraFov = 72.0;
+    int cameraResolution = 0;
+    int sgbVersion = readSceneGlobalInfo(filePointer, nodeCount, cameraFov, cameraResolution);
     currentScene->totalFrames = (currentScene->totalFrames < 24) ? 24 : currentScene->totalFrames;
     currentScene->nodes.clear();
     if(nodeCount < NODE_LIGHT+1)
@@ -61,7 +63,10 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             if(sgNode->getType() == NODE_CAMERA || sgNode->getType() == NODE_LIGHT) {
                 loadNode(sgNode, OPEN_SAVED_FILE);
                 sgNode->setPropertiesOfNode();
-                
+                if(sgNode->getType() == NODE_CAMERA) {
+                    sgNode->getProperty(FOV).value.x = cameraFov;
+                    sgNode->getProperty(CAM_RESOLUTION).value.x = cameraResolution;
+                }
             } else {
                 
                 SceneImporter* importer = new SceneImporter();
@@ -74,6 +79,11 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
                 }
                 
                 currentScene->nodes.push_back(sgNode);
+                
+                if(sgNode->IsPropertyExists(HAS_PHYSICS)) {
+                    if(sgNode->getProperty(HAS_PHYSICS).value.x == 1.0)
+                        currentScene->setPropsOfObject(sgNode, sgNode->getProperty(PHYSICS_KIND).value.x);
+                }
             }
             sgNode->setInitialKeyValues(OPEN_SAVED_FILE);
             
@@ -84,6 +94,9 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             int origId = 0;
             sgNode->readData(filePointer, origId);
             bool status = true;
+            
+            if(sgNode->getType() == NODE_CAMERA)
+                sgNode->getProperty(FOV).value.x = cameraFov;
             
             if(origId > 0) {
                 sgNode->setType(NODE_TEMP_INST);
@@ -129,7 +142,9 @@ bool SGSceneLoader::legacyReadScene(ifstream *filePointer)
         return false;
 
     int nodeCount = 0;
-    readSceneGlobalInfo(filePointer, nodeCount);
+    float cameraFov = 72.0;
+    int cameraResolution = 0;
+    readSceneGlobalInfo(filePointer, nodeCount, cameraFov, cameraResolution);
     currentScene->totalFrames = (currentScene->totalFrames < 24) ? 24 : currentScene->totalFrames;
     currentScene->nodes.clear();
     if(nodeCount < NODE_LIGHT+1)
@@ -141,6 +156,8 @@ bool SGSceneLoader::legacyReadScene(ifstream *filePointer)
         int origId = 0;
         sgNode->readData(filePointer, origId);
         bool status = true;
+        if(sgNode->getType() == NODE_CAMERA)
+            sgNode->getProperty(FOV).value.x = cameraFov;
         
         if(origId > 0) {
             sgNode->setType(NODE_TEMP_INST);
@@ -271,13 +288,13 @@ int SGSceneLoader::legacyReadSceneGlobalInfo(ifstream *filePointer, int sgbVersi
     lightColor.z = FileHelper::readFloat(filePointer);
     ShaderManager::lightColor.push_back(lightColor);
     ShaderManager::shadowDensity = FileHelper::readFloat(filePointer);
-    currentScene->cameraFOV = FileHelper::readFloat(filePointer);
+    currentScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x = FileHelper::readFloat(filePointer);
     nodeCount = FileHelper::readInt(filePointer);
     
     return sgbVersion;
 }
 
-int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
+int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount, float& cameraFov, int& cameraResolution)
 {
     if(!currentScene || !smgr)
         return;
@@ -294,10 +311,10 @@ int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount)
     lightColor.y = FileHelper::readFloat(filePointer);
     lightColor.z = FileHelper::readFloat(filePointer);
     ShaderManager::shadowDensity = FileHelper::readFloat(filePointer);
-    currentScene->cameraFOV = FileHelper::readFloat(filePointer);
-
+    cameraFov = FileHelper::readFloat(filePointer); //TODO pass camera FOV
+    
     FileHelper::readFloat(filePointer); // Ambient Light
-    FileHelper::readFloat(filePointer);
+    cameraResolution = FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);

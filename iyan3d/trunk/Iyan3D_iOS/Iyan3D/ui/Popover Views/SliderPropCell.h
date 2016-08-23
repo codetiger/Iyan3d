@@ -16,11 +16,15 @@
 @end
 
 @interface SliderPropCell : UITableViewCell
+{
+    BOOL sliderMoving;
+}
 
 @property (assign) int tableIndex;
 @property (assign) BOOL dynamicSlider;
 @property (weak, nonatomic) id < SliderPropDelegate > delegate;
 @property (strong, nonatomic) NSIndexPath* indexPath;
+@property (assign) float offsetValue;
 
 @property (weak, nonatomic) IBOutlet UILabel *xValue;
 

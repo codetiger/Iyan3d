@@ -56,8 +56,8 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
     sgNode->getProperty(PHYSICS_KIND).value.x = pType;
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
-    for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
-        sgNode->getProperty((PROP_INDEX)pI).value.x = (physicsProps[PHYSICS_KIND].value.x == pI) ? 1 : 0;
+    for(int pI = PHYSICS_NONE; pI < PHYSICS_JELLY; pI++)
+        sgNode->getProperty((PROP_INDEX)pI).value.x = (pType == pI) ? 1 : 0;
 
     switch (pType) {
         case PHYSICS_STATIC:
