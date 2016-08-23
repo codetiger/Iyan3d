@@ -10,7 +10,7 @@
 
 SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis)
 {
-    drawMode = DRAW_MODE_LINE_LOOP;
+    drawMode = DRAW_MODE_LINE_STRIP;
     this->mesh = new Mesh();
     
     addCircleWithAxis(mesh, 1, noOfVertices, radius);
