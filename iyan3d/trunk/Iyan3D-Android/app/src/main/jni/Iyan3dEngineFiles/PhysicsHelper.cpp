@@ -305,8 +305,7 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
                 shortDist2Child = dist;
         }
     }
-    printf("ShortDst: %f\n", shortDist2Child);
-    
+   
     Quaternion nodeRot = jointNode->getAbsoluteTransformation().getRotation();
     
     btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
