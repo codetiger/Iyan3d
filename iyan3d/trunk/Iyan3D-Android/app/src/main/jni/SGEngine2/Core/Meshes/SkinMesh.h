@@ -10,11 +10,10 @@
 #define __SGEngine2__SkinMesh__
 
 #include <iostream>
-#include "AnimatedMesh.h"
 #include "Joint.h"
 #include "../Nodes/JointNode.h"
 
-class SkinMesh:public AnimatedMesh{
+class SkinMesh:public Mesh {
 public:
     int versionId;
     

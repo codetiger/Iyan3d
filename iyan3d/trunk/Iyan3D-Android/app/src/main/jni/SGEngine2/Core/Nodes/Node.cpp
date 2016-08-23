@@ -256,14 +256,6 @@ void Node::setMaterial(Material *mat, bool isTransparentMaterial)
 #endif
 }
 
-u16 Node::getBufferCount()
-{
-    if(type == NODE_TYPE_MORPH || type== NODE_TYPE_MORPH_SKINNED)
-        return 2;
-    
-    return 1;
-}
-
 void Node::setID(int id)
 {
     this->id = id;

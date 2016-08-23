@@ -165,7 +165,6 @@ Mesh* Mesh::clone()
 {
     Mesh *m = new Mesh();
     m->meshType = meshType;
-    m->meshformat = meshformat;
     m->setOptimization(false, false, false);
     
     m->tempIndicesData = tempIndicesData;

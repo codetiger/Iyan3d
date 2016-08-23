@@ -5,7 +5,7 @@
 #define UV_MAPPED 1
 #define VERTEX_COLORED 2
 
-AnimatedMesh* CSGRMeshFileLoader::LoadMesh(string filepath)
+SkinMesh* CSGRMeshFileLoader::LoadMesh(string filepath)
 {
 
     ifstream f(filepath, ios::in | ios::binary);

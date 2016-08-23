@@ -404,7 +404,7 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh, string callbac
     return node;
 }
 
-shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(AnimatedMesh* mesh, string callbackFuncName, int maxJoints, rig_type rigType, MESH_TYPE meshType)
+shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(SkinMesh* mesh, string callbackFuncName, int maxJoints, rig_type rigType, MESH_TYPE meshType)
 {
     shared_ptr<AnimatedMeshNode> node = make_shared<AnimatedMeshNode>();
     node->setMesh(mesh, maxJoints, rigType);
@@ -554,7 +554,7 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
     }
 }
 
-AnimatedMesh* SceneManager::LoadMesh(string filePath)
+SkinMesh* SceneManager::LoadMesh(string filePath)
 {
     return CSGRMeshFileLoader::LoadMesh(filePath);
 }

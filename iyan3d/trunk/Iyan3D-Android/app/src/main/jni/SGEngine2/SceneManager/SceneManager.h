@@ -14,7 +14,6 @@
 #include "../RenderManager/MetalWrapper.h"
 #include "../Core/Textures/Texture.h"
 #include "../Core/Textures/OGLTexture.h"
-#include "../Core/Meshes/AnimatedMesh.h"
 #include "../Core/Nodes/AnimatedMeshNode.h"
 #include "../Core/Nodes/ParticleManager.h"
 #include "../Loaders/CSGRMeshFileLoader.h"
@@ -64,7 +63,7 @@ public:
     Texture* loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type, bool blurTexture, int blurRadius = 0);
     Texture* loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type);
     shared_ptr<MeshNode> createNodeFromMesh(Mesh* mesh, string callBackFuncName, MESH_TYPE meshType = MESH_TYPE_LITE, int matIndex = -1);
-    shared_ptr<AnimatedMeshNode> createAnimatedNodeFromMesh(AnimatedMesh* mesh, string callBackFuncName, int maxJoints, rig_type rigType = CHARACTER_RIG ,MESH_TYPE meshType = MESH_TYPE_LITE);
+    shared_ptr<AnimatedMeshNode> createAnimatedNodeFromMesh(SkinMesh* mesh, string callBackFuncName, int maxJoints, rig_type rigType = CHARACTER_RIG ,MESH_TYPE meshType = MESH_TYPE_LITE);
     shared_ptr<ParticleManager> createParticlesFromMesh(Mesh* mesh,string callBackFuncName,MESH_TYPE meshType = MESH_TYPE_LITE,int matIndex = -1);
     shared_ptr<CameraNode> createCameraNode(string callBackFuncName);
     shared_ptr<PlaneMeshNode> createPlaneNode(string callBackFuncName , float aspectRatio);
@@ -75,7 +74,7 @@ public:
     void (*ShaderCallBackForNode)(int nodeId, std::string mateialName, int materialIndex, std::string callbackFuncName);
     bool (*isTransparentCallBack)(int nodeId, string callbackFuncName);
     void setMaterialProperty(Material *mat,string name,float* values,DATA_TYPE type,unsigned short count,u16 paramIndex = 0);
-    AnimatedMesh* LoadMesh(string filePath);
+    SkinMesh* LoadMesh(string filePath);
     void (*MTLPipelineStateCallBack)(int);
     void (*MTLEndEncoding)();
     bool LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false, bool isTest = false);

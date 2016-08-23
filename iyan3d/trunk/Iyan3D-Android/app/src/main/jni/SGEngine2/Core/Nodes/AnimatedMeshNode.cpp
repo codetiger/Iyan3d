@@ -34,7 +34,7 @@ AnimatedMeshNode::~AnimatedMeshNode()
     jointNodes.clear();
 }
 
-void AnimatedMeshNode::setMesh(AnimatedMesh* mesh, int maxJoints, rig_type rigType)
+void AnimatedMeshNode::setMesh(SkinMesh* mesh, int maxJoints, rig_type rigType)
 {
     this->mesh = mesh;
     SkinMesh* SMesh = (SkinMesh*)mesh;
@@ -122,12 +122,12 @@ void AnimatedMeshNode::initializeMeshCache()
     meshCache->Commit();
 }
 
-AnimatedMesh* AnimatedMeshNode::getMesh()
+SkinMesh* AnimatedMeshNode::getMesh()
 {
     if(skinType == CPU_SKIN)
-        return (AnimatedMesh*)this->meshCache;
+        return (SkinMesh*)this->meshCache;
     
-    return (AnimatedMesh*)this->mesh;
+    return (SkinMesh*)this->mesh;
 }
 
 Mesh* AnimatedMeshNode::getMeshCache()

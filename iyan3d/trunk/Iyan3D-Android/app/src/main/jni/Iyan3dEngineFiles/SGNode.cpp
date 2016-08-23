@@ -285,7 +285,7 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
         }
     }
     
-    AnimatedMesh *mesh = TextMesh3d::get3DTextAnimatedMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
+    SkinMesh *mesh = TextMesh3d::get3DTextAnimatedMesh(text, bezierSegments, extrude, width, (char*)pathForFont.c_str(), fontColor, smgr->device, bevelRadius, bevelSegments);
     if(mesh == NULL)
         return shared_ptr<Node>();
     
@@ -440,7 +440,7 @@ shared_ptr<Node> SGNode::loadSGR(std::string meshPath,NODE_TYPE objectType,Scene
 
     std::string textureName = getProperty(TEXTURE).fileName;
     
-    AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath);
+    SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath);
     setSkinningData((SkinMesh*)mesh);
     shared_ptr<AnimatedMeshNode> node = smgr->createAnimatedNodeFromMesh(mesh,"setUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
     bool isSGJointsCreated = (joints.size() > 0) ? true : false;

@@ -223,7 +223,7 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->clearSGJoints();
                     smgr->RemoveNode(sgrSGNode->node);
                 }
-                AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(animatedSGRPath);
+                SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(animatedSGRPath);
                 sgrSGNode->setSkinningData((SkinMesh*)mesh);
                 shared_ptr<AnimatedMeshNode> riggedAnimNode = smgr->createAnimatedNodeFromMesh(mesh, "sgrUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
                 sgrSGNode->node = riggedAnimNode;
@@ -520,7 +520,7 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
     
     if(envelopeSgNod == NULL) {
         envelopeSgNod = new SGNode(NODE_RIG);
-        AnimatedMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr");
+        SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr");
         envelopeSgNod->setSkinningData((SkinMesh*)mesh);
         shared_ptr<AnimatedMeshNode> envelopeNode = smgr->createAnimatedNodeFromMesh(mesh, "envelopeUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
         envelopeNode->setID(ENVELOPE_START_ID + jointId);

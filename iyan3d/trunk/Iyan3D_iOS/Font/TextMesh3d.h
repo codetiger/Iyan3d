@@ -25,6 +25,6 @@ public:
     static void AddCharacterSideFace(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius);
     static double AddCharacter(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius);
     static void AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, double offset, float extrude, SkinMesh* mesh, double bevelRadius, int bevelSegments, int height);
-    static AnimatedMesh* get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments);
+    static SkinMesh* get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments);
     static Mesh* get3DTextMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments);
 };

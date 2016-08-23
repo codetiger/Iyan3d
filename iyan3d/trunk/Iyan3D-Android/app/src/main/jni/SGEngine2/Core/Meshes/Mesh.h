@@ -17,16 +17,10 @@
 #include "MeshOptimizeHelper.h"
 
 typedef enum {
-    MESH_FORMAT_TRIANGLES = 0,
-    MESH_FORMAT_STRIP,
-    MESH_FORMAT_INDEXED_TRIANGLES,
-    MESH_FORMAT_INDEXED_STRIP
-} mesh_format_t;
-
-typedef enum{
     MESH_TYPE_HEAVY,
     MESH_TYPE_LITE
-}MESH_TYPE;
+} MESH_TYPE;
+
 using std::vector;
 
 struct vertexData {
@@ -84,7 +78,6 @@ private:
     bool shouldSplitBuffers;
     float normalSmoothThreshold;
 public:
-    mesh_format_t meshformat;
     MESH_TYPE meshType;
 
     Mesh* clone();

@@ -37,22 +37,11 @@ typedef enum {
     NODE_TYPE_CAMERA,
     NODE_TYPE_LIGHT,
     NODE_TYPE_MESH,
-    NODE_TYPE_MORPH,
-    NODE_TYPE_ANIMATED,
     NODE_TYPE_SKINNED,
-    NODE_TYPE_MORPH_SKINNED,
     NODE_TYPE_PARTICLES,
     NODE_TYPE_LINES,
     NODE_TYPE_INSTANCED
 } node_type;
-
-typedef enum {
-    FM_NODE_TYPE_PLATFORM_SINGLE,
-    FM_NODE_TYPE_PLATFORM_REPEATE,
-    FM_NODE_TYPE_ENVIRONMENT,
-    FM_NODE_TYPE_FIXED,
-    FM_NODE_TYPE_REPEATED
-} FM_NODE_TYPE;
 
 typedef enum {
     NODE_GPUMEM_TYPE_STATIC,
@@ -135,8 +124,6 @@ public:
     BoundingBox getBoundingBox();
     bool getVisible();
     int getID();
-    
-    u16 getBufferCount();
     
     Quaternion getRotation();
     Vector3 getPosition();

@@ -256,9 +256,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
     if(supportsVAO)
         handleVAO(node, 3);
     else {
-        for(int i = 0; i < node->getBufferCount();i++) {
-            UnBindAttributes(node->material);
-        }
+        UnBindAttributes(node->material);
     }
 }
 

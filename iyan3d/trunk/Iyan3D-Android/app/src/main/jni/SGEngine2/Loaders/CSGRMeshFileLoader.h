@@ -53,7 +53,7 @@ struct SSGMColHeader {
 class CSGRMeshFileLoader {
 
 public:
-    static AnimatedMesh* LoadMesh(string filepath);
+    static SkinMesh* LoadMesh(string filepath);
     static Mesh* createSGMMesh(string filepath);
 };
 

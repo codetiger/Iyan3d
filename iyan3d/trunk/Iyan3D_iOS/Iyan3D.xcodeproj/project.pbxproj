@@ -851,8 +851,6 @@
 		256F6D861BF624FB00154622 /* MTLMaterial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD31BF624FB00154622 /* MTLMaterial.mm */; };
 		256F6D881BF624FB00154622 /* OGLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD41BF624FB00154622 /* OGLMaterial.cpp */; };
 		256F6D891BF624FB00154622 /* OGLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD41BF624FB00154622 /* OGLMaterial.cpp */; };
-		256F6D8A1BF624FB00154622 /* AnimatedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD71BF624FB00154622 /* AnimatedMesh.cpp */; };
-		256F6D8B1BF624FB00154622 /* AnimatedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD71BF624FB00154622 /* AnimatedMesh.cpp */; };
 		256F6D8C1BF624FB00154622 /* CubeMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD91BF624FB00154622 /* CubeMeshNode.cpp */; };
 		256F6D8D1BF624FB00154622 /* CubeMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BD91BF624FB00154622 /* CubeMeshNode.cpp */; };
 		256F6D8E1BF624FB00154622 /* Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6BDB1BF624FB00154622 /* Joint.cpp */; };
@@ -3357,8 +3355,6 @@
 		256F6BD31BF624FB00154622 /* MTLMaterial.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTLMaterial.mm; sourceTree = "<group>"; };
 		256F6BD41BF624FB00154622 /* OGLMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OGLMaterial.cpp; sourceTree = "<group>"; };
 		256F6BD51BF624FB00154622 /* OGLMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGLMaterial.h; sourceTree = "<group>"; };
-		256F6BD71BF624FB00154622 /* AnimatedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedMesh.cpp; sourceTree = "<group>"; };
-		256F6BD81BF624FB00154622 /* AnimatedMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedMesh.h; sourceTree = "<group>"; };
 		256F6BD91BF624FB00154622 /* CubeMeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeMeshNode.cpp; sourceTree = "<group>"; };
 		256F6BDA1BF624FB00154622 /* CubeMeshNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeMeshNode.h; sourceTree = "<group>"; };
 		256F6BDB1BF624FB00154622 /* Joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Joint.cpp; sourceTree = "<group>"; };
@@ -5652,8 +5648,6 @@
 		256F6BD61BF624FB00154622 /* Meshes */ = {
 			isa = PBXGroup;
 			children = (
-				256F6BD71BF624FB00154622 /* AnimatedMesh.cpp */,
-				256F6BD81BF624FB00154622 /* AnimatedMesh.h */,
 				256F6BD91BF624FB00154622 /* CubeMeshNode.cpp */,
 				256F6BDA1BF624FB00154622 /* CubeMeshNode.h */,
 				256F6BDB1BF624FB00154622 /* Joint.cpp */,
@@ -10137,7 +10131,6 @@
 				25DE10711CAA8D6D0076F669 /* btCompoundShape.cpp in Sources */,
 				25730E6A1AFD3C7B0042F81A /* BitmapRotationManipulator.m in Sources */,
 				256F6EA41BF624FB00154622 /* MetalHandler.mm in Sources */,
-				256F6D8A1BF624FB00154622 /* AnimatedMesh.cpp in Sources */,
 				25DE103D1CAA8D6D0076F669 /* btCollisionObject.cpp in Sources */,
 				25DE11451CAA91310076F669 /* btSoftRigidCollisionAlgorithm.cpp in Sources */,
 				251424841C9698F90012CA68 /* sweep.c in Sources */,
@@ -10237,7 +10230,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				25DE10E61CAA8D6D0076F669 /* btContactConstraint.cpp in Sources */,
-				256F6D8B1BF624FB00154622 /* AnimatedMesh.cpp in Sources */,
 				251424791C9698F90012CA68 /* mesh.c in Sources */,
 				256F6BA21BF6246300154622 /* SGAction.cpp in Sources */,
 				254A4B321D34F82B00D23D6D /* SwitchPropCell.mm in Sources */,

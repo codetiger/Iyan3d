@@ -371,7 +371,7 @@ void TextMesh3d::AddBevel(FT_Face face, wchar_t ch, unsigned short bezierSteps, 
     prevCharIndex = curCharIndex;
 }
 
-AnimatedMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments)
+SkinMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float extrude, int height, char* filepath, Vector4 color, DEVICE_TYPE device, double bevelRadius, int bevelSegments)
 {
     FT_Library library;
     if (FT_Init_FreeType(&library)) {
