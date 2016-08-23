@@ -769,16 +769,12 @@ GLenum OGLES2RenderManager::getOGLDrawMode(DRAW_MODE mode)
             return GL_POINTS;
         case DRAW_MODE_LINES:
             return GL_LINES;
-        case DRAW_MODE_LINE_LOOP:
-            return GL_LINE_LOOP;
         case DRAW_MODE_LINE_STRIP:
             return GL_LINE_STRIP;
         case DRAW_MODE_TRIANGLES:
             return GL_TRIANGLES;
         case DRAW_MODE_TRIANGLE_STRIP:
             return GL_TRIANGLE_STRIP;
-        case DRAW_MODE_TRIANGLE_FAN:
-            return GL_TRIANGLE_FAN;
         default:
             return GL_TRIANGLES;
     }

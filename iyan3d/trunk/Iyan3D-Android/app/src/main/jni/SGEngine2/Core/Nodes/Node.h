@@ -58,11 +58,9 @@ typedef enum {
 enum DRAW_MODE{
     DRAW_MODE_POINTS,
     DRAW_MODE_LINES,
-    DRAW_MODE_LINE_LOOP,
     DRAW_MODE_LINE_STRIP,
     DRAW_MODE_TRIANGLES,
     DRAW_MODE_TRIANGLE_STRIP,
-    DRAW_MODE_TRIANGLE_FAN
 };
 
 class Node : public enable_shared_from_this<Node> {

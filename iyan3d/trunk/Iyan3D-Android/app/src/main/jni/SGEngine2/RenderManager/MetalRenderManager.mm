@@ -748,16 +748,12 @@ int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode)
             return MTLPrimitiveTypePoint;
         case DRAW_MODE_LINES:
             return MTLPrimitiveTypeLine;
-        case DRAW_MODE_LINE_LOOP:
-            return MTLPrimitiveTypeLine;
         case DRAW_MODE_LINE_STRIP:
             return MTLPrimitiveTypeLineStrip;
         case DRAW_MODE_TRIANGLES:
             return MTLPrimitiveTypeTriangle;
         case DRAW_MODE_TRIANGLE_STRIP:
             return MTLPrimitiveTypeTriangleStrip;
-        case DRAW_MODE_TRIANGLE_FAN:
-            return MTLPrimitiveTypeTriangle;
         default:
             return MTLPrimitiveTypeTriangle;
     }
