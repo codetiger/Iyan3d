@@ -19,7 +19,7 @@ typedef struct
     packed_float2 texCoord1;
     packed_float3 tangent;
     packed_float3 bitagent;
-    packed_float4 optionalData1;
+    packed_float4 vertColor;
 } vertex_t;
 
 typedef struct
@@ -35,7 +35,6 @@ typedef struct
     packed_float4 optionalData4;
 } vertex_heavy_t;
 
-
 typedef struct
 {
     packed_float3 data;
@@ -45,7 +44,6 @@ typedef struct
 {
     packed_float4 data;
 } float4Struct;
-
 
 typedef struct {
     float hasLighting;
@@ -62,8 +60,6 @@ typedef struct {
     float3 B;
     float3 N;
 } ColorInOut;
-
-
 
 typedef struct {
     float4x4 JointTransform;
@@ -90,7 +86,6 @@ typedef struct {
 #define SHADER_COMMON_SKIN_hasLighting 21
 #define SHADER_COMMON_SKIN_uvScale 22
 #define SHADER_COMMON_SKIN_meshColor 23
-
 
 vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                                      constant float4x4& mvp [[ buffer(SHADER_COMMON_SKIN_mvp) ]],
@@ -194,7 +189,6 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     return out;
 }
 
-
 vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]],
                               constant float4x4& mvp [[ buffer(SHADER_COMMON_SKIN_mvp) ]],
                               constant JointData* Joint_Data [[ buffer(SHADER_COMMON_SKIN_jointData) ]],
@@ -280,7 +274,6 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
 #define SHADER_PARTICLE_world 9
 #define SHADER_PARTICLE_hasMeshColor 10
 
-
 vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                   constant float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
                                   constant float4x4& model [[ buffer(SHADER_PARTICLE_world)]],
@@ -354,7 +347,6 @@ vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0)
     return out;
 }
 
-
 fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
 {
     float4 color = float4(in.meshColor, 1.0);
@@ -400,14 +392,14 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     
     float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
     float4 vertex_position_cameraspace = model[iId].data * vertex_position_objectspace;
-    float4 optionalData1 = float4(vertex_array[vid].optionalData1);
+    float4 vertColor = float4(vertex_array[vid].vertColor);
     float3 tangent = float3(vertex_array[vid].tangent);
     float3 bitangent = float3(vertex_array[vid].bitagent);
     float3 normal = float3(vertex_array[vid].normal);
     
     ColorInOut out;
     out.hasMeshColor = hasMeshColor[iId];
-    out.meshColor = (meshColor[iId].data[0] == -1.0) ? optionalData1.xyz : float3(meshColor[iId].data);
+    out.meshColor = (meshColor[iId].data[0] == -1.0) ? vertColor.xyz : float3(meshColor[iId].data);
     out.reflection = reflectionValue[iId];
     
     out.T = normalize(float3(model[iId].data * float4(tangent, 0.0)));
@@ -440,7 +432,6 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     
     return out;
 }
-
 
 #define SHADER_COMMON_colorMap 0
 #define SHADER_COMMON_normalMap 1
@@ -673,7 +664,8 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
 #define SHADER_DRAW_2D_IMAGE_texture1 0
 vertex ColorInOut Draw2DImage_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                      unsigned int vid [[ vertex_id ]]
-                                     ) {
+                                     )
+{
     float2 uv = vertex_array[vid].texCoord1;
     ColorInOut out;
     out.position = float4(float3(vertex_array[vid].position), 1.0);
@@ -684,13 +676,15 @@ vertex ColorInOut Draw2DImage_Vertex(device vertex_t* vertex_array [[ buffer(0) 
     return out;
 }
 
-fragment half4 Draw2DImage_Fragment(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(0)]]) {
+fragment half4 Draw2DImage_Fragment(ColorInOut in [[stage_in]],texture2d<half>  tex2D [[texture(0)]])
+{
     constexpr sampler quad_sampler(address::repeat,filter::linear);
     half4 texColor = tex2D.sample(quad_sampler,in.uv);
     return texColor;
 }
 
-fragment half4 Draw2DImage_Fragment_Depth(ColorInOut in [[stage_in]],depth2d<float> shadowMap [[texture(0)]]) {
+fragment half4 Draw2DImage_Fragment_Depth(ColorInOut in [[stage_in]],depth2d<float> shadowMap [[texture(0)]])
+{
     constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
     float d = shadowMap.sample(linear_sampler, in.uv.xy);
     half4 texColor = half4(d, d, d,1.0);
@@ -701,7 +695,8 @@ fragment half4 Draw2DImage_Fragment_Depth(ColorInOut in [[stage_in]],depth2d<flo
 vertex ColorInOut Depth_Pass_vert(device vertex_t* vertex_array [[ buffer(0) ]],
                                   constant float4x4& mvp [[buffer(SHADER_DEPTH_PASS_mvp)]],
                                   unsigned int vid [[ vertex_id ]]
-                                  ) {
+                                  )
+{
     ColorInOut out;
     out.position = (mvp) * float4(float3(vertex_array[vid].position), 1.0);
     return out;
@@ -713,7 +708,8 @@ vertex ColorInOut Depth_Pass_Skin_vert(device vertex_heavy_t* vertex_array [[ bu
                                        constant float4x4& mvp [[buffer(SHADER_DEPTH_PASS_SKIN_mvp)]],
                                        constant JointData* Joint_Data [[ buffer(SHADER_DEPTH_PASS_SKIN_jointdata)]],
                                        unsigned int vid [[ vertex_id ]]
-                                       ) {
+                                       )
+{
     ColorInOut out;
     float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
     float4 optionalData1 = vertex_array[vid].optionalData1;
@@ -773,7 +769,8 @@ vertex ColorInOut Depth_Pass_Text_vert(device vertex_heavy_t* vertex_array [[ bu
                                        constant float4x4& mvp [[buffer(SHADER_DEPTH_PASS_SKIN_mvp)]],
                                        constant JointData* Joint_Data [[ buffer(SHADER_DEPTH_PASS_SKIN_jointdata)]],
                                        unsigned int vid [[ vertex_id ]]
-                                       ) {
+                                       )
+{
     ColorInOut out;
     float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
     float4 optionalData1 = vertex_array[vid].optionalData1;

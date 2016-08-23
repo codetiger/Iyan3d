@@ -6,7 +6,7 @@ attribute vec3 vertNormal;
 attribute vec2 texCoord1;
 attribute vec3 vertTangent;
 attribute vec3 vertBitangent;
-attribute vec4 optionalData1;
+attribute vec4 vertColor;
 
 uniform vec3 eyePos;
 uniform mat4 vp, lvp, model[uniSize];
@@ -23,7 +23,7 @@ void main()
 {
     int iId = gl_InstanceIDEXT;
     vHasMeshColor = hasMeshColor[iId];
-    vMeshColor = (meshColor[iId].x == -1.0) ? optionalData1.xyz : meshColor[iId];
+    vMeshColor = (meshColor[iId].x == -1.0) ? vertColor.xyz : meshColor[iId];
     vTexCoord = texCoord1 * uvScaleValue[iId];
     vReflectionValue = reflectionValue[iId];
     vTransparencyValue = transparencyValue[iId];

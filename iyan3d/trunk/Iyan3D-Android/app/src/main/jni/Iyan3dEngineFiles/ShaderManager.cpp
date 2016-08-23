@@ -150,7 +150,7 @@ std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniform
     string extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
     
     if(extensions.find("GL_EXT_draw_instanced") == std::string::npos) {
-        strsToReplace.insert(std::pair<string, string>("gl_InstanceIDEXT", "int(optionalData1.w)"));
+        strsToReplace.insert(std::pair<string, string>("gl_InstanceIDEXT", "int(vertColor.w)"));
     }
     
     ShaderManager::maxIntsances = maxUniforms;

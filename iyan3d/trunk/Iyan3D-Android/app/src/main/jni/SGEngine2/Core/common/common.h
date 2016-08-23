@@ -68,7 +68,6 @@ enum DATA_TYPE {
     DATA_FLOAT_MAT4,
     DATA_TEXTURE_2D,
     DATA_TEXTURE_CUBE
-
 };
 
 enum NODE_PROPERTY {
@@ -88,9 +87,11 @@ enum TEXTURE_DATA_FORMAT {
     TEXTURE_RG,
     TEXTURE_DEPTH32
 };
+
 enum TEXTURE_DATA_TYPE {
     TEXTURE_BYTE
 };
+
 enum DEVICE_TYPE {
     OPENGLES2,
     METAL
@@ -105,6 +106,7 @@ enum FPLANES {
     F_TOP_PLANE,
     F_PLANE_COUNT = 6
 };
+
 enum METAL_DEPTH_FUNCTION {
     CompareFunctionNever = 0,
     CompareFunctionLess = 1,
@@ -122,38 +124,8 @@ enum IMAGE_FLIP {
     FLIP_VERTICAL
 };
 
-//template <typename T>
-//std::string to_string(T value)
-//{
-//    std::ostringstream ostringstream1 ;
-//    ostringstream1 << value ;
-//    return ostringstream1.str() ;
-//}
-
-//template <typename T>
-//int  stringToInt(T string1){
-//    string buffer=string1;
-//    int a = 0;
-//
-//    for(string::iterator it = buffer.begin(); it != buffer.end(); ++it)
-//    {
-//        a=(a*10) + (*it-48);
-//    }
-//    cout<<"the value"<<a;
-//
-//    return a;
-//}
-//
-//template <typename T>
-//float stringToFloat(T string1){
-//    std::string num = string1;
-//    double temp = ::atof(num.c_str());
-//    return temp;
-//
-//}
-
 static const int totalAttributes = MAX_VERTEX_DATA;
-static const string attributesName[MAX_VERTEX_DATA] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "optionalData1" };
+static const string attributesName[MAX_VERTEX_DATA] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "vertColor" };
 static const DATA_TYPE attributesType[MAX_VERTEX_DATA] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
 static const u_int32_t attributesTotalValues[MAX_VERTEX_DATA] = { 3, 3, 2, 3, 3, 4 };
 
