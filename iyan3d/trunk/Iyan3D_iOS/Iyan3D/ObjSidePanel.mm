@@ -200,10 +200,11 @@
 
     if(_addBtn.tag == OBJ) {
         indexPathOfOBJ = (int)indexPath.row;
-        if(indexPathOfOBJ > 5)
-            [self.addBtn setTitle:NSLocalizedString(@"ADD TO SCENEN", nil) forState:UIControlStateNormal];
-    } else
-    {
+        if(indexPathOfOBJ >= [basicShapes count])
+            [self.addBtn setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
+        else
+            [self.addBtn setTitle:NSLocalizedString(@"NEXT", nil) forState:UIControlStateNormal];
+    } else {
         if(indexPath.row == 0) {
             haveTexture = NO;
             _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
@@ -256,7 +257,7 @@
 {
     if(indexPathOfOBJ == -1)
         return;
-    if(self.addBtn.tag == OBJ){
+    if(self.addBtn.tag == OBJ && indexPathOfOBJ < [basicShapes count]){
         [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
         filesList=nil;
@@ -271,7 +272,7 @@
         [self.importFilesCollectionView reloadData];
         [_colorWheelBtn setHidden:NO];
     }
-   else if(self.addBtn.tag == Texture){
+   else if(self.addBtn.tag == Texture || indexPathOfOBJ >= [basicShapes count]){
        if(viewType == IMPORT_OBJFILE) {
            //[self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
            [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:NO];
