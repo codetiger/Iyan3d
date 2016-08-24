@@ -385,7 +385,7 @@ void RenderHelper::drawCameraPreview()
     if(renderingScene->whiteBorderTexture)
         smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0,0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     
-    smgr->setRenderTarget(NULL,false,false);
+    smgr->setRenderTarget(NULL, false, false);
     smgr->setActiveCamera(renderingScene->viewCamera);
     
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++) {
