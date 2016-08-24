@@ -498,25 +498,29 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
     if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_STATIC) {
         btTriangleMesh *m = new btTriangleMesh();
         
-        vector< unsigned int > indices = mesh->getTotalIndicesArray();
-        for (int i = 0; i < indices.size(); i += 3) {
-            Vector3 vpos1, vpos2, vpos3;
-            
-            if(mesh->meshType == MESH_TYPE_LITE) {
-                vpos1 = mesh->getLiteVertexByIndex(indices[i+0])->vertPosition;
-                vpos2 = mesh->getLiteVertexByIndex(indices[i+1])->vertPosition;
-                vpos3 = mesh->getLiteVertexByIndex(indices[i+2])->vertPosition;
-            } else {
-                vpos1 = mesh->getHeavyVertexByIndex(indices[i+0])->vertPosition;
-                vpos2 = mesh->getHeavyVertexByIndex(indices[i+1])->vertPosition;
-                vpos3 = mesh->getHeavyVertexByIndex(indices[i+2])->vertPosition;
-            }
+        for (int mbi = 0; mbi < mesh->getMeshBufferCount(); mbi++) {
 
-            btVector3 btv1 = btVector3(vpos1.x, vpos1.y, vpos1.z);
-            btVector3 btv2 = btVector3(vpos2.x, vpos2.y, vpos2.z);
-            btVector3 btv3 = btVector3(vpos3.x, vpos3.y, vpos3.z);
-            
-            m->addTriangle(btv1, btv2, btv3);
+            unsigned short* indices = mesh->getIndicesArray(mbi);
+
+            for (int i = 0; i < mesh->getIndicesCount(mbi); i += 3) {
+                Vector3 vpos1, vpos2, vpos3;
+                
+                if(mesh->meshType == MESH_TYPE_LITE) {
+                    vpos1 = mesh->getLiteVerticesForMeshBuffer(mbi, indices[i+0])->vertPosition;
+                    vpos2 = mesh->getLiteVerticesForMeshBuffer(mbi, indices[i+1])->vertPosition;
+                    vpos3 = mesh->getLiteVerticesForMeshBuffer(mbi, indices[i+2])->vertPosition;
+                } else {
+                    vpos1 = mesh->getHeavyVerticesForMeshBuffer(mbi, indices[i+0])->vertPosition;
+                    vpos2 = mesh->getHeavyVerticesForMeshBuffer(mbi, indices[i+1])->vertPosition;
+                    vpos3 = mesh->getHeavyVerticesForMeshBuffer(mbi, indices[i+2])->vertPosition;
+                }
+                
+                btVector3 btv1 = btVector3(vpos1.x, vpos1.y, vpos1.z);
+                btVector3 btv2 = btVector3(vpos2.x, vpos2.y, vpos2.z);
+                btVector3 btv3 = btVector3(vpos3.x, vpos3.y, vpos3.z);
+                
+                m->addTriangle(btv1, btv2, btv3);
+            }
         }
         
         btBvhTriangleMeshShape *_shape = new btBvhTriangleMeshShape(m, false);
@@ -525,17 +529,22 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
         return _shape;
     } else {
         btConvexHullShape* _shape = new btConvexHullShape();
-        for (int j = 0; j < mesh->getVerticesCount(); j++) {
-            Vector3 vpos;
-            if(mesh->meshType == MESH_TYPE_LITE)
-                vpos = mesh->getLiteVertexByIndex(j)->vertPosition;
-            else
-                vpos = mesh->getHeavyVertexByIndex(j)->vertPosition;
-            
-            btVector3 btv = btVector3(vpos.x, vpos.y, vpos.z);
-            _shape->addPoint(btv);
-        }
         
+        for (int mbi = 0; mbi < mesh->getMeshBufferCount(); mbi++) {
+
+            for (int i = 0; i < mesh->getVerticesCountInMeshBuffer(mbi); i++) {
+                Vector3 vpos;
+                
+                if(mesh->meshType == MESH_TYPE_LITE)
+                    vpos = mesh->getLiteVerticesForMeshBuffer(mbi, i)->vertPosition;
+                else
+                    vpos = mesh->getHeavyVerticesForMeshBuffer(mbi, i)->vertPosition;
+                
+                btVector3 btv = btVector3(vpos.x, vpos.y, vpos.z);
+                _shape->addPoint(btv);
+            }
+        }
+
         btShapeHull *hull = new btShapeHull(_shape);
         hull->buildHull(0.0f);
         

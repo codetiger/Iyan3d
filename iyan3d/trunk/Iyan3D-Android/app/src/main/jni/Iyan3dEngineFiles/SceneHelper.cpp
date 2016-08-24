@@ -125,7 +125,7 @@ SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
         delete v;
     }
     
-    mesh->setOptimization(false, false, false);
+    mesh->setOptimization(false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, "LightLine");
     node->setID(LIGHT_DIRECTION_ID);
@@ -190,7 +190,7 @@ SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, 
         delete v;
     }
     
-    mesh->setOptimization(false, false, false);
+    mesh->setOptimization(false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, callbackName);
     node->setID(nodeId);

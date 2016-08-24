@@ -300,10 +300,6 @@ shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, i
         }
     }
     
-    if(node->skinType == CPU_SKIN) {
-        node->getMeshCache()->recalculateNormals();
-        node->getMeshCache()->fixOrientation();
-    }
     node->setMaterial(smgr->getMaterialByIndex(SHADER_TEXT_SKIN));
 
     std::string textureName = getProperty(TEXTURE).fileName;
@@ -575,19 +571,13 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
 
 shared_ptr<Node> SGNode::initLightSceneNode(SceneManager *smgr)
 {
-    // CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/light.sgm",smgr->device);
-    
-    Mesh* lightMesh = new Mesh();
-    lightMesh->copyDataFromMesh(SceneHelper::pointLightMesh);
+    shared_ptr<Node> lightNode = smgr->createNodeFromMesh(SceneHelper::pointLightMesh, "setUniforms");
 
-    shared_ptr<Node> lightNode = smgr->createNodeFromMesh(lightMesh,"setUniforms");
-    //Texture *nodeTex = smgr->loadTexture("Text light.png",constants::BundlePath + "/light.png",TEXTURE_RGBA8,TEXTURE_BYTE);
-    //lightNode->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     lightNode->setPosition(Vector3(-LIGHT_INIT_POS_X,LIGHT_INIT_POS_Y,LIGHT_INIT_POS_Z));
     lightNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     lightNode->setScale(Vector3(3.0));
-    //lightNode->setScale(Vector3(4.0));
-    getProperty(LIGHTING).value.x = false; // Vector4(0, 0, 0, 0), UNDEFINED);
+    getProperty(LIGHTING).value.x = false;
+
     return lightNode;
 }
 

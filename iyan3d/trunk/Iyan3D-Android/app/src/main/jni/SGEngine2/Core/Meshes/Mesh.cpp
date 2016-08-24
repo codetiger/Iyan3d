@@ -18,9 +18,11 @@ Mesh::Mesh()
     clearIndicesArray();
     instanceCount = 0;
     
-    removeDoubles = true;
-    optimizeIndicesOrder = true;
-    calculateTangents = true;
+    shouldRemoveDoubles = true;
+    shouldOptimizeIndicesOrder = true;
+    shouldCalculateTangents = true;
+    shouldCalculateNormals = false;
+    shouldGenerateUV = false;
     shouldSplitBuffers = false;
     normalSmoothThreshold = 1.0;
 }
@@ -62,18 +64,15 @@ void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mb
 void Mesh::copyDataFromMesh(Mesh* otherMesh)
 {
     if(otherMesh->meshType == MESH_TYPE_LITE) {
-        for(int i = 0; i < otherMesh->getVerticesCount(); i++) {
+        for(int i = 0; i < otherMesh->getVerticesCount(); i++)
             addVertex(otherMesh->getLiteVertexByIndex(i));
-        }
     } else {
-        for(int i = 0; i < otherMesh->getVerticesCount(); i++) {
+        for(int i = 0; i < otherMesh->getVerticesCount(); i++)
             addHeavyVertex(otherMesh->getHeavyVertexByIndex(i));
-        }
     }
     
-    for(int i = 0; i < otherMesh->getTotalIndicesCount(); i++) {
+    for(int i = 0; i < otherMesh->getTotalIndicesCount(); i++)
         addToIndicesArray(otherMesh->getTotalIndicesArray()[i]);
-    }
 }
 
 void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
@@ -130,8 +129,8 @@ void Mesh::addVertex(vertexData* vertex, bool updateBB)
     if(updateBB)
         BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
     
-    removeDoubles = true;
-    calculateTangents = true;
+    shouldRemoveDoubles = true;
+    shouldCalculateTangents = true;
     shouldSplitBuffers = true;
 }
 
@@ -148,8 +147,8 @@ void Mesh::addHeavyVertex(vertexDataHeavy* vertex)
     tempVerticesDataHeavy.push_back(vtx);
     BBox.addPointsToCalculateBoundingBox(vertex->vertPosition);
 
-    removeDoubles = true;
-    calculateTangents = true;
+    shouldRemoveDoubles = true;
+    shouldCalculateTangents = true;
     shouldSplitBuffers = true;
 }
 
@@ -157,7 +156,7 @@ void Mesh::addToIndicesArray(unsigned int index)
 {
     tempIndicesData.push_back(index);
     
-    optimizeIndicesOrder = true;
+    shouldOptimizeIndicesOrder = true;
     shouldSplitBuffers = true;
 }
 
@@ -165,35 +164,65 @@ Mesh* Mesh::clone()
 {
     Mesh *m = new Mesh();
     m->meshType = meshType;
-    m->setOptimization(false, false, false);
+    m->setOptimization(false, false);
     
     m->tempIndicesData = tempIndicesData;
     m->tempVerticesData = tempVerticesData;
     m->tempVerticesDataHeavy = tempVerticesDataHeavy;
     
     m->Commit();
-    
     return m;
 }
 
-void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents, float smoothThreshold)
+Mesh* Mesh::convert2Lite()
 {
-    removeDoubles = rmDoubles;
-    optimizeIndicesOrder = optimIndOrd;
-    calculateTangents = calcTangents;
+    Mesh *m = new Mesh();
+    m->meshType = MESH_TYPE_LITE;
+  
+    m->tempIndicesData = tempIndicesData;
+    m->tempVerticesData.clear();
+    m->tempVerticesDataHeavy.clear();
+    
+    for (int i = 0; i < getVerticesCount(); i++) {
+        vertexDataHeavy *vtx = getHeavyVertexByIndex(i);
+        vertexData v;
+        v.vertPosition = vtx->vertPosition;
+        v.vertNormal = vtx->vertNormal;
+        v.texCoord1 = vtx->texCoord1;
+        v.vertColor = vtx->optionalData4;
+        m->addVertex(&v);
+    }
+    
+    m->Commit();
+    return m;
+}
+
+void Mesh::setOptimization(bool rmDoubles, bool optimIndOrd, bool calcTangents, bool calcNormals, bool genUV, float smoothThreshold)
+{
+    shouldRemoveDoubles = rmDoubles;
+    shouldOptimizeIndicesOrder = optimIndOrd;
+    shouldCalculateTangents = calcTangents;
     normalSmoothThreshold = smoothThreshold;
+    shouldCalculateNormals = calcNormals;
+    shouldGenerateUV = genUV;
 }
 
 void Mesh::Commit(bool forceSplitBuffers)
 {
-    if (removeDoubles)
+    if(shouldCalculateNormals)
+        recalculateNormals();
+    
+    if (shouldRemoveDoubles)
         removeDoublesInMesh();
     
-    if (optimizeIndicesOrder)
+    if (shouldOptimizeIndicesOrder)
         reOrderMeshIndices();
     
-    if (calculateTangents)
+    if (shouldCalculateTangents)
         reCalculateTangents();
+    
+    if(shouldGenerateUV)
+        generateUV();
     
     if(shouldSplitBuffers || forceSplitBuffers) {
         clearVerticesArray();
@@ -460,6 +489,7 @@ void Mesh::generateUV()
     }
     
     checkUVSeam();
+    shouldGenerateUV = false;
 }
 
 void Mesh::checkUVSeam()
@@ -543,6 +573,11 @@ vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int index)
 vertexDataHeavy* Mesh::getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex)
 {
     return &(meshBufferVerticesDataHeavy[meshBufferIndex])[vertexIndex];
+}
+
+vertexData* Mesh::getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex)
+{
+    return &(meshBufferVerticesData[meshBufferIndex])[vertexIndex];
 }
 
 vector<vertexData> Mesh::getTotalLiteVerticesArray()
@@ -723,8 +758,10 @@ void Mesh::removeDoublesInMesh()
     
 
 //    printf(" after RemoveDoubles: %d\n", getVerticesCount());
+    normalSmoothThreshold = 1.0;
+    shouldRemoveDoubles = false;
     
-    removeDoubles = false;
+    recalculateNormals();
 }
 
 void Mesh::reOrderMeshIndices()
@@ -744,13 +781,13 @@ void Mesh::reOrderMeshIndices()
     for (int i = 0; i < indicesCount; i++)
         addToIndicesArray(optimizedIndices[i]);
 
-    optimizeIndicesOrder = false;
+    shouldOptimizeIndicesOrder = false;
 //    printf("\nAfter Optimization\n");
 //    for (int i = 0; i < indicesCount; i++)
 //        printf("%d ", getHighPolyIndicesArray()[i]);
 }
 
-void Mesh::fixOrientation()
+void Mesh::flipMeshHorizontal()
 {
     const u32 vtxcnt = getVerticesCount();
     for (int i = 0; i != vtxcnt; i++) {
@@ -813,6 +850,8 @@ void Mesh::recalculateNormals()
         Vector3 &n = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertNormal : getHeavyVertexByIndex(i)->vertNormal;
         n = n.normalize();
     }
+    
+    shouldCalculateNormals = false;
 }
 
 Vector3 Mesh::getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3)

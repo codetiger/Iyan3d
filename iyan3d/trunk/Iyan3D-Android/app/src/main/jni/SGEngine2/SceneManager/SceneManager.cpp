@@ -397,8 +397,7 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh, string callbac
         node->setMaterial(getMaterialByIndex(matIndex));
     node->mesh = mesh;
     node->callbackFuncName = callbackFuncName;
-    if(node->mesh)
-    	node->mesh->Commit();
+  	node->mesh->Commit();
     node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;

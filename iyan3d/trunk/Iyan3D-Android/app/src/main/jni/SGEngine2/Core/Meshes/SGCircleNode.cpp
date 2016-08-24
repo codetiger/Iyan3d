@@ -47,7 +47,7 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
         m->addToIndicesArray(prevVertexCount + i);
     }
     
-    m->setOptimization(false, false, false);
+    m->setOptimization(false, false);
 }
 
 SGCircleNode::~SGCircleNode()

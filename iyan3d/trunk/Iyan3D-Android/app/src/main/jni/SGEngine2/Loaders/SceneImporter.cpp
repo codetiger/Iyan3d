@@ -99,7 +99,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         
         SkinMesh *mesh = (SkinMesh*)CSGRMeshFileLoader::LoadMesh(filepath);
         sceneNode->setSkinningData(mesh);
-        mesh->setOptimization(false, false, false);
+        mesh->setOptimization(false, false);
         
         shared_ptr<AnimatedMeshNode> sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh(mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
@@ -151,7 +151,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         sceneNode->materialProps.push_back(materialProps);
         unsigned short materialIndex = sceneNode->materialProps.size() - 1;
         Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(filepath);
-        mesh->setOptimization(false, false, false);
+        mesh->setOptimization(false, false);
         shared_ptr<MeshNode> sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_MESH);
         sceneNode->node = sgn;
         
@@ -191,7 +191,7 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
         
         SkinMesh *mesh = (SkinMesh*)lMesh;
         //sceneNode->setSkinningData(mesh);
-        mesh->setOptimization(false, false, false);
+        mesh->setOptimization(false, false);
         
         shared_ptr<AnimatedMeshNode> sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh(mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
@@ -215,7 +215,7 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
     } else { //TODO for all other types
         
         Mesh *mesh = lMesh;
-        mesh->setOptimization(false, false, false);
+        mesh->setOptimization(false, false);
         shared_ptr<MeshNode> sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_MESH);
         sceneNode->node = sgn;
         sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
@@ -323,7 +323,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
         loadBoneHierarcy((SkinMesh*)mesh, bones);
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
-        mesh->setOptimization(false, false, false);
+        mesh->setOptimization(false, false);
 
         sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;

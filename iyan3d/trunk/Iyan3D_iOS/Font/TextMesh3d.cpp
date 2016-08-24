@@ -399,26 +399,10 @@ SkinMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float
             joint = mesh->addJoint(rootBone);
             boneIndex = joint->Index + 1;
         }
-        SkinMesh *tempMesh = new SkinMesh();
-        
-       	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius);
-       	AddBevel(face, text[i], beizerSteps, offset, -extrude, tempMesh, bevelRadius, bevelSegments, height);
-        tempMesh->removeDoublesInMesh();
-        unsigned int oldVertCount = mesh->getVerticesCount();
-        
-        for (int j = 0; j < tempMesh->getVerticesCount(); j++) {
-            vertexDataHeavy *vtx = tempMesh->getHeavyVertexByIndex(j);
-            mesh->addHeavyVertex(vtx);
-        }
-        
-        for (int j = 0; j < tempMesh->getTotalIndicesCount(); j++) {
-            unsigned int in = tempMesh->getHighPolyIndicesArray()[j];
-            mesh->addToIndicesArray(in + oldVertCount);
-        }
-        
-        delete tempMesh;
-        
+       	AddCharacterSideFace(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
+       	AddBevel(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius, bevelSegments, height);
        	offset = AddCharacter(face, text[i], beizerSteps, offset, -extrude, mesh, bevelRadius);
+
         if(text[i] != ' ') {
             double diff = prevOffset - offset;
             joint->LocalAnimatedMatrix.setElement(12, -offset - diff/2.0);
@@ -432,6 +416,7 @@ SkinMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float
         prevOffset = offset;
     }
     mesh->finalize();
+
     rootBone->LocalAnimatedMatrix.setElement(12, offset/2);
     rootBone->LocalAnimatedMatrix.setElement(13, -height/2);
     rootBone->LocalAnimatedMatrix.setElement(14, extrude/2);
@@ -442,9 +427,8 @@ SkinMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float
     if(mesh->getVerticesCount() <= 0)
         return NULL;
 
-    mesh->fixOrientation();
-    mesh->recalculateNormals();
-    mesh->generateUV();
+    mesh->flipMeshHorizontal();
+    mesh->setOptimization(true, true, true, true, true, 0.7);
 
     return mesh;
 }
@@ -485,31 +469,11 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
     if(mesh->getVerticesCount() <= 0)
         return NULL;
 
-    mesh->fixOrientation();
+    mesh->flipMeshHorizontal();
     mesh->moveVertices(Vector3(offset, -height, extrude) / 2.0);
-    mesh->recalculateNormals();
+    mesh->setOptimization(true, true, true, true, true, 0.7);
+    mesh->Commit();
 
-    Mesh* m = new Mesh();
-    for (int i = 0; i < mesh->getVerticesCount(); i++) {
-        vertexDataHeavy *vtx = mesh->getHeavyVertexByIndex(i);
-        vertexData v;
-        v.vertPosition = vtx->vertPosition;
-        v.vertNormal = vtx->vertNormal;
-        v.texCoord1 = vtx->texCoord1;
-        v.vertColor = vtx->optionalData4;
-        m->addVertex(&v);
-    }
-    
-    for (int i = 0; i < mesh->getTotalIndicesCount(); i++)
-        m->addToIndicesArray(mesh->getHighPolyIndicesArray()[i]);
-
-    m->setOptimization(false, false, false, 0.7);
-    m->removeDoublesInMesh();
-    m->reOrderMeshIndices();
-    m->reCalculateTangents();
-    m->setOptimization(false, false, false, 1.0);
-    m->recalculateNormals();
-    m->generateUV();
-
+    Mesh* m = mesh->convert2Lite();
     return m;
 }

@@ -74,15 +74,26 @@ private:
     vector<vertexDataHeavy> tempVerticesDataHeavy;
     vector<unsigned int> tempIndicesData;
     
-    bool removeDoubles, optimizeIndicesOrder, calculateTangents;
+    bool shouldRemoveDoubles, shouldOptimizeIndicesOrder, shouldCalculateTangents, shouldCalculateNormals, shouldGenerateUV;
     bool shouldSplitBuffers;
     float normalSmoothThreshold;
+
+    void reCalculateTangents();
+    void calculateTanget(Vector3 &tangent, Vector3 &bitangent, Vector3 vt1, Vector3 vt2, Vector3 vt3, Vector2 tc1, Vector2 tc2, Vector2 tc3);
+   
+    void checkUVSeam();
+    void generateUV();
+    void recalculateNormals();
+
 public:
     MESH_TYPE meshType;
 
     Mesh* clone();
+    Mesh* convert2Lite();
+    
     void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
     void addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
+    
     void copyDataFromMesh(Mesh* otherMesh);
     void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
     void removeVerticesOfAnInstance(int verticesCount, int indicesCount);
@@ -94,13 +105,7 @@ public:
     void clearVerticesArray();
     void clearIndicesArray();
     
-    void reCalculateTangents();
-    void calculateTanget(Vector3 &tangent, Vector3 &bitangent, Vector3 vt1, Vector3 vt2, Vector3 vt3, Vector2 tc1, Vector2 tc2, Vector2 tc3);
-
-    void checkUVSeam();
-    void generateUV();
-    void recalculateNormals();
-    void fixOrientation();
+    void flipMeshHorizontal();
     void moveVertices(Vector3 offset);
     vertexData* getLiteVertexByIndex(unsigned int index);
     vertexDataHeavy* getHeavyVertexByIndex(unsigned int index);
@@ -108,8 +113,10 @@ public:
     vector<vertexDataHeavy> getHeavyVerticesArray(int index);
     vector<vertexData> getTotalLiteVerticesArray();
     vector<vertexDataHeavy> getTotalHeavyVerticesArray();
+
     vertexDataHeavy* getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
-    
+    vertexData* getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
+
     unsigned short* getIndicesArray(int index);
     unsigned int * getHighPolyIndicesArray();
     unsigned int getIndicesCount(int index);
@@ -127,7 +134,7 @@ public:
     
     void removeDoublesInMesh();
     void reOrderMeshIndices();
-    void setOptimization(bool removeDoubles, bool optimizeIndicesOrder, bool calculateTangents, float smoothThreshold = 1.0);
+    void setOptimization(bool removeDoubles, bool optimizeIndicesOrder, bool calculateTangents = false, bool shouldCalculateNormals = false, bool shouldGenerateUV = false, float smoothThreshold = 1.0);
     
     Mesh();
     ~Mesh();

@@ -60,9 +60,11 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
 {
     rigNode->setType(NODE_SGM);
     rigNode->isRigged = false;
+    
     Mesh *mesh = new Mesh();
     animNode = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
     sMesh = (SkinMesh*)animNode->mesh;
+
     for(int i = 0; i < animNode->mesh->getVerticesCount(); i++) {
         vertexDataHeavy *vHData = animNode->mesh->getHeavyVertexByIndex(i);
         vertexData vData;
@@ -76,6 +78,7 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     for(int j = 0; j <  animNode->mesh->getTotalIndicesCount(); j++) {
         mesh->addToIndicesArray(animNode->mesh->getTotalIndicesArray()[j]);
     }
+
     animNode->setVisible(false);
     shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
     rigNode->node = meshNode;
