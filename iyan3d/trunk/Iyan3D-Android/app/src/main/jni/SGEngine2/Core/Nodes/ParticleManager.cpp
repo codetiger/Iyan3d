@@ -111,12 +111,16 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
     if(!meshCacheCreated)
         this->meshCache->clearIndices();
     this->meshCache->getBoundingBox()->clearPoints();
+    
+    vector< vertexData > mbvd;
+    vector< unsigned short > mbi;
+    
     for (int i = 0; i < maxParticleCount; i++) {
         Particle* p = pool->getParticleByIndex(i);
         this->isSelected = isSelected;
         Vector3 nodePos = getAbsoluteTransformation().getTranslation();
         
-        vertexData *v = new vertexData();
+        vertexData v;
         
         Vector4 finalPos;
         if(!isSelected) {
@@ -130,18 +134,20 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
         } else
             finalPos = Vector4(nodePos.x, nodePos.y, nodePos.z, p->age);
         
-        v->vertPosition = Vector3(finalPos.x, finalPos.y, finalPos.z);
-        v->vertNormal.x = finalPos.w;
-        v->vertNormal.y = finalPos.w;
-        v->vertNormal.z = finalPos.w;
+        v.vertPosition = Vector3(finalPos.x, finalPos.y, finalPos.z);
+        v.vertNormal.x = finalPos.w;
+        v.vertNormal.y = finalPos.w;
+        v.vertNormal.z = finalPos.w;
         
-        bool updateBB = p->isLive;
-        this->meshCache->addVertex(v, updateBB);
-        if(!meshCacheCreated)
-            this->meshCache->addToIndicesArray(i);
+//        bool updateBB = p->isLive; //TODO updateBoundingbox check
         
-        delete v;
+        mbvd.push_back(v);
+        if(!meshCacheCreated) {
+            mbi.push_back(i);
+        }
     }
+    
+    this->meshCache->addMeshBuffer(mbvd, mbi, 0);
     this->meshCache->Commit();
     this->shouldUpdateMesh = true;
     

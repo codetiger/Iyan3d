@@ -113,13 +113,14 @@ CubeMeshNode::CubeMeshNode()
     texCoord1.push_back(Vector2(0.0, 0.0));
     texCoord1.push_back(Vector2(1.0, 0.0));
 
-    
+    vector< vertexData > mbvd;
+    vector< unsigned short > mbi;
     for(int i = 0; i < vertPosition.size();i++){
         vertexData vData;
         vData.vertPosition = vertPosition[i];
         vData.vertNormal = vertNormal[i];
         vData.texCoord1 = texCoord1[i];
-        this->mesh->addVertex(&vData);
+        mbvd.push_back(vData);
     }
     vertPosition.clear();
     vertNormal.clear();
@@ -141,7 +142,9 @@ CubeMeshNode::CubeMeshNode()
     };
     
     for(int i = 0; i < 36; i++)
-        this->mesh->addToIndicesArray(indices[i]);
+        mbi.push_back(indices[i]);
+    this->mesh->addMeshBuffer(mbvd, mbi, 0);
+    
     updateAbsoluteTransformation();
 }
 

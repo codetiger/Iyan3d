@@ -91,8 +91,8 @@ public:
     Mesh* clone();
     Mesh* convert2Lite();
     
-    void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
-    void addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex);
+    void addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex, bool updateBB = true);
+    void addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex, bool updateBB = true);
     
     void copyDataFromMesh(Mesh* otherMesh);
     void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
@@ -117,6 +117,7 @@ public:
     vertexDataHeavy* getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
     vertexData* getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
 
+    vector< unsigned short > getIndicesArrayAtMeshBufferIndex(int index);
     unsigned short* getIndicesArray(int index);
     unsigned int * getHighPolyIndicesArray();
     unsigned int getIndicesCount(int index);

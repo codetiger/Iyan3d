@@ -37,42 +37,52 @@ Mesh::~Mesh()
     instanceCount = 0;
 }
 
-void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex)
+void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, unsigned short materialIndex, bool updateBB)
 {
     meshBufferVerticesData.push_back(mbvd);
     meshBufferIndices.push_back(mbi);
     meshBufferMaterialIndices.push_back(materialIndex);
     
-    for(int i = 0; i < meshBufferVerticesData[meshBufferVerticesData.size() - 1].size(); i++) {
-        vertexData v = meshBufferVerticesData[meshBufferVerticesData.size() - 1][i];
-        BBox.addPointsToCalculateBoundingBox(v.vertPosition);
+    if(updateBB) {
+        for(int i = 0; i < meshBufferVerticesData[meshBufferVerticesData.size() - 1].size(); i++) {
+            vertexData v = meshBufferVerticesData[meshBufferVerticesData.size() - 1][i];
+            BBox.addPointsToCalculateBoundingBox(v.vertPosition);
+        }
     }
 }
 
-void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex)
+void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex, bool updateBB)
 {
     meshBufferVerticesDataHeavy.push_back(mbvd);
     meshBufferIndices.push_back(mbi);
     meshBufferMaterialIndices.push_back(materialIndex);
     
-    for(int i = 0; i < meshBufferVerticesDataHeavy[meshBufferVerticesDataHeavy.size() - 1].size(); i++) {
-        vertexDataHeavy v = meshBufferVerticesDataHeavy[meshBufferVerticesDataHeavy.size() - 1][i];
-        BBox.addPointsToCalculateBoundingBox(v.vertPosition);
+    if(updateBB) {
+        for(int i = 0; i < meshBufferVerticesDataHeavy[meshBufferVerticesDataHeavy.size() - 1].size(); i++) {
+            vertexDataHeavy v = meshBufferVerticesDataHeavy[meshBufferVerticesDataHeavy.size() - 1][i];
+            BBox.addPointsToCalculateBoundingBox(v.vertPosition);
+        }
     }
 }
 
 void Mesh::copyDataFromMesh(Mesh* otherMesh)
 {
     if(otherMesh->meshType == MESH_TYPE_LITE) {
-        for(int i = 0; i < otherMesh->getVerticesCount(); i++)
-            addVertex(otherMesh->getLiteVertexByIndex(i));
+        for( int i = 0; i < otherMesh->getMeshBufferCount(); i++) {
+            vector< vertexData > mbvd = otherMesh->getLiteVerticesArray(i);
+            vector< unsigned short > mbi = otherMesh->getIndicesArrayAtMeshBufferIndex(i);
+            unsigned short materialIndex = otherMesh->getMeshBufferMaterialIndices(i);
+            addMeshBuffer(mbvd, mbi, materialIndex);
+        }
     } else {
-        for(int i = 0; i < otherMesh->getVerticesCount(); i++)
-            addHeavyVertex(otherMesh->getHeavyVertexByIndex(i));
+        for( int i = 0; i < otherMesh->getMeshBufferCount(); i++) {
+            vector< vertexDataHeavy > mbhvd = otherMesh->getHeavyVerticesArray(i);
+            vector< unsigned short > mbi = otherMesh->getIndicesArrayAtMeshBufferIndex(i);
+            unsigned short materialIndex = otherMesh->getMeshBufferMaterialIndices(i);
+            addMeshBuffer(mbhvd, mbi, materialIndex);
+        }
     }
     
-    for(int i = 0; i < otherMesh->getTotalIndicesCount(); i++)
-        addToIndicesArray(otherMesh->getTotalIndicesArray()[i]);
 }
 
 void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
@@ -84,19 +94,15 @@ void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
         
         unsigned int vertexCount = getVerticesCount();
         
-        for(int i = 0; i < originalMesh->getVerticesCount(); i++) {
-            vertexData v;
-            vertexData *vertx = originalMesh->getLiteVertexByIndex(i);
-            v.vertPosition = vertx->vertPosition;
-            v.vertNormal = vertx->vertNormal;
-            v.texCoord1 = vertx->texCoord1;
-            v.vertColor = Vector4(vertx->vertColor.x, vertx->vertColor.y, vertx->vertColor.z, instanceIndex);
-            addVertex(&v);
-        }
-        
-        for( int i = 0; i < originalMesh->getTotalIndicesCount(); i ++) {
-            unsigned int indexToAdd = originalMesh->getTotalIndicesArray()[i] + vertexCount;
-            addToIndicesArray(indexToAdd);
+        for( int i = 0; i < originalMesh->getMeshBufferCount(); i++) {
+            vector< vertexData > mbvd = originalMesh->getLiteVerticesArray(i);
+            for( int j = 0; j < mbvd.size(); j++) {
+                vertexData &v = mbvd[j];
+                v.vertColor = Vector4(v.vertColor.x, v.vertColor.y, v.vertColor.z, instanceIndex);
+            }
+            vector< unsigned short > mbi = originalMesh->getIndicesArrayAtMeshBufferIndex(i);
+            unsigned short materialIndex = originalMesh->getMeshBufferMaterialIndices(i);
+            addMeshBuffer(mbvd, mbi, materialIndex);
         }
     }
     
@@ -178,19 +184,24 @@ Mesh* Mesh::convert2Lite()
 {
     Mesh *m = new Mesh();
     m->meshType = MESH_TYPE_LITE;
-  
-    m->tempIndicesData = tempIndicesData;
-    m->tempVerticesData.clear();
-    m->tempVerticesDataHeavy.clear();
+    m->meshBufferIndices.clear();
+    m->meshBufferVerticesData.clear();
     
-    for (int i = 0; i < getVerticesCount(); i++) {
-        vertexDataHeavy *vtx = getHeavyVertexByIndex(i);
-        vertexData v;
-        v.vertPosition = vtx->vertPosition;
-        v.vertNormal = vtx->vertNormal;
-        v.texCoord1 = vtx->texCoord1;
-        v.vertColor = vtx->optionalData4;
-        m->addVertex(&v);
+    for( int i = 0; i < getMeshBufferCount(); i++) {
+        vector< vertexData > mbvd;
+        vector< unsigned short > mbi = getIndicesArrayAtMeshBufferIndex(i);
+        int materialIndex = getMeshBufferMaterialIndices(i);
+        
+        for( int j = 0; j < meshBufferVerticesDataHeavy[i].size(); j++){
+            vertexData v;
+            vertexDataHeavy vH = meshBufferVerticesDataHeavy[i][j];
+            v.vertPosition = vH.vertPosition;
+            v.vertNormal = vH.vertNormal;
+            v.texCoord1 = vH.texCoord1;
+            v.vertColor = vH.optionalData4;
+            mbvd.push_back(v);
+        }
+        m->addMeshBuffer(mbvd, mbi, materialIndex);
     }
     
     m->Commit();
@@ -616,6 +627,11 @@ BoundingBox* Mesh::getBoundingBox()
 unsigned int * Mesh::getHighPolyIndicesArray()
 {
     return &tempIndicesData[0];
+}
+
+vector< unsigned short > Mesh::getIndicesArrayAtMeshBufferIndex(int index)
+{
+    return meshBufferIndices[index];
 }
 
 unsigned short* Mesh::getIndicesArray(int index)

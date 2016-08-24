@@ -61,24 +61,11 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     rigNode->setType(NODE_SGM);
     rigNode->isRigged = false;
     
-    Mesh *mesh = new Mesh();
     animNode = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
     sMesh = (SkinMesh*)animNode->mesh;
 
-    for(int i = 0; i < animNode->mesh->getVerticesCountInMeshBuffer(0); i++) {
-        vertexDataHeavy *vHData = animNode->mesh->getHeavyVerticesForMeshBuffer(0, i);
-        vertexData vData;
-        vData.vertPosition = vHData->vertPosition;
-        vData.vertNormal = vHData->vertNormal;
-        vData.texCoord1 = vHData->texCoord1;
-        vData.vertColor = Vector4(1.0, 1.0, 1.0, 0.0); //TODO
-        mesh->addVertex(&vData);
-    }
+    Mesh *mesh = animNode->mesh->convert2Lite();
     
-    for(int j = 0; j <  animNode->mesh->getIndicesCount(0); j++) {
-        mesh->addToIndicesArray(animNode->mesh->getIndicesArray(0)[j]);
-    }
-
     animNode->setVisible(false);
     shared_ptr<MeshNode> meshNode = smgr->createNodeFromMesh(mesh, "setUniforms");
     rigNode->node = meshNode;

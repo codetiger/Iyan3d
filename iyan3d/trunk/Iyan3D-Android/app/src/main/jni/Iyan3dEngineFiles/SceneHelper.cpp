@@ -117,14 +117,15 @@ SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
 
     Mesh* mesh = new Mesh();
     
+    vector< vertexData > mbvd;
+    vector< unsigned short > mbi;
     for(int i = 0; i < vPositions.size(); i++) {
-        vertexData *v = new vertexData();
-        v->vertPosition = vPositions[i];
-        mesh->addVertex(v);
-        mesh->addToIndicesArray(i);
-        delete v;
+        vertexData v;
+        v.vertPosition = vPositions[i];
+        mbvd.push_back(v);
+        mbi.push_back(i);
     }
-    
+    mesh->addMeshBuffer(mbvd, mbi, 0);
     mesh->setOptimization(false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, "LightLine");
@@ -182,14 +183,16 @@ SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, 
 
     Mesh * mesh = new Mesh();
     
+    vector< vertexData > mbvd;
+    vector< unsigned short > mbi;
     for(int i = 0; i < positions.size(); i++) {
-        vertexData *v = new vertexData();
-        v->vertPosition = positions[i];
-        mesh->addVertex(v);
-        mesh->addToIndicesArray(i);
-        delete v;
+        vertexData v;
+        v.vertPosition = positions[i];
+        mbvd.push_back(v);
+        mbi.push_back(i);
     }
     
+    mesh->addMeshBuffer(mbvd, mbi, 0);
     mesh->setOptimization(false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, callbackName);
