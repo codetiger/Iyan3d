@@ -16,10 +16,10 @@ MeshNode::MeshNode()
 
 MeshNode::~MeshNode()
 {
-    if(mesh && mesh->getVerticesCount())
+    if(mesh)
         delete mesh;
     
-    if(this->meshCache && this->meshCache->getVerticesCount())
+    if(this->meshCache)
         delete this->meshCache;
     
     mesh = NULL;

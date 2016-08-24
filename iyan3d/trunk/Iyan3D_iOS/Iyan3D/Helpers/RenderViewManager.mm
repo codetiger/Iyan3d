@@ -242,7 +242,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 - (bool) loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name TextureName:(NSString*)textureName Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
 {
    
-    NSLog(@" Texture Name %@ ", textureName);
     string textureNameStr = std::string([textureName UTF8String]);
     
     if(editorScene) {

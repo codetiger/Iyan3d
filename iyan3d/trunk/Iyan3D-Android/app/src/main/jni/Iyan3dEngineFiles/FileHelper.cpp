@@ -104,22 +104,22 @@ std::wstring FileHelper::readWString(ifstream *file)
 
 void FileHelper::writeInt(ofstream *file , int data)
 {
-    file->write((char*)&data , sizeof(int));
+    file->write((char*)&data, sizeof(int));
 }
 
 void FileHelper::writeShort(ofstream *file , short data)
 {
-    file->write((char*)&data , sizeof(short));
+    file->write((char*)&data, sizeof(short));
 }
 
 void FileHelper::writeFloat(ofstream *file , float data)
 {
-    file->write((char*)&data , sizeof(float));
+    file->write((char*)&data, sizeof(float));
 }
 
 void FileHelper::writeBool(ofstream *file , bool data)
 {
-    file->write((char*)&data , sizeof(bool));
+    file->write((char*)&data, sizeof(bool));
 }
 
 void FileHelper::writeString(ofstream *file , std::string data)

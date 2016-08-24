@@ -8,7 +8,6 @@
 //
 
 #include "HeaderFiles/SGEditorScene.h"
-#include "HeaderFiles/SGCloudRenderingHelper.h"
 
 string constants::BundlePath = " ";
 string constants::CachesStoragePath = " ";
@@ -625,12 +624,6 @@ int SGEditorScene::undo(int &returnValue2)
 int SGEditorScene::redo()
 {
     return actionMan->redo();
-}
-
-bool SGEditorScene::generateSGFDFile(int frame)
-{
-	updater->setDataForFrame(frame);
-	return SGCloudRenderingHelper::writeFrameData(this, smgr, frame);
 }
 
 void SGEditorScene::setLightingOn()

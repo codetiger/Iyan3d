@@ -65,8 +65,8 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
     animNode = dynamic_pointer_cast<AnimatedMeshNode>(rigNode->node);
     sMesh = (SkinMesh*)animNode->mesh;
 
-    for(int i = 0; i < animNode->mesh->getVerticesCount(); i++) {
-        vertexDataHeavy *vHData = animNode->mesh->getHeavyVertexByIndex(i);
+    for(int i = 0; i < animNode->mesh->getVerticesCountInMeshBuffer(0); i++) {
+        vertexDataHeavy *vHData = animNode->mesh->getHeavyVerticesForMeshBuffer(0, i);
         vertexData vData;
         vData.vertPosition = vHData->vertPosition;
         vData.vertNormal = vHData->vertNormal;
@@ -75,8 +75,8 @@ SGNode* SGAutoRigSceneManager::getSGMNodeForRig(SGNode *rigNode)
         mesh->addVertex(&vData);
     }
     
-    for(int j = 0; j <  animNode->mesh->getTotalIndicesCount(); j++) {
-        mesh->addToIndicesArray(animNode->mesh->getTotalIndicesArray()[j]);
+    for(int j = 0; j <  animNode->mesh->getIndicesCount(0); j++) {
+        mesh->addToIndicesArray(animNode->mesh->getIndicesArray(0)[j]);
     }
 
     animNode->setVisible(false);
@@ -244,7 +244,6 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->getProperty(IS_VERTEX_COLOR).value.x = nodeToRig->getProperty(IS_VERTEX_COLOR).value.x;
                     sgrSGNode->getProperty(VERTEX_COLOR).value = nodeToRig->getProperty(VERTEX_COLOR).value;
                     sgrSGNode->node->setVisible(true);
-                    printf("\n setscenemode - Vertices count %d ", dynamic_pointer_cast<MeshNode>(sgrSGNode->node)->getMesh()->getVerticesCount());
                 }
             }
             else{

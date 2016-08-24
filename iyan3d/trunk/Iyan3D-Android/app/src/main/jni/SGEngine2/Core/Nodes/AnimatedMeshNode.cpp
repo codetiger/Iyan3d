@@ -39,10 +39,12 @@ void AnimatedMeshNode::setMesh(SkinMesh* mesh, int maxJoints, rig_type rigType)
     this->mesh = mesh;
     SkinMesh* SMesh = (SkinMesh*)mesh;
     int jointsCount = SMesh->joints->size();
+
     for (int i = 0; i < jointsCount; i++) {
         shared_ptr<JointNode> node = make_shared<JointNode>();
         jointNodes.push_back(node);
     }
+    
     for (int i = 0; i < jointsCount; i++) {
         if ((*SMesh->joints)[i]->Parent) {
             unsigned short parentId = (*SMesh->joints)[i]->Parent->Index;
@@ -52,28 +54,32 @@ void AnimatedMeshNode::setMesh(SkinMesh* mesh, int maxJoints, rig_type rigType)
     }
     
     if(this->mesh) {
-        for(int i = 0; i < mesh->getVerticesCount(); i++) {
-            vertexDataHeavy *vData = mesh->getHeavyVertexByIndex(i);
-            if(vData) {
-                int jointId = vData->optionalData1.x - 1;
-                if(jointId > 0 && jointNodes[jointId])
-                    jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
-                if(rigType == CHARACTER_RIG) {
-                    jointId = vData->optionalData1.y - 1;
+        for (int mbi = 0; mbi < mesh->getMeshBufferCount(); mbi++) {
+            for(int i = 0; i < mesh->getVerticesCountInMeshBuffer(mbi); i++) {
+                vertexDataHeavy *vData = mesh->getHeavyVerticesForMeshBuffer(mbi, i);
+                if(vData) {
+                    int jointId = vData->optionalData1.x - 1;
+                    
                     if(jointId > 0 && jointNodes[jointId])
                         jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
-                    jointId = vData->optionalData1.z - 1;
-                    if(jointId > 0 && jointNodes[jointId])
-                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
-                    jointId = vData->optionalData3.x - 1;
-                    if(jointId > 0 && jointNodes[jointId])
-                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
-                    jointId = vData->optionalData3.y - 1;
-                    if(jointId > 0 && jointNodes[jointId])
-                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
-                    jointId = vData->optionalData3.z - 1;
-                    if(jointId > 0 && jointNodes[jointId])
-                        jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                    
+                    if(rigType == CHARACTER_RIG) {
+                        jointId = vData->optionalData1.y - 1;
+                        if(jointId > 0 && jointNodes[jointId])
+                            jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                        jointId = vData->optionalData1.z - 1;
+                        if(jointId > 0 && jointNodes[jointId])
+                            jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                        jointId = vData->optionalData3.x - 1;
+                        if(jointId > 0 && jointNodes[jointId])
+                            jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                        jointId = vData->optionalData3.y - 1;
+                        if(jointId > 0 && jointNodes[jointId])
+                            jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                        jointId = vData->optionalData3.z - 1;
+                        if(jointId > 0 && jointNodes[jointId])
+                            jointNodes[jointId]->bBox.addPointsToCalculateBoundingBox(vData->vertPosition);
+                    }
                 }
             }
         }
@@ -100,26 +106,7 @@ void AnimatedMeshNode::setMesh(SkinMesh* mesh, int maxJoints, rig_type rigType)
 
 void AnimatedMeshNode::initializeMeshCache()
 {
-    meshCache = new Mesh();
-    
-    for (int vIndex = 0; vIndex < this->mesh->getVerticesCount(); vIndex++) {
-        vertexData finalVertData;
-        vertexDataHeavy* vertex = this->mesh->getHeavyVertexByIndex(vIndex);
-
-        finalVertData.vertPosition = vertex->vertPosition;
-        finalVertData.vertNormal = vertex->vertNormal;
-        finalVertData.texCoord1 = vertex->texCoord1;
-        finalVertData.vertColor = vertex->optionalData4;
-        finalVertData.vertTangent = vertex->vertTangent;
-        finalVertData.vertBitangent = vertex->vertBitangent;
-
-        meshCache->addVertex(&finalVertData);
-    }
-
-    for (int iIndex = 0; iIndex < mesh->getTotalIndicesCount(); iIndex++) {
-        meshCache->addToIndicesArray(mesh->getTotalIndicesArray()[iIndex]);
-    }
-    meshCache->Commit();
+    meshCache = this->mesh->convert2Lite();
 }
 
 SkinMesh* AnimatedMeshNode::getMesh()
@@ -180,18 +167,20 @@ void AnimatedMeshNode::updateMeshCache()
         jointTransforms.push_back(JointVertexPull);
     }
 
-    for (int vIndex = 0; vIndex < this->mesh->getVerticesCount(); vIndex++) {
-        vertexData* finalVertData = this->meshCache->getLiteVertexByIndex(vIndex);
-        vertexDataHeavy* vertex = this->mesh->getHeavyVertexByIndex(vIndex);
-        
-        finalVertData->vertPosition = vertex->vertPosition;
-        finalVertData->vertNormal = vertex->vertNormal;
-        finalVertData->texCoord1 = vertex->texCoord1;
-        finalVertData->vertColor = vertex->optionalData4;
-        finalVertData->vertTangent = vertex->vertTangent;
-        finalVertData->vertBitangent = vertex->vertBitangent;
-
-        calculateJointTransforms(vertex, jointTransforms, finalVertData->vertPosition, finalVertData->vertNormal);
+    for (int mbi = 0; mbi < this->mesh->getMeshBufferCount(); mbi++) {
+        for (int vIndex = 0; vIndex < this->mesh->getVerticesCountInMeshBuffer(mbi); vIndex++) {
+            vertexData* finalVertData = this->meshCache->getLiteVerticesForMeshBuffer(mbi, vIndex);
+            vertexDataHeavy* vertex = this->mesh->getHeavyVerticesForMeshBuffer(mbi, vIndex);
+            
+            finalVertData->vertPosition = vertex->vertPosition;
+            finalVertData->vertNormal = vertex->vertNormal;
+            finalVertData->texCoord1 = vertex->texCoord1;
+            finalVertData->vertColor = vertex->optionalData4;
+            finalVertData->vertTangent = vertex->vertTangent;
+            finalVertData->vertBitangent = vertex->vertBitangent;
+            
+            calculateJointTransforms(vertex, jointTransforms, finalVertData->vertPosition, finalVertData->vertNormal);
+        }
     }
     jointTransforms.clear();
     
@@ -218,8 +207,8 @@ void AnimatedMeshNode::updatePartOfMeshCache(int jointId)
     for(int index = 0; index < PaintedVertexIndices.size(); index++) {
         
         int vIndex = PaintedVertexIndices[index];
-        vertexData* finalVertData = this->meshCache->getLiteVertexByIndex(vIndex);
-        vertexDataHeavy* vertex = this->mesh->getHeavyVertexByIndex(vIndex);
+        vertexData* finalVertData = this->meshCache->getLiteVerticesForMeshBuffer(0, vIndex);
+        vertexDataHeavy* vertex = this->mesh->getHeavyVerticesForMeshBuffer(0, vIndex);
         
         finalVertData->vertPosition = vertex->vertPosition;
         finalVertData->vertNormal = vertex->vertNormal;

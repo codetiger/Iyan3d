@@ -1664,8 +1664,6 @@
 		25F0C26B1C2E931700C8EC85 /* SGSceneUpdater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C2691C2E931700C8EC85 /* SGSceneUpdater.cpp */; };
 		25F0C26E1C2EB27800C8EC85 /* SGSceneWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C26D1C2EB27800C8EC85 /* SGSceneWriter.cpp */; };
 		25F0C26F1C2EB27800C8EC85 /* SGSceneWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F0C26D1C2EB27800C8EC85 /* SGSceneWriter.cpp */; };
-		25F51F7D1C3291930021D3F5 /* SGCloudRenderingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */; };
-		25F51F7E1C3291940021D3F5 /* SGCloudRenderingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */; };
 		25F748C51D08085400FB0AFD /* fb_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748B91D08085400FB0AFD /* fb_Pad.png */; };
 		25F748C61D08085400FB0AFD /* fb_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748B91D08085400FB0AFD /* fb_Pad.png */; };
 		25F748C71D08085400FB0AFD /* fb_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BA1D08085400FB0AFD /* fb_Pad@2x.png */; };
@@ -3332,7 +3330,6 @@
 		256F6B791BF6246200154622 /* KeyHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyHelper.cpp; sourceTree = "<group>"; };
 		256F6B7A1BF6246200154622 /* MathHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathHelper.cpp; sourceTree = "<group>"; };
 		256F6B7B1BF6246200154622 /* SGAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGAction.cpp; sourceTree = "<group>"; };
-		256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGCloudRenderingHelper.cpp; sourceTree = "<group>"; };
 		256F6B801BF6246300154622 /* SGJoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGJoint.cpp; sourceTree = "<group>"; };
 		256F6B811BF6246300154622 /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGNode.cpp; sourceTree = "<group>"; };
 		256F6B841BF6246300154622 /* ShaderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderManager.cpp; sourceTree = "<group>"; };
@@ -5492,7 +5489,6 @@
 				256F6B791BF6246200154622 /* KeyHelper.cpp */,
 				256F6B7A1BF6246200154622 /* MathHelper.cpp */,
 				256F6B7B1BF6246200154622 /* SGAction.cpp */,
-				256F6B7F1BF6246200154622 /* SGCloudRenderingHelper.cpp */,
 				256F6B801BF6246300154622 /* SGJoint.cpp */,
 				251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */,
 				251BF4711C2C1D4A00A5D41D /* SceneHelper.cpp */,
@@ -9970,7 +9966,6 @@
 				256F6B9D1BF6246300154622 /* KeyHelper.cpp in Sources */,
 				25DE11111CAA8D6D0076F669 /* btMultiBodyJointLimitConstraint.cpp in Sources */,
 				25DE11071CAA8D6D0076F669 /* btSimpleDynamicsWorld.cpp in Sources */,
-				25F51F7D1C3291930021D3F5 /* SGCloudRenderingHelper.cpp in Sources */,
 				25DE10931CAA8D6D0076F669 /* btPolyhedralConvexShape.cpp in Sources */,
 				25DE107D1CAA8D6D0076F669 /* btConvexPointCloudShape.cpp in Sources */,
 				254A4B2C1D34C93700D23D6D /* SliderPropCell.mm in Sources */,
@@ -10335,7 +10330,6 @@
 				25F0C26F1C2EB27800C8EC85 /* SGSceneWriter.cpp in Sources */,
 				256F6EB51BF624FB00154622 /* DownloadTask.mm in Sources */,
 				25DE10341CAA8D6D0076F669 /* btActivatingCollisionAlgorithm.cpp in Sources */,
-				25F51F7E1C3291940021D3F5 /* SGCloudRenderingHelper.cpp in Sources */,
 				25DE10EE1CAA8D6D0076F669 /* btGeneric6DofSpring2Constraint.cpp in Sources */,
 				25DE11401CAA91310076F669 /* btSoftBodyConcaveCollisionAlgorithm.cpp in Sources */,
 				25C05D401D536BB4008F06AA /* MeshRW.cpp in Sources */,

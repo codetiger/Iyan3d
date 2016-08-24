@@ -208,6 +208,7 @@ bool SGSceneLoader::loadSceneData(std::string *filePath, JNIEnv *env, jclass typ
     inputSGBFile.close();
     return true;
 }
+
 bool SGSceneLoader::readScene(ifstream *filePointer, JNIEnv *env, jclass type,jobject object)
 {
     if(!currentScene || !smgr)
@@ -569,7 +570,8 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
         currentScene->actionMan->currentAction++;
 }
 
-void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType){
+void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType)
+{
     
     if(actionType == UNDO_ACTION){
         meshObject->oriTextureName = ConversionHelper::getStringForWString(currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].actionSpecificStrings[1]);

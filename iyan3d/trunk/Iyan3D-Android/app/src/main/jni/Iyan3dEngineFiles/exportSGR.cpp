@@ -23,12 +23,12 @@ bool exportSGR::writeSGR(std::string filePath,shared_ptr<AnimatedMeshNode> node)
     
     SkinMesh *skinnedMesh = (SkinMesh*)node->getMesh();
     Mesh *mesh = node->getMesh();
-    unsigned int vertexCount = mesh->getVerticesCount();
+    unsigned int vertexCount = mesh->getVerticesCountInMeshBuffer(0);
     u16 versionIdentifier = 0; // 0 for HighPoly models
     FileHelper::writeShort(&filePointer, versionIdentifier);// write VertexCount
     FileHelper::writeInt(&filePointer, vertexCount);// write VertexCount
     for(int i = 0; i < vertexCount; i++){
-        vertexData *vertex = mesh->getLiteVertexByIndex(i);
+        vertexData *vertex = mesh->getLiteVerticesForMeshBuffer(0, i);
         Vector3 vertexPosition = AutoRigHelper::getVertexGlobalPosition(vertex->vertPosition,node);
         // write vertex position,normal,UV Coords
         FileHelper::writeFloat(&filePointer,vertexPosition.x);
@@ -42,39 +42,38 @@ bool exportSGR::writeSGR(std::string filePath,shared_ptr<AnimatedMeshNode> node)
     }
     
     
-    unsigned int indicesCount = mesh->getTotalIndicesCount();
-    FileHelper::writeInt(&filePointer,indicesCount); // write IndexCount
+    unsigned int indicesCount = mesh->getIndicesCount(0);
+    FileHelper::writeInt(&filePointer, indicesCount); // write IndexCount
     
-    u32 *indicesArr = mesh->getHighPolyIndicesArray();
-    for(int k = 0; k < indicesCount; k++){
+    unsigned short *indicesArr = mesh->getIndicesArray(0);
+    for(int k = 0; k < indicesCount; k++) {
         unsigned int index = indicesArr[k];
-        FileHelper::writeInt(&filePointer,index);	// write Vertex Index
+        FileHelper::writeInt(&filePointer, index);	// write Vertex Index
     }
     
 	unsigned short boneCount = node->getJointCount();
-    FileHelper::writeShort(&filePointer,boneCount);	// write boneCount
+    FileHelper::writeShort(&filePointer, boneCount);	// write boneCount
     
-	for(int j = 0; j < boneCount; j++){
+	for(int j = 0; j < boneCount; j++) {
 		if(j == 0)
-			FileHelper::writeShort(&filePointer,-1); // write -1 for pivot bone
+			FileHelper::writeShort(&filePointer, -1); // write -1 for pivot bone
 		else if(j == 1)
-			FileHelper::writeShort(&filePointer,0); // write 0 for hip bone
+			FileHelper::writeShort(&filePointer, 0); // write 0 for hip bone
 		else
-			FileHelper::writeShort(&filePointer,node->getJointNode(j)->getParent()->getID()); // write bone ParentId
+			FileHelper::writeShort(&filePointer, node->getJointNode(j)->getParent()->getID()); // write bone ParentId
 		
 		Mat4 jointMatrix = (*skinnedMesh->joints)[j]->LocalAnimatedMatrix;
 		for(int k = 0;k < 16;k++) // write jointMatrix
 			FileHelper::writeFloat(&filePointer, jointMatrix[k]);
 		
 		unsigned short boneWeightCount = (*skinnedMesh->joints)[j]->PaintedVertices->size();
-		//printf("\n weight %d %d %d",j,node->getJointNode(j)->getParent()->getID(),boneWeightCount);
-		FileHelper::writeShort(&filePointer,boneWeightCount); // write boneWeightCount
+		FileHelper::writeShort(&filePointer, boneWeightCount); // write boneWeightCount
 		
-		for(int w = 0;w < boneWeightCount;w++){	// write vertexIndex and strength
+		for(int w = 0; w < boneWeightCount; w++) {	// write vertexIndex and strength
 			unsigned int vertexIndex = (*(*skinnedMesh->joints)[j]->PaintedVertices)[w]->vertexId;
 			unsigned short strength = (*(*skinnedMesh->joints)[j]->PaintedVertices)[w]->weight * 255.0;
-			FileHelper::writeInt(&filePointer,vertexIndex);
-			FileHelper::writeShort(&filePointer,strength);
+			FileHelper::writeInt(&filePointer, vertexIndex);
+			FileHelper::writeShort(&filePointer, strength);
 		}
 	}
     //node.reset();
@@ -87,12 +86,12 @@ bool exportSGR::createSGR(std::string filePath,shared_ptr<MeshNode> node, std::m
     if(!node || node->getMesh() == NULL)
         return false;
 	Mesh *mesh = node->getMesh();
-	unsigned int vertexCount = mesh->getVerticesCount();
+	unsigned int vertexCount = mesh->getVerticesCountInMeshBuffer(0);
     u16 versionIdentifier = 1; // 0 for HighPoly models, 1 For writing envelope radius
     FileHelper::writeShort(&filePointer, versionIdentifier);// write VertexCount
 	FileHelper::writeInt(&filePointer, vertexCount);// write VertexCount
 	for(int i = 0; i < vertexCount; i++){
-        vertexData *vertex = mesh->getLiteVertexByIndex(i);
+        vertexData *vertex = mesh->getLiteVerticesForMeshBuffer(0, i);
         Vector3 vertexPosition = AutoRigHelper::getVertexGlobalPosition(vertex->vertPosition,node);
         // write vertex position,normal,UV Coords
 		FileHelper::writeFloat(&filePointer,vertexPosition.x);
@@ -104,10 +103,10 @@ bool exportSGR::createSGR(std::string filePath,shared_ptr<MeshNode> node, std::m
 		FileHelper::writeFloat(&filePointer,vertex->texCoord1.x);
 		FileHelper::writeFloat(&filePointer,1 - vertex->texCoord1.y);
 	}
-    unsigned int indicesCount = mesh->getTotalIndicesCount();
+    unsigned int indicesCount = mesh->getIndicesCount(0);
 	FileHelper::writeInt(&filePointer,indicesCount); // write IndexCount
 	
-    u32 *indicesArr = mesh->getHighPolyIndicesArray();
+    unsigned short *indicesArr = mesh->getIndicesArray(0);
     for(int k = 0; k < indicesCount; k++){
         unsigned int index = indicesArr[k];
 		FileHelper::writeInt(&filePointer,index);	// write Vertex Index

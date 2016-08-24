@@ -198,7 +198,6 @@ public:
     MIRROR_SWITCH_STATE getMirrorState();
     void clearSelections();
     Vector4 getCameraPreviewLayout();
-    bool generateSGFDFile(int frame);
     void setLightingOn();
     void setLightingOff();
     void popLightProps();

@@ -24,7 +24,7 @@ SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis)
 
 void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float radius)
 {
-    int prevVertexCount = m->getVerticesCount();
+    int prevVertexCount = m->getVerticesCountInMeshBuffer(0);
     double theta = 0.0;
     
     for(int i = 0; i < noOfVertices + 1; i++) {
@@ -48,6 +48,7 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
     }
     
     m->setOptimization(false, false);
+    m->Commit();
 }
 
 SGCircleNode::~SGCircleNode()

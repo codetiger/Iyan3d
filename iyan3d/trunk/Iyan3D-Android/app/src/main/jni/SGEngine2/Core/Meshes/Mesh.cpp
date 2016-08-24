@@ -592,10 +592,12 @@ vector<vertexDataHeavy> Mesh::getTotalHeavyVerticesArray()
 
 unsigned int Mesh::getVerticesCountInMeshBuffer(int index)
 {
-    if(meshType == MESH_TYPE_HEAVY)
+    if(meshType == MESH_TYPE_HEAVY && meshBufferVerticesDataHeavy.size())
         return (unsigned int)meshBufferVerticesDataHeavy[index].size();
-    else
+    else if(meshBufferVerticesData.size())
         return (unsigned int)meshBufferVerticesData[index].size();
+    
+    return 0;
 }
 
 unsigned int Mesh::getVerticesCount()

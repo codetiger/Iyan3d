@@ -424,9 +424,6 @@ SkinMesh* TextMesh3d::get3DTextAnimatedMesh(wstring text, u16 beizerSteps, float
     FT_Done_Face(face);
     FT_Done_FreeType(library);
     
-    if(mesh->getVerticesCount() <= 0)
-        return NULL;
-
     mesh->flipMeshHorizontal();
     mesh->setOptimization(true, true, true, true, true, 0.7);
 
@@ -466,9 +463,6 @@ Mesh* TextMesh3d::get3DTextMesh(wstring text, u16 beizerSteps, float extrude, in
     FT_Done_Face(face);
     FT_Done_FreeType(library);
     
-    if(mesh->getVerticesCount() <= 0)
-        return NULL;
-
     mesh->flipMeshHorizontal();
     mesh->moveVertices(Vector3(offset, -height, extrude) / 2.0);
     mesh->setOptimization(true, true, true, true, true, 0.7);

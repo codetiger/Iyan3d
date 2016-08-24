@@ -205,8 +205,8 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
         sgNode->node->memtype = NODE_GPUMEM_TYPE_DYNAMIC;
     }
 
-    for (int i = 0; i < n->meshCache->getVerticesCount(); i++) {
-        vertexData *v = n->meshCache->getLiteVertexByIndex(i);
+    for (int i = 0; i < n->meshCache->getVerticesCountInMeshBuffer(0); i++) {
+        vertexData *v = n->meshCache->getLiteVerticesForMeshBuffer(0, i);
         int index = n->MeshMap.find(i)->second;
         if(n->m_vertices.find(index) != n->m_vertices.end()) {
             btSoftBody::Node* node = n->m_vertices.find(index)->second;
@@ -373,7 +373,7 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
     unsigned short *indicesArray = mesh->getIndicesArray(0);
    
     int vtxCount = mesh->getVerticesCountInMeshBuffer(0);
-    vertexData *vertexArray = mesh->getLiteVertexByIndex(0);
+    vertexData *vertexArray = mesh->getLiteVerticesForMeshBuffer(0, 0);
     
     for( int i = 0; i < indicesCount; i++) {
         int iIndex = indicesArray[i];

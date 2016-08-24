@@ -3,7 +3,7 @@
 vector< set<int> > adjacentVertices;
 std::map<int, Mat4> envelopeMatrices;
 
-void initAdjacencyMatrix(int verticesCount, int indicesCount, u32* indices) {
+void initAdjacencyMatrix(int verticesCount, int indicesCount, unsigned short* indices) {
     adjacentVertices.clear();
     set<int> emptySet;
     emptySet.clear();
@@ -138,13 +138,13 @@ void AutoRigHelper::updateOBJVertexColors(shared_ptr<MeshNode> objNode, std::map
     
     
     initEnvelopeMatrices(rigKeys);
-    int verticesCount = objNode->getMesh()->getVerticesCount();
-    for(int i = 0; i < verticesCount; i++){
-        vertexData *vertex = objNode->getMesh()->getLiteVertexByIndex(i);
+    int verticesCount = objNode->getMesh()->getVerticesCountInMeshBuffer(0);
+    for(int i = 0; i < verticesCount; i++) {
+        vertexData *vertex = objNode->getMesh()->getLiteVerticesForMeshBuffer(0, i);
         vertex->vertColor = Vector4(255/255.0,0,0,0.0);
     }
     for(int i = 0; i < verticesCount; i++){
-        vertexData *vertex = objNode->getMesh()->getLiteVertexByIndex(i);
+        vertexData *vertex = objNode->getMesh()->getLiteVerticesForMeshBuffer(0, i);
         for(std::map<int, SGNode *>::iterator it = envelopes.begin(); it!=envelopes.end(); it++)
         {
             if(it->first == selectedJointId || selectedJointId == rigKeys[it->first].parentId){
@@ -195,11 +195,11 @@ void AutoRigHelper::initWeights(shared_ptr<MeshNode> meshSceneNode, std::map<int
     
     initEnvelopeMatrices(rigKeys);
     
-    int verticesCount = mesh->getVerticesCount();
-    vertexData* vertices = (vertexData*)mesh->getLiteVertexByIndex(0);
+    int verticesCount = mesh->getVerticesCountInMeshBuffer(0);
+    vertexData* vertices = (vertexData*)mesh->getLiteVerticesForMeshBuffer(0, 0);
     
     for(int j=0; j < verticesCount; j++){
-        vertexData* vertex = mesh->getLiteVertexByIndex(j);
+        vertexData* vertex = mesh->getLiteVerticesForMeshBuffer(0, j);
         float totalWeight = 0.0;
         //printf("\n vertexPositionBefore %f %f %f ",vertex.Pos.x,vertex.Pos.y,vertex.Pos.z);
         Vector3 vertexPosition = getVertexGlobalPosition(vertex->vertPosition,meshSceneNode);
@@ -227,8 +227,8 @@ void AutoRigHelper::initWeights(shared_ptr<MeshNode> meshSceneNode, std::map<int
         if(influencedJoints[j].size() != 0)
             isWeighted[j]=true;
     }
-    int indicesCount =  mesh->getTotalIndicesCount();
-    u32* indices =  mesh->getHighPolyIndicesArray();
+    int indicesCount =  mesh->getIndicesCount(0);
+    unsigned short* indices =  mesh->getIndicesArray(0);
     initAdjacencyMatrix(verticesCount, indicesCount, indices);
     initUnmatchedWeights(verticesCount,isWeighted, influencedVertices, influencedJoints);
     int weightedCount = (int)isWeighted.size();
