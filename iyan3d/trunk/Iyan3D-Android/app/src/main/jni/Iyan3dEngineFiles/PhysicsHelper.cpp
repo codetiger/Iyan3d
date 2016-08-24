@@ -369,15 +369,11 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
 
     Mesh* mesh = n->getMesh();
 
-    int indicesCount = mesh->getTotalIndicesCount();
-    unsigned int indicesArray[indicesCount];
-    vector< unsigned int > inds = mesh->getTotalIndicesArray();
-    std::copy(inds.begin(), inds.end(), indicesArray);
-    
-    int vtxCount = mesh->getVerticesCount();
-    vertexData *vertexArray = new vertexData[vtxCount];
-    vector< vertexData > vtx = mesh->getTotalLiteVerticesArray();
-    std::copy(vtx.begin(), vtx.end(), vertexArray);
+    int indicesCount = mesh->getIndicesCount(0);
+    unsigned short *indicesArray = mesh->getIndicesArray(0);
+   
+    int vtxCount = mesh->getVerticesCountInMeshBuffer(0);
+    vertexData *vertexArray = mesh->getLiteVertexByIndex(0);
     
     for( int i = 0; i < indicesCount; i++) {
         int iIndex = indicesArray[i];
@@ -474,7 +470,7 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
     pr->isJoint = false;
     pr->jointIndex = -1;
 
-    sBody->setUserPointer((void*)sgNode);
+    sBody->setUserPointer((void*)pr);
     
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
     
