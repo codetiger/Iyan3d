@@ -27,6 +27,9 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
     int prevVertexCount = m->getVerticesCountInMeshBuffer(0);
     double theta = 0.0;
     
+    vector< vertexData > mbvd;
+    vector< unsigned short > mbi;
+    
     for(int i = 0; i < noOfVertices + 1; i++) {
         vertexData vert;
         Vector3 direction;
@@ -39,23 +42,20 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
             direction = Vector3(theta, 0.0, 0.0).rotationToDirection().normalize();
         
         vert.vertPosition = (direction * Vector3(radius));
-        m->addVertex(&vert);
+        mbvd.push_back(vert);
         theta += 360.0 / noOfVertices;
     }
 
     for(int i = 0; i < noOfVertices + 1; i++) {
-        m->addToIndicesArray(prevVertexCount + i);
+        mbi.push_back(prevVertexCount + i);
     }
-    
+    m->addMeshBuffer(mbvd, mbi, 0);
     m->setOptimization(false, false);
     m->Commit();
 }
 
 SGCircleNode::~SGCircleNode()
-{
-    if(this->mesh)
-        delete this->mesh;
-    
+{    
 }
 
 void SGCircleNode::update()
