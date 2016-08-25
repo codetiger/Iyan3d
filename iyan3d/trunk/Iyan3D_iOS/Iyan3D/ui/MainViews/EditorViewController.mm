@@ -1413,25 +1413,19 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-//    if(editorScene->nodes.size() == 2) {
-//        SceneImporter *loader = new SceneImporter();
-//        loader->importNodesFromFile(editorScene, "dsfds", FileHelper::getDocumentsDirectory() + "cylinder.dae", FileHelper::getDocumentsDirectory(), false, Vector3(0), false);
-//        [self reloadSceneObjects];
-//    } else {
-        if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
-            [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
-        [_popUpVc.view setClipsToBounds:YES];
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*8) : CGSizeMake(205.0, 39*8);
-        self.popoverController.delegate =self;
-        self.popUpVc.delegate=self;
-        CGRect rect = _importBtn.frame;
-        rect = [self.view convertRect:rect fromView:_importBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
-//    }
+    if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
+        [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
+    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+    _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
+    [_popUpVc.view setClipsToBounds:YES];
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*8) : CGSizeMake(205.0, 39*8);
+    self.popoverController.delegate =self;
+    self.popUpVc.delegate=self;
+    CGRect rect = _importBtn.frame;
+    rect = [self.view convertRect:rect fromView:_importBtn.superview];
+    [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
 }
 
 - (IBAction)infoBtnAction:(id)sender

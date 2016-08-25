@@ -212,7 +212,6 @@
         if (assetItem == nil)
             return;
         selectedAsset = assetItem.assetId;
-        NSLog(@"Selected Asset %d " , assetItem.assetId);
         [cache checkDownloadedAsset:assetItem.assetId];
         [self downloadAsset:assetItem ForActivity:LOAD_NODE isTempAsset:true];
     }

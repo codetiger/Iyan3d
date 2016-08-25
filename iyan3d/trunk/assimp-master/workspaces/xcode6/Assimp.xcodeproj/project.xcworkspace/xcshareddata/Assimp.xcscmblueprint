@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "19668fbc-42bf-4728-acef-d3afb4f12ffe",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "19668fbc-42bf-4728-acef-d3afb4f12ffe" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "19668fbc-42bf-4728-acef-d3afb4f12ffe" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DEE94C2C-32B7-4F52-9E3B-EDF4389A0C78",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "19668fbc-42bf-4728-acef-d3afb4f12ffe" : "iyan3d5\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Assimp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iyan3d\/trunk\/assimp-master\/workspaces\/xcode6\/Assimp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/192.168.1.5\/iyan3d5.0",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "19668fbc-42bf-4728-acef-d3afb4f12ffe"
+    }
+  ]
+}

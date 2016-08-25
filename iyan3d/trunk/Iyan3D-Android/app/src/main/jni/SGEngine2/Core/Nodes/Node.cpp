@@ -106,7 +106,7 @@ bool Node::isMetalSupported()
 
 void Node::setTexture(Texture *texture, int textureIndex)
 {
-    if(textureIndex > NODE_TEXTURE_TYPE_NORMALMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
+    if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
         return;
 
     textures[textureIndex] = texture;
@@ -239,7 +239,7 @@ void Node::FlagTransformationToChildren()
 
 Texture* Node::getTextureByIndex(u16 textureIndex)
 {
-    if(textureIndex > NODE_TEXTURE_TYPE_NORMALMAP|| textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
+    if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
         return NULL;
 
     return textures[textureIndex];
