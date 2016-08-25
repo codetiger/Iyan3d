@@ -1276,7 +1276,7 @@ void SGNode::legacyReadData(ifstream *filePointer, int sgbVersion, int &origInde
 void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
 {
     
-    FileHelper::writeInt(filePointer, -1); // Asset Id in Previous version
+    FileHelper::writeInt(filePointer, (type == NODE_ADDITIONAL_LIGHT) ? assetId : -1); // Asset Id in Previous version
     FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeFloat(filePointer, IsPropertyExists(HAS_PHYSICS) ? getProperty(HAS_PHYSICS).value.x : -1.0);

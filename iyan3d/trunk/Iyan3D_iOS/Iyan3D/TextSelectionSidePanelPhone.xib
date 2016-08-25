@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
@@ -12,7 +11,6 @@
                 <outlet property="boneSwitch" destination="tHe-ur-yd2" id="q0t-pR-EaA"/>
                 <outlet property="cancelBtn" destination="Mev-Ov-cY1" id="TD2-yc-Zzz"/>
                 <outlet property="collectionView" destination="eIk-mP-vhY" id="hwb-au-jMN"/>
-                <outlet property="colorWheelbtn" destination="fyl-eu-bU3" id="GQu-4J-yw7"/>
                 <outlet property="dummyLeft" destination="NZ2-sC-xGy" id="NU9-y4-81f"/>
                 <outlet property="dummyRight" destination="NOX-e7-aB3" id="eXU-97-M7Q"/>
                 <outlet property="fontTab" destination="En3-oy-ObV" id="o97-q1-BUm"/>
@@ -159,22 +157,6 @@
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fyl-eu-bU3">
-                    <rect key="frame" x="178" y="118" width="24" height="24"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Choose color for 3D text." identifier="3"/>
-                    <state key="normal" image="color_IPhone.png"/>
-                    <connections>
-                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="rjE-Cn-nGw"/>
-                    </connections>
-                </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AxF-KM-Dek">
-                    <rect key="frame" x="144" y="120" width="40" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
             <accessibility key="accessibilityConfiguration" hint="Choose a font to preview 3D text." identifier="3"/>
@@ -186,6 +168,5 @@
     <resources>
         <image name="Bevel_IPhone.png" width="18" height="17"/>
         <image name="No-Bevel_IPhone.png" width="17" height="17"/>
-        <image name="color_IPhone.png" width="16" height="16"/>
     </resources>
 </document>

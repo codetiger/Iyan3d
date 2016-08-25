@@ -20,6 +20,7 @@
 
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode;
 - (void) importObjWithIndexPath:(int) indexPath TextureName:(NSString*) textureFileName MeshColor:(Vector3) color HasTexture:(BOOL) hasTexture IsTempNode:(BOOL) isTempNode;
+- (BOOL) addTempNodeToScene;
 - (void) removeTempNodeFromScene;
 - (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp;
 - (void) removeTempTextureAndVertex;

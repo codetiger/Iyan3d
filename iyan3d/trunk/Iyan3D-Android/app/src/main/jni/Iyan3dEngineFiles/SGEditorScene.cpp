@@ -784,6 +784,19 @@ bool SGEditorScene::allNodesClonable()
     return status;
 }
 
+bool SGEditorScene::addTempNodeToScene()
+{
+    for(int i = 0; i < nodes.size(); i++) {
+        if(nodes[i]->isTempNode) {
+            nodes[i]->isTempNode = false;
+            return true;
+            break;
+        }
+    }
+    
+    return false;
+}
+
 Vector3 SGEditorScene::getSelectedNodeScale()
 {
     if(selectedNodeIds.size() > 0 && getParentNode())

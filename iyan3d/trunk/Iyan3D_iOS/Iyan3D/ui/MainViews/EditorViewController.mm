@@ -609,6 +609,15 @@ BOOL missingAlertShown;
     _sceneMirrorSwitch.frame = mirrorSwitchFrame;
 }
 
+- (BOOL) addTempNodeToScene
+{
+    if(!(editorScene && editorScene->addTempNodeToScene()))
+       return NO;
+    [self reloadSceneObjects];
+    [self showOrHideProgress:HIDE_PROGRESS];
+    return YES;
+}
+
 - (void) removeTempNodeFromScene
 {
     if(editorScene && editorScene->loader)
@@ -903,7 +912,6 @@ BOOL missingAlertShown;
 
 - (void)collectionView:(UICollectionView*)collectionView didSelectItemAtIndexPath:(NSIndexPath*)indexPath
 {
-    
     [self NormalHighLight];
     editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = (int)indexPath.row;

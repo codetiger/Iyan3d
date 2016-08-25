@@ -60,7 +60,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             int origId = 0;
             Mesh* mesh = sgNode->readData(filePointer, origId);
 
-            if(sgNode->getType() == NODE_CAMERA || sgNode->getType() == NODE_LIGHT) {
+            if(sgNode->getType() == NODE_CAMERA || sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
                 loadNode(sgNode, OPEN_SAVED_FILE);
                 sgNode->setPropertiesOfNode();
                 if(sgNode->getType() == NODE_CAMERA) {

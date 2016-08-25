@@ -380,7 +380,9 @@
         isCanceled = true;
         Vector4 color = Vector4(red,green,blue,1.0);
         float bevelValue = _bevelSlider.value;
-        [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:DEFAULT_FONT_SIZE BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
+        
+        if(![self.textSelectionDelegate addTempNodeToScene])
+            [_textSelectionDelegate load3DTex:(withRig) ? ASSET_TEXT_RIG : ASSET_TEXT AssetId:0 TextureName:@"-1" TypedText:_inputText.text FontSize:DEFAULT_FONT_SIZE BevelValue:bevelValue TextColor:color FontPath:fontFileName isTempNode:NO];
         [_textSelectionDelegate removeTempNodeFromScene];
         [_textSelectionDelegate showOrHideLeftView:NO withView:nil];
         [self.view removeFromSuperview];

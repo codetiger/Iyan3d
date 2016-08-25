@@ -142,7 +142,8 @@
      //addToScenePressed = YES;
     [self.assetSelectionDelegate showOrHideProgress:1];
     [self cancelOperations:downloadQueue];
-    [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
+    if(![self.assetSelectionDelegate addTempNodeToScene])
+        [self downloadAsset:[cache GetAsset:selectedAsset] ForActivity:LOAD_NODE isTempAsset:false];
     [self.assetSelectionDelegate showOrHideLeftView:NO withView:nil];
     [self.view removeFromSuperview];
     [self.assetSelectionDelegate deallocSubViews];

@@ -21,6 +21,7 @@
 - (void) removeTempNodeFromScene;
 - (void) showOrHideProgress:(BOOL) value;
 - (void)deallocSubViews;
+- (BOOL) addTempNodeToScene;
 
 @end
 

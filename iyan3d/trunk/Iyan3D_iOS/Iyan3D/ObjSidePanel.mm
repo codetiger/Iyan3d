@@ -57,9 +57,9 @@
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
     filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil]]];
 
-    self.importBtn.layer.cornerRadius=8.0;
-    self.addBtn.layer.cornerRadius=8.0;
-    self.cancelBtn.layer.cornerRadius=8.0;
+    self.importBtn.layer.cornerRadius = 8.0;
+    self.addBtn.layer.cornerRadius = 8.0;
+    self.cancelBtn.layer.cornerRadius = 8.0;
     [_colorWheelBtn setHidden:YES];
     indexPathOfOBJ =  (viewType == IMPORT_OBJFILE) ? -1 : 0;
     if(viewType != IMPORT_OBJFILE){
@@ -200,10 +200,7 @@
 
     if(_addBtn.tag == OBJ) {
         indexPathOfOBJ = (int)indexPath.row;
-        if(indexPathOfOBJ >= [basicShapes count])
-            [self.addBtn setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
-        else
-            [self.addBtn setTitle:NSLocalizedString(@"NEXT", nil) forState:UIControlStateNormal];
+        [self.addBtn setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
     } else {
         if(indexPath.row == 0) {
             haveTexture = NO;
@@ -257,7 +254,20 @@
 {
     if(indexPathOfOBJ == -1)
         return;
-    if(self.addBtn.tag == OBJ && indexPathOfOBJ < [basicShapes count]){
+    
+    if(sender != nil) {
+        
+        if(![self.objSlideDelegate addTempNodeToScene]) {
+            if(viewType == IMPORT_OBJFILE) {
+                [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:NO];
+            } else
+                [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+        }
+        
+        [self.view removeFromSuperview];
+        [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
+        [self.objSlideDelegate deallocSubViews];
+    } else if (self.addBtn.tag == OBJ) {
         [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
         filesList=nil;
@@ -272,18 +282,7 @@
         [self.importFilesCollectionView reloadData];
         [_colorWheelBtn setHidden:NO];
     }
-   else if(self.addBtn.tag == Texture || indexPathOfOBJ >= [basicShapes count]){
-       if(viewType == IMPORT_OBJFILE) {
-           //[self.objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
-           [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:NO];
-       } else
-           [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
 
-       [self.view removeFromSuperview];
-        [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
-       [self.objSlideDelegate deallocSubViews];
-    }
-    
     [self setToolTips];
     [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
 

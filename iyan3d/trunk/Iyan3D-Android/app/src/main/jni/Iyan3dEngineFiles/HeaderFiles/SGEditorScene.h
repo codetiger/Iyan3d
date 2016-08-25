@@ -182,6 +182,7 @@ public:
     bool allObjectsScalable();
     bool allNodesRemovable();
     bool allNodesClonable();
+    bool addTempNodeToScene();
     Vector3 getSelectedNodeScale();
     bool checkNodeSize();
     void saveThumbnail(char* imagePath);
