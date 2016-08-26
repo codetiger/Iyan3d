@@ -56,9 +56,6 @@ corresponding preprocessor flag to selectively disable formats.
 #ifndef ASSIMP_BUILD_NO_OBJ_IMPORTER
 #   include "ObjFileImporter.h"
 #endif
-#ifndef ASSIMP_BUILD_NO_BVH_IMPORTER
-#   include "BVHLoader.h"
-#endif
 #ifndef ASSIMP_BUILD_NO_COLLADA_IMPORTER
 #   include "ColladaLoader.h"
 #endif
@@ -70,6 +67,9 @@ corresponding preprocessor flag to selectively disable formats.
 #endif
 #ifndef ASSIMP_BUILD_NO_SGM_IMPORTER
 #   include "SGMLoader.h"
+#endif
+#ifndef ASSIMP_BUILD_NO_TEXT3D_IMPORTER
+#   include "Text3DLoader.h"
 #endif
 
 namespace Assimp {
@@ -88,12 +88,6 @@ void GetImporterInstanceList(std::vector< BaseImporter* >& out)
 #if (!defined ASSIMP_BUILD_NO_3DS_IMPORTER)
     out.push_back( new Discreet3DSImporter());
 #endif
-#if (!defined ASSIMP_BUILD_NO_BVH_IMPORTER)
-    out.push_back( new BVHLoader());
-#endif
-#if (!defined ASSIMP_BUILD_NO_B3D_IMPORTER)
-    out.push_back( new B3DImporter());
-#endif
 #if (!defined ASSIMP_BUILD_NO_COLLADA_IMPORTER)
     out.push_back( new ColladaLoader());
 #endif
@@ -105,6 +99,9 @@ void GetImporterInstanceList(std::vector< BaseImporter* >& out)
 #endif
 #if ( !defined ASSIMP_BUILD_NO_SGM_IMPORTER )
     out.push_back( new SGMImporter() );
+#endif
+#if ( !defined ASSIMP_BUILD_NO_TEXT3D_IMPORTER )
+    out.push_back( new Text3DImporter() );
 #endif
 }
 

@@ -72,11 +72,42 @@ Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
     return mtrix;
 }
 
+void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fontPath, int bezierSegments, float extrude, float bevelRadius, int bevelSegments, bool hasBones, bool isTempNode)
+{
+    sgScene->freezeRendering = true;
+    
+    Assimp::Importer *importer = new Assimp::Importer();
+    importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
+    importer->SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 65);
+    
+    importer->SetPropertyWString("TEXT3D_TEXT", text);
+    importer->SetPropertyBool("TEXT3D_HASBONES", hasBones);
+    importer->SetPropertyString("TEXT3D_FONTPATH", fontPath);
+    importer->SetPropertyInteger("TEXT3D_BEZIERSTEPS", bezierSegments);
+    importer->SetPropertyFloat("TEXT3D_EXTRUDE", extrude);
+    importer->SetPropertyFloat("TEXT3D_BEVELRADIUS", bevelRadius);
+    importer->SetPropertyInteger("TEXT3D_BEVELSEGMENTS", bevelSegments);
+
+    unsigned int pFlags = aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_SortByPType | aiProcess_SplitLargeMeshes | aiProcess_GenSmoothNormals;
+    scene = importer->ReadFile(fontPath, pFlags);
+    
+    if(!scene) {
+        printf("Error in Loading: %s\n", importer->GetErrorString());
+        return;
+    }
+    
+    loadNodes(sgScene, fontPath, isTempNode, "");
+    delete importer;
+    
+    sgScene->freezeRendering = false;
+    
+}
+
 void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
     sgScene->freezeRendering = true;
     string ext = getFileExtention(filePath);
-
+    
     unsigned int pFlags = aiProcessPreset_TargetRealtime_Fast | aiProcess_SplitLargeMeshes;
     if(ext != "sgm" && ext != "sgr")
         pFlags = pFlags | aiProcess_ConvertToLeftHanded;
@@ -96,7 +127,6 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
     }
 
     sgScene->freezeRendering = false;
-
 }
 
 void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode, Mesh* lMesh)

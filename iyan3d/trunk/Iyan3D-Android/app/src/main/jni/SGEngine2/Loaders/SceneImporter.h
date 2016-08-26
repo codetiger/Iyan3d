@@ -33,6 +33,7 @@ public:
     
     void importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode);
     void importNodeFromMesh(SGEditorScene *sgScene, SGNode* sgNode, Mesh* lMesh);
+    void import3DText(SGEditorScene *sgScene, wstring text, string fontPath, int bezierSegments, float extrude, float bevelRadius, int bevelSegments, bool hasBones, bool isTempNode);
     
 private:
     const aiScene* scene = NULL;

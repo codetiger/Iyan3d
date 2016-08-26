@@ -1421,6 +1421,11 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
+//    SceneImporter *loader = new SceneImporter();
+//    wstring text = L"Hello";
+//    loader->import3DText(editorScene, text, FileHelper::getDocumentsDirectory() + "test.ttf", 4, 10, 0.5, 4, false, false);
+//    [self reloadSceneObjects];
+
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
     BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);

@@ -1039,6 +1039,17 @@ bool Importer::SetPropertyString(const char* szName, const std::string& value)
 
 // ------------------------------------------------------------------------------------------------
 // Set a configuration property
+bool Importer::SetPropertyWString(const char* szName, const std::wstring& value)
+{
+    bool exising;
+    ASSIMP_BEGIN_EXCEPTION_REGION();
+    exising = SetGenericProperty<std::wstring>(pimpl->mWStringProperties, szName, value);
+    ASSIMP_END_EXCEPTION_REGION(bool);
+    return exising;
+}
+
+// ------------------------------------------------------------------------------------------------
+// Set a configuration property
 bool Importer::SetPropertyMatrix(const char* szName, const aiMatrix4x4& value)
 {
     bool exising;
@@ -1070,6 +1081,14 @@ const std::string Importer::GetPropertyString(const char* szName,
     const std::string& iErrorReturn /*= ""*/) const
 {
     return GetGenericProperty<std::string>(pimpl->mStringProperties,szName,iErrorReturn);
+}
+
+// ------------------------------------------------------------------------------------------------
+// Get a configuration property
+const std::wstring Importer::GetPropertyWString(const char* szName,
+                                              const std::wstring& iErrorReturn /*= ""*/) const
+{
+    return GetGenericProperty<std::wstring>(pimpl->mWStringProperties, szName, iErrorReturn);
 }
 
 // ------------------------------------------------------------------------------------------------

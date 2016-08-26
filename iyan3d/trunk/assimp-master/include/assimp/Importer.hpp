@@ -233,6 +233,12 @@ public:
     bool SetPropertyString(const char* szName, const std::string& sValue);
 
     // -------------------------------------------------------------------
+    /** Set a string configuration property.
+     * @see SetPropertyInteger()
+     */
+    bool SetPropertyWString(const char* szName, const std::wstring& sValue);
+
+    // -------------------------------------------------------------------
     /** Set a matrix configuration property.
      * @see SetPropertyInteger()
      */
@@ -280,6 +286,15 @@ public:
      */
     const std::string GetPropertyString(const char* szName,
         const std::string& sErrorReturn = "") const;
+
+    // -------------------------------------------------------------------
+    /** Get a wstring configuration property
+     *
+     *  The return value remains valid until the property is modified.
+     * @see GetPropertyWString()
+     */
+    const std::wstring GetPropertyWString(const char* szName,
+                                        const std::wstring& sErrorReturn = L"") const;
 
     // -------------------------------------------------------------------
     /** Get a matrix configuration property

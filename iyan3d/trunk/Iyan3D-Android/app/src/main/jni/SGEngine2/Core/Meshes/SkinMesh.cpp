@@ -90,6 +90,11 @@ Joint* SkinMesh::addJoint(Joint *parent)
 
 void SkinMesh::finalize()
 {
+    reverse(joints->begin(), joints->end());
+    for(int i = 0; i < joints->size(); i++) {
+        (*joints)[i]->Index = i;
+    }
+    
     for(int CheckingIdx = 0; CheckingIdx < joints->size(); CheckingIdx++) {
         if(!(*joints)[CheckingIdx]->Parent)
             RootJoints->push_back((*joints)[CheckingIdx]);

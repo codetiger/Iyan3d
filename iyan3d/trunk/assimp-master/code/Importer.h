@@ -77,6 +77,7 @@ public:
     typedef std::map<KeyType, int> IntPropertyMap;
     typedef std::map<KeyType, ai_real> FloatPropertyMap;
     typedef std::map<KeyType, std::string> StringPropertyMap;
+    typedef std::map<KeyType, std::wstring> WStringPropertyMap;
     typedef std::map<KeyType, aiMatrix4x4> MatrixPropertyMap;
 
 public:
@@ -109,6 +110,9 @@ public:
 
     /** List of string properties */
     StringPropertyMap mStringProperties;
+
+    /** List of string properties */
+    WStringPropertyMap mWStringProperties;
 
     /** List of Matrix properties */
     MatrixPropertyMap mMatrixProperties;
@@ -148,15 +152,16 @@ public:
         ImporterPimpl::IntPropertyMap     ints;
         ImporterPimpl::FloatPropertyMap   floats;
         ImporterPimpl::StringPropertyMap  strings;
+        ImporterPimpl::WStringPropertyMap wstrings;
         ImporterPimpl::MatrixPropertyMap  matrices;
 
         bool operator == (const PropertyMap& prop) const {
             // fixme: really isocpp? gcc complains
-            return ints == prop.ints && floats == prop.floats && strings == prop.strings && matrices == prop.matrices;
+            return ints == prop.ints && floats == prop.floats && strings == prop.strings && wstrings == prop.wstrings && matrices == prop.matrices;
         }
 
         bool empty () const {
-            return ints.empty() && floats.empty() && strings.empty() && matrices.empty();
+            return ints.empty() && floats.empty() && strings.empty() && wstrings.empty() && matrices.empty();
         }
     };
     //! @endcond
