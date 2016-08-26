@@ -216,7 +216,7 @@ void PhysicsHelper::updateMeshCache(SGNode* sgNode)
         }
     }
     
-    n->meshCache->Commit(true);
+    n->meshCache->Commit();
     sgNode->node->shouldUpdateMesh = true;
 }
 

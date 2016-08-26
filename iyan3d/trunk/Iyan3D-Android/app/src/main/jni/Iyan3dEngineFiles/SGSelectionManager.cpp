@@ -8,6 +8,7 @@
 
 #include "HeaderFiles/SGSelectionManager.h"
 #include "HeaderFiles/SGEditorScene.h"
+#include "SceneImporter.h"
 
 SGEditorScene *selectionScene;
 SGSelectionManager::SGSelectionManager(SceneManager* sceneMngr, void* scene)
@@ -253,7 +254,11 @@ void SGSelectionManager::updateParentPosition()
         prevScale = parentNode->getScale();
         smgr->RemoveNode(parentNode);
     }
-    sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm");
+
+    SceneImporter *importer = new SceneImporter();
+    sphereMesh = importer->loadMeshFromFile(constants::BundlePath + "/sphere.sgm");
+    delete importer;
+    
     parentNode = smgr->createNodeFromMesh(sphereMesh, "setUniforms");
     getParentNode()->setVisible(false);
     getParentNode()->setID(PIVOT_ID);

@@ -4,6 +4,7 @@
 #include "HeaderFiles/SGNode.h"
 #include "HeaderFiles/ShaderManager.h"
 #include "MeshRW.h"
+#include "SceneImporter.h"
 
 #ifdef ANDROID
 #include "../opengl.h"
@@ -91,7 +92,10 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
     switch (objectType){
         case NODE_CAMERA:
         {
-            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/camera.sgm");
+            SceneImporter *importer = new SceneImporter();
+            Mesh *mesh = importer->loadMeshFromFile(constants::BundlePath + "/camera.sgm");
+            delete importer;
+            
             node = smgr->createNodeFromMesh(mesh,"setUniforms");
             node->setPosition(Vector3(RENDER_CAM_INIT_POS_X,RENDER_CAM_INIT_POS_Y,RENDER_CAM_INIT_POS_Z));
             getProperty(LIGHTING).value.x = false;
@@ -113,16 +117,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
             getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
 //            node = loadSGMandOBJ(meshPath, objectType, smgr);
-            break;
-        }
-        case NODE_RIG:
-        {
-            getProperty(TEXTURE).fileName = texturePath;
-            oriTextureName = texturePath;
-            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            node = loadSGR(meshPath, objectType,smgr);
-            isMirrorEnabled = joints.size() == HUMAN_JOINTS_SIZE ? true : false;
             break;
         }
         case NODE_IMAGE:
@@ -173,7 +167,11 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
                 }
             #endif
             Json::Value pData = parseParticlesJson(assetId);
-            Mesh *mesh = CSGRMeshFileLoader::createSGMMesh(meshPath);
+            
+            SceneImporter *importer = new SceneImporter();
+            Mesh *mesh = importer->loadMeshFromFile(meshPath);
+            delete importer;
+
             node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
             setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
@@ -399,43 +397,6 @@ bool SGNode::checkFileExists(std::string fileName)
     }else {
         return false;
     }
-}
-
-shared_ptr<Node> SGNode::loadSGR(std::string meshPath,NODE_TYPE objectType,SceneManager *smgr)
-{
-    if (!checkFileExists(meshPath)) {
-        return shared_ptr<Node>();
-    }
-
-    std::string textureName = getProperty(TEXTURE).fileName;
-    
-    SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(meshPath);
-    setSkinningData((SkinMesh*)mesh);
-    shared_ptr<AnimatedMeshNode> node = smgr->createAnimatedNodeFromMesh(mesh,"setUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
-    bool isSGJointsCreated = (joints.size() > 0) ? true : false;
-    int jointsCount = node->getJointCount();
-        
-    for(int i = 0;i < jointsCount;i++){
-        node->getJointNode(i)->setID(i);
-        if(!isSGJointsCreated){
-            SGJoint *joint = new SGJoint();
-            joint->jointNode = node->getJointNode(i);
-            joints.push_back(joint);
-        }
-    }
-    node->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN),true);
-    
-    if(textureName != "" && checkFileExists(FileHelper::getTexturesDirectory() + textureName + ".png")) {
-        getProperty(IS_VERTEX_COLOR).value.x = false;
-        Texture *nodeTex = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
-        getProperty(TEXTURE).fileName = textureName;
-    } else {
-        getProperty(IS_VERTEX_COLOR).value.x = true;
-        getProperty(TEXTURE).fileName = "";
-    }
-    
-    return node;
 }
 
 void SGNode::setSkinningData(SkinMesh *mesh)

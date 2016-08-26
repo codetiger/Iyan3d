@@ -15,7 +15,8 @@ SceneImporter::SceneImporter()
 
 SceneImporter::~SceneImporter()
 {
-    delete scene;
+    if(scene)
+        delete scene;
 }
 
 string getFileExtention(const string& s)
@@ -98,8 +99,9 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
     
     std::string ext = (hasBones) ? "textrig" : "text";
     
-    loadNodes(sgScene, fontPath, isTempNode, ext, true);
+    loadNodes2Scene(sgScene, fontPath, isTempNode, ext, true);
     delete importer;
+    scene = NULL;
     
     sgScene->freezeRendering = false;
     
@@ -124,8 +126,9 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             return;
         }
         
-        loadNodes(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
+        loadNodes2Scene(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
         delete importer;
+        scene = NULL;
     }
 
     sgScene->freezeRendering = false;
@@ -139,7 +142,6 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
         
         SkinMesh *mesh = (SkinMesh*)lMesh;
         //sceneNode->setSkinningData(mesh);
-        mesh->setOptimization(false, false);
         
         shared_ptr<AnimatedMeshNode> sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh(mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
@@ -163,7 +165,6 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
     } else { //TODO for all other types
         
         Mesh *mesh = lMesh;
-        mesh->setOptimization(false, false);
         shared_ptr<MeshNode> sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_MESH);
         sceneNode->node = sgn;
         sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
@@ -181,7 +182,76 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
 
 }
 
-void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext, bool hasMeshColor, Vector3 mColor)
+Mesh* SceneImporter::loadMeshFromFile(string filePath)
+{
+    unsigned int pFlags = aiProcessPreset_TargetRealtime_Fast | aiProcess_SplitLargeMeshes;
+    
+    Assimp::Importer *importer = new Assimp::Importer();
+    scene = importer->ReadFile(filePath, pFlags);
+    
+    if(!scene) {
+        printf("Error in Loading: %s\n", importer->GetErrorString());
+        return NULL;
+    }
+    
+    Mesh* mesh = new Mesh();
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh *aiM = scene->mMeshes[i];
+        
+        if(aiM) {
+            vector< vertexData > mbvd;
+            vector< unsigned short > mbi;
+            getMeshFrom(mbvd, mbi, aiM);
+            
+            mesh->addMeshBuffer(mbvd, mbi, 0);
+        }
+    }
+
+    delete importer;
+    scene = NULL;
+    return mesh;
+}
+
+SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
+{
+    unsigned int pFlags = aiProcessPreset_TargetRealtime_Fast | aiProcess_SplitLargeMeshes;
+    
+    Assimp::Importer *importer = new Assimp::Importer();
+    importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
+    scene = importer->ReadFile(filePath, pFlags);
+    
+    if(!scene) {
+        printf("Error in Loading: %s\n", importer->GetErrorString());
+        return NULL;
+    }
+    
+    map< string, Joint* > *bones = new map< string, Joint* >();
+
+    SkinMesh* mesh = new SkinMesh();
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh *aiM = scene->mMeshes[i];
+        
+        if(aiM) {
+            vector< vertexDataHeavy > mbvd;
+            vector< unsigned short > mbi;
+            getSkinMeshFrom(mbvd, mbi, aiM);
+            
+            mesh->addMeshBuffer(mbvd, mbi, 0);
+            
+            if(aiM->HasBones())
+                loadBonesFromMesh(aiM, mesh, bones);
+        }
+    }
+    loadBoneHierarcy((SkinMesh*)mesh, bones);
+    mesh->reverseJointsOrder();
+    mesh->finalize();
+
+    delete importer;
+    scene = NULL;
+    return mesh;
+}
+
+void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext, bool hasMeshColor, Vector3 mColor)
 {
     Mesh* mesh;
     map< string, Joint* > *bones = new map< string, Joint* >();
@@ -287,7 +357,6 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
         ((SkinMesh*)mesh)->reverseJointsOrder();
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
-        mesh->setOptimization(false, false);
 
         sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
@@ -309,7 +378,6 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex((sceneNode->getType() == NODE_RIG) ? SHADER_SKIN : SHADER_TEXT_SKIN));
 
     } else {
-        mesh->setOptimization(true, true, true);
         sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms");
         sceneNode->node = sgn;
         

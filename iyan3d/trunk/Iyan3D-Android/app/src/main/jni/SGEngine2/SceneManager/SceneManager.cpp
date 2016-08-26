@@ -553,11 +553,6 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
     }
 }
 
-SkinMesh* SceneManager::LoadMesh(string filePath)
-{
-    return CSGRMeshFileLoader::LoadMesh(filePath);
-}
-
 bool SceneManager::LoadShaders(string materialName, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
 {
     if(device == OPENGLES2) {

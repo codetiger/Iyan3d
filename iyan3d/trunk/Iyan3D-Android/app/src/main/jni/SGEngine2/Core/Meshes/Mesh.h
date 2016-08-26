@@ -73,17 +73,6 @@ private:
     vector<vertexData> tempVerticesData;
     vector<vertexDataHeavy> tempVerticesDataHeavy;
     vector<unsigned int> tempIndicesData;
-    
-    bool shouldRemoveDoubles, shouldOptimizeIndicesOrder, shouldCalculateTangents, shouldCalculateNormals, shouldGenerateUV;
-    bool shouldSplitBuffers;
-    float normalSmoothThreshold;
-
-    void reCalculateTangents();
-    void calculateTanget(Vector3 &tangent, Vector3 &bitangent, Vector3 vt1, Vector3 vt2, Vector3 vt3, Vector2 tc1, Vector2 tc2, Vector2 tc3);
-   
-    void checkUVSeam();
-    void generateUV();
-    void recalculateNormals();
 
 public:
     MESH_TYPE meshType;
@@ -97,10 +86,7 @@ public:
     void copyDataFromMesh(Mesh* otherMesh);
     void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
     void removeVerticesOfAnInstance(int verticesCount, int indicesCount);
-    void addVertex(vertexData* vertex, bool updateBB = true);
-    void addHeavyVertex(vertexDataHeavy* vertex);
-    void addToIndicesArray(unsigned int index);
-    void Commit(bool forceSplitBuffers = false);
+    void Commit();
 
     void clearVerticesArray();
     void clearIndicesArray();
@@ -132,10 +118,6 @@ public:
     void clearIndices();
     BoundingBox* getBoundingBox();
     Vector3 getAngleWeight(Vector3& v1, Vector3& v2, Vector3& v3);
-    
-    void removeDoublesInMesh();
-    void reOrderMeshIndices();
-    void setOptimization(bool removeDoubles, bool optimizeIndicesOrder, bool calculateTangents = false, bool shouldCalculateNormals = false, bool shouldGenerateUV = false, float smoothThreshold = 1.0);
     
     Mesh();
     ~Mesh();

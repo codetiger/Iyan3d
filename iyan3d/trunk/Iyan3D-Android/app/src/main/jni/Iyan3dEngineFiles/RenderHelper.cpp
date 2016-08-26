@@ -22,6 +22,7 @@
 
 #include "HeaderFiles/RenderHelper.h"
 #include "HeaderFiles/SGEditorScene.h"
+#include "SceneImporter.h"
 
 SGEditorScene * renderingScene;
 
@@ -786,7 +787,10 @@ bool RenderHelper::createJointSpheres(int additionalJoints)
         SGNode *sgNode = new SGNode(NODE_SGM);
         sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
 
-        Mesh *jointSphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm");
+        SceneImporter *importer = new SceneImporter();
+        Mesh *jointSphereMesh = importer->loadMeshFromFile(constants::BundlePath + "/sphere.sgm");
+        delete importer;
+        
         if(jointSphereMesh == NULL) {
             delete sgNode;
             return false;

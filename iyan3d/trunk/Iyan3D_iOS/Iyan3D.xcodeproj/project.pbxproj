@@ -881,8 +881,6 @@
 		256F6E9D1BF624FB00154622 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D451BF624FB00154622 /* pngwtran.c */; };
 		256F6E9E1BF624FB00154622 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D461BF624FB00154622 /* pngwutil.c */; };
 		256F6E9F1BF624FB00154622 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D461BF624FB00154622 /* pngwutil.c */; };
-		256F6EA01BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */; };
-		256F6EA11BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */; };
 		256F6EA41BF624FB00154622 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D4D1BF624FB00154622 /* MetalHandler.mm */; };
 		256F6EA61BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */; };
 		256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */; };
@@ -3258,8 +3256,6 @@
 		256F6D441BF624FB00154622 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwrite.c; sourceTree = "<group>"; };
 		256F6D451BF624FB00154622 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwtran.c; sourceTree = "<group>"; };
 		256F6D461BF624FB00154622 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwutil.c; sourceTree = "<group>"; };
-		256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSGRMeshFileLoader.cpp; sourceTree = "<group>"; };
-		256F6D491BF624FB00154622 /* CSGRMeshFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSGRMeshFileLoader.h; sourceTree = "<group>"; };
 		256F6D4C1BF624FB00154622 /* MetalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHandler.h; path = ../MetalHandler.h; sourceTree = "<group>"; };
 		256F6D4D1BF624FB00154622 /* MetalHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHandler.mm; path = ../MetalHandler.mm; sourceTree = "<group>"; };
 		256F6D4F1BF624FB00154622 /* ImageLoaderOBJC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoaderOBJC.h; sourceTree = "<group>"; };
@@ -5369,8 +5365,6 @@
 		256F6D471BF624FB00154622 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				256F6D481BF624FB00154622 /* CSGRMeshFileLoader.cpp */,
-				256F6D491BF624FB00154622 /* CSGRMeshFileLoader.h */,
 				3DBA6FE81D49CDA8003F8D03 /* SceneImporter.cpp */,
 				3DBA6FE91D49CDA8003F8D03 /* SceneImporter.h */,
 			);
@@ -9793,7 +9787,6 @@
 				C8E6173918C5DD7100BC5342 /* FPTouchView.m in Sources */,
 				251BF4771C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */,
 				25DE10A71CAA8D6D0076F669 /* btTriangleIndexVertexMaterialArray.cpp in Sources */,
-				256F6EA01BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */,
 				25DE102F1CAA8D6D0076F669 /* btSimpleBroadphase.cpp in Sources */,
 				25DE10511CAA8D6D0076F669 /* btEmptyCollisionAlgorithm.cpp in Sources */,
 				25DE107F1CAA8D6D0076F669 /* btConvexPolyhedron.cpp in Sources */,
@@ -9926,7 +9919,6 @@
 				256F6E831BF624FB00154622 /* pngerror.c in Sources */,
 				256F6B9A1BF6246300154622 /* json_value.cpp in Sources */,
 				256F6E991BF624FB00154622 /* pngwio.c in Sources */,
-				256F6EA11BF624FB00154622 /* CSGRMeshFileLoader.cpp in Sources */,
 				3D58CD671C3D43C2006371DE /* WEPopoverContentViewController.m in Sources */,
 				0184EC891C35406A006F0B57 /* RenderTableViewCell.m in Sources */,
 				01B4CF831C291EFD0091E19B /* AnimationSelectionCollectionViewCell.mm in Sources */,

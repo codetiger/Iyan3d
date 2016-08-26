@@ -16,7 +16,6 @@
 #include "../Core/Textures/OGLTexture.h"
 #include "../Core/Nodes/AnimatedMeshNode.h"
 #include "../Core/Nodes/ParticleManager.h"
-#include "../Loaders/CSGRMeshFileLoader.h"
 #include "../Core/Material/Material.h"
 #include "../Core/Material/MaterialManager.h"
 #include "../Core/Meshes/PlaneMeshNode.h"
@@ -74,7 +73,6 @@ public:
     void (*ShaderCallBackForNode)(int nodeId, std::string mateialName, int materialIndex, std::string callbackFuncName);
     bool (*isTransparentCallBack)(int nodeId, string callbackFuncName);
     void setMaterialProperty(Material *mat,string name,float* values,DATA_TYPE type,unsigned short count,u16 paramIndex = 0);
-    SkinMesh* LoadMesh(string filePath);
     void (*MTLPipelineStateCallBack)(int);
     void (*MTLEndEncoding)();
     bool LoadShaders(string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false, bool isTest = false);

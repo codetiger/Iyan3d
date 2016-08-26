@@ -9,6 +9,7 @@
 
 #include "HeaderFiles/SceneHelper.h"
 #include "HeaderFiles/ShaderParamOrder.h"
+#include "SceneImporter.h"
 
 float SceneHelper::screenWidth = 0.0;
 float SceneHelper::screenHeight = 0.0;
@@ -48,7 +49,9 @@ shared_ptr<CameraNode> SceneHelper::initRenderCamera(SceneManager *smgr, float f
 
 void SceneHelper::initLightMesh(SceneManager *smgr)
 {
-    SceneHelper::pointLightMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm");
+    SceneImporter *importer = new SceneImporter();
+    pointLightMesh = importer->loadMeshFromFile(constants::BundlePath + "/sphere.sgm");
+    delete importer;
 }
 
 Vector3 SceneHelper::planeFacingDirection(int controlType)
@@ -126,7 +129,6 @@ SGNode* SceneHelper::createLightDirLine(SceneManager *smgr)
         mbi.push_back(i);
     }
     mesh->addMeshBuffer(mbvd, mbi, 0);
-    mesh->setOptimization(false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, "LightLine");
     node->setID(LIGHT_DIRECTION_ID);
@@ -193,7 +195,6 @@ SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, 
     }
     
     mesh->addMeshBuffer(mbvd, mbi, 0);
-    mesh->setOptimization(false, false);
     
     shared_ptr<Node> node = smgr->createNodeFromMesh(mesh, callbackName);
     node->setID(nodeId);
@@ -217,7 +218,11 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
         sgNode->getProperty(IS_VERTEX_COLOR).value = Vector4(true, 0, 0, 0);
         sgNode->getProperty(VERTEX_COLOR).value = Vector4(Vector3(-1.0), 0.0);
-        Mesh *ctrlMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/controls" + to_string(i+1) + ".sgm");
+        
+        SceneImporter *importer = new SceneImporter();
+        Mesh *ctrlMesh = importer->loadMeshFromFile(constants::BundlePath + "/controls" + to_string(i+1) + ".sgm");
+        delete importer;
+
         if(ctrlMesh == NULL){
             Logger::log(ERROR,"SGScene", "SGRSpheres Mesh Not Loaded");
             return sceneControls;
@@ -250,7 +255,10 @@ SGNode* SceneHelper::initIndicatorNode(SceneManager *smgr)
     SGNode *sgNode = new SGNode(NODE_SGM);
     sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
 
-    Mesh *indMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/indicator.sgm");
+    SceneImporter *importer = new SceneImporter();
+    Mesh *indMesh = importer->loadMeshFromFile(constants::BundlePath + "/indicator.sgm");
+    delete importer;
+
     if(indMesh == NULL){
         Logger::log(ERROR,"SGScene", "Indicator Mesh Not Loaded");
     }

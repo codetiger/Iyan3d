@@ -17,8 +17,6 @@
 #include "../Core/Meshes/SkinMesh.h"
 #include "SGEditorScene.h"
 
-#include "CSGRMeshFileLoader.h"
-
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 #include "assimp/scene.h"
@@ -35,10 +33,12 @@ public:
     void importNodeFromMesh(SGEditorScene *sgScene, SGNode* sgNode, Mesh* lMesh);
     void import3DText(SGEditorScene *sgScene, wstring text, string fontPath, int bezierSegments, float extrude, float bevelRadius, int bevelSegments, bool hasBones, bool isTempNode);
     
+    Mesh* loadMeshFromFile(string filePath);
+    SkinMesh* loadSkinMeshFromFile(string filePath);
 private:
     const aiScene* scene = NULL;
 
-    void loadNodes(SGEditorScene *sgScene, string path, bool isTempNode, string ext, bool hasMeshColor = false, Vector3 mColor = Vector3(1.0));
+    void loadNodes2Scene(SGEditorScene *sgScene, string path, bool isTempNode, string ext, bool hasMeshColor = false, Vector3 mColor = Vector3(1.0));
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
     void loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones);
 

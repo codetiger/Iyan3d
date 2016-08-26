@@ -145,7 +145,6 @@ void Text3DImporter::SetupProperties(const Importer* pImp)
 bool Text3DImporter::CanRead( const string& pFile, IOSystem* pIOHandler, bool checkSig) const
 {
     const string extension = GetExtension(pFile);
-    printf("extension: %s\n", extension.c_str());
 
     if (extension == "otf" || extension == "ttf")
         return true;
@@ -591,6 +590,8 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
             rootBone->mChildren[i]->mParent = rootBone;
         }
     }
+    
+    vertices.clear();
 }
 
 #endif // !! ASSIMP_BUILD_NO_SGM_IMPORTER

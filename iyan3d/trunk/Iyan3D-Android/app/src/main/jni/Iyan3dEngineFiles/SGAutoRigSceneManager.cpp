@@ -8,6 +8,7 @@
 
 #include "HeaderFiles/SGAutoRigSceneManager.h"
 #include "HeaderFiles/SGEditorScene.h"
+#include "SceneImporter.h"
 
 SGEditorScene* rigScene;
 
@@ -213,7 +214,11 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->clearSGJoints();
                     smgr->RemoveNode(sgrSGNode->node);
                 }
-                SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(animatedSGRPath);
+                
+                SceneImporter *importer = new SceneImporter();
+                SkinMesh *mesh = importer->loadSkinMeshFromFile(animatedSGRPath);
+                delete importer;
+
                 sgrSGNode->setSkinningData((SkinMesh*)mesh);
                 shared_ptr<AnimatedMeshNode> riggedAnimNode = smgr->createAnimatedNodeFromMesh(mesh, "sgrUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
                 sgrSGNode->node = riggedAnimNode;
@@ -310,7 +315,10 @@ void SGAutoRigSceneManager::resetRigKeys()
             rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node->setID(REFERENCE_NODE_START_ID + i);
             rigKeys[rigScene->tPoseJoints[i].id].envelopeRadius = rigScene->tPoseJoints[i].envelopeRadius;
             if(rigScene->tPoseJoints[i].id != 0){
-                sphereMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/sphere.sgm");
+                SceneImporter *importer = new SceneImporter();
+                sphereMesh = importer->loadMeshFromFile(constants::BundlePath + "/sphere.sgm");
+                delete importer;
+
                 rigKeys[rigScene->tPoseJoints[i].id].sphere->node = smgr->createNodeFromMesh(sphereMesh,"jointUniforms");
                 rigKeys[rigScene->tPoseJoints[i].id].sphere->node->setID(JOINT_START_ID + i);
                 rigKeys[rigScene->tPoseJoints[i].id].sphere->node->setParent(rigKeys[rigScene->tPoseJoints[i].id].referenceNode->node);
@@ -337,7 +345,11 @@ void SGAutoRigSceneManager::resetRigKeys()
         if(!(rigKeys[rigScene->tPoseJoints[i].id].bone->node)){
             int parentId = rigKeys[rigScene->tPoseJoints[i].id].parentId;
             if(parentId <= 0) continue; //ignoring hip's parent
-            boneMesh = CSGRMeshFileLoader::createSGMMesh(constants::BundlePath + "/BoneMesh.sgm");
+            
+            SceneImporter *importer = new SceneImporter();
+            boneMesh = importer->loadMeshFromFile(constants::BundlePath + "/BoneMesh.sgm");
+            delete importer;
+
             rigKeys[rigScene->tPoseJoints[i].id].bone->node = smgr->createNodeFromMesh(boneMesh,"BoneUniforms");
             rigKeys[rigScene->tPoseJoints[i].id].bone->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
             Vector4 vColor = Vector4(1.0, 1.0, 1.0, 1.0);
@@ -509,7 +521,11 @@ void SGAutoRigSceneManager::initEnvelope(int jointId)
     
     if(envelopeSgNod == NULL) {
         envelopeSgNod = new SGNode(NODE_RIG);
-        SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr");
+        
+        SceneImporter *importer = new SceneImporter();
+        SkinMesh *mesh = importer->loadSkinMeshFromFile(constants::BundlePath + "/Envelop.sgr");
+        delete importer;
+
         envelopeSgNod->setSkinningData((SkinMesh*)mesh);
         shared_ptr<AnimatedMeshNode> envelopeNode = smgr->createAnimatedNodeFromMesh(mesh, "envelopeUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
         envelopeNode->setID(ENVELOPE_START_ID + jointId);

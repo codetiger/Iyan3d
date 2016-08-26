@@ -12,7 +12,6 @@
 #include "../common/common.h"
 
 #include "../Nodes/MeshNode.h"
-#include "../../Loaders/CSGRMeshFileLoader.h"
 
 class CubeMeshNode : public MeshNode {
     

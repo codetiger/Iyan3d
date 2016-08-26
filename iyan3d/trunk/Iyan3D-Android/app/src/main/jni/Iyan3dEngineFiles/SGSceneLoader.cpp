@@ -815,7 +815,11 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
     
     if(envelopeSgNod == NULL){
         envelopeSgNod = new SGNode(NODE_RIG);
-        SkinMesh *mesh = CSGRMeshFileLoader::LoadMesh(constants::BundlePath + "/Envelop.sgr");
+        
+        SceneImporter *importer = new SceneImporter();
+        SkinMesh *mesh = importer->loadSkinMeshFromFile(constants::BundlePath + "/Envelop.sgr");
+        delete importer;
+
         envelopeSgNod->setSkinningData((SkinMesh*)mesh);
         shared_ptr<AnimatedMeshNode> envelopeNode = smgr->createAnimatedNodeFromMesh(mesh, "envelopeUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
         envelopeNode->setID(ENVELOPE_START_ID + jointId);
