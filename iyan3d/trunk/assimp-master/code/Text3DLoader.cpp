@@ -543,8 +543,12 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
     
     pScene->mMeshes[0]->mNumVertices = vertices.size();
     pScene->mMeshes[0]->mVertices = new aiVector3D[vertices.size()];
-    for (int i = 0; i < vertices.size(); i++)
+    for (int i = 0; i < vertices.size(); i++) {
         pScene->mMeshes[0]->mVertices[i] = vertices[i];
+        pScene->mMeshes[0]->mVertices[i].x += offset / 2.0;
+        pScene->mMeshes[0]->mVertices[i].y -= 16.0 / 2.0;
+        pScene->mMeshes[0]->mVertices[i].z -= extrude / 2.0;
+    }
 
     pScene->mMeshes[0]->mNumFaces = vertices.size() / 3;
     pScene->mMeshes[0]->mFaces = new aiFace[vertices.size() / 3];
@@ -560,30 +564,23 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
         aiNode* rootBone = pScene->mRootNode->mChildren[1] = new aiNode();
         rootBone->mName.Set("Armature");
         rootBone->mParent = pScene->mRootNode;
-        rootBone->mNumChildren = 1;
-        rootBone->mChildren = new aiNode*[1];
+        rootBone->mTransformation.a4 = offset / 2.0;
+        rootBone->mTransformation.b4 = -16.0 / 2.0;
+        rootBone->mTransformation.c4 = -extrude / 2.0;
         
-        aiNode* mainBone = rootBone->mChildren[0] = new aiNode();
-        mainBone->mName.Set("MainBone");
-        mainBone->mParent = rootBone;
-//        mainBone->mTransformation.a4 = offset /2.0;
-//        mainBone->mTransformation.b4 = -16.0 / 2.0;
-//        mainBone->mTransformation.c4 = -extrude / 2.0;
-        
-        mainBone->mNumChildren = boneList.size();
-        mainBone->mChildren = new aiNode*[boneList.size()];
+        rootBone->mNumChildren = boneList.size();
+        rootBone->mChildren = new aiNode*[boneList.size()];
         
         pScene->mMeshes[0]->mNumBones = boneList.size();
         pScene->mMeshes[0]->mBones = new aiBone*[boneList.size()];
         
         for (int i = 0; i < boneList.size(); i++) {
-            
             pScene->mMeshes[0]->mBones[i] = boneList[i];
-            
-            mainBone->mChildren[i] = new aiNode();
-            mainBone->mChildren[i]->mName = boneList[i]->mName;
-            mainBone->mChildren[i]->mTransformation = matrixList[i];
-            mainBone->mChildren[i]->mParent = mainBone;
+
+            rootBone->mChildren[i] = new aiNode();
+            rootBone->mChildren[i]->mName = boneList[i]->mName;
+            rootBone->mChildren[i]->mTransformation = matrixList[i];
+            rootBone->mChildren[i]->mParent = rootBone;
         }
     }
 }
