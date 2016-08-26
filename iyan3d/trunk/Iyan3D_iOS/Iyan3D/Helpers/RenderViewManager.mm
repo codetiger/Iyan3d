@@ -359,9 +359,22 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             float green = [[moreDetail objectForKey:@"green"]floatValue];
             float blue = [[moreDetail objectForKey:@"blue"]floatValue];
             float alpha = [[moreDetail objectForKey:@"alpha"]floatValue];
-            NSString* fontFilePath = [moreDetail objectForKey:@"fontFileName"];
+            NSString* fontFileName = [moreDetail objectForKey:@"fontFileName"];
             Vector4 textColor = Vector4(red,green,blue,alpha);
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
+            
+            std::string fontFilePath = FileHelper::getCachesDirectory() + [fontFileName UTF8String];
+            
+            SceneImporter * loader = new SceneImporter();
+            loader->import3DText(editorScene, name, fontFilePath, 4, 4, imgHeight / 50.0f, 4, (type == ASSET_TEXT_RIG), isTempNode);
+            
+            if(!isTempNode){
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+                [self.delegate updateAssetListInScenes];
+            }
+
+            /*
             SGNode* textNode = editorScene->loader->loadNode(nodeType, 0, "", textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
             if (textNode == NULL) {
                 UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"fontstyle_char_unsupported", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
@@ -378,6 +391,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
                 [self.delegate updateAssetListInScenes];
             }
+             */
+            
             break;
         }
         case ASSET_ADDITIONAL_LIGHT: {

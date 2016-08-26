@@ -96,7 +96,9 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
         return;
     }
     
-    loadNodes(sgScene, fontPath, isTempNode, "");
+    std::string ext = (hasBones) ? "textrig" : "text";
+    
+    loadNodes(sgScene, fontPath, isTempNode, ext);
     delete importer;
     
     sgScene->freezeRendering = false;
@@ -191,7 +193,15 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
             hasBones = aiM->HasBones();
     }
 
-    SGNode *sceneNode = new SGNode(hasBones ? NODE_RIG : NODE_SGM);
+    NODE_TYPE nType;
+    if(ext == "text")
+        nType = NODE_TEXT;
+    else if (ext == "textrig")
+        nType = NODE_TEXT_SKIN;
+    else
+        nType = (hasBones) ? NODE_RIG : NODE_SGM;
+    
+    SGNode *sceneNode = new SGNode(nType);
     sceneNode->isTempNode = isTempNode;
     
     if(hasBones)
@@ -265,7 +275,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
 
     shared_ptr<Node> sgn;
     
-    if(sceneNode->getType() == NODE_RIG) {
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         loadBoneHierarcy((SkinMesh*)mesh, bones);
         ((SkinMesh*)mesh)->reverseJointsOrder();
         ((SkinMesh*)mesh)->finalize();
@@ -289,7 +299,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
 
         sgn->setScale(Vector3(1.0));
         sgn->updateAbsoluteTransformation();
-        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex((sceneNode->getType() == NODE_RIG) ? SHADER_SKIN : SHADER_TEXT_SKIN));
 
     } else {
         mesh->setOptimization(true, true, true);
@@ -317,7 +327,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
     }
 
     sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
-    if(sceneNode->getType() == NODE_RIG) {
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
     }
