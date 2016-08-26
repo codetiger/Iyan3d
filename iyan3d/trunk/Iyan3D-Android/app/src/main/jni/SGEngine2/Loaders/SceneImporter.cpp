@@ -267,6 +267,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
     
     if(sceneNode->getType() == NODE_RIG) {
         loadBoneHierarcy((SkinMesh*)mesh, bones);
+        ((SkinMesh*)mesh)->reverseJointsOrder();
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
         mesh->setOptimization(false, false);
