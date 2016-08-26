@@ -185,11 +185,6 @@ void Mesh::clearIndicesArray()
     meshBufferIndices.clear();
 }
 
-vertexData* Mesh::getLiteVertexByIndex(unsigned int index)
-{
-    return &tempVerticesData[index];
-}
-
 vertexDataHeavy* Mesh::getHeavyVertexByIndex(unsigned int index)
 {
     return &tempVerticesDataHeavy[index];
@@ -215,16 +210,6 @@ vertexData* Mesh::getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIn
     return &(meshBufferVerticesData[meshBufferIndex])[vertexIndex];
 }
 
-vector<vertexData> Mesh::getTotalLiteVerticesArray()
-{
-    return tempVerticesData;
-}
-
-vector<vertexDataHeavy> Mesh::getTotalHeavyVerticesArray()
-{
-    return tempVerticesDataHeavy;
-}
-
 unsigned int Mesh::getVerticesCountInMeshBuffer(int index)
 {
     if(meshType == MESH_TYPE_HEAVY && meshBufferVerticesDataHeavy.size())
@@ -248,11 +233,6 @@ BoundingBox* Mesh::getBoundingBox()
     return &BBox;
 }
 
-unsigned int * Mesh::getHighPolyIndicesArray()
-{
-    return &tempIndicesData[0];
-}
-
 vector< unsigned short > Mesh::getIndicesArrayAtMeshBufferIndex(int index)
 {
     return meshBufferIndices[index];
@@ -273,11 +253,6 @@ unsigned int Mesh::getTotalIndicesCount()
     return (int)tempIndicesData.size();
 }
 
-vector< unsigned int > Mesh::getTotalIndicesArray()
-{
-    return tempIndicesData;
-}
-
 int Mesh::getMeshBufferCount()
 {
     return (int)meshBufferIndices.size();
@@ -296,38 +271,5 @@ void Mesh::clearVertices()
 void Mesh::clearIndices()
 {
     tempIndicesData.clear();
-}
-
-void Mesh::flipMeshHorizontal()
-{
-    const u32 vtxcnt = getVerticesCount();
-    for (int i = 0; i != vtxcnt; i++) {
-        Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
-        
-        if (meshType == MESH_TYPE_LITE)
-            getLiteVertexByIndex(i)->vertPosition = Vector3(-pos.x, pos.y, pos.z);
-        else
-            getHeavyVertexByIndex(i)->vertPosition = Vector3(-pos.x, pos.y, pos.z);
-    }
-}
-
-void Mesh::moveVertices(Vector3 offset)
-{
-    const u32 vtxcnt = getVerticesCount();
-    BBox.clearPoints();
-
-    for (int i = 0; i!= vtxcnt;i++) {
-        
-        Vector3 pos = (meshType == MESH_TYPE_LITE) ? getLiteVertexByIndex(i)->vertPosition : getHeavyVertexByIndex(i)->vertPosition;
-        
-        if (meshType == MESH_TYPE_LITE) {
-            getLiteVertexByIndex(i)->vertPosition = Vector3(pos.x, pos.y, pos.z) + offset;
-            BBox.addPointsToCalculateBoundingBox(Vector3(pos.x, pos.y, pos.z) + offset);
-        }
-        else {
-            getHeavyVertexByIndex(i)->vertPosition = Vector3(pos.x, pos.y, pos.z) + offset;
-            BBox.addPointsToCalculateBoundingBox(Vector3(pos.x, pos.y, pos.z) + offset);
-        }
-    }
 }
 

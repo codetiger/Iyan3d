@@ -91,24 +91,17 @@ public:
     void clearVerticesArray();
     void clearIndicesArray();
     
-    void flipMeshHorizontal();
-    void moveVertices(Vector3 offset);
-    vertexData* getLiteVertexByIndex(unsigned int index);
     vertexDataHeavy* getHeavyVertexByIndex(unsigned int index);
     vector<vertexData> getLiteVerticesArray(int index);
     vector<vertexDataHeavy> getHeavyVerticesArray(int index);
-    vector<vertexData> getTotalLiteVerticesArray();
-    vector<vertexDataHeavy> getTotalHeavyVerticesArray();
 
     vertexDataHeavy* getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
     vertexData* getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
 
     vector< unsigned short > getIndicesArrayAtMeshBufferIndex(int index);
     unsigned short* getIndicesArray(int index);
-    unsigned int * getHighPolyIndicesArray();
     unsigned int getIndicesCount(int index);
     unsigned int getTotalIndicesCount();
-    vector< unsigned int > getTotalIndicesArray();
     unsigned int getVerticesCountInMeshBuffer(int index);
     unsigned int getVerticesCount();
     int getMeshBufferCount();
