@@ -3,7 +3,6 @@
 
 #include "HeaderFiles/SGNode.h"
 #include "HeaderFiles/ShaderManager.h"
-#include "TextMesh3d.h"
 #include "MeshRW.h"
 
 #ifdef ANDROID
@@ -116,20 +115,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
 //            node = loadSGMandOBJ(meshPath, objectType, smgr);
             break;
         }
-        case NODE_TEXT:
-        {
-            getProperty(TEXTURE).fileName = texturePath;
-            oriTextureName = texturePath;
-            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            getProperty(TRANSPARENCY).value = Vector4(1.0, 0.0, 0.0, 0.0);
-
-            node = load3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
-            getProperty(SPECIFIC_FLOAT).value = Vector4(height, 0, 0, 0);
-            getProperty(FONT_SIZE).value = Vector4(width, 0, 0, 0);
-            optionalFilePath = specificFilePath;
-            break;
-        }
         case NODE_RIG:
         {
             getProperty(TEXTURE).fileName = texturePath;
@@ -154,20 +139,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
             getProperty(TEXTURE).fileName = ConversionHelper::getStringForWString(objectName);
             node = loadVideo(ConversionHelper::getStringForWString(objectName), smgr , aspectRatio);
-            break;
-        }
-        case NODE_TEXT_SKIN:
-        {
-            // 'width' here is font size and 'height' is bevel value
-            getProperty(TEXTURE).fileName = texturePath;
-            oriTextureName = texturePath;
-            getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            node = loadSkin3DText(smgr, objectName, 4, 4, width, specificFilePath, objSpecificColor, height / 50.0f, 4);
-            getProperty(TRANSPARENCY).value.x = 1.0; // Vector4(1.0, 0, 0, 0), UNDEFINED);
-            getProperty(SPECIFIC_FLOAT).value.x = width; // Vector4(width, 0, 0, 0), UNDEFINED);
-            optionalFilePath = specificFilePath;
-            getProperty(FONT_SIZE).value.x = width; // Vector4(width, 0, 0, 0), UNDEFINED);
             break;
         }
         case NODE_ADDITIONAL_LIGHT:
@@ -241,6 +212,7 @@ shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance ,
     return lightNode;
 }
 
+/*
 shared_ptr<Node> SGNode::loadSkin3DText(SceneManager *smgr, std::wstring text, int bezierSegments, float extrude, float width, string fontPath, Vector4 fontColor, float bevelRadius, int bevelSegments)
 {
     if(bevelRadius == 0 || bevelSegments == 0)
@@ -381,6 +353,7 @@ shared_ptr<Node> SGNode::load3DText(SceneManager *smgr, std::wstring text, int b
     node->updateBoundingBox();
     return node;
 }
+*/
 
 Json::Value SGNode::parseParticlesJson(int assetId)
 {
