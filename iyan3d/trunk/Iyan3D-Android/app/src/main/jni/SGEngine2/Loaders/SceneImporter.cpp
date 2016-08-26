@@ -87,7 +87,7 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
     importer->SetPropertyFloat("TEXT3D_EXTRUDE", extrude);
     importer->SetPropertyFloat("TEXT3D_BEVELRADIUS", bevelRadius);
     importer->SetPropertyInteger("TEXT3D_BEVELSEGMENTS", bevelSegments);
-
+    
     unsigned int pFlags = aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_SortByPType | aiProcess_SplitLargeMeshes | aiProcess_GenSmoothNormals;
     scene = importer->ReadFile(fontPath, pFlags);
     

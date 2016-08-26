@@ -560,6 +560,14 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
             pScene->mMeshes[0]->mFaces[i].mIndices[j] = count++;
     }
 
+    pScene->mMeshes[0]->mMaterialIndex = 0;
+    pScene->mNumMaterials = 1;
+    pScene->mMaterials = new aiMaterial*[1];
+    pScene->mMaterials[0] = new aiMaterial();
+    
+    int mapping = aiTextureMapping_SPHERE;
+    pScene->mMaterials[0]->AddProperty<int>(&mapping, 1, AI_MATKEY_MAPPING(aiTextureType_DIFFUSE, 0));
+    
     if(shouldHaveBones) {
         aiNode* rootBone = pScene->mRootNode->mChildren[1] = new aiNode();
         rootBone->mName.Set("Armature");
