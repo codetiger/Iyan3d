@@ -226,7 +226,7 @@
     }
     
     if(viewType == IMPORT_OBJFILE) {
-        [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:YES];
+        [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:(indexPathOfOBJ >= 6) IsTempNode:YES];
     } else
         [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES];
 }
@@ -259,7 +259,7 @@
         
         if(![self.objSlideDelegate addTempNodeToScene]) {
             if(viewType == IMPORT_OBJFILE) {
-                [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:NO];
+                [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:(indexPathOfOBJ >= 6) IsTempNode:NO];
             } else
                 [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
         }

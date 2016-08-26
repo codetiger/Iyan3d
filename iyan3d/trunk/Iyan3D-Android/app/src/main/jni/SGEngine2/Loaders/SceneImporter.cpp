@@ -98,7 +98,7 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
     
     std::string ext = (hasBones) ? "textrig" : "text";
     
-    loadNodes(sgScene, fontPath, isTempNode, ext);
+    loadNodes(sgScene, fontPath, isTempNode, ext, true);
     delete importer;
     
     sgScene->freezeRendering = false;
@@ -124,7 +124,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             return;
         }
         
-        loadNodes(sgScene, fileLocation, isTempNode, ext);
+        loadNodes(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
         delete importer;
     }
 
@@ -181,7 +181,7 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
 
 }
 
-void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext)
+void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext, bool hasMeshColor, Vector3 mColor)
 {
     Mesh* mesh;
     map< string, Joint* > *bones = new map< string, Joint* >();
@@ -270,6 +270,13 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath, bool is
             p2.value.x = 0.0;
 
             printf("Normal Texture: %s\n", p1.fileName.c_str());
+        }
+        
+        if(hasMeshColor) {
+            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+            p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p2.value.x = 1.0;
         }
     }
 
