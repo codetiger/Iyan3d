@@ -533,7 +533,7 @@ Texture* OGLES2RenderManager::createRenderTargetTexture(string textureName ,TEXT
     return newTex;
 }
 
-void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass,Vector4 color)
+void OGLES2RenderManager::setRenderTarget(Texture *renderTexture, bool clearBackBuffer, bool clearZBuffer, bool isDepthPass, Vector4 color)
 {
     if(renderTexture){
         glBindFramebuffer(GL_FRAMEBUFFER,((OGLTexture*)renderTexture)->rttFrameBuffer);
@@ -541,7 +541,7 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
         glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)renderTexture)->OGLTextureName);
         currentTextures[0] = -1;
         currentTextureIndex = -1;
-        PrepareDisplay(renderTexture->width,renderTexture->height,clearBackBuffer,clearZBuffer, isDepthPass, color);
+        PrepareDisplay(renderTexture->width, renderTexture->height, clearBackBuffer, clearZBuffer, isDepthPass, color);
     }
     else {
         currentTextures[0] = -1;
@@ -550,7 +550,7 @@ void OGLES2RenderManager::setRenderTarget(Texture *renderTexture,bool clearBackB
     }
 }
 
-void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath , IMAGE_FLIP flipType)
+void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath, IMAGE_FLIP flipType)
 {
     int bytesPerPix = 4;
     size_t imageSize = bytesPerPix * size_t(texture->width) * size_t(texture->height);

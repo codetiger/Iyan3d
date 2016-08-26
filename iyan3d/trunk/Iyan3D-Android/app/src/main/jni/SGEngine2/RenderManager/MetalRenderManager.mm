@@ -70,7 +70,7 @@ void MetalRenderManager::setupMetalLayer()
     renderView.contentScaleFactor = [UIScreen mainScreen].scale;
 }
 
-void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth,bool clearDepthBuffer)
+void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func, bool writeDepth, bool clearDepthBuffer)
 {
     if(isEncodingEnded)
         return;
@@ -359,6 +359,7 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
 {
     if(!isCmdBufferCommited) // Temporary try for perfection
         endDisplay();
+    
     isCmdBufferCommited = false;
     changeViewport(width, height);
     CMDBuffer = [_commandQueue commandBuffer];

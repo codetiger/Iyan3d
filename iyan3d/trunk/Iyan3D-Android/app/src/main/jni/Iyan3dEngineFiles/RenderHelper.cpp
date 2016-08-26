@@ -384,7 +384,7 @@ void RenderHelper::drawCameraPreview()
     
     smgr->Render(false);
     if(renderingScene->whiteBorderTexture)
-        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0,0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     
     smgr->setRenderTarget(NULL, false, false);
     smgr->setActiveCamera(renderingScene->viewCamera);
@@ -688,7 +688,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
             renderingScene->nodes[i]->node->setVisible(false);
     }
     
-    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[rT][0]],true,true,false,Vector4(bgColor));
+    smgr->setRenderTarget(renderingScene->renderingTextureMap[RESOLUTION[rT][0]], true, true, false, Vector4(bgColor));
     
     smgr->Render(false);
     
