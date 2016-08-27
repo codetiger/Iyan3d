@@ -15,7 +15,8 @@ SceneImporter::SceneImporter()
 
 SceneImporter::~SceneImporter()
 {
-    delete scene;
+    if(scene)
+        delete scene;
 }
 
 string getFileExtention(const string& s)
@@ -75,11 +76,11 @@ Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
 void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fontPath, int bezierSegments, float extrude, float bevelRadius, int bevelSegments, bool hasBones, bool isTempNode)
 {
     sgScene->freezeRendering = true;
-
+    
     Assimp::Importer *importer = new Assimp::Importer();
     importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
     importer->SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 65);
-
+    
     importer->SetPropertyWString("TEXT3D_TEXT", text);
     importer->SetPropertyBool("TEXT3D_HASBONES", hasBones);
     importer->SetPropertyString("TEXT3D_FONTPATH", fontPath);
@@ -87,61 +88,62 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
     importer->SetPropertyFloat("TEXT3D_EXTRUDE", extrude);
     importer->SetPropertyFloat("TEXT3D_BEVELRADIUS", bevelRadius);
     importer->SetPropertyInteger("TEXT3D_BEVELSEGMENTS", bevelSegments);
-
-    unsigned int pFlags = aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_SortByPType | aiProcess_SplitLargeMeshes | aiProcess_GenSmoothNormals;
-    scene = importer->ReadFile(fontPath, pFlags);
-
+    
+    importer->SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_POINT | aiPrimitiveType_LINE);
+    
+    scene = importer->ReadFile(fontPath, aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes);
+    
     if(!scene) {
         printf("Error in Loading: %s\n", importer->GetErrorString());
         return;
     }
-
-    std::string ext = (hasBones) ? "textrig" : "text";
-
+    
+    std::string ext = "text";
+    
     loadNodes2Scene(sgScene, fontPath, isTempNode, ext, true);
     delete importer;
     scene = NULL;
-
+    
     sgScene->freezeRendering = false;
-
+    
 }
 
 void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
     sgScene->freezeRendering = true;
     string ext = getFileExtention(filePath);
-
-    unsigned int pFlags = aiProcessPreset_TargetRealtime_Fast | aiProcess_SplitLargeMeshes;
-    if(ext != "sgm" && ext != "sgr")
-        pFlags = pFlags | aiProcess_ConvertToLeftHanded;
-
+    
     if(ext == "sgm" || ext == "sgr" || ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds") {
         Assimp::Importer *importer = new Assimp::Importer();
         importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
+        
+        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder;
+        if(ext != "sgr")
+            pFlags = pFlags | aiProcess_FlipUVs;
+        
         scene = importer->ReadFile(filePath, pFlags);
-
+        
         if(!scene) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
         }
-
+        
         loadNodes2Scene(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
         delete importer;
         scene = NULL;
     }
-
+    
     sgScene->freezeRendering = false;
 }
 
 void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode, Mesh* lMesh)
 {
     sgScene->freezeRendering = true;
-
+    
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         
         SkinMesh *mesh = (SkinMesh*)lMesh;
         //sceneNode->setSkinningData(mesh);
-        mesh->setOptimization(false, false, false);
         
         shared_ptr<AnimatedMeshNode> sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh(mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
@@ -161,11 +163,10 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
         sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
         sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
-            
+        
     } else { //TODO for all other types
         
         Mesh *mesh = lMesh;
-        mesh->setOptimization(false, false, false);
         shared_ptr<MeshNode> sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_MESH);
         sceneNode->node = sgn;
         sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
@@ -180,10 +181,75 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
     sgScene->updater->resetMaterialTypes(false);
     
     sgScene->freezeRendering = false;
-
+    
 }
 
-void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
+Mesh* SceneImporter::loadMeshFromFile(string filePath)
+{
+    Assimp::Importer *importer = new Assimp::Importer();
+    scene = importer->ReadFile(filePath, aiProcess_Triangulate);
+    
+    if(!scene) {
+        printf("Error in Loading: %s\n", importer->GetErrorString());
+        return NULL;
+    }
+    
+    Mesh* mesh = new Mesh();
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh *aiM = scene->mMeshes[i];
+        
+        if(aiM && aiM->mPrimitiveTypes == aiPrimitiveType_TRIANGLE) {
+            vector< vertexData > mbvd;
+            vector< unsigned short > mbi;
+            getMeshFrom(mbvd, mbi, aiM);
+            
+            mesh->addMeshBuffer(mbvd, mbi, 0);
+        }
+    }
+    
+    delete importer;
+    scene = NULL;
+    return mesh;
+}
+
+SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
+{
+    Assimp::Importer *importer = new Assimp::Importer();
+    importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
+    scene = importer->ReadFile(filePath, aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes);
+    
+    if(!scene) {
+        printf("Error in Loading: %s\n", importer->GetErrorString());
+        return NULL;
+    }
+    
+    map< string, Joint* > *bones = new map< string, Joint* >();
+    
+    SkinMesh* mesh = new SkinMesh();
+    for (int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh *aiM = scene->mMeshes[i];
+        
+        if(aiM && aiM->mPrimitiveTypes == aiPrimitiveType_TRIANGLE) {
+            vector< vertexDataHeavy > mbvd;
+            vector< unsigned short > mbi;
+            getSkinMeshFrom(mbvd, mbi, aiM);
+            
+            mesh->addMeshBuffer(mbvd, mbi, 0);
+            
+            if(aiM->HasBones())
+                loadBonesFromMesh(aiM, mesh, bones);
+        }
+    }
+    loadBoneHierarcy((SkinMesh*)mesh, bones);
+    mesh->reverseJointsOrder();
+    mesh->finalize();
+    
+    delete importer;
+    scene = NULL;
+    return mesh;
+}
+
+void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext, bool hasMeshColor, Vector3 mColor)
 {
     Mesh* mesh;
     map< string, Joint* > *bones = new map< string, Joint* >();
@@ -194,17 +260,26 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
         if(!hasBones)
             hasBones = aiM->HasBones();
     }
-
-    SGNode *sceneNode = new SGNode(hasBones ? NODE_RIG : NODE_SGM);
     
-    if(hasBones) {
+    NODE_TYPE nType;
+    if(ext == "text")
+        nType = (hasBones) ? NODE_TEXT_SKIN : NODE_TEXT;
+    else
+        nType = (hasBones) ? NODE_RIG : NODE_SGM;
+    
+    SGNode *sceneNode = new SGNode(nType);
+    sceneNode->isTempNode = isTempNode;
+    
+    if(hasBones)
         mesh = new SkinMesh();
-    } else {
+    else
         mesh = new Mesh();
-    }
-
+    
     for (int i = 0; i < scene->mNumMeshes; i++) {
         aiMesh *aiM = scene->mMeshes[i];
+        
+        if(!aiM || aiM->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
+            continue;
         
         MaterialProperty *materialProps = new MaterialProperty(hasBones ? NODE_RIG : NODE_SGM);
         sceneNode->materialProps.push_back(materialProps);
@@ -219,7 +294,7 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
             
             if(aiM->HasBones())
                 loadBonesFromMesh(aiM, (SkinMesh*)mesh, bones);
-
+            
         } else {
             
             vector< vertexData > mbvd;
@@ -244,12 +319,12 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
             
             Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
             p1.fileName = getFileName(string(path.data));
-            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, folderPath + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
             materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
             Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
             p2.value.x = 0.0;
-
-            printf("Diffuse Texture: %s\n", p1.fileName.c_str());
+            
+            printf("Diffuse Texture: %s\n", (FileHelper::getTexturesDirectory() + p1.fileName).c_str());
         }
         
         if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
@@ -258,26 +333,33 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
             
             Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
             p1.fileName = getFileName(string(path.data));
-            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, folderPath + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
             materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
             Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
             p2.value.x = 0.0;
-
+            
             printf("Normal Texture: %s\n", p1.fileName.c_str());
         }
+        
+        if(hasMeshColor) {
+            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+            p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
+            p2.value.x = 1.0;
+        }
     }
-
+    
     shared_ptr<Node> sgn;
     
-    if(sceneNode->getType() == NODE_RIG) {
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         loadBoneHierarcy((SkinMesh*)mesh, bones);
+        ((SkinMesh*)mesh)->reverseJointsOrder();
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
-        mesh->setOptimization(false, false, false);
-
+        
         sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
-
+        
         bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
         int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointCount();
         
@@ -289,30 +371,46 @@ void SceneImporter::loadNodes(SGEditorScene *sgScene, string folderPath)
                 sceneNode->joints.push_back(joint);
             }
         }
-
+        
         sgn->setScale(Vector3(1.0));
         sgn->updateAbsoluteTransformation();
-        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_SKIN));
-
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex((sceneNode->getType() == NODE_RIG) ? SHADER_SKIN : SHADER_TEXT_SKIN));
+        
     } else {
-        mesh->setOptimization(false, false, false);
         sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms");
         sceneNode->node = sgn;
-
+        
         sgn->setScale(Vector3(1.0));
         sgn->updateAbsoluteTransformation();
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
     }
     
+    Quaternion r1 = Quaternion();
+    Quaternion r2 = Quaternion();
+    
+    if(ext == "dae" || ext == "fbx") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "obj") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "sgm" || ext == "sgr") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 1.0, 0.0));
+        //            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+    }
+    
+    Quaternion r = r1 * r2;
+    sceneNode->setRotation(r, 0);
+    sgn->setRotation(r);
+    
     sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
-    if(sceneNode->getType() == NODE_RIG) {
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
     }
-
+    
     sceneNode->name = ConversionHelper::getWStringForString(string(scene->mRootNode->mName.C_Str()));
-    printf("Loaded Node Name: %s\n", scene->mRootNode->mName.C_Str());
-
+    
     sceneNode->node = sgn;
     sceneNode->actionId = ++sgScene->actionObjectsSize;
     sceneNode->node->setID(sgScene->assetIDCounter++);
@@ -354,7 +452,7 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
 void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
 {
     typedef map< string, Joint* >::iterator it_type;
-
+    
     map< string, Joint*> *newBones = new map< string, Joint*>();
     
     do {
@@ -422,12 +520,16 @@ void SceneImporter::getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short>
     for (int j = 0; j < aiM->mNumVertices; j++) {
         vertexData vd;
         vd.vertPosition = Vector3(aiM->mVertices[j].x, aiM->mVertices[j].y, aiM->mVertices[j].z);
-        vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
+        
+        if(aiM->mNormals)
+            vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
+        else
+            vd.vertNormal = Vector3(0.0);
         
         if(aiM->mColors[0])
-            vd.optionalData1 = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, aiM->mColors[0][j].a);
+            vd.vertColor = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, aiM->mColors[0][j].a);
         else
-            vd.optionalData1 = Vector4(-1.0);
+            vd.vertColor = Vector4(-1.0);
         
         if(aiM->mTextureCoords[0])
             vd.texCoord1 = Vector2(aiM->mTextureCoords[0][j].x, aiM->mTextureCoords[0][j].y);

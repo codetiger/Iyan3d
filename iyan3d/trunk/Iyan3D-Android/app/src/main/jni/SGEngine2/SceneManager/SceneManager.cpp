@@ -24,11 +24,11 @@ SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_
     this->screenScale = screenScale;
     this->bundlePath = bundlePath;
     #ifdef ANDROID
-    renderMan = new OGLES2RenderManager(width,height,screenScale);
+    renderMan = new OGLES2RenderManager(width, height, screenScale);
     common::deviceType = OPENGLES2;
     #elif IOS
     if(type == OPENGLES2) {
-        renderMan = new OGLES2RenderManager(width,height,screenScale);
+        renderMan = new OGLES2RenderManager(width, height, screenScale);
         common::deviceType = OPENGLES2;
     } else if(type == METAL) {
         #if !(TARGET_IPHONE_SIMULATOR)
@@ -271,13 +271,6 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
     if(!nodes[index])
         return;
     
-    if(clearDepthBuffer){
-		#ifndef UBUNTU
-        	if(device == OPENGLES2)
-        		glClear(GL_DEPTH_BUFFER_BIT);
-		#endif
-    }
-
     if(device == METAL) {
         renderMan->setUpDepthState(func, true, clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
     }
@@ -489,12 +482,12 @@ shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, st
     return iNode;
 }
 
-void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, bool isBGImage, Material *material, bool isRTT)
+void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT)
 {
     renderMan->useMaterialToRender(material);
     int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
     setPropertyValue(material,"texture1",&textureValue,DATA_TEXTURE_2D,1,true,0,NOT_EXISTS,texture);
-    renderMan->draw2DImage(texture, originCoord, endCoord, isBGImage, material, isRTT);
+    renderMan->draw2DImage(texture, originCoord, endCoord, material, isRTT);
     
 }
 

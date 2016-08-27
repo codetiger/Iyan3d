@@ -426,7 +426,7 @@ void OGLES2RenderManager::blendFunction(GLenum func)
     }
 }
 
-void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
+void OGLES2RenderManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT)
 {
     // to flip horizontally for opengl textures
     Vector2 bottomRight = Helper::screenToOpenglCoords(originCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
@@ -462,9 +462,6 @@ void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vecto
     UnBindAttributes(material);
     deleteAndUnbindBuffer(GL_ARRAY_BUFFER, 1, &_vertexBuffer);
     deleteAndUnbindBuffer(GL_ELEMENT_ARRAY_BUFFER, 1, &_indexBuffer);
-    
-    if(isBGImage)
-        glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 void OGLES2RenderManager::draw3DLine(Vector3 start,Vector3 end,Material *material)
@@ -615,8 +612,8 @@ Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *textu
     glBindTexture(GL_TEXTURE_2D, ((OGLTexture*)texture)->OGLTextureName);
     currentTextureIndex = -1;
     GLubyte pixelColor[4];
-    glReadPixels((int)touchPosition.x,(int)(mid - difFromMid),1,1,GL_RGBA,GL_UNSIGNED_BYTE,&pixelColor[0]);
-    return Vector4((int)pixelColor[0],(int)pixelColor[1],(int)pixelColor[2],(int)pixelColor[3]);
+    glReadPixels((int)touchPosition.x, (int)(mid - difFromMid), 1, 1, GL_RGBA,GL_UNSIGNED_BYTE, &pixelColor[0]);
+    return Vector4((int)pixelColor[0], (int)pixelColor[1], (int)pixelColor[2], (int)pixelColor[3]);
 }
 
 void OGLES2RenderManager::setFrameBufferObjects(u_int32_t framebuff, u_int32_t colorbuff, u_int32_t depthduff)
@@ -626,9 +623,10 @@ void OGLES2RenderManager::setFrameBufferObjects(u_int32_t framebuff, u_int32_t c
     depthBuffer = depthduff;
 }
 
-void OGLES2RenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth,bool setToRenderBuffer)
+void OGLES2RenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func, bool writeDepth, bool clearDepthBuffer)
 {
-    
+    if(clearDepthBuffer)
+        glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 void OGLES2RenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType , bool updateBothBuffers)

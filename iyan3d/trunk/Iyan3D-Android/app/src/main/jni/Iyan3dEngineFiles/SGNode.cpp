@@ -449,26 +449,6 @@ void SGNode::setSkinningData(SkinMesh *mesh)
 //                Logger::log(INFO, "SGNODE:SetSkinningData()", "More joints affecting a vertex");
         }
     }
-    // equalize the weights sum to 1.0
-    
-    for (int i = 0; i < mesh->getMeshBufferCount(); i++) {
-        for(int j = 0; j < mesh->getVerticesCountInMeshBuffer(i); j++) {
-            Vector4 od2 = (mesh->getHeavyVerticesArray(i)[j].optionalData2);
-            Vector4 od4 = (mesh->getHeavyVerticesArray(i)[j].optionalData4);
-            
-            float sum = od2.x + od2.y + od2.z + od2.w + od4.x + od4.y + od4.z + od4.w;
-            if(sum != 1.0) {
-                double dif = 1.0 - sum;
-                mesh->getHeavyVerticesArray(i)[j].optionalData2 = Vector4(od2.x + ((od2.x/sum) * dif), od2.y + ((od2.y/sum) * dif), od2.z + ((od2.z/sum) * dif), od2.w + ((od2.w/sum) * dif));
-                mesh->getHeavyVerticesArray(i)[j].optionalData4 = Vector4(od4.x + ((od4.x/sum) * dif), od4.y + ((od4.y/sum) * dif), od4.z + ((od4.z/sum) * dif), od4.w + ((od4.w/sum) * dif));
-            }
-            
-            Vector4 od21 = (mesh->getHeavyVerticesArray(i)[j].optionalData2);
-            Vector4 od41 = (mesh->getHeavyVerticesArray(i)[j].optionalData4);
-            sum = od21.x + od21.y + od21.z + od21.w + od41.x + od41.y + od41.z + od41.w;
-            
-        }
-    }
 }
 
 shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float aspectRatio)

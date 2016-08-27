@@ -83,9 +83,11 @@ public:
     void setPropertyValue(Material *material,string name,int* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex = 0,int nodeIndex = -1,Texture *tex = NULL,int userValue = 0, bool blurTex = true);
     bool RemoveMaterialByIndex(u16 index);
     bool RemoveMaterial(Material *mat);
+
     void draw3DLine(Vector3 start , Vector3 end , Vector3 color , Material *material,int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex);
     void draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex,int vertexColorUniParamIndex,int transparencyUniParamIndex);
-    void draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT = false);
+    void draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT = false);
+    
     Texture* createRenderTargetTexture(string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType,int width,int height);
     void setRenderTarget(Texture* renderTexture,bool clearBackBuffer = true,bool clearZBuffer = true,bool isDepthPass=false,Vector4 color = Vector4(255,255,255,255));
     Vector3 getPixelColor(Vector2 touchPosition,Texture* texture,Vector4 bgColor = Vector4(255.0,255.0,255.0,255.0));

@@ -310,7 +310,7 @@ void RenderHelper::postRTTDrawCall()
     if(renderingScene->previewTexture && (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)) {
         movePreviewToCorner();
         Vector4 previewLayout = renderingScene->getCameraPreviewLayout();
-        smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x, previewLayout.y),Vector2(previewLayout.z, previewLayout.w), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
+        smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x, previewLayout.y),Vector2(previewLayout.z, previewLayout.w), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
     }
 }
 
@@ -384,7 +384,7 @@ void RenderHelper::drawCameraPreview()
     
     smgr->Render(false);
     if(renderingScene->whiteBorderTexture)
-        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     
     smgr->setRenderTarget(NULL, false, false);
     smgr->setActiveCamera(renderingScene->viewCamera);
@@ -706,7 +706,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     int waterMarkSize = SceneHelper::screenWidth * 0.2;
     
     if(!removeWaterMark)
-        smgr->draw2DImage(renderingScene->watermarkTexture,Vector2(SceneHelper::screenWidth - waterMarkSize ,SceneHelper::screenHeight - waterMarkSize),Vector2(SceneHelper::screenWidth,SceneHelper::screenHeight),false,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+        smgr->draw2DImage(renderingScene->watermarkTexture, Vector2(SceneHelper::screenWidth - waterMarkSize, SceneHelper::screenHeight - waterMarkSize), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     if(smgr->device == METAL)
         rttShadowMap();
     

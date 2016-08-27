@@ -42,8 +42,15 @@ private:
     id <MTLCommandQueue> _commandQueue;
     id <MTLLibrary> _defaultLibrary;
     id <MTLBuffer> vertexBuffer;
-    id <MTLDepthStencilState> _depthState;
     id <MTLTexture> _depthTex;
+    id <MTLTexture> _renderTargetDepthTex;
+
+    id <MTLDepthStencilState> _depthState;
+
+    id <MTLDepthStencilState> _generalDepthWriteEnableState;
+    id <MTLDepthStencilState> _generalDepthWriteDisableState;
+
+    
     float _rotation;
     id <MTLCommandBuffer> CMDBuffer;
     id <MTLRenderCommandEncoder> RenderCMDBuffer;
@@ -88,11 +95,13 @@ public:
     void (*NodePropertyCallBack)(shared_ptr<Node> node);
     void setActiveCamera(shared_ptr<CameraNode> camera);
     shared_ptr<CameraNode> getActiveCamera();
+
     void draw3DLine(Vector3 start,Vector3 end,Material *material);
     void draw3DLines(vector<Vector3> vPositions,Material *material);
+    void draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT = false);
+
     void clearDepthBuffer();
     void setTransparencyBlending(bool enable);
-    void draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT = false);
     bool PrepareDisplay(int width,int height,bool clearColorBuf = true,bool clearDepthBuf = true,bool isDepthPass = false,Vector4 color = Vector4(255,255,255,255));
     void endDisplay();
     Texture* createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height);

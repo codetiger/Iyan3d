@@ -68,6 +68,15 @@ void MetalRenderManager::setupMetalLayer()
     renderView.opaque = YES;
     renderView.backgroundColor = nil;
     renderView.contentScaleFactor = [UIScreen mainScreen].scale;
+    
+    MTLDepthStencilDescriptor *depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
+    depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
+    depthStateDesc.depthWriteEnabled = YES;
+    _generalDepthWriteEnableState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+
+    depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
+    depthStateDesc.depthWriteEnabled = NO;
+    _generalDepthWriteDisableState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
 }
 
 void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func, bool writeDepth, bool clearDepthBuffer)
@@ -75,20 +84,21 @@ void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func, bool writeDe
     if(isEncodingEnded)
         return;
     
-    MTLDepthStencilDescriptor *depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
-    depthStateDesc.depthCompareFunction = func;
-    depthStateDesc.depthWriteEnabled = writeDepth;
-    _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
-    [RenderCMDBuffer setDepthStencilState:_depthState];
+    if(writeDepth)
+        [RenderCMDBuffer setDepthStencilState:_generalDepthWriteEnableState];
+    else
+        [RenderCMDBuffer setDepthStencilState:_generalDepthWriteDisableState];
     
-    if(clearDepthBuffer){
+    if(clearDepthBuffer) {
         endEncoding();
         _renderPassDescriptor.depthAttachment.clearDepth = 1.0f;
         _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionLoad;
+        
         if(ANTI_ALIASING_SAMPLE_COUNT > 1)
             _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionMultisampleResolve;
         else
             _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
+        
         if(_renderPassDescriptor && CMDBuffer) {
             RenderCMDBuffer = [CMDBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
             [RenderCMDBuffer setFrontFacingWinding:MTLWindingClockwise];
@@ -120,10 +130,12 @@ void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> tex
         _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x, color.y, color.z, color.w);
     }
 
-    MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width: texture.width height: texture.height mipmapped: NO];
-    desc.textureType = colorTextureType;
-    desc.sampleCount = sampleCount;
-    _depthTex = [device newTextureWithDescriptor: desc];
+    if(!_depthTex) {
+        MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width: texture.width height: texture.height mipmapped: NO];
+        desc.textureType = colorTextureType;
+        desc.sampleCount = sampleCount;
+        _depthTex = [device newTextureWithDescriptor: desc];
+    }
     
     _renderPassDescriptor.depthAttachment.texture = _depthTex;
     _renderPassDescriptor.depthAttachment.loadAction = MTLLoadActionClear;
@@ -210,7 +222,7 @@ void MetalRenderManager::draw3DLines(vector<Vector3> vPositions,Material *materi
 
 void MetalRenderManager::clearDepthBuffer()
 {
-    setUpDepthState(CompareFunctionLessEqual,true,false);
+    setUpDepthState(CompareFunctionLessEqual, true, false);
 }
 
 void MetalRenderManager::setTransparencyBlending(bool enable)
@@ -218,31 +230,32 @@ void MetalRenderManager::setTransparencyBlending(bool enable)
     
 }
 
-void MetalRenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
+void MetalRenderManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT)
 {
-    setUpDepthState(CompareFunctionAlways,false,false);
-    Vector2 upperLeft = Helper::screenToOpenglCoords(originCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
-    Vector2 bottomRight = Helper::screenToOpenglCoords(endCoord,(float)screenWidth * screenScale,(float)screenHeight * screenScale);
-    Vector3 uu = Vector3(upperLeft.x,upperLeft.y,0.0);
-    Vector3 ub = Vector3(upperLeft.x,bottomRight.y,0.0);
-    Vector3 bb = Vector3(bottomRight.x,bottomRight.y,0.0);
-    Vector3 bu = Vector3(bottomRight.x,upperLeft.y,0.0);
+    setUpDepthState(CompareFunctionLessEqual, false, false);
+    
+    Vector2 upperLeft = Helper::screenToOpenglCoords(originCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
+    Vector2 bottomRight = Helper::screenToOpenglCoords(endCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
+    Vector3 uu = Vector3(upperLeft.x, upperLeft.y, 0.0);
+    Vector3 ub = Vector3(upperLeft.x, bottomRight.y, 0.0);
+    Vector3 bb = Vector3(bottomRight.x, bottomRight.y, 0.0);
+    Vector3 bu = Vector3(bottomRight.x, upperLeft.y, 0.0);
     
     vector<Vector3> vertPosition;
-    vertPosition.push_back((isRTT)?ub:uu);
-    vertPosition.push_back((isRTT)?uu:ub);
-    vertPosition.push_back((isRTT)?bu:bb);
-    vertPosition.push_back((isRTT)?bb:bu);
+    vertPosition.push_back((isRTT) ? ub:uu);
+    vertPosition.push_back((isRTT) ? uu:ub);
+    vertPosition.push_back((isRTT) ? bu:bb);
+    vertPosition.push_back((isRTT) ? bb:bu);
     
     vector<Vector2> texCoord1;
-    texCoord1.push_back(Vector2(0.0,1.0));
-    texCoord1.push_back(Vector2(0.0,0.0));
-    texCoord1.push_back(Vector2(1.0,0.0));
-    texCoord1.push_back(Vector2(1.0,1.0));
+    texCoord1.push_back(Vector2(0.0 , 1.0));
+    texCoord1.push_back(Vector2(0.0 , 0.0));
+    texCoord1.push_back(Vector2(1.0 , 0.0));
+    texCoord1.push_back(Vector2(1.0 , 1.0));
 
     
     vector<vertexData> vertices;
-    for(int i = 0; i < vertPosition.size();i++){
+    for(int i = 0; i < vertPosition.size(); i++) {
         vertexData vData;
         vData.vertPosition = vertPosition[i];
         vData.texCoord1 = texCoord1[i];
@@ -271,15 +284,15 @@ void MetalRenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector
         memcpy(indexBufferPointer,&indicesRTT[0],indexBufSize);
     else
         memcpy(indexBufferPointer,&indices[0],indexBufSize);
+    
     drawPrimitives(MTLPrimitiveTypeTriangle,6,MTLIndexTypeUInt16,MTLBuffersMap[indexBufSize][bufIndex].buf,0);
-    if(isBGImage)
-        setUpDepthState(CompareFunctionLessEqual,true,false);
 }
 
 void MetalRenderManager::useMaterialToRender(Material *mat)
 {
     if(_currentDrawable == nil)
-        PrepareDisplay(0,0,true,true,false,Vector4(1.0,1.0,1.0,1.0));
+        PrepareDisplay(0, 0, true, true, false, Vector4(1.0, 1.0, 1.0, 1.0));
+    
     [RenderCMDBuffer setRenderPipelineState:((MTLMaterial*)mat)->PipelineState];
 }
 
@@ -314,6 +327,7 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
     if(node->type <= NODE_TYPE_CAMERA)
         return;
     shared_ptr<MTLNodeData> MTLNode = dynamic_pointer_cast<MTLNodeData>(node->nodeData);
+    
     Mesh *nodeMes;
     if(node->type == NODE_TYPE_SKINNED) {
         if(node->skinType == GPU_SKIN)
@@ -328,28 +342,20 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
     MTLIndexType indexType = MTLIndexTypeUInt16;
     unsigned int indicesCount = nodeMes->getIndicesCount(meshBufferIndex);
     id<MTLBuffer> buf = [MTLNode->indexBuffers objectAtIndex:meshBufferIndex];
+    
     if (node->type == NODE_TYPE_PARTICLES) {
-        MTLDepthStencilDescriptor *depthStateDesc;
-        if(!isRTT) {
-            depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
-            depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
-            depthStateDesc.depthWriteEnabled = NO;
-            _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
-            [RenderCMDBuffer setDepthStencilState:_depthState];
-        }
+        if(!isRTT)
+            [RenderCMDBuffer setDepthStencilState:_generalDepthWriteDisableState];
         
         drawPrimitives(getMTLDrawMode(DRAW_MODE_POINTS), indicesCount,indexType, buf, 0);
         
-        if(!isRTT) {
-            depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
-            depthStateDesc.depthWriteEnabled = YES;
-            _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
-            [RenderCMDBuffer setDepthStencilState:_depthState];
-        }
+        if(!isRTT)
+            [RenderCMDBuffer setDepthStencilState:_generalDepthWriteEnableState];
 
     } else {
-        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) :  maxInstances;
-        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount,indexType, buf, (supportsInstancing) ? instancingCount+1 : 0);
+        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) : maxInstances;
+        
+        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount, indexType, buf, (supportsInstancing) ? instancingCount + 1 : 0);
     }
     
     node->shouldUpdateMesh = false;
@@ -377,8 +383,8 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
             [RenderCMDBuffer setCullMode:MTLCullModeBack];
             [RenderCMDBuffer setFrontFacingWinding:MTLWindingClockwise];
             RenderCMDBuffer.label = @"MyRenderEncoder";
-            setUpDepthState(CompareFunctionLessEqual,true,false);
-            [RenderCMDBuffer setDepthStencilState:_depthState];
+            
+            [RenderCMDBuffer setDepthStencilState:_generalDepthWriteEnableState];
             [RenderCMDBuffer pushDebugGroup:@"DrawCube"];
             mainRenderCMDBuffer = RenderCMDBuffer;
         }
@@ -554,7 +560,7 @@ id<MTLTexture> MetalRenderManager::getMSATexture(int sampleCount,int width,int h
     return [device newTextureWithDescriptor:msaaTexDesc];
 }
 
-void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBuffer,bool clearZBuffer,bool isDepthPass,Vector4 color)
+void MetalRenderManager::setRenderTarget(Texture *renderTexture, bool clearBackBuffer, bool clearZBuffer, bool isDepthPass, Vector4 color)
 {
     if(isCmdBufferCommited)
         return;
@@ -564,7 +570,7 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
         changeViewport(renderTexture->width, renderTexture->height);
         _renderPassDescriptor = nil;
         _renderPassDescriptor = [MTLRenderPassDescriptor new];
-        int sampleCount = 1,colorTextureType = MTLTextureType2D;
+        int sampleCount = 1, colorTextureType = MTLTextureType2D;
         if(!isDepthPass) {
             if(ANTI_ALIASING_SAMPLE_COUNT > 1) {
                 sampleCount = ANTI_ALIASING_SAMPLE_COUNT;colorTextureType = MTLTextureType2DMultisample;
@@ -578,13 +584,15 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
             _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
             _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x, color.y, color.z, color.w);
             
-            MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width:((MTLTexture*)renderTexture)->texture.width height:((MTLTexture*)renderTexture)->texture.height mipmapped: NO];
-            desc.sampleCount = sampleCount;
-            desc.textureType = colorTextureType;
-            _depthTex = [device newTextureWithDescriptor: desc];
+            if(!_renderTargetDepthTex) {
+                MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width:((MTLTexture*)renderTexture)->texture.width height:((MTLTexture*)renderTexture)->texture.height mipmapped: NO];
+                desc.sampleCount = sampleCount;
+                desc.textureType = colorTextureType;
+                _renderTargetDepthTex = [device newTextureWithDescriptor: desc];
+            }
         }
         
-        _renderPassDescriptor.depthAttachment.texture = (isDepthPass)? ((MTLTexture*)renderTexture)->texture : _depthTex;
+        _renderPassDescriptor.depthAttachment.texture = (isDepthPass)? ((MTLTexture*)renderTexture)->texture : _renderTargetDepthTex;
         _renderPassDescriptor.depthAttachment.loadAction = (isDepthPass)?MTLLoadActionClear:MTLLoadActionDontCare;
         _renderPassDescriptor.depthAttachment.clearDepth = 1.0f;
         _renderPassDescriptor.depthAttachment.storeAction = MTLStoreActionStore;
@@ -593,11 +601,9 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
             rttRenderCMDBuffer = [CMDBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
             [rttRenderCMDBuffer setCullMode:MTLCullModeBack];
             [rttRenderCMDBuffer setFrontFacingWinding:MTLWindingClockwise];
-            MTLDepthStencilDescriptor *depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
-            depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
-            depthStateDesc.depthWriteEnabled = YES;
-            _depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
-            [rttRenderCMDBuffer setDepthStencilState:_depthState];
+            
+            [rttRenderCMDBuffer setDepthStencilState:_generalDepthWriteEnableState];
+            
             [rttRenderCMDBuffer pushDebugGroup:@"DrawCube"];
             rttRenderCMDBuffer.label = @"RttRenderEncoder";
             RenderCMDBuffer = rttRenderCMDBuffer;
