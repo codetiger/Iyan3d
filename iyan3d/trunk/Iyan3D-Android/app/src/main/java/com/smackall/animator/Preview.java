@@ -35,30 +35,31 @@ public class Preview extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        HitScreens.EditorView(Preview.this);
-
         mediaController = new MediaController(this);
         showPreview(getIntent().getExtras().getString("path"));
     }
 
-    public void showPreview(String fileNameWithoutExt){
+    public void showPreview(String fileNameWithoutExt) {
 
-        if(FileHelper.checkValidFilePath(PathManager.RenderPath+"/"+ fileNameWithoutExt+".png"))
+        if (FileHelper.checkValidFilePath(PathManager.RenderPath + "/" + fileNameWithoutExt + ".png"))
             type = Constants.IMAGE;
-        else if(FileHelper.checkValidFilePath(PathManager.RenderPath+"/"+fileNameWithoutExt+".mp4"))
+        else if (FileHelper.checkValidFilePath(PathManager.RenderPath + "/" + fileNameWithoutExt + ".mp4"))
             type = Constants.VIDEO;
+        else if (FileHelper.checkValidFilePath(PathManager.LocalCacheFolder + "/" + fileNameWithoutExt + ".png"))
+            type = Constants.IMAGE;
         else
             return;
 
-        path = PathManager.RenderPath+"/"+fileNameWithoutExt+((type == Constants.IMAGE) ? ".png" : ".mp4");
-
+        path = PathManager.RenderPath + "/" + fileNameWithoutExt + ((type == Constants.IMAGE) ? ".png" : ".mp4");
+        if (!FileHelper.checkValidFilePath(path))
+            path = PathManager.LocalCacheFolder + "/" + fileNameWithoutExt + ((type == Constants.IMAGE) ? ".png" : ".mp4");
         init(type);
         showPreviewScene();
     }
 
-    private void init(int type){
-        preview_VideoView = ((VideoView)findViewById(R.id.preview_videoView));
-        preview_ImageView = ((ImageView)findViewById(R.id.preview_imageView));
+    private void init(int type) {
+        preview_VideoView = ((VideoView) findViewById(R.id.preview_videoView));
+        preview_ImageView = ((ImageView) findViewById(R.id.preview_imageView));
 
         findViewById(R.id.preview_close).setOnClickListener(this);
         findViewById(R.id.preview_share).setOnClickListener(this);
@@ -67,18 +68,18 @@ public class Preview extends AppCompatActivity implements View.OnClickListener {
         preview_ImageView.setVisibility((type == Constants.IMAGE) ? View.VISIBLE : View.GONE);
     }
 
-    private void showPreviewScene(){
-        if(!FileHelper.checkValidFilePath(path)){
+    private void showPreviewScene() {
+        if (!FileHelper.checkValidFilePath(path)) {
             findViewById(R.id.preview_close).performClick();
             return;
         }
 
         HitScreens.Preview(this, type);
-        if(type == Constants.IMAGE)
+        if (type == Constants.IMAGE)
             preview_ImageView.setImageBitmap(BitmapFactory.decodeFile(path));
-        else{
+        else {
             preview_VideoView.setVideoPath(path);
-            if(mediaController == null)
+            if (mediaController == null)
                 mediaController = new MediaController(this);
             preview_VideoView.setMediaController(mediaController);
             mediaController.setAnchorView(preview_VideoView);
@@ -91,27 +92,26 @@ public class Preview extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(mediaController != null && type == Constants.VIDEO)
+        if (mediaController != null && type == Constants.VIDEO)
             mediaController.show(0);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.preview_close:
                 finish();
                 break;
             case R.id.preview_share:
                 try {
-                    Events.shareEvent(this,type);
+                    Events.shareEvent(this, type);
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
                     shareIntent.setType((type == Constants.IMAGE) ? "image/png" : "video/mp4");
                     startActivity(Intent.createChooser(shareIntent, "Share to"));
-                }
-                catch (ActivityNotFoundException e){
-                    UIHelper.informDialog(this,"No Activity found for share this.");
+                } catch (ActivityNotFoundException e) {
+                    UIHelper.informDialog(this, getString(R.string.no_activity_for_share_intent));
                 }
                 break;
         }

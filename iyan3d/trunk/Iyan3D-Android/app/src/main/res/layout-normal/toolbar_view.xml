@@ -1,303 +1,304 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="10"
-    android:background="#3c3f41"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#3c3f41"
+              android:orientation="vertical"
+              android:paddingBottom="5dp"
+              android:paddingLeft="2dp"
+              android:paddingRight="2dp"
+              android:paddingTop="5dp"
+              android:weightSum="10">
 
     <LinearLayout
-        style="@android:style/Widget.Button"
-        android:background="#f5595c60"
         android:id="@+id/play_btn"
-        android:orientation="vertical"
+        style="@android:style/Widget.Button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:gravity="center"
+        android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp">
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/play_btn" />
+            android:src="@drawable/play_btn"/>
 
     </LinearLayout>
 
     <LinearLayout
-        style="@android:style/Widget.Button"
-        android:background="#f5595c60"
         android:id="@+id/my_object_btn"
-        android:orientation="horizontal"
+        style="@android:style/Widget.Button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
+        android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp">
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/my_object"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/my_object"/>
 
         <TextView
             android:id="@+id/image_button_3_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/myObject"
             android:textColor="#ffffff"
-            android:text="MY OBJECTS"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/import_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/import_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/import_btn"
-            android:id="@+id/imageView14"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/import_btn"/>
 
         <TextView
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/add"
             android:textColor="#ffffff"
-            android:text="ADD"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/animation_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/animation_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/animation_btn"
-            android:id="@+id/imageView15"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/animation_btn"/>
 
         <TextView
             android:id="@+id/textView31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/animation"
             android:textColor="#ffffff"
-            android:text="ANIMATION"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/option_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/option_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/option_btn"
-            android:id="@+id/imageView16"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/option_btn"/>
 
         <TextView
             android:id="@+id/textView32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/options"
             android:textColor="#ffffff"
-            android:text="OPTIONS"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/export_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/export_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/export_btn"
-            android:id="@+id/imageView17"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/export_btn"/>
 
         <TextView
             android:id="@+id/textView33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/export"
             android:textColor="#ffffff"
-            android:text="EXPORT"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/move_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/move_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/move_btn"
-            android:id="@+id/imageView18"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/move_btn"/>
 
         <TextView
             android:id="@+id/textView34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/move"
             android:textColor="#ffffff"
-            android:text="MOVE"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/rotate_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/rotate_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/rotate_btn"
-            android:id="@+id/imageView19"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/rotate_btn"/>
 
         <TextView
             android:id="@+id/textView35"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/rotate"
             android:textColor="#ffffff"
-            android:text="ROTATE"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/scale_btn"
         style="@android:style/Widget.Button"
-        android:background="#f5595c60"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center|left"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:id="@+id/scale_btn">
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:background="#f5595c60"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
 
         <ImageView
+            android:id="@+id/imageView20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/scale_btn"
-            android:id="@+id/imageView20"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:src="@drawable/scale_btn"/>
 
         <TextView
             android:id="@+id/textView36"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/scale"
             android:textColor="#ffffff"
-            android:text="SCALE"
             android:textSize="8sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:weightSum="1"
+        android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp">
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
+            android:id="@+id/undo"
             style="@android:style/Widget.Button"
-            android:background="#f5595c60"
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
             android:layout_weight="0.5"
-            android:id="@+id/undo"
-            android:layout_marginRight="2dp">
+            android:background="#f5595c60"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -307,14 +308,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/redo"
             style="@android:style/Widget.Button"
-            android:background="#f5595c60"
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:id="@+id/redo"
             android:layout_marginLeft="2dp"
+            android:layout_weight="0.5"
+            android:background="#f5595c60"
+            android:orientation="horizontal"
             >
 
             <ImageView

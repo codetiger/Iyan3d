@@ -15,9 +15,9 @@ import com.smackall.animator.R;
  */
 public class FrameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private Context context;
     public TextView tvName;
     public View view;
+    private Context context;
 
     public FrameViewHolder(Context context, View itemView) {
         super(itemView);

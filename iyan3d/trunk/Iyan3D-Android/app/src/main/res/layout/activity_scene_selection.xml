@@ -1,119 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context="com.smackall.animator.SceneSelection"
-    android:orientation="vertical"
-    android:weightSum="1">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/coordinatorLayout"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:orientation="vertical"
+             android:weightSum="1"
+             tools:context="com.smackall.animator.SceneSelection">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.smackall.animator.SceneSelection"
-    android:orientation="vertical"
-    android:weightSum="1"
-    android:id="@+id/scene_selection">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.075"
-        android:background="#a800ff"
-        android:weightSum="1">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:id="@+id/scene_selection"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:weightSum="1"
+                  tools:context="com.smackall.animator.SceneSelection">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.2"
-            android:gravity="center|left"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.075"
+            android:background="#a800ff"
+            android:orientation="horizontal"
             android:weightSum="1">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/new_scene_btn"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/new_scene_btn"
-                android:adjustViewBounds="false"
-                android:scaleType="center"
-                android:onClick="addNewScene"
-                android:clickable="true" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center|left"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/new_scene_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:adjustViewBounds="false"
+                    android:clickable="true"
+                    android:onClick="addNewScene"
+                    android:scaleType="center"
+                    android:src="@drawable/new_scene_btn"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.6"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView41"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scenes"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/newsFeed_btn"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:clickable="true"
+                        android:onClick="showNewsFeed"
+                        android:scaleType="center"
+                        android:src="@drawable/newsfeed"/>
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/login_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:onClick="showLogIn"
+                    android:scaleType="center"
+                    android:src="@drawable/login_btn"/>
+
+                <ImageView
+                    android:id="@+id/help"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:onClick="showHelp"
+                    android:scaleType="center"
+                    android:src="@drawable/help"/>
+
+                <ImageView
+                    android:id="@+id/info_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:onClick="openSceneProps"
+                    android:scaleType="center"
+                    android:src="@drawable/info_btn"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.6"
-            android:gravity="center" >
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.925"
+            android:background="#222325"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Scenes"
-                android:id="@+id/textView41"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.2"
-            android:gravity="center|right"
-            android:weightSum="3">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/login_btn"
-                android:src="@drawable/login_btn"
-                android:adjustViewBounds="true"
-                android:scaleType="center"
-                android:clickable="true"
-                android:onClick="showLogIn"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/help"
-                android:src="@drawable/help"
-                android:adjustViewBounds="true"
-                android:scaleType="center"
-                android:clickable="true"
-                android:onClick="showHelp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/info_btn"
-                android:src="@drawable/info_btn"
-                android:adjustViewBounds="true"
-                android:scaleType="center"
-                android:onClick="openSceneProps"
-                android:clickable="true"
-                android:layout_weight="1" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.925"
-        android:background="#222325">
-
-        <!--<GridView-->
+            <!--<GridView-->
             <!--android:layout_width="fill_parent"-->
             <!--android:layout_height="fill_parent"-->
             <!--android:id="@+id/gridView"-->
@@ -124,20 +140,20 @@
             <!--android:layout_margin="30dp"-->
             <!--android:foregroundGravity="bottom" />-->
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/gridView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="30dp"
-            android:scrollbars="vertical"
-            android:clipToPadding="false"/>
-    </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/gridView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="30dp"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/tool_tip_view_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
-    </FrameLayout>
+</FrameLayout>

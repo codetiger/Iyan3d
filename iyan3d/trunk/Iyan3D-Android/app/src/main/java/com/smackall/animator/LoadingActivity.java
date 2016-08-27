@@ -1,28 +1,23 @@
 package com.smackall.animator;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Scene;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
-import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
@@ -38,28 +33,24 @@ import com.smackall.animator.Helper.UIHelper;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
-import io.fabric.sdk.android.services.common.SystemCurrentTimeProvider;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    DownloadHelper assetJsonDownload;
-    DownloadHelper animationJsonDownload;
-    int process = 0;
-    public ProgressBar loadingBar;
-    boolean activityStarted = false;
-    int startTime = 0;
-    Intent i;
-    private Tracker mTracker;
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "FVYtYJI6e4lZMHoZvYCt2ejao";
     private static final String TWITTER_SECRET = "eiFIXzb9zjoaH0lrDZ2Jrh2ezvbmuFv6rvPJdIXLYxgkaZ7YKC";
-
+    public ProgressBar loadingBar;
+    DownloadHelper assetJsonDownload;
+    DownloadHelper animationJsonDownload;
+    int process = 0;
+    boolean activityStarted = false;
+    int startTime = 0;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +58,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             Intent intent;
-            if(Constants.currentActivity != -1) {
+            if (Constants.currentActivity != -1) {
                 int currentActivity = Constants.currentActivity;
                 Class cl = (currentActivity == 0) ? SceneSelection.class : EditorView.class;
                 intent = new Intent(Intent.ACTION_MAIN);
@@ -76,13 +67,12 @@ public class LoadingActivity extends AppCompatActivity {
                 intent.addCategory(Intent.CATEGORY_LAUNCHER);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                         Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                if(getIntent().getExtras() != null)
+                if (getIntent().getExtras() != null)
                     intent.putExtras(getIntent().getExtras());
-            }
-            else{
+            } else {
                 intent = new Intent(this, SceneSelection.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if(getIntent().getExtras() != null)
+                if (getIntent().getExtras() != null)
                     intent.putExtras(getIntent().getExtras());
             }
 
@@ -96,19 +86,19 @@ public class LoadingActivity extends AppCompatActivity {
             finish();
             return;
         }
-        if(!isTaskRoot()){
+        if (!isTaskRoot()) {
             Intent intent = getIntent();
             String action = intent.getAction();
-            if(action.compareTo(Intent.ACTION_VIEW) == 0) {
+            if (action.compareTo(Intent.ACTION_VIEW) == 0) {
                 String scheme = intent.getScheme();
                 ContentResolver resolver = getContentResolver();
                 if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
                     Uri uri = intent.getData();
                     String name = uri.getPath();
-                    if(name != null && FileHelper.checkValidFilePath(name)) {
+                    if (name != null && FileHelper.checkValidFilePath(name)) {
                         intent.putExtra("hasExtraForOpenWith", true);
                         intent.putExtra("i3dPath", name);
-                        i.putExtra("fromLoading",false);
+                        i.putExtra("fromLoading", false);
                     }
                 }
                 PendingIntent pi = PendingIntent.getActivity(this, 0, intent,
@@ -127,52 +117,50 @@ public class LoadingActivity extends AppCompatActivity {
         FullScreen.HideStatusBar(this);
         setContentView(R.layout.activity_loading);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this,new Crashlytics(), new CrashlyticsNdk(), new Twitter(authConfig));
+        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk(), new Twitter(authConfig));
         HitScreens.LoadingView(LoadingActivity.this);
         Constants.deviceUniqueId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        loadingBar = (ProgressBar)findViewById(R.id.loadingBar);
+        loadingBar = (ProgressBar) findViewById(R.id.loadingBar);
         float space = Constants.getFreeSpace();
-        if(space < 50.0){
-            UIHelper.informDialog(LoadingActivity.this,"Phone storage is low. Minimum 50MB of space is required.",true);
+        if (space < 50.0) {
+            UIHelper.informDialog(LoadingActivity.this, getString(R.string.phone_storage_low_need_50mb), true);
         }
         i = new Intent(LoadingActivity.this, SceneSelection.class);
         Intent intent = getIntent();
         String action = intent.getAction();
-        if(action != null && action.compareTo(Intent.ACTION_VIEW) == 0) {
+        if (action != null && action.compareTo(Intent.ACTION_VIEW) == 0) {
             String scheme = intent.getScheme();
             if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
                 Uri uri = intent.getData();
                 String name = uri.getPath();
-                if(name != null && FileHelper.checkValidFilePath(name)) {
+                if (name != null && FileHelper.checkValidFilePath(name)) {
                     i.putExtra("hasExtraForOpenWith", true);
                     i.putExtra("i3dPath", name);
-                    i.putExtra("fromLoading",false);
+                    i.putExtra("fromLoading", false);
                 }
             }
         }
         init();
     }
 
-    private void init(){
+    private void init() {
+
         boolean needPermission = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
-        CoordinatorLayout coordinatorLayout = ((CoordinatorLayout)findViewById(R.id.coordinatorLayout));
+        CoordinatorLayout coordinatorLayout = ((CoordinatorLayout) findViewById(R.id.coordinatorLayout));
         PermissionManager permissionManager = new PermissionManager();
-        if(needPermission && !permissionManager.checkPermission(Constants.INTERNET,this)) {
-            permissionManager.requestInternetPermission(this,coordinatorLayout);
-        }
-        else if(needPermission && !permissionManager.checkPermission(Constants.STORAGE,this)){
-            permissionManager.requestReadAndWritePermission(this,coordinatorLayout);
-        }
-        else if(needPermission && !permissionManager.checkPermission(Constants.GET_ACCOUNTS,this)){
-            permissionManager.requestGetAccounts(this,coordinatorLayout);
-        }
-        else if(needPermission && !permissionManager.checkPermission(Constants.WAKELOCK,this)){
-            permissionManager.requestWakeLock(this,coordinatorLayout);
-        }
-        else {
+        if (needPermission && !permissionManager.checkPermission(Constants.INTERNET, this)) {
+            permissionManager.requestInternetPermission(this, coordinatorLayout);
+        } else if (needPermission && !permissionManager.checkPermission(Constants.STORAGE, this)) {
+            permissionManager.requestReadAndWritePermission(this, coordinatorLayout);
+        } else if (needPermission && !permissionManager.checkPermission(Constants.GET_ACCOUNTS, this)) {
+            permissionManager.requestGetAccounts(this, coordinatorLayout);
+        } else if (needPermission && !permissionManager.checkPermission(Constants.WAKELOCK, this)) {
+            permissionManager.requestWakeLock(this, coordinatorLayout);
+        } else {
+            Events.archEvent();
             Events.appStart(LoadingActivity.this);
-            startTime = (int) (System.currentTimeMillis()/1000);
+            startTime = (int) (System.currentTimeMillis() / 1000);
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             Constants.width = displaymetrics.widthPixels;
@@ -182,6 +170,7 @@ public class LoadingActivity extends AppCompatActivity {
             final SharedPreferenceManager sp = new SharedPreferenceManager();
             PathManager.initPaths(this);
             FileHelper.copyAssetsDirToLocal(this);
+            FileHelper.copySingleAssetFile(LoadingActivity.this, "white_texture.png", PathManager.LocalTextureFolder,"white_texture.png");
             KeyMaker.makeKey(this);
             final DatabaseHelper db = new DatabaseHelper();
             db.createDataBase();
@@ -205,8 +194,7 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
-    private void loadProgressBar()
-    {
+    private void loadProgressBar() {
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -214,34 +202,30 @@ public class LoadingActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(loadingBar != null)
-                            loadingBar.setProgress(loadingBar.getProgress()+1);
+                        if (loadingBar != null)
+                            loadingBar.setProgress(loadingBar.getProgress() + 1);
                         process++;
-                        if(process == 50)
+                        if (process == 50)
                             timer.cancel();
-                            startSceneSelection();
+                        startSceneSelection();
                     }
                 });
             }
         }, 1000, 100);
     }
 
-    private void dealloc()
-    {
-        //assetJsonDownload = null;
-        //animationJsonDownload = null;
+    private void dealloc() {
         LoadingActivity.this.finish();
     }
 
-    public void startSceneSelection()
-    {
-        if(loadingBar.getProgress() >= 100) {
-            if(!activityStarted) {
-                int finishTime = (int) Math.abs(((System.currentTimeMillis()/1000)) - startTime);
-                Events.loadingCompleted(LoadingActivity.this,finishTime);
+    public void startSceneSelection() {
+        if (loadingBar.getProgress() >= 100) {
+            if (!activityStarted) {
+                int finishTime = (int) Math.abs(((System.currentTimeMillis() / 1000)) - startTime);
+                Events.loadingCompleted(LoadingActivity.this, finishTime);
                 activityStarted = true;
                 i.putExtra("isNotification", false);
-                i.putExtra("fromLoading",true);
+                i.putExtra("fromLoading", true);
                 startActivity(i);
                 LoadingActivity.this.dealloc();
             }
@@ -250,7 +234,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == Constants.REQUEST_GET_ACCOUNTS ||requestCode == Constants.REQUEST_INTERNET || requestCode == Constants.REQUEST_STORAGE || requestCode == Constants.REQUEST_WAKELOCK)
+        if (requestCode == Constants.REQUEST_GET_ACCOUNTS || requestCode == Constants.REQUEST_INTERNET || requestCode == Constants.REQUEST_STORAGE || requestCode == Constants.REQUEST_WAKELOCK)
             init();
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }

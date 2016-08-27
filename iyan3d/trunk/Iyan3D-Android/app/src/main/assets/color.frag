@@ -1,6 +1,8 @@
 precision lowp float;
-uniform vec3 perVertexColor[1];
-uniform float transparency;
+
+uniform vec3 meshColor[1];
+uniform float transparencyValue[1];
+
 void main() {
-	gl_FragColor = vec4(vec3(perVertexColor[0]),transparency);
+	gl_FragColor = vec4(vec3(meshColor[0]), transparencyValue[0]);
 }

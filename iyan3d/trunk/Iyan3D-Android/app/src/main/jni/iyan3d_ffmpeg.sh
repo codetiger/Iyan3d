@@ -133,9 +133,10 @@ function build_one
 mkdir -p $1
 cd $1
 $BASE/src/configure \
+--disable-everything \
 --disable-logging \
 --prefix=$2 \
---disable-static \
+--enable-static \
 --enable-shared \
 --enable-small \
 --disable-swscale-alpha \
@@ -163,37 +164,24 @@ $BASE/src/configure \
 --disable-fft \
 --disable-faan \
 --disable-pixelutils \
---disable-encoders \
 --enable-encoder=mpeg4 \
---enable-encoder=png \
---disable-decoders \
---enable-decoder=mpeg4 \
 --enable-decoder=png \
---disable-hwaccels \
---disable-muxers \
 --enable-muxer=mp4 \
---disable-demuxers \
 --enable-demuxer=image2 \
---enable-demuxer=mpegvideo \
---disable-parsers \
---enable-parser=mpegvideo \
 --enable-parser=png \
---disable-bsfs \
---disable-protocols \
 --enable-protocol=file \
---enable-protocol=data \
---enable-protocol=async \
---disable-indevs \
---disable-outdevs \
---disable-devices \
+--enable-filter=format \
+--enable-filter=null \
+--enable-filter=scale \
+--enable-filter=setpts \
 --disable-debug \
 --enable-symver \
 --arch=$4 \
 --cross-prefix=$3 \
 --sysroot=$5 \
 --target-os=linux \
---extra-cflags="-Os $6" \
---extra-ldflags="$7" \
+--extra-cflags="-Os -ffunction-sections -fdata-sections $6" \
+--extra-ldflags="-Wl,--gc-sections,--icf=safe $7" \
 --enable-pic \
 --disable-neon \
 $8
@@ -231,9 +219,9 @@ CROSS_PREFIX=$TOOLCHAIN/bin/arm-linux-androideabi-
 ARCH=arm
 E_CFLAGS=
 E_LDFLAGS=
-EXTRA=
-build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
-"$E_CFLAGS" "$E_LDFLAGS" "$EXTRA"
+EXTRA="--disable-asm"
+#build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
+#"$E_CFLAGS" "$E_LDFLAGS" "$EXTRA"
 #TOOLCHAIN=$BASE/toolchain
 #$ANDROID_NDK/build/tools/make-standalone-toolchain.sh --toolchain=arm-linux-androideabi-4.9 --arch=arm --platform=android-14 --install-dir=$TOOLCHAIN
 #export PATH=$TOOLCHAIN/bin:$PATH
@@ -244,7 +232,7 @@ build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
 #$CC -lm -lz -shared --sysroot=$SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $E_LDFLAGS $BUILD_ROOT/libswscale/*.o $BUILD_ROOT/libswscale/arm/*.o $BUILD_ROOT/libavfilter/*.o $BUILD_ROOT/libavformat/*.o \
 #$BUILD_ROOT/libavcodec/*.o $BUILD_ROOT/libavcodec/arm/*.o $BUILD_ROOT/compat/*.o $BUILD_ROOT/libavutil/*.o $BUILD_ROOT/libavutil/arm/*.o \
 #-o $PREFIX/lib/libffmpeg.so
-moveToApp "armeabi"
+#moveToApp "armeabi"
 ###############################################################################
 #
 # ARM-v7a build configuration
@@ -289,8 +277,8 @@ ARCH=arm64
 E_CFLAGS=
 E_LDFLAGS=
 EXTRA=
-build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
-"$E_CFLAGS" "$E_LDFLAGS" "$EXTRA"
+#build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
+#"$E_CFLAGS" "$E_LDFLAGS" "$EXTRA"
 
 #TOOLCHAIN=$BASE/toolchain
 #$ANDROID_NDK/build/tools/make-standalone-toolchain.sh --toolchain=aarch64-linux-android-4.9 --arch=arm64 --platform=android-21 --install-dir=$TOOLCHAIN
@@ -302,7 +290,7 @@ build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
 #$CC -lm -lz -shared --sysroot=$SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $E_LDFLAGS $BUILD_ROOT/libswscale/*.o $BUILD_ROOT/libswscale/aarch64/*.o $BUILD_ROOT/libavfilter/*.o $BUILD_ROOT/libavformat/*.o \
 #$BUILD_ROOT/libavcodec/*.o $BUILD_ROOT/libavcodec/aarch64/*.o $BUILD_ROOT/libavcodec/neon/*.o $BUILD_ROOT/compat/*.o $BUILD_ROOT/libavutil/*.o $BUILD_ROOT/libavutil/aarch64/*.o \
 #-o $PREFIX/lib/libffmpeg.so
-moveToApp "arm64-v8a"
+#moveToApp "arm64-v8a"
 ###############################################################################
 #
 # x86 build configuration
@@ -347,8 +335,8 @@ ARCH=x86_64
 E_CFLAGS="-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel"
 E_LDFLAGS=
 EXTRA="--enable-asm"
-build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
-"$E_CFLAGS" "$E_LDFLAGS" "$EXTRA"
+#build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
+#"$E_CFLAGS" "$E_LDFLAGS" "$EXTRA"
 
 #TOOLCHAIN=$BASE/toolchain
 #$ANDROID_NDK/build/tools/make-standalone-toolchain.sh --toolchain=x86_64-4.9 --arch=x86_64 --platform=android-21 --install-dir=$TOOLCHAIN
@@ -360,5 +348,5 @@ build_one "$BUILD_ROOT" "$PREFIX" "$CROSS_PREFIX" "$ARCH" "$SYSROOT" \
 #$CC -lm -lz -shared --sysroot=$SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $E_LDFLAGS $BUILD_ROOT/libswscale/*.o $BUILD_ROOT/libswscale/x86/*.o $BUILD_ROOT/libavfilter/*.o $BUILD_ROOT/libavformat/*.o \
 #$BUILD_ROOT/libavcodec/*.o $BUILD_ROOT/libavcodec/x86/*.o $BUILD_ROOT/compat/*.o $BUILD_ROOT/libavutil/*.o $BUILD_ROOT/libavutil/x86/*.o \
 #-o $PREFIX/lib/libffmpeg.so
-moveToApp "x86_64"
+#moveToApp "x86_64"
 exit

@@ -20,45 +20,45 @@ import java.net.URLConnection;
  */
 public class MissingAssetHandler {
     Context mContext;
-    public MissingAssetHandler(Context context){
+
+    public MissingAssetHandler(Context context) {
         this.mContext = context;
     }
 
-    public boolean checkAssets(String filename , int nodeType){
-        switch (nodeType){
+    public boolean checkAssets(String filename, int nodeType) {
+        switch (nodeType) {
             case Constants.NODE_TEXT_SKIN:
             case Constants.NODE_TEXT:
-                if(!FileHelper.checkValidFilePath(PathManager.LocalFontsFolder+"/"+filename))
-                    if(!FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder+"/"+filename))
-                        return downloadMissingAsset(GL2JNILib.Font()+filename,PathManager.LocalFontsFolder+"/"+filename);
+                if (!FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" + filename))
+                    if (!FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder + "/" + filename))
+                        return downloadMissingAsset(GL2JNILib.Font() + filename, PathManager.LocalFontsFolder + "/" + filename);
                 break;
             case Constants.NODE_SGM:
-                if(!FileHelper.checkValidFilePath(PathManager.LocalMeshFolder+"/"+filename+".sgm")) {
+                if (!FileHelper.checkValidFilePath(PathManager.LocalMeshFolder + "/" + filename + ".sgm")) {
                     downloadMissingAsset(GL2JNILib.Mesh() + filename + ".sgm", PathManager.LocalMeshFolder + "/" + filename + ".sgm");
-                   return downloadMissingAsset(GL2JNILib.Texture() + filename + ".png", PathManager.LocalMeshFolder + "/" + filename + "-cm.png");
+                    return downloadMissingAsset(GL2JNILib.Texture() + filename + ".png", PathManager.LocalTextureFolder + "/" + filename + "-cm.png");
                 }
                 break;
             case Constants.NODE_RIG:
-                if(!FileHelper.checkValidFilePath(PathManager.LocalMeshFolder+"/"+filename+".sgr")) {
+                if (!FileHelper.checkValidFilePath(PathManager.LocalMeshFolder + "/" + filename + ".sgr")) {
                     downloadMissingAsset(GL2JNILib.Mesh() + filename + ".sgr", PathManager.LocalMeshFolder + "/" + filename + ".sgr");
-                    return downloadMissingAsset(GL2JNILib.Texture() + filename + ".png", PathManager.LocalMeshFolder + "/" + filename + "-cm.png");
+                    return downloadMissingAsset(GL2JNILib.Texture() + filename + ".png", PathManager.LocalTextureFolder + "/" + filename + "-cm.png");
                 }
                 break;
             case Constants.NODE_PARTICLES:
                 break;
             case Constants.NODE_IMAGE:
-                if(!FileHelper.checkValidFilePath(PathManager.LocalImportedImageFolder+"/"+filename+".png")) {
+                if (!FileHelper.checkValidFilePath(PathManager.LocalImportedImageFolder + "/" + filename + ".png")) {
                     return false;
                 }
                 break;
             case Constants.NODE_VIDEO:
                 break;
         }
-    return true;
+        return true;
     }
 
-    public boolean downloadMissingAsset(String link,String path)
-    {
+    public boolean downloadMissingAsset(String link, String path) {
         int count;
         try {
             URL url = new URL(link);

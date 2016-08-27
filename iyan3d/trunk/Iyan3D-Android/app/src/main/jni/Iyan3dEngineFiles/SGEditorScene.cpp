@@ -189,7 +189,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     previousDistance = Vector2(0.0, 0.0);
     actionObjectsSize = 0;
     moveNodeId = NOT_SELECTED;
-    
+
     shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, Vector4(0), UNDEFINED, SLIDER_TYPE, "Ambient Light", "Scene Properties");
     shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", "envmap.png");
 }
@@ -707,9 +707,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
 #ifdef IOS
     StoragePath = constants::CachesStoragePath + "/";
 #endif
-#ifdef ANDROID
-    StoragePath = constants::DocumentsStoragePath + "/mesh/";
-#endif
+
     string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName + ".png";
 
     if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {

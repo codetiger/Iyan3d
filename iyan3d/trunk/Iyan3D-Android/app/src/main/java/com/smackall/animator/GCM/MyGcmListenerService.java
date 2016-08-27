@@ -21,7 +21,7 @@ import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.R;
 import com.smackall.animator.SceneSelection;
 
-public class MyGcmListenerService extends GcmListenerService{
+public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
 
@@ -38,12 +38,6 @@ public class MyGcmListenerService extends GcmListenerService{
         String message = data.getString("message");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
-
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
 
         // [START_EXCLUDE]
         /**
@@ -69,7 +63,7 @@ public class MyGcmListenerService extends GcmListenerService{
      */
     private void sendNotification(String message) {
         Intent intent;
-        if(Constants.currentActivity != -1) {
+        if (Constants.currentActivity != -1) {
             int currentActivity = Constants.currentActivity;
             Class cl = (currentActivity == 0) ? SceneSelection.class : EditorView.class;
             intent = new Intent(Intent.ACTION_MAIN);
@@ -78,11 +72,10 @@ public class MyGcmListenerService extends GcmListenerService{
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        }
-        else{
+        } else {
             intent = new Intent(this, SceneSelection.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("isNotification",true);
+            intent.putExtra("isNotification", true);
         }
 
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent,

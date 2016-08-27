@@ -47,39 +47,68 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+
 /**
  * Created by Sabish.M on 12/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class Login implements View.OnClickListener , GoogleApiClient.OnConnectionFailedListener{
+public class Login implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     Context mContext;
-    private Dialog login;
     CallbackManager callbackManager;
     LoginButton facebookLoginBtn;
     GoogleApiClient mGoogleApiClient;
     TwitterButton twitterButton;
-
     HashMap<String, String> map;
+    private Dialog login;
     private UserDetails userDetails;
+    private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
+        @Override
+        public void onSuccess(LoginResult loginResult) {
+            GraphRequest request = GraphRequest.newMeRequest(
+                    loginResult.getAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(JSONObject object, GraphResponse response) {
+                            jsonToMap(response.getJSONObject());
+                            userDetails.uniqueId = map.get("id");
+                            userDetails.userName = map.get("name");
+                            userDetails.mail = map.get("email");
+                            userDetails.signInType = Constants.FACEBOOK_SIGNIN;
+                            userDetails.setUserDetails();
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,email,gender");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
 
-    public Login(Context context){
+        @Override
+        public void onCancel() {
+        }
+
+        @Override
+        public void onError(FacebookException e) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.unable_to_sign_int));
+
+        }
+    };
+
+    public Login(Context context) {
         this.mContext = context;
     }
 
-    public void showLogin(View v,MotionEvent event)
-    {
-        if(map != null)
+    public void showLogin(View v, MotionEvent event) {
+        if (map != null)
             map.clear();
 
         try {
             String className = mContext.getClass().getSimpleName();
-            if (className.toLowerCase().equals("sceneselection"))
-                userDetails = ((SceneSelection) ((Activity) mContext)).userDetails;
-            else
-                userDetails = ((EditorView) ((Activity) mContext)).userDetails;
+            userDetails = className.toLowerCase().equals("sceneselection") ? ((SceneSelection) mContext).userDetails : ((EditorView) mContext).userDetails;
+        } catch (ClassCastException ignored) {
+            return;
         }
-        catch (ClassCastException ignored){return;}
 
         Dialog login = new Dialog(mContext);
         login.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -87,24 +116,23 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
         login.setCancelable(false);
         login.setCanceledOnTouchOutside(true);
 
-        switch (UIHelper.ScreenType){
+        switch (UIHelper.ScreenType) {
             case Constants.SCREEN_NORMAL:
-                login.getWindow().setLayout((int) (Constants.width / 2), (int) (Constants.height/1.1));
+                login.getWindow().setLayout(Constants.width / 2, (int) (Constants.height / 1.1));
                 break;
             default:
-                login.getWindow().setLayout(Constants.width / 3, (int) (Constants.height / 2));
+                login.getWindow().setLayout(Constants.width / 3, Constants.height / 2);
                 break;
         }
 
         Window window = login.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.gravity= Gravity.TOP | Gravity.START;
-        wlp.dimAmount=0.0f;
-        if(event != null) {
-            wlp.x = (int)event.getX();
-            wlp.y = (int)event.getY();
-        }
-        else {
+        wlp.gravity = Gravity.TOP | Gravity.START;
+        wlp.dimAmount = 0.0f;
+        if (event != null) {
+            wlp.x = (int) event.getX();
+            wlp.y = (int) event.getY();
+        } else {
             int[] location = new int[2];
             v.getLocationOnScreen(location);
             wlp.x = location[0];
@@ -117,14 +145,13 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
         login.show();
 
         twitterButton = new TwitterButton(mContext);
-        LinearLayout a = (LinearLayout)login.findViewById(R.id.twitterBtnHolder);
+        LinearLayout a = (LinearLayout) login.findViewById(R.id.twitterBtnHolder);
         a.addView(twitterButton);
         twitterButton.setVisibility(View.GONE);
         twitter();
     }
 
-    public void initAllSignSdk()
-    {
+    public void initAllSignSdk() {
 
         FacebookSdk.sdkInitialize(mContext);
         callbackManager = CallbackManager.Factory.create();
@@ -140,12 +167,11 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
                 .build();
     }
 
-    private void initViews(Dialog login)
-    {
+    private void initViews(Dialog login) {
         login.findViewById(R.id.sign_in_button).setOnClickListener(this);
         login.findViewById(R.id.dummyFacebookBtn).setOnClickListener(this);
         login.findViewById(R.id.dummyTwitterbtn).setOnClickListener(this);
-        facebookLoginBtn = (LoginButton)login.findViewById(R.id.facebook);
+        facebookLoginBtn = (LoginButton) login.findViewById(R.id.facebook);
         facebookLoginBtn.setReadPermissions(Arrays.asList(
                 "public_profile", "email", "user_friends"));
         facebookLoginBtn.registerCallback(callbackManager, callback);
@@ -153,10 +179,10 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sign_in_button:
                 google();
-                login.dismiss();
+
                 break;
             case R.id.dummyFacebookBtn:
                 facebookLoginBtn.performClick();
@@ -165,44 +191,11 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
                 twitterButton.performClick();
                 break;
         }
-        login.dismiss();
+        if (login != null && login.isShowing())
+            login.dismiss();
     }
 
-
-    private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
-        @Override
-        public void onSuccess(LoginResult loginResult) {
-            GraphRequest request = GraphRequest.newMeRequest(
-                    loginResult.getAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response) {
-                            jsonToMap(response.getJSONObject());
-                            userDetails.uniqueId = map.get("id");
-                            userDetails.userName = map.get("name");
-                            userDetails.mail =map.get("email");
-                            userDetails.signInType = Constants.FACEBOOK_SIGNIN;
-                            userDetails.setUserDetails();
-                        }
-                    });
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email,gender");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
-
-        @Override
-        public void onCancel() {
-        }
-        @Override
-        public void onError(FacebookException e) {
-            UIHelper.informDialog(mContext,"Unable to SignIn Please try again.");
-
-        }
-    };
-
-    public void twitter()
-    {
+    public void twitter() {
         twitterButton.setCallback(new Callback() {
             @Override
             public void success(Result result) {
@@ -211,7 +204,7 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
 
             @Override
             public void failure(TwitterException exception) {
-                UIHelper.informDialog(mContext, "Please Check your Internet Connection.");
+                UIHelper.informDialog(mContext, mContext.getString(R.string.check_network_msg));
             }
         });
     }
@@ -221,7 +214,7 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
         Twitter.getApiClient(session).getAccountService().verifyCredentials(true, false, new Callback<User>() {
             @Override
             public void failure(TwitterException e) {
-                UIHelper.informDialog(mContext, "Please Check your Internet Connection.");
+                UIHelper.informDialog(mContext, mContext.getString(R.string.check_network_msg));
                 //If any error occurs handle it here
             }
 
@@ -239,11 +232,11 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
 
     private void google() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        ((Activity)mContext).startActivityForResult(signInIntent, Constants.GOOGLE_SIGNIN_REQUESTCODE);
+        ((Activity) mContext).startActivityForResult(signInIntent, Constants.GOOGLE_SIGNIN_REQUESTCODE);
     }
 
-    public void googleSignInActivityResult(int requestCode, int resultCode, Intent data){
-        if(data != null) {
+    public void googleSignInActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleGoogleSignInResult(result);
         }
@@ -251,38 +244,35 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        UIHelper.informDialog(mContext,"Please Check your Internet Connection.");
+        UIHelper.informDialog(mContext, mContext.getString(R.string.check_network_msg));
     }
 
     private void handleGoogleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             mGoogleApiClient.connect();
             GoogleSignInAccount acct = result.getSignInAccount();
-            if(acct != null && userDetails != null) {
+            if (acct != null && userDetails != null) {
                 userDetails.uniqueId = acct.getId();
                 userDetails.userName = acct.getDisplayName();
                 userDetails.mail = acct.getEmail();
                 userDetails.signInType = Constants.GOOGLE_SIGNIN;
                 userDetails.setUserDetails();
-            }
-            else
-                UIHelper.informDialog(mContext,"Please Check your Internet Connection.");
-        } else {
-
+            } else
+                UIHelper.informDialog(mContext, mContext.getString(R.string.check_network_msg));
         }
     }
 
-    public void logOut()
-    {
+    public void logOut() {
 
         try {
             String className = mContext.getClass().getSimpleName();
             if (className.toLowerCase().equals("sceneselection")) {
-                ((SceneSelection) ((Activity) mContext)).userDetails.resetUserDetails();
+                ((SceneSelection) mContext).userDetails.resetUserDetails();
             } else
-                ((EditorView) ((Activity) mContext)).userDetails.resetUserDetails();
+                ((EditorView) mContext).userDetails.resetUserDetails();
+        } catch (ClassCastException ignored) {
+            return;
         }
-        catch (ClassCastException ignored){return;}
         try {
             Twitter.getSessionManager().clearActiveSession();
             Twitter.logOut();
@@ -302,18 +292,17 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
 
                     }
                 });
-        }
-        catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-        if(login != null && login.isShowing())
+        if (login != null && login.isShowing())
             login.dismiss();
     }
 
-    private void jsonToMap(JSONObject t){
-        if(t == null) return;
+    private void jsonToMap(JSONObject t) {
+        if (t == null) return;
         try {
-            if(map != null)
+            if (map != null)
                 map.clear();
             map = new HashMap<String, String>();
             Iterator<?> keys = t.keys();
@@ -323,8 +312,7 @@ public class Login implements View.OnClickListener , GoogleApiClient.OnConnectio
                 String value = t.getString(key);
                 map.put(key, value);
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

@@ -1,90 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:orientation="vertical"
               android:padding="10dp">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:orientation="horizontal"
         android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.7"
+            android:orientation="vertical"
             android:weightSum="1.5">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.8"
-                android:weightSum="1"
-                android:gravity="center|left">
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <TextView
+                    android:id="@+id/taskName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/taskName"
                     android:layout_gravity="center_vertical"
                     android:gravity="center|left"
-                    android:textStyle="bold"
-                    android:textColor="#000000"/>
+                    android:text="New Text"
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.7"
                 android:gravity="center|left"
+                android:orientation="horizontal"
                 android:paddingLeft="10dp">
 
                 <TextView
+                    android:id="@+id/progress_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/progress_date"
                     android:layout_gravity="center_vertical"
                     android:gravity="center|left"
-                    android:textStyle="bold"
-                    android:textColor="#000000"/>
+                    android:text="New Text"
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.3"
-            android:paddingRight="10dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingRight="10dp">
 
             <TextView
+                android:id="@+id/task_precentage"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="New Text"
-                android:id="@+id/task_precentage"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:textStyle="bold"
+                android:text="New Text"
                 android:textColor="#000000"
+                android:textStyle="bold"
                 />
 
             <ProgressBar
+                android:id="@+id/downloadProgress"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/downloadProgress"
                 android:visibility="gone"/>
 
         </LinearLayout>

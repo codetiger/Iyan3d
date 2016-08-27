@@ -3,7 +3,7 @@
     <item
         androclass:id="@+id/apply_animation"
         androclass:orderInCategory="0"
-        androclass:title="@string/apply_animation" />
+        androclass:title="@string/apply_animation"/>
     <item
         androclass:id="@+id/save_animation"
         androclass:orderInCategory="1"

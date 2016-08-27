@@ -1,10 +1,8 @@
 package com.smackall.animator.Helper;
 
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -17,11 +15,6 @@ import java.util.logging.Logger;
  */
 public class JSONParser {
 
-    static InputStream is = null;
-    static JSONObject jObj = null;
-    static String json = "";
-
-    // constructor
     public JSONParser() {
 
     }
@@ -46,7 +39,7 @@ public class JSONParser {
                     StringBuilder sb = new StringBuilder();
                     String line;
                     while ((line = br.readLine()) != null) {
-                        sb.append(line+"\n");
+                        sb.append(line).append("\n");
                     }
                     br.close();
                     return sb.toString();

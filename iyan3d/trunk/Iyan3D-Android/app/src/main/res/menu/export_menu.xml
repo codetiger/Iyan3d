@@ -3,7 +3,7 @@
     <item
         androclass:id="@+id/export_image"
         androclass:orderInCategory="0"
-        androclass:title="@string/images" />
+        androclass:title="@string/images"/>
     <item
         androclass:id="@+id/export_video"
         androclass:orderInCategory="1"

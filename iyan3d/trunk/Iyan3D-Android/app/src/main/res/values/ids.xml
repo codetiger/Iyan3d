@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="field_of_view" type="id"/>
+    <item name="cam_resolution" type="id"/>
+    <item name="light_color" type="id"/>
+    <item name="light_type" type="id"/>
+    <item name="physics_properties_list" type="id"/>
+    <item name="material_properties_list" type="id"/>
+    <item name="props_list" type="id"/>
+
+</resources>

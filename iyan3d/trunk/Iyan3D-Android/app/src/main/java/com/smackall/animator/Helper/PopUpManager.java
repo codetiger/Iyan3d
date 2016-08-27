@@ -1,12 +1,10 @@
 package com.smackall.animator.Helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.smackall.animator.EditorView;
-import com.smackall.animator.opengl.GL2JNILib;
 
 /**
  * Created by Sabish.M on 15/3/16.
@@ -14,19 +12,18 @@ import com.smackall.animator.opengl.GL2JNILib;
  */
 public class PopUpManager {
 
-    private Context mContext;
     private EditorView editorView;
 
-    public PopUpManager(Context context){
-        this.mContext = context;
-        editorView = ((EditorView)((Activity)mContext));
+    public PopUpManager(Context context) {
+        editorView = ((EditorView) context);
     }
 
-    public void initPopUpManager(int selectedNodeId,View v,MotionEvent event)
-    {
-        if(selectedNodeId == -1) return;
-            int nodeType = GL2JNILib.getNodeType(selectedNodeId);
+    public void initPopUpManager(int selectedNodeId, View v, MotionEvent event) {
+        editorView.props.showProps(v, event);
 
+        /*
+        if(selectedNodeId == -1) return;
+        int nodeType = GL2JNILib.getNodeType(selectedNodeId);
         switch (nodeType){
             case Constants.NODE_CAMERA:
                 editorView.cameraProps.showCameraProps(v,event);
@@ -49,6 +46,8 @@ public class PopUpManager {
             case Constants.NODE_OBJ:
                 editorView.meshProps.showMeshProps(v,event);
                 break;
+
         }
+        */
     }
 }

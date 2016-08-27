@@ -3,7 +3,7 @@
     <item
         androclass:id="@+id/rename_btn"
         androclass:orderInCategory="0"
-        androclass:title="@string/rename" />
+        androclass:title="@string/rename"/>
     <item
         androclass:id="@+id/delete_btn"
         androclass:orderInCategory="1"
@@ -11,9 +11,9 @@
     <item
         androclass:id="@+id/clone_btn"
         androclass:orderInCategory="2"
-        androclass:title="@string/clone" />
+        androclass:title="@string/clone"/>
     <item
         androclass:id="@+id/back_up"
         androclass:orderInCategory="3"
-        androclass:title="@string/backUp" />
+        androclass:title="@string/backUp"/>
 </menu>

@@ -1,19 +1,19 @@
 package com.smackall.animator.Helper;
 
 public class AnimDB {
-    int animAssetId;
-    String animName;
-    int bonecount;
-    int downloads;
-    int featuredindex;
-    Integer id;
-    String keyword;
-    int publishedId;
-    int rating;
-    int type;
-    String uploaded;
-    String userName;
-    String userid;
+    private int animAssetId;
+    private String animName;
+    private int boneCount;
+    private int downloads;
+    private int featuredIndex;
+    private Integer id;
+    private String keyword;
+    private int publishedId;
+    private int rating;
+    private int type;
+    private String uploaded;
+    private String userName;
+    private String userId;
 
     public AnimDB() {
     }
@@ -22,11 +22,11 @@ public class AnimDB {
         this.animAssetId = n;
         this.animName = string2;
         this.keyword = string3;
-        this.userid = string4;
+        this.userId = string4;
         this.userName = string5;
         this.type = n2;
-        this.bonecount = n3;
-        this.featuredindex = n4;
+        this.boneCount = n3;
+        this.featuredIndex = n4;
         this.uploaded = string6;
         this.downloads = n5;
         this.rating = n6;
@@ -36,27 +36,27 @@ public class AnimDB {
         this.animAssetId = n;
         this.animName = string2;
         this.keyword = string3;
-        this.userid = string4;
+        this.userId = string4;
         this.userName = string5;
         this.type = n2;
-        this.bonecount = n3;
-        this.featuredindex = n4;
+        this.boneCount = n3;
+        this.featuredIndex = n4;
         this.uploaded = string6;
         this.downloads = n5;
         this.rating = n6;
         this.publishedId = n7;
     }
 
-    public AnimDB(Integer n, int n2, String string2, String string3, String string4, String string5, int n3, int n4, int n5, String string6, int n6, int n7,int n8) {
+    public AnimDB(Integer n, int n2, String string2, String string3, String string4, String string5, int n3, int n4, int n5, String string6, int n6, int n7, int n8) {
         this.id = n;
         this.animAssetId = n2;
         this.animName = string2;
         this.keyword = string3;
-        this.userid = string4;
+        this.userId = string4;
         this.userName = string5;
         this.type = n3;
-        this.bonecount = n4;
-        this.featuredindex = n5;
+        this.boneCount = n4;
+        this.featuredIndex = n5;
         this.uploaded = string6;
         this.downloads = n6;
         this.rating = n7;
@@ -71,100 +71,100 @@ public class AnimDB {
         return this.animName;
     }
 
-    public int getAnimType() {
-        return this.type;
-    }
-
-    public int getBonecount() {
-        return this.bonecount;
-    }
-
-    public int getDownloads() {
-        return this.downloads;
-    }
-
-    public int getFeaturedindex() {
-        return this.featuredindex;
-    }
-
-    public int getID() {
-        return this.id;
-    }
-
-    public String getKeyword() {
-        return this.keyword;
-    }
-
-    public int getRating() {
-        return this.rating;
-    }
-
-    public String getUploaded() {
-        return this.uploaded;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public String getUserid() {
-        return this.userid;
-    }
-
-    public int getpublishedId() {
-        return this.publishedId;
-    }
-
     public void setAnimName(String string2) {
         this.animName = string2;
+    }
+
+    public int getAnimType() {
+        return this.type;
     }
 
     public void setAnimType(int n) {
         this.type = n;
     }
 
-    public void setAssetsId(int n) {
-        this.animAssetId = n;
+    public int getBoneCount() {
+        return this.boneCount;
     }
 
-    public void setBonecount(int n) {
-        this.bonecount = n;
+    public void setBoneCount(int n) {
+        this.boneCount = n;
+    }
+
+    public int getDownloads() {
+        return this.downloads;
     }
 
     public void setDownloads(int n) {
         this.downloads = n;
     }
 
-    public void setFeaturedindex(int n) {
-        this.featuredindex = n;
+    public int getFeaturedIndex() {
+        return this.featuredIndex;
+    }
+
+    public void setFeaturedIndex(int n) {
+        this.featuredIndex = n;
+    }
+
+    public int getID() {
+        return this.id;
     }
 
     public void setID(int n) {
         this.id = n;
     }
 
+    public String getKeyword() {
+        return this.keyword;
+    }
+
     public void setKeyword(String string2) {
         this.keyword = string2;
     }
 
-    public void setPublishedId(int n) {
-        this.publishedId = n;
+    public int getRating() {
+        return this.rating;
     }
 
     public void setRating(int n) {
         this.rating = n;
     }
 
+    public String getUploaded() {
+        return this.uploaded;
+    }
+
     public void setUploaded(String string2) {
         this.uploaded = string2;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 
     public void setUserName(String string2) {
         this.userName = string2;
     }
 
-    public void setUserid(String string2) {
-        this.userid = string2;
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(String string2) {
+        this.userId = string2;
+    }
+
+    public int getPublishedId() {
+        return this.publishedId;
+    }
+
+    public void setPublishedId(int n) {
+        this.publishedId = n;
+    }
+
+    public void setAssetsId(int n) {
+        this.animAssetId = n;
     }
 }
 

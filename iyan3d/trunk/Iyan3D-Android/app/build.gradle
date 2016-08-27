@@ -21,9 +21,9 @@ android {
     signingConfigs {
         Release {
             keyAlias 'android distribution key'
-            keyPassword 'SmartPh0ne'
+            keyPassword KEYSTORE_PASSWORD
             storeFile file('/home/android-developer/Documents/Cert/DistCert.jks')
-            storePassword 'SmartPh0ne'
+            storePassword KEYSTORE_PASSWORD
         }
     }
     compileSdkVersion 23
@@ -33,14 +33,29 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         multiDexEnabled true
-        versionCode 23
-        versionName "5.5"
+
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+
+        packagingOptions {
+            exclude "lib/mips/libcrashlytics.so"
+            exclude "lib/mips/libcrashlytics-envelope.so"
+            exclude "lib/armeabi/libcrashlytics.so"
+            exclude "lib/armeabi/libcrashlytics-envelope.so"
+            exclude "lib/arm64-v8a/libcrashlytics.so"
+            exclude "lib/arm64-v8a/libcrashlytics-envelope.so"
+            exclude "lib/x86_64/libcrashlytics.so"
+            exclude "lib/x86_64/libcrashlytics-envelope.so"
+            exclude "lib/mips64/libcrashlytics.so"
+            exclude "lib/mips64/libcrashlytics-envelope.so"
+        }
     }
+
     sourceSets.main {
         jniLibs.srcDir 'src/main/libs'
         jni.srcDirs = []
     }
-
 
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
         def rootDir = project.rootDir
@@ -59,11 +74,6 @@ android {
                     'NDK_APPLICATION_MK=src/main/jni/Application.mk'
 
         } else {
-
-           // $(shell gnome-terminal -e "chmod +x $(LOCAL_PATH)/ffmpeg_build_scripts/iyan3d_ffmpeg_$(TARGET_ARCH_ABI).sh \exit")
-           // $(shell gnome-terminal -x sh -c "$(LOCAL_PATH)/ffmpeg_build_scripts/iyan3d_ffmpeg_$(TARGET_ARCH_ABI).sh; bash")
-
-
             commandLine "$ndkDir/ndk-build",
                     'NDK_PROJECT_PATH=build/intermediates/ndk',
                     'NDK_LIBS_OUT=src/main/jniLibs',
@@ -73,16 +83,18 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.pro'
             signingConfig signingConfigs.Release
-            debuggable true
-            jniDebuggable true
-            renderscriptDebuggable true
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
         }
         debug {
             minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.pro'
             signingConfig signingConfigs.Release
@@ -93,26 +105,6 @@ android {
     }
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn ndkBuild
-    }
-    productFlavors {
-
-    }
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64','mips','mips64'
-            universalApk true
-        }
-    }
-    project.ext.versionCodes = ['armeabi':1, 'armeabi-v7a':2,'arm64-v8a':3, 'x86':4,'x86_64':5,'mips':6,'mips64':7]
-
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.versionCodeOverride =
-                    project.ext.versionCodes.get(output.getFilter(
-                            com.android.build.OutputFile.ABI), 0) * 1000 + android.defaultConfig.versionCode
-        }
     }
 }
 
@@ -137,6 +129,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:recyclerview-v7:23.3.0'
+
 }
 
 crashlytics {

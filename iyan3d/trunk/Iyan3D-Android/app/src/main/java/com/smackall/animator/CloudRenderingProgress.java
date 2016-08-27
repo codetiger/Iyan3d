@@ -1,5 +1,6 @@
 package com.smackall.animator;
 
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -17,10 +18,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.vending.billing.IInAppBillingService;
@@ -30,8 +29,6 @@ import com.smackall.animator.Helper.CreditTask;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.FileHelper;
 import com.smackall.animator.Helper.HQTaskDB;
-import com.smackall.animator.Helper.MediaScannerWrapper;
-import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
 
 import org.json.JSONException;
@@ -45,33 +42,29 @@ import java.util.Locale;
  * Created by Sabish.M on 12/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-
-public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
-
+public class CloudRenderingProgress implements View.OnClickListener, CreditTask {
+    public IInAppBillingService mService;
     private Context mContext;
     private RenderingProgressAdapter adapter;
     private DatabaseHelper db;
     private Dialog dialog;
+    private HashMap<String, String> map;
 
-    public IInAppBillingService mService;
-    HashMap<String, String> map;
-
-    public CloudRenderingProgress(Context context,DatabaseHelper db,IInAppBillingService service){
+    public CloudRenderingProgress(Context context, DatabaseHelper db, IInAppBillingService service) {
         this.mContext = context;
         this.db = db;
         this.mService = service;
     }
 
-    public void showCloudRenderingProgress(View v, MotionEvent event)
-    {
+    public void showCloudRenderingProgress(View v, MotionEvent event) {
         Dialog cloud_rendering = new Dialog(mContext);
         cloud_rendering.requestWindowFeature(Window.FEATURE_NO_TITLE);
         cloud_rendering.setContentView(R.layout.cloud_rendering);
         cloud_rendering.setCancelable(false);
         cloud_rendering.setCanceledOnTouchOutside(true);
-        switch (UIHelper.ScreenType){
+        switch (UIHelper.ScreenType) {
             case Constants.SCREEN_NORMAL:
-                cloud_rendering.getWindow().setLayout((int) (Constants.width / 1.5), (int) (Constants.height));
+                cloud_rendering.getWindow().setLayout((int) (Constants.width / 1.5), Constants.height);
                 break;
             default:
                 cloud_rendering.getWindow().setLayout(Constants.width / 3, (int) (Constants.height / 1.25));
@@ -79,13 +72,12 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
         }
         Window window = cloud_rendering.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.gravity= Gravity.TOP | Gravity.START;
-        wlp.dimAmount=0.0f;
-        if(event != null) {
-            wlp.x = (int)event.getX();
-            wlp.y = (int)event.getY();
-        }
-        else {
+        wlp.gravity = Gravity.TOP | Gravity.START;
+        wlp.dimAmount = 0.0f;
+        if (event != null) {
+            wlp.x = (int) event.getX();
+            wlp.y = (int) event.getY();
+        } else {
             int[] location = new int[2];
             v.getLocationOnScreen(location);
             wlp.x = location[0];
@@ -97,70 +89,63 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
         try {
             String className = mContext.getClass().getSimpleName();
             if (className.toLowerCase().equals("sceneselection"))
-                ((SceneSelection) ((Activity) mContext)).creditsManager.getCreditsForUniqueId(CloudRenderingProgress.this);
+                ((SceneSelection) mContext).creditsManager.getCreditsForUniqueId(CloudRenderingProgress.this);
             else
-                ((EditorView) ((Activity) mContext)).creditsManager.getCreditsForUniqueId(CloudRenderingProgress.this);
-        }
-        catch (ClassCastException ignored){
+                ((EditorView) mContext).creditsManager.getCreditsForUniqueId(CloudRenderingProgress.this);
+        } catch (ClassCastException ignored) {
             return;
         }
         cloud_rendering.show();
     }
 
-    private void initViews(Dialog cloudRendering)
-    {
-        ((Button)cloudRendering.findViewById(R.id.add5K)).setOnClickListener(this);
-        ((Button)cloudRendering.findViewById(R.id.add20K)).setOnClickListener(this);
-        ((Button)cloudRendering.findViewById(R.id.add50K)).setOnClickListener(this);
-        ((Button)cloudRendering.findViewById(R.id.sign_out)).setOnClickListener(this);
-        ((Button)cloudRendering.findViewById(R.id.my_account)).setOnClickListener(this);
+    private void initViews(Dialog cloudRendering) {
+        cloudRendering.findViewById(R.id.add5K).setOnClickListener(this);
+        cloudRendering.findViewById(R.id.add20K).setOnClickListener(this);
+        cloudRendering.findViewById(R.id.add50K).setOnClickListener(this);
+        cloudRendering.findViewById(R.id.sign_out).setOnClickListener(this);
+        cloudRendering.findViewById(R.id.my_account).setOnClickListener(this);
         showLoginTypeAndUserName(cloudRendering);
-        adapter = new RenderingProgressAdapter(mContext,db);
+        adapter = new RenderingProgressAdapter(mContext, db);
         initList(cloudRendering);
 
     }
 
-    private void showLoginTypeAndUserName(Dialog cloudRendering)
-    {
+    private void showLoginTypeAndUserName(Dialog cloudRendering) {
         UserDetails userDetails = null;
         String className = mContext.getClass().getSimpleName();
 
-        try{
-            if (className.toLowerCase().equals("sceneselection"))
-                userDetails =((SceneSelection) ((Activity) mContext)).userDetails;
-            else
-                userDetails = ((EditorView) ((Activity) mContext)).userDetails;
+        try {
+            userDetails = className.toLowerCase().equals("sceneselection") ? ((SceneSelection) mContext).userDetails : ((EditorView) mContext).userDetails;
+        } catch (ClassCastException ignored) {
         }
-        catch (ClassCastException ignored){}
         Drawable drawable = null;
-        if(userDetails == null) return;
-        switch (userDetails.signInType){
+        if (userDetails == null) return;
+        switch (userDetails.signInType) {
             case Constants.GOOGLE_SIGNIN:
-                drawable = ContextCompat.getDrawable(mContext,R.drawable.gplus);
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.gplus);
                 break;
             case Constants.FACEBOOK_SIGNIN:
-                drawable = ContextCompat.getDrawable(mContext,R.drawable.fb);
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.fb);
                 break;
             case Constants.TWITTER_SIGNIN:
-                drawable = ContextCompat.getDrawable(mContext,R.drawable.twit);
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.twit);
                 break;
         }
-        if(drawable != null)
-            ((ImageView)cloudRendering.findViewById(R.id.loginTypeImage)).setImageDrawable(drawable);
-            ((TextView)cloudRendering.findViewById(R.id.userName)).setText(userDetails.userName);
+        if (drawable != null)
+            ((ImageView) cloudRendering.findViewById(R.id.loginTypeImage)).setImageDrawable(drawable);
+        ((TextView) cloudRendering.findViewById(R.id.userName)).setText(userDetails.userName);
 
     }
 
 
-    private void initList(Dialog dialog)
-    {
-        ((ListView)dialog.findViewById(R.id.progress_list)).setAdapter(adapter);
+    private void initList(Dialog dialog) {
+        ((ListView) dialog.findViewById(R.id.progress_list)).setAdapter(adapter);
         adapter.updateTaskStatus();
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.add5K:
                 purchaseCredits("basicrecharge");
                 break;
@@ -174,32 +159,32 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
                 try {
                     String className = mContext.getClass().getSimpleName();
                     if (className.toLowerCase().equals("sceneselection"))
-                        ((SceneSelection) ((Activity) mContext)).login.logOut();
+                        ((SceneSelection) mContext).login.logOut();
                     else
-                        ((EditorView) ((Activity) mContext)).login.logOut();
+                        ((EditorView) mContext).login.logOut();
+                } catch (ClassCastException ignored) {
                 }
-                catch (ClassCastException ignored){}
                 break;
             case R.id.my_account:
                 String url = "https://www.iyan3dapp.com/cms/";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 try {
-                    ((Activity)mContext).startActivity(i);
-                }
-                catch (ActivityNotFoundException ignored){
+                    mContext.startActivity(i);
+                } catch (ActivityNotFoundException ignored) {
 
                 }
                 break;
         }
-        dialog.dismiss();
+        if (dialog != null && dialog.isShowing())
+            dialog.dismiss();
     }
 
     @Override
-    public void onCreditRequestCompleted(int credit,int premiumUser) {
-        ((ProgressBar)dialog.findViewById(R.id.progressBar)).setVisibility(View.GONE);
-        ((TextView)dialog.findViewById(R.id.credit_lable)).setVisibility(View.VISIBLE);
-        ((TextView)dialog.findViewById(R.id.credit_lable)).setText(String.format(Locale.getDefault(),"%d", credit));
+    public void onCreditRequestCompleted(int credit, int premiumUser) {
+        dialog.findViewById(R.id.progressBar).setVisibility(View.GONE);
+        dialog.findViewById(R.id.credit_lable).setVisibility(View.VISIBLE);
+        ((TextView) dialog.findViewById(R.id.credit_lable)).setText(String.format(Locale.getDefault(), "%d", credit));
     }
 
     @Override
@@ -213,8 +198,8 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
     }
 
     @Override
-    public void finishExport(int frame, boolean status,String msg) {
-        UIHelper.informDialog(mContext,msg);
+    public void finishExport(int frame, boolean status, String msg) {
+        UIHelper.informDialog(mContext, msg);
     }
 
     @Override
@@ -222,15 +207,15 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
 
     }
 
-    private void purchaseCredits(String type){
-        if(mService == null){
+    private void purchaseCredits(String type) {
+        if (mService == null) {
             return;
         }
 
         try {
-            Bundle buyIntentBundle = mService.getBuyIntent(3, mContext.getPackageName(),type, "inapp", FileHelper.randomString(32));
+            Bundle buyIntentBundle = mService.getBuyIntent(3, mContext.getPackageName(), type, "inapp", FileHelper.randomString(32));
             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
-            if(pendingIntent != null) {
+            if (pendingIntent != null) {
                 ((Activity) mContext).startIntentSenderForResult(pendingIntent.getIntentSender(),
                         1002, new Intent(), 0, 0,
                         0);
@@ -240,7 +225,7 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
         }
     }
 
-    public void purchaseResult(int requestCode, int resultCode, Intent data){
+    public void purchaseResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1002 && Activity.RESULT_OK == resultCode && data != null) {
             int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
             String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
@@ -254,22 +239,26 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
                         JSONObject jo = new JSONObject(purchaseData);
                         String sku = jo.getString("productId");
                         int credit = 0;
-                        if(sku.equals("basicrecharge"))
-                            credit = 5000;
-                        else if(sku.equals("mediumrecharge"))
-                            credit = 25000;
-                        else if(sku.equals("megarecharge"))
-                            credit = 50000;
+                        switch (sku) {
+                            case "basicrecharge":
+                                credit = 5000;
+                                break;
+                            case "mediumrecharge":
+                                credit = 25000;
+                                break;
+                            case "megarecharge":
+                                credit = 50000;
+                                break;
+                        }
                         try {
                             String className = mContext.getClass().getSimpleName();
                             if (className.toLowerCase().equals("sceneselection"))
-                                ((SceneSelection) (Activity) mContext).creditsManager.useOrRechargeCredits(credit, "RECHARGE", purchaseData, dataSignature, 0, CloudRenderingProgress.this);
+                                ((SceneSelection) mContext).creditsManager.useOrRechargeCredits(credit, "RECHARGE", purchaseData, dataSignature, 0, CloudRenderingProgress.this);
                             else
-                                ((EditorView) (Activity) mContext).creditsManager.useOrRechargeCredits(credit, "RECHARGE", purchaseData, dataSignature, 0, CloudRenderingProgress.this);
-                        }catch (ClassCastException ignored){}
-                    }
-                    catch (JSONException e) {
-
+                                ((EditorView) mContext).creditsManager.useOrRechargeCredits(credit, "RECHARGE", purchaseData, dataSignature, 0, CloudRenderingProgress.this);
+                        } catch (ClassCastException ignored) {
+                        }
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
@@ -279,11 +268,11 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
         }
     }
 
-    private void jsonToMap(String t){
+    private void jsonToMap(String t) {
         try {
-            if(map != null)
+            if (map != null)
                 map.clear();
-            map = new HashMap<String, String>();
+            map = new HashMap<>();
             JSONObject jObject = new JSONObject(t);
             Iterator<?> keys = jObject.keys();
             while (keys.hasNext()) {
@@ -291,8 +280,7 @@ public class CloudRenderingProgress implements View.OnClickListener,CreditTask {
                 String value = jObject.getString(key);
                 map.put(key, value);
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

@@ -1,6 +1,5 @@
 package com.smackall.animator;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -8,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Switch;
 
 import com.smackall.animator.Helper.Constants;
@@ -26,37 +24,34 @@ public class OtherProps implements View.OnClickListener {
     private Dialog dialog;
     private boolean defaultValueInitialized = false;
 
-    public OtherProps(Context mContext)
-    {
+    public OtherProps(Context mContext) {
         this.mContext = mContext;
-        editorView = ((EditorView)(Activity)mContext);
+        editorView = ((EditorView) mContext);
     }
 
-    public void showOtherProps(View v, MotionEvent event)
-    {
+    public void showOtherProps(View v, MotionEvent event) {
         defaultValueInitialized = false;
         Dialog mesh_prop = new Dialog(mContext);
         mesh_prop.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mesh_prop.setContentView(R.layout.image_props);
         mesh_prop.setCancelable(false);
         mesh_prop.setCanceledOnTouchOutside(true);
-        switch (UIHelper.ScreenType){
+        switch (UIHelper.ScreenType) {
             case Constants.SCREEN_NORMAL:
-                mesh_prop.getWindow().setLayout(Constants.width/2, (int) (Constants.height/2));
+                mesh_prop.getWindow().setLayout(Constants.width / 2, Constants.height / 2);
                 break;
             default:
-                mesh_prop.getWindow().setLayout(Constants.width / 3, (int) (Constants.height/3));
+                mesh_prop.getWindow().setLayout(Constants.width / 3, Constants.height / 3);
                 break;
         }
         Window window = mesh_prop.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.gravity= Gravity.TOP | Gravity.START;
-        wlp.dimAmount=0.0f;
-        if(event != null) {
-            wlp.x = (int)event.getX();
-            wlp.y = (int)event.getY();
-        }
-        else {
+        wlp.gravity = Gravity.TOP | Gravity.START;
+        wlp.dimAmount = 0.0f;
+        if (event != null) {
+            wlp.x = (int) event.getX();
+            wlp.y = (int) event.getY();
+        } else {
             int[] location = new int[2];
             v.getLocationOnScreen(location);
             wlp.x = location[0];
@@ -70,30 +65,29 @@ public class OtherProps implements View.OnClickListener {
         defaultValueInitialized = true;
     }
 
-    private void initViews(Dialog mesh_prop)
-    {
-        ((Button)mesh_prop.findViewById(R.id.delete_btn)).setOnClickListener(this);
-        ((Button)mesh_prop.findViewById(R.id.clone_btn)).setOnClickListener(this);
-        ((Switch)mesh_prop.findViewById(R.id.light)).setOnClickListener(this);
-        ((Switch)mesh_prop.findViewById(R.id.visiblity)).setOnClickListener(this);
+    private void initViews(Dialog mesh_prop) {
+        mesh_prop.findViewById(R.id.delete_btn).setOnClickListener(this);
+        mesh_prop.findViewById(R.id.clone_btn).setOnClickListener(this);
+        mesh_prop.findViewById(R.id.light).setOnClickListener(this);
+        mesh_prop.findViewById(R.id.visiblity).setOnClickListener(this);
     }
 
-    private void setDefaultValues(Dialog mesh_prop)
-    {
-        ((Switch)mesh_prop.findViewById(R.id.light)).setChecked(GL2JNILib.isLightning());
+    private void setDefaultValues(Dialog mesh_prop) {
+        ((Switch) mesh_prop.findViewById(R.id.light)).setChecked(GL2JNILib.isLightning());
         ((Switch) mesh_prop.findViewById(R.id.visiblity)).setChecked(GL2JNILib.isVisible());
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.delete_btn:
-                this.dialog.dismiss();
+                if (dialog != null && dialog.isShowing())
+                    dialog.dismiss();
                 editorView.delete.showDelete();
                 dealloc();
                 break;
             case R.id.clone_btn:
-                ((EditorView)((Activity)mContext)).renderManager.createDuplicate();
+                ((EditorView) mContext).renderManager.createDuplicate();
                 dealloc();
                 break;
             case R.id.light:
@@ -105,24 +99,22 @@ public class OtherProps implements View.OnClickListener {
         }
     }
 
-    private void dealloc()
-    {
-        if(this.dialog != null) {
+    private void dealloc() {
+        if (this.dialog != null && this.dialog.isShowing()) {
             this.dialog.dismiss();
             this.dialog = null;
         }
     }
 
-    private void update(boolean storeAction)
-    {
-        if(!defaultValueInitialized) return;
-        boolean light = ((Switch)dialog.findViewById(R.id.light)).isChecked();
-        boolean visible = ((Switch)dialog.findViewById(R.id.visiblity)).isChecked();
+    private void update(boolean storeAction) {
+        if (!defaultValueInitialized) return;
+        boolean light = ((Switch) dialog.findViewById(R.id.light)).isChecked();
+        boolean visible = ((Switch) dialog.findViewById(R.id.visiblity)).isChecked();
 //        GL2JNILib.setNodeLighting(GL2JNILib.getSelectedNodeId(),light);
 //        GL2JNILib.setNodeVisiblity(GL2JNILib.getSelectedNodeId(),visible);
         float refraction = GL2JNILib.refractionValue();
         float reflection = GL2JNILib.reflectionValue();
-        ((EditorView)mContext).renderManager.changeMeshProps(refraction,reflection,light,visible,storeAction);
+        ((EditorView) mContext).renderManager.changeMeshProps(refraction, reflection, light, visible, storeAction);
 
     }
 }

@@ -8,8 +8,7 @@
 
 #ifndef Vector4GLK_hpp
 #define Vector4GLK_hpp
-
-#include <GLKit/GLKVector4.h>
+#include <GLKVector4.h>
 #include "Vector3.h"
 
 class Vector4 {

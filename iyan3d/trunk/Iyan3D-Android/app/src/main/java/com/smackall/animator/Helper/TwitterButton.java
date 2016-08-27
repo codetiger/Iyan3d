@@ -1,13 +1,12 @@
 package com.smackall.animator.Helper;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +34,7 @@ public class TwitterButton extends Button {
     Callback<TwitterSession> callback;
 
     public TwitterButton(Context context) {
-        this(context, (AttributeSet) null);
+        this(context, null);
     }
 
     public TwitterButton(Context context, AttributeSet attrs) {
@@ -43,7 +42,7 @@ public class TwitterButton extends Button {
     }
 
     public TwitterButton(Context context, AttributeSet attrs, int defStyle) {
-        this(context, attrs, defStyle, (TwitterAuthClient) null);
+        this(context, attrs, defStyle, null);
     }
 
     TwitterButton(Context context, AttributeSet attrs, int defStyle, TwitterAuthClient authClient) {
@@ -54,13 +53,12 @@ public class TwitterButton extends Button {
         this.checkTwitterCoreAndEnable();
     }
 
-    @TargetApi(21)
     private void setupButton() {
         Resources res = this.getResources();
-        super.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(com.twitter.sdk.android.core.R.drawable.tw__ic_logo_default), (Drawable) null, (Drawable) null, (Drawable) null);
+        super.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(this.getContext(), com.twitter.sdk.android.core.R.drawable.tw__ic_logo_default), null, null, null);
         super.setCompoundDrawablePadding(res.getDimensionPixelSize(com.twitter.sdk.android.core.R.dimen.tw__login_btn_drawable_padding));
         super.setText(com.twitter.sdk.android.core.R.string.tw__login_btn_txt);
-        super.setTextColor(res.getColor(com.twitter.sdk.android.core.R.color.tw__solid_white));
+        super.setTextColor(ContextCompat.getColor(this.getContext(), com.twitter.sdk.android.core.R.color.tw__solid_white));
         super.setTextSize(0, (float) res.getDimensionPixelSize(com.twitter.sdk.android.core.R.dimen.tw__login_btn_text_size));
         super.setTypeface(Typeface.DEFAULT_BOLD);
         super.setPadding(res.getDimensionPixelSize(com.twitter.sdk.android.core.R.dimen.tw__login_btn_left_padding), 0, res.getDimensionPixelSize(com.twitter.sdk.android.core.R.dimen.tw__login_btn_right_padding), 0);
@@ -72,16 +70,16 @@ public class TwitterButton extends Button {
 
     }
 
+    public Callback<TwitterSession> getCallback() {
+        return this.callback;
+    }
+
     public void setCallback(Callback<TwitterSession> callback) {
         if (callback == null) {
             throw new IllegalArgumentException("Callback cannot be null");
         } else {
             this.callback = callback;
         }
-    }
-
-    public Callback<TwitterSession> getCallback() {
-        return this.callback;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,8 +133,8 @@ public class TwitterButton extends Button {
 
         public void onClick(View view) {
             this.checkCallback(TwitterButton.this.callback);
-            this.checkActivity((Activity) TwitterButton.this.activityRef.get());
-            TwitterButton.this.getTwitterAuthClient().authorize((Activity) TwitterButton.this.activityRef.get(), TwitterButton.this.callback);
+            this.checkActivity(TwitterButton.this.activityRef.get());
+            TwitterButton.this.getTwitterAuthClient().authorize(TwitterButton.this.activityRef.get(), TwitterButton.this.callback);
             if (TwitterButton.this.onClickListener != null) {
                 TwitterButton.this.onClickListener.onClick(view);
             }

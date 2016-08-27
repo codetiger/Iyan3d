@@ -14,11 +14,11 @@ public class ImageDB {
     boolean isTempNode;
     int actionType = Constants.ACTION_TEXT_IMAGE_ADD;
 
-   public ImageDB(){
+    public ImageDB() {
 
-   }
+    }
 
-    public ImageDB(int nodeType,String name,int width,int height,int assetAddType,boolean isTempNode){
+    public ImageDB(int nodeType, String name, int width, int height, int assetAddType, boolean isTempNode) {
         this.nodeType = nodeType;
         this.name = name;
         this.width = width;
@@ -27,43 +27,59 @@ public class ImageDB {
         this.isTempNode = isTempNode;
     }
 
-    public void setNodeType(int nodeType){
-        this.nodeType = nodeType;
-    }
-    public void setName(String name){
-        this.name = name;
-    }
-    public void setWidth(int width){
-        this.width = width;
-    }
-    public void setHeight(int height){
-        this.height = height;
-    }
-    public void setAssetAddType(int assetAddType){
-        this.assetAddType = assetAddType;
-    }
-    public void setTempNode(boolean isTempNode){
+    public void setTempNode(boolean isTempNode) {
         this.isTempNode = isTempNode;
     }
-    public void setActionType(int actionType){this.actionType = actionType;}
 
-    public int getNodeType(){
+    public int getNodeType() {
         return this.nodeType;
     }
-    public String getName(){
+
+    public void setNodeType(int nodeType) {
+        this.nodeType = nodeType;
+    }
+
+    public String getName() {
         return this.name;
     }
-    public int getWidth(){
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getWidth() {
         return this.width;
     }
-    public int getHeight(){
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
         return this.height;
     }
-    public int getAssetAddType(){
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getAssetAddType() {
         return this.assetAddType;
     }
-    public boolean getIsTempNode(){
-       return this.isTempNode;
+
+    public void setAssetAddType(int assetAddType) {
+        this.assetAddType = assetAddType;
     }
-    public int getActionType(){return this.actionType;}
+
+    public boolean getIsTempNode() {
+        return this.isTempNode;
+    }
+
+    public int getActionType() {
+        return this.actionType;
+    }
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
+    }
 }

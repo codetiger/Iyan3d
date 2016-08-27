@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:weightSum="1"
-    android:id="@+id/assets_list_elements_layout"
-    android:background="#f3171616">
+              android:id="@+id/assets_list_elements_layout"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="#f3171616"
+              android:orientation="vertical"
+              android:weightSum="1">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="fill_parent"
@@ -27,39 +27,39 @@
                     android:id="@+id/native_progress_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:indeterminate="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true" />
+                    android:indeterminate="true"/>
             </RelativeLayout>
 
             <ImageView
+                android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView1"
-                android:src="@drawable/play_btn"
                 android:layout_gravity="center"
+                android:adjustViewBounds="true"
                 android:foregroundGravity="center"
                 android:paddingTop="10dp"
                 android:scaleType="fitCenter"
-                android:adjustViewBounds="true" />
+                android:src="@drawable/play_btn"/>
         </FrameLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.2"
-        android:gravity="center" >
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/textView1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="New Text"
-            android:id="@+id/textView1"
             android:gravity="center"
-            android:textColor="#ffffff" />
+            android:text="New Text"
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
 </LinearLayout>

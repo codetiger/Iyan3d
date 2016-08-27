@@ -1,6 +1,5 @@
 package com.smackall.animator;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.smackall.animator.Helper.Constants;
@@ -20,8 +19,8 @@ public class AdditionalLight {
     }
 
     public void addLight() {
-        if(GL2JNILib.lightCount() > 4) {
-            UIHelper.informDialog(mContext,"Scene Contains only maximum 5 lights.");
+        if (GL2JNILib.lightCount() > 4) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.only_five_light_msg));
             return;
         }
         int lightCount = 1;
@@ -31,7 +30,8 @@ public class AdditionalLight {
                 lightId = Math.max(GL2JNILib.getAssetIdWithNodeId(i), lightId);
         }
         lightCount += lightId - ((lightId != 0) ? 900 : 0);
-        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
-        ((EditorView)(Activity)mContext).renderManager.importLight(lightCount,Constants.IMPORT_ASSET_ACTION);
+        ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
+        ((EditorView) mContext).renderManager.importLight(lightCount, Constants.IMPORT_ASSET_ACTION);
     }
 }
+

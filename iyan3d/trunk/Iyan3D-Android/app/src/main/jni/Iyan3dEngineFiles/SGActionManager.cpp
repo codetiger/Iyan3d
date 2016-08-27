@@ -636,7 +636,7 @@ void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
 void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
 {
     if((actionScene->isJointSelected  && actionScene->nodes[actionScene->selectedNodeId]->getType() != NODE_TEXT_SKIN) || (!actionScene->isNodeSelected && actionScene->selectedNodeIds.size() <= 0)) return;
-    
+
     if(changeKeysAction.actionType == ACTION_EMPTY) {
         if(actionScene->selectedNodeIds.size() > 0)
             storeActionKeysForMulti(false);
@@ -669,7 +669,7 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
     }
 
     if(actionScene->selectedNodeIds.size() <= 0)
-        actionScene->updater->setDataForFrame(actionScene->currentFrame);
+        actionScene->updater->setDataForFrame(actionScene->currentFrame,false);
 
     
     actionScene->updater->reloadKeyFrameMap();

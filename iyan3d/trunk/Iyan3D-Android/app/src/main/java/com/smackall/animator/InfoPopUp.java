@@ -1,6 +1,5 @@
 package com.smackall.animator;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +11,6 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.facebook.share.widget.LikeView;
-import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.UserOnBoarding.UserOnBoarding;
 
 /**
@@ -22,15 +19,14 @@ import com.smackall.animator.UserOnBoarding.UserOnBoarding;
  */
 public class InfoPopUp {
 
-    private static final int ID_TUTORIAL  = 0;
+    private static final int ID_TUTORIAL = 0;
     private static final int ID_SETTINGS = 1;
     private static final int ID_RATE = 2;
     private static final int ID_SHARE = 3;
     private static final int ID_CONTACT = 4;
     private Context mContext;
 
-    public void infoPopUpMenu(Context context, View v)
-    {
+    public void infoPopUpMenu(Context context, View v) {
         this.mContext = context;
         PopupMenu popup = new PopupMenu(context, v);
         popup.getMenuInflater().inflate(R.menu.info_props_menu, popup.getMenu());
@@ -59,31 +55,27 @@ public class InfoPopUp {
         popup.show();
     }
 
-    private void openTutorial(Context context)
-    {
+    private void openTutorial(Context context) {
         String className = context.getClass().getSimpleName();
-        Intent i = new Intent((className.toLowerCase().equals("sceneselection") ? ((SceneSelection)(context)) : ((EditorView)(context))), UserOnBoarding.class);
+        Intent i = new Intent((className.toLowerCase().equals("sceneselection") ? ((SceneSelection) (context)) : ((EditorView) (context))), UserOnBoarding.class);
         context.startActivity(i);
     }
 
-    private void rateThisApp(Context context)
-    {
-        String url = "market://details?id="+context.getPackageName();
+    private void rateThisApp(Context context) {
+        String url = "market://details?id=" + context.getPackageName();
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         try {
-            ((Activity)context).startActivity(i);
-        }
-        catch (ActivityNotFoundException e){
+            context.startActivity(i);
+        } catch (ActivityNotFoundException ignored) {
 
         }
     }
 
-    private void openMail(Context context)
-    {
+    private void openMail(Context context) {
         Intent email = new Intent(Intent.ACTION_SEND);
         email.setType("message/rfc822");
-        email.putExtra(Intent.EXTRA_EMAIL,new String[] { "iyan3d@smackall.com" });
+        email.putExtra(Intent.EXTRA_EMAIL, new String[]{"iyan3d@smackall.com"});
         PackageInfo pInfo = null;
         String version = "";
         try {
@@ -93,35 +85,33 @@ public class InfoPopUp {
             e.printStackTrace();
             version = "";
         }
-        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Iyan3D "+version+" app ( Device Model " + Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL + " , Android Version " + Build.VERSION.RELEASE + " )");
+        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Iyan3D " + version + " app ( Device Model " + Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL + " , Android Version " + Build.VERSION.RELEASE + " )");
         try {
-            ((Activity)context).startActivity(email);
-        }
-        catch (ActivityNotFoundException e){
+            context.startActivity(email);
+        } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void openSettings(Context context)
-    {
+    private void openSettings(Context context) {
         try {
             String className = context.getClass().getSimpleName();
             if (className.toLowerCase().equals("sceneselection"))
-                ((SceneSelection) ((Activity) context)).settings.showSettings();
+                ((SceneSelection) context).settings.showSettings();
             else
-                ((EditorView) ((Activity) context)).settings.showSettings();
+                ((EditorView) context).settings.showSettings();
+        } catch (ClassCastException ignored) {
         }
-        catch (ClassCastException ignored){}
     }
 
-    private void openFollowDialog(Context context){
+    private void openFollowDialog(Context context) {
         try {
             String className = context.getClass().getSimpleName();
             if (className.toLowerCase().equals("sceneselection"))
-                ((SceneSelection) ((Activity) context)).followApp.showFollowOption();
+                ((SceneSelection) context).followApp.showFollowOption();
             else
-                ((EditorView) ((Activity) context)).followApp.showFollowOption();
+                ((EditorView) context).followApp.showFollowOption();
+        } catch (ClassCastException ignored) {
         }
-        catch (ClassCastException ignored){}
     }
 }

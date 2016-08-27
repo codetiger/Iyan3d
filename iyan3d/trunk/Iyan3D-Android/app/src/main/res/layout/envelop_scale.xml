@@ -1,70 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="#ffffff"
-    android:weightSum="1">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffff"
+              android:orientation="horizontal"
+              android:padding="10dp"
+              android:weightSum="1">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.7"
         android:gravity="center"
+        android:orientation="vertical"
         android:weightSum="1">
 
         <TextView
+            android:id="@+id/textView16"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:text="Envelop"
-            android:id="@+id/textView16"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.2"
             android:gravity="center|left"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:text="@string/envelop"
+            android:textColor="#000000"
+            android:textStyle="bold"/>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.8"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <SeekBar
+                android:id="@+id/envelop_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/envelop_bar"
                 android:layout_gravity="center_horizontal"
-                android:indeterminate="false" />
+                android:indeterminate="false"/>
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.3"
         android:gravity="center"
+        android:orientation="vertical"
         android:weightSum="1">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"></LinearLayout>
+            android:layout_weight="0.2"
+            android:orientation="horizontal"></LinearLayout>
 
         <TextView
+            android:id="@+id/envelop_value"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:text="0"
-            android:id="@+id/envelop_value"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.8"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="0"/>
     </LinearLayout>
 </LinearLayout>

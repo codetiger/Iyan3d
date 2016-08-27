@@ -14,9 +14,9 @@ public class NoSpacingItemDecoreation extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view,
                                RecyclerView parent, RecyclerView.State state) {
-        outRect.bottom = (int) (Constants.height / 20);
+        outRect.bottom = Constants.height / 20;
         outRect.left = 0;
-        outRect.right =0;
+        outRect.right = 0;
         outRect.top = Constants.height / 20;
     }
 }

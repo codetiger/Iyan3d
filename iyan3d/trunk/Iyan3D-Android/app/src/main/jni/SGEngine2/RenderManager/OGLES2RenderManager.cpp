@@ -10,8 +10,9 @@
 #include <stdint.h>
 #include "../Core/Nodes/ParticleManager.h"
 #include "OGLES2RenderManager.h"
+#ifdef IOS
 #include <OpenGLES/ES2/glext.h>
-
+#endif
 #ifdef ANDROID
 //#include "../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/stdint.h"
 #include "../../opengl.h"
@@ -20,6 +21,7 @@
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES;
 PFNGLISVERTEXARRAYOESPROC glIsVertexArrayOES;
+PFNGLDISCARDFRAMEBUFFEREXTPROC glDiscardFramebufferEXT;
 
 void OGLES2RenderManager::initialiseOtherVAOFunc ()
 {
@@ -30,6 +32,7 @@ void OGLES2RenderManager::initialiseOtherVAOFunc ()
         Logger::log(INFO, "OGLRenderManager", "glGenVertexArraysOES is null");
     }
 }
+
 #endif
 
 OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale)
@@ -42,6 +45,11 @@ OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,fl
     depthBuffer = colorBuffer = frameBuffer = 0;
     shaderPrograms.clear();
     Initialize();
+
+    #ifdef ANDROID
+        glDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC)eglGetProcAddress("glDiscardFramebufferEXT");
+    #endif
+
     for (int i = 0; i < 32; i++) {
         currentTextures[i] = -1;
     }

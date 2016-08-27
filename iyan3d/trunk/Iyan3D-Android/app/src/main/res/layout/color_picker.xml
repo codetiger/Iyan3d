@@ -1,73 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:weightSum="1"
-    android:background="#ffffff">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="#ffffff"
+              android:orientation="horizontal"
+              android:weightSum="1">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:layout_weight="0.05" />
+        android:layout_weight="0.05"
+        android:orientation="vertical"
+        android:weightSum="1"/>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:layout_weight="0.9">
+        android:layout_weight="0.9"
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/linearLayout2"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0.05"
-            android:id="@+id/linearLayout2" />
+            android:orientation="vertical"/>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.65">
+            android:layout_weight="0.65"
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/color_picker"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/color_picker"
-                android:src="@drawable/color_picker" />
+                android:src="@drawable/color_picker"/>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/linearLayout"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0.05"
-            android:id="@+id/linearLayout" />
+            android:orientation="vertical"/>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/color_preview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.2"
-            android:id="@+id/color_preview"></LinearLayout>
+            android:orientation="vertical"></LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/linearLayout3"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0.05"
-            android:id="@+id/linearLayout3" />
+            android:orientation="vertical"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:layout_weight="0.05" >
+        android:layout_weight="0.05"
+        android:orientation="vertical"
+        android:weightSum="1">
 
     </LinearLayout>
 </LinearLayout>

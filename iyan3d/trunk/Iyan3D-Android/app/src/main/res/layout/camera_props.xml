@@ -1,85 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="3"
-    android:background="#ffffff"
-    android:padding="10dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffff"
+              android:orientation="vertical"
+              android:padding="10dp"
+              android:weightSum="3">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1.25"
-        android:weightSum="1"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:weightSum="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.5"
-                android:gravity="center|left">
+                android:gravity="center|left"
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/textView9"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="FIELD OF VIEW"
-                    android:id="@+id/textView9"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center|left"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
+                    android:text="FIELD OF VIEW"
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.5"
-                android:weightSum="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.7"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <SeekBar
+                        android:id="@+id/field_of_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/field_of_view"
                         android:indeterminate="false"
                         android:max="170"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3"
-                    android:gravity="center" >
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/fov_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fov_text"
                         android:layout_gravity="center_horizontal"
-                        android:text="0" />
+                        android:text="0"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -87,111 +88,111 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1.25"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.25"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/textView11"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="RESOLUTION"
-                android:id="@+id/textView11"
                 android:gravity="center|left"
-                android:textStyle="bold"
-                android:textColor="#000000" />
+                android:text="RESOLUTION"
+                android:textColor="#000000"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.75"
-            android:weightSum="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <RadioGroup
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1080P"
-                        android:button="@null"
-                        android:drawableBottom="@android:drawable/btn_radio"
-                        android:tag="0"
                         android:id="@+id/THOUSAND_EIGHTY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
                         android:checked="true"
+                        android:drawableBottom="@android:drawable/btn_radio"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"/>
+                        android:paddingRight="20dp"
+                        android:tag="0"
+                        android:text="1080P"/>
 
                     <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="720P"
-                        android:button="@null"
-                        android:drawableBottom="@android:drawable/btn_radio"
                         android:id="@+id/SEVEN_TWENTY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
                         android:checked="false"
+                        android:drawableBottom="@android:drawable/btn_radio"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
                         android:tag="1"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp" />
+                        android:text="720P"/>
 
                     <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="480P"
-                        android:button="@null"
-                        android:drawableBottom="@android:drawable/btn_radio"
                         android:id="@+id/FOUR_EIGHTY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
                         android:checked="false"
+                        android:drawableBottom="@android:drawable/btn_radio"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
                         android:tag="2"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp" />
+                        android:text="480P"/>
 
                     <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="360P"
-                        android:button="@null"
-                        android:drawableBottom="@android:drawable/btn_radio"
                         android:id="@+id/THREE_SIXTY"
-                        android:checked="false"
-                        android:tag="3"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp" />
-
-                    <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="240P"
                         android:button="@null"
-                        android:drawableBottom="@android:drawable/btn_radio"
-                        android:id="@+id/TWO_FOURTY"
                         android:checked="false"
-                        android:tag="4"
+                        android:drawableBottom="@android:drawable/btn_radio"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp" />
+                        android:paddingRight="20dp"
+                        android:tag="3"
+                        android:text="360P"/>
+
+                    <RadioButton
+                        android:id="@+id/TWO_FOURTY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:checked="false"
+                        android:drawableBottom="@android:drawable/btn_radio"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:tag="4"
+                        android:text="240P"/>
                 </RadioGroup>
             </LinearLayout>
 
@@ -199,20 +200,20 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.5"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   Delete Animation"
-            android:drawableLeft="@drawable/delete_btn"
-            android:id="@+id/delete"
             android:layout_gravity="center_horizontal"
-            android:gravity="center" />
+            android:drawableLeft="@drawable/delete_btn"
+            android:gravity="center"
+            android:text="   Delete Animation"/>
     </LinearLayout>
 </LinearLayout>

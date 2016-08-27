@@ -22,8 +22,8 @@ private:
 public:
     SGSceneUpdater(SceneManager* smgr, void* scene);
     ~SGSceneUpdater();
-    
-    void setDataForFrame(int frame);
+
+    void setDataForFrame(int frame, bool updateBB = true);
     void setKeysForFrame(int frame);
     void updateControlsMaterial();
     void updateControlsOrientaion(bool forRTT = false);

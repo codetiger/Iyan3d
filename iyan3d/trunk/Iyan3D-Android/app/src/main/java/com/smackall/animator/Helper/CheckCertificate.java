@@ -58,7 +58,7 @@ public class CheckCertificate {
         return hexString;
     }
 
-    public static String byte2HexFormatted(byte[] arr) {
+    private static String byte2HexFormatted(byte[] arr) {
         StringBuilder str = new StringBuilder(arr.length * 2);
         for (int i = 0; i < arr.length; i++) {
             String h = Integer.toHexString(arr[i]);

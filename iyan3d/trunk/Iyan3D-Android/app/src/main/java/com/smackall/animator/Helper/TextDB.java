@@ -19,11 +19,11 @@ public class TextDB {
     boolean isTempNode = true;
     int actionType = Constants.ACTION_TEXT_IMAGE_ADD;
 
-    public TextDB(){
+    public TextDB() {
 
     }
 
-    public TextDB(float red,float green,float blue,int typeOfNode,String textureName,String assetName,int fontSize,int bevalValue,int assetAddType,String filePath,boolean isTempNode){
+    public TextDB(float red, float green, float blue, int typeOfNode, String textureName, String assetName, int fontSize, int bevalValue, int assetAddType, String filePath, boolean isTempNode) {
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -37,74 +37,100 @@ public class TextDB {
         this.isTempNode = isTempNode;
     }
 
-    public void setRed(float red){
-        this.red = red;
-    }
-    public void setGreen(float green){
-        this.green = green;
-    }
-    public void setBlue(float blue){
-        this.blue = blue;
-    }
-    public void setTypeOfNode(int typeOfNode){
-        this.typeOfNode = typeOfNode;
-    }
-    public void setTextureName(String textureName){
-        this.textureName = textureName;
-    }
-    public void setAssetName(String assetName){
-        this.assetName = assetName;
-    }
-    public void setFontSize(int fontSize){
-        this.fontSize = fontSize;
-    }
-    public void setBevalValue(int bevalValue){
-        this.bevalValue = bevalValue;
-    }
-    public void setAssetAddType(int assetAddType){
-        this.assetAddType = assetAddType;
-    }
-    public void setFilePath(String filePath){
-        this.filePath = filePath;
-    }
-    public void setTempNode(boolean isTempNode){
-        this.isTempNode = isTempNode;
-    }
-    public void setActionType(int actionType){this.actionType = actionType;}
-
-    public float getRed(){
+    public float getRed() {
         return this.red;
     }
-    public float getGreen(){
+
+    public void setRed(float red) {
+        this.red = red;
+    }
+
+    public float getGreen() {
         return this.green;
     }
-    public float getBlue(){
+
+    public void setGreen(float green) {
+        this.green = green;
+    }
+
+    public float getBlue() {
         return blue;
     }
-    public int getTypeOfNode(){
+
+    public void setBlue(float blue) {
+        this.blue = blue;
+    }
+
+    public int getTypeOfNode() {
         return this.typeOfNode;
     }
-    public String  getTextureName(){
-        return this.textureName ;
+
+    public void setTypeOfNode(int typeOfNode) {
+        this.typeOfNode = typeOfNode;
     }
-    public String getAssetName(){
-        return this.assetName ;
+
+    public String getTextureName() {
+        return this.textureName;
     }
-    public int getFontSize(){
-        return this.fontSize ;
+
+    public void setTextureName(String textureName) {
+        this.textureName = textureName;
     }
-    public int getBevalValue(){
-        return this.bevalValue ;
+
+    public String getAssetName() {
+        return this.assetName;
     }
-    public int getAssetAddType(){
+
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
+    }
+
+    public int getFontSize() {
+        return this.fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public int getBevalValue() {
+        return this.bevalValue;
+    }
+
+    public void setBevalValue(int bevalValue) {
+        this.bevalValue = bevalValue;
+    }
+
+    public int getAssetAddType() {
         return this.assetAddType;
     }
-    public String getFilePath(){
+
+    public void setAssetAddType(int assetAddType) {
+        this.assetAddType = assetAddType;
+    }
+
+    public String getFilePath() {
         return this.filePath;
     }
-    public boolean getTempNode(){
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public boolean getTempNode() {
         return this.isTempNode;
     }
-    public int getActionType(){return this.actionType;}
+
+    public void setTempNode(boolean isTempNode) {
+        this.isTempNode = isTempNode;
+    }
+
+    public int getActionType() {
+        return this.actionType;
+    }
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
+    }
 
 }

@@ -1,81 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="4"
-    android:padding="10dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="10dp"
+              android:weightSum="4">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:weightSum="1"
-        android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="1">
 
         <ImageView
+            android:id="@+id/facebook_follow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/facebook_follow"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/follow_acebook"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/twitterBtnHolder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:weightSum="1"
+        android:orientation="vertical"
         android:padding="10dp"
-        android:id="@+id/twitterBtnHolder">
+        android:weightSum="1">
 
         <ImageView
+            android:id="@+id/twitter_follow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/twitter_follow"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/follow_twitter"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:weightSum="1"
-        android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="1">
 
         <ImageView
+            android:id="@+id/google_follow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/google_follow"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/follow_gplus"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:weightSum="1"
-        android:padding="10dp" >
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="1">
 
         <ImageView
+            android:id="@+id/youtube_follow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/youtube_follow"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/subscribe_youtube" />
+            android:background="@drawable/subscribe_youtube"/>
     </LinearLayout>
 
 </LinearLayout>

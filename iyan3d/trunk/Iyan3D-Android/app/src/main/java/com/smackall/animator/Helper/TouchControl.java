@@ -18,49 +18,48 @@ import java.util.Calendar;
  * Created by Sabish.M on 14/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGestureListener{
+public class TouchControl implements View.OnTouchListener, GestureDetector.OnGestureListener {
 
-    private Context mContext;
-    long startClickTime , clickDuration;
+    long startClickTime, clickDuration;
     boolean swiping = false;
     int panBegan = 0;
-    int moveBegan=0;
+    int moveBegan = 0;
     VelocityTracker velocityTracker;
     int fingerCount = 0;
+    private Context mContext;
     private GestureDetectorCompat mDetector;
 
-    public TouchControl(Context mContext){
+    public TouchControl(Context mContext) {
         this.mContext = mContext;
-        velocityTracker=  VelocityTracker.obtain();
-        mDetector = new GestureDetectorCompat(mContext,this);
+        velocityTracker = VelocityTracker.obtain();
+        mDetector = new GestureDetectorCompat(mContext, this);
         initView();
     }
 
-    private void initView()
-    {
-        ((Activity)mContext).findViewById(R.id.glView).setOnTouchListener(this);
+    private void initView() {
+        ((Activity) mContext).findViewById(R.id.glView).setOnTouchListener(this);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(!((EditorView)(Activity)mContext).isDisplayPrepared)
+        if (!((EditorView) mContext).isDisplayPrepared)
             return true;
         this.mDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 fingerCount = event.getPointerCount();
                 startClickTime = Calendar.getInstance().getTimeInMillis();
-                ((EditorView)(Activity)mContext).renderManager.touchBegan(event);
+                ((EditorView) mContext).renderManager.touchBegan(event);
                 return true;
             case MotionEvent.ACTION_UP:
                 clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                 if (fingerCount == 1 && clickDuration < 200) {
-                    ((EditorView)(Activity)mContext).renderManager.checktapposition(event);
+                    ((EditorView) mContext).renderManager.checktapposition(event);
                 }
                 panBegan = 0;
                 moveBegan = 0;
                 swiping = false;
-                ((EditorView)(Activity)mContext).renderManager.tapEnd(event);
+                ((EditorView) mContext).renderManager.tapEnd(event);
                 return true;
             case MotionEvent.ACTION_POINTER_DOWN:
                 fingerCount = event.getPointerCount();
@@ -71,18 +70,18 @@ public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGe
                     velocityTracker.addMovement(event);
                     velocityTracker.computeCurrentVelocity(1000);
                     if (moveBegan == 0) {
-                        ((EditorView)(Activity)mContext).renderManager.checkControlSelection(event);
+                        ((EditorView) mContext).renderManager.checkControlSelection(event);
                         moveBegan++;
                     }
-                    ((EditorView)(Activity)mContext).renderManager.tapMove(event);
-                    ((EditorView)(Activity)mContext).renderManager.swipe(velocityTracker);
+                    ((EditorView) mContext).renderManager.tapMove(event);
+                    ((EditorView) mContext).renderManager.swipe(velocityTracker);
                     return true;
                 } else if (fingerCount == 2) {
                     if (panBegan == 0) {
-                        ((EditorView)(Activity)mContext).renderManager.panBegin(event);
+                        ((EditorView) mContext).renderManager.panBegin(event);
                         panBegan++;
                     } else
-                        ((EditorView)(Activity)mContext).renderManager.panProgress(event);
+                        ((EditorView) mContext).renderManager.panProgress(event);
                     return true;
                 }
                 break;
@@ -102,7 +101,7 @@ public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGe
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if(GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false,null);
+        if (GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false, null);
         return false;
     }
 
@@ -113,12 +112,11 @@ public class TouchControl implements View.OnTouchListener,  GestureDetector.OnGe
 
     @Override
     public void onLongPress(MotionEvent e) {
-        if(GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false,null);
-        MotionEvent event = e;
-            if (GL2JNILib.selectedNodeIdsSize() > 0)
-                ((EditorView) mContext).showCloneOption(null, e);
-            else
-                ((EditorView) ((Activity) mContext)).popUpManager.initPopUpManager(GL2JNILib.getSelectedNodeId(), null, event);
+        if (GL2JNILib.isPlaying()) GL2JNILib.setIsPlaying(false, null);
+        if (GL2JNILib.selectedNodeIdsSize() > 0)
+            ((EditorView) mContext).showCloneOption(null, e);
+        else
+            ((EditorView) mContext).popUpManager.initPopUpManager(GL2JNILib.getSelectedNodeId(), null, e);
     }
 
     @Override

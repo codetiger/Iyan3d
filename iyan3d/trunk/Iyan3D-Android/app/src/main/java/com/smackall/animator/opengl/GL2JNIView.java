@@ -21,21 +21,19 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public class GL2JNIView extends GLSurfaceView  {
+public class GL2JNIView extends GLSurfaceView {
     private static final boolean DEBUG = false;
-    public static  boolean fileLoad=false;
-    public static boolean  tapdetected=false;
-
+    private static SharedPreferenceManager sharedPreferenceManager;
+    private static Context staticContext;
+    private static boolean addVAOSupport = false;
     Renderer renderer;
     Context mContext;
-    static SharedPreferenceManager sharedPreferenceManager;
-    static Context staticContext;
-    static boolean addVAOSupport = false;
+
     public GL2JNIView(Context context, SharedPreferenceManager sharedPreferenceManager) {
         super(context);
         mContext = context;
         GL2JNIView.sharedPreferenceManager = sharedPreferenceManager;
-        this.staticContext = context;
+        staticContext = context;
         init(false, 0, 0);
     }
 
@@ -44,7 +42,34 @@ public class GL2JNIView extends GLSurfaceView  {
         init(translucent, depth, stencil);
     }
 
-       private void init(boolean translucent, int depth, int stencil) {
+    public static int detectOpenGLES() {
+        ActivityManager am = (ActivityManager) staticContext.getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = am.getDeviceConfigurationInfo();
+        return info.reqGlEsVersion;
+    }
+
+    private static void checkEglError(String prompt, EGL10 egl) {
+
+    }
+
+    public static void callBackSurfaceRendered() {
+        ((EditorView) staticContext).showOrHideLoading(Constants.HIDE);
+        ((EditorView) staticContext).isDisplayPrepared = true;
+        ((Activity) staticContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (((EditorView) staticContext).frameAdapter != null)
+                    ((EditorView) staticContext).frameAdapter.notifyDataSetChanged();
+
+                if (Constants.isFirstTimeUser) {
+                    ((EditorView) staticContext).descriptionManager.helpForFirstTimeUser(staticContext);
+                    ((EditorView) staticContext).helpDialogs.showPop(staticContext);
+                }
+            }
+        });
+    }
+
+    private void init(boolean translucent, int depth, int stencil) {
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
          * If we want a translucent one, we should change the surface's
          * format here, using PixelFormat.TRANSLUCENT for GL Surfaces
@@ -57,37 +82,31 @@ public class GL2JNIView extends GLSurfaceView  {
         /* Setup the context factory for 2.0 rendering.
          * See ContextFactory class definition below
          */
-           setEGLContextFactory(new ContextFactory());
+        setEGLContextFactory(new ContextFactory());
         /* We need to choose an EGLConfig that matches the format of
          * our surface exactly. This is going to be done in our
          * custom config chooser. See ConfigChooser class definition
          * below.
          */
-           setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 24, 0));
+        setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 24, 0));
         /* Set the renderer responsible for frame rendering */
         renderer = new Renderer(mContext);
         setRenderer(renderer);
         //setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
-    public static int detectOpenGLES() {
-        ActivityManager am = (ActivityManager)staticContext.getSystemService(Context.ACTIVITY_SERVICE);
-        ConfigurationInfo info = am.getDeviceConfigurationInfo();
-        return info.reqGlEsVersion;
-    }
-
-
     private static class ContextFactory implements EGLContextFactory {
         private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+
         public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
             checkEglError("Before eglCreateContext", egl);
 
             EGLContext context;
-            int[] openglesattrib = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL10.EGL_NONE };
+            int[] openglesattrib = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL10.EGL_NONE};
             EGLConfig eglConfigCopy = eglConfig;
             EGLConfigChooser eglConfigChooser = null;
 
-            if(detectOpenGLES() >= 0x30000) {
+            if (detectOpenGLES() >= 0x30000) {
                 addVAOSupport = true;
             } else {
                 addVAOSupport = false;
@@ -96,15 +115,13 @@ public class GL2JNIView extends GLSurfaceView  {
 
             try {
                 context = egl.eglCreateContext(display, eglConfigCopy, EGL10.EGL_NO_CONTEXT, openglesattrib);
-            }
-            catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException ex) {
                 eglConfigChooser = new ConfigChooser(5, 6, 5, 0, 16, 0);
                 eglConfigCopy = eglConfigChooser.chooseConfig(egl, display);
 
                 try {
                     context = egl.eglCreateContext(display, eglConfigCopy, EGL10.EGL_NO_CONTEXT, openglesattrib);
-                }
-                catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     context = null;
                 }
             }
@@ -118,14 +135,30 @@ public class GL2JNIView extends GLSurfaceView  {
         }
     }
 
-    private static void checkEglError(String prompt, EGL10 egl) {
-        int error;
-        while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-
-        }
-    }
-
     private static class ConfigChooser implements EGLConfigChooser {
+
+        private static int EGL_OPENGL_ES2_BIT = 4;
+
+        /* This EGL config specification is used to specify 2.0 rendering.
+         * We use a minimum size of 4 bits for red/green/blue, but will
+         * perform actual matching in chooseConfig() below.
+         */
+        private static int[] s_configAttribs2 =
+                {
+                        EGL10.EGL_RED_SIZE, 8,
+                        EGL10.EGL_GREEN_SIZE, 8,
+                        EGL10.EGL_BLUE_SIZE, 8,
+                        EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                        EGL10.EGL_NONE
+                };
+        // Subclasses can adjust these values:
+        protected int mRedSize;
+        protected int mGreenSize;
+        protected int mBlueSize;
+        protected int mAlphaSize;
+        protected int mDepthSize;
+        protected int mStencilSize;
+        private int[] mValue = new int[1];
 
         public ConfigChooser(int r, int g, int b, int a, int depth, int stencil) {
             mRedSize = r;
@@ -135,21 +168,6 @@ public class GL2JNIView extends GLSurfaceView  {
             mDepthSize = depth;
             mStencilSize = stencil;
         }
-
-        /* This EGL config specification is used to specify 2.0 rendering.
-         * We use a minimum size of 4 bits for red/green/blue, but will
-         * perform actual matching in chooseConfig() below.
-         */
-
-        private static int EGL_OPENGL_ES2_BIT = 4;
-        private static int[] s_configAttribs2 =
-                {
-                        EGL10.EGL_RED_SIZE, 8,
-                        EGL10.EGL_GREEN_SIZE, 8,
-                        EGL10.EGL_BLUE_SIZE, 8,
-                        EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                        EGL10.EGL_NONE
-                };
 
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
 
@@ -179,7 +197,7 @@ public class GL2JNIView extends GLSurfaceView  {
 
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display,
                                       EGLConfig[] configs) {
-            for(EGLConfig config : configs) {
+            for (EGLConfig config : configs) {
                 int d = findConfigAttrib(egl, display, config,
                         EGL10.EGL_DEPTH_SIZE, 0);
                 int s = findConfigAttrib(egl, display, config,
@@ -217,8 +235,8 @@ public class GL2JNIView extends GLSurfaceView  {
         private void printConfigs(EGL10 egl, EGLDisplay display,
                                   EGLConfig[] configs) {
             int numConfigs = configs.length;
-            for (int i = 0; i < numConfigs; i++) {
-                printConfig(egl, display, configs[i]);
+            for (EGLConfig config : configs) {
+                printConfig(egl, display, config);
             }
         }
 
@@ -298,76 +316,56 @@ public class GL2JNIView extends GLSurfaceView  {
             for (int i = 0; i < attributes.length; i++) {
                 int attribute = attributes[i];
                 String name = names[i];
-                if ( egl.eglGetConfigAttrib(display, config, attribute, value)) {
-                } else {
+                if (!egl.eglGetConfigAttrib(display, config, attribute, value)) {
                     // Log.w(TAG, String.format("  %s: failed\n", name));
-                    while (egl.eglGetError() != EGL10.EGL_SUCCESS);
+                    while (egl.eglGetError() != EGL10.EGL_SUCCESS) ;
                 }
             }
         }
-
-        // Subclasses can adjust these values:
-        protected int mRedSize;
-        protected int mGreenSize;
-        protected int mBlueSize;
-        protected int mAlphaSize;
-        protected int mDepthSize;
-        protected int mStencilSize;
-        private int[] mValue = new int[1];
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {
         private Context mContext;
 
-        public Renderer(Context mContext){
+        public Renderer(Context mContext) {
             this.mContext = mContext;
         }
+
         @Override
         public void onDrawFrame(GL10 gl) {
-            if(!((EditorView)((Activity)mContext)).renderingPaused) {
-                ((EditorView)((Activity)mContext)).renderManager.renderAll();
+            if (!((EditorView) mContext).renderingPaused) {
+                ((EditorView) mContext).renderManager.renderAll();
             }
-
         }
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-
         }
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            int maxUniform = GL2JNILib.init(Constants.width, Constants.height,addVAOSupport,sharedPreferenceManager.getInt(mContext,"maxUniform"));
-            sharedPreferenceManager.setData(mContext,"maxUniform",maxUniform);
+            String maxJointStr = "maxJoint" + Constants.getAppVersion(mContext);
+            String maxUniformStr = "maxUniform" + Constants.getAppVersion(mContext);
+            int maxJoints = sharedPreferenceManager.getInt(mContext, maxJointStr);
+            int maxUniform = sharedPreferenceManager.getInt(mContext, maxUniformStr);
+            int[] values = GL2JNILib.init(Constants.width, Constants.height, addVAOSupport, maxUniform, maxJoints);
+            if (maxUniform == 0)
+                sharedPreferenceManager.setData(mContext, maxUniformStr, values[0]);
+            if (maxJoints == 0)
+                sharedPreferenceManager.setData(mContext, maxJointStr, values[1]);
+            System.out.println("Max Uniform Max Joints: " + values[0] + " " + values[1]);
             loadFromFile();
         }
 
-        public  void loadFromFile(){
-            String filePath= PathManager.LocalProjectFolder+"/"+((EditorView)(Activity)mContext).projectNameHash+".sgb";
+        public void loadFromFile() {
+            String filePath = PathManager.LocalProjectFolder + "/" + ((EditorView) mContext).projectNameHash + ".sgb";
             File f = new File(filePath);
-            if(f.exists()){
-                GL2JNILib.loadScene(((EditorView)mContext).nativeCallBacks, filePath);
-            }else{
-                GL2JNILib.loadScene(((EditorView)mContext).nativeCallBacks, "init");
+            if (f.exists()) {
+                GL2JNILib.loadScene(((EditorView) mContext).nativeCallBacks, filePath);
+            } else {
+                GL2JNILib.loadScene(((EditorView) mContext).nativeCallBacks, "init");
             }
         }
-    }
-
-    public static void callBackSurfaceRendered(){
-        ((EditorView)((Activity)staticContext)).showOrHideLoading(Constants.HIDE);
-        ((EditorView)((Activity)staticContext)).isDisplayPrepared = true;
-        ((EditorView)((Activity)staticContext)).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(((EditorView) ((Activity) staticContext)).frameAdapter != null)
-                    ((EditorView) ((Activity) staticContext)).frameAdapter.notifyDataSetChanged();
-
-                if(Constants.isFirstTimeUser) {
-                    ((EditorView) ((Activity) staticContext)).descriptionManager.helpForFirstTimeUser(staticContext);
-                    ((EditorView) ((Activity) staticContext)).helpDialogs.showPop(staticContext);
-                }
-            }
-        });
     }
 }
 

@@ -21,7 +21,7 @@ import com.smackall.animator.R;
  * Created by alessandro on 12/12/15.
  */
 public class TooltipOverlayDrawable extends Drawable {
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public static final String TAG = TooltipOverlay.class.getSimpleName();
     public static final float ALPHA_MAX = 255f;
     public static final double FADEOUT_START_DELAY = 0.55;
@@ -37,8 +37,6 @@ public class TooltipOverlayDrawable extends Drawable {
     private ValueAnimator mSecondAnimator;
     private int mRepeatIndex;
     private boolean mStarted;
-    private int mOuterAlpha;
-    private int mInnerAlpha;
     private int mRepeatCount = 1;
     private long mDuration = 400;
 
@@ -47,7 +45,7 @@ public class TooltipOverlayDrawable extends Drawable {
         mInnerPaint.setStyle(Paint.Style.FILL);
 
         final TypedArray array =
-            context.getTheme().obtainStyledAttributes(defStyleResId, R.styleable.TooltipOverlay);
+                context.getTheme().obtainStyledAttributes(defStyleResId, R.styleable.TooltipOverlay);
 
         for (int i = 0; i < array.getIndexCount(); i++) {
             int index = array.getIndex(i);
@@ -72,8 +70,8 @@ public class TooltipOverlayDrawable extends Drawable {
 
         array.recycle();
 
-        mOuterAlpha = getOuterAlpha();
-        mInnerAlpha = getInnerAlpha();
+        int mOuterAlpha = getOuterAlpha();
+        int mInnerAlpha = getInnerAlpha();
 
         // first
         Animator fadeIn = ObjectAnimator.ofInt(this, "outerAlpha", 0, mOuterAlpha);
@@ -149,7 +147,7 @@ public class TooltipOverlayDrawable extends Drawable {
         return mOuterPaint.getAlpha();
     }
 
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public void setOuterAlpha(final int value) {
         mOuterPaint.setAlpha(value);
         invalidateSelf();
@@ -159,7 +157,7 @@ public class TooltipOverlayDrawable extends Drawable {
         return mInnerPaint.getAlpha();
     }
 
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public void setInnerAlpha(final int value) {
         mInnerPaint.setAlpha(value);
         invalidateSelf();
@@ -247,23 +245,23 @@ public class TooltipOverlayDrawable extends Drawable {
         setOuterRadius(0);
     }
 
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public float getInnerRadius() {
         return mInnerRadius;
     }
 
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public void setInnerRadius(final float rippleRadius) {
         mInnerRadius = rippleRadius;
         invalidateSelf();
     }
 
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public float getOuterRadius() {
         return mOuterRadius;
     }
 
-    @SuppressWarnings ("unused")
+    @SuppressWarnings("unused")
     public void setOuterRadius(final float value) {
         mOuterRadius = value;
         invalidateSelf();

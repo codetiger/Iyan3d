@@ -33,30 +33,29 @@ import java.util.zip.ZipOutputStream;
  */
 public class Save {
 
+    private static final int BUFFER = 2048;
     private Context mContext;
     private DatabaseHelper db;
-    private static final int BUFFER = 2048;
 
-    public Save(Context context,DatabaseHelper db){
+    public Save(Context context, DatabaseHelper db) {
         this.mContext = context;
         this.db = db;
     }
 
-    public void enterNameForAnimation()
-    {
+    public void enterNameForAnimation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("Save your Animation as template");
+        builder.setTitle(mContext.getString(R.string.save_your_animation_as_template));
         final EditText input = new EditText(mContext);
-        input.setHint("Animation Name");
+        input.setHint(mContext.getString(R.string.animation_name));
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(mContext.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 saveAnimation(input.getText().toString());
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -65,23 +64,27 @@ public class Save {
         builder.show();
     }
 
-    public void saveAnimation(final String name)
-    {
-        if(name.length() == 0){ UIHelper.informDialog(mContext,"Animation name cannot be empty."); return;}
-        if(FileHelper.isItHaveSpecialChar(name)) {UIHelper.informDialog(mContext,"Animation Name cannot contain any special characters.");return;}
+    public void saveAnimation(final String name) {
+        if (name.length() == 0) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.animation_name_empty));
+            return;
+        }
+        if (FileHelper.isItHaveSpecialChar(name)) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.animation_name_special_char));
+            return;
+        }
         final int assetId = 80000 + db.getNextAnimationAssetId();
         final int type = (GL2JNILib.getNodeType(GL2JNILib.getSelectedNodeId()) == Constants.NODE_TEXT_SKIN) ? 1 : 0;
-        ((EditorView)((Activity)mContext)).glView.queueEvent(new Runnable() {
+        ((EditorView) mContext).glView.queueEvent(new Runnable() {
             @Override
             public void run() {
-                GL2JNILib.saveAnimation(((EditorView)mContext).nativeCallBacks,assetId,name,type);
+                GL2JNILib.saveAnimation(((EditorView) mContext).nativeCallBacks, assetId, name, type);
             }
         });
     }
 
-    public void addToDatabase(final boolean status, final String name, final int type)
-    {
-        ((Activity)mContext).runOnUiThread(new Runnable() {
+    public void addToDatabase(final boolean status, final String name, final int type) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (status) {
@@ -91,47 +94,44 @@ public class Save {
                     animDB.setAnimName(name);
                     animDB.setPublishedId(0);
                     animDB.setRating(0);
-                    animDB.setBonecount(GL2JNILib.jointSize(GL2JNILib.getSelectedNodeId()));
+                    animDB.setBoneCount(GL2JNILib.jointSize(GL2JNILib.getSelectedNodeId()));
                     animDB.setAnimType(type);
-                    animDB.setUserid(((EditorView)(Activity)mContext).userDetails.uniqueId);
-                    animDB.setUserName(((EditorView)(Activity)mContext).userDetails.userName);
-                    animDB.setKeyword(((EditorView)(Activity)mContext).userDetails.userName);
+                    animDB.setUserId(((EditorView) mContext).userDetails.uniqueId);
+                    animDB.setUserName(((EditorView) mContext).userDetails.userName);
+                    animDB.setKeyword(((EditorView) mContext).userDetails.userName);
                     animDB.setUploaded(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date()));
                     db.addNewMyAnimationAssets(animDB);
-                    ((EditorView)((Activity)mContext)).imageManager.makeThumbnail(PathManager.LocalAnimationFolder+"/"+assetId+".png");
-                    UIHelper.informDialog(mContext,"Animation Saved Successfully.");
+                    ((EditorView) mContext).imageManager.makeThumbnail(PathManager.LocalAnimationFolder + "/" + assetId + ".png");
+                    UIHelper.informDialog(mContext, mContext.getString(R.string.animation_save_success));
                     showMyAnimationList();
-                }
-                else
+                } else
                     System.out.println("Error");
             }
         });
     }
 
-    public void showMyAnimationList()
-    {
-        if (((EditorView)mContext).animationSelection == null)
-            ((EditorView)mContext).animationSelection = new AnimationSelection(mContext, db,((EditorView)mContext).addToDownloadManager,((EditorView)mContext).downloadManager,((EditorView)mContext).sharedPreferenceManager);
+    public void showMyAnimationList() {
+        if (((EditorView) mContext).animationSelection == null)
+            ((EditorView) mContext).animationSelection = new AnimationSelection(mContext, db, ((EditorView) mContext).addToDownloadManager, ((EditorView) mContext).downloadManager, ((EditorView) mContext).sharedPreferenceManager);
         Constants.VIEW_TYPE = Constants.ANIMATION_VIEW;
-        ((EditorView)mContext).animationSelection.showAnimationSelection();
-        ((EditorView)mContext).animationSelection.category.setSelection(4);
+        ((EditorView) mContext).animationSelection.showAnimationSelection();
+        ((EditorView) mContext).animationSelection.category.setSelection(4);
     }
 
-    public void saveI3DFile(String fileName)
-    {
-        ArrayList<String> fileNames = ((EditorView)mContext).zipManager.getFiles(true);
-        String zipname = fileName+".i3d";
-        String path  =PathManager.LocalProjectFolder+"/";
+    public void saveI3DFile(String fileName) {
+        ArrayList<String> fileNames = ((EditorView) mContext).zipManager.getFiles(true);
+        String zipname = fileName + ".i3d";
+        String path = PathManager.LocalProjectFolder + "/";
 
-        try  {
+        try {
             BufferedInputStream origin = null;
-            FileOutputStream dest = new FileOutputStream(path+zipname);
+            FileOutputStream dest = new FileOutputStream(path + zipname);
 
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
             byte data[] = new byte[BUFFER];
 
-            for(int i=0; i < fileNames.size(); i++) {
-                if(!FileHelper.checkValidFilePath(fileNames.get(i))) {
+            for (int i = 0; i < fileNames.size(); i++) {
+                if (!FileHelper.checkValidFilePath(fileNames.get(i))) {
                     break;
                 }
                 FileInputStream fi = new FileInputStream(fileNames.get(i));
@@ -139,8 +139,7 @@ public class Save {
                 ZipEntry entry = new ZipEntry(fileNames.get(i).substring(fileNames.get(i).lastIndexOf("/") + 1));
                 try {
                     out.putNextEntry(entry);
-                }
-                catch (ZipException e){
+                } catch (ZipException e) {
                     e.printStackTrace();
                     continue;
                 }
@@ -153,7 +152,7 @@ public class Save {
 
             out.finish();
             out.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

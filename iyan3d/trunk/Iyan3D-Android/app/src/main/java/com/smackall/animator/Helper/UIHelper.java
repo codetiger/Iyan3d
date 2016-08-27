@@ -19,25 +19,25 @@ public class UIHelper {
 
     public static int ScreenType;
 
-    public static void informDialog(final Context context, final String msg){
-        ((Activity)context).runOnUiThread(new Runnable() {
+    public static void informDialog(final Context context, final String msg) {
+        ((Activity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
                 informDialog
                         .setMessage(msg)
                         .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
-                                    if(((EditorView)(Activity)context).addToDownloadManager != null){
-                                        ((EditorView)(Activity)context).addToDownloadManager.errorMessageShowing = false;
+                                    if (((EditorView) context).addToDownloadManager != null) {
+                                        ((EditorView) context).addToDownloadManager.errorMessageShowing = false;
                                     }
-                                }
-                                catch (ClassCastException e){
+                                } catch (ClassCastException e) {
                                     e.printStackTrace();
                                 }
-                                dialog.dismiss();
+                                if (dialog != null)
+                                    dialog.dismiss();
                             }
                         });
                 informDialog.create();
@@ -50,17 +50,18 @@ public class UIHelper {
         });
     }
 
-    public static void informDialog(final Context context, final String msg,final boolean dummy){
-        ((Activity)context).runOnUiThread(new Runnable() {
+    public static void informDialog(final Context context, final String msg, final boolean dummy) {
+        ((Activity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
                 informDialog
                         .setMessage(msg)
                         .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
+                                if (dialog != null)
+                                    dialog.dismiss();
                             }
                         });
                 informDialog.create();
@@ -73,8 +74,8 @@ public class UIHelper {
         });
     }
 
-    public static void showSignInPanelWithMessage(final Context context, final String msg){
-        ((Activity)context).runOnUiThread(new Runnable() {
+    public static void showSignInPanelWithMessage(final Context context, final String msg) {
+        ((Activity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
@@ -82,10 +83,11 @@ public class UIHelper {
                 informDialog
                         .setMessage(msg)
                         .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                ((EditorView)(Activity)context).showLogin(((Activity) context).findViewById(R.id.login));
-                                dialog.dismiss();
+                                ((EditorView) context).showLogin(((Activity) context).findViewById(R.id.login));
+                                if (dialog != null)
+                                    dialog.dismiss();
                             }
                         });
                 informDialog.create();
@@ -98,48 +100,39 @@ public class UIHelper {
         });
     }
 
-    public static void getScreenCategory(Context context){
+    public static void getScreenCategory(Context context) {
         if ((context.getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK) ==
                 Configuration.SCREENLAYOUT_SIZE_LARGE) {
-            ScreenType =  Constants.SCREEN_LARGE;
-        }
-        else if((context.getResources().getConfiguration().screenLayout &
+            ScreenType = Constants.SCREEN_LARGE;
+        } else if ((context.getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK) ==
-                Configuration.SCREENLAYOUT_SIZE_NORMAL){
+                Configuration.SCREENLAYOUT_SIZE_NORMAL) {
             ScreenType = Constants.SCREEN_NORMAL;
-        }
-        else if((context.getResources().getConfiguration().screenLayout &
+        } else if ((context.getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK) ==
-                Configuration.SCREENLAYOUT_SIZE_XLARGE){
+                Configuration.SCREENLAYOUT_SIZE_XLARGE) {
             ScreenType = Constants.SCREEN_XLARGE;
-        }
-        else {
+        } else {
             ScreenType = Constants.SCREEN_UNDEFINED;
         }
     }
 
-    public static void dpi(Context mContext)
-    {
+    public static void dpi(Context mContext) {
         getScreenCategory(mContext);
-        int density= mContext.getResources().getDisplayMetrics().densityDpi;
+        int density = mContext.getResources().getDisplayMetrics().densityDpi;
 
-        if(density <= 120){
+        if (density <= 120) {
             Toast.makeText(mContext, "LDPI", Toast.LENGTH_LONG).show();
-        }
-        else if(density <= 160){
+        } else if (density <= 160) {
             Toast.makeText(mContext, "MDPI", Toast.LENGTH_LONG).show();
-        }
-        else if(density <= 240){
+        } else if (density <= 240) {
             Toast.makeText(mContext, "HDPI", Toast.LENGTH_LONG).show();
-        }
-        else if(density <= 320){
+        } else if (density <= 320) {
             Toast.makeText(mContext, "XHDPI", Toast.LENGTH_LONG).show();
-        }
-        else if(density <= 480){
+        } else if (density <= 480) {
             Toast.makeText(mContext, "XXHDPI", Toast.LENGTH_LONG).show();
-        }
-        else if(density <= 640){
+        } else if (density <= 640) {
             Toast.makeText(mContext, "XXXHDPI", Toast.LENGTH_LONG).show();
         }
     }

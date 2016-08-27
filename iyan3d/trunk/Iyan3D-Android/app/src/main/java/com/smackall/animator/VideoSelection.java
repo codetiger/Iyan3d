@@ -22,46 +22,45 @@ import java.util.Locale;
  */
 public class VideoSelection {
 
+    public ImageDB videoDB = new ImageDB();
+    ViewGroup insertPoint;
     private Context mContext;
     private VideoSelectionAdapter videoSelectionAdapter;
-    ViewGroup insertPoint;
-    public ImageDB videoDB=new ImageDB();
     private Tracker mTracker;
 
 
-    public VideoSelection(Context context){
+    public VideoSelection(Context context) {
         this.mContext = context;
     }
 
-    public void showVideoSelection()
-    {
+    public void showVideoSelection() {
         HitScreens.VideoSelectionView(mContext);
-        ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
-        insertPoint = (((EditorView)((Activity)mContext)).sharedPreferenceManager.getInt(mContext,"toolbarPosition") == 1 ) ?
-                (ViewGroup) ((Activity)mContext).findViewById(R.id.leftView)
-                : (ViewGroup) ((Activity)mContext).findViewById(R.id.rightView);
+        ((EditorView) mContext).showOrHideToolbarView(Constants.HIDE);
+        insertPoint = (((EditorView) mContext).sharedPreferenceManager.getInt(mContext, "toolbarPosition") == 1) ?
+                (ViewGroup) ((Activity) mContext).findViewById(R.id.leftView)
+                : (ViewGroup) ((Activity) mContext).findViewById(R.id.rightView);
 
-        for (int i = 0; i < ((ViewGroup)insertPoint.getParent()).getChildCount(); i++){
-            if(((ViewGroup)insertPoint.getParent()).getChildAt(i).getTag() != null && ((ViewGroup)insertPoint.getParent()).getChildAt(i).getTag().toString().equals("-1"))
-                ((ViewGroup)insertPoint.getParent()).getChildAt(i).setVisibility(View.GONE);
+        for (int i = 0; i < ((ViewGroup) insertPoint.getParent()).getChildCount(); i++) {
+            if (((ViewGroup) insertPoint.getParent()).getChildAt(i).getTag() != null && ((ViewGroup) insertPoint.getParent()).getChildAt(i).getTag().toString().equals("-1"))
+                ((ViewGroup) insertPoint.getParent()).getChildAt(i).setVisibility(View.GONE);
         }
         insertPoint.setVisibility(View.VISIBLE);
         insertPoint.removeAllViews();
 
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.image_selection,insertPoint,false);
-        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        GridView gridView = (GridView)v.findViewById(R.id.image_grid);
+        View v = vi.inflate(R.layout.image_selection, insertPoint, false);
+        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        GridView gridView = (GridView) v.findViewById(R.id.image_grid);
         initVideoGrid(gridView);
-        ((Button)v.findViewById(R.id.import_btn)).setText(String.format(Locale.getDefault(),"%s","IMPORT VIDEO"));
-        Button cancel = (Button)v.findViewById(R.id.cancel_image);
+        ((Button) v.findViewById(R.id.import_btn)).setText(String.format(Locale.getDefault(), "%s", "IMPORT VIDEO"));
+        Button cancel = (Button) v.findViewById(R.id.cancel_image);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HitScreens.EditorView(mContext);
                 insertPoint.removeAllViews();
-                ((EditorView) ((Activity) mContext)).renderManager.removeTempNode();
-                ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
+                ((EditorView) mContext).renderManager.removeTempNode();
+                ((EditorView) mContext).showOrHideToolbarView(Constants.SHOW);
                 videoSelectionAdapter = null;
             }
         });
@@ -71,7 +70,7 @@ public class VideoSelection {
                 videoDB.setTempNode(false);
                 importVideo();
                 insertPoint.removeAllViews();
-                ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
+                ((EditorView) mContext).showOrHideToolbarView(Constants.SHOW);
                 videoSelectionAdapter = null;
             }
         });
@@ -84,17 +83,16 @@ public class VideoSelection {
         });
     }
 
-    private void initVideoGrid(GridView gridView)
-    {
-        videoSelectionAdapter = new VideoSelectionAdapter(mContext,gridView);
+    private void initVideoGrid(GridView gridView) {
+        videoSelectionAdapter = new VideoSelectionAdapter(mContext, gridView);
         gridView.setAdapter(videoSelectionAdapter);
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
     }
 
-    public void notifyDataChanged(){
-        ((Activity)mContext).runOnUiThread(new Runnable() {
+    public void notifyDataChanged() {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 videoSelectionAdapter.notifyDataSetChanged();
@@ -102,9 +100,8 @@ public class VideoSelection {
         });
     }
 
-    public void importVideo()
-    {
-        ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
-        ((EditorView) ((Activity) mContext)).renderManager.importImage(videoDB);
+    public void importVideo() {
+        ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
+        ((EditorView) mContext).renderManager.importImage(videoDB);
     }
 }

@@ -1,705 +1,706 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="4"
-    android:background="#4c4c4c">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#4c4c4c"
+             android:orientation="vertical"
+             android:weightSum="4">
 
     <FrameLayout
+        android:id="@+id/viewGroup"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/viewGroup" />
+        android:layout_height="match_parent"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.5"
                 android:background="#a800ff"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:weightSum="1.5">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.25" />
+                    android:layout_weight="0.25"
+                    android:orientation="horizontal"/>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/textView24"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="RENDERING PROGRESS"
-                        android:id="@+id/textView24"
+                        android:text="@string/settings"
                         android:textColor="#ffffff"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:weightSum="1">
 
                     <ImageView
+                        android:id="@+id/help"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/help"
+                        android:layout_weight="0.2"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/help"
-                        android:layout_weight="0.2" />
+                        android:src="@drawable/help"/>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:weightSum="2"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="2">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:weightSum="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.5"
-                        android:weightSum="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
-                            android:weightSum="1"
-                            android:gravity="center" >
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="1">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="fill_parent"
-                                android:text="TOOLBAR"
                                 android:id="@+id/textView3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:textStyle="bold"
-                                android:textColor="#ffffff" />
+                                android:text="@string/toolbar"
+                                android:textColor="#ffffff"
+                                android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
-                            android:weightSum="1"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5">
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
+                                    android:id="@+id/toolBar_left_radio"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/toolBar_left_radio"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="0"
-                                    android:checked="false" />
+                                    android:checked="false"
+                                    android:tag="0"/>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
+                                    android:id="@+id/toolBar_Right_radio"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/toolBar_Right_radio"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="1"
-                                    android:checked="true" />
+                                    android:checked="true"
+                                    android:tag="1"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.5"
-                        android:weightSum="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
-                            android:weightSum="1"
-                            android:gravity="center" >
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="1">
 
                             <TextView
+                                android:id="@+id/textView4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="fill_parent"
-                                android:text="RENDER PREVIEW SIZE"
-                                android:id="@+id/textView4"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:textStyle="bold"
-                                android:textColor="#ffffff" />
+                                android:text="@string/renderpreviewsize"
+                                android:textColor="#ffffff"
+                                android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
-                            android:weightSum="1"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
                                     android:id="@+id/preview_small_radio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="0"
-                                    android:checked="true" />
+                                    android:checked="true"
+                                    android:tag="0"/>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
                                     android:id="@+id/preview_Large_radio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="1"
-                                    android:checked="false" />
+                                    android:checked="false"
+                                    android:tag="1"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:weightSum="4"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_toolbar_left"
-                            android:src="@drawable/toolbar_left" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/toolbar_left"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_toobar_right"
-                            android:src="@drawable/toolbar_right" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/toolbar_right"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_preview_small"
-                            android:src="@drawable/preview_size_small" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/preview_size_small"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_preview_large"
-                            android:src="@drawable/preview_size_large" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/preview_size_large"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:weightSum="2"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="2">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
-                    android:weightSum="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:text="FRAME COUNT DISPLAY"
                         android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
                         android:gravity="center"
-                        android:textStyle="bold"
-                        android:textColor="#ffffff" />
+                        android:text="@string/framecountDisplay"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
-                    android:weightSum="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.5"
-                        android:weightSum="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:weightSum="1"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="1">
 
                             <RadioButton
+                                android:id="@+id/frame_count_radio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/frame_count_radio"
-                                android:tag="0"
-                                android:checked="true" />
+                                android:checked="true"
+                                android:tag="0"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.5"
-                        android:weightSum="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:weightSum="1"
-                            android:gravity="center" >
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="1">
 
                             <RadioButton
+                                android:id="@+id/frame_duration_radio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/frame_duration_radio"
-                                android:tag="1"
-                                android:checked="false" />
+                                android:checked="false"
+                                android:tag="1"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:weightSum="2"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:id="@+id/frame_count_btn"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:id="@+id/frame_count_btn">
+                        android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/imageView12"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imageView12"
-                            android:src="@drawable/frame_settings_count" />
+                            android:src="@drawable/frame_settings_count"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:id="@+id/frame_duration_btn"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:id="@+id/frame_duration_btn">
+                        android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/imageView11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imageView11"
-                            android:src="@drawable/frame_settings_duration" />
+                            android:src="@drawable/frame_settings_duration"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:weightSum="2"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="2">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
-                    android:weightSum="1"
-                    android:gravity="center" >
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <TextView
+                        android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
-                        android:text="RENDER PREVIEW POSITION"
-                        android:id="@+id/textView6"
                         android:gravity="center"
-                        android:textStyle="bold"
-                        android:textColor="#ffffff" />
+                        android:text="@string/renderpreviewposition"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
-                    android:weightSum="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.5"
-                        android:weightSum="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:weightSum="1"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
+                                    android:id="@+id/preview_left_bottom_radio"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/preview_left_bottom_radio"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="0"
-                                    android:checked="true" />
+                                    android:checked="true"
+                                    android:tag="0"/>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
+                                    android:id="@+id/preview_left_top_radio"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/preview_left_top_radio"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="1"
-                                    android:checked="false" />
+                                    android:checked="false"
+                                    android:tag="1"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.5"
-                        android:weightSum="1"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:weightSum="1"
-                            android:gravity="center" >
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
+                                    android:id="@+id/preview_right_bottom_radio"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/preview_right_bottom_radio"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="2"
-                                    android:checked="false" />
+                                    android:checked="false"
+                                    android:tag="2"/>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="0.5" >
+                                android:layout_weight="0.5"
+                                android:orientation="vertical">
 
                                 <RadioButton
+                                    android:id="@+id/preview_right_top_radio"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/preview_right_top_radio"
                                     android:layout_gravity="center_horizontal"
-                                    android:tag="3"
-                                    android:checked="false" />
+                                    android:checked="false"
+                                    android:tag="3"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:weightSum="4"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_left_bottom_btn"
-                            android:src="@drawable/position_left_bottom" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/position_left_bottom"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_left_top_tn"
-                            android:src="@drawable/position_top_left" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/position_top_left"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/img_right_bottom_btn"
-                            android:src="@drawable/position_right_bootom" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/position_right_bootom"/>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/img_right_top_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/img_right_top_btn"
-                            android:src="@drawable/position_right_top" />
+                            android:src="@drawable/position_right_top"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.7"
-                android:weightSum="3"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center|right"
-                    android:weightSum="1" >
+                    android:orientation="vertical"
+                    android:weightSum="1">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.5">
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/textView7"
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
-                                android:text="MultiSelect"
-                                android:id="@+id/textView7"
-                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:text="@string/multiselect"
                                 android:textColor="#ffffff"
-                                android:gravity="center" />
+                                android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
                             <Switch
+                                android:id="@+id/mutiSelect_switch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/mutiSelect_switch"
                                 android:checked="false"
                                 android:textColor="#ffffff"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"/>
                         </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:weightSum="1">
 
                     <Button
+                        android:id="@+id/restore_btn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="RESTORE PURCHASE"
-                        android:id="@+id/restore_btn"
-                        android:layout_weight="0.8" />
+                        android:layout_weight="0.8"
+                        android:text="@string/restorePurchase"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:weightSum="1">
 
                     <Button
+                        android:id="@+id/settings_done_btn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="DONE"
-                        android:id="@+id/settings_done_btn"
-                        android:layout_weight="0.8" />
+                        android:layout_weight="0.8"
+                        android:text="@string/done"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

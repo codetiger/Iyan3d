@@ -27,7 +27,7 @@ SGSceneUpdater::~SGSceneUpdater()
     
 }
 
-void SGSceneUpdater::setDataForFrame(int frame)
+void SGSceneUpdater::setDataForFrame(int frame,bool updateBB)
 {
     if(!updatingScene || !smgr)
         return;
@@ -58,7 +58,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
         if(visibilityKeyindex != -1)
             sgNode->getProperty(VISIBILITY).value.x = sgNode->visibilityKeys[visibilityKeyindex].visibility;
 
-        sgNode->setPositionOnNode(position, !updatingScene->isPlaying);
+        sgNode->setPositionOnNode(position, !updatingScene->isPlaying && updateBB);
         
         if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
 			#ifndef UBUNTU
@@ -73,8 +73,6 @@ void SGSceneUpdater::setDataForFrame(int frame)
             sgNode->setRotationOnNode(rotation, !updatingScene->isPlaying);
             sgNode->setScaleOnNode(scale, !updatingScene->isPlaying);
         }
-        
-        
         for (int j = 0; j < sgNode->joints.size(); j++) {
             SGJoint *joint = sgNode->joints[j];
             Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame,joint->rotationKeys,true);
@@ -86,7 +84,7 @@ void SGSceneUpdater::setDataForFrame(int frame)
                 changed = joint->setScaleOnNode(jointScale, !updatingScene->isPlaying);
             }
         }
-        
+
         if(sgNode->node->type == NODE_TYPE_SKINNED && sgNode->node->skinType == CPU_SKIN) {
             (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->updateMeshCache();
         }
@@ -192,10 +190,8 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
 
     if((!isNodeSelected || !selectedNode) && (!isJointSelected || !selectedJoint) && updatingScene->selectedNodeIds.size() <= 0)
         return;
-
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
-
     Vector3 nodePos;
     if(updatingScene->selectedNodeIds.size() > 0 && updatingScene->getParentNode())
         nodePos = updatingScene->getPivotPoint(false);
@@ -247,7 +243,7 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
 
             Mat4 rotMat = rot.getMatrix();
             rotMat.rotateVect(delta);
-            
+
             Quaternion finalRotation = MathHelper::RotateNodeInWorld(currentControl->node->getRotation(), rot);
 
             currentControl->node->setRotation(finalRotation);
@@ -546,16 +542,12 @@ void SGSceneUpdater::updateSkeletonBone(std::map<int, RigKey>& rigKeys, int join
         Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
         rigKeys[jointId].bone->node->setRotation(MathHelper::rotationBetweenVectors(targetDir, currentDir));
         rigKeys[jointId].bone->node->updateAbsoluteTransformation();
-
         f32 boneLength = rigKeys[jointId].referenceNode->node->getAbsolutePosition().getDistanceFrom(rigKeys[parentId].referenceNode->node->getAbsolutePosition());
-
         Mat4 childGlobal;
         childGlobal.scale(boneLength);
-
         Mat4 parentGlobal;
         parentGlobal.scale(rigKeys[0].referenceNode->node->getAbsoluteTransformation().getScale());
         parentGlobal.invert();
-
         Mat4 childLocal = parentGlobal * childGlobal;
         rigKeys[jointId].bone->node->setScale(Vector3(rigKeys[jointId].bone->node->getScale().x,childLocal.getScale().y,rigKeys[jointId].bone->node->getScale().z));
         rigKeys[jointId].bone->node->updateAbsoluteTransformationOfChildren();

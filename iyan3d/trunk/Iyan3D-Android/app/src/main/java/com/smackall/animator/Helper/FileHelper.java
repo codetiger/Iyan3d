@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.smackall.animator.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,6 +22,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class FileHelper {
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
+    static SecureRandom rnd = new SecureRandom();
+
     public static boolean checkValidFilePath(File file) {
         return file != null && file.exists();
     }
@@ -28,11 +33,6 @@ public class FileHelper {
         return string2 != null && new File(string2).exists();
     }
 
-    /*
-     * Enabled aggressive block sorting
-     * Enabled unnecessary exception pruning
-     * Enabled aggressive exception aggregation
-     */
     public static boolean copy(File file, File file2) {
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -47,8 +47,7 @@ public class FileHelper {
                 }
                 fileOutputStream.write(arrby, 0, n);
             } while (true);
-        }
-        catch (Exception var4_6) {
+        } catch (Exception var4_6) {
             return false;
         }
     }
@@ -69,8 +68,7 @@ public class FileHelper {
                 }
                 fileOutputStream.write(arrby, 0, n);
             } while (true);
-        }
-        catch (Exception var6_8) {
+        } catch (Exception var6_8) {
             return false;
         }
     }
@@ -80,8 +78,8 @@ public class FileHelper {
             if (file.isDirectory() && file.list() != null) {
                 String[] arrstring = file.list();
                 int n = arrstring.length;
-                for (int i = 0; i < n; ++i) {
-                    FileHelper.deleteFilesAndFolder(new File(file, arrstring[i]));
+                for (String anArrstring : arrstring) {
+                    FileHelper.deleteFilesAndFolder(new File(file, anArrstring));
                 }
             }
             file.delete();
@@ -94,8 +92,8 @@ public class FileHelper {
             if (file.isDirectory() && file.list() != null) {
                 String[] arrstring = file.list();
                 int n = arrstring.length;
-                for (int i = 0; i < n; ++i) {
-                    FileHelper.deleteFilesAndFolder(String.valueOf((Object)new File(file, arrstring[i])));
+                for (String anArrstring : arrstring) {
+                    FileHelper.deleteFilesAndFolder(String.valueOf(new File(file, anArrstring)));
                 }
             }
             file.delete();
@@ -111,13 +109,13 @@ public class FileHelper {
         return string2.substring(1 + string2.lastIndexOf("."), string2.length());
     }
 
-    public static String getFileNameFromPath(String path){
-        return path.substring(path.lastIndexOf("/")+1, path.length());
+    public static String getFileNameFromPath(String path) {
+        return path.substring(path.lastIndexOf("/") + 1, path.length());
     }
 
     public static String getFileWithoutExt(File file) {
         String string2 = file.getAbsolutePath();
-        return string2.substring(1 + string2.lastIndexOf("/"),  string2.lastIndexOf("."));
+        return string2.substring(1 + string2.lastIndexOf("/"), string2.lastIndexOf("."));
     }
 
     public static String getFileWithoutExt(String string2) {
@@ -163,9 +161,9 @@ public class FileHelper {
             byte[] hash = md.digest(s.getBytes("UTF-8"));
 
             //converting byte array to Hexadecimal String
-            StringBuilder sb = new StringBuilder(2*hash.length);
-            for(byte b : hash){
-                sb.append(String.format("%02x", b&0xff));
+            StringBuilder sb = new StringBuilder(2 * hash.length);
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b & 0xff));
             }
 
             digest = sb.toString();
@@ -176,35 +174,31 @@ public class FileHelper {
         return digest;
     }
 
-    public static boolean isItHaveSpecialChar(String input){
-        String charecters =
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
+    public static boolean isItHaveSpecialChar(String input) {
+        String charecters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890";
         String[] charArray = input.split("");
-        for(int i =0; i < charArray.length; i++){
-            if(!charecters.contains(charArray[i]))
+        for (String aCharArray : charArray) {
+            if (!charecters.contains(aCharArray))
                 return true;
         }
         return false;
     }
 
-    public static void getObjAndTextureFromCommonIyan3dPath(Context context,final  int mode){
-        final String commonFolder = PathManager.LocalImportAndExport+"/";
-        final String userMeshFolder = PathManager.LocalUserMeshFolder+"/";
+    public static void getObjAndTextureFromCommonIyan3dPath(final int mode) {
+        final String commonFolder = PathManager.LocalImportAndExport + "/";
+        final String userMeshFolder = PathManager.LocalUserMeshFolder + "/";
 
         final File f = new File(commonFolder);
 
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.toLowerCase().endsWith((mode == Constants.OBJ_MODE) ? "obj" :"png"))
-                    return true;
-                else
-                    return false;
+                return filename.toLowerCase().endsWith((mode == Constants.OBJ_MODE) ? "obj" : "png");
             }
         };
         File files[] = f.listFiles(filenameFilter);
 
-        if(files != null) {
+        if (files != null) {
             for (File file1 : files) {
                 File file = new File(userMeshFolder + getFileNameFromPath(file1.getAbsolutePath()));
                 copy(file1.getAbsoluteFile(), file);
@@ -213,24 +207,21 @@ public class FileHelper {
         }
     }
 
-    public static void getFontFromCommonIyan3dPath(Context context){
-        final String commonFolder = PathManager.LocalImportAndExport+"/";
-        final String userFontFolder = PathManager.LocalUserFontFolder+"/";
+    public static void getFontFromCommonIyan3dPath() {
+        final String commonFolder = PathManager.LocalImportAndExport + "/";
+        final String userFontFolder = PathManager.LocalUserFontFolder + "/";
 
         final File f = new File(commonFolder);
 
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.toLowerCase().endsWith("otf") ||  filename.toLowerCase().endsWith("ttf"))
-                    return true;
-                else
-                    return false;
+                return filename.toLowerCase().endsWith("otf") || filename.toLowerCase().endsWith("ttf");
             }
         };
         File files[] = f.listFiles(filenameFilter);
 
-        if(files != null) {
+        if (files != null) {
             for (File file1 : files) {
                 File file = new File(userFontFolder + getFileNameFromPath(file1.getAbsolutePath()));
                 copy(file1.getAbsoluteFile(), file);
@@ -245,7 +236,7 @@ public class FileHelper {
         String[] assets = null;
         try {
             assets = assetManager.list("");
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
 
@@ -254,14 +245,13 @@ public class FileHelper {
             OutputStream out = null;
             try {
                 in = assetManager.open(filename);
-                File outFile = new File(PathManager.DefaultAssetsDir+"/", filename);
+                File outFile = new File(PathManager.DefaultAssetsDir + "/", filename);
                 out = new FileOutputStream(outFile);
                 copyFile(in, out);
 
-            } catch(IOException e) {
+            } catch (IOException ignored) {
 
-            }
-            finally {
+            } finally {
                 if (in != null) {
                     try {
                         in.close();
@@ -280,33 +270,27 @@ public class FileHelper {
             }
         }
     }
+
     private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
-        while((read = in.read(buffer)) != -1){
+        while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
         }
     }
 
-    public static void copySingleAssetFile(Context context, String filename, String md5Filename,String ext,String filePath) {
+    public static void copySingleAssetFile(Context context, String filename,String toPath,String outName) {
         AssetManager assetManager = context.getAssets();
-        String filePathStr = null;
-        if(filePath == null) {
-            filePathStr = PathManager.LocalScenesFolder;
-        }
-        else {
-            filePathStr = filePath;
-        }
-        File fileDir = new File(filePathStr);
-        if(!fileDir.exists())
-            fileDir.mkdir();
+
+        File fileDir = new File(toPath);
+        if (!fileDir.exists())
+            fileDir.mkdirs();
 
         InputStream in = null;
         OutputStream out = null;
         try {
             in = assetManager.open(filename);
-            String newFileName = filePathStr+"/"+md5Filename+ext;
-            out = new FileOutputStream(newFileName);
+            out = new FileOutputStream(toPath+"/"+outName);
 
             byte[] buffer = new byte[1024];
             int read;
@@ -318,29 +302,25 @@ public class FileHelper {
             out.flush();
             out.close();
             out = null;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
-    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
-    static SecureRandom rnd = new SecureRandom();
-
-    public static String randomString( int len ){
-        StringBuilder sb = new StringBuilder( len );
-        for( int i = 0; i < len; i++ )
-            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+    public static String randomString(int len) {
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
 
-    public static String getFilePathFromUri(Uri uri,Context mContext,String type){
+    public static String getFilePathFromUri(Uri uri, Context mContext, String type) {
         String[] filePathColumn = {type};
 
         Cursor cursor = mContext.getContentResolver().query(uri,
                 filePathColumn, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
-        }
-        else {
+        } else {
             return null;
         }
 
@@ -350,64 +330,80 @@ public class FileHelper {
         return picturePath;
     }
 
-    public static void manageImageFile(String path,Context mContext){
+    public static void manageImageFile(String path, Context mContext) {
         boolean exits = FileHelper.checkValidFilePath(path);
-        if(exits){
-            Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
-            if(bmp == null) return;
+        if (exits) {
+            Bitmap bmp = null;
+            try {
+                bmp = BitmapFactory.decodeFile(path);
+            } catch (OutOfMemoryError e) {
+                UIHelper.informDialog(mContext, mContext.getString(R.string.outOfMemory));
+            }
+            if (bmp == null) return;
             savePng(bmp, PathManager.LocalThumbnailFolder + "/original" + FileHelper.getFileWithoutExt(path));
             bmp = null;
-            makeThumbnail(path, "",mContext);
-            scaleToSquare(path,mContext);
+            makeThumbnail(path, "", mContext);
+            scaleToSquare(path, mContext);
         }
     }
 
-    public static void makeThumbnail(String path, String fileName,Context mContext)
-    {
-        Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
+    public static void makeThumbnail(String path, String fileName, Context mContext) {
+        Bitmap bmp = null;
+        try {
+            bmp = BitmapFactory.decodeFile(path);
+        } catch (OutOfMemoryError e) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.outOfMemory));
+        }
         if (bmp == null)
             return;
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 128, 128, false);
-        savePng(scaledBitmap,PathManager.LocalThumbnailFolder+"/"+((fileName.length() >0) ? fileName : FileHelper.getFileWithoutExt(path)));
+        savePng(scaledBitmap, PathManager.LocalThumbnailFolder + "/" + ((fileName.length() > 0) ? fileName : FileHelper.getFileWithoutExt(path)));
         scaledBitmap = null;
     }
 
-    public static void makeThumbnail(String path,Context mContext)
-    {
-        Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
+    public static void makeThumbnail(String path, Context mContext) {
+        Bitmap bmp = null;
+        try {
+            bmp = BitmapFactory.decodeFile(path);
+        } catch (OutOfMemoryError e) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.outOfMemory));
+        }
         if (bmp == null)
             return;
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, 128, 128, false);
-        savePng(scaledBitmap,PathManager.LocalThumbnailFolder+"/"+FileHelper.getFileWithoutExt(path));
+        savePng(scaledBitmap, PathManager.LocalThumbnailFolder + "/" + FileHelper.getFileWithoutExt(path));
         scaledBitmap = null;
     }
 
-    private static void scaleToSquare(String path,Context mContext)
-    {
-        Bitmap bmp = null;try {bmp = BitmapFactory.decodeFile(path);}catch (OutOfMemoryError e){UIHelper.informDialog(mContext,"Memory Out of range!");}
-        if(bmp == null) return;
+    private static void scaleToSquare(String path, Context mContext) {
+        Bitmap bmp = null;
+        try {
+            bmp = BitmapFactory.decodeFile(path);
+        } catch (OutOfMemoryError e) {
+            UIHelper.informDialog(mContext, mContext.getString(R.string.outOfMemory));
+        }
+        if (bmp == null) return;
         final int oriWidth = bmp.getWidth();
         final int oriHeight = bmp.getHeight();
         int maxSize = Math.max(oriHeight, oriWidth);
         int targetSize = 0;
-        if(maxSize <= 128)
+        if (maxSize <= 128)
             targetSize = 128;
-        else if(maxSize <= 256)
+        else if (maxSize <= 256)
             targetSize = 256;
-        else if(maxSize <= 512)
+        else if (maxSize <= 512)
             targetSize = 512;
         else
             targetSize = 1024;
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, targetSize, targetSize, false);
-        savePng(scaledBitmap,PathManager.LocalImportedImageFolder+"/"+FileHelper.getFileWithoutExt(path));
+        savePng(scaledBitmap, PathManager.LocalImportedImageFolder + "/" + FileHelper.getFileWithoutExt(path));
         scaledBitmap = null;
     }
 
-    public static void savePng(Bitmap bitmap, String filePath)
-    {
+    public static void savePng(Bitmap bitmap, String filePath) {
         try {
             File temp = new File(filePath);
-            FileOutputStream os = new FileOutputStream(temp+".png");
+            FileOutputStream os = new FileOutputStream(temp + ".png");
             bitmap.compress(Bitmap.CompressFormat.PNG, 50, os);
             os.flush();
             os.close();

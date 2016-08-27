@@ -1,4 +1,3 @@
-
 package com.smackall.animator.Helper;
 
 public class SceneDB {
@@ -27,28 +26,28 @@ public class SceneDB {
         return this._id;
     }
 
-    public String getImage() {
-        return this.image;
-    }
-
-    public String getName() {
-        return this.sceneName;
-    }
-
-    public String getTime() {
-        return this.time;
-    }
-
     public void setID(int n) {
         this._id = n;
+    }
+
+    public String getImage() {
+        return this.image;
     }
 
     public void setImage(String string2) {
         this.image = string2;
     }
 
+    public String getName() {
+        return this.sceneName;
+    }
+
     public void setName(String string2) {
         this.sceneName = string2;
+    }
+
+    public String getTime() {
+        return this.time;
     }
 
     public void setTime(String string2) {

@@ -3,13 +3,13 @@
     <item
         androclass:id="@+id/oneFrame"
         androclass:orderInCategory="1"
-        androclass:title="@string/one" />
+        androclass:title="@string/one"/>
     <item
-        androclass:id="@+id/twentyfourFrame"
+        androclass:id="@+id/twentyFourFrame"
         androclass:orderInCategory="24"
         androclass:title="@string/twentyFour"/>
     <item
         androclass:id="@+id/twoFortyFrame"
         androclass:orderInCategory="240"
-        androclass:title="@string/twoFortyFrame" />
+        androclass:title="@string/twoFortyFrame"/>
 </menu>

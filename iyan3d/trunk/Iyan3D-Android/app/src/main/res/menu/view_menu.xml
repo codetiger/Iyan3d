@@ -3,7 +3,7 @@
     <item
         androclass:id="@+id/front"
         androclass:orderInCategory="0"
-        androclass:title="@string/front" />
+        androclass:title="@string/front"/>
     <item
         androclass:id="@+id/top"
         androclass:orderInCategory="1"
@@ -11,11 +11,11 @@
     <item
         androclass:id="@+id/left"
         androclass:orderInCategory="2"
-        androclass:title="@string/left" />
+        androclass:title="@string/left"/>
     <item
         androclass:id="@+id/back"
         androclass:orderInCategory="3"
-        androclass:title="@string/back" />
+        androclass:title="@string/back"/>
     <item
         androclass:id="@+id/right"
         androclass:orderInCategory="4"
@@ -23,5 +23,5 @@
     <item
         androclass:id="@+id/bottom"
         androclass:orderInCategory="5"
-        androclass:title="@string/bottom" />
+        androclass:title="@string/bottom"/>
 </menu>

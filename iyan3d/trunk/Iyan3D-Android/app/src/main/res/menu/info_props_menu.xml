@@ -3,7 +3,7 @@
     <item
         androclass:id="@+id/tutorial_btn"
         androclass:orderInCategory="0"
-        androclass:title="@string/tutorial" />
+        androclass:title="@string/tutorial"/>
     <item
         androclass:id="@+id/settings_btn"
         androclass:orderInCategory="1"
@@ -11,13 +11,13 @@
     <item
         androclass:id="@+id/rate_app"
         androclass:orderInCategory="2"
-        androclass:title="@string/rate" />
+        androclass:title="@string/rate"/>
     <item
         androclass:id="@+id/share_app"
         androclass:orderInCategory="3"
-        androclass:title="@string/share" />
+        androclass:title="@string/share"/>
     <item
         androclass:id="@+id/contact_btn"
         androclass:orderInCategory="4"
-        androclass:title="@string/contact" />
+        androclass:title="@string/contact"/>
 </menu>

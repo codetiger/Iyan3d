@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:weightSum="1">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,22 +15,22 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="top"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/scene_props_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/scene_properties_btn"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:src="@drawable/scene_properties_btn"/>
 
         <TextView
             android:id="@+id/textpart"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:textColor="#ffffff"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#ffffff"/>
     </FrameLayout>
 
 </LinearLayout>

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
+              android:id="@+id/animation_editor_frame_holder"
+              android:layout_width="50dp"
 
-    android:orientation="vertical"
-    android:weightSum="1"
-    android:id="@+id/animation_editor_frame_holder"
-    android:background="@drawable/border_grid_frames_non_pressed"
-    android:padding="0dp">
+              android:layout_height="50dp"
+              android:background="@drawable/border_grid_frames_non_pressed"
+              android:orientation="vertical"
+              android:padding="0dp"
+              android:weightSum="1">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_weight="0.8"
         android:gravity="center"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/frame_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:id="@+id/frame_text"
-            android:textSize="10sp"
             android:maxLines="1"
-            android:textColor="#ffffff" />
+            android:text="0"
+            android:textColor="#ffffff"
+            android:textSize="10sp"/>
     </LinearLayout>
 
 </LinearLayout>

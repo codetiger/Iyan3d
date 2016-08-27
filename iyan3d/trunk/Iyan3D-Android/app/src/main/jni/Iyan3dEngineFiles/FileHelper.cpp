@@ -201,7 +201,11 @@ Vector2 FileHelper::readVector2(ifstream *file)
 
 std::string FileHelper::getTexturesDirectory()
 {
-    return FileHelper::getDocumentsDirectory() + "Resources/Textures/";
+    #ifdef ANDROID
+        return FileHelper::getDocumentsDirectory() + "/textures/";
+    #else
+        return FileHelper::getDocumentsDirectory() + "Resources/Textures/";
+    #endif
 }
 
 std::string FileHelper::getCachesDirectory()

@@ -14,14 +14,13 @@ import java.util.ArrayList;
  * Note that currently multiple Overlay doesn't work well, but multiple ToolTip is working fine
  * Therefore, if you want to use multiple ToolTip, please switch off the Overlay by .setOverlay(null)
  */
-public class HelpDialogs implements Tooltip.Callback{
+public class HelpDialogs implements Tooltip.Callback {
 
     public ArrayList<View> views = new ArrayList<>();
     public ArrayList<Tooltip.TooltipView> toolTips = new ArrayList<>();
 
 
-    public void showPop(Context ctx)
-    {
+    public void showPop(Context ctx) {
         ViewGroup rootView = (ViewGroup) (((Activity) ctx).getWindow().getDecorView());
         //getAllContentDescriptionViews(view);+
         try {
@@ -29,71 +28,52 @@ public class HelpDialogs implements Tooltip.Callback{
                 if (views.get(i) != null && views.get(i).getTag() != null && views.get(i).getContentDescription() != null)
                     showToolTipView(ctx, views.get(i), views.get(i).getTag().toString(), views.get(i).getContentDescription().toString(), R.color.yellow, rootView, 0);
             }
+        } catch (NullPointerException ignored) {
         }
-        catch (NullPointerException e){}
     }
 
     //For Resized Dialog's Views
     public void showPop(Context ctx, ViewGroup rootView, int width) {
-        //getAllContentDescriptionViews(view);
         for (int i = 0; i < views.size(); i++) {
             if (views.get(i) != null && views.get(i).getTag() != null && views.get(i).getContentDescription() != null)
                 showToolTipView(ctx, views.get(i), views.get(i).getTag().toString(), views.get(i).getContentDescription().toString(), R.color.yellow, rootView, width);
         }
     }
 
-    private void getAllContentDescriptionViews(ViewGroup view)
-    {
-        if(view == null) return;
-        for(int i = 0; i < (view.getChildCount()); i++){
-            try {
-                if (view.getChildAt(i).getContentDescription() != null && view.getChildAt(i).getContentDescription() != "" && view.getChildAt(i).getContentDescription().length() > 5) {
-                    views.add(view.getChildAt(i));
-                }
-                if (((ViewGroup) view.getChildAt(i)).getChildCount() > 0) {
-                    getAllContentDescriptionViews(((ViewGroup) view.getChildAt(i)));
-                }
-            }
-            catch (ClassCastException ignored){
-
-            }
-        }
-    }
-
     private void showToolTipView(Context context, View anchorView, String tag, String text, int backgroundColor, ViewGroup rootView, int width) {
-       Tooltip.Gravity gravity = Tooltip.Gravity.LEFT;
+        Tooltip.Gravity gravity = Tooltip.Gravity.LEFT;
 
-        if(tag.toLowerCase().equals("right"))
+        if (tag.toLowerCase().equals("right"))
             gravity = Tooltip.Gravity.RIGHT;
-        else if(tag.toLowerCase().equals("left"))
+        else if (tag.toLowerCase().equals("left"))
             gravity = Tooltip.Gravity.LEFT;
-        else if(tag.toLowerCase().equals("top"))
+        else if (tag.toLowerCase().equals("top"))
             gravity = Tooltip.Gravity.TOP;
-        else if(tag.toLowerCase().equals("bottom"))
+        else if (tag.toLowerCase().equals("bottom"))
             gravity = Tooltip.Gravity.BOTTOM;
-        else if(tag.toLowerCase().equals("center"))
+        else if (tag.toLowerCase().equals("center"))
             gravity = Tooltip.Gravity.CENTER;
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-       toolTips.add(Tooltip.make(
+        toolTips.add(Tooltip.make(
                 context,
                 new Tooltip.Builder()
                         .anchor(anchorView, gravity)
-                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_CONSUME,0)
+                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_CONSUME, 0)
                         .text(text)
                         .fitToScreen(true)
                         .viewWidth(width)
                         .withCallback(this)
                         .maxWidth(metrics.widthPixels / 2)
                         .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
-                        .build(),backgroundColor));
+                        .build(), backgroundColor));
         toolTips.get(toolTips.size() - 1).show(rootView);
     }
 
     @Override
     public void onTooltipClose(Tooltip.TooltipView tooltip, boolean fromUser, boolean containsTouch) {
-        if(!fromUser && !containsTouch) return;
-        dismissTips(containsTouch,tooltip);
+        if (!fromUser && !containsTouch) return;
+        dismissTips(containsTouch, tooltip);
     }
 
     @Override
@@ -111,8 +91,7 @@ public class HelpDialogs implements Tooltip.Callback{
 
     }
 
-    public void dismissTips(boolean containsTouch, Tooltip.TooltipView tooltip)
-    {
+    public void dismissTips(boolean containsTouch, Tooltip.TooltipView tooltip) {
         try {
             for (int i = 0; i < toolTips.size(); i++) {
                 if (containsTouch) {
@@ -129,6 +108,8 @@ public class HelpDialogs implements Tooltip.Callback{
             }
             if (!containsTouch)
                 toolTips.clear();
-        }catch (NullPointerException e){e.printStackTrace();}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 }

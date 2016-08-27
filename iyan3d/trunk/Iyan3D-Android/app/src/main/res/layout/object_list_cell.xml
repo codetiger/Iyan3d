@@ -1,95 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#ffffff"
+             android:orientation="vertical">
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Button"
-        android:id="@+id/button"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="#ff0000"
         android:gravity="center|right"
-        android:background="#ff0000">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.7"
-            android:gravity="center|left" >
+            android:gravity="center|left"
+            android:orientation="vertical">
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.3"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/delete_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/delete_btn"
+                android:layout_gravity="center"
                 android:background="#ff0000"
-                android:id="@+id/delete_btn"
-                android:layout_gravity="center" />
+                android:src="@drawable/delete_btn"/>
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
-        android:weightSum="1"
         android:background="#ffffff"
-        android:visibility="visible">
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.3"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/object_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/object_img"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.7"
-            android:gravity="center|left">
+            android:gravity="center|left"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/object_lable"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="New Text"
-                android:id="@+id/object_lable"
                 android:layout_gravity="center_horizontal"
                 android:ellipsize="end"
+                android:gravity="center|left"
                 android:maxLines="1"
-                android:textStyle="bold"
+                android:text="New Text"
                 android:textColor="#000000"
-                android:gravity="center|left" />
+                android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
 

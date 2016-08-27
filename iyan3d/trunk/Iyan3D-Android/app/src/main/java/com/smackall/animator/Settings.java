@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -18,7 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -46,40 +44,75 @@ import java.util.Iterator;
  * Created by Sabish.M on 8/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class Settings implements CompoundButton.OnCheckedChangeListener , View.OnClickListener {
-
-    Context mContext;
-    SharedPreferenceManager sp;
-
-    RadioButton  toolbar_left, toolbar_right,preview_small,preview_large,frame_count,frame_duration,preview_left_bottom,preview_left_top,preview_right_bottom,preview_right_top;
-    Switch multi_select;
-    Button restore_btn,done_btn;
-    ImageView img_toolbar_left,img_toolbar_right,img_preview_small,img_preview_large,preview_left_bottom_btn,preview_left_top_btn,preview_right_bottom_btn,preview_right_top_btn;
-    LinearLayout frame_count_btn,frame_duration_btn;
-    boolean Ui;
+public class Settings implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     public IInAppBillingService mService;
+    Context mContext;
+    SharedPreferenceManager sp;
+    RadioButton toolbar_left, toolbar_right, preview_small, preview_large, frame_count, frame_duration, preview_left_bottom, preview_left_top, preview_right_bottom, preview_right_top;
+    Switch multi_select;
+    Button restore_btn, done_btn;
+    ImageView img_toolbar_left, img_toolbar_right, img_preview_small, img_preview_large, preview_left_bottom_btn, preview_left_top_btn, preview_right_bottom_btn, preview_right_top_btn;
+    LinearLayout frame_count_btn, frame_duration_btn;
+    boolean Ui;
     HashMap<String, String> map;
 
     float divideValue = 0.0f;
-    public Settings(Context context,SharedPreferenceManager sp,IInAppBillingService service){
+
+    public Settings(Context context, SharedPreferenceManager sp, IInAppBillingService service) {
         this.mContext = context;
         this.sp = sp;
         this.mService = service;
 
     }
 
+    public static void informDialog(final Context context, final String msg) {
+        ((Activity) context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
+                informDialog
+                        .setMessage(msg)
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface informDialog, int id) {
+                                if (informDialog != null)
+                                    informDialog.dismiss();
+                                try {
+                                    String className = context.getClass().getSimpleName();
+                                    if (className.toLowerCase().equals("sceneselection")) {
+                                        ((SceneSelection) context).settings.done_btn.performClick();
+                                        ((SceneSelection) context).showLogIn(((Activity) context).findViewById(R.id.login_btn));
+                                    } else {
+                                        ((EditorView) context).settings.done_btn.performClick();
+                                        ((EditorView) context).showLogin(((Activity) context).findViewById(R.id.login));
+                                    }
+                                } catch (ClassCastException ignored) {
+                                    return;
+                                }
+                            }
+                        });
+                informDialog.create();
+                try {
+                    informDialog.show();
+                } catch (WindowManager.BadTokenException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public void showSettings() {
         Constants.VIEW_TYPE = Constants.SETTINGS_VIEW;
         HitScreens.SettingsView(mContext);
-        if(map != null) map.clear();
+        if (map != null) map.clear();
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.settings_view);
 
-        switch (UIHelper.ScreenType){
+        switch (UIHelper.ScreenType) {
             case Constants.SCREEN_NORMAL:
-                dialog.getWindow().setLayout((int) (Constants.width), Constants.height);
+                dialog.getWindow().setLayout(Constants.width, Constants.height);
                 break;
             default:
                 divideValue = 1.5f;
@@ -119,13 +152,14 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
             public void onClick(View v) {
                 HitScreens.EditorView(mContext);
                 String className = mContext.getClass().getSimpleName();
-                if(!className.toLowerCase().equals("sceneselection")) {
-                    ((EditorView) ((Activity) mContext)).swapViews();
-                    ((EditorView) ((Activity) mContext)).renderManager.cameraPosition(Constants.height - ((FrameLayout) ((Activity)mContext).findViewById(R.id.glView)).getHeight());
-                    if(Constants.VIEW_TYPE != Constants.AUTO_RIG_VIEW)
+                if (!className.toLowerCase().equals("sceneselection")) {
+                    ((EditorView) mContext).swapViews();
+                    ((EditorView) mContext).renderManager.cameraPosition(Constants.height - ((Activity) mContext).findViewById(R.id.glView).getHeight());
+                    if (Constants.VIEW_TYPE != Constants.AUTO_RIG_VIEW)
                         Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
                 }
-                dialog.dismiss();
+                if (dialog != null && dialog.isShowing())
+                    dialog.dismiss();
             }
         });
 
@@ -134,27 +168,28 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
             public void onClick(View v) {
                 //queryForItemAvailable();
                 try {
-                    if (className.toLowerCase().equals("sceneselection") ? ((SceneSelection) (Activity) mContext).userDetails.signInType <= 0 : ((EditorView) (Activity) mContext).userDetails.signInType <= 0) {
+                    if (className.toLowerCase().equals("sceneselection") ? ((SceneSelection) mContext).userDetails.signInType <= 0 : ((EditorView) mContext).userDetails.signInType <= 0) {
                         informDialog(mContext, "Please SignIn to continue.");
                         done_btn.performClick();
                         return;
                     }
+                } catch (ClassCastException ignored) {
+                    return;
                 }
-                catch (ClassCastException ignored){return;}
                 restorePurchase();
             }
         });
 
         settingsBtnHandler();
         dialog.show();
-        final DescriptionManager descriptionManager = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection)(mContext)).descriptionManager : ((EditorView)(mContext)).descriptionManager);
-        final HelpDialogs helpDialogs = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection)(mContext)).helpDialogs : ((EditorView)(mContext)).helpDialogs);
+        final DescriptionManager descriptionManager = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection) (mContext)).descriptionManager : ((EditorView) (mContext)).descriptionManager);
+        final HelpDialogs helpDialogs = ((className.toLowerCase().equals("sceneselection")) ? ((SceneSelection) (mContext)).helpDialogs : ((EditorView) (mContext)).helpDialogs);
         dialog.findViewById(R.id.help).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.findViewById(R.id.viewGroup).bringToFront();
-               descriptionManager.addSettingsViewDescriptions(mContext, dialog);
-                helpDialogs.showPop(mContext, ((ViewGroup) dialog.findViewById(R.id.viewGroup)), (divideValue > 0) ? ((ViewGroup) dialog.findViewById(R.id.viewGroup)).getWidth() : 0);
+                descriptionManager.addSettingsViewDescriptions(mContext, dialog);
+                helpDialogs.showPop(mContext, ((ViewGroup) dialog.findViewById(R.id.viewGroup)), (divideValue > 0) ? dialog.findViewById(R.id.viewGroup).getWidth() : 0);
             }
         });
 
@@ -169,48 +204,47 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 if (sp.getInt(mContext, "firstTimeUserForSetting") == 0) {
                     sp.setData(mContext, "firstTimeUserForSetting", 1);
                     descriptionManager.addSettingsViewDescriptions(mContext, dialog);
-                    helpDialogs.showPop(mContext, (ViewGroup) dialog.getWindow().getDecorView(), (divideValue > 0) ? ((ViewGroup) dialog.findViewById(R.id.viewGroup)).getWidth() : 0);
+                    helpDialogs.showPop(mContext, (ViewGroup) dialog.getWindow().getDecorView(), (divideValue > 0) ? dialog.findViewById(R.id.viewGroup).getWidth() : 0);
                 }
-            }});
+            }
+        });
     }
 
-    private void initButtons(Dialog dialog)
-    {
-        toolbar_left = (RadioButton)dialog.findViewById(R.id.toolBar_left_radio);
-        toolbar_right = (RadioButton)dialog.findViewById(R.id.toolBar_Right_radio);
-        preview_small = (RadioButton)dialog.findViewById(R.id.preview_small_radio);
-        preview_large = (RadioButton)dialog.findViewById(R.id.preview_Large_radio);
-        frame_count = (RadioButton)dialog.findViewById(R.id.frame_count_radio);
-        frame_duration = (RadioButton)dialog.findViewById(R.id.frame_duration_radio);
-        preview_left_bottom = (RadioButton)dialog.findViewById(R.id.preview_left_bottom_radio);
-        preview_left_top = (RadioButton)dialog.findViewById(R.id.preview_left_top_radio);
-        preview_right_bottom = (RadioButton)dialog.findViewById(R.id.preview_right_bottom_radio);
-        preview_right_top = (RadioButton)dialog.findViewById(R.id.preview_right_top_radio);
-        multi_select = (Switch)dialog.findViewById(R.id.mutiSelect_switch);
+    private void initButtons(Dialog dialog) {
+        toolbar_left = (RadioButton) dialog.findViewById(R.id.toolBar_left_radio);
+        toolbar_right = (RadioButton) dialog.findViewById(R.id.toolBar_Right_radio);
+        preview_small = (RadioButton) dialog.findViewById(R.id.preview_small_radio);
+        preview_large = (RadioButton) dialog.findViewById(R.id.preview_Large_radio);
+        frame_count = (RadioButton) dialog.findViewById(R.id.frame_count_radio);
+        frame_duration = (RadioButton) dialog.findViewById(R.id.frame_duration_radio);
+        preview_left_bottom = (RadioButton) dialog.findViewById(R.id.preview_left_bottom_radio);
+        preview_left_top = (RadioButton) dialog.findViewById(R.id.preview_left_top_radio);
+        preview_right_bottom = (RadioButton) dialog.findViewById(R.id.preview_right_bottom_radio);
+        preview_right_top = (RadioButton) dialog.findViewById(R.id.preview_right_top_radio);
+        multi_select = (Switch) dialog.findViewById(R.id.mutiSelect_switch);
 
-        img_toolbar_left = (ImageView)dialog.findViewById(R.id.img_toolbar_left);
-        img_toolbar_right = (ImageView)dialog.findViewById(R.id.img_toobar_right);
-        img_preview_small =(ImageView)dialog.findViewById(R.id.img_preview_small);
-        img_preview_large =(ImageView)dialog.findViewById(R.id.img_preview_large);
-        preview_left_bottom_btn=(ImageView)dialog.findViewById(R.id.img_left_bottom_btn);
-        preview_left_top_btn=(ImageView)dialog.findViewById(R.id.img_left_top_tn);
-        preview_right_bottom_btn=(ImageView)dialog.findViewById(R.id.img_right_bottom_btn);
-        preview_right_top_btn=(ImageView)dialog.findViewById(R.id.img_right_top_btn);
-        frame_count_btn = (LinearLayout)dialog.findViewById(R.id.frame_count_btn);
-        frame_duration_btn = (LinearLayout)dialog.findViewById(R.id.frame_duration_btn);
-        done_btn = (Button)dialog.findViewById(R.id.settings_done_btn);
-        restore_btn = (Button)dialog.findViewById(R.id.restore_btn);
+        img_toolbar_left = (ImageView) dialog.findViewById(R.id.img_toolbar_left);
+        img_toolbar_right = (ImageView) dialog.findViewById(R.id.img_toobar_right);
+        img_preview_small = (ImageView) dialog.findViewById(R.id.img_preview_small);
+        img_preview_large = (ImageView) dialog.findViewById(R.id.img_preview_large);
+        preview_left_bottom_btn = (ImageView) dialog.findViewById(R.id.img_left_bottom_btn);
+        preview_left_top_btn = (ImageView) dialog.findViewById(R.id.img_left_top_tn);
+        preview_right_bottom_btn = (ImageView) dialog.findViewById(R.id.img_right_bottom_btn);
+        preview_right_top_btn = (ImageView) dialog.findViewById(R.id.img_right_top_btn);
+        frame_count_btn = (LinearLayout) dialog.findViewById(R.id.frame_count_btn);
+        frame_duration_btn = (LinearLayout) dialog.findViewById(R.id.frame_duration_btn);
+        done_btn = (Button) dialog.findViewById(R.id.settings_done_btn);
+        restore_btn = (Button) dialog.findViewById(R.id.restore_btn);
 
     }
 
-    private void settingsBtnHandler()
-    {
+    private void settingsBtnHandler() {
         Ui = true;
-        int toolBarPosition = this.sp.getInt(mContext,"toolbarPosition");
-        int frameType = this.sp.getInt(mContext,"frameType");
-        int previewPosition = this.sp.getInt(mContext,"previewPosition");
-        int multiSelect = this.sp.getInt(mContext,"multiSelect");
-        int previewSize = this.sp.getInt(mContext,"previewSize");
+        int toolBarPosition = this.sp.getInt(mContext, "toolbarPosition");
+        int frameType = this.sp.getInt(mContext, "frameType");
+        int previewPosition = this.sp.getInt(mContext, "previewPosition");
+        int multiSelect = this.sp.getInt(mContext, "multiSelect");
+        int previewSize = this.sp.getInt(mContext, "previewSize");
 
 
         toolbar_left.setChecked((toolBarPosition == Constants.TOOLBAR_LEFT));
@@ -219,8 +253,8 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
         preview_small.setChecked((previewSize == Constants.PREVIEW_SMALL));
         preview_large.setChecked((previewSize == Constants.PREVIEW_LARGE));
 
-        frame_count.setChecked((frameType == Constants.FRAME_COUNT) ? true : false);
-        frame_duration.setChecked((frameType == Constants.FRAME_DURATION) ? true : false);
+        frame_count.setChecked((frameType == Constants.FRAME_COUNT));
+        frame_duration.setChecked((frameType == Constants.FRAME_DURATION));
 
         preview_left_bottom.setChecked((previewPosition == Constants.PREVIEW_LEFT_BOTTOM));
         preview_left_top.setChecked((previewPosition == Constants.PREVIEW_LEFT_TOP));
@@ -233,26 +267,26 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(Ui)return;
-        int toolBarPreviewPosition = this.sp.getInt(mContext,"previewPosition");
-        switch (buttonView.getId()){
+        if (Ui) return;
+        int toolBarPreviewPosition = this.sp.getInt(mContext, "previewPosition");
+        switch (buttonView.getId()) {
             case R.id.toolBar_left_radio:
-                sp.setData(mContext,"toolbarPosition",(isChecked) ? 0 : 1);
+                sp.setData(mContext, "toolbarPosition", (isChecked) ? 0 : 1);
                 break;
             case R.id.toolBar_Right_radio:
-                sp.setData(mContext,"toolbarPosition",(isChecked) ? 1 : 0);
+                sp.setData(mContext, "toolbarPosition", (isChecked) ? 1 : 0);
                 break;
             case R.id.preview_small_radio:
-                sp.setData(mContext,"previewSize",(isChecked) ? 0 : 1);
+                sp.setData(mContext, "previewSize", (isChecked) ? 0 : 1);
                 break;
             case R.id.preview_Large_radio:
-                sp.setData(mContext,"previewSize",(isChecked) ? 1 : 0);
+                sp.setData(mContext, "previewSize", (isChecked) ? 1 : 0);
                 break;
             case R.id.frame_count_radio:
-                this.sp.setData(mContext,"frameType",(isChecked) ? 0 : 1);
+                this.sp.setData(mContext, "frameType", (isChecked) ? 0 : 1);
                 break;
             case R.id.frame_duration_radio:
-                this.sp.setData(mContext,"frameType",(isChecked) ? 1 : 0);
+                this.sp.setData(mContext, "frameType", (isChecked) ? 1 : 0);
                 break;
             case R.id.preview_left_bottom_radio:
                 this.sp.setData(mContext, "previewPosition", (isChecked) ? 0 : toolBarPreviewPosition);
@@ -261,7 +295,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 this.sp.setData(mContext, "previewPosition", (isChecked) ? 1 : toolBarPreviewPosition);
                 break;
             case R.id.preview_right_bottom_radio:
-                this.sp.setData(mContext, "previewPosition", (isChecked) ? 2 :toolBarPreviewPosition);
+                this.sp.setData(mContext, "previewPosition", (isChecked) ? 2 : toolBarPreviewPosition);
                 break;
             case R.id.preview_right_top_radio:
                 this.sp.setData(mContext, "previewPosition", (isChecked) ? 3 : toolBarPreviewPosition);
@@ -275,42 +309,41 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
 
     @Override
     public void onClick(View v) {
-        int toolBarPreviewPosition = this.sp.getInt(mContext,"previewPosition");
-        switch (v.getId()){
+        int toolBarPreviewPosition = this.sp.getInt(mContext, "previewPosition");
+        switch (v.getId()) {
             case R.id.img_toolbar_left:
-                sp.setData(mContext,"toolbarPosition",0);
+                sp.setData(mContext, "toolbarPosition", 0);
                 break;
             case R.id.img_toobar_right:
-                sp.setData(mContext,"toolbarPosition",1);
+                sp.setData(mContext, "toolbarPosition", 1);
                 break;
             case R.id.img_preview_small:
-                sp.setData(mContext,"previewSize",0);
+                sp.setData(mContext, "previewSize", 0);
                 break;
             case R.id.img_preview_large:
-                sp.setData(mContext,"previewSize",1);
+                sp.setData(mContext, "previewSize", 1);
                 break;
             case R.id.frame_count_btn:
-                this.sp.setData(mContext,"frameType",0);
+                this.sp.setData(mContext, "frameType", 0);
                 break;
             case R.id.frame_duration_btn:
-                this.sp.setData(mContext,"frameType",1);
+                this.sp.setData(mContext, "frameType", 1);
                 break;
             case R.id.img_left_bottom_btn:
-                this.sp.setData(mContext,  "previewPosition",0);
+                this.sp.setData(mContext, "previewPosition", 0);
                 break;
             case R.id.img_left_top_tn:
-                this.sp.setData(mContext,  "previewPosition", 1);
+                this.sp.setData(mContext, "previewPosition", 1);
                 break;
             case R.id.img_right_bottom_btn:
-                this.sp.setData(mContext,  "previewPosition", 2);
+                this.sp.setData(mContext, "previewPosition", 2);
                 break;
             case R.id.img_right_top_btn:
-                this.sp.setData(mContext,  "previewPosition", 3);
+                this.sp.setData(mContext, "previewPosition", 3);
                 break;
         }
         settingsBtnHandler();
     }
-
 
     private void restorePurchase() {
         if (mService == null) {
@@ -328,28 +361,26 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 if (purchaseDataList != null && signatureList != null && ownedSkus != null) {
                     for (int i = 0; i < purchaseDataList.size(); ++i) {
                         String sku = ownedSkus.get(i);
-                        if(sku.equals("premium")){
+                        if (sku.equals("premium")) {
                             String json = purchaseDataList.get(i);
                             String signature = signatureList.get(i);
-                            new VerifyRestorePurchase(json,signature).execute();
+                            new VerifyRestorePurchase(json, signature).execute();
                             return;
                         }
                     }
-                    UIHelper.informDialog(mContext,"No Purchases found.");
+                    UIHelper.informDialog(mContext, "No Purchases found.");
+                } else {
+                    UIHelper.informDialog(mContext, "No Purchases found.");
                 }
-                else{
-                    UIHelper.informDialog(mContext,"No Purchases found.");
-                }
-            }
-            else{
-                UIHelper.informDialog(mContext,"No Purchases found.");
+            } else {
+                UIHelper.informDialog(mContext, "No Purchases found.");
             }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public void result(int requestCode, int resultCode, Intent data){
+    public void result(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1001) {
             int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
             String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
@@ -358,17 +389,15 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 try {
                     JSONObject jo = new JSONObject(purchaseData);
                     String sku = jo.getString("productId");
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    private void queryForItemAvailable()
-    {
-        ArrayList<String> skuList = new ArrayList<String> ();
+    private void queryForItemAvailable() {
+        ArrayList<String> skuList = new ArrayList<String>();
         skuList.add("basicrecharge");
         skuList.add("mediumrecharge");
         skuList.add("megarecharge");
@@ -381,7 +410,7 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
             if (response == 0) {
                 ArrayList<String> responseList
                         = skuDetails.getStringArrayList("DETAILS_LIST");
-                if(responseList != null){
+                if (responseList != null) {
                     for (String thisResponse : responseList) {
                         JSONObject object = new JSONObject(thisResponse);
                         String sku = object.getString("productId");
@@ -394,49 +423,9 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
         }
     }
 
-    private class VerifyRestorePurchase extends AsyncTask<Integer, Integer, String> {
-        String json;
-        String signature;
-        String response;
-        public VerifyRestorePurchase(String json,String signature){
-            this.json = json;
-            this.signature = signature;
-        }
-        @Override
-        protected String doInBackground(Integer... params) {
-            String uniqueId = ((Constants.currentActivity == 0) ? ((SceneSelection)((Activity)mContext)).userDetails.uniqueId : ((EditorView)((Activity)mContext)).userDetails.uniqueId);
-            String url = GL2JNILib.verifyRestorePurchase();
-            String charset = "UTF-8";
-            try {
-                FileUploader multiPart = new FileUploader(url,charset,"POST");
-                multiPart.addFormField("uniqueid",(uniqueId));
-                multiPart.addFormField("signed_data",(json));
-                multiPart.addFormField("signature",(signature));
-                response = multiPart.finish();
-            } catch (IOException e) {
-                e.printStackTrace();
-                UIHelper.informDialog(mContext,"Please Check your network connection.");
-                return null;
-            }
-            return response;
-        }
-        protected void onPostExecute(String st) {
-            if(response != null){
-                jsonToMap(st);
-                int result = Integer.parseInt(map.get("result"));
-                String msg = map.get("message");
-                if(result == 1){
-                    UIHelper.informDialog(mContext,msg);
-                }
-            }
-            else
-                System.out.println("Response is null");
-        }
-    }
-
-    private void jsonToMap(String t){
+    private void jsonToMap(String t) {
         try {
-            if(map != null)
+            if (map != null)
                 map.clear();
             map = new HashMap<String, String>();
             JSONObject jObject = new JSONObject(t);
@@ -446,44 +435,51 @@ public class Settings implements CompoundButton.OnCheckedChangeListener , View.O
                 String value = jObject.getString(key);
                 map.put(key, value);
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public static void informDialog(final Context context, final String msg){
-        ((Activity)context).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder informDialog = new AlertDialog.Builder(context);
-                informDialog
-                        .setMessage(msg)
-                        .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface informDialog, int id) {
-                                informDialog.dismiss();
-                                try {
-                                    String className = context.getClass().getSimpleName();
-                                    if (className.toLowerCase().equals("sceneselection")) {
-                                        ((SceneSelection) context).settings.done_btn.performClick();
-                                        ((SceneSelection) context).showLogIn(((Activity) context).findViewById(R.id.login_btn));
-                                    } else {
-                                        ((EditorView) context).settings.done_btn.performClick();
-                                        ((EditorView) context).showLogin(((Activity) context).findViewById(R.id.login));
-                                    }
-                                }
-                                catch (ClassCastException ignored){return;}
-                            }
-                        });
-                informDialog.create();
-                try {
-                    informDialog.show();
-                } catch (WindowManager.BadTokenException e) {
-                    e.printStackTrace();
-                }
+    private class VerifyRestorePurchase extends AsyncTask<Integer, Integer, String> {
+        String json;
+        String signature;
+        String response;
+
+        public VerifyRestorePurchase(String json, String signature) {
+            this.json = json;
+            this.signature = signature;
+        }
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            String uniqueId = ((Constants.currentActivity == 0) ? ((SceneSelection) mContext).userDetails.uniqueId : ((EditorView) mContext).userDetails.uniqueId);
+            String url = GL2JNILib.verifyRestorePurchase();
+            String charset = "UTF-8";
+            try {
+                FileUploader multiPart = new FileUploader(url, charset, "POST");
+                multiPart.addFormField("uniqueid", (uniqueId));
+                multiPart.addFormField("signed_data", (json));
+                multiPart.addFormField("signature", (signature));
+                response = multiPart.finish();
+            } catch (IOException e) {
+                e.printStackTrace();
+                UIHelper.informDialog(mContext, mContext.getString(R.string.check_network_msg));
+                return null;
             }
-        });
+            return response;
+        }
+
+        protected void onPostExecute(String st) {
+            if (response != null) {
+                jsonToMap(st);
+                int result = Integer.parseInt(map.get("result"));
+                String msg = map.get("message");
+                if (result == 1) {
+                    UIHelper.informDialog(mContext, msg);
+                }
+            } else
+                System.out.println("Response is null");
+        }
     }
 }
 

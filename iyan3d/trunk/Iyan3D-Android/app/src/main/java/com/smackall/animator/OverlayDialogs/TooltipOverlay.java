@@ -23,20 +23,20 @@ public class TooltipOverlay extends ImageView {
         init(context, R.style.ToolTipLayoutDefaultStyle);
     }
 
+    public TooltipOverlay(Context context, AttributeSet attrs, int defStyleAttr, int defStyleResId) {
+        super(context, attrs, defStyleAttr);
+        init(context, defStyleResId);
+    }
+
     private void init(final Context context, final int defStyleResId) {
         TooltipOverlayDrawable drawable = new TooltipOverlayDrawable(context, defStyleResId);
         setImageDrawable(drawable);
 
         final TypedArray array =
-            context.getTheme().obtainStyledAttributes(defStyleResId, R.styleable.TooltipOverlay);
+                context.getTheme().obtainStyledAttributes(defStyleResId, R.styleable.TooltipOverlay);
         mMargins = array.getDimensionPixelSize(R.styleable.TooltipOverlay_android_layout_margin, 0);
         array.recycle();
 
-    }
-
-    public TooltipOverlay(Context context, AttributeSet attrs, int defStyleAttr, int defStyleResId) {
-        super(context, attrs, defStyleAttr);
-        init(context, defStyleResId);
     }
 
     public int getLayoutMargins() {

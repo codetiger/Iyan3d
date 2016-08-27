@@ -15,13 +15,16 @@ public class HQTaskDB {
     int progress = 0;
     String uniqueId = "";
 
-    public HQTaskDB(){}
-    public HQTaskDB(String date, String name,int task){
+    public HQTaskDB() {
+    }
+
+    public HQTaskDB(String date, String name, int task) {
         this.date = date;
         this.name = name;
         this.task = task;
     }
-    public HQTaskDB(int id, String date, String name,int taskId,int taskType,int completed,int progress,String uniqueId){
+
+    public HQTaskDB(int id, String date, String name, int taskId, int taskType, int completed, int progress, String uniqueId) {
         this.id = id;
         this.date = date;
         this.name = name;
@@ -29,43 +32,70 @@ public class HQTaskDB {
         this.completed = completed;
         this.progress = progress;
         this.uniqueId = uniqueId;
+        this.taskType = taskType;
     }
-    public void setId(int id){
-        this.id = id;
-    }
-    public void setDate(String date){
-        this.date = date;
-    }
-    public void setTask(int task){
-        this.task = task;
-    }
-    public void setName(String name){
-        this.name = name;
-    }
-    public void setTaskType(int type){this.taskType = type;}
-    public void setCompleted(int isComplete)
-    {
-        this.completed  = isComplete;
-    }
-    public void setProgress(int progress){this.progress = progress;}
-    public void setUniqueId(String uniqueId){this.uniqueId = uniqueId;}
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    public String getDate()
-    {
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDate() {
         return this.date;
     }
-    public int getTask()
-    {
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getTask() {
         return this.task;
     }
-    public int getId()
-    {
+
+    public void setTask(int task) {
+        this.task = task;
+    }
+
+    public int getId() {
         return this.id;
     }
-    public int getTaskType(){return this.taskType;}
-    public int getCompleted(){return this.completed;}
-    public int getProgress(){return this.progress;}
-    public String getUniqueId(){return this.uniqueId;}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTaskType() {
+        return this.taskType;
+    }
+
+    public void setTaskType(int type) {
+        this.taskType = type;
+    }
+
+    public int getCompleted() {
+        return this.completed;
+    }
+
+    public void setCompleted(int isComplete) {
+        this.completed = isComplete;
+    }
+
+    public int getProgress() {
+        return this.progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    public String getUniqueId() {
+        return this.uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 }

@@ -19,8 +19,10 @@ public class PathManager {
     public static String LocalFontsFolder = "";
     public static String LocalScenesFolder = "";
     public static String LocalImportAndExport = "";
+    public static String LocalTextureFolder = "";
     public static String LocalUserFontFolder = "";
     public static String LocalUserVideoFolder = "";
+    public static String LocalNewsFeedThumbnail = "";
     public static String DefaultAssetsDir = "";
     public static String DefaultDatabaseDirectory = "";
     public static String Iyan3DDatabse = "";
@@ -47,16 +49,20 @@ public class PathManager {
         FileHelper.mkDir(LocalCacheFolder);
         LocalFontsFolder = String.valueOf((getExternalFiles(activity) + "/fonts"));
         FileHelper.mkDir(LocalFontsFolder);
+        LocalTextureFolder = String.valueOf((getExternalFiles(activity) + "/textures"));
+        FileHelper.mkDir(LocalTextureFolder);
         LocalUserFontFolder = String.valueOf((getExternalFiles(activity) + "/fonts/userFonts"));
         FileHelper.mkDir(LocalUserFontFolder);
         LocalScenesFolder = String.valueOf((getExternalFiles(activity) + "/scenes"));
         FileHelper.mkDir(LocalScenesFolder);
         LocalImportAndExport = String.valueOf((Environment.getExternalStorageDirectory() + "/iyan3d"));
         FileHelper.mkDir(LocalImportAndExport);
-        RenderPath = LocalImportAndExport+"/"+"Render";
+        RenderPath = LocalImportAndExport + "/" + "Render";
         FileHelper.mkDir(RenderPath);
-        LocalUserVideoFolder = String.valueOf((getExternalFiles(activity) +"/video"));
+        LocalUserVideoFolder = String.valueOf((getExternalFiles(activity) + "/video"));
         FileHelper.mkDir(LocalUserVideoFolder);
+        LocalNewsFeedThumbnail = String.valueOf((getExternalFiles(activity) + "/newsFeed"));
+        FileHelper.mkDir(LocalNewsFeedThumbnail);
         DefaultDatabaseDirectory = DefaultFilesDir + "/databases";
         FileHelper.mkDir(DefaultDatabaseDirectory);
         DefaultAssetsDir = DefaultFilesDir + "/assets";
@@ -64,7 +70,7 @@ public class PathManager {
         Iyan3DDatabse = DefaultDatabaseDirectory + "/iyan3d.db";
         PathManager.checkOldVersionProjectFilesFound(activity);
     }
-    
+
     static void checkOldVersionProjectFilesFound(Activity activity) {
         File file;
         File file2;
@@ -136,16 +142,20 @@ public class PathManager {
                 FileHelper.move(string11 + string21, LocalAnimationFolder + "/" + string21);
             }
         }
+        if ((file7 = new File(string11)).exists() && file7.isDirectory() && file7.list() != null) {
+            for (String string21 : file3.list()) {
+                if (string21.endsWith(".png"))
+                    FileHelper.move(string4 + string21, LocalTextureFolder + "/" + string21);
+            }
+        }
     }
 
-    static String getExternalFiles(Activity activity)
-    {
-        String state = Environment.getExternalStorageState();
+    static String getExternalFiles(Activity activity) {
         String path;
-            path = String.valueOf(activity.getExternalFilesDir(null));
-        if(path == null || path.equals("null")) {
+        path = String.valueOf(activity.getExternalFilesDir(null));
+        if (path == null || path.equals("null")) {
             path = Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/files";
-            FileHelper.mkDir(Environment.getExternalStorageDirectory()+"/Android/data/"+activity.getPackageName()+"/");
+            FileHelper.mkDir(Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/");
             FileHelper.mkDir(Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/");
             FileHelper.mkDir(Environment.getExternalStorageDirectory() + "/Android/data/" + activity.getPackageName() + "/files/");
         }

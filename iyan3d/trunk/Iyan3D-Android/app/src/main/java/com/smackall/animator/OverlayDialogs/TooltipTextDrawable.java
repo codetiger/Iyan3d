@@ -1,4 +1,3 @@
-
 package com.smackall.animator.OverlayDialogs;
 
 import android.annotation.TargetApi;
@@ -36,10 +35,10 @@ class TooltipTextDrawable extends Drawable {
     private int arrowWeight = 0;
     private Tooltip.Gravity gravity;
 
-    public TooltipTextDrawable(final Context context, final Tooltip.Builder builder,int bgColor) {
+    public TooltipTextDrawable(final Context context, final Tooltip.Builder builder, int bgColor) {
 
         TypedArray theme =
-            context.getTheme().obtainStyledAttributes(null, R.styleable.TooltipLayout, builder.defStyleAttr, builder.defStyleRes);
+                context.getTheme().obtainStyledAttributes(null, R.styleable.TooltipLayout, builder.defStyleAttr, builder.defStyleRes);
         this.ellipseSize = theme.getDimensionPixelSize(R.styleable.TooltipLayout_ttlm_cornerRadius, 4);
         final int strokeWidth = theme.getDimensionPixelSize(R.styleable.TooltipLayout_ttlm_strokeWeight, 2);
         final int backgroundColor = theme.getColor(R.styleable.TooltipLayout_ttlm_backgroundColor, 0);
@@ -69,6 +68,56 @@ class TooltipTextDrawable extends Drawable {
         path = new Path();
     }
 
+    private static boolean isDrawPoint(
+            final int left, final int top, final int right, final int bottom, final float maxY, final float maxX, final float minY,
+            final float minX, final Point tmpPoint, final Point point, final Tooltip.Gravity gravity,
+            final int arrowWeight) {
+        boolean drawPoint = false;
+        tmpPoint.set(point.x, point.y);
+
+        if (gravity == Tooltip.Gravity.RIGHT || gravity == Tooltip.Gravity.LEFT) {
+            if (tmpPoint.y >= top && tmpPoint.y <= bottom) {
+                if (top + tmpPoint.y + arrowWeight > maxY) {
+                    tmpPoint.y = (int) (maxY - arrowWeight - top);
+                } else if (top + tmpPoint.y - arrowWeight < minY) {
+                    tmpPoint.y = (int) (minY + arrowWeight - top);
+                }
+                drawPoint = true;
+            }
+        } else {
+            if (tmpPoint.x >= left && tmpPoint.x <= right) {
+                if (tmpPoint.x >= left && tmpPoint.x <= right) {
+                    if (left + tmpPoint.x + arrowWeight > maxX) {
+                        tmpPoint.x = (int) (maxX - arrowWeight - left);
+                    } else if (left + tmpPoint.x - arrowWeight < minX) {
+                        tmpPoint.x = (int) (minX + arrowWeight - left);
+                    }
+                    drawPoint = true;
+                }
+            }
+        }
+        return drawPoint;
+    }
+
+    private static void clampPoint(
+            final int left, final int top, final int right, final int bottom, final Point tmpPoint) {
+        if (tmpPoint.y < top) {
+            tmpPoint.y = top;
+        } else if (tmpPoint.y > bottom) {
+            tmpPoint.y = bottom;
+        }
+        if (tmpPoint.x < left) {
+            tmpPoint.x = left;
+        }
+        if (tmpPoint.x > right) {
+            tmpPoint.x = right;
+        }
+    }
+
+    static boolean equals(@Nullable Object a, @Nullable Object b) {
+        return (a == null) ? (b == null) : a.equals(b);
+    }
+
     @Override
     public void draw(final Canvas canvas) {
         if (null != bgPaint) {
@@ -86,11 +135,7 @@ class TooltipTextDrawable extends Drawable {
             this.padding = padding;
             this.arrowWeight = (int) ((float) padding / arrowRatio);
 
-            if (null != point) {
-                this.point = new Point(point);
-            } else {
-                this.point = null;
-            }
+            this.point = null != point ? new Point(point) : null;
 
             final Rect bounds = getBounds();
             if (!bounds.isEmpty()) {
@@ -120,10 +165,10 @@ class TooltipTextDrawable extends Drawable {
     }
 
     private void calculatePathWithGravity(
-        final Rect outBounds, final int left, final int top, final int right, final int bottom, final float maxY, final float maxX,
-        final float minY, final float minX) {
+            final Rect outBounds, final int left, final int top, final int right, final int bottom, final float maxY, final float maxX,
+            final float minY, final float minX) {
         boolean drawPoint =
-            isDrawPoint(left, top, right, bottom, maxY, maxX, minY, minX, tmpPoint, point, gravity, arrowWeight);
+                isDrawPoint(left, top, right, bottom, maxY, maxX, minY, minX, tmpPoint, point, gravity, arrowWeight);
         clampPoint(left, top, right, bottom, tmpPoint);
 
         path.reset();
@@ -172,52 +217,6 @@ class TooltipTextDrawable extends Drawable {
         path.quadTo(left, top, left + ellipseSize, top);
     }
 
-    private static boolean isDrawPoint(
-        final int left, final int top, final int right, final int bottom, final float maxY, final float maxX, final float minY,
-        final float minX, final Point tmpPoint, final Point point, final Tooltip.Gravity gravity,
-        final int arrowWeight) {
-        boolean drawPoint = false;
-        tmpPoint.set(point.x, point.y);
-
-        if (gravity == Tooltip.Gravity.RIGHT || gravity == Tooltip.Gravity.LEFT) {
-            if (tmpPoint.y >= top && tmpPoint.y <= bottom) {
-                if (top + tmpPoint.y + arrowWeight > maxY) {
-                    tmpPoint.y = (int) (maxY - arrowWeight - top);
-                } else if (top + tmpPoint.y - arrowWeight < minY) {
-                    tmpPoint.y = (int) (minY + arrowWeight - top);
-                }
-                drawPoint = true;
-            }
-        } else {
-            if (tmpPoint.x >= left && tmpPoint.x <= right) {
-                if (tmpPoint.x >= left && tmpPoint.x <= right) {
-                    if (left + tmpPoint.x + arrowWeight > maxX) {
-                        tmpPoint.x = (int) (maxX - arrowWeight - left);
-                    } else if (left + tmpPoint.x - arrowWeight < minX) {
-                        tmpPoint.x = (int) (minX + arrowWeight - left);
-                    }
-                    drawPoint = true;
-                }
-            }
-        }
-        return drawPoint;
-    }
-
-    private static void clampPoint(
-        final int left, final int top, final int right, final int bottom, final Point tmpPoint) {
-        if (tmpPoint.y < top) {
-            tmpPoint.y = top;
-        } else if (tmpPoint.y > bottom) {
-            tmpPoint.y = bottom;
-        }
-        if (tmpPoint.x < left) {
-            tmpPoint.x = left;
-        }
-        if (tmpPoint.x > right) {
-            tmpPoint.x = right;
-        }
-    }
-
     @Override
     protected void onBoundsChange(final Rect bounds) {
         super.onBoundsChange(bounds);
@@ -248,7 +247,7 @@ class TooltipTextDrawable extends Drawable {
         return PixelFormat.TRANSLUCENT;
     }
 
-    @TargetApi (Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void getOutline(Outline outline) {
         copyBounds(outlineRect);
@@ -258,9 +257,5 @@ class TooltipTextDrawable extends Drawable {
             outline.setAlpha(0);
         }
         //outline.setAlpha(getAlpha() / ALPHA_MAX);
-    }
-
-    static boolean equals(@Nullable Object a, @Nullable Object b) {
-        return (a == null) ? (b == null) : a.equals(b);
     }
 }

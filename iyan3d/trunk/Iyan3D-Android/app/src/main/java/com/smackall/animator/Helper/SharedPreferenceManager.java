@@ -11,57 +11,58 @@ public class SharedPreferenceManager {
 
     String APP_PREF = "APP_PREF";
 
-    public void setData(Context context,String key,int value){
+    public void setData(Context context, String key, int value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
         editor.putInt(key, value);
         editor.apply();
     }
-    public void setData(Context context,String key,long value){
+
+    public void setData(Context context, String key, long value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
         editor.putLong(key, value);
         editor.apply();
     }
 
-    public void setData(Context context,String key,String value){
+    public void setData(Context context, String key, String value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
         editor.putString(key, value);
         editor.apply();
     }
 
-    public void setData(Context context,String key,float value){
+    public void setData(Context context, String key, float value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
-        editor.putFloat(key,value);
+        editor.putFloat(key, value);
         editor.apply();
     }
 
-    public void setData (Context context,String key,boolean value){
+    public void setData(Context context, String key, boolean value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE).edit();
         editor.putBoolean(key, value);
         editor.apply();
     }
 
-    public String getString(Context context,String key){
+    public String getString(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
-        return prefs.getString(key,null);
+        return prefs.getString(key, null);
     }
 
-    public int getInt(Context context,String key){
+    public int getInt(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
         return prefs.getInt(key, 0);
     }
 
-    public float getFloat(Context context,String key){
+    public float getFloat(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
         return prefs.getFloat(key, 0);
     }
 
-    public long getLong(Context context,String key){
+    public long getLong(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
         return prefs.getLong(key, 0);
     }
 
-    public boolean getBool(Context context,String key){
+    public boolean getBool(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE);
-        return prefs.getBoolean(key,false);
+        return prefs.getBoolean(key, false);
     }
 }

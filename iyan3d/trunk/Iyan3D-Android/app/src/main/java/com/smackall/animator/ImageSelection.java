@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.google.android.gms.analytics.Tracker;
 import com.smackall.animator.Adapters.ImageSelectionAdapter;
 import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
@@ -20,47 +19,45 @@ import com.smackall.animator.Helper.ImageDB;
  */
 public class ImageSelection {
 
+    public ImageDB imageDB;
+    public View v;
+    ViewGroup insertPoint;
     private Context mContext;
     private ImageSelectionAdapter imageSelectionAdapter;
-    ViewGroup insertPoint;
-    public ImageDB imageDB;
-    private Tracker mTracker;
-    public View v;
 
-    public ImageSelection(Context context){
+    public ImageSelection(Context context) {
         this.mContext = context;
     }
 
-    public void showImageSelection()
-    {
+    public void showImageSelection() {
         HitScreens.ImageSelectionView(mContext);
         imageDB = new ImageDB();
-        ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.HIDE);
-        insertPoint = (((EditorView)((Activity)mContext)).sharedPreferenceManager.getInt(mContext,"toolbarPosition") == 1 ) ?
-                (ViewGroup) ((Activity)mContext).findViewById(R.id.leftView)
-                : (ViewGroup) ((Activity)mContext).findViewById(R.id.rightView);
+        ((EditorView) mContext).showOrHideToolbarView(Constants.HIDE);
+        insertPoint = (((EditorView) mContext).sharedPreferenceManager.getInt(mContext, "toolbarPosition") == 1) ?
+                (ViewGroup) ((Activity) mContext).findViewById(R.id.leftView)
+                : (ViewGroup) ((Activity) mContext).findViewById(R.id.rightView);
 
-        for (int i = 0; i < ((ViewGroup)insertPoint.getParent()).getChildCount(); i++){
-            if(((ViewGroup)insertPoint.getParent()).getChildAt(i).getTag() != null && ((ViewGroup)insertPoint.getParent()).getChildAt(i).getTag().toString().equals("-1"))
-                ((ViewGroup)insertPoint.getParent()).getChildAt(i).setVisibility(View.GONE);
+        for (int i = 0; i < ((ViewGroup) insertPoint.getParent()).getChildCount(); i++) {
+            if (((ViewGroup) insertPoint.getParent()).getChildAt(i).getTag() != null && ((ViewGroup) insertPoint.getParent()).getChildAt(i).getTag().toString().equals("-1"))
+                ((ViewGroup) insertPoint.getParent()).getChildAt(i).setVisibility(View.GONE);
         }
         insertPoint.setVisibility(View.VISIBLE);
         insertPoint.removeAllViews();
 
         LayoutInflater vi = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        v = vi.inflate(R.layout.image_selection,insertPoint,false);
-        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        GridView gridView = (GridView)v.findViewById(R.id.image_grid);
+        v = vi.inflate(R.layout.image_selection, insertPoint, false);
+        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        GridView gridView = (GridView) v.findViewById(R.id.image_grid);
         initImagesGrid(gridView);
-        Button cancel = (Button)v.findViewById(R.id.cancel_image);
+        Button cancel = (Button) v.findViewById(R.id.cancel_image);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
                 HitScreens.EditorView(mContext);
                 insertPoint.removeAllViews();
-                ((EditorView) ((Activity) mContext)).renderManager.removeTempNode();
-                ((EditorView)((Activity)mContext)).showOrHideToolbarView(Constants.SHOW);
+                ((EditorView) mContext).renderManager.removeTempNode();
+                ((EditorView) mContext).showOrHideToolbarView(Constants.SHOW);
                 mContext = null;
                 imageSelectionAdapter = null;
             }
@@ -68,15 +65,15 @@ public class ImageSelection {
         v.findViewById(R.id.add_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imageDB.getName().equals("") || imageDB.getName().length() <= 0){
+                if (imageDB.getName().equals("") || imageDB.getName().length() <= 0) {
                     return;
                 }
                 HitScreens.EditorView(mContext);
-                ((EditorView)(Activity)mContext).showOrHideLoading(Constants.SHOW);
+                ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
                 imageDB.setTempNode(false);
                 importImage();
                 insertPoint.removeAllViews();
-                ((EditorView) ((Activity) mContext)).showOrHideToolbarView(Constants.SHOW);
+                ((EditorView) mContext).showOrHideToolbarView(Constants.SHOW);
                 mContext = null;
                 imageSelectionAdapter = null;
                 Constants.VIEW_TYPE = Constants.EDITOR_VIEW;
@@ -85,26 +82,25 @@ public class ImageSelection {
         v.findViewById(R.id.import_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EditorView)((Activity)mContext)).imageManager.getImageFromStorage(Constants.IMPORT_IMAGES);
+                ((EditorView) mContext).imageManager.getImageFromStorage(Constants.IMPORT_IMAGES);
             }
         });
     }
 
-    private void initImagesGrid(GridView gridView)
-    {
-        imageSelectionAdapter = new ImageSelectionAdapter(mContext,gridView);
+    private void initImagesGrid(GridView gridView) {
+        imageSelectionAdapter = new ImageSelectionAdapter(mContext, gridView);
         gridView.setAdapter(imageSelectionAdapter);
         gridView.setNumColumns(3);
         gridView.setHorizontalSpacing(20);
         gridView.setVerticalSpacing(40);
     }
 
-    public void notifyDataChanged(){
-        if(imageSelectionAdapter != null)
+    public void notifyDataChanged() {
+        if (imageSelectionAdapter != null)
             imageSelectionAdapter.notifyDataSetChanged();
     }
 
-    public void importImage(){
-        ((EditorView)((Activity)mContext)).renderManager.importImage(imageDB);
+    public void importImage() {
+        ((EditorView) mContext).renderManager.importImage(imageDB);
     }
 }

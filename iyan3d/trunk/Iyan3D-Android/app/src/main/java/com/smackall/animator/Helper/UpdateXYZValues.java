@@ -1,13 +1,11 @@
 package com.smackall.animator.Helper;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.smackall.animator.EditorView;
 import com.smackall.animator.R;
 
 import java.util.Locale;
@@ -18,32 +16,33 @@ import java.util.Locale;
  */
 public class UpdateXYZValues {
 
-    private Context mContext;
     boolean status;
-    float xValue,yValue,zValue;
-    public UpdateXYZValues(Context mContext){
+    float xValue, yValue, zValue;
+    private Context mContext;
+
+    public UpdateXYZValues(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void updateXyzValue(boolean hide, float x, float y, float z){
+    public void updateXyzValue(boolean hide, float x, float y, float z) {
         status = hide;
         xValue = x;
         yValue = y;
         zValue = z;
-        if(x == -999.0 && y == -999.0 & z == -999.0)
+        if (x == -999.0 && y == -999.0 & z == -999.0)
             status = true;
-        ((Activity)mContext).runOnUiThread(new Runnable() {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((Activity)mContext).findViewById(R.id.mesurmentLable).setVisibility((status) ? View.INVISIBLE : View.VISIBLE);
-                ((TextView)((Activity)mContext).findViewById(R.id.mesurmentLable)).setGravity(Gravity.CENTER);
+                ((Activity) mContext).findViewById(R.id.mesurmentLable).setVisibility((status) ? View.INVISIBLE : View.VISIBLE);
+                ((TextView) ((Activity) mContext).findViewById(R.id.mesurmentLable)).setGravity(Gravity.CENTER);
                 String value = "X : ";
-                value += String.format(Locale.getDefault(),"%.1f", xValue);
+                value += String.format(Locale.getDefault(), "%.1f", xValue);
                 value += " Y : ";
-                value += String.format(Locale.getDefault(),"%.1f", yValue);
+                value += String.format(Locale.getDefault(), "%.1f", yValue);
                 value += " Z : ";
-                value += String.format(Locale.getDefault(),"%.1f", zValue);
-                ((TextView)((Activity)mContext).findViewById(R.id.mesurmentLable)).setText(value);
+                value += String.format(Locale.getDefault(), "%.1f", zValue);
+                ((TextView) ((Activity) mContext).findViewById(R.id.mesurmentLable)).setText(value);
             }
         });
     }

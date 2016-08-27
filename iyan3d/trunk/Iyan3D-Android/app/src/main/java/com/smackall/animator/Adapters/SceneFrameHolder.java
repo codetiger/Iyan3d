@@ -12,12 +12,12 @@ import com.smackall.animator.R;
  * Created by Sabish.M on 7/4/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class SceneFrameHolder extends RecyclerView.ViewHolder{
+public class SceneFrameHolder extends RecyclerView.ViewHolder {
 
-    private Context context;
-    public ImageView imagepart,scene_props_btn;
+    public ImageView imagepart, scene_props_btn;
     public TextView textpart;
     public View view;
+    private Context context;
 
     public SceneFrameHolder(Context context, View itemView) {
         super(itemView);

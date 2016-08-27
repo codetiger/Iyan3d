@@ -8,9 +8,13 @@ import android.view.View;
  */
 public interface CreditTask {
 
-    void onCreditRequestCompleted(int credit,int premiumuser);
-    void onCheckProgressCompleted(int progress,int taskId);
-    void onTaskFileDownloadCompleted(HQTaskDB taskDB,View list,boolean downloadComplete);
-    void finishExport(int frame,boolean status,String msg);
+    void onCreditRequestCompleted(int credit, int premiumuser);
+
+    void onCheckProgressCompleted(int progress, int taskId);
+
+    void onTaskFileDownloadCompleted(HQTaskDB taskDB, View list, boolean downloadComplete);
+
+    void finishExport(int frame, boolean status, String msg);
+
     void failed();
 }

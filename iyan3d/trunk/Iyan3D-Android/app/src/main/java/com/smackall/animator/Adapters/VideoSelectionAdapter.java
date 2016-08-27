@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.smackall.animator.Helper.Constants;
@@ -27,14 +26,15 @@ import java.io.FilenameFilter;
  * Created by Sabish.M on 19/3/16.
  * Copyright (c) 2015 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class VideoSelectionAdapter extends BaseAdapter{
+public class VideoSelectionAdapter extends BaseAdapter {
 
 
-    private Context mContext;
     public GridView gridView;
-    private File[] videos = null;
     int previousPosition = -1;
-    public VideoSelectionAdapter(Context c,GridView gridView) {
+    private Context mContext;
+    private File[] videos = null;
+
+    public VideoSelectionAdapter(Context c, GridView gridView) {
         mContext = c;
         this.gridView = gridView;
     }
@@ -58,29 +58,30 @@ public class VideoSelectionAdapter extends BaseAdapter{
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         final View grid;
-        if(convertView==null){
-            LayoutInflater inflater=((Activity)mContext).getLayoutInflater();
-            grid=inflater.inflate(R.layout.asset_cell, parent, false);
+        if (convertView == null) {
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            grid = inflater.inflate(R.layout.asset_cell, parent, false);
 
-        }else{
-            grid = (View)convertView;
+        } else {
+            grid = convertView;
         }
-        switch (UIHelper.ScreenType){
+        switch (UIHelper.ScreenType) {
             case Constants.SCREEN_NORMAL:
-                grid.getLayoutParams().height = this.gridView.getHeight()/4                                                                                                                                                                                                         ;
+                grid.getLayoutParams().height = this.gridView.getHeight() / 4;
                 break;
             default:
-                grid.getLayoutParams().height = this.gridView.getHeight()/5;
+                grid.getLayoutParams().height = this.gridView.getHeight() / 5;
                 break;
-        }        ((ProgressBar)grid.findViewById(R.id.progress_bar)).setVisibility(View.INVISIBLE);
-        ((ImageView)grid.findViewById(R.id.thumbnail)).setVisibility(View.VISIBLE);
-        ((TextView)grid.findViewById(R.id.assetLable)).setVisibility(View.VISIBLE);
-        ((ImageView)grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalThumbnailFolder + "/" + FileHelper.getFileWithoutExt(videos[position].toString()) + ".png"));
-        ((TextView)grid.findViewById(R.id.assetLable)).setText(FileHelper.getFileWithoutExt(videos[position]));
+        }
+        grid.findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
+        grid.findViewById(R.id.thumbnail).setVisibility(View.VISIBLE);
+        grid.findViewById(R.id.assetLable).setVisibility(View.VISIBLE);
+        ((ImageView) grid.findViewById(R.id.thumbnail)).setImageBitmap(BitmapFactory.decodeFile(PathManager.LocalThumbnailFolder + "/" + FileHelper.getFileWithoutExt(videos[position].toString()) + ".png"));
+        ((TextView) grid.findViewById(R.id.assetLable)).setText(FileHelper.getFileWithoutExt(videos[position]));
 
         grid.setBackgroundResource(0);
-        grid.setBackgroundColor(ContextCompat.getColor(mContext,R.color.cellBg));
-        if(previousPosition != -1 && position == previousPosition) {
+        grid.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cellBg));
+        if (previousPosition != -1 && position == previousPosition) {
             grid.setBackgroundResource(R.drawable.cell_highlight);
         }
 
@@ -89,14 +90,13 @@ public class VideoSelectionAdapter extends BaseAdapter{
             public void onClick(View v) {
                 previousPosition = position;
                 notifyDataSetChanged();
-                importVideo(position                                                                                                                                                                                                                                            );
+                importVideo(position);
             }
         });
         return grid;
     }
 
-    private void importVideo(int position)
-    {
+    private void importVideo(int position) {
         String path = videos[position].getAbsolutePath();
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
@@ -112,16 +112,12 @@ public class VideoSelectionAdapter extends BaseAdapter{
 //        ((EditorView)((Activity)mContext)).videoSelection.importVideo();
     }
 
-    private void getFileList()
-    {
-        final File f = new File(PathManager.LocalUserVideoFolder+"/");
+    private void getFileList() {
+        final File f = new File(PathManager.LocalUserVideoFolder + "/");
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.toLowerCase().endsWith("mp4"))
-                    return true;
-                else
-                    return false;
+                return filename.toLowerCase().endsWith("mp4");
             }
         };
         videos = f.listFiles(filenameFilter);

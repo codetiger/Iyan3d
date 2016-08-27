@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical" android:layout_width="match_parent"
+              android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:weightSum="5"
-              android:background="#3c3f41">
+              android:background="#3c3f41"
+              android:orientation="vertical"
+              android:weightSum="5">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:weightSum="0.5"
+        android:layout_weight="0.5"
         android:gravity="center"
-        android:layout_weight="0.5">
+        android:orientation="vertical"
+        android:weightSum="0.5">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.5"
             android:background="#a800ff"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/textView30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RENDERING PROGRESS"
-                android:id="@+id/textView30"
+                android:text="@string/renderingprogress"
                 android:textColor="#ffffff"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -35,111 +36,111 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="3"
         android:gravity="center"
-        android:weightSum="2"
-        android:padding="10dp">
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="2">
 
         <ImageView
+            android:id="@+id/preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/preview"
             android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.5"
         android:gravity="center"
+        android:orientation="horizontal"
         android:weightSum="2">
 
         <TextView
+            android:id="@+id/progresstext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:id="@+id/progresstext"
             android:textColor="#ffffff"
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progress"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:weightSum="2" >
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <Button
+                android:id="@+id/cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="CANCEL"
-                android:id="@+id/cancel"
                 android:layout_gravity="center"
                 android:layout_weight="0.75"
+                android:text="@string/cancel"
                 android:textSize="10sp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ProgressBar
+                android:id="@+id/previewProgress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/previewProgress"
                 android:layout_gravity="center_horizontal"
                 android:indeterminate="false"/>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <Button
+                android:id="@+id/done"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="DONE"
-                android:id="@+id/done"
                 android:layout_gravity="center"
                 android:layout_weight="0.75"
-                android:visibility="gone"
-                android:textSize="10sp"/>
+                android:text="@string/done"
+                android:textSize="10sp"
+                android:visibility="gone"/>
 
             <ProgressBar
+                android:id="@+id/roundProgress"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/roundProgress"
                 android:indeterminate="false"
                 android:visibility="gone"/>
         </LinearLayout>
