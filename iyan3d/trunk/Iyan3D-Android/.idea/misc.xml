@@ -4,9 +4,9 @@
     <option name="defaultSettings" value="true" />
     <option name="enableCppFormatting" value="true" />
     <option name="enableJavaFormatting" value="false" />
-    <option name="formatter" value="ECLIPSE" />
-    <option name="id" value="1458020303763" />
+    <option name="id" value="1470389361020" />
     <option name="name" value="default" />
+    <option name="pathToConfigFileCpp" value="$USER_HOME$/Downloads/styleguide-gh-pages/eclipse-cpp-google-style.xml" />
   </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
@@ -45,7 +45,7 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
@@ -57,6 +57,11 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="svn://192.168.1.5/iyan3d5.0/iyan3d/trunk/Iyan3D-Android/app/src/main/jni" />
+                </list>
+              </option>
               <option name="trunkUrl" value="svn://192.168.1.5/iyan3d5.0/iyan3d/trunk" />
               <option name="userinfoInUrl" value="true" />
             </SvnBranchConfiguration>
@@ -65,21 +70,5 @@
       </map>
     </option>
     <option name="mySupportsUserInfoFilter" value="true" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>
