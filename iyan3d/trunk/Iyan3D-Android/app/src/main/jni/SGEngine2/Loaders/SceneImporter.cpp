@@ -275,15 +275,59 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
     else
         mesh = new Mesh();
     
+    for (int i = 0; i < scene->mNumMaterials; i++) {
+        MaterialProperty *materialProps = new MaterialProperty(hasBones ? NODE_RIG : NODE_SGM);
+        sceneNode->materialProps.push_back(materialProps);
+        
+        aiColor4D color;
+        aiMaterial *material = scene->mMaterials[i];
+        
+        if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
+            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, i);
+            p1.value = Vector4(color.r, color.g, color.b, color.a);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
+            p2.value.x = 1.0;
+        }
+        
+        if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+            aiString path;
+            material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+            
+            Property &p1 = sceneNode->getProperty(TEXTURE, i);
+            p1.fileName = getFileName(string(path.data));
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
+            p2.value.x = 0.0;
+        }
+        
+        if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
+            aiString path;
+            material->GetTexture(aiTextureType_NORMALS, 0, &path);
+            
+            Property &p1 = sceneNode->getProperty(TEXTURE, i);
+            p1.fileName = getFileName(string(path.data));
+            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
+            p2.value.x = 0.0;
+        }
+        
+        if(hasMeshColor) {
+            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, i);
+            p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
+            p2.value.x = 1.0;
+        }
+    }
+    
     for (int i = 0; i < scene->mNumMeshes; i++) {
         aiMesh *aiM = scene->mMeshes[i];
         
         if(!aiM || aiM->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
             continue;
         
-        MaterialProperty *materialProps = new MaterialProperty(hasBones ? NODE_RIG : NODE_SGM);
-        sceneNode->materialProps.push_back(materialProps);
-        unsigned short materialIndex = sceneNode->materialProps.size() - 1;
+        unsigned short materialIndex = aiM->mMaterialIndex;
         
         if(hasBones) {
             
@@ -301,51 +345,6 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
             vector< unsigned short > mbi;
             getMeshFrom(mbvd, mbi, aiM);
             mesh->addMeshBuffer(mbvd, mbi, materialIndex);
-        }
-        
-        aiColor4D color;
-        aiMaterial *material = scene->mMaterials[aiM->mMaterialIndex];
-        
-        if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
-            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
-            p1.value = Vector4(color.r, color.g, color.b, color.a);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
-            p2.value.x = 1.0;
-        }
-        
-        if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
-            aiString path;
-            material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-            
-            Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
-            p1.fileName = getFileName(string(path.data));
-            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
-            p2.value.x = 0.0;
-            
-            printf("Diffuse Texture: %s\n", (FileHelper::getTexturesDirectory() + p1.fileName).c_str());
-        }
-        
-        if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
-            aiString path;
-            material->GetTexture(aiTextureType_NORMALS, 0, &path);
-            
-            Property &p1 = sceneNode->getProperty(TEXTURE, materialIndex);
-            p1.fileName = getFileName(string(path.data));
-            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
-            p2.value.x = 0.0;
-            
-            printf("Normal Texture: %s\n", p1.fileName.c_str());
-        }
-        
-        if(hasMeshColor) {
-            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
-            p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, materialIndex);
-            p2.value.x = 1.0;
         }
     }
     

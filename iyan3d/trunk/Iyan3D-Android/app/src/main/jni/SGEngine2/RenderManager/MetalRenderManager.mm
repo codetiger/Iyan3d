@@ -317,7 +317,7 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
     }
     
     useMaterialToRender(node->material);
-    BindAttribute(node,meshBufferIndex);
+    BindAttribute(node, meshBufferIndex);
     //node.reset();
      return true;
 }
@@ -469,7 +469,7 @@ void MetalRenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 u
 {
     MTLMaterial *MTLMat = ((MTLMaterial*)mat);
     id<MTLTexture> tex = NULL;
-    if(MTLMat->uniforms[uIndex].type == DATA_TEXTURE_2D || MTLMat->uniforms[uIndex].type == DATA_TEXTURE_CUBE){
+    if(MTLMat->uniforms[uIndex].type == DATA_TEXTURE_2D || MTLMat->uniforms[uIndex].type == DATA_TEXTURE_CUBE) {
         int textureIndex = ((int*)MTLMat->uniforms[uIndex].values)[0];
         if((MTLTexture*)node->getTextureByIndex(textureIndex) != NULL)
             tex = ((MTLTexture*)node->getTextureByIndex(textureIndex))->texture;
