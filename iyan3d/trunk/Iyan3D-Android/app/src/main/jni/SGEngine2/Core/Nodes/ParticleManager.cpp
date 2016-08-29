@@ -82,6 +82,10 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
             p->age = maxLife * maxLifeRandPercent * 0.01f * rand()/(float)RAND_MAX;
             p->position = getAbsoluteTransformation().getTranslation();
             Vector3 direction = Vector3(0, 1, 0);
+            Mat4 rotMatix;
+            Quaternion rot = getRotation() * Vector3(- 0.5 + rand()/(float)RAND_MAX, 0.0, - 0.5 + rand()/(float)RAND_MAX) * startVelocitySpreadAngle * DEGTORAD;
+            rotMatix.setRotation(rot);
+            rotMatix.rotateVect(direction);
             p->velocity = direction * (startVelocityMagnitude + rand()/RAND_MAX *  startVelocityMagnitudeRand);
         } else break;
     }
@@ -108,7 +112,7 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
         meshCacheCreated = true;
     
     this->meshCache->clearVertices();
-    if(!meshCacheCreated)
+    //if(!meshCacheCreated)
         this->meshCache->clearIndices();
     this->meshCache->getBoundingBox()->clearPoints();
     
@@ -142,16 +146,15 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
 //        bool updateBB = p->isLive; //TODO updateBoundingbox check
         
         mbvd.push_back(v);
-        if(!meshCacheCreated) {
+        //if(!meshCacheCreated) {
             mbi.push_back(i);
-        }
+        //}
     }
     
     this->meshCache->addMeshBuffer(mbvd, mbi, 0);
-    this->meshCache->Commit();
     this->shouldUpdateMesh = true;
     
-    return meshCacheCreated;
+    return true;
 }
 
 Quaternion ParticleManager::rotationBetweenVectors(Vector3 targetDirection, Vector3 initialDirection)

@@ -246,7 +246,7 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
             blendFunction(GL_ONE);
             setDepthMask(false);
         }
-        unsigned int indicesSize = nodeMes->getIndicesCount(meshBufferIndex);
+        unsigned int indicesSize = nodeMes->getIndicesCount(0);
         shared_ptr<OGLNodeData> OGLNode = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
         if(nodeMes)
             drawElements(getOGLDrawMode(DRAW_MODE_POINTS), (GLsizei)indicesSize, indicesDataType, 0, 0);

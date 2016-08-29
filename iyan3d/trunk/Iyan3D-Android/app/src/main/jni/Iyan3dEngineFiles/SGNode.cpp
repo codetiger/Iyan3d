@@ -176,7 +176,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             setParticlesData(node, pData);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
             Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
-            node->setTexture(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO modify for particles
+            materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
             getProperty(TRANSPARENCY).value.x = 0.7 ;// Vector4(0.7, 0, 0, 0), UNDEFINED);
             break;
         }

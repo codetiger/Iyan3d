@@ -302,11 +302,23 @@ int Mesh::getMeshBufferMaterialIndices(int meshBufferIndex)
 
 void Mesh::clearVertices()
 {
-    tempVerticesData.clear();
+    for(int i = 0; i < meshBufferVerticesData.size(); i++) {
+        meshBufferVerticesData[i].clear();
+    }
+    meshBufferVerticesData.clear();
+    
+    for(int i = 0; i < meshBufferVerticesDataHeavy.size(); i++) {
+        meshBufferVerticesDataHeavy[i].clear();
+    }
+    meshBufferVerticesDataHeavy.clear();
+
 }
 
 void Mesh::clearIndices()
 {
-    tempIndicesData.clear();
+    for(int i = 0; i < meshBufferIndices.size(); i++) {
+        meshBufferIndices[i].clear();
+    }
+    meshBufferIndices.clear();
 }
 

@@ -567,10 +567,10 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
         meshCacheCreated = pNode->updateParticles((sgNode->getProperty(SELECTED).value.x || isRendering), smgr->getActiveCamera()->getPosition());
     }
     
-    if(!meshCacheCreated) {
+    //if(!meshCacheCreated) {
         pNode->shouldUpdateMesh = true;
         smgr->updateVertexAndIndexBuffers(sgNode->node, MESH_TYPE_LITE);
-    }
+    //}
     Mat4 model = sgNode->node->getModelMatrix();
     Mat4 vp = projMat * viewMat;
     
