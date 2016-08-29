@@ -40,10 +40,13 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) { //ToDo search optimisation
         if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count)
+            if(uniforms[i].values == NULL || uniforms[i].count != count) {
                 uniforms[i].values = new float[count];
+                int bufSize = count * sizeof(float);
+                uniforms[i].buf = [MetalHandler::getMTLDevice() newBufferWithLength:bufSize options:0];
+            }
 
-            if(memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
+            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
                 memcpy(uniforms[i].values, values, count * sizeof(float));
                 uniforms[i].count = count;
             }
@@ -76,10 +79,13 @@ short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
         if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count)
+            if(uniforms[i].values == NULL || uniforms[i].count != count) {
                 uniforms[i].values = new int[count];
+                int bufSize = count * sizeof(float);
+                uniforms[i].buf = [MetalHandler::getMTLDevice() newBufferWithLength:bufSize options:0];
+            }
             
-            if(memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
+            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
                 memcpy(uniforms[i].values, values, count * sizeof(int));
                 uniforms[i].count = count;
             }

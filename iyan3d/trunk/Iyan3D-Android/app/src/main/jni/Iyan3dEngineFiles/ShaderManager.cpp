@@ -523,7 +523,7 @@ void ShaderManager::setUVScaleValue(SGNode *sgNode, u16 paramIndex, int material
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        uvScale[i+1] = sgNode->getProperty(TEXTURE_SCALE, materialIndex).value.x; // v[j].second->getProperty(TRANSPARENCY).value.x;
+        uvScale[i+1] = v[j].second->getProperty(TEXTURE_SCALE, materialIndex).value.x; // v[j].second->getProperty(TRANSPARENCY).value.x;
         i++;
     }
     

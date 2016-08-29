@@ -84,36 +84,73 @@ void Mesh::copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex)
         if(instanceIndex == 1)
             copyInstanceToMeshCache(originalMesh, 0);
         
-        unsigned int vertexCount = getVerticesCount();
+        unsigned int verticesCount = originalMesh->getVerticesCountInMeshBuffer(0);
+        vector < vertexData > newVertices;
+        vector< unsigned short > newIndices;
         
-        for( int i = 0; i < originalMesh->getMeshBufferCount(); i++) {
-            vector< vertexData > mbvd = originalMesh->getLiteVerticesArray(i);
-            for( int j = 0; j < mbvd.size(); j++) {
-                vertexData &v = mbvd[j];
-                v.vertColor = Vector4(v.vertColor.x, v.vertColor.y, v.vertColor.z, instanceIndex);
+        int mbCount = getMeshBufferCount();
+        int lastMBSize = (mbCount > 0) ? meshBufferVerticesData[mbCount - 1].size() : 0;
+        bool insertInLastMeshBuffer = (mbCount > 0) ? ((lastMBSize + verticesCount) < MAX_VERTICES_COUNT) : false;
+
+        for( int i = 0; i < verticesCount; i++) {
+            vertexData *v1 = originalMesh->getLiteVerticesForMeshBuffer(0, i);
+            vertexData v2;
+            v2.vertPosition = v1->vertPosition;
+            v2.vertNormal = v1->vertNormal;
+            v2.texCoord1 = v1->texCoord1;
+            v2.vertTangent = v1->vertTangent;
+            v2.vertBitangent = v1->vertBitangent;
+            v2.vertColor = Vector4(v1->vertColor.x, v1->vertColor.y, v1->vertColor.z, instanceIndex);
+            
+            if(insertInLastMeshBuffer) {
+                meshBufferVerticesData[mbCount - 1].push_back(v2);
+            } else {
+                newVertices.push_back(v2);
             }
-            vector< unsigned short > mbi = originalMesh->getIndicesArrayAtMeshBufferIndex(i);
-            unsigned short materialIndex = originalMesh->getMeshBufferMaterialIndices(i);
-            addMeshBuffer(mbvd, mbi, materialIndex);
         }
+        
+        
+        for(int i = 0; i < originalMesh->getIndicesCount(0); i++) {
+            unsigned short index = originalMesh->getIndicesArrayAtMeshBufferIndex(0)[i];
+            if(insertInLastMeshBuffer) {
+                meshBufferIndices[mbCount - 1].push_back(lastMBSize + index);
+            } else {
+                newIndices.push_back(index);
+            }
+        }
+        
+        if(!insertInLastMeshBuffer) {
+            addMeshBuffer(newVertices, newIndices, 0);
+        }
+        
+        instanceCount++;
     }
-    
-    instanceCount++;
 }
 
 void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount)
 {
-    int endIndex = (getVerticesCount() > verticesCount) ? getVerticesCount() - verticesCount : getVerticesCount();
+    std::vector< vertexData >::iterator beginIt;
+    std::vector< vertexData >::iterator endIt;
+    int lastMBIndex = meshBufferVerticesData.size() - 1;
+    int lastMBSize = meshBufferVerticesData[lastMBIndex].size();
     
-    for(int i = getVerticesCount()-1; i > endIndex; i --)
-        tempVerticesData.erase(tempVerticesData.begin() + i);
-
-    endIndex = (getTotalIndicesCount() > indicesCount) ? getTotalIndicesCount() - indicesCount : getTotalIndicesCount();
-
-    for(int i = getTotalIndicesCount()-1; i > endIndex; i--)
-        tempIndicesData.erase(tempIndicesData.begin() + i);
+    beginIt = (lastMBSize > verticesCount) ? (meshBufferVerticesData[lastMBIndex].begin() + (lastMBSize - verticesCount)) : meshBufferVerticesData[lastMBIndex].begin();
+    endIt = meshBufferVerticesData[lastMBIndex].end();
     
-    Commit();
+    meshBufferVerticesData[lastMBIndex].erase(beginIt, endIt);
+    
+    std::vector< unsigned short >::iterator beginIndIt;
+    std::vector< unsigned short >::iterator endIndIt;
+    lastMBIndex = meshBufferIndices.size() - 1;
+    lastMBSize = meshBufferIndices[lastMBIndex].size();
+
+    beginIndIt = (lastMBSize > indicesCount) ? (meshBufferIndices[lastMBIndex].begin() + (lastMBSize - indicesCount)) : meshBufferIndices[lastMBIndex].begin();
+    endIndIt = meshBufferIndices[lastMBIndex].end();
+    
+    meshBufferIndices[lastMBIndex].erase(beginIndIt, endIndIt);
+    
+    instanceCount--;
+//    Commit();
 }
 
 Mesh* Mesh::clone()

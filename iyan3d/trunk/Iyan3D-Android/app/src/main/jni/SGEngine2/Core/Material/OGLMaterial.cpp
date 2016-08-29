@@ -69,7 +69,7 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
             if(uniforms[i].values == NULL || uniforms[i].count != count)
                 uniforms[i].values = new int[count];
             
-            if(memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
+            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
                 memcpy(uniforms[i].values, values, count * sizeof(int));
                 uniforms[i].count = count;
                 uniforms[i].isUpdated = true;
@@ -104,7 +104,7 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
             if(uniforms[i].values == NULL || uniforms[i].count != count)
                 uniforms[i].values = new float[count];
 
-            if(memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
+            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
                 memcpy(uniforms[i].values, values, count * sizeof(float));
                 uniforms[i].count = count;
                 uniforms[i].isUpdated = true;
