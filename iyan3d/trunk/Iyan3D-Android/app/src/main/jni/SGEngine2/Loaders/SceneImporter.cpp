@@ -318,6 +318,10 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
             p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
             Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
             p2.value.x = 1.0;
+            
+            Property &p3 = sceneNode->getProperty(TEXTURE, i);
+            p3.fileName = "";
+            materialProps->setTextureForType(NULL, NODE_TEXTURE_TYPE_COLORMAP);
         }
     }
     
