@@ -183,6 +183,7 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
     {"SHADER_PARTICLES_RTT", "particlesRTT.vsh","particles.fsh"}
 };
+
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
 {
     {"SHADER_MESH", "Mesh_Vertex", "Common_Fragment"},

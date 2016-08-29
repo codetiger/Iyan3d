@@ -265,8 +265,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgm";
             Vector3 mColor = Vector3(vertexColor.x, vertexColor.y, vertexColor.z);
             editorScene->loader->removeTempNodeIfExists();
+
             SceneImporter *loader = new SceneImporter();
             loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, [textureName UTF8String], false, mColor, isTempNode);
+            delete loader;
             
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
@@ -291,8 +293,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgr";
             Vector3 mColor = Vector3(vertexColor.x, vertexColor.y, vertexColor.z);
             editorScene->loader->removeTempNodeIfExists();
+            
             SceneImporter *loader = new SceneImporter();
             loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, [textureName UTF8String], false, mColor, isTempNode);
+            delete loader;
             
             if(!isTempNode){
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)

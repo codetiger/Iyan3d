@@ -420,6 +420,9 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
     sgScene->updater->resetMaterialTypes(false);
     
     sgScene->nodes.push_back(sceneNode);
+    
+    bones->clear();
+    delete bones;
 }
 
 void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
@@ -488,6 +491,9 @@ void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
             }
         }
     } while(newBones->size() > 0);
+    
+    newBones->clear();
+    delete newBones;
 }
 
 void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones)

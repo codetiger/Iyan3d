@@ -15,12 +15,12 @@
 #include "SGVisibilityKey.h"
 #include "ActionKey.h"
 
-struct properties{
-    int isLighting,isSelected,fontSize, specificInt;
-    float transparency,nodeSpecificFloat;
+struct properties {
+    int isLighting, isSelected, fontSize, specificInt;
+    float transparency, nodeSpecificFloat;
     float reflection, refraction;
     bool isVisible,perVertexColor, faceNormals;
-    Vector3 vertexColor,oriVertexColor;
+    Vector3 vertexColor, oriVertexColor;
     Vector3 textColor;
     std::string prevMatName;
     
@@ -39,11 +39,13 @@ public:
     
     std::map< PROP_INDEX, Property > options;
     std::vector< MaterialProperty* > materialProps;
+    
     bool isRigged;
     bool isMirrorEnabled;
     bool isTempNode;
     bool smoothTexture;
-    int assetId,actionId;
+    int assetId, actionId;
+    
     shared_ptr<Node> node;
     std::wstring name;
     std::string oriTextureName;
@@ -60,8 +62,9 @@ public:
     vector<Quaternion> jointsInitialRotations;
     
     SGNode(NODE_TYPE type);
-    void setPropertiesOfNode();
     ~SGNode();
+
+    void setPropertiesOfNode();
     bool checkFileExists(std::string fileName);
     void setSkinningData(SkinMesh *mesh);
     shared_ptr<Node> loadNode(int assetId, std::string meshPath, std::string texturePath, NODE_TYPE objectType, SceneManager *smgr, std::wstring imagePath, int width, int height, Vector4 textColor, string &filePath);
