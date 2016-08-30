@@ -124,12 +124,13 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         
         scene = importer->ReadFile(filePath, pFlags);
         
-        if(!scene) {
+        if(!scene || scene->mNumMeshes == 0) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
+        } else {
+            loadNodes2Scene(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
         }
         
-        loadNodes2Scene(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
         delete importer;
         scene = NULL;
     }
