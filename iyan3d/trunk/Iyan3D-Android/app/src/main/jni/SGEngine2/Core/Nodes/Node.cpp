@@ -25,7 +25,7 @@ Node::Node()
     Parent = shared_ptr<Node>();
     Children = make_shared< vector< shared_ptr<Node> > >();
     isVisible = true;
-    hasTransparency = hasNormalMap = hasReflectionMap = false;
+    hasTransparency = false;
     
     #ifdef ANDROID
     nodeData = make_shared<OGLNodeData>();

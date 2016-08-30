@@ -21,8 +21,10 @@ uint8_t* loadPNGImage(std::string filePath, int &width, int &height, bool &hasTr
     NSString *fileName = [NSString stringWithFormat:@"%s",filePath.c_str()];
     CGImageRef spriteImage = [UIImage imageWithContentsOfFile:fileName].CGImage;
     
-    if (!spriteImage) 
+    if (!spriteImage) {
         NSLog(@"Failed to load image %@ FilePath %@", fileName, fileName);
+        return NULL;
+    }
     
     width = (int)CGImageGetWidth(spriteImage);
     height = (int)CGImageGetHeight(spriteImage);

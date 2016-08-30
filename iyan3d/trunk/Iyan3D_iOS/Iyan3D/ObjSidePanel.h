@@ -22,8 +22,8 @@
 - (void) importObjWithIndexPath:(int) indexPath TextureName:(NSString*) textureFileName MeshColor:(Vector3) color HasTexture:(BOOL) hasTexture IsTempNode:(BOOL) isTempNode;
 - (BOOL) addTempNodeToScene;
 - (void) removeTempNodeFromScene;
-- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp;
-- (void) removeTempTextureAndVertex;
+- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp AtIndex:(PROP_INDEX) pIndex;
+- (void) removeTempTextureAndVertex:(PROP_INDEX) pIndex;
 -(void) showOrHideProgress:(BOOL) value;
 - (void) deallocSubViews;
 @end
@@ -38,9 +38,10 @@
     NSArray* basicShapes;
     int viewType;
     FPPopoverController *popover;
+    PROP_INDEX propIndex;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type AndPropIndex:(PROP_INDEX) pIndex;
 
 
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;

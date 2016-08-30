@@ -546,14 +546,26 @@ shared_ptr<Node> SGEditorScene::getParentNode()
     return selectMan->getParentNode();
 }
 
-void SGEditorScene::setEnvironmentTexture(std::string textureFilePath)
+void SGEditorScene::setEnvironmentTexture(std::string textureFilePath, bool isPreview)
 {
     freezeRendering = true;
-    //smgr->RemoveTexture(shaderMGR->environmentTex);
-    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", textureFilePath, TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
+    if(shaderMGR->environmentTex)
+        smgr->RemoveTexture(shaderMGR->environmentTex);
+    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", FileHelper::getTexturesDirectory() + textureFilePath + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
+    
+    if(!isPreview) {
+        shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", textureFilePath);
+    }
+    
     if(shaderMGR->environmentTex)
         printf("\n Texture exists %d ", shaderMGR->environmentTex->width);
-    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", textureFilePath);
+    
+    for( int i = 2; i < nodes.size(); i++) {
+        if(nodes[i]->getType() != NODE_IMAGE && nodes[i]->getType() != NODE_VIDEO) {
+            for(int j = 0; j < nodes[i]->materialProps.size(); j++)
+                nodes[i]->materialProps[j]->setTextureForType(shaderMGR->environmentTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
+        }
+    }
     freezeRendering = false;
 }
 
@@ -654,7 +666,7 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
-void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo, int materialIndex)
+void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo, int materialIndex, PROP_INDEX pIndex)
 {
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
@@ -662,7 +674,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     string texturePath = FileHelper::getTexturesDirectory() + textureFileName+ ".png";
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
-        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x = (pIndex == TEXTURE) ? false : true; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         
         if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
             loader->copyMeshFromOriginalNode(nodes[selectedNodeId]);
@@ -673,19 +685,27 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
             loader->setFirstInstanceAsMainNode(nodes[selectedNodeId]);
         }
         
+        node_texture_type texType;
+        if(pIndex == TEXTURE)
+            texType = NODE_TEXTURE_TYPE_COLORMAP;
+        else if (pIndex == BUMP_MAP)
+            texType = NODE_TEXTURE_TYPE_NORMALMAP;
+        else
+            texType = NODE_TEXTURE_TYPE_REFLECTIONMAP;
+        
+        
         bool blurTex = (nodes[selectedNodeId]->smoothTexture);
+        printf(" \n Texture file path %s ", texturePath.c_str());
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, blurTex);
-        nodes[selectedNodeId]->materialProps[materialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
+        nodes[selectedNodeId]->materialProps[materialIndex]->setTextureForType(nodeTex, texType); //TODO for selected mesh buffer index
         
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName;
-            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = textureFileName + ".png";
+            nodes[selectedNodeId]->getProperty(pIndex).fileName = textureFileName + ".png";
         }
     } else {
         nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value = Vector4(vertexColor, 0);
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = "-1";
-            nodes[selectedNodeId]->getProperty(TEXTURE).fileName = "";
+            nodes[selectedNodeId]->getProperty(pIndex).fileName = "-1";
         }
         nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value = Vector4(true, 0, 0, 0);
     }
@@ -698,7 +718,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     }
 }
 
-void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex)
+void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex, PROP_INDEX pIndex)
 {
     if(selectedNode == NOT_EXISTS)
         return;
@@ -710,14 +730,32 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
 
     string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName + ".png";
 
-    if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
-        nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
-        Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
-        nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
-    } else {
-        nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
-        nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
-        nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+    node_texture_type texType;
+    if(pIndex == TEXTURE)
+        texType = NODE_TEXTURE_TYPE_COLORMAP;
+    else if (pIndex == BUMP_MAP)
+        texType = NODE_TEXTURE_TYPE_NORMALMAP;
+    else
+        texType = NODE_TEXTURE_TYPE_REFLECTIONMAP;
+
+    if(pIndex == ENVIRONMENT_TEXTURE) {
+        setEnvironmentTexture(shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName, false);
+    }
+    else {
+        smgr->RemoveTexture(nodes[selectedNode]->materialProps[selectedMaterialIndex]->getTextureOfType(texType));
+        nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(NULL, texType);
+        
+        if(pIndex == TEXTURE) {
+            if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
+                nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+                Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
+                nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
+            } else {
+                nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
+                nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
+                nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+            }
+        }
     }
 }
 

@@ -453,7 +453,7 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
     float hasReflectionMap = (environmentTex) ? 1.0 : 0.0;
     smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     
-    float hasNormalMap = sgNode->node->hasNormalMap;
+    float hasNormalMap = (sgNode->materialProps[materialIndex]->getTextureOfType(NODE_TEXTURE_TYPE_NORMALMAP)) ? 1.0 : 0.0;
     smgr->setPropertyValue(sgNode->node->material, "hasNormalMap", &hasNormalMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasNormalMap, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     
     setSamplerType(sgNode, SHADER_COMMON_samplerType);

@@ -23,7 +23,7 @@
     NSArray *filesList;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type AndPropIndex:(PROP_INDEX) pIndex
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -40,6 +40,7 @@
         indexPathOfOBJ = -1;
         viewType = type;
         textureFileName = @"-1";
+        propIndex = pIndex;
     }
     return self;
 }
@@ -228,7 +229,7 @@
     if(viewType == IMPORT_OBJFILE) {
         [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:(indexPathOfOBJ >= 6) IsTempNode:YES];
     } else
-        [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES];
+        [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES AtIndex:propIndex];
 }
 
 - (IBAction)importBtnAction:(id)sender
@@ -261,7 +262,7 @@
             if(viewType == IMPORT_OBJFILE) {
                 [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:(indexPathOfOBJ >= 6) IsTempNode:NO];
             } else
-                [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+                [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO AtIndex:propIndex];
         }
         
         [self.view removeFromSuperview];
@@ -316,7 +317,7 @@
             //[_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
             [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:YES];
         } else
-            [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES];
+            [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES AtIndex:propIndex];
     }
 }
 
@@ -345,7 +346,7 @@
     if(viewType == IMPORT_OBJFILE)
         [self.objSlideDelegate removeTempNodeFromScene];
     else
-        [self.objSlideDelegate removeTempTextureAndVertex];
+        [self.objSlideDelegate removeTempTextureAndVertex: propIndex];
     [self.view removeFromSuperview];
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
     [self.objSlideDelegate deallocSubViews];
@@ -377,7 +378,7 @@
     if(_addBtn.tag == OBJ)
         [self.objSlideDelegate removeTempNodeFromScene];
     else
-        [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
+        [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO AtIndex:propIndex];
 
 }
 

@@ -77,7 +77,7 @@ protected:
     Quaternion rotation;
     
 public:
-    bool hasTransparency, hasNormalMap, hasReflectionMap;
+    bool hasTransparency;
     int instancingRenderIt;
     vector< shared_ptr<Node> > instancedNodes;
     BoundingBox bBox;
