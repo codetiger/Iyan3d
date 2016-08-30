@@ -452,6 +452,16 @@ void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsign
         else
             vd.vertNormal = Vector3(0.0);
         
+        if(aiM->mTangents)
+            vd.vertTangent = Vector3(aiM->mTangents[j].x, aiM->mTangents[j].y, aiM->mTangents[j].z);
+        else
+            vd.vertTangent = Vector3(0.0);
+        
+        if(aiM->mBitangents)
+            vd.vertBitangent = Vector3(aiM->mBitangents[j].x, aiM->mBitangents[j].y, aiM->mBitangents[j].z);
+        else
+            vd.vertBitangent = Vector3(0.0);
+        
         if(aiM->mColors[0])
             vd.vertColor = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, 0.0);
         else
@@ -557,7 +567,17 @@ void SceneImporter::getMeshFrom(vector<vertexData> &mbvd, vector<unsigned short>
             vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
         else
             vd.vertNormal = Vector3(0.0);
-        
+
+        if(aiM->mTangents)
+            vd.vertTangent = Vector3(aiM->mTangents[j].x, aiM->mTangents[j].y, aiM->mTangents[j].z);
+        else
+            vd.vertTangent = Vector3(0.0);
+
+        if(aiM->mBitangents)
+            vd.vertBitangent = Vector3(aiM->mBitangents[j].x, aiM->mBitangents[j].y, aiM->mBitangents[j].z);
+        else
+            vd.vertBitangent = Vector3(0.0);
+
         if(aiM->mColors[0])
             vd.vertColor = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, 0.0);
         else
