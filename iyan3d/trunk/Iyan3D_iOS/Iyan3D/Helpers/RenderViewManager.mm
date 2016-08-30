@@ -267,7 +267,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->loader->removeTempNodeIfExists();
 
             SceneImporter *loader = new SceneImporter();
-            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, [textureName UTF8String], false, mColor, isTempNode);
+            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, FileHelper::getTexturesDirectory(), false, mColor, isTempNode);
             delete loader;
             
             if(!isTempNode){
@@ -295,7 +295,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->loader->removeTempNodeIfExists();
             
             SceneImporter *loader = new SceneImporter();
-            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, [textureName UTF8String], false, mColor, isTempNode);
+            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, FileHelper::getTexturesDirectory(), false, mColor, isTempNode);
             delete loader;
             
             if(!isTempNode){

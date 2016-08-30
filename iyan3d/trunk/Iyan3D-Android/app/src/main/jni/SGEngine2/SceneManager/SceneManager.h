@@ -79,8 +79,10 @@ public:
     Material* getMaterialByIndex(int index);
     Material* getMaterialByName(string name);
     int getNodeIndexByID(int id);
-    void setPropertyValue(Material *material,string name,float* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex = 0,int nodeIndex = -1,Texture *tex = NULL,int userValue = 0);
-    void setPropertyValue(Material *material,string name,int* values,DATA_TYPE type,unsigned short count, bool isFragmentData, u16 paramIndex = 0,int nodeIndex = -1,Texture *tex = NULL,int userValue = 0, bool blurTex = true);
+
+    void setPropertyValue(Material *material, string name, float* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex = 0, int nodeIndex = -1, int materialIndex = -1, Texture *tex = NULL, int userValue = 0);
+    void setPropertyValue(Material *material, string name, int* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex = 0, int nodeIndex = -1, int materialIndex = -1, Texture *tex = NULL, int userValue = 0, bool blurTex = true);
+    
     bool RemoveMaterialByIndex(u16 index);
     bool RemoveMaterial(Material *mat);
 

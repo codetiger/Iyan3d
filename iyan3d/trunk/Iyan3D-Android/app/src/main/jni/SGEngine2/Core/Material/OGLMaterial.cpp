@@ -61,7 +61,7 @@ void OGLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_
     uniforms.push_back(uni);
 }
 
-short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex)
+short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int materialIndex)
 {
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
@@ -96,7 +96,7 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     return uniformNodeIndex;
 }
 
-short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex)
+short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int materialIndex)
 {
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {

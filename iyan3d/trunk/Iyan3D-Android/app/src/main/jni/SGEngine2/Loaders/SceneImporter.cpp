@@ -278,49 +278,59 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
         MaterialProperty *materialProps = new MaterialProperty(hasBones ? NODE_RIG : NODE_SGM);
         sceneNode->materialProps.push_back(materialProps);
         
-        aiColor4D color;
         aiMaterial *material = scene->mMaterials[i];
         
+        Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
+        p2.value.x = 1.0;
+
+        Property &p3 = sceneNode->getProperty(TEXTURE, i);
+        p3.fileName = "";
+
+        materialProps->setTextureForType(NULL, NODE_TEXTURE_TYPE_COLORMAP);
+
+        Property &p1 = sceneNode->getProperty(VERTEX_COLOR, i);
+        aiColor4D color;
         if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
-            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, i);
             p1.value = Vector4(color.r, color.g, color.b, color.a);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
-            p2.value.x = 1.0;
-        }
+            printf("VertexColor: %f, %f, %f\n", color.r, color.g, color.b);
+        } else if(hasMeshColor)
+            p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
+        else
+            p1.value = Vector4(0.5, 0.5, 0.5, 1.0);
         
         if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aiString path;
             material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-            
-            Property &p1 = sceneNode->getProperty(TEXTURE, i);
-            p1.fileName = getFileName(string(path.data));
-            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
-            p2.value.x = 0.0;
+
+            string texturePath = getFileName(string(path.data));
+            printf("Texture: %s ", texturePath.c_str());
+
+            Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            if(texture) {
+                printf("Loaded\n");
+                Property &p1 = sceneNode->getProperty(TEXTURE, i);
+                p1.fileName = texturePath;
+                
+                Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
+                p2.value.x = 0.0;
+                
+                materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+            } else {
+                printf("Load Failed\n");
+            }
         }
         
         if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
             aiString path;
             material->GetTexture(aiTextureType_NORMALS, 0, &path);
+            string texturePath = getFileName(string(path.data));
             
-            Property &p1 = sceneNode->getProperty(TEXTURE, i);
-            p1.fileName = getFileName(string(path.data));
-            Texture* texture = sgScene->getSceneManager()->loadTexture(p1.fileName, FileHelper::getTexturesDirectory() + p1.fileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
-            p2.value.x = 0.0;
-        }
-        
-        if(hasMeshColor) {
-            Property &p1 = sceneNode->getProperty(VERTEX_COLOR, i);
-            p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
-            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, i);
-            p2.value.x = 1.0;
-            
-            Property &p3 = sceneNode->getProperty(TEXTURE, i);
-            p3.fileName = "";
-            materialProps->setTextureForType(NULL, NODE_TEXTURE_TYPE_COLORMAP);
+            Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+            if(texture) {
+                Property &p1 = sceneNode->getProperty(TEXTURE, i);
+                p1.fileName = texturePath;
+                materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
+            }
         }
     }
     

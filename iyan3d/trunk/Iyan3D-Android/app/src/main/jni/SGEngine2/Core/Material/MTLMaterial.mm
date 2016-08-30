@@ -21,7 +21,7 @@ MTLMaterial::~MTLMaterial()
     uniforms.clear();
 }
 
-void MTLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, int nodeIndex)
+void MTLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, int nodeIndex, int materialIndex)
 {
     MTLUniform uni;
     uni.name = propertyName;
@@ -31,15 +31,16 @@ void MTLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_
     uni.count = count;
     uni.parameterIndex = paramIndex;
     uni.nodeIndex = nodeIndex;
+    uni.materialIndex = materialIndex;
     uni.buf = nil;
     this->uniforms.push_back(uni);
 }
 
-short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex)
+short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int materialIndex)
 {
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) { //ToDo search optimisation
-        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex) {
+        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].materialIndex == materialIndex) {
             if(uniforms[i].values == NULL || uniforms[i].count != count) {
                 uniforms[i].values = new float[count];
                 int bufSize = count * sizeof(float);
@@ -57,7 +58,7 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     }
     
     if(uIndex == NOT_EXISTS) {
-        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex);
+        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex, materialIndex);
         uIndex = uniforms.size()-1;
         uniforms[uIndex].values = new float[count];
         memcpy(uniforms[uIndex].values, values, count * sizeof(float));
@@ -73,12 +74,12 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     return uIndex;
 }
 
-short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex)
+short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex, int nodeIndex, int materialIndex)
 {
     
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
-        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex) {
+        if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].materialIndex == materialIndex) {
             if(uniforms[i].values == NULL || uniforms[i].count != count) {
                 uniforms[i].values = new int[count];
                 int bufSize = count * sizeof(float);
@@ -96,7 +97,7 @@ short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     }
     
     if(uIndex == NOT_EXISTS) {
-        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex);
+        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex, materialIndex);
         uIndex = uniforms.size()-1;
         uniforms[uIndex].values = new int[count];
         memcpy(uniforms[uIndex].values, values, count * sizeof(int));

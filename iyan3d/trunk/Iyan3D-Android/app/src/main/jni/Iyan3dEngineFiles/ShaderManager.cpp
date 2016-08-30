@@ -264,7 +264,7 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
     }
     
     Material * material = sgNode->node->material;
-    smgr->setPropertyValue(material, "meshColor", vertColor, DATA_FLOAT_VEC3, ((endIndex - startIndex)+1) * 3, false, paramIndex, nodeIndex);
+    smgr->setPropertyValue(material, "meshColor", vertColor, DATA_FLOAT_VEC3, ((endIndex - startIndex)+1) * 3, false, paramIndex, nodeIndex, materialIndex);
     delete [] vertColor;
 }
 
@@ -315,7 +315,7 @@ void ShaderManager::setHasMeshColor(SGNode *sgNode, bool status, int paramIndex,
         i++;
     }
     
-    smgr->setPropertyValue(sgNode->node->material, "hasMeshColor", hasMeshColor, DATA_FLOAT, (endIndex - startIndex)+1, isFragmentData, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "hasMeshColor", hasMeshColor, DATA_FLOAT, (endIndex - startIndex)+1, isFragmentData, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     delete [] hasMeshColor;
 }
 
@@ -391,7 +391,7 @@ void ShaderManager::setNodeLighting(SGNode *sgNode, int paramIndex, int material
         i++;
     }
     
-    smgr->setPropertyValue(sgNode->node->material, "hasLighting", lighting, DATA_FLOAT, (endIndex - startIndex)+1, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "hasLighting", lighting, DATA_FLOAT, (endIndex - startIndex)+1, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     
     delete [] lighting;
 }
@@ -419,7 +419,7 @@ void ShaderManager::setReflectionValue(SGNode *sgNode, int paramIndex, int mater
         i++;
     }
     
-    smgr->setPropertyValue(sgNode->node->material, "reflectionValue", value, DATA_FLOAT, (endIndex - startIndex)+1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "reflectionValue", value, DATA_FLOAT, (endIndex - startIndex)+1, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     
     delete [] value;
     
@@ -447,19 +447,19 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
     string textureNames[] = {"colorMap", "normalMap", "shadowMap", "reflectionMap"};
     
     for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_REFLECTIONMAP; i++) {
-        setTextureForNode(sgNode, sgNode->materialProps[materialIndex]->getTextureOfType((node_texture_type)i), textureNames[i], paramIndex, i);
+        setTextureForNode(sgNode, sgNode->materialProps[materialIndex]->getTextureOfType((node_texture_type)i), textureNames[i], paramIndex, i, materialIndex);
     }
     
     float hasReflectionMap = (environmentTex) ? 1.0 : 0.0;
-    smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "hasReflectionMap", &hasReflectionMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasReflectionMap, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     
     float hasNormalMap = sgNode->node->hasNormalMap;
-    smgr->setPropertyValue(sgNode->node->material, "hasNormalMap", &hasNormalMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasNormalMap, smgr->getNodeIndexByID(sgNode->node->getID()));
+    smgr->setPropertyValue(sgNode->node->material, "hasNormalMap", &hasNormalMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasNormalMap, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
     
     setSamplerType(sgNode, SHADER_COMMON_samplerType);
 }
 
-void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue)
+void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex)
 {
     int textureValue = 0;
     
@@ -467,14 +467,14 @@ void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string t
         OGLTexture* tex = (OGLTexture*)texture;
         if(texture != NULL) {
             textureValue = tex->OGLTextureName;
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), tex, userValue);
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, tex, userValue);
         }
     } else if(deviceType == METAL) {
         textureValue =  userValue;
         if(texture != NULL) {
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), texture, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
         } else {
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
+            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
         }
     }
 

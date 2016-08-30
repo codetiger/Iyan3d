@@ -4413,7 +4413,6 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     NSString * name = [dict objectForKey:@"name"];
     NSString * meshName = [dict objectForKey:@"meshName"];
-    NSString * textureName = [dict objectForKey:@"textureName"];
     int nodeType = [[dict objectForKey:@"nodeType"] intValue];
     bool isTempNode = [[dict objectForKey:@"isTempNode"] boolValue];
     bool hasTexture = [[dict objectForKey:@"hasTexture"] boolValue];
@@ -4434,7 +4433,7 @@ void downloadFile(NSString* url, NSString* fileName)
     editorScene->loader->removeTempNodeIfExists();
     
     SceneImporter *loader = new SceneImporter();
-    loader->importNodesFromFile(editorScene, [name UTF8String], meshPath, [textureName UTF8String], !hasTexture, mColor, isTempNode);
+    loader->importNodesFromFile(editorScene, [name UTF8String], meshPath, FileHelper::getDocumentsDirectory(), !hasTexture, mColor, isTempNode);
     if(!isTempNode)
         [self reloadSceneObjects];
 }

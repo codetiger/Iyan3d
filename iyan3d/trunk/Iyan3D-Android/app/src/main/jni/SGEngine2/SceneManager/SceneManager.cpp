@@ -353,10 +353,12 @@ Texture* SceneManager::loadTexture(string textureName, string filePath, TEXTURE_
 #ifdef UBUNTU
     newTex = new DummyTexture();
 #endif
-    newTex->loadTexture(textureName, filePath, format, type, blurTexture, blurRadius);
-    textures.push_back(newTex);
-
-    return newTex;
+    
+    if(newTex->loadTexture(textureName, filePath, format, type, blurTexture, blurRadius)) {
+        textures.push_back(newTex);
+        return newTex;
+    } else
+        return NULL;
 }
 
 Texture* SceneManager::loadTextureFromVideo(string videoFileName, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type)
@@ -479,7 +481,7 @@ void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 en
 {
     renderMan->useMaterialToRender(material);
     int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
-    setPropertyValue(material,"texture1",&textureValue,DATA_TEXTURE_2D,1,true,0,NOT_EXISTS,texture);
+    setPropertyValue(material, "texture1", &textureValue, DATA_TEXTURE_2D, 1, true, 0, NOT_EXISTS, NOT_EXISTS, texture);
     renderMan->draw2DImage(texture, originCoord, endCoord, material, isRTT);
     
 }
@@ -487,13 +489,15 @@ void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 en
 void SceneManager::draw3DLine(Vector3 start, Vector3 end, Vector3 color, Material *material, int mvpUniParamIndex, int vertexColorUniParamIndex, int transparencyUniParamIndex)
 {
     renderMan->useMaterialToRender(material);
-    float vertColor[3] = {color.x,color.y,color.z};
+    float vertColor[3] = {color.x, color.y, color.z};
     float transparency = 1.0;
     getActiveCamera()->update();
     Mat4 mat = getActiveCamera()->getProjectionMatrix() * getActiveCamera()->getViewMatrix();
-    setPropertyValue(material,"mvp",mat.pointer(),DATA_FLOAT_MAT4,16,false,mvpUniParamIndex);
-    setPropertyValue(material,"perVertexColor",&vertColor[0],DATA_FLOAT_VEC3,3,false,vertexColorUniParamIndex);
-    setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1,false,transparencyUniParamIndex);
+    
+    setPropertyValue(material, "mvp", mat.pointer(), DATA_FLOAT_MAT4, 16, false, mvpUniParamIndex);
+    setPropertyValue(material, "perVertexColor", &vertColor[0], DATA_FLOAT_VEC3, 3, false, vertexColorUniParamIndex);
+    setPropertyValue(material, "transparency", &transparency, DATA_FLOAT, 1, false, transparencyUniParamIndex);
+    
     renderMan->draw3DLine(start, end, material);
 }
 
@@ -504,13 +508,13 @@ void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Materi
     float transparency = 1.0;
     getActiveCamera()->update();
     Mat4 mat = getActiveCamera()->getProjectionMatrix() * getActiveCamera()->getViewMatrix();
-    setPropertyValue(material,"mvp",mat.pointer(),DATA_FLOAT_MAT4,16,false,mvpUniParamIndex);
-    setPropertyValue(material,"perVertexColor",&vertColor[0],DATA_FLOAT_VEC3,3,false,vertexColorUniParamIndex);
-    setPropertyValue(material,"transparency",&transparency,DATA_FLOAT,1,false,transparencyUniParamIndex);
+    setPropertyValue(material, "mvp", mat.pointer(), DATA_FLOAT_MAT4, 16, false, mvpUniParamIndex);
+    setPropertyValue(material, "perVertexColor", &vertColor[0], DATA_FLOAT_VEC3, 3, false, vertexColorUniParamIndex);
+    setPropertyValue(material, "transparency", &transparency, DATA_FLOAT, 1, false, transparencyUniParamIndex);
     renderMan->draw3DLines(vPositions, material);
 }
 
-void SceneManager::setPropertyValue(Material *material, string name, float* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, Texture *tex, int userValue)
+void SceneManager::setPropertyValue(Material *material, string name, float* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, int materialIndex, Texture *tex, int userValue)
 {
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS) nod = nodes[nodeIndex];
@@ -518,12 +522,12 @@ void SceneManager::setPropertyValue(Material *material, string name, float* valu
     if(nodeIndex == NOT_EXISTS && device == METAL) {
         renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
     } else {
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex);
         renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue);
     }
 }
 
-void SceneManager::setPropertyValue(Material *material, string name, int* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, Texture *tex, int userValue, bool blurTex)
+void SceneManager::setPropertyValue(Material *material, string name, int* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, int materialIndex, Texture *tex, int userValue, bool blurTex)
 {
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS)
@@ -532,7 +536,7 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
     if(nodeIndex == NOT_EXISTS && device == METAL) {
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     } else {
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex);
         if(device == METAL)
             renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
         else

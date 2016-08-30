@@ -91,6 +91,7 @@ bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
 
     width = (uint32_t)CGImageGetWidth(image.CGImage);
     height = (uint32_t)CGImageGetHeight(image.CGImage);
+    
     int bytesPerRow = getBytesPerRow(width,format);
     CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(image.CGImage);
     hasTransparency = (alphaInfo == kCGImageAlphaFirst || alphaInfo == kCGImageAlphaLast || alphaInfo == kCGImageAlphaPremultipliedFirst || alphaInfo == kCGImageAlphaPremultipliedLast);
@@ -105,10 +106,7 @@ bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
     if(!texture)
         return NO;
 
-    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
-               mipmapLevel:0
-                 withBytes:CGBitmapContextGetData(context)
-               bytesPerRow:4 * width];
+    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:CGBitmapContextGetData(context) bytesPerRow:4 * width];
     
     CGColorSpaceRelease(colorSpace);
     colorSpace = nil;
@@ -145,8 +143,6 @@ bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
     width = (int)CGImageGetWidth(imageRef);
     height = (int)CGImageGetHeight(imageRef);
     
-    printf("\n width %d ", width);
-
     float bigSide = (width >= height) ? width : height;
     float target = 0;
     
