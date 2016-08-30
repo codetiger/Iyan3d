@@ -55,7 +55,7 @@
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil]]];
+    filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", @"OBJ", @"FBX", @"DAE", @"3DS", nil]]];
 
     self.importBtn.layer.cornerRadius = 8.0;
     self.addBtn.layer.cornerRadius = 8.0;
@@ -93,9 +93,9 @@
 {
     NSArray *extensions;
     if(caseNum == 1)
-        extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
+        extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", nil];
     else
-        extensions = [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil];
+        extensions = [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", @"OBJ", @"FBX", @"DAE", @"3DS", nil];
     
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
@@ -147,7 +147,7 @@
     {
         _ObjInfoLable.text = NSLocalizedString(@"add_obj_document_dir", nil);
         if(indexPath.row > basicShapes.count-1){
-            NSString *extension = [[filesList objectAtIndex:indexPath.row-[basicShapes count]]pathExtension];
+            NSString *extension = [[[filesList objectAtIndex:indexPath.row-[basicShapes count]] pathExtension] lowercaseString];
             if([extension isEqualToString:@"obj"] || [extension isEqualToString:@"fbx"] || [extension isEqualToString:@"dae"] || [extension isEqualToString:@"3ds"]) {
                 [cell.propsBtn setHidden:NO];
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
@@ -271,7 +271,7 @@
         [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
         filesList=nil;
-        NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"PNG", @"JPEG", nil];
+        NSArray *extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", nil];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* docDirPath = [srcDirPath objectAtIndex:0];
         NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];

@@ -259,7 +259,7 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:nil];
 
-    NSArray *extensions = [NSArray arrayWithObjects:@"png", @"jpeg", @"jpg", @"JPEG", @"PNG", nil];
+    NSArray *extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", nil];
    
     NSArray *dirFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory error:nil];
 

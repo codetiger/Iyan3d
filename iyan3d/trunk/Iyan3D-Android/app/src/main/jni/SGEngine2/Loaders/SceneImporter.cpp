@@ -112,6 +112,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
 {
     sgScene->freezeRendering = true;
     string ext = getFileExtention(filePath);
+    transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     
     if(ext == "sgm" || ext == "sgr" || ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds") {
         Assimp::Importer *importer = new Assimp::Importer();

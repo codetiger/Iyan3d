@@ -4211,7 +4211,7 @@ void downloadFile(NSString* url, NSString* fileName)
     
     NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
-    NSArray *filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", nil]]];
+    NSArray *filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", @"OBJ", @"FBX", @"DAE", @"3DS", nil]]];
 
     NSArray *basicShapes = [NSArray arrayWithObjects:@"Cone", @"Cube", @"Cylinder", @"Plane", @"Sphere", @"Torus", nil];
     NSArray *basicShapesId = [NSArray arrayWithObjects:@"60001.sgm", @"60002.sgm", @"60003.sgm", @"60004.sgm", @"60005.sgm", @"60006.sgm", nil];
