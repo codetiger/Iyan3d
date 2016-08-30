@@ -92,7 +92,7 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
         else
             FileHelper::writeInt(filePointer, -1);
         
-        Mat4 jointMatrix = (*skinnedMesh->joints)[j]->LocalAnimatedMatrix;
+        Mat4 jointMatrix = (*skinnedMesh->joints)[j]->originalJointMatrix;
         for(int k = 0; k < 16; k++)
             FileHelper::writeFloat(filePointer, jointMatrix[k]);
         
@@ -206,6 +206,7 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
         else
             ibone = mesh->addJoint(NULL);
         
+        ibone->originalJointMatrix = Mat4(boneMatrix);
         ibone->LocalAnimatedMatrix = Mat4(boneMatrix);
         
         delete [] boneMatrix;

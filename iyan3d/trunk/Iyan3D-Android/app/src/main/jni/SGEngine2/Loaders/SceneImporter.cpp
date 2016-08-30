@@ -481,6 +481,7 @@ void SceneImporter::loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones)
                         newBones->insert(pair<string, Joint*>(string(n->mParent->mName.C_Str()), sgBone));
                         
                         sgBone->LocalAnimatedMatrix = AssimpToMat4(n->mParent->mTransformation);
+                        sgBone->originalJointMatrix = sgBone->LocalAnimatedMatrix;
                     } else {
                         it_type parentIterator = bones->find(string(n->mParent->mName.C_Str()));
                         if(parentIterator == bones->end())
@@ -518,6 +519,7 @@ void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joi
             
             aiNode *n = scene->mRootNode->FindNode(bone->mName);
             sgBone->LocalAnimatedMatrix = AssimpToMat4(n->mTransformation);
+            sgBone->originalJointMatrix = sgBone->LocalAnimatedMatrix;
         }
     }
 }

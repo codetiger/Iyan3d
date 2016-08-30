@@ -33,10 +33,12 @@ public:
     double envelopeRadius;
     double sphereRadius;
     unsigned short Index;
+
+    Mat4 originalJointMatrix;
     
-    Mat4 LocalAnimatedMatrix; //  filed from jointnode local transformation and ,esh file loader
-    Mat4 GlobalAnimatedMatrix; // calculated from the local matrix
-    Mat4 GlobalInversedMatrix; // from GlobalAnimatedMatrix
+    Mat4 LocalAnimatedMatrix;
+    Mat4 GlobalAnimatedMatrix;
+    Mat4 GlobalInversedMatrix;
     
     Joint *Parent;
     shared_ptr< vector< shared_ptr<PaintedVertex> > > PaintedVertices;
