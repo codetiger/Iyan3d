@@ -79,7 +79,6 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
         for(int j = 0; j < indicesCount; j++) {
             FileHelper::writeInt(filePointer, indices[j]);
         }
-        
     }
     
     int boneCount = skinnedMesh->joints->size();
@@ -124,8 +123,10 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
         
         vector<vertexData> mbvd;
         vector<unsigned short> mbi;
+        
         int materialIndex = FileHelper::readInt(filePointer);
         int verticesCount = FileHelper::readInt(filePointer);
+        
         for(int j = 0; j < verticesCount; j++) {
             vertexData v;
             v.vertPosition = FileHelper::readVector3(filePointer);
@@ -134,16 +135,15 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
             v.vertTangent = FileHelper::readVector3(filePointer);
             v.vertBitangent = FileHelper::readVector3(filePointer);
             v.vertColor = FileHelper::readVector4(filePointer);
-            //mesh->addVertex(&v); //TODO add directly to mesh buffer vertices
             mbvd.push_back(v);
         }
         
         int indicesCount = FileHelper::readInt(filePointer);
         for(int j = 0; j < indicesCount; j++) {
             unsigned short index = FileHelper::readInt(filePointer);
-            //mesh->addToIndicesArray(index); //TODO add directly to mesh buffer indices
             mbi.push_back(index);
         }
+        
         mesh->addMeshBuffer(mbvd, mbi, materialIndex);
     }
     
@@ -176,7 +176,6 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
             v.optionalData3 = FileHelper::readVector4(filePointer);
             v.optionalData4 = FileHelper::readVector4(filePointer);
             
-            //mesh->addHeavyVertex(&v); //TODO add directly to mesh buffer vertices
             mbvd.push_back(v);
         }
         
@@ -184,7 +183,6 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
         
         for(int j = 0; j < indicesCount; j++) {
             unsigned short index = FileHelper::readInt(filePointer);
-            //mesh->addToIndicesArray(index); //TODO add directly to mesh buffer indices
             mbi.push_back(index);
         }
         

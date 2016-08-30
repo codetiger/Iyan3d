@@ -75,7 +75,6 @@ protected:
     Mat4 AbsoluteTransformation;
     Vector3 position, scale;
     Quaternion rotation;
-    Texture* textures[MAX_TEXTURE_PER_NODE];
     
 public:
     bool hasTransparency, hasNormalMap, hasReflectionMap;
@@ -107,7 +106,6 @@ public:
     void setParent(shared_ptr<Node> parent);
     void setVisible(bool isVisible);
     Vector3 getAbsolutePosition();
-    void setTexture(Texture *texture, int textureIndex);
     void FlagTransformationToChildren(); // NOT FIXED
     void setMaterial(Material* mat, bool isTransparentMaterial = false);
     void setID(int id);
@@ -131,8 +129,6 @@ public:
     Mat4 getModelMatrix();
     Mat4 getAbsoluteTransformation();
 
-    Texture* getTextureByIndex(u16 textureIndex);
-    
     shared_ptr<Node> getParent();
     
     void setUserPointer(void* userPtr);

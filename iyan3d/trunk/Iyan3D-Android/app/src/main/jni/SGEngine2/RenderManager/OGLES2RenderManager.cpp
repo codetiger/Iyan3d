@@ -696,7 +696,6 @@ void OGLES2RenderManager::createVertexBuffer(shared_ptr<Node> node, short meshBu
     GLuint size = (GLuint)nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) * ((meshType == MESH_TYPE_LITE) ? sizeof(vertexData) : sizeof(vertexDataHeavy));
     unsigned int vertexBufLoc = 0;
     
-    //TODO: implement functionality for CPU_SKIN type
     shared_ptr<OGLNodeData> nData = dynamic_pointer_cast<OGLNodeData>(node->nodeData);
     if(meshType == MESH_TYPE_LITE){
         if(nData->vertexBufLocations.size() > meshBufferIndex) {

@@ -668,8 +668,15 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
             currentScene->updater->resetMaterialTypes(false);
     }
     
-    if(nType != NODE_TEXT_SKIN && nType != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED)
-        smgr->RemoveTexture(currentNode->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP));
+    if(nType != NODE_TEXT_SKIN && nType != NODE_ADDITIONAL_LIGHT && instanceSize <= 0 && currentNode->node->type != NODE_TYPE_INSTANCED) {
+        for (int i = 0; i < currentNode->materialProps.size(); i++) {
+            for (int j = NODE_TEXTURE_TYPE_COLORMAP; j < NODE_TEXTURE_TYPE_NORMALMAP; j++) {
+                Texture* nodeTex = currentNode->materialProps[i]->getTextureOfType((node_texture_type)j);
+                if(nodeTex)
+                    smgr->RemoveTexture(nodeTex);
+            }
+        }
+    }
     
     smgr->RemoveNode(currentNode->node);
     delete currentNode;

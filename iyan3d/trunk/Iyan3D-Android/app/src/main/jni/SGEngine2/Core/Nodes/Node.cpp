@@ -22,13 +22,11 @@ Node::Node()
     uvScale = 1.0f;
     instancingRenderIt = 0;
     
-    for(int i = 0; i < MAX_TEXTURE_PER_NODE; i++)
-        textures[i] = NULL;
-
     Parent = shared_ptr<Node>();
     Children = make_shared< vector< shared_ptr<Node> > >();
     isVisible = true;
     hasTransparency = hasNormalMap = hasReflectionMap = false;
+    
     #ifdef ANDROID
     nodeData = make_shared<OGLNodeData>();
     #elif IOS
@@ -102,21 +100,6 @@ bool Node::isMetalSupported()
         return true;
     return false;
     #endif
-}
-
-void Node::setTexture(Texture *texture, int textureIndex)
-{
-    if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
-        return;
-
-    textures[textureIndex] = texture;
-    
-    if(textureIndex == NODE_TEXTURE_TYPE_COLORMAP)
-        hasTransparency = texture->hasTransparency;
-//    else if(textureIndex == NODE_TEXTURE_TYPE_REFLECTIONMAP)
-//        hasReflectionMap = (texture != NULL);
-    else if(textureIndex == NODE_TEXTURE_TYPE_NORMALMAP)
-        hasNormalMap = (texture != NULL);
 }
 
 void Node::setRotation(Quaternion r, bool updateBB)
@@ -235,14 +218,6 @@ void Node::FlagTransformationToChildren()
     updateAbsoluteTransformationOfChildren();
     updateBoundingBox();
     return;
-}
-
-Texture* Node::getTextureByIndex(u16 textureIndex)
-{
-    if(textureIndex > NODE_TEXTURE_TYPE_REFLECTIONMAP || textureIndex < NODE_TEXTURE_TYPE_COLORMAP)
-        return NULL;
-
-    return textures[textureIndex];
 }
 
 void Node::setMaterial(Material *mat, bool isTransparentMaterial)

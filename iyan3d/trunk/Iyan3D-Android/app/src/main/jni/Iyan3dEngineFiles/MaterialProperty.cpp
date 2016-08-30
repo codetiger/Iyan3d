@@ -174,17 +174,20 @@ void MaterialProperty::writeProperties(ofstream *filePointer)
     
     FileHelper::writeFloat(filePointer, (IsPropertyExists(TEXTURE_SCALE)) ? getProperty(TEXTURE_SCALE).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(TEXTURE_SMOOTH) ? getProperty(TEXTURE_SMOOTH).value.x : -1.0);
+    
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
+    
     FileHelper::writeVector4(filePointer, (IsPropertyExists(VERTEX_COLOR)) ? getProperty(VERTEX_COLOR).value : Vector4(-1.0));
     FileHelper::writeVector4(filePointer, (IsPropertyExists(TEXT_COLOR)) ? getProperty(TEXT_COLOR).value : Vector4(-1.0));
     FileHelper::writeVector4(filePointer, Vector4(-1.0));
     FileHelper::writeVector4(filePointer, Vector4(-1.0));
     FileHelper::writeString(filePointer, (IsPropertyExists(TEXTURE)) ? getProperty(TEXTURE).fileName : " ");
     FileHelper::writeString(filePointer, (IsPropertyExists(BUMP_MAP)) ? getProperty(BUMP_MAP).fileName : " ");
+    
     FileHelper::writeString(filePointer, " ");
     FileHelper::writeString(filePointer, " ");
     FileHelper::writeString(filePointer, " ");

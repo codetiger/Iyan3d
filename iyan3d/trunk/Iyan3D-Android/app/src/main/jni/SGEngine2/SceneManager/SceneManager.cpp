@@ -514,9 +514,10 @@ void SceneManager::setPropertyValue(Material *material, string name, float* valu
 {
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS) nod = nodes[nodeIndex];
-    if(nodeIndex == NOT_EXISTS && device == METAL){
+    
+    if(nodeIndex == NOT_EXISTS && device == METAL) {
         renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
-    }else{
+    } else {
         short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex);
         renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue);
     }

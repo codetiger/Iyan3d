@@ -14,7 +14,6 @@
 #include <iostream>
 #include <map>
 #include "md5.h"
-#include "MeshOptimizeHelper.h"
 
 typedef enum {
     MESH_TYPE_HEAVY,

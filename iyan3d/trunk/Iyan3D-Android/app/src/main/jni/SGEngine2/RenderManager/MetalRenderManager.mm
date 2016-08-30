@@ -474,13 +474,6 @@ void MetalRenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 u
 {
     MTLMaterial *MTLMat = ((MTLMaterial*)mat);
     id<MTLTexture> tex = NULL;
-    if(MTLMat->uniforms[uIndex].type == DATA_TEXTURE_2D || MTLMat->uniforms[uIndex].type == DATA_TEXTURE_CUBE) {
-        int textureIndex = ((int*)MTLMat->uniforms[uIndex].values)[0];
-        if((MTLTexture*)node->getTextureByIndex(textureIndex) != NULL)
-            tex = ((MTLTexture*)node->getTextureByIndex(textureIndex))->texture;
-        else
-            tex = ((MTLTexture*)emptyTexture)->texture;
-    }
     
     BindUniform(MTLMat->uniforms[uIndex].type, MTLMat->uniforms[uIndex].buf, MTLMat->uniforms[uIndex].values, MTLMat->uniforms[uIndex].count, MTLMat->uniforms[uIndex].parameterIndex, tex, MTLMat->uniforms[uIndex].name, MTLMat->uniforms[uIndex].nodeIndex, isFragmentData, blurTex);
 }
@@ -489,7 +482,9 @@ void MetalRenderManager::bindDynamicUniform(Material *material, string name, voi
 {
     int dataTypeSize = (type == DATA_INTEGER) ? sizeof(int) : sizeof(float);
     int bufIndex = getAvailableBfferWithSize(count * dataTypeSize);
+    
     id<MTLTexture> texture = (tex) ? ((MTLTexture*)tex)->texture : ((MTLTexture*)emptyTexture)->texture;
+    
     BindUniform(type, MTLBuffersMap[count * dataTypeSize][bufIndex].buf, values, count, paramIndex, texture, name, NOT_EXISTS, isFragmentData, blurTex);
 }
 

@@ -226,7 +226,10 @@ bool SGAutoRigSceneManager::setSceneMode(AUTORIG_SCENE_MODE mode)
                     sgrSGNode->createSGJoints();
                     sgrSGNode->node->setID(SGR_ID);
                     sgrSGNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_SKIN));
-                    sgrSGNode->node->setTexture(nodeToRig->node->getTextureByIndex(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
+                    
+                    Texture* nodeTex = nodeToRig->materialProps[0]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP);
+                    sgrSGNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+
                     for(int i = 0; i < sgrSGNode->materialProps.size(); i ++) {
                         sgrSGNode->materialProps[i]->setTextureForType(nodeToRig->materialProps[i]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP), NODE_TEXTURE_TYPE_COLORMAP);
                         sgrSGNode->materialProps[i]->setTextureForType(rigScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
