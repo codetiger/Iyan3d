@@ -70,10 +70,6 @@ private:
     vector< vector<unsigned short> > meshBufferIndices;
     vector< unsigned short > meshBufferMaterialIndices;
 
-    vector<vertexData> tempVerticesData;
-    vector<vertexDataHeavy> tempVerticesDataHeavy;
-    vector<unsigned int> tempIndicesData;
-
 public:
     MESH_TYPE meshType;
 
@@ -86,24 +82,20 @@ public:
     void copyDataFromMesh(Mesh* otherMesh);
     void copyInstanceToMeshCache(Mesh *originalMesh, int instanceIndex);
     void removeVerticesOfAnInstance(int verticesCount, int indicesCount);
-    void Commit();
 
     void clearVerticesArray();
     void clearIndicesArray();
     
-    vertexDataHeavy* getHeavyVertexByIndex(unsigned int index);
-    vector<vertexData> getLiteVerticesArray(int index);
-    vector<vertexDataHeavy> getHeavyVerticesArray(int index);
+    vector<vertexData> getLiteVerticesArray(int meshBufferIndex);
+    vector<vertexDataHeavy> getHeavyVerticesArray(int meshBufferIndex);
 
     vertexDataHeavy* getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
     vertexData* getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex);
 
-    vector< unsigned short > getIndicesArrayAtMeshBufferIndex(int index);
-    unsigned short* getIndicesArray(int index);
-    unsigned int getIndicesCount(int index);
-    unsigned int getTotalIndicesCount();
-    unsigned int getVerticesCountInMeshBuffer(int index);
-    unsigned int getVerticesCount();
+    vector< unsigned short > getIndicesArrayAtMeshBufferIndex(int meshBufferIndex);
+    unsigned short* getIndicesArray(int meshBufferIndex);
+    unsigned int getIndicesCount(int meshBufferIndex);
+    unsigned int getVerticesCountInMeshBuffer(int meshBufferIndex);
     int getMeshBufferCount();
     int getMeshBufferMaterialIndices(int meshBufferIndex);
 

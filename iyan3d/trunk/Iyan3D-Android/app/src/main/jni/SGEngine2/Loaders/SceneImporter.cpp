@@ -241,7 +241,6 @@ SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
         }
     }
     loadBoneHierarcy((SkinMesh*)mesh, bones);
-    mesh->reverseJointsOrder();
     mesh->finalize();
     
     delete importer;
@@ -356,7 +355,6 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
     
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         loadBoneHierarcy((SkinMesh*)mesh, bones);
-        ((SkinMesh*)mesh)->reverseJointsOrder();
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
         

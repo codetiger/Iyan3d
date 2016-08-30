@@ -525,7 +525,6 @@ void SGSceneUpdater::updateOBJVertexColor()
     AutoRigHelper::updateOBJVertexColors(dynamic_pointer_cast<MeshNode>(updatingScene->rigMan->nodeToRig->node),envelopes,updatingScene->rigMan->rigKeys,updatingScene->rigMan->selectedNodeId, mirrorJointIdToUpdate);
     
     int nodeIndex = smgr->getNodeIndexByID(updatingScene->rigMan->nodeToRig->node->getID());
-    dynamic_pointer_cast<MeshNode>(updatingScene->rigMan->nodeToRig->node)->getMesh()->Commit();
     smgr->updateVertexBuffer(nodeIndex);
 }
 

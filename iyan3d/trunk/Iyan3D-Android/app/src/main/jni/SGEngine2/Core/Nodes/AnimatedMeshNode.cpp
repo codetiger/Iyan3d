@@ -184,7 +184,6 @@ void AnimatedMeshNode::updateMeshCache()
     }
     jointTransforms.clear();
     
-    meshCache->Commit();
     this->shouldUpdateMesh = true;
 }
 

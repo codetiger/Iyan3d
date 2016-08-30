@@ -390,7 +390,6 @@ shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh, string callbac
         node->setMaterial(getMaterialByIndex(matIndex));
     node->mesh = mesh;
     node->callbackFuncName = callbackFuncName;
-  	node->mesh->Commit();
     node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
@@ -401,7 +400,6 @@ shared_ptr<AnimatedMeshNode> SceneManager::createAnimatedNodeFromMesh(SkinMesh* 
     shared_ptr<AnimatedMeshNode> node = make_shared<AnimatedMeshNode>();
     node->setMesh(mesh, maxJoints, rigType);
     node->callbackFuncName = callbackFuncName;
-    node->mesh->Commit();
     node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
@@ -414,8 +412,6 @@ shared_ptr<ParticleManager> SceneManager::createParticlesFromMesh(Mesh* mesh, st
         node->setMaterial(getMaterialByIndex(matIndex));
     node->mesh = mesh;
     node->callbackFuncName = callBackFuncName;
-    if(node->mesh)
-        node->mesh->Commit();
     node->mesh->meshType = meshType;
     AddNode(node,meshType);
     return node;
@@ -433,7 +429,6 @@ shared_ptr<PlaneMeshNode> SceneManager::createPlaneNode(string callBackFuncName,
 {
     shared_ptr<PlaneMeshNode> plane(new PlaneMeshNode(aspectRatio));// = make_shared<PlaneMeshNode>(aspectRatio);
     plane->callbackFuncName = callBackFuncName;
-    plane->mesh->Commit();
     AddNode(plane,MESH_TYPE_LITE);
     return plane;
 }
@@ -442,7 +437,6 @@ shared_ptr<SGCircleNode> SceneManager::createCircleNode(int totVertices, float r
 {
     shared_ptr<SGCircleNode> node = shared_ptr<SGCircleNode>(new SGCircleNode(totVertices, radius, allAxis));
     node->callbackFuncName = callBackFuncName;
-    node->mesh->Commit();
     AddNode(node,MESH_TYPE_LITE);
     return node;
 }
@@ -452,7 +446,6 @@ shared_ptr<LightNode> SceneManager::createLightNode(Mesh *mesh, string callBackF
     shared_ptr<LightNode> light(new LightNode());
     light->callbackFuncName = callBackFuncName;
     light->mesh = mesh;
-    light->mesh->Commit();
     AddNode(light,MESH_TYPE_LITE);
     return light;
 }

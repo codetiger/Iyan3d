@@ -10,9 +10,6 @@
 
 Mesh::Mesh()
 {
-    tempVerticesData.clear();
-    tempVerticesDataHeavy.clear();
-    tempIndicesData.clear();
     meshType = MESH_TYPE_LITE;
     clearVerticesArray();
     clearIndicesArray();
@@ -21,9 +18,6 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
-    tempVerticesData.clear();
-    tempIndicesData.clear();
-    tempVerticesDataHeavy.clear();
     clearIndicesArray();
     clearVerticesArray();
     instanceCount = 0;
@@ -150,7 +144,6 @@ void Mesh::removeVerticesOfAnInstance(int verticesCount, int indicesCount)
     meshBufferIndices[lastMBIndex].erase(beginIndIt, endIndIt);
     
     instanceCount--;
-//    Commit();
 }
 
 Mesh* Mesh::clone()
@@ -158,11 +151,6 @@ Mesh* Mesh::clone()
     Mesh *m = new Mesh();
     m->meshType = meshType;
     
-    m->tempIndicesData = tempIndicesData;
-    m->tempVerticesData = tempVerticesData;
-    m->tempVerticesDataHeavy = tempVerticesDataHeavy;
-    
-    m->Commit();
     return m;
 }
 
@@ -190,13 +178,7 @@ Mesh* Mesh::convert2Lite()
         m->addMeshBuffer(mbvd, mbi, materialIndex);
     }
     
-    m->Commit();
     return m;
-}
-
-void Mesh::Commit()
-{
-    BBox.calculateEdges();
 }
 
 void Mesh::clearVerticesArray()
@@ -222,19 +204,14 @@ void Mesh::clearIndicesArray()
     meshBufferIndices.clear();
 }
 
-vertexDataHeavy* Mesh::getHeavyVertexByIndex(unsigned int index)
+vector<vertexData> Mesh::getLiteVerticesArray(int meshBufferIndex)
 {
-    return &tempVerticesDataHeavy[index];
+    return meshBufferVerticesData[meshBufferIndex];
 }
 
-vector<vertexData> Mesh::getLiteVerticesArray(int index)
+vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int meshBufferIndex)
 {
-    return meshBufferVerticesData[index];
-}
-
-vector<vertexDataHeavy> Mesh::getHeavyVerticesArray(int index)
-{
-    return meshBufferVerticesDataHeavy[index];
+    return meshBufferVerticesDataHeavy[meshBufferIndex];
 }
 
 vertexDataHeavy* Mesh::getHeavyVerticesForMeshBuffer(int meshBufferIndex, int vertexIndex)
@@ -247,22 +224,14 @@ vertexData* Mesh::getLiteVerticesForMeshBuffer(int meshBufferIndex, int vertexIn
     return &(meshBufferVerticesData[meshBufferIndex])[vertexIndex];
 }
 
-unsigned int Mesh::getVerticesCountInMeshBuffer(int index)
+unsigned int Mesh::getVerticesCountInMeshBuffer(int meshBufferIndex)
 {
     if(meshType == MESH_TYPE_HEAVY && meshBufferVerticesDataHeavy.size())
-        return (unsigned int)meshBufferVerticesDataHeavy[index].size();
+        return (unsigned int)meshBufferVerticesDataHeavy[meshBufferIndex].size();
     else if(meshBufferVerticesData.size())
-        return (unsigned int)meshBufferVerticesData[index].size();
+        return (unsigned int)meshBufferVerticesData[meshBufferIndex].size();
     
     return 0;
-}
-
-unsigned int Mesh::getVerticesCount()
-{
-    if(meshType == MESH_TYPE_HEAVY)
-        return (unsigned int)tempVerticesDataHeavy.size();
-    else
-        return (unsigned int)tempVerticesData.size();
 }
 
 BoundingBox* Mesh::getBoundingBox()
@@ -270,24 +239,19 @@ BoundingBox* Mesh::getBoundingBox()
     return &BBox;
 }
 
-vector< unsigned short > Mesh::getIndicesArrayAtMeshBufferIndex(int index)
+vector< unsigned short > Mesh::getIndicesArrayAtMeshBufferIndex(int meshBufferIndex)
 {
-    return meshBufferIndices[index];
+    return meshBufferIndices[meshBufferIndex];
 }
 
-unsigned short* Mesh::getIndicesArray(int index)
+unsigned short* Mesh::getIndicesArray(int meshBufferIndex)
 {
-    return &(meshBufferIndices[index][0]);
+    return &(meshBufferIndices[meshBufferIndex][0]);
 }
 
-unsigned int Mesh::getIndicesCount(int index)
+unsigned int Mesh::getIndicesCount(int meshBufferIndex)
 {
-    return (unsigned int )(meshBufferIndices[index]).size();
-}
-
-unsigned int Mesh::getTotalIndicesCount()
-{
-    return (int)tempIndicesData.size();
+    return (unsigned int )(meshBufferIndices[meshBufferIndex]).size();
 }
 
 int Mesh::getMeshBufferCount()

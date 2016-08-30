@@ -649,7 +649,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
             origMesh = dynamic_pointer_cast<MeshNode>(currentNode->node)->mesh;
         }
         
-        meshCahce->removeVerticesOfAnInstance(origMesh->getVerticesCount(), origMesh->getTotalIndicesCount());
+        meshCahce->removeVerticesOfAnInstance(origMesh->getVerticesCountInMeshBuffer(0), origMesh->getIndicesCount(0));
     }
     
     if(instanceSize > 0 && !deAllocScene) {

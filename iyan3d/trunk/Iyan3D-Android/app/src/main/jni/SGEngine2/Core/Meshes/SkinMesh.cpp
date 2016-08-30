@@ -90,24 +90,39 @@ Joint* SkinMesh::addJoint(Joint *parent)
 
 void SkinMesh::finalize()
 {
-    for(int CheckingIdx = 0; CheckingIdx < joints->size(); CheckingIdx++) {
-        if(!(*joints)[CheckingIdx]->Parent)
-            RootJoints->push_back((*joints)[CheckingIdx]);
+    vector< Joint* > *reOrderedBones = new vector< Joint* >();
+    
+    for(int i = 0; i < joints->size(); i++) {
+        if(!(*joints)[i]->Parent) {
+            RootJoints->push_back((*joints)[i]);
+            reOrderedBones->push_back((*joints)[i]);
+            (*joints)[i]->Index = reOrderedBones->size() - 1;
+        }
     }
+    
+    for(int i = 0; i < RootJoints->size(); i++) {
+        addChildrenJoints((*RootJoints)[i], reOrderedBones);
+    }
+    
+    joints->clear();
+    delete joints;
+    joints = reOrderedBones;
+    
     buildAllGlobalAnimatedMatrices(NULL,NULL);
     
     for(int i = 0; i < joints->size(); i++){
         Joint *joint = (*joints)[i];
         joint->GlobalInversedMatrix = joint->GlobalAnimatedMatrix;
-        joint->GlobalInversedMatrix.invert(); // slow
+        joint->GlobalInversedMatrix.invert();
     }
 }
 
-void SkinMesh::reverseJointsOrder()
+void SkinMesh::addChildrenJoints(Joint* parent, vector< Joint* > *reOrderedBones)
 {
-    reverse(joints->begin(), joints->end());
-    for(int i = 0; i < joints->size(); i++) {
-        (*joints)[i]->Index = i;
+    for(int i = 0; i < parent->childJoints->size(); i++) {
+        reOrderedBones->push_back((*parent->childJoints)[i]);
+        (*parent->childJoints)[i]->Index = reOrderedBones->size() - 1;
+        addChildrenJoints((*parent->childJoints)[i], reOrderedBones);
     }
 }
 

@@ -29,7 +29,7 @@ public:
     void recoverJointsFromMesh(vector< shared_ptr<JointNode> > jointNodes);
     void createJointNodes(vector< shared_ptr<JointNode> > jointNodes);
     void finalize();
-    void reverseJointsOrder();
+    void addChildrenJoints(Joint* parent, vector< Joint* > *reOrderedBones);
 };
 
 #endif /* defined(__SGEngine2__SkinMesh__) */

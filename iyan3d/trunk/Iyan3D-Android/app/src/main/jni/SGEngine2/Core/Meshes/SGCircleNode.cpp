@@ -50,7 +50,6 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
         mbi.push_back(prevVertexCount + i);
     }
     m->addMeshBuffer(mbvd, mbi, 0);
-    m->Commit();
 }
 
 SGCircleNode::~SGCircleNode()
