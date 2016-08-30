@@ -359,6 +359,10 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
             getMeshFrom(mbvd, mbi, aiM);
             mesh->addMeshBuffer(mbvd, mbi, materialIndex);
         }
+
+        Property &p1 = sceneNode->getProperty(VERTEX_COLOR, materialIndex);
+        if(aiM->mColors[0])
+            p1.value = Vector4(-1.0);
     }
     
     shared_ptr<Node> sgn;
