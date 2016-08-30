@@ -443,26 +443,35 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
 
 void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)
 {
-    for (int i = 0; i < aiM->mNumVertices; i++) {
+    for (int j = 0; j < aiM->mNumVertices; j++) {
         vertexDataHeavy vd;
-        vd.vertPosition = Vector3(aiM->mVertices[i].x, aiM->mVertices[i].y, aiM->mVertices[i].z);
-        vd.vertNormal = Vector3(aiM->mNormals[i].x, aiM->mNormals[i].y, aiM->mNormals[i].z);
+        vd.vertPosition = Vector3(aiM->mVertices[j].x, aiM->mVertices[j].y, aiM->mVertices[j].z);
+        
+        if(aiM->mNormals)
+            vd.vertNormal = Vector3(aiM->mNormals[j].x, aiM->mNormals[j].y, aiM->mNormals[j].z);
+        else
+            vd.vertNormal = Vector3(0.0);
+        
+        if(aiM->mColors[0])
+            vd.vertColor = Vector4(aiM->mColors[0][j].r, aiM->mColors[0][j].g, aiM->mColors[0][j].b, 0.0);
+        else
+            vd.vertColor = Vector4(0.0);
         
         if(aiM->mTextureCoords[0])
-            vd.texCoord1 = Vector2(aiM->mTextureCoords[0][i].x, 1 - aiM->mTextureCoords[0][i].y);
+            vd.texCoord1 = Vector2(aiM->mTextureCoords[0][j].x, aiM->mTextureCoords[0][j].y);
         else
             vd.texCoord1 = Vector2(0.0, 0.0);
-        
+
         vd.optionalData1 = vd.optionalData2 = vd.optionalData3 = vd.optionalData4 = Vector4(0.0);
-        
+
         mbvd.push_back(vd);
     }
     
-    for (int i = 0; i < aiM->mNumFaces; i++) {
-        aiFace face = aiM->mFaces[i];
+    for (int j = 0; j < aiM->mNumFaces; j++) {
+        aiFace face = aiM->mFaces[j];
         
-        for (int j = 0; j < face.mNumIndices; j++) {
-            mbi.push_back(face.mIndices[j]);
+        for (int k = 0; k < face.mNumIndices; k++) {
+            mbi.push_back(face.mIndices[k]);
         }
     }
 }

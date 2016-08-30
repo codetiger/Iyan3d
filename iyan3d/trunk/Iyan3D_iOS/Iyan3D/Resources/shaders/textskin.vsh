@@ -6,6 +6,7 @@ attribute vec3 vertNormal;
 attribute vec2 texCoord1;
 attribute vec3 vertTangent;
 attribute vec3 vertBitangent;
+attribute vec4 vertColor;
 attribute vec4 optionalData1;
 attribute vec4 optionalData2;
 attribute vec4 optionalData3;
@@ -27,7 +28,7 @@ varying mat3 vTBNMatrix;
 void main()
 {
     vHasMeshColor = hasMeshColor[0];
-    vMeshColor = (meshColor[0].x == -1.0) ? optionalData4.xyz : meshColor[0];
+    vMeshColor = (meshColor[0].x == -1.0) ? vertColor.xyz : meshColor[0];
     vTexCoord = texCoord1 * uvScaleValue[0];
     vReflectionValue = reflectionValue[0];
     vHasLighting = hasLighting[0];

@@ -33,7 +33,7 @@
 using namespace std;
 
 #define MAX_VERTEX_DATA 6
-#define MAX_VERTEX_DATA_SKINNED 9
+#define MAX_VERTEX_DATA_SKINNED 10
 
 #define MAX_VERTICES_COUNT 65535
 
@@ -130,9 +130,9 @@ static const DATA_TYPE attributesType[MAX_VERTEX_DATA] = { DATA_FLOAT, DATA_FLOA
 static const u_int32_t attributesTotalValues[MAX_VERTEX_DATA] = { 3, 3, 2, 3, 3, 4 };
 
 static const int totalAttributesSkinned = MAX_VERTEX_DATA_SKINNED;
-static const string attributesNameSkinned[MAX_VERTEX_DATA_SKINNED] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "optionalData1", "optionalData2", "optionalData3", "optionalData4" };
-static const DATA_TYPE attributesTypeSkinned[MAX_VERTEX_DATA_SKINNED] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
-static const u_int32_t attributesTotalValuesSkinned[MAX_VERTEX_DATA_SKINNED] = { 3, 3, 2, 3, 3, 4, 4, 4, 4 };
+static const string attributesNameSkinned[MAX_VERTEX_DATA_SKINNED] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "vertColor", "optionalData1", "optionalData2", "optionalData3", "optionalData4" };
+static const DATA_TYPE attributesTypeSkinned[MAX_VERTEX_DATA_SKINNED] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
+static const u_int32_t attributesTotalValuesSkinned[MAX_VERTEX_DATA_SKINNED] = { 3, 3, 2, 3, 3, 4, 4, 4, 4, 4 };
 
 class common {
 public:

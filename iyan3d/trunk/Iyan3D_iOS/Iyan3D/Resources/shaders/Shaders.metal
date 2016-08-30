@@ -29,6 +29,7 @@ typedef struct
     packed_float2 texCoord1;
     packed_float3 tangent;
     packed_float3 bitagent;
+    packed_float4 vertColor;
     packed_float4 optionalData1;
     packed_float4 optionalData2;
     packed_float4 optionalData3;
@@ -106,6 +107,7 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     ColorInOut out;
     float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
     float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
+    float4 in_vertColor = float4(vertex_array[vid].vertColor);
     float4 optionalData1 = vertex_array[vid].optionalData1;
     float4 optionalData2 = vertex_array[vid].optionalData2;
     float4 optionalData3 = vertex_array[vid].optionalData3;
@@ -114,7 +116,7 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     float3 bitangent = vertex_array[vid].bitagent;
     
     out.hasMeshColor = hasMeshColor[0];
-    out.meshColor = (meshColor[0].data[0] == -1.0) ? optionalData4.xyz : float3(meshColor[0].data);
+    out.meshColor = (meshColor[0].data[0] == -1.0) ? in_vertColor.xyz : float3(meshColor[0].data);
     out.reflection = reflectionValue[0];
     out.transparency = transparencyValue[0];
     out.hasLighting = hasLighting[0];
@@ -208,14 +210,14 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     ColorInOut out;
     float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
     float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
+    float4 in_vertColor = float4(vertex_array[vid].vertColor);
     float4 optionalData1 = vertex_array[vid].optionalData1;
     float4 optionalData2 = vertex_array[vid].optionalData2;
-    float4 optionalData4 = vertex_array[vid].optionalData4;
     float3 tangent = vertex_array[vid].tangent;
     float3 bitangent = vertex_array[vid].bitagent;
     
     out.hasMeshColor = hasMeshColor[0];
-    out.meshColor = (meshColor[0].data[0] == -1.0) ? optionalData4.xyz : float3(meshColor[0].data);
+    out.meshColor = (meshColor[0].data[0] == -1.0) ? in_vertColor.xyz : float3(meshColor[0].data);
     out.reflection = reflectionValue[0];
     out.transparency = transparencyValue[0];
     out.hasLighting = hasLighting[0];

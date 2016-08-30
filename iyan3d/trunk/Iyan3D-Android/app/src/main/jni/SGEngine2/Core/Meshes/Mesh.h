@@ -40,6 +40,7 @@ struct vertexDataHeavy {
     Vector2 texCoord1;
     Vector3 vertTangent;
     Vector3 vertBitangent;
+    Vector4 vertColor;
     Vector4 optionalData1;
     Vector4 optionalData2;
     Vector4 optionalData3;
