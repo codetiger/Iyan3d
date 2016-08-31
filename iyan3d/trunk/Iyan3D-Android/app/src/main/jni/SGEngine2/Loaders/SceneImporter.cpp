@@ -426,13 +426,13 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
     sceneNode->actionId = ++sgScene->actionObjectsSize;
     sceneNode->node->setID(sgScene->assetIDCounter++);
     
+    sgScene->nodes.push_back(sceneNode);
+
     sgScene->selectMan->removeChildren(sgScene->getParentNode());
     sgScene->updater->setDataForFrame(sgScene->currentFrame);
     sgScene->selectMan->updateParentPosition();
     sgScene->updater->resetMaterialTypes(false);
-    
-    sgScene->nodes.push_back(sceneNode);
-    
+        
     bones->clear();
     delete bones;
 }

@@ -382,8 +382,6 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
     if(!updatingScene || !smgr)
         return;
 
-    int count = (int)ShaderManager::lightPosition.size();
-    
     commonType = SHADER_MESH;
     commonSkinType = SHADER_SKIN;
     vertexColorTextType = SHADER_TEXT_SKIN;

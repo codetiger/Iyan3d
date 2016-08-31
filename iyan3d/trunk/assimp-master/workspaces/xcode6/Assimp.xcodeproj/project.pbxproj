@@ -1126,9 +1126,9 @@
 		137567A2412C45B8A269E344 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				MACH_O_TYPE = staticlib;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SDKROOT = iphoneos;
 			};
 			name = RelWithDebInfo;
 		};
@@ -1152,8 +1152,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
 					assimp_EXPORTS,
 					ASSIMP_BUILD_BOOST_WORKAROUND,
 					ASSIMP_BUILD_NO_OWN_ZLIB,
@@ -1206,7 +1206,6 @@
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
 					"$(inherited)",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1214,11 +1213,8 @@
 					"$(SRCROOT)/code/freeType/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "code code/BoostWorkaround contrib/openddlparser/include contrib/rapidjson/include include $(inherited)";
 			};
@@ -1244,8 +1240,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
 					assimp_EXPORTS,
 					ASSIMP_BUILD_BOOST_WORKAROUND,
 					ASSIMP_BUILD_NO_OWN_ZLIB,
@@ -1298,7 +1294,6 @@
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
 					"$(inherited)",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1306,11 +1301,8 @@
 					"$(SRCROOT)/code/freeType/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "code code/BoostWorkaround contrib/openddlparser/include contrib/rapidjson/include include $(inherited)";
 			};
@@ -1336,8 +1328,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
 					assimp_EXPORTS,
 					ASSIMP_BUILD_BOOST_WORKAROUND,
 					ASSIMP_BUILD_NO_OWN_ZLIB,
@@ -1390,7 +1382,6 @@
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
 					"$(inherited)",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1398,11 +1389,8 @@
 					"$(SRCROOT)/code/freeType/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "code code/BoostWorkaround contrib/openddlparser/include contrib/rapidjson/include include $(inherited)";
 			};
@@ -1428,8 +1416,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
 					assimp_EXPORTS,
 					ASSIMP_BUILD_BOOST_WORKAROUND,
 					ASSIMP_BUILD_NO_OWN_ZLIB,
@@ -1482,7 +1470,6 @@
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
 					"$(inherited)",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1490,11 +1477,8 @@
 					"$(SRCROOT)/code/freeType/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "code code/BoostWorkaround contrib/openddlparser/include contrib/rapidjson/include include $(inherited)";
 			};
@@ -1503,29 +1487,27 @@
 		9604718722A94CBB9F87A9D8 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				MACH_O_TYPE = staticlib;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SDKROOT = iphoneos;
 			};
 			name = MinSizeRel;
 		};
 		C58F2FA1D18E452FBFD3B286 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				MACH_O_TYPE = staticlib;
-				ONLY_ACTIVE_ARCH = YES;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
 		DB0088F8DB7C490CBA3CCB90 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				MACH_O_TYPE = staticlib;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
