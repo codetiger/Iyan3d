@@ -108,7 +108,7 @@ void SkinMesh::finalize()
     delete joints;
     joints = reOrderedBones;
     
-    buildAllGlobalAnimatedMatrices(NULL,NULL);
+    buildAllGlobalAnimatedMatrices(NULL, NULL);
     
     for(int i = 0; i < joints->size(); i++){
         Joint *joint = (*joints)[i];

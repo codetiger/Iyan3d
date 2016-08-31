@@ -98,9 +98,7 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
         return;
     }
     
-    std::string ext = "text";
-    
-    loadNodes2Scene(sgScene, fontPath, isTempNode, ext, true);
+    loadNodes2Scene(sgScene, fontPath, isTempNode, "text", true);
     delete importer;
     scene = NULL;
     
@@ -117,6 +115,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
     if(ext == "sgm" || ext == "sgr" || ext == "obj" || ext == "fbx" || ext == "dae" || ext == "3ds") {
         Assimp::Importer *importer = new Assimp::Importer();
         importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
+        importer->SetPropertyInteger(AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8);
         
         unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder;
         if(ext != "sgr")
@@ -292,10 +291,9 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
 
         Property &p1 = sceneNode->getProperty(VERTEX_COLOR, i);
         aiColor4D color;
-        if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS) {
+        if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
             p1.value = Vector4(color.r, color.g, color.b, color.a);
-            printf("VertexColor: %f, %f, %f\n", color.r, color.g, color.b);
-        } else if(hasMeshColor)
+        else if(hasMeshColor)
             p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
         else
             p1.value = Vector4(0.5, 0.5, 0.5, 1.0);
@@ -305,11 +303,9 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
             material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
             string texturePath = getFileName(string(path.data));
-            printf("Texture: %s ", texturePath.c_str());
 
             Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
             if(texture) {
-                printf("Loaded\n");
                 Property &p1 = sceneNode->getProperty(TEXTURE, i);
                 p1.fileName = texturePath;
                 
@@ -317,8 +313,6 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
                 p2.value.x = 0.0;
                 
                 materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
-            } else {
-                printf("Load Failed\n");
             }
         }
         

@@ -32,7 +32,7 @@ void main()
     vTransparencyValue = transparencyValue[0];
     vHasLighting = hasLighting[0];
 
-    mat4 finalMatrix;
+    mat4 finalMatrix = mat4(1.0);
 
     int jointId = int(optionalData1.x);
     if(jointId > 0)

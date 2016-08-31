@@ -74,6 +74,16 @@ typedef struct {
     float3 lightPosition;
 } LightPosData;
 
+float4x4 Identity()
+{
+    simd::float4 X = { 1, 0, 0, 0 };
+    simd::float4 Y = { 0, 1, 0, 0 };
+    simd::float4 Z = { 0, 0, 1, 0 };
+    simd::float4 W = { 0, 0, 0, 1 };
+    simd::float4x4 mat = { X, Y, Z, W };
+    return mat;
+}
+
 // CommonSkinVertex
 #define SHADER_COMMON_SKIN_mvp 12
 #define SHADER_COMMON_SKIN_jointData 13
@@ -121,7 +131,7 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     out.transparency = transparencyValue[0];
     out.hasLighting = hasLighting[0];
 
-    float4x4 finalMatrix;
+    float4x4 finalMatrix = Identity();
     
     int jointId = int(optionalData1.x);
     if(jointId > 0)
@@ -222,7 +232,7 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     out.transparency = transparencyValue[0];
     out.hasLighting = hasLighting[0];
     
-    float4x4 finalMatrix;
+    float4x4 finalMatrix = Identity();
 
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
