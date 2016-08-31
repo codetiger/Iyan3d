@@ -114,6 +114,9 @@ public:
     void createVertexBuffer(shared_ptr<Node> node,short meshBufferIndex = 0,MESH_TYPE meshType = MESH_TYPE_LITE);
     Material* LoadMetalShaders(string vertexFuncName,string fragFuncName,bool isDepthPass = false);
     void writeImageToFile(Texture *texture , char* filePath,IMAGE_FLIP flipType = NO_FLIP);
+
+    void resetTextureCache();
+
 #endif
 };
 

@@ -355,6 +355,7 @@ Texture* SceneManager::loadTexture(string textureName, string filePath, TEXTURE_
 #endif
     
     if(newTex->loadTexture(textureName, filePath, format, type, blurTexture, blurRadius)) {
+        renderMan->resetTextureCache();
         textures.push_back(newTex);
         return newTex;
     } else
@@ -380,6 +381,7 @@ Texture* SceneManager::loadTextureFromVideo(string videoFileName, TEXTURE_DATA_F
     newTex = new DummyTexture();
 #endif
     newTex->loadTextureFromVideo(videoFileName, format, type);
+    renderMan->resetTextureCache();
     textures.push_back(newTex);
     
     return newTex;

@@ -104,6 +104,8 @@ public:
     void setDepthMask(bool enable);
     void setDepthFunction(GLenum func);
     void blendFunction(GLenum func);
+    
+    void resetTextureCache();
 };
 
 #endif /* defined(__SGEngine2__OGLES2RenderManager__) */

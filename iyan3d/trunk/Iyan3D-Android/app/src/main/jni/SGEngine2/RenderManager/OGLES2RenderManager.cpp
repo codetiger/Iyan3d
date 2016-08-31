@@ -50,10 +50,7 @@ OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,fl
         glDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC)eglGetProcAddress("glDiscardFramebufferEXT");
     #endif
 
-    for (int i = 0; i < 32; i++) {
-        currentTextures[i] = -1;
-    }
-    currentTextureIndex = -1;
+    resetTextureCache();
 }
 
 OGLES2RenderManager::~OGLES2RenderManager()
@@ -332,7 +329,6 @@ bool OGLES2RenderManager::bindTexture(int index, uint32_t texture)
         return true;
     }
     return false;
-    
 }
 
 void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
@@ -801,5 +797,11 @@ void OGLES2RenderManager::setDepthFunction(GLenum func)
     }
 }
 
+void OGLES2RenderManager::resetTextureCache() {
+    for (int i = 0; i < 32; i++) {
+        currentTextures[i] = -1;
+    }
+    currentTextureIndex = -1;
+}
 
 

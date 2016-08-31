@@ -762,4 +762,9 @@ int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode)
     }
 }
 
+void MetalRenderManager::resetTextureCache() {
+    
+}
+
+
 #endif

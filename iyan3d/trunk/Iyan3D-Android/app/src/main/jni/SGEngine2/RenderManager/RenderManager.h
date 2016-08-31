@@ -76,5 +76,6 @@ public:
     virtual void setUpDepthState(METAL_DEPTH_FUNCTION func, bool writeDepth = true, bool clearDepthBuffer = false) = 0;
     virtual void createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE , bool updateBothBuffers = true) = 0;
     virtual void createVertexBuffer(shared_ptr<Node> node,short meshBufferIndex = 0,MESH_TYPE meshType = MESH_TYPE_LITE) = 0;
+    virtual void resetTextureCache() = 0;
 };
 #endif /* defined(__SGEngine2__RenderManager__) */

@@ -5401,9 +5401,9 @@
 				256F6D561BF624FB00154622 /* MTLNodeDataWrapper.h */,
 				256F6D571BF624FB00154622 /* OGLES2RenderManager.cpp */,
 				256F6D581BF624FB00154622 /* OGLES2RenderManager.h */,
+				256F6D5D1BF624FB00154622 /* RenderManager.h */,
 				256F6D5B1BF624FB00154622 /* RenderingView.h */,
 				256F6D5C1BF624FB00154622 /* RenderingView.m */,
-				256F6D5D1BF624FB00154622 /* RenderManager.h */,
 			);
 			path = RenderManager;
 			sourceTree = "<group>";
@@ -10267,7 +10267,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../assimp-master/include/",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				MTL_OPTIMIZATION_LEVEL = s;
@@ -10307,7 +10307,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../assimp-master/include/",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				MTL_OPTIMIZATION_LEVEL = s;
