@@ -1689,9 +1689,6 @@ BOOL missingAlertShown;
 //        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
 //        _meshProp.delegate = self;
         
-        if(editorScene->nodes[editorScene->selectedNodeId]->IsPropertyExists(PHYSICS_KIND))
-            printf("\n Physics Type %f ", editorScene->nodes[editorScene->selectedNodeId]->getProperty(PHYSICS_KIND).value.x);
-        
         CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties()];
         commonProps.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];

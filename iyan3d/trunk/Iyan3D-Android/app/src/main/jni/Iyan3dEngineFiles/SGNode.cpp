@@ -830,8 +830,6 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
     setPropertiesOfNode();
     (IsPropertyExists(HAS_PHYSICS)) ? getProperty(HAS_PHYSICS).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
     (IsPropertyExists(PHYSICS_KIND)) ? getProperty(PHYSICS_KIND).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    if(IsPropertyExists(PHYSICS_KIND))
-        printf("\n Physics Type %f ", getProperty(PHYSICS_KIND).value.x);
     (IsPropertyExists(WEIGHT)) ? getProperty(WEIGHT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
     (IsPropertyExists(FORCE_MAGNITUDE)) ? getProperty(FORCE_MAGNITUDE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
     (IsPropertyExists(IS_SOFT)) ? getProperty(IS_SOFT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
@@ -1047,8 +1045,6 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     FileHelper::writeInt(filePointer,(int)type);
     FileHelper::writeFloat(filePointer, IsPropertyExists(HAS_PHYSICS) ? getProperty(HAS_PHYSICS).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(PHYSICS_KIND) ? getProperty(PHYSICS_KIND).value.x : -1.0);
-    if(IsPropertyExists(PHYSICS_KIND))
-        printf("\n Physics Type %f ", getProperty(PHYSICS_KIND).value.x);
     FileHelper::writeFloat(filePointer, IsPropertyExists(WEIGHT) ? getProperty(WEIGHT).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(FORCE_MAGNITUDE) ? getProperty(FORCE_MAGNITUDE).value.x : -1.0);
     FileHelper::writeFloat(filePointer, IsPropertyExists(IS_SOFT) ? getProperty(IS_SOFT).value.x : -1.0);

@@ -36,14 +36,18 @@ string getFileName(const string& s)
 {
     
     char sep = '/';
-    
     size_t i = s.rfind(sep, s.length());
     if (i != string::npos) {
         return(s.substr(i+1, s.length() - i));
-    } else
-        return s;
+    }
+
+    sep = '\\';
+    i = s.rfind(sep, s.length());
+    if (i != string::npos) {
+        return(s.substr(i+1, s.length() - i));
+    }
     
-    return("");
+    return s;
 }
 
 Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
@@ -117,9 +121,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
         importer->SetPropertyInteger(AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8);
         
-        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder;
-        if(ext != "sgr")
-            pFlags = pFlags | aiProcess_FlipUVs;
+        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs;
         
         scene = importer->ReadFile(filePath, pFlags);
         
@@ -188,7 +190,7 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
 Mesh* SceneImporter::loadMeshFromFile(string filePath)
 {
     Assimp::Importer *importer = new Assimp::Importer();
-    scene = importer->ReadFile(filePath, aiProcess_Triangulate);
+    scene = importer->ReadFile(filePath, aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes);
     
     if(!scene) {
         printf("Error in Loading: %s\n", importer->GetErrorString());
@@ -313,6 +315,8 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
                 p2.value.x = 0.0;
                 
                 materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+            } else {
+                printf("Loading Texture Failed: %s\n", texturePath.c_str());
             }
         }
         
@@ -399,9 +403,15 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
     Quaternion r1 = Quaternion();
     Quaternion r2 = Quaternion();
     
-    if(ext == "dae" || ext == "fbx") {
+    if(ext == "dae") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
         r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "fbx") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        if(hasBones)
+            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+        else
+            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
     } else if(ext == "obj") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
         r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));

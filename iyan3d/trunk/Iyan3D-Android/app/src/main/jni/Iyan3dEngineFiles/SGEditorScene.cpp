@@ -694,9 +694,9 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
             texType = NODE_TEXTURE_TYPE_REFLECTIONMAP;
         
         
-        bool blurTex = (nodes[selectedNodeId]->smoothTexture);
+        bool smoothTexture = (nodes[selectedNodeId]->smoothTexture);
         printf(" \n Texture file path %s ", texturePath.c_str());
-        Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, blurTex);
+        Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         nodes[selectedNodeId]->materialProps[materialIndex]->setTextureForType(nodeTex, texType); //TODO for selected mesh buffer index
         
         if(!isTemp || isUndoRedo){

@@ -442,8 +442,6 @@ void MetalRenderManager::BindUniform(DATA_TYPE type, id<MTLBuffer> buf, void* va
         case DATA_FLOAT_MAT2:
         case DATA_FLOAT_MAT3:
         case DATA_FLOAT_MAT4:{
-            uint8_t *bufferPointer = (uint8_t *)[buf contents];
-            memcpy(bufferPointer,values,count * sizeof(float));
             if(isFragmentData)
                 [this->RenderCMDBuffer setFragmentBuffer:buf offset:0 atIndex:parameterIndex];
             else
@@ -451,8 +449,6 @@ void MetalRenderManager::BindUniform(DATA_TYPE type, id<MTLBuffer> buf, void* va
             break;
         }
         case DATA_INTEGER:{
-            uint8_t *bufferPointer = (uint8_t *)[buf contents];
-            memcpy(bufferPointer,values,count * sizeof(int));
             if(isFragmentData)
                 [this->RenderCMDBuffer setFragmentBuffer:buf offset:0 atIndex:parameterIndex];
             else

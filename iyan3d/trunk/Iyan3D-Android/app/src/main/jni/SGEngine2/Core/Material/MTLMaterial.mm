@@ -41,14 +41,12 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) { //ToDo search optimisation
         if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].materialIndex == materialIndex) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count) {
-                uniforms[i].values = new float[count];
-                int bufSize = count * sizeof(float);
-                uniforms[i].buf = [MetalHandler::getMTLDevice() newBufferWithLength:bufSize options:0];
+            if(uniforms[i].buf == 0 || uniforms[i].count != count) {
+                uniforms[i].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
             }
 
-            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
-                memcpy(uniforms[i].values, values, count * sizeof(float));
+            if(uniforms[i].count != count || memcmp((uint8_t *)[uniforms[i].buf contents], values, count * sizeof(float)) != 0) {
+                memcpy((uint8_t *)[uniforms[i].buf contents], values, count * sizeof(float));
                 uniforms[i].count = count;
             }
 
@@ -60,12 +58,9 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     if(uIndex == NOT_EXISTS) {
         AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex, materialIndex);
         uIndex = uniforms.size()-1;
-        uniforms[uIndex].values = new float[count];
-        memcpy(uniforms[uIndex].values, values, count * sizeof(float));
         uniforms[uIndex].count = count;
-
-        int bufSize = count * sizeof(float);
-        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:bufSize options:0];
+        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
+        memcpy((uint8_t *)[uniforms[uIndex].buf contents], values, count * sizeof(float));
     }
     
     if(uIndex == NOT_EXISTS)
@@ -80,14 +75,12 @@ short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     short uIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
         if(uniforms[i].name == name && uniforms[i].nodeIndex == nodeIndex && uniforms[i].materialIndex == materialIndex) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count) {
-                uniforms[i].values = new int[count];
-                int bufSize = count * sizeof(float);
-                uniforms[i].buf = [MetalHandler::getMTLDevice() newBufferWithLength:bufSize options:0];
+            if(uniforms[i].buf == 0 || uniforms[i].count != count) {
+                uniforms[i].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
             }
             
-            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
-                memcpy(uniforms[i].values, values, count * sizeof(int));
+            if(uniforms[i].count != count || memcmp((uint8_t *)[uniforms[i].buf contents], values, count * sizeof(int)) != 0) {
+                memcpy((uint8_t *)[uniforms[i].buf contents], values, count * sizeof(int));
                 uniforms[i].count = count;
             }
             
@@ -99,12 +92,9 @@ short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     if(uIndex == NOT_EXISTS) {
         AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, paramIndex, count, 0, nodeIndex, materialIndex);
         uIndex = uniforms.size()-1;
-        uniforms[uIndex].values = new int[count];
-        memcpy(uniforms[uIndex].values, values, count * sizeof(int));
         uniforms[uIndex].count = count;
-        
-        int bufSize = count * sizeof(int);
-        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:bufSize options:0];
+        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
+        memcpy((uint8_t *)[uniforms[uIndex].buf contents], values, count * sizeof(int));
     }
     
     if(uIndex == NOT_EXISTS)
