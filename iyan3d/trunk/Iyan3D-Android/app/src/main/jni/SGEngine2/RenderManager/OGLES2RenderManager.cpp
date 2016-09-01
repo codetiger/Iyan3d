@@ -609,7 +609,7 @@ Vector4 OGLES2RenderManager::getPixelColor(Vector2 touchPosition, Texture *textu
     currentTextureIndex = -1;
     GLubyte pixelColor[4];
     glReadPixels((int)touchPosition.x, (int)(mid - difFromMid), 1, 1, GL_RGBA,GL_UNSIGNED_BYTE, &pixelColor[0]);
-    return Vector4((int)pixelColor[0], (int)pixelColor[1], (int)pixelColor[2], (int)pixelColor[3]);
+    return Vector4((float)pixelColor[0], (float)pixelColor[1], (float)pixelColor[2], (float)pixelColor[3]);
 }
 
 void OGLES2RenderManager::setFrameBufferObjects(u_int32_t framebuff, u_int32_t colorbuff, u_int32_t depthduff)

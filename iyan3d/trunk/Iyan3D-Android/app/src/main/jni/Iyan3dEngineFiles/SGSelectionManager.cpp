@@ -189,6 +189,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
                 unselectObject(selectionScene->selectedNodeId);
                 selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
                 highlightSelectedNode();
+                return true;
             }
         } else if (nodeId != 65535 && selectionScene->selectedNodeId == nodeId) {
             
@@ -197,7 +198,7 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
             if(selectionScene->selectedNodeIds.size() > 0 && isMultipleSelectionEnabled)
                 return multipleSelections(nodeId);
             else if (jointId != 255 && jointId >= selectionScene->nodes[selectionScene->selectedNodeId]->materialProps.size()) {
-                selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId - totalMeshBuffers) != NOT_EXISTS) ? true:false;
+                selectionScene->isJointSelected = ((selectionScene->selectedJointId = (jointId - totalMeshBuffers)) != NOT_EXISTS) ? true:false;
                 if(selectionScene->isJointSelected)
                     selectionScene->renHelper->displayJointsBasedOnSelection();
             } else if ((jointId == 255 || jointId < totalMeshBuffers) && jointId != selectionScene->selectedMeshBufferId && drawMeshBufferRTT) {

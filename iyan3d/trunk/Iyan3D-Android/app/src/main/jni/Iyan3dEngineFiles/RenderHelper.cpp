@@ -607,9 +607,12 @@ void RenderHelper::drawJointsSpheresForRTT(bool enableDepthTest)
 {
     if(!renderingScene || !smgr)
         return;
-    SGNode *sgNode = renderingScene->selectedNode;
-    // Draw Joints above nodes if nodeSelected
     
+    smgr->clearDepthBuffer();
+    ShaderManager::isRendering = true;
+    SGNode *sgNode = renderingScene->selectedNode;
+    setJointSpheresVisibility(true);
+    // Draw Joints above nodes if nodeSelected
     int totalMeshBuffers = sgNode->materialProps.size();
     
     if(renderingScene->jointSpheres.size() <= 0 || (sgNode->getType() != NODE_RIG && sgNode->getType() != NODE_TEXT_SKIN))
@@ -622,14 +625,16 @@ void RenderHelper::drawJointsSpheresForRTT(bool enableDepthTest)
         renderingScene->jointSpheres[j]->setScaleOnNode(scaleValues[j] * 1.3);
         Vector3 packed = MathHelper::packInterger(renderingScene->selectedNodeId);
         packed.z = j + totalMeshBuffers;
+        renderingScene->jointSpheres[j]->getProperty(IS_VERTEX_COLOR).value.x = true;
         renderingScene->jointSpheres[j]->getProperty(VERTEX_COLOR).value = Vector4( packed/255.0, 1.0 );
-        smgr->RenderNode(false, smgr->getNodeIndexByID(renderingScene->jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
+        smgr->RenderNode(true, smgr->getNodeIndexByID(renderingScene->jointSpheres[j]->node->getID()), (j == 0) ? enableDepthTest:false);
     }
     // Reset joints
     for(int j = 0;j < (dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node))->getJointCount();j++) {
         renderingScene->jointSpheres[j]->getProperty(VERTEX_COLOR).value = vertexColors[j];
         renderingScene->jointSpheres[j]->setScaleOnNode(scaleValues[j]);
     }
+    ShaderManager::isRendering = false;
     vertexColors.clear();
     scaleValues.clear();
 }
