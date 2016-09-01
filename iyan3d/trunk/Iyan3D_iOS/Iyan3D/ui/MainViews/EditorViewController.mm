@@ -2559,15 +2559,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
         _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
         _meshProp.delegate = self;
+        
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize =(isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
+        self.popoverController.popoverLayoutMargins = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType = WEPopoverAnimationTypeCrossFade;
+        
         [_meshProp.view setClipsToBounds:YES];
-        [self.popoverController presentPopoverFromRect:longPressposition
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionAny
-                                              animated:NO];
+        
+        [self.popoverController presentPopoverFromRect:longPressposition inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
     }
 }
 

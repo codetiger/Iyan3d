@@ -16,6 +16,7 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
     
     nodeType = nType;
     if(nodeType == NODE_CAMERA) {
+        
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
         addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Visible");
@@ -25,7 +26,9 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(REFLECTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Reflection");
         addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Glassy");
         addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, TYPE_NONE, "Color");
+
     } else if(nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) {
+
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
         addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Visible");
@@ -35,6 +38,7 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Glassy");
         
     } else if(nodeType == NODE_SGM || nodeType == NODE_OBJ || nodeType == NODE_TEXT || nodeType == NODE_RIG || nodeType == NODE_TEXT_SKIN) {
+        
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, PARENT_TYPE, "Material Properties", "PROPERTIES");
         addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
@@ -55,6 +59,7 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(BUMP_DEPTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SLIDER_TYPE, "Depth", "SKIN");
         
     } else if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES) {
+        
         if(nodeType != NODE_PARTICLES)
             addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
     }
