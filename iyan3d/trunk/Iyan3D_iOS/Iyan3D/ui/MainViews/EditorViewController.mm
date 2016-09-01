@@ -1689,7 +1689,7 @@ BOOL missingAlertShown;
 //        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
 //        _meshProp.delegate = self;
         
-        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties()];
+        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties(editorScene->selectedMeshBufferId)];
         commonProps.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
         self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
@@ -2630,7 +2630,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         editorScene->selectMan->unselectObjects();
         for(int i = 0; i < addedNodeIds.size(); i++) {
-            editorScene->selectMan->selectObject(addedNodeIds[i], true);
+            editorScene->selectMan->selectObject(addedNodeIds[i], editorScene->selectedMeshBufferId, true);
         }
         editorScene->updater->updateControlsOrientaion();
         editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_ADDED, 0);
@@ -2641,7 +2641,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         selectedNode = editorScene->selectedNodeId;
         
         [self cloneSelectedAssetWithId:selectedAssetId NodeType:selectedNodeType AndSelNodeId:selectedNode];
-        editorScene->selectMan->selectObject(editorScene->nodes.size()-1 , false);
+        editorScene->selectMan->selectObject(editorScene->nodes.size()-1, editorScene->selectedMeshBufferId, false);
         editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
 }
@@ -2722,6 +2722,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) changeTextureForAsset:(PROP_INDEX) pIndex
 {
     selectedNodeId = editorScene->selectedNodeId;
+    selectedMeshBufferId = editorScene->selectedMeshBufferId;
+    
     if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
         objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:CHANGE_TEXTURE AndPropIndex:pIndex];
@@ -2790,7 +2792,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         return;
     
     bool isMultiSelectenabled= [[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
-    editorScene->selectMan->selectObject(assetIndex,isMultiSelectenabled);
+    editorScene->selectMan->selectObject(assetIndex, NOT_SELECTED, isMultiSelectenabled);
     [self setupEnableDisableControls];
     
 }
@@ -3568,14 +3570,16 @@ void downloadFile(NSString* url, NSString* fileName)
     if(editorScene->selectedNodeId >= 0 || editorScene->selectedNodeId < editorScene->nodes.size())
         selectedNode = editorScene->nodes[editorScene->selectedNodeId];
     
+    int matIndex = (editorScene->selectedMeshBufferId == NOT_SELECTED) ? 0 : editorScene->selectedMeshBufferId;
+
     switch (index) {
             
         case VISIBILITY:
         case LIGHTING:
         case REFRACTION:
         case REFLECTION: {
-            float prevRefraction = selectedNode->getProperty(REFRACTION).value.x;
-            float prevReflection = selectedNode->getProperty(REFLECTION).value.x;
+            float prevRefraction = selectedNode->getProperty(REFRACTION, matIndex).value.x;
+            float prevReflection = selectedNode->getProperty(REFLECTION, matIndex).value.x;
             bool prevLighting = selectedNode->getProperty(LIGHTING).value.x;
             bool prevVisibility = selectedNode->getProperty(VISIBILITY).value.x;
             
@@ -3585,7 +3589,7 @@ void downloadFile(NSString* url, NSString* fileName)
         case TEXTURE_SMOOTH: {
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
                 editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
-                editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH).value.x = value.x;
+                editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH, matIndex).value.x = value.x;
                 if(smgr->device == OPENGLES2)
                     [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
             }
@@ -3748,7 +3752,8 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) reloadTexture
 {
-    editorScene->changeTexture(editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE).fileName, Vector3(1.0), false, false);
+    int matIndex = (editorScene->selectedMeshBufferId == NOT_SELECTED) ? 0 : editorScene->selectedMeshBufferId;
+    editorScene->changeTexture(editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE, matIndex).fileName, Vector3(1.0), false, false);
 }
 
 - (void) switchMirror
@@ -4452,7 +4457,8 @@ void downloadFile(NSString* url, NSString* fileName)
     if(!isTempNode){
         if(!isHaveTexture){
             selectedNodeId = (int)editorScene->nodes.size()-1;
-            editorScene->selectMan->selectObject((int)editorScene->nodes.size()-1,false);
+            selectedMeshBufferId = editorScene->selectedMeshBufferId;
+            editorScene->selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
             [self changeTexture:@"0-cm" VertexColor:Vector3(1.0) IsTemp:YES AtIndex:TEXTURE]; // for White Texture Thumbnail
             editorScene->selectMan->unselectObject((int)editorScene->nodes.size()-1);
         }
@@ -4477,7 +4483,7 @@ void downloadFile(NSString* url, NSString* fileName)
             nodes = nil;
         }
         if(!isHaveTexture){
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1,false);
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1, NOT_SELECTED, false);
             [self changeTexture:[dict objectForKey:@"textureName"] VertexColor:Vector3(color.x,color.y,color.z) IsTemp:YES AtIndex:TEXTURE]; // back to original Texture
             editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
         }
@@ -4517,9 +4523,9 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->setEnvironmentTexture(*texture, isTemp);
     }
     else {
-        editorScene->selectMan->selectObject(selectedNodeId,false);
+        editorScene->selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
         if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
-            editorScene->changeTexture(*texture, Vector3(color), isTemp, NO, 0, pIndex); //TODO material Index
+            editorScene->changeTexture(*texture, Vector3(color), isTemp, NO, pIndex);
             editorScene->selectMan->unselectObject(selectedNodeId);
             editorScene->setLightingOn();
         }
@@ -4530,7 +4536,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) removeTempTextureAndVertex:(PROP_INDEX) pIndex
 {
-    editorScene->removeTempTextureAndVertex(selectedNodeId, 0, pIndex); //TODO material Index
+    editorScene->removeTempTextureAndVertex(selectedNodeId, selectedMeshBufferId, pIndex); //TODO material Index
 }
 
 - (void) changeRenderingBgColor:(Vector4)vertexColor

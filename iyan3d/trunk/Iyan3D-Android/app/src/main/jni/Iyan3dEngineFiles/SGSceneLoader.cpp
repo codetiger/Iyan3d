@@ -618,7 +618,7 @@ void SGSceneLoader::restoreTexture(SGNode* meshObject,int actionType)
     }
     if((actionType == UNDO_ACTION || actionType == REDO_ACTION) && !meshObject->getProperty(IS_VERTEX_COLOR).value.x && meshObject->node->type != NODE_TYPE_INSTANCED){
         Vector4 vertColor = meshObject->getProperty(VERTEX_COLOR).value;
-        currentScene->selectMan->selectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId), false);
+        currentScene->selectMan->selectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId), NOT_SELECTED, false);
         currentScene->changeTexture(meshObject->getProperty(TEXTURE).fileName, Vector3(vertColor.x, vertColor.y, vertColor.z), true, true);
         currentScene->selectMan->unselectObject(currentScene->actionMan->getObjectIndex(meshObject->actionId));
     }
@@ -684,7 +684,7 @@ bool SGSceneLoader::removeObject(u16 nodeIndex, bool deAllocScene)
     if(!deAllocScene) {
         currentScene->nodes.erase(currentScene->nodes.begin() + nodeIndex);
         currentScene->updater->updateLightProperties(currentScene->currentFrame);
-        currentScene->selectedNodeId = NOT_EXISTS;
+        currentScene->selectedNodeId = currentScene->selectedJointId = currentScene->selectedMeshBufferId = NOT_EXISTS;
         currentScene->selectedNode = NULL;
         currentScene->selectedJoint = NULL;
         currentScene->isNodeSelected = currentScene->isJointSelected = false;
@@ -859,13 +859,17 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
     }
 }
 
-void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType)
+void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType) //TODO check instacing for multiple buffers
 {
     if(!currentScene || (currentScene->selectedNodeId == NOT_EXISTS && currentScene->selectedNodeIds.size() <= 0 && actionType == IMPORT_ASSET_ACTION))
         return;
     
     SGNode* iNode = new SGNode(nType);
-    iNode->materialProps.push_back(new MaterialProperty(nType)); //TODO
+    for(int i = 0; i < sgNode->materialProps.size(); i++) {
+        MaterialProperty * m = new MaterialProperty(nType);
+        memcpy(m, sgNode->materialProps[i], sizeof(MaterialProperty));
+        iNode->materialProps.push_back(m);
+    }
     shared_ptr<Node> original = (sgNode->node->type == NODE_TYPE_INSTANCED) ? sgNode->node->original : sgNode->node;
     if(sgNode->node->type != NODE_TYPE_INSTANCED)
         original->setUserPointer(sgNode);
@@ -878,6 +882,7 @@ void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType a
     iNode->setInitialKeyValues(actionType);
     iNode->node->updateAbsoluteTransformation();
     iNode->node->updateAbsoluteTransformationOfChildren();
+    iNode->options = sgNode->options;
     
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
         iNode->actionId = ++currentScene->actionObjectsSize;

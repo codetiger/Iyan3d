@@ -28,9 +28,9 @@ public:
     bool checkCtrlSelection(Vector2 curTouchPos, bool isMultiSelectEnabled, bool isDisplayPrepared = false);
     void postNodeJointSelection();
     bool getCtrlColorFromTouchTextureAnim(Vector2 touchPosition);
-    bool getNodeColorFromTouchTexture(bool isMultiSelected ,bool touchMove);
-    bool selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove);
-    bool updateNodeSelectionFromColor(Vector3 pixel, bool isMultipleSelectionEnabled, bool touchMove);
+    bool getNodeColorFromTouchTexture(bool isMultiSelected ,bool touchMove, bool drawMeshBufferRTT = false);
+    bool selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove, bool drawMeshBufferRTT = false);
+    bool updateNodeSelectionFromColor(Vector3 pixel, bool isMultipleSelectionEnabled, bool touchMove, bool drawMeshBufferRTT = false);
     bool multipleSelections(int nodeId);
     void updateParentPosition();
     void unselectObjects();
@@ -43,8 +43,8 @@ public:
     void removeChildren(shared_ptr<Node> fromParent, bool resetKeys = false);
     void highlightSelectedNode(int nodeId = -1);
     void unHightlightSelectedNode();
-    void highlightJointSpheres();
-    void selectObject(int objectId ,bool isMultiSelectionEnabled);
+    void highlightMeshBufferAndJointSpheres();
+    void selectObject(int objectId ,int selectedMeshBufferId, bool isMultiSelectionEnabled);
     void unselectObject(int objectId);
     
     void checkSelectionForAutoRig(Vector2 touchPosition);

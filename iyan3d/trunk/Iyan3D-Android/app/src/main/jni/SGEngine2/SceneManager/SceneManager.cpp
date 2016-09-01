@@ -481,6 +481,9 @@ shared_ptr<Node> SceneManager::createInstancedNode(shared_ptr<Node> original, st
 
 void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT)
 {
+    if(!material || !texture)
+        return;
+    
     renderMan->useMaterialToRender(material);
     int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
     setPropertyValue(material, "texture1", &textureValue, DATA_TEXTURE_2D, 1, true, 0, NOT_EXISTS, NOT_EXISTS, texture);

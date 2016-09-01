@@ -561,8 +561,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     else
                         editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
                     
-                    if(!editorScene->renHelper->isMovingPreview)
+                    if(!editorScene->renHelper->isMovingPreview) {
                         editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
+                        editorScene->moveMan->swipeToRotate();
+                    }
                     break;
                 }
                 case 2: {

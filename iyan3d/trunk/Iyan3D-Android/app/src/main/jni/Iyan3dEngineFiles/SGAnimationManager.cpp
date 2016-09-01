@@ -62,7 +62,7 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
 {
     if(fromNodeId < 0 || fromNodeId >= animScene->nodes.size() || toNodeId < 0 || toNodeId >= animScene->nodes.size())
         return;
-    animScene->selectMan->selectObject(toNodeId,false);
+    animScene->selectMan->selectObject(toNodeId, NOT_SELECTED,false);
     animScene->nodes[toNodeId]->positionKeys = animScene->nodes[fromNodeId]->positionKeys;
     animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
     animScene->nodes[toNodeId]->scaleKeys = animScene->nodes[fromNodeId]->scaleKeys;

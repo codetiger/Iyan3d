@@ -51,6 +51,7 @@ public:
     void drawCameraPreview();
     void rttNodeJointSelection(Vector2 touchPosition, bool isMultiSelectenabled, bool touchMove);
     void drawJointsSpheresForRTT(bool enableDepthTest);
+    void drawMeshBuffersForRTT();
     bool displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animNode , float scaleValue = 0.7);
     bool createJointSpheres(int additionalJoints);
     void displayJointsBasedOnSelection();

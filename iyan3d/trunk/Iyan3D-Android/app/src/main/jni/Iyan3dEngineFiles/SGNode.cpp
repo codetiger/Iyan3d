@@ -26,6 +26,7 @@ void SGNode::setPropertiesOfNode()
 {
     
     addOrUpdateProperty(DELETE, Vector4(1, 0, 0, 0), UNDEFINED, ICON_TYPE, "Delete", "GENERAL", "", DELETE_ICON);
+    addOrUpdateProperty(SELECTED, Vector4(false, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
     
     if(type == NODE_CAMERA) {
         //TODO
@@ -1170,11 +1171,11 @@ void SGNode::leagcyWrite(ofstream *filePointer, vector<SGNode*> &nodes)
         joints[i]->writeData(filePointer);
 }
 
-void SGNode::setMeshProperties(float refraction, float reflection, bool isLighting, bool isVisible , bool isPhysicsObj, int physicsType, float fMagnitude, float currentFrame)
+void SGNode::setMeshProperties(int matIndex, float refraction, float reflection, bool isLighting, bool isVisible , bool isPhysicsObj, int physicsType, float fMagnitude, float currentFrame)
 {
     getProperty(LIGHTING).value.x = isLighting;
-    getProperty(REFRACTION).value.x = refraction;
-    getProperty(REFLECTION).value.x = reflection;
+    getProperty(REFRACTION, matIndex).value.x = refraction;
+    getProperty(REFLECTION, matIndex).value.x = reflection;
     getProperty(VISIBILITY).value.x = isVisible;
     getProperty(HAS_PHYSICS).value.x = isPhysicsObj;
     getProperty(PHYSICS_KIND).value.x = physicsType;
@@ -1251,7 +1252,7 @@ std::map< PROP_INDEX, Property > SGNode::getAllProperties(int meshBufferIndex)
 Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
 {
     
-    if(options.find(pIndex) == options.end()) {
+    if(options.find(pIndex) == options.end() || meshBufferIndex != NOT_SELECTED) {
         std::map<PROP_INDEX, Property>::iterator pIt;
         
         int matIndex = 0;

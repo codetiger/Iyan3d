@@ -189,7 +189,7 @@ void ShaderManager::setUniforms(SGNode *sgNode, string matName, int materialInde
         setLightViewProjMatrix(sgNode, SHADER_MESH_lightViewProjMatrix);
         setEyePos(sgNode, SHADER_MESH_eyePos);
         setShadowDakness(sgNode, SHADER_MESH_shadowDarkness);
-        setHasMeshColor(sgNode, sgNode->getProperty(IS_VERTEX_COLOR).value.x, SHADER_MESH_hasMeshColor, false, materialIndex);
+        setHasMeshColor(sgNode, sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x, SHADER_MESH_hasMeshColor, false, materialIndex);
         Vector4 meshColor = (sgNode->getType() == NODE_CAMERA) ? Vector4(-1.0) : sgNode->getProperty(VERTEX_COLOR, materialIndex).value;
         setVertexColorUniform(sgNode, meshColor, SHADER_MESH_meshColor, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
         setReflectionValue(sgNode, SHADER_MESH_reflectionValue, materialIndex);
@@ -205,8 +205,8 @@ void ShaderManager::setUniforms(SGNode *sgNode, string matName, int materialInde
         setLightViewProjMatrix(sgNode, SHADER_COMMON_SKIN_lightViewProjMatrix);
         setEyePos(sgNode, SHADER_COMMON_SKIN_eyePos);
         setShadowDakness(sgNode, SHADER_COMMON_SKIN_shadowDarkness);
-        setHasMeshColor(sgNode, sgNode->getProperty(IS_VERTEX_COLOR).value.x, SHADER_COMMON_SKIN_hasMeshColor, false, materialIndex);
-        setVertexColorUniform(sgNode, sgNode->getProperty(VERTEX_COLOR).value, SHADER_COMMON_SKIN_meshColor, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
+        setHasMeshColor(sgNode, sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x, SHADER_COMMON_SKIN_hasMeshColor, false, materialIndex);
+        setVertexColorUniform(sgNode, sgNode->getProperty(VERTEX_COLOR, materialIndex).value, SHADER_COMMON_SKIN_meshColor, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
         setReflectionValue(sgNode, SHADER_COMMON_SKIN_reflectionValue, materialIndex);
         setNodeTransparency(sgNode, SHADER_COMMON_SKIN_transparency, materialIndex);
         setNodeLighting(sgNode, SHADER_COMMON_SKIN_hasLighting, materialIndex);
@@ -248,7 +248,21 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *vertColor = new float[((endIndex - startIndex)+1) * 3];
-    Vector4 vertexColor = sgNode->getProperty(SELECTED, materialIndex).value.x ? Vector4(0.0, 1.0, 0.0, 0) : color;
+    
+    bool isMBSelected = false;
+    for(int i = 0; i < sgNode->materialProps.size(); i++) {
+        if(sgNode->getProperty(SELECTED, i).value.x) {
+            isMBSelected = true;
+            break;
+        }
+    }
+    
+    Vector4 vertexColor = sgNode->getProperty(SELECTED).value.x ? ((isMBSelected) ? Vector4(1.0, 1.0, 1.0, 0) : Vector4(0.0, 1.0, 0.0, 0)) : color;
+    vertexColor = sgNode->getProperty(SELECTED, materialIndex).value.x ? Vector4(0.0, 1.0, 0.0, 0) : vertexColor;
+    if(isRendering && materialIndex > 0) {
+        printf(" \n Mat Index %d ", materialIndex);
+        printf(" \n Mesh Color %f %f %f ", vertexColor.x, vertexColor.y, vertexColor.z);
+    }
     vertColor[0] = vertexColor.x;
     vertColor[1] = vertexColor.y;
     vertColor[2] = vertexColor.z;
@@ -256,7 +270,8 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        Vector4 vColor = v[j].second->getProperty(SELECTED, materialIndex).value.x ? Vector4(0.0, 1.0, 0.0, 0) : v[j].second->getProperty(VERTEX_COLOR, materialIndex).value;
+        Vector4 vColor = v[j].second->getProperty(SELECTED).value.x ? Vector4(0.0, 1.0, 0.0, 0) : v[j].second->getProperty(VERTEX_COLOR, materialIndex).value;
+        vColor = v[j].second->getProperty(SELECTED, materialIndex).value.x ? Vector4(1.0, 1.0, 0.0, 0) : vColor;
         vertColor[((i+1) * 3)] = vColor.x;
         vertColor[((i+1) * 3) + 1] = vColor.y;
         vertColor[((i+1) * 3) + 2] = vColor.z;
@@ -306,12 +321,12 @@ void ShaderManager::setHasMeshColor(SGNode *sgNode, bool status, int paramIndex,
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *hasMeshColor = new float[(endIndex - startIndex) + 1];
-    hasMeshColor[0] = ((sgNode->getType() != NODE_PARTICLES) && (sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x || sgNode->getProperty(SELECTED, materialIndex).value.x || status)) ? 1.0 : 0.0;
+    hasMeshColor[0] = ((sgNode->getType() != NODE_PARTICLES) && (sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x || sgNode->getProperty(SELECTED).value.x || status)) ? 1.0 : 0.0;
     
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        hasMeshColor[i+1] = (v[j].second->getProperty(IS_VERTEX_COLOR, materialIndex).value.x || v[j].second->getProperty(SELECTED, materialIndex).value.x || status) ? 1.0 : 0.0;
+        hasMeshColor[i+1] = (v[j].second->getProperty(IS_VERTEX_COLOR, materialIndex).value.x || v[j].second->getProperty(SELECTED).value.x || status) ? 1.0 : 0.0;
         i++;
     }
     
@@ -380,13 +395,13 @@ void ShaderManager::setNodeLighting(SGNode *sgNode, int paramIndex, int material
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *lighting = new float[((endIndex - startIndex)+1)];
-    lighting[0] = (sgNode->getType() == NODE_LIGHT || sgNode->getProperty(SELECTED, materialIndex).value.x) ? 0 : (int)sgNode->getProperty(LIGHTING, materialIndex).value.x;
+    lighting[0] = (sgNode->getType() == NODE_LIGHT || sgNode->getProperty(SELECTED).value.x) ? 0 : (int)sgNode->getProperty(LIGHTING).value.x;
     lighting[0] = (ShaderManager::sceneLighting) ? lighting[0] : 0;
     
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        lighting[i+1] = (v[j].second->getType() == NODE_LIGHT || v[j].second->getProperty(SELECTED, materialIndex).value.x) ? 0 : (float)v[j].second->getProperty(LIGHTING, materialIndex).value.x;
+        lighting[i+1] = (v[j].second->getType() == NODE_LIGHT || v[j].second->getProperty(SELECTED).value.x) ? 0 : (float)v[j].second->getProperty(LIGHTING).value.x;
         lighting[i+1] = (ShaderManager::sceneLighting) ? lighting[i+1] : 0;
         i++;
     }
@@ -410,12 +425,12 @@ void ShaderManager::setReflectionValue(SGNode *sgNode, int paramIndex, int mater
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *value = new float[((endIndex - startIndex)+1)];
-    value[0] = sgNode->getProperty(SELECTED, materialIndex).value.x ?  0.0 : sgNode->getProperty(REFLECTION, materialIndex).value.x;
+    value[0] = sgNode->getProperty(SELECTED).value.x ?  0.0 : sgNode->getProperty(REFLECTION, materialIndex).value.x;
     
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        value[i+1] = v[j].second->getProperty(SELECTED, materialIndex).value.x ?  0.0 : v[j].second->getProperty(REFLECTION, materialIndex).value.x;
+        value[i+1] = v[j].second->getProperty(SELECTED).value.x ?  0.0 : v[j].second->getProperty(REFLECTION, materialIndex).value.x;
         i++;
     }
     
@@ -495,12 +510,12 @@ void ShaderManager::setNodeTransparency(SGNode *sgNode, u16 paramIndex, int mate
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *transparency = new float[((endIndex - startIndex)+1)];
-    transparency[0] = (sgNode->getProperty(SELECTED, materialIndex).value.x || !sgNode->getProperty(VISIBILITY, materialIndex).value.x) ?  NODE_SELECTION_TRANSPARENCY : sgNode->getProperty(TRANSPARENCY, materialIndex).value.x;
+    transparency[0] = (sgNode->getProperty(SELECTED).value.x || !sgNode->getProperty(VISIBILITY).value.x) ?  NODE_SELECTION_TRANSPARENCY : sgNode->getProperty(TRANSPARENCY).value.x;
     
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
     for(int j = startIndex; j < endIndex; j++) {
-        transparency[i+1] = (v[j].second->getProperty(SELECTED, materialIndex).value.x || !v[j].second->getProperty(VISIBILITY, materialIndex).value.x) ?  NODE_SELECTION_TRANSPARENCY : v[j].second->getProperty(TRANSPARENCY, materialIndex).value.x;
+        transparency[i+1] = (v[j].second->getProperty(SELECTED).value.x || !v[j].second->getProperty(VISIBILITY).value.x) ?  NODE_SELECTION_TRANSPARENCY : v[j].second->getProperty(TRANSPARENCY).value.x;
         i++;
     }
     

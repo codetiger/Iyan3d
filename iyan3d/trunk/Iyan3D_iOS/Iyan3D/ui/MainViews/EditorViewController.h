@@ -61,7 +61,7 @@
     int cameraResolutionType;
     CacheSystem *cache;
     bool isViewLoaded , isPlaying;
-    int previousAction , lightCount,selectedNodeId;
+    int previousAction , lightCount,selectedNodeId, selectedMeshBufferId;
     ActionType assetAddType;
     NSString *imgSalt;
     NSTimer *playTimer;

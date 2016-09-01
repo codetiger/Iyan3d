@@ -316,14 +316,16 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         return;
     
     SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
+    int matIndex = (actionScene->selectedMeshBufferId == NOT_SELECTED) ? 0 : actionScene->selectedMeshBufferId;
+    
     std::map<PROP_INDEX, Property> physicsProps = selectedNode->getProperty(HAS_PHYSICS).subProps;
 
     if(propertyAction.actionType == ACTION_EMPTY){
         propertyAction.actionType = ACTION_CHANGE_PROPERTY_MESH;
         propertyAction.objectIndex = selectedNode->actionId;
         propertyAction.frameId = actionScene->currentFrame;
-        propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(REFRACTION).value.x);
-        propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(REFLECTION).value.x);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(REFRACTION, matIndex).value.x);
+        propertyAction.actionSpecificFloats.push_back(selectedNode->getProperty(REFLECTION, matIndex).value.x);
         propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(LIGHTING).value.x);
         propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(VISIBILITY).value.x);
         propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(HAS_PHYSICS).value.x);
@@ -331,7 +333,7 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         propertyAction.actionSpecificIntegers.push_back((int)physicsProps[PHYSICS_KIND].value.x);
     }
     
-    selectedNode->setMeshProperties(refraction, reflection, isLighting, isVisible, selectedNode->getProperty(HAS_PHYSICS).value.x, physicsProps[PHYSICS_KIND].value.x, physicsProps[FORCE_MAGNITUDE].value.x, actionScene->currentFrame);
+    selectedNode->setMeshProperties(matIndex, refraction, reflection, isLighting, isVisible, selectedNode->getProperty(HAS_PHYSICS).value.x, physicsProps[PHYSICS_KIND].value.x, physicsProps[FORCE_MAGNITUDE].value.x, actionScene->currentFrame);
     
     if(isChanged) {
         propertyAction.actionSpecificFloats.push_back(refraction);
@@ -447,7 +449,7 @@ void SGActionManager::setMirrorState(MIRROR_SWITCH_STATE flag)
 
     mirrorSwitchState = flag;
     if(actionScene->isJointSelected)
-        actionScene->selectMan->highlightJointSpheres();
+        actionScene->selectMan->highlightMeshBufferAndJointSpheres();
 }
 
 bool SGActionManager::switchMirrorState()
@@ -743,7 +745,8 @@ int SGActionManager::undo(int &returnValue2)
             break;
         }
         case ACTION_CHANGE_PROPERTY_MESH:{
-            actionScene->nodes[indexOfAction]->setMeshProperties(recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.actionSpecificFlags[2], recentAction.actionSpecificIntegers[0], recentAction.actionSpecificFloats[2], recentAction.frameId);
+            //TODO
+            actionScene->nodes[indexOfAction]->setMeshProperties(0, recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.actionSpecificFlags[2], recentAction.actionSpecificIntegers[0], recentAction.actionSpecificFloats[2], recentAction.frameId);
             break;
         }
         case ACTION_CHANGE_PROPERTY_LIGHT: {
@@ -811,7 +814,7 @@ int SGActionManager::undo(int &returnValue2)
             break;
         }
         case ACTION_TEXTURE_CHANGE:{
-            actionScene->selectMan->selectObject(indexOfAction,false);
+            actionScene->selectMan->selectObject(indexOfAction, NOT_SELECTED, false); //TODO
             actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]).c_str(), Vector3(recentAction.actionSpecificFloats[0],recentAction.actionSpecificFloats[1],recentAction.actionSpecificFloats[2]),true,true);
             actionScene->selectMan->unselectObject(indexOfAction);
             break;
@@ -909,7 +912,7 @@ int SGActionManager::redo()
             actionScene->currentFrame = recentAction.frameId;
             break;
         case ACTION_CHANGE_PROPERTY_MESH:
-            sgNode->setMeshProperties(recentAction.actionSpecificFloats[3], recentAction.actionSpecificFloats[4], recentAction.actionSpecificFlags[3], recentAction.actionSpecificFlags[4], recentAction.actionSpecificFlags[5], recentAction.actionSpecificIntegers[1], recentAction.actionSpecificFloats[5], recentAction.frameId);
+            sgNode->setMeshProperties(0, recentAction.actionSpecificFloats[3], recentAction.actionSpecificFloats[4], recentAction.actionSpecificFlags[3], recentAction.actionSpecificFlags[4], recentAction.actionSpecificFlags[5], recentAction.actionSpecificIntegers[1], recentAction.actionSpecificFloats[5], recentAction.frameId);
             break;
         case ACTION_CHANGE_PROPERTY_LIGHT:
             
@@ -964,7 +967,7 @@ int SGActionManager::redo()
             break;
         }
         case ACTION_TEXTURE_CHANGE:{
-            actionScene->selectMan->selectObject(indexOfAction,false);
+            actionScene->selectMan->selectObject(indexOfAction, NOT_SELECTED, false);
             actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[1]).c_str(), Vector3(recentAction.actionSpecificFloats[3],recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5]),true,true);
             actionScene->selectMan->unselectObject(indexOfAction);
             break;

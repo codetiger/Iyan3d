@@ -166,7 +166,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     isMultipleSelection = false;
     isJointSelected = isNodeSelected = isControlSelected = shadowsOff = false;
     freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
-    selectedNodeId = selectedJointId = riggingNodeId = NOT_EXISTS;
+    selectedNodeId = selectedJointId = selectedMeshBufferId = riggingNodeId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
     jointSpheres.clear();
@@ -244,7 +244,7 @@ void SGEditorScene::renderAll()
             renHelper->renderEnvelopes();
         
 //        if(touchTexture)
-//            smgr->draw2DImage(touchTexture, Vector2(0.0, 150.0), Vector2(1024.0, 1174.0), false, smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+//            smgr->draw2DImage(touchTexture, Vector2(0.0, 100.0), Vector2(256.0, 356.0), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE), false);
         
         //        // rtt division atlast post and pre stage
         renHelper->postRTTDrawCall();
@@ -432,7 +432,7 @@ void SGEditorScene::clearSelections()
     isNodeSelected = isJointSelected = false;
     selectedNode = NULL;
     selectedJoint = NULL;
-    selectedNodeId = selectedJointId = NOT_SELECTED;
+    selectedNodeId = selectedJointId = selectedMeshBufferId = NOT_SELECTED;
 }
 
 void SGEditorScene::shaderCallBackForNode(int nodeID, string matName, int materialIndex)
@@ -516,6 +516,11 @@ bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 bool SGEditorScene::hasNodeSelected()
 {
     return (isRigMode && rigMan) ? rigMan->isNodeSelected : isNodeSelected;
+}
+
+bool SGEditorScene::hasMeshBufferSelected()
+{
+    return (isRigMode && rigMan) ? false : (selectedMeshBufferId != NOT_EXISTS);
 }
 
 bool SGEditorScene::hasJointSelected()
@@ -623,7 +628,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     if(selectedNodeId != NOT_SELECTED)
         nodes[selectedNodeId]->getProperty(SELECTED).value.x = true;
     
-    selectMan->selectObject(selectedNodeId,false);
+    selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
     renHelper->setControlsVisibility(true);
     smgr->EndDisplay();
 }
@@ -666,15 +671,17 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
-void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo, int materialIndex, PROP_INDEX pIndex)
+void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo, PROP_INDEX pIndex)
 {
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
-
+    
+    int matIndex = (selectedMeshBufferId == NOT_SELECTED) ? 0 : selectedMeshBufferId;
+    
     string texturePath = FileHelper::getTexturesDirectory() + textureFileName+ ".png";
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
-        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x = (pIndex == TEXTURE) ? false : true; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x = (pIndex == TEXTURE) ? false : true; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         
         if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
             loader->copyMeshFromOriginalNode(nodes[selectedNodeId]);
@@ -697,24 +704,24 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         bool smoothTexture = (nodes[selectedNodeId]->smoothTexture);
         printf(" \n Texture file path %s ", texturePath.c_str());
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        nodes[selectedNodeId]->materialProps[materialIndex]->setTextureForType(nodeTex, texType); //TODO for selected mesh buffer index
+        nodes[selectedNodeId]->materialProps[matIndex]->setTextureForType(nodeTex, texType); //TODO for selected mesh buffer index
         
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->getProperty(pIndex).fileName = textureFileName + ".png";
+            nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = textureFileName + ".png";
         }
     } else {
-        nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value = Vector4(vertexColor, 0);
+        nodes[selectedNodeId]->getProperty(VERTEX_COLOR, matIndex).value = Vector4(vertexColor, 0);
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->getProperty(pIndex).fileName = "-1";
+            nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = "-1";
         }
-        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value = Vector4(true, 0, 0, 0);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value = Vector4(true, 0, 0, 0);
     }
     
     if(!isTemp)
         actionMan->storeAddOrRemoveAssetAction(ACTION_TEXTURE_CHANGE, 0);
     if(!isTemp || isUndoRedo){
-        nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->getProperty(TEXTURE).fileName;
-        nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value;
+        nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->getProperty(TEXTURE, matIndex).fileName;
+        nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR, matIndex).value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR, matIndex).value;
     }
 }
 
@@ -879,7 +886,7 @@ void SGEditorScene::setMirrorState(MIRROR_SWITCH_STATE flag)
 {
     actionMan->setMirrorState(flag);
     if(isJointSelected)
-       selectMan->highlightJointSpheres();
+        selectMan->highlightMeshBufferAndJointSpheres();
 }
 
 bool SGEditorScene::switchMirrorState()
@@ -890,7 +897,7 @@ bool SGEditorScene::switchMirrorState()
     actionMan->addAction(action);
     setMirrorState((MIRROR_SWITCH_STATE)!getMirrorState());
     if(isJointSelected || (isRigMode && (rigMan->isSGRJointSelected || rigMan->isSkeletonJointSelected)))
-      selectMan->highlightJointSpheres();
+        selectMan->highlightMeshBufferAndJointSpheres();
     return getMirrorState();
 }
 

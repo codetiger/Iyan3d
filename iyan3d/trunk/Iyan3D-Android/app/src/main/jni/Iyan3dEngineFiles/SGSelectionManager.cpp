@@ -87,8 +87,8 @@ void SGSelectionManager::postNodeJointSelection()
             selectionScene->actionMan->setMirrorState(MIRROR_OFF);
     }
     
-    if(selectionScene->isJointSelected && selectionScene->selectedJointId != NOT_SELECTED)
-        highlightJointSpheres();
+    if((selectionScene->isJointSelected && selectionScene->selectedJointId != NOT_SELECTED) || selectionScene->hasMeshBufferSelected())
+        highlightMeshBufferAndJointSpheres();
     
     if(!selectionScene->isNodeSelected || (currentSelectedNode->getType() != NODE_RIG && currentSelectedNode->getType() != NODE_TEXT_SKIN))
         selectionScene->renHelper->setJointSpheresVisibility(false);
@@ -116,7 +116,7 @@ bool SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
     return false;
 }
 
-bool SGSelectionManager::getNodeColorFromTouchTexture(bool isMultiSelected,bool touchMove)
+bool SGSelectionManager::getNodeColorFromTouchTexture(bool isMultiSelected,bool touchMove, bool drawMeshBufferRTT)
 {
     if(!selectionScene || !smgr)
         return false;
@@ -124,24 +124,24 @@ bool SGSelectionManager::getNodeColorFromTouchTexture(bool isMultiSelected,bool 
     Vector2 touchPixel = selectionScene->nodeJointPickerPosition;
     if(selectNodeOrJointInPixel(touchPixel,isMultiSelected, touchMove))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y+1.0),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x, touchPixel.y-1.0),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y-1.0),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y+1.0),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0),isMultiSelected, touchMove))
+    if(selectNodeOrJointInPixel(Vector2(touchPixel.x+1.0, touchPixel.y-1.0),isMultiSelected, touchMove, drawMeshBufferRTT))
         return true;
-    return selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0),isMultiSelected, touchMove);
+    return selectNodeOrJointInPixel(Vector2(touchPixel.x-1.0, touchPixel.y+1.0),isMultiSelected, touchMove, drawMeshBufferRTT);
 }
 
-bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove)
+bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel,bool isMultiSelectEnabled, bool touchMove, bool drawMeshBufferRTT)
 {
     
     if(!selectionScene || !smgr)
@@ -152,14 +152,14 @@ bool SGSelectionManager::selectNodeOrJointInPixel(Vector2 touchPixel,bool isMult
     
     SceneHelper::limitPixelCoordsWithinTextureRange(selectionScene->touchTexture->width,selectionScene->touchTexture->height,xCoord,yCoord);
     Vector3 pixel = smgr->getPixelColor(Vector2(xCoord,yCoord),selectionScene->touchTexture);
-    bool status = updateNodeSelectionFromColor(pixel, isMultiSelectEnabled,touchMove);
+    bool status = updateNodeSelectionFromColor(pixel, isMultiSelectEnabled, touchMove, drawMeshBufferRTT);
     if(status) {
         selectionScene->updater->reloadKeyFrameMap();
     }
     return status;
 }
 
-bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMultipleSelectionEnabled, bool touchMove)
+bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMultipleSelectionEnabled, bool touchMove, bool drawMeshBufferRTT)
 {
     
     if(!selectionScene || !smgr)
@@ -179,11 +179,47 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
         }
     }
     
+    if(touchMove) {
+        //TODO for touch move related
+    } else {
+        if(nodeId != 65535 && selectionScene->selectedNodeId != nodeId) {
+            if((selectionScene->isNodeSelected || selectionScene->selectedNodeIds.size() > 0) && isMultipleSelectionEnabled)
+                return multipleSelections(nodeId);
+            else if (!isMultipleSelectionEnabled || (!selectionScene->isNodeSelected && selectionScene->selectedNodeIds.size() == 0)) {
+                unselectObject(selectionScene->selectedNodeId);
+                selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
+                highlightSelectedNode();
+            }
+        } else if (nodeId != 65535 && selectionScene->selectedNodeId == nodeId) {
+            
+            int totalMeshBuffers = selectionScene->nodes[selectionScene->selectedNodeId]->materialProps.size();
+
+            if(selectionScene->selectedNodeIds.size() > 0 && isMultipleSelectionEnabled)
+                return multipleSelections(nodeId);
+            else if (jointId != 255 && jointId >= selectionScene->nodes[selectionScene->selectedNodeId]->materialProps.size()) {
+                selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId - totalMeshBuffers) != NOT_EXISTS) ? true:false;
+                if(selectionScene->isJointSelected)
+                    selectionScene->renHelper->displayJointsBasedOnSelection();
+            } else if ((jointId == 255 || jointId < totalMeshBuffers) && jointId != selectionScene->selectedMeshBufferId && drawMeshBufferRTT) {
+                selectionScene->renHelper->drawMeshBuffersForRTT();
+            } else if ((jointId == 255 || jointId < totalMeshBuffers) && jointId != selectionScene->selectedMeshBufferId) {
+                selectionScene->selectedMeshBufferId = (jointId < totalMeshBuffers) ? jointId : NOT_SELECTED;
+            }
+        }
+        
+        if(selectionScene->isJointSelected || selectionScene->selectedMeshBufferId != NOT_SELECTED) {
+            highlightMeshBufferAndJointSpheres();
+            return true;
+        } else
+            return false;
+    }
+    
+    /*
     if(touchMove && selectionScene->selectedNodeId == nodeId)
         selectionScene->moveNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS;
     else if(!touchMove) {
         selectionScene->moveNodeId = NOT_EXISTS;
-        if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected && isMultipleSelectionEnabled)
+        if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected && !selectionScene->hasMeshBufferSelected() && isMultipleSelectionEnabled)
             return multipleSelections(nodeId);
         else {
             unselectObject(selectionScene->selectedNodeId);
@@ -191,11 +227,18 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
         }
     }
     if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && selectionScene->selectedNodeIds.size() <= 0) {
-        if(!touchMove)
+        int totalMeshBuffers = 0;
+        if(!touchMove) {
             highlightSelectedNode();
+            
+            SGNode* currentSelectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
+            totalMeshBuffers = currentSelectedNode->materialProps.size();
+            selectionScene->selectedMeshBufferId = (jointId != 255 && jointId < totalMeshBuffers) ? jointId : NOT_SELECTED;
+        }
+        
         if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN){
             if(!touchMove) {
-                selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId != 255) ? jointId : NOT_EXISTS) != NOT_EXISTS ? true:false;
+                selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId != 255 && jointId >= totalMeshBuffers) ? (jointId - totalMeshBuffers) : NOT_EXISTS) != NOT_EXISTS ? true:false;
             }
             if(selectionScene->isJointSelected && !touchMove) {
                 selectionScene->renHelper->displayJointsBasedOnSelection();
@@ -204,13 +247,14 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
     }
     if((selectionScene->isNodeSelected || selectionScene->isJointSelected) && !touchMove) {
         selectionScene->updater->updateControlsOrientaion(selectionScene);
-        if(selectionScene->isJointSelected)
-            highlightJointSpheres();
+        if(selectionScene->isJointSelected || selectionScene->hasMeshBufferSelected())
+            highlightMeshBufferAndJointSpheres();
         return true;
     } else if(selectionScene->moveNodeId != NOT_EXISTS)
         return true;
     else
         return false;
+     */
 }
 
 bool SGSelectionManager::multipleSelections(int nodeId)
@@ -390,7 +434,13 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     //currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
     currentSelectedNode->getProperty(SELECTED).value.x = true;
     
-    currentSelectedNode->getProperty(TRANSPARENCY).value.x = NODE_SELECTION_TRANSPARENCY;
+    for( int i = 0; i < currentSelectedNode->materialProps.size(); i++) {
+        currentSelectedNode->getProperty(TRANSPARENCY, i).value.x = NODE_SELECTION_TRANSPARENCY;
+    }
+    
+    if(selectionScene->selectedMeshBufferId != NOT_SELECTED)
+        currentSelectedNode->getProperty(SELECTED, selectionScene->selectedMeshBufferId).value.x = true;
+
     selectionScene->selectedNode = currentSelectedNode;
     
     bool status = true;
@@ -416,8 +466,10 @@ void SGSelectionManager::unHightlightSelectedNode()
     SGNode* currentSelectedNode = selectionScene->nodes[selectedNodeId];
     
     currentSelectedNode->getProperty(SELECTED).value.x = false;
-    
-    currentSelectedNode->getProperty(TRANSPARENCY).value.x = 1.0;
+    for( int i = 0; i < currentSelectedNode->materialProps.size(); i++) {
+        currentSelectedNode->getProperty(SELECTED, i).value.x = false;
+        currentSelectedNode->getProperty(TRANSPARENCY, i).value.x = 1.0;
+    }
     
     if(selectionScene->selectedNodeIds.size() <= 0) {
         if(currentSelectedNode->getType() == NODE_RIG)
@@ -429,11 +481,28 @@ void SGSelectionManager::unHightlightSelectedNode()
     }
 }
 
-void SGSelectionManager::highlightJointSpheres()
+void SGSelectionManager::highlightMeshBufferAndJointSpheres()
 {
     if(!selectionScene || !smgr)
         return;
+    
+    
     bool isNodeSelected = selectionScene->hasNodeSelected();
+    bool isMeshBufferSelected = selectionScene->hasMeshBufferSelected();
+    SGNode* selectedNode = selectionScene->getSelectedNode();
+
+    if(isMeshBufferSelected) {
+        for(int i = 0; i < selectedNode->materialProps.size(); i++) {
+            if(i == selectionScene->selectedMeshBufferId)
+                selectedNode->getProperty(SELECTED, i).value.x = true;
+            else
+                selectedNode->getProperty(SELECTED, i).value.x = false;
+        }
+    }
+    
+    if(selectedNode->getType() != NODE_RIG && selectedNode->getType() != NODE_TEXT_SKIN)
+        return;
+    
     bool isJointSelected = selectionScene->hasJointSelected();
     int selectedJointId = (selectionScene->isRigMode) ? selectionScene->rigMan->selectedJointId : selectionScene->selectedJointId;
     
@@ -454,7 +523,7 @@ void SGSelectionManager::highlightJointSpheres()
     selectionScene->updater->updateControlsOrientaion(selectionScene);
 }
 
-void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled)
+void SGSelectionManager::selectObject(int objectId, int selectedMeshBufferId, bool isMultiSelectionEnabled) //TODO for mesh buffer selection
 {
     if(!selectionScene || !smgr)
         return;
@@ -472,8 +541,13 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     selectionScene->selectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
 
     selectionScene->isNodeSelected = selectionScene->selectedNode->getProperty(SELECTED).value.x = true;
-        
-    selectionScene->selectedNode->getProperty(TRANSPARENCY).value.x = NODE_SELECTION_TRANSPARENCY;
+    
+    if(selectedMeshBufferId != NOT_SELECTED) {
+        selectionScene->selectedMeshBufferId = selectedMeshBufferId;
+        selectionScene->selectedNode->getProperty(SELECTED, selectedMeshBufferId).value.x = true;
+    }
+    for(int i = 0; i < selectionScene->selectedNode->materialProps.size(); i++)
+        selectionScene->selectedNode->getProperty(TRANSPARENCY, i).value.x = NODE_SELECTION_TRANSPARENCY;
     
     bool status = true;
     if(selectionScene->selectedNode->getType() == NODE_RIG)
@@ -483,11 +557,10 @@ void SGSelectionManager::selectObject(int objectId ,bool isMultiSelectionEnabled
     if(!status)
         unselectObject(selectionScene->selectedNodeId);
     
-    if(selectionScene->selectedNode->getType() == NODE_RIG || selectionScene->selectedNode->getType() == NODE_TEXT_SKIN){
-        if(selectionScene->selectedNodeId != NOT_SELECTED)
-            highlightJointSpheres();
-        
-    }else if(selectionScene->selectedNode->getType() == NODE_CAMERA){
+    if(selectionScene->selectedNodeId != NOT_SELECTED)
+        highlightMeshBufferAndJointSpheres();
+    
+    if(selectionScene->selectedNode->getType() == NODE_CAMERA){
         selectionScene->selectedNode->getProperty(IS_VERTEX_COLOR).value.x = false;
     }
     if(!selectionScene->isNodeSelected || (selectionScene->selectedNode->getType() != NODE_RIG && selectionScene->selectedNode->getType() != NODE_TEXT_SKIN))
@@ -506,12 +579,17 @@ void SGSelectionManager::unselectObject(int objectId)
     
     if(objectId >= 0 && objectId < selectionScene->nodes.size())
     {
-        selectionScene->nodes[objectId]->getProperty(TRANSPARENCY).value.x = 1.0;
         selectionScene->nodes[objectId]->getProperty(SELECTED).value.x = false;
+        
+        for( int i = 0; i < selectionScene->nodes[objectId]->materialProps.size(); i++) {
+            selectionScene->nodes[objectId]->getProperty(TRANSPARENCY, i).value.x = 1.0; //TODO for mesh buffers
+            selectionScene->nodes[objectId]->getProperty(SELECTED, i).value.x = false;
+        }
         selectionScene->selectedJoint = NULL;
         selectionScene->selectedNode = NULL;
         selectionScene->selectedJointId = NOT_EXISTS;
         selectionScene->selectedNodeId = NOT_EXISTS;
+        selectionScene->selectedMeshBufferId = NOT_EXISTS;
         selectionScene->isJointSelected = selectionScene->isNodeSelected = false;
         selectionScene->updater->resetMaterialTypes(false);
         selectionScene->renHelper->setJointSpheresVisibility(false);
@@ -702,7 +780,7 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
             selectionScene->rigMan->selectedJointId = selectedJointColor;
             selectionScene->rigMan->isSGRJointSelected = true;
             selectionScene->rigMan->selectedJoint = selectionScene->rigMan->selectedNode->joints[selectionScene->rigMan->selectedJointId];
-            highlightJointSpheres();
+            highlightMeshBufferAndJointSpheres();
         }
         bool status = selectionScene->renHelper->displayJointSpheresForNode(animNode);
         Vector3 jScale = selectionScene->rigMan->selectedNode->joints[1]->jointNode->getScale();
@@ -720,6 +798,6 @@ void SGSelectionManager::updateSGRSelection(int selectedNodeColor,int selectedJo
         selectionScene->rigMan->selectedNodeId = 0;
         selectionScene->rigMan->selectedJointId = NOT_SELECTED;
     }
-    highlightJointSpheres();
+    highlightMeshBufferAndJointSpheres();
 }
 

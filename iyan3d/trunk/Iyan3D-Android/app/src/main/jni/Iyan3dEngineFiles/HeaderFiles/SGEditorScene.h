@@ -69,7 +69,7 @@ public:
     bool freezeRendering , isPlaying;
     bool isMultipleSelection;
     bool isNodeSelected,isJointSelected,isControlSelected;
-    int selectedJointId,selectedNodeId,selectedControlId,controlType;
+    int selectedJointId, selectedNodeId, selectedControlId, controlType, selectedMeshBufferId;
     int riggingNodeId;
     int moveNodeId;
     int totalFrames;
@@ -168,6 +168,7 @@ public:
     void setControlsUniforms(int nodeID,string matName);
     bool isControlsTransparent(int nodeID,string matName);
     bool hasNodeSelected();
+    bool hasMeshBufferSelected();
     bool hasJointSelected();
     SGNode* getSelectedNode();
     SGJoint* getSelectedJoint();
@@ -175,7 +176,7 @@ public:
     
     void setEnvironmentTexture(std::string textureFilePath, bool isPreview);
     
-    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo, int materialIndex = 0, PROP_INDEX pIndex = TEXTURE); //TODO pass material index after RTT
+    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo, PROP_INDEX pIndex = TEXTURE); //TODO pass material index after RTT
     void removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex = 0, PROP_INDEX pIndex = TEXTURE); //TODO pass material index after RTT
     bool canEditRigBones(SGNode *sgNode);
     bool isNodeInSelection(SGNode* sgNode);

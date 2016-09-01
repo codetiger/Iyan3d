@@ -837,7 +837,7 @@
     editorSceneLocal->animMan->copyPropsOfNode((int)editorSceneLocal->nodes.size()-1, selectedNodeId, true);
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes];
-    editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
+    editorSceneLocal->selectMan->selectObject(selectedNodeId, NOT_SELECTED, false);
     editorSceneLocal->actionMan->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
     editorSceneLocal->updater->setDataForFrame(currentFrame);
 }
@@ -867,7 +867,7 @@
     
     editorSceneLocal->loader->removeObject(editorSceneLocal->nodes.size()-1);
     [self.delegate updateAssetListInScenes];
-    editorSceneLocal->selectMan->selectObject(selectedNodeId,false);
+    editorSceneLocal->selectMan->selectObject(selectedNodeId, NOT_SELECTED, false);
     [self.delegate createDuplicateAssetsForAnimation];
     if(!isFirstTimeAnimationApplyed) {
         editorSceneLocal->currentFrame = currentFrame;
