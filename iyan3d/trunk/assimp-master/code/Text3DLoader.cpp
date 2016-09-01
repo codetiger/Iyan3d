@@ -73,6 +73,7 @@ static const aiImporterDesc desc = {
 };
 
 vector < aiVector3D > vertices;
+vector < aiVector3D > textCoords;
 
 typedef GLvoid (*GLUTesselatorFunction) ();
 
@@ -531,9 +532,23 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
                 bone->mWeights[j].mWeight = 1.0;
             }
             boneList.push_back(bone);
-            prevVertCount = vertices.size();
         }
 
+        aiVector3D center;
+        for (int j = prevVertCount; j < vertices.size(); j++)
+            center += vertices[j];
+        
+        center /= (vertices.size() - prevVertCount);
+        for (int j = prevVertCount; j < vertices.size(); j++) {
+            aiVector3D textCoord;
+            
+            const aiVector3D diff = (vertices[j]-center).Normalize();
+            textCoord = aiVector3D((atan2(diff.x, diff.z) + AI_MATH_PI_F) / AI_MATH_TWO_PI_F, (asin(diff.y) + AI_MATH_HALF_PI_F) / AI_MATH_PI_F, 0.0);
+            
+            textCoords.push_back(textCoord);
+        }
+
+        prevVertCount = vertices.size();
         prevOffset = offset;
     }
 
@@ -542,11 +557,15 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
     
     pScene->mMeshes[0]->mNumVertices = vertices.size();
     pScene->mMeshes[0]->mVertices = new aiVector3D[vertices.size()];
+    pScene->mMeshes[0]->mTextureCoords[0] = new aiVector3D[vertices.size()];
+    
     for (int i = 0; i < vertices.size(); i++) {
         pScene->mMeshes[0]->mVertices[i] = vertices[i];
         pScene->mMeshes[0]->mVertices[i].x += offset / 2.0;
         pScene->mMeshes[0]->mVertices[i].y -= 16.0 / 2.0;
         pScene->mMeshes[0]->mVertices[i].z -= extrude / 2.0;
+        
+        pScene->mMeshes[0]->mTextureCoords[0][i] = textCoords[i];
     }
 
     pScene->mMeshes[0]->mNumFaces = vertices.size() / 3;
@@ -592,6 +611,7 @@ void Text3DImporter::InternReadFile( const string& pFile, aiScene* pScene, IOSys
     }
     
     vertices.clear();
+    textCoords.clear();
 }
 
 #endif // !! ASSIMP_BUILD_NO_SGM_IMPORTER
