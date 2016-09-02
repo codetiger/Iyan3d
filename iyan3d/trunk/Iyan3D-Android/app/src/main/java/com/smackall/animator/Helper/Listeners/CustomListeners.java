@@ -9,16 +9,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 
-import com.smackall.animator.ColorPicker;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CustomViews.CustomRadioButton;
+import com.smackall.animator.Helper.CustomViews.CustomSeekBar;
 import com.smackall.animator.Helper.Property;
 import com.smackall.animator.Props;
-import com.smackall.animator.TextureSelection;
 import com.smackall.animator.opengl.GL2JNILib;
 
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ import java.util.HashMap;
  * Created by Sabish.M on 27/7/16.
  * Copyright (c) 2016 Smackall Games Pvt Ltd. All rights reserved.
  */
-public class CustomListeners implements SeekBar.OnSeekBarChangeListener, View.OnClickListener,SwitchCompat.OnCheckedChangeListener, Animation.AnimationListener, View.OnTouchListener
+public class CustomListeners implements CustomSeekBarListener, View.OnClickListener, SwitchCompat.OnCheckedChangeListener, Animation.AnimationListener, View.OnTouchListener
 ,RadioGroup.OnCheckedChangeListener{
 
     boolean forAnimation = false;
@@ -107,22 +104,6 @@ public class CustomListeners implements SeekBar.OnSeekBarChangeListener, View.On
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        GL2JNILib.changedPropertyAtIndex(props.editorView.nativeCallBacks,property.index,progress,property.valueY,property.valueZ,property.valueW,false);
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        if (seekBar.getProgress() > 5)
-            seekBar.setMax((property.valueW == 1 && seekBar.getProgress() > seekBar.getMax() / 2) ? seekBar.getProgress() * 2 : seekBar.getMax());
-    }
-
-    @Override
     public void onAnimationStart(Animation animation) {
 
     }
@@ -158,5 +139,43 @@ public class CustomListeners implements SeekBar.OnSeekBarChangeListener, View.On
         Property property = propertyMap.get(position);
         GL2JNILib.changedPropertyAtIndex(props.editorView.nativeCallBacks,property.index,1.0f,property.valueY,property.valueZ,property.valueW,false);
         GL2JNILib.changedPropertyAtIndex(props.editorView.nativeCallBacks,property.index,1.0f,property.valueY,property.valueZ,property.valueW,true);
+    }
+
+    @Override
+    public void onProgressChanged(CustomSeekBar seekBar, float progress, boolean fromUser) {
+        if (progress < 0.0f) {
+            seekBar.setCustomProgress(0.0f, false);
+            return;
+        }
+        GL2JNILib.changedPropertyAtIndex(props.editorView.nativeCallBacks, property.index, progress, property.valueY, property.valueZ, property.valueW, false);
+        //[self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:NO];
+        if ((property.valueW == 1)) {
+            //_xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
+            if (!seekBar.sliderMoving && progress > 0.0f && (progress == seekBar.getMin() || progress == seekBar.getCustomMax())) {
+                seekBar.sliderMoving = true;
+                seekBar.setMin(progress - seekBar.getOffset());
+                seekBar.setCustomMax(progress + seekBar.getOffset() + seekBar.getMin());
+                seekBar.setCustomProgress(seekBar.getCustomMax() - seekBar.getOffset(), true);
+                seekBar.sliderMoving = false;
+            }
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(CustomSeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(CustomSeekBar seekBar) {
+
+        //[self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:YES];
+
+        if ((property.valueW == 1) && seekBar.getCustomProgress() > 0.0f) {
+            //_xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
+            seekBar.setOffset(seekBar.getCustomProgress());
+            seekBar.setMin(((seekBar.getCustomProgress() > seekBar.getOffset()) ? seekBar.getCustomProgress() - seekBar.getOffset() : 0.0f));
+            seekBar.setCustomMax(seekBar.getCustomProgress() + seekBar.getOffset() + seekBar.getMin());
+        }
     }
 }

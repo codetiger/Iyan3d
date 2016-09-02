@@ -82,6 +82,8 @@ public class TextSelectionAdapter extends BaseAdapter {
         } else {
             grid = convertView;
         }
+
+
         switch (UIHelper.ScreenType) {
             case Constants.SCREEN_NORMAL:
                 grid.getLayoutParams().height = this.gridView.getHeight() / 3;
@@ -90,8 +92,11 @@ public class TextSelectionAdapter extends BaseAdapter {
                 grid.getLayoutParams().height = this.gridView.getHeight() / 5;
                 break;
         }
+
         grid.findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
         grid.findViewById(R.id.display_text).setVisibility(View.INVISIBLE);
+
+
 
         String DisplayName = assetsDBs.get(position).getAssetName();
         ((TextView) grid.findViewById(R.id.lable_text)).setText(FileHelper.getFileWithoutExt(DisplayName));
@@ -101,6 +106,7 @@ public class TextSelectionAdapter extends BaseAdapter {
         if (FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" + downloadFileName) || FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder + "/" + downloadFileName)) {
             grid.findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
             grid.findViewById(R.id.display_text).setVisibility(View.VISIBLE);
+            ((TextView) grid.findViewById(R.id.display_text)).setTypeface(Typeface.DEFAULT);
             Typeface fontType;
             try {
                 fontType = FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" + downloadFileName) ? Typeface.createFromFile(PathManager.LocalFontsFolder + "/" + downloadFileName) : Typeface.createFromFile(PathManager.LocalUserFontFolder + "/" + downloadFileName);
@@ -127,8 +133,9 @@ public class TextSelectionAdapter extends BaseAdapter {
             public void onClick(View v) {
                 previousPosition = position;
                 notifyDataSetChanged();
-                importText((isStore) ? assetsDBs.get(position).getAssetsId() + "." + FileHelper.getFileExt(assetsDBs.get(position).getAssetName()) :
-                        assetsDBs.get(position).getAssetName());
+                //importText((isStore) ? assetsDBs.get(position).getAssetsId() + "." + FileHelper.getFileExt(assetsDBs.get(position).getAssetName()) :
+                //        assetsDBs.get(position).getAssetName());
+                importText(PathManager.LocalFontsFolder+"/"+assetsDBs.get(position).getAssetsId()+"."+FileHelper.getFileExt(assetsDBs.get(position).getAssetName()));
             }
         });
         return grid;

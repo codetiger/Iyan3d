@@ -18,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.smackall.animator.EditorView;
 import com.smackall.animator.Helper.CustomViews.CustomRadioButton;
+import com.smackall.animator.Helper.CustomViews.CustomSeekBar;
 import com.smackall.animator.Helper.Listeners.CustomListeners;
 import com.smackall.animator.Props;
 import com.smackall.animator.R;
@@ -127,9 +127,17 @@ public class PropsViewGenerator {
             t.getLayoutParams().height = measureHeight(t) + ((measureHeight(t)) / 2);
             linearLayout.addView(t);
         }
-        SeekBar seekBar = props.getSlider((int) map.get(position).valueX, (!map.get(position).title.equals("")) ? 0.7f : 1.0f);
-        seekBar.setMax(100);
+        CustomSeekBar seekBar = props.getSlider((!map.get(position).title.equals("")) ? 0.7f : 1.0f);
         seekBar.setOnSeekBarChangeListener(new CustomListeners(propertyMap.get(position), position, mContext, props));
+        seekBar.isDynamic = map.get(position).valueW == 1;
+        if (seekBar.isDynamic) {
+            seekBar.setMin((map.get(position).valueX - ((map.get(position).valueZ == 1.0f) ? map.get(position).valueX : 0.5f)));
+            seekBar.setCustomMax((map.get(position).valueX + ((map.get(position).valueZ == 1.0f) ? map.get(position).valueX : 0.5f)) + seekBar.getMin());
+            seekBar.setOffset(((map.get(position).valueZ == 1.0) ? map.get(position).valueX : 0.5f));
+            seekBar.setCustomProgress(map.get(position).valueX, true);
+        }
+
+
         linearLayout.addView(seekBar);
         if (groupName.containsKey(map.get(position).groupName) && position == groupName.get(map.get(position).groupName)) {
 

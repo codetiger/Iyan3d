@@ -27,7 +27,7 @@ public class TextureSelection {
 
     public ChangeTextureAdapter changeTextureAdapter;
     public AssetsDB assetsDB = new AssetsDB();
-    public int selectedNodeid;
+    public int selectedNodeid,selectedMeshBufferId;
     public View v;
     private Context mContext;
     private Tracker mTracker;
@@ -39,6 +39,7 @@ public class TextureSelection {
     public void showChangeTexture() {
         HitScreens.TextureSelectionView(mContext);
         selectedNodeid = GL2JNILib.getSelectedNodeId();
+        selectedMeshBufferId = GL2JNILib.getSelectedMeshBufferId();
         ((EditorView) mContext).showOrHideToolbarView(Constants.HIDE);
         final ViewGroup insertPoint = (((EditorView) mContext).sharedPreferenceManager.getInt(mContext, "toolbarPosition") == 1) ?
                 (ViewGroup) ((Activity) mContext).findViewById(R.id.leftView)
@@ -109,6 +110,6 @@ public class TextureSelection {
             assetsDB.setTexture(addToScene ? fileName : "temp");
         }
 
-        ((EditorView) mContext).renderManager.changeTexture(selectedNodeid, assetsDB.getTexture(), assetsDB.getX(), assetsDB.getY(), assetsDB.getZ(), assetsDB.getIsTempNode());
+        ((EditorView) mContext).renderManager.changeTexture(selectedNodeid,selectedMeshBufferId, assetsDB.getTexture(), assetsDB.getX(), assetsDB.getY(), assetsDB.getZ(), assetsDB.getIsTempNode());
     }
 }

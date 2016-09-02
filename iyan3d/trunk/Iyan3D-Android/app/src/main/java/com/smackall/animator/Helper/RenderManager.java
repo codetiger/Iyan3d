@@ -183,8 +183,8 @@ public class RenderManager {
             @Override
             public void run() {
                 ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
-                GL2JNILib.importModel(assetsDB.getAssetsId(), assetsDB.getAssetName(), assetsDB.getAssetPath(), assetsDB.getTexture(),
-                        assetsDB.getX(), assetsDB.getY(), assetsDB.getZ(), assetsDB.getType(), assetsDB.getIsTempNode());
+                GL2JNILib.importModel(assetsDB.getAssetName(),
+                        assetsDB.getAssetPath(), assetsDB.getTexturePath(), assetsDB.isHasMeshColor(), assetsDB.getX(), assetsDB.getY(), assetsDB.getZ(), assetsDB.getType(), assetsDB.getIsTempNode());
                 ((EditorView) mContext).showOrHideLoading(Constants.HIDE);
             }
         });
@@ -195,7 +195,7 @@ public class RenderManager {
             @Override
             public void run() {
                 ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
-                GL2JNILib.loadText(textDB.getRed(), textDB.getGreen(), textDB.getBlue(), textDB.getTypeOfNode(), textDB.getTextureName(), textDB.getAssetName()
+                GL2JNILib.loadText(textDB.getTypeOfNode(), textDB.getText()
                         , textDB.getFontSize(), textDB.getBevalValue(), textDB.getActionType(), textDB.getFilePath(), textDB.getTempNode());
                 ((EditorView) mContext).showOrHideLoading(Constants.HIDE);
             }
@@ -209,7 +209,6 @@ public class RenderManager {
                 ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
                 GL2JNILib.importImageOrVideo(imageDB.getNodeType(), imageDB.getName(), imageDB.getWidth(), imageDB.getHeight(), imageDB.getActionType(), imageDB.getIsTempNode());
                 ((EditorView) mContext).showOrHideLoading(Constants.HIDE);
-
             }
         });
     }
@@ -226,12 +225,12 @@ public class RenderManager {
         });
     }
 
-    public void changeTexture(final int selectedNodeId, final String textureName, final float x, final float y, final float z, final boolean isTemp) {
+    public void changeTexture(final int selectedNodeId,final int selectedMeshBufferid, final String textureName, final float x, final float y, final float z, final boolean isTemp) {
         glView.queueEvent(new Runnable() {
             @Override
             public void run() {
                 ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
-                GL2JNILib.changeTexture(selectedNodeId, textureName, x, y, z, isTemp);
+                GL2JNILib.changeTexture(selectedNodeId,selectedMeshBufferid, textureName, x, y, z, isTemp);
                 ((EditorView) mContext).showOrHideLoading(Constants.HIDE);
             }
         });
@@ -491,7 +490,7 @@ public class RenderManager {
         } else if ((selectedNodeType == Constants.NODE_TEXT_SKIN || selectedNodeType == Constants.NODE_TEXT) && selectedNodeId != Constants.NOT_SELECTED) {
             ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
             TextDB textDB = new TextDB();
-            textDB.setAssetName(GL2JNILib.getNodeName(selectedNodeId));
+            textDB.setText(GL2JNILib.getNodeName(selectedNodeId));
             textDB.setFilePath(GL2JNILib.optionalFilePathWithId(selectedNodeId));
             textDB.setRed(GL2JNILib.getVertexColorXWithId(selectedNodeId));
             textDB.setGreen(GL2JNILib.getVertexColorYWithId(selectedNodeId));
@@ -501,7 +500,7 @@ public class RenderManager {
             textDB.setTextureName(GL2JNILib.getTexture(selectedNodeId));
             textDB.setTypeOfNode((selectedNodeType == Constants.NODE_TEXT_SKIN) ? Constants.ASSET_TEXT_RIG : Constants.ASSET_TEXT);
             textDB.setTempNode(false);
-            GL2JNILib.loadText(textDB.getRed(), textDB.getGreen(), textDB.getBlue(), textDB.getTypeOfNode(), textDB.getTextureName(), textDB.getAssetName()
+            GL2JNILib.loadText( textDB.getTypeOfNode(), textDB.getText()
                     , textDB.getFontSize(), textDB.getBevalValue(), textDB.getActionType(), textDB.getFilePath(), textDB.getTempNode());
             GL2JNILib.copyPropsOfNode(selectedNodeId, GL2JNILib.getNodeCount() - 1, false);
             ((EditorView) mContext).showOrHideLoading(Constants.HIDE);

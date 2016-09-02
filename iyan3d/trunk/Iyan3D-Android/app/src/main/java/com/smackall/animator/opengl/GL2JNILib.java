@@ -79,9 +79,11 @@ public class GL2JNILib {
 
     public static native int getSelectedNodeId();
 
+    public static native int getSelectedMeshBufferId();
+
     public static native void importAsset(int assetAddType, int assetId, String assetName, String textureName, int width, int height, boolean isTempNode, float x, float y, float z, int assetActionType);
 
-    public static native void importModel(int assetId, String assetName, String meshPath, String texturePath, float x, float y, float z, int assetAddType, boolean isTempNode);
+    public static native void importModel(String name, String filePth, String fileLocation, boolean hasMeshColor, float x, float y, float z, int assetAddType, boolean isTempNode);
 
     public static native void removeTempNode();
 
@@ -183,7 +185,7 @@ public class GL2JNILib {
 
     public static native void cameraPropertyChanged(int fov, int resolution, boolean storeAction);
 
-    public static native boolean loadText(float red, float green, float blue, int typeOfNode, String textureName, String assetName, int fontSize, int bevalValue, int assetAddType, String filePath, boolean isTempNode);
+    public static native boolean loadText(int typeOfNode, String text, int fontSize, int bevalValue, int assetAddType, String filePath, boolean isTempNode);
 
     public static native boolean importImageOrVideo(int nodeType, String name, int width, int height, int assetAddType, boolean isTempNode);
 
@@ -193,7 +195,7 @@ public class GL2JNILib {
 
     public static native void saveAsSGM(String FileName, String textureName, int assetId, boolean haveTexture, float x, float y, float z);
 
-    public static native void changeTexture(int selectedNodeId, String textureName, float x, float y, float z, boolean isTemp);
+    public static native void changeTexture(int selectedNodeId,int selectedMeshBufferId, String textureName, float x, float y, float z, boolean isTemp);
 
     public static native void removeTempTexture(int selectedNodeId);
 

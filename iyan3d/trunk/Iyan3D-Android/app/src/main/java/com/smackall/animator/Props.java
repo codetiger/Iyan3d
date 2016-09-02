@@ -9,8 +9,6 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatRadioButton;
-import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -25,15 +23,14 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.smackall.animator.Analytics.HitScreens;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.CustomViews.CustomRadioButton;
+import com.smackall.animator.Helper.CustomViews.CustomSeekBar;
 import com.smackall.animator.Helper.Listeners.CustomListeners;
 import com.smackall.animator.Helper.Property;
 import com.smackall.animator.Helper.PropsViewGenerator;
@@ -115,11 +112,10 @@ public class Props {
             GL2JNILib.getSceneProps(nativeCallBacks);
     }
 
-    public SeekBar getSlider(int progress, float weight) {
-        AppCompatSeekBar seekBar = new AppCompatSeekBar(mContext);
+    public CustomSeekBar getSlider(float weight) {
+        CustomSeekBar seekBar = new CustomSeekBar(mContext);
         LinearLayout.LayoutParams a = new LinearLayout.LayoutParams((weight != 0) ? 0 : LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, weight);
         seekBar.setLayoutParams(a);
-        seekBar.setProgress(progress);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             seekBar.setElevation(3.0f);
         }

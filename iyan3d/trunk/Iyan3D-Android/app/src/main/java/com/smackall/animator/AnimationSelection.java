@@ -227,7 +227,7 @@ public class AnimationSelection {
             });
         } else if ((selectedNodeType == Constants.NODE_TEXT_SKIN || selectedNodeType == Constants.NODE_TEXT) && selectedAssetId != -1) {
             final TextDB textDB = new TextDB();
-            textDB.setAssetName(GL2JNILib.getNodeName(selectedNodeId));
+            textDB.setText(GL2JNILib.getNodeName(selectedNodeId));
             textDB.setFilePath(GL2JNILib.optionalFilePathWithId(selectedNodeId));
             textDB.setRed(GL2JNILib.getVertexColorXWithId(selectedNodeId));
             textDB.setGreen(GL2JNILib.getVertexColorYWithId(selectedNodeId));
@@ -240,7 +240,7 @@ public class AnimationSelection {
             ((EditorView) mContext).glView.queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    GL2JNILib.loadText(textDB.getRed(), textDB.getGreen(), textDB.getBlue(), textDB.getTypeOfNode(), textDB.getTextureName(), textDB.getAssetName(), textDB.getFontSize(),
+                    GL2JNILib.loadText(textDB.getTypeOfNode(), textDB.getText(), textDB.getFontSize(),
                             textDB.getBevalValue(), textDB.getAssetAddType(), textDB.getFilePath(), textDB.getTempNode());
                     ((EditorView) mContext).showOrHideLoading(Constants.HIDE);
                     doCopyingWork();

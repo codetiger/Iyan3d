@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +19,8 @@ import com.smackall.animator.Helper.AssetsDB;
 import com.smackall.animator.Helper.Constants;
 import com.smackall.animator.Helper.DatabaseHelper;
 import com.smackall.animator.Helper.FileHelper;
-import com.smackall.animator.Helper.PathManager;
 import com.smackall.animator.Helper.UIHelper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -38,13 +37,14 @@ public class OBJSelection {
     DatabaseHelper db;
     OBJSelectionAdapter objSelectionAdapter;
     ViewGroup insertPoint;
+    AssetsDB assetsDB = new AssetsDB();
 
     public OBJSelection(Context context, DatabaseHelper db) {
         this.mContext = context;
         this.db = db;
     }
 
-    public void showObjSelection(final int ViewMode) {
+    public void showObjSelection() {
         HitScreens.OBJSelectionView(mContext);
         modelImported = isImporting = false;
         ((EditorView) mContext).showOrHideToolbarView(Constants.HIDE);
@@ -64,12 +64,11 @@ public class OBJSelection {
         TextView infoLable = (TextView) objView.findViewById(R.id.info_lable);
         objView.findViewById(R.id.import_btn).setVisibility(View.VISIBLE);
         gridView = (GridView) objView.findViewById(R.id.obj_grid);
-        gridView.setTag(ViewMode);
-        infoLable.setText(((Integer.parseInt(gridView.getTag().toString()) == Constants.OBJ_MODE)) ? mContext.getString(R.string.add_obj_in_sdCard) : mContext.getString(R.string.add_texture_in_sdcard));
+        infoLable.setText(mContext.getString(R.string.add_obj_in_sdCard));
         initAssetGrid(gridView);
         Button cancel = (Button) objView.findViewById(R.id.cancel_obj);
         ((Button) objView.findViewById(R.id.import_btn)).setText(String.format(Locale.getDefault(), "%s", mContext.getString(R.string.import_obj)));
-        ((Button) objView.findViewById(R.id.next_obj)).setText(String.format(Locale.getDefault(), "%s", mContext.getString(R.string.addtoscene)));
+        ((Button) objView.findViewById(R.id.import_model)).setText(String.format(Locale.getDefault(), "%s", mContext.getString(R.string.addtoscene)));
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,23 +86,13 @@ public class OBJSelection {
         objView.findViewById(R.id.import_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((Integer.parseInt(gridView.getTag().toString())) == Constants.OBJ_MODE) {
-                    getObjFromStorage();
-                } else {
-                    ((EditorView) mContext).imageManager.getImageFromStorage(Constants.IMPORT_OBJ);
-                }
+                getModelFromStorage();
             }
         });
-        objView.findViewById(R.id.next_obj).setOnClickListener(new View.OnClickListener() {
+        objView.findViewById(R.id.import_model).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!modelImported) return;
-                addSgmToDatabase();
-                insertPoint.removeAllViews();
-                ((EditorView) mContext).showOrHideToolbarView(Constants.SHOW);
-                mContext = null;
-                db = null;
-                objSelectionAdapter = null;
+                importModel(assetsDB.getAssetPath(), false, false);
             }
         });
     }
@@ -126,35 +115,23 @@ public class OBJSelection {
         });
     }
 
-    private void addSgmToDatabase() {
-        ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
-        AssetsDB assetsDB = objSelectionAdapter.assetsDB;
-        String fileName = assetsDB.getAssetName();
-        String textureName = (assetsDB.getTexture().equals("-1")) ? "white_texture" : assetsDB.getTexture();
-        int assetId = 20000 + ((db.getMYModelAssetCount() == 0) ? 1 : db.getAllMyModelDetail().get(db.getMYModelAssetCount() - 1).getID() + 1);
-        String sgmFrom = (assetsDB.getAssetsId() == 123456) ? PathManager.LocalMeshFolder + "/123456.sgm" : PathManager.DefaultAssetsDir + "/" + assetsDB.getAssetsId() + ".sgm";
-        String sgmTo = PathManager.LocalMeshFolder + "/" + assetId + ".sgm";
-        String textureFrom = (textureName.equals("white_texture") ? PathManager.DefaultAssetsDir + "/" + textureName + ".png" : PathManager.LocalImportedImageFolder + "/" + textureName + ".png");
-        String textureTo = PathManager.LocalTextureFolder + "/" + assetId + "-cm.png";
-        FileHelper.copy(sgmFrom, sgmTo);
-        FileHelper.copy(textureFrom, textureTo);
-        ((EditorView) mContext).imageManager.makeThumbnail(textureTo, Integer.toString(assetId));
-        assetsDB.setAssetsId(assetId);
-        assetsDB.setDateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date()));
-        assetsDB.setNBones(0);
-        assetsDB.setHash(FileHelper.md5(fileName));
-        assetsDB.setType(Constants.NODE_SGM);
-        if (assetsDB.getX() == -1 && assetsDB.getY() == -1 && assetsDB.getZ() == -1)
-            assetsDB.setTexture(assetId + "-cm");
-        db.addNewMyModelAssets(assetsDB);
-        assetsDB.setIsTempNode(false);
-        ((EditorView) mContext).renderManager.importAssets(assetsDB);
-    }
-
-    public void getObjFromStorage() {
+    public void getModelFromStorage() {
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("file/*.obj");
+
+            String[] ACCEPT_MIME_TYPES = {
+                    "file/*.obj",
+                    "file/*.3ds",
+                    "file/*.dae",
+                    "file/*.fbx"
+            };
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
+            } else
+                intent.setType("file/*.*");
+
             ((Activity) mContext).startActivityForResult(intent, Constants.OBJ_IMPORT_RESPONSE);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
@@ -162,25 +139,65 @@ public class OBJSelection {
         }
     }
 
-    public void startActivityForResult(Intent i, int requestCode, int resultCode) {
-        ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
-        if (requestCode == Constants.OBJ_IMPORT_RESPONSE && resultCode == Activity.RESULT_OK && null != i) {
-            String path = i.getData().getPath();
-            if (path != null && !path.toLowerCase().equals("null")) {
-                if (!FileHelper.checkValidFilePath(path)) {
-                    UIHelper.informDialog(mContext, mContext.getString(R.string.manually_copy_obj));
-                } else {
-                    String ext = FileHelper.getFileExt(path);
-                    if (ext.toLowerCase().endsWith("obj")) {
-                        String fileName = FileHelper.getFileNameFromPath(path);
-                        FileHelper.copy(path, PathManager.LocalUserMeshFolder + "/" + fileName);
-                        notifyDataChanged();
-                    } else {
-                        UIHelper.informDialog(mContext, mContext.getString(R.string.not_valid_obj_format));
+    public void startActivityForResult(final Intent i, final int requestCode, final int resultCode) {
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (requestCode == Constants.OBJ_IMPORT_RESPONSE && resultCode == Activity.RESULT_OK && null != i) {
+                    final String path = i.getData().getPath();
+                    if (path != null && !path.toLowerCase().equals("null")) {
+                        if (!FileHelper.checkValidFilePath(path)) {
+                            UIHelper.informDialog(mContext, mContext.getString(R.string.manually_copy_obj));
+                        } else {
+                            String ext = FileHelper.getFileExt(path);
+
+                            if (ext.toLowerCase().endsWith("obj") ||
+                                    ext.toLowerCase().endsWith("3ds") ||
+                                    ext.toLowerCase().endsWith("dae") ||
+                                    ext.toLowerCase().endsWith("fbx")) {
+                                ((EditorView) mContext).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        importModel(path, false, false);
+                                    }
+                                });
+                            } else {
+                                UIHelper.informDialog(mContext, mContext.getString(R.string.not_valid_obj_format));
+                            }
+                        }
                     }
                 }
             }
+        }, 500);
+    }
+
+    public void importModel(String meshPath, boolean isTempNode, boolean isColorChanged) {
+        String fileName = FileHelper.getFileNameFromPath(meshPath);
+
+        objSelectionAdapter.objSelectedPosition = -1;
+        objSelectionAdapter.notifyDataSetChanged();
+        if (!isColorChanged)
+            assetsDB.resetValues();
+        assetsDB.setAssetPath(meshPath);
+        assetsDB.setAssetName(fileName);
+        assetsDB.setTexture("-1");
+        assetsDB.setX(1.0f);
+        assetsDB.setY(1.0f);
+        assetsDB.setZ(1.0f);
+        assetsDB.setHasMeshColor(false);
+        assetsDB.setIsTempNode(isTempNode);
+        assetsDB.setTexturePath(FileHelper.getFileLocation(meshPath) + "/");
+
+        ((EditorView) mContext).renderManager.importAssets(assetsDB);
+
+        if (!isTempNode) {
+            insertPoint.removeAllViews();
+            ((EditorView) mContext).showOrHideToolbarView(Constants.SHOW);
+            mContext = null;
+            db = null;
+            objSelectionAdapter = null;
         }
-        ((EditorView) mContext).showOrHideLoading(Constants.HIDE);
     }
 }

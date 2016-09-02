@@ -1,0 +1,14 @@
+prefix=/storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/ffmpeg/install/armeabi-v7a
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 6.47.100
+Requires: 
+Requires.private: libswscale >= 4.1.100, libavutil >= 55.28.100
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -lm -lz
+Cflags: -I${includedir}

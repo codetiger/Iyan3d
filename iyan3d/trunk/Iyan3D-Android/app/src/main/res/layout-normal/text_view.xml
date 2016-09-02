@@ -97,7 +97,7 @@
             android:weightSum="1">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.7"
                 android:gravity="center"
@@ -113,24 +113,6 @@
                     android:textSize="8sp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <Button
-                    android:id="@+id/color_picker_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#00ffffff"
-                    android:drawableRight="@drawable/color_select"
-                    android:text="@string/color"
-                    android:textColor="#ffffff"
-                    android:textSize="8sp"/>
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

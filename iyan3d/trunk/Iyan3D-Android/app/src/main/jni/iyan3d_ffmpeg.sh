@@ -15,7 +15,7 @@
 ###############################################################################
 export ANDROID_NDK=/storage/android-developer/Android/Sdk/ndk-bundle
 SCRIPT=$(readlink -f $0)
-BASE=/storage/Sabish/Iyan3D-5.0SVN/app/ffmpeg
+BASE=/storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/ffmpeg
 ###############################################################################
 #
 # Argument parsing.
@@ -192,13 +192,13 @@ make install
 
 function moveToApp
 {
-rm -r /storage/Sabish/Iyan3D-5.0SVN/app/src/main/obj/local/$1
-rm /storage/Sabish/Iyan3D-5.0SVN/app/src/main/jni/ffmpeg/$1-config/config.h
-cp -r $BASE/build/$1/config.h /storage/Sabish/Iyan3D-5.0SVN/app/src/main/jni/ffmpeg/$1-config/config.h
-cp -r $BASE/install/$1/ /storage/Sabish/Iyan3D-5.0SVN/app/src/main/obj/local/
+rm -r /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/obj/local/$1
+rm /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/ffmpeg/$1-config/config.h
+cp -r $BASE/build/$1/config.h /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/ffmpeg/$1-config/config.h
+cp -r $BASE/install/$1/ /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/obj/local/
 #cd /storage/Sabish/Iyan3D-5.0SVN
 #./gradlew assembleDebug
-#adb push /storage/Sabish/Iyan3D-5.0SVN/app/build/outputs/apk/app-debug.apk /data/local/tmp/com.smackall.animator
+#adb push /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/build/outputs/apk/app-debug.apk /data/local/tmp/com.smackall.animator
 #adb shell pm install -r "/data/local/tmp/com.smackall.animator"
 #adb shell am start -n "com.smackall.animator/com.smackall.animator.LoadingActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 #cd /home/android-developer/Downloads/ffmpeg-3.1.1

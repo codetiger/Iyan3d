@@ -100,12 +100,14 @@ public class ColorPicker implements View.OnTouchListener {
                     ((EditorView) mContext).textSelection.importText();
                 break;
             case Constants.TEXTURE_MODE:
-                ((EditorView) mContext).objSelection.objSelectionAdapter.assetsDB.setX(red / 255.0f);
-                ((EditorView) mContext).objSelection.objSelectionAdapter.assetsDB.setY(green / 255.0f);
-                ((EditorView) mContext).objSelection.objSelectionAdapter.assetsDB.setZ(blue / 255.0f);
-                ((EditorView) mContext).objSelection.objSelectionAdapter.assetsDB.setTexture("-1");
+                ((EditorView) mContext).objSelection.assetsDB.setX(red / 255.0f);
+                ((EditorView) mContext).objSelection.assetsDB.setY(green / 255.0f);
+                ((EditorView) mContext).objSelection.assetsDB.setZ(blue / 255.0f);
+                ((EditorView) mContext).objSelection.assetsDB.setTexture("-1");
                 if (event.getAction() == MotionEvent.ACTION_UP)
-                    ((EditorView) mContext).objSelection.objSelectionAdapter.importOBJ();
+                    ((EditorView) mContext).objSelection.importModel(
+                            ((EditorView) mContext).objSelection.assetsDB.getAssetPath(), ((EditorView) mContext).objSelection.assetsDB.getIsTempNode(),
+                            true);
                 break;
             case Constants.CHANGE_TEXTURE_MODE:
                 ((EditorView) mContext).textureSelection.assetsDB.setX(red / 255.0f);

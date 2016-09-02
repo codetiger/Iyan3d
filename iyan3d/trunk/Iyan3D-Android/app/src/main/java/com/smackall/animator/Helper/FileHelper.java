@@ -122,6 +122,15 @@ public class FileHelper {
         return string2.substring(1 + string2.lastIndexOf("/"), string2.lastIndexOf("."));
     }
 
+    public static String getFileLocation(String string) {
+        return string.substring(0, string.lastIndexOf("/"));
+    }
+
+    public static String getFileLocation(File file) {
+        String string = file.getAbsolutePath();
+        return string.substring(0, string.lastIndexOf("/"));
+    }
+
     public static void mkDir(File file) {
         if (!file.exists()) {
             file.mkdirs();

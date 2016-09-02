@@ -69,7 +69,6 @@ public class TextSelection implements View.OnClickListener, SeekBar.OnSeekBarCha
     private void initViews(View v) {
         v.findViewById(R.id.cancel_textView).setOnClickListener(this);
         v.findViewById(R.id.add_text_btn).setOnClickListener(this);
-        v.findViewById(R.id.color_picker_btn).setOnClickListener(this);
         v.findViewById(R.id.withBone).setOnClickListener(this);
         v.findViewById(R.id.fontstore).setOnClickListener(this);
         v.findViewById(R.id.myfont).setOnClickListener(this);
@@ -88,9 +87,6 @@ public class TextSelection implements View.OnClickListener, SeekBar.OnSeekBarCha
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.color_picker_btn:
-                ((EditorView) mContext).colorPicker.showColorPicker(v, null, Constants.TEXT_VIEW);
-                break;
             case R.id.cancel_textView:
             case R.id.add_text_btn:
                 HitScreens.EditorView(mContext);
@@ -137,12 +133,12 @@ public class TextSelection implements View.OnClickListener, SeekBar.OnSeekBarCha
         if (textDB.getFilePath().equals("-1")) {
             UIHelper.informDialog(mContext, mContext.getString(R.string.choode_font_style));
             return;
-        } else if (!FileHelper.checkValidFilePath(PathManager.LocalFontsFolder + "/" + textDB.getFilePath()) && !FileHelper.checkValidFilePath(PathManager.LocalUserFontFolder + "/" + textDB.getFilePath())) {
+        } else if (!FileHelper.checkValidFilePath(textDB.getFilePath()) && !FileHelper.checkValidFilePath(textDB.getFilePath())) {
             UIHelper.informDialog(mContext, mContext.getString(R.string.check_network_msg));
             return;
         }
         ((EditorView) mContext).showOrHideLoading(Constants.SHOW);
-        textDB.setAssetName(((EditText) v.findViewById(R.id.inputText)).getText().toString());
+        textDB.setText(((EditText) v.findViewById(R.id.inputText)).getText().toString());
         textDB.setBevalValue(((SeekBar) v.findViewById(R.id.bevalSlider)).getProgress());
         textDB.setFontSize(10);
         textDB.setTextureName("-1");

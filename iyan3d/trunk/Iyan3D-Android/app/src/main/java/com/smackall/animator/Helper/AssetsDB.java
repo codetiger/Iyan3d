@@ -1,5 +1,6 @@
 package com.smackall.animator.Helper;
 
+
 public class AssetsDB {
 
     private String assetName;
@@ -21,6 +22,8 @@ public class AssetsDB {
     private float y = -1.0f;
     private float z = -1.0f;
     private int actionType = Constants.IMPORT_ASSET_ACTION;
+    private boolean hasMeshColor = false;
+    private String texturePath = PathManager.LocalTextureFolder + "/";
 
 
     public AssetsDB() {
@@ -65,6 +68,30 @@ public class AssetsDB {
         this.keywords = string3;
         this.hash = string4;
         this.time = string5;
+    }
+
+    public void resetValues() {
+        assetName = "";
+        assetsId = 0;
+        assetPath = "";
+        hash = "";
+        iap = 0;
+        id = 0;
+        keywords = "";
+        nBones = 0;
+        time = "";
+        type = 0;
+        group = 0;
+        isTempNode = true;
+        texture = "";
+        width = 0;
+        height = 0;
+        x = -1.0f;
+        y = -1.0f;
+        z = -1.0f;
+        actionType = Constants.IMPORT_ASSET_ACTION;
+        hasMeshColor = false;
+        texturePath = PathManager.LocalTextureFolder + "/";
     }
 
     public int getGroup() {
@@ -218,5 +245,22 @@ public class AssetsDB {
     public void setAssetPath(String path) {
         this.assetPath = path;
     }
+
+    public boolean isHasMeshColor() {
+        return hasMeshColor;
+    }
+
+    public void setHasMeshColor(boolean hasMeshColor) {
+        this.hasMeshColor = hasMeshColor;
+    }
+
+    public String getTexturePath() {
+        return texturePath;
+    }
+
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
+    }
 }
+
 

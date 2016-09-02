@@ -1,4 +1,4 @@
-LOCAL_PATH := /storage/Sabish/Iyan3D-5.0SVN/app/src/main/jni
+LOCAL_PATH := /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni
 
 ifeq ($(TARGET_ARCH),armeabi)
     APP_PLATFORM=14
@@ -110,7 +110,7 @@ LOCAL_CFLAGS  += -march=armv7-a -mfloat-abi=softfp
 endif
 LOCAL_STATIC_LIBRARIES := libavfilter libavformat libavcodec libswscale libavutil
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/ffmpeg
-LOCAL_C_INCLUDES += /storage/Sabish/Iyan3D-5.0SVN/app/src/main/obj/local/$(TARGET_ARCH_ABI)/include
+LOCAL_C_INCLUDES += /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/obj/local/$(TARGET_ARCH_ABI)/include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/ffmpeg/$(TARGET_ARCH_ABI)-config
 LOCAL_SRC_FILES := ffmpeg/FFmpegJni.c ffmpeg/ffmpeg.c ffmpeg/cmdutils.c ffmpeg/ffmpeg_filter.c ffmpeg/ffmpeg_opt.c
 LOCAL_MODULE := videokit
@@ -119,12 +119,59 @@ endif
 
 include $(CLEAR_VARS)
 
-LOCAL_PATH := /storage/Sabish/Iyan3D-5.0SVN/app/src/main/jni/assimp
+LOCAL_PATH := /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2
+LOCAL_MODULE := freetype_static
+
+FILE_LIST := $(wildcard $(LOCAL_PATH)/src/autofit/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/base/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/cff/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/pshinter/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/psnames/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/raster/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/sfnt/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/smooth/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/truetype/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/raster/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/autofit/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/cff/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/sfnt/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/truetype/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/base/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/psnames/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/pshinter/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/src/smooth/*.cpp)
+
+
+LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH) \
+                    $(LOCAL_PATH)/freetype \
+                    $(LOCAL_PATH)/freetype/config \
+                    $(LOCAL_PATH)/freetype/internal \
+                    $(LOCAL_PATH)/freetype/services \
+                    $(LOCAL_PATH)/src/autofit \
+                    $(LOCAL_PATH)/src/base \
+                    $(LOCAL_PATH)/src/cff \
+                    $(LOCAL_PATH)/src/pshinter \
+                    $(LOCAL_PATH)/src/psnames \
+                    $(LOCAL_PATH)/src/raster \
+                    $(LOCAL_PATH)/src/sfnt \
+                    $(LOCAL_PATH)/src/smooth \
+                    $(LOCAL_PATH)/src/truetype
+
+include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_PATH := /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master
 LOCAL_MODULE := assimp_static
 ASSIMP_SRC_DIR = code
 
 FILE_LIST := $(wildcard $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/contrib/openddlparser/code/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/ftgl/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/iGLU-1.0.0/libtess/*.c)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/iGLU-1.0.0/libutil/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/contrib/unzip/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/contrib/poly2tri/poly2tri/*/*.cc)
 
@@ -221,19 +268,41 @@ ASSIMP_FLAGS_3_1 = $(ASSIMP_FLAGS_3_0) # -DASSIMP_BUILD_BLENDER_DEBUG
 
 LOCAL_CFLAGS += -Os $(ASSIMP_FLAGS_3_1) -DOPENDDL_NO_USE_CPP11 $(DontBuildImporters)  # $(DontBuildProcess)
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/include $(LOCAL_PATH)/contrib/rapidjson/include $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/BoostWorkaround $(LOCAL_PATH)/contrib/openddlparser/include ./
+LOCAL_C_INCLUDES := /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2 \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype/config \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype/internal \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype/services \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/autofit \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/base \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/cff \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/pshinter \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/psnames \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/raster \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/sfnt \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/smooth \
+                    /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/truetype
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/include $(LOCAL_PATH)/contrib/rapidjson/include \
+                    $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/BoostWorkaround \
+                    $(LOCAL_PATH)/contrib/openddlparser/include \
+                    $(LOCAL_PATH)/code \
+                    $(LOCAL_PATH)/code/ftgl \
+                    $(LOCAL_PATH)/code/iGLU-1.0.0/include \
+                    $(LOCAL_PATH)/code/res
+
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include $(LOCAL_PATH)/include $(LOCAL_PATH)/$(ASSIMP_SRC_DIR)/BoostWorkaround
 
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_PATH := /storage/Sabish/Iyan3D-5.0SVN/app/src/main/jni
+LOCAL_PATH := /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni
 
 LOCAL_MODULE := iyan3d
 
 FILE_LIST := $(wildcard $(LOCAL_PATH)/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/*.cpp)
+FILE_LIST += $(filter-out $(LOCAL_PATH)/Iyan3dEngineFiles/SGCloudRenderingHelper.cpp, $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/*.cpp))
 FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/*.cpp)
@@ -257,19 +326,6 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Textures/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/common/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/common/GLKMath/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Meshes/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/raster/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/autofit/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/cff/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/sfnt/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/truetype/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/base/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/psnames/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/pshinter/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/smooth/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/glu/libutil/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/glu/libtess/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/ftgl/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/RenderManager/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/SceneManager/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/libpng/*.cpp)
@@ -299,19 +355,6 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Nodes/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/Textures/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/common/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Core/common/GLKMath/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/raster/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/autofit/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/cff/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/sfnt/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/truetype/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/base/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/psnames/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/pshinter/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/smooth/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/glu/libutil/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/glu/libtess/*.c)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Font/ftgl/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/RenderManager/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/SceneManager/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/libpng/*.c)
@@ -319,70 +362,69 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Loaders/*.c)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/SGEngine2/Utilities/*.c)
 LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
+LOCAL_STATIC_LIBRARIES := libassimp_static freetype_static
 
-LOCAL_STATIC_LIBRARIES := libassimp_static
 LOCAL_CPPFLAGS := -Os -ffunction-sections -fdata-sections -fvisibility=hidden -std=c++11 -fpermissive
 LOCAL_CFLAGS := -Os -ffunction-sections -fdata-sections -fvisibility=hidden
 LOCAL_LDFLAGS := -Wl,--gc-sections,--icf=safe
 LOCAL_LDLIBS  := -llog -lGLESv2 -lEGL -landroid -lz -lm -lGLESv1_CM
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/assimp/include \
-        $(LOCAL_PATH)/SGEngine2 \
-        $(LOCAL_PATH)/SGEngine2/libpng \
-        $(LOCAL_PATH)/SGEngine2/Utilities \
-        $(LOCAL_PATH)/SGEngine2/SceneManager \
-        $(LOCAL_PATH)/SGEngine2/Core \
-        $(LOCAL_PATH)/SGEngine2/Core/Meshes \
-        $(LOCAL_PATH)/SGEngine2/Core/common \
-        $(LOCAL_PATH)/SGEngine2/Core/common/GLKMath \
-        $(LOCAL_PATH)/SGEngine2/Core/Material \
-        $(LOCAL_PATH)/SGEngine2/Core/Textures \
-        $(LOCAL_PATH)/SGEngine2/Core/Nodes \
-        $(LOCAL_PATH)/SGEngine2/RenderManager \
-        $(LOCAL_PATH)/SGEngine2/Font \
-        $(LOCAL_PATH)/SGEngine2/Font/glu \
-        $(LOCAL_PATH)/SGEngine2/Font/glu/libutil \
-        $(LOCAL_PATH)/SGEngine2/Font/glu/libtess \
-        $(LOCAL_PATH)/SGEngine2/Font/glu/include \
-        $(LOCAL_PATH)/SGEngine2/Font/ftgl \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/psnames \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/raster \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/sfnt \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/autofit \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/truetype \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/smooth \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/base \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/cff \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/src/pshinter \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/freetype \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/freetype/config \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/freetype/internal \
-        $(LOCAL_PATH)/SGEngine2/Font/freeType/include/freetype/internal/services \
-        $(LOCAL_PATH)/SGEngine2/Font/poly2tri \
-        $(LOCAL_PATH)/SGEngine2/Font/poly2tri/common \
-        $(LOCAL_PATH)/SGEngine2/Font/poly2tri/sweep \
-        $(LOCAL_PATH)/SGEngine2/Loaders \
-        $(LOCAL_PATH)/Iyan3dEngineFiles \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3 \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/BroadphaseCollision \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionDispatch \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionShapes \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/Gimpact \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/NarrowPhaseCollision \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Character \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/ConstraintSolver \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Dynamics \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Featherstone \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/MLCPSolvers \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Vehicle \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletSoftBody \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/LinearMath \
-        $(LOCAL_PATH)/Iyan3dEngineFiles/HeaderFiles
+
+LOCAL_C_INCLUDES :=/storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2 \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2 \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype/config \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype/internal \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/freetype/services \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/autofit \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/base \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/cff \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/pshinter \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/psnames \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/raster \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/sfnt \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/smooth \
+                   /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/jni/freetype2/src/truetype
+
+LOCAL_C_INCLUDES += /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master/include \
+                    /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master/code \
+                    /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master/code/ftgl \
+                    /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master/code/iGLU-1.0.0/include \
+                    /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master/code/iGLU-1.0.0/libtess \
+                    /storage/Sabish/Iyan3D_6.0_SVN/trunk/assimp-master/code/iGLU-1.0.0/libutil
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH) \
+                    $(LOCAL_PATH)/SGEngine2 \
+                    $(LOCAL_PATH)/SGEngine2/libpng \
+                    $(LOCAL_PATH)/SGEngine2/Utilities \
+                    $(LOCAL_PATH)/SGEngine2/SceneManager \
+                    $(LOCAL_PATH)/SGEngine2/Core \
+                    $(LOCAL_PATH)/SGEngine2/Core/Meshes \
+                    $(LOCAL_PATH)/SGEngine2/Core/common \
+                    $(LOCAL_PATH)/SGEngine2/Core/common/GLKMath \
+                    $(LOCAL_PATH)/SGEngine2/Core/Material \
+                    $(LOCAL_PATH)/SGEngine2/Core/Textures \
+                    $(LOCAL_PATH)/SGEngine2/Core/Nodes \
+                    $(LOCAL_PATH)/SGEngine2/RenderManager \
+                    $(LOCAL_PATH)/SGEngine2/Loaders \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3 \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/BroadphaseCollision \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionDispatch \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/CollisionShapes \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/Gimpact \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletCollision/NarrowPhaseCollision \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Character \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/ConstraintSolver \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Dynamics \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Featherstone \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/MLCPSolvers \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletDynamics/Vehicle \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/BulletSoftBody \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/bullet3/src/LinearMath \
+                    $(LOCAL_PATH)/Iyan3dEngineFiles/HeaderFiles
 include $(BUILD_SHARED_LIBRARY)
 
 LOCAL_PATH := $(call my-dir)

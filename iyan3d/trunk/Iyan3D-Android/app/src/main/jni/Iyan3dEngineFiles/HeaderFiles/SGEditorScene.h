@@ -151,7 +151,7 @@ public:
     void renderAll();
     
     #ifdef ANDROID
-        bool (*downloadMissingAssetsCallBack)(jobject object,std::string filePath, NODE_TYPE nodeType, bool hasTexture, JNIEnv *env, jclass type);
+        bool (*downloadMissingAssetsCallBack)(JNIEnv *env, jclass type,jobject object,string fileName,NODE_TYPE nodeType,bool hasTexture,string textureName);
         unsigned char* (*getVideoFrameCallBack)(std::string fileName, int frame,int width, int height);
     #endif
     

@@ -102,6 +102,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     public MeshProps meshProps;
     public OtherProps otherProps;
     public ColorPicker colorPicker;
+    public FilePicker filePicker;
     public Scale scale;
     public EnvelopScale envelopScale;
     public Play play;
@@ -278,6 +279,7 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         meshProps = new MeshProps(EditorView.this);
         otherProps = new OtherProps(EditorView.this);
         colorPicker = new ColorPicker(EditorView.this);
+        filePicker = new FilePicker(this);
         scale = new Scale(EditorView.this);
         envelopScale = new EnvelopScale(EditorView.this);
         login = new Login(EditorView.this);
@@ -587,9 +589,10 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
                         break;
                     case Constants.IMPORT_OBJ:
                         Constants.VIEW_TYPE = Constants.OBJ_VIEW;
-                        if (objSelection == null)
-                            objSelection = new OBJSelection(EditorView.this, db);
-                        objSelection.showObjSelection(Constants.OBJ_MODE);
+//                        if (objSelection == null)
+//                            objSelection = new OBJSelection(EditorView.this, db);
+//                        objSelection.showObjSelection();
+                        filePicker.showFilePicker();
                         break;
                     case Constants.IMPORT_ADD_BONE:
                         if (rig == null)
@@ -784,11 +787,13 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
         clone_btn.show();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data == null) return;
+
         if (requestCode == Constants.IMAGE_IMPORT_RESPONSE)
             imageManager.startActivityForResult(data, requestCode, resultCode);
         else if (requestCode == Constants.OBJ_IMPORT_RESPONSE) {
@@ -902,5 +907,10 @@ public class EditorView extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mService = null;
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
     }
 }

@@ -11,7 +11,7 @@ public class TextDB {
     float blue = 1.0f;
     int typeOfNode;
     String textureName = "-1";
-    String assetName = "TEXT";
+    String text = "TEXT";
     int fontSize = 10;
     int bevalValue;
     int assetAddType;
@@ -23,13 +23,13 @@ public class TextDB {
 
     }
 
-    public TextDB(float red, float green, float blue, int typeOfNode, String textureName, String assetName, int fontSize, int bevalValue, int assetAddType, String filePath, boolean isTempNode) {
+    public TextDB(float red, float green, float blue, int typeOfNode, String textureName, String text, int fontSize, int bevalValue, int assetAddType, String filePath, boolean isTempNode) {
         this.red = red;
         this.green = green;
         this.blue = blue;
         this.typeOfNode = typeOfNode;
         this.textureName = textureName;
-        this.assetName = assetName;
+        this.text = text;
         this.fontSize = fontSize;
         this.bevalValue = bevalValue;
         this.assetAddType = assetAddType;
@@ -77,12 +77,12 @@ public class TextDB {
         this.textureName = textureName;
     }
 
-    public String getAssetName() {
-        return this.assetName;
+    public String getText() {
+        return this.text;
     }
 
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getFontSize() {

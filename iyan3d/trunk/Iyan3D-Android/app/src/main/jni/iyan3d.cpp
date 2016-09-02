@@ -178,43 +178,44 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
     if(!editorScene)
         return;
     editorScene->camPreviewScale = (previewSize == 1) ? 1.0 : 2.0;
-    float camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+    int cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
+    float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
     if(position==PREVIEW_LEFTBOTTOM)
     {
-        camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+        camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0)
         {
             editorScene->camPreviewOrigin.x=0;
             editorScene->camPreviewOrigin.y=oglHeight*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
 
         }
         if(editorScene->camPreviewScale==2.0)
         {
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=oglHeight*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
 
         }
     }
     if(position==PREVIEW_LEFTTOP)
     {
-        camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+        camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0)
         {
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
         }
         if(editorScene->camPreviewScale==2.0)
         {
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
         }
@@ -224,21 +225,21 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
     {
         if(editorScene->camPreviewScale==1.0)
         {
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale-camPrevRatio;
             editorScene->camPreviewOrigin.y=oglHeight*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=-editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
 
 
         }
         if(editorScene->camPreviewScale==2.0)
         {
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=oglHeight*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
 
         }
     }
@@ -247,17 +248,17 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
 
         if(editorScene->camPreviewScale==1.0)
         {
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
         }
         if(editorScene->camPreviewScale==2.0)
         {
-            camPrevRatio = RESOLUTION[editorScene->cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[editorScene->cameraResolutionType][0] / camPrevRatio;;
-            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[editorScene->cameraResolutionType][1] / camPrevRatio;
+            camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
         }
@@ -279,7 +280,7 @@ void cameraPositionViaToolBarPosition(int selectedIndex, float rightWidth,float 
 
 void boneLimitsCallBack() {}
 
-bool downloadMissingAssetsCallBack(jobject object,string fileName, NODE_TYPE nodeType,bool hasTexture ,JNIEnv *env, jclass type)
+bool downloadMissingAssetsCallBack(JNIEnv *env, jclass type,jobject object,string fileName,NODE_TYPE nodeType,bool hasTexture,string textureName)
 {
     jstring fileNameStr = env->NewStringUTF(fileName.c_str());
     int nType = (int)nodeType;
@@ -489,7 +490,7 @@ void createDuplicateAssets(JNIEnv *env, jclass type, jobject callback)
             editorScene->selectMan->unselectObjects();
             for(int i = 0; i < addedNodeIds.size(); i++)
             {
-                editorScene->selectMan->selectObject(addedNodeIds[i], true);
+                editorScene->selectMan->selectObject(addedNodeIds[i],NOT_SELECTED, true);
             }
             editorScene->updater->updateControlsOrientaion();
             editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_ADDED, 0);
@@ -505,7 +506,7 @@ void createDuplicateAssets(JNIEnv *env, jclass type, jobject callback)
             jmethodID saveCompleteCallBack = env->GetMethodID(dataClass, "cloneSelectedAssetWithId", "(III)V");
             env->CallVoidMethod(callback, saveCompleteCallBack,selectedAssetId,(int)selectedNodeType,selectedNode);
 
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1 , false);
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1 ,NOT_SELECTED, false);
             editorScene->updater->setDataForFrame(editorScene->currentFrame);
         }
 
@@ -625,6 +626,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_save(JNIEnv *env, jclass type,jobject object ,jboolean isCloudRender,jstring filePath,jboolean isAutoSave);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_dealloc(JNIEnv *env, jclass type);
     JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedNodeId(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedMeshBufferId(JNIEnv *env, jclass type);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeTempNode(JNIEnv *env, jclass type);
     JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeCount(JNIEnv *env, jclass type);
     JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeType(JNIEnv *env, jclass type,jint nodeId);
@@ -678,16 +680,16 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraPositionViaToolBarPosition(JNIEnv *env, jclass type,jint selectedIndex, jfloat rightWidth,jfloat topHeight);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAsset(JNIEnv *env,jclass type,jint assetType,jint assetId,jstring assetName,jstring textureName,
             jint width,jint height,jboolean isTempNode,jfloat x,jfloat y, jfloat z,int assetActionType);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jint assetId,jstring assetName,jstring meshPath,jstring texturePath,
-       jfloat x,jfloat y, jfloat z,int assetAddType,jboolean isTempNode);
+     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jstring name,jstring filePath,jstring fileLocation,jboolean hasMeshColor,
+        jfloat x,jfloat y, jfloat z,int assetAddType,jboolean isTempNode);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraPropertyChanged(JNIEnv *env, jclass type,jint fov,jint resolution,jboolean storeAction);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jfloat red,jfloat green,jfloat blue,jint typeOfNode,jstring textureName,jstring assetName,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jint typeOfNode,jstring text,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode);
     JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importImageOrVideo(JNIEnv *env, jclass type,jint nodeType,jstring assetName,jint imgWidth,jint imgHeight
             ,jint assetAddType,jboolean isTempNode);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAdditionalLight(JNIEnv *env, jclass type,jint lightCount,jint action);
     JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightCount(JNIEnv *env, jclass type);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_saveAsSGM(JNIEnv *env, jclass type,jstring fileName,jstring textureName,jint assetId,jboolean haveTexture,jfloat x,jfloat y, jfloat z);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp);
+    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jint selectedMeshBufferId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeTempTexture(JNIEnv *env, jclass type,jint selectedNodeId);
     JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_canEditRigBones(JNIEnv *env, jclass type);
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_beginRigging(JNIEnv *env, jclass type);
@@ -905,13 +907,14 @@ extern "C" {
         {
             addCameraLight();
             loadFilepath = "";
-            editorScene->updater->setCameraProperty(editorScene->cameraFOV, editorScene->cameraResolutionType);
+             editorScene->updater->setCameraProperty(editorScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x, editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x);
+            //TODO editorScene->updater->setCameraProperty(editorScene->cameraFOV, cameraResolutionType);
             editorScene->updater->setDataForFrame(editorScene->currentFrame);
             callBackIsDisplayPrepared(env, type);
         }
         else if (file.size() > 0)
         {
-            editorScene->loader->loadSceneData(&file,env,type,object);
+            editorScene->loader->loadSceneData(env,type,object,&file);
             loadFilepath = "";
             callBackIsDisplayPrepared(env, type);
         }
@@ -1067,30 +1070,36 @@ extern "C" {
         return (jint) editorScene->selectedNodeId;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jint assetId,jstring assetName,jstring meshPath,jstring texturePath,
+    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedMeshBufferId(JNIEnv *env, jclass type)
+    {
+        return (jint) editorScene->selectedMeshBufferId;
+    }
+
+    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jstring name,jstring filePath,jstring fileLocation,jboolean hasMeshColor,
     jfloat x,jfloat y, jfloat z,int assetAddType,jboolean isTempNode){
 
-        const char *assetName_ = env->GetStringUTFChars(assetName, 0);
-        string assetNameStr = assetName_;
-        const char *nativeStringForTexture = env->GetStringUTFChars(texturePath, 0);
-        string texture = nativeStringForTexture;
-        const char *nativeStringForMesh = env->GetStringUTFChars(meshPath, 0);
-        string mesh = nativeStringForMesh;
+
+        const char *assetName_char = env->GetStringUTFChars(name, 0);
+        string assetName = assetName_char;
+        const char *filePath_char = env->GetStringUTFChars(filePath, 0);
+        string meshFilePath = filePath_char;
+        const char *fileLocation_char = env->GetStringUTFChars(fileLocation, 0);
+        string meshFileLocation = fileLocation_char;
         Vector3 color = Vector3(x,y,z);
 
         editorScene->loader->removeTempNodeIfExists();
 
         SceneImporter *loader = new SceneImporter();
-        loader->importNodesFromFile(editorScene, assetNameStr, mesh, texture, false, color, isTempNode);
+        loader->importNodesFromFile(editorScene, assetName, meshFilePath, meshFileLocation,hasMeshColor, color, isTempNode);
 
-        if(!isTempNode){
-            if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-               editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
-        }
+        //if(!isTempNode){
+        //    if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+        //       editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+        //}
 
-        env->ReleaseStringUTFChars(texturePath, nativeStringForTexture);
-        env->ReleaseStringUTFChars(meshPath, nativeStringForMesh);
-        env->ReleaseStringUTFChars(assetName, assetName_);
+        env->ReleaseStringUTFChars(name, assetName_char);
+        env->ReleaseStringUTFChars(filePath, filePath_char);
+        env->ReleaseStringUTFChars(fileLocation, fileLocation_char);
     }
 
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAsset(JNIEnv *env,jclass type,jint assetType ,jint assetId,jstring assetName,jstring textureName,
@@ -1158,7 +1167,7 @@ extern "C" {
 
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_selectNode(JNIEnv *env, jclass type,jint nodeId,jboolean isMultiSelect)
     {
-        editorScene->selectMan->selectObject(nodeId,isMultiSelect);
+        editorScene->selectMan->selectObject(nodeId,NOT_SELECTED,isMultiSelect);
     }
 
     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeNode(JNIEnv *env, jclass type,jint nodeId,jboolean isUndoOrRedo)
@@ -1293,12 +1302,12 @@ extern "C" {
 
     JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraFov(JNIEnv *env, jclass type)
     {
-        return editorScene->cameraFOV;
+        return 72.0f; // TODO editorScene->cameraFOV;
     }
 
     JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_resolutionType(JNIEnv *env, jclass type)
     {
-        return editorScene->cameraResolutionType;
+        return editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;;
     }
 
     JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightx(JNIEnv *env, jclass type)
@@ -1481,19 +1490,18 @@ extern "C" {
     }
 
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,
-            jfloat red,jfloat green,jfloat blue,jint typeOfNode,jstring textureName,jstring assetName, jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jint typeOfNode,jstring text,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode)
     {
         editorScene->loader->removeTempNodeIfExists();
-        const char *name = env->GetStringUTFChars(assetName, 0);
-        wstring assetNameW = ConversionHelper::getWStringForString(name);
-        const char *nativeString = env->GetStringUTFChars(textureName, 0);
-        string texture = nativeString;
-        const char *fontName = env->GetStringUTFChars(filePath, 0);
-        string font = fontName;
-        Vector4 textColor = Vector4(red,green,blue,1.0);
+
+        const char *textChar = env->GetStringUTFChars(text, 0);
+        wstring textWStr = ConversionHelper::getWStringForString(textChar);
+        const char *fontPath = env->GetStringUTFChars(filePath, 0);
+        string fontPathStr = fontPath;
         NODE_TYPE nodeType = (typeOfNode == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
+
         ActionType actionType = IMPORT_ASSET_ACTION;
+
         if(assetAddType == TEXT_IMAGE_ADD)
             actionType = IMPORT_ASSET_ACTION;
         else if(assetAddType == UNDO)
@@ -1501,30 +1509,23 @@ extern "C" {
         else if (assetAddType == REDO)
             actionType = REDO_ACTION;
 
-         SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,"","-1",assetNameW, fontSize, bevalValue, actionType, textColor, font,isTempNode);
 
+        SceneImporter *loader = new SceneImporter();
+
+        loader->import3DText(editorScene, textWStr, fontPathStr, 4, 4, bevalValue / 50.0f, 4, (nodeType == NODE_TEXT_SKIN), isTempNode);
 
         //TODO SGNode* textNode = editorScene->loader->loadNode(nodeType, 0,texture,assetNameW, fontSize, bevalValue, actionType, textColor, font,isTempNode);
 
-        env->ReleaseStringUTFChars(assetName, name);
-        env->ReleaseStringUTFChars(textureName, nativeString);
-        env->ReleaseStringUTFChars(filePath, fontName);
+        env->ReleaseStringUTFChars(text, textChar);
+        env->ReleaseStringUTFChars(filePath, fontPath);
 
-        if (textNode == NULL)
-        {
-            if(editorScene && editorScene->loader)
-                editorScene->loader->removeTempNodeIfExists();
-            return false;
+        //TODO
+        /*
+        if(!isTempNode){
+            if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
+                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
         }
-        if(textNode)
-            textNode->isTempNode = isTempNode;
-        if(isTempNode)
-            editorScene->isPreviewMode = false;
-        if(!isTempNode)
-        {
-            if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, 0);
-        }
+        */
 
         return true;
     }
@@ -1600,11 +1601,10 @@ extern "C" {
 
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp)
+    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jint selectedMeshBufferId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp)
     {
-
         const char *texture = env->GetStringUTFChars(textureName, 0);
-        editorScene->selectMan->selectObject(selectedNodeId,false);
+        editorScene->selectMan->selectObject(selectedNodeId,selectedMeshBufferId,false);
         if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected())
         {
             editorScene->changeTexture(texture, Vector3(x,y,z),isTemp,false);
@@ -2074,7 +2074,7 @@ extern "C" {
             if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, sgNode->assetId);
             editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1 , false);
+            editorScene->selectMan->selectObject(editorScene->nodes.size()-1 ,NOT_SELECTED, false);
             editorScene->updater->setDataForFrame(editorScene->currentFrame);
         }
     }

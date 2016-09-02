@@ -22,10 +22,17 @@ png_bytep *row_pointers;
 uint8_t * PNGFileManager::read_png_file(const char *filename , int &texWidth , int &texHeight) {
     Logger::log(INFO , "Read png" , "Png read Started");
     uint8_t * outputData;
+
+    //string file = "/data/data/com.smackall.animator/files/assets/white_texture.png";
+
     FILE *fp = fopen(filename, "rb");
-    
+
+    if(!fp)
+     return NULL;
+
     printf("File Name %s ",filename);
-    
+
+    //Logger::log(INFO,"PngFileManager","Texture Name : %s" + file);
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if(!png) return NULL;
     

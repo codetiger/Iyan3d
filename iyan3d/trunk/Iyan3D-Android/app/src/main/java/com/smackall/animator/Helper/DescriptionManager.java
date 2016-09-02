@@ -112,37 +112,32 @@ public class DescriptionManager {
             } else if (Constants.VIEW_TYPE == Constants.TEXT_VIEW) {
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.inputText));
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.bevalSlider));
-                ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.color_picker_btn));
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.fontstore));
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.text_gridView));
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.add_text_btn));
 
                 ((Activity) context).findViewById(R.id.inputText).setContentDescription(context.getString(R.string.enter_your_text_here));
                 ((Activity) context).findViewById(R.id.bevalSlider).setContentDescription(context.getString(R.string.add_bevel_to_3d_text));
-                ((Activity) context).findViewById(R.id.color_picker_btn).setContentDescription(context.getString(R.string.choose_color_for_3d_text));
                 ((Activity) context).findViewById(R.id.fontstore).setContentDescription(context.getString(R.string.toggle_between_store_fonts_and_local));
                 ((Activity) context).findViewById(R.id.text_gridView).setContentDescription(context.getString(R.string.choose_a_font_to_preview));
                 ((Activity) context).findViewById(R.id.add_text_btn).setContentDescription(context.getString(R.string.import_selected_3d_text));
 
                 ((Activity) context).findViewById(R.id.inputText).setTag("left");
                 ((Activity) context).findViewById(R.id.bevalSlider).setTag("left");
-                ((Activity) context).findViewById(R.id.color_picker_btn).setTag("left");
                 ((Activity) context).findViewById(R.id.fontstore).setTag("left");
                 ((Activity) context).findViewById(R.id.text_gridView).setTag("left");
                 ((Activity) context).findViewById(R.id.add_text_btn).setTag("left");
             } else if (Constants.VIEW_TYPE == Constants.OBJ_VIEW) {
-                boolean objMode = (Integer.parseInt((((EditorView) context).objSelection.gridView.getTag().toString()))
-                        == Constants.OBJ_MODE);
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.obj_grid));
                 ((EditorView) context).helpDialogs.views.add(((EditorView) context).objSelection.objView.findViewById(R.id.import_btn));
-                ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.next_obj));
+                ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.import_model));
 
-                ((Activity) context).findViewById(R.id.obj_grid).setContentDescription((objMode) ? context.getString(R.string.select_and_obj) : context.getString(R.string.choose_texture));
-                ((EditorView) context).objSelection.objView.findViewById(R.id.import_btn).setContentDescription((objMode) ? context.getString(R.string.tap_to_import_obj_from_local) : context.getString(R.string.tap_to_import_texture_from_gallery));
-                ((Activity) context).findViewById(R.id.next_obj).setContentDescription((objMode) ? context.getString(R.string.tap_to_choose_texture_or_color) : context.getString(R.string.import_the_model_with_selected_texture_or_color));
+                ((Activity) context).findViewById(R.id.obj_grid).setContentDescription(context.getString(R.string.select_and_obj));
+                ((EditorView) context).objSelection.objView.findViewById(R.id.import_btn).setContentDescription(context.getString(R.string.tap_to_import_obj_from_local));
+                ((Activity) context).findViewById(R.id.import_model).setContentDescription(context.getString(R.string.tap_to_choose_texture_or_color));
 
                 ((EditorView) context).objSelection.objView.findViewById(R.id.import_btn).setTag("left");
-                ((Activity) context).findViewById(R.id.next_obj).setTag("left");
+                ((Activity) context).findViewById(R.id.import_model).setTag("left");
             } else if (Constants.VIEW_TYPE == Constants.CHANGE_TEXTURE) {
                 ((EditorView) context).helpDialogs.views.add(((Activity) context).findViewById(R.id.image_grid));
                 ((EditorView) context).helpDialogs.views.add(((EditorView) context).textureSelection.v.findViewById(R.id.import_btn));
