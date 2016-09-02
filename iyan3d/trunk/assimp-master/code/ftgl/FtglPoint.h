@@ -29,10 +29,10 @@
 #define _DIFONT_POINT_H_
 
 #include <ft2build.h>
-#include <freeType/freetype.h>
-#include <freeType/ftglyph.h>
-#include <freeType/ftoutln.h>
-#include <freeType/fttrigon.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
+#include <freetype/ftoutln.h>
+#include <freetype/fttrigon.h>
 
 /**
  * FtglPoint class is a basic 3-dimensional point or vector.
@@ -48,7 +48,7 @@ public:
         values[1] = 0;
         values[2] = 0;
     }
-    
+
     /**
      * Constructor. Z coordinate is set to zero if unspecified.
      *
@@ -63,7 +63,7 @@ public:
         values[1] = y;
         values[2] = z;
     }
-    
+
     /**
      * Constructor. This converts an FT_Vector to an difont::FtglPoint
      *
@@ -75,7 +75,7 @@ public:
         values[1] = ft_vector.y;
         values[2] = 0;
     }
-    
+
     /**
      * Normalise a point's coordinates. If the coordinates are zero,
      * the point is left untouched.
@@ -83,8 +83,8 @@ public:
      * @return A vector of norm one.
      */
     FtglPoint Normalise();
-    
-    
+
+
     /**
      * Operator += In Place Addition.
      *
@@ -96,10 +96,10 @@ public:
         values[0] += point.values[0];
         values[1] += point.values[1];
         values[2] += point.values[2];
-        
+
         return *this;
     }
-    
+
     /**
      * Operator +
      *
@@ -112,10 +112,10 @@ public:
         temp.values[0] = values[0] + point.values[0];
         temp.values[1] = values[1] + point.values[1];
         temp.values[2] = values[2] + point.values[2];
-        
+
         return temp;
     }
-    
+
     /**
      * Operator -= In Place Substraction.
      *
@@ -127,10 +127,10 @@ public:
         values[0] -= point.values[0];
         values[1] -= point.values[1];
         values[2] -= point.values[2];
-        
+
         return *this;
     }
-    
+
     /**
      * Operator -
      *
@@ -143,10 +143,10 @@ public:
         temp.values[0] = values[0] - point.values[0];
         temp.values[1] = values[1] - point.values[1];
         temp.values[2] = values[2] - point.values[2];
-        
+
         return temp;
     }
-    
+
     /**
      * Operator *  Scalar multiplication
      *
@@ -159,11 +159,11 @@ public:
         temp.values[0] = values[0] * multiplier;
         temp.values[1] = values[1] * multiplier;
         temp.values[2] = values[2] * multiplier;
-        
+
         return temp;
     }
-    
-    
+
+
     /**
      * Operator *  Scalar multiplication
      *
@@ -175,8 +175,8 @@ public:
     {
         return point * multiplier;
     }
-    
-    
+
+
     /**
      * Operator *  Scalar product
      *
@@ -190,8 +190,8 @@ public:
         + a.values[1] * b.values[1]
         + a.values[2] * b.values[2];
     }
-    
-    
+
+
     /**
      * Operator ^  Vector product
      *
@@ -209,8 +209,8 @@ public:
         - values[1] * point.values[0];
         return temp;
     }
-    
-    
+
+
     /**
      * Operator == Tests for equality
      *
@@ -219,8 +219,8 @@ public:
      * @return true if a & b are equal
      */
     friend bool operator == (const FtglPoint &a, const FtglPoint &b);
-    
-    
+
+
     /**
      * Operator != Tests for non equality
      *
@@ -229,8 +229,8 @@ public:
      * @return true if a & b are not equal
      */
     friend bool operator != (const FtglPoint &a, const FtglPoint &b);
-    
-    
+
+
     /**
      * Cast to double*
      */
@@ -238,16 +238,16 @@ public:
     {
         return values;
     }
-    
-    
+
+
     /**
      * Setters
      */
     void X(double x) { values[0] = x; };
     void Y(double y) { values[1] = y; };
     void Z(double z) { values[2] = z; };
-    
-    
+
+
     /**
      * Getters
      */
@@ -257,7 +257,7 @@ public:
     float Xf() const { return static_cast<float>(values[0]); };
     float Yf() const { return static_cast<float>(values[1]); };
     float Zf() const { return static_cast<float>(values[2]); };
-    
+
 private:
     /**
      * The point data

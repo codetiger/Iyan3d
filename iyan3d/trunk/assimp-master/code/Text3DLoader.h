@@ -51,10 +51,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/Importer.hpp>
 
 #include <ft2build.h>
-#include <freeType/freetype.h>
-#include <freeType/ftglyph.h>
-#include <freeType/ftoutln.h>
-#include <freeType/fttrigon.h>
+#include <freetype.h>
+#include <freetype/ftglyph.h>
+#include <freetype/ftoutln.h>
+#include <freetype/fttrigon.h>
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -96,7 +96,7 @@ protected:
     const aiImporterDesc* GetInfo () const;
 
     void SetupProperties(const Importer* pImp);
-    
+
     // -------------------------------------------------------------------
     /** Imports the given file into the given scene structure.
     * See BaseImporter::InternReadFile() for details
@@ -111,7 +111,7 @@ private:
     float extrude;
     double bevelRadius;
     int bevelSegments;
-    
+
     double AddCharacter(FT_Face face, wchar_t ch, double offset);
     void AddBevel(FT_Face face, wchar_t ch, double offset);
     void AddCharacterSideFace(FT_Face face, wchar_t ch, double offset);
@@ -120,39 +120,39 @@ private:
     struct SSGRVectHeader {
         float vx, vy, vz, nx, ny, nz, s, t;
     };
-    
+
     struct SSGMCountHeaderLowPoly {
         unsigned short vertCount, indCount, colCount;
     };
-    
+
     struct SSGMCountHeaderHighPoly {
         unsigned int vertCount, indCount, colCount;
     };
-    
+
     struct SSGMVectHeader {
         float vx, vy, vz, nx, ny, nz;
     };
-    
+
     struct SSGMUVHeader {
         float s, t;
     };
-    
+
     struct SSGMIndexHeaderLowPoly {
         unsigned short vtInd, colInd;
     };
-    
+
     struct SSGMIndexHeaderHighPoly {
         unsigned int vtInd, colInd;
     };
-    
+
     struct SSGMColHeader {
         unsigned char r, g, b;
     };
-    
+
 #define UV_MAPPED 1
 #define VERTEX_COLORED 2
-    
-    
+
+
     struct Material
     {
         Material()

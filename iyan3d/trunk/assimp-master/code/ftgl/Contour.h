@@ -30,10 +30,10 @@
 
 #include <vector>
 #include <ft2build.h>
-#include <freeType/freetype.h>
-#include <freeType/ftglyph.h>
-#include <freeType/ftoutln.h>
-#include <freeType/fttrigon.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
+#include <freetype/ftoutln.h>
+#include <freetype/fttrigon.h>
 
 #include <FtglPoint.h>
 

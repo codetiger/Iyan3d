@@ -31,7 +31,11 @@
 #ifndef __glu_h__
 #define __glu_h__
 
-#include <OpenGLES/ES1/gl.h>
+#ifdef ANDROID
+    #include <GLES/gl.h>
+#else
+  #include <OpenGLES/ES1/gl.h>
+#endif
 
 #ifndef GLAPIENTRY
 #define GLAPIENTRY
