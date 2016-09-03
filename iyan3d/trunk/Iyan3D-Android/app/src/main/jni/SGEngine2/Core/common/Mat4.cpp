@@ -118,9 +118,7 @@ void Mat4::perspective(float fov, float aspect, float nearz, float farz)
 
 void Mat4::translate(float x, float y, float z)
 {
-    (*this)[12] = x;
-    (*this)[13] = y;
-    (*this)[14] = z;
+    matrix = GLKMatrix4Translate(matrix, x, y, z);
 }
 
 void Mat4::translate(const Vector3& v)
