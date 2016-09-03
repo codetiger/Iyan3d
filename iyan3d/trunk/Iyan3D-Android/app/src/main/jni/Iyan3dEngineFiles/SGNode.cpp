@@ -776,10 +776,10 @@ void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame
             float angleX = -0.1;
             float totAng = 0.1;
             while(1){
-                Quaternion delta = Quaternion(Vector3(angleX,0.0,0.0) * DEGTORAD);
+                Quaternion delta = Quaternion(Vector3(angleX, 0.0, 0.0) * DEGTORAD);
                 Quaternion local = delta * grandParent->getRotation();
                 grandParent->setRotation(local, true);
-                joints[grandParent->getID()]->setRotation(local,currentFrame);
+                joints[grandParent->getID()]->setRotation(local, currentFrame);
                 joints[grandParent->getID()]->setRotationOnNode(local, true);
                 grandParent->updateAbsoluteTransformation();
                 grandParent->updateAbsoluteTransformationOfChildren();

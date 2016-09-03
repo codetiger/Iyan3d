@@ -318,21 +318,22 @@ void SGEditorScene::setTransparencyForObjects()
 {
     if(!smgr && nodes.size() < 3)
         return;
-    
-    if((nodes[nodes.size()-1]->isTempNode && !isPreviewMode) || isRigMode) {
-        isPreviewMode = true;
-        int excludeNodeId = (isRigMode) ? riggingNodeId : (int)nodes.size()-1;
-        for(int index = 0; index < nodes.size(); index++) {
-            if(index != excludeNodeId){
-                nodes[index]->getProperty(TRANSPARENCY).value.x = (isRigMode) ? 0.0 : 0.2;
-            }
+
+    isPreviewMode = false;
+
+    for(int index = 0; index < nodes.size(); index++) {
+        if(nodes[index]->isTempNode || (isRigMode && riggingNodeId == index)) {
+            isPreviewMode = true;
+            nodes[index]->getProperty(TRANSPARENCY).value.x = 1.0;
+        } else {
+            nodes[index]->getProperty(TRANSPARENCY).value.x = (isRigMode) ? 0.0 : 0.2;
         }
-    } else if(!nodes[nodes.size()-1]->isTempNode && isPreviewMode) {
-        isPreviewMode = false;
-        for(int index = 0; index < nodes.size(); index++) {
+    }
+
+    if(!isPreviewMode && !isRigMode) {
+        for(int index = 0; index < nodes.size(); index++)
             if(nodes[index]->getProperty(VISIBILITY).value.x)
                 nodes[index]->getProperty(TRANSPARENCY).value.x = 1.0;
-        }
     }
 }
 
@@ -829,15 +830,15 @@ bool SGEditorScene::allNodesClonable()
 
 bool SGEditorScene::addTempNodeToScene()
 {
+    bool hasChangedStatus = false;
     for(int i = 0; i < nodes.size(); i++) {
         if(nodes[i]->isTempNode) {
+            hasChangedStatus = true;
             nodes[i]->isTempNode = false;
-            return true;
-            break;
         }
     }
     
-    return false;
+    return hasChangedStatus;
 }
 
 Vector3 SGEditorScene::getSelectedNodeScale()
