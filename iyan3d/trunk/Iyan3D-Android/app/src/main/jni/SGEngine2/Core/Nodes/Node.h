@@ -72,7 +72,7 @@ private:
     void * userPtr;
     
 protected:
-    Mat4 AbsoluteTransformation;
+    Mat4 AbsoluteTransformation, relativeTransform;
     Vector3 position, scale;
     Quaternion rotation;
     

@@ -105,6 +105,7 @@ bool Node::isMetalSupported()
 void Node::setRotation(Quaternion r, bool updateBB)
 {
     rotation = r;
+    updateRelativeTransformation();
     if(updateBB)
         FlagTransformationToChildren();
 }
@@ -112,6 +113,7 @@ void Node::setRotation(Quaternion r, bool updateBB)
 void Node::setPosition(Vector3 position, bool updateBB)
 {
     this->position = position;
+    updateRelativeTransformation();
     if(updateBB)
         FlagTransformationToChildren();
 }
@@ -119,6 +121,7 @@ void Node::setPosition(Vector3 position, bool updateBB)
 void Node::setScale(Vector3 scale, bool updateBB)
 {
     this->scale = scale;
+    updateRelativeTransformation();
     if(updateBB)
         FlagTransformationToChildren();
 }
@@ -192,18 +195,20 @@ Mat4 Node::getAbsoluteTransformation()
 
 void Node::updateRelativeTransformation()
 {
+    Mat4 T = Mat4();
+    T.translate(position);
+    
+    Mat4 R = rotation.getMatrix();
+    
+    Mat4 S = Mat4();
+    S.scale(scale);
+    
+    relativeTransform = (T * R * S);
 }
 
 Mat4 Node::getRelativeTransformation()
 {
-    Mat4 localMat = Mat4();
-    localMat.translate(position);
-    localMat.setRotation(rotation);
-    
-    if(scale != Vector3(1.0f))
-        localMat.scale(scale);
-    
-    return localMat;
+    return relativeTransform;
 }
 
 Mat4 Node::getModelMatrix()
