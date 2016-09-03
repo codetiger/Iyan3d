@@ -30,8 +30,6 @@ extern "C" {
 #pragma mark Prototypes
 #pragma mark -
     
-extern const GLKMatrix4 GLKMatrix4Identity;
-
 /*
  m30, m31, and m32 correspond to the translation values tx, ty, tz, respectively.
  */
@@ -210,6 +208,11 @@ GLK_INLINE GLKMatrix4 GLKMatrix4Make(float m00, float m01, float m02, float m03,
                      m30, m31, m32, m33 };
     return m;
 }
+
+    const GLKMatrix4 GLKMatrix4Identity = { 1.0, 0.0, 0.0, 0.0,
+                                            0.0, 1.0, 0.0, 0.0,
+                                            0.0, 0.0, 1.0, 0.0,
+                                            0.0, 0.0, 0.0, 1.0 };
 
 GLK_INLINE GLKMatrix4 GLKMatrix4MakeAndTranspose(float m00, float m01, float m02, float m03,
                                                         float m10, float m11, float m12, float m13,

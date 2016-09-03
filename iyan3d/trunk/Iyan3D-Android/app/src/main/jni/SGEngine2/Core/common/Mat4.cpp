@@ -58,6 +58,21 @@ Mat4::~Mat4()
 {
 }
 
+Mat4 Mat4::MakeTranslationMatrix(Vector3 t)
+{
+    matrix = GLKMatrix4MakeTranslation(t.x, t.y, t.z);
+}
+
+Mat4 Mat4::MakeScaleMatrix(Vector3 s)
+{
+    matrix = GLKMatrix4MakeScale(s.x, s.y, s.z);
+}
+
+Mat4 Mat4::MakeRotationMatrix(Quaternion r)
+{
+    matrix = GLKMatrix4MakeWithQuaternion(r.glkQuaternion());
+}
+
 Mat4& Mat4::operator=(const Mat4& m)
 {
     if (this != &m) {
@@ -90,7 +105,8 @@ Vector4 Mat4::operator*(const Vector4& v) const
     return Vector4(vect);
 }
 
-void Mat4::setElement(unsigned int index, float value) {
+void Mat4::setElement(unsigned int index, float value)
+{
     matrix.m[index] = value;
 }
 

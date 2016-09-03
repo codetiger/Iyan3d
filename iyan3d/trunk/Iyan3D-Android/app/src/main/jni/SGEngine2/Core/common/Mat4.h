@@ -32,6 +32,10 @@ public:
     Mat4(const Vector3& axis_x, const Vector3& axis_y, const Vector3& axis_z, const Vector3& trans);
     ~Mat4();
     
+    Mat4 MakeTranslationMatrix(Vector3 t);
+    Mat4 MakeScaleMatrix(Vector3 s);
+    Mat4 MakeRotationMatrix(Quaternion r);
+
     Mat4& operator=(const Mat4& m);
     bool operator==(const Mat4& m) const;
     Mat4& operator*=(const Mat4& m);

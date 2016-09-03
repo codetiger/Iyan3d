@@ -196,12 +196,13 @@ Mat4 Node::getAbsoluteTransformation()
 void Node::updateRelativeTransformation()
 {
     Mat4 T = Mat4();
-    T.translate(position);
-    
-    Mat4 R = rotation.getMatrix();
+    T.MakeTranslationMatrix(position);
     
     Mat4 S = Mat4();
-    S.scale(scale);
+    S.MakeScaleMatrix(scale);
+    
+    Mat4 R = Mat4();
+    R.MakeRotationMatrix(rotation);
     
     relativeTransform = (T * R * S);
 }
