@@ -70,56 +70,82 @@ GLKQuaternion Quaternion::glkQuaternion() const
     return GLKQuaternionMake(x, y, z, w);
 }
 
-Quaternion& Quaternion::operator=(const Mat4& m)
+Quaternion& Quaternion::operator=(const Mat4& mm)
 {
-    const float diag = m[0] + m[5] + m[10] + 1;
+    // Most of the Transformation Matrix decomposition code were taken from http://opensource.apple.com//source/WebCore/WebCore-514/platform/graphics/transforms/TransformationMatrix.cpp
     
-    if (diag > 0.0f) {
-        const float scale = sqrtf(diag) * 2.0f; // get scale from diagonal
-        
-        // TODO: speed this up
-        x = (m[6] - m[9]) / scale;
-        y = (m[8] - m[2]) / scale;
-        z = (m[1] - m[4]) / scale;
-        w = 0.25f * scale;
+    Mat4 m = mm;
+    
+    for (int i = 0; i < 16; i++)
+        m[i] /= m[15];
+    
+    m[3] = m[7] = m[11] = 0.0;
+    m[15] = 1.0;
+    
+    //clearing out translation
+    m[12] = m[13] = m[14] = 0.0;
+    
+    Vector3 row[3], pdum3;
+    
+    for (int i = 0; i < 3; i++) {
+        row[i].x = m[i * 4 + 0];
+        row[i].y = m[i * 4 + 1];
+        row[i].z = m[i * 4 + 2];
     }
-    else {
-        if (m[0] > m[5] && m[0] > m[10]) {
-            // 1st element of diag is greatest value
-            // find scale according to 1st element, and double it
-            const float scale = sqrtf(1.0f + m[0] - m[5] - m[10]) * 2.0f;
-            
-            // TODO: speed this up
-            x = 0.25f * scale;
-            y = (m[4] + m[1]) / scale;
-            z = (m[2] + m[8]) / scale;
-            w = (m[6] - m[9]) / scale;
-        }
-        else if (m[5] > m[10]) {
-            // 2nd element of diag is greatest value
-            // find scale according to 2nd element, and double it
-            const float scale = sqrtf(1.0f + m[5] - m[0] - m[10]) * 2.0f;
-            
-            // TODO: speed this up
-            x = (m[4] + m[1]) / scale;
-            y = 0.25f * scale;
-            z = (m[9] + m[6]) / scale;
-            w = (m[8] - m[2]) / scale;
-        }
-        else {
-            // 3rd element of diag is greatest value
-            // find scale according to 3rd element, and double it
-            const float scale = sqrtf(1.0f + m[10] - m[0] - m[5]) * 2.0f;
-            
-            // TODO: speed this up
-            x = (m[8] + m[2]) / scale;
-            y = (m[9] + m[6]) / scale;
-            z = 0.25f * scale;
-            w = (m[1] - m[4]) / scale;
+    
+    row[0].normalize();
+    
+    float skewXY = row[0].dotProduct(row[1]);
+    row[1] = row[1] + (row[0] * -skewXY);
+    row[1].normalize();
+    
+    float skewXZ = row[0].dotProduct(row[2]);
+    row[2] = row[2] + (row[0] * -skewXZ);
+    float skewYZ = row[1].dotProduct(row[2]);
+    row[2] = row[2] + (row[1] * -skewYZ);
+    row[2].normalize();
+    
+    pdum3 = row[1].crossProduct(row[2]);
+    if(row[0].dotProduct(pdum3) < 0) {
+        for (int i = 0; i < 3; i++) {
+            row[i].x *= -1;
+            row[i].y *= -1;
+            row[i].z *= -1;
         }
     }
     
-    return normalize();
+    float t = row[0].x + row[1].y + row[2].z + 1.0;
+    
+    if (t > 1e-4) {
+        float s = 0.5 / sqrt(t);
+        w = 0.25 / s;
+        x = (row[2].y - row[1].z) * s;
+        y = (row[0].z - row[2].x) * s;
+        z = (row[1].x - row[0].y) * s;
+    } else if (row[0].x > row[1].y && row[0].x > row[2].z) {
+        float s = sqrt (1.0 + row[0].x - row[1].y - row[2].z) * 2.0; // S=4*qx
+        x = 0.25 * s;
+        y = (row[0].y + row[1].x) / s;
+        z = (row[0].z + row[2].x) / s;
+        w = (row[2].y - row[1].z) / s;
+    } else if (row[1].y > row[2].z) {
+        float s = sqrt (1.0 + row[1].y - row[0].x - row[2].z) * 2.0; // S=4*qy
+        x = (row[0].y + row[1].x) / s;
+        y = 0.25 * s;
+        z = (row[1].z + row[2].y) / s;
+        w = (row[0].z - row[2].x) / s;
+    } else {
+        float s = sqrt(1.0 + row[2].z - row[0].x - row[1].y) * 2.0; // S=4*qz
+        x = (row[0].z + row[2].x) / s;
+        y = (row[1].z + row[2].y) / s;
+        z = 0.25 * s;
+        w = (row[1].x - row[0].y) / s;
+    }
+    
+    x = -x;
+    y = -y;
+    z = -z;
+    return *this;
 }
 
 Quaternion Quaternion::operator*(const Quaternion& other) const

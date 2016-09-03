@@ -35,10 +35,20 @@ public:
     
     Mesh* loadMeshFromFile(string filePath);
     SkinMesh* loadSkinMeshFromFile(string filePath);
-private:
-    const aiScene* scene = NULL;
 
-    void loadNodes2Scene(SGEditorScene *sgScene, string path, bool isTempNode, string ext, bool hasMeshColor = false, Vector3 mColor = Vector3(1.0));
+private:
+    void importNode(aiNode *node, aiMatrix4x4 accTransform);
+    int loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool hasBones);
+    void loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *bones, Mesh* mesh, bool hasBones, aiMatrix4x4 transform);
+
+    const aiScene* scene = NULL;
+    bool hasMeshColor;
+    Vector3 mColor;
+    string folderPath, ext;
+    bool isTempNode;
+    SGEditorScene *sgScene;
+
+    void loadNodes2Scene(SGEditorScene *sgScene, string path);
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
     void loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones);
 

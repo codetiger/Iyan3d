@@ -101,8 +101,21 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
         printf("Error in Loading: %s\n", importer->GetErrorString());
         return;
     }
-    
-    loadNodes2Scene(sgScene, fontPath, isTempNode, "text", true);
+
+    this->isTempNode = isTempNode;
+    this->sgScene = sgScene;
+    this->hasMeshColor = false;
+    this->mColor = Vector3(0.5);
+    this->ext = "text";
+    this->folderPath = "";
+
+    importNode(scene->mRootNode, aiMatrix4x4());
+
+    sgScene->selectMan->removeChildren(sgScene->getParentNode());
+    sgScene->updater->setDataForFrame(sgScene->currentFrame);
+    sgScene->selectMan->updateParentPosition();
+    sgScene->updater->resetMaterialTypes(false);
+
     delete importer;
     scene = NULL;
     
@@ -129,7 +142,19 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             printf("Error in Loading: %s\n", importer->GetErrorString());
             return;
         } else {
-            loadNodes2Scene(sgScene, fileLocation, isTempNode, ext, hasMeshColor, meshColor);
+            this->isTempNode = isTempNode;
+            this->sgScene = sgScene;
+            this->hasMeshColor = hasMeshColor;
+            this->mColor = meshColor;
+            this->ext = ext;
+            this->folderPath = fileLocation;
+
+            importNode(scene->mRootNode, aiMatrix4x4());
+            
+            sgScene->selectMan->removeChildren(sgScene->getParentNode());
+            sgScene->updater->setDataForFrame(sgScene->currentFrame);
+            sgScene->selectMan->updateParentPosition();
+            sgScene->updater->resetMaterialTypes(false);
         }
         
         delete importer;
@@ -251,7 +276,228 @@ SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
     return mesh;
 }
 
-void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, bool isTempNode, string ext, bool hasMeshColor, Vector3 mColor)
+int SceneImporter::loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool hasBones)
+{
+    
+    MaterialProperty *materialProps = new MaterialProperty(hasBones ? NODE_RIG : NODE_SGM);
+    sceneNode->materialProps.push_back(materialProps);
+    
+    int nodeMaterialIndex = sceneNode->materialProps.size() - 1;
+    
+    aiMaterial *material = scene->mMaterials[materialIndex];
+    
+    Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, nodeMaterialIndex);
+    p2.value.x = 1.0;
+    
+    Property &p3 = sceneNode->getProperty(TEXTURE, nodeMaterialIndex);
+    p3.fileName = "";
+    
+    materialProps->setTextureForType(NULL, NODE_TEXTURE_TYPE_COLORMAP);
+    
+    Property &p1 = sceneNode->getProperty(VERTEX_COLOR, nodeMaterialIndex);
+    aiColor4D color;
+    if(aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
+        p1.value = Vector4(color.r, color.g, color.b, color.a);
+    else if(hasMeshColor)
+        p1.value = Vector4(mColor.x, mColor.y, mColor.z, 1.0);
+    else
+        p1.value = Vector4(0.5, 0.5, 0.5, 1.0);
+    
+    if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+        aiString path;
+        material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+        
+        string texturePath = getFileName(string(path.data));
+        
+        Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        if(texture) {
+            Property &p1 = sceneNode->getProperty(TEXTURE, nodeMaterialIndex);
+            p1.fileName = texturePath;
+            
+            Property &p2 = sceneNode->getProperty(IS_VERTEX_COLOR, nodeMaterialIndex);
+            p2.value.x = 0.0;
+            
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+        } else {
+            printf("Loading Texture Failed: %s\n", texturePath.c_str());
+        }
+    }
+    
+    if(material->GetTextureCount(aiTextureType_NORMALS) > 0) {
+        aiString path;
+        material->GetTexture(aiTextureType_NORMALS, 0, &path);
+        string texturePath = getFileName(string(path.data));
+        
+        Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        if(texture) {
+            Property &p1 = sceneNode->getProperty(TEXTURE, nodeMaterialIndex);
+            p1.fileName = texturePath;
+            materialProps->setTextureForType(texture, NODE_TEXTURE_TYPE_NORMALMAP);
+        }
+    }
+    
+    return nodeMaterialIndex;
+}
+
+void SceneImporter::loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *bones, Mesh* mesh, bool hasBones, aiMatrix4x4 transform)
+{
+    shared_ptr<Node> sgn;
+    
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
+        loadBoneHierarcy((SkinMesh*)mesh, bones);
+        ((SkinMesh*)mesh)->finalize();
+        sceneNode->setSkinningData((SkinMesh*)mesh);
+        
+        sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
+        sceneNode->node = sgn;
+        
+        bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
+        int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointCount();
+        
+        for(int i = 0;i < jointsCount;i++) {
+            dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i)->setID(i);
+            if(!isSGJointsCreated) {
+                SGJoint *joint = new SGJoint();
+                joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i);
+                sceneNode->joints.push_back(joint);
+            }
+        }
+        
+        sgn->updateAbsoluteTransformation();
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex((sceneNode->getType() == NODE_RIG) ? SHADER_SKIN : SHADER_TEXT_SKIN));
+        
+    } else {
+        sgn = sgScene->getSceneManager()->createNodeFromMesh(mesh, "setUniforms");
+        sceneNode->node = sgn;
+        
+        sgn->updateAbsoluteTransformation();
+        sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
+    }
+    
+    Quaternion r1 = Quaternion();
+    Quaternion r2 = Quaternion();
+    
+    if(ext == "dae") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "fbx") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        if(hasBones)
+            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+        else
+            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "obj") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "sgm" || ext == "sgr") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 1.0, 0.0));
+        //            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+    }
+
+    Mat4 m = AssimpToMat4(transform);
+    m = (r1 * r2).getMatrix() * m;
+    
+    Quaternion r = m.getRotation();
+    
+    sceneNode->setPosition(m.getTranslation(), 0);
+    sceneNode->setRotation(r, 0);
+    sceneNode->setScale(m.getScale(), 0);
+
+    sgn->setPosition(m.getTranslation());
+    sgn->setRotation(r);
+    sgn->setScale(m.getScale());
+    
+    string name = ConversionHelper::getStringForWString(sceneNode->name.c_str());
+
+    sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
+    if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
+        sgScene->loader->setJointsScale(sceneNode);
+        dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
+    }
+    
+    sceneNode->node = sgn;
+    sceneNode->actionId = ++sgScene->actionObjectsSize;
+    sceneNode->node->setID(sgScene->assetIDCounter++);
+    
+    sgScene->nodes.push_back(sceneNode);
+    
+    bones->clear();
+    delete bones;
+}
+
+void SceneImporter::importNode(aiNode *node, aiMatrix4x4 accTransform)
+{
+    aiMatrix4x4 transform = node->mTransformation * accTransform;
+
+    if (node->mNumMeshes > 0) {
+        Mesh* mesh;
+        map< string, Joint* > *bones = new map< string, Joint* >();
+        bool hasBones = false;
+        
+        for (int i = 0; i < node->mNumMeshes; i++) {
+            aiMesh *aiM = scene->mMeshes[node->mMeshes[i]];
+            if(!hasBones)
+                hasBones = aiM->HasBones();
+        }
+
+        NODE_TYPE nType;
+        if(ext == "text")
+            nType = (hasBones) ? NODE_TEXT_SKIN : NODE_TEXT;
+        else
+            nType = (hasBones) ? NODE_RIG : NODE_SGM;
+        
+        SGNode *sceneNode = new SGNode(nType);
+        sceneNode->isTempNode = isTempNode;
+        
+        if(hasBones)
+            mesh = new SkinMesh();
+        else
+            mesh = new Mesh();
+
+        for (int i = 0; i < node->mNumMeshes; i++) {
+            
+            aiMesh *aiM = scene->mMeshes[node->mMeshes[i]];
+            
+            if(!aiM || aiM->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
+                continue;
+            
+            unsigned short materialIndex = aiM->mMaterialIndex;
+            
+            int nodeMaterialIndex = loadMaterial2Node(sceneNode, materialIndex, hasBones);
+
+            if(hasBones) {
+                
+                vector< vertexDataHeavy > mbvd;
+                vector< unsigned short > mbi;
+                getSkinMeshFrom(mbvd, mbi, aiM);
+                mesh->addMeshBuffer(mbvd, mbi, nodeMaterialIndex);
+                
+                if(aiM->HasBones())
+                    loadBonesFromMesh(aiM, (SkinMesh*)mesh, bones);
+            } else {
+                
+                vector< vertexData > mbvd;
+                vector< unsigned short > mbi;
+                getMeshFrom(mbvd, mbi, aiM);
+                mesh->addMeshBuffer(mbvd, mbi, nodeMaterialIndex);
+            }
+            
+            Property &px = sceneNode->getProperty(VERTEX_COLOR, nodeMaterialIndex);
+            if(aiM->mColors[0])
+                px.value = Vector4(-1.0);
+        }
+
+        string name = node->mName.C_Str();
+        sceneNode->name = ConversionHelper::getWStringForString(name);
+        
+        loadDetails2Node(sceneNode, bones, mesh, hasBones, node->mTransformation);
+    }
+
+    for (int i = 0; i < node->mNumChildren; i++)
+        importNode(node->mChildren[i], transform);
+}
+
+void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath)
 {
     Mesh* mesh;
     map< string, Joint* > *bones = new map< string, Joint* >();
@@ -442,7 +688,7 @@ void SceneImporter::loadNodes2Scene(SGEditorScene *sgScene, string folderPath, b
     sgScene->updater->setDataForFrame(sgScene->currentFrame);
     sgScene->selectMan->updateParentPosition();
     sgScene->updater->resetMaterialTypes(false);
-        
+    
     bones->clear();
     delete bones;
 }
