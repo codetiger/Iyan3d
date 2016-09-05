@@ -19,7 +19,6 @@ Node::Node()
     position = Vector3(0.0);
     rotation = Vector3(0.0);
     scale = Vector3(1.0);
-    uvScale = 1.0f;
     instancingRenderIt = 0;
     
     Parent = shared_ptr<Node>();

@@ -214,48 +214,6 @@ bool SGSelectionManager::updateNodeSelectionFromColor(Vector3 pixel,bool isMulti
         } else
             return false;
     }
-    
-    /*
-    if(touchMove && selectionScene->selectedNodeId == nodeId)
-        selectionScene->moveNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS;
-    else if(!touchMove) {
-        selectionScene->moveNodeId = NOT_EXISTS;
-        if(((selectionScene->isNodeSelected && selectionScene->selectedNodeId != nodeId) || selectionScene->selectedNodeIds.size() > 0) && jointId == 255 && !selectionScene->isJointSelected && !selectionScene->hasMeshBufferSelected() && isMultipleSelectionEnabled)
-            return multipleSelections(nodeId);
-        else {
-            unselectObject(selectionScene->selectedNodeId);
-            selectionScene->isNodeSelected = (selectionScene->selectedNodeId = (nodeId != 65535) ? nodeId : NOT_EXISTS) != NOT_EXISTS ? true:false;
-        }
-    }
-    if((selectionScene->selectedNodeId != NOT_EXISTS || (touchMove && selectionScene->moveNodeId != NOT_EXISTS))  && selectionScene->selectedNodeIds.size() <= 0) {
-        int totalMeshBuffers = 0;
-        if(!touchMove) {
-            highlightSelectedNode();
-            
-            SGNode* currentSelectedNode = selectionScene->nodes[selectionScene->selectedNodeId];
-            totalMeshBuffers = currentSelectedNode->materialProps.size();
-            selectionScene->selectedMeshBufferId = (jointId != 255 && jointId < totalMeshBuffers) ? jointId : NOT_SELECTED;
-        }
-        
-        if(selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_RIG || selectionScene->nodes[selectionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN){
-            if(!touchMove) {
-                selectionScene->isJointSelected = (selectionScene->selectedJointId = (jointId != 255 && jointId >= totalMeshBuffers) ? (jointId - totalMeshBuffers) : NOT_EXISTS) != NOT_EXISTS ? true:false;
-            }
-            if(selectionScene->isJointSelected && !touchMove) {
-                selectionScene->renHelper->displayJointsBasedOnSelection();
-            }
-        }
-    }
-    if((selectionScene->isNodeSelected || selectionScene->isJointSelected) && !touchMove) {
-        selectionScene->updater->updateControlsOrientaion(selectionScene);
-        if(selectionScene->isJointSelected || selectionScene->hasMeshBufferSelected())
-            highlightMeshBufferAndJointSpheres();
-        return true;
-    } else if(selectionScene->moveNodeId != NOT_EXISTS)
-        return true;
-    else
-        return false;
-     */
 }
 
 bool SGSelectionManager::multipleSelections(int nodeId)
@@ -445,7 +403,7 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     selectionScene->selectedNode = currentSelectedNode;
     
     bool status = true;
-    if(selectionScene->selectedNodeIds.size() <= 0) {
+    if(selectionScene->selectedNodeIds.size() <= 0 && selectionScene->selectedMeshBufferId == NOT_EXISTS) {
         if(currentSelectedNode->getType() == NODE_RIG)
             status = selectionScene->renHelper->displayJointSpheresForNode(dynamic_pointer_cast<AnimatedMeshNode>(currentSelectedNode->node));
         else if (currentSelectedNode->getType() == NODE_TEXT_SKIN)
@@ -508,7 +466,7 @@ void SGSelectionManager::highlightMeshBufferAndJointSpheres()
     int selectedJointId = (selectionScene->isRigMode) ? selectionScene->rigMan->selectedJointId : selectionScene->selectedJointId;
     
     if((isNodeSelected  || isJointSelected) && selectionScene->selectedNodeIds.size() <= 0) {
-        selectionScene->renHelper->setJointSpheresVisibility(true);
+        selectionScene->renHelper->setJointSpheresVisibility(selectionScene->selectedMeshBufferId == NOT_SELECTED);
         for(int i = 0; i< selectionScene->jointSpheres.size(); i++)
             if(selectionScene->jointSpheres[i]){
                 int mirrorjointId = BoneLimitsHelper::getMirrorJointId(selectedJointId);

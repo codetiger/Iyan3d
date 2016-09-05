@@ -82,7 +82,6 @@ public:
     vector< shared_ptr<Node> > instancedNodes;
     BoundingBox bBox;
     skin_type skinType;
-    float uvScale;
     bool shouldUpdateMesh;
     DRAW_MODE drawMode;
     string callbackFuncName;

@@ -128,7 +128,6 @@ BOOL missingAlertShown;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         currentScene = scene;
-        IndexOfSelected = index;
         cache = [CacheSystem cacheSystem];
         constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -179,15 +178,12 @@ BOOL missingAlertShown;
     self.rigCancelBtn.layer.cornerRadius = CORNER_RADIUS;
     self.publishBtn.layer.cornerRadius = CORNER_RADIUS;
     
-    //    _addFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    //    _lastFrameBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
 #if !(TARGET_IPHONE_SIMULATOR)
     if (iOSVersion >= 8.0)
         isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
 #endif
-    //    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    //    screenHeight = screenRect.size.height;
+
     constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     if ([Utility IsPadDevice])
@@ -336,11 +332,10 @@ BOOL missingAlertShown;
     }
     
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
-        editorScene->camPreviewScale=[[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]floatValue];
+        editorScene->camPreviewScale = [[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]floatValue];
     }
     missingAlertShown = false;
     [renderViewMan setUpCallBacks:editorScene];
-    editorScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
     [renderViewMan addGesturesToSceneView];
     [self performSelectorOnMainThread:@selector(loadScene) withObject:nil waitUntilDone:YES];
     
@@ -1562,116 +1557,21 @@ BOOL missingAlertShown;
 
 - (IBAction)optionsBtnAction:(id)sender
 {
+    CGRect rect = _optionsBtn.frame;
+    rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
     
     if((!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED)) && editorScene->selectedNodeIds.size() <= 0) {
-        
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-
-        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->shaderMGR->sceneProps];
-        commonProps.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
-        self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [commonProps.view setClipsToBounds:YES];
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:NO];
-
+        [self showCommonPropsVCAtRect:rect WithProps:editorScene->shaderMGR->sceneProps AnyDirection:NO];
         return;
     }
     
     if(editorScene->selectedNodeIds.size() > 0) {
         if(editorScene->allNodesRemovable() || editorScene->allNodesClonable()){
-            CGRect rect = _optionsBtn.frame;
-            rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
             [self presentPopOver:rect];
         }
-    } else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
+    } else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
     {
-        Quaternion lightProp;
-        Vector3 lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
-        float shad = ShaderManager::shadowDensity;
-        lightProp = Quaternion(lightColor.x, lightColor.y, lightColor.z, shad);
-        float dist = ((editorScene->getSelectedNode()->getProperty(SPECIFIC_FLOAT).value.x/300.0)-0.001);
-        
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-        /*
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->getProperty(LIGHT_TYPE).value.x];
-        _lightProp.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 300 : 322;
-        if(![Utility IsPadDevice])
-            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 241;
-        int width = ([Utility IsPadDevice] ? 388 : 320);
-        self.popoverController.popoverContentSize = CGSizeMake(width, height);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_lightProp.view setClipsToBounds:YES];
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:NO];
-         */
-        
-        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties()];
-        commonProps.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
-        self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [commonProps.view setClipsToBounds:YES];
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:NO];
-
-    }
-    else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
-    {
-        /*
-        float fovValue = editorScene->cameraFOV;
-        NSInteger resolutionType = editorScene->cameraResolutionType;
-
-        _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
-        _camProp.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
-        self.popoverController.popoverContentSize = CGSizeMake(300 , 230);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_camProp.view setClipsToBounds:YES];
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:NO];
-         */
-        
-        
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-
-        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties()];
-        commonProps.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
-        self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [commonProps.view setClipsToBounds:YES];
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:NO];
-
+        [self showCommonPropsVCAtRect:rect WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties() AnyDirection:NO];
     }
     else
     {
@@ -1682,27 +1582,26 @@ BOOL missingAlertShown;
             if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES)
                 isVideoOrImageOrParticle = true;
         }
-        
-        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
-//        int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-//        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->props.perVertexColor) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
-//        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
-//        _meshProp.delegate = self;
-        
-        CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties(editorScene->selectedMeshBufferId)];
-        commonProps.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
-        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [commonProps.view setClipsToBounds:YES];
-        CGRect rect = _optionsBtn.frame;
-        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self.popoverController presentPopoverFromRect:rect
-                                                inView:self.view
-                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                              animated:NO];
+        [self showCommonPropsVCAtRect:rect WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties(editorScene->selectedMeshBufferId) AnyDirection:NO];
     }
+}
+
+- (void) showCommonPropsVCAtRect:(CGRect) rectPos WithProps:(std::map< PROP_INDEX, Property >) allProps AnyDirection:(BOOL) anyDir //TODO for video and image
+{
+    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+
+    CommonProps *commonProps = [[CommonProps alloc] initWithNibName:@"CommonProps" bundle:nil WithProps:allProps];
+    commonProps.delegate = self;
+    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:commonProps];
+    self.popoverController.popoverContentSize = CGSizeMake(464 , 280);
+    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+    [commonProps.view setClipsToBounds:YES];
+    [self.popoverController presentPopoverFromRect:rectPos
+                                            inView:self.view
+                          permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                          animated:NO];
+
 }
 
 - (IBAction)moveBtnAction:(id)sender
@@ -2475,79 +2374,22 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 -(void)showOptions :(CGRect)longPressposition
 {
-    /*
-     if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
-     {
-     //        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
-     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"optionsBtn"];
-     [_popUpVc.view setClipsToBounds:YES];
-     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
-     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-     self.popoverController.popoverContentSize = CGSizeMake(205.0, 42);
-     self.popoverController.delegate =self;
-     self.popUpVc.delegate=self;
-     [self.popoverController presentPopoverFromRect:longPressposition
-     inView:self.view
-     permittedArrowDirections:UIPopoverArrowDirectionAny
-     animated:YES];
-     return;
-     }
-     */
-    
-    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED)
+    if((!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED)) && editorScene->selectedNodeIds.size() <= 0) {
+        [self showCommonPropsVCAtRect:longPressposition WithProps:editorScene->shaderMGR->sceneProps AnyDirection:YES];
         return;
+    }
     
-    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT))
-    {
-        Quaternion lightProp;
-        Vector3 lightColor = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
-        float shad = ShaderManager::shadowDensity;
-        lightProp = Quaternion(lightColor.x, lightColor.y, lightColor.z, shad);
-        float dist = ((editorScene->getSelectedNode()->getProperty(SPECIFIC_FLOAT).value.x/300.0)-0.001);
+    if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA)) {
         
-
-        _lightProp = [[LightProperties alloc] initWithNibName:([Utility IsPadDevice]) ? @"LightProperties"  : @"LightPropertiesPhone" bundle:nil LightColor:lightProp NodeType:editorScene->getSelectedNode()->getType() Distance:dist LightType:editorScene->getSelectedNode()->getProperty(LIGHT_TYPE).value.x];
-        _lightProp.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
-        int height = ([Utility IsPadDevice] && editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 305 : 335;
-        if(![Utility IsPadDevice])
-            height = (editorScene->getSelectedNode()->getType() == NODE_LIGHT) ? 236 : 241;
-        int width = ([Utility IsPadDevice] ? 388 : 320);
-        self.popoverController.popoverContentSize = CGSizeMake(width,  height);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_lightProp.view setClipsToBounds:YES];
+        [self showCommonPropsVCAtRect:longPressposition WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties() AnyDirection:YES];
         
-        [self.popoverController presentPopoverFromRect:longPressposition
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionAny
-                                              animated:NO];
-    }
-    else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
-    {
+    } else if(editorScene && editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES)) {
         
-        float fovValue = editorScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x;
-        NSInteger resolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
-        _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
-        _camProp.delegate = self;
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
-        self.popoverController.popoverContentSize = CGSizeMake(300 , 230);
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_camProp.view setClipsToBounds:YES];
-        [self.popoverController presentPopoverFromRect:longPressposition
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionAny
-                                              animated:NO];
-        
-    }
-    else if(editorScene && editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES))
-    {
         CGRect rect = _optionsBtn.frame;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self presentPopOver:rect];
-    }
-    else if(editorScene && editorScene->hasNodeSelected()){
+        
+    } else if(editorScene && editorScene->hasNodeSelected()){
         bool isVideoOrImageOrParticle = false;
         NODE_TYPE nodeType = NODE_UNDEFINED;
         if(editorScene && editorScene->hasNodeSelected()){
@@ -2556,18 +2398,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 isVideoOrImageOrParticle = true;
         }
         int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
-        int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
-        _meshProp = [[MeshProperties alloc] initWithNibName:(isVideoOrImageOrParticle) ? @"LightAndVideoProperties" : @"MeshProperties" bundle:nil WithProps:editorScene->nodes[editorScene->selectedNodeId] MirrorState:state AndSmoothTexture:smoothTex];
-        _meshProp.delegate = self;
-        
-        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
-        self.popoverController.popoverContentSize = (isVideoOrImageOrParticle) ? CGSizeMake(183 , 115) : CGSizeMake(464 , 280);
-        self.popoverController.popoverLayoutMargins = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType = WEPopoverAnimationTypeCrossFade;
-        
-        [_meshProp.view setClipsToBounds:YES];
-        
-        [self.popoverController presentPopoverFromRect:longPressposition inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+        [self showCommonPropsVCAtRect:longPressposition WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties(editorScene->selectedMeshBufferId) AnyDirection:YES];
     }
 }
 
@@ -2653,7 +2484,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if(selectedNodeIndex != NOT_EXISTS)
         sgNode = editorScene->nodes[selectedNodeIndex];
     
-    if (selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) {
+    if ((selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && sgNode->materialProps.size() == 1) {
         
         if(sgNode->node->original && sgNode->node->original->instancedNodes.size() >= 8000) {
             UIAlertView * cloneAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"copy_limit_exceed_message", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
@@ -2707,6 +2538,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
         
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
+    } else {
+        assetAddType = IMPORT_ASSET_ACTION;
+        AssetItem *assetItem = [cache GetAsset:selectedAssetId];
+        assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
+                                                   encoding:[NSString defaultCStringEncoding]];
+        [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNodeIndex];
     }
 }
 
@@ -2851,7 +2688,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
 }
 
-- (void) importBtnDelegateAction:(int)indexValue
+- (void) importBtnDelegateAction:(int)indexValue //TODO remove downloading json and showing store models
 {
     
     [self addFabricEvent:@"ImportAction" WithAttribute:indexValue];
@@ -3364,165 +3201,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     [animationsliderVC openMyAnimations];
 }
 
-bool downloadMissingAssetCallBack(std::string fileName, NODE_TYPE nodeType, bool hasTexture, std::string textureName)
-{
-    NSLog(@"File Name %s Node Type %d", fileName.c_str(), nodeType);
-    
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths objectAtIndex:0];
-    
-    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [docPaths objectAtIndex:0];
-    
-    switch (nodeType) {
-        case NODE_PARTICLES: {
-            NSString* assetIdStr = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
-            if ([assetIdStr intValue] >= 50000 && ([assetIdStr intValue] < 60000)) {
-                NSString* particlePath = [NSString stringWithFormat:@"%@%d.json", cacheDirectory, [assetIdStr intValue]];
-                if (![[NSFileManager defaultManager] fileExistsAtPath:particlePath]) {
-                    NSString* filePath = [NSString stringWithFormat:@"%@/%d.json", cacheDirectory, [assetIdStr intValue]];
-                    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/particles/%d.json", [assetIdStr intValue]];
-                    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
-                        downloadFile(url, filePath);
-                    NSString* meshfilePath = [NSString stringWithFormat:@"%@/%d.sgm", cacheDirectory, [assetIdStr intValue]];
-                    NSString* meshurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%d.sgm", [assetIdStr intValue]];
-                    if (![[NSFileManager defaultManager] fileExistsAtPath:meshfilePath])
-                        downloadFile(meshurl, meshfilePath);
-                    NSString* texfilePath = [NSString stringWithFormat:@"%@/%d-cm.png", cacheDirectory, [assetIdStr intValue]];
-                    NSString* texurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%d.png", [assetIdStr intValue]];
-                    if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath])
-                        downloadFile(texurl, texfilePath);
-                    
-                    if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath]) {
-                        if (!missingAlertShown) {
-                            [[AppHelper getAppHelper] missingAlertView];
-                            missingAlertShown = true;
-                        }
-                        return false;
-                    }
-                    else
-                        return true;
-                    return false;
-                }
-                else
-                    return true;
-            }
-            
-            break;
-        }
-        case NODE_SGM:
-        case NODE_RIG: {
-            //BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:stoi(fileName)];
-            NSString* extension = (nodeType == NODE_SGM) ? @"sgm" : @"sgr";
-            NSString* name = [NSString stringWithCString:fileName.c_str() encoding:[NSString defaultCStringEncoding]];
-            NSString* file = [name stringByDeletingPathExtension];
-            if ([file intValue] >= 40000 && ([file intValue] < 50000)) {
-                NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Rigs/%d.sgr", documentsDirectory, [file intValue]];
-                if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
-                    if (!missingAlertShown) {
-                        [[AppHelper getAppHelper] missingAlertView];
-                        missingAlertShown = true;
-                    }
-                    return false;
-                }
-                else
-                    return true;
-            }
-            if (([file intValue] >= 20000 && ([file intValue] < 30000)) || ([file intValue] >= 60000 && ([file intValue] < 60010))) {
-                NSString* rigPath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.sgm", documentsDirectory, [file intValue]];
-                if (![[NSFileManager defaultManager] fileExistsAtPath:rigPath]) {
-                    if (!missingAlertShown) {
-                        [[AppHelper getAppHelper] missingAlertView];
-                        missingAlertShown = true;
-                    }
-                    return false;
-                }
-                else
-                    return true;
-            }
-            // TODO for sgr in documents directory
-            NSString* filePath = [NSString stringWithFormat:@"%@/%s.%@", cacheDirectory, fileName.c_str(), extension];
-            NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/mesh/%s.%@", fileName.c_str(), extension];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
-                downloadFile(url, filePath);
-            NSString* texfilePath = [NSString stringWithFormat:@"%@/%s-cm.png", cacheDirectory, fileName.c_str()];
-            NSString* texurl = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/meshtexture/%s.png", fileName.c_str()];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:texfilePath])
-                downloadFile(texurl, texfilePath);
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-                if (!missingAlertShown) {
-                    [[AppHelper getAppHelper] missingAlertView];
-                    missingAlertShown = true;
-                }
-                return false;
-            }
-            else
-                return true;
-            break;
-        }
-        case NODE_TEXT:
-        case NODE_TEXT_SKIN: {
-            AssetItem* assetObj = [[CacheSystem cacheSystem] GetAssetByName:[NSString stringWithUTF8String:fileName.c_str()]];
-            BOOL assetPurchaseStatus = [[CacheSystem cacheSystem] checkDownloadedAsset:assetObj.assetId];
-            NSString* extension = [[NSString stringWithUTF8String:fileName.c_str()] pathExtension];
-            
-            NSString* filePath = [NSString stringWithFormat:@"%@/%s", cacheDirectory, fileName.c_str()];
-            NSString* docFilePath = [NSString stringWithFormat:@"%@/Resources/Fonts/%s", documentsDirectory, fileName.c_str()];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-                if (![[NSFileManager defaultManager] fileExistsAtPath:docFilePath]) {
-                    NSString* url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/font/%d.%@", assetObj.assetId, extension];
-                    if ([assetObj.iap isEqualToString:@"0"] || assetPurchaseStatus)
-                        downloadFile(url, filePath);
-                    
-                    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-                        if (!missingAlertShown) {
-                            [[AppHelper getAppHelper] missingAlertView];
-                            missingAlertShown = true;
-                        }
-                        return false;
-                    }
-                    else
-                        return true;
-                }
-                else
-                    return true;
-            }
-            else
-                return true;
-            break;
-        }
-        case NODE_IMAGE: {
-            NSString* imagePath = [NSString stringWithFormat:@"%@/%s.png", cacheDirectory, fileName.c_str()];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-                if (!missingAlertShown) {
-                    [[AppHelper getAppHelper] missingAlertView];
-                    missingAlertShown = true;
-                }
-                return false;
-            }
-            else
-                return true;
-            break;
-        }
-        case NODE_OBJ: {
-            NSString* objPath = [NSString stringWithFormat:@"%@/Resources/Objs/%s.obj", documentsDirectory, fileName.c_str()];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:objPath]) {
-                if (!missingAlertShown) {
-                    [[AppHelper getAppHelper] missingAlertView];
-                    missingAlertShown = true;
-                }
-                return false;
-            }
-            else
-                return true;
-            break;
-        }
-        default:
-            break;
-    }
-}
-
 void downloadFile(NSString* url, NSString* fileName)
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
@@ -3547,7 +3225,7 @@ void downloadFile(NSString* url, NSString* fileName)
         [self.framesCollectionView reloadData];
 }
 
-- (void)cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution
+- (void) cameraPropertyChanged:(float)fov Resolution:(NSInteger)resolution
 {
     NSLog(@"Fov value : %f Resolution type: %ld",fov,(long)resolution);
     cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
@@ -3603,7 +3281,7 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         case TEXTURE_SCALE: {
             editorScene->selectMan->unHightlightSelectedNode();
-            editorScene->actionMan->changeUVScale(editorScene->selectedNodeId, value.x);
+            editorScene->actionMan->changeUVScale(editorScene->selectedNodeId, editorScene->selectedMeshBufferId, value.x);
             break;
         }
         case DELETE: {
@@ -3728,7 +3406,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 #pragma mark Meshproperties Delegate
 
-- (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible storeInAction:(BOOL)status
+- (void) meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible storeInAction:(BOOL)status
 {
     if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
         return;
@@ -3812,34 +3490,6 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->syncSceneWithPhysicsWorld();
 }
 
--(void) deleteDelegateAction
-{
-    if(editorScene->selectedNodeIds.size() > 0){
-        editorScene->loader->removeSelectedObjects();
-        [self undoRedoButtonState:DEACTIVATE_BOTH];
-    }
-    else{
-        [self deleteObjectOrAnimation];
-        [self undoRedoButtonState:DEACTIVATE_BOTH];
-    }
-    [self.popoverController dismissPopoverAnimated:YES];
-    [self updateAssetListInScenes];
-}
-
--(void)cloneDelegateAction
-{
-    assetAddType = IMPORT_ASSET_ACTION;
-    [self createDuplicateAssets];
-    [self updateAssetListInScenes];
-    [self.popoverController dismissPopoverAnimated:YES];
-}
-
--(void)changeSkinDelgate //TODO remove this method
-{
-    [self changeTextureForAsset: UNDEFINED];
-    [self.popoverController dismissPopoverAnimated:YES];
-}
-
 - (void) loadSceneSelectionView
 {
     
@@ -3875,7 +3525,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 -(void)googleSigninDelegate
 {
-    isLoggedin= true;
+    //TODO
 }
 
 -(void)dismisspopover
@@ -4442,65 +4092,12 @@ void downloadFile(NSString* url, NSString* fileName)
         [self reloadSceneObjects];
 }
 
-- (void) legacyLoadObjOrSGM:(NSMutableDictionary*)dict
-{
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    Vector4 color = Vector4([[dict objectForKey:@"x"]floatValue], [[dict objectForKey:@"y"]floatValue], [[dict objectForKey:@"z"]floatValue], 1.0);
-    int assetId = [[dict objectForKey:@"assetId"]intValue];
-    wstring assetName = [self getwstring:[dict objectForKey:@"name"]];
-    BOOL isTempNode = [[dict objectForKey:@"isTempNode"]boolValue];
-    BOOL isHaveTexture = [[dict objectForKey:@"isHaveTexture"]boolValue];
-    
-    [renderViewMan loadNodeInScene:NODE_SGM AssetId:assetId AssetName:assetName TextureName:([dict objectForKey:@"textureName"]) Width:0 Height:0 isTempNode:isTempNode More:dict ActionType:IMPORT_ASSET_ACTION VertexColor:color];
-    
-    if(!isTempNode){
-        if(!isHaveTexture){
-            selectedNodeId = (int)editorScene->nodes.size()-1;
-            selectedMeshBufferId = editorScene->selectedMeshBufferId;
-            editorScene->selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
-            [self changeTexture:@"0-cm" VertexColor:Vector3(1.0) IsTemp:YES AtIndex:TEXTURE]; // for White Texture Thumbnail
-            editorScene->selectMan->unselectObject((int)editorScene->nodes.size()-1);
-        }
-        if(assetId >= 20000 && assetId <= 30000){
-            NSMutableArray* nodes = [[NSMutableArray alloc]init];
-            for(int i = 0; i < editorScene->nodes.size(); i++){
-                if(i != editorScene->nodes.size()-1 && editorScene->nodes[i]->getProperty(VISIBILITY).value.x == true){
-                    editorScene->nodes[i]->node->setVisible(false);
-                    [nodes addObject:[NSNumber numberWithInt:i]];
-                }
-            }
-            editorScene->renHelper->isExportingImages = true;
-            editorScene->updater->setDataForFrame(editorScene->currentFrame);
-            NSString* imageFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%d.png", docDirPath, assetId];
-            renderBgColor = Vector4(0.1,0.1,0.1,1.0);
-            editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], 0, false, YES, editorScene->currentFrame, renderBgColor);
-            
-            for(int i = 0; i < [nodes count]; i++){
-                editorScene->nodes[[[nodes objectAtIndex:i]intValue]]->node->setVisible(true);
-            }
-            [nodes removeAllObjects];
-            nodes = nil;
-        }
-        if(!isHaveTexture){
-            editorScene->selectMan->selectObject(editorScene->nodes.size()-1, NOT_SELECTED, false);
-            [self changeTexture:[dict objectForKey:@"textureName"] VertexColor:Vector3(color.x,color.y,color.z) IsTemp:YES AtIndex:TEXTURE]; // back to original Texture
-            editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
-        }
-    }
-}
-
 
 - (void) scalePropertyChangedInRigView:(float)scaleValue
 {
     if((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_EDIT_ENVELOPES)) &&  editorScene->rigMan->isSkeletonJointSelected){
         editorScene->rigMan->changeEnvelopeScale(Vector3(scaleValue), false);
     }
-}
-
-- (void) scaleValueForAction:(float)scaleValue
-{
-    
 }
 
 - (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp AtIndex:(PROP_INDEX) pIndex
@@ -4544,7 +4141,7 @@ void downloadFile(NSString* url, NSString* fileName)
     renderBgColor = vertexColor;
 }
 
-- (void)cameraResolutionChanged:(int)changedResolutionType
+- (void) cameraResolutionChanged:(int)changedResolutionType
 {
     cameraResolutionType = changedResolutionType;
     [self cameraPropertyChanged:editorScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x Resolution:cameraResolutionType];
@@ -4602,8 +4199,6 @@ void downloadFile(NSString* url, NSString* fileName)
     loginVc.delegare = nil;
     loginVc = nil;
     followUsVC = nil;
-    lightProperties.delegate = nil;
-    lightProperties = nil;
     currentScene = nil;
     cache = nil;
     [playTimer invalidate];
@@ -4624,14 +4219,8 @@ void downloadFile(NSString* url, NSString* fileName)
     self.popUpVc = nil;
     _loggedInVc.delegare = nil;
     _loggedInVc = nil;
-    _lightProp.delegate = nil;
-    _lightProp = nil;
     _scaleProps.delegate = nil;
     _scaleProps = nil;
-    _camProp.delegate = nil;
-    _camProp = nil;
-    _meshProp.delegate = nil;
-    _meshProp = nil;
 }
 
 @end

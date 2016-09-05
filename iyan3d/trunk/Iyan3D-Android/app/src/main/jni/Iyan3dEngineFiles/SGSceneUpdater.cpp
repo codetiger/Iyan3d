@@ -169,7 +169,7 @@ void SGSceneUpdater::updateControlsMaterial()
             updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         else {
             updatingScene->sceneControls[i]->getProperty(VERTEX_COLOR).value = Vector4(Vector3(-1.0), 0.0);
-            updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH_mvp));
+            updatingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
         }
     }
 }

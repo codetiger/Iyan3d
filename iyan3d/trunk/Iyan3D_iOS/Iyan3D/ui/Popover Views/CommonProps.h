@@ -24,9 +24,6 @@
 - (void) applyPhysicsProps:(Property) property;
 
 - (void)meshPropertyChanged:(float)refraction Reflection:(float)reflection Lighting:(BOOL)light Visible:(BOOL)visible storeInAction:(BOOL)status;
-- (void) deleteDelegateAction;
-- (void)cloneDelegateAction;
-- (void)changeSkinDelgate;
 - (void) switchMirror;
 - (void) setPhysics:(bool)status;
 - (void) setPhysicsType:(int)type;

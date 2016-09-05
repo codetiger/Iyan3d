@@ -151,12 +151,10 @@ public:
     void renderAll();
     
     #ifdef ANDROID
-        bool (*downloadMissingAssetsCallBack)(JNIEnv *env, jclass type,jobject object,string fileName,NODE_TYPE nodeType,bool hasTexture,string textureName);
         unsigned char* (*getVideoFrameCallBack)(std::string fileName, int frame,int width, int height);
     #endif
     
     void (*fileWriteCallBack)();
-    bool (*downloadMissingAssetCallBack)(std::string filePath, NODE_TYPE nodeType, bool hasTexture, string textureName);
     void shaderCallBackForNode(int nodeID, string matName, int materialIndex);
     float getNodeTransparency(int nodeId);
     bool isNodeTransparent(int nodeId);

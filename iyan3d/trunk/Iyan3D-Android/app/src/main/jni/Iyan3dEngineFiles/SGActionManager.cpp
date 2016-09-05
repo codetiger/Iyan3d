@@ -349,11 +349,10 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
     actionScene->updater->setDataForFrame(actionScene->currentFrame);
 }
 
-void SGActionManager::changeUVScale(int nodeIndex, float scale)
+void SGActionManager::changeUVScale(int nodeIndex, int meshBufferIndex, float scale)
 {
     if(actionScene && nodeIndex < actionScene->nodes.size()) {
-        actionScene->nodes[nodeIndex]->node->uvScale = scale;
-        actionScene->nodes[nodeIndex]->getProperty(TEXTURE_SCALE).value.x = scale;//Vector4(scale, 0, 0, true), MATERIAL_PROPS);
+        actionScene->nodes[nodeIndex]->getProperty(TEXTURE_SCALE, meshBufferIndex).value.x = scale;//Vector4(scale, 0, 0, true), MATERIAL_PROPS);
     }
 }
 

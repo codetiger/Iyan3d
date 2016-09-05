@@ -272,8 +272,6 @@
         NSData *imageDataforDisplay = [self convertAndScaleImage:[UIImage imageWithContentsOfFile:srcFilePath] size:64];
         [imageDataforDisplay writeToFile:desFilePathForDisplay atomically:YES];
     }
-    //[[AppHelper getAppHelper] moveFontFilesIfNeccasary];
-    //[self downloadMissingAssets];
     [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
     
 }

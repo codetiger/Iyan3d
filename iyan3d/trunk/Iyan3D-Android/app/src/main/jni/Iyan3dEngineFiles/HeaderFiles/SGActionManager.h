@@ -62,7 +62,7 @@ public:
     /* Property Change actions */
     
     void changeMeshProperty(float refraction, float reflection, bool isLighting, bool isVisible, bool isChanged = false);
-    void changeUVScale(int nodeIndex, float scale);
+    void changeUVScale(int nodeIndex, int meshBufferIndex, float scale);
     void changeCameraProperty(float fov , int resolutionType, bool isChanged = false);
     void changeLightProperty(float red , float green, float blue, float shadow,float distance, int lightType, bool isChanged = false);
     void storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity,float distance, int lightType);

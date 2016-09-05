@@ -516,8 +516,10 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     smgr->Render(true);
     bool drawMeshBufferRTT = false;
     if((selectedSGNode && renderingScene->selectedNodeIds.size() <= 0 && !touchMove) || renderingScene->isJointSelected) {
-        drawJointsSpheresForRTT(true);
-        drawMeshBufferRTT = true;
+        if(renderingScene->selectedMeshBufferId == NOT_SELECTED) {
+            drawJointsSpheresForRTT(true);
+        }
+            drawMeshBufferRTT = true;
     }
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
@@ -848,12 +850,28 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     for(int i = 0;i < bonesCount;i++){
         shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
         renderingScene->jointSpheres[i]->node->setParent(jointNode);
-        if(bonesCount != renderingScene->tPoseJoints.size())
-            renderingScene->jointSpheres[i]->node->setScale(scaleValue);
-        else {
+        if(bonesCount != renderingScene->tPoseJoints.size()) {
+            animNode->updateBoundingBox();
+            float xExt = animNode->getBoundingBox().getXExtend();
+            float yExt = animNode->getBoundingBox().getYExtend();
+            float zExt = animNode->getBoundingBox().getZExtend();
+            
+            Vector3 nodeScale = animNode->getScale();
+            
+            float volume = xExt/nodeScale.x * yExt/nodeScale.y * zExt/nodeScale.z;
+            float sphereSize = volume / 60.0;
+            Vector3 sphereScale = Vector3(sphereSize);
+            renderingScene->jointSpheres[i]->node->setScale(sphereScale);
+        } else {
             float radius = renderingScene->tPoseJoints[i].sphereRadius;
             Vector3 nodeScale = animNode->getScale();
             Vector3 jointScale = jointNode->getAbsoluteTransformation().getScale();
+            float xExt = animNode->getMesh()->getBoundingBox()->getXExtend();
+            float yExt = animNode->getMesh()->getBoundingBox()->getYExtend();
+            float zExt = animNode->getMesh()->getBoundingBox()->getZExtend();
+            
+            float volume = xExt * yExt * zExt;
+            //TODO
             Vector3 finalScaleValue;
             if(jointScale.x > nodeScale.x || jointScale.y > nodeScale.y || jointScale.z > nodeScale.z || radius > nodeScale.x || radius > nodeScale.y || radius > nodeScale.z)
                 finalScaleValue = Vector3(radius/jointNode->getAbsoluteTransformation().getScale().x, radius/jointNode->getAbsoluteTransformation().getScale().y, radius/jointNode->getAbsoluteTransformation().getScale().z) * animNode->getScale();

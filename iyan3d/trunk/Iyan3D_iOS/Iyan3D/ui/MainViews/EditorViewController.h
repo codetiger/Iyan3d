@@ -19,7 +19,6 @@
 #import <GameKit/GameKit.h>
 
 #import "OnBoardVC.h"
-#import "LightProperties.h"
 #import "RenderingView.h"
 #import "ImportImageNew.h"
 #import "AssetSelectionSidePanel.h"
@@ -34,13 +33,12 @@
 #import "SettingsViewController.h"
 #import "ScaleViewController.h"
 #import "ObjSidePanel.h"
-#import "CameraSettings.h"
-#import "MeshProperties.h"
 #import "CommonProps.h"
 #import "ScaleForAutoRigViewController.h"
 #import "FollowUsVC.h"
 
-@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate,ImageImportNewDelgate,SliderDelegate,AssetSelectionDelegate,RenderingViewControllerDelegate,RenderViewManagerDelegate,PopUpViewControllerDelegate ,WEPopoverControllerDelegate,LightPropertiesDelegate,ScalePropertiesViewControllerDelegate,ObjSliderDelegate,CameraSettingsDelegate,MeshPropertiesDelegate,LoginViewControllerDelegate,LoggedinViewControllerDelegat,SettingsViewControllerDelegate,AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate>{
+@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, AssetSelectionDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate,PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, LoginViewControllerDelegate, LoggedinViewControllerDelegat, SettingsViewControllerDelegate, AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
+    
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
@@ -49,15 +47,12 @@
     LoginViewController *loginVc;
     FollowUsVC *followUsVC;
     ObjSidePanel *objVc;
-    LightProperties *lightProperties;
     bool isMetalSupported;
-    bool isLoggedin;
     BOOL isSelected;
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
     SGEditorScene *editorScene;
     SceneItem *currentScene;
-    int IndexOfSelected;
     int cameraResolutionType;
     CacheSystem *cache;
     bool isViewLoaded , isPlaying;
@@ -67,7 +62,6 @@
     NSTimer *playTimer;
     SettingsViewController *settingsVc;
     CADisplayLink* displayLink;
-    //CGFloat screenHeight;
     ScaleForAutoRigViewController *scaleAutoRig;
     Vector4 renderBgColor;
     NSString *cachesDir , *docDir;
@@ -86,7 +80,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *framesCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *addFrameBtn;
-@property (weak, nonatomic) IBOutlet UIButton *extrenderBtn;
 @property (weak, nonatomic) IBOutlet UIButton *viewBtn;
 @property (weak, nonatomic) IBOutlet UIButton *infoBtn;
 @property (weak, nonatomic) IBOutlet UIButton *editobjectBtn;
@@ -110,10 +103,7 @@
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
 @property (nonatomic, strong) LoggedInViewController *loggedInVc;
-@property (nonatomic, strong) LightProperties *lightProp;
 @property (nonatomic, strong) ScaleViewController *scaleProps;
-@property (nonatomic, strong) CameraSettings *camProp;
-@property (nonatomic, strong) MeshProperties *meshProp;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 @property (weak, nonatomic) IBOutlet UIButton *moveFirst;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *center_progress;

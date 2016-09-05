@@ -122,9 +122,6 @@ SGEditorScene *editorScene;
     
     smgr->ShaderCallBackForNode = &shaderCallBackForNode;
     smgr->isTransparentCallBack = &isTransparentCallBack;
-//    SceneManager::getTransparencyCB = &getTransparency;
-    //    animationScene->downloadMissingAssetCallBack = &downloadMissingAssetCallBack;
-    //    animationScene->fileWriteCallBack = &fileWriteCallBack;
 
 }
 

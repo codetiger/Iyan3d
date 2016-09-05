@@ -101,14 +101,6 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
             if(origId > 0) {
                 sgNode->setType(NODE_TEMP_INST);
                 sgNode->assetId = origId;
-            } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ) {
-                status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
-            } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
-                status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
-            } else if (sgNode->getType() == NODE_IMAGE) {
-                status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x), sgNode->getProperty(TEXTURE).fileName);
-            } else if (sgNode->getType() == NODE_PARTICLES) {
-                status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true, sgNode->getProperty(TEXTURE).fileName);
             }
             
             if(!status)
@@ -162,16 +154,8 @@ bool SGSceneLoader::legacyReadScene(ifstream *filePointer)
         if(origId > 0) {
             sgNode->setType(NODE_TEMP_INST);
             sgNode->assetId = origId;
-        } else if(sgNode->getType() == NODE_SGM || sgNode->getType() == NODE_RIG || sgNode->getType() == NODE_OBJ) {
-            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId),sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
-        } else if (sgNode->getType() == NODE_TEXT_SKIN || sgNode->getType() == NODE_TEXT) {
-            status = currentScene->downloadMissingAssetCallBack(sgNode->optionalFilePath,sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(TEXTURE).fileName == "" || sgNode->getProperty(TEXTURE).fileName == "-1"), sgNode->getProperty(TEXTURE).fileName);
-        } else if (sgNode->getType() == NODE_IMAGE) {
-            status = currentScene->downloadMissingAssetCallBack(ConversionHelper::getStringForWString(sgNode->name), sgNode->getType(), !(sgNode->getProperty(IS_VERTEX_COLOR).value.x), sgNode->getProperty(TEXTURE).fileName);
-        } else if (sgNode->getType() == NODE_PARTICLES) {
-            status = currentScene->downloadMissingAssetCallBack(to_string(sgNode->assetId), sgNode->getType(), true, sgNode->getProperty(TEXTURE).fileName);
         }
-
+        
         if(!status)
             sgNode = NULL;
         tempNodes.push_back(sgNode);
