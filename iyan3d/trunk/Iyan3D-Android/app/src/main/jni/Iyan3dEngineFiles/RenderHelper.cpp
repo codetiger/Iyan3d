@@ -553,7 +553,14 @@ void RenderHelper::drawMeshBuffersForRTT()
 {
     if(renderingScene->selectedNodeId != NOT_SELECTED) {
         
-        
+        if(renderingScene->shaderMGR->deviceType == METAL){
+            smgr->EndDisplay();
+            
+            bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+            if(!displayPrepared)
+                return;
+        }
+
         smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
 
         SGNode *sgNode = renderingScene->selectedNode;
@@ -600,8 +607,10 @@ void RenderHelper::drawMeshBuffersForRTT()
         vertexColors.clear();
         isMeshColored.clear();
         
-        if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-            renderingScene->selectMan->getNodeColorFromTouchTexture(false, false);
+        if(renderingScene->shaderMGR->deviceType == METAL)
+            smgr->EndDisplay();
+        
+        renderingScene->selectMan->getNodeColorFromTouchTexture(false, false);
     }
 }
 

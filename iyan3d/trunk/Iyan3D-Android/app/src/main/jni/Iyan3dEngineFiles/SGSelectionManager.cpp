@@ -34,7 +34,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelect
    
     selectionScene->renHelper->rttNodeJointSelection(touchPosition,isMultiSelectEnabled, false);
     if(selectionScene->shaderMGR->deviceType == METAL){
-        getNodeColorFromTouchTexture(isMultiSelectEnabled,false);
+        getNodeColorFromTouchTexture(isMultiSelectEnabled,false, true);
     }
     selectionScene->isRTTCompleted = true;
     selectionScene->updater->updateControlsOrientaion();
