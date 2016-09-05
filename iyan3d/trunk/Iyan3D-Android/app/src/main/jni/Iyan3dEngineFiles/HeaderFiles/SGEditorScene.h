@@ -174,8 +174,8 @@ public:
     
     void setEnvironmentTexture(std::string textureFilePath, bool isPreview);
     
-    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo, PROP_INDEX pIndex = TEXTURE); //TODO pass material index after RTT
-    void removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex = 0, PROP_INDEX pIndex = TEXTURE); //TODO pass material index after RTT
+    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo, PROP_INDEX pIndex = TEXTURE);
+    void removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex = 0, PROP_INDEX pIndex = TEXTURE);
     bool canEditRigBones(SGNode *sgNode);
     bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();

@@ -51,23 +51,19 @@ public:
     ~ShaderManager();
     
     
-    void setMeshProps(SGNode *sgnNode, bool isVColored, int paramIndex);
     void setHasMeshColor(SGNode *sgNode, bool status, int paramIndex, bool isFragmentData, int materialIndex);
     void setNumberOfLights(SGNode *sgNode, int paramIndex);
     void setLightsProperties(SGNode *sgNode, int param1, int param2, int param3, int param4, int param5);
     void setJointTransform(SGNode *node, SkinMesh *SMesh, int paramIndex);
     void setModelViewProjMatrix(SGNode *node, u16 paramIndex, bool isDepthPass = false);
     void setMVPForParticles(SGNode *node, u16 paramIndex);
-    void setViewProjMatrix(SGNode *node, u16 paramIndex);
     void setVertexColorUniform(SGNode *sgNode, Vector4 color, int paramIndex, int nodeIndex, int materialIndex);
     void setNodeLighting(SGNode *sgNode, int paramIndex, int materialIndex);
     void setViewProjMatrix(Material *material);
-    void setSceneDataUniforms(SGNode *node, u16 paramIndex);
     void setNodeTransparency(SGNode *node, u16 paramIndex, int materialIndex);
     void setUVScaleValue(SGNode *sgNode, u16 paramIndex, int materialIndex);
     void setModelMatrix(SGNode *node, u16 paramIndex);
     void setProjectionMatrix(SGNode *node, u16 paramIndex);
-    void setViewMatrix(SGNode *node, u16 paramIndex);
     void setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex);
     void setLightViewProjMatrix(SGNode *node, u16 paramIndex);
     void setVertexColorUniforms(SGNode *node, u16 paramIndex);

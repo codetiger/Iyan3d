@@ -55,6 +55,8 @@ bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos, bool isMultiSel
         status = getCtrlColorFromTouchTextureAnim(curTouchPos);
     }
     
+//TODO select and move object in plane
+    
 //    if(!status && selectionScene->hasNodeSelected()) {
 //            if(selectionScene->selectedNodeIds.size() <= 0 && !selectionScene->isRigMode) {
 //                selectionScene->renHelper->rttNodeJointSelection(curTouchPos, isMultiSelectEnabled, true);
@@ -482,7 +484,7 @@ void SGSelectionManager::highlightMeshBufferAndJointSpheres()
     selectionScene->updater->updateControlsOrientaion(selectionScene);
 }
 
-void SGSelectionManager::selectObject(int objectId, int selectedMeshBufferId, bool isMultiSelectionEnabled) //TODO for mesh buffer selection
+void SGSelectionManager::selectObject(int objectId, int selectedMeshBufferId, bool isMultiSelectionEnabled)
 {
     if(!selectionScene || !smgr)
         return;
@@ -541,7 +543,7 @@ void SGSelectionManager::unselectObject(int objectId)
         selectionScene->nodes[objectId]->getProperty(SELECTED).value.x = false;
         
         for( int i = 0; i < selectionScene->nodes[objectId]->materialProps.size(); i++) {
-            selectionScene->nodes[objectId]->getProperty(TRANSPARENCY, i).value.x = 1.0; //TODO for mesh buffers
+            selectionScene->nodes[objectId]->getProperty(TRANSPARENCY, i).value.x = 1.0;
             selectionScene->nodes[objectId]->getProperty(SELECTED, i).value.x = false;
         }
         selectionScene->selectedJoint = NULL;

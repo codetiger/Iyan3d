@@ -32,6 +32,8 @@
 #define ADD_OBJECT 100
 #define DELETE_OBJECT 200
 
+#define MAX_NUM_OF_LIGHTS 5
+
 @implementation RenderViewManager
 
 SGEditorScene *editorScene;
@@ -273,15 +275,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 [self.delegate updateAssetListInScenes];
             }
 
-            /*
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_SGM, assetId, meshPath, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
-            if(sgNode)
-                sgNode->isTempNode = isTempNode;
-            if(!isTempNode){
+            /* 
+             //TODO store add action for undo/redo
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
-              [self.delegate updateAssetListInScenes];
-            }
              */
             break;
         }
@@ -300,19 +297,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
-
-            /*
-            string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgr";
-            SGNode* sgNode = editorScene->loader->loadNode(NODE_RIG, assetId, meshPath, textureNameStr, name, 0, 0, assetAddType, vertexColor, "", isTempNode);
-            if(sgNode)
-                sgNode->isTempNode = isTempNode;
-            if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
-                [self.delegate updateAssetListInScenes];
-            }
-             */
-            
             break;
         }
         case ASSET_OBJ: {
@@ -347,8 +331,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             std::string* sgaFilePath = new std::string([filePath UTF8String]);
             editorScene->animMan->applyAnimations(*sgaFilePath, editorScene->selectedNodeId);
             delete sgaFilePath;
-            //animationScene->storeAddOrRemoveAssetAction(ACTION_APPLY_ANIM, 0);
-            //[self.frameCarouselView reloadData];
             //[self showTipsViewForAction:ANIMATION_APPLIED];
             //isFileSaved = !(animationScene->changeAction = true);
             
@@ -374,31 +356,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
-
-            /*
-            SGNode* textNode = editorScene->loader->loadNode(nodeType, 0, "", textureNameStr,name, imgWidth, imgHeight, assetAddType, textColor, [fontFilePath UTF8String],isTempNode);
-            if (textNode == NULL) {
-                UIAlertView* loadNodeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"fontstyle_char_unsupported", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-                [loadNodeAlert show];
-                [self.delegate showOrHideProgress:0];
-                if(editorScene && editorScene->loader)
-                    editorScene->loader->removeTempNodeIfExists();
-                return false;
-            }
-            if(textNode)
-                textNode->isTempNode = isTempNode;
-            if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
-                [self.delegate updateAssetListInScenes];
-            }
-             */
             
             break;
         }
         case ASSET_ADDITIONAL_LIGHT: {
-            //TODO enum for max lights
-            if(ShaderManager::lightPosition.size() < 5) {
+            if(ShaderManager::lightPosition.size() < MAX_NUM_OF_LIGHTS) {
                 editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId, "",  "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
                 if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId , "Light"+ to_string(assetId-ASSET_ADDITIONAL_LIGHT));

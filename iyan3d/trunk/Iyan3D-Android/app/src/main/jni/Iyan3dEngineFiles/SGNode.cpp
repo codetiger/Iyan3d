@@ -13,7 +13,6 @@
 SGNode::SGNode(NODE_TYPE type)
 {
     this->type = type;
-    //node = shared_ptr<Node>();
     smoothTexture = true;
     instanceNodes.clear();
     isTempNode = false;
@@ -116,7 +115,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             oriTextureName = texturePath;
             getProperty(VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
             getProperty(ORIG_VERTEX_COLOR).value = Vector4(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z, 0.0);
-            //            node = loadSGMandOBJ(meshPath, objectType, smgr);
             break;
         }
         case NODE_IMAGE:
@@ -184,13 +182,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             Logger::log(ERROR, "SGNode::loadNode ", "Unknown node type to load");
             break;
     }
-    
-    //    if(node) {
-    //        Texture *nodeEnvTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
-    //        node->setTexture(nodeEnvTex, NODE_TEXTURE_TYPE_REFLECTIONMAP);
-    ////        Texture *nodeNormalTex = smgr->loadTexture("Normal Texture", constants::BundlePath + "/norm1.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
-    ////        node->setTexture(nodeNormalTex, NODE_TEXTURE_TYPE_NORMALMAP);
-    //    }
     
     return node;
 }
@@ -298,8 +289,6 @@ void SGNode::setSkinningData(SkinMesh *mesh)
                 (*optionalData3).w = j + 1;
                 (*optionalData4).w = weight;
             }
-            //            else
-            //                Logger::log(INFO, "SGNODE:SetSkinningData()", "More joints affecting a vertex");
         }
     }
 }
@@ -317,7 +306,7 @@ shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float 
     Texture *nodeTex = smgr->loadTexture(textureName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-    materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
+    materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     //delete [] textureFileName; //TODO TEST
     return planeNode;
 }
@@ -332,7 +321,7 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
 #endif
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
-    materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for all meshbuffers
+    materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
     return planeNode;
 }
 
@@ -557,7 +546,7 @@ void SGNode::setInitialKeyValues(int actionType)
                 rotationKey.rotation = MathHelper::RotateNodeInWorld(lineRot, delta);
                 rotationKey.id = 0;
                 KeyHelper::addKey(rotationKeys, rotationKey);
-                getProperty(LIGHT_TYPE).value.x = false; // Vector4(0, 0, 0, 0), UNDEFINED);
+                getProperty(LIGHT_TYPE).value.x = false;
                 
             }
             
@@ -675,7 +664,6 @@ Vector3 SGNode::getJointPosition(int jointId, bool isAbsolutePosition)
 {
     shared_ptr<AnimatedMeshNode> selectedNode = dynamic_pointer_cast<AnimatedMeshNode>(node);
     shared_ptr<JointNode> joint = selectedNode->getJointNode(jointId);
-    //selectedNode.reset();
     return ((isAbsolutePosition)? joint->getAbsolutePosition():joint->getPosition());
 }
 
@@ -743,7 +731,6 @@ void SGNode::CCD(shared_ptr<JointNode> bone, Vector3 target, int parentHeirarchy
         parent->updateAbsoluteTransformation();
         parent->updateAbsoluteTransformationOfChildren();
     }
-    //parent.reset();
 }
 
 void SGNode::MoveBone(shared_ptr<JointNode> bone,Vector3 target,int currentFrame)
@@ -824,8 +811,8 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
 {
     assetId = FileHelper::readInt(filePointer);
     int sgbVersion = FileHelper::readInt(filePointer);
-    if(sgbVersion < SGB_VERSION_CURRENT)
-        legacyReadData(filePointer, sgbVersion, origIndex);
+//    if(sgbVersion < SGB_VERSION_CURRENT)
+//        legacyReadData(filePointer, sgbVersion, origIndex);
     
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     setPropertiesOfNode();
@@ -894,150 +881,6 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
     return mesh;
 }
 
-void SGNode::legacyReadData(ifstream *filePointer, int sgbVersion, int &origIndex)
-{
-    joints.clear();
-    //    assetId = FileHelper::readInt(filePointer);
-    //
-    //    int sgbVersion = FileHelper::readInt(filePointer);
-    int hasPhysics, physicsType, lightType, isSoft;
-    float weight, forceMagnitude;
-    Vector4 forceDir;
-    float specificFloat;
-    
-    if(sgbVersion == SGB_VERSION_3) { // Empty Data for future use
-        hasPhysics = FileHelper::readInt(filePointer);
-        physicsType = FileHelper::readInt(filePointer);
-        origIndex = FileHelper::readInt(filePointer);
-        lightType = FileHelper::readInt(filePointer);
-        int texSmooth = FileHelper::readInt(filePointer);
-        smoothTexture = (texSmooth == 0 || texSmooth == 2) ? true : false;
-        weight = FileHelper::readFloat(filePointer);
-        forceMagnitude = FileHelper::readFloat(filePointer);
-        forceDir.x = FileHelper::readFloat(filePointer);
-        forceDir.y = FileHelper::readFloat(filePointer);
-        forceDir.z = FileHelper::readFloat(filePointer);
-        forceDir.w = 0.0;
-        specificFloat = FileHelper::readFloat(filePointer);
-        isSoft = (int)FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-    }
-    
-    if(sgbVersion >= SGB_VERSION_2)
-        getProperty(TEXTURE).fileName = FileHelper::readString(filePointer,sgbVersion);
-    else
-        getProperty(TEXTURE).fileName = to_string(assetId)+"-cm";
-    
-    type = (NODE_TYPE)FileHelper::readInt(filePointer);
-    materialProps.push_back(new MaterialProperty(type));
-    setPropertiesOfNode();
-    if(sgbVersion == SGB_VERSION_3) {
-        getProperty(HAS_PHYSICS).value.x = hasPhysics; // Vector4(hasPhysics, 0, 0, 0), UNDEFINED);
-        getProperty(PHYSICS_KIND).value.x = (physicsType < PHYSICS_CONST) ? physicsType + PHYSICS_CONST : physicsType;
-        std::map<PROP_INDEX, Property> physicsProps = getProperty(HAS_PHYSICS).subProps;
-        
-        for(int pI = PHYSICS_NONE; pI < PHYSICS_NONE+7; pI++)
-            getProperty((PROP_INDEX)pI).value.x = (physicsProps[PHYSICS_KIND].value.x == pI);
-        
-        if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT)
-            getProperty(LIGHT_TYPE).value.x = lightType - 1; // Vector4(lightType - 1, 0, 0, 0), UNDEFINED);
-        getProperty(WEIGHT).value.x = weight; // Vector4(weight, 0, 0, 0), HAS_PHYSICS);
-        getProperty(FORCE_MAGNITUDE).value.x = forceMagnitude; // Vector4(forceMagnitude, 0, 0, true), HAS_PHYSICS);
-        getProperty(FORCE_DIRECTION).value = forceDir;
-        getProperty(SPECIFIC_FLOAT).value.x = specificFloat; // Vector4(specificFloat, 0, 0, 0), UNDEFINED);
-        getProperty(IS_SOFT).value.x = isSoft; // Vector4(isSoft), HAS_PHYSICS);
-    }
-    
-    isRigged = FileHelper::readBool(filePointer);
-    getProperty(LIGHTING).value.x = FileHelper::readBool(filePointer);
-    getProperty(REFRACTION).value.x = FileHelper::readFloat(filePointer);
-    getProperty(REFLECTION).value.x = FileHelper::readFloat(filePointer);
-    
-    if(sgbVersion > SGB_VERSION_1) {
-        
-        std::wstring nodeSpecificString = FileHelper::readWString(filePointer);
-        
-        if (nodeSpecificString.find(L"$_@") != std::wstring::npos) {
-            
-            vector<std::wstring> fontProperties;
-            std::size_t separator = nodeSpecificString.find(L"$_@");
-            for (int i = 0; i < 4; i++) {
-                
-                separator = nodeSpecificString.find(L"$_@");
-                fontProperties.push_back(nodeSpecificString.substr(0,separator));
-                if(separator+3 >= nodeSpecificString.length() ||  separator == std::wstring::npos)
-                    break;
-                nodeSpecificString = nodeSpecificString.substr(separator+3,nodeSpecificString.size()-1);
-                
-            }
-            name = fontProperties[0];
-            optionalFilePath = ConversionHelper::getStringForWString(fontProperties[1]);//string(fontProperties[1].begin(), fontProperties[1].end());
-            int fontSize = stoi(ConversionHelper::getStringForWString(fontProperties[2]).c_str());
-            getProperty(FONT_SIZE).value.x = fontSize; // Vector4(fontSize, 0, 0, 0), UNDEFINED);
-            
-            if(separator != std::wstring::npos) {
-                float specificFloat = stof(ConversionHelper::getStringForWString(fontProperties[3]).c_str());
-                getProperty(SPECIFIC_FLOAT).value.x = specificFloat; // Vector4(specificFloat, 0, 0, 0), UNDEFINED);
-            }
-            
-        } else
-            name = nodeSpecificString;
-    } else {
-        
-        string nodeSpecificString = FileHelper::readString(filePointer,sgbVersion);
-        
-        if (nodeSpecificString.find("$_@") != std::string::npos){
-            vector<string> fontProperties;
-            std::size_t separator = nodeSpecificString.find("$_@");
-            for (int i = 0; i < 4; i++) {
-                
-                separator = nodeSpecificString.find("$_@");
-                fontProperties.push_back(nodeSpecificString.substr(0,separator));
-                if(separator+3 >= nodeSpecificString.length() ||  separator == std::string::npos)
-                    break;
-                nodeSpecificString = nodeSpecificString.substr(separator+3,nodeSpecificString.size()-1);
-                
-            }
-            name = ConversionHelper::getWStringForString(fontProperties[0]) ;//wstring(fontProperties[0].begin(), fontProperties[0].end());
-            optionalFilePath = fontProperties[1];
-            getProperty(FONT_SIZE).value.x = stoi(fontProperties[2].c_str());
-            
-            if(separator != std::string::npos) {
-                getProperty(SPECIFIC_FLOAT).value.x = stof(fontProperties[3].c_str());
-            }
-            
-        } else
-            name = ConversionHelper::getWStringForString(nodeSpecificString);//wstring(nodeSpecificString.begin(), nodeSpecificString.end());
-    }
-    
-    Vector4 textColor;
-    textColor.x = FileHelper::readFloat(filePointer);
-    textColor.y = FileHelper::readFloat(filePointer);
-    textColor.z = FileHelper::readFloat(filePointer);
-    textColor.w = 0.0;
-    if(type == NODE_SGM || type == NODE_TEXT)
-        getProperty(TEXT_COLOR).value = textColor;
-    
-    if(type == NODE_IMAGE && getProperty(TEXT_COLOR).value.x == 0.0) getProperty(TEXT_COLOR).value.x = 2.0;
-    if(type == NODE_IMAGE && getProperty(TEXT_COLOR).value.y == 0.0) getProperty(TEXT_COLOR).value.y = 1.0;
-    
-    getProperty(VERTEX_COLOR).value = getProperty(TEXT_COLOR).value;
-    int keysCount = FileHelper::readInt(filePointer);
-    KeyHelper::readData(filePointer,keysCount,positionKeys, rotationKeys, scaleKeys, visibilityKeys);
-    joints.clear();
-    int jointsCount = FileHelper::readInt(filePointer);
-    for(int i = 0; i < jointsCount; i++)
-    {
-        SGJoint *joint = new SGJoint();
-        joint->readData(filePointer);
-        joints.push_back(joint);
-    }
-}
-
 void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
 {
     
@@ -1095,75 +938,7 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     
     FileHelper::writeBool(filePointer,isRigged);
     
-    /*
-     std::wstring nodeSpecificString;
-     if(type == NODE_TEXT_SKIN || type == NODE_TEXT) {
-     nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(getProperty(FONT_SIZE).value.x) + L"$_@" + to_wstring(getProperty(SPECIFIC_FLOAT).value.x) + L"$_@";
-     } else
-     nodeSpecificString = name;
-     */
     FileHelper::writeWString(filePointer,name);
-    KeyHelper::writeData(filePointer, positionKeys, rotationKeys, scaleKeys, visibilityKeys);
-    FileHelper::writeInt(filePointer, int(joints.size()));
-    int i;
-    for(i = 0; i < joints.size(); i++)
-        joints[i]->writeData(filePointer);
-}
-
-void SGNode::leagcyWrite(ofstream *filePointer, vector<SGNode*> &nodes)
-{
-    Property emptyProp;
-    emptyProp.index = UNDEFINED;
-    emptyProp.value = Vector4(0);
-    std::map<PROP_INDEX, Property> physicsProps = (type == NODE_SGM || NODE_OBJ || NODE_TEXT) ? getProperty(HAS_PHYSICS).subProps : emptyProp.subProps;
-    Property hasPhysicsProp = (type == NODE_SGM || NODE_OBJ || NODE_TEXT) ? getProperty(HAS_PHYSICS) : emptyProp;
-    
-    FileHelper::writeInt(filePointer,assetId);
-    FileHelper::writeInt(filePointer,SGB_VERSION_CURRENT); // New sgb version because of changing the format
-    FileHelper::writeInt(filePointer, hasPhysicsProp.value.x);
-    FileHelper::writeInt(filePointer, (int)physicsProps[PHYSICS_KIND].value.x);
-    
-    int nodeIndex = 0;
-    if(node->type == NODE_TYPE_INSTANCED) {
-        int actionId = ((SGNode*)node->original->getUserPointer())->actionId;
-        for (int i = 0; i < nodes.size(); i++) {
-            if(actionId == nodes[i]->actionId)
-                nodeIndex = i;
-        }
-    }
-    
-    FileHelper::writeInt(filePointer, nodeIndex); //Node Index of Original Node if Instanced
-    FileHelper::writeInt(filePointer, (type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT) ? getProperty(LIGHT_TYPE).value.x + 1 : 0); // Light Type + 1
-    FileHelper::writeInt(filePointer, (int)smoothTexture + 1);
-    FileHelper::writeFloat(filePointer, (physicsProps.find(WEIGHT) != physicsProps.end()) ? physicsProps[WEIGHT].value.x : 0.0);
-    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_MAGNITUDE) != physicsProps.end()) ? physicsProps[FORCE_MAGNITUDE].value.x : 0.0);
-    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_DIRECTION) != physicsProps.end()) ? physicsProps[FORCE_DIRECTION].value.x : 0.0);
-    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_DIRECTION) != physicsProps.end()) ? physicsProps[FORCE_DIRECTION].value.y : 0.0);
-    FileHelper::writeFloat(filePointer, (physicsProps.find(FORCE_DIRECTION) != physicsProps.end()) ? physicsProps[FORCE_DIRECTION].value.z : 0.0);
-    FileHelper::writeFloat(filePointer, getProperty(SPECIFIC_FLOAT).value.x);
-    FileHelper::writeFloat(filePointer, physicsProps[IS_SOFT].value.x);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeFloat(filePointer, 0.0);
-    FileHelper::writeString(filePointer, getProperty(TEXTURE).fileName);
-    FileHelper::writeInt(filePointer,(int)type);
-    FileHelper::writeBool(filePointer,isRigged);
-    FileHelper::writeBool(filePointer, getProperty(LIGHTING).value.x);
-    FileHelper::writeFloat(filePointer,getProperty(REFRACTION).value.x);
-    FileHelper::writeFloat(filePointer,getProperty(REFLECTION).value.x);
-    
-    std::wstring nodeSpecificString;
-    if(type == NODE_TEXT_SKIN || type == NODE_TEXT) {
-        nodeSpecificString = name + L"$_@" + ConversionHelper::getWStringForString(optionalFilePath) + L"$_@" + to_wstring(getProperty(FONT_SIZE).value.x) + L"$_@" + to_wstring(getProperty(SPECIFIC_FLOAT).value.x) + L"$_@";
-    } else
-        nodeSpecificString = name;
-    
-    FileHelper::writeWString(filePointer,nodeSpecificString);
-    FileHelper::writeFloat(filePointer, getProperty(VERTEX_COLOR).value.x);
-    FileHelper::writeFloat(filePointer, getProperty(VERTEX_COLOR).value.y);
-    FileHelper::writeFloat(filePointer, getProperty(VERTEX_COLOR).value.z);
     KeyHelper::writeData(filePointer, positionKeys, rotationKeys, scaleKeys, visibilityKeys);
     FileHelper::writeInt(filePointer, int(joints.size()));
     int i;

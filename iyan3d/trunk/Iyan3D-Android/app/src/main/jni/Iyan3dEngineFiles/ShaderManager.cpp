@@ -132,7 +132,7 @@ void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, in
         strsToReplace.insert(temp.begin(), temp.end());
     } else {
         ShaderManager::maxIntsances = 4000;
-        ShaderManager::maxJoints = 161; //TODO
+        ShaderManager::maxJoints = 250; //TODO
     }
     
     for(int i = 0; i < TOTAL_MATERIALS;i++) {
@@ -280,36 +280,6 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
     Material * material = sgNode->node->material;
     smgr->setPropertyValue(material, "meshColor", vertColor, DATA_FLOAT_VEC3, ((endIndex - startIndex)+1) * 3, false, paramIndex, nodeIndex, materialIndex);
     delete [] vertColor;
-}
-
-void ShaderManager::setMeshProps(SGNode *sgNode, bool isVColored, int paramIndex)
-{
-    int startIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt : 0;
-    int endIndex = (sgNode->instanceNodes.size() > 0) ? sgNode->node->instancingRenderIt + ShaderManager::maxIntsances : 0;
-    if(endIndex > sgNode->instanceNodes.size())
-        endIndex = (int)sgNode->instanceNodes.size();
-    
-    float *props = new float[((endIndex - startIndex)+1) * 4];
-    
-    props[0] = (sgNode->getProperty(SELECTED).value.x || !sgNode->getProperty(VISIBILITY).value.x) ?  NODE_SELECTION_TRANSPARENCY : sgNode->getProperty(TRANSPARENCY).value.x;
-    props[1] = ((sgNode->getType() != NODE_PARTICLES) && (sgNode->getProperty(IS_VERTEX_COLOR).value.x || sgNode->getProperty(SELECTED).value.x || isVColored)) ? 1.0 : 0.0;
-    props[2] = sgNode->getProperty(SELECTED).value.x ?  0.0 : sgNode->getProperty(REFLECTION).value.x;
-    props[3] = (!ShaderManager::sceneLighting || sgNode->getType() == NODE_LIGHT || sgNode->getProperty(SELECTED).value.x) ? 0 : (int)sgNode->getProperty(LIGHTING).value.x;
-    
-    
-    int i = 0;
-    vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
-    for(int j = startIndex; j < endIndex; j++) {
-        props[(i+1) * 4] = (v[j].second->getProperty(SELECTED).value.x || !v[j].second->getProperty(VISIBILITY).value.x) ?  NODE_SELECTION_TRANSPARENCY : v[j].second->getProperty(TRANSPARENCY).value.x;
-        props[((i+1) * 4) + 1] = ((v[j].second->getType() != NODE_PARTICLES) && (v[j].second->getProperty(IS_VERTEX_COLOR).value.x || v[j].second->getProperty(SELECTED).value.x)) ? 1.0 : 0.0;
-        props[((i+1) * 4) + 2] = v[j].second->getProperty(SELECTED).value.x ?  0.0 : v[j].second->getProperty(REFLECTION).value.x;
-        props[((i+1) * 4) + 3] = (!ShaderManager::sceneLighting || v[j].second->getType() == NODE_LIGHT || v[j].second->getProperty(SELECTED).value.x) ? 0 : (int)v[j].second->getProperty(LIGHTING).value.x;
-        i++;
-    }
-    
-    Material * material = sgNode->node->material;
-    smgr->setPropertyValue(material, "props", props, DATA_FLOAT_VEC4, ((endIndex - startIndex)+1) * 4, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
-    delete [] props;
 }
 
 void ShaderManager::setHasMeshColor(SGNode *sgNode, bool status, int paramIndex, bool isFragmentData, int materialIndex)
@@ -547,10 +517,6 @@ void ShaderManager::setUVScaleValue(SGNode *sgNode, u16 paramIndex, int material
     delete [] uvScale;
 }
 
-void ShaderManager::setSceneDataUniforms(SGNode *node, u16 paramIndex)
-{
-    
-}
 
 void ShaderManager::setModelViewProjMatrix(SGNode *sgNode, u16 paramIndex, bool isDepthPass)
 {
@@ -633,21 +599,6 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     delete [] sColor;
     delete [] mColor;
     delete [] eColor;
-}
-
-void ShaderManager::setViewProjMatrix(SGNode *sgNode, u16 paramIndex)
-{
-    Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
-    Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
-    Mat4 mvp = projMat * viewMat;
-    smgr->setPropertyValue(sgNode->node->material, "vp", mvp.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
-}
-
-void ShaderManager::setViewMatrix(SGNode *sgNode,u16 paramIndex)
-{
-    Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
-    Mat4 view = viewMat;
-    smgr->setPropertyValue(sgNode->node->material, "view", view.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
 void ShaderManager::setModelMatrix(SGNode *sgNode, u16 paramIndex)

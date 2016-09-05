@@ -128,58 +128,6 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     return true;
 }
 
-bool SGSceneLoader::legacyReadScene(ifstream *filePointer)
-{
-    if(!currentScene || !smgr)
-        return false;
-
-    int nodeCount = 0;
-    float cameraFov = 72.0;
-    int cameraResolution = 0;
-    readSceneGlobalInfo(filePointer, nodeCount, cameraFov, cameraResolution);
-    currentScene->totalFrames = (currentScene->totalFrames < 24) ? 24 : currentScene->totalFrames;
-    currentScene->nodes.clear();
-    if(nodeCount < NODE_LIGHT+1)
-        return false;
-    
-    vector<SGNode*> tempNodes;
-    for(int i = 0;i < nodeCount;i++) {
-        SGNode *sgNode = new SGNode(NODE_UNDEFINED);
-        int origId = 0;
-        sgNode->readData(filePointer, origId);
-        bool status = true;
-        if(sgNode->getType() == NODE_CAMERA)
-            sgNode->getProperty(FOV).value.x = cameraFov;
-        
-        if(origId > 0) {
-            sgNode->setType(NODE_TEMP_INST);
-            sgNode->assetId = origId;
-        }
-        
-        if(!status)
-            sgNode = NULL;
-        tempNodes.push_back(sgNode);
-    }
-    currentScene->syncSceneWithPhysicsWorld();
-
-    for (int i = 0; i < tempNodes.size(); i++) {
-        SGNode *sgNode = tempNodes[i];
-        bool nodeLoaded = false;
-
-        if(sgNode && sgNode->getType() == NODE_TEMP_INST) {
-            nodeLoaded = loadInstance(sgNode, sgNode->assetId, OPEN_SAVED_FILE);
-        } else if(sgNode)
-            nodeLoaded = loadNode(sgNode, OPEN_SAVED_FILE);
-
-        if(!nodeLoaded)
-            delete sgNode;
-    }
-    
-    currentScene->syncSceneWithPhysicsWorld();
-
-    return true;
-}
-
 #ifdef ANDROID
 bool SGSceneLoader::loadSceneData(JNIEnv *env, jclass type,jobject object,std::string *filePath)
 {
@@ -295,47 +243,14 @@ bool SGSceneLoader::readScene(JNIEnv *env, jclass type,jobject object,ifstream *
 }
 #endif
 
-int SGSceneLoader::legacyReadSceneGlobalInfo(ifstream *filePointer, int sgbVersion, int& nodeCount)
-{
-    if(!currentScene || !smgr)
-        return;
-
-    if(sgbVersion >= SGB_VERSION_3) {
-        FileHelper::readInt(filePointer); // dofNear
-        FileHelper::readInt(filePointer); // dofFar
-        FileHelper::readInt(filePointer); // Empty Data for future use
-        FileHelper::readInt(filePointer);
-        FileHelper::readInt(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        FileHelper::readFloat(filePointer);
-        currentScene->totalFrames = FileHelper::readInt(filePointer);
-    } else
-        currentScene->totalFrames = sgbVersion;
-    
-    Vector3 lightColor;
-    lightColor.x = FileHelper::readFloat(filePointer);
-    lightColor.y = FileHelper::readFloat(filePointer);
-    lightColor.z = FileHelper::readFloat(filePointer);
-    ShaderManager::lightColor.push_back(lightColor);
-    ShaderManager::shadowDensity = FileHelper::readFloat(filePointer);
-    currentScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x = FileHelper::readFloat(filePointer);
-    nodeCount = FileHelper::readInt(filePointer);
-    
-    return sgbVersion;
-}
-
 int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount, float& cameraFov, int& cameraResolution)
 {
     if(!currentScene || !smgr)
         return;
     
     int sgbVersion = FileHelper::readInt(filePointer);
-    if(sgbVersion != SGB_VERSION_CURRENT)
-        return legacyReadSceneGlobalInfo(filePointer, sgbVersion, nodeCount);
+//    if(sgbVersion != SGB_VERSION_CURRENT)
+//        return legacyReadSceneGlobalInfo(filePointer, sgbVersion, nodeCount);
     
     FileHelper::readInt(filePointer); // dofNear
     FileHelper::readInt(filePointer); // dofFar
@@ -345,7 +260,7 @@ int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount, fl
     lightColor.y = FileHelper::readFloat(filePointer);
     lightColor.z = FileHelper::readFloat(filePointer);
     ShaderManager::shadowDensity = FileHelper::readFloat(filePointer);
-    cameraFov = FileHelper::readFloat(filePointer); //TODO pass camera FOV
+    cameraFov = FileHelper::readFloat(filePointer);
     
     FileHelper::readFloat(filePointer); // Ambient Light
     cameraResolution = FileHelper::readFloat(filePointer);
@@ -380,19 +295,19 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
     sgnode->materialProps.push_back(new MaterialProperty(type));
 
     sgnode->node = sgnode->loadNode(assetId, meshPath, textureName, type, smgr, name, imgwidth, imgheight, textColor, fontFilePath);
+    
     if(!sgnode->node) {
         delete sgnode;
         Logger::log(INFO,"SGANimationScene","Node not loaded");
         currentScene->freezeRendering = false;
         return NULL;
     }
+    
     if(sgnode->getType() == NODE_PARTICLES && isTempNode)
         sgnode->getProperty(SELECTED).value.x = true; // Vector4(true, 0, 0, 0), UNDEFINED);
     else if(sgnode->getType() == NODE_PARTICLES && !isTempNode)
         sgnode->getProperty(SELECTED).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
     
-    if(sgnode->getType() == NODE_TEXT_SKIN)
-        currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgnode);
     sgnode->assetId = assetId;
     sgnode->name = name;
     sgnode->setInitialKeyValues(actionType);
@@ -405,11 +320,8 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
         currentScene->initLightCamera(sgnode->node->getPosition());
         addLight(sgnode);
 #endif
-    }else if(type == NODE_IMAGE || type == NODE_VIDEO){
+    } else if(type == NODE_IMAGE || type == NODE_VIDEO){
         sgnode->getProperty(LIGHTING).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
-    } else if (type == NODE_RIG) {
-        setJointsScale(sgnode);
-        dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache();
     } else if (type == NODE_TEXT_SKIN) {
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache();
     } else if (type == NODE_ADDITIONAL_LIGHT) {
@@ -463,8 +375,6 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
         currentScene->freezeRendering = false;
         return false;
     }
-    if(sgNode->getType() == NODE_TEXT_SKIN)
-        currentScene->textJointsBasePos[(int)currentScene->nodes.size()] = currentScene->animMan->storeTextInitialPositions(sgNode);
 
     sgNode->setInitialKeyValues(actionType);
     sgNode->node->updateAbsoluteTransformation();
@@ -489,8 +399,6 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
         addLight(sgNode);
     } else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
         sgNode->getProperty(LIGHTING).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
-    else if (sgNode->getType() == NODE_RIG)
-        setJointsScale(sgNode);
     
     currentScene->updater->setDataForFrame(currentScene->currentFrame);
     currentScene->updater->resetMaterialTypes(false);
@@ -892,7 +800,7 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
     }
 }
 
-void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType) //TODO check instacing for multiple buffers
+void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType)
 {
     if(!currentScene || (currentScene->selectedNodeId == NOT_EXISTS && currentScene->selectedNodeIds.size() <= 0 && actionType == IMPORT_ASSET_ACTION))
         return;

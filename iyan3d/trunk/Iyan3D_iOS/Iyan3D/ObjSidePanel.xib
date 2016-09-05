@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -11,7 +11,6 @@
                 <outlet property="addBtn" destination="hmZ-Gp-sTd" id="feS-s7-AHY"/>
                 <outlet property="cancelBtn" destination="gba-ht-Eqv" id="wwy-7V-a3M"/>
                 <outlet property="collectionView" destination="iSK-at-mkm" id="F3R-5h-EnV"/>
-                <outlet property="colorWheelBtn" destination="iBb-rI-NfD" id="sNb-0v-KeF"/>
                 <outlet property="importBtn" destination="lrB-Fh-jSo" id="2fX-SV-sMU"/>
                 <outlet property="importFilesCollectionView" destination="iSK-at-mkm" id="M4D-Sv-T4N"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -32,13 +31,6 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBb-rI-NfD">
-                            <rect key="frame" x="258" y="13" width="29" height="23"/>
-                            <state key="normal" image="color.png"/>
-                            <connections>
-                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="KQB-1a-dJz"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -109,7 +101,6 @@
         </view>
     </objects>
     <resources>
-        <image name="color.png" width="23" height="23"/>
         <image name="render_image.png" width="18" height="18"/>
     </resources>
 </document>

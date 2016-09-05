@@ -241,7 +241,7 @@
         [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
     }
     
-    //TODO :
+    //TODO : Remove all premium upgrade functions
     // [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"])

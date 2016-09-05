@@ -199,7 +199,7 @@ void SGActionManager::moveJoint(Vector3 outputValue, bool touchMove)
             }
         }
     }
-// TODO For CPU Skin update mesh cache
+// TODO For CPU Skin update mesh cache check performance
 }
 
 void SGActionManager::rotateJoint(Quaternion outputValue)
@@ -217,7 +217,7 @@ void SGActionManager::rotateJoint(Quaternion outputValue)
             selectedNode->joints[mirrorJointId]->setRotationOnNode(rot, true);
         }
     }
-    // TODO For CPU Skin update mesh cache
+    // TODO For CPU Skin update mesh cache check performance
 }
 
 void SGActionManager::storeActionKeys(bool finished)

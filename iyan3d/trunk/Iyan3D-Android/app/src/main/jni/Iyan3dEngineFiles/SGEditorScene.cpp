@@ -203,7 +203,7 @@ void SGEditorScene::initTextures()
     whiteBorderTexture = smgr->loadTexture("whiteborder",constants::BundlePath + "/whiteborder.png",TEXTURE_RGBA8,TEXTURE_BYTE, true);
     
     shaderMGR->shadowTexture = smgr->createRenderTargetTexture("shadowTexture", TEXTURE_DEPTH32, TEXTURE_BYTE, SHADOW_TEXTURE_WIDTH, SHADOW_TEXTURE_HEIGHT);
-    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", constants::BundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 50);
+    shaderMGR->environmentTex = NULL;
     
     renderingTextureMap[RESOLUTION[0][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[0][0] , RESOLUTION[0][1]);
     renderingTextureMap[RESOLUTION[1][0]] = smgr->createRenderTargetTexture("RenderTexture", TEXTURE_RGBA8, TEXTURE_BYTE,RESOLUTION[1][0] , RESOLUTION[1][1]);
@@ -705,7 +705,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         bool smoothTexture = (nodes[selectedNodeId]->smoothTexture);
         printf(" \n Texture file path %s ", texturePath.c_str());
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-        nodes[selectedNodeId]->materialProps[matIndex]->setTextureForType(nodeTex, texType); //TODO for selected mesh buffer index
+        nodes[selectedNodeId]->materialProps[matIndex]->setTextureForType(nodeTex, texType);
         
         if(!isTemp || isUndoRedo){
             nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = textureFileName + ".png";
@@ -757,7 +757,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
             if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
                 nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
                 Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
-                nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP); //TODO for selected mesh buffer index
+                nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
             } else {
                 nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
                 nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;

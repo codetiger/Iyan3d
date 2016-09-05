@@ -78,7 +78,6 @@ public:
     void writeData(ofstream* filePointer, vector<SGNode*> &nodes);
     void leagcyWrite(ofstream* filePointer, vector<SGNode*> &nodes);
     Mesh* readData(ifstream* filePointer, int &origIndex);
-    void legacyReadData(ifstream* filePointer, int sgbVersion, int &origIndex);
     ActionKey getKeyForFrame(int frameId);
     void setKeyForFrame(int frameId, ActionKey& key);
     void removeAnimationInCurrentFrame(int currentFrame);

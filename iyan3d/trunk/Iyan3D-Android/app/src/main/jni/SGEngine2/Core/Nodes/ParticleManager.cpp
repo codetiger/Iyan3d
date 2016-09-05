@@ -143,7 +143,6 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
         v.vertNormal.y = finalPos.w;
         v.vertNormal.z = finalPos.w;
         
-//        bool updateBB = p->isLive; //TODO updateBoundingbox check
         
         mbvd.push_back(v);
         //if(!meshCacheCreated) {
@@ -154,7 +153,7 @@ bool ParticleManager::updateParticles(bool isSelected, Vector3 camPos)
     this->meshCache->addMeshBuffer(mbvd, mbi, 0);
     this->shouldUpdateMesh = true;
     
-    return true;
+    return meshCacheCreated;
 }
 
 Quaternion ParticleManager::rotationBetweenVectors(Vector3 targetDirection, Vector3 initialDirection)

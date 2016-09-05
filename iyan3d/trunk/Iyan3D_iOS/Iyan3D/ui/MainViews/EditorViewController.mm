@@ -1575,18 +1575,11 @@ BOOL missingAlertShown;
     }
     else
     {
-        bool isVideoOrImageOrParticle = false;
-        NODE_TYPE nodeType = NODE_UNDEFINED;
-        if(editorScene && editorScene->hasNodeSelected()){
-            nodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
-            if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES)
-                isVideoOrImageOrParticle = true;
-        }
         [self showCommonPropsVCAtRect:rect WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties(editorScene->selectedMeshBufferId) AnyDirection:NO];
     }
 }
 
-- (void) showCommonPropsVCAtRect:(CGRect) rectPos WithProps:(std::map< PROP_INDEX, Property >) allProps AnyDirection:(BOOL) anyDir //TODO for video and image
+- (void) showCommonPropsVCAtRect:(CGRect) rectPos WithProps:(std::map< PROP_INDEX, Property >) allProps AnyDirection:(BOOL) anyDir
 {
     BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
 
@@ -4133,7 +4126,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) removeTempTextureAndVertex:(PROP_INDEX) pIndex
 {
-    editorScene->removeTempTextureAndVertex(selectedNodeId, selectedMeshBufferId, pIndex); //TODO material Index
+    editorScene->removeTempTextureAndVertex(selectedNodeId, selectedMeshBufferId, pIndex);
 }
 
 - (void) changeRenderingBgColor:(Vector4)vertexColor

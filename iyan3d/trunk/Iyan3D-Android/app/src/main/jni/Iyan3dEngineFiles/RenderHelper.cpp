@@ -460,6 +460,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     vector<bool> nodeSelection;
     vector< vector<bool> > bufferSelection;
     vector< vector<bool> > isVcolored;
+    vector< vector<float> > reflections;
     vector<bool> isLighting;
     
     for(int i = 0; i < renderingScene->nodes.size(); i++){
@@ -495,12 +496,15 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         vector<Vector4> mbVColors;
         vector<bool> mbIsVColored;
         vector<bool> mbIsSelected;
+        vector<float> mbReflections;
 
         for(int j = 0; j < renderingScene->nodes[i]->materialProps.size(); j ++) {
             mbVColors.push_back(renderingScene->nodes[i]->getProperty(VERTEX_COLOR, j).value);
             mbIsSelected.push_back(renderingScene->nodes[i]->getProperty(SELECTED, j).value.x);
             mbIsVColored.push_back(renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR, j).value.x);
+            mbReflections.push_back(renderingScene->nodes[i]->getProperty(REFLECTION, j).value.x);
             
+            renderingScene->nodes[i]->getProperty(REFLECTION, j).value.x = 0.0;
             renderingScene->nodes[i]->getProperty(SELECTED, j).value.x = false;
             renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR, j).value.x = true;
 
@@ -508,6 +512,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
             renderingScene->nodes[i]->getProperty(VERTEX_COLOR, j).value = Vector4(packed/255.0 ,1.0);
         }
         
+        reflections.push_back(mbReflections);
         vertexColors.push_back(mbVColors);
         isVcolored.push_back(mbIsVColored);
         bufferSelection.push_back(mbIsSelected);
@@ -536,12 +541,15 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
             renderingScene->nodes[i]->getProperty(SELECTED, j).value.x = bufferSelection[i][j];
             renderingScene->nodes[i]->getProperty(VERTEX_COLOR, j).value = vertexColors[i][j];
             renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR, j).value.x = isVcolored[i][j];
+            renderingScene->nodes[i]->getProperty(REFLECTION, j).value.x = reflections[i][j];
         }
+        reflections[i].clear();
         bufferSelection[i].clear();
         vertexColors[i].clear();
         isVcolored[i].clear();
     }
-    previousMaterialNames.clear(); vertexColors.clear(); transparency.clear(); isVcolored.clear(); bufferSelection.clear();
+    previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();
+    isVcolored.clear(); bufferSelection.clear(); reflections.clear();
     if(renderingScene->shaderMGR->deviceType == OPENGLES2)
         renderingScene->selectMan->getNodeColorFromTouchTexture(isMultiSelectenabled, touchMove, drawMeshBufferRTT);
     smgr->setRenderTarget(NULL,false,false);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ObjSidePanel">
@@ -11,7 +11,6 @@
                 <outlet property="addBtn" destination="uWq-xB-Yo7" id="dIi-MA-bNC"/>
                 <outlet property="cancelBtn" destination="ITe-RY-oV3" id="5mv-aa-ZhU"/>
                 <outlet property="collectionView" destination="qL2-Qj-oF8" id="0Dw-tD-LaK"/>
-                <outlet property="colorWheelBtn" destination="xNc-sr-0jo" id="bTz-QE-6Ga"/>
                 <outlet property="importBtn" destination="47o-Es-se8" id="Mrf-CJ-L96"/>
                 <outlet property="importFilesCollectionView" destination="qL2-Qj-oF8" id="F08-U3-PEz"/>
                 <outlet property="view" destination="jz5-x0-bMx" id="AV0-HB-i2m"/>
@@ -34,14 +33,6 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xNc-sr-0jo">
-                            <rect key="frame" x="173" y="6" width="23" height="23"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="color.png"/>
-                            <connections>
-                                <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="wjB-NS-SH6"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -118,7 +109,6 @@
         </view>
     </objects>
     <resources>
-        <image name="color.png" width="23" height="23"/>
         <image name="render_image.png" width="18" height="18"/>
     </resources>
 </document>

@@ -159,7 +159,6 @@ void SceneManager::RemoveTexture(Texture *texture)
                     break;
                 }
             } else if(device == METAL) {
-                // TODO: Implement Texture removal for metal
                 if(textures[i] == texture)
                     delete textures[i];
                 textures.erase(textures.begin() + i);
