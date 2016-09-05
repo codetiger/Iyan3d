@@ -11,6 +11,8 @@
 SceneImporter::SceneImporter()
 {
     scene = NULL;
+    rigNode = NULL;
+    hasLoadedRigNode = false;
 }
 
 SceneImporter::~SceneImporter()
@@ -21,7 +23,6 @@ SceneImporter::~SceneImporter()
 
 string getFileExtention(const string& s)
 {
-    
     char sep = '.';
     
     size_t i = s.rfind(sep, s.length());
@@ -125,6 +126,9 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
 
 void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
 {
+    rigNode = NULL;
+    hasLoadedRigNode = false;
+
     sgScene->freezeRendering = true;
     string ext = getFileExtention(filePath);
     transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
@@ -151,6 +155,9 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
 
             importNode(scene->mRootNode, aiMatrix4x4());
             
+            if(rigNode)
+                loadDetails2Node(rigNode, rigMesh, aiMatrix4x4());
+
             sgScene->selectMan->removeChildren(sgScene->getParentNode());
             sgScene->updater->setDataForFrame(sgScene->currentFrame);
             sgScene->selectMan->updateParentPosition();
@@ -339,12 +346,11 @@ int SceneImporter::loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool 
     return nodeMaterialIndex;
 }
 
-void SceneImporter::loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *bones, Mesh* mesh, bool hasBones, aiMatrix4x4 transform)
+void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 transform)
 {
     shared_ptr<Node> sgn;
     
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
-        loadBoneHierarcy((SkinMesh*)mesh, bones);
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
         
@@ -354,7 +360,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *b
         bool isSGJointsCreated = (sceneNode->joints.size() > 0) ? true : false;
         int jointsCount = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointCount();
         
-        for(int i = 0;i < jointsCount;i++) {
+        for(int i = 0; i < jointsCount; i++) {
             dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i)->setID(i);
             if(!isSGJointsCreated) {
                 SGJoint *joint = new SGJoint();
@@ -382,7 +388,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *b
         r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
     } else if(ext == "fbx") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        if(hasBones)
+        if(sceneNode->getType() == NODE_RIG)
             r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
         else
             r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
@@ -391,12 +397,10 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *b
         r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
     } else if(ext == "sgm" || ext == "sgr") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 1.0, 0.0));
-        //            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
     }
 
     Mat4 m = AssimpToMat4(transform);
     m = (r1 * r2).getMatrix() * m;
-    
     Quaternion r = m.getRotation();
     
     sceneNode->setPosition(m.getTranslation(), 0);
@@ -420,9 +424,6 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *b
     sceneNode->node->setID(sgScene->assetIDCounter++);
     
     sgScene->nodes.push_back(sceneNode);
-    
-    bones->clear();
-    delete bones;
 }
 
 void SceneImporter::importNode(aiNode *node, aiMatrix4x4 accTransform)
@@ -430,7 +431,6 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 accTransform)
     aiMatrix4x4 transform = node->mTransformation * accTransform;
 
     if (node->mNumMeshes > 0) {
-        Mesh* mesh;
         map< string, Joint* > *bones = new map< string, Joint* >();
         bool hasBones = false;
         
@@ -440,29 +440,40 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 accTransform)
                 hasBones = aiM->HasBones();
         }
 
-        NODE_TYPE nType;
-        if(ext == "text")
-            nType = (hasBones) ? NODE_TEXT_SKIN : NODE_TEXT;
-        else
-            nType = (hasBones) ? NODE_RIG : NODE_SGM;
+        SGNode *sceneNode = NULL;
+        Mesh *mesh;
         
-        SGNode *sceneNode = new SGNode(nType);
-        sceneNode->isTempNode = isTempNode;
-        
-        if(hasBones)
-            mesh = new SkinMesh();
-        else
-            mesh = new Mesh();
+        if(hasBones && rigNode != NULL) {
+            sceneNode = rigNode;
+            mesh = rigMesh;
+        } else {
+            NODE_TYPE nType;
+            if(ext == "text")
+                nType = (hasBones) ? NODE_TEXT_SKIN : NODE_TEXT;
+            else
+                nType = (hasBones) ? NODE_RIG : NODE_SGM;
+            
+            sceneNode = new SGNode(nType);
+            sceneNode->isTempNode = isTempNode;
+
+            if(hasBones)
+                mesh = new SkinMesh();
+            else
+                mesh = new Mesh();
+            
+            if(hasBones) {
+                rigNode = &(*sceneNode);
+                rigMesh = &(*mesh);
+            }
+        }
 
         for (int i = 0; i < node->mNumMeshes; i++) {
             
             aiMesh *aiM = scene->mMeshes[node->mMeshes[i]];
-            
             if(!aiM || aiM->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
                 continue;
             
             unsigned short materialIndex = aiM->mMaterialIndex;
-            
             int nodeMaterialIndex = loadMaterial2Node(sceneNode, materialIndex, hasBones);
 
             if(hasBones) {
@@ -490,7 +501,14 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 accTransform)
         string name = node->mName.C_Str();
         sceneNode->name = ConversionHelper::getWStringForString(name);
         
-        loadDetails2Node(sceneNode, bones, mesh, hasBones, node->mTransformation);
+        if(bones->size()) {
+            loadBoneHierarcy((SkinMesh*)mesh, bones);
+            bones->clear();
+            delete bones;
+        }
+        
+        if(!hasBones)
+            loadDetails2Node(sceneNode, mesh, node->mTransformation);
     }
 
     for (int i = 0; i < node->mNumChildren; i++)

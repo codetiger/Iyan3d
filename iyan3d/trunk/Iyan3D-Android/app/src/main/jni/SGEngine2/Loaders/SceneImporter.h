@@ -39,7 +39,7 @@ public:
 private:
     void importNode(aiNode *node, aiMatrix4x4 accTransform);
     int loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool hasBones);
-    void loadDetails2Node(SGNode *sceneNode, map< string, Joint* > *bones, Mesh* mesh, bool hasBones, aiMatrix4x4 transform);
+    void loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 transform);
 
     const aiScene* scene = NULL;
     bool hasMeshColor;
@@ -47,6 +47,9 @@ private:
     string folderPath, ext;
     bool isTempNode;
     SGEditorScene *sgScene;
+    SGNode *rigNode;
+    Mesh *rigMesh;
+    bool hasLoadedRigNode;
 
     void loadNodes2Scene(SGEditorScene *sgScene, string path);
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
