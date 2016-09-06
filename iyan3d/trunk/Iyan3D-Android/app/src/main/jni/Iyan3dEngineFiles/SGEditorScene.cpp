@@ -74,6 +74,7 @@ SGEditorScene::~SGEditorScene()
     
     if(renderingTextureMap.size())
         renderingTextureMap.clear();
+    
     if(sceneControls.size()) {
         for (int i = 0; i < sceneControls.size(); i++) {
             if(sceneControls[i]) {

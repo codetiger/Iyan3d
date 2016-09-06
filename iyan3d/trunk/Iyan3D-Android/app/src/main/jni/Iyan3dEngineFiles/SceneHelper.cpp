@@ -213,7 +213,7 @@ SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, 
 vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
 {
     vector<SGNode*> sceneControls;
-    for(int i = 0;i < TOTAL_CONTROLS;i++){
+    for(int i = 0; i < TOTAL_CONTROLS; i++) {
         SGNode *sgNode = new SGNode(NODE_SGM);
         sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
         sgNode->getProperty(IS_VERTEX_COLOR).value = Vector4(true, 0, 0, 0);
@@ -223,15 +223,17 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         Mesh *ctrlMesh = importer->loadMeshFromFile(constants::BundlePath + "/controls" + to_string(i+1) + ".sgm");
         delete importer;
 
-        if(ctrlMesh == NULL){
+        if(ctrlMesh == NULL) {
             Logger::log(ERROR,"SGScene", "SGRSpheres Mesh Not Loaded");
             return sceneControls;
         }
+        
         shared_ptr<MeshNode> ctrlNode = smgr->createNodeFromMesh(ctrlMesh,"setCtrlUniforms");
-        if(!ctrlNode){
+        if(!ctrlNode) {
             Logger::log(ERROR,"SGScene", "Unable to create sgrSpheres");
             return sceneControls;
         }
+        
         sgNode->node = ctrlNode;
         sgNode->getProperty(LIGHTING).value.x = false;
         sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));

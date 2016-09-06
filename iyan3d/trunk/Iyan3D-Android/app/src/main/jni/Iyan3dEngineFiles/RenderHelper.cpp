@@ -191,7 +191,7 @@ void RenderHelper::renderControls()
     int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     
-    for(int i = controlStartIndex;i <= controlEndIndex;i++){
+    for(int i = controlStartIndex; i <= controlEndIndex; i++) {
         Vector3 ctrlToCam = (renderingScene->viewCamera->getPosition() - renderingScene->sceneControls[i]->node->getPosition()).normalize();
         float angle = fabs(ctrlToCam.dotProduct(SceneHelper::controlDirection(i%3)));
         float ctrlTransparency = (angle > 0.9) ? (0.95 - angle) * 20.0 : 1.0;
@@ -672,7 +672,8 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     
     if(renderingScene->jointSpheres.size())
         renderingScene->jointSpheres[0]->node->setVisible(false);
-    for(int i=1;i<renderingScene->jointSpheres.size();i++){
+    
+    for(int i = 1; i < renderingScene->jointSpheres.size(); i++) {
         if(isNodeSelected && selectedNode && (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT_SKIN) && i < selectedNode->joints.size())
                 renderingScene->jointSpheres[i]->node->setVisible(visibilityFlag);
         else if (renderingScene->selectedNodeIds.size() > 0)

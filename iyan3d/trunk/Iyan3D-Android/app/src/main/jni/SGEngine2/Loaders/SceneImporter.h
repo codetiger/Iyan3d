@@ -51,7 +51,6 @@ private:
     Mesh *rigMesh;
     bool hasLoadedRigNode;
 
-    void loadNodes2Scene(SGEditorScene *sgScene, string path);
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
     void loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones);
 

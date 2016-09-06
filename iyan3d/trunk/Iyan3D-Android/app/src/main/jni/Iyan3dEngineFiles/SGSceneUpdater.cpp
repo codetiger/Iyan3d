@@ -10,6 +10,9 @@
 #define CONTROLS_MARKED_SCALE 0.27
 #define CONTROLS_MARKED_DISTANCE_FROM_NODE 1.019
 
+#define JOINT_MARKED_DISTANCE_FROM_CAMERA 6.17
+#define JOINT_MARKED_SCALE 0.27
+
 
 #include "HeaderFiles/SGSceneUpdater.h"
 #include "HeaderFiles/SGEditorScene.h"
@@ -190,8 +193,10 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
 
     if((!isNodeSelected || !selectedNode) && (!isJointSelected || !selectedJoint) && updatingScene->selectedNodeIds.size() <= 0)
         return;
+    
     int controlStartIndex = (updatingScene->controlType == MOVE) ? X_MOVE : (updatingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (updatingScene->controlType == MOVE) ? Z_MOVE : (updatingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
+    
     Vector3 nodePos;
     if(updatingScene->selectedNodeIds.size() > 0 && updatingScene->getParentNode())
         nodePos = updatingScene->getPivotPoint(false);
@@ -251,6 +256,15 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
         }
         
         currentControl->node->updateAbsoluteTransformation();
+    }
+    
+    for (int i = 0; i < updatingScene->jointSpheres.size(); i++) {
+        Vector3 pos = updatingScene->jointSpheres[i]->node->getPosition();
+        float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
+        float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
+        jointScale = jointScale * 1.5;
+        
+        updatingScene->jointSpheres[i]->node->setScale(jointScale);
     }
 }
 
