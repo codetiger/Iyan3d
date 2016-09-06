@@ -184,18 +184,27 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
     NSString* ext = [[[url absoluteString] pathExtension] lowercaseString];
     NSString* msg = @"There was a problem in loading the file you just imported.";
 
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSFileManager *fm = [NSFileManager defaultManager];
+
     if([ext isEqualToString:@"zip"]) {
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
         
         ZipArchive *zip = [[ZipArchive alloc] init];
         if([zip UnzipOpenFile:[url path]]) {
             if([zip UnzipFileTo:documentsDirectory overWrite:YES]) {
                 msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
-                NSLog(@"Zip File unzipped successfully\n");
+                [fm removeItemAtPath:[url path] error:nil];
             }
         }
         [zip UnzipCloseFile];
+
+    } else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"3ds"] || [ext isEqualToString:@"fbx"] || [ext isEqualToString:@"dae"] || [ext isEqualToString:@"png"] || [ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"] || [ext isEqualToString:@"tga"] || [ext isEqualToString:@"bmp"]) {
+
+        if([fm moveItemAtPath:[url path] toPath:documentsDirectory error:nil]) {
+            msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
+            [fm removeItemAtPath:[url path] error:nil];
+        }
     }
     
 	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
