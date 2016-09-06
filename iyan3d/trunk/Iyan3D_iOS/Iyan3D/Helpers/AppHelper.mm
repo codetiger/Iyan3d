@@ -399,47 +399,22 @@
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* inboxDirectoryPath = [docDirPath stringByAppendingPathComponent:@"Inbox"];
-    NSString* fontDirectoryPath = [docDirPath stringByAppendingPathComponent:@"Resources/Fonts"];
-    NSArray* fontExtensions = [NSArray arrayWithObjects:@"ttf", @"otf", nil];
-    NSArray* modelExtensions = [NSArray arrayWithObjects:@"obj", @"png", nil];
     NSArray* filesGathered;
 
     if ([[NSFileManager defaultManager] fileExistsAtPath:inboxDirectoryPath]) {
         filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:inboxDirectoryPath error:Nil];
-        NSArray* modelRelatedFiles;
-        if([filesGathered count] > 0)
-            modelRelatedFiles = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", modelExtensions]];
 
-        for (NSString* aFile in modelRelatedFiles) {
+        for (NSString* aFile in filesGathered) {
             NSError* error;
             if (![[NSFileManager defaultManager] fileExistsAtPath:[docDirPath stringByAppendingPathComponent:aFile]]) {
                 [[NSFileManager defaultManager] moveItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] toPath:[docDirPath stringByAppendingPathComponent:aFile] error:&error];
             }
+
             if (error)
                 NSLog(@" Error copying font files %@ due to %@", error.localizedDescription, error.localizedFailureReason);
             else
                 [[NSFileManager defaultManager] removeItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] error:nil];
         }
-
-//        if ([presentCache checkOBJImporterPurchase]) {
-
-            if (![[NSFileManager defaultManager] fileExistsAtPath:fontDirectoryPath])
-                [[NSFileManager defaultManager] createDirectoryAtPath:fontDirectoryPath withIntermediateDirectories:YES attributes:Nil error:Nil];
-            NSArray* fontFiles;
-            if([filesGathered count] > 0)
-                fontFiles = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
-
-            for (NSString* aFile in fontFiles) {
-                NSError* error;
-                if (![[NSFileManager defaultManager] fileExistsAtPath:[fontDirectoryPath stringByAppendingPathComponent:aFile]]) {
-                    [[NSFileManager defaultManager] moveItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] toPath:[fontDirectoryPath stringByAppendingPathComponent:aFile] error:&error];
-                }
-                if (error)
-                    NSLog(@" Error copying font files %@ due to %@", error.localizedDescription, error.localizedFailureReason);
-                else
-                    [[NSFileManager defaultManager] removeItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] error:nil];
-            }
-        
     }
 }
 

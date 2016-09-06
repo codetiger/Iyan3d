@@ -200,11 +200,7 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
         [zip UnzipCloseFile];
 
     } else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"3ds"] || [ext isEqualToString:@"fbx"] || [ext isEqualToString:@"dae"] || [ext isEqualToString:@"png"] || [ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"] || [ext isEqualToString:@"tga"] || [ext isEqualToString:@"bmp"]) {
-
-        if([fm moveItemAtPath:[url path] toPath:documentsDirectory error:nil]) {
-            msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
-            [fm removeItemAtPath:[url path] error:nil];
-        }
+        msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
     }
     
 	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];

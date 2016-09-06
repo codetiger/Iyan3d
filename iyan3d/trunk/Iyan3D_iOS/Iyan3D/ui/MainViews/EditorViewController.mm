@@ -218,7 +218,6 @@ BOOL missingAlertShown;
     [_center_progress setHidden:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersBG) name:@"AppGoneBackground" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openLoggedInView) name:@"renderCompleted" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appEntersFG) name:@"applicationDidBecomeActive" object:nil];
     
     ScreenWidth = self.renderView.frame.size.width;
