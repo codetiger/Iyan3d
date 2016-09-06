@@ -12,7 +12,6 @@
 #include "SGEngineOGL.h"
 #include "SGEngineMTL.h"
 #include <SafariServices/SafariServices.h>
-#include <GoogleSignIn/GoogleSignIn.h>
 #include "Utility.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
@@ -22,10 +21,6 @@
 #import <Crashlytics/Crashlytics.h>
 
 #include <sys/time.h>
-#import <GLKit/GLKMath.h>
-#include <LinearMath/btMatrixX.h>
-
-#define DB_ALERT 0
 
 SceneManager *scenemgr;
 @interface AppDelegate ()
@@ -43,35 +38,20 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil]];
-    } else {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    }
-    
     [[Twitter sharedInstance] startWithConsumerKey:@"FVYtYJI6e4lZMHoZvYCt2ejao" consumerSecret:@"eiFIXzb9zjoaH0lrDZ2Jrh2ezvbmuFv6rvPJdIXLYxgkaZ7YKC"];
-    
+
 #if !(TARGET_IPHONE_SIMULATOR)
     [Fabric with:@[[Crashlytics class], [Twitter class]]];
 #else
-   [Fabric with:@[[Twitter class]]];
+    [Fabric with:@[[Twitter class]]];
 #endif
     
-    [self setUpDropBox];
-    
-    [GIDSignIn sharedInstance].clientID = kClient;
-
     NSDictionary *appDefaults = @{kAllowTracking: @(YES)};
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [GAI sharedInstance].optOut = ![[NSUserDefaults standardUserDefaults] boolForKey:kAllowTracking];
     [GAI sharedInstance].dispatchInterval = 20;
     [GAI sharedInstance].trackUncaughtExceptions = YES;
-    //[[GAI sharedInstance].logger setLogLevel:kGAILogLevelVerbose];
-    //    self.tracker = [[GAI sharedInstance] trackerWithName:@"CuteAnimals"
-    //                                              trackingId:kTrackingId];
     self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kTrackingId];
-    //self.tracker.allowIDFACollection = NO;
 
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
@@ -117,20 +97,6 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
         [standardUserDefaults setObject:value forKey:key];
         [standardUserDefaults synchronize];
     }
-}
-
-- (void) setUpDropBox
-{
-    NSString* appKey = @"9crd2qv94ebj7i6";
-    NSString* appSecret = @"iv95w28ddsmzf0u";
-    NSString *root = kDBRootAppFolder;
-    
-    DBSession* session =
-    [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
-    session.delegate = self;
-    [DBSession setSharedSession:session];
-    
-    [DBRequest setNetworkRequestDelegate:self];
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId
@@ -182,7 +148,7 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 
 -(void) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*) view
 {
-    scenemgr = new SceneManager(width,height,screenScale,(DEVICE_TYPE)type,[[[NSBundle mainBundle] resourcePath] UTF8String],(__bridge void*)view);
+    scenemgr = new SceneManager(width, height, screenScale, (DEVICE_TYPE)type, [[[NSBundle mainBundle] resourcePath] UTF8String], (__bridge void*)view);
 }
 
 +(AppDelegate *)getAppDelegate
@@ -264,7 +230,6 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
     NSString* ext = [[[url absoluteString] pathExtension] lowercaseString];
     NSString* msg;
     
-    
     if([ext isEqualToString:@"ttf"] || [ext isEqualToString:@"otf"])
         msg = [NSString stringWithFormat:@"To use your %@ font file, use 'Text' option in your Import Menu. You should have upgraded to the Premium version for using this feature.", [ext uppercaseString]];
     else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"png"]|| [ext isEqualToString:@"jpeg"]) {
@@ -280,30 +245,6 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
             [[NSNotificationCenter defaultCenter] postNotificationName:@"i3dopen" object:nil];
         }
     }
-    else if ([[url absoluteString] containsString:@"google"]) {
-        return [[GIDSignIn sharedInstance] handleURL:url
-                                   sourceApplication:sourceApplication
-                                          annotation:annotation];
-    }
-    else if ([[url absoluteString] containsString:@"fb"]) {
-        return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                              openURL:url
-                                                    sourceApplication:sourceApplication
-                                                           annotation:annotation];
-    }
-    else {
-       
-        if ([[DBSession sharedSession] handleOpenURL:url]) {
-            if([[DBSession sharedSession] isLinked]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"DBlinked" object:nil];
-//                UIAlertView *dbAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"App successfully linked to DropBox. You can now backup your scene by pressing 'BackUp' in scene options." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//                [dbAlert setTag:DB_ALERT];
-//                [dbAlert show];
-            }
-            return YES;
-        }
-
-    }
     
     [self.window endEditing:YES];
 //	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -314,14 +255,6 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (alertView.tag) {
-        case DB_ALERT:
-            
-            break;
-        default:
-            break;
-    }
-    
 }
 
 -(BOOL)iPhone6Plus

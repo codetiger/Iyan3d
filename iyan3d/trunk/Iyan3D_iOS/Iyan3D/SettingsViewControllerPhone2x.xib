@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -17,8 +17,6 @@
                 <outlet property="multiselectLabel" destination="NbO-lJ-RJP" id="6DR-NB-U2o"/>
                 <outlet property="qualityLebel" destination="mfM-j2-uir" id="eMZ-Gz-iWo"/>
                 <outlet property="qualitySettingIfoLabel" destination="Md4-d0-P17" id="raE-AS-tSM"/>
-                <outlet property="restoreBtn" destination="NjZ-i4-GH8" id="pFX-5O-fGH"/>
-                <outlet property="restorePurchaseProgress" destination="e08-WE-edF" id="Qeg-gq-Myh"/>
                 <outlet property="settingsTitleLabel" destination="O57-sf-55w" id="sdh-in-vNQ"/>
                 <outlet property="speedLabel" destination="K7V-4d-ysP" id="NvI-S4-TKs"/>
                 <outlet property="toolBarLabel" destination="NGS-wu-atl" id="BMN-Qc-ihN"/>
@@ -155,24 +153,6 @@
                                 <action selector="doneBtnAction:" destination="-1" eventType="touchUpInside" id="7a5-eg-vFL"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NjZ-i4-GH8">
-                            <rect key="frame" x="415" y="15" width="115" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" red="0.00024560625339999998" green="0.63386878189999996" blue="0.10996116240000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to restore purchase. Works only if purchased Premium in previous versions." identifier="2"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
-                            <state key="normal" title="RESTORE PURCHASE">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="restoreAction:" destination="-1" eventType="touchUpInside" id="dEQ-h8-vk8"/>
-                            </connections>
-                        </button>
-                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="e08-WE-edF">
-                            <rect key="frame" x="462" y="20" width="20" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

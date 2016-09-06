@@ -187,30 +187,6 @@ static const NSString* FEED_ISREAD = @"isread";
     }
 }
 
-- (void) createNewsFeedTable
-{
-    @synchronized (dbLock) {
-        char *errMsg;
-        NSString* createRenderTaskTables = [NSString stringWithFormat:@"CREATE TABLE %@ (%@ INTEGER, %@ INTEGER, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ INTEGER)", NEWS_FEED_TABLE, FEED_ID, FEED_TYPE, FEED_TITLE, FEED_MESSAGE, FEED_URL, FEED_THUMB_URL, FEED_ISREAD];
-        if(sqlite3_exec(_cacheSystem, [createRenderTaskTables UTF8String], NULL, NULL, &errMsg) != SQLITE_OK){
-            NSLog(@" Error creating Render task table %s " , errMsg);
-        }
-        sqlite3_free(errMsg);
-        
-    }
-}
-
--(void) addNewsFeed: (FeedItem*) fItem {
-    @synchronized (dbLock){
-        sqlite3_stmt    *statement;
-        NSString *querySQL = [NSString stringWithFormat:@"INSERT INTO %@ (%@ ,%@, %@, %@, %@, %@, %@) VALUES (\"%d\",\"%d\", \"%@\", \"%@\", \"%@\", \"%@\", \"%d\")", NEWS_FEED_TABLE, FEED_ID, FEED_TYPE, FEED_TITLE, FEED_MESSAGE, FEED_URL, FEED_THUMB_URL, FEED_ISREAD, fItem.itemId, fItem.type, fItem.title , fItem.message, fItem.url, fItem.thumbImage, fItem.isRead];
-        sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
-        if (sqlite3_step(statement) != SQLITE_DONE)
-            NSLog(@"Failed Inserting Asset %s", sqlite3_errmsg(_cacheSystem));
-        sqlite3_finalize(statement);
-    }
-}
-
 -(void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString *)projectName date:(NSString*) dateStr {
     @synchronized (dbLock){
         sqlite3_stmt    *statement;
@@ -260,66 +236,6 @@ static const NSString* FEED_ISREAD = @"isread";
         }
         sqlite3_finalize(statement);
         return array1;
-    }
-}
-
--(NSMutableArray*) getNewsFeedsFromLocal
-{
-    @synchronized (dbLock){
-        NSMutableArray *array1=[[NSMutableArray alloc] init];
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY %@ DESC", NEWS_FEED_TABLE, FEED_ID];
-        sqlite3_stmt *statement;
-        if (sqlite3_prepare_v2(_cacheSystem, [query UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-            while( sqlite3_step(statement) == SQLITE_ROW) {
-                FeedItem* f = [[FeedItem alloc] init];
-                f.itemId = sqlite3_column_int(statement, 0);
-                f.type = sqlite3_column_int(statement, 1);
-                f.title = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-                f.message = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 3)];
-                f.url = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 4)];
-                f.thumbImage = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
-                f.isRead = sqlite3_column_int(statement, 6);
-                [array1 addObject:f];
-            }
-        }else{
-            NSLog(@"Error");
-        }
-        sqlite3_finalize(statement);
-        return array1;
-    }
-}
-
-- (void) updateFeed:(int)feedId WithStatus:(int) isRead
-{
-    @synchronized (dbLock) {
-        NSString *querySQL = [NSString stringWithFormat: @"SELECT * FROM %@ WHERE %@ = %d", NEWS_FEED_TABLE, FEED_ID, feedId];
-        sqlite3_stmt *statement;
-        if (sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-            if (sqlite3_step(statement) == SQLITE_ROW) {
-                sqlite3_stmt *statement;
-                NSString *querySQL = [NSString stringWithFormat: @"UPDATE %@ SET %@ = %d WHERE %@ = %d", NEWS_FEED_TABLE, FEED_ISREAD, isRead, FEED_ID, feedId];
-                sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
-                if (sqlite3_step(statement) != SQLITE_DONE)
-                    NSLog(@"Failed Updating Asset %s", sqlite3_errmsg(_cacheSystem));
-            } else
-                NSLog(@"Not found");
-        } else
-            NSLog(@"Not Found");
-        
-        sqlite3_finalize(statement);
-    }
-}
-
-- (void) clearAllFeeds
-{
-    @synchronized (dbLock) {
-        sqlite3_stmt    *statement;
-        NSString *querySQL = [NSString stringWithFormat: @"DELETE FROM %@", NEWS_FEED_TABLE];
-        sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
-        if (sqlite3_step(statement) != SQLITE_DONE){
-            NSLog(@"Failed Deleting Scene %s", sqlite3_errmsg(_cacheSystem));
-        }
-        sqlite3_finalize(statement);
     }
 }
 

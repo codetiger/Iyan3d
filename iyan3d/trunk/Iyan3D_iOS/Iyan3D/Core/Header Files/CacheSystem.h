@@ -12,7 +12,6 @@
 #import "SceneItem.h"
 #import "AnimationItem.h"
 #include "RenderItem.h"
-#include "FeedItem.h"
 
 @interface CacheSystem : NSObject {
     sqlite3 *_cacheSystem;
@@ -55,17 +54,12 @@
 - (int) getNextAutoRigAssetId;
 - (BOOL) checkAndCreateGroupColumnInAssetsTable;
 - (void) createRenderTaskTables;
-- (void) createNewsFeedTable;
+
 - (NSMutableArray *) getRenderTask;
 - (RenderItem *)getRenderTaskByTaskId:(int) taskId;
 - (RenderItem *)getRenderTaskByDate:(NSString*) dateTime;
 - (void) updateRenderTask:(int)taskId WithProgress:(int)progress;
 - (void) deleteRenderTaskData: (int)taskId;
 - (void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName date:(NSString*) dateStr;
-
--(void) addNewsFeed: (FeedItem*) fItem;
--(NSMutableArray*) getNewsFeedsFromLocal;
-- (void) updateFeed:(int)feedId WithStatus:(int) isRead;
-- (void) clearAllFeeds;
 
 @end

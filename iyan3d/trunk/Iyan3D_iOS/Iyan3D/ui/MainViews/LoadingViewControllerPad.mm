@@ -203,15 +203,12 @@
     [cache OpenDatabase];
     [cache createTablesForPrice];
     [cache createRenderTaskTables];
-    [cache createNewsFeedTable];
     [cache createAnimationTables];
     [cache checkAndCreateGroupColumnInAssetsTable];
     [self.activityIndicator startAnimating];
     [self performSelectorInBackground:@selector(performBackgroundTasks) withObject:nil];
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
     [[AppHelper getAppHelper] setIdentifierForVendor];
-
-
 }
 
 - (void) didReceiveMemoryWarning

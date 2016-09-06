@@ -50,22 +50,18 @@
         scenesArray = [cache GetSceneList];
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
-        currentSelectedScene = -1;
         isFirstTime = value;
     }
     return self;
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     
     self.sceneTitleLabel.text = NSLocalizedString(@"Scenes", nil);
     
     self.screenName = @"SceneSelectionView iOS";
-    [self.feedCount setHidden:YES];
-    
-    self.feedCount.layer.cornerRadius = 20.0;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight = screenRect.size.height;
     if([Utility IsPadDevice]){
@@ -75,7 +71,6 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
-    [self.sceneView setHidden:YES];
     
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && isFirstTime) {
         UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Already_upgraded_Premium_Please_Restore_Purchase", nil) delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -84,27 +79,17 @@
     }
     
     isFirstTimeUser = false;
-    [self loadNewsFeedData];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-    restClient.delegate = self;
-
     if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"openrenderTasks"]) {
-        [self openLoggedInView];
         [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"openrenderTasks"];
     }
     [self.centerLoading setHidden:YES];
     
-    [self checkAndOpeni3d];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shareScene:) name:@"DBlinked" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openLoggedInView) name:@"renderCompleted" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkAndOpeni3d) name:@"i3dopen" object:nil];
-
     [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
     
     UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
@@ -117,77 +102,7 @@
     }
 }
 
-- (void) loadNewsFeedData
-{
-    
-    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/newsfeed.php"];
-    NSString *postPath = @"https://www.iyan3dapp.com/appapi/newsfeed.php";
-    
-    NSString* lastid = @"0";
-    if([[AppHelper getAppHelper] userDefaultsForKey:@"lastfeedid"])
-        lastid = [[AppHelper getAppHelper] userDefaultsForKey:@"lastfeedid"];
-    
-    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:lastid, @"lastid", nil]];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSError * jsonError;
-        NSArray* jsonArray = [[NSArray alloc] init];
-        jsonArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:&jsonError];
-        if(!jsonError && [jsonArray count] > 0) {
-            for(int i = 0; i < [jsonArray count]; i++) {
-                FeedItem *f = [[FeedItem alloc] init];
-                f.itemId = [[[jsonArray objectAtIndex:i] objectForKey:@"id"] intValue];
-                f.type = [[[jsonArray objectAtIndex:i] objectForKey:@"type"] intValue];
-                f.title = [[jsonArray objectAtIndex:i] objectForKey:@"title"];
-                f.message = [[jsonArray objectAtIndex:i] objectForKey:@"message"];
-                f.url = [[jsonArray objectAtIndex:i] objectForKey:@"url"];
-                f.thumbImage = [[jsonArray objectAtIndex:i] objectForKey:@"thumbnailurl"];
-                f.isRead = false;
-                [cache addNewsFeed:f];
-                
-                if(i == 0) {
-                    [[AppHelper getAppHelper] saveToUserDefaults:[NSString stringWithFormat:@"%d", f.itemId] withKey:@"lastfeedid"];
-                }
-            }
-            
-            NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
-            [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
-        } else {
-            NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
-            [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
-        }
-    }
-                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         NSLog(@"Failure: %@", error.localizedDescription);
-                                         NSMutableArray * feedItems = [cache getNewsFeedsFromLocal];
-                                         [self performSelectorOnMainThread:@selector(setFeedsCount:) withObject:feedItems waitUntilDone:NO];
-                                     }];
-    [operation start];
-    
-}
-
-- (void) setFeedsCount:(NSMutableArray*) feedItems
-{
-    int count = 0;
-    for(int i = 0; i < [feedItems count]; i ++) {
-        FeedItem* f = [feedItems objectAtIndex:i];
-        if(!f.isRead)
-            count++;
-    }
-    
-    if(count > 0) {
-        [self.feedCount setHidden:NO];
-        self.feedCount.text = [NSString stringWithFormat:@"%d", count];
-        self.feedCount.layer.cornerRadius = 7.5;
-        self.feedCount.clipsToBounds = YES;
-    } else
-        [self.feedCount setHidden:YES];
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if([touch.view isDescendantOfView:self.helpBtn]) {
         return YES;
@@ -197,23 +112,13 @@
     return NO;
 }
 
-- (void) checkAndOpeni3d
-{
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"i3dopen"]) {
-        NSString* i3dPath = [[AppHelper getAppHelper] userDefaultsForKey:@"i3dpath"];
-        [self showLoading];
-        [self performSelectorInBackground:@selector(unzipAndRestoreScenei3d:) withObject:i3dPath];
-        [[AppHelper getAppHelper] saveBoolUserDefaults:NO withKey:@"i3dopen"];
-    }
-}
-
 - (void) showLoading
 {
     [self.centerLoading setHidden:NO];
     [self.centerLoading startAnimating];
 }
 
-- (void)hideLoading
+- (void) hideLoading
 {
     [self.centerLoading stopAnimating];
     [self.centerLoading setHidden:YES];
@@ -221,23 +126,9 @@
     [self.scenesCollectionView reloadData];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DBlinked" object:nil];
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"i3dopen" object:nil];
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-}
-
-- (void) openLoggedInView
-{
-    [self performSelectorOnMainThread:@selector(loginBtnAction:) withObject:nil waitUntilDone:YES];
 }
 
 - (void) unzipAndRestoreScenei3d:(NSString*) filePath
@@ -325,11 +216,6 @@
 {
     [Answers logCustomEventWithName:@"CreateNewSceneInTopLeft" customAttributes:@{}];
     [self addNewScene];
-}
-
-- (IBAction)scenePreviewClosebtn:(id)sender
-{
-    //[self popZoomOut];
 }
 
 - (IBAction)feedBackButtonAction:(id)sender
@@ -587,174 +473,11 @@
     return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 
--(void)updateSceneDB
-{
-    NSCharacterSet * set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789 "] invertedSet];
-    NSString* name = [_sceneTitle.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    if([name length] == 0) {
-        [self.view endEditing:YES];
-        UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Scene_name_empty", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [errorAlert show];
-        
-    } else {
-        [self.view endEditing:YES];
-        if([name rangeOfCharacterFromSet:set].location != NSNotFound) {
-            UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Scene_name_special_character", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-            [errorAlert show];
-            
-        } else {
-            if(currentSelectedScene < [scenesArray count]) {
-                SceneItem* scene = scenesArray[currentSelectedScene];
-                scene.name = _sceneTitle.text;
-                scene.createdDate = scene.createdDate;
-                scene.sceneFile = scene.sceneFile;
-                scene.sceneId = scene.sceneId;
-                [cache UpdateScene:scene];
-                scenesArray = [cache GetSceneList];
-                [self.scenesCollectionView reloadData];
-            }
-        }
-    }
-}
-
-- (IBAction)titleChangeAction:(id)sender
-{
-    [self updateSceneDB];
-}
-
-#pragma Scene Preview Delegates
-
-- (void) showSceneEnteredView:(NSIndexPath*)sceneIndex
-{
-    [self.sceneView setHidden:NO];
-    currentSelectedScene = sceneIndex.row;
-    if(sceneIndex.row < [scenesArray count]) {
-        SceneItem* scenes = scenesArray[sceneIndex.row];
-    
-        _sceneTitle.text = scenes.name;
-        _sceneDate.text = scenes.createdDate;
-    
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        NSString* originalFilePath = [NSString stringWithFormat:@"%@/Projects/%@.png", documentsDirectory, scenes.sceneFile];
-        BOOL fileExit = [[NSFileManager defaultManager] fileExistsAtPath:originalFilePath];
-        if(fileExit)
-            _scenePreview.image = [UIImage imageWithContentsOfFile:originalFilePath];
-        else
-            _scenePreview.image = [UIImage imageNamed:@"bgImageforall.png"];
-    }
-}
-
 #pragma View Animation Delegate
 
 - (IBAction)toolTipAction:(id)sender
 {
     [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
-}
-
-- (IBAction)openSceneAction:(id)sender
-{
-    SceneItem *scene = scenesArray[currentSelectedScene];
-    [[AppHelper getAppHelper] resetAppHelper];
-
-    if([Utility IsPadDevice]) {
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:@"EditorViewController" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:animationEditor];
-
-    } else {
-        EditorViewController* animationEditor = [[EditorViewController alloc] initWithNibName:([self iPhone6Plus]) ? @"EditorViewControllerPhone@2x" : @"EditorViewControllerPhone" bundle:nil SceneItem:scene selectedindex:currentSelectedScene];
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:animationEditor];
-    }
-    
-    [self removeFromParentViewController];
-}
-
-- (IBAction)loginBtnAction:(id)sender
-{
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]) {
-        if ([Utility IsPadDevice]) {
-            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(305, 495);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [_loggedInVc.view setClipsToBounds:YES];
-            _loggedInVc.delegare=self;
-            self.popUpVc.delegate=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
-                                                  animated:YES];
-        } else {
-            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            _loggedInVc.delegare=self;
-            [_loggedInVc.view setClipsToBounds:YES];
-            self.popUpVc.delegate=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                  animated:YES];
-        }   
-        
-    } else {
-        if ([Utility IsPadDevice]) {
-            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
-            self.popoverController.popoverContentSize = CGSizeMake(302 , 240.0);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [loginVc.view setClipsToBounds:YES];
-            self.popUpVc.delegate=self;
-            loginVc.delegare=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-            
-        } else {
-            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
-            self.popoverController.popoverContentSize = CGSizeMake(228.00, 208.0);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [loginVc.view setClipsToBounds:YES];
-            self.popUpVc.delegate=self;
-            loginVc.delegare=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-        }
-    }
-
-}
-
-- (IBAction)feedBtnAction:(id)sender
-{
-    
-    [self.feedCount setHidden:YES];
-    NSString* nibName = @"NewsFeedVC";
-    CGSize sizeOfView = CGSizeMake(305, 495);
-    if(![Utility IsPadDevice]) {
-        nibName = @"NewsFeedVCPhone";
-        sizeOfView = CGSizeMake(305, 253);
-    }
-    
-    NewsFeedVC *newsVC = [[NewsFeedVC alloc] initWithNibName:nibName bundle:nil];
-    newsVC.delegate = self;
-    self.popoverController = [[WEPopoverController alloc] initWithContentViewController:newsVC];
-    self.popoverController.popoverContentSize = sizeOfView;
-    self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-    self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    [newsVC.view setClipsToBounds:YES];
-    self.popUpVc.delegate=self;
-    self.popoverController.delegate =self;
-    [self.popoverController presentPopoverFromRect:_feedBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
 }
 
 - (void) showOrHideProgress:(BOOL) value
@@ -803,7 +526,6 @@
 
 -(void)deleteScene:(int)indexValue
 {
-    [_sceneTitle resignFirstResponder];
     SceneItem* scene = scenesArray[indexValue];
     [[AppHelper getAppHelper] removeFromUserDefaultsWithKey:scene.name];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -884,36 +606,6 @@
     return false;
 }
 
-- (void)restClient:(DBRestClient*)client uploadProgress:(CGFloat)progress
-{
-    NSLog(@" Upload Progress %f ", (float)progress);
-}
-
-- (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath from:(NSString*)srcPath
-          metadata:(DBMetadata*)metadata
-{
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
-    [self.view setUserInteractionEnabled:YES];
-    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Success", nil) message:NSLocalizedString(@"file_successfully_saved_dropbox", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil] show];
-}
-
-- (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error
-{
-    [self performSelectorOnMainThread:@selector(hideLoading) withObject:nil waitUntilDone:YES];
-    [self.view setUserInteractionEnabled:YES];
-    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failure", nil) message:NSLocalizedString(@"Error_uploading_file", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
-}
-
-- (void)restClient:(DBRestClient*)client loadAccountInfoFailedWithError:(NSError*)error
-{
-    NSLog(@" Error acc %@ ", error.localizedDescription);
-}
-
-- (void)restClient:(DBRestClient*)client loadThumbnailFailedWithError:(NSError*)error
-{
-    NSLog(@" Error thumb %@ ", error.localizedDescription);
-}
-
 #pragma AlertView
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -949,37 +641,6 @@
             }
         }
         [alertView resignFirstResponder];
-        
-    } else if (alertView.tag == LOGOUT_ALERT) {
-        if (buttonIndex == CANCEL) {
-            [[DBSession sharedSession] unlinkAll];
-            [self shareScene:[NSNumber numberWithInt:selectedSceneIndex]];
-        } else if (buttonIndex == OK) {
-            [self uploadSceneToDropBox];
-        }
-        
-    } else if (alertView.tag == RESTORE_PURCHASH_ALERT){
-        
-        if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"]){
-            [self infoBtnDelegateAction:SETTINGS];
-        }
-        else
-            [self loginBtnAction:nil];
-        
-    }
-}
-
-- (void) uploadSceneToDropBox
-{
-    SceneItem * scene = scenesArray[selectedSceneIndex];
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [paths objectAtIndex:0];
-    NSString *i3dPath = [NSString stringWithFormat:@"%@/Projects/%@.i3d", documentsDirectory, scene.sceneFile];
-    if([[NSFileManager defaultManager] fileExistsAtPath:i3dPath]) {
-        [self.view setUserInteractionEnabled:NO];
-        [self performSelectorOnMainThread:@selector(showLoading) withObject:nil waitUntilDone:YES];
-        NSString *destDir = @"/";
-        [restClient uploadFile:[i3dPath lastPathComponent] toPath:destDir withParentRev:nil fromPath:i3dPath];
     }
 }
 
@@ -1017,12 +678,6 @@
     return NO;
 }
 
-#pragma LogIn Delegates
--(void)googleSigninDelegate
-{
-    isLoggedin= true;
-}
-
 -(void)dismisspopover
 {
     [self.popoverController dismissPopoverAnimated:YES];
@@ -1031,9 +686,7 @@
 
 -(void)dismissView
 {
-    [_loggedInVc dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
-
 }
 
 - (void) showPreview:(NSString*) outputPath
@@ -1059,32 +712,6 @@
     }
 }
 
-- (void) performActionForSelectedFeed:(FeedItem*) feed
-{
-    [self.popoverController dismissPopoverAnimated:YES];
-    
-    if(feed.type == ALERT_TYPE) {
-        UIAlertView * infoAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:feed.message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [infoAlert show];
-    } else if(feed.type == IMAGE_TYPE) {
-        [self.centerLoading setHidden:NO];
-        [self.centerLoading startAnimating];
-        NSString* tempDir = NSTemporaryDirectory();
-        NSString* imagePath = [NSString stringWithFormat:@"%@/feedImage.png", tempDir];
-        if(![[AppHelper getAppHelper] checkInternetConnected])  {
-            [self showInternetError:SLOW_INTERNET];
-        } else {
-            DownloadTask *t = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(showPreviewInMainThread:) returnObject:imagePath outputFilePath:imagePath andURL:feed.url];
-            t.taskType = DOWNLOAD_AND_WRITE_IMAGE;
-            t.queuePriority = NSOperationQueuePriorityHigh;
-            NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-            [queue addOperation:t];
-        }
-    } else if(feed.type == URL_TYPE) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:feed.url]];
-    }
-}
-
 - (void)showInternetError:(int)connectionError
 {
     if (connectionError != SLOW_INTERNET) {
@@ -1100,18 +727,14 @@
 - (void)dealloc
 {
     _followUsVC = nil;
-    restClient.delegate = nil;
-    restClient = nil;
     self.fileBeginsWith = nil;
     cache = nil;
     [scenesArray removeAllObjects];
     scenesArray = nil;
     dateFormatter = nil;
     settingsVc = nil;
-    loginVc = nil;
     self.popUpVc = nil;
     self.popoverController = nil;
-    self.loggedInVc = nil;
 }
 
 @end

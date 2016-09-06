@@ -277,12 +277,6 @@ BOOL missingAlertShown;
     return NO;
 }
 
-- (void) openLoggedInView
-{
-    if(editorScene && !editorScene->freezeRendering)
-        [self performSelectorOnMainThread:@selector(loginBtnAction:) withObject:nil waitUntilDone:YES];
-}
-
 - (void) appEntersBG
 {
     isAppInBG = true;
@@ -1308,81 +1302,6 @@ BOOL missingAlertShown;
                                                 inView:self.view
                               permittedArrowDirections:UIPopoverArrowDirectionRight
                                               animated:YES];
-    }
-}
-
-- (IBAction)loginBtnAction:(id)sender
-{
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
-    {
-        if ([Utility IsPadDevice])
-        {
-            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewController" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(305, 495);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [_loggedInVc.view setClipsToBounds:YES];
-            _loggedInVc.delegare=self;
-            self.popUpVc.delegate=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
-                                                  animated:YES];
-        }
-        else
-        {
-            _loggedInVc = [[LoggedInViewController alloc] initWithNibName:@"LoggedInViewControllerPhone" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_loggedInVc];
-            self.popoverController.popoverContentSize = CGSizeMake(230.0, 250.0);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            _loggedInVc.delegare=self;
-            [_loggedInVc.view setClipsToBounds:YES];
-            self.popUpVc.delegate=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
-                                                  animated:YES];
-        }
-    }
-    else
-    {
-        if ([Utility IsPadDevice])
-        {
-            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
-            self.popoverController.popoverContentSize = CGSizeMake(302 , 240.0);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [loginVc.view setClipsToBounds:YES];
-            self.popUpVc.delegate=self;
-            loginVc.delegare=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
-                                                  animated:YES];
-            
-        }
-        else
-        {
-            loginVc = [[LoginViewController alloc] initWithNibName:@"LoginViewControllerPhone" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:loginVc];
-            self.popoverController.popoverContentSize = CGSizeMake(228.00, 208.0);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-            [loginVc.view setClipsToBounds:YES];
-            self.popUpVc.delegate=self;
-            loginVc.delegare=self;
-            self.popoverController.delegate =self;
-            [self.popoverController presentPopoverFromRect:_loginBtn.frame
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionUp
-                                                  animated:YES];
-        }
     }
 }
 
@@ -2990,16 +2909,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 }
 
-- (void) loginBtnAction
-{
-    [self.popoverController dismissPopoverAnimated:YES];
-    loginVc = [[LoginViewController alloc] initWithNibName:([Utility IsPadDevice]) ? @"LoginViewController" : @"LoginViewControllerPhone"bundle:nil];
-    [loginVc.view setClipsToBounds:YES];
-    loginVc.modalPresentationStyle = UIModalPresentationFormSheet;
-    [self presentViewController:loginVc animated:YES completion:nil];
-    loginVc.view.superview.backgroundColor = [UIColor clearColor];
-}
-
 - (void) infoBtnDelegateAction:(int)indexValue
 {
     
@@ -3516,26 +3425,26 @@ void downloadFile(NSString* url, NSString* fileName)
     }
 }
 
--(void)googleSigninDelegate
+-(void) googleSigninDelegate
 {
     //TODO
 }
 
--(void)dismisspopover
+-(void) dismisspopover
 {
     [self.popoverController dismissPopoverAnimated:YES];
 }
 
 #pragma mark LoggedinViewController Delegate
 
--(void)dismissView:(UIViewController*) VC
+-(void) dismissView:(UIViewController*) VC
 {
     [VC dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
     
 }
 
--(void)dismissView:(UIViewController*) VC WithProperty:(Property) physicsProp
+-(void) dismissView:(UIViewController*) VC WithProperty:(Property) physicsProp
 {
     [VC dismissViewControllerAnimated:YES completion:nil];
     [self.popoverController dismissPopoverAnimated:YES];
@@ -3553,12 +3462,10 @@ void downloadFile(NSString* url, NSString* fileName)
     
     if([Utility IsPadDevice]) {
         MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:@"MediaPreviewVC" bundle:nil mediaType:mediaType medPath:outputPath];
-        [self dismissView:_loggedInVc];
             medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewControllerInCurrentView:medPreview];
     } else {
         MediaPreviewVC *medPreview = [[MediaPreviewVC alloc] initWithNibName:[[AppHelper getAppHelper] iPhone6Plus] ? @"MediaPreviewVCPhone@2x" : @"MediaPreviewVCPhone" bundle:nil mediaType:mediaType medPath:outputPath];
-        [self dismissView:_loggedInVc];
         medPreview.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewControllerInCurrentView:medPreview];
     }
@@ -3782,14 +3689,12 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     if(editorScene->isPlaying){
         [self.addFrameBtn setEnabled:false];
-        [self.loginBtn setEnabled:false];
         [self.viewBtn setEnabled:false];
         [self.infoBtn setEnabled:false];
     }
     else {
         [self.lastFrameBtn setEnabled:true];
         [self.addFrameBtn setEnabled:true];
-        [self.loginBtn setEnabled:true];
         [self.viewBtn setEnabled:true];
         [self.infoBtn setEnabled:true];
     }
@@ -4085,7 +3990,6 @@ void downloadFile(NSString* url, NSString* fileName)
         [self reloadSceneObjects];
 }
 
-
 - (void) scalePropertyChangedInRigView:(float)scaleValue
 {
     if((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_EDIT_ENVELOPES)) &&  editorScene->rigMan->isSkeletonJointSelected){
@@ -4189,8 +4093,6 @@ void downloadFile(NSString* url, NSString* fileName)
     textSelectionSlider = nil;
     assetSelectionSlider.assetSelectionDelegate = nil;
     assetSelectionSlider = nil;
-    loginVc.delegare = nil;
-    loginVc = nil;
     followUsVC = nil;
     currentScene = nil;
     cache = nil;
@@ -4210,8 +4112,6 @@ void downloadFile(NSString* url, NSString* fileName)
     self.popoverController = nil;
     self.popUpVc.delegate = nil;
     self.popUpVc = nil;
-    _loggedInVc.delegare = nil;
-    _loggedInVc = nil;
     _scaleProps.delegate = nil;
     _scaleProps = nil;
 }

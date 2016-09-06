@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -9,11 +9,8 @@
             <connections>
                 <outlet property="addSceneBtn" destination="g7e-JY-bEf" id="zM1-5k-HDY"/>
                 <outlet property="centerLoading" destination="rad-5Q-RvL" id="Hlk-Ka-haX"/>
-                <outlet property="feedBtn" destination="2el-3m-B7D" id="iVa-kG-4ux"/>
-                <outlet property="feedCount" destination="BKJ-wU-lBk" id="M6v-Ub-sUg"/>
                 <outlet property="helpBtn" destination="kf0-ZU-tmJ" id="upr-Jd-ke1"/>
                 <outlet property="infoBtn" destination="fVt-o1-OKO" id="WKK-uI-qsC"/>
-                <outlet property="loginBtn" destination="zTv-CV-o50" id="hco-IV-cWj"/>
                 <outlet property="sceneTitleLabel" destination="DDF-yF-lFa" id="QiD-hT-vD9"/>
                 <outlet property="scenesCollectionView" destination="GtZ-Ek-nEF" id="4xu-p6-Mnr"/>
                 <outlet property="topBar" destination="wjS-eD-GYe" id="i4s-q4-jm4"/>
@@ -71,31 +68,6 @@
                                         <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="poe-gv-pYF"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zTv-CV-o50">
-                                    <rect key="frame" x="873" y="24" width="22" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <accessibility key="accessibilityConfiguration" hint="Manage your account" identifier="1"/>
-                                    <state key="normal" image="Login-icon.png"/>
-                                    <connections>
-                                        <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="f5d-uM-EWN"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2el-3m-B7D">
-                                    <rect key="frame" x="818" y="24" width="22" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="Feeds.png"/>
-                                    <connections>
-                                        <action selector="feedBtnAction:" destination="-1" eventType="touchUpInside" id="MLk-pI-Ldd"/>
-                                    </connections>
-                                </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BKJ-wU-lBk">
-                                    <rect key="frame" x="835" y="13" width="30" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
                             </subviews>
                             <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
@@ -130,9 +102,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Feeds.png" width="22" height="22"/>
         <image name="Help.png" width="22" height="22"/>
-        <image name="Login-icon.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
         <image name="bgImageforall.png" width="1024" height="1024"/>
         <image name="info-icon.png" width="22" height="22"/>

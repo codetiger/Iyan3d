@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -24,7 +24,6 @@
                 <outlet property="infoBtn" destination="jnS-gW-EaC" id="k6p-US-bPT"/>
                 <outlet property="lastFrameBtn" destination="037-BU-8q5" id="RkI-Wm-3aD"/>
                 <outlet property="leftView" destination="L0B-6d-c1X" id="Pu8-ZT-SOi"/>
-                <outlet property="loginBtn" destination="Diu-e1-yeL" id="EuC-We-Win"/>
                 <outlet property="moveBtn" destination="6eX-px-hba" id="jIJ-DK-UgE"/>
                 <outlet property="moveBtnAutorig" destination="rRU-cR-7ay" id="J7J-zn-kma"/>
                 <outlet property="moveFirst" destination="D8h-yp-xgX" id="R16-a4-MKF"/>
@@ -427,7 +426,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A5V-XI-dmt">
-                            <rect key="frame" x="440" y="21" width="22" height="22"/>
+                            <rect key="frame" x="471" y="21" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Standard view angles" identifier="0"/>
                             <state key="normal" image="View_IPhone.png"/>
@@ -443,16 +442,8 @@
                                 <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="pAg-A3-QvG"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Diu-e1-yeL">
-                            <rect key="frame" x="469" y="21" width="22" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="Login-IPhone.png"/>
-                            <connections>
-                                <action selector="loginBtnAction:" destination="-1" eventType="touchUpInside" id="iPf-ly-6Zb"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="037-BU-8q5">
-                            <rect key="frame" x="384" y="19" width="23" height="26"/>
+                            <rect key="frame" x="416" y="19" width="23" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="0.94999999999999996" height="1"/>
                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
@@ -469,7 +460,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="w5e-Hu-oAW">
-                            <rect key="frame" x="407" y="19" width="22" height="26"/>
+                            <rect key="frame" x="439" y="19" width="22" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Add Frames" identifier="1"/>
                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
@@ -479,7 +470,7 @@
                             </connections>
                         </button>
                         <collectionView clipsSubviews="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="Sij-qL-4rT">
-                            <rect key="frame" x="99" y="19" width="287" height="26"/>
+                            <rect key="frame" x="99" y="19" width="318" height="26"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.4156863093" green="0.4156863093" blue="0.4156863093" alpha="1" colorSpace="deviceRGB"/>
                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="uvS-2u-9PT">
@@ -538,7 +529,6 @@
         <image name="EXPORT.png" width="25" height="18"/>
         <image name="Help_iphone.png" width="22" height="22"/>
         <image name="Import_IPhone.png" width="25" height="18"/>
-        <image name="Login-IPhone.png" width="22" height="22"/>
         <image name="MY-OBJECTS_IPhone.png" width="25" height="18"/>
         <image name="Move_IPhone.png" width="25" height="18"/>
         <image name="Next-frame_IPhone.png" width="23" height="26"/>

@@ -27,8 +27,6 @@
 #import "RenderingViewController.h"
 #import "SGEditorScene.h"
 #import "RenderViewManager.h"
-#import "LoginViewController.h"
-#import "LoggedInViewController.h"
 #import "SceneItem.h"
 #import "SettingsViewController.h"
 #import "ScaleViewController.h"
@@ -37,14 +35,13 @@
 #import "ScaleForAutoRigViewController.h"
 #import "FollowUsVC.h"
 
-@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, AssetSelectionDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate,PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, LoginViewControllerDelegate, LoggedinViewControllerDelegat, SettingsViewControllerDelegate, AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
+@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, AssetSelectionDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate,PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, SettingsViewControllerDelegate, AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
     
     NSMutableArray *assetsInScenes;
     ImportImageNew *importImageViewVC;
     AnimationSelectionSlider *animationsliderVC;
     TextSelectionSidePanel *textSelectionSlider;
     AssetSelectionSidePanel *assetSelectionSlider;
-    LoginViewController *loginVc;
     FollowUsVC *followUsVC;
     ObjSidePanel *objVc;
     bool isMetalSupported;
@@ -102,9 +99,7 @@
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
-@property (nonatomic, strong) LoggedInViewController *loggedInVc;
 @property (nonatomic, strong) ScaleViewController *scaleProps;
-@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 @property (weak, nonatomic) IBOutlet UIButton *moveFirst;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *center_progress;
 @property (weak, nonatomic) IBOutlet UILabel *rigScreenLabel;
@@ -145,7 +140,6 @@
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;
 - (IBAction)exportAction:(id)sender;
-- (IBAction)loginBtnAction:(id)sender;
 - (IBAction)animationBtnAction:(id)sender;
 - (IBAction)importBtnAction:(id)sender;
 - (IBAction)optionsBtnAction:(id)sender;

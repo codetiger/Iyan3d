@@ -126,6 +126,18 @@
 				<string>com.smackall.3ds</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>Zip File</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.smackall.zip</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -145,38 +157,6 @@
 	<string>5.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>db-9crd2qv94ebj7i6</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.smackall.animator</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.smackall.animator</string>
-				<string>fb1434740593485806</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleVersion</key>
 	<string>5.5.3</string>
 	<key>Fabric</key>
@@ -239,50 +219,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UTExportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Iyan 3D Project File</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.smackall.i3d</string>
-			<key>UTTypeSize320IconFile</key>
-			<string>i3dfile</string>
-			<key>UTTypeSize64IconFile</key>
-			<string>i3dfile</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>i3d</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>3D Mesh Object</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.smackall.obj</string>
-			<key>UTTypeSize320IconFile</key>
-			<string>objfile</string>
-			<key>UTTypeSize64IconFile</key>
-			<string>objfile</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>obj</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
 </dict>
 </plist>
