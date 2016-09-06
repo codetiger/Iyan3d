@@ -348,6 +348,81 @@ int SceneImporter::loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool 
     return nodeMaterialIndex;
 }
 
+void SceneImporter::loadAnimationKeys(SGJoint *joint)
+{
+    int maxFrames = 0;
+    for (int i = 0; i < scene->mNumAnimations; i++) {
+        for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++) {
+            string name(scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str());
+            if(joint->jointNode->name == name) {
+                aiNodeAnim* channel = scene->mAnimations[i]->mChannels[j];
+                for (int k = 0; k < channel->mNumPositionKeys; k++) {
+                    int frame = (int)(24.0 / channel->mPositionKeys[k].mTime);
+                    Vector3 p = Vector3(channel->mPositionKeys[k].mValue.x, channel->mPositionKeys[k].mValue.y, channel->mPositionKeys[k].mValue.z);
+                    joint->setPosition(p, frame);
+                    if(frame > maxFrames)
+                        maxFrames = frame;
+                }
+                for (int k = 0; k < channel->mNumScalingKeys; k++) {
+                    int frame = (int)(24.0 / channel->mPositionKeys[k].mTime);
+                    Vector3 s = Vector3(channel->mScalingKeys[k].mValue.x, channel->mScalingKeys[k].mValue.y, channel->mScalingKeys[k].mValue.z);
+                    joint->setScale(s, frame);
+                    if(frame > maxFrames)
+                        maxFrames = frame;
+                }
+                for (int k = 0; k < channel->mNumRotationKeys; k++) {
+                    int frame = (int)(24.0 / channel->mPositionKeys[k].mTime);
+                    Quaternion r = Quaternion(channel->mRotationKeys[k].mValue.x, channel->mRotationKeys[k].mValue.y, channel->mRotationKeys[k].mValue.z, channel->mRotationKeys[k].mValue.w);
+                    joint->setRotation(r, frame);
+                    if(frame > maxFrames)
+                        maxFrames = frame;
+                }
+            }
+        }
+    }
+
+//    if(maxFrames > sgScene->totalFrames)
+//        sgScene->totalFrames = maxFrames;
+}
+
+void SceneImporter::loadAnimationKeys(SGNode *node)
+{
+    int maxFrames = 0;
+    for (int i = 0; i < scene->mNumAnimations; i++) {
+        for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++) {
+            string name(scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str());
+            string nodeName = ConversionHelper::getStringForWString(node->name);
+            if(nodeName == name) {
+                aiNodeAnim* channel = scene->mAnimations[i]->mChannels[j];
+                for (int k = 0; k < channel->mNumPositionKeys; k++) {
+                    int frame = (int)(24.0 / channel->mPositionKeys[k].mTime);
+                    Vector3 p = Vector3(channel->mPositionKeys[k].mValue.x, channel->mPositionKeys[k].mValue.y, channel->mPositionKeys[k].mValue.z);
+                    node->setPosition(p, frame);
+                    if(frame > maxFrames)
+                        maxFrames = frame;
+                }
+                for (int k = 0; k < channel->mNumScalingKeys; k++) {
+                    int frame = (int)(24.0 / channel->mPositionKeys[k].mTime);
+                    Vector3 s = Vector3(channel->mScalingKeys[k].mValue.x, channel->mScalingKeys[k].mValue.y, channel->mScalingKeys[k].mValue.z);
+                    node->setScale(s, frame);
+                    if(frame > maxFrames)
+                        maxFrames = frame;
+                }
+                for (int k = 0; k < channel->mNumRotationKeys; k++) {
+                    int frame = (int)(24.0 / channel->mPositionKeys[k].mTime);
+                    Quaternion r = Quaternion(channel->mRotationKeys[k].mValue.x, channel->mRotationKeys[k].mValue.y, channel->mRotationKeys[k].mValue.z, channel->mRotationKeys[k].mValue.w);
+                    node->setRotation(r, frame);
+                    if(frame > maxFrames)
+                        maxFrames = frame;
+                }
+            }
+        }
+    }
+    
+//    if(maxFrames > sgScene->totalFrames)
+//        sgScene->totalFrames = maxFrames;
+}
+
 void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 transform)
 {
     shared_ptr<Node> sgn;
@@ -367,6 +442,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
             if(!isSGJointsCreated) {
                 SGJoint *joint = new SGJoint();
                 joint->jointNode = dynamic_pointer_cast<AnimatedMeshNode>(sgn)->getJointNode(i);
+                loadAnimationKeys(joint);
                 sceneNode->joints.push_back(joint);
             }
         }
@@ -409,12 +485,12 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     sceneNode->setRotation(r, 0);
     sceneNode->setScale(m.getScale(), 0);
 
+    loadAnimationKeys(sceneNode);
+    
     sgn->setPosition(m.getTranslation());
     sgn->setRotation(r);
     sgn->setScale(m.getScale());
     
-    string name = ConversionHelper::getStringForWString(sceneNode->name.c_str());
-
     sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         sgScene->loader->setJointsScale(sceneNode);
@@ -464,8 +540,8 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 accTransform)
                 mesh = new Mesh();
             
             if(hasBones) {
-                rigNode = &(*sceneNode);
-                rigMesh = &(*mesh);
+                rigNode = sceneNode;
+                rigMesh = mesh;
             }
         }
 

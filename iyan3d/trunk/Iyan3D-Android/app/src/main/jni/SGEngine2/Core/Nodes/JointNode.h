@@ -14,6 +14,8 @@
 class JointNode:public Node{
     
 public:
+    string name;
+    
     JointNode();
     ~JointNode();
     

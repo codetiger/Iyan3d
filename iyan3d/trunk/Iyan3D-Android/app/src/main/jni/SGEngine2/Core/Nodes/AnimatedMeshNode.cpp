@@ -46,6 +46,7 @@ void AnimatedMeshNode::setMesh(SkinMesh* mesh, int maxJoints, rig_type rigType)
     }
     
     for (int i = 0; i < jointsCount; i++) {
+        jointNodes[i]->name = (*SMesh->joints)[i]->name;
         if ((*SMesh->joints)[i]->Parent) {
             unsigned short parentId = (*SMesh->joints)[i]->Parent->Index;
             jointNodes[i]->Parent = jointNodes[parentId];

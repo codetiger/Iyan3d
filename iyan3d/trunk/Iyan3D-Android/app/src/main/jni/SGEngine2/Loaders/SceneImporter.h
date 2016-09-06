@@ -40,7 +40,9 @@ private:
     void importNode(aiNode *node, aiMatrix4x4 accTransform);
     int loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool hasBones);
     void loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 transform);
-
+    void loadAnimationKeys(SGJoint *joint);
+    void loadAnimationKeys(SGNode *node);
+    
     const aiScene* scene = NULL;
     bool hasMeshColor;
     Vector3 mColor;

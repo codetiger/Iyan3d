@@ -59,6 +59,7 @@ public:
     vector<SGRotationKey> rotationKeys;
     vector<SGScaleKey> scaleKeys;
     vector<SGVisibilityKey> visibilityKeys;
+    
     vector<Quaternion> jointsInitialRotations;
     
     SGNode(NODE_TYPE type);

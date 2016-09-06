@@ -126,21 +126,22 @@ void SGEditorScene::removeAllNodes()
 void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
 {
     isRigMode = rigMode;
-    if(rigMode){
+    
+    if(rigMode) {
         riggingNodeId = selectedNodeId;
-        for(int i = 0; i < nodes.size(); i++) {
+        for(int i = 0; i < nodes.size(); i++)
             if(i != riggingNodeId)
                 nodes[i]->node->setVisible(false);
-        }
+
         rigMan = new SGAutoRigSceneManager(smgr,this);
         //setTransparencyForObjects();
         selectMan->unselectObject(selectedNodeId);
         clearSelections();
-    }
-    else{
-        for(int i = 0; i < nodes.size(); i++) {
-                nodes[i]->node->setVisible(true);
-        }
+        
+    } else {
+        for(int i = 0; i < nodes.size(); i++)
+            nodes[i]->node->setVisible(true);
+        
         riggingNodeId = NOT_EXISTS;
         delete rigMan;
         updater->resetMaterialTypes(false);
@@ -217,15 +218,12 @@ void SGEditorScene::initTextures()
 
 void SGEditorScene::renderAll()
 {
-
     if(freezeRendering) {
         ShaderManager::isRendering = true;
         return;
     }
 
-
-    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false,
-                                                Vector4(0.1, 0.1, 0.1, 1.0));
+    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false, Vector4(0.1, 0.1, 0.1, 1.0));
 
     if(displayPrepared) {
         rotationCircle->node->setVisible(false);
