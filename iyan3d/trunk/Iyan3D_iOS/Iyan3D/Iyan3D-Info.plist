@@ -38,7 +38,7 @@
 				<string>objfile</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>OBJ File</string>
+			<string>OBJ File (3D Mesh)</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -76,7 +76,7 @@
 				<string>daefile</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>DAE File</string>
+			<string>DAE File (3D Scene)</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -90,7 +90,7 @@
 				<string>fbxfile</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>FBX File</string>
+			<string>FBX File (3D Scene)</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -104,7 +104,7 @@
 				<string>3dsfile</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>3DS File</string>
+			<string>3DS File (3D Scene)</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -215,7 +215,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>OBJ File</string>
+			<string>OBJ File (3D Mesh)</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.smackall.obj</string>
 			<key>UTTypeSize320IconFile</key>
@@ -231,7 +231,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>DAE File</string>
+			<string>DAE File (3D Scene)</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.smackall.dae</string>
 			<key>UTTypeSize320IconFile</key>
@@ -247,7 +247,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>FBX File</string>
+			<string>FBX File (3D Scene)</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.smackall.fbx</string>
 			<key>UTTypeSize320IconFile</key>
@@ -263,17 +263,13 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>3DS File</string>
+			<string>3DS File (3D Scene)</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.smackall.3ds</string>
 			<key>UTTypeSize320IconFile</key>
 			<string>3dsfile</string>
 			<key>UTTypeSize64IconFile</key>
 			<string>3dsfile</string>
-		</dict>
-		<dict>
-			<key>LSHandlerRank</key>
-			<string>Alternate</string>
 		</dict>
 	</array>
 </dict>
