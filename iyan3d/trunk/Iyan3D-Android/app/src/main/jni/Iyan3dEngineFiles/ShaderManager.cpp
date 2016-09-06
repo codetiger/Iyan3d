@@ -259,9 +259,9 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
     
     Vector4 vertexColor = sgNode->getProperty(SELECTED).value.x ? ((isMBSelected) ? Vector4(1.0, 1.0, 1.0, 0) : Vector4(0.0, 1.0, 0.0, 0)) : color;
     vertexColor = sgNode->getProperty(SELECTED, materialIndex).value.x ? Vector4(0.0, 1.0, 0.0, 0) : vertexColor;
-    if(isRendering && sgNode->node->getID() == JOINT_SPHERES_START_ID) {
-        printf(" \n Mesh Color %f %f %f ", vertexColor.x, vertexColor.y, vertexColor.z);
-    }
+//    if(isRendering && sgNode->node->getID() == JOINT_SPHERES_START_ID) {
+//        printf(" \n Mesh Color %f %f %f ", vertexColor.x, vertexColor.y, vertexColor.z);
+//    }
     vertColor[0] = vertexColor.x;
     vertColor[1] = vertexColor.y;
     vertColor[2] = vertexColor.z;

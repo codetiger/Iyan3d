@@ -364,14 +364,14 @@ void SceneImporter::loadAnimationKeys(SGJoint *joint)
                         maxFrames = frame;
                 }
                 for (int k = 0; k < channel->mNumScalingKeys; k++) {
-                    int frame = (int)(24.0 * channel->mPositionKeys[k].mTime);
+                    int frame = (int)(24.0 * channel->mScalingKeys[k].mTime);
                     Vector3 s = Vector3(channel->mScalingKeys[k].mValue.x, channel->mScalingKeys[k].mValue.y, channel->mScalingKeys[k].mValue.z);
                     joint->setScale(s, frame);
                     if(frame > maxFrames)
                         maxFrames = frame;
                 }
                 for (int k = 0; k < channel->mNumRotationKeys; k++) {
-                    int frame = (int)(24.0 * channel->mPositionKeys[k].mTime);
+                    int frame = (int)(24.0 * channel->mRotationKeys[k].mTime);
                     Quaternion r = Quaternion(channel->mRotationKeys[k].mValue.x, channel->mRotationKeys[k].mValue.y, channel->mRotationKeys[k].mValue.z, channel->mRotationKeys[k].mValue.w);
                     joint->setRotation(r, frame);
                     if(frame > maxFrames)
@@ -402,14 +402,14 @@ void SceneImporter::loadAnimationKeys(SGNode *node)
                         maxFrames = frame;
                 }
                 for (int k = 0; k < channel->mNumScalingKeys; k++) {
-                    int frame = (int)(24.0 * channel->mPositionKeys[k].mTime);
+                    int frame = (int)(24.0 * channel->mScalingKeys[k].mTime);
                     Vector3 s = Vector3(channel->mScalingKeys[k].mValue.x, channel->mScalingKeys[k].mValue.y, channel->mScalingKeys[k].mValue.z);
                     node->setScale(s, frame);
                     if(frame > maxFrames)
                         maxFrames = frame;
                 }
                 for (int k = 0; k < channel->mNumRotationKeys; k++) {
-                    int frame = (int)(24.0 * channel->mPositionKeys[k].mTime);
+                    int frame = (int)(24.0 * channel->mRotationKeys[k].mTime);
                     Quaternion r = Quaternion(channel->mRotationKeys[k].mValue.x, channel->mRotationKeys[k].mValue.y, channel->mRotationKeys[k].mValue.z, channel->mRotationKeys[k].mValue.w);
                     node->setRotation(r, frame);
                     if(frame > maxFrames)
