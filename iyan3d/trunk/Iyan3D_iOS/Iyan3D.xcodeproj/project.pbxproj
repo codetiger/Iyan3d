@@ -399,11 +399,8 @@
 		01D2F09D1C44CDD9000E41C7 /* Pause_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0981C44CDD9000E41C7 /* Pause_Pad@2x.png */; };
 		01D2F09E1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0991C44CDD9000E41C7 /* Play_Pad@2x.png */; };
 		01D2F09F1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D2F0991C44CDD9000E41C7 /* Play_Pad@2x.png */; };
-		01D2F0A31C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */; };
 		01D2F0A41C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A01C45181F000E41C7 /* FBSDKCoreKit.framework */; };
-		01D2F0A51C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */; };
 		01D2F0A61C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A11C45181F000E41C7 /* FBSDKLoginKit.framework */; };
-		01D2F0A71C45181F000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
 		01D2F0A81C451820000E41C7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D2F0A21C45181F000E41C7 /* FBSDKShareKit.framework */; };
 		01E6188E1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
 		01E6188F1C2C145700DBBC00 /* Normal-shader_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 01E6188A1C2C145700DBBC00 /* Normal-shader_Pad.png */; };
@@ -4479,7 +4476,6 @@
 				25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */,
 				25F7C4651B682F7400C4183F /* libz.dylib in Frameworks */,
 				251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
-				01D2F0A71C45181F000E41C7 /* FBSDKShareKit.framework in Frameworks */,
 				E262744419234C890036F8E3 /* GameKit.framework in Frameworks */,
 				E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */,
 				01C2B7941C46419300384370 /* TwitterKit.framework in Frameworks */,
@@ -4490,13 +4486,11 @@
 				62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */,
 				251BF4581C2C191700A5D41D /* Fabric.framework in Frameworks */,
 				E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */,
-				01D2F0A31C45181F000E41C7 /* FBSDKCoreKit.framework in Frameworks */,
 				C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */,
 				C4BEFB0B1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
 				C4BEFB051D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */,
 				C87EBFE218F3DAD800EB656E /* CoreData.framework in Frameworks */,
 				C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */,
-				01D2F0A51C45181F000E41C7 /* FBSDKLoginKit.framework in Frameworks */,
 				C4BEFB071D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
 				C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */,
 				01C2B7981C46419300384370 /* TwitterCore.framework in Frameworks */,

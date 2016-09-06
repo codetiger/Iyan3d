@@ -10,20 +10,6 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeIconFiles</key>
-			<array>
-				<string>i3dfile</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>i3d File</string>
-			<key>LSHandlerRank</key>
-			<string>Alternate</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>com.smackall.i3d</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>OTF font</string>
@@ -135,7 +121,7 @@
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.smackall.zip</string>
+				<string>com.pkware.zip-archive</string>
 			</array>
 		</dict>
 	</array>

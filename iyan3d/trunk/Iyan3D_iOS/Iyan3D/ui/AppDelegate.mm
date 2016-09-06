@@ -53,9 +53,6 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kTrackingId];
 
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    NSLog(@"doc dir %@",docDirPath);
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -70,50 +67,7 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
     [self.window setRootViewController:loadingViewController];
     [self.window makeKeyAndVisible];
     
-    if (launchOptions != nil) {
-        NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-        if (dictionary != nil)
-            [self saveBoolToUserDefaultsWith:YES AndKey:@"openrenderTasks"];
-    }
-    
     return YES;
-}
-
--(void) saveBoolToUserDefaultsWith:(BOOL)value AndKey:(NSString*) key
-{
-    NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    
-    if (standardUserDefaults) {
-        [standardUserDefaults setBool:value forKey:key];
-        [standardUserDefaults synchronize];
-    }
-}
-
--(void) saveToUserDefaultsWithValue:(id)value AndKey:(NSString*)key
-{
-    NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    
-    if (standardUserDefaults) {
-        [standardUserDefaults setObject:value forKey:key];
-        [standardUserDefaults synchronize];
-    }
-}
-
-- (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId
-{
-    [[[UIAlertView alloc]
-       initWithTitle:@"Error" message:@"Failed Linking Dropbox" delegate:self
-       cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
-}
-
-- (void)networkRequestStarted
-{
-    
-}
-
-- (void)networkRequestStopped
-{
-
 }
 
 - (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
@@ -228,27 +182,24 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString* ext = [[[url absoluteString] pathExtension] lowercaseString];
-    NSString* msg;
-    
-    if([ext isEqualToString:@"ttf"] || [ext isEqualToString:@"otf"])
-        msg = [NSString stringWithFormat:@"To use your %@ font file, use 'Text' option in your Import Menu. You should have upgraded to the Premium version for using this feature.", [ext uppercaseString]];
-    else if([ext isEqualToString:@"obj"] || [ext isEqualToString:@"png"]|| [ext isEqualToString:@"jpeg"]) {
-        msg = [NSString stringWithFormat:@"To import your %@ file, use 'Import And Rig Models' button in Home Page", [ext uppercaseString]];
-    }
-    else if ([ext isEqualToString:@"i3d"]) {
-        if(![self.window.rootViewController isKindOfClass:[LoadingViewControllerPad class]]) {
-            
+    NSString* msg = @"There was a problem in loading the file you just imported.";
+
+    if([ext isEqualToString:@"zip"]) {
+        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString* documentsDirectory = [paths objectAtIndex:0];
+        
+        ZipArchive *zip = [[ZipArchive alloc] init];
+        if([zip UnzipOpenFile:[url path]]) {
+            if([zip UnzipFileTo:documentsDirectory overWrite:YES]) {
+                msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
+                NSLog(@"Zip File unzipped successfully\n");
+            }
         }
-        if([[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
-            [self saveBoolToUserDefaultsWith:YES AndKey:@"i3dopen"];
-            [self saveToUserDefaultsWithValue:url.path AndKey:@"i3dpath"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"i3dopen" object:nil];
-        }
+        [zip UnzipCloseFile];
     }
     
-    [self.window endEditing:YES];
-//	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	//[message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+	UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	[message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 
 	return YES;
 }
