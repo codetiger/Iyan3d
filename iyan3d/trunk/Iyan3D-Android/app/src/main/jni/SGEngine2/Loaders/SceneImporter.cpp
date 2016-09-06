@@ -51,6 +51,30 @@ string getFileName(const string& s)
     return s;
 }
 
+Mat4 getDeltaMatrix(string ext, bool isRigged)
+{
+    Quaternion r1 = Quaternion();
+    Quaternion r2 = Quaternion();
+    
+    if(ext == "dae" || ext == "3ds") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "fbx") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        if(isRigged)
+            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+        else
+            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "obj") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+        r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
+    } else if(ext == "sgm" || ext == "sgr") {
+        r1.fromAngleAxis(M_PI, Vector3(0.0, 1.0, 0.0));
+    }
+    
+    return (r1 * r2).getMatrix();
+}
+
 Mat4 AssimpToMat4(aiMatrix4x4 assimpMatrix)
 {
     Mat4 mtrix;
@@ -387,6 +411,7 @@ void SceneImporter::loadAnimationKeys(SGJoint *joint)
 
 void SceneImporter::loadAnimationKeys(SGNode *node)
 {
+    Mat4 m = getDeltaMatrix(ext, node->getType() == NODE_RIG);
     int maxFrames = 0;
     for (int i = 0; i < scene->mNumAnimations; i++) {
         for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++) {
@@ -397,6 +422,8 @@ void SceneImporter::loadAnimationKeys(SGNode *node)
                 for (int k = 0; k < channel->mNumPositionKeys; k++) {
                     int frame = (int)(24.0 * channel->mPositionKeys[k].mTime);
                     Vector3 p = Vector3(channel->mPositionKeys[k].mValue.x, channel->mPositionKeys[k].mValue.y, channel->mPositionKeys[k].mValue.z);
+                    Vector4 p4 = m * Vector4(p, 0.0);
+                    p = Vector3(p4.x, p4.y, p4.z);
                     node->setPosition(p, frame);
                     if(frame > maxFrames)
                         maxFrames = frame;
@@ -411,6 +438,7 @@ void SceneImporter::loadAnimationKeys(SGNode *node)
                 for (int k = 0; k < channel->mNumRotationKeys; k++) {
                     int frame = (int)(24.0 * channel->mRotationKeys[k].mTime);
                     Quaternion r = Quaternion(channel->mRotationKeys[k].mValue.x, channel->mRotationKeys[k].mValue.y, channel->mRotationKeys[k].mValue.z, channel->mRotationKeys[k].mValue.w);
+                    r = m * r.getMatrix();
                     node->setRotation(r, frame);
                     if(frame > maxFrames)
                         maxFrames = frame;
@@ -458,27 +486,8 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
     }
     
-    Quaternion r1 = Quaternion();
-    Quaternion r2 = Quaternion();
-    
-    if(ext == "dae") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
-    } else if(ext == "fbx") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        if(sceneNode->getType() == NODE_RIG)
-            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
-        else
-            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
-    } else if(ext == "obj") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
-    } else if(ext == "sgm" || ext == "sgr") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 1.0, 0.0));
-    }
-
     Mat4 m = AssimpToMat4(transform);
-    m = (r1 * r2).getMatrix() * m;
+    m = getDeltaMatrix(ext, sceneNode->getType() == NODE_RIG) * m;
     Quaternion r = m.getRotation();
     
     sceneNode->setPosition(m.getTranslation(), 0);
@@ -491,7 +500,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     sgn->setRotation(r);
     sgn->setScale(m.getScale());
     
-    sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
+//    sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
