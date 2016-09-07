@@ -592,6 +592,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 {
     editorScene->moveMan->panProgress(_touchMovePosition[0], _touchMovePosition[1]);
     editorScene->updater->updateLightCamera();
+    editorScene->updater->updateJointSpheres();
 }
 
 -(void) showPopOver:(int) selectedNodeId{

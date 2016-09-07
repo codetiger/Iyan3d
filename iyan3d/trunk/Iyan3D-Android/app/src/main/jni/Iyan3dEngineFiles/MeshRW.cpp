@@ -68,6 +68,7 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
             FileHelper::writeVector2(filePointer, v.texCoord1);
             FileHelper::writeVector3(filePointer, v.vertTangent);
             FileHelper::writeVector3(filePointer, v.vertBitangent);
+            FileHelper::writeVector4(filePointer, v.vertColor);
             FileHelper::writeVector4(filePointer, v.optionalData1);
             FileHelper::writeVector4(filePointer, v.optionalData2);
             FileHelper::writeVector4(filePointer, v.optionalData3);
@@ -152,6 +153,7 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
 
 Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
 {
+    
     SkinMesh* mesh = new SkinMesh();
     mesh->meshType = MESH_TYPE_HEAVY;
     
@@ -171,6 +173,7 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
             v.texCoord1 = FileHelper::readVector2(filePointer);
             v.vertTangent = FileHelper::readVector3(filePointer);
             v.vertBitangent = FileHelper::readVector3(filePointer);
+            v.vertColor = FileHelper::readVector4(filePointer);
             v.optionalData1 = FileHelper::readVector4(filePointer);
             v.optionalData2 = FileHelper::readVector4(filePointer);
             v.optionalData3 = FileHelper::readVector4(filePointer);

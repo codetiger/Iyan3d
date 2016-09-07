@@ -258,14 +258,6 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
         currentControl->node->updateAbsoluteTransformation();
     }
     
-    for (int i = 0; i < updatingScene->jointSpheres.size(); i++) {
-        Vector3 pos = updatingScene->jointSpheres[i]->node->getPosition();
-        float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
-        float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
-        jointScale = jointScale * 1.5;
-        
-        updatingScene->jointSpheres[i]->node->setScale(jointScale);
-    }
 }
 
 void SGSceneUpdater::changeCameraView(CAMERA_VIEW_MODE mode)
@@ -294,6 +286,40 @@ void SGSceneUpdater::updateLightCamera()
     if(updatingScene->nodes.size() > NODE_LIGHT) {        
         updateLightCam(updatingScene->nodes[NODE_LIGHT]->node->getAbsolutePosition());
     }
+}
+
+void SGSceneUpdater::updateJointSpheres()
+{
+    if(updatingScene->selectedNodeId == NOT_SELECTED || (updatingScene->nodes[updatingScene->selectedNodeId]->getType() != NODE_RIG && updatingScene->nodes[updatingScene->selectedNodeId]->getType() != NODE_TEXT_SKIN))
+        return;
+    
+    shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(updatingScene->nodes[updatingScene->selectedNodeId]->node);
+    int bonesCount = animNode->getJointCount();
+    
+    animNode->updateBoundingBox();
+    float xExt = animNode->getBoundingBox().getXExtend();
+    float yExt = animNode->getBoundingBox().getYExtend();
+    float zExt = animNode->getBoundingBox().getZExtend();
+    
+    Vector3 nodeScale = animNode->getScale();
+    
+    float volume = xExt/nodeScale.x * yExt/nodeScale.y * zExt/nodeScale.z;
+    float sphereSize = volume / 70.0;
+
+    for(int i = 0;i < bonesCount;i++) {
+        
+        shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
+        
+            Vector3 pos = updatingScene->jointSpheres[i]->node->getPosition();
+            float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
+            float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
+            jointScale = jointScale;
+            
+            Vector3 sphereScale = Vector3(sphereSize * jointScale);
+            
+            updatingScene->jointSpheres[i]->node->setScale(sphereScale);
+    }
+
 }
 
 void SGSceneUpdater::updateLightCam(Vector3 position)

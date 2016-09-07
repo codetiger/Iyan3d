@@ -20,6 +20,10 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+#define JOINT_MARKED_DISTANCE_FROM_CAMERA 6.17
+#define JOINT_MARKED_SCALE 0.27
+
+
 #include "HeaderFiles/RenderHelper.h"
 #include "HeaderFiles/SGEditorScene.h"
 #include "SceneImporter.h"
@@ -868,7 +872,6 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     for(int i = 0;i < bonesCount;i++){
         shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
         renderingScene->jointSpheres[i]->node->setParent(jointNode);
-        if(bonesCount != renderingScene->tPoseJoints.size()) {
             animNode->updateBoundingBox();
             float xExt = animNode->getBoundingBox().getXExtend();
             float yExt = animNode->getBoundingBox().getYExtend();
@@ -878,27 +881,17 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
             
             float volume = xExt/nodeScale.x * yExt/nodeScale.y * zExt/nodeScale.z;
             float sphereSize = volume / 60.0;
-            Vector3 sphereScale = Vector3(sphereSize);
+            
+            Vector3 pos = renderingScene->jointSpheres[i]->node->getPosition();
+            float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
+            float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
+            jointScale = jointScale;
+
+            Vector3 sphereScale = Vector3(sphereSize * jointScale);
+            
             renderingScene->jointSpheres[i]->node->setScale(sphereScale);
-        } else {
-            float radius = renderingScene->tPoseJoints[i].sphereRadius;
-            Vector3 nodeScale = animNode->getScale();
-            Vector3 jointScale = jointNode->getAbsoluteTransformation().getScale();
-            float xExt = animNode->getMesh()->getBoundingBox()->getXExtend();
-            float yExt = animNode->getMesh()->getBoundingBox()->getYExtend();
-            float zExt = animNode->getMesh()->getBoundingBox()->getZExtend();
-            
-            float volume = xExt * yExt * zExt;
-            //TODO
-            Vector3 finalScaleValue;
-            if(jointScale.x > nodeScale.x || jointScale.y > nodeScale.y || jointScale.z > nodeScale.z || radius > nodeScale.x || radius > nodeScale.y || radius > nodeScale.z)
-                finalScaleValue = Vector3(radius/jointNode->getAbsoluteTransformation().getScale().x, radius/jointNode->getAbsoluteTransformation().getScale().y, radius/jointNode->getAbsoluteTransformation().getScale().z) * animNode->getScale();
-            else
-                finalScaleValue = Vector3(radius);
-            
-            renderingScene->jointSpheres[i]->node->setScale(finalScaleValue);
-        }
     }
+
     setJointSpheresVisibility(true);
     displayJointsBasedOnSelection();
     return status;

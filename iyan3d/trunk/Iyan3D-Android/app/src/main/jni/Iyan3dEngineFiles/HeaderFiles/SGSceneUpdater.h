@@ -30,6 +30,7 @@ public:
     void changeCameraView(CAMERA_VIEW_MODE mode);
     void updateLightCamera();
     void updateLightCam(Vector3 position);
+    void updateJointSpheres();
     void updateLightProperties(int frameId);
     void resetMaterialTypes(bool isToonShader);
     void reloadKeyFrameMap();
