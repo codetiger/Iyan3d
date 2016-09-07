@@ -143,7 +143,7 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
     this->ext = "text";
     this->folderPath = "";
     
-    importNode(scene->mRootNode);
+    importNode(scene->mRootNode, aiMatrix4x4());
     
     if(rigNode)
         loadDetails2Node(rigNode, rigMesh, aiMatrix4x4());
@@ -173,7 +173,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
         importer->SetPropertyInteger(AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8);
         
-        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_OptimizeGraph;
+        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs;
         
         scene = importer->ReadFile(filePath, pFlags);
         
@@ -188,10 +188,10 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             this->ext = ext;
             this->folderPath = fileLocation;
 
-            importNode(scene->mRootNode);
+            importNode(scene->mRootNode, aiMatrix4x4());
             
             if(rigNode)
-                loadDetails2Node(rigNode, rigMesh, scene->mRootNode->mTransformation);
+                loadDetails2Node(rigNode, rigMesh, aiMatrix4x4());
 
             sgScene->selectMan->removeChildren(sgScene->getParentNode());
             sgScene->updater->setDataForFrame(sgScene->currentFrame);
@@ -525,8 +525,10 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     sgScene->nodes.push_back(sceneNode);
 }
 
-void SceneImporter::importNode(aiNode *node)
+void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
 {
+    aiMatrix4x4 transform = node->mTransformation * parentTransform;
+    
     if (node->mNumMeshes > 0) {
         map< string, Joint* > *bones = new map< string, Joint* >();
         bool hasBones = false;
@@ -605,11 +607,11 @@ void SceneImporter::importNode(aiNode *node)
         }
         
         if(!hasBones)
-            loadDetails2Node(sceneNode, mesh, node->mTransformation);
+            loadDetails2Node(sceneNode, mesh, transform);
     }
 
     for (int i = 0; i < node->mNumChildren; i++)
-        importNode(node->mChildren[i]);
+        importNode(node->mChildren[i], transform);
 }
 
 void SceneImporter::getSkinMeshFrom(vector<vertexDataHeavy> &mbvd, vector<unsigned short> &mbi, aiMesh *aiM)

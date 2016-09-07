@@ -37,7 +37,7 @@ public:
     SkinMesh* loadSkinMeshFromFile(string filePath);
 
 private:
-    void importNode(aiNode *node);
+    void importNode(aiNode *node, aiMatrix4x4 transform);
     int loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool hasBones);
     void loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 transform);
     void loadAnimationKeys(SGJoint *joint);
