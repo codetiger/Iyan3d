@@ -312,36 +312,36 @@ void SGNode::setSkinningData(SkinMesh *mesh)
             Vector4 vn = Vector4(0.0);
             
             if(vts->optionalData1.x > 0) {
-                vp += boneMatrix[(int)vts->optionalData1.x] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.x;
-                vn += boneMatrixIT[(int)vts->optionalData1.x] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.x;
+                vp += boneMatrix[(int)vts->optionalData1.x - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.x;
+                vn += boneMatrixIT[(int)vts->optionalData1.x - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.x;
             }
             if(vts->optionalData1.y > 0) {
-                vp += boneMatrix[(int)vts->optionalData1.y] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.y;
-                vn += boneMatrixIT[(int)vts->optionalData1.y] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.y;
+                vp += boneMatrix[(int)vts->optionalData1.y - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.y;
+                vn += boneMatrixIT[(int)vts->optionalData1.y - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.y;
             }
             if(vts->optionalData1.z > 0) {
-                vp += boneMatrix[(int)vts->optionalData1.z] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.z;
-                vn += boneMatrixIT[(int)vts->optionalData1.z] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.z;
+                vp += boneMatrix[(int)vts->optionalData1.z - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.z;
+                vn += boneMatrixIT[(int)vts->optionalData1.z - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.z;
             }
             if(vts->optionalData1.w > 0) {
-                vp += boneMatrix[(int)vts->optionalData1.w] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.w;
-                vn += boneMatrixIT[(int)vts->optionalData1.w] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.w;
+                vp += boneMatrix[(int)vts->optionalData1.w - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData2.w;
+                vn += boneMatrixIT[(int)vts->optionalData1.w - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData2.w;
             }
             if(vts->optionalData3.x > 0) {
-                vp += boneMatrix[(int)vts->optionalData3.x] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.x;
-                vn += boneMatrixIT[(int)vts->optionalData3.x] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.x;
+                vp += boneMatrix[(int)vts->optionalData3.x - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.x;
+                vn += boneMatrixIT[(int)vts->optionalData3.x - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.x;
             }
             if(vts->optionalData3.y > 0) {
-                vp += boneMatrix[(int)vts->optionalData3.y] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.y;
-                vn += boneMatrixIT[(int)vts->optionalData3.y] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.y;
+                vp += boneMatrix[(int)vts->optionalData3.y - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.y;
+                vn += boneMatrixIT[(int)vts->optionalData3.y - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.y;
             }
             if(vts->optionalData3.z > 0) {
-                vp += boneMatrix[(int)vts->optionalData3.z] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.z;
-                vn += boneMatrixIT[(int)vts->optionalData3.z] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.z;
+                vp += boneMatrix[(int)vts->optionalData3.z - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.z;
+                vn += boneMatrixIT[(int)vts->optionalData3.z - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.z;
             }
             if(vts->optionalData3.w > 0) {
-                vp += boneMatrix[(int)vts->optionalData3.w] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.w;
-                vn += boneMatrixIT[(int)vts->optionalData3.w] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.w;
+                vp += boneMatrix[(int)vts->optionalData3.w - 1] * Vector4(vts->vertPosition, 1.0) * vts->optionalData4.w;
+                vn += boneMatrixIT[(int)vts->optionalData3.w - 1] * Vector4(vts->vertNormal, 0.0) * vts->optionalData4.w;
             }
             vn.normalize();
             
