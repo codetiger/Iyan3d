@@ -52,6 +52,8 @@ private:
     SGNode *rigNode;
     Mesh *rigMesh;
     bool hasLoadedRigNode;
+    map< string, Joint* > *bones;
+
 
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);
     void loadBoneHierarcy(SkinMesh *m, map< string, Joint*> *bones);

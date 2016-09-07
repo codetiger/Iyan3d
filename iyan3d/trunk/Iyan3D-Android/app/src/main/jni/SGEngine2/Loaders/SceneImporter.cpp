@@ -14,6 +14,7 @@ SceneImporter::SceneImporter()
     scene = NULL;
     rigNode = NULL;
     hasLoadedRigNode = false;
+    bones = new map< string, Joint* >();
 }
 
 SceneImporter::~SceneImporter()
@@ -193,6 +194,8 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             if(rigNode)
                 loadDetails2Node(rigNode, rigMesh, aiMatrix4x4());
 
+            printf("Bone Count: %lu\n", rigNode->joints.size());
+            
             sgScene->selectMan->removeChildren(sgScene->getParentNode());
             sgScene->updater->setDataForFrame(sgScene->currentFrame);
             sgScene->selectMan->updateParentPosition();
@@ -466,6 +469,12 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
 {
     shared_ptr<Node> sgn;
     
+    if(bones->size()) {
+        loadBoneHierarcy((SkinMesh*)mesh, bones);
+        bones->clear();
+        delete bones;
+    }
+
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
@@ -530,7 +539,6 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
     aiMatrix4x4 transform = node->mTransformation * parentTransform;
     
     if (node->mNumMeshes > 0) {
-        map< string, Joint* > *bones = new map< string, Joint* >();
         bool hasBones = false;
         
         for (int i = 0; i < node->mNumMeshes; i++) {
@@ -599,12 +607,6 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
 
         string name = node->mName.C_Str();
         sceneNode->name = ConversionHelper::getWStringForString(name);
-        
-        if(bones->size()) {
-            loadBoneHierarcy((SkinMesh*)mesh, bones);
-            bones->clear();
-            delete bones;
-        }
         
         if(!hasBones)
             loadDetails2Node(sceneNode, mesh, transform);
@@ -710,7 +712,8 @@ void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joi
 {
     for (int i = 0; i < aiM->mNumBones; i++) {
         aiBone* bone = aiM->mBones[i];
-        if(bones->find(string(bone->mName.C_Str())) == bones->end()) {
+        string bName = string(bone->mName.C_Str());
+        if(bones->find(bName) == bones->end()) {
             Joint* sgBone = m->addJoint(NULL);
             sgBone->name = string(bone->mName.C_Str());
             
@@ -728,6 +731,16 @@ void SceneImporter::loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joi
             sgBone->LocalAnimatedMatrix = AssimpToMat4(n->mTransformation);
             sgBone->originalJointMatrix = sgBone->LocalAnimatedMatrix;
             sgBone->inverseBindPoseMatrix = AssimpToMat4(bone->mOffsetMatrix);
+        } else {
+            Joint* sgBone = (*bones)[bName];
+
+            for (int j = 0; j < bone->mNumWeights; j++) {
+                shared_ptr<PaintedVertex> pvInfo = make_shared<PaintedVertex>();
+                pvInfo->vertexId = bone->mWeights[j].mVertexId;
+                pvInfo->weight = bone->mWeights[j].mWeight;
+                pvInfo->meshBufferIndex = m->getMeshBufferCount() - 1;
+                sgBone->PaintedVertices->push_back(pvInfo);
+            }
         }
     }
 }
