@@ -735,7 +735,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
     StoragePath = constants::CachesStoragePath + "/";
 #endif
 
-    string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName + ".png";
+    string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName;
 
     node_texture_type texType;
     if(pIndex == TEXTURE)
@@ -749,18 +749,25 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
         setEnvironmentTexture(shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName, false);
     }
     else {
-        smgr->RemoveTexture(nodes[selectedNode]->materialProps[selectedMaterialIndex]->getTextureOfType(texType));
-        nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(NULL, texType);
+        if(selectedMaterialIndex == -1)
+            selectedMaterialIndex = 0;
         
-        if(pIndex == TEXTURE) {
-            if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
-                nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
-                Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
-                nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-            } else {
-                nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
-                nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
-                nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+        if(selectedMaterialIndex > 0 && selectedMaterialIndex < nodes[selectedNode]->materialProps.size()) {
+            Texture *tex = nodes[selectedNode]->materialProps[selectedMaterialIndex]->getTextureOfType(texType);
+            if(tex)
+                smgr->RemoveTexture(tex);
+            nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(NULL, texType);
+            
+            if(pIndex == TEXTURE) {
+                if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
+                    nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+                    Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
+                    nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
+                } else {
+                    nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
+                    nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
+                    nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+                }
             }
         }
     }
