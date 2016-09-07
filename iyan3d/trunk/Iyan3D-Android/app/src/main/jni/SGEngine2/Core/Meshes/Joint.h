@@ -34,7 +34,7 @@ public:
     double sphereRadius;
     unsigned short Index;
 
-    Mat4 originalJointMatrix;
+    Mat4 originalJointMatrix, inverseBindPoseMatrix;
     
     Mat4 LocalAnimatedMatrix;
     Mat4 GlobalAnimatedMatrix;
