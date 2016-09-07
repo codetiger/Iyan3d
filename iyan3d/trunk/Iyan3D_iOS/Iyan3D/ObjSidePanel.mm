@@ -205,19 +205,21 @@
     } else {
         if(indexPath.row == 0) {
             haveTexture = NO;
-            _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
-            _vertexColorProp.delegate = self;
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_vertexColorProp];
-            self.popoverController.popoverContentSize = CGSizeMake(200, 200);
-            self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType = WEPopoverAnimationTypeCrossFade;
-            [_popUpVc.view setClipsToBounds:YES];
-            CGRect rect = cell.frame;
-            rect = [self.view convertRect:rect fromView:cell.superview];
-            [self.popoverController presentPopoverFromRect:rect
-                                                    inView:self.view
-                                  permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                  animated:NO];
+            if(propIndex == TEXTURE) {
+                _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
+                _vertexColorProp.delegate = self;
+                self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_vertexColorProp];
+                self.popoverController.popoverContentSize = CGSizeMake(200, 200);
+                self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+                self.popoverController.animationType = WEPopoverAnimationTypeCrossFade;
+                [_popUpVc.view setClipsToBounds:YES];
+                CGRect rect = cell.frame;
+                rect = [self.view convertRect:rect fromView:cell.superview];
+                [self.popoverController presentPopoverFromRect:rect
+                                                        inView:self.view
+                                      permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                      animated:NO];
+            }
             textureFileName = @"-1";
         }
         else{

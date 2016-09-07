@@ -76,6 +76,13 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
                     string textureName = sgNode->getProperty(TEXTURE).fileName;
                     Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
                     sgNode->materialProps[j]->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
+                    
+                    string bumpMapName = sgNode->getProperty(BUMP_MAP).fileName;
+                    string bumpPath = FileHelper::getTexturesDirectory() + bumpMapName;
+                    if(sgNode->checkFileExists(bumpPath)) {
+                        Texture * bumpMap = smgr->loadTexture(bumpMapName, bumpPath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+                        sgNode->materialProps[j]->setTextureForType(bumpMap, NODE_TEXTURE_TYPE_NORMALMAP);
+                    }
                 }
                 
                 currentScene->nodes.push_back(sgNode);
@@ -124,6 +131,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
     }
     
     currentScene->syncSceneWithPhysicsWorld();
+    currentScene->setEnvironmentTexture(currentScene->shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName, false);
     
     return true;
 }
@@ -272,7 +280,7 @@ int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount, fl
     FileHelper::readVector4(filePointer);
     Vector4 test = FileHelper::readVector4(filePointer);
     
-    string env = FileHelper::readString(filePointer, sgbVersion); // Environment Texture Name
+    currentScene->shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName = FileHelper::readString(filePointer, sgbVersion); // Environment Texture Name
     FileHelper::readString(filePointer, sgbVersion);
     FileHelper::readString(filePointer, sgbVersion);
     FileHelper::readString(filePointer, sgbVersion);

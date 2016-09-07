@@ -98,7 +98,7 @@
 
 - (void)pixelDemoGotPixel:(BMPixel)pixel
 {
-    colorValue = Vector4(pixel.red, pixel.green, pixel.blue, 1.0); //TODO
+    colorValue = Vector4(pixel.red, pixel.green, pixel.blue, 1.0);
     UIColor *selectedColor = [UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha];
     [self.selectedColorView setBackgroundColor:selectedColor];
     ((TexturePropCell*)selectedCell).texImageView.backgroundColor = selectedColor;
@@ -108,7 +108,7 @@
 
 - (void)pixelDemoTouchEnded:(BMPixel)pixel
 {
-    colorValue = Vector4(pixel.red, pixel.green, pixel.blue, 1.0); //TODO
+    colorValue = Vector4(pixel.red, pixel.green, pixel.blue, 1.0);
     UIColor *selectedColor = [UIColor colorWithRed:pixel.red green:pixel.green blue:pixel.blue alpha:pixel.alpha];
     [self.selectedColorView setBackgroundColor:selectedColor];
     ((TexturePropCell*)selectedCell).texImageView.backgroundColor = selectedColor;

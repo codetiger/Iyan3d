@@ -193,7 +193,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     moveNodeId = NOT_SELECTED;
 
     shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, Vector4(0), UNDEFINED, SLIDER_TYPE, "Ambient Light", "Scene Properties");
-    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", "envmap.png");
+    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", "");
 }
 
 void SGEditorScene::initTextures()
@@ -554,9 +554,13 @@ shared_ptr<Node> SGEditorScene::getParentNode()
 void SGEditorScene::setEnvironmentTexture(std::string textureFilePath, bool isPreview)
 {
     freezeRendering = true;
+    
     if(shaderMGR->environmentTex)
         smgr->RemoveTexture(shaderMGR->environmentTex);
-    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", FileHelper::getTexturesDirectory() + textureFilePath + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
+
+    string envTexFilePath = FileHelper::getTexturesDirectory() + textureFilePath + ".png";
+
+    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", envTexFilePath, TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
     
     if(!isPreview) {
         shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", textureFilePath);
@@ -681,7 +685,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     string texturePath = FileHelper::getTexturesDirectory() + textureFileName+ ".png";
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
-        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x = (pIndex == TEXTURE) ? false : true; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+        nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x = (pIndex == TEXTURE) ? false : nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         
         if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
             loader->copyMeshFromOriginalNode(nodes[selectedNodeId]);
@@ -727,7 +731,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
 
 void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMaterialIndex, PROP_INDEX pIndex)
 {
-    if(selectedNode == NOT_EXISTS)
+    if(selectedNode == NOT_EXISTS && pIndex != ENVIRONMENT_TEXTURE)
         return;
     
     string StoragePath;
@@ -735,7 +739,6 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
     StoragePath = constants::CachesStoragePath + "/";
 #endif
 
-    string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName;
 
     node_texture_type texType;
     if(pIndex == TEXTURE)
@@ -749,6 +752,8 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
         setEnvironmentTexture(shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName, false);
     }
     else {
+        string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(TEXTURE).fileName;
+
         if(selectedMaterialIndex == -1)
             selectedMaterialIndex = 0;
         
