@@ -7,6 +7,7 @@
 //
 
 #include "SceneImporter.h"
+#include <fstream>
 
 SceneImporter::SceneImporter()
 {
@@ -49,6 +50,14 @@ string getFileName(const string& s)
     }
     
     return s;
+}
+
+bool copyFile(string srcFile, string dstFile)
+{
+    std::ifstream src(srcFile, std::ios::binary);
+    std::ofstream dest(dstFile, std::ios::binary);
+    dest << src.rdbuf();
+    return src && dest;
 }
 
 Mat4 getDeltaMatrix(string ext, bool isRigged)
@@ -341,8 +350,9 @@ int SceneImporter::loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool 
         material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
         
         string texturePath = getFileName(string(path.data));
+        copyFile(folderPath + texturePath, FileHelper::getTexturesDirectory() + texturePath);
         
-        Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, FileHelper::getTexturesDirectory() + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
         if(texture) {
             Property &p1 = sceneNode->getProperty(TEXTURE, nodeMaterialIndex);
             p1.fileName = texturePath;
@@ -360,8 +370,9 @@ int SceneImporter::loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool 
         aiString path;
         material->GetTexture(aiTextureType_NORMALS, 0, &path);
         string texturePath = getFileName(string(path.data));
+        copyFile(folderPath + texturePath, FileHelper::getTexturesDirectory() + texturePath);
         
-        Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, folderPath + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
+        Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, FileHelper::getTexturesDirectory() + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
         if(texture) {
             Property &p1 = sceneNode->getProperty(TEXTURE, nodeMaterialIndex);
             p1.fileName = texturePath;
@@ -485,6 +496,8 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
         sgn->updateAbsoluteTransformation();
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex(SHADER_MESH));
     }
+
+    sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
     
     Mat4 m = AssimpToMat4(transform);
     m = getDeltaMatrix(ext, sceneNode->getType() == NODE_RIG) * m;
@@ -500,7 +513,6 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     sgn->setRotation(r);
     sgn->setScale(m.getScale());
     
-//    sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
