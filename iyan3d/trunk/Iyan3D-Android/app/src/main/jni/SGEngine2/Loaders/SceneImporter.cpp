@@ -191,10 +191,10 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
 
             importNode(scene->mRootNode, aiMatrix4x4());
             
-            if(rigNode)
+            if(rigNode) {
                 loadDetails2Node(rigNode, rigMesh, aiMatrix4x4());
-
-            printf("Bone Count: %lu\n", rigNode->joints.size());
+                printf("Bone Count: %lu\n", rigNode->joints.size());
+            }
             
             sgScene->selectMan->removeChildren(sgScene->getParentNode());
             sgScene->updater->setDataForFrame(sgScene->currentFrame);
