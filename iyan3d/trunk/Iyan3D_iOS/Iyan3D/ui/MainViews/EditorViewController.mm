@@ -1039,8 +1039,10 @@ BOOL missingAlertShown;
 - (void) exitScene
 {
     [self addFabricEvent:@"BackToScenes" WithAttribute:-1];
+    
     if(editorScene)
         editorScene->freezeRendering = true;
+    
     if(editorScene && editorScene->isPlaying) {
         [self stopPlaying];
         editorScene->freezeRendering = false;
@@ -1049,6 +1051,7 @@ BOOL missingAlertShown;
     
     if(editorScene)
         editorScene->isPreviewMode = false;
+    
     [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
     [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(saveAndExit) withObject:nil waitUntilDone:YES];
@@ -1762,10 +1765,12 @@ BOOL missingAlertShown;
     isPlaying = !isPlaying;
     editorScene->isPlaying = isPlaying;
     [self showOrHideRightView:YES];
+    
     if (editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
         [self.framesCollectionView reloadData];
     }
+    
     if (isPlaying) {
         //[self setInterfaceVisibility:YES];
         if(editorScene->selectedNodeIds.size() > 0)
@@ -1774,8 +1779,7 @@ BOOL missingAlertShown;
         [self.playBtn setImage:[UIImage imageNamed:@"Pause_Pad.png"] forState:UIControlStateNormal];
         
         playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0f / 24.0f) target:self selector:@selector(playTimerTarget) userInfo:nil repeats:YES];
-    }
-    else {
+    } else {
         [self performSelectorOnMainThread:@selector(stopPlaying) withObject:nil waitUntilDone:YES];
     }
 }
