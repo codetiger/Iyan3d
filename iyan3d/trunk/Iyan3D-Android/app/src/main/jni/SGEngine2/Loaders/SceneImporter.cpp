@@ -609,7 +609,7 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
         }
         
         if(!hasBones)
-            loadDetails2Node(sceneNode, mesh, transform);
+            loadDetails2Node(sceneNode, mesh, node->mTransformation);
     }
 
     for (int i = 0; i < node->mNumChildren; i++)
