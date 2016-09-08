@@ -68,13 +68,13 @@ Mat4 getDeltaMatrix(string ext, bool isRigged)
     
     if(ext == "dae" || ext == "3ds") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+        if(isRigged)
+            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+        else
+            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
     } else if(ext == "fbx") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        if(isRigged)
-            r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
-        else
-            r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
+        r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
     } else if(ext == "obj") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
         r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
@@ -180,6 +180,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         
         if(!scene || scene->mNumMeshes == 0) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
+            sgScene->freezeRendering = false;
             return;
         } else {
             this->isTempNode = isTempNode;
@@ -189,7 +190,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             this->ext = ext;
             this->folderPath = fileLocation;
 
-            importNode(scene->mRootNode, aiMatrix4x4());
+            importNode(scene->mRootNode, scene->mRootNode->mTransformation);
             
             if(rigNode) {
                 loadDetails2Node(rigNode, rigMesh, aiMatrix4x4());
@@ -536,7 +537,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
 
 void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
 {
-    aiMatrix4x4 transform = node->mTransformation * parentTransform;
+    aiMatrix4x4 transform = parentTransform * node->mTransformation;
     
     if (node->mNumMeshes > 0) {
         bool hasBones = false;
@@ -609,7 +610,7 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
         }
         
         if(!hasBones)
-            loadDetails2Node(sceneNode, mesh, node->mTransformation);
+            loadDetails2Node(sceneNode, mesh, transform);
     }
 
     for (int i = 0; i < node->mNumChildren; i++)
