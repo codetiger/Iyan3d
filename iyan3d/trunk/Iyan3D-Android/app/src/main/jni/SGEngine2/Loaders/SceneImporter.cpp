@@ -431,6 +431,7 @@ void SceneImporter::loadAnimationKeys(SGNode *node)
         for (int j = 0; j < scene->mAnimations[i]->mNumChannels; j++) {
             string name(scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str());
             string nodeName = ConversionHelper::getStringForWString(node->name);
+          
             if(nodeName == name) {
                 aiNodeAnim* channel = scene->mAnimations[i]->mChannels[j];
                 for (int k = 0; k < channel->mNumPositionKeys; k++) {
@@ -469,13 +470,13 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
 {
     shared_ptr<Node> sgn;
     
-    if(bones->size()) {
-        loadBoneHierarcy((SkinMesh*)mesh, bones);
-        bones->clear();
-        delete bones;
-    }
-
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
+        if(bones->size()) {
+            loadBoneHierarcy((SkinMesh*)mesh, bones);
+            bones->clear();
+            delete bones;
+        }
+
         ((SkinMesh*)mesh)->finalize();
         sceneNode->setSkinningData((SkinMesh*)mesh);
         
@@ -507,7 +508,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     }
 
     sceneNode->setInitialKeyValues(IMPORT_ASSET_ACTION);
-
+    
     Mat4 m = AssimpToMat4(transform);
     m = getDeltaMatrix(ext, sceneNode->getType() == NODE_RIG) * m;
     Quaternion r = m.getRotation();
@@ -515,12 +516,11 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     sceneNode->setPosition(m.getTranslation(), 0);
     sceneNode->setRotation(r, 0);
     sceneNode->setScale(m.getScale(), 0);
-
-    loadAnimationKeys(sceneNode);
-    
     sgn->setPosition(m.getTranslation());
     sgn->setRotation(r);
     sgn->setScale(m.getScale());
+    
+    loadAnimationKeys(sceneNode);
     
     if(sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
         sgScene->loader->setJointsScale(sceneNode);
@@ -572,6 +572,9 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
                 rigNode = sceneNode;
                 rigMesh = mesh;
             }
+
+            string name = node->mName.C_Str();
+            sceneNode->name = ConversionHelper::getWStringForString(name);
         }
 
         for (int i = 0; i < node->mNumMeshes; i++) {
@@ -604,9 +607,6 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
             if(aiM->mColors[0])
                 px.value = Vector4(-1.0);
         }
-
-        string name = node->mName.C_Str();
-        sceneNode->name = ConversionHelper::getWStringForString(name);
         
         if(!hasBones)
             loadDetails2Node(sceneNode, mesh, transform);
