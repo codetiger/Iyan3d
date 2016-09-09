@@ -160,7 +160,7 @@ void SceneImporter::import3DText(SGEditorScene *sgScene, wstring text, string fo
     sgScene->freezeRendering = false;
 }
 
-void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode)
+bool SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode, string *error)
 {
     rigNode = NULL;
     hasLoadedRigNode = false;
@@ -180,8 +180,9 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         
         if(!scene || scene->mNumMeshes == 0) {
             printf("Error in Loading: %s\n", importer->GetErrorString());
+            (*error) = string(importer->GetErrorString());
             sgScene->freezeRendering = false;
-            return;
+            return false;
         } else {
             this->isTempNode = isTempNode;
             this->sgScene = sgScene;
@@ -208,6 +209,7 @@ void SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
     }
     
     sgScene->freezeRendering = false;
+    return true;
 }
 
 void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode, Mesh* lMesh)

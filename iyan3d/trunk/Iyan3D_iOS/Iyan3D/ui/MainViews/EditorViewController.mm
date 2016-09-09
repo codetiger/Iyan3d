@@ -3988,7 +3988,16 @@ void downloadFile(NSString* url, NSString* fileName)
     editorScene->loader->removeTempNodeIfExists();
     
     SceneImporter *loader = new SceneImporter();
-    loader->importNodesFromFile(editorScene, [name UTF8String], meshPath, FileHelper::getDocumentsDirectory(), !hasTexture, mColor, isTempNode);
+    string error;
+    
+    if(!loader->importNodesFromFile(editorScene, [name UTF8String], meshPath, FileHelper::getDocumentsDirectory(), !hasTexture, mColor, isTempNode, &error)) {
+        NSString *errorMessage = [NSString stringWithFormat:@"%@ %s", NSLocalizedString(@"Incompatible_File_Message", nil), error.c_str()];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incompatible_File_Title", nil) message:errorMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
+        [alert show];
+    }
+    
+    delete loader;
+
     if(!isTempNode)
         [self reloadSceneObjects];
 }

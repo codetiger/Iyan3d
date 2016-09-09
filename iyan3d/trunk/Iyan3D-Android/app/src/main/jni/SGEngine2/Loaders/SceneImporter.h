@@ -29,7 +29,7 @@ public:
     SceneImporter();
     ~SceneImporter();
     
-    void importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode);
+    bool importNodesFromFile(SGEditorScene *sgScene, string name, string filePath, string fileLocation, bool hasMeshColor, Vector3 meshColor, bool isTempNode, string *error);
     void importNodeFromMesh(SGEditorScene *sgScene, SGNode* sgNode, Mesh* lMesh);
     void import3DText(SGEditorScene *sgScene, wstring text, string fontPath, int bezierSegments, float extrude, float bevelRadius, int bevelSegments, bool hasBones, bool isTempNode);
     

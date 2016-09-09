@@ -251,7 +251,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     
     switch (type) {
         case ASSET_CAMERA: {
-            editorScene->loader->loadNode(NODE_CAMERA, assetId, "", "", name, 0, 0, assetAddType,vertexColor, "", isTempNode);
+            editorScene->loader->loadNode(NODE_CAMERA, assetId, "", "", name, 0, 0, assetAddType, vertexColor, "", isTempNode);
             break;
         }
         case ASSET_LIGHT: {
@@ -266,7 +266,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->loader->removeTempNodeIfExists();
 
             SceneImporter *loader = new SceneImporter();
-            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, FileHelper::getTexturesDirectory(), false, mColor, isTempNode);
+            string error;
+            
+            if(!loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, FileHelper::getTexturesDirectory(), false, mColor, isTempNode, &error)) {
+                NSString *errorMessage = [NSString stringWithFormat:@"%@ %s", NSLocalizedString(@"Incompatible_File_Message", nil), error.c_str()];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incompatible_File_Title", nil) message:errorMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
+                [alert show];
+            }
+                
             delete loader;
             
             if(!isTempNode){
@@ -289,7 +296,14 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             editorScene->loader->removeTempNodeIfExists();
             
             SceneImporter *loader = new SceneImporter();
-            loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, FileHelper::getTexturesDirectory(), false, mColor, isTempNode);
+            string error;
+            
+            if(!loader->importNodesFromFile(editorScene, ConversionHelper::getStringForWString(name), meshPath, FileHelper::getTexturesDirectory(), false, mColor, isTempNode, &error)) {
+                NSString *errorMessage = [NSString stringWithFormat:@"%@ %s", NSLocalizedString(@"Incompatible_File_Message", nil), error.c_str()];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incompatible_File_Title", nil) message:errorMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
+                [alert show];
+            }
+
             delete loader;
             
             if(!isTempNode){
