@@ -35,6 +35,8 @@ void Mesh::addMeshBuffer(vector<vertexData> mbvd, vector<unsigned short> mbi, un
             BBox.addPointsToCalculateBoundingBox(v.vertPosition);
         }
     }
+    
+    BBox.calculateEdges();
 }
 
 void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mbi, unsigned short materialIndex, bool updateBB)
@@ -49,6 +51,8 @@ void Mesh::addMeshBuffer(vector<vertexDataHeavy> mbvd, vector<unsigned short> mb
             BBox.addPointsToCalculateBoundingBox(v.vertPosition);
         }
     }
+
+    BBox.calculateEdges();
 }
 
 void Mesh::copyDataFromMesh(Mesh* otherMesh)
