@@ -2415,16 +2415,15 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
         
-    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS)
-    {
+    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS) {
+        
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
         [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNodeIndex];
         
-    }
-    else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
+    } else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS) {
         
         NSString *typedText = [self stringWithwstring:sgNode->name];
         NSString *fontName = [NSString stringWithCString:sgNode->optionalFilePath.c_str()
@@ -2434,8 +2433,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         
         float bevalValue = sgNode->getProperty(SPECIFIC_FLOAT).value.x;
         int fontSize = sgNode->getProperty(FONT_SIZE).value.x;
-        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
-                                                                                                                               encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str() encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
     } else if ((selectedNodeType == NODE_IMAGE || selectedNodeType == NODE_VIDEO) && sgNode) {
