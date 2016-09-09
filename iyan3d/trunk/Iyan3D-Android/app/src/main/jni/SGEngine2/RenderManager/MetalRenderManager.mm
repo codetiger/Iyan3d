@@ -158,10 +158,10 @@ id <CAMetalDrawable> MetalRenderManager::currentDrawable()
 
 void* initMetalRenderManager(void *renderView, float screenWidth, float screenHeight, float screenScale)
 {
-    #if !(TARGET_IPHONE_SIMULATOR)
+#if !(TARGET_IPHONE_SIMULATOR)
     MetalRenderManager *metalRenderManager = new MetalRenderManager(renderView, screenWidth, screenHeight, screenScale);
     return metalRenderManager;
-    #endif
+#endif
 }
 
 void MetalRenderManager::Initialize()
@@ -319,7 +319,7 @@ bool MetalRenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex,
     useMaterialToRender(node->material);
     BindAttribute(node, meshBufferIndex);
     //node.reset();
-     return true;
+    return true;
 }
 
 void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex, int meshBufferIndex)
@@ -580,12 +580,12 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture, bool clearBackB
             _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
             _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x, color.y, color.z, color.w);
             
-            if(!_renderTargetDepthTex) {
-                MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width:((MTLTexture*)renderTexture)->texture.width height:((MTLTexture*)renderTexture)->texture.height mipmapped: NO];
-                desc.sampleCount = sampleCount;
-                desc.textureType = colorTextureType;
-                _renderTargetDepthTex = [device newTextureWithDescriptor: desc];
-            }
+            //            if(!_renderTargetDepthTex) {
+            MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width:((MTLTexture*)renderTexture)->texture.width height:((MTLTexture*)renderTexture)->texture.height mipmapped: NO];
+            desc.sampleCount = sampleCount;
+            desc.textureType = colorTextureType;
+            _renderTargetDepthTex = [device newTextureWithDescriptor: desc];
+            //            }
         }
         
         _renderPassDescriptor.depthAttachment.texture = (isDepthPass)? ((MTLTexture*)renderTexture)->texture : _renderTargetDepthTex;
@@ -622,7 +622,7 @@ void MetalRenderManager::endEncoding()
 Vector4 MetalRenderManager::getPixelColor(Vector2 touchPosition,Texture* renderTexture)
 {
     unsigned char color[4];
-    MTLRegion region = MTLRegionMake2D((int)touchPosition.x,(int)touchPosition.y,1,1);
+    MTLRegion region = MTLRegionMake2D((int)touchPosition.x,(int)touchPosition.y, 1, 1);
     [((MTLTexture*)renderTexture)->texture getBytes:&color[0] bytesPerRow:renderTexture->width * 4 fromRegion:region mipmapLevel:0];
     return Vector4(color[2],color[1],color[0],color[3]);
 }

@@ -601,6 +601,8 @@ Texture* SceneManager::createRenderTargetTexture(string textureName, TEXTURE_DAT
 
 void SceneManager::setRenderTarget(Texture *renderTexture, bool clearBackBuffer, bool clearZBuffer, bool isDepthPass, Vector4 color)
 {
+    if(renderTexture)
+        renderTargetIndex++;
     renderMan->setRenderTarget(renderTexture,clearBackBuffer,clearZBuffer,isDepthPass,color);
 }
 

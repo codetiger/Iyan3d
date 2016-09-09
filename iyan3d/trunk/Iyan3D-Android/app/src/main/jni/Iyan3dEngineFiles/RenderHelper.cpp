@@ -359,11 +359,7 @@ void RenderHelper::drawCameraPreview()
         return;
     
     
-    if(renderingScene->shaderMGR->deviceType == METAL){
-        bool displayPrepared = smgr->PrepareDisplay(renderingScene->previewTexture->width, renderingScene->previewTexture->height, false, true, false, Vector4(0.1, 0.1, 0.1, 255));
-        if(!displayPrepared)
-            return;
-    }
+
     
     ShaderManager::renderingPreview = true;
     bool isLightOn = ShaderManager::sceneLighting;
@@ -426,8 +422,6 @@ void RenderHelper::drawCameraPreview()
     renderingScene->directionLine->node->setVisible(dirLineVisible);
     renderingScene->lightCircles->node->setVisible(lightCircleVisible);
     
-    if(renderingScene->shaderMGR->deviceType == METAL)
-        smgr->EndDisplay();
 }
 
 void RenderHelper::setRenderCameraOrientation()
