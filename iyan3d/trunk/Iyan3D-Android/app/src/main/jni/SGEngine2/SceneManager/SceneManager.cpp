@@ -23,6 +23,7 @@ SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_
     displayHeight = height;
     this->screenScale = screenScale;
     this->bundlePath = bundlePath;
+    renderTargetIndex = 0;
     #ifdef ANDROID
     renderMan = new OGLES2RenderManager(width, height, screenScale);
     common::deviceType = OPENGLES2;
@@ -183,6 +184,7 @@ void SceneManager::RemoveAllNodes()
 
 bool SceneManager::PrepareDisplay(int width, int height, bool clearColorBuf, bool clearDepthBuf, bool isDepthPass, Vector4 color)
 {
+    renderTargetIndex++;
     return renderMan->PrepareDisplay(width,height,clearColorBuf,clearDepthBuf,isDepthPass,color);
 }
 
@@ -217,6 +219,7 @@ void SceneManager::Render(bool isRTT)
 
 void SceneManager::EndDisplay()
 {
+    renderTargetIndex = 0;
     renderMan->endDisplay();
 }
 
@@ -526,7 +529,7 @@ void SceneManager::setPropertyValue(Material *material, string name, float* valu
     if(nodeIndex == NOT_EXISTS && device == METAL) {
         renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
     } else {
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex, renderTargetIndex);
         renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue);
     }
 }
@@ -540,7 +543,7 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
     if(nodeIndex == NOT_EXISTS && device == METAL) {
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     } else {
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex);
+        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex, renderTargetIndex);
         if(device == METAL)
             renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
         else

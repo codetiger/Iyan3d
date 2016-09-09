@@ -45,11 +45,18 @@ void CameraNode::setTarget(Vector3 target)
 void CameraNode::setRotation(Quaternion rotation)
 {
     if(bindTargetAndRotation) {
-        Mat4 trans = Mat4();
-        trans.translate(position);
-        trans.setRotation(rotation);
         
-        this->target = trans.getTranslation();
+        Mat4 T = Mat4();
+        T.translate(position);
+        
+        Mat4 R = rotation.getMatrix();
+        
+        Mat4 transform = (T * R);
+        
+        Vector3 direction = Vector3(0.0, 0.0, -1.0);
+        transform.rotateVect(direction);
+        
+        this->target = transform.getTranslation() + direction;
     }
     
     this->rotation = rotation;

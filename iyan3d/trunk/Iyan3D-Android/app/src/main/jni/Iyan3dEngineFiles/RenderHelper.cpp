@@ -358,6 +358,13 @@ void RenderHelper::drawCameraPreview()
     if(!renderingScene || !smgr || renderingScene->selectedNodeIds.size() > 0)
         return;
     
+    
+    if(renderingScene->shaderMGR->deviceType == METAL){
+        bool displayPrepared = smgr->PrepareDisplay(renderingScene->previewTexture->width, renderingScene->previewTexture->height, false, true, false, Vector4(0.1, 0.1, 0.1, 255));
+        if(!displayPrepared)
+            return;
+    }
+    
     ShaderManager::renderingPreview = true;
     bool isLightOn = ShaderManager::sceneLighting;
     if(!isLightOn)
@@ -368,6 +375,10 @@ void RenderHelper::drawCameraPreview()
     renderingScene->greenGrid->node->setVisible(false);
     renderingScene->blueGrid->node->setVisible(false);
     renderingScene->redGrid->node->setVisible(false);
+    bool dirLineVisible =     renderingScene->directionLine->node->getVisible();
+    renderingScene->directionLine->node->setVisible(false);
+    bool lightCircleVisible = renderingScene->lightCircles->node->getVisible();
+    renderingScene->lightCircles->node->setVisible(false);
     
     smgr->setRenderTarget(renderingScene->previewTexture, true, true, false, Vector4(0.1, 0.1, 0.1, 1.0));
     Vector4 camprevlay = renderingScene->getCameraPreviewLayout();
@@ -386,7 +397,7 @@ void RenderHelper::drawCameraPreview()
     }
     setControlsVisibility(false);
     
-    smgr->Render(false);
+    smgr->Render(true);
     if(renderingScene->whiteBorderTexture)
         smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     
@@ -412,6 +423,11 @@ void RenderHelper::drawCameraPreview()
     renderingScene->greenGrid->node->setVisible(true);
     renderingScene->blueGrid->node->setVisible(true);
     renderingScene->redGrid->node->setVisible(true);
+    renderingScene->directionLine->node->setVisible(dirLineVisible);
+    renderingScene->lightCircles->node->setVisible(lightCircleVisible);
+    
+    if(renderingScene->shaderMGR->deviceType == METAL)
+        smgr->EndDisplay();
 }
 
 void RenderHelper::setRenderCameraOrientation()
@@ -421,12 +437,12 @@ void RenderHelper::setRenderCameraOrientation()
     renderingScene->renderCamera->setPosition(renderingScene->nodes[NODE_CAMERA]->node->getPosition());
     renderingScene->renderCamera->updateAbsoluteTransformation();
     Quaternion rot  = renderingScene->nodes[NODE_CAMERA]->node->getRotation();
-    renderingScene->renderCamera->setRotation(rot * Quaternion(Vector3(180, 0, 0) * DEGTORAD));
+    renderingScene->renderCamera->setRotation(rot);
     renderingScene->renderCamera->updateAbsoluteTransformation();
     
     Vector3 upReal = Vector3(0.0, 1.0, 0.0);
     Mat4 rotmat;
-    rotmat.setRotation(Quaternion(Vector3(rot.x - 180.0, rot.y, rot.z) * DEGTORAD));
+    rotmat.setRotation(rot);
     rotmat.rotateVect(upReal);
     renderingScene->renderCamera->setUpVector(upReal);
 #ifndef UBUNTU

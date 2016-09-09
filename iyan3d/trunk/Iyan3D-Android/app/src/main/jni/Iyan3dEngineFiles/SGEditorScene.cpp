@@ -242,8 +242,8 @@ void SGEditorScene::renderAll()
         if(isRigMode && rigMan)
             renHelper->renderEnvelopes();
         
-        if(touchTexture)
-            smgr->draw2DImage(touchTexture, Vector2(0.0, 100.0), Vector2(256.0, 356.0), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE), false);
+//        if(touchTexture)
+//            smgr->draw2DImage(touchTexture, Vector2(0.0, 100.0), Vector2(256.0, 356.0), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE), false);
         
         //        // rtt division atlast post and pre stage
         renHelper->postRTTDrawCall();

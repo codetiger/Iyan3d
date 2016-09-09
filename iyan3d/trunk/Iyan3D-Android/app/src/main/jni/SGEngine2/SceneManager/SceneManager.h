@@ -32,6 +32,7 @@ private:
     int draw2DMatIndex;
     MaterialManager* mtlManger;
     void setShaderState(int nodeIndex);
+    int renderTargetIndex;
     
 public:
     void AddNode(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE);

@@ -330,6 +330,7 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(VISIBILITY).value.x);
         propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(HAS_PHYSICS).value.x);
         propertyAction.actionSpecificFloats.push_back(physicsProps[FORCE_MAGNITUDE].value.x);
+        propertyAction.actionSpecificIntegers.push_back(matIndex);
         propertyAction.actionSpecificIntegers.push_back((int)physicsProps[PHYSICS_KIND].value.x);
     }
     
@@ -342,6 +343,7 @@ void SGActionManager::changeMeshProperty(float refraction, float reflection, boo
         propertyAction.actionSpecificFlags.push_back(isVisible);
         propertyAction.actionSpecificFlags.push_back(selectedNode->getProperty(HAS_PHYSICS).value.x);
         propertyAction.actionSpecificFloats.push_back(physicsProps[FORCE_MAGNITUDE].value.x);
+        propertyAction.actionSpecificIntegers.push_back(matIndex);
         propertyAction.actionSpecificIntegers.push_back((int)physicsProps[PHYSICS_KIND].value.x);
         finalizeAndAddAction(propertyAction);
         propertyAction.drop();
@@ -552,6 +554,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         StoreDeleteObjectKeys(indexOfAsset);
         addAction(assetAction);
     } else if (actionType == ACTION_APPLY_ANIM) {
+        
         assetAction.drop();
         assetAction.actionType = ACTION_APPLY_ANIM;
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->animMan->animFilePath));
@@ -597,6 +600,7 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.drop();
         assetAction.actionType = ACTION_TEXTURE_CHANGE;
         assetAction.objectIndex = (actionScene->nodes[actionScene->selectedNodeId]->actionId);
+        assetAction.actionSpecificIntegers.push_back(actionScene->selectedMeshBufferId);
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
         assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->getProperty(TEXTURE).fileName));
         assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->getProperty(ORIG_VERTEX_COLOR).value.x);
@@ -745,7 +749,7 @@ int SGActionManager::undo(int &returnValue2)
         }
         case ACTION_CHANGE_PROPERTY_MESH:{
             //TODO
-            actionScene->nodes[indexOfAction]->setMeshProperties(0, recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.actionSpecificFlags[2], recentAction.actionSpecificIntegers[0], recentAction.actionSpecificFloats[2], recentAction.frameId);
+            actionScene->nodes[indexOfAction]->setMeshProperties(recentAction.actionSpecificIntegers[0], recentAction.actionSpecificFloats[0], recentAction.actionSpecificFloats[1], recentAction.actionSpecificFlags[0], recentAction.actionSpecificFlags[1], recentAction.actionSpecificFlags[2], recentAction.actionSpecificIntegers[1], recentAction.actionSpecificFloats[2], recentAction.frameId);
             break;
         }
         case ACTION_CHANGE_PROPERTY_LIGHT: {
@@ -813,7 +817,7 @@ int SGActionManager::undo(int &returnValue2)
             break;
         }
         case ACTION_TEXTURE_CHANGE:{
-            actionScene->selectMan->selectObject(indexOfAction, NOT_SELECTED, false); //TODO
+            actionScene->selectMan->selectObject(indexOfAction, recentAction.actionSpecificIntegers[0], false); //TODO
             actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]).c_str(), Vector3(recentAction.actionSpecificFloats[0],recentAction.actionSpecificFloats[1],recentAction.actionSpecificFloats[2]),true,true);
             actionScene->selectMan->unselectObject(indexOfAction);
             break;
@@ -911,7 +915,7 @@ int SGActionManager::redo()
             actionScene->currentFrame = recentAction.frameId;
             break;
         case ACTION_CHANGE_PROPERTY_MESH:
-            sgNode->setMeshProperties(0, recentAction.actionSpecificFloats[3], recentAction.actionSpecificFloats[4], recentAction.actionSpecificFlags[3], recentAction.actionSpecificFlags[4], recentAction.actionSpecificFlags[5], recentAction.actionSpecificIntegers[1], recentAction.actionSpecificFloats[5], recentAction.frameId);
+            sgNode->setMeshProperties(recentAction.actionSpecificIntegers[2], recentAction.actionSpecificFloats[3], recentAction.actionSpecificFloats[4], recentAction.actionSpecificFlags[3], recentAction.actionSpecificFlags[4], recentAction.actionSpecificFlags[5], recentAction.actionSpecificIntegers[3], recentAction.actionSpecificFloats[5], recentAction.frameId);
             break;
         case ACTION_CHANGE_PROPERTY_LIGHT:
             
@@ -966,7 +970,7 @@ int SGActionManager::redo()
             break;
         }
         case ACTION_TEXTURE_CHANGE:{
-            actionScene->selectMan->selectObject(indexOfAction, NOT_SELECTED, false);
+            actionScene->selectMan->selectObject(indexOfAction, recentAction.actionSpecificIntegers[1], false);
             actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[1]).c_str(), Vector3(recentAction.actionSpecificFloats[3],recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5]),true,true);
             actionScene->selectMan->unselectObject(indexOfAction);
             break;

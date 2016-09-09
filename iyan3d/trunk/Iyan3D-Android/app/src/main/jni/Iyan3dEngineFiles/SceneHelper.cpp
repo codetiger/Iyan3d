@@ -236,7 +236,7 @@ vector<SGNode*> SceneHelper::initControls(SceneManager *smgr)
         
         sgNode->node = ctrlNode;
         sgNode->getProperty(LIGHTING).value.x = false;
-        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
+        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
         
         Texture *nodeTex = smgr->loadTexture("Dummy Texture", constants::BundlePath + "/dummy.png", TEXTURE_RGBA8, TEXTURE_BYTE, true);
         sgNode->materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
