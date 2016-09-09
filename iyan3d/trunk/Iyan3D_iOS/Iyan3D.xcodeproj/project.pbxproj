@@ -867,8 +867,6 @@
 		25730E781AFD3E2B0042F81A /* GetPixelDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E771AFD3E2B0042F81A /* GetPixelDemo.m */; };
 		257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 257564BF1AE6E3D400B66113 /* RenderingViewController.xib */; };
 		257564C51AE6E3D400B66113 /* RenderingViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */; };
-		257564C61AE6E3D400B66113 /* ShaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 257564C21AE6E3D400B66113 /* ShaderCell.m */; };
-		257564C71AE6E3D400B66113 /* ShaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 257564C31AE6E3D400B66113 /* ShaderCell.xib */; };
 		25895B781B4F056700E833F8 /* AnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 25895B771B4F056700E833F8 /* AnimationItem.m */; };
 		25895B791B4F056700E833F8 /* AnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 25895B771B4F056700E833F8 /* AnimationItem.m */; };
 		2593C41C1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */; };
@@ -1549,14 +1547,6 @@
 		25EC6CE91C7F39DD002CF5D2 /* wm117.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC6C261C7F39DD002CF5D2 /* wm117.png */; };
 		25EC6CEA1C7F39DD002CF5D2 /* wm118.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC6C271C7F39DD002CF5D2 /* wm118.png */; };
 		25EC6CEB1C7F39DD002CF5D2 /* wm118.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC6C271C7F39DD002CF5D2 /* wm118.png */; };
-		25EFBEAC1BE25CA700DB300C /* RenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA31BE25CA700DB300C /* RenderCell.m */; };
-		25EFBEAD1BE25CA700DB300C /* RenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA31BE25CA700DB300C /* RenderCell.m */; };
-		25EFBEAE1BE25CA700DB300C /* RenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA41BE25CA700DB300C /* RenderCell.xib */; };
-		25EFBEAF1BE25CA700DB300C /* RenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA41BE25CA700DB300C /* RenderCell.xib */; };
-		25EFBEB01BE25CA700DB300C /* RenPro.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA61BE25CA700DB300C /* RenPro.mm */; };
-		25EFBEB11BE25CA700DB300C /* RenPro.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA61BE25CA700DB300C /* RenPro.mm */; };
-		25EFBEB21BE25CA700DB300C /* RenPro.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA71BE25CA700DB300C /* RenPro.xib */; };
-		25EFBEB31BE25CA700DB300C /* RenPro.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEA71BE25CA700DB300C /* RenPro.xib */; };
 		25EFBEB41BE25CA700DB300C /* RETrimControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA91BE25CA700DB300C /* RETrimControl.m */; };
 		25EFBEB51BE25CA700DB300C /* RETrimControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA91BE25CA700DB300C /* RETrimControl.m */; };
 		25EFBEB61BE25CA700DB300C /* RETrimPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEAB1BE25CA700DB300C /* RETrimPopover.m */; };
@@ -2268,7 +2258,6 @@
 		E20670DE1B049AA6006DD2F7 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 257106D61A95E928004716A5 /* Reachability.mm */; };
 		E20670E21B049AA6006DD2F7 /* BitmapDrawManipulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E5B1AFD3C7B0042F81A /* BitmapDrawManipulator.m */; };
 		E20670E31B049AA6006DD2F7 /* ScaleForAutoRigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */; };
-		E20670EC1B049AA6006DD2F7 /* ShaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 257564C21AE6E3D400B66113 /* ShaderCell.m */; };
 		E20670F01B049AA6006DD2F7 /* SmartImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E24973F4196BD80F0025D442 /* SmartImageView.mm */; };
 		E20670FE1B049AA6006DD2F7 /* ObjCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E249763C196BE0190025D442 /* ObjCellView.mm */; };
 		E20671081B049AA6006DD2F7 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E24973F5196BD80F0025D442 /* Utility.m */; };
@@ -2581,15 +2570,12 @@
 		E20673F11B049AA6006DD2F7 /* texts-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC900C01A0A01470051B941 /* texts-phone@2x.png */; };
 		E20673F41B049AA6006DD2F7 /* up-arrow-50-60.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F00877F1ADFC15400764DDE /* up-arrow-50-60.png */; };
 		E20673F61B049AA6006DD2F7 /* controls4.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AD196BDC650025D442 /* controls4.sgm */; };
-		E20673F81B049AA6006DD2F7 /* ShaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 257564C31AE6E3D400B66113 /* ShaderCell.xib */; };
 		E20673F91B049AA6006DD2F7 /* first-pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901441A0A54840051B941 /* first-pad@2x.png */; };
 		E20673FB1B049AA6006DD2F7 /* AssetCellViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497626196BE0190025D442 /* AssetCellViewPhone.xib */; };
 		E20673FE1B049AA6006DD2F7 /* AutoRigHelp5.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FED9E7E1A8E0F780089869B /* AutoRigHelp5.png */; };
 		E20673FF1B049AA6006DD2F7 /* picture-img@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9010E1A0A07860051B941 /* picture-img@2x.png */; };
 		E20674001B049AA6006DD2F7 /* home-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC9009A1A0A01460051B941 /* home-phone@2x.png */; };
 		E20674011B049AA6006DD2F7 /* topbarView.png in Resources */ = {isa = PBXBuildFile; fileRef = 62D28EE719DFDD74002F90AE /* topbarView.png */; };
-		E21A893C1B08757E00435C87 /* ShaderCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */; };
-		E21A893D1B0877CC00435C87 /* ShaderCellPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */; };
 		E21A89401B08939600435C87 /* normalShader.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A893E1B08939600435C87 /* normalShader.png */; };
 		E21A89411B08939600435C87 /* toonShadere.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A893F1B08939600435C87 /* toonShadere.png */; };
 		E21A89421B0893BF00435C87 /* normalShader.png in Resources */ = {isa = PBXBuildFile; fileRef = E21A893E1B08939600435C87 /* normalShader.png */; };
@@ -3220,9 +3206,6 @@
 		25730E771AFD3E2B0042F81A /* GetPixelDemo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetPixelDemo.m; path = "ui/Popover Views/GetPixelDemo.m"; sourceTree = "<group>"; };
 		257564BF1AE6E3D400B66113 /* RenderingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RenderingViewController.xib; path = "ui/Popover Views/RenderingViewController.xib"; sourceTree = "<group>"; };
 		257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RenderingViewControllerPhone.xib; path = "ui/Popover Views/RenderingViewControllerPhone.xib"; sourceTree = "<group>"; };
-		257564C11AE6E3D400B66113 /* ShaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderCell.h; path = "ui/Popover Views/ShaderCell.h"; sourceTree = "<group>"; };
-		257564C21AE6E3D400B66113 /* ShaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShaderCell.m; path = "ui/Popover Views/ShaderCell.m"; sourceTree = "<group>"; };
-		257564C31AE6E3D400B66113 /* ShaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ShaderCell.xib; path = "ui/Popover Views/ShaderCell.xib"; sourceTree = "<group>"; };
 		25895B711B4F031100E833F8 /* AnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationItem.h; path = "Core/Header Files/AnimationItem.h"; sourceTree = "<group>"; };
 		25895B771B4F056700E833F8 /* AnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationItem.m; path = Core/AnimationItem.m; sourceTree = "<group>"; };
 		2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2_sim.a; path = FrameWorks/libFreetype2_sim.a; sourceTree = "<group>"; };
@@ -3809,12 +3792,6 @@
 		25EC6C251C7F39DD002CF5D2 /* wm116.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wm116.png; sourceTree = "<group>"; };
 		25EC6C261C7F39DD002CF5D2 /* wm117.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wm117.png; sourceTree = "<group>"; };
 		25EC6C271C7F39DD002CF5D2 /* wm118.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wm118.png; sourceTree = "<group>"; };
-		25EFBEA21BE25CA700DB300C /* RenderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCell.h; sourceTree = "<group>"; };
-		25EFBEA31BE25CA700DB300C /* RenderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderCell.m; sourceTree = "<group>"; };
-		25EFBEA41BE25CA700DB300C /* RenderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RenderCell.xib; sourceTree = "<group>"; };
-		25EFBEA51BE25CA700DB300C /* RenPro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenPro.h; sourceTree = "<group>"; };
-		25EFBEA61BE25CA700DB300C /* RenPro.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenPro.mm; sourceTree = "<group>"; };
-		25EFBEA71BE25CA700DB300C /* RenPro.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RenPro.xib; sourceTree = "<group>"; };
 		25EFBEA81BE25CA700DB300C /* RETrimControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RETrimControl.h; sourceTree = "<group>"; };
 		25EFBEA91BE25CA700DB300C /* RETrimControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RETrimControl.m; sourceTree = "<group>"; };
 		25EFBEAA1BE25CA700DB300C /* RETrimPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RETrimPopover.h; sourceTree = "<group>"; };
@@ -4399,7 +4376,6 @@
 		C8E6173618C5DD7100BC5342 /* FPTouchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPTouchView.m; path = 3rdParty/FPPopOver/FPTouchView.m; sourceTree = "<group>"; };
 		E20674061B049AA6006DD2F7 /* Iyan3D-Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Iyan3D-Simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E211247C1AF20A0D00C23624 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = Shaders.metal; path = Resources/shaders/Shaders.metal; sourceTree = "<group>"; };
-		E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ShaderCellPhone.xib; path = "ui/Popover Views/ShaderCellPhone.xib"; sourceTree = "<group>"; };
 		E21A893E1B08939600435C87 /* normalShader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = normalShader.png; path = Resources/imgs/normalShader.png; sourceTree = "<group>"; };
 		E21A893F1B08939600435C87 /* toonShadere.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toonShadere.png; path = Resources/imgs/toonShadere.png; sourceTree = "<group>"; };
 		E21A89441B08A5AA00435C87 /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clock.png; path = Resources/imgs/clock.png; sourceTree = "<group>"; };
@@ -6187,25 +6163,15 @@
 		25F80ABA1CFDB03A00CF331B /* RenderingView */ = {
 			isa = PBXGroup;
 			children = (
-				257564C11AE6E3D400B66113 /* ShaderCell.h */,
-				257564C21AE6E3D400B66113 /* ShaderCell.m */,
-				257564C31AE6E3D400B66113 /* ShaderCell.xib */,
-				E21A893B1B08757E00435C87 /* ShaderCellPhone.xib */,
 				E2497646196BE0190025D442 /* RenderingViewController.h */,
 				E2497647196BE0190025D442 /* RenderingViewController.mm */,
 				257564BF1AE6E3D400B66113 /* RenderingViewController.xib */,
 				257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */,
 				3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */,
-				25EFBEA71BE25CA700DB300C /* RenPro.xib */,
 				25EFBEA81BE25CA700DB300C /* RETrimControl.h */,
 				25EFBEA91BE25CA700DB300C /* RETrimControl.m */,
 				25EFBEAA1BE25CA700DB300C /* RETrimPopover.h */,
 				25EFBEAB1BE25CA700DB300C /* RETrimPopover.m */,
-				25EFBEA21BE25CA700DB300C /* RenderCell.h */,
-				25EFBEA31BE25CA700DB300C /* RenderCell.m */,
-				25EFBEA41BE25CA700DB300C /* RenderCell.xib */,
-				25EFBEA51BE25CA700DB300C /* RenPro.h */,
-				25EFBEA61BE25CA700DB300C /* RenPro.mm */,
 			);
 			name = RenderingView;
 			sourceTree = "<group>";
@@ -7873,7 +7839,6 @@
 				250FEC401D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
 				25EC6C321C7F39DD002CF5D2 /* wm26.png in Resources */,
 				7FC524DE1B6F6F3600C5D26D /* Minimize-Full-screen@2x.png in Resources */,
-				25EFBEAE1BE25CA700DB300C /* RenderCell.xib in Resources */,
 				7F7D5A371B8C91D100E6BA86 /* googlelogout_Pad.png in Resources */,
 				251815831D1D4924009F68A8 /* Step-1_-img.png in Resources */,
 				250FEC4C1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
@@ -8255,7 +8220,6 @@
 				627A5F3E19ED342F00CB545C /* objfile.png in Resources */,
 				3DB4ABA41C75DA9400C89B5C /* Add-Bone-pad@2x.png in Resources */,
 				E2497670196BE0190025D442 /* ScaleForAutoRigViewController.xib in Resources */,
-				25EFBEB21BE25CA700DB300C /* RenPro.xib in Resources */,
 				01B02CDE1C61CAB400C9102A /* pause_IPhone@3x_.png in Resources */,
 				7F0087881ADFC15400764DDE /* down-arrow-large-pad@3x.png in Resources */,
 				8ADEFEAA197425E8001E159D /* humanTPoseBoneLimits.json in Resources */,
@@ -8274,7 +8238,6 @@
 				01B4D0551C2937000091E19B /* My-objects-Light_Pad@2x.png in Resources */,
 				7F31A7501AA4960300A6E7B1 /* Scene-topviewBg-phone@3x.png in Resources */,
 				25EC6BAE1C7F066B002CF5D2 /* wm17.png in Resources */,
-				E21A893C1B08757E00435C87 /* ShaderCellPhone.xib in Resources */,
 				25F748E71D08175200FB0AFD /* twit_Phone@2x.png in Resources */,
 				250E54AB1D3E07C40081A7CB /* Icon1@2x.png in Resources */,
 				01B3950C1C37A72B003955C6 /* Add-Bones_Pad.png in Resources */,
@@ -8284,7 +8247,6 @@
 				25EC6CB01C7F39DD002CF5D2 /* wm89.png in Resources */,
 				3DD47BF01C60A43500E7CCFD /* 60001.sgm in Resources */,
 				E24974C3196BDC650025D442 /* controls4.sgm in Resources */,
-				257564C71AE6E3D400B66113 /* ShaderCell.xib in Resources */,
 				01F872991C3A42EF009AA31E /* undo_IPhone.png in Resources */,
 				7FC9015E1A0A54850051B941 /* first-pad@2x.png in Resources */,
 				01F8733A1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */,
@@ -8498,7 +8460,6 @@
 				250FEC831D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */,
 				25EC6C651C7F39DD002CF5D2 /* wm51.png in Resources */,
 				250FEC451D1E5506000C8A2C /* round-close_phone.png in Resources */,
-				E21A893D1B0877CC00435C87 /* ShaderCellPhone.xib in Resources */,
 				01F873071C3A6C4E009AA31E /* pause_IPhone@2x_.png in Resources */,
 				25EC6BA91C7F066B002CF5D2 /* wm14.png in Resources */,
 				E20672101B049AA6006DD2F7 /* add-frame-phone.png in Resources */,
@@ -8612,7 +8573,6 @@
 				E206724A1B049AA6006DD2F7 /* render_image@2x.png in Resources */,
 				25EC6CD71C7F39DD002CF5D2 /* wm108.png in Resources */,
 				E206724B1B049AA6006DD2F7 /* first-pad.png in Resources */,
-				25EFBEAF1BE25CA700DB300C /* RenderCell.xib in Resources */,
 				E206724C1B049AA6006DD2F7 /* Scene-topviewBg.png in Resources */,
 				3DB4ABA11C75DA9400C89B5C /* Add-Bone-IPhone@3x.png in Resources */,
 				01F872621C3A42EF009AA31E /* Add-Frames_IPhone.png in Resources */,
@@ -8834,7 +8794,6 @@
 				251815841D1D4924009F68A8 /* Step-1_-img.png in Resources */,
 				250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
 				01B4CF851C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
-				25EFBEB31BE25CA700DB300C /* RenPro.xib in Resources */,
 				3DA6EE8C1D48838A00C842C6 /* textskin.vsh in Resources */,
 				E20672EB1B049AA6006DD2F7 /* frames-phone@3x.png in Resources */,
 				01F8730F1C3A6C4E009AA31E /* Rotate_IPhone@2x.png in Resources */,
@@ -9242,7 +9201,6 @@
 				25EC6CB11C7F39DD002CF5D2 /* wm89.png in Resources */,
 				3DD47BF11C60A43500E7CCFD /* 60001.sgm in Resources */,
 				E20673F61B049AA6006DD2F7 /* controls4.sgm in Resources */,
-				E20673F81B049AA6006DD2F7 /* ShaderCell.xib in Resources */,
 				01F8729A1C3A42EF009AA31E /* undo_IPhone.png in Resources */,
 				25BBCB141C203F200039DA5C /* Splash.png in Resources */,
 				E20673F91B049AA6006DD2F7 /* first-pad@2x.png in Resources */,
@@ -9318,7 +9276,6 @@
 				256F6BB31BF6246300154622 /* ShaderManager.cpp in Sources */,
 				7F19F6801B5E6C9F001A342C /* UIImageView+AFNetworking.m in Sources */,
 				25DE0EA71CAA8C980076F669 /* btQuickprof.cpp in Sources */,
-				257564C61AE6E3D400B66113 /* ShaderCell.m in Sources */,
 				25DE10ED1CAA8D6D0076F669 /* btGeneric6DofSpring2Constraint.cpp in Sources */,
 				25DE10DF1CAA8D6D0076F669 /* btKinematicCharacterController.cpp in Sources */,
 				25CACF631B27C20F0027F48C /* FontCellView.m in Sources */,
@@ -9394,7 +9351,6 @@
 				256F6D8C1BF624FB00154622 /* CubeMeshNode.cpp in Sources */,
 				3D58CD681C3D43C2006371DE /* WEPopoverController.m in Sources */,
 				256F6E861BF624FB00154622 /* pngmem.c in Sources */,
-				25EFBEB01BE25CA700DB300C /* RenPro.mm in Sources */,
 				3D58CD6A1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
 				25DE109B1CAA8D6D0076F669 /* btStaticPlaneShape.cpp in Sources */,
 				E249766C196BE0190025D442 /* RenderingViewController.mm in Sources */,
@@ -9479,7 +9435,6 @@
 				25730E631AFD3C7B0042F81A /* OSCommonImage.m in Sources */,
 				25DE10571CAA8D6D0076F669 /* btInternalEdgeUtility.cpp in Sources */,
 				25730E681AFD3C7B0042F81A /* BitmapCropManipulator.m in Sources */,
-				25EFBEAC1BE25CA700DB300C /* RenderCell.m in Sources */,
 				E24973F6196BD80F0025D442 /* AssetItem.m in Sources */,
 				25DE10991CAA8D6D0076F669 /* btSphereShape.cpp in Sources */,
 				256F6DA61BF624FB00154622 /* LightNode.cpp in Sources */,
@@ -9714,13 +9669,11 @@
 				25DE10941CAA8D6D0076F669 /* btPolyhedralConvexShape.cpp in Sources */,
 				25DE10B21CAA8D6D0076F669 /* btGenericPoolAllocator.cpp in Sources */,
 				25D96E631CCF43E600A5AEED /* Vector4.cpp in Sources */,
-				25EFBEAD1BE25CA700DB300C /* RenderCell.m in Sources */,
 				25DE10521CAA8D6D0076F669 /* btEmptyCollisionAlgorithm.cpp in Sources */,
 				25DE103A1CAA8D6D0076F669 /* btBoxBoxDetector.cpp in Sources */,
 				256F6BAE1BF6246300154622 /* SGNode.cpp in Sources */,
 				25D7DA651D06F6DC00E84D2F /* JDFTooltipManager.m in Sources */,
 				3D58CD6F1C3D43C2006371DE /* WETouchableView.m in Sources */,
-				E20670EC1B049AA6006DD2F7 /* ShaderCell.m in Sources */,
 				25895B791B4F056700E833F8 /* AnimationItem.m in Sources */,
 				25DE10421CAA8D6D0076F669 /* btCollisionWorldImporter.cpp in Sources */,
 				256F6E891BF624FB00154622 /* pngpread.c in Sources */,
@@ -9732,7 +9685,6 @@
 				25DE10AE1CAA8D6D0076F669 /* btUniformScalingShape.cpp in Sources */,
 				25DE10BA1CAA8D6D0076F669 /* btGImpactShape.cpp in Sources */,
 				25EBB2A81D1173B50031F18D /* MediaPreviewVC.m in Sources */,
-				25EFBEB11BE25CA700DB300C /* RenPro.mm in Sources */,
 				25DE10B61CAA8D6D0076F669 /* btGImpactCollisionAlgorithm.cpp in Sources */,
 				256F6E831BF624FB00154622 /* pngerror.c in Sources */,
 				256F6B9A1BF6246300154622 /* json_value.cpp in Sources */,

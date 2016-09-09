@@ -18,7 +18,7 @@
 {
    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self) {
-        clickedBtn=buttonValue;
+        clickedBtn = buttonValue;
         [self setTableData:buttonValue];
         return self;
     }
@@ -27,47 +27,26 @@
 
 - (void) viewDidLoad
 {
-    
     [super viewDidLoad];
-//    self.screenName = [NSString stringWithFormat:@"%@View iOS", clickedBtn];
-    if([clickedBtn isEqualToString:@"loginBtn"]){
-        if ([Utility IsPadDevice]){
-            [self.topBar setHidden:NO];
-            self.popoverBtns.hidden=YES;
-            [self.loginBtn setHidden:NO];
-            [self.loginImage setHidden:NO];
-        }
-        else{
-            [self.topBar setHidden:NO];
-            self.popoverBtns.hidden=YES;
-            [self.loginBtn setHidden:NO];
-            [self.loginImage setHidden:NO];
-            UIImage *image = [UIImage imageNamed: @"Login-Icon_IPhone"];
-            [self.loginImage setImage:image];
-        }
-    }
     if ([clickedBtn isEqualToString:@"myObjectsBtn"]) {
         _popoverBtns.alwaysBounceVertical = YES;
-        if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"]==YES) {
-            self.popoverBtns.allowsMultipleSelection=YES;
-        }
+        
+        if ([[AppHelper getAppHelper]userDefaultsBoolForKey:@"multiSelectOption"] == YES)
+            self.popoverBtns.allowsMultipleSelection = YES;
         else
-        {
-            self.popoverBtns.allowsMultipleSelection=NO;
-        }
-    }
-    else {
-            _popoverBtns.alwaysBounceVertical = NO;
-        self.popoverBtns.allowsMultipleSelection=NO;
+            self.popoverBtns.allowsMultipleSelection = NO;
+    } else {
+        _popoverBtns.alwaysBounceVertical = NO;
+        self.popoverBtns.allowsMultipleSelection = NO;
     }
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
-        if([clickedBtn isEqualToString:@"importBtn"] && ![Utility IsPadDevice]){
-            _popoverBtns.rowHeight = self.view.frame.size.height/8;
-            [_popoverBtns reloadData];
-        }
+    if([clickedBtn isEqualToString:@"importBtn"] && ![Utility IsPadDevice]) {
+        _popoverBtns.rowHeight = self.view.frame.size.height/8;
+        [_popoverBtns reloadData];
+    }
 }
 
 - (void) setTableData:(NSString *)clickedBtnName
@@ -76,14 +55,11 @@
     if([clickedBtnName isEqualToString:@"importBtn"]) {
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:
-                     NSLocalizedString(@"Models", nil),
+                     NSLocalizedString(@"ImportFile", nil),
+                     NSLocalizedString(@"Text", nil),
                      NSLocalizedString(@"Images", nil),
                      NSLocalizedString(@"Videos", nil),
-                     NSLocalizedString(@"Text", nil),
                      NSLocalizedString(@"Light", nil),
-                     NSLocalizedString(@"OBJ File", nil),
-                     NSLocalizedString(@"Add Bone", nil),
-                     NSLocalizedString(@"Particle Effects", nil),
                      nil];
     } else if([clickedBtnName isEqualToString:@"animationBtn"]) {
         [self allowMultipleSelection:NO];
@@ -148,10 +124,6 @@
         tableData = [NSMutableArray arrayWithObjects:
                      NSLocalizedString(@"Move Camera", nil),
                      nil];
-    } else if([clickedBtnName isEqualToString:@"loginBtn"]) {
-        self.popoverBtns.hidden=YES;
-        [self.loginBtn setHidden:NO];
-        [self.loginImage setHidden:NO];
     } else if([clickedBtnName isEqualToString:@"animProps1"]) {
         [self allowMultipleSelection:NO];
         tableData = [NSMutableArray arrayWithObjects:
@@ -170,7 +142,6 @@
                      NSLocalizedString(@"No data", nil),
                      nil];
     }
- 
 }
 
 - (void) didReceiveMemoryWarning
@@ -225,9 +196,7 @@
             else if(indexPath.row == 7)
                 cell.imageView.image = [UIImage imageNamed:@"Particles"];
         }
-    }
-    else
-    {
+    } else {
         if([clickedBtn isEqualToString:@"exportBtn"]) {
             if(indexPath.row == 0 )
                 cell.imageView.image = [UIImage imageNamed:@"Export-image_IPhone"];
@@ -275,7 +244,7 @@
                     cell.imageView.image = [UIImage imageNamed:@"My-objects-Models_IPhone"];
 
         }
-     }
+    }
     
     if([clickedBtn isEqualToString:@"viewBtn"] || [clickedBtn isEqualToString:@"infoBtn"] || [clickedBtn isEqualToString:@"addFrames"] ) {
         cell.textLabel.textColor = [UIColor colorWithRed:0.0 green:0.478 blue:1.0 alpha:1.0];
@@ -314,18 +283,12 @@
     }
 }
 
-- (IBAction) loginBtnAction:(id)sender
-{
-    [self.delegate loginBtnAction];
-}
-
 - (void) UpdateObjectList:(NSArray*) objectList
 {
     [tableData removeAllObjects];
     [tableData addObjectsFromArray:objectList];
     [self.popoverBtns reloadData];
     [self.delegate highlightObjectList];
-    
 }
 
 - (void *) updateSelection:(NSIndexPath *)indexPath ScrollPosition:(int)scrolPosition

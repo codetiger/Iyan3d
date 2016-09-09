@@ -59,7 +59,6 @@
         [self.medView addSubview:imageView];
         
     } else if (mediaType == VIDEO_TYPE) {
-        NSLog(@" /n Media Path %@ ", mediaPath);
         self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:mediaPath]];
         [self.moviePlayer.view setFrame:self.medView.frame];
         [self.moviePlayer.view setCenter:self.medView.center];

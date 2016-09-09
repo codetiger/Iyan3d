@@ -39,7 +39,7 @@ public:
     void setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool isVisible);
     void drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId);
     void renderEnvelopes();
-    void renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, int frame, Vector4 bgColor = Vector4(0.1, 0.1, 0.1, 1.0));
+    void renderAndSaveImage(char *imagePath, bool isDisplayPrepared, int frame, Vector4 bgColor = Vector4(0.1, 0.1, 0.1, 1.0));
     
     void movePreviewToCorner();
     void postRTTDrawCall();

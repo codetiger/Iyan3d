@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -11,31 +11,22 @@
                 <outlet property="backgroundColorLable" destination="UIQ-pP-dd7" id="5g3-Ag-wdS"/>
                 <outlet property="cancelActivityIndicator" destination="nif-U0-BwV" id="T3H-Ag-uTc"/>
                 <outlet property="cancelButton" destination="BrA-Pe-0Ve" id="ojj-c7-nZ9"/>
-                <outlet property="checkCreditProgress" destination="2NW-u8-on1" id="QbA-RE-YWN"/>
                 <outlet property="colorPickerBtn" destination="8g0-ud-PUd" id="y0C-mw-5rB"/>
-                <outlet property="creditLable" destination="hLk-cO-cda" id="Yw6-OV-HId"/>
-                <outlet property="exportButton" destination="ZUU-pt-gvf" id="fmO-uG-1Cq"/>
                 <outlet property="helpBtn" destination="O7k-54-Tll" id="pZN-dJ-4HE"/>
                 <outlet property="limitFramesLbl" destination="QKd-Gl-wYM" id="qDL-Bt-edU"/>
                 <outlet property="makeVideoLoading" destination="chg-7r-BYf" id="wFs-ZV-FnW"/>
                 <outlet property="nextButton" destination="pdo-ld-rqe" id="fBG-Me-oIy"/>
                 <outlet property="progressSub" destination="KgH-cZ-Wef" id="oXQ-SR-vmB"/>
-                <outlet property="renderDesc" destination="q6U-Pr-Qfx" id="IYW-2y-xN5"/>
                 <outlet property="renderTitleLabel" destination="71g-Tp-NrI" id="Vak-Aa-e9a"/>
                 <outlet property="renderedImageView" destination="WL1-RT-tct" id="m3h-dQ-TZN"/>
                 <outlet property="renderingProgressBar" destination="dzw-IT-60p" id="pUG-Ah-J59"/>
                 <outlet property="renderingProgressLabel" destination="CUp-Zq-jgS" id="E4x-Za-CNe"/>
-                <outlet property="renderingStyleLabel" destination="0uN-CX-8C2" id="Kfi-Nb-uhP"/>
-                <outlet property="renderingTypes" destination="MVH-u3-p41" id="Keg-H1-0py"/>
                 <outlet property="resolutionSegment" destination="eXO-4u-FHT" id="AwK-fb-uUo"/>
                 <outlet property="resolutionTypeLabel" destination="E66-VV-JUT" id="rk3-mG-S4h"/>
-                <outlet property="shaderStyle" destination="MVH-u3-p41" id="zuG-Tg-MoH"/>
                 <outlet property="shareActivityIndicator" destination="qZj-v7-ywE" id="Svx-Fb-Iek"/>
                 <outlet property="startButtonText" destination="pdo-ld-rqe" id="N6o-iw-Y81"/>
                 <outlet property="topBar" destination="OG1-y7-6p6" id="Dit-a8-0fV"/>
                 <outlet property="view" destination="2" id="3"/>
-                <outlet property="waterMarkLabel" destination="8K2-Nn-ge0" id="Rg5-Tg-Vcf"/>
-                <outlet property="watermarkSwitch" destination="7z9-il-Fpy" id="tdg-Ru-dOA"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -69,14 +60,6 @@
                     <rect key="frame" x="25" y="85" width="442" height="408"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8g0-ud-PUd">
-                    <rect key="frame" x="88" y="196" width="47" height="47"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="color.png"/>
-                    <connections>
-                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="yca-Mo-LA6"/>
-                    </connections>
-                </button>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" id="dzw-IT-60p">
                     <rect key="frame" x="144" y="569" width="201" height="3"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -84,18 +67,6 @@
                     <color key="progressTintColor" red="0.59607845540000004" green="0.0" blue="0.85098046059999999" alpha="1" colorSpace="deviceRGB"/>
                     <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                 </progressView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZUU-pt-gvf">
-                    <rect key="frame" x="427" y="550" width="40" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                    <state key="normal" backgroundImage="videoShare.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="exportButtonAction:" destination="-1" eventType="touchUpInside" id="1Yn-ch-zaI"/>
-                    </connections>
-                </button>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="0N1-4Q-98X">
                     <rect key="frame" x="235" y="273" width="20" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -109,37 +80,10 @@
                     <rect key="frame" x="370" y="546" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="2NW-u8-on1" userLabel="checkCreditProgress">
-                    <rect key="frame" x="395" y="549" width="37" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                </activityIndicatorView>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="nif-U0-BwV">
                     <rect key="frame" x="40" y="546" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" scrollEnabled="NO" pagingEnabled="YES" showsVerticalScrollIndicator="NO" dataMode="none" id="MVH-u3-p41">
-                    <rect key="frame" x="0.0" y="294" width="490" height="160"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
-                    <inset key="scrollIndicatorInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="50" minimumInteritemSpacing="10" id="2i7-IM-ZDg">
-                        <size key="itemSize" width="150" height="110"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="10" minY="40" maxX="10" maxY="40"/>
-                    </collectionViewFlowLayout>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="HXs-WC-E9k"/>
-                        <outlet property="delegate" destination="-1" id="wRi-LT-L6N"/>
-                    </connections>
-                </collectionView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RENDERING STYLE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0uN-CX-8C2">
-                    <rect key="frame" x="158" y="265" width="173" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BrA-Pe-0Ve">
                     <rect key="frame" x="24" y="555" width="100" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -153,21 +97,6 @@
                         <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="J3T-kQ-PZv"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WATERMARK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8K2-Nn-ge0">
-                    <rect key="frame" x="349" y="173" width="98" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="7z9-il-Fpy">
-                    <rect key="frame" x="374" y="204" width="51" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Enable/Disable Watermark image." identifier="2"/>
-                    <connections>
-                        <action selector="waterMarkValueChanged:" destination="-1" eventType="valueChanged" id="xyN-1V-z91"/>
-                    </connections>
-                </switch>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pdo-ld-rqe">
                     <rect key="frame" x="363" y="553" width="100" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -188,23 +117,15 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Render Normal Shader in Your Device" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="q6U-Pr-Qfx">
-                    <rect key="frame" x="27" y="452" width="441" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="hLk-cO-cda">
-                    <rect key="frame" x="184" y="549" width="126" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Credits required for the current export." identifier="1"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                    <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RESOLUTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E66-VV-JUT">
+                    <rect key="frame" x="174" y="100" width="140" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="eXO-4u-FHT">
-                    <rect key="frame" x="80" y="98" width="329" height="29"/>
+                    <rect key="frame" x="80" y="142" width="329" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <segments>
                         <segment title="1080p"/>
@@ -219,28 +140,29 @@
                     </connections>
                 </segmentedControl>
                 <view contentMode="center" id="KgH-cZ-Wef" userLabel="progressHolder">
-                    <rect key="frame" x="47" y="509" width="400" height="30"/>
+                    <rect key="frame" x="47" y="428" width="400" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BACKGROUND COLOR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UIQ-pP-dd7">
-                    <rect key="frame" x="40" y="173" width="142" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIMIT FRAMES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QKd-Gl-wYM">
-                    <rect key="frame" x="184" y="492" width="126" height="21"/>
+                    <rect key="frame" x="184" y="411" width="126" height="21"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" hint="Limit the number of frames to be exported." identifier="2"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RESOLUTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E66-VV-JUT">
-                    <rect key="frame" x="174" y="56" width="140" height="21"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8g0-ud-PUd">
+                    <rect key="frame" x="221" y="243" width="47" height="47"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="color.png"/>
+                    <connections>
+                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="yca-Mo-LA6"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BACKGROUND COLOR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UIQ-pP-dd7">
+                    <rect key="frame" x="173" y="220" width="142" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -253,6 +175,5 @@
     <resources>
         <image name="Help.png" width="22" height="22"/>
         <image name="color.png" width="23" height="23"/>
-        <image name="videoShare.png" width="40" height="30"/>
     </resources>
 </document>

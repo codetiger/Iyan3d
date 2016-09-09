@@ -15,14 +15,14 @@
 #import "QuartzCore/QuartzCore.h"
 #import "Utility.h"
 #import "ZipArchive.h"
-#import "ShaderCell.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "AFHTTPRequestOperation.h"
 #import "AFHTTPClient.h"
+
 #if !(TARGET_IPHONE_SIMULATOR)
-#import <QuartzCore/CAMetalLayer.h>
-#import <Metal/Metal.h>
+    #import <QuartzCore/CAMetalLayer.h>
+    #import <Metal/Metal.h>
 #endif
 
 #define RENDER_IMAGE 0
@@ -38,11 +38,6 @@
 #define FOUR_HUNDRED_EIGHTY_P 2
 #define THREE_HUNDRED_SIXTY_P 3
 #define TWO_HUNDRED_FOURTY_P 4
-
-
-#define SHADER_DEFAULT 0
-#define SHADER_TOON 6
-#define SHADER_CLOUD 12
 
 #define UPLOAD_ALERT_VIEW  3
 #define YOUTUBE_BUTTON_TAG  2
@@ -75,7 +70,6 @@
         isCanceled = false;
         renderingExportImage = exportType;
         resolutionType = resolution;
-        shaderType = SHADER_DEFAULT;
         bgColor = Vector3(0.1,0.1,0.1);
         ScreenWidth = screenWidth;
         ScreenHeight = screenHeight;
@@ -88,9 +82,6 @@
     [super viewDidLoad];
     self.screenName = @"RenderingView iOS";
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(creditsUsed:) name:@"creditsupdate" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifiedUsage) name:@"creditsused" object:nil];
-    
     cancelPressed = resAlertShown = NO;
     selectedIndex = 0;
     isAppInBg = false;
@@ -102,19 +93,10 @@
     [self.cancelActivityIndicator setHidden:true];
     [self.watermarkSwitch setOn:YES];
     [self beginViewHideAndShow:true];
-    shaderArray = [[NSMutableArray alloc] init];
     shaderTypesDict = [[NSMutableDictionary alloc] init];
-    [shaderArray addObject:[NSNumber numberWithInt:SHADER_DEFAULT]];
-    [shaderArray addObject:[NSNumber numberWithInt:SHADER_TOON ]];
-    [shaderArray addObject:[NSNumber numberWithInt:SHADER_CLOUD ]];
-    //[shaderArray addObject:[NSNumber numberWithInt:SHADER_PHOTO ]];
     
     [self.delegate freezeEditorRender:YES];
     
-    [shaderTypesDict setObject:NSLocalizedString(@"Normal Shader", nil) forKey:[NSNumber numberWithInt:SHADER_DEFAULT]];
-    [shaderTypesDict setObject:NSLocalizedString(@"Toon Shader", nil) forKey:[NSNumber numberWithInt:SHADER_TOON ]];
-    [shaderTypesDict setObject:NSLocalizedString(@"HQ Rendering", nil) forKey:[NSNumber numberWithInt:SHADER_CLOUD]];
-    //[shaderTypesDict setObject:@"Photo Realistic" forKey:[NSNumber numberWithInt:SHADER_PHOTO ]];
     if([Utility IsPadDevice])
         [self.renderingTypes registerNib:[UINib nibWithNibName:@"ShaderCell" bundle:nil] forCellWithReuseIdentifier:@"TYPE"];
     else
@@ -141,7 +123,6 @@
     }
     _nextButton.tag = START;
     [_checkCreditProgress setHidden:YES];
-    [self updateCreditLable];
     
     self.nextButton.accessibilityHint = NSLocalizedString(@"tap_to_start", nil);
     self.nextButton.accessibilityIdentifier = @"2";
@@ -159,7 +140,6 @@
 
 - (void)trimControl:(RETrimControl *)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue
 {
-    [self updateCreditLable];
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -229,13 +209,11 @@
 
 - (IBAction)startButtonAction:(id)sender
 {
-    if(_nextButton.tag == DONE){
+    if(_nextButton.tag == DONE) {
         [self.limitFramesLbl setHidden:YES];
         [_progressSub setHidden:YES];
         [self cancelButtonAction:nil];
-    }
-    else{
-        
+    } else {
         [Answers logCustomEventWithName:@"ExportNextAction" customAttributes:@{}];
         
         self.nextButton.accessibilityHint = @"";
@@ -253,44 +231,7 @@
             renderingFrame = _trimControl.leftValue;
             [self.trimControl setHidden:YES];
         }
-            NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-        if(resolutionType == TWO_HUNDRED_FOURTY_P && _watermarkSwitch.isOn &&    ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)){
-            [self renderBeginFunction:0];
-        }
-         else if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
-             [_checkCreditProgress setHidden:NO];
-             [_checkCreditProgress startAnimating];
-             [_nextButton setHidden:YES];
-             [[AppHelper getAppHelper] getCreditsForUniqueId:uniqueId Name:[[AppHelper getAppHelper] userDefaultsForKey:@"username"] Email:[[AppHelper getAppHelper] userDefaultsForKey:@"email"] SignInType:[[[AppHelper getAppHelper] userDefaultsForKey:@"signintype"] intValue]];
-            }
-            else{
-                UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"please_signin", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-                [signinAlert show];
-                [signinAlert setTag:SIGNIN_ALERT_VIEW];
-                [self.trimControl setHidden:NO];
-            }
-        }
-}
-
-- (void) saveDeductedCredits:(int)credits
-{
-    NSString *videoType = (resolutionType == THOUSAND_EIGHTY_P) ? @"1080P" : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? @"720P" : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? @"480P" : (resolutionType == THREE_HUNDRED_SIXTY_P) ? @"360P" : @"240P";
-    [[AppHelper getAppHelper] useOrRechargeCredits:[[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]  credits:credits For:videoType];
-}
-
-- (void) creditsUsed:(NSNotification*) notification
-{
-    NSDictionary* userInfo = notification.userInfo;
-    NSLog(@" \n userinfo %@ ", userInfo);
-    BOOL network = [userInfo[@"network"] boolValue];
-    [_checkCreditProgress stopAnimating];
-    [_checkCreditProgress setHidden:YES];
-    if(network) {
-        [self performSelectorOnMainThread:@selector(verifyCreditsAndRender:) withObject:userInfo waitUntilDone:YES];
-    }
-    else{
-        [self.trimControl setHidden:NO];
-        [_nextButton setHidden:NO];
+        [self renderBeginFunction:0];
     }
 }
 
@@ -311,73 +252,6 @@
     [self.renderingProgressLabel setHidden:YES];
     [self.renderingProgressBar setHidden:YES];
     [self performSelectorOnMainThread:@selector(renderFinishAction:) withObject:[NSNumber numberWithInt:renderingExportImage] waitUntilDone:NO];
-}
-
-- (void) verifyCreditsAndRender:(NSDictionary*)userInfo
-{
-    int valueForRender = 0;
-    NSNumber* userCredits = userInfo[@"credits"];
-    BOOL premium = [userInfo[@"premium"] boolValue];
-    
-    if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
-        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 8 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
-    else
-        valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 230 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 100 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 45 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 25 : 10;
-    
-    int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-    int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
-    int creditsForFrames = frames * valueForRender;
-    int credits = (creditsForFrames + waterMarkCredit)  * -1;
-    
-    if([userCredits intValue] >= abs(credits)) {
-        [_creditLable setHidden:YES];
-        if(([shaderArray[selectedIndex] intValue] == SHADER_CLOUD)){
-            [self.activityIndicatorView setHidden:NO];
-            [self.activityIndicatorView startAnimating];
-            [self.delegate syncSceneWithPhysicsWorld];
-            [self.delegate saveScene];
-            [self shaderPhotoAction:credits];
-        }
-        else
-            [self renderBeginFunction:credits];
-    } else if (premium) {
-        if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) {
-            [_creditLable setHidden:YES];
-            [self renderBeginFunction:credits];
-        }  else{
-            UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"not_enough_credits", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-            [notEnoughCredit show];
-            [notEnoughCredit setTag:CREDITS_VIEW];
-            [self.trimControl setHidden:NO];
-            [_nextButton setHidden:NO];
-        }
-    } else{
-        UIAlertView *notEnoughCredit = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"not_enough_credits", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-        [notEnoughCredit show];
-        [notEnoughCredit setTag:CREDITS_VIEW];
-        [self.trimControl setHidden:NO];
-        [_nextButton setHidden:NO];
-    }
-}
-
-- (void) updateCreditLable
-{
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && [[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
-        [_creditLable setHidden:YES];
-    else {
-        [_creditLable setHidden:NO];
-        int valueForRender = 0;
-        if(([shaderArray[selectedIndex] intValue] != SHADER_CLOUD))
-            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 8 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 4 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 2 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 1 : 0;
-        else
-            valueForRender = (resolutionType == THOUSAND_EIGHTY_P) ? 230 : (resolutionType == SEVEN_HUNDRED_TWENTY_P) ? 100 : (resolutionType == FOUR_HUNDRED_EIGHTY_P) ? 45 : (resolutionType == THREE_HUNDRED_SIXTY_P) ? 25 : 10;
-
-        int frames = (renderingExportImage == RENDER_IMAGE) ? 1 : ((int)_trimControl.rightValue - (int)_trimControl.leftValue);
-        int waterMarkCredit = ((!_watermarkSwitch.isOn && ([shaderArray[selectedIndex] intValue] != SHADER_CLOUD)) ? 50 : 0);
-        int creditsForFrames = frames * valueForRender;
-        int credits = (creditsForFrames + waterMarkCredit);
-        _creditLable.text = (credits == 0 ) ? @"" : [NSString stringWithFormat:@"%d Credits", credits];
-    }
 }
 
 -(NSMutableArray*) getFileteredFilePathsFrom:(NSMutableArray*) filePaths
@@ -585,7 +459,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFilesToRender) name:@"FileWriteCompleted" object:nil];
 
     isAppInBg = false;
-    [self updateCreditLable];
     
     UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
@@ -651,18 +524,15 @@
         }
         [NSThread sleepForTimeInterval:0.1];
     }
-    [self.delegate setShaderTypeForRendering:SHADER_DEFAULT];
     if(isCanceled)
         return;
+    
     if(renderingExportImage == RENDER_VIDEO) {
         [self.makeVideoLoading setHidden:NO];
         [self.makeVideoLoading startAnimating];
     }
     
-    if(resolutionType != TWO_HUNDRED_FOURTY_P || (resolutionType == TWO_HUNDRED_FOURTY_P && !_watermarkSwitch.isOn))
-        [self saveDeductedCredits:[credits intValue]];
-    else
-        [self verifiedUsage];
+   [self verifiedUsage];
 }
 
 - (void) renderFinishAction:(NSNumber*)object
@@ -694,89 +564,6 @@
     _nextButton.tag = DONE;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return [shaderArray count];
-}
-
-- (ShaderCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    ShaderCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TYPE" forIndexPath:indexPath];
-    cell.ShaderCellName.text = [NSString stringWithFormat:@"%@",[shaderTypesDict objectForKey:shaderArray[indexPath.row]]];
-    cell.layer.borderWidth = 1.0f;
-    cell.layer.borderColor = [UIColor clearColor].CGColor;
-    if ((int)indexPath.row == 0){
-        cell.ShaderImage.image =[UIImage imageNamed:@"render1.png"];
-    }
-    else if ((int)indexPath.row == 1){
-        cell.ShaderImage.image =[UIImage imageNamed:@"render2.png"];
-    }
-    else if ((int)indexPath.row == 2){
-        cell.ShaderImage.image =[UIImage imageNamed:@"render3.png"];
-    }
-    
-    
-    if(selectedIndex == (int)indexPath.row){
-        UIColor *borderColor = [UIColor purpleColor];
-        [cell.ShaderImage.layer setBorderColor:borderColor.CGColor];
-        [cell.ShaderImage.layer setBorderWidth:3.0];
-    }
-    else{
-        UIColor *borderColor = [UIColor clearColor];
-        [cell.ShaderImage.layer setBorderColor:borderColor.CGColor];
-        [cell.ShaderImage.layer setBorderWidth:2.0];
-    }
-    return cell;
-}
-
-- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([shaderArray[indexPath.row] intValue] == SHADER_TOON){
-        NSLog(@" Selcted index: %d",(int)indexPath.row);
-        tempSelectedIndex = (int)indexPath.row;
-        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [self.renderDesc setText:[NSString stringWithFormat:@"Render Toon Shader in your device."]];
-        selectedIndex = (int)indexPath.row;
-        [self.renderingTypes reloadData];
-    }
-    else if([shaderArray[indexPath.row] intValue] == SHADER_DEFAULT){
-        shaderType = [shaderArray[indexPath.row] intValue];
-        NSLog(@" Selcted index: %d",(int)indexPath.row);
-        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [self.renderDesc setText:[NSString stringWithFormat:@"Render Normal Shader in your device."]];
-        selectedIndex = (int)indexPath.row;
-        [self.renderingTypes reloadData];
-    }
-    else if ([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
-//        tempSelectedIndex = (int)indexPath.row;
-        if(!resAlertShown) {
-            UIAlertView *resolutionAlert = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please try 240p or 360p resolution which are much cheaper so that you can preview the scene before final renders." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [resolutionAlert show];
-            resAlertShown = YES;
-        }
-        self.resolutionSegment.selectedSegmentIndex = TWO_HUNDRED_FOURTY_P;
-        [self cameraResolutionChanged:nil];
-        [self.renderDesc setText:[NSString stringWithFormat:@"Render with High Quality in cloud."]];
-        shaderType = [shaderArray[indexPath.row] intValue];
-        NSLog(@" Selcted index: %d",(int)indexPath.row);
-        [self.nextButton setTitle:@"Upload" forState:UIControlStateNormal];
-        selectedIndex = (int)indexPath.row;
-        [self.renderingTypes reloadData];
-    }
-    
-    if([shaderArray[indexPath.row] intValue] == SHADER_CLOUD){
-        [_watermarkSwitch setOn:NO animated:YES];
-        [_watermarkSwitch setEnabled:NO];
-        [_colorPickerBtn setEnabled:NO];
-    }
-    else{
-        [_watermarkSwitch setEnabled:YES];
-        [_watermarkSwitch setOn:YES animated:YES];
-        [_colorPickerBtn setEnabled:YES];
-    }
-    [self updateCreditLable];
-}
-
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     switch (alertView.tag) {
@@ -790,7 +577,6 @@
                     isCanceled = true;
                     [self.delegate clearFolder:NSTemporaryDirectory()];
                     [self.delegate resumeRenderingAnimationScene];
-                    [_delegate loginBtnAction:nil];
                     [self deallocMem];
                 }];
             }
@@ -830,12 +616,6 @@
 {
     resolutionType = (int)self.resolutionSegment.selectedSegmentIndex;
     [self.delegate cameraResolutionChanged:resolutionType];
-    [self updateCreditLable];
-}
-
-- (IBAction)waterMarkValueChanged:(id)sender
-{
-        [self updateCreditLable];
 }
 
 - (IBAction) cancelButtonAction:(id)sender
@@ -953,7 +733,6 @@
             self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d",renderingStartFrame + 1];
         }
         else if(renderingExportImage == RENDER_VIDEO) {
-            NSLog(@"progress label %d / %d ", 1 + (renderingFrame - (int)_trimControl.leftValue),(int)(_trimControl.rightValue - _trimControl.leftValue)+1);
             self.renderingProgressLabel.text = [NSString stringWithFormat:@"%d/%d", renderingFrame ,(int)_trimControl.rightValue];
         }
         else if(renderingExportImage == RENDER_GIF) {
@@ -961,11 +740,7 @@
         }
         self.renderingProgressBar.progress = ((float)(renderingFrame - (int)_trimControl.leftValue))/(((int)_trimControl.rightValue - (int)_trimControl.leftValue));
         
-        
-        if(selectedIndex < [shaderArray count])
-            shaderType = [shaderArray[selectedIndex] intValue];
-        
-        [self.delegate renderFrame:renderingFrame withType:shaderType isImage:(renderingExportImage == RENDER_IMAGE) andRemoveWatermark:(!self.watermarkSwitch.isOn)];
+        [self.delegate renderFrame:renderingFrame isImage:(renderingExportImage == RENDER_IMAGE)];
         
         NSString *tempDir = NSTemporaryDirectory();
         NSString *imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, renderingFrame];
@@ -978,14 +753,11 @@
 
 - (void) MakeVideo
 {
-    NSLog(@"Camera Width %f Height %f " ,cameraResolutionWidth,cameraResolutionHeight);
-    
     imagesArray = [[NSMutableArray alloc] init];
     NSString *tempDir = NSTemporaryDirectory();
     
     for (int i = _trimControl.leftValue ; i <= _trimControl.rightValue ; i++) {
         NSString* file = [tempDir stringByAppendingPathComponent:[NSString stringWithFormat:@"r-%d.png", i]];
-        NSLog(@"Rendering Frame: %d",i);
         [imagesArray addObject:file];
     }
     
@@ -1000,7 +772,8 @@
         return;
     
     AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:self.videoFilePath] fileType:AVFileTypeQuickTimeMovie error:&error];
-    NSLog(@" Video Error %@ ", error.localizedDescription);
+    if(error)
+        NSLog(@" Video Error %@ ", error.localizedDescription);
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264, AVVideoCodecKey, [NSNumber numberWithInt:cameraResolutionWidth], AVVideoWidthKey, [NSNumber numberWithInt:cameraResolutionHeight], AVVideoHeightKey, nil];
     
     AVAssetWriterInput* videoWriterInput = [AVAssetWriterInput
@@ -1202,12 +975,9 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
         if(self.watermarkSwitch.isOn)
             [self.watermarkSwitch setOn:NO];
             [self.renderingTypes reloadData];
-    }else{
+    } else {
         selectedIndex = tempSelectedIndex;
         [self.renderingTypes reloadData];
-        
-        if(selectedIndex < [shaderArray count])
-            shaderType = [shaderArray[selectedIndex] intValue];
     }
     
     [[UIApplication sharedApplication] endIgnoringInteractionEvents];

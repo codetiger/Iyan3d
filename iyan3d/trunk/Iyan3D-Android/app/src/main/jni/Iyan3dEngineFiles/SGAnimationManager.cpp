@@ -444,9 +444,9 @@ bool SGAnimationManager::storeAnimations(int assetId)
     int oldResolution = animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
 
     animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = 2;
-    animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true, animScene->currentFrame);
+    animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), true, animScene->currentFrame);
     if(animScene->shaderMGR->deviceType == METAL)
-        animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true, animScene->currentFrame);
+        animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), true, animScene->currentFrame);
     animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = oldResolution;
     
     vector<int> totalKeyFrames;

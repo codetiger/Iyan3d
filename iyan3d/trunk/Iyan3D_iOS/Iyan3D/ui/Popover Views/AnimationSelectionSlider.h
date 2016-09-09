@@ -30,7 +30,6 @@
 - (void) removeTempNodeFromScene;
 - (void)deallocSubViews;
 - (void) reloadFrames;
-- (IBAction)loginBtnAction:(id)sender;
 
 @end
 

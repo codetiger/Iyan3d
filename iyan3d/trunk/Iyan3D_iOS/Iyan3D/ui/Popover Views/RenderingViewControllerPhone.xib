@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -13,27 +13,19 @@
                 <outlet property="cancelButton" destination="ZQF-TY-3kd" id="Ph4-Jc-ZgH"/>
                 <outlet property="checkCreditProgress" destination="5ol-zq-fUr" id="78P-b3-jP3"/>
                 <outlet property="colorPickerBtn" destination="gvb-oT-QNE" id="VKT-FS-Rzl"/>
-                <outlet property="creditLable" destination="uzw-0x-DE0" id="kqJ-2r-cUl"/>
-                <outlet property="exportButton" destination="Gld-fi-edq" id="agU-yN-wOg"/>
                 <outlet property="helpBtn" destination="dkR-IH-QxK" id="vuS-a9-PRe"/>
                 <outlet property="limitFramesLbl" destination="HoP-9h-eKn" id="ICy-GM-L5y"/>
                 <outlet property="makeVideoLoading" destination="V7W-A0-gIs" id="qey-f4-wPq"/>
                 <outlet property="nextButton" destination="jxD-ic-6yT" id="2Py-pf-esi"/>
                 <outlet property="progressSub" destination="khA-DN-AoL" id="nWz-Kl-Et3"/>
-                <outlet property="renderDesc" destination="CBn-9F-7BL" id="tsJ-fd-ObW"/>
                 <outlet property="renderedImageView" destination="FZY-Eg-gZi" id="rUS-qV-iQn"/>
                 <outlet property="renderingProgressBar" destination="t7G-EF-a3t" id="fik-8n-fgj"/>
                 <outlet property="renderingProgressLabel" destination="Bev-df-JmR" id="QPN-6H-5Cb"/>
-                <outlet property="renderingStyleLabel" destination="OfE-WV-3t8" id="c4c-XJ-nHl"/>
-                <outlet property="renderingTypes" destination="8hd-nw-Euc" id="9E2-Pb-PHQ"/>
                 <outlet property="resolutionSegment" destination="8I1-7e-l7o" id="oaO-cp-u1b"/>
                 <outlet property="resolutionTypeLabel" destination="0gK-8w-KH3" id="uUd-T7-pmg"/>
-                <outlet property="shaderStyle" destination="8hd-nw-Euc" id="ctd-6D-BW2"/>
                 <outlet property="shareActivityIndicator" destination="QcO-uo-AeA" id="JDU-rZ-Bzq"/>
                 <outlet property="startButtonText" destination="jxD-ic-6yT" id="MgT-g5-3Ck"/>
                 <outlet property="view" destination="22B-4k-y0q" id="tQ3-K1-1EI"/>
-                <outlet property="waterMarkLabel" destination="Zza-L3-rRe" id="65k-fn-IPH"/>
-                <outlet property="watermarkSwitch" destination="MPY-C0-WiO" id="CcC-iL-jtU"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -75,39 +67,29 @@
                     <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                 </progressView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BG COLOR" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5xo-sK-aOd">
-                    <rect key="frame" x="353" y="53" width="128" height="14"/>
+                    <rect key="frame" x="385" y="74" width="128" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Gld-fi-edq">
-                    <rect key="frame" x="502" y="279" width="40" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                    <state key="normal" backgroundImage="videoShare.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gvb-oT-QNE">
+                    <rect key="frame" x="435" y="92" width="28" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="color.png"/>
                     <connections>
-                        <action selector="exportButtonAction:" destination="-1" eventType="touchUpInside" id="OgJ-TX-psQ"/>
+                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="NJm-Tj-MMc"/>
                     </connections>
                 </button>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="ESt-EA-JnN">
-                    <rect key="frame" x="274" y="142" width="20" height="20"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RESOLUTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0gK-8w-KH3">
+                    <rect key="frame" x="172" y="70" width="98" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                </activityIndicatorView>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="QcO-uo-AeA">
-                    <rect key="frame" x="503" y="276" width="37" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </activityIndicatorView>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="zPE-vB-GV8">
-                    <rect key="frame" x="41" y="276" width="37" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                </activityIndicatorView>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="8I1-7e-l7o">
-                    <rect key="frame" x="24" y="72" width="330" height="29"/>
+                    <rect key="frame" x="56" y="93" width="330" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <segments>
                         <segment title="1080p"/>
@@ -121,6 +103,31 @@
                         <action selector="cameraResolutionChanged:" destination="-1" eventType="valueChanged" id="k33-qw-OmW"/>
                     </connections>
                 </segmentedControl>
+                <view contentMode="scaleToFill" id="khA-DN-AoL" userLabel="progressHolder">
+                    <rect key="frame" x="167" y="219" width="234" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIMIT FRAMES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HoP-9h-eKn">
+                    <rect key="frame" x="203" y="195" width="163" height="21"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <accessibility key="accessibilityConfiguration" hint="Limit the number of frames to be exported." identifier="2"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="ESt-EA-JnN">
+                    <rect key="frame" x="274" y="142" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="QcO-uo-AeA">
+                    <rect key="frame" x="503" y="276" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </activityIndicatorView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="zPE-vB-GV8">
+                    <rect key="frame" x="41" y="276" width="37" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </activityIndicatorView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jxD-ic-6yT">
                     <rect key="frame" x="468" y="280" width="80" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -147,53 +154,6 @@
                         <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="IDC-bv-oJo"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RENDERING STYLE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OfE-WV-3t8">
-                    <rect key="frame" x="110" y="107" width="348" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" indicatorStyle="white" dataMode="none" id="8hd-nw-Euc">
-                    <rect key="frame" x="20" y="127" width="528" height="111"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="30" minimumInteritemSpacing="30" id="5Rv-fL-xRa">
-                        <size key="itemSize" width="80" height="90"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="tP5-Of-rwe"/>
-                        <outlet property="delegate" destination="-1" id="DSo-Vl-qHf"/>
-                    </connections>
-                </collectionView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Render Normal Shader in Your Device" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CBn-9F-7BL">
-                    <rect key="frame" x="117" y="242" width="328" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <view contentMode="scaleToFill" id="khA-DN-AoL" userLabel="progressHolder">
-                    <rect key="frame" x="167" y="280" width="234" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WATERMARK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Zza-L3-rRe">
-                    <rect key="frame" x="466" y="49" width="74" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="MPY-C0-WiO">
-                    <rect key="frame" x="479" y="71" width="51" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Enable/Disable Watermark image." identifier="2"/>
-                    <connections>
-                        <action selector="waterMarkValueChanged:" destination="-1" eventType="valueChanged" id="DtO-2d-8OG"/>
-                    </connections>
-                </switch>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5/10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="Bev-df-JmR">
                     <rect key="frame" x="152" y="276" width="225" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -201,14 +161,6 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gvb-oT-QNE">
-                    <rect key="frame" x="403" y="71" width="28" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="color.png"/>
-                    <connections>
-                        <action selector="colorPickerAction:" destination="-1" eventType="touchUpInside" id="NJm-Tj-MMc"/>
-                    </connections>
-                </button>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="V7W-A0-gIs">
                     <rect key="frame" x="438" y="276" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -217,29 +169,6 @@
                     <rect key="frame" x="484" y="277" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                 </activityIndicatorView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RESOLUTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0gK-8w-KH3">
-                    <rect key="frame" x="140" y="49" width="98" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIMIT FRAMES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HoP-9h-eKn">
-                    <rect key="frame" x="203" y="256" width="163" height="21"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Limit the number of frames to be exported." identifier="2"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="uzw-0x-DE0">
-                    <rect key="frame" x="464" y="261" width="80" height="21"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Credits required for the current export." identifier="2"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
@@ -249,6 +178,5 @@
     <resources>
         <image name="Help_iphone.png" width="22" height="22"/>
         <image name="color.png" width="23" height="23"/>
-        <image name="videoShare.png" width="40" height="30"/>
     </resources>
 </document>

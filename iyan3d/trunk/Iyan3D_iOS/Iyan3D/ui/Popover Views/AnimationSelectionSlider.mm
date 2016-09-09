@@ -715,7 +715,6 @@
         }
             
         case SIGNIN_ALERT: {
-            [self.delegate loginBtnAction:nil];
             break;
         }
         default:

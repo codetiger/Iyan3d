@@ -102,11 +102,6 @@
     
 }
 
-- (void) loginBtnAction
-{
-    
-}
-
 - (void) optionBtnDelegate:(int)indexValue
 {
     

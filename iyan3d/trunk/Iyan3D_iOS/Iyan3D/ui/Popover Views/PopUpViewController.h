@@ -19,7 +19,6 @@
 - (void) addFrameBtnDelegateAction:(int)indexValue;
 - (void) myObjectsBtnDelegateAction:(int)indexValue;
 - (void)highlightObjectList;
-- (void) loginBtnAction;
 - (void) propertiesBtnDelegate:(int)indexValue;
 - (void) optionBtnDelegate:(int)indexValue;
 - (NODE_TYPE) getNodeType:(int)nodeId;
@@ -35,7 +34,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *loginImage;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
-- (IBAction)loginBtnAction:(id)sender;
 @property (weak, nonatomic) id <PopUpViewControllerDelegate> delegate;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil clickedButton:(NSString *)buttonValue;
 - (void *)updateDescelect:(NSIndexPath *)indexPath;

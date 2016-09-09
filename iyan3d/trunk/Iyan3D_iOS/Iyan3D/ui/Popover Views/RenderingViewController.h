@@ -22,7 +22,7 @@
 
 @protocol RenderingViewControllerDelegate
 - (void) freezeEditorRender:(BOOL) freeze;
-- (void) renderFrame:(int)frame withType:(int)shaderType isImage:(bool)isImage andRemoveWatermark:(bool)removeWatermark;
+- (void) renderFrame:(int)frame isImage:(bool)isImage;
 - (void) setShaderTypeForRendering:(int)shaderType;
 - (NSMutableArray*) getFileNamesToAttach:(bool) forBackUp;
 - (BOOL) canUploadToCloud;
@@ -32,7 +32,6 @@
 - (void) resumeRenderingAnimationScene;
 - (void) saveScene;
 - (void) changeRenderingBgColor:(Vector4)vertexColor;
-- (IBAction)loginBtnAction:(id)sender;
 - (void) syncSceneWithPhysicsWorld;
 - (void) showPreview:(NSString*) outputPath;
 
@@ -42,7 +41,7 @@
 
 @interface RenderingViewController : GAITrackedViewController<RETrimControlDelegate , NSURLConnectionDelegate,UICollectionViewDataSource,UICollectionViewDelegate,TextColorPickerDelegate, MediaPreviewDelegate, UIGestureRecognizerDelegate>
 {
-    int renderingStartFrame, renderingEndFrame, renderingFrame , shaderType,finalFrame,publishId;
+    int renderingStartFrame, renderingEndFrame, renderingFrame, finalFrame, publishId;
     bool isCanceled,isAppInBg;
     BOOL resAlertShown;
 	int renderingExportImage;
@@ -52,7 +51,7 @@
     float cameraResolutionWidth, cameraResolutionHeight;
     UIAlertView *uploadSceneAlert;
     UIAlertView *logoutAlert;
-    NSMutableArray *imagesArray, *shaderArray;
+    NSMutableArray *imagesArray;
     NSMutableDictionary *shaderTypesDict;
     CacheSystem* cache;
     int selectedIndex,tempSelectedIndex;

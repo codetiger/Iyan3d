@@ -758,7 +758,7 @@ void RenderHelper::renderEnvelopes()
     }
 }
 
-void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark, int frame, Vector4 bgColor)
+void RenderHelper::renderAndSaveImage(char *imagePath, bool isDisplayPrepared, int frame, Vector4 bgColor)
 {
     if(!renderingScene || !smgr || renderingScene->isRigMode)
         return;
@@ -797,10 +797,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     }
     
     vector<string> previousMaterialNames;
-    if(renderingType != shaderType)
-    {
-        renderingScene->updater->resetMaterialTypes(true);
-    }
     
     std::map< int , Vector3 > nPositions;
     for(unsigned long i = 0; i < renderingScene->nodes.size(); i++){
@@ -832,8 +828,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture", watermarkPath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
     int waterMarkSize = SceneHelper::screenWidth * 0.2;
     
-    if(!removeWaterMark)
-        smgr->draw2DImage(renderingScene->watermarkTexture, Vector2(SceneHelper::screenWidth - waterMarkSize, SceneHelper::screenHeight - waterMarkSize), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     if(smgr->device == METAL)
         rttShadowMap();
     
@@ -859,9 +853,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDi
     renderingScene->redGrid->node->setVisible(true);
 
     ShaderManager::shadowsOff = isShadowsOff;
-    
-    if(renderingType != shaderType)
-        renderingScene->updater->resetMaterialTypes(false);
     
     if(selectedObjectId != NOT_SELECTED)
         renderingScene->selectMan->selectObject(selectedObjectId, selectedMeshBufferId, false);

@@ -1337,23 +1337,22 @@ BOOL missingAlertShown;
 
 - (IBAction)importBtnAction:(id)sender
 {
-//    SceneImporter *loader = new SceneImporter();
-//    wstring text = L"Hello";
-//    loader->import3DText(editorScene, text, FileHelper::getDocumentsDirectory() + "test.ttf", 4, 10, 0.5, 4, false, false);
-//    [self reloadSceneObjects];
-
     if(![[AppHelper getAppHelper] userDefaultsForKey:@"addbtnpressed"])
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithBool:YES] withKey:@"addbtnpressed"];
-    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==TOOLBAR_LEFT);
+
+    BOOL status = ([[[AppHelper getAppHelper] userDefaultsForKey:@"toolbarPosition"] integerValue] == TOOLBAR_LEFT);
     _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"importBtn"];
     [_popUpVc.view setClipsToBounds:YES];
+    
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*8) : CGSizeMake(205.0, 39*8);
+    self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*5) : CGSizeMake(205.0, 39*5);
     self.popoverController.delegate =self;
     self.popUpVc.delegate=self;
+    
     CGRect rect = _importBtn.frame;
     rect = [self.view convertRect:rect fromView:_importBtn.superview];
+    
     [self.popoverController presentPopoverFromRect:rect inView:self.view permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight animated:YES];
 }
 
@@ -2219,14 +2218,14 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     editorScene->updater->resetMaterialTypes((shaderType == 0) ? false : true);
 }
 
-- (void) renderFrame:(int)frame withType:(int)shaderType isImage:(bool)isImage andRemoveWatermark:(bool)removeWatermark
+- (void) renderFrame:(int)frame isImage:(bool)isImage
 {
     editorScene->renHelper->isExportingImages = true;
     editorScene->updatePhysics(frame);
     editorScene->updater->setDataForFrame(frame);
     NSString* tempDir = NSTemporaryDirectory();
     NSString* imageFilePath = [NSString stringWithFormat:@"%@/r-%d.png", tempDir, frame];
-    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], shaderType, false, removeWatermark,(isImage) ? -1 : frame, renderBgColor);
+    editorScene->renHelper->renderAndSaveImage((char*)[imageFilePath cStringUsingEncoding:NSUTF8StringEncoding], false, (isImage) ? -1 : frame, renderBgColor);
 }
 
 - (void) freezeEditorRender:(BOOL) freeze
@@ -2606,26 +2605,26 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     
     [self addFabricEvent:@"ImportAction" WithAttribute:indexValue];
     switch (indexValue) {
-        case IMPORT_PARTICLE:
-        case IMPORT_MODELS: {
-            if([Utility IsPadDevice]){
-                [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-                assetSelectionSlider.assetSelectionDelegate = self;
-                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-            }
-            else{
-                [self.popoverController dismissPopoverAnimated:YES];
-                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-                assetSelectionSlider.assetSelectionDelegate = self;
-                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-            }
-            NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
-            assetSelectionSlider.modelCategory.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
-            assetSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
-            
-            break;
-        }   case IMPORT_VIDEO:
+//        case IMPORT_PARTICLE:
+//        case IMPORT_MODELS: {
+//            if([Utility IsPadDevice]) {
+//                [self.popoverController dismissPopoverAnimated:YES];
+//                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+//                assetSelectionSlider.assetSelectionDelegate = self;
+//                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+//            } else {
+//                [self.popoverController dismissPopoverAnimated:YES];
+//                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+//                assetSelectionSlider.assetSelectionDelegate = self;
+//                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
+//            }
+//            NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
+//            assetSelectionSlider.modelCategory.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+//            assetSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
+//            
+//            break;
+//        }
+        case IMPORT_VIDEO:
         case IMPORT_IMAGES:
             if([Utility IsPadDevice])
             {
@@ -2684,32 +2683,32 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             objVc.addBtn.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
             break;
         }
-        case IMPORT_ADDBONE:{
-            [self.popoverController dismissPopoverAnimated:YES];
-            NODE_TYPE selectedNodeType = NODE_UNDEFINED;
-            if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-                selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
-                
-                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && selectedNodeType != NODE_RIG) {
-                    UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Bones cannot be added to this model.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-                    [error show];
-                } else if(selectedNodeType == NODE_RIG && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
-                    UIAlertView* warning = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"model_cannot_add_bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"NO", nil) otherButtonTitles:NSLocalizedString(@"YES", nil), nil];
-                    [warning setTag:SGR_WARNING];
-                    [warning show];
-                    
-                } else {
-                    [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:YES];
-                }
-            }
-            else
-            {
-                UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Please Select any Node to add Bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-                [error show];
-            }
-            break;
-        }
-        case IMPORT_TEXT:{
+//        case IMPORT_ADDBONE: {
+//            [self.popoverController dismissPopoverAnimated:YES];
+//            NODE_TYPE selectedNodeType = NODE_UNDEFINED;
+//            if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+//                selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
+//                
+//                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && selectedNodeType != NODE_RIG) {
+//                    UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Bones cannot be added to this model.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+//                    [error show];
+//                } else if(selectedNodeType == NODE_RIG && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
+//                    UIAlertView* warning = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"model_cannot_add_bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"NO", nil) otherButtonTitles:NSLocalizedString(@"YES", nil), nil];
+//                    [warning setTag:SGR_WARNING];
+//                    [warning show];
+//                    
+//                } else {
+//                    [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:YES];
+//                }
+//            }
+//            else
+//            {
+//                UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Please Select any Node to add Bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+//                [error show];
+//            }
+//            break;
+//        }
+        case IMPORT_TEXT: {
             if([Utility IsPadDevice])
             {
                 [self.popoverController dismissPopoverAnimated:YES];
@@ -2818,7 +2817,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
 
     if(indexValue==EXPORT_IMAGE) {
-        renderBgColor = Vector4(0.1,0.1,0.1,1.0);
+        renderBgColor = Vector4(0.1, 0.1, 0.1, 1.0);
         if([Utility IsPadDevice]) {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;

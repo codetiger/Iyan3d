@@ -26,8 +26,7 @@
 @protocol TextSelectionDelegate
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
-- (void) load3DTex:(int)type AssetId:(int)assetId TextureName:(NSString*)textureName TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors
-          FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode;
+- (void) load3DTex:(int)type AssetId:(int)assetId TextureName:(NSString*)textureName TypedText:(NSString*)typedText FontSize:(int)fontSize BevelValue:(float)bevelRadius TextColor:(Vector4)colors FontPath:(NSString*)fontFileName isTempNode:(bool)isTempNode;
 - (void) removeTempNodeFromScene;
 - (BOOL) addTempNodeToScene;
 - (void) textColorPicker:(UIView*)colorPickerButton;
