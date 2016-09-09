@@ -356,7 +356,8 @@ int SceneImporter::loadMaterial2Node(SGNode *sceneNode, int materialIndex, bool 
         material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
         
         string texturePath = getFileName(string(path.data));
-        copyFile(folderPath + texturePath, FileHelper::getTexturesDirectory() + texturePath);
+        if(folderPath != FileHelper::getTexturesDirectory())
+            copyFile(folderPath + texturePath, FileHelper::getTexturesDirectory() + texturePath);
         
         Texture* texture = sgScene->getSceneManager()->loadTexture(texturePath, FileHelper::getTexturesDirectory() + texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
         if(texture) {
@@ -481,7 +482,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
         }
 
         ((SkinMesh*)mesh)->finalize();
-        sceneNode->setSkinningData((SkinMesh*)mesh);
+        sceneNode->setSkinningData((SkinMesh*)mesh, ext != "sgr");
         
         sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
