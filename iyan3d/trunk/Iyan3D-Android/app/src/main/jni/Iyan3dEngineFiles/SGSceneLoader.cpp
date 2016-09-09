@@ -306,29 +306,28 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
     
     if(!sgnode->node) {
         delete sgnode;
-        Logger::log(INFO,"SGANimationScene","Node not loaded");
+        Logger::log(INFO, "SGANimationScene", "Node not loaded");
         currentScene->freezeRendering = false;
         return NULL;
     }
     
-    if(sgnode->getType() == NODE_PARTICLES && isTempNode)
-        sgnode->getProperty(SELECTED).value.x = true; // Vector4(true, 0, 0, 0), UNDEFINED);
-    else if(sgnode->getType() == NODE_PARTICLES && !isTempNode)
-        sgnode->getProperty(SELECTED).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
+    if(sgnode->getType() == NODE_PARTICLES)
+        sgnode->getProperty(SELECTED).value.x = isTempNode;
     
     sgnode->assetId = assetId;
     sgnode->name = name;
     sgnode->setInitialKeyValues(actionType);
     sgnode->node->updateAbsoluteTransformation();
     sgnode->node->updateAbsoluteTransformationOfChildren();
+
     if(type == NODE_CAMERA)
         ShaderManager::camPos = sgnode->node->getAbsolutePosition();
-    else if (type == NODE_LIGHT){
+    else if (type == NODE_LIGHT) {
 #ifndef UBUNTU
         currentScene->initLightCamera(sgnode->node->getPosition());
         addLight(sgnode);
 #endif
-    } else if(type == NODE_IMAGE || type == NODE_VIDEO){
+    } else if(type == NODE_IMAGE || type == NODE_VIDEO) {
         sgnode->getProperty(LIGHTING).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
     } else if (type == NODE_TEXT_SKIN) {
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache();
@@ -340,6 +339,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
 
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
+    
     currentScene->nodes.push_back(sgnode);
     sgnode->node->setID(currentScene->assetIDCounter++);
     performUndoRedoOnNodeLoad(sgnode,actionType);

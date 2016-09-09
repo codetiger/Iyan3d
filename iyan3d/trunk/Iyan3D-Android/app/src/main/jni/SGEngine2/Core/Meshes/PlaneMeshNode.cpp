@@ -13,14 +13,14 @@ PlaneMeshNode::PlaneMeshNode(float aspectRatio)
     this->mesh = new Mesh();
     
     float width = 6.0 * aspectRatio;
-    float xCoord = width/2.0;
+    float xCoord = width / 2.0;
     float yCoord = 3.0;
 
     vector<Vector3> vertPosition;
-    vertPosition.push_back(Vector3(xCoord, yCoord, 0.0)); // Right Top Corner
-    vertPosition.push_back(Vector3(xCoord, -yCoord, 0.0)); // Right Bottom
-    vertPosition.push_back(Vector3(-xCoord, -yCoord, 0.0)); // Left Bottom
-    vertPosition.push_back(Vector3(-xCoord ,yCoord, 0.0)); // Left Top Corner
+    vertPosition.push_back(Vector3( xCoord,  yCoord, 0.0));
+    vertPosition.push_back(Vector3( xCoord, -yCoord, 0.0));
+    vertPosition.push_back(Vector3(-xCoord, -yCoord, 0.0));
+    vertPosition.push_back(Vector3(-xCoord,  yCoord, 0.0));
     
     vector<Vector3> vertNormal;
     vertNormal.push_back(Vector3(0.0, 0.0, 1.0));
@@ -49,8 +49,8 @@ PlaneMeshNode::PlaneMeshNode(float aspectRatio)
     texCoord1.clear();
     
     unsigned short indices[6] = {
-        0,3,1,
-        2,1,3
+        0, 3, 1,
+        2, 1, 3
     };
     
     for(int i = 0; i < 6; i++)
@@ -67,5 +67,4 @@ PlaneMeshNode::~PlaneMeshNode()
 
 void PlaneMeshNode::update()
 {
-    
 }
