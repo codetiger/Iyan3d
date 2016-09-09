@@ -10,28 +10,28 @@
 
 SGCircleNode::SGCircleNode(int noOfVertices, float radius, bool isAllAxis)
 {
-    drawMode = DRAW_MODE_LINE_STRIP;
-    this->mesh = new Mesh();
-    
-    addCircleWithAxis(mesh, 1, noOfVertices, radius);
+    drawMode = DRAW_MODE_LINES;
+    vector< vertexData > mbvd;
+    vector< unsigned short > mbi;
+
+    addCircleWithAxis(1, noOfVertices, radius, mbvd, mbi);
     if(isAllAxis) {
-        addCircleWithAxis(mesh, 0, noOfVertices, radius);
-        addCircleWithAxis(mesh, 2, noOfVertices, radius);
+        addCircleWithAxis(0, noOfVertices, radius, mbvd, mbi);
+        addCircleWithAxis(2, noOfVertices, radius, mbvd, mbi);
     }
-    
+
+    this->mesh = new Mesh();
+    mesh->addMeshBuffer(mbvd, mbi, 0);
+
     updateAbsoluteTransformation();
 }
 
-void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float radius)
+void SGCircleNode::addCircleWithAxis(int axis, int noOfVertices, float radius, vector< vertexData > &mbvd, vector< unsigned short > &mbi)
 {
-    int prevVertexCount = m->getVerticesCountInMeshBuffer(0);
+    int prevVertexCount = mbvd.size();
     double theta = 0.0;
     
-    vector< vertexData > mbvd;
-    vector< unsigned short > mbi;
-    
     for(int i = 0; i < noOfVertices + 1; i++) {
-        vertexData vert;
         Vector3 direction;
         
         if(axis == 0)
@@ -41,15 +41,16 @@ void SGCircleNode::addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float 
         else if(axis == 2)
             direction = Vector3(theta, 0.0, 0.0).rotationToDirection().normalize();
         
+        vertexData vert;
         vert.vertPosition = (direction * Vector3(radius));
         mbvd.push_back(vert);
         theta += 360.0 / noOfVertices;
+        
+        if(i != 0) {
+            mbi.push_back(prevVertexCount + i - 1);
+            mbi.push_back(prevVertexCount + i);
+        }
     }
-
-    for(int i = 0; i < noOfVertices + 1; i++) {
-        mbi.push_back(prevVertexCount + i);
-    }
-    m->addMeshBuffer(mbvd, mbi, 0);
 }
 
 SGCircleNode::~SGCircleNode()

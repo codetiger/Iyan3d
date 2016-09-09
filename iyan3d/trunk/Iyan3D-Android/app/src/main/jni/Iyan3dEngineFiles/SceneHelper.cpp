@@ -79,7 +79,7 @@ SGNode* SceneHelper::createCircle(SceneManager *smgr)
     SGNode* rotationCircle = new SGNode(NODE_SGM);
     rotationCircle->materialProps.push_back(new MaterialProperty(NODE_SGM));
 
-    rotationCircle->node = smgr->createCircleNode(100,1.0,"RotationCircle");
+    rotationCircle->node = smgr->createCircleNode(100, 1.0, "RotationCircle");
     rotationCircle->node->setID(CIRCLE_NODE_ID);
     rotationCircle->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
     Vector4 vColor = Vector4(0.0, 1.0, 0.0, 1.0);

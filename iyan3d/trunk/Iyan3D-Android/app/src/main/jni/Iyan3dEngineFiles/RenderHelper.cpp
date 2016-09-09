@@ -143,8 +143,8 @@ void RenderHelper::drawCircle()
             dir.normalize();
             // long lines for every 45 deg gap.
             float lineLenght = (int(theta) % 45 == 0) ? longLineLength:shorLineLength;
-            Vector3 vertexPos1 = nodePos + (dir * Vector3((circleAxis.x * radius),(circleAxis.y * radius),(circleAxis.z * radius)));
-            Vector3 vertexPos2 = nodePos + (dir * Vector3((circleAxis.x * radius - lineLenght),(circleAxis.y * radius - lineLenght),(circleAxis.z * radius - lineLenght)));
+            Vector3 vertexPos1 = nodePos + (dir * Vector3((circleAxis.x * radius), (circleAxis.y * radius), (circleAxis.z * radius)));
+            Vector3 vertexPos2 = nodePos + (dir * Vector3((circleAxis.x * radius - lineLenght), (circleAxis.y * radius - lineLenght), (circleAxis.z * radius - lineLenght)));
             smgr->draw3DLine(vertexPos1, vertexPos2, Vector3(0.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
             theta += 5.0;
         }

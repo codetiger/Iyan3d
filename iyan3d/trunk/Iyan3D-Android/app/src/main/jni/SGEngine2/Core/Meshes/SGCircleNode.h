@@ -17,7 +17,7 @@ class SGCircleNode : public MeshNode {
     
 public:
     SGCircleNode(int noOfVertices, float radius, bool isAllAxis = false);
-    void addCircleWithAxis(Mesh *m, int axis, int noOfVertices, float radius);
+    void addCircleWithAxis(int axis, int noOfVertices, float radius, vector< vertexData > &mbvd, vector< unsigned short > &mbi);
     ~SGCircleNode();
     void update();
 };
