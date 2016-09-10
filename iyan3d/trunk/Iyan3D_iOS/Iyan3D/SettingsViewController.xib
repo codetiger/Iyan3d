@@ -173,11 +173,6 @@
                                 <action selector="doneBtnAction:" destination="-1" eventType="touchUpInside" id="gD3-9b-6Hd"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uhy-Dt-Lj7">
-                            <rect key="frame" x="192" y="8" width="20" height="25"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to restore purchase. Works only if purchased Premium in previous versions." identifier="2"/>
-                        </view>
                     </subviews>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

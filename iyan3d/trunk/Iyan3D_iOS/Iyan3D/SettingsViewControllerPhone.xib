@@ -45,12 +45,6 @@
                                 <action selector="doneBtnAction:" destination="-1" eventType="touchUpInside" id="cXU-lX-at9"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" id="2OI-4x-3lc">
-                            <rect key="frame" x="225" y="5" width="27" height="26"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to restore purchase. Works only if purchased Premium in previous versions." identifier="2"/>
-                        </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
