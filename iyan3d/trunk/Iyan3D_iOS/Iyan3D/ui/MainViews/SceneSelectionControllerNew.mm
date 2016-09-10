@@ -553,7 +553,7 @@
 
 -(void)renameScene:(int)indexValue
 {
-    UIAlertView *renameScene = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Rename Scene", nil) message:NSLocalizedString(@"Duplicate_Scene_Name_message", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
+    UIAlertView *renameScene = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Rename Scene", nil) message:NSLocalizedString(@"Please enter a new Scene name", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
 
     sceneToBeRenamed=indexValue;
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
