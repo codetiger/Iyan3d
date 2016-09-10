@@ -34,14 +34,12 @@
 #define APPLY_ANIMATION 0
 #define SAVE_ANIMATION 1
 
-#define IMPORT_MODELS 0
-#define IMPORT_IMAGES 1
-#define IMPORT_VIDEO 2
-#define IMPORT_TEXT 3
+#define IMPORT_OBJFILE 0
+#define IMPORT_TEXT 1
+#define IMPORT_IMAGES 2
+#define IMPORT_VIDEO 3
 #define IMPORT_LIGHT 4
-#define IMPORT_OBJFILE 5
-#define IMPORT_ADDBONE 6
-#define IMPORT_PARTICLE 7
+
 #define IMAGE_EXPORT 8
 #define VIDEO_EXPORT 9
 #define CHANGE_TEXTURE 7
@@ -2602,7 +2600,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) importBtnDelegateAction:(int)indexValue //TODO remove downloading json and showing store models
 {
-    
     [self addFabricEvent:@"ImportAction" WithAttribute:indexValue];
     switch (indexValue) {
 //        case IMPORT_PARTICLE:
@@ -2626,38 +2623,25 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 //        }
         case IMPORT_VIDEO:
         case IMPORT_IMAGES:
+            [self.popoverController dismissPopoverAnimated:YES];
+            self.imagePicker = [[UIImagePickerController alloc] init];
+            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            if(indexValue == IMPORT_VIDEO)
+                self.imagePicker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie,nil];
+
+            [self.imagePicker setNavigationBarHidden:YES];
+            [self.imagePicker setToolbarHidden:YES];
+
             if([Utility IsPadDevice])
-            {
-                [self.popoverController dismissPopoverAnimated:YES];
-                self.imagePicker = [[UIImagePickerController alloc] init];
-                self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-                if(indexValue == IMPORT_VIDEO)
-                    self.imagePicker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie,nil];
-                [self.imagePicker setNavigationBarHidden:YES];
-                [self.imagePicker setToolbarHidden:YES];
                 importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNew" bundle:nil Type:(indexValue == IMPORT_VIDEO) ? IMPORT_VIDEO : IMPORT_IMAGES];
-                [self showOrHideLeftView:YES withView:importImageViewVC.view];
-                [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-                self.imagePicker.delegate=importImageViewVC;
-                importImageViewVC.delegate = self;
-                [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-            }
             else
-            {
-                [self.popoverController dismissPopoverAnimated:YES];
-                self.imagePicker = [[UIImagePickerController alloc] init];
-                self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-                if(indexValue == IMPORT_VIDEO)
-                    self.imagePicker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie,nil];
-                [self.imagePicker setNavigationBarHidden:YES];
-                [self.imagePicker setToolbarHidden:YES];
                 importImageViewVC = [[ImportImageNew alloc] initWithNibName:@"ImportImageNewPhone" bundle:nil Type:(indexValue == IMPORT_VIDEO) ? IMPORT_VIDEO : IMPORT_IMAGES];
-                [self showOrHideLeftView:YES withView:importImageViewVC.view];
-                [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
-                self.imagePicker.delegate=importImageViewVC;
-                importImageViewVC.delegate = self;
-                [importImageViewVC.imagesView addSubview:self.imagePicker.view];
-            }
+            
+            [self showOrHideLeftView:YES withView:importImageViewVC.view];
+            [self.imagePicker.view setFrame:CGRectMake(0, 0, importImageViewVC.imagesView.frame.size.width, importImageViewVC.imagesView.frame.size.height)];
+            self.imagePicker.delegate=importImageViewVC;
+            importImageViewVC.delegate = self;
+            [importImageViewVC.imagesView addSubview:self.imagePicker.view];
             break;
         case IMPORT_LIGHT:
             [self.popoverController dismissPopoverAnimated:YES];
@@ -2743,12 +2727,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
     
     switch (indexValue) {
-        case IMPORT_PARTICLE:
-            [attributes setObject:@"Particles" forKey:@"Import"];
-            break;
-        case IMPORT_MODELS:
-            [attributes setObject:@"Models" forKey:@"Import"];
-            break;
+//        case IMPORT_PARTICLE:
+//            [attributes setObject:@"Particles" forKey:@"Import"];
+//            break;
+//        case IMPORT_MODELS:
+//            [attributes setObject:@"Models" forKey:@"Import"];
+//            break;
         case IMPORT_IMAGES:
             [attributes setObject:@"Images" forKey:@"Import"];
             break;
@@ -2758,9 +2742,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         case IMPORT_TEXT:
             [attributes setObject:@"Text" forKey:@"Import"];
             break;
-        case IMPORT_ADDBONE:
-            [attributes setObject:@"AddBone" forKey:@"Import"];
-            break;
+//        case IMPORT_ADDBONE:
+//            [attributes setObject:@"AddBone" forKey:@"Import"];
+//            break;
         case IMPORT_OBJFILE:
             [attributes setObject:@"OBJ" forKey:@"Import"];
             break;
@@ -2813,15 +2797,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self setupEnableDisableControls];
     }
     
-    [self addFabricEvent:@"ExportAction" WithAttribute:IMPORT_PARTICLE+indexValue+1];
     cameraResolutionType = editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
 
-    if(indexValue==EXPORT_IMAGE) {
+    if(indexValue == EXPORT_IMAGE) {
         renderBgColor = Vector4(0.1, 0.1, 0.1, 1.0);
         if([Utility IsPadDevice]) {
             [self.popoverController dismissPopoverAnimated:YES];
             RenderingViewController* renderingView;
-            
             
             renderingView = [[RenderingViewController alloc] initWithNibName:@"RenderingViewController" bundle:nil StartFrame:editorScene->currentFrame EndFrame:editorScene->totalFrames renderOutput:RENDER_IMAGE caMresolution:cameraResolutionType ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
             renderingView.delegate = self;

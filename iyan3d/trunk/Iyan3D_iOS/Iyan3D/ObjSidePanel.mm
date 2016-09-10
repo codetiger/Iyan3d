@@ -15,7 +15,7 @@
 
 #define OBJ 0
 #define Texture 1
-#define IMPORT_OBJFILE 5
+#define IMPORT_OBJFILE 0
 #define CHANGE_TEXTURE 7
 
 @implementation ObjSidePanel
@@ -228,9 +228,9 @@
         }
     }
     
-    if(viewType == IMPORT_OBJFILE) {
+    if(viewType == IMPORT_OBJFILE)
         [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:(indexPathOfOBJ >= 6) IsTempNode:YES];
-    } else
+    else
         [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES AtIndex:propIndex];
 }
 
@@ -261,9 +261,9 @@
     if(sender != nil) {
         
         if(![self.objSlideDelegate addTempNodeToScene]) {
-            if(viewType == IMPORT_OBJFILE) {
+            if(viewType == IMPORT_OBJFILE)
                 [self.objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:(indexPathOfOBJ >= 6) IsTempNode:NO];
-            } else
+            else
                 [self.objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO AtIndex:propIndex];
         }
         
@@ -315,10 +315,9 @@
     [self.importFilesCollectionView reloadData];
     if(isDragFinish){
         [self.objSlideDelegate showOrHideProgress:1];
-        if(viewType == IMPORT_OBJFILE) {
-            //[_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
+        if(viewType == IMPORT_OBJFILE)
             [_objSlideDelegate importObjWithIndexPath:indexPathOfOBJ TextureName:textureFileName MeshColor:color HasTexture:haveTexture IsTempNode:YES];
-        } else
+        else
             [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES AtIndex:propIndex];
     }
 }
@@ -349,6 +348,7 @@
         [self.objSlideDelegate removeTempNodeFromScene];
     else
         [self.objSlideDelegate removeTempTextureAndVertex: propIndex];
+    
     [self.view removeFromSuperview];
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
     [self.objSlideDelegate deallocSubViews];
