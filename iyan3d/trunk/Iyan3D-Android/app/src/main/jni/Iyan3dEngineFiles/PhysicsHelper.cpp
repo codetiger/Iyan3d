@@ -366,13 +366,11 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
     std::map<int, Vector3> vertex_map;
     int count = 0;
 
-    Mesh* mesh = n->getMesh();
-
-    int indicesCount = mesh->getIndicesCount(0);
-    unsigned short *indicesArray = mesh->getIndicesArray(0);
+    int indicesCount = n->mesh->getIndicesCount(0);
+    unsigned short *indicesArray = n->mesh->getIndicesArray(0);
    
-    int vtxCount = mesh->getVerticesCountInMeshBuffer(0);
-    vertexData *vertexArray = mesh->getLiteVerticesForMeshBuffer(0, 0);
+    int vtxCount = n->mesh->getVerticesCountInMeshBuffer(0);
+    vertexData *vertexArray = n->mesh->getLiteVerticesForMeshBuffer(0, 0);
     
     for( int i = 0; i < indicesCount; i++) {
         int iIndex = indicesArray[i];

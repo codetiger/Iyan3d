@@ -154,6 +154,10 @@ Mesh* Mesh::clone()
 {
     Mesh *m = new Mesh();
     m->meshType = meshType;
+    m->meshBufferIndices = meshBufferIndices;
+    m->meshBufferVerticesData = meshBufferVerticesData;
+    m->meshBufferVerticesDataHeavy = meshBufferVerticesDataHeavy;
+    m->meshBufferMaterialIndices = meshBufferMaterialIndices;
     
     return m;
 }
