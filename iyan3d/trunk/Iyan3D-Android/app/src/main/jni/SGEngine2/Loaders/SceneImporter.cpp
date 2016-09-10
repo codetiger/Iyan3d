@@ -65,18 +65,17 @@ Mat4 getDeltaMatrix(string ext, bool isRigged)
 {
     Quaternion r1 = Quaternion();
     Quaternion r2 = Quaternion();
-    
-    if(ext == "dae" || ext == "3ds") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+
+    r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+
+    if(ext == "dae") {
         if(isRigged)
             r2.fromAngleAxis(M_PI_2, Vector3(1.0, 0.0, 0.0));
         else
             r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
-    } else if(ext == "fbx") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
-        r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
-    } else if(ext == "obj") {
-        r1.fromAngleAxis(M_PI, Vector3(0.0, 0.0, 1.0));
+    } else if(ext == "3ds") {
+        r2.fromAngleAxis(M_PI_2, Vector3(-1.0, 0.0, 0.0));
+    } else if(ext == "fbx" || ext == "obj") {
         r2.fromAngleAxis(M_PI, Vector3(1.0, 0.0, 0.0));
     } else if(ext == "sgm" || ext == "sgr") {
         r1.fromAngleAxis(M_PI, Vector3(0.0, 1.0, 0.0));
