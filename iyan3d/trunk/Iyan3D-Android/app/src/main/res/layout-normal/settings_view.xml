@@ -676,12 +676,6 @@
                     android:paddingRight="10dp"
                     android:weightSum="1">
 
-                    <Button
-                        android:id="@+id/restore_btn"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/restorePurchase"
-                        />
                 </LinearLayout>
 
                 <LinearLayout

@@ -17,9 +17,7 @@
 #}
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
--keep class com.facebook.android.** {*;}
 -keep class com.crashlytics.sdk.android.** {*;}
--keep class com.twitter.sdk.android.** {*;}
 -keep class org.jcodec.** {*;}
 -dontwarn com.squareup.okhttp.**
 -dontwarn com.google.appengine.api.urlfetch.**
@@ -30,7 +28,7 @@
 -keepattributes SourceFile,LineNumberTable
 -printmapping mapping.txt
 -keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
+ -keep interface com.squareup.okhttp.** { *; }
 -keep class retrofit.** { *; }
 -keepclasseswithmembers class * {
     @retrofit.http.* <methods>;
@@ -42,9 +40,9 @@
 -keep class android.support.v7.** { *; }
 -keep interface android.support.v7.** { *; }
 -keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
--keep class com.smackall.animator.opengl.**{*;}
--keep class com.smackall.animator.NativeCallBackClasses.**{*;}
--keep class com.smackall.animator.DownloadManager.**{*;}
+-keep class com.smackall.iyan3dPro.opengl.**{*;}
+-keep class com.smackall.iyan3dPro.NativeCallBackClasses.**{*;}
+-keep class com.smackall.iyan3dPro.DownloadManager.**{*;}
 
 -keep @io.realm.annotations.RealmModule class *
 -keep class * extends io.realm.RealmObject

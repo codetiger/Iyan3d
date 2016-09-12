@@ -11,9 +11,9 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="4"
+        android:layout_weight="3"
         android:orientation="vertical"
-        android:weightSum="4">
+        android:weightSum="3">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -122,31 +122,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/fontstore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/font_store"
-                    android:textColor="#ffffff"/>
-
-                <RadioButton
-                    android:id="@+id/myfont"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/my_fonts"
-                    android:textColor="#ffffff"/>
-            </RadioGroup>
         </LinearLayout>
     </LinearLayout>
 
@@ -154,17 +129,14 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="6"
+        android:layout_weight="7"
         android:gravity="center"
         android:orientation="horizontal"
+        android:id="@+id/gridView_holder"
+
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <GridView
-            android:id="@+id/text_gridView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"/>
     </LinearLayout>
 
     <LinearLayout

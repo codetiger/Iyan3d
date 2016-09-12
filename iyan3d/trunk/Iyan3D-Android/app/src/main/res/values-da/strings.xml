@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Iyan 3D</string>
+    <string name="app_name">Iyan 3D Pro</string>
     <string name="action_settings">Indstillinger</string>
     <string name="title_activity_scene_selection">SceneSelection</string>
     <string name="rename">Omdøb</string>
@@ -13,9 +13,6 @@
     <string name="rate">Bedøm denne app</string>
     <string name="share">Følg os</string>
     <string name="contact">Kontakt</string>
-    <string name="one" translatable="false">1</string>
-    <string name="twentyFour" translatable="false">24</string>
-    <string name="twoFortyFrame" translatable="false">240</string>
     <string name="front">Front</string>
     <string name="top">Top</string>
     <string name="left">Venstre</string>
@@ -36,8 +33,6 @@
     <string name="title_activity_user_on_boarding">UserOnBoarding</string>
     <string name="title_activity_preview">Fernisering</string>
     <string name="delete_animation">Slet Animation</string>
-    <string name="app_id" translatable="false">1434740593485806</string>
-    <string name="gcm_defaultSenderIdOwn" translatable="false">282597545553</string>
     <string name="next">Næste</string>
     <string name="done">Færdig</string>
     <string name="scenes">Scener</string>
@@ -230,7 +225,7 @@
     <string name="delete_animation_in_this_frame">Slet Animation i denne ramme</string>
     <string name="envelop">indhylle</string>
     <string name="news_feed">NYHEDSSTRØM</string>
-    <string name="hola_there_welcome_to_iyan_3d">Hola der! Velkommen til Iyan 3D.</string>
+    <string name="hola_there_welcome_to_iyan_3d">Hola der! Velkommen til Iyan 3D Pro.</string>
     <string name="add_joint">ADD FÆLLES</string>
     <string name="enter_text">Indtast tekst</string>
     <string name="more_info">Mere info</string>

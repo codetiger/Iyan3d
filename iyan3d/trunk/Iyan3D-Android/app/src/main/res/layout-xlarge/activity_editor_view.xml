@@ -6,7 +6,7 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
                 android:weightSum="1"
-                tools:context="com.smackall.animator.EditorView">
+                tools:context="com.smackall.iyan3dPro.EditorView">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:tools="http://schemas.android.com/tools"
@@ -14,7 +14,7 @@
                  android:layout_height="match_parent"
                  android:orientation="vertical"
                  android:weightSum="1"
-                 tools:context="com.smackall.animator.EditorView">
+                 tools:context="com.smackall.iyan3dPro.EditorView">
 
         <FrameLayout
             android:id="@+id/glView"
@@ -297,23 +297,6 @@
                     android:layout_weight="0.2"
                     android:orientation="horizontal"
                     android:weightSum="4">
-
-                    <LinearLayout
-                        android:id="@+id/login"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:onClick="showLogin"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
-
-                        <ImageView
-                            android:id="@+id/imageView5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/login_btn"/>
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/view_btn"

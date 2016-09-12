@@ -48,11 +48,6 @@
                 android:verticalSpacing="0dp"/>
         </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/loadingJson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
     </FrameLayout>
 
     <LinearLayout

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Iyan 3D</string>
+    <string name="app_name">Iyan 3D Pro</string>
     <string name="action_settings">Ayarlar</string>
     <string name="title_activity_scene_selection">Sahne Seçimi</string>
     <string name="rename">Adını değiştirmek</string>
@@ -225,7 +225,7 @@
     <string name="delete_animation_in_this_frame">Bu Karede Animasyon Sil</string>
     <string name="envelop">örtmek</string>
     <string name="news_feed">HABER AKIŞI</string>
-    <string name="hola_there_welcome_to_iyan_3d">Orada Hola! Iyan 3D hoşgeldiniz.</string>
+    <string name="hola_there_welcome_to_iyan_3d">Orada Hola! Iyan 3D Pro hoşgeldiniz.</string>
     <string name="add_joint">eklem ADD</string>
     <string name="enter_text">Metin girmek</string>
     <string name="more_info">Daha fazla bilgi</string>

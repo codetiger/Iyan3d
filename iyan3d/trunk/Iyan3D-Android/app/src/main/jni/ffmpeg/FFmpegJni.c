@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv);
 
-JNIEXPORT jint JNICALL Java_com_smackall_animator_FFmpeg_run(JNIEnv *env, jobject obj, jint argc, jobjectArray args)
+JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_FFmpeg_run(JNIEnv *env, jobject obj, jint argc, jobjectArray args)
 {
     int i = 0;
     char **argv = NULL;

@@ -101,7 +101,7 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:gravity="center|top"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <RadioGroup
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="2">
@@ -213,22 +213,6 @@
                             android:textStyle="bold"/>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView27"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/watermark"
-                            android:textColor="#ffffff"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -255,20 +239,6 @@
                             android:src="@drawable/color_select"/>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Switch
-                            android:id="@+id/waterMark"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:checked="true"/>
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -276,203 +246,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="1.75"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView28"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/renderingstyle"
-                        android:textColor="#ffffff"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="2"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:weightSum="1.55">
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:weightSum="2">
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.5"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingTop="2dp">
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/leftValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="#fffb00"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="1dp"
-                            android:paddingLeft="1dp"
-                            android:paddingRight="1dp">
+                            android:text="0"
+                            android:textColor="#ffffff"/>
+                    </LinearLayout>
 
-                            <ImageView
-                                android:id="@+id/normal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:adjustViewBounds="true"
-                                android:clickable="true"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/normal"/>
-                        </LinearLayout>
-
+                    <LinearLayout
+                        android:id="@+id/seekbar_placeholder"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:orientation="vertical">
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.5"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".25"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingTop="2dp">
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/rightValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="#fffb00"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="1dp"
-                            android:paddingLeft="1dp"
-                            android:paddingRight="1dp">
-
-                            <ImageView
-                                android:id="@+id/toon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:adjustViewBounds="true"
-                                android:clickable="true"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/toon"/>
-                        </LinearLayout>
+                            android:text="0"
+                            android:textColor="#ffffff"/>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingTop="2dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="#fffb00"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="1dp"
-                            android:paddingLeft="1dp"
-                            android:paddingRight="1dp">
-
-                            <ImageView
-                                android:id="@+id/cloud"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:adjustViewBounds="true"
-                                android:clickable="true"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/cloud"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/renderHelpHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#ffffff"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/leftValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="#ffffff"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/seekbar_placeholder"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.5"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".25"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/rightValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="#ffffff"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -508,14 +334,6 @@
                     android:orientation="vertical"
                     android:paddingBottom="10dp">
 
-                    <TextView
-                        android:id="@+id/credit_lable"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:text="@string/Credits"
-                        android:textColor="#1aff00"
-                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <LinearLayout

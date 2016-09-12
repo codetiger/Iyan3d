@@ -5,7 +5,7 @@
              android:background="@drawable/dialog_bg"
              tools:context=".UserOnBoarding.UserOnBoarding">
 
-    <com.smackall.animator.UserOnBoarding.CustomViewPager
+    <com.smackall.iyan3dPro.UserOnBoarding.CustomViewPager
         android:id="@+id/viewPager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>

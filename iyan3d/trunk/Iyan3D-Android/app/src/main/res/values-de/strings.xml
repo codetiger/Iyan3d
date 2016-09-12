@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Iyan 3D</string>
+    <string name="app_name">Iyan 3D Pro</string>
     <string name="action_settings">Einstellungen</string>
     <string name="title_activity_scene_selection">Szenenauswahl</string>
     <string name="rename">Umbenennen</string>
@@ -225,7 +225,7 @@
     <string name="delete_animation_in_this_frame">Löschen Animation in diesem Rahmen</string>
     <string name="envelop">einhüllen</string>
     <string name="news_feed">NEUIGKEITEN</string>
-    <string name="hola_there_welcome_to_iyan_3d">Hola there! Willkommen bei Iyan 3D.</string>
+    <string name="hola_there_welcome_to_iyan_3d">Hola there! Willkommen bei Iyan 3D Pro.</string>
     <string name="add_joint">joint</string>
     <string name="enter_text">Text eingeben</string>
     <string name="more_info">Mehr Infos</string>

@@ -153,6 +153,7 @@ void saveScene()
     editorScene->saveThumbnail(imagePath);
     string savePath = constants::DocumentsStoragePath + "/projects/" +fileName + ".sgb";
     editorScene->saveSceneData(&savePath);
+    Logger::log(INFO,"IYAN3D.CPP","Save Completed");
     delete imagePath;
 }
 
@@ -196,7 +197,7 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
             camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=oglHeight*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
 
         }
@@ -206,7 +207,7 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
         camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0)
         {
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
@@ -214,7 +215,7 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
         if(editorScene->camPreviewScale==2.0)
         {
             camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
@@ -238,7 +239,7 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
             camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=oglHeight*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
 
         }
@@ -249,7 +250,7 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
         if(editorScene->camPreviewScale==1.0)
         {
             camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
@@ -257,7 +258,7 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
         if(editorScene->camPreviewScale==2.0)
         {
             camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             editorScene->camPreviewOrigin.x=oglWidth*editorScene->screenScale-toolBarWidth*editorScene->screenScale;
             editorScene->camPreviewOrigin.y=topHeight*editorScene->screenScale;
@@ -267,7 +268,6 @@ void cameraPreviewPosition(int position, int previewSize,float topHeight,float t
 
 void cameraPositionViaToolBarPosition(int selectedIndex, float rightWidth,float topViewHeight)
 {
-
     if(editorScene)
     {
         editorScene->topLeft = Vector2((selectedIndex==TOOLBAR_LEFT) ? rightWidth : 0.0 , topViewHeight) * editorScene->screenScale;
@@ -280,18 +280,10 @@ void cameraPositionViaToolBarPosition(int selectedIndex, float rightWidth,float 
 
 void boneLimitsCallBack() {}
 
-bool downloadMissingAssetsCallBack(JNIEnv *env, jclass type,jobject object,string fileName,NODE_TYPE nodeType,bool hasTexture,string textureName)
-{
-    jstring fileNameStr = env->NewStringUTF(fileName.c_str());
-    int nType = (int)nodeType;
-    jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
-    jmethodID javaRigMethodRef = env->GetMethodID(dataClass, "checkAssets","(Ljava/lang/String;I)Z");
-    return env->CallBooleanMethod(object, javaRigMethodRef,fileNameStr,nType);
-}
 
 void updateXYZValuesCallBack(JNIEnv *env, jclass type,jobject object,bool hide,float x, float y, float z)
 {
-    jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+    jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
     jmethodID updateXYZMethod = env->GetMethodID(dataClass, "updateXYZValue","(ZFFF)V");
     return env->CallVoidMethod(object, updateXYZMethod,hide,x,y,z);
 }
@@ -391,7 +383,7 @@ unsigned char* getVideoFrameCallBack(string filename,int frame,int width,int hei
     Logger::log(INFO,"IYAN3D","Working");
     JNIEnv *env;
     g_vm->AttachCurrentThread(&env, 0);
-    jclass dataClass = env->FindClass("com/smackall/animator/Helper/VideoManager");
+    jclass dataClass = env->FindClass("com/smackall/iyan3dPro/Helper/VideoManager");
     int len = 0;
 
     jbyteArray j_value =  (jbyteArray)env->CallObjectMethod(videoManagerClass,getVideoAtFrameMethodId,env->NewStringUTF(filename.c_str()), frame, width, height);
@@ -435,7 +427,7 @@ void changeLightPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,PROP_
 void setProperties(JNIEnv *env, jclass type, jobject callback, std::map< PROP_INDEX, Property > options)
 {
     std::map< PROP_INDEX, Property >::iterator optIt;
-    jclass propertyClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+    jclass propertyClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
     jmethodID setPropertToMap = env->GetMethodID(propertyClass, "addSGNodeProperty", "(IIILjava/lang/String;Ljava/lang/String;ILjava/lang/String;FFFFZ)V");
 
     for(optIt = options.begin(); optIt != options.end(); optIt++)
@@ -447,7 +439,7 @@ void setProperties(JNIEnv *env, jclass type, jobject callback, std::map< PROP_IN
         Vector4 value = prop.value;
         Logger::log(INFO,"IYAN3D","Index : " + to_string(prop.index));
         env->CallVoidMethod(callback, setPropertToMap,prop.index,prop.parentIndex,prop.type,title,fileName,prop.iconId,groupName,value.x,value.y,value.z,value.w,
-                            prop.isEnabled);
+                            (jboolean)prop.isEnabled);
         if(prop.subProps.size() > 0)
         {
             setProperties(env, type, callback, prop.subProps);
@@ -481,7 +473,7 @@ void createDuplicateAssets(JNIEnv *env, jclass type, jobject callback)
                 selectedNodeType = editorScene->nodes[fromNodeIds[i]]->getType();
                 selectedNode = fromNodeIds[i];
 
-                jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+                jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
                 jmethodID saveCompleteCallBack = env->GetMethodID(dataClass, "cloneSelectedAssetWithId", "(III)V");
                 env->CallVoidMethod(callback, saveCompleteCallBack,selectedAssetId,(int)selectedNodeType,selectedNode);
                 addedNodeIds.push_back(editorScene->nodes.size() - 1);
@@ -502,7 +494,7 @@ void createDuplicateAssets(JNIEnv *env, jclass type, jobject callback)
             selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
             selectedNode = editorScene->selectedNodeId;
 
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID saveCompleteCallBack = env->GetMethodID(dataClass, "cloneSelectedAssetWithId", "(III)V");
             env->CallVoidMethod(callback, saveCompleteCallBack,selectedAssetId,(int)selectedNodeType,selectedNode);
 
@@ -513,12 +505,56 @@ void createDuplicateAssets(JNIEnv *env, jclass type, jobject callback)
         syncSceneWithPhysicsWorld();
 }
 
+
+
+void velocityChanged(double vel)
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->nodes[editorScene->selectedNodeId]->getProperty(FORCE_MAGNITUDE).value = Vector4(vel, 0, 0, true);
+      //TODO  [self showLoadingActivity];
+        syncSceneWithPhysicsWorld();
+    }
+}
+
+void meshPropertyChanged(float refraction, float reflection, bool light,bool visible ,bool status)
+{
+    if(editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size())
+        return;
+
+    if (editorScene->nodes[editorScene->selectedNodeId]->getProperty(LIGHTING).value.x != light || editorScene->nodes[editorScene->selectedNodeId]->getProperty(VISIBILITY).value.x != visible || status) { //switch action
+        editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, true);
+    }
+    else { //slider action
+        editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, false);
+    }
+}
+
+void enablePhysics(bool status)
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->nodes[editorScene->selectedNodeId]->getProperty(HAS_PHYSICS).value = Vector4(status, 0, 0, 0);
+        if(!status) {
+            //TODO [self showLoadingActivity];
+            syncSceneWithPhysicsWorld();
+        }
+    }
+}
+
+void setPhysicsType(int type)
+{
+    if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+        editorScene->setPropsOfObject(editorScene->nodes[editorScene->selectedNodeId], type);
+        //TODO [self showLoadingActivity];
+        syncSceneWithPhysicsWorld();
+    }
+
+}
+
 void changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,PROP_INDEX index, Vector4 value, bool status)
 {
-
     SGNode* selectedNode= NULL;
 
-    jclass callBackClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+    jclass callBackClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
 
     if(editorScene->selectedNodeId >= 0 || editorScene->selectedNodeId < editorScene->nodes.size())
         selectedNode = editorScene->nodes[editorScene->selectedNodeId];
@@ -545,14 +581,16 @@ void changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,PROP_INDE
             }
             break;
         }
+        case ENVIRONMENT_TEXTURE:
+        case BUMP_MAP:
         case TEXTURE: {
-            jmethodID deleteObjectOrAnimation = env->GetMethodID(callBackClass, "changeTextureForAsset", "()V");
-            env->CallVoidMethod(callback, deleteObjectOrAnimation);
+            jmethodID deleteObjectOrAnimation = env->GetMethodID(callBackClass, "changeTextureForAsset", "(I)V");
+            env->CallVoidMethod(callback, deleteObjectOrAnimation,(int)index);
             break;
         }
         case TEXTURE_SCALE: {
             editorScene->selectMan->unHightlightSelectedNode();
-            editorScene->actionMan->changeUVScale(editorScene->selectedNodeId, value.x);
+            editorScene->actionMan->changeUVScale(editorScene->selectedNodeId, editorScene->selectedMeshBufferId,value.x);
             break;
         }
         case DELETE: {
@@ -608,253 +646,313 @@ void changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,PROP_INDE
     }
 }
 
+void applyPhysicsProps(JNIEnv *env, jclass type, jobject callback,PROP_INDEX index, Vector4 value, bool status)
+{
+    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED)
+        return;
+
+    SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
+    if(selectedNode->getType() == NODE_SGM || selectedNode->getType() == NODE_OBJ || selectedNode->getType() == NODE_TEXT || selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT_SKIN) {
+
+        Logger::log(INFO,"IYAN3D","WORKING");
+        std::map<PROP_INDEX, Property> currentPhysics = selectedNode->getProperty(HAS_PHYSICS).subProps;
+        std::map<PROP_INDEX, Property> newPhysics = currentPhysics;
+        std::map<PROP_INDEX, Property>::iterator p;
+
+        for(p = newPhysics.begin(); p!=newPhysics.end(); ++p) {
+        	 Property prop = p->second;
+        	if(prop.index  == index) {
+                prop.value = value;
+                p = newPhysics.end();
+                Logger::log(INFO,"IYAN3D","WORKING 1");
+                break;
+        	}
+        }
+
+        float prevRefraction = selectedNode->getProperty(REFRACTION).value.x;
+        float prevReflection = selectedNode->getProperty(REFLECTION).value.x;
+        bool prevLighting = selectedNode->getProperty(LIGHTING).value.x;
+        bool prevVisibility = selectedNode->getProperty(VISIBILITY).value.x;
+        int pType = (newPhysics[PHYSICS_KIND].value.x);
+
+        if(currentPhysics[FORCE_MAGNITUDE].value.x != newPhysics[FORCE_MAGNITUDE].value.x) {
+            velocityChanged(newPhysics[FORCE_MAGNITUDE].value.x);
+            meshPropertyChanged(prevRefraction,prevReflection ,prevLighting ,prevVisibility,true);
+                            Logger::log(INFO,"IYAN3D","WORKING 2");
+        }
+
+        if(currentPhysics[PHYSICS_KIND].value.x != newPhysics[PHYSICS_KIND].value.x) {
+                Logger::log(INFO,"IYAN3D","WORKING 2");
+            meshPropertyChanged(prevRefraction,prevReflection,prevLighting,prevVisibility,false);
+
+            if(pType == PHYSICS_NONE){
+                            Logger::log(INFO,"IYAN3D","WORKING 4");
+                if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
+                                Logger::log(INFO,"IYAN3D","WORKING 5");
+                    editorScene->nodes[editorScene->selectedNodeId]->getProperty(HAS_PHYSICS).value = Vector4(status, 0, 0, 0);
+                        //TODO [self showLoadingActivity];
+                        syncSceneWithPhysicsWorld();
+                }
+            }
+        } else {
+                        Logger::log(INFO,"IYAN3D","WORKING 1");
+            enablePhysics(true);
+            setPhysicsType(pType);
+        }
+        meshPropertyChanged(prevRefraction,prevReflection,prevLighting,prevVisibility,true);
+    }
+}
+
 extern "C" {
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getMaxJoint(JNIEnv *env, jclass type);
-    JNIEXPORT jintArray JNICALL Java_com_smackall_animator_opengl_GL2JNILib_init(JNIEnv *env, jclass type, jint width,jint height,jboolean addVAOSupport,jint uniformValue,jint maxJoints);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_step(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadScene(JNIEnv *env,jclass type,jobject object,jstring filePath);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setAssetspath(JNIEnv *env,jclass type,jstring assetPath_,jstring setMeshpath_,jstring setImagepath_);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_tapEnd(JNIEnv *env, jclass type,jfloat x, jfloat y);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_controlSelection(JNIEnv *env, jclass type, jfloat x,jfloat y,jboolean isMultiSelect);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_tapMove(JNIEnv *env, jclass type,jobject object,jfloat x, jfloat y);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_touchBegan(JNIEnv *env, jclass type,jfloat x, jfloat y);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_swipe(JNIEnv *env, jclass type,jfloat velocityX,jfloat velocityY);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_panBegin(JNIEnv *env, jclass type,jfloat cordX1,jfloat cordY1,jfloat cordX2,jfloat cordY2);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_panProgress(JNIEnv *env,jclass type,jobject object,jfloat cordX1,jfloat cordY1,jfloat cordX2,jfloat cordY2);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_tap(JNIEnv *env, jclass type, jfloat x, jfloat y,jboolean isMultiSelect);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadFile(JNIEnv *env, jclass type, jstring filePath_);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_save(JNIEnv *env, jclass type,jobject object ,jboolean isCloudRender,jstring filePath,jboolean isAutoSave);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_dealloc(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedNodeId(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedMeshBufferId(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeTempNode(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeCount(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeType(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeName(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_selectNode(JNIEnv *env, jclass type,jint nodeId,jboolean isMultiSelect);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeNode(JNIEnv *env, jclass type,jint nodeId,jboolean isUndoOrRedo);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_copyPropsOfNode(JNIEnv *env, jclass type,jint from,jint to,jboolean excludeKeys);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getAssetId(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getAssetIdWithNodeId(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getTexture(JNIEnv *env, jclass type,jint selectedNode);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorX(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorY(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorZ(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getMaxJoint(JNIEnv *env, jclass type);
+    JNIEXPORT jintArray JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_init(JNIEnv *env, jclass type, jint width,jint height,jboolean addVAOSupport,jint uniformValue,jint maxJoints);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_step(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_loadScene(JNIEnv *env,jclass type,jobject object,jstring filePath);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setAssetspath(JNIEnv *env,jclass type,jstring assetPath_,jstring setMeshpath_,jstring setImagepath_);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_tapEnd(JNIEnv *env, jclass type,jfloat x, jfloat y);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_controlSelection(JNIEnv *env, jclass type, jfloat x,jfloat y,jboolean isMultiSelect);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_tapMove(JNIEnv *env, jclass type,jobject object,jfloat x, jfloat y);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_touchBegan(JNIEnv *env, jclass type,jfloat x, jfloat y);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_swipe(JNIEnv *env, jclass type,jfloat velocityX,jfloat velocityY);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_panBegin(JNIEnv *env, jclass type,jfloat cordX1,jfloat cordY1,jfloat cordX2,jfloat cordY2);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_panProgress(JNIEnv *env,jclass type,jobject object,jfloat cordX1,jfloat cordY1,jfloat cordX2,jfloat cordY2);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_tap(JNIEnv *env, jclass type, jfloat x, jfloat y,jboolean isMultiSelect);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_loadFile(JNIEnv *env, jclass type, jstring filePath_);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_save(JNIEnv *env, jclass type,jobject object ,jboolean isCloudRender,jstring filePath,jboolean isAutoSave);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_dealloc(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedNodeId(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedMeshBufferId(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeTempNode(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodeCount(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodeType(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodeName(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_selectNode(JNIEnv *env, jclass type,jint nodeId,jboolean isMultiSelect);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeNode(JNIEnv *env, jclass type,jint nodeId,jboolean isUndoOrRedo);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_copyPropsOfNode(JNIEnv *env, jclass type,jint from,jint to,jboolean excludeKeys);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getAssetId(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getAssetIdWithNodeId(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getTexture(JNIEnv *env, jclass type,jint selectedNode);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorX(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorY(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorZ(JNIEnv *env, jclass type);
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorXWithId(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorYWithId(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorZWithId(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorXWithId(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorYWithId(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorZWithId(JNIEnv *env, jclass type,jint nodeId);
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_optionalFilePath(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_nodeSpecificFloat(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_nodeSpecificFloatWithId(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_optionalFilePath(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_nodeSpecificFloat(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_nodeSpecificFloatWithId(JNIEnv *env, jclass type,jint nodeId);
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getFontSize(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getFontSizeWithId(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_refractionValue(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_reflectionValue(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isLightning(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isVisible(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_jointSize(JNIEnv *env, jclass type,jint selectedNode);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_mirrorState(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraFov(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_resolutionType(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightx(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lighty(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightz(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_shadowDensity(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeMeshProperty(JNIEnv *env, jclass type,jfloat refraction,jfloat reflection,jboolean light,jboolean visible,jboolean storeAction);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_switchMirror(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getRigMirrorState(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeLightProperty(JNIEnv *env, jclass type,jfloat x, jfloat y, jfloat z, jfloat w,jfloat distance,jint lightType,jboolean storeAction);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_previewPosition(JNIEnv *env, jclass type,jint position,jint previewSize,jfloat topHeight,jfloat toolbarWidth);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_switchFrame(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setCurrentFrame(JNIEnv *env, jclass type,jint currentFrame,jobject object);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_stopPlaying(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_play(JNIEnv *env, jclass type,jobject object);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_totalFrame(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_addFrame(JNIEnv *env, jclass type,jint frame);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_currentFrame(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isPlaying(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setIsPlaying(JNIEnv *env, jclass type,jboolean isPlaying,jobject object);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraPositionViaToolBarPosition(JNIEnv *env, jclass type,jint selectedIndex, jfloat rightWidth,jfloat topHeight);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAsset(JNIEnv *env,jclass type,jint assetType,jint assetId,jstring assetName,jstring textureName,
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getFontSize(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getFontSizeWithId(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_refractionValue(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_reflectionValue(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isLightning(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isVisible(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_jointSize(JNIEnv *env, jclass type,jint selectedNode);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_mirrorState(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraFov(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_resolutionType(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lightx(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lighty(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lightz(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_shadowDensity(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeMeshProperty(JNIEnv *env, jclass type,jfloat refraction,jfloat reflection,jboolean light,jboolean visible,jboolean storeAction);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_switchMirror(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getRigMirrorState(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeLightProperty(JNIEnv *env, jclass type,jfloat x, jfloat y, jfloat z, jfloat w,jfloat distance,jint lightType,jboolean storeAction);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_previewPosition(JNIEnv *env, jclass type,jint position,jint previewSize,jfloat topHeight,jfloat toolbarWidth);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_switchFrame(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setCurrentFrame(JNIEnv *env, jclass type,jint currentFrame,jobject object);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_stopPlaying(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_play(JNIEnv *env, jclass type,jobject object);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_totalFrame(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_addFrame(JNIEnv *env, jclass type,jint frame);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_currentFrame(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isPlaying(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setIsPlaying(JNIEnv *env, jclass type,jboolean isPlaying,jobject object);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraPositionViaToolBarPosition(JNIEnv *env, jclass type,jint selectedIndex, jfloat rightWidth,jfloat topHeight);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importAsset(JNIEnv *env,jclass type,jint assetType,jint assetId,jstring assetName,jstring textureName,
             jint width,jint height,jboolean isTempNode,jfloat x,jfloat y, jfloat z,int assetActionType);
-     JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jstring name,jstring filePath,jstring fileLocation,jboolean hasMeshColor,
+     JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jobject callback,jstring name,jstring filePath,jstring fileLocation,jboolean hasMeshColor,
         jfloat x,jfloat y, jfloat z,int assetAddType,jboolean isTempNode);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraPropertyChanged(JNIEnv *env, jclass type,jint fov,jint resolution,jboolean storeAction);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jint typeOfNode,jstring text,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importImageOrVideo(JNIEnv *env, jclass type,jint nodeType,jstring assetName,jint imgWidth,jint imgHeight
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraPropertyChanged(JNIEnv *env, jclass type,jint fov,jint resolution,jboolean storeAction);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jint typeOfNode,jstring text,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importImageOrVideo(JNIEnv *env, jclass type,jint nodeType,jstring assetName,jint imgWidth,jint imgHeight
             ,jint assetAddType,jboolean isTempNode);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAdditionalLight(JNIEnv *env, jclass type,jint lightCount,jint action);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightCount(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_saveAsSGM(JNIEnv *env, jclass type,jstring fileName,jstring textureName,jint assetId,jboolean haveTexture,jfloat x,jfloat y, jfloat z);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jint selectedMeshBufferId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeTempTexture(JNIEnv *env, jclass type,jint selectedNodeId);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_canEditRigBones(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_beginRigging(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cancelRig(JNIEnv *env, jclass type,jboolean completed);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_addJoint(JNIEnv *env, jclass type,jobject obj);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_switchRigSceneMode(JNIEnv *env, jclass type,jobject obj,jint scene);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setSkeletonType(JNIEnv *env, jclass type,jint skeletonType);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_unselectObjects(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_hideNode(JNIEnv *env, jclass type,jint nodeId,jboolean hide);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_copyKeysOfNode(JNIEnv *env, jclass type,jint fromNodeId,jint toNodeId);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_unselectObject(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getBoneCount(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTotalFrame(JNIEnv *env, jclass type,jint frame);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_applyAnimation(JNIEnv *env, jclass type,jint fromNodeId,jint applyedNodeId,jstring path);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scale(JNIEnv *env, jclass type,jobject object);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scaleValueX(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scaleValueY(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scaleValueZ(JNIEnv *env, jclass type);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_envelopScale(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeEnvelopScale(JNIEnv *env, jclass type, jfloat x);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setScaleValue(JNIEnv *env, jclass type,jfloat x,jfloat y, jfloat z,jboolean store);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_move(JNIEnv *env, jclass type,jobject object);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_rotate(JNIEnv *env, jclass type,jobject object);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_rigNodeScale(JNIEnv *env, jclass type,float x, float y, float z);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isRigMode(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isVAOSupported(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraView(JNIEnv *env, jclass type,int indexValue);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isNodeSelected(JNIEnv *env, jclass type,int position);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_deleteAnimation(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_saveAnimation(JNIEnv *env, jclass type,jobject obj,jint assetId,jstring name, jint animType);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isJointSelected(JNIEnv *env, jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isHaveKey(JNIEnv *env,jclass type, jint currentFrame);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_hasNodeSelected(JNIEnv *env,jclass type);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_editorScene(JNIEnv *env,jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_undo(JNIEnv *env,jclass type,jobject object);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_redo(JNIEnv *env,jclass type,jobject object);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_decreaseCurrentAction(JNIEnv *env,jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_objectIndex(JNIEnv *env,jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_increaseCurrentAction(JNIEnv *env,jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_renderFrame(JNIEnv *env,jclass type,jobject object,jint frame,jint shader,jboolean isImage,jboolean waterMark
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importAdditionalLight(JNIEnv *env, jclass type,jint lightCount,jint action);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lightCount(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_saveAsSGM(JNIEnv *env, jclass type,jstring fileName,jstring textureName,jint assetId,jboolean haveTexture,jfloat x,jfloat y, jfloat z);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jint selectedMeshBufferId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp,jint index);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeTempTexture(JNIEnv *env, jclass type,jint selectedNodeId);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_canEditRigBones(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_beginRigging(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cancelRig(JNIEnv *env, jclass type,jboolean completed);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_addJoint(JNIEnv *env, jclass type,jobject obj);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_switchRigSceneMode(JNIEnv *env, jclass type,jobject obj,jint scene);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setSkeletonType(JNIEnv *env, jclass type,jint skeletonType);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_unselectObjects(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_hideNode(JNIEnv *env, jclass type,jint nodeId,jboolean hide);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_copyKeysOfNode(JNIEnv *env, jclass type,jint fromNodeId,jint toNodeId);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_unselectObject(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getBoneCount(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setTotalFrame(JNIEnv *env, jclass type,jint frame);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_applyAnimation(JNIEnv *env, jclass type,jint fromNodeId,jint applyedNodeId,jstring path);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scale(JNIEnv *env, jclass type,jobject object);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scaleValueX(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scaleValueY(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scaleValueZ(JNIEnv *env, jclass type);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_envelopScale(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeEnvelopScale(JNIEnv *env, jclass type, jfloat x);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setScaleValue(JNIEnv *env, jclass type,jfloat x,jfloat y, jfloat z,jboolean store);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_move(JNIEnv *env, jclass type,jobject object);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_rotate(JNIEnv *env, jclass type,jobject object);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_rigNodeScale(JNIEnv *env, jclass type,float x, float y, float z);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isRigMode(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isVAOSupported(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraView(JNIEnv *env, jclass type,int indexValue);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isNodeSelected(JNIEnv *env, jclass type,int position);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_deleteAnimation(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_saveAnimation(JNIEnv *env, jclass type,jobject obj,jint assetId,jstring name, jint animType);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isJointSelected(JNIEnv *env, jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isHaveKey(JNIEnv *env,jclass type, jint currentFrame);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_hasNodeSelected(JNIEnv *env,jclass type);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_editorScene(JNIEnv *env,jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_undo(JNIEnv *env,jclass type,jobject object);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_redo(JNIEnv *env,jclass type,jobject object);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_decreaseCurrentAction(JNIEnv *env,jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_objectIndex(JNIEnv *env,jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_increaseCurrentAction(JNIEnv *env,jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_renderFrame(JNIEnv *env,jclass type,jobject object,jint frame,jint shader,jboolean isImage,jboolean waterMark
             ,jfloat x, jfloat y, jfloat z);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_optionalFilePathWithId(JNIEnv *env, jclass type,jint id);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_perVertexColor(JNIEnv *env,jclass type,jint id);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_initVideoManagerClass(JNIEnv *env,jclass type,jobject object);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_optionalFilePathWithId(JNIEnv *env, jclass type,jint id);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_perVertexColor(JNIEnv *env,jclass type,jint id);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_initVideoManagerClass(JNIEnv *env,jclass type,jobject object);
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Mesh(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Texture(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_MeshThumbnail(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Font(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_AnimationThumbnail(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Particle(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Animation(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Credits(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_UseOrRecharge(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_CheckProgress(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_TaskDownload(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_verifyRestorePurchase(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_RenderTask(JNIEnv *env, jclass type);
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_PublishAnimation(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Mesh(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Texture(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_MeshThumbnail(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Font(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_AnimationThumbnail(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Particle(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Animation(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Credits(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_UseOrRecharge(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_CheckProgress(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_TaskDownload(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_verifyRestorePurchase(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_RenderTask(JNIEnv *env, jclass type);
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_PublishAnimation(JNIEnv *env, jclass type);
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setNodeLighting(JNIEnv *env, jclass type,jint nodeId,jboolean state);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setNodeVisiblity(JNIEnv *env, jclass type,jint nodeId,jboolean state);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setfreezeRendering(JNIEnv *env, jclass type,jboolean state);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTransparency(JNIEnv *env, jclass type,jfloat transparency,jint nodeId);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cloneSelectedAsset(JNIEnv *env, jclass type,jint selectedAssetId,jint selectedNodeType,jint selectedNodeIndex,jint assetAddType);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_selectedNodeIdsSize(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedNodeIdAtIndex(JNIEnv *env, jclass type,jint index);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_createDuplicateAssets(JNIEnv *env, jclass type,jobject object);
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isPhysicsEnabled(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_physicsType(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_velocity(JNIEnv *env, jclass type,jint nodeId);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_enablePhysics(JNIEnv *env, jclass type,jboolean status);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setPhysicsType(JNIEnv *env, jclass type,jint physicsType);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_velocityChanged(JNIEnv *env, jclass type,jint value);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setDirection(JNIEnv *env, jclass type);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeSelectedObjects(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getLightType(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_ADD_INSTANCE_BACK(JNIEnv *env, jclass type,jint actionType);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_syncPhysicsWithWorld(JNIEnv *env, jclass type,jint from, jint to,jboolean doUpdatePhysics);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_updatePhysics(JNIEnv *env, jclass type,jint frame);
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedJointScale(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexState(JNIEnv *env, jclass type);
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexStateWithId(JNIEnv *env, jclass type, jint nodeId);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTextureSmoothStatus(JNIEnv *env, jclass type, jboolean status);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodePropsMapWithNodeId(JNIEnv *env, jclass type,jobject callback,jint nodeId);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSceneProps(JNIEnv *env, jclass type, jobject callback);
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,jint index, jfloat x,
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setNodeLighting(JNIEnv *env, jclass type,jint nodeId,jboolean state);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setNodeVisiblity(JNIEnv *env, jclass type,jint nodeId,jboolean state);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setfreezeRendering(JNIEnv *env, jclass type,jboolean state);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setTransparency(JNIEnv *env, jclass type,jfloat transparency,jint nodeId);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cloneSelectedAsset(JNIEnv *env, jclass type,jint selectedAssetId,jint selectedNodeType,jint selectedNodeIndex,jint assetAddType);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_selectedNodeIdsSize(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedNodeIdAtIndex(JNIEnv *env, jclass type,jint index);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_createDuplicateAssets(JNIEnv *env, jclass type,jobject object);
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isPhysicsEnabled(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_physicsType(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_velocity(JNIEnv *env, jclass type,jint nodeId);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_enablePhysics(JNIEnv *env, jclass type,jboolean status);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setPhysicsType(JNIEnv *env, jclass type,jint physicsType);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_velocityChanged(JNIEnv *env, jclass type,jint value);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setDirection(JNIEnv *env, jclass type);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeSelectedObjects(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getLightType(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_ADD_INSTANCE_BACK(JNIEnv *env, jclass type,jint actionType);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_syncPhysicsWithWorld(JNIEnv *env, jclass type,jint from, jint to,jboolean doUpdatePhysics);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_updatePhysics(JNIEnv *env, jclass type,jint frame);
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedJointScale(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_smoothTexState(JNIEnv *env, jclass type);
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_smoothTexStateWithId(JNIEnv *env, jclass type, jint nodeId);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setTextureSmoothStatus(JNIEnv *env, jclass type, jboolean status);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodePropsMapWithNodeId(JNIEnv *env, jclass type,jobject callback,jint nodeId);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSceneProps(JNIEnv *env, jclass type, jobject callback);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,jint index, jfloat x,
          jfloat y,jfloat z,jfloat w, jboolean status);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_applyPhysicsProps(JNIEnv *env, jclass type, jobject callback,jint index, jfloat x,
+         jfloat y,jfloat z,jfloat w, jboolean status);
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setEnvironmentTexture(JNIEnv *env, jclass type,jstring texturePath,jboolean isTemp);
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Mesh(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Mesh(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://iyan3dapp.com/appapi/mesh/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Texture(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Texture(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://iyan3dapp.com/appapi/meshtexture/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_MeshThumbnail(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_MeshThumbnail(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/128images/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Font(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Font(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://iyan3dapp.com/appapi/font/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_AnimationThumbnail(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_AnimationThumbnail(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://iyan3dapp.com/appapi/animationImage/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Particle(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Particle(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://iyan3dapp.com/appapi/particles/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Animation(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Animation(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("http://iyan3dapp.com/appapi/animationFile/");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_Credits(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_Credits(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/login.php");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_UseOrRecharge(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_UseOrRecharge(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/credits-and.php");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_CheckProgress(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_CheckProgress(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/checkprogress.php");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_TaskDownload(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_TaskDownload(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/download.php");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_verifyRestorePurchase(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_verifyRestorePurchase(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/restore-and.php");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_RenderTask(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_RenderTask(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/rendertask.php");
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_PublishAnimation(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_PublishAnimation(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF("https://www.iyan3dapp.com/appapi/publish.php");
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getMaxJoint(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getMaxJoint(JNIEnv *env, jclass type)
     {
         return getMaximumJointsSize();
     }
 
-    JNIEXPORT jintArray JNICALL Java_com_smackall_animator_opengl_GL2JNILib_init(JNIEnv *env, jclass type, jint width,jint height,jboolean addVAOSupport,jint uniformValue,jint maxJoints)
+    JNIEXPORT jintArray JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_init(JNIEnv *env, jclass type, jint width,jint height,jboolean addVAOSupport,jint uniformValue,jint maxJoints)
     {
 
         if (editorScene)
@@ -876,7 +974,6 @@ extern "C" {
         sceneManager->setFrameBufferObjects(0, _colorRenderBuffer, _depthRenderBuffer);
 
         setCallBack();
-        editorScene->downloadMissingAssetsCallBack = &downloadMissingAssetsCallBack;
         editorScene->getVideoFrameCallBack = &getVideoFrameCallBack;
 
         jintArray intArray = env->NewIntArray(2);
@@ -890,7 +987,7 @@ extern "C" {
     }
 
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_step(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_step(JNIEnv *env, jclass type)
     {
         if (editorScene)
         {
@@ -898,7 +995,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadScene(JNIEnv *env,jclass type,jobject object,jstring filePath)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_loadScene(JNIEnv *env,jclass type,jobject object,jstring filePath)
     {
 
         const char *loadFilepath = env->GetStringUTFChars(filePath, 0);
@@ -914,14 +1011,14 @@ extern "C" {
         }
         else if (file.size() > 0)
         {
-            editorScene->loader->loadSceneData(env,type,object,&file);
+            editorScene->loader->loadSceneData(&file);
             loadFilepath = "";
             callBackIsDisplayPrepared(env, type);
         }
     }
 
     JNIEXPORT void JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_setAssetspath(JNIEnv *env, jclass type, jstring assetPath_, jstring setMeshpath_, jstring setImagepath_)
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setAssetspath(JNIEnv *env, jclass type, jstring assetPath_, jstring setMeshpath_, jstring setImagepath_)
     {
         const char *assetPath = env->GetStringUTFChars(assetPath_, 0);
         const char *setMeshpath = env->GetStringUTFChars(setMeshpath_, 0);
@@ -931,12 +1028,13 @@ extern "C" {
         string importedImagesPath = setImagepath;
         constants::BundlePath = assetStoragePath;
         constants::DocumentsStoragePath = meshStoragePath;
+
         env->ReleaseStringUTFChars(assetPath_, assetPath);
         env->ReleaseStringUTFChars(setMeshpath_, setMeshpath);
         env->ReleaseStringUTFChars(setImagepath_, setImagepath);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_tapEnd(JNIEnv *env, jclass type, jfloat x, jfloat y)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_tapEnd(JNIEnv *env, jclass type, jfloat x, jfloat y)
     {
         if(editorScene->isRigMode)
             editorScene->moveMan->touchEndRig(Vector2(x,y));
@@ -944,14 +1042,14 @@ extern "C" {
             editorScene->moveMan->touchEnd(Vector2(x, y));
         //editorScene->setLightingOn();
     }
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_controlSelection(JNIEnv *env, jclass type, jfloat x,jfloat y,jboolean isMultiSelect)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_controlSelection(JNIEnv *env, jclass type, jfloat x,jfloat y,jboolean isMultiSelect)
     {
         touchBegan = Vector2(x, y);
         editorScene->selectMan->checkCtrlSelection(Vector2(x, y),isMultiSelect,displayPrepared);
     }
 
     JNIEXPORT void JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_tapMove(JNIEnv *env, jclass type,jobject object ,jfloat x, jfloat y)
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_tapMove(JNIEnv *env, jclass type,jobject object ,jfloat x, jfloat y)
     {
 
         if(editorScene)
@@ -972,7 +1070,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_touchBegan(JNIEnv *env, jclass type,jfloat x, jfloat y)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_touchBegan(JNIEnv *env, jclass type,jfloat x, jfloat y)
     {
         if(editorScene->isRigMode)
             editorScene->moveMan->touchBeganRig(Vector2(x,y)*screenScale);
@@ -980,7 +1078,7 @@ extern "C" {
             editorScene->moveMan->touchBegan(Vector2(x,y) * screenScale);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_swipe(JNIEnv *env, jclass type, jfloat velocityX, jfloat velocityY)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_swipe(JNIEnv *env, jclass type, jfloat velocityX, jfloat velocityY)
     {
 
         if(editorScene)
@@ -991,7 +1089,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_panBegin(JNIEnv *env, jclass type, jfloat cordX1,
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_panBegin(JNIEnv *env, jclass type, jfloat cordX1,
             jfloat cordY1, jfloat cordX2, jfloat cordY2)
     {
 
@@ -1004,7 +1102,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_panProgress(JNIEnv *env, jclass type,jobject object, jfloat cordX1, jfloat cordY1, jfloat cordX2,jfloat cordY2)
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_panProgress(JNIEnv *env, jclass type,jobject object, jfloat cordX1, jfloat cordY1, jfloat cordX2,jfloat cordY2)
     {
         editorScene->setLightingOff();
         editorScene->moveMan->panProgress(Vector2(cordX1, cordY1),Vector2(cordX2, cordY2));
@@ -1018,7 +1116,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_tap(JNIEnv *env, jclass type, jfloat x, jfloat y,jboolean isMultiSelect)
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_tap(JNIEnv *env, jclass type, jfloat x, jfloat y,jboolean isMultiSelect)
     {
         tapPosition = Vector2(x, y) * screenScale;
 
@@ -1041,7 +1139,7 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_loadFile(JNIEnv *env, jclass type, jstring filePath_)
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_loadFile(JNIEnv *env, jclass type, jstring filePath_)
     {
         const char *filePath = env->GetStringUTFChars(filePath_, 0);
 //	loadFilepath = filePath;
@@ -1049,14 +1147,14 @@ extern "C" {
         env->ReleaseStringUTFChars(filePath_, filePath);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_save(JNIEnv *env, jclass type,jobject object ,jboolean isCloudRender,jstring filePath,jboolean isAutoSave)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_save(JNIEnv *env, jclass type,jobject object ,jboolean isCloudRender,jstring filePath,jboolean isAutoSave)
     {
         const char *nativeString = env->GetStringUTFChars(filePath, 0);
         fileName = nativeString;
         saveScene();
         if(!isAutoSave)
         {
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID saveCompleteCallBack = env->GetMethodID(dataClass, "saveCompletedCallBack", "(Z)V");
             env->CallVoidMethod(object, saveCompleteCallBack,isCloudRender);
         }
@@ -1064,18 +1162,18 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_smackall_animator_opengl_GL2JNILib_getSelectedNodeId(JNIEnv *env, jclass type)
+    Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedNodeId(JNIEnv *env, jclass type)
     {
 
         return (jint) editorScene->selectedNodeId;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedMeshBufferId(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedMeshBufferId(JNIEnv *env, jclass type)
     {
         return (jint) editorScene->selectedMeshBufferId;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jstring name,jstring filePath,jstring fileLocation,jboolean hasMeshColor,
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importModel(JNIEnv *env,jclass type,jobject callback,jstring name,jstring filePath,jstring fileLocation,jboolean hasMeshColor,
     jfloat x,jfloat y, jfloat z,int assetAddType,jboolean isTempNode){
 
 
@@ -1090,8 +1188,15 @@ extern "C" {
         editorScene->loader->removeTempNodeIfExists();
 
         SceneImporter *loader = new SceneImporter();
-        loader->importNodesFromFile(editorScene, assetName, meshFilePath, meshFileLocation,hasMeshColor, color, isTempNode);
+        string error;
+        if(!loader->importNodesFromFile(editorScene, assetName, meshFilePath, meshFileLocation,hasMeshColor, color, isTempNode,&error)){
+             jstring errorStr = env->NewStringUTF(error.c_str());
+             jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
+             jmethodID errorCallback = env->GetMethodID(dataClass, "showInformationDialog", "(Ljava/lang/String;)V");
+             env->CallVoidMethod(callback, errorCallback,errorStr);
+        }
 
+        delete loader;
         //if(!isTempNode){
         //    if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
         //       editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
@@ -1102,7 +1207,7 @@ extern "C" {
         env->ReleaseStringUTFChars(fileLocation, fileLocation_char);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAsset(JNIEnv *env,jclass type,jint assetType ,jint assetId,jstring assetName,jstring textureName,
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importAsset(JNIEnv *env,jclass type,jint assetType ,jint assetId,jstring assetName,jstring textureName,
             jint width,jint height,jboolean isTempNode,jfloat x,jfloat y, jfloat z,int assetActionType)
     {
         const char *assetName_ = env->GetStringUTFChars(assetName, 0);
@@ -1145,32 +1250,32 @@ extern "C" {
 
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeTempNode(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeTempNode(JNIEnv *env, jclass type)
     {
         editorScene->loader->removeTempNodeIfExists();
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeCount(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodeCount(JNIEnv *env, jclass type)
     {
         return editorScene->nodes.size();
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeType(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodeType(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->getType();
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodeName(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodeName(JNIEnv *env, jclass type,jint nodeId)
     {
         return  env->NewStringUTF(ConversionHelper::getStringForWString(editorScene->nodes[nodeId]->name).c_str());
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_selectNode(JNIEnv *env, jclass type,jint nodeId,jboolean isMultiSelect)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_selectNode(JNIEnv *env, jclass type,jint nodeId,jboolean isMultiSelect)
     {
         editorScene->selectMan->selectObject(nodeId,NOT_SELECTED,isMultiSelect);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeNode(JNIEnv *env, jclass type,jint nodeId,jboolean isUndoOrRedo)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeNode(JNIEnv *env, jclass type,jint nodeId,jboolean isUndoOrRedo)
     {
         if(editorScene->nodes.size()>nodeId)
         {
@@ -1190,152 +1295,152 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_copyPropsOfNode(JNIEnv *env, jclass type,jint from,jint to,jboolean excludeKeys)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_copyPropsOfNode(JNIEnv *env, jclass type,jint from,jint to,jboolean excludeKeys)
     {
         editorScene->animMan->copyPropsOfNode(from, (to == 0) ?(int)editorScene->nodes.size()-1 : to,excludeKeys);
         editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getAssetId(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getAssetId(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->assetId;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getAssetIdWithNodeId(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getAssetIdWithNodeId(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->assetId;
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getTexture(JNIEnv *env, jclass type,jint selectedNode)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getTexture(JNIEnv *env, jclass type,jint selectedNode)
     {
         return jstring("null");//TODO env->NewStringUTF(editorScene->nodes[selectedNode]->textureName.c_str());
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorX(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorX(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorY(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorY(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.y;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorZ(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorZ(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(VERTEX_COLOR).value.z;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorXWithId(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorXWithId(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->getProperty(VERTEX_COLOR).value.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorYWithId(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorYWithId(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->getProperty(VERTEX_COLOR).value.y;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getVertexColorZWithId(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getVertexColorZWithId(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->getProperty(VERTEX_COLOR).value.z;
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_optionalFilePath(JNIEnv *env, jclass type)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_optionalFilePath(JNIEnv *env, jclass type)
     {
         return env->NewStringUTF(editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str());
     }
 
-    JNIEXPORT jstring JNICALL Java_com_smackall_animator_opengl_GL2JNILib_optionalFilePathWithId(JNIEnv *env, jclass type,jint id)
+    JNIEXPORT jstring JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_optionalFilePathWithId(JNIEnv *env, jclass type,jint id)
     {
         return env->NewStringUTF(editorScene->nodes[id]->optionalFilePath.c_str());
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_nodeSpecificFloat(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_nodeSpecificFloat(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(SPECIFIC_FLOAT).value.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_nodeSpecificFloatWithId(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_nodeSpecificFloatWithId(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->getProperty(SPECIFIC_FLOAT).value.x;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getFontSize(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getFontSize(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(FONT_SIZE).value.x;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getFontSizeWithId(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getFontSizeWithId(JNIEnv *env, jclass type,jint nodeId)
     {
         return editorScene->nodes[nodeId]->getProperty(FONT_SIZE).value.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_refractionValue(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_refractionValue(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(REFRACTION).value.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_reflectionValue(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_reflectionValue(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(REFLECTION).value.x;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isLightning(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isLightning(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(LIGHTING).value.x;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isVisible(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isVisible(JNIEnv *env, jclass type)
     {
         return editorScene->nodes[editorScene->selectedNodeId]->getProperty(VISIBILITY).value.x;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_jointSize(JNIEnv *env, jclass type,jint selectedNode)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_jointSize(JNIEnv *env, jclass type,jint selectedNode)
     {
         return editorScene->nodes[selectedNode]->joints.size();
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_mirrorState(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_mirrorState(JNIEnv *env, jclass type)
     {
         return editorScene->getMirrorState();
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraFov(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraFov(JNIEnv *env, jclass type)
     {
         return 72.0f; // TODO editorScene->cameraFOV;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_resolutionType(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_resolutionType(JNIEnv *env, jclass type)
     {
-        return editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;;
+        return editorScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightx(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lightx(JNIEnv *env, jclass type)
     {
         return getLightProps().x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lighty(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lighty(JNIEnv *env, jclass type)
     {
         return getLightProps().y;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightz(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lightz(JNIEnv *env, jclass type)
     {
         return getLightProps().z;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_shadowDensity(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_shadowDensity(JNIEnv *env, jclass type)
     {
         return ShaderManager::shadowDensity;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeMeshProperty(JNIEnv *env, jclass type,jfloat refraction,jfloat reflection,jboolean light,jboolean visible,jboolean storeAction)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeMeshProperty(JNIEnv *env, jclass type,jfloat refraction,jfloat reflection,jboolean light,jboolean visible,jboolean storeAction)
     {
         editorScene->actionMan->changeMeshProperty(refraction, reflection, light, visible, storeAction);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_switchMirror(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_switchMirror(JNIEnv *env, jclass type)
     {
         if(editorScene && editorScene->isRigMode)
             editorScene->rigMan->switchMirrorState();
@@ -1343,12 +1448,12 @@ extern "C" {
             editorScene->switchMirrorState();
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getRigMirrorState(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getRigMirrorState(JNIEnv *env, jclass type)
     {
         return editorScene->actionMan->getMirrorState();
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeLightProperty(JNIEnv *env, jclass type,jfloat x, jfloat y, jfloat z, jfloat w,jfloat distance,jint lightType,jboolean storeAction)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeLightProperty(JNIEnv *env, jclass type,jfloat x, jfloat y, jfloat z, jfloat w,jfloat distance,jint lightType,jboolean storeAction)
     {
         editorScene->shadowsOff = false;
         editorScene->actionMan->changeLightProperty(x, y, z, w,distance,lightType,storeAction);
@@ -1358,21 +1463,21 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_previewPosition(JNIEnv *env, jclass type,jint position,jint previewSize,jfloat topHeight,jfloat toolbarWidth)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_previewPosition(JNIEnv *env, jclass type,jint position,jint previewSize,jfloat topHeight,jfloat toolbarWidth)
     {
         cameraPreviewPosition(position,previewSize,topHeight,toolbarWidth);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_switchFrame(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_switchFrame(JNIEnv *env, jclass type)
     {
         editorScene->actionMan->switchFrame(editorScene->currentFrame);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setCurrentFrame(JNIEnv *env, jclass type,jint currentFrame,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setCurrentFrame(JNIEnv *env, jclass type,jint currentFrame,jobject object)
     {
         if(object != NULL)
         {
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID loadingMethod = env->GetMethodID(dataClass, "showOrHideLoading", "(I)V");
             env->CallVoidMethod(object, loadingMethod,SHOW);
         }
@@ -1381,35 +1486,35 @@ extern "C" {
         editorScene->actionMan->switchFrame((float)editorScene->currentFrame);
         if(object != NULL)
         {
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID loadingMethod = env->GetMethodID(dataClass, "showOrHideLoading", "(I)V");
             env->CallVoidMethod(object, loadingMethod,HIDE);
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_stopPlaying(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_stopPlaying(JNIEnv *env, jclass type)
     {
         editorScene->setLightingOn();
         editorScene->isPlaying = false;
         editorScene->actionMan->switchFrame(editorScene->currentFrame);
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_totalFrame(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_totalFrame(JNIEnv *env, jclass type)
     {
         return (editorScene) ? editorScene->totalFrames : 24;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_addFrame(JNIEnv *env, jclass type,jint frame)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_addFrame(JNIEnv *env, jclass type,jint frame)
     {
         editorScene->totalFrames += frame;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTotalFrame(JNIEnv *env, jclass type,jint frame)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setTotalFrame(JNIEnv *env, jclass type,jint frame)
     {
         editorScene->totalFrames = frame;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_play(JNIEnv *env, jclass type,jobject object)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_play(JNIEnv *env, jclass type,jobject object)
     {
         if (editorScene->selectedNodeId != NOT_SELECTED)
         {
@@ -1446,23 +1551,23 @@ extern "C" {
         return true;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_currentFrame(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_currentFrame(JNIEnv *env, jclass type)
     {
         return (editorScene) ? editorScene->currentFrame : 0;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isPlaying(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isPlaying(JNIEnv *env, jclass type)
     {
         return (editorScene) ? editorScene->isPlaying : false;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setIsPlaying(JNIEnv *env, jclass type,jboolean isPlaying,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setIsPlaying(JNIEnv *env, jclass type,jboolean isPlaying,jobject object)
     {
         if(isPlaying)
         {
             if(object != NULL)
             {
-                jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+                jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
                 jmethodID loadingMethod = env->GetMethodID(dataClass, "showOrHideLoading", "(I)V");
                 env->CallVoidMethod(object, loadingMethod,SHOW);
             }
@@ -1473,24 +1578,24 @@ extern "C" {
         editorScene->isPlaying = isPlaying;
         if(object != NULL)
         {
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID loadingMethod = env->GetMethodID(dataClass, "showOrHideLoading", "(I)V");
             env->CallVoidMethod(object, loadingMethod,HIDE);
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraPositionViaToolBarPosition(JNIEnv *env, jclass type,jint selectedIndex,jfloat rightWidth,jfloat topHeight)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraPositionViaToolBarPosition(JNIEnv *env, jclass type,jint selectedIndex,jfloat rightWidth,jfloat topHeight)
     {
         cameraPositionViaToolBarPosition(selectedIndex,rightWidth,topHeight);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraPropertyChanged(JNIEnv *env, jclass type,jint fov,jint resolution,jboolean storeAction)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraPropertyChanged(JNIEnv *env, jclass type,jint fov,jint resolution,jboolean storeAction)
     {
         editorScene->actionMan->changeCameraProperty(fov, (int)resolution, storeAction);
     }
 
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jint typeOfNode,jstring text,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_loadText(JNIEnv *env, jclass type,jint typeOfNode,jstring text,jint fontSize,jint bevalValue,jint assetAddType,jstring filePath,jboolean isTempNode)
     {
         editorScene->loader->removeTempNodeIfExists();
 
@@ -1530,7 +1635,7 @@ extern "C" {
         return true;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importImageOrVideo(JNIEnv *env, jclass type,jint nodeType,jstring assetName,jint imgWidth,jint imgHeight
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importImageOrVideo(JNIEnv *env, jclass type,jint nodeType,jstring assetName,jint imgWidth,jint imgHeight
             ,jint assetAddType,jboolean isTempNode)
     {
         editorScene->loader->removeTempNodeIfExists();
@@ -1562,7 +1667,7 @@ extern "C" {
         return false;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_importAdditionalLight(JNIEnv *env, jclass type,jint lightCount,jint action)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_importAdditionalLight(JNIEnv *env, jclass type,jint lightCount,jint action)
     {
         ActionType actionType = IMPORT_ASSET_ACTION;
         if(action == IMPORT_ASSET)
@@ -1576,7 +1681,7 @@ extern "C" {
         {
             int assetId = ASSET_ADDITIONAL_LIGHT + lightCount;
             wstring assetNameW = ConversionHelper::getWStringForString("Light " + to_string(lightCount));
-            //TODO editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId ,"",assetNameW, 20 , 50 , actionType , Vector4(1.0),"",false);
+            editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId ,"","",assetNameW, 20 , 50 , actionType , Vector4(1.0),"",false);
             if(actionType != UNDO_ACTION && actionType != REDO_ACTION)
             {
                 editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId , "Light"+ to_string(lightCount));
@@ -1584,12 +1689,12 @@ extern "C" {
         }
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_lightCount(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_lightCount(JNIEnv *env, jclass type)
     {
         return ShaderManager::lightPosition.size();
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_saveAsSGM(JNIEnv *env, jclass type,jstring fileName,jstring textureName,
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_saveAsSGM(JNIEnv *env, jclass type,jstring fileName,jstring textureName,
             jint assetId,jboolean haveTexture,jfloat x,jfloat y, jfloat z)
     {
         const char *objStr = env->GetStringUTFChars(fileName, 0);
@@ -1601,13 +1706,13 @@ extern "C" {
 
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jint selectedMeshBufferId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeTexture(JNIEnv *env, jclass type,jint selectedNodeId,jint selectedMeshBufferId,jstring textureName,jfloat x,jfloat y,jfloat z,jboolean isTemp,jint index)
     {
         const char *texture = env->GetStringUTFChars(textureName, 0);
         editorScene->selectMan->selectObject(selectedNodeId,selectedMeshBufferId,false);
         if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected())
         {
-            editorScene->changeTexture(texture, Vector3(x,y,z),isTemp,false);
+            editorScene->changeTexture(texture, Vector3(x,y,z),isTemp,false,(PROP_INDEX)index);
             editorScene->selectMan->unselectObject(selectedNodeId);
             editorScene->setLightingOn();
         }
@@ -1615,17 +1720,17 @@ extern "C" {
 
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeTempTexture(JNIEnv *env, jclass type,jint selectedNodeId)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeTempTexture(JNIEnv *env, jclass type,jint selectedNodeId)
     {
         editorScene->removeTempTextureAndVertex(selectedNodeId);
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_canEditRigBones(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_canEditRigBones(JNIEnv *env, jclass type)
     {
         return (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId]));
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_beginRigging(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_beginRigging(JNIEnv *env, jclass type)
     {
         int selectedNodeId = editorScene->selectedNodeId;
         editorScene->riggingNodeId = selectedNodeId;
@@ -1635,7 +1740,7 @@ extern "C" {
         //editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cancelRig(JNIEnv *env, jclass type,jboolean completed)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cancelRig(JNIEnv *env, jclass type,jboolean completed)
     {
         if(editorScene->rigMan->deallocAutoRig(completed))
         {
@@ -1643,14 +1748,14 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_addJoint(JNIEnv *env, jclass type,jobject obj)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_addJoint(JNIEnv *env, jclass type,jobject obj)
     {
 
         if(editorScene->rigMan->isSkeletonJointSelected)
         {
             /*
             	if(editorScene->rigMan->rigKeys.size() >= RIG_MAX_BONES){
-            		jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            		jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             		jmethodID javaRigMethodRef = env->GetMethodID(dataClass, "boneLimitCallBack", "()V");
             		env->CallVoidMethod(obj, javaRigMethodRef);
             	}
@@ -1659,12 +1764,12 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_switchRigSceneMode(JNIEnv *env, jclass type,jobject obj,jint scene)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_switchRigSceneMode(JNIEnv *env, jclass type,jobject obj,jint scene)
     {
         if(editorScene && editorScene->rigMan)
         {
             jboolean completed = false;
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID javaRigMethodRef = env->GetMethodID(dataClass, "rigCompletedCallBack", "(Z)V");
             if(editorScene->rigMan->sceneMode + scene == RIG_MODE_PREVIEW)
             {
@@ -1678,7 +1783,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setSkeletonType(JNIEnv *env, jclass type,jint skeletonType)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setSkeletonType(JNIEnv *env, jclass type,jint skeletonType)
     {
         if(skeletonType == HUMAN_RIGGING)
         {
@@ -1690,43 +1795,44 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_unselectObjects(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_unselectObjects(JNIEnv *env, jclass type)
     {
         editorScene->selectMan->unselectObjects();
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTransparency(JNIEnv *env, jclass type,jfloat transparency,jint nodeId)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setTransparency(JNIEnv *env, jclass type,jfloat transparency,jint nodeId)
     {
         editorScene->nodes[nodeId]->getProperty(TRANSPARENCY,0).value.x = transparency;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_hideNode(JNIEnv *env, jclass type,jint nodeId,jboolean hide)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_hideNode(JNIEnv *env, jclass type,jint nodeId,jboolean hide)
     {
         editorScene->nodes[nodeId]->node->setVisible(!hide);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_unselectObject(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_unselectObject(JNIEnv *env, jclass type,jint nodeId)
     {
         editorScene->selectMan->unselectObject(nodeId);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_copyKeysOfNode(JNIEnv *env, jclass type,jint fromNodeId,jint toNodeId)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_copyKeysOfNode(JNIEnv *env, jclass type,jint fromNodeId,jint toNodeId)
     {
         editorScene->animMan->copyKeysOfNode(fromNodeId, toNodeId);
         editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getBoneCount(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getBoneCount(JNIEnv *env, jclass type,jint nodeId)
     {
         if(editorScene->isRigMode)
         {
             return (int)editorScene->rigMan->rigKeys.size();
         }
-        else
+        else{
             return (int)editorScene->nodes[nodeId]->joints.size();
+        }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_applyAnimation(JNIEnv *env, jclass type,jint fromNodeId,jint applyedNodeId,jstring path)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_applyAnimation(JNIEnv *env, jclass type,jint fromNodeId,jint applyedNodeId,jstring path)
     {
         const char *filePathStr = env->GetStringUTFChars(path, 0);
         string filepath = filePathStr;
@@ -1734,7 +1840,7 @@ extern "C" {
         env->ReleaseStringUTFChars(path, filePathStr);
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scale(JNIEnv *env, jclass type,jobject object)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scale(JNIEnv *env, jclass type,jobject object)
     {
         bool status = false;
         if(!editorScene->isRigMode || (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS)))
@@ -1764,7 +1870,7 @@ extern "C" {
         return status;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scaleValueX(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scaleValueX(JNIEnv *env, jclass type)
     {
         Vector3 currentScale;
         if(!editorScene->isRigMode || (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS)))
@@ -1772,7 +1878,7 @@ extern "C" {
         return currentScale.x;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scaleValueY(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scaleValueY(JNIEnv *env, jclass type)
     {
         Vector3 currentScale;
         if(!editorScene->isRigMode || (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS)))
@@ -1780,7 +1886,7 @@ extern "C" {
         return currentScale.y;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_scaleValueZ(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_scaleValueZ(JNIEnv *env, jclass type)
     {
         Vector3 currentScale;
         if(!editorScene->isRigMode || (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS)))
@@ -1788,19 +1894,19 @@ extern "C" {
         return currentScale.z;
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_envelopScale(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_envelopScale(JNIEnv *env, jclass type)
     {
         return  editorScene->rigMan->getSelectedJointScale();
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setScaleValue(JNIEnv *env, jclass type,jfloat x,jfloat y, jfloat z,jboolean store)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setScaleValue(JNIEnv *env, jclass type,jfloat x,jfloat y, jfloat z,jboolean store)
     {
         if((editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size()) && editorScene->selectedNodeIds.size() <= 0)
             return;
         editorScene->actionMan->changeObjectScale(Vector3(x, y, z), store);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_move(JNIEnv *env, jclass type,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_move(JNIEnv *env, jclass type,jobject object)
     {
         if(editorScene->hasNodeSelected() || editorScene->selectedNodeIds.size() > 0)
         {
@@ -1814,7 +1920,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_rotate(JNIEnv *env, jclass type,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_rotate(JNIEnv *env, jclass type,jobject object)
     {
         if(editorScene->hasNodeSelected() || editorScene->allObjectsScalable())
         {
@@ -1828,12 +1934,12 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_rigNodeScale(JNIEnv *env, jclass type,float x, float y, float z)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_rigNodeScale(JNIEnv *env, jclass type,float x, float y, float z)
     {
         editorScene->rigMan->changeNodeScale(Vector3(x,y,z));
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changeEnvelopScale(JNIEnv *env, jclass type, jfloat x)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changeEnvelopScale(JNIEnv *env, jclass type, jfloat x)
     {
         if((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_EDIT_ENVELOPES)) &&  editorScene->rigMan->isSkeletonJointSelected)
         {
@@ -1843,23 +1949,23 @@ extern "C" {
         return false;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isRigMode(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isRigMode(JNIEnv *env, jclass type)
     {
         return editorScene->isRigMode;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isVAOSupported(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isVAOSupported(JNIEnv *env, jclass type)
     {
         return editorScene->renHelper->supportsVAO();
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cameraView(JNIEnv *env, jclass type,int indexValue)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cameraView(JNIEnv *env, jclass type,int indexValue)
     {
         CAMERA_VIEW_MODE cameraView = (indexValue == FRONT_VIEW) ? VIEW_FRONT : (indexValue == TOP_VIEW) ? (CAMERA_VIEW_MODE)VIEW_TOP : (indexValue == LEFT_VIEW) ? VIEW_LEFT : (indexValue == BACK_VIEW) ? VIEW_BACK : (indexValue == RIGHT_VIEW) ? VIEW_RIGHT :VIEW_BOTTOM;
         editorScene->updater->changeCameraView(cameraView);
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isNodeSelected(JNIEnv *env, jclass type,int position)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isNodeSelected(JNIEnv *env, jclass type,int position)
     {
         if(editorScene->selectedNodeIds.size() > 0)
         {
@@ -1880,29 +1986,29 @@ extern "C" {
         return false;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_deleteAnimation(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_deleteAnimation(JNIEnv *env, jclass type)
     {
         bool isKeySetForNode = editorScene->animMan->removeAnimationForSelectedNodeAtFrame(editorScene->currentFrame);
         return isKeySetForNode;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_saveAnimation(JNIEnv *env, jclass type,jobject obj,jint assetId,jstring name, jint animType)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_saveAnimation(JNIEnv *env, jclass type,jobject obj,jint assetId,jstring name, jint animType)
     {
         bool status = editorScene->animMan->storeAnimations(assetId);
 
-        jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+        jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
         jmethodID animSaveMethod = env->GetMethodID(dataClass, "addToDatabase", "(ZLjava/lang/String;I)V");
         env->CallVoidMethod(obj, animSaveMethod,status,name,animType);
         return status;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isJointSelected(JNIEnv *env, jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isJointSelected(JNIEnv *env, jclass type)
     {
         return editorScene->isJointSelected;
     }
 
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isHaveKey(JNIEnv *env,jclass type, jint currentFrame)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isHaveKey(JNIEnv *env,jclass type, jint currentFrame)
     {
         if(editorScene)
             return editorScene->isKeySetForFrame.find(currentFrame) != editorScene->isKeySetForFrame.end();
@@ -1910,18 +2016,18 @@ extern "C" {
             return false;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_hasNodeSelected(JNIEnv *env,jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_hasNodeSelected(JNIEnv *env,jclass type)
     {
         return editorScene->hasNodeSelected();
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_editorScene(JNIEnv *env,jclass type)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_editorScene(JNIEnv *env,jclass type)
     {
         if(editorScene) return true;
         return false;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_undo(JNIEnv *env,jclass type,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_undo(JNIEnv *env,jclass type,jobject object)
     {
         int returnValue = NOT_SELECTED;
         ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue);
@@ -1948,7 +2054,7 @@ extern "C" {
         }
         default:
         {
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID undo = env->GetMethodID(dataClass, "undo", "(II)V");
             env->CallVoidMethod(object, undo,(int)actionType,returnValue);
             break;
@@ -1956,7 +2062,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_redo(JNIEnv *env,jclass type,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_redo(JNIEnv *env,jclass type,jobject object)
     {
         int returnValue = editorScene->redo();
         if (returnValue == ADD_INSTANCE_BACK)
@@ -1979,54 +2085,54 @@ extern "C" {
         }
         else
         {
-            jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+            jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
             jmethodID redo = env->GetMethodID(dataClass, "redo", "(I)V");
             env->CallVoidMethod(object, redo,returnValue);
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_decreaseCurrentAction(JNIEnv *env,jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_decreaseCurrentAction(JNIEnv *env,jclass type)
     {
         editorScene->actionMan->currentAction--;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_increaseCurrentAction(JNIEnv *env,jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_increaseCurrentAction(JNIEnv *env,jclass type)
     {
         editorScene->actionMan->currentAction++;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_objectIndex(JNIEnv *env,jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_objectIndex(JNIEnv *env,jclass type)
     {
         SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction-1];
         return recentAction.objectIndex;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_renderFrame(JNIEnv *env,jclass type,jobject object,jint frame,jint shader,jboolean isImage,jboolean waterMark
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_renderFrame(JNIEnv *env,jclass type,jobject object,jint frame,jint shader,jboolean isImage,jboolean waterMark
             ,jfloat x, jfloat y, jfloat z)
     {
         editorScene->renHelper->isExportingImages = true;
         editorScene->updater->setDataForFrame(frame-1);
         string path = constants::DocumentsStoragePath+"/.cache/"+to_string(frame)+".png";
-        editorScene->renHelper->renderAndSaveImage(path.c_str(), shader, false, waterMark,(isImage) ? -1 : frame-1, Vector4(x,y,z,1.0));
-        jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/NativeCallBacks");
+        editorScene->renHelper->renderAndSaveImage(path.c_str(), false, (isImage) ? -1 : frame-1, Vector4(x,y,z,1.0));
+        jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/NativeCallBacks");
         jmethodID preview = env->GetMethodID(dataClass, "updatePreview", "(I)V");
         env->CallVoidMethod(object, preview,frame);
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_perVertexColor(JNIEnv *env,jclass type,jint id)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_perVertexColor(JNIEnv *env,jclass type,jint id)
     {
         return editorScene->nodes[id]->getProperty(IS_VERTEX_COLOR).value.x;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_initVideoManagerClass(JNIEnv *env,jclass type,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_initVideoManagerClass(JNIEnv *env,jclass type,jobject object)
     {
         env->GetJavaVM(&g_vm);
         videoManagerClass = env->NewGlobalRef(object); //object;
-        jclass dataClass = env->FindClass("com/smackall/animator/NativeCallBackClasses/VideoManager");
+        jclass dataClass = env->FindClass("com/smackall/iyan3dPro/NativeCallBackClasses/VideoManager");
         getVideoAtFrameMethodId = env->GetMethodID(dataClass,"getImageAtTime","(Ljava/lang/String;III)[B");
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setNodeLighting(JNIEnv *env, jclass type,jint nodeId,jboolean state)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setNodeLighting(JNIEnv *env, jclass type,jint nodeId,jboolean state)
     {
         if(editorScene)
         {
@@ -2037,7 +2143,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setNodeVisiblity(JNIEnv *env, jclass type,jint nodeId,jboolean state)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setNodeVisiblity(JNIEnv *env, jclass type,jint nodeId,jboolean state)
     {
         if(editorScene)
         {
@@ -2048,13 +2154,13 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setfreezeRendering(JNIEnv *env, jclass type,jboolean state)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setfreezeRendering(JNIEnv *env, jclass type,jboolean state)
     {
         if(editorScene)
             editorScene->freezeRendering = state;
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_cloneSelectedAsset(JNIEnv *env, jclass type,jint selectedAssetId,jint selectedNodeType,jint selectedNodeIndex,jint assetAddType)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_cloneSelectedAsset(JNIEnv *env, jclass type,jint selectedAssetId,jint selectedNodeType,jint selectedNodeIndex,jint assetAddType)
     {
 
         SGNode *sgNode = NULL;
@@ -2079,23 +2185,23 @@ extern "C" {
         }
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_selectedNodeIdsSize(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_selectedNodeIdsSize(JNIEnv *env, jclass type)
     {
         return (int)editorScene->selectedNodeIds.size();
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedNodeIdAtIndex(JNIEnv *env, jclass type,jint index)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedNodeIdAtIndex(JNIEnv *env, jclass type,jint index)
     {
         return editorScene->selectedNodeIds[index];
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_createDuplicateAssets(JNIEnv *env, jclass type,jobject object)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_createDuplicateAssets(JNIEnv *env, jclass type,jobject object)
     {
 
        createDuplicateAssets(env,type,object);
     }
 
-    JNIEXPORT jboolean JNICALL Java_com_smackall_animator_opengl_GL2JNILib_isPhysicsEnabled(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jboolean JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_isPhysicsEnabled(JNIEnv *env, jclass type,jint nodeId)
     {
         bool isPhysicsEnable = false;
         if(nodeId != -1)
@@ -2103,7 +2209,7 @@ extern "C" {
         return isPhysicsEnable;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_physicsType(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_physicsType(JNIEnv *env, jclass type,jint nodeId)
     {
         int physicsType = 0;
         if(nodeId != -1)
@@ -2111,7 +2217,7 @@ extern "C" {
         return physicsType;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_velocity(JNIEnv *env, jclass type,jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_velocity(JNIEnv *env, jclass type,jint nodeId)
     {
         int velocity = 0;
         if(nodeId != -1)
@@ -2119,7 +2225,7 @@ extern "C" {
         return velocity;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_enablePhysics(JNIEnv *env, jclass type,jboolean status)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_enablePhysics(JNIEnv *env, jclass type,jboolean status)
     {
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED)
         {
@@ -2131,7 +2237,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setPhysicsType(JNIEnv *env, jclass type,jint physicsType)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setPhysicsType(JNIEnv *env, jclass type,jint physicsType)
     {
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED)
         {
@@ -2140,7 +2246,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_velocityChanged(JNIEnv *env, jclass type,jint value)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_velocityChanged(JNIEnv *env, jclass type,jint value)
     {
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED)
         {
@@ -2149,12 +2255,12 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setDirection(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setDirection(JNIEnv *env, jclass type)
     {
          setDirection();
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_removeSelectedObjects(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_removeSelectedObjects(JNIEnv *env, jclass type)
     {
         if(editorScene->selectedNodeIds.size() > 0)
         {
@@ -2162,12 +2268,12 @@ extern "C" {
         }
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getLightType(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getLightType(JNIEnv *env, jclass type)
     {
         return editorScene->getSelectedNode()->getProperty(LIGHT_TYPE).value.x;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_ADD_INSTANCE_BACK(JNIEnv *env, jclass type,jint actionType)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_ADD_INSTANCE_BACK(JNIEnv *env, jclass type,jint actionType)
     {
         SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction - (actionType == 1) ? 1 : 0];
 
@@ -2185,36 +2291,36 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_syncPhysicsWithWorld(JNIEnv *env, jclass type,jint from, jint to,jboolean doUpdatePhysics)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_syncPhysicsWithWorld(JNIEnv *env, jclass type,jint from, jint to,jboolean doUpdatePhysics)
     {
         syncSceneWithPhysicsWorld();
         for(int i = from; i < to && doUpdatePhysics; i++)
             updatePhysics(i);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_updatePhysics(JNIEnv *env, jclass type,jint frame)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_updatePhysics(JNIEnv *env, jclass type,jint frame)
     {
         updatePhysics(frame);
     }
 
-    JNIEXPORT jfloat JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSelectedJointScale(JNIEnv *env, jclass type)
+    JNIEXPORT jfloat JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSelectedJointScale(JNIEnv *env, jclass type)
     {
         return editorScene->rigMan->getSelectedJointScale();
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexState(JNIEnv *env, jclass type)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_smoothTexState(JNIEnv *env, jclass type)
     {
         int smoothTex = (editorScene->nodes[editorScene->selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x) ? -1 : (int)editorScene->nodes[editorScene->selectedNodeId]->smoothTexture;
         return smoothTex;
     }
 
-    JNIEXPORT jint JNICALL Java_com_smackall_animator_opengl_GL2JNILib_smoothTexStateWithId(JNIEnv *env, jclass type, jint nodeId)
+    JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_smoothTexStateWithId(JNIEnv *env, jclass type, jint nodeId)
     {
         int smoothTex = (editorScene->nodes[nodeId]->getProperty(IS_VERTEX_COLOR).value.x) ? -1 : (int)editorScene->nodes[nodeId]->smoothTexture;
         return smoothTex;
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_setTextureSmoothStatus(JNIEnv *env, jclass type, jboolean status)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setTextureSmoothStatus(JNIEnv *env, jclass type, jboolean status)
     {
         if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId])
         {
@@ -2225,25 +2331,37 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getNodePropsMapWithNodeId(JNIEnv *env, jclass type, jobject callback,jint nodeId)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getNodePropsMapWithNodeId(JNIEnv *env, jclass type, jobject callback,jint nodeId)
     {
         std::map< PROP_INDEX, Property > options = editorScene->nodes[nodeId]->getAllProperties(0); //TODO
         setProperties(env, type, callback, options);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_getSceneProps(JNIEnv *env, jclass type, jobject callback)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_getSceneProps(JNIEnv *env, jclass type, jobject callback)
     {
         std::map< PROP_INDEX, Property > sceneProps = editorScene->shaderMGR->sceneProps;
         setProperties(env, type, callback, sceneProps);
     }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,jint index, jfloat x,
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_changedPropertyAtIndex(JNIEnv *env, jclass type, jobject callback,jint index, jfloat x,
      jfloat y,jfloat z,jfloat w, jboolean status){
         changedPropertyAtIndex(env,type,callback,(PROP_INDEX)index,Vector4(x,y,z,w),status);
     }
 
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_applyPhysicsProps(JNIEnv *env, jclass type, jobject callback,jint index, jfloat x,
+     jfloat y,jfloat z,jfloat w, jboolean status){
+        applyPhysicsProps(env,type,callback,(PROP_INDEX)index,Vector4(x,y,z,w),status);
+    }
 
-    JNIEXPORT void JNICALL Java_com_smackall_animator_opengl_GL2JNILib_dealloc(JNIEnv *env, jclass type)
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_setEnvironmentTexture(JNIEnv *env, jclass type,jstring texturePath,jboolean isTemp){
+        const char *texturePathChar = env->GetStringUTFChars(texturePath, 0);
+        string texturePathStr = texturePathChar;
+        editorScene->setEnvironmentTexture(texturePathStr, isTemp);
+        env->ReleaseStringUTFChars(texturePath, texturePathChar);
+    }
+
+
+    JNIEXPORT void JNICALL Java_com_smackall_iyan3dPro_opengl_GL2JNILib_dealloc(JNIEnv *env, jclass type)
     {
 
         if(editorScene)
@@ -2260,7 +2378,7 @@ extern "C" {
         touchY = 0.0;
         prevPos = Vector2(0.0,0.0);
         currentPos = Vector2(0.0,0.0);
-        tapPosition = Vector2(0.0,0.0);;
+        tapPosition = Vector2(0.0,0.0);
         displayPrepared = false;
         fileName = "";
     }

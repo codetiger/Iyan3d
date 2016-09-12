@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Iyan 3D</string>
+    <string name="app_name">Iyan 3D Pro</string>
     <string name="action_settings">設定</string>
     <string name="title_activity_scene_selection">SceneSelection</string>
     <string name="rename">リネーム</string>
@@ -225,7 +225,7 @@
     <string name="delete_animation_in_this_frame">このフレームでアニメーションを削除します。</string>
     <string name="envelop">包みます</string>
     <string name="news_feed">ニュースフィード</string>
-    <string name="hola_there_welcome_to_iyan_3d">そこにオラ！ Iyan 3Dへようこそ。</string>
+    <string name="hola_there_welcome_to_iyan_3d">そこにオラ！ Iyan 3D Proへようこそ。</string>
     <string name="add_joint">JOINTを追加</string>
     <string name="enter_text">テキストを入力します。</string>
     <string name="more_info">詳細</string>

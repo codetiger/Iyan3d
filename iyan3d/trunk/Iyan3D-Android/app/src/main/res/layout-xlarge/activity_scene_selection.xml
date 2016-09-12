@@ -7,7 +7,7 @@
              android:layout_height="fill_parent"
              android:orientation="vertical"
              android:weightSum="1"
-             tools:context="com.smackall.animator.SceneSelection">
+             tools:context="com.smackall.iyan3dPro.SceneSelection">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:tools="http://schemas.android.com/tools"
@@ -16,7 +16,7 @@
                   android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:weightSum="1"
-                  tools:context="com.smackall.animator.SceneSelection">
+                  tools:context="com.smackall.iyan3dPro.SceneSelection">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -69,34 +69,6 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="4">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/newsFeed_btn"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:clickable="true"
-                        android:onClick="showNewsFeed"
-                        android:scaleType="center"
-                        android:src="@drawable/newsfeed"/>
-                </FrameLayout>
-
-                <ImageView
-                    android:id="@+id/login_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:clickable="true"
-                    android:onClick="showLogIn"
-                    android:scaleType="center"
-                    android:src="@drawable/login_btn"/>
 
                 <ImageView
                     android:id="@+id/help"

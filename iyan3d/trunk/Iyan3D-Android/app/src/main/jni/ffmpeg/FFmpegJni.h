@@ -12,7 +12,7 @@ extern "C" {
  * Method:    run
  * Signature: (I[Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_com_smackall_animator_FFmpeg_run(JNIEnv *env, jobject obj, jint argc, jobjectArray args);
+JNIEXPORT jint JNICALL Java_com_smackall_iyan3dPro_FFmpeg_run(JNIEnv *env, jobject obj, jint argc, jobjectArray args);
 
 #ifdef __cplusplus
 }

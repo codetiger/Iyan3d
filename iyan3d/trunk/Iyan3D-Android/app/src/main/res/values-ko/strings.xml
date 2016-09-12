@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Iyan 3D</string>
+    <string name="app_name">Iyan 3D Pro</string>
     <string name="action_settings">설정</string>
     <string name="title_activity_scene_selection">SceneSelection</string>
     <string name="rename">이름 바꾸기</string>
@@ -225,7 +225,7 @@
     <string name="delete_animation_in_this_frame">이 프레임의 애니메이션 삭제</string>
     <string name="envelop">싸다</string>
     <string name="news_feed">뉴스 피드</string>
-    <string name="hola_there_welcome_to_iyan_3d">이 안녕! Iyan 3D에 오신 것을 환영합니다.</string>
+    <string name="hola_there_welcome_to_iyan_3d">이 안녕! Iyan 3D Pro에 오신 것을 환영합니다.</string>
     <string name="add_joint">JOINT를 ADD</string>
     <string name="enter_text">텍스트를 입력</string>
     <string name="more_info">더 많은 정보</string>

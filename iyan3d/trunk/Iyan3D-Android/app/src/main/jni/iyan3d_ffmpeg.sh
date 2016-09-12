@@ -198,9 +198,9 @@ cp -r $BASE/build/$1/config.h /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main
 cp -r $BASE/install/$1/ /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/src/main/obj/local/
 #cd /storage/Sabish/Iyan3D-5.0SVN
 #./gradlew assembleDebug
-#adb push /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/build/outputs/apk/app-debug.apk /data/local/tmp/com.smackall.animator
-#adb shell pm install -r "/data/local/tmp/com.smackall.animator"
-#adb shell am start -n "com.smackall.animator/com.smackall.animator.LoadingActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+#adb push /storage/Sabish/Iyan3D_6.0_SVN/Iyan3D/app/build/outputs/apk/app-debug.apk /data/local/tmp/com.smackall.iyan3dPro
+#adb shell pm install -r "/data/local/tmp/com.smackall.iyan3dPro"
+#adb shell am start -n "com.smackall.iyan3dPro/com.smackall.iyan3dPro.LoadingActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 #cd /home/android-developer/Downloads/ffmpeg-3.1.1
 }
 

@@ -6,6 +6,11 @@
         androclass:orderInCategory="0"
         androclass:title="@string/models"/>
     <item
+        androclass:id="@+id/text"
+        androclass:icon="@drawable/import_text"
+        androclass:orderInCategory="3"
+        androclass:title="@string/text"/>
+    <item
         androclass:id="@+id/images"
         androclass:icon="@drawable/import_image"
         androclass:orderInCategory="1"
@@ -16,28 +21,23 @@
     <!--androclass:icon="@drawable/import_video"-->
     <!--androclass:title="@string/videos" />-->
     <item
-        androclass:id="@+id/text"
-        androclass:icon="@drawable/import_text"
-        androclass:orderInCategory="3"
-        androclass:title="@string/text"/>
-    <item
         androclass:id="@+id/light"
         androclass:icon="@drawable/import_light"
         androclass:orderInCategory="4"
         androclass:title="@string/light"/>
-    <item
-        androclass:id="@+id/objFile"
-        androclass:icon="@drawable/import_obj"
-        androclass:orderInCategory="5"
-        androclass:title="@string/objFile"/>
-    <item
-        androclass:id="@+id/addBone"
-        androclass:icon="@drawable/add_bone"
-        androclass:orderInCategory="6"
-        androclass:title="@string/addBone"/>
-    <item
-        androclass:id="@+id/particle"
-        androclass:icon="@drawable/import_particle"
-        androclass:orderInCategory="7"
-        androclass:title="@string/particle"/>
+   <!--<item-->
+   <!--    androclass:id="@+id/objFile"-->
+   <!--    androclass:icon="@drawable/import_obj"-->
+   <!--    androclass:orderInCategory="5"-->
+   <!--    androclass:title="@string/objFile"/>-->
+   <!--<item-->
+   <!--    androclass:id="@+id/addBone"-->
+   <!--    androclass:icon="@drawable/add_bone"-->
+   <!--    androclass:orderInCategory="6"-->
+   <!--    androclass:title="@string/addBone"/>-->
+   <!--<item-->
+   <!--    androclass:id="@+id/particle"-->
+   <!--    androclass:icon="@drawable/import_particle"-->
+   <!--    androclass:orderInCategory="7"-->
+   <!--    androclass:title="@string/particle"/>-->
 </menu>
