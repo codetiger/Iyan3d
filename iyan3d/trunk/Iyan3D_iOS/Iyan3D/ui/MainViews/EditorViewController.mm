@@ -1345,8 +1345,8 @@ BOOL missingAlertShown;
     self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
     self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
     self.popoverController.popoverContentSize = ([self iPhone6Plus]) ? CGSizeMake(205.0, 39*5) : CGSizeMake(205.0, 39*5);
-    self.popoverController.delegate =self;
-    self.popUpVc.delegate=self;
+    self.popoverController.delegate = self;
+    self.popUpVc.delegate = self;
     
     CGRect rect = _importBtn.frame;
     rect = [self.view convertRect:rect fromView:_importBtn.superview];

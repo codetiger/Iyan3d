@@ -182,19 +182,19 @@
             if(indexPath.row == 0)
                 cell.imageView.image = [UIImage imageNamed:@"Import-model_Pad"];
             else if(indexPath.row == 1)
-                cell.imageView.image = [UIImage imageNamed:@"Import-image_Pad"];
-            else if(indexPath.row == 2)
-                cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad"];
-            else if(indexPath.row == 3)
                 cell.imageView.image = [UIImage imageNamed:@"Import-text_Pad"];
+            else if(indexPath.row == 2)
+                cell.imageView.image = [UIImage imageNamed:@"Import-image_Pad"];
+            else if(indexPath.row == 3)
+                cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad"];
             else if(indexPath.row == 4)
                 cell.imageView.image = [UIImage imageNamed:@"Import-Light_Pad"];
-            else if(indexPath.row == 5)
-                cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad"];
-            else if(indexPath.row == 6)
-                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad"];
-            else if(indexPath.row == 7)
-                cell.imageView.image = [UIImage imageNamed:@"Particles"];
+//            else if(indexPath.row == 5)
+//                cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad"];
+//            else if(indexPath.row == 6)
+//                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad"];
+//            else if(indexPath.row == 7)
+//                cell.imageView.image = [UIImage imageNamed:@"Particles"];
         }
     } else {
         if([clickedBtn isEqualToString:@"exportBtn"]) {
@@ -206,19 +206,19 @@
             if(indexPath.row == 0)
                 cell.imageView.image = [UIImage imageNamed:@"Import-model_IPhone"];
             else if(indexPath.row == 1)
-                cell.imageView.image = [UIImage imageNamed:@"Import-image_IPhone"];
-            else if(indexPath.row == 2)
-                cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone"];
-            else if(indexPath.row == 3)
                 cell.imageView.image = [UIImage imageNamed:@"Import-text_IPhone"];
+            else if(indexPath.row == 2)
+                cell.imageView.image = [UIImage imageNamed:@"Import-image_IPhone"];
+            else if(indexPath.row == 3)
+                cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone"];
             else if(indexPath.row == 4)
                 cell.imageView.image = [UIImage imageNamed:@"Import-Light_IPhone"];
-            else if(indexPath.row == 5)
-                cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone"];
-            else if(indexPath.row == 6)
-                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone"];
-            else if(indexPath.row == 7)
-                cell.imageView.image = [UIImage imageNamed:@"Particle_IPhone"];
+//            else if(indexPath.row == 5)
+//                cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone"];
+//            else if(indexPath.row == 6)
+//                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone"];
+//            else if(indexPath.row == 7)
+//                cell.imageView.image = [UIImage imageNamed:@"Particle_IPhone"];
 
         } else if([clickedBtn isEqualToString:@"myObjectsBtn"]) {
             
