@@ -174,7 +174,7 @@ bool SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
         importer->SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, MAX_VERTICES_COUNT);
         importer->SetPropertyInteger(AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8);
         
-        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs;
+        unsigned int pFlags = aiProcessPreset_TargetRealtime_Quality | aiProcess_FindInstances | aiProcess_OptimizeMeshes | aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_OptimizeGraph;
         
         scene = importer->ReadFile(filePath, pFlags);
         
@@ -482,7 +482,7 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
         }
 
         ((SkinMesh*)mesh)->finalize();
-        sceneNode->setSkinningData((SkinMesh*)mesh, ext != "sgr");
+        sceneNode->setSkinningData((SkinMesh*)mesh, ext != "sgr" && ext != "text");
         
         sgn = sgScene->getSceneManager()->createAnimatedNodeFromMesh((SkinMesh*)mesh, "setUniforms", ShaderManager::maxJoints,  CHARACTER_RIG, MESH_TYPE_HEAVY);
         sceneNode->node = sgn;
