@@ -264,58 +264,30 @@ void AnimatedMeshNode::calculateSingleJointTransforms(vertexDataHeavy* vertex, M
 {
     Vector4 pos = Vector4(0.0);
     Vector4 nor = Vector4(0.0);
+    float strength = 0;
     
     if(jointId > 0) {
         
-        if (jointId == vertex->optionalData1.x) {
-            
-            float strength = vertex->optionalData2.x;
-                pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-                nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData1.y) {
-            
-            float strength = vertex->optionalData2.y;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData1.z) {
-            
-            float strength = vertex->optionalData2.z;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData1.w) {
-            
-            float strength = vertex->optionalData2.w;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData3.x) {
-            
-            float strength = vertex->optionalData4.x;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData3.y) {
-            
-            float strength = vertex->optionalData4.y;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData3.z) {
-            
-            float strength = vertex->optionalData4.z;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        } else if (jointId == vertex->optionalData3.w) {
-            
-            float strength = vertex->optionalData4.w;
-            pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
-            nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
-            
-        }
+        if (jointId == vertex->optionalData1.x)
+            strength = vertex->optionalData2.x;
+        else if (jointId == vertex->optionalData1.y)
+            strength = vertex->optionalData2.y;
+        else if (jointId == vertex->optionalData1.z)
+            strength = vertex->optionalData2.z;
+        else if (jointId == vertex->optionalData1.w)
+            strength = vertex->optionalData2.w;
+        else if (jointId == vertex->optionalData3.x)
+            strength = vertex->optionalData4.x;
+        else if (jointId == vertex->optionalData3.y)
+            strength = vertex->optionalData4.y;
+        else if (jointId == vertex->optionalData3.z)
+            strength = vertex->optionalData4.z;
+        else if (jointId == vertex->optionalData3.w)
+            strength = vertex->optionalData4.w;
+        
+        pos = pos + (jointTransform * Vector4(vertPosition, 1.0)) * strength;
+        nor = nor + (jointTransform * Vector4(vertNormal, 0.0)) * strength;
+
     } else {
         
         pos = Vector4(vertPosition, 1.0);
@@ -330,70 +302,44 @@ void AnimatedMeshNode::calculateSingleJointTransforms(vertexDataHeavy* vertex, M
 
 void AnimatedMeshNode::calculateJointTransforms(vertexDataHeavy* vertex, vector<Mat4> jointTransforms, Vector3& vertPosition, Vector3& vertNormal, rig_type rigType)
 {
-    Vector4 pos = Vector4(0.0);
-    Vector4 nor = Vector4(0.0);
+    Vector4 pos = Vector4(vertPosition, 1.0);
+    Vector4 nor = Vector4(vertNormal, 0.0);
+    Mat4 finalMatrix = Mat4();
 
     int jointId = int(vertex->optionalData1.x);
-    float strength = vertex->optionalData2.x;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-    else {
-        pos = Vector4(vertPosition, 1.0);
-        nor = Vector4(vertNormal, 0.0);
-    }
-
-    if(rigType == CHARACTER_RIG) {
+    if (jointId > 0)
+        finalMatrix  = (jointTransforms[jointId - 1] * vertex->optionalData2.x);
+    
     jointId = int(vertex->optionalData1.y);
-    strength = vertex->optionalData2.y;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData2.y);
+    
     jointId = int(vertex->optionalData1.z);
-    strength = vertex->optionalData2.z;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData2.z);
+    
     jointId = int(vertex->optionalData1.w);
-    strength = vertex->optionalData2.w;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData2.w);
+    
     jointId = int(vertex->optionalData3.x);
-    strength = vertex->optionalData4.x;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData4.x);
+    
     jointId = int(vertex->optionalData3.y);
-    strength = vertex->optionalData4.y;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData4.y);
+    
     jointId = int(vertex->optionalData3.z);
-    strength = vertex->optionalData4.z;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData4.z);
+    
     jointId = int(vertex->optionalData3.w);
-    strength = vertex->optionalData4.w;
-    if (jointId > 0) {
-        pos = pos + (jointTransforms[jointId - 1] * Vector4(vertPosition, 1.0)) * strength;
-        nor = nor + (jointTransforms[jointId - 1] * Vector4(vertNormal, 0.0)) * strength;
-    }
-    }
+    if (jointId > 0)
+        finalMatrix  = finalMatrix + (jointTransforms[jointId - 1] * vertex->optionalData4.w);
+    
+    pos = finalMatrix * pos;
+    nor = finalMatrix * nor;
     
     vertPosition = Vector3(pos.x, pos.y, pos.z);
     vertNormal = Vector3(nor.x, nor.y, nor.z);

@@ -90,6 +90,23 @@ Vector4 Mat4::operator*(const Vector4& v) const
     return Vector4(vect);
 }
 
+Mat4 Mat4::operator*(const float& s) const
+{
+    Mat4 ret;
+    ret.matrix = GLKMatrix4Scale(matrix, s, s, s);
+    ret.matrix.m[12] *= s;
+    ret.matrix.m[13] *= s;
+    ret.matrix.m[14] *= s;
+    ret.matrix.m[15] *= s;
+    return ret;
+}
+
+Mat4 Mat4::operator+(const Mat4& m) const {
+    Mat4 ret;
+    ret.matrix = GLKMatrix4Add(matrix, m.matrix);
+    return ret;
+}
+
 void Mat4::setElement(unsigned int index, float value) {
     matrix.m[index] = value;
 }

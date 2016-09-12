@@ -36,6 +36,8 @@ public:
     bool operator==(const Mat4& m) const;
     Mat4& operator*=(const Mat4& m);
     Mat4 operator*(const Mat4& m) const;
+    Mat4 operator*(const float& s) const;
+    Mat4 operator+(const Mat4& m) const;
     Vector4 operator*(const Vector4& v) const;
     
     void setElement(unsigned int index, float value);
