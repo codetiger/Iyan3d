@@ -499,7 +499,7 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
         texTransparency = diffuse_color.w;
     }
     
-    if(texTransparency <= 0.5)
+    if(texTransparency <= 0.01)
         discard_fragment();
     
     float3x3 TBNMatrix = float3x3(in.T, in.B, in.N);
