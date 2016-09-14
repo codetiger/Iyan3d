@@ -3992,10 +3992,10 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
-    NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@.png",docDirPath,textureName];
+    NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@", docDirPath, textureName];
     std::string *texture = new std::string([textureName UTF8String]);
-    if ([[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
-        NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@.png",docDirPath,(isTemp) ? @"temp" : textureName];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]) {
+        NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@",docDirPath,(isTemp) ? @"temp" : textureName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:desFilePath])
             [[NSFileManager defaultManager] removeItemAtPath:desFilePath error:nil];
         UIImage *image =[UIImage imageWithContentsOfFile:srcTextureFilePath];

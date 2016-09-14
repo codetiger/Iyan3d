@@ -54,7 +54,7 @@ typedef struct {
     float shadowDarkness, transparency;
     float2 pointCoord [[ point_coord ]];
     float2 uv,texture2UV;
-    float4 position [[position]] , vertexPosCam;
+    float4 position [[position]] , vertexPosition_ws;
     float4 eyeVec, lightDir, lightColor;
     float3 meshColor;
     float3 T;
@@ -173,7 +173,7 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
 
     nor = normalize(nor);
     
-    out.vertexPosCam = pos;
+    out.vertexPosition_ws = pos;
     
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x * uvScaleValue[0];
@@ -244,11 +244,10 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
 
     nor = normalize(nor);
     
-    float4 vertex_position_objectspace = pos;
-    float4 vertex_position_cameraspace = model[0].data * pos;
-    out.vertexPosCam = vertex_position_cameraspace;
+    float4 vertexPosition_ws = model[0].data * pos;
+    out.vertexPosition_ws = vertexPosition_ws;
     
-    out.position = mvp * vertex_position_objectspace;
+    out.position = mvp * pos;
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x * uvScaleValue[0];
     out.uv.y = uv.y * uvScaleValue[0];
@@ -257,14 +256,14 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     out.B = normalize(float3(finalMatrix * float4(bitangent, 0.0)));
     out.N = normalize(float3(nor));
     
-    float4 vertexLightCoord = lvp * vertex_position_cameraspace;
+    float4 vertexLightCoord = lvp * vertexPosition_ws;
     float4 texCoords = vertexLightCoord / vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
     out.vertexDepth = texCoords.z;
     
     float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
-    out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
+    out.eyeVec = normalize(eye_position_cameraspace - vertexPosition_ws);
     
     if(int(hasLighting[0]) == 1){
         out.shadowDarkness = shadowDarkness;
@@ -402,8 +401,7 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
                                 )
 {
     
-    float4 vertex_position_objectspace = float4(float3(vertex_array[vid].position), 1.0);
-    float4 vertex_position_cameraspace = model[iId].data * vertex_position_objectspace;
+    float4 vertexPosition_ws = model[iId].data * float4(float3(vertex_array[vid].position), 1.0);
     float4 vertColor = float4(vertex_array[vid].vertColor);
     float3 tangent = float3(vertex_array[vid].tangent);
     float3 bitangent = float3(vertex_array[vid].bitagent);
@@ -418,29 +416,28 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.B = normalize(float3(model[iId].data * float4(bitangent, 0.0)));
     out.N = normalize(float3(model[iId].data * float4(normal,  0.0)));
 
-    out.vertexPosCam = vertex_position_cameraspace;
+    out.vertexPosition_ws = vertexPosition_ws;
     out.transparency = transparency[iId];
     out.hasLighting = hasLighting[iId];
-    out.position = vp * vertex_position_cameraspace;
+    out.position = vp * vertexPosition_ws;
     
     float2 uv = vertex_array[vid].texCoord1;
     out.uv.x = uv.x * uvScaleValue[iId];
     out.uv.y = uv.y * uvScaleValue[iId];
     
-    float4 vertexLightCoord = lvp * vertex_position_cameraspace;
+    float4 vertexLightCoord = lvp * vertexPosition_ws;
     float4 texCoords = vertexLightCoord/vertexLightCoord.w;
     out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
     out.vertexDepth = texCoords.z;
     
-    float4 eye_position_cameraspace =  float4(float3(eyePos),1.0);
-    out.eyeVec = normalize(eye_position_cameraspace - vertex_position_cameraspace);
+    float4 eye_position_ws = float4(float3(eyePos), 1.0);
+    out.eyeVec = eye_position_ws;
 
-    if(int(hasLighting[iId]) == 1){
+    if(int(hasLighting[iId]) == 1)
         out.shadowDarkness = shadowDarkness;
-    }else{
+    else
         out.shadowDarkness = 0.0;
-    }
     
     return out;
 }
@@ -516,14 +513,14 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
     if(in.hasLighting > 0.5) {
         
         if(hasReflectionMap > 0.5) {
-            float4 r = reflect(-in.eyeVec, normal);
+            float4 r = reflect(in.vertexPosition_ws - in.eyeVec, normal);
             float m = 2. * sqrt(pow(r.x, 2.0) + pow(r.y, 2.0) + pow(r.z + 1.0, 2.0));
             float2 vN = r.xy / m + .5;
             vN.y = -vN.y;
             specular = reflectionMap.sample(quad_sampler, vN);
         } else {
-            float4 light_position_cameraspace = float4(float3(lightPos[0]),1.0);
-            float4 lightDir = (lightType[0] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
+            float4 light_position_ws = float4(float3(lightPos[0]),1.0);
+            float4 lightDir = (lightType[0] == 1.0) ? light_position_ws : normalize(light_position_ws - in.vertexPosition_ws);
             float n_dot_l = saturate(dot(normal, lightDir));
             
             float4 reflectValue = -lightDir + 2.0f * n_dot_l * normal;
@@ -536,9 +533,9 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
         colorOfLight = half4(0.0);
         for (int i = 0; i < lightCount; i++) {
             
-            float4 light_position_cameraspace = float4(float3(lightPos[i]),1.0);
-            float4 lightDir = (lightType[i] == 1.0) ? light_position_cameraspace : normalize(light_position_cameraspace - in.vertexPosCam);
-            float distanceFromLight = distance(light_position_cameraspace , in.vertexPosCam);
+            float4 light_position_ws = float4(float3(lightPos[i]),1.0);
+            float4 lightDir = (lightType[i] == 1.0) ? light_position_ws : normalize(light_position_ws - in.vertexPosition_ws);
+            float distanceFromLight = distance(light_position_ws, in.vertexPosition_ws);
             
             float distanceRatio = (1.0 - saturate(distanceFromLight / lightFadeDistance[i]));
             distanceRatio = mix(1.0, distanceRatio, lightType[i]);

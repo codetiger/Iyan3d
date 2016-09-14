@@ -224,7 +224,7 @@
         }
         else{
             haveTexture = YES;
-            textureFileName = [[filesList objectAtIndex:indexPath.row-1] stringByDeletingPathExtension];
+            textureFileName = [filesList objectAtIndex:indexPath.row-1];
         }
     }
     
