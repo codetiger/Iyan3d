@@ -299,30 +299,36 @@ void SGSceneUpdater::updateJointSpheres()
     shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(updatingScene->nodes[updatingScene->selectedNodeId]->node);
     int bonesCount = animNode->getJointCount();
     
-    animNode->updateBoundingBox();
-    float xExt = animNode->getBoundingBox().getXExtend();
-    float yExt = animNode->getBoundingBox().getYExtend();
-    float zExt = animNode->getBoundingBox().getZExtend();
+    updateJointSpheresPosition();
     
-    Vector3 nodeScale = animNode->getScale();
-    
-    float volume = xExt/nodeScale.x * yExt/nodeScale.y * zExt/nodeScale.z;
-    float sphereSize = volume / 70.0;
 
     for(int i = 0;i < bonesCount;i++) {
-        
-        shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
         
             Vector3 pos = updatingScene->jointSpheres[i]->node->getPosition();
             float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
             float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
-            jointScale = jointScale;
+            jointScale = jointScale * 1.5;
             
-            Vector3 sphereScale = Vector3(sphereSize * jointScale);
+            Vector3 sphereScale = Vector3(jointScale);
             
             updatingScene->jointSpheres[i]->node->setScale(sphereScale);
     }
 
+}
+
+void SGSceneUpdater::updateJointSpheresPosition()
+{
+    if(updatingScene->selectedNodeId == NOT_SELECTED || (updatingScene->nodes[updatingScene->selectedNodeId]->getType() != NODE_RIG && updatingScene->nodes[updatingScene->selectedNodeId]->getType() != NODE_TEXT_SKIN))
+        return;
+    
+    shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(updatingScene->nodes[updatingScene->selectedNodeId]->node);
+    int bonesCount = animNode->getJointCount();
+
+    for(int i = 0;i < bonesCount;i++) {
+        
+        shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
+        updatingScene->jointSpheres[i]->node->setPosition(jointNode->getAbsolutePosition());
+    }
 }
 
 void SGSceneUpdater::updateLightCam(Vector3 position)

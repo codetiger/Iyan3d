@@ -870,25 +870,15 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
     if(bonesCount > renderingScene->jointSpheres.size())
         status = createJointSpheres(bonesCount - (int)renderingScene->jointSpheres.size());
     
+    renderingScene->updater->updateJointSpheresPosition();
+
     for(int i = 0;i < bonesCount;i++){
-        shared_ptr<JointNode> jointNode = animNode->getJointNode(i);
-        renderingScene->jointSpheres[i]->node->setParent(jointNode);
-            animNode->updateBoundingBox();
-            float xExt = animNode->getBoundingBox().getXExtend();
-            float yExt = animNode->getBoundingBox().getYExtend();
-            float zExt = animNode->getBoundingBox().getZExtend();
-            
-            Vector3 nodeScale = animNode->getScale();
-            
-            float volume = xExt/nodeScale.x * yExt/nodeScale.y * zExt/nodeScale.z;
-            float sphereSize = volume / 60.0;
-            
+        
             Vector3 pos = renderingScene->jointSpheres[i]->node->getPosition();
             float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
             float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
-            jointScale = jointScale;
-
-            Vector3 sphereScale = Vector3(sphereSize * jointScale);
+            jointScale = jointScale * 1.5;
+            Vector3 sphereScale = Vector3(jointScale);
             
             renderingScene->jointSpheres[i]->node->setScale(sphereScale);
     }

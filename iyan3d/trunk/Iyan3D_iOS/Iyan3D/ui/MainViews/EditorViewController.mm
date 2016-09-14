@@ -2462,6 +2462,14 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
 }
 
+- (void) cloneNodeByCopyingMesh:(int) indexOfNode
+{
+    if(!editorScene || indexOfNode >= editorScene->nodes.size())
+        return;
+    
+    
+}
+
 - (void) loadCloneNodeWithType:(int) selectedNodeType WithObject:(id) object nodeId:(int) selectedNode
 {
     

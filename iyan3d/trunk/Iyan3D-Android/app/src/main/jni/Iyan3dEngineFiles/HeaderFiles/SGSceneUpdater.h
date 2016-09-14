@@ -31,6 +31,7 @@ public:
     void updateLightCamera();
     void updateLightCam(Vector3 position);
     void updateJointSpheres();
+    void updateJointSpheresPosition();
     void updateLightProperties(int frameId);
     void resetMaterialTypes(bool isToonShader);
     void reloadKeyFrameMap();

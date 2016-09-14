@@ -133,6 +133,9 @@ void SGMovementManager::touchEnd(Vector2 curTouchPos) {
             moveScene->actionMan->storeActionKeys(true);
         moveScene->selectedControlId = NOT_SELECTED;
         moveScene->isControlSelected = false;
+        
+        moveScene->updater->updateJointSpheres();
+        
     } else if (moveScene->moveNodeId != NOT_EXISTS) {
         moveScene->actionMan->storeActionKeys(true);
         moveScene->moveNodeId = NOT_EXISTS;
@@ -232,6 +235,8 @@ void SGMovementManager::touchMove(Vector2 curTouchPos, Vector2 prevTouchPos, flo
             moveScene->actionMan->changeObjectScale(moveScene->getSelectedNodeScale() + outputValue, false);
         } else
             isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue, outputQuatValue);
+        
+        moveScene->updater->updateJointSpheresPosition();
         
     } else if (moveScene->moveNodeId != NOT_EXISTS && moveScene->controlType == MOVE) {
         moveObjectInPlane(curTouchPos, prevTouchPoints[0], true);
