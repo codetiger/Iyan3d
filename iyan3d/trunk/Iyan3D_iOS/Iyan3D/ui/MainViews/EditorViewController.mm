@@ -2266,8 +2266,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                       [self showOrHideProgress:SHOW_PROGRESS];
                                       if(editorScene->selectedNodeIds.size() > 0){
                                           assetAddType = IMPORT_ASSET_ACTION;
-                                          [self createDuplicateAssets];
-                                          [self undoRedoButtonState:DEACTIVATE_BOTH];
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              [self createDuplicateAssets];
+                                              [self undoRedoButtonState:DEACTIVATE_BOTH];
+                                          });
                                       }
                                       
                                       [self updateAssetListInScenes];
@@ -2353,6 +2355,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) createDuplicateAssets
 {
+    editorScene->freezeRendering = true;
     
     int selectedAssetId  = NOT_EXISTS;
     int selectedNode = NOT_EXISTS;
@@ -2387,6 +2390,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->selectMan->selectObject(editorScene->nodes.size()-1, editorScene->selectedMeshBufferId, false);
         editorScene->updater->setDataForFrame(editorScene->currentFrame);
     }
+    
+    editorScene->freezeRendering = false;
 }
 
 - (void) cloneSelectedAssetWithId:(int) selectedAssetId NodeType:(int) selectedNodeType AndSelNodeId:(int)selectedNodeIndex
@@ -3182,8 +3187,10 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         case CLONE: {
             assetAddType = IMPORT_ASSET_ACTION;
-            [self createDuplicateAssets];
-            [self updateAssetListInScenes];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self createDuplicateAssets];
+                [self updateAssetListInScenes];
+            });
             break;
         }
         case VERTEX_COLOR: {

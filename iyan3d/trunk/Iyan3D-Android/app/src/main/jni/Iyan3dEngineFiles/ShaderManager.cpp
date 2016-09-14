@@ -190,7 +190,7 @@ void ShaderManager::setUniforms(SGNode *sgNode, string matName, int materialInde
         setEyePos(sgNode, SHADER_MESH_eyePos);
         setShadowDakness(sgNode, SHADER_MESH_shadowDarkness);
         setHasMeshColor(sgNode, sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x, SHADER_MESH_hasMeshColor, false, materialIndex);
-        Vector4 meshColor = (sgNode->getType() == NODE_CAMERA) ? Vector4(-1.0) : sgNode->getProperty(VERTEX_COLOR, materialIndex).value;
+        Vector4 meshColor = sgNode->getProperty(VERTEX_COLOR, materialIndex).value;
         setVertexColorUniform(sgNode, meshColor, SHADER_MESH_meshColor, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
         setReflectionValue(sgNode, SHADER_MESH_reflectionValue, materialIndex);
         setNodeTransparency(sgNode, SHADER_MESH_transparency, materialIndex);

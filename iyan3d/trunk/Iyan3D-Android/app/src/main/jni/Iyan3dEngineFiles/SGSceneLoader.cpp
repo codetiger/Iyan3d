@@ -701,7 +701,8 @@ void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType a
     SGNode* iNode = new SGNode(nType);
     for(int i = 0; i < sgNode->materialProps.size(); i++) {
         MaterialProperty * m = new MaterialProperty(nType);
-        memcpy(m, sgNode->materialProps[i], sizeof(MaterialProperty));
+        memcpy(m, sgNode->materialProps[i], sizeof(sgNode->materialProps[i]));
+        m->getProps() = sgNode->materialProps[i]->getPropsCopy();
         iNode->materialProps.push_back(m);
     }
     shared_ptr<Node> original = (sgNode->node->type == NODE_TYPE_INSTANCED) ? sgNode->node->original : sgNode->node;

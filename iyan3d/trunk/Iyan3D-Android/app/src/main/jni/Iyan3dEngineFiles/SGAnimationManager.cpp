@@ -77,15 +77,12 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
     
     animScene->selectMan->unselectObject(fromNodeId);
     animScene->nodes[toNodeId]->options = animScene->nodes[fromNodeId]->options;
-    animScene->nodes[toNodeId]->getProperty(TEXTURE).fileName = animScene->nodes[fromNodeId]->getProperty(TEXTURE).fileName;
-    animScene->nodes[toNodeId]->oriTextureName = animScene->nodes[fromNodeId]->oriTextureName;
-    animScene->nodes[toNodeId]->getProperty(IS_VERTEX_COLOR).value.x = animScene->nodes[fromNodeId]->getProperty(IS_VERTEX_COLOR).value.x;
-    animScene->nodes[toNodeId]->getProperty(VERTEX_COLOR).value = animScene->nodes[fromNodeId]->getProperty(VERTEX_COLOR).value;
-    
-//    if(animScene->selectedNodeIds.size() > 0) {
-//        animScene->selectMan->unselectObjects();
-//        animScene->updater->setDataForFrame(animScene->currentFrame);
+//    for(int i = 0; i < animScene->nodes[fromNodeId]->materialProps.size(); i++) {
+//        if(animScene->nodes[toNodeId]->materialProps.size() <= i)
+//            animScene->nodes[toNodeId]->materialProps.push_back(new MaterialProperty(animScene->nodes[toNodeId]->getType()));
+//        memcpy(animScene->nodes[toNodeId]->materialProps[i], animScene->nodes[fromNodeId]->materialProps[i], sizeof(MaterialProperty));
 //    }
+    //animScene->nodes[toNodeId]->materialProps = animScene->nodes[fromNodeId]->materialProps;
     
     if(!excludeKeys) {
         ActionKey key;

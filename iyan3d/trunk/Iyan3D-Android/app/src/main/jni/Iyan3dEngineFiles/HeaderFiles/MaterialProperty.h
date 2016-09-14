@@ -24,6 +24,7 @@ public:
     ~MaterialProperty();
     
     std::map< PROP_INDEX, Property >& getProps();
+    std::map< PROP_INDEX, Property > getPropsCopy();
     
     Texture* getTextureOfType(node_texture_type nType);
     void setTextureForType(Texture* texture, node_texture_type nType);

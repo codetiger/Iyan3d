@@ -114,7 +114,7 @@ public:
     bool IsPropertyExists(PROP_INDEX pIndex);
     std::map< PROP_INDEX, Property > getAllProperties(int meshBufferIndex = NOT_SELECTED);
     Property& getProperty(PROP_INDEX pIndex, int meshBufferIndex = NOT_SELECTED);
-    PROP_INDEX checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex);
+    PROP_INDEX checkPropertyInSubProps(std::map< PROP_INDEX, Property >& propsMap, PROP_INDEX pIndex);
     void addOrUpdateProperty(PROP_INDEX index, Vector4 value, PROP_INDEX parentProp, PROP_TYPE type = TYPE_NONE, string title = "", string groupName = " ", string fileName = "", ICON_INDEX iconId = NO_ICON);
     void checkAndUpdatePropsMap(std::map < PROP_INDEX, Property > &propsMap, Property property);
 };

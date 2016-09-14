@@ -93,6 +93,11 @@ std::map< PROP_INDEX, Property >& MaterialProperty::getProps()
     return props;
 }
 
+std::map< PROP_INDEX, Property > MaterialProperty::getPropsCopy()
+{
+    return props;
+}
+
 Property& MaterialProperty::getProperty(PROP_INDEX pIndex)
 {
     if(props.find(pIndex) != props.end()) {

@@ -98,6 +98,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             node = smgr->createNodeFromMesh(mesh,"setUniforms");
             node->setPosition(Vector3(RENDER_CAM_INIT_POS_X,RENDER_CAM_INIT_POS_Y,RENDER_CAM_INIT_POS_Z));
             getProperty(LIGHTING).value.x = false;
+            getProperty(VERTEX_COLOR).value = Vector4(-1.0);
             node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
             break;
         }
@@ -1140,7 +1141,7 @@ Property& SGNode::getProperty(PROP_INDEX pIndex, int meshBufferIndex)
     }
 }
 
-PROP_INDEX SGNode::checkPropertyInSubProps(std::map< PROP_INDEX, Property > propsMap, PROP_INDEX pIndex)
+PROP_INDEX SGNode::checkPropertyInSubProps(std::map< PROP_INDEX, Property >& propsMap, PROP_INDEX pIndex)
 {
     std::map<PROP_INDEX, Property>::iterator pIt;
     for(pIt = propsMap.begin(); pIt != propsMap.end(); pIt++) {

@@ -33,6 +33,14 @@ void FileHelper::resetSeekPosition(){
     seekPosition = 0;
 }
 
+unsigned int FileHelper::readUnsignedInt(ifstream *file)
+{
+    unsigned int intRead;
+    file->read((char*)&intRead, sizeof(unsigned int));
+    seekPosition += sizeof(unsigned int);
+    return intRead;
+}
+
 int FileHelper::readInt(ifstream *file)
 {
     int intRead;
@@ -100,6 +108,11 @@ std::wstring FileHelper::readWString(ifstream *file)
     //seekPosition += stringSize;
     
     return stringRead;
+}
+
+void FileHelper::writeUnsignedInt(ofstream *file, unsigned int data)
+{
+    file->write((char*)&data, sizeof(unsigned int));
 }
 
 void FileHelper::writeInt(ofstream *file , int data)

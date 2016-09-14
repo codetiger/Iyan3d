@@ -27,6 +27,7 @@ public:
     FileHelper();
     static void resetSeekPosition();
     static void clearFolder();
+    static unsigned int readUnsignedInt(ifstream *file);
     static int readInt(ifstream *file);
     static int readShort(ifstream *file);
     static float readFloat(ifstream *file);
@@ -38,6 +39,7 @@ public:
     static Vector2 readVector2(ifstream *file);
 
     static void writeInt(ofstream *file , int data);
+    static void writeUnsignedInt(ofstream *file, unsigned int data);
 	static void writeShort(ofstream *file , short data);
     static void writeFloat(ofstream *file , float data);
     static void writeBool(ofstream *file , bool data);

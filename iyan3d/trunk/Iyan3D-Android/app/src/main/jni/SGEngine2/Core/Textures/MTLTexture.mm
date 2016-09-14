@@ -82,6 +82,9 @@ bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
 
     UIImage *originalImage = [UIImage imageWithContentsOfFile:pathToTextureFile];
     UIImage *image = originalImage;
+    
+    if(!originalImage)
+        return NO;
 
     if(blurRadius)
         image = boxblurImage(originalImage, blurRadius);
