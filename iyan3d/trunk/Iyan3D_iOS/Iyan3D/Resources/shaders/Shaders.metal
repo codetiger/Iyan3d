@@ -249,8 +249,7 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     
     out.position = mvp * pos;
     float2 uv = vertex_array[vid].texCoord1;
-    out.uv.x = uv.x * uvScaleValue[0];
-    out.uv.y = uv.y * uvScaleValue[0];
+    out.uv = uv * uvScaleValue[0];
     
     out.T = normalize(float3(finalMatrix * float4(tangent, 0.0)));
     out.B = normalize(float3(finalMatrix * float4(bitangent, 0.0)));
@@ -474,7 +473,7 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
                                   constant float& samplerType [[ buffer(SHADER_COMMON_samplerType) ]])
 {
     float shadowBias = 0.005, shadowValue = 0.0;
-    if(in.shadowDarkness > 0.0){
+    if(in.shadowDarkness > 0.0) {
         constexpr sampler linear_sampler(min_filter::linear, mag_filter::linear);
         float depth = shadowMap.sample(linear_sampler,in.texture2UV);
         if((depth + shadowBias) < in.vertexDepth)
@@ -513,13 +512,12 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
     if(in.hasLighting > 0.5) {
         
         if(hasReflectionMap > 0.5) {
-            float4 r = reflect(in.vertexPosition_ws - in.eyeVec, normal);
-            float m = 2. * sqrt(pow(r.x, 2.0) + pow(r.y, 2.0) + pow(r.z + 1.0, 2.0));
-            float2 vN = r.xy / m + .5;
-            vN.y = -vN.y;
+            float4 rVec = reflect(in.eyeVec - in.vertexPosition_ws, normal) + float4(0.0, 0.0, 1.0, 0.0);
+            float2 vN = rVec.xy / length(rVec);
+            vN = (vN * 0.5) + 0.5;
             specular = reflectionMap.sample(quad_sampler, vN);
         } else {
-            float4 light_position_ws = float4(float3(lightPos[0]),1.0);
+            float4 light_position_ws = float4(lightPos[0], 1.0);
             float4 lightDir = (lightType[0] == 1.0) ? light_position_ws : normalize(light_position_ws - in.vertexPosition_ws);
             float n_dot_l = saturate(dot(normal, lightDir));
             
@@ -533,7 +531,7 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
         colorOfLight = half4(0.0);
         for (int i = 0; i < lightCount; i++) {
             
-            float4 light_position_ws = float4(float3(lightPos[i]),1.0);
+            float4 light_position_ws = float4(lightPos[i], 1.0);
             float4 lightDir = (lightType[i] == 1.0) ? light_position_ws : normalize(light_position_ws - in.vertexPosition_ws);
             float distanceFromLight = distance(light_position_ws, in.vertexPosition_ws);
             
