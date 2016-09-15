@@ -693,6 +693,33 @@ void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
     }
 }
 
+SGNode* SGSceneLoader::copyOfSGNode(SGNode *sgNode)
+{
+    NODE_TYPE nType = sgNode->getType();
+    SGNode *newNode = new SGNode(nType);
+    
+    newNode->assetId = sgNode->assetId;
+    newNode->name = sgNode->name;
+    
+    for(int i = 0; i < sgNode->materialProps.size(); i++) {
+        MaterialProperty * m = new MaterialProperty(nType);
+        memcpy(m, sgNode->materialProps[i], sizeof(sgNode->materialProps[i]));
+        m->getProps() = sgNode->materialProps[i]->getPropsCopy();
+        newNode->materialProps.push_back(m);
+    }
+    
+    if(nType == NODE_RIG || nType == NODE_TEXT_SKIN) {
+        for(int i = 0; i < sgNode->joints.size(); i++)
+        {
+            SGJoint *joint = new SGJoint();
+            memcpy(joint, sgNode->joints[i], sizeof(SGJoint));
+            newNode->joints.push_back(joint);
+        }
+    }
+
+    return newNode;
+}
+
 void SGSceneLoader::createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType)
 {
     if(!currentScene || (currentScene->selectedNodeId == NOT_EXISTS && currentScene->selectedNodeIds.size() <= 0 && actionType == IMPORT_ASSET_ACTION))

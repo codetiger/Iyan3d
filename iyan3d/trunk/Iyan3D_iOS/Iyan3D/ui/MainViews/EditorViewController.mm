@@ -2423,7 +2423,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
-        [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNodeIndex];
+        [self cloneNodeByCopyingMesh:selectedNodeIndex];
+
         
     } else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS) {
         
@@ -2458,7 +2459,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
-        [self loadCloneNodeWithType:selectedNodeType WithObject:assetItem nodeId:selectedNodeIndex];
+        [self cloneNodeByCopyingMesh:selectedNodeIndex];
     }
 }
 
@@ -2467,7 +2468,27 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     if(!editorScene || indexOfNode >= editorScene->nodes.size())
         return;
     
+    SGNode* nodeToClone = editorScene->nodes[indexOfNode];
+    NODE_TYPE nType = nodeToClone->getType();
+    Mesh *meshToClone = dynamic_pointer_cast<MeshNode>(nodeToClone->node)->getMesh();
     
+    SGNode* newNode = editorScene->loader->copyOfSGNode(nodeToClone);
+    
+    Mesh* copiedMesh = (nType == NODE_RIG || nType == NODE_TEXT_SKIN) ? new SkinMesh() : new Mesh();
+    copiedMesh->meshType = meshToClone->meshType;
+    copiedMesh->copyDataFromMesh(meshToClone);
+    
+    if(nType == NODE_RIG || nType == NODE_TEXT_SKIN) {
+        ((SkinMesh*)copiedMesh)->copyJointsFromMesh((SkinMesh*)meshToClone);
+    }
+    
+    SceneImporter* importer = new SceneImporter();
+    importer->importNodeFromMesh(editorScene, newNode, copiedMesh);
+    editorScene->nodes.push_back(newNode);
+    //delete importer;
+    editorScene->animMan->copyPropsOfNode(indexOfNode, (int)editorScene->nodes.size()-1);
+
+    [self reloadSceneObjects];
 }
 
 - (void) loadCloneNodeWithType:(int) selectedNodeType WithObject:(id) object nodeId:(int) selectedNode

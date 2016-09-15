@@ -44,6 +44,7 @@ public:
     
     // Instanced Nodes
     
+    SGNode* copyOfSGNode(SGNode* sgNode);
     void createInstance(SGNode* sgNode, NODE_TYPE nType, ActionType actionType);
     bool loadInstance(SGNode* iNode, int origActionId, ActionType actionType);
 };

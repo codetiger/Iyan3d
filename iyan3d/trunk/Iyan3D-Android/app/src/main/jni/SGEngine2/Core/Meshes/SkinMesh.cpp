@@ -75,6 +75,45 @@ void SkinMesh::recoverJointsFromMesh(vector< shared_ptr<JointNode> > jointNodes)
     }
 }
 
+void SkinMesh::copyJointsFromMesh(SkinMesh* otherMesh)
+{
+    for( int i = 0; i < otherMesh->joints->size(); i++) {
+        
+        Joint *originalJ = (*(otherMesh->joints))[i];
+
+        int parentIndex = -1;
+        if(originalJ->Parent)
+            parentIndex = originalJ->Parent->Index;
+        
+        Joint * newJ = NULL;
+        if(parentIndex >= 0)
+            newJ = addJoint((*joints)[parentIndex]);
+        else
+            newJ= addJoint(NULL);
+        
+        newJ->originalJointMatrix = originalJ->originalJointMatrix;
+        newJ->LocalAnimatedMatrix = originalJ->LocalAnimatedMatrix;
+        
+        
+        for( int j = 0; j < originalJ->PaintedVertices->size(); ++j) {
+            
+            shared_ptr<PaintedVertex> oPVI = (*originalJ->PaintedVertices)[j];
+            shared_ptr<PaintedVertex> pVI = make_shared<PaintedVertex>();
+            pVI->vertexId = oPVI->vertexId;
+            pVI->weight = oPVI->weight;
+            pVI->meshBufferIndex = oPVI->meshBufferIndex;
+            newJ->PaintedVertices->push_back(pVI);
+            
+        }
+        
+        newJ->envelopeRadius = originalJ->envelopeRadius;
+        newJ->sphereRadius = originalJ->sphereRadius;
+
+    }
+    
+    finalize();
+}
+
 Joint* SkinMesh::addJoint(Joint *parent)
 {
     Joint *joint =  new Joint();

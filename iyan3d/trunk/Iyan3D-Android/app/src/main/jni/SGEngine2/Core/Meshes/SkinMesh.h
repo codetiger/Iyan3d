@@ -23,6 +23,7 @@ public:
     vector<Joint*> *RootJoints;
     
     Joint* getJointById(short jointId);
+    void copyJointsFromMesh(SkinMesh* otherMesh);
     Joint* addJoint(Joint *parent);
     void buildAllGlobalAnimatedMatrices(Joint *joint,Joint *parentJoint);
     void transferJointsToMesh(vector< shared_ptr<JointNode> > joints);
