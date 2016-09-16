@@ -74,7 +74,5 @@ void main()
         vReflectionCoord = r.xy / m + .5;
         vReflectionCoord.y = -vReflectionCoord.y;
     }
-    
-    gl_Position = mvp * pos;
 }
 

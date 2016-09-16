@@ -943,7 +943,7 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
         joint->readData(filePointer);
         joints.push_back(joint);
     }
-    
+        
     return mesh;
 }
 

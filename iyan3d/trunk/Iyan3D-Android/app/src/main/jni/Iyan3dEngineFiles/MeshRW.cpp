@@ -53,10 +53,9 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
     for(int i = 0; i < meshBufferCount; i++) {
         
         vector< vertexDataHeavy > vertices = skinnedMesh->getHeavyVerticesArray(i);
-        unsigned short* indices = skinnedMesh->getIndicesArray(i);
+        vector< unsigned short > indicesArr = skinnedMesh->getIndicesArrayAtMeshBufferIndex(i);
         int verticesCount = (int)vertices.size();
-        unsigned int indicesCount = skinnedMesh->getIndicesCount(i);
-        
+                
         FileHelper::writeInt(filePointer, skinnedMesh->getMeshBufferMaterialIndices(i));
         
         FileHelper::writeInt(filePointer, verticesCount);
@@ -75,10 +74,10 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
             FileHelper::writeVector4(filePointer, v.optionalData4);
         }
         
-        FileHelper::writeUnsignedInt(filePointer, indicesCount);
+        FileHelper::writeUnsignedInt(filePointer, indicesArr.size());
         
-        for(unsigned int j = 0; j < indicesCount; j++) {
-            FileHelper::writeInt(filePointer, indices[j]);
+        for(unsigned int j = 0; j < indicesArr.size(); j++) {
+            FileHelper::writeInt(filePointer, indicesArr[j]);
         }
     }
     
@@ -95,6 +94,10 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
         Mat4 jointMatrix = (*skinnedMesh->joints)[j]->LocalAnimatedMatrix;
         for(int k = 0; k < 16; k++)
             FileHelper::writeFloat(filePointer, jointMatrix[k]);
+        
+        Mat4 invBindPosMatrix = (*skinnedMesh->joints)[j]->inverseBindPoseMatrix;
+        for(int k = 0; k < 16; k ++)
+            FileHelper::writeFloat(filePointer, invBindPosMatrix[k]);
         
         unsigned short boneWeightCount = (*skinnedMesh->joints)[j]->PaintedVertices->size();
         FileHelper::writeInt(filePointer, boneWeightCount);
@@ -113,7 +116,6 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
         FileHelper::writeFloat(filePointer, (*skinnedMesh->joints)[j]->envelopeRadius);
         FileHelper::writeFloat(filePointer, (*skinnedMesh->joints)[j]->sphereRadius);
         
-        printf("\n REad Last MeshBFInd %f ", (*skinnedMesh->joints)[j]->sphereRadius);
 
     }
 }
@@ -163,11 +165,12 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
     mesh->meshType = MESH_TYPE_HEAVY;
     
     int meshBufferCount = FileHelper::readInt(filePointer);
-    vector<vertexDataHeavy> mbvd;
-    vector<unsigned short> mbi;
     
     for(int i = 0; i < meshBufferCount; i++) {
         
+        vector<vertexDataHeavy> mbvd;
+        vector<unsigned short> mbi;
+
         int materialIndex = FileHelper::readInt(filePointer);
         int verticesCount = FileHelper::readInt(filePointer);
         
@@ -215,6 +218,12 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
         ibone->originalJointMatrix = Mat4(boneMatrix);
         ibone->LocalAnimatedMatrix = Mat4(boneMatrix);
         
+        float* invBindPos = new float[16];
+        for( int k = 0; k < 16; k ++)
+            invBindPos[k] = FileHelper::readFloat(filePointer);
+        
+        ibone->inverseBindPoseMatrix = Mat4(invBindPos);
+        
         delete [] boneMatrix;
         
         int boneWeightCount = FileHelper::readInt(filePointer);
@@ -235,8 +244,6 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
         ibone->envelopeRadius = FileHelper::readFloat(filePointer);
         ibone->sphereRadius = FileHelper::readFloat(filePointer);
         
-        printf("\n REad Last MeshBFInd %f ", ibone->sphereRadius);
-
     }
     
     mesh->finalize();
