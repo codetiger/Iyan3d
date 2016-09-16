@@ -155,7 +155,7 @@ int SGSceneLoader::readSceneGlobalInfo(ifstream *filePointer, int& nodeCount, fl
     ShaderManager::shadowDensity = FileHelper::readFloat(filePointer);
     cameraFov = FileHelper::readFloat(filePointer);
     
-    FileHelper::readFloat(filePointer); // Ambient Light
+    currentScene->shaderMGR->getProperty(AMBIENT_LIGHT).value.x = FileHelper::readFloat(filePointer); // Ambient Light
     cameraResolution = FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
