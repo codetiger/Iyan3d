@@ -412,8 +412,10 @@ void ShaderManager::setReflectionValue(SGNode *sgNode, int paramIndex, int mater
 void ShaderManager::setEyePos(SGNode *sgNode,int paramIndex)
 {
     float *campos = new float[3];
-    Vector3 camposVec = smgr->getActiveCamera()->getAbsolutePosition();
-    campos[0] = camposVec.x;    campos[1] = camposVec.y;    campos[2] = camposVec.z;
+    Vector3 camposVec = smgr->getActiveCamera()->getPosition();
+    campos[0] = camposVec.x;
+    campos[1] = camposVec.y;
+    campos[2] = camposVec.z;
     smgr->setPropertyValue(sgNode->node->material, "eyePos", campos, DATA_FLOAT_VEC3, 3, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
     delete[] campos;
 }

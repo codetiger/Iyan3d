@@ -430,7 +430,7 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
     out.vertexDepth = texCoords.z;
     
-    float4 eye_position_ws = float4(float3(eyePos), 1.0);
+    float4 eye_position_ws = vertexPosition_ws - float4(float3(eyePos), 1.0);
     out.eyeVec = eye_position_ws;
 
     if(int(hasLighting[iId]) == 1)
@@ -485,9 +485,9 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
     half4 diffuse_color = half4(half3(in.meshColor), 1.0);
     half texTransparency = 1.0;
     if(in.hasMeshColor < 0.5) {
-        if(samplerType == 0.0) {
+        if(samplerType == 0.0)
             diffuse_color = colorMap.sample(quad_sampler, in.uv);
-        }
+        
         if(samplerType == 1.0) {
             constexpr sampler nearest_sampler(min_filter::nearest, mag_filter::nearest);
             diffuse_color = colorMap.sample(nearest_sampler, in.uv);
@@ -504,7 +504,6 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
     if(hasNormalMap > 0.5) {
         half4 n =  normalMap.sample(quad_sampler, in.uv);
         normal = float4(normalize(TBNMatrix * float3(n.xyz)), 0.0);
-
     }
 
     half4 specular = half4(0.0), colorOfLight = half4(1.0);
@@ -512,9 +511,10 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
     if(in.hasLighting > 0.5) {
         
         if(hasReflectionMap > 0.5) {
-            float4 rVec = reflect(in.eyeVec - in.vertexPosition_ws, normal) + float4(0.0, 0.0, 1.0, 0.0);
-            float2 vN = rVec.xy / length(rVec);
-            vN = (vN * 0.5) + 0.5;
+            float4 r = reflect(in.eyeVec, normal);
+            float m = 2.0 * sqrt(r.x * r.x + r.y * r.y + (r.z + 1.0) * (r.z + 1.0));
+            float2 vN = (r.xy / m) + 0.5;
+            vN.y = -vN.y;
             specular = reflectionMap.sample(quad_sampler, vN);
         } else {
             float4 light_position_ws = float4(lightPos[0], 1.0);
