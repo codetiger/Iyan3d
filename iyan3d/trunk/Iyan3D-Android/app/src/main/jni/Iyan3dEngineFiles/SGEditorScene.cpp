@@ -193,7 +193,7 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, 
     moveNodeId = NOT_SELECTED;
 
     shaderMGR->addOrUpdateProperty(AMBIENT_LIGHT, Vector4(0), UNDEFINED, SLIDER_TYPE, "Ambient Light", "Scene Properties");
-    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", "");
+    shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Matcap", "Scene Properties", "");
 }
 
 void SGEditorScene::initTextures()
@@ -563,7 +563,7 @@ void SGEditorScene::setEnvironmentTexture(std::string textureFilePath, bool isPr
     shaderMGR->environmentTex = smgr->loadTexture("Env Texture", envTexFilePath, TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
     
     if(!isPreview) {
-        shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", textureFilePath);
+        shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Matcap", "Scene Properties", textureFilePath);
     }
     
     for( int i = 2; i < nodes.size(); i++) {
