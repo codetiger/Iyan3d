@@ -98,7 +98,6 @@ void main()
         vec3 r = reflect( -vEyeVec, N );
         float m = 2. * sqrt(pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2.0));
         vReflectionCoord = r.xy / m + .5;
-        vReflectionCoord.y = -vReflectionCoord.y;
     }
 }
 

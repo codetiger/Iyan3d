@@ -431,7 +431,7 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.vertexDepth = texCoords.z;
     
     float4 eye_position_ws = vertexPosition_ws - float4(float3(eyePos), 1.0);
-    out.eyeVec = eye_position_ws;
+    out.eyeVec = normalize(eye_position_ws);
 
     if(int(hasLighting[iId]) == 1)
         out.shadowDarkness = shadowDarkness;
@@ -514,7 +514,6 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
             float4 r = reflect(in.eyeVec, normal);
             float m = 2.0 * sqrt(r.x * r.x + r.y * r.y + (r.z + 1.0) * (r.z + 1.0));
             float2 vN = (r.xy / m) + 0.5;
-            vN.y = -vN.y;
             specular = reflectionMap.sample(quad_sampler, vN);
         } else {
             float4 light_position_ws = float4(lightPos[0], 1.0);

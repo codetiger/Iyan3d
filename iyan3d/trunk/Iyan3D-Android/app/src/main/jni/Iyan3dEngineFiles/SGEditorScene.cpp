@@ -566,9 +566,6 @@ void SGEditorScene::setEnvironmentTexture(std::string textureFilePath, bool isPr
         shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Map", "Scene Properties", textureFilePath);
     }
     
-    if(shaderMGR->environmentTex)
-        printf("\n Texture exists %d ", shaderMGR->environmentTex->width);
-    
     for( int i = 2; i < nodes.size(); i++) {
         if(nodes[i]->getType() != NODE_IMAGE && nodes[i]->getType() != NODE_VIDEO) {
             for(int j = 0; j < nodes[i]->materialProps.size(); j++)
