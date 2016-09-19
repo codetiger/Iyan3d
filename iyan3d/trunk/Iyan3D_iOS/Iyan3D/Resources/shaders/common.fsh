@@ -10,7 +10,7 @@ uniform vec3 lightColor[5], lightPos[5];
 uniform float fadeEndDistance[5], lightTypes[5];
 
 varying float vHasLighting, vReflectionValue, vHasMeshColor, vTransparencyValue, vShadowDist;
-varying vec2 vTexCoord, vTexCoordBias, vReflectionCoord;
+varying vec2 vTexCoord, vTexCoordBias;
 varying vec3 vMeshColor;
 varying vec3 vEyeVec, vVertexPosition;
 varying mat3 vTBNMatrix;
@@ -91,17 +91,23 @@ void main()
     vec4 colorOfLight = vec4(1.0);
 
     if(vHasLighting > 0.5) {
-        if(hasReflectionMap > 0.5)
-            specular = texture2D(reflectionMap, vReflectionCoord);
-        else
-            specular = vec4(getSpecularOfLight(0, normal));
+        if(vReflectionValue > 0.0) {
+            if(hasReflectionMap > 0.5) {
+                vec3 r = reflect(vEyeVec, normal);
+                float m = 2.0 * sqrt(r.x * r.x + r.y * r.y + (r.z + 1.0) * (r.z + 1.0));
+                vec2 vN = (r.xy / m) + 0.5;
+                
+                specular = texture2D(reflectionMap, vN);
+            } else
+                specular = vec4(getSpecularOfLight(0, normal));
+        }
         
         colorOfLight = vec4(0.0);
         for (int i = 0; i < int(lightCount); i++) {
             colorOfLight += getColorOfLight(i, normal);
         }
     }
-    
+
     vec4 finalColor = vec4(diffuse_color + specular) * colorOfLight;
 
     if(hasReflectionMap > 0.5)
