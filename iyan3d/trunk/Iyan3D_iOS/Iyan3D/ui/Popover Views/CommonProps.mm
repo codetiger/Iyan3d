@@ -430,7 +430,8 @@
 
 - (void) applyPhysicsProps
 {
-    [self.delegate applyPhysicsProps:physicsProperty];
+    if(physicsProperty.index == HAS_PHYSICS)
+        [self.delegate applyPhysicsProps:physicsProperty];
 }
 
 - (void)didReceiveMemoryWarning {
