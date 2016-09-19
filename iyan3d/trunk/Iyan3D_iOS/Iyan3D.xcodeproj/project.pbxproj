@@ -850,7 +850,6 @@
 		256F6EBB1BF624FB00154622 /* Maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D6C1BF624FB00154622 /* Maths.cpp */; };
 		256F6F831BF6275A00154622 /* ConversionHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6F821BF6275A00154622 /* ConversionHelper.cpp */; };
 		256F6F841BF6275A00154622 /* ConversionHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6F821BF6275A00154622 /* ConversionHelper.cpp */; };
-		257106D81A95F87F004716A5 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 257106D61A95E928004716A5 /* Reachability.mm */; };
 		25730E601AFD3C7B0042F81A /* ANImageBitmapRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E461AFD3C7B0042F81A /* ANImageBitmapRep.m */; };
 		25730E611AFD3C7B0042F81A /* BitmapContextRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E481AFD3C7B0042F81A /* BitmapContextRep.m */; };
 		25730E621AFD3C7B0042F81A /* NSImage+ANImageBitmapRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E4B1AFD3C7B0042F81A /* NSImage+ANImageBitmapRep.m */; };
@@ -2255,7 +2254,6 @@
 		C8E6173718C5DD7100BC5342 /* FPPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173218C5DD7100BC5342 /* FPPopoverController.m */; };
 		C8E6173818C5DD7100BC5342 /* FPPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173418C5DD7100BC5342 /* FPPopoverView.m */; };
 		C8E6173918C5DD7100BC5342 /* FPTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173618C5DD7100BC5342 /* FPTouchView.m */; };
-		E20670DE1B049AA6006DD2F7 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 257106D61A95E928004716A5 /* Reachability.mm */; };
 		E20670E21B049AA6006DD2F7 /* BitmapDrawManipulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E5B1AFD3C7B0042F81A /* BitmapDrawManipulator.m */; };
 		E20670E31B049AA6006DD2F7 /* ScaleForAutoRigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */; };
 		E20670F01B049AA6006DD2F7 /* SmartImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E24973F4196BD80F0025D442 /* SmartImageView.mm */; };
@@ -3175,8 +3173,6 @@
 		256F6D6C1BF624FB00154622 /* Maths.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Maths.cpp; sourceTree = "<group>"; };
 		256F6D6D1BF624FB00154622 /* Maths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Maths.h; sourceTree = "<group>"; };
 		256F6F821BF6275A00154622 /* ConversionHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConversionHelper.cpp; sourceTree = "<group>"; };
-		257106D51A95E928004716A5 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		257106D61A95E928004716A5 /* Reachability.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Reachability.mm; sourceTree = "<group>"; };
 		25730E451AFD3C7B0042F81A /* ANImageBitmapRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANImageBitmapRep.h; sourceTree = "<group>"; };
 		25730E461AFD3C7B0042F81A /* ANImageBitmapRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANImageBitmapRep.m; sourceTree = "<group>"; };
 		25730E471AFD3C7B0042F81A /* BitmapContextRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapContextRep.h; sourceTree = "<group>"; };
@@ -4959,7 +4955,6 @@
 			children = (
 				251BF4801C2C20A300A5D41D /* RenderViewManager.h */,
 				251BF4811C2C20A300A5D41D /* RenderViewManager.mm */,
-				257106D41A95E928004716A5 /* Reachability */,
 				254F7DAF1A94CC52004D63A8 /* AppHelper.h */,
 				254F7DB01A94CC52004D63A8 /* AppHelper.mm */,
 			);
@@ -5285,15 +5280,6 @@
 				256F6D6D1BF624FB00154622 /* Maths.h */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		257106D41A95E928004716A5 /* Reachability */ = {
-			isa = PBXGroup;
-			children = (
-				257106D51A95E928004716A5 /* Reachability.h */,
-				257106D61A95E928004716A5 /* Reachability.mm */,
-			);
-			path = Reachability;
 			sourceTree = "<group>";
 		};
 		25730E441AFD3C7B0042F81A /* ANImageBitmapRep */ = {
@@ -9264,7 +9250,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				257106D81A95F87F004716A5 /* Reachability.mm in Sources */,
 				25DE10B11CAA8D6D0076F669 /* btGenericPoolAllocator.cpp in Sources */,
 				256F6D961BF624FB00154622 /* SkinMesh.cpp in Sources */,
 				25DE10291CAA8D6D0076F669 /* btMultiSapBroadphase.cpp in Sources */,
@@ -9648,7 +9633,6 @@
 				7F30F5BB1B576DB900B311E3 /* NSString+NSHash.m in Sources */,
 				25CACF6C1B27D5000027F48C /* FontCellView.m in Sources */,
 				25DE106C1CAA8D6D0076F669 /* btBvhTriangleMeshShape.cpp in Sources */,
-				E20670DE1B049AA6006DD2F7 /* Reachability.mm in Sources */,
 				25DE109A1CAA8D6D0076F669 /* btSphereShape.cpp in Sources */,
 				25DD33FE1D4F6CFC0008778C /* MaterialProperty.cpp in Sources */,
 				25DE105E1CAA8D6D0076F669 /* btSphereBoxCollisionAlgorithm.cpp in Sources */,

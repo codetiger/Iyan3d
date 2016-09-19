@@ -57,15 +57,9 @@
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:previousDownloadTime];
     int hours = timeInterval / 3600;
     if (hours > 5) {
-        if ([self checkInternetConnected]) {
-            [self initHelper];
-            [[AppHelper getAppHelper] loadAllAssets];
-            [AppHelper getAppHelper].isAssetsUpdated = YES;
-        } else{
-            [self performSelectorOnMainThread:@selector(showInternetErrorAlert) withObject:nil waitUntilDone:NO];
-            if(self.delegate)
-                [self.delegate performLocalTasks];
-        }
+        [self initHelper];
+        [[AppHelper getAppHelper] loadAllAssets];
+        [AppHelper getAppHelper].isAssetsUpdated = YES;
     } else {
         if(self.delegate)
             [self.delegate performLocalTasks];
@@ -127,14 +121,6 @@
             [[AppHelper getAppHelper] saveToUserDefaults:uniqueIdentifier withKey:@"identifierForVendor"];
         }
     }
-}
-
-- (BOOL)checkInternetConnected
-{
-
-    Reachability* reachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
-    return !(networkStatus == NotReachable);
 }
 
 - (NSLocale*)getPriceLocale;

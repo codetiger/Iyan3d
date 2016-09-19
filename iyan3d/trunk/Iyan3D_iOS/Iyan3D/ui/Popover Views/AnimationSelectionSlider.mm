@@ -428,43 +428,13 @@
     asset = animationsItems[indexVal];
 }
 
-- (void)publishBtnaction:(id)sender
-{
-    
-    if(sender != nil)
-        _publishBtn = (UIButton*)sender;
-    
-    NSString *uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-    
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"] && uniqueId.length > 5) {
-        if(sender != nil)
-            [_publishBtn setHidden:YES];
-        if ([[AppHelper getAppHelper] checkInternetConnected]) {
-            [self.delegate showOrHideProgress:1];
-            [self.publishBtn setHidden:YES];
-            [self.view setUserInteractionEnabled:NO];
-            [self publishAssetWithUserName:[[AppHelper getAppHelper] userDefaultsForKey:@"username"]];
-        }
-    }
-    else{
-        UIAlertView *signinAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"sign_in_to_continue", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-        [signinAlert show];
-        [signinAlert setTag:SIGNIN_ALERT];
-    }
-}
-
 #pragma mark animations related data methods
 
 - (void)getAnimationData
 {
     animationJsonArray = [[NSMutableArray alloc] init];
     [AppHelper getAppHelper].delegate = self;
-    if ([[AppHelper getAppHelper] checkInternetConnected]) {
-        [[AppHelper getAppHelper] performReadingJsonInQueue:downloadQueue ForPage:5];
-    } else {
-        [self.downloadIndicator stopAnimating];
-        [self.downloadIndicator setHidden:YES];
-    }
+    [[AppHelper getAppHelper] performReadingJsonInQueue:downloadQueue ForPage:5];
 }
 
 - (void)displayBasedOnSelection:(NSNumber*)rowIndex

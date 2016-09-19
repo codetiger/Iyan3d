@@ -48,7 +48,6 @@
         [self.delegate renameAnimation:_selectedIndex];
     } else if (indexValue == 3) {
         [self.delegate setSelectedAnimationAtIndex:_selectedIndex];
-        [self.delegate publishBtnaction:nil];
     }
     
     [self.popoverController dismissPopoverAnimated:YES];

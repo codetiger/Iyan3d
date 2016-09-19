@@ -20,7 +20,6 @@
 - (void) deleteAnimationAtIndex:(int) indexVal;
 - (void) cloneAnimation:(int) indexVal;
 - (void) renameAnimation:(int) indexVal;
-- (void)publishBtnaction:(id)sender;
 - (void) setSelectedAnimationAtIndex:(int)indexVal;
 
 @end

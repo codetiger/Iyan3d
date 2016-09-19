@@ -136,7 +136,6 @@
 - (IBAction)moveLastAction:(id)sender;
 - (IBAction)moveFirstAction:(id)sender;
 - (IBAction)addJoinAction:(id)sender;
-- (IBAction)publishBtnAction:(id)sender;
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;
 - (IBAction)exportAction:(id)sender;

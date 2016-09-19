@@ -132,13 +132,8 @@
 {
     [super viewDidAppear:animated];
     if ([fontArray count] == 0) {
-        if ([[AppHelper getAppHelper] checkInternetConnected]) {
             [[AppHelper getAppHelper] initHelper];
             [[AppHelper getAppHelper] performReadingJsonInQueue:downloadQueue ForPage:TEXT_VIEW];
-        }
-        else {
-            [self showInternetError:NO_INTERNET];
-        }
     }
     else {
         [self loadAllFonts];
@@ -147,16 +142,6 @@
 
 - (IBAction)boneSwitchAction:(id)sender {
     withRig = (_boneSwitch.isOn) ? true : false;
-}
-
-
-- (void)showInternetError:(int)connectionError
-{
-    if (connectionError != SLOW_INTERNET) {
-        [self.view endEditing:YES];
-        UIAlertView* internetError = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [internetError performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-    }
 }
 
 - (void)didReceiveMemoryWarning {

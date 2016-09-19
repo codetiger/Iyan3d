@@ -122,6 +122,5 @@
 - (IBAction)rateButtonAction:(id)sender;
 - (IBAction)exportButtonAction:(id)sender;
 - (IBAction)startButtonAction:(id)sender;
-- (void) shaderPhotoAction:(int)credits;
 
 @end

@@ -1240,11 +1240,6 @@ BOOL missingAlertShown;
         editorScene->rigMan->addNewJoint();
 }
 
-- (IBAction)publishBtnAction:(id)sender
-{
-    [animationsliderVC publishBtnaction:sender];
-}
-
 - (IBAction)editFunction:(id)sender
 {
     if([self.objectList isEditing]) {

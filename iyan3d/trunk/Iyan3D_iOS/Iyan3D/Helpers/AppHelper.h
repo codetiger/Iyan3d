@@ -10,7 +10,6 @@
 #import "StoreKit/StoreKit.h"
 #import "Utility.h"
 #import "CacheSystem.h"
-#import "Reachability.h"
 
 @protocol AppHelperDelegate
 -(void)loadingViewStatus:(BOOL)status;
@@ -53,7 +52,7 @@
 -(void) initHelper;
 -(void) missingAlertView;
 -(void) downloadJsonData;
--(BOOL) checkInternetConnected;
+
 -(NSLocale*) getPriceLocale;
 -(NSMutableArray*) getRestoreIds;
 -(void) initializeFontListArray;
