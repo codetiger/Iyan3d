@@ -679,7 +679,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     
     int matIndex = (selectedMeshBufferId == NOT_SELECTED) ? 0 : selectedMeshBufferId;
     
-    string texturePath = FileHelper::getTexturesDirectory() + textureFileName+ ".png";
+    string texturePath = FileHelper::getTexturesDirectory() + textureFileName;
 
     if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x = (pIndex == TEXTURE) ? false : nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
@@ -703,12 +703,11 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         
         
         bool smoothTexture = (nodes[selectedNodeId]->smoothTexture);
-        printf(" \n Texture file path %s ", texturePath.c_str());
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         nodes[selectedNodeId]->materialProps[matIndex]->setTextureForType(nodeTex, texType);
         
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = textureFileName + ".png";
+            nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = textureFileName;
         }
     } else {
         nodes[selectedNodeId]->getProperty(VERTEX_COLOR, matIndex).value = Vector4(vertexColor, 0);

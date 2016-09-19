@@ -885,19 +885,41 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
 {
     assetId = FileHelper::readInt(filePointer);
     int sgbVersion = FileHelper::readInt(filePointer);
-//    if(sgbVersion < SGB_VERSION_CURRENT)
-//        legacyReadData(filePointer, sgbVersion, origIndex);
     
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     setPropertiesOfNode();
-    (IsPropertyExists(HAS_PHYSICS)) ? getProperty(HAS_PHYSICS).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(PHYSICS_KIND)) ? getProperty(PHYSICS_KIND).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(WEIGHT)) ? getProperty(WEIGHT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(FORCE_MAGNITUDE)) ? getProperty(FORCE_MAGNITUDE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(IS_SOFT)) ? getProperty(IS_SOFT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(LIGHT_TYPE)) ? getProperty(LIGHT_TYPE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(SPECIFIC_FLOAT)) ? getProperty(SPECIFIC_FLOAT).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
-    (IsPropertyExists(FONT_SIZE)) ? getProperty(FONT_SIZE).value.x = FileHelper::readFloat(filePointer) : FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(HAS_PHYSICS))
+        getProperty(HAS_PHYSICS).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(PHYSICS_KIND))
+        getProperty(PHYSICS_KIND).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(WEIGHT))
+        getProperty(WEIGHT).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(FORCE_MAGNITUDE))
+        getProperty(FORCE_MAGNITUDE).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(IS_SOFT))
+        getProperty(IS_SOFT).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(LIGHT_TYPE))
+        getProperty(LIGHT_TYPE).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(SPECIFIC_FLOAT))
+        getProperty(SPECIFIC_FLOAT).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
+    if(IsPropertyExists(FONT_SIZE))
+        getProperty(FONT_SIZE).value.x = FileHelper::readFloat(filePointer);
+    else
+        FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);

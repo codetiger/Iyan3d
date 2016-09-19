@@ -4025,14 +4025,17 @@ void downloadFile(NSString* url, NSString* fileName)
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@", docDirPath, textureName];
     std::string *texture = new std::string([textureName UTF8String]);
+    NSString* tempPath = [NSString stringWithFormat:@"temp.%@", [textureName pathExtension]];
+    
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]) {
-        NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@",docDirPath,(isTemp) ? @"temp" : textureName];
+        NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@",docDirPath,(isTemp) ? tempPath : textureName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:desFilePath])
             [[NSFileManager defaultManager] removeItemAtPath:desFilePath error:nil];
         UIImage *image =[UIImage imageWithContentsOfFile:srcTextureFilePath];
         NSData *imageData = [self convertAndScaleImage:image size:-1];
         [imageData writeToFile:desFilePath atomically:YES];
-        *texture = *new std::string([(isTemp)?@"temp" : textureName UTF8String]);
+        *texture = *new std::string((isTemp)? [tempPath UTF8String] : [textureName UTF8String]);
     }
     
     if(pIndex == ENVIRONMENT_TEXTURE) {
