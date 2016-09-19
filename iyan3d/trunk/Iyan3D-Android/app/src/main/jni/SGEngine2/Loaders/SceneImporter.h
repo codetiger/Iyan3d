@@ -53,6 +53,7 @@ private:
     Mesh *rigMesh;
     bool hasLoadedRigNode;
     map< string, Joint* > *bones;
+    string nodeName;
 
 
     void loadBonesFromMesh(aiMesh *aiM, SkinMesh *m, map< string, Joint*> *bones);

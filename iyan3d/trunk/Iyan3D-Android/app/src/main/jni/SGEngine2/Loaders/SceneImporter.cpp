@@ -190,6 +190,7 @@ bool SceneImporter::importNodesFromFile(SGEditorScene *sgScene, string name, str
             this->mColor = meshColor;
             this->ext = ext;
             this->folderPath = fileLocation;
+            this->nodeName = name;
 
             importNode(scene->mRootNode, scene->mRootNode->mTransformation);
             
@@ -576,8 +577,13 @@ void SceneImporter::importNode(aiNode *node, aiMatrix4x4 parentTransform)
                 rigMesh = mesh;
             }
 
-            string name = node->mName.C_Str();
-            sceneNode->name = ConversionHelper::getWStringForString(name);
+            if(this->nodeName == "") {
+                string name = node->mName.C_Str();
+                sceneNode->name = ConversionHelper::getWStringForString(name);
+            } else {
+                string name = node->mName.C_Str();
+                sceneNode->name = ConversionHelper::getWStringForString(this->nodeName);
+            }
         }
 
         for (int i = 0; i < node->mNumMeshes; i++) {
