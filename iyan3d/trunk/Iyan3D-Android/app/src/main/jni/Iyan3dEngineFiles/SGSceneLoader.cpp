@@ -708,15 +708,6 @@ SGNode* SGSceneLoader::copyOfSGNode(SGNode *sgNode)
         newNode->materialProps.push_back(m);
     }
     
-    if(nType == NODE_RIG || nType == NODE_TEXT_SKIN) {
-        for(int i = 0; i < sgNode->joints.size(); i++)
-        {
-            SGJoint *joint = new SGJoint();
-            memcpy(joint, sgNode->joints[i], sizeof(SGJoint));
-            newNode->joints.push_back(joint);
-        }
-    }
-
     return newNode;
 }
 

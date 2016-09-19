@@ -553,10 +553,14 @@ void SGNode::setInitialKeyValues(int actionType)
         } else {
             visibilityKey.visibility = true;
             positionKey.id = rotationKey.id = scaleKey.id = visibilityKey.id = 0;
-            KeyHelper::addKey(positionKeys, positionKey);
-            KeyHelper::addKey(rotationKeys, rotationKey);
-            KeyHelper::addKey(scaleKeys, scaleKey);
-            KeyHelper::addKey(visibilityKeys, visibilityKey);
+            if(positionKeys.size() == 0)
+                KeyHelper::addKey(positionKeys, positionKey);
+            if(rotationKeys.size() == 0)
+                KeyHelper::addKey(rotationKeys, rotationKey);
+            if(scaleKeys.size() == 0)
+                KeyHelper::addKey(scaleKeys, scaleKey);
+            if(visibilityKeys.size() == 0)
+                KeyHelper::addKey(visibilityKeys, visibilityKey);
             
             int jointCount = (type == NODE_RIG || type == NODE_TEXT_SKIN) ? (dynamic_pointer_cast<AnimatedMeshNode>(node))->getJointCount():0;
             
@@ -578,10 +582,14 @@ void SGNode::setInitialKeyValues(int actionType)
                     jointVisibilityKey.visibility = true;
                     jointsInitialRotations.push_back(jointRotationKey.rotation);
                     jointPositionKey.id = jointRotationKey.id = jointScaleKey.id = jointVisibilityKey.id = 0;
-                    KeyHelper::addKey(joint->positionKeys, jointPositionKey);
-                    KeyHelper::addKey(joint->rotationKeys, jointRotationKey);
-                    KeyHelper::addKey(joint->scaleKeys, jointScaleKey);
-                    KeyHelper::addKey(joint->visibilityKeys, jointVisibilityKey);
+                    if(joint->positionKeys.size() == 0)
+                        KeyHelper::addKey(joint->positionKeys, jointPositionKey);
+                    if(joint->rotationKeys.size() == 0)
+                        KeyHelper::addKey(joint->rotationKeys, jointRotationKey);
+                    if(joint->scaleKeys.size() == 0)
+                        KeyHelper::addKey(joint->scaleKeys, jointScaleKey);
+                    if(joint->visibilityKeys.size() == 0)
+                        KeyHelper::addKey(joint->visibilityKeys, jointVisibilityKey);
                     joint->jointNode = jointNode;
                 }
             }
