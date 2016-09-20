@@ -19,7 +19,7 @@ uniform float hasLighting[1], reflectionValue[1], hasMeshColor[1], uvScaleValue[
 uniform float ambientLight;
 
 varying float vHasLighting, vReflectionValue, vHasMeshColor, vTransparencyValue, vShadowDist;
-varying vec2 vTexCoord, vTexCoordBias, vReflectionCoord;
+varying vec2 vTexCoord, vTexCoordBias;
 varying vec3 vMeshColor;
 varying vec3 vEyeVec, vVertexPosition;
 varying mat3 vTBNMatrix;
@@ -52,7 +52,7 @@ void main()
     vTBNMatrix = mat3(T, B, N);
     
     vVertexPosition = pos.xyz;
-    vEyeVec = normalize(eyePos - vVertexPosition);
+    vEyeVec = normalize(vVertexPosition - eyePos);
     
     if(bool(hasLighting[0])) {
         vec4 vertexLightCoord = lvp * pos;
@@ -67,14 +67,5 @@ void main()
         vShadowDist = 0.0;
         vTexCoordBias = vec2(0.0);
     }
-    
-    if(reflectionValue[0] > 0.0) {
-        vec3 r = reflect( -vEyeVec, N );
-        float m = 2. * sqrt(pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2.0));
-        vReflectionCoord = r.xy / m + .5;
-        vReflectionCoord.y = -vReflectionCoord.y;
-    }
-    
-    gl_Position = mvp * pos;
 }
 
