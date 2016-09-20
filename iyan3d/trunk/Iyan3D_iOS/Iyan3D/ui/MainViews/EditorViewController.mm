@@ -3283,7 +3283,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) applyPhysicsProps:(Property) property
 {
-    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED)
+    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED || (property.index != HAS_PHYSICS) || property.value.x != 1)
         return;
     
     SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
