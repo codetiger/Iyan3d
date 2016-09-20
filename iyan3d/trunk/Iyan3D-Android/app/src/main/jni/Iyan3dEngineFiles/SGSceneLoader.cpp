@@ -74,7 +74,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
                 
                 for(int j = 0; j < sgNode->materialProps.size(); j++) {
                     string textureName = sgNode->getProperty(TEXTURE).fileName;
-                    Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName + ".png", TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
+                    Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName, TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
                     sgNode->materialProps[j]->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
                     
                     string bumpMapName = sgNode->getProperty(BUMP_MAP).fileName;
