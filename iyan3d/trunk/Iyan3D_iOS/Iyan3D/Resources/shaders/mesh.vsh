@@ -35,7 +35,6 @@ void main()
     vTBNMatrix = mat3(T, B, N);
     
     vec4 vertex_position_model = model[iId] * vec4(vertPosition, 1.0);
-
     vVertexPosition = vertex_position_model.xyz;
     vEyeVec = normalize(vVertexPosition - eyePos);
     

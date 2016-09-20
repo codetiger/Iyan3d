@@ -390,7 +390,7 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
             RenderCMDBuffer.label = @"MyRenderEncoder";
             
             [RenderCMDBuffer setDepthStencilState:_generalDepthWriteEnableState];
-            [RenderCMDBuffer pushDebugGroup:@"DrawCube"];
+            [RenderCMDBuffer pushDebugGroup:@"DrawScene"];
             mainRenderCMDBuffer = RenderCMDBuffer;
         }
     }
@@ -495,7 +495,7 @@ int MetalRenderManager::getAvailableBfferWithSize(int bufSize)
     }
     if(bufIndex == NOT_EXISTS){
         BufferState bufState;
-        bufState.buf = [device newBufferWithLength:bufSize options:0];
+        bufState.buf = [device newBufferWithLength:bufSize options:MTLResourceCPUCacheModeWriteCombined];
         MTLBuffersMap[bufSize].push_back(bufState);
         bufIndex = (int)MTLBuffersMap[bufSize].size() - 1;
         MTLBuffersMap[bufSize][bufIndex].isOccupied = true;
@@ -657,7 +657,7 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
         
         if(updateBothBuffers) {
             unsigned int length = nodeMes->getIndicesCount(i) * sizeof(unsigned short);
-            [MTLNode->indexBuffers addObject:[device newBufferWithBytes:nodeMes->getIndicesArray(i) length:length options:MTLResourceOptionCPUCacheModeDefault]];
+            [MTLNode->indexBuffers addObject:[device newBufferWithBytes:nodeMes->getIndicesArray(i) length:length options:MTLResourceCPUCacheModeWriteCombined]];
         }
     }
 }
@@ -699,9 +699,9 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
         
     } else {
         if(meshType == MESH_TYPE_LITE)
-            buf = [device newBufferWithBytes:&(nodeMes->getLiteVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexData) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceOptionCPUCacheModeDefault];
+            buf = [device newBufferWithBytes:&(nodeMes->getLiteVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexData) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceCPUCacheModeWriteCombined];
         else
-            buf = [device newBufferWithBytes:&(nodeMes->getHeavyVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexDataHeavy) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceOptionCPUCacheModeDefault];
+            buf = [device newBufferWithBytes:&(nodeMes->getHeavyVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexDataHeavy) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceCPUCacheModeWriteCombined];
         if(buf)
             [MTLNode->VertexBuffers addObject:buf];
     }

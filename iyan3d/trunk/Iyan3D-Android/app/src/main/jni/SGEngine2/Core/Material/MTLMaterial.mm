@@ -42,7 +42,9 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
         MTLUniform* uniform = &uniforms[i];
         if(uniform->nodeIndex == nodeIndex && uniform->materialIndex == materialIndex && uniform->renderTargetIndex == renderTargetIndex && uniform->name == name) {
             if(uniform->buf == 0 || uniform->count != count) {
-                uniform->buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
+                if(uniform->buf)
+                    [uniform->buf setPurgeableState:MTLPurgeableStateEmpty];
+                uniform->buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:MTLResourceCPUCacheModeWriteCombined];
             }
 
             if(uniform->count != count || memcmp((uint8_t *)[uniform->buf contents], values, count * sizeof(float)) != 0) {
@@ -59,7 +61,7 @@ short MTLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
         AddProperty(name, type, paramIndex, count, 0, nodeIndex, materialIndex, renderTargetIndex);
         uIndex = uniforms.size()-1;
         uniforms[uIndex].count = count;
-        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
+        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:MTLResourceCPUCacheModeWriteCombined];
         memcpy((uint8_t *)[uniforms[uIndex].buf contents], values, count * sizeof(float));
     }
     
@@ -77,7 +79,9 @@ short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
         MTLUniform* uniform = &uniforms[i];
         if(uniform->nodeIndex == nodeIndex && uniform->materialIndex == materialIndex && uniform->renderTargetIndex == renderTargetIndex && uniform->name == name) {
             if(uniform->buf == 0 || uniform->count != count) {
-                uniform->buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
+                if(uniform->buf)
+                    [uniform->buf setPurgeableState:MTLPurgeableStateEmpty];
+                uniform->buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:MTLResourceCPUCacheModeWriteCombined];
             }
             
             if(uniform->count != count || memcmp((uint8_t *)[uniform->buf contents], values, count * sizeof(int)) != 0) {
@@ -94,7 +98,7 @@ short MTLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
         AddProperty(name, type, paramIndex, count, 0, nodeIndex, materialIndex, renderTargetIndex);
         uIndex = uniforms.size()-1;
         uniforms[uIndex].count = count;
-        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:0];
+        uniforms[uIndex].buf = [MetalHandler::getMTLDevice() newBufferWithLength:count * sizeof(float) options:MTLResourceCPUCacheModeWriteCombined];
         memcpy((uint8_t *)[uniforms[uIndex].buf contents], values, count * sizeof(int));
     }
     
