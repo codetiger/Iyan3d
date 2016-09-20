@@ -46,14 +46,12 @@ void OGLMaterial::AddAttributes(string name,DATA_TYPE type,uint32_t location,u16
     attributes.push_back(attr);
 }
 
-void OGLMaterial::AddProperty(string propertyName, NODE_PROPERTY property, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, short nodeIndex)
+void OGLMaterial::AddProperty(string propertyName, DATA_TYPE type, u16 paramIndex, u16 count, uint32_t location, short nodeIndex)
 {
-    uniform uni;
+    OGLUniform uni;
     uni.location = location;
     uni.name = propertyName;
     uni.type = type;
-    uni.property = property;
-    uni.index = this->uniforms.size();
     uni.count = count;
     uni.nodeIndex = nodeIndex;
     uni.values = NULL;
@@ -65,14 +63,15 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
 {
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
-        if(uniforms[i].name == name) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count)
-                uniforms[i].values = new int[count];
+        OGLUniform* uniform = &uniforms[i];
+        if(uniform->name == name) {
+            if(uniform->values == NULL || uniform->count != count)
+                uniform->values = new int[count];
             
-            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(int)) != 0) {
-                memcpy(uniforms[i].values, values, count * sizeof(int));
-                uniforms[i].count = count;
-                uniforms[i].isUpdated = true;
+            if(uniform->count != count || memcmp(uniform->values, values, count * sizeof(int)) != 0) {
+                memcpy(uniform->values, values, count * sizeof(int));
+                uniform->count = count;
+                uniform->isUpdated = true;
             }
 
             uniformNodeIndex = i;
@@ -82,7 +81,7 @@ short OGLMaterial::setPropertyValue(string name, int *values, DATA_TYPE type, u1
     
     if(uniformNodeIndex == NOT_EXISTS) {
         uint location = glGetUniformLocation(shaderProgram, name.c_str());
-        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, 0, count, location, nodeIndex);
+        AddProperty(name, type, 0, count, location, nodeIndex);
         uniformNodeIndex = uniforms.size()-1;
         uniforms[uniformNodeIndex].values = new int[count];
         memcpy(uniforms[uniformNodeIndex].values, values, count * sizeof(int));
@@ -100,14 +99,15 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
 {
     short uniformNodeIndex = NOT_EXISTS;
     for(int i = 0; i < uniforms.size(); i++) {
-        if(uniforms[i].name == name) {
-            if(uniforms[i].values == NULL || uniforms[i].count != count)
-                uniforms[i].values = new float[count];
+        OGLUniform* uniform = &uniforms[i];
+        if(uniform->name == name) {
+            if(uniform->values == NULL || uniform->count != count)
+                uniform->values = new float[count];
 
-            if(uniforms[i].count != count || memcmp(uniforms[i].values, values, count * sizeof(float)) != 0) {
-                memcpy(uniforms[i].values, values, count * sizeof(float));
-                uniforms[i].count = count;
-                uniforms[i].isUpdated = true;
+            if(uniform->count != count || memcmp(uniform->values, values, count * sizeof(float)) != 0) {
+                memcpy(uniform->values, values, count * sizeof(float));
+                uniform->count = count;
+                uniform->isUpdated = true;
             }
             uniformNodeIndex = i;
             break;
@@ -116,7 +116,7 @@ short OGLMaterial::setPropertyValue(string name, float *values, DATA_TYPE type, 
     
     if(uniformNodeIndex == NOT_EXISTS) {
         uint location = glGetUniformLocation(shaderProgram, name.c_str());
-        AddProperty(name, NODE_PROPERTY_USER_DEFINED, type, 0, count, location, nodeIndex);
+        AddProperty(name, type, 0, count, location, nodeIndex);
         uniformNodeIndex = uniforms.size()-1;
         uniforms[uniformNodeIndex].values = new float[count];
         memcpy(uniforms[uniformNodeIndex].values, values, count * sizeof(float));

@@ -25,12 +25,10 @@
 
 #define MAX_SHADERS_PER_MATERIAL 8
 
-struct uniform {
+struct OGLUniform {
     std::string name;
     uint32_t location;
     DATA_TYPE type;
-    NODE_PROPERTY property;
-    unsigned short index;
     unsigned short count;
     void *values;
     short nodeIndex;
@@ -46,14 +44,14 @@ struct attribute{
 class OGLMaterial : public Material{
     
 public:
-    vector<uniform> uniforms;
+    vector<OGLUniform> uniforms;
     vector<attribute> attributes;
     uint32_t shaderProgram;
     
     OGLMaterial();
     ~OGLMaterial();
     void AddAttributes(string name,DATA_TYPE type,uint32_t location,u16 bufIndex);
-    void AddProperty(string propertyName,NODE_PROPERTY property,DATA_TYPE type,u16 paramIndex = 0,u16 count = 1,uint32_t location = 0,short nodeIndex = NOT_EXISTS);
+    void AddProperty(string propertyName, DATA_TYPE type,u16 paramIndex = 0,u16 count = 1,uint32_t location = 0,short nodeIndex = NOT_EXISTS);
     virtual short setPropertyValue(string name,float *values,DATA_TYPE type,u16 count,u16 paramIndex = 0,int nodeIndex = NOT_EXISTS, int materialIndex = NOT_EXISTS, int renderTargetIndex = NOT_EXISTS);
     virtual short setPropertyValue(string name,int *values,DATA_TYPE type,u16 count,u16 paramIndex = 0,int nodeIndex = NOT_EXISTS, int materialIndex = NOT_EXISTS, int renderTargetIndex = NOT_EXISTS);
     bool LoadShaders(string vShaderName,string fShaderName, std::map< string, string > shadersStr);

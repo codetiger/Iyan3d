@@ -448,23 +448,19 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
 
 void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex)
 {
+    if(texture == NULL)
+        return;
+        
     int textureValue = 0;
     
     if(deviceType == OPENGLES2) {
         OGLTexture* tex = (OGLTexture*)texture;
-        if(texture != NULL) {
-            textureValue = tex->OGLTextureName;
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, tex, userValue);
-        }
+        textureValue = tex->OGLTextureName;
+        smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, tex, userValue);
     } else if(deviceType == METAL) {
         textureValue =  userValue;
-        if(texture != NULL) {
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
-        } else {
-            smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, NULL, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
-        }
+        smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
     }
-
 }
 
 void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex)

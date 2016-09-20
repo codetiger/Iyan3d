@@ -170,33 +170,27 @@ vertex ColorInOut Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer(0) ]
     finalMatrix = model[0].data * finalMatrix;
     float4 pos = finalMatrix * in_position;
     float4 nor = finalMatrix * in_normal;
-
     nor = normalize(nor);
     
     out.vertexPosition_ws = pos;
-    
-    float2 uv = vertex_array[vid].texCoord1;
-    out.uv.x = uv.x * uvScaleValue[0];
-    out.uv.y = uv.y * uvScaleValue[0];
+    out.uv = vertex_array[vid].texCoord1 * uvScaleValue[0];
+    out.shadowDarkness = 0.0;
 
     out.T = normalize(float3(finalMatrix * float4(tangent, 0.0)));
     out.B = normalize(float3(finalMatrix * float4(bitangent, 0.0)));
     out.N = normalize(float3(nor));
     
-    float4 vertexLightCoord = lvp * pos;
-    float4 texCoords = vertexLightCoord / vertexLightCoord.w;
-    out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
-    out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
-    out.vertexDepth = texCoords.z;
+    if(int(hasLighting[0]) == 1) {
+        float4 vertexLightCoord = lvp * pos;
+        float4 texCoords = vertexLightCoord / vertexLightCoord.w;
+        out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
+        out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
+        out.vertexDepth = texCoords.z;
+        out.shadowDarkness = shadowDarkness;
+    }
     
     float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
     out.eyeVec = normalize(eye_position_cameraspace - pos);
-    
-    if(int(hasLighting[0]) == 1){
-        out.shadowDarkness = shadowDarkness;
-    }else{
-        out.shadowDarkness = 0.0;
-    }
     
     return out;
 }
@@ -241,34 +235,30 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
 
     float4 pos = finalMatrix * in_position;
     float4 nor = finalMatrix * in_normal;
-
     nor = normalize(nor);
     
     float4 vertexPosition_ws = model[0].data * pos;
     out.vertexPosition_ws = vertexPosition_ws;
-    
     out.position = mvp * pos;
     float2 uv = vertex_array[vid].texCoord1;
     out.uv = uv * uvScaleValue[0];
+    out.shadowDarkness = 0.0;
     
     out.T = normalize(float3(finalMatrix * float4(tangent, 0.0)));
     out.B = normalize(float3(finalMatrix * float4(bitangent, 0.0)));
     out.N = normalize(float3(nor));
     
-    float4 vertexLightCoord = lvp * vertexPosition_ws;
-    float4 texCoords = vertexLightCoord / vertexLightCoord.w;
-    out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
-    out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
-    out.vertexDepth = texCoords.z;
+    if(int(hasLighting[0]) == 1) {
+        float4 vertexLightCoord = lvp * vertexPosition_ws;
+        float4 texCoords = vertexLightCoord / vertexLightCoord.w;
+        out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
+        out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
+        out.vertexDepth = texCoords.z;
+        out.shadowDarkness = shadowDarkness;
+    }
     
     float4 eye_position_cameraspace = float4(float3(eyePos),1.0);
     out.eyeVec = normalize(eye_position_cameraspace - vertexPosition_ws);
-    
-    if(int(hasLighting[0]) == 1){
-        out.shadowDarkness = shadowDarkness;
-    }else{
-        out.shadowDarkness = 0.0;
-    }
     
     return out;
 }
@@ -419,24 +409,20 @@ vertex ColorInOut Mesh_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     out.transparency = transparency[iId];
     out.hasLighting = hasLighting[iId];
     out.position = vp * vertexPosition_ws;
+    out.uv = vertex_array[vid].texCoord1 * uvScaleValue[iId];
+    out.shadowDarkness = 0.0;
     
-    float2 uv = vertex_array[vid].texCoord1;
-    out.uv.x = uv.x * uvScaleValue[iId];
-    out.uv.y = uv.y * uvScaleValue[iId];
-    
-    float4 vertexLightCoord = lvp * vertexPosition_ws;
-    float4 texCoords = vertexLightCoord/vertexLightCoord.w;
-    out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
-    out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
-    out.vertexDepth = texCoords.z;
+    if(bool(hasLighting[iId])) {
+        float4 vertexLightCoord = lvp * vertexPosition_ws;
+        float4 texCoords = vertexLightCoord/vertexLightCoord.w;
+        out.texture2UV = float4((texCoords / 2.0) + 0.5).xy;
+        out.texture2UV.y = (1.0 - out.texture2UV.y); // need to flip metal texture vertically
+        out.vertexDepth = texCoords.z;
+        out.shadowDarkness = shadowDarkness;
+    }
     
     float4 eye_position_ws = vertexPosition_ws - float4(float3(eyePos), 1.0);
     out.eyeVec = normalize(eye_position_ws);
-
-    if(int(hasLighting[iId]) == 1)
-        out.shadowDarkness = shadowDarkness;
-    else
-        out.shadowDarkness = 0.0;
     
     return out;
 }

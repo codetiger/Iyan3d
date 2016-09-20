@@ -130,17 +130,6 @@ bool OGLES2RenderManager::PrepareNode(shared_ptr<Node> node, int meshBufferIndex
     } else
         createVAO(node, meshBufferIndex);
     
-    for(int i = 0;i < material->uniforms.size();i++){
-        switch(material->uniforms[i].property){
-            case NODE_PROPERTY_UV1:{
-                int textureIndex = 0;
-                material->uniforms[i].values = &textureIndex;
-            }
-            default:
-                break;
-        }
-    }
-    
     return true;
 }
 
@@ -333,7 +322,7 @@ bool OGLES2RenderManager::bindTexture(int index, uint32_t texture)
 
 void OGLES2RenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 uIndex, bool isFragmentData, int userValue, bool blurTex)
 {
-    uniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
+    OGLUniform uni = ((OGLMaterial*)mat)->uniforms[uIndex];
 
     if(uni.type != DATA_TEXTURE_2D && uni.type != DATA_TEXTURE_CUBE && !uni.isUpdated)
         return;

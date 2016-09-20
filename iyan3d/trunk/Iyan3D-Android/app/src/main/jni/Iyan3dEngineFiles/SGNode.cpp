@@ -55,21 +55,22 @@ void SGNode::setPropertiesOfNode()
         addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(300.0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Distance");
         addOrUpdateProperty(FONT_SIZE, Vector4(20.0, 0, 0, 0), UNDEFINED, TYPE_NONE, "FontSize");
         
-        addOrUpdateProperty(HAS_PHYSICS, Vector4(0, 0, 0, 0), UNDEFINED, PARENT_TYPE, "Physics Properties", "PROPERTIES");
-        addOrUpdateProperty(PHYSICS_NONE, Vector4(1), HAS_PHYSICS, LIST_TYPE, "None", "PHYSICS TYPE");
-        addOrUpdateProperty(PHYSICS_STATIC, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Static", "PHYSICS TYPE");
-        addOrUpdateProperty(PHYSICS_LIGHT, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Light", "PHYSICS TYPE");
-        addOrUpdateProperty(PHYSICS_MEDIUM, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Medium", "PHYSICS TYPE");
-        addOrUpdateProperty(PHYSICS_HEAVY, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Heavy", "PHYSICS TYPE");
-        addOrUpdateProperty(PHYSICS_CLOTH, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Cloth", "PHYSICS TYPE");
-        addOrUpdateProperty(PHYSICS_JELLY, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Jelly", "PHYSICS TYPE");
-        
-        addOrUpdateProperty(WEIGHT, Vector4(0.0, 0.0, 0.0, 0.0), HAS_PHYSICS, TYPE_NONE, "Mass");
-        addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(0, 0, 0, true), HAS_PHYSICS, SLIDER_TYPE, "Velocity", "APPLY FORCE");
-        addOrUpdateProperty(FORCE_DIRECTION, Vector4(0, 0, 0, 0), HAS_PHYSICS, BUTTON_TYPE, "Direction", "APPLY FORCE");
-        addOrUpdateProperty(IS_SOFT, Vector4(0, 0, 0, 0), HAS_PHYSICS, TYPE_NONE, "Soft");
-        addOrUpdateProperty(PHYSICS_KIND, Vector4(PHYSICS_NONE), HAS_PHYSICS, TYPE_NONE, "Physics Type");
-        
+        if(type == NODE_SGM || type == NODE_OBJ || type == NODE_TEXT) {
+            addOrUpdateProperty(HAS_PHYSICS, Vector4(0, 0, 0, 0), UNDEFINED, PARENT_TYPE, "Physics Properties", "PROPERTIES");
+            addOrUpdateProperty(PHYSICS_NONE, Vector4(1), HAS_PHYSICS, LIST_TYPE, "None", "PHYSICS TYPE");
+            addOrUpdateProperty(PHYSICS_STATIC, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Static", "PHYSICS TYPE");
+            addOrUpdateProperty(PHYSICS_LIGHT, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Light", "PHYSICS TYPE");
+            addOrUpdateProperty(PHYSICS_MEDIUM, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Medium", "PHYSICS TYPE");
+            addOrUpdateProperty(PHYSICS_HEAVY, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Heavy", "PHYSICS TYPE");
+            addOrUpdateProperty(PHYSICS_CLOTH, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Cloth", "PHYSICS TYPE");
+            addOrUpdateProperty(PHYSICS_JELLY, Vector4(0), HAS_PHYSICS, LIST_TYPE, "Jelly", "PHYSICS TYPE");
+            
+            addOrUpdateProperty(WEIGHT, Vector4(0.0, 0.0, 0.0, 0.0), HAS_PHYSICS, TYPE_NONE, "Mass");
+            addOrUpdateProperty(FORCE_MAGNITUDE, Vector4(0, 0, 0, true), HAS_PHYSICS, SLIDER_TYPE, "Velocity", "APPLY FORCE");
+            addOrUpdateProperty(FORCE_DIRECTION, Vector4(0, 0, 0, 0), HAS_PHYSICS, BUTTON_TYPE, "Direction", "APPLY FORCE");
+            addOrUpdateProperty(IS_SOFT, Vector4(0, 0, 0, 0), HAS_PHYSICS, TYPE_NONE, "Soft");
+            addOrUpdateProperty(PHYSICS_KIND, Vector4(PHYSICS_NONE), HAS_PHYSICS, TYPE_NONE, "Physics Type");
+        }
     } else if(type == NODE_IMAGE || type == NODE_VIDEO || type == NODE_PARTICLES) {
         
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
