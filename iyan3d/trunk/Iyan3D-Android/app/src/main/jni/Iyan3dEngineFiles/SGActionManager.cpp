@@ -398,16 +398,21 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
         changeKeysAction.keys.push_back(selectedNode->getKeyForFrame(actionScene->currentFrame));
     }
     
-    if(selectedNode->getType() == NODE_LIGHT){
-        ShaderManager::shadowDensity = shadow;
-        selectedNode->getProperty(SHADOW_DARKNESS).value.x = shadow;
-        selectedNode->getProperty(LIGHT_TYPE).value.x = (int)lightType;
-    }
-    else if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
-        ShaderManager::shadowDensity = shadow;
-        selectedNode->getProperty(SHADOW_DARKNESS).value.x = shadow;
+    if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
         selectedNode->getProperty(SPECIFIC_FLOAT).value.x = (distance + 0.001) * 300.0;
+    }
+    
+    if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
+        ShaderManager::shadowDensity = shadow;
+        selectedNode->getProperty(SHADOW_DARKNESS).value.x = shadow;
         selectedNode->getProperty(LIGHT_TYPE).value.x = (int)lightType;
+
+        for(int pI = LIGHT_POINT; pI < LIGHT_DIRECTIONAL + 1; pI++) {
+            if(pI - LIGHT_CONSTANT == (int)lightType)
+                selectedNode->getProperty((PROP_INDEX)pI).value.x = 1.0;
+            else
+                selectedNode->getProperty((PROP_INDEX)pI).value.x = 0.0;
+        }
     }
     
     //nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value = Vector3(red,green,blue);

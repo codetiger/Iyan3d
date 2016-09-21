@@ -31,6 +31,10 @@
     
     [self.delegate actionMadeInTable:_tableIndex AtIndexPath:_indexPath WithValue:Vector4(self.slider.value) AndStatus:NO];
     if(_dynamicSlider) {
+        
+        if(_slider.value >= _maxLimit)
+            _slider.value = _maxLimit;
+        
         _xValue.text = [NSString stringWithFormat:@"%.1f", _slider.value];
         if(!sliderMoving && _slider.value > 0.0 && (_slider.value == _slider.minimumValue || _slider.value == _slider.maximumValue)) {
             sliderMoving = true;

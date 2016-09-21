@@ -66,6 +66,8 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
                 if(sgNode->getType() == NODE_CAMERA) {
                     sgNode->getProperty(FOV).value.x = cameraFov;
                     sgNode->getProperty(CAM_RESOLUTION).value.x = cameraResolution;
+                } else if (sgNode->getType() == NODE_LIGHT) {
+                    ShaderManager::shadowDensity = sgNode->getProperty(SHADOW_DARKNESS).value.x;
                 }
             } else {
                 
@@ -73,16 +75,18 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
                 importer->importNodeFromMesh(currentScene, sgNode, mesh);
                 
                 for(int j = 0; j < sgNode->materialProps.size(); j++) {
-                    string textureName = sgNode->getProperty(TEXTURE).fileName;
-                    Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName, TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH).value.x);
+                    string textureName = sgNode->getProperty(TEXTURE, j).fileName;
+                    Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName, TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH, j).value.x);
                     sgNode->materialProps[j]->setTextureForType(texture, NODE_TEXTURE_TYPE_COLORMAP);
                     
-                    string bumpMapName = sgNode->getProperty(BUMP_MAP).fileName;
+                    string bumpMapName = sgNode->getProperty(BUMP_MAP, j).fileName;
                     string bumpPath = FileHelper::getTexturesDirectory() + bumpMapName;
                     if(sgNode->checkFileExists(bumpPath)) {
                         Texture * bumpMap = smgr->loadTexture(bumpMapName, bumpPath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
                         sgNode->materialProps[j]->setTextureForType(bumpMap, NODE_TEXTURE_TYPE_NORMALMAP);
                     }
+                    
+                    sgNode->materialProps[j]->setTextureForType(currentScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
                 }
                 
                 currentScene->nodes.push_back(sgNode);

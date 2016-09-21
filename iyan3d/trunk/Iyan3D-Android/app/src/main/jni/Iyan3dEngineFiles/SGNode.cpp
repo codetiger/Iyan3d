@@ -29,7 +29,7 @@ void SGNode::setPropertiesOfNode()
     
     if(type == NODE_CAMERA) {
         //TODO
-        addOrUpdateProperty(FOV, Vector4(72.0, 0, 5.0, true), UNDEFINED, SLIDER_TYPE, "Field Of View");
+        addOrUpdateProperty(FOV, Vector4(72.0, 170.0, 5.0, true), UNDEFINED, SLIDER_TYPE, "Field Of View");
         addOrUpdateProperty(CAM_RESOLUTION, Vector4(0), UNDEFINED, TYPE_NONE, "Resolution");
         addOrUpdateProperty(THOUSAND_EIGHTY, Vector4(1.0, 0, 0, 0), UNDEFINED, LIST_TYPE, "1080p", "Resolution");
         addOrUpdateProperty(SEVEN_TWENTY, Vector4(0), UNDEFINED, LIST_TYPE, "720p", "Resolution");
@@ -621,7 +621,7 @@ void SGNode::setInitialKeyValues(int actionType)
                 rotationKey.rotation = MathHelper::RotateNodeInWorld(lineRot, delta);
                 rotationKey.id = 0;
                 KeyHelper::addKey(rotationKeys, rotationKey);
-                getProperty(LIGHT_TYPE).value.x = false;
+                getProperty(LIGHT_TYPE).value.x = 0;
                 
             }
             
@@ -921,7 +921,11 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
         getProperty(FONT_SIZE).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
-    FileHelper::readFloat(filePointer);
+    
+    if(IsPropertyExists(SHADOW_DARKNESS)) {
+        getProperty(SHADOW_DARKNESS).value.x = FileHelper::readFloat(filePointer);
+    } else
+        FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
     FileHelper::readFloat(filePointer);
@@ -992,7 +996,7 @@ void SGNode::writeData(ofstream *filePointer, vector<SGNode*> &nodes)
     FileHelper::writeFloat(filePointer, IsPropertyExists(LIGHT_TYPE) ? getProperty(LIGHT_TYPE).value.x : -1.0);
     FileHelper::writeFloat(filePointer, (IsPropertyExists(SPECIFIC_FLOAT)) ? getProperty(SPECIFIC_FLOAT).value.x : -1.0);
     FileHelper::writeFloat(filePointer, (IsPropertyExists(FONT_SIZE)) ? getProperty(FONT_SIZE).value.x : -1.0);
-    FileHelper::writeFloat(filePointer, -1.0);
+    FileHelper::writeFloat(filePointer, (IsPropertyExists(SHADOW_DARKNESS)) ? getProperty(SHADOW_DARKNESS).value.x : -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);
     FileHelper::writeFloat(filePointer, -1.0);

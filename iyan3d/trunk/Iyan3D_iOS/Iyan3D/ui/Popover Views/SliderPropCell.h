@@ -25,6 +25,7 @@
 @property (weak, nonatomic) id < SliderPropDelegate > delegate;
 @property (strong, nonatomic) NSIndexPath* indexPath;
 @property (assign) float offsetValue;
+@property (assign) float maxLimit;
 
 @property (weak, nonatomic) IBOutlet UILabel *xValue;
 

@@ -94,7 +94,7 @@
 {
     NSArray *extensions;
     if(caseNum == 1)
-        extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", nil];
+        extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", @"tga", @"TGA", nil];
     else
         extensions = [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", @"OBJ", @"FBX", @"DAE", @"3DS", nil];
     
@@ -274,7 +274,7 @@
         [_ObjInfoLable setHidden:YES];
         [_importBtn setHidden:NO];
         filesList=nil;
-        NSArray *extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", nil];
+        NSArray *extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", @"tga", @"TGA", nil];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* docDirPath = [srcDirPath objectAtIndex:0];
         NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];

@@ -192,6 +192,10 @@
                         cell.dynamicSlider = NO;
                     }
                     
+                    if(property.value.y > 0.0) {
+                        cell.maxLimit = property.value.y;
+                    }
+                    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     return cell;
                     
@@ -243,8 +247,13 @@
                     
                     cell.titleLabel.text =   [NSString stringWithCString:property.title.c_str() encoding:NSUTF8StringEncoding];
                     if(property.type == IMAGE_TYPE && property.fileName.length() > 5) {
+                        
                         NSString *imageFile = [NSString stringWithCString:property.fileName.c_str() encoding:NSUTF8StringEncoding];
-                        cell.texImageView.image = [UIImage imageWithContentsOfFile:imageFile];
+                        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                        NSString *docDir = [paths objectAtIndex:0];
+                        NSString *filePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@", docDir, imageFile];
+                        
+                        cell.texImageView.image = [UIImage imageWithContentsOfFile:filePath];
                     } else {
                         cell.texImageView.backgroundColor = [UIColor colorWithRed:property.value.x green:property.value.y blue:property.value.z alpha:1.0];
                     }

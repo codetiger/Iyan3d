@@ -3236,6 +3236,11 @@ void downloadFile(NSString* url, NSString* fileName)
             [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
             break;
         }
+        case LIGHT_TYPE: {
+            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:false];
+            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:true];
+            break;
+        }
         case FORCE_DIRECTION: {
             [self setDirection];
             break;
@@ -3267,7 +3272,7 @@ void downloadFile(NSString* url, NSString* fileName)
     Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, selectedNode->scaleKeys);
     Vector4 lightProps = (pIndex == VERTEX_COLOR) ? value : Vector4(scale, ShaderManager::shadowDensity);
     float dist = (pIndex == SPECIFIC_FLOAT) ? value.x : selectedNode->getProperty(SPECIFIC_FLOAT).value.x;
-    int lightType = (selectedNode->getProperty(pIndex).groupName == "LIGHT TYPE") ? pIndex - 23 : selectedNode->getProperty(LIGHT_TYPE).value.x;
+    int lightType = (selectedNode->getProperty(pIndex).groupName == "LIGHT TYPE") ? pIndex - LIGHT_CONSTANT : selectedNode->getProperty(LIGHT_TYPE).value.x;
     lightProps.w = (pIndex == SHADOW_DARKNESS) ? value.x : ShaderManager::shadowDensity;
     /* Number 22 because Point light's value is 0 in previous version , now it is 22 */
     if(!status)

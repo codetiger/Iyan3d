@@ -78,7 +78,7 @@ void main()
     
     float shadowValue = 0.0;
     
-    if(vShadowDist > 0.1)
+    if(vShadowDist > 0.0)
         shadowValue = GetShadowValue();
 
     vec3 normal = normalize(vTBNMatrix[2]);
@@ -114,7 +114,7 @@ void main()
         finalColor = vec4(diffuse_color * (1.0 - vReflectionValue) + specular * vReflectionValue) * colorOfLight;
     
     finalColor -= (finalColor * shadowValue);
-    
+    //finalColor = finalColor + (vec4(0.0, 0.0, 0.0, 0.0) - finalColor) * (shadowValue); // In Older version
     gl_FragColor.xyz = finalColor.xyz;
     gl_FragColor.a = diffuse_color.a * vTransparencyValue;
 }

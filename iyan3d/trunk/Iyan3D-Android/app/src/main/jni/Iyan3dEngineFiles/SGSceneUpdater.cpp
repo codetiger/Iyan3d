@@ -287,7 +287,7 @@ void SGSceneUpdater::updateLightCamera()
         return;
 
     if(updatingScene->nodes.size() > NODE_LIGHT) {        
-        updateLightCam(updatingScene->nodes[NODE_LIGHT]->node->getAbsolutePosition());
+        updateLightCam(updatingScene->nodes[NODE_LIGHT]->node->getPosition());
     }
 }
 
@@ -532,7 +532,7 @@ void SGSceneUpdater::setCameraProperty(float fov , int resolutionType)
     updatingScene->nodes[NODE_CAMERA]->getProperty(FOV).value.x = fov;
     updatingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = resolutionType;
     
-    for(int pI = THOUSAND_EIGHTY; pI < TWO_FORTY; pI++) {
+    for(int pI = THOUSAND_EIGHTY; pI < TWO_FORTY + 1; pI++) {
         if(pI - CAM_CONSTANT == resolutionType)
             updatingScene->nodes[NODE_CAMERA]->getProperty((PROP_INDEX)pI).value.x = 1.0;
         else
