@@ -501,7 +501,7 @@ void ShaderManager::setUVScaleValue(SGNode *sgNode, u16 paramIndex, int material
     if(endIndex > sgNode->instanceNodes.size())
         endIndex = (int)sgNode->instanceNodes.size();
     
-    bool isUVScaleAvailable = sgNode->IsPropertyExists(TEXTURE_SCALE);
+    bool isUVScaleAvailable = sgNode->materialProps[materialIndex]->IsPropertyExists(TEXTURE_SCALE);
     float *uvScale = new float[((endIndex - startIndex)+1)];
 
     uvScale[0] = isUVScaleAvailable ? sgNode->getProperty(TEXTURE_SCALE, materialIndex).value.x : 1.0;
