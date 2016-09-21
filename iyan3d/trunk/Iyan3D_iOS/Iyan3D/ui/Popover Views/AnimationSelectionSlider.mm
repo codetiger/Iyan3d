@@ -10,11 +10,9 @@
 #import "DownloadTask.h"
 #import "AFNetworking.h"
 #import "AFHTTPRequestOperation.h"
-#define TRENDING 4
-#define FEATURED 5
-#define TOP_RATED 6
+
 #define MY_ANIMATION 7
-#define RECENT 8
+
 #define CANCEL_BUTTON 0
 #define OK_BUTTON 1
 
@@ -32,7 +30,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         animationType = type;
-        self.tableType = 4;
+        self.tableType = animationCategoryTab = MY_ANIMATION;
         editorSceneLocal = editorScene;
         selectedNodeId = editorSceneLocal->selectedNodeId;
         bonecount = (int)editorSceneLocal->nodes[selectedNodeId]->joints.size();
@@ -69,15 +67,9 @@
     cache = [CacheSystem cacheSystem];
     animationsItems = [cache GetAnimationList:animationType fromTable:self.tableType Search:@""];
     [self.animationCollectionView reloadData];    
-    downloadQueue = [[NSOperationQueue alloc] init];
-    [downloadQueue setMaxConcurrentOperationCount:3];
-    [self.downloadIndicator setHidden:NO];
-    [self.downloadIndicator startAnimating];
     [self.delegate myAnimation:YES];
-    animDownloadQueue = [[NSOperationQueue alloc] init];
-    [animDownloadQueue setMaxConcurrentOperationCount:1];
+    
     userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
-    [self performSelectorInBackground:@selector(getAnimationData) withObject:nil];
     
     UITapGestureRecognizer* tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
@@ -85,7 +77,7 @@
     
     [self.addBtn setTitle:NSLocalizedString(@"ADD", nil) forState:UIControlStateNormal];
     [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
-    [self.categoryBtn setTitle:NSLocalizedString(@"Trending", nil) forState:UIControlStateNormal];
+    [self.categoryBtn setTitle:NSLocalizedString(@"My Animations", nil) forState:UIControlStateNormal];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -124,7 +116,7 @@
     cell.selectedIndex = (int)indexPath.row;
     cell.parentVC = self;
     cell.backgroundColor = [UIColor clearColor];
-    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:(animationCategoryTab == MY_ANIMATION) ? MY_ANIMATION_VIEW : ALL_ANIMATION_VIEW OperationQueue:downloadQueue ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
+    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:MY_ANIMATION_VIEW OperationQueue:nil ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
     
     cell.assetNameLabel.textColor = [UIColor whiteColor];
     cell.assetNameLabel.font=[UIFont fontWithName:@"Helvetica-Bold" size:11];
@@ -262,78 +254,6 @@
                                  alertControllerWithTitle:NSLocalizedString(@"Category", nil)
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction* trending = [UIAlertAction
-                                actionWithTitle:NSLocalizedString(@"Trending", nil)
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action)
-                                {
-                                    if(animationCategoryTab == TRENDING)
-                                        return;
-                                    [_delegate showOrHideProgress:1];
-                                    [self.categoryBtn setTitle:NSLocalizedString(@"Trending", nil) forState:UIControlStateNormal];
-                                    animationsItems = [cache GetAnimationList:animationType fromTable:4 Search:@""];
-                                    [self.delegate myAnimation:YES];
-                                    [self.animationCollectionView reloadData];
-                                    animationCategoryTab = TRENDING;
-                                    selectedAssetId=-1;
-                                    [view dismissViewControllerAnimated:YES completion:nil];
-                                    [_delegate showOrHideProgress:0];
-                                }];
-    UIAlertAction* featured = [UIAlertAction
-                                actionWithTitle:NSLocalizedString(@"Featured", nil)
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action)
-                                {
-                                    if(animationCategoryTab == FEATURED)
-                                        return;
-                                    [_delegate showOrHideProgress:1];
-                                    animationsItems = [cache GetAnimationList:animationType fromTable:6 Search:@""];
-                                    [self.categoryBtn setTitle:NSLocalizedString(@"Featured", nil) forState:UIControlStateNormal];
-                                    [self.animationCollectionView reloadData];
-                                    [self.delegate myAnimation:YES];
-                                    animationCategoryTab = FEATURED;
-                                    selectedAssetId = -1;
-                                    [view dismissViewControllerAnimated:YES completion:nil];
-                                    [_delegate showOrHideProgress:0];
-                                    
-                                }];
-    
-    UIAlertAction* toprated = [UIAlertAction
-                                  actionWithTitle:NSLocalizedString(@"Top Rated", nil)
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction * action)
-                                  {
-                                      if(animationCategoryTab == TOP_RATED)
-                                          return;
-                                      [_delegate showOrHideProgress:1];
-                                      animationsItems = [cache GetAnimationList:animationType fromTable:5 Search:@""];
-                                      [self.categoryBtn setTitle:NSLocalizedString(@"Top Rated", nil) forState:UIControlStateNormal];
-                                      [self.animationCollectionView reloadData];
-                                      [self.delegate myAnimation:YES];
-                                      animationCategoryTab = TOP_RATED;
-                                      selectedAssetId = -1;
-                                      [view dismissViewControllerAnimated:YES completion:nil];
-                                      [_delegate showOrHideProgress:0];
-                                      
-                                  }];
-    UIAlertAction* recent = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"Recent", nil)
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction * action)
-                               {
-                                   if(animationCategoryTab == RECENT)
-                                       return;
-                                   [_delegate showOrHideProgress:1];
-                                   animationsItems = [cache GetAnimationList:animationType fromTable:8 Search:@""];
-                                   [self.categoryBtn setTitle:NSLocalizedString(@"Recent", nil) forState:UIControlStateNormal];
-                                   [self.animationCollectionView reloadData];
-                                   [self.delegate myAnimation:YES];
-                                   animationCategoryTab = RECENT;
-                                   selectedAssetId = -1;
-                                   [view dismissViewControllerAnimated:YES completion:nil];
-                                   [_delegate showOrHideProgress:0];
-                                   
-                               }];
     
     UIAlertAction* myanimation = [UIAlertAction
                                   actionWithTitle:NSLocalizedString(@"My Animations", nil)
@@ -347,27 +267,11 @@
 
                                   }];
     switch (animationCategoryTab) {
-        case TRENDING:
-            [trending setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
-            break;
-        case TOP_RATED:
-            [toprated setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
-            break;
-        case FEATURED:
-            [featured setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
-            break;
-        case RECENT:
-            [recent setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
-            break;
         case MY_ANIMATION:
             [myanimation setValue:[[UIImage imageNamed:@"selected_mark.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
             break;
     }
     
-    [view addAction:trending];
-    [view addAction:toprated];
-    [view addAction:featured];
-    [view addAction:recent];
     [view addAction:myanimation];
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceView = self.categoryBtn;
@@ -381,7 +285,7 @@
 {
     [_delegate showOrHideProgress:1];
     [self.categoryBtn setTitle:NSLocalizedString(@"My Animations", nil) forState:UIControlStateNormal];
-    animationsItems = [cache GetAnimationList:animationType fromTable:7 Search:@""];
+    animationsItems = [cache GetAnimationList:animationType fromTable:MY_ANIMATION Search:@""];
     [self.delegate myAnimation:YES];
     [self.animationCollectionView reloadData];
     animationCategoryTab = MY_ANIMATION;
@@ -430,13 +334,6 @@
 
 #pragma mark animations related data methods
 
-- (void)getAnimationData
-{
-    animationJsonArray = [[NSMutableArray alloc] init];
-    [AppHelper getAppHelper].delegate = self;
-    [[AppHelper getAppHelper] performReadingJsonInQueue:downloadQueue ForPage:5];
-}
-
 - (void)displayBasedOnSelection:(NSNumber*)rowIndex
 {
     if ([animationsItems count] > [rowIndex intValue]) {
@@ -462,11 +359,10 @@
     }
 }
 
+
 - (void)downloadAnimation:(AnimationItem*)assetItem
 {
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths objectAtIndex:0];
-    NSString *fileName, *url;
+    NSString *fileName;
     NSString* extension = (animationType == RIG_ANIMATION) ? @"sgra" : @"sgta";
     if (animationCategoryTab == MY_ANIMATION) {
         fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, assetItem.assetId, extension];
@@ -477,23 +373,6 @@
         else {
             NSLog(@"File not exists");
             NSLog(@"File Path : %@ ",fileName);
-        }
-    }
-    else {
-        fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, assetItem.assetId, extension];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-            if (assetItem)
-            [self performSelectorOnMainThread:@selector(applyAnimation:) withObject:[NSNumber numberWithInt:assetItem.boneCount] waitUntilDone:NO];
-        }
-        else {
-            [self.delegate showOrHideProgress:1];
-            url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/animationFile/%d.%@", assetItem.assetId, extension];
-            [animDownloadQueue cancelAllOperations];
-            //[self cancelOperations:animDownloadQueue];
-            DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(applyAnimation:) returnObject:[NSNumber numberWithInt:assetItem.boneCount] outputFilePath:fileName andURL:url];
-            task.taskType = DOWNLOAD_AND_RETURN_OBJ;
-            task.queuePriority = NSOperationQueuePriorityHigh;
-            [animDownloadQueue addOperation:task];
         }
     }
 }
@@ -553,14 +432,6 @@
     }
 }
 
-- (void) cancelOperations:(NSOperationQueue*) queue
-{
-    [queue cancelAllOperations];
-    
-    for (DownloadTask *task in [queue operations]) {
-        [task cancel];
-    }
-}
 
 # pragma mark AppHelper delegates
 
@@ -862,14 +733,10 @@
 
 - (void)deallocView
 {
-    [downloadQueue cancelAllOperations];
-    downloadQueue = nil;
     cache = nil;
     self.delegate=nil;
     animationJsonArray = nil;
     animationsItems = nil;
-    [animDownloadQueue cancelAllOperations];
-    animDownloadQueue = nil;
     jsonUserArray = nil;
     docDirPath = nil;
     editorSceneLocal = nil;

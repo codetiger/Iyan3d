@@ -38,7 +38,6 @@
     NSMutableArray *animationJsonArray;
     NSMutableArray* animationsItems;
     CacheSystem *cache;
-    NSOperationQueue *downloadQueue , *animDownloadQueue;
     NSArray *jsonUserArray;
     AnimationItem* asset;
     int tabValue , previousTabValue;

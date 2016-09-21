@@ -95,40 +95,42 @@ void SGAnimationManager::copyPropsOfNode(int fromNodeId, int toNodeId, bool excl
         key.isScaleKey = true;
         if(animScene->nodes[fromNodeId]->scaleKeys.size() >0)
             key.scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(animScene->currentFrame, animScene->nodes[fromNodeId]->scaleKeys);
-
+        
         animScene->nodes[toNodeId]->setKeyForFrame(0, key);
-
-        SGAction &addAction = (animScene->actionMan->actions[animScene->actionMan->actions.size() -1]);
-
-        SGNode *sgNode = animScene->nodes[toNodeId];
-
-        if(sgNode->positionKeys.size())
-            addAction.nodePositionKeys = sgNode->positionKeys;
-        if(sgNode->rotationKeys.size())
-            addAction.nodeRotationKeys = sgNode->rotationKeys;
-        if(sgNode->scaleKeys.size())
-            addAction.nodeSCaleKeys = sgNode->scaleKeys;
-        if(sgNode->visibilityKeys.size())
-            addAction.nodeVisibilityKeys = sgNode->visibilityKeys;
-        for (int i = 0; i < (int)sgNode->joints.size(); i++) {
-            addAction.jointRotKeys[i] = sgNode->joints[i]->rotationKeys;
-            if(sgNode->getType() == NODE_TEXT_SKIN){
-                addAction.jointPosKeys[i] = sgNode->joints[i]->positionKeys;
-                addAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
+        
+        if(animScene->actionMan->actions.size() > 0) {
+            SGAction &addAction = (animScene->actionMan->actions[animScene->actionMan->actions.size() -1]);
+            
+            SGNode *sgNode = animScene->nodes[toNodeId];
+            
+            if(sgNode->positionKeys.size())
+                addAction.nodePositionKeys = sgNode->positionKeys;
+            if(sgNode->rotationKeys.size())
+                addAction.nodeRotationKeys = sgNode->rotationKeys;
+            if(sgNode->scaleKeys.size())
+                addAction.nodeSCaleKeys = sgNode->scaleKeys;
+            if(sgNode->visibilityKeys.size())
+                addAction.nodeVisibilityKeys = sgNode->visibilityKeys;
+            for (int i = 0; i < (int)sgNode->joints.size(); i++) {
+                addAction.jointRotKeys[i] = sgNode->joints[i]->rotationKeys;
+                if(sgNode->getType() == NODE_TEXT_SKIN){
+                    addAction.jointPosKeys[i] = sgNode->joints[i]->positionKeys;
+                    addAction.jointScaleKeys[i] = sgNode->joints[i]->scaleKeys;
+                }
             }
-        }
-
-        if(addAction.actionType == ACTION_NODE_ADDED) {
-            addAction.actionSpecificStrings[0] = (ConversionHelper::getWStringForString(sgNode->oriTextureName));
-            addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->getProperty(TEXTURE).fileName));
-            addAction.actionSpecificFloats[0] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.x);
-            addAction.actionSpecificFloats[1] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.y);
-            addAction.actionSpecificFloats[2] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.z);
-            addAction.actionSpecificFloats[3] = (sgNode->getProperty(VERTEX_COLOR).value.x);
-            addAction.actionSpecificFloats[4] = (sgNode->getProperty(VERTEX_COLOR).value.y);
-            addAction.actionSpecificFloats[5] = (sgNode->getProperty(VERTEX_COLOR).value.z);
-            addAction.actionSpecificFlags[0] = (sgNode->getProperty(IS_VERTEX_COLOR).value.x);
-            addAction.options = animScene->nodes[fromNodeId]->options;
+            
+            if(addAction.actionType == ACTION_NODE_ADDED) {
+                addAction.actionSpecificStrings[0] = (ConversionHelper::getWStringForString(sgNode->oriTextureName));
+                addAction.actionSpecificStrings[1] = (ConversionHelper::getWStringForString(sgNode->getProperty(TEXTURE).fileName));
+                addAction.actionSpecificFloats[0] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.x);
+                addAction.actionSpecificFloats[1] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.y);
+                addAction.actionSpecificFloats[2] = (sgNode->getProperty(ORIG_VERTEX_COLOR).value.z);
+                addAction.actionSpecificFloats[3] = (sgNode->getProperty(VERTEX_COLOR).value.x);
+                addAction.actionSpecificFloats[4] = (sgNode->getProperty(VERTEX_COLOR).value.y);
+                addAction.actionSpecificFloats[5] = (sgNode->getProperty(VERTEX_COLOR).value.z);
+                addAction.actionSpecificFlags[0] = (sgNode->getProperty(IS_VERTEX_COLOR).value.x);
+                addAction.options = animScene->nodes[fromNodeId]->options;
+            }
         }
     }
 }

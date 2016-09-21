@@ -1831,7 +1831,7 @@ BOOL missingAlertShown;
 
 -(void) myAnimation:(BOOL)showorHide
 {
-    [self.publishBtn setHidden:showorHide];
+    [self.publishBtn setHidden:YES];
 }
 
 - (void)NormalHighLight
@@ -2330,9 +2330,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->getProperty(TEXTURE).fileName.c_str()
                                                    encoding:[NSString defaultCStringEncoding]];
         assetItem.isTempAsset = YES;
-        [self performSelectorOnMainThread:@selector(loadNode:) withObject:assetItem waitUntilDone:YES];
+        [self cloneSelectedAssetWithId:selectedAssetId NodeType:selectedNodeType AndSelNodeId:selectedNode];
         editorScene->animMan->copyKeysOfNode(selectedNode, (int)editorScene->nodes.size()-1);
-        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
+//        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
     }
     else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
