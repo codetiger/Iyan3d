@@ -150,7 +150,7 @@ SGNode* SceneHelper::createRedLines(SceneManager *smgr)
     vector< Vector3 > vPositions;
     vPositions.push_back(Vector3(-gridSize, 0, 0));
     vPositions.push_back(Vector3(gridSize, 0, 0));
-    return createLines(smgr, vPositions, Vector3(1.0,0.2,0.2), "RedLines", RED_LINES_ID);
+    return createLines(smgr, vPositions, Vector3(0.8, 0.2, 0.2), "RedLines", RED_LINES_ID);
 }
 
 SGNode* SceneHelper::createGreenLines(SceneManager *smgr)
@@ -159,7 +159,7 @@ SGNode* SceneHelper::createGreenLines(SceneManager *smgr)
     vector< Vector3 > vPositions;
     vPositions.push_back(Vector3(0, 0, -gridSize));
     vPositions.push_back(Vector3(0, 0, gridSize));
-    return createLines(smgr, vPositions, Vector3(0.2,1.0,0.2), "GreenLines", GREEN_LINES_ID);
+    return createLines(smgr, vPositions, Vector3(0.2, 0.8, 0.2), "GreenLines", GREEN_LINES_ID);
 
 }
 
@@ -174,8 +174,7 @@ SGNode* SceneHelper::createBlueLines(SceneManager *smgr)
         vPositionsGrid.push_back(Vector3(-gridSize, 0, i));
         vPositionsGrid.push_back(Vector3( gridSize, 0, i));
     }
-//    vPositionsGrid.push_back(Vector3(gridSize, 0 , i));
-    return createLines(smgr, vPositionsGrid, Vector3(0.6, 0.6, 1.0), "BlueLines", BLUE_LINES_ID);
+    return createLines(smgr, vPositionsGrid, Vector3(0.25, 0.25, 0.25), "BlueLines", BLUE_LINES_ID);
 }
 
 SGNode* SceneHelper::createLines(SceneManager *smgr, vector<Vector3> positions, Vector3 color, string callbackName, int nodeId)

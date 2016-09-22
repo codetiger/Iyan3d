@@ -511,7 +511,7 @@ void SceneManager::draw3DLine(Vector3 start, Vector3 end, Vector3 color, Materia
 void SceneManager::draw3DLines(vector<Vector3> vPositions, Vector3 color, Material *material, int mvpUniParamIndex, int vertexColorUniParamIndex, int transparencyUniParamIndex)
 {
     renderMan->useMaterialToRender(material);
-    float vertColor[3] = {color.x,color.y,color.z};
+    float vertColor[3] = {color.x, color.y, color.z};
     float transparency = 1.0;
     getActiveCamera()->update();
     Mat4 mat = getActiveCamera()->getProjectionMatrix() * getActiveCamera()->getViewMatrix();

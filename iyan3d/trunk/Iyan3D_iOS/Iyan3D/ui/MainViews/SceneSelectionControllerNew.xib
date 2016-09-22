@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SceneSelectionControllerNew">
@@ -22,20 +23,16 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bgImageforall.png" id="Ehh-Gc-aku">
-                    <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                </imageView>
                 <view contentMode="scaleToFill" id="cum-Bc-Ynt">
-                    <rect key="frame" x="0.0" y="0.0" width="1024" height="59"/>
+                    <frame key="frameInset" width="1024" height="59"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" id="wjS-eD-GYe">
-                            <rect key="frame" x="0.0" y="0.0" width="1024" height="59"/>
+                            <frame key="frameInset" width="1024" height="59"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="g7e-JY-bEf" userLabel="addBtn">
-                                    <rect key="frame" x="18" y="21" width="30" height="30"/>
+                                    <frame key="frameInset" minX="18" minY="21" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <accessibility key="accessibilityConfiguration" hint="Creates a new scene" identifier="0"/>
                                     <state key="normal" image="New.png"/>
@@ -44,14 +41,14 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scenes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DDF-yF-lFa">
-                                    <rect key="frame" x="439" y="21" width="146" height="30"/>
+                                    <frame key="frameInset" minX="42.87%" minY="35.59%" width="14.26%" height="50.85%"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fVt-o1-OKO">
-                                    <rect key="frame" x="974" y="24" width="22" height="22"/>
+                                    <frame key="frameInset" minY="24" width="22" height="22" maxX="28"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <accessibility key="accessibilityConfiguration" hint="Settings, Tutorials &amp; Contact us" identifier="0"/>
                                     <state key="normal" image="info-icon.png"/>
@@ -60,22 +57,22 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kf0-ZU-tmJ">
-                                    <rect key="frame" x="926" y="24" width="22" height="22"/>
+                                    <frame key="frameInset" minX="92.42%" minY="24" width="22" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" image="Help.png"/>
                                     <connections>
                                         <action selector="toolTipAction:" destination="-1" eventType="touchUpInside" id="poe-gv-pYF"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" red="0.61176470589999998" green="0.18039215689999999" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.53333333329999999" green="0.0" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.53333333329999999" green="0.0" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" keyboardDismissMode="onDrag" dataMode="none" id="GtZ-Ek-nEF" userLabel="SceneSelection Collection View">
-                    <rect key="frame" x="0.0" y="59" width="1024" height="709"/>
+                    <frame key="frameInset" minY="59" height="709"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                     <inset key="contentInset" minX="10" minY="10" maxX="10" maxY="10"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="23" minimumInteritemSpacing="10" id="BA4-Kl-xUa">
@@ -90,13 +87,12 @@
                     </connections>
                 </collectionView>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="rad-5Q-RvL">
-                    <rect key="frame" x="494" y="395" width="37" height="37"/>
+                    <frame key="frameInset" minX="494" minY="395" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-            <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="451" y="209"/>
         </view>
@@ -104,7 +100,11 @@
     <resources>
         <image name="Help.png" width="22" height="22"/>
         <image name="New.png" width="21" height="21"/>
-        <image name="bgImageforall.png" width="1024" height="1024"/>
         <image name="info-icon.png" width="22" height="22"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+    </simulatedMetricsContainer>
 </document>

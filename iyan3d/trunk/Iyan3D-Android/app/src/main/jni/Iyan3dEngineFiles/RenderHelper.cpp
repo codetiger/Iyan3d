@@ -86,7 +86,7 @@ void RenderHelper::drawGrid()
         vPosBB.push_back(bb.getEdgeByIndex(3));
         vPosBB.push_back(bb.getEdgeByIndex(4));
         
-        smgr->draw3DLines(vPosBB, Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
+        smgr->draw3DLines(vPosBB, Vector3(1.0, 1.0, 0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
     }
 }
 
@@ -357,7 +357,6 @@ void RenderHelper::drawCameraPreview()
 {
     if(!renderingScene || !smgr || renderingScene->selectedNodeIds.size() > 0)
         return;
-
     
     ShaderManager::renderingPreview = true;
     bool isLightOn = ShaderManager::sceneLighting;
@@ -985,8 +984,7 @@ void RenderHelper::rttShadowMap()
     Vector3 posn = renderingScene->lightCamera->getAbsolutePosition();
     
     smgr->setActiveCamera(renderingScene->lightCamera);
-    smgr->setRenderTarget(renderingScene->shaderMGR->shadowTexture, true, true, true, Vector4(255,255,255,255));
-    
+    smgr->setRenderTarget(renderingScene->shaderMGR->shadowTexture,true,true,true,Vector4(255,255,255,255));
     setJointSpheresVisibility(false); //hide joints
     renderingScene->nodes[NODE_CAMERA]->node->setVisible(false);//hide camera
     renderingScene->nodes[NODE_LIGHT]->node->setVisible(false);//hide light
@@ -1018,7 +1016,7 @@ void RenderHelper::rttShadowMap()
     renderingScene->directionIndicator->node->setVisible(indState);
     renderingScene->nodes[NODE_CAMERA]->node->setVisible(true);// Unhide camera
     renderingScene->nodes[NODE_LIGHT]->node->setVisible(true);// Unhide light
-    for(unsigned long i = 2; i < renderingScene->nodes.size(); i++){// set previous shaders
+    for(unsigned long i = 2;i < renderingScene->nodes.size();i++){// set previous shaders
         SGNode* sgNode = renderingScene->nodes[i];
         if(!sgNode->getProperty(VISIBILITY).value.x || !sgNode->getProperty(LIGHTING).value.x)
             sgNode->node->setVisible(true);

@@ -2830,8 +2830,6 @@
 		01C2B7921C46419300384370 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = FrameWorks/TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
 		01C2B7931C46419300384370 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterCore.framework; path = FrameWorks/TwitterCore.framework; sourceTree = "<group>"; };
 		01C2B79A1C46543200384370 /* color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color@2x.png"; sourceTree = "<group>"; };
-		01CB22DF1C4E679A00A2EE69 /* property-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "property-icon.png"; path = "Resources/images/SceneSelection/property-icon.png"; sourceTree = "<group>"; };
-		01CB22E01C4E679A00A2EE69 /* property-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "property-icon@2x.png"; path = "Resources/images/SceneSelection/property-icon@2x.png"; sourceTree = "<group>"; };
 		01CCD1C01C3F927D00565664 /* ObjSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjSidePanel.h; sourceTree = "<group>"; };
 		01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjSidePanel.mm; sourceTree = "<group>"; };
 		01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjSidePanel.xib; sourceTree = "<group>"; };
@@ -6989,8 +6987,6 @@
 				25EA75531C60C70A007E17CA /* alpha.png */,
 				25F80ACF1CFDB6E700CF331B /* Subscribe */,
 				25EA754F1C60B5B3007E17CA /* particleTexture.png */,
-				01CB22DF1C4E679A00A2EE69 /* property-icon.png */,
-				01CB22E01C4E679A00A2EE69 /* property-icon@2x.png */,
 				25730E6F1AFD3D560042F81A /* round83.png */,
 				25E364481B38DDE10039A8C5 /* wheel2.png */,
 				7FBE04E61B1DB88500F9B7C1 /* whiteborder.png */,
