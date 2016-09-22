@@ -13,7 +13,6 @@
 SGNode::SGNode(NODE_TYPE type)
 {
     this->type = type;
-    smoothTexture = true;
     instanceNodes.clear();
     isTempNode = false;
     optionalFilePath = "";
@@ -360,7 +359,7 @@ void SGNode::setSkinningData(SkinMesh *mesh, bool applyInverseBindPose)
     }
 }
 
-shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float aspectRatio)
+shared_ptr<Node> SGNode::loadImage(string textureName, SceneManager *smgr, float aspectRatio)
 {
     char* textureFileName = new char[256];
     
@@ -370,7 +369,8 @@ shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float 
 #else
     sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
 #endif
-    Texture *nodeTex = smgr->loadTexture(textureName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+    Property smoothProperty = materialProps[0]->getProperty(TEXTURE_SMOOTH);
+    Texture *nodeTex = smgr->loadTexture(textureName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothProperty.value.x);
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);

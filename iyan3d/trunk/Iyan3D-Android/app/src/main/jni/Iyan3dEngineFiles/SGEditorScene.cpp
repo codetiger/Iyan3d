@@ -701,9 +701,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
             loader->setFirstInstanceAsMainNode(nodes[selectedNodeId]);
         }
         
-        
-        
-        bool smoothTexture = (nodes[selectedNodeId]->smoothTexture);
+        bool smoothTexture = nodes[selectedNodeId]->getProperty(TEXTURE_SMOOTH, selectedMeshBufferId).value.x;
         Texture *nodeTex = smgr->loadTexture(textureFileName, texturePath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
         nodes[selectedNodeId]->materialProps[matIndex]->setTextureForType(nodeTex, texType);
         
@@ -775,7 +773,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
             if(pIndex == TEXTURE) {
                 if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
                     nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
-                    Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->smoothTexture);
+                    Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNodeId]->getProperty(TEXTURE_SMOOTH, selectedMeshBufferId).value.x);
                     nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
                 } else {
                     nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";

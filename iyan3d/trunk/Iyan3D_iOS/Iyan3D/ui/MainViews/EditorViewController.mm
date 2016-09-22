@@ -3179,7 +3179,6 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         case TEXTURE_SMOOTH: {
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
-                editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
                 editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH, matIndex).value.x = value.x;
                 if(smgr->device == OPENGLES2)
                     [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
@@ -3342,7 +3341,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) setTextureSmoothStatus:(BOOL) status
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
-        editorScene->nodes[editorScene->selectedNodeId]->smoothTexture = status;
+        editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH, editorScene->selectedMeshBufferId).value.x = status;
         if(smgr->device == OPENGLES2)
             [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
     }

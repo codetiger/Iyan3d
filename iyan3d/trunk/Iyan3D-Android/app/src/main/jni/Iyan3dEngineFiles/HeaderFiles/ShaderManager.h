@@ -64,11 +64,11 @@ public:
     void setUVScaleValue(SGNode *sgNode, u16 paramIndex, int materialIndex);
     void setModelMatrix(SGNode *node, u16 paramIndex);
     void setProjectionMatrix(SGNode *node, u16 paramIndex);
-    void setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex);
+    void setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex, bool smoothTexture);
     void setLightViewProjMatrix(SGNode *node, u16 paramIndex);
     void setVertexColorUniforms(SGNode *node, u16 paramIndex);
     void setTexturesUniforms(SGNode *node, u16 paramIndex, int materialIndex);
-    void setSamplerType(SGNode *sgNode, u16 paramIndex);
+    void setSamplerType(SGNode *sgNode, u16 paramIndex, bool smoothTexture);
     void copyMat(float* pointer, Mat4& mat);
     void setJointTransform(SGNode *node, int paramIndex, SceneManager *smgr);
     void setLightViewProjMatrix(SGNode *sgNode, int paramIndex);

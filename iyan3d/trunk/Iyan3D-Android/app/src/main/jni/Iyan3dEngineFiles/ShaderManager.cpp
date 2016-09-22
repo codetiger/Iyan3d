@@ -434,7 +434,17 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
     string textureNames[] = {"colorMap", "normalMap", "shadowMap", "reflectionMap"};
     
     for (int i = NODE_TEXTURE_TYPE_COLORMAP; i <= NODE_TEXTURE_TYPE_REFLECTIONMAP; i++) {
-        setTextureForNode(sgNode, sgNode->materialProps[materialIndex]->getTextureOfType((node_texture_type)i), textureNames[i], paramIndex, i, materialIndex);
+        Texture* texture = sgNode->materialProps[materialIndex]->getTextureOfType((node_texture_type)i);
+        bool smoothTexture = false;
+        if(i == NODE_TEXTURE_TYPE_COLORMAP) {
+            if(texture) {
+                Property smoothProperty = sgNode->materialProps[materialIndex]->getProperty(TEXTURE_SMOOTH);
+                smoothTexture = smoothProperty.value.x;
+            }
+            
+            setSamplerType(sgNode, SHADER_COMMON_samplerType, smoothTexture);
+        }
+        setTextureForNode(sgNode, texture, textureNames[i], paramIndex, i, materialIndex, smoothTexture);
     }
     
     float hasReflectionMap = (environmentTex) ? 1.0 : 0.0;
@@ -442,11 +452,9 @@ void ShaderManager::setTexturesUniforms(SGNode *sgNode, u16 paramIndex, int mate
     
     float hasNormalMap = (sgNode->materialProps[materialIndex]->getTextureOfType(NODE_TEXTURE_TYPE_NORMALMAP)) ? 1.0 : 0.0;
     smgr->setPropertyValue(sgNode->node->material, "hasNormalMap", &hasNormalMap, DATA_FLOAT, 1, true, SHADER_COMMON_hasNormalMap, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex);
-    
-    setSamplerType(sgNode, SHADER_COMMON_samplerType);
 }
 
-void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex)
+void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string textureName, int paramIndex, int userValue, int materialIndex, bool smoothTexture)
 {
     if(texture == NULL)
         return;
@@ -459,13 +467,13 @@ void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string t
         smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, tex, userValue);
     } else if(deviceType == METAL) {
         textureValue =  userValue;
-        smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, (userValue == NODE_TEXTURE_TYPE_COLORMAP) ? sgNode->smoothTexture : false);
+        smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, smoothTexture);
     }
 }
 
-void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex)
+void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex, bool smoothTexture)
 {
-    float samplerType = (sgNode->smoothTexture) ? 0.0 : 1.0;
+    float samplerType = smoothTexture ? 0.0 : 1.0;
     smgr->setPropertyValue(sgNode->node->material, "samplerType", &samplerType, DATA_FLOAT, 1, true , SHADER_COMMON_samplerType, smgr->getNodeIndexByID(sgNode->node->getID()));
 }
 
@@ -518,7 +526,6 @@ void ShaderManager::setUVScaleValue(SGNode *sgNode, u16 paramIndex, int material
     
     delete [] uvScale;
 }
-
 
 void ShaderManager::setModelViewProjMatrix(SGNode *sgNode, u16 paramIndex, bool isDepthPass)
 {
