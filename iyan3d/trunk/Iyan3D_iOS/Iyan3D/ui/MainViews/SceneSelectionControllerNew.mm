@@ -246,7 +246,10 @@
 - (SceneSelectionFrameCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
    SceneSelectionFrameCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
-    cell.delegate=self;
+    cell.delegate = self;
+    cell.propertiesBtn.layer.cornerRadius = CORNER_RADIUS;
+    cell.propertiesBtn.clipsToBounds = YES;
+    
     if(indexPath.row < [scenesArray count]) {
         if(indexPath.row == 0) {
             [cell setAccessibilityHint:NSLocalizedString(@"Tap to open the scene.", nil)];

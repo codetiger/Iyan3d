@@ -18,6 +18,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="New-scene.png" id="oVz-BA-cwT">
                         <frame key="frameInset" width="200" height="200"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8EX-Cy-KCW">
                         <frame key="frameInset" minY="161" width="200" height="39"/>
@@ -29,13 +30,16 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nxG-tF-ruR">
                         <frame key="frameInset" minX="160" width="40" height="40"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" image="property-icon.png"/>
+                        <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                        <state key="normal" image="properties-img.png"/>
                         <connections>
                             <action selector="propertiesAction:" destination="Rfu-0C-76h" eventType="touchUpInside" id="COQ-Sp-yvV"/>
                         </connections>
                     </button>
                 </subviews>
             </view>
+            <color key="backgroundColor" red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="calibratedRGB"/>
             <size key="customSize" width="113" height="141"/>
             <connections>
                 <outlet property="image" destination="oVz-BA-cwT" id="DYq-Nt-5lg"/>
@@ -47,7 +51,7 @@
     </objects>
     <resources>
         <image name="New-scene.png" width="431" height="376"/>
-        <image name="property-icon.png" width="40" height="40"/>
+        <image name="properties-img.png" width="24" height="24"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

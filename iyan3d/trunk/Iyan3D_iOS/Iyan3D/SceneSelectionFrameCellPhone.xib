@@ -18,6 +18,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="New-scene.png" translatesAutoresizingMaskIntoConstraints="NO" id="GYs-4b-Vr7">
                         <frame key="frameInset" width="120" height="120"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CA3-bm-cdA">
                         <frame key="frameInset" minY="94" width="120" height="26"/>
@@ -29,13 +30,16 @@
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OcL-d6-rFs">
                         <frame key="frameInset" minX="85" width="35" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" image="property-icon.png"/>
+                        <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="imageEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
+                        <state key="normal" image="properties-img-phone.png"/>
                         <connections>
                             <action selector="propertiesAction:" destination="nWb-jv-i5f" eventType="touchUpInside" id="xLi-DQ-Gvm"/>
                         </connections>
                     </button>
                 </subviews>
             </view>
+            <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
             <size key="customSize" width="113" height="141"/>
             <connections>
                 <outlet property="image" destination="GYs-4b-Vr7" id="UfC-JM-SdJ"/>
@@ -47,6 +51,6 @@
     </objects>
     <resources>
         <image name="New-scene.png" width="431" height="376"/>
-        <image name="property-icon.png" width="40" height="40"/>
+        <image name="properties-img-phone.png" width="15" height="15"/>
     </resources>
 </document>
