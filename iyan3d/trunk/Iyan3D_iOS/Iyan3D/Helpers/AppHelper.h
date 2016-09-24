@@ -14,47 +14,32 @@
 @protocol AppHelperDelegate
 -(void)loadingViewStatus:(BOOL)status;
 -(void)statusForOBJImport:(NSNumber*)object;
--(void)premiumUnlocked;
--(void)addRestoreId:(NSString*)productIdentifier;
--(void)statusForRestorePurchase:(NSNumber *)object;
--(void)transactionCancelled;
 -(void)setAnimationData:(NSArray*)allAnimations;
 -(void) performLocalTasks;
 @end
 
 @interface AppHelper : NSObject <SKProductsRequestDelegate,SKPaymentTransactionObserver>
 {
-    NSArray *jsonArray,*fontArr,*fontListArr,*jsonAnimationArray;
-    NSMutableArray *productIdentifierList;
-    NSMutableDictionary * allAssets;
-    NSArray *allProducts;
     CacheSystem* cache;
-    NSNumberFormatter * priceFormatter;
     BOOL processTransaction;
     int transactionCount;
-    NSMutableArray *restoreIdArr;
     NSString *fontDirPath;
     NSDictionary* helpStatements;
     NSMutableArray * toolTips;
 }
 
 @property (nonatomic, assign) id  <AppHelperDelegate> delegate;
-@property(assign) BOOL isAssetsUpdated;
 @property (nonatomic, strong) SKProductsRequest *productsRequest;
 
 +(AppHelper *)getAppHelper;
--(void) addTransactionObserver;
 -(void) setIdentifierForVendor;
 -(void) parseHelpJson;
 -(NSDictionary*) parseJsonFileWithName:(NSString*)jsonFileName;
 -(NSString*) getHelpStatementForAction:(int)action;
--(void) removeTransactionObserver;
 -(void) initHelper;
 -(void) missingAlertView;
 -(void) downloadJsonData;
 
--(NSLocale*) getPriceLocale;
--(NSMutableArray*) getRestoreIds;
 -(void) initializeFontListArray;
 - (void) loadAllAssets;
 -(void)performReadingJsonInQueue:(NSOperationQueue*)queue ForPage:(int)viewType;
@@ -77,4 +62,6 @@
 - (void) toggleHelp:(UIViewController*) vc Enable:(BOOL)enable;
 - (void) showTipForView:(UIView*) subView InMainView:(UIView*)view;
 
--(BOOL)iPhone6Plus;@end
+-(BOOL)iPhone6Plus;
+
+@end

@@ -35,46 +35,16 @@
     }
     return theAppHelper;
 }
-- (void)addTransactionObserver
-{
-    cache = [CacheSystem cacheSystem];
-    processTransaction = false;
-    [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-    restoreIdArr = [[NSMutableArray alloc] init];
-}
-- (void)removeTransactionObserver
-{
-    processTransaction = false;
-    [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
-}
 
 - (void)downloadJsonData
 {
-    NSDate *previousDownloadTime = [NSDate distantPast];
-    if ([[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdatev1"])
-        previousDownloadTime = [[AppHelper getAppHelper] userDefaultsForKey:@"AssetDetailsUpdatev1"];
-    
-    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:previousDownloadTime];
-    int hours = timeInterval / 3600;
-    if (hours > 5) {
-        [self initHelper];
-        [[AppHelper getAppHelper] loadAllAssets];
-        [AppHelper getAppHelper].isAssetsUpdated = YES;
-    } else {
-        if(self.delegate)
-            [self.delegate performLocalTasks];
-    }
-}
-
-- (void) showInternetErrorAlert
-{
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-    [alert show];
+    [self initHelper];
+    if(self.delegate)
+        [self.delegate performLocalTasks];
 }
 
 - (void)initializeFontListArray
 {
-    fontListArr = Nil;
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     fontDirPath = [NSString stringWithFormat:@"%@/Resources/Fonts", docDirPath];
@@ -86,8 +56,8 @@
     }
     [self copyFontFilesFromDirectory:docDirPath ToDirectory:fontDirPath withExtensions:fontExtensions];
     filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fontDirPath error:Nil];
-    fontListArr = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
 }
+
 - (void)copyFontFilesFromDirectory:(NSString*)sourceDir ToDirectory:(NSString*)destinationDir withExtensions:(NSArray*)extensions
 {
     NSArray* fontFilesToCopy = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:sourceDir error:Nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
@@ -105,12 +75,6 @@
 - (void)initHelper
 {
     cache = [CacheSystem cacheSystem];
-    productIdentifierList = [[NSMutableArray alloc] init];
-    allAssets = [[NSMutableDictionary alloc] init];
-    allProducts = [[NSArray alloc] init];
-    priceFormatter = [[NSNumberFormatter alloc] init];
-    [priceFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 }
 
 - (void)setIdentifierForVendor
@@ -123,186 +87,9 @@
     }
 }
 
-- (NSLocale*)getPriceLocale;
-{
-    return priceFormatter.locale;
-}
-
-- (void) loadAllFontsInQueue:(NSOperationQueue*)queue WithDelegate:(id)delegateObj AndSelectorMethod:(SEL)selectorMethod
-{
-    if(!cache)
-        cache = [CacheSystem cacheSystem];
-    
-    fontArr = [cache GetAssetList:FONT Search:@""];
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths objectAtIndex:0];
-    
-//    NSLog(@" Cache %@ queue %@ delegate %@ font count %lu " , cache, queue , delegateObj , (unsigned long)[fontArr count]);
-    for (int i = 0; i < [fontArr count]; i++) {
-        AssetItem* asset = fontArr[i];
-        AssetItem* assetItem = [cache GetAsset:asset.assetId];
-        NSString *fileName, *url;
-        if (assetItem.type == FONT) {
-            fileName = [NSString stringWithFormat:@"%@/%@", cacheDirectory, assetItem.name];
-            url = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/font/%d.%@", assetItem.assetId, [assetItem.name pathExtension]];
-            DownloadTask *task = [[DownloadTask alloc] initWithDelegateObject:delegateObj selectorMethod:selectorMethod returnObject:assetItem.name outputFilePath:fileName andURL:url];
-            task.queuePriority = NSOperationQueuePriorityHigh;
-            [queue addOperation:task];
-        }
-    }
-}
-
-- (void) loadAllAssets
-{
-    jsonArray = [[NSArray alloc] init];
-    
-    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-    sessionConfig.timeoutIntervalForRequest = 5.0;
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    [[session dataTaskWithURL:[NSURL URLWithString:@"https://iyan3dapp.com/appapi/json/assetsDetailv5.json"]
-            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                if(!error && data != nil) {
-                    
-                    NSData* jsonData = [NSData dataWithData:data];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
-                    
-                    
-                    NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
-                    if (jsonData == nil || [jsonStr length] < 5) {
-                        if(self.delegate)
-                            [self.delegate performLocalTasks];
-                        return;
-                    }
-
-                    jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
-                    NSError *jsonParserError;
-                    
-                    jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&jsonParserError];
-                    
-                    [self setAssetsDetails:ASSET_SELECTION];
-                    [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AssetDetailsUpdatev1"];
-                }
-                if(self.delegate)
-                    [self.delegate performLocalTasks];
-            }] resume];
-}
-
-- (void)performReadingJsonInQueue:(NSOperationQueue*)queue ForPage:(int)viewType
-{
-    SEL selectorForTask = nil;
-    NSString* urlString;
-    if (viewType == (int)ASSET_SELECTION || viewType == (int)TEXT_VIEW) {
-        selectorForTask = @selector(loadAllAssets:);
-        urlString = @"https://iyan3dapp.com/appapi/json/assetsDetailv5.json";
-    }
-    else if (viewType == (int)ALL_ANIMATION_VIEW) {
-        selectorForTask = @selector(loadAllAnimations:);
-        urlString = @"https://iyan3dapp.com/appapi/json/animationDetail.json";
-    }
-
-    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:selectorForTask returnObject:nil outputFilePath:@"" andURL:urlString];
-    task.taskType = DOWNLOAD_AND_READ;
-    task.queuePriority = NSOperationQueuePriorityVeryHigh;
-    [queue addOperation:task];
-}
-
-- (void)loadAllAssets:(NSData*)rawData
-{
-    jsonArray = [[NSArray alloc] init];
-
-    if (rawData != nil) {
-        NSData* jsonData = [NSData dataWithData:rawData];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
-        
-        NSError* error;
-        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
-        if (jsonData == nil || [jsonStr length] < 5) {
-            return;
-        }
-
-        jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
-        jsonArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-        [self setAssetsDetails:ASSET_SELECTION];
-    }
-}
-- (void)loadAllAnimations:(NSData*)rawData
-{
-    jsonAnimationArray = [[NSArray alloc] init];
-
-    if (rawData != nil) {
-        NSData* jsonData = [NSData dataWithData:rawData];//[Utility decryptData:rawData Password:@"SGmanKindWin5SG"];
-        
-        NSError* error;
-        NSString* jsonStr = [NSString stringWithUTF8String:(const char*)[jsonData bytes]];
-        if (jsonData == nil || [jsonStr length] < 5) {
-            return;
-        }
-
-        jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
-        if (jsonStr != nil)
-            jsonAnimationArray = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-    }
-    else
-        jsonAnimationArray = nil;
-    if(self.delegate != nil)
-        [self.delegate setAnimationData:jsonAnimationArray];
-}
 - (void)setAssetsDetails
 {
     [self setAssetsDetails:SCENE_SELECTION];
-}
-
-- (void)setAssetsDetails:(int)fromPage
-{
-    if (fromPage == ASSET_SELECTION) {
-        for (int i = 0; i < jsonArray.count; i++) {
-            AssetItem* asset = [[AssetItem alloc] init];
-            NSDictionary* dict = jsonArray[i];
-            asset.assetId = [[dict valueForKey:@"id"] intValue];
-            asset.type = [[dict valueForKey:@"type"] intValue];
-            asset.boneCount = [[dict valueForKey:@"nbones"] intValue];
-            asset.name = [dict valueForKey:@"name"];
-            asset.modifiedDate = [dict valueForKey:@"datetime"];
-            asset.hash = [dict valueForKey:@"hash"];
-            asset.iap = [dict valueForKey:@"iap"];
-            asset.keywords = [dict valueForKey:@"keywords"];
-            asset.group = [[dict valueForKey:@"group"] intValue];
-
-            AssetItem* checkAsset = [cache GetAsset:asset.assetId];
-            if ([checkAsset.modifiedDate length] > 0) {
-                if ([asset.modifiedDate isEqualToString:checkAsset.modifiedDate])
-                    [self saveBoolUserDefaults:NO withKey:[NSString stringWithFormat:@"updateImage%d", asset.assetId]];
-                else {
-
-                    [self saveBoolUserDefaults:YES withKey:[NSString stringWithFormat:@"updateImage%d", asset.assetId]];
-                }
-            }
-            else
-                [self saveBoolUserDefaults:YES withKey:[NSString stringWithFormat:@"updateImage%d", asset.assetId]];
-
-            [productIdentifierList addObject:asset.iap];
-            [allAssets setObject:asset forKey:asset.iap];
-
-            [cache UpdateAsset:asset];
-        }
-    }
-    else if (fromPage == SCENE_SELECTION) {
-        AssetItem* objImport = [[AssetItem alloc] init];
-        objImport.assetId = 0;
-        objImport.type = 0;
-        objImport.boneCount = 0;
-        objImport.name = @"OBJ";
-        objImport.modifiedDate = @"0";
-        objImport.hash = @"0";
-        objImport.iap = OBJ_IMPORT_IAP;
-        objImport.keywords = @"obj";
-
-        [allAssets setObject:objImport forKey:objImport.iap];
-    }
-
-    [AppHelper getAppHelper].isAssetsUpdated = YES;
-    [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AssetDetailsUpdate"];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"AssetsSet" object:nil userInfo:nil];
 }
 
 - (void)writeDataToFile:(NSData*)data FileName:(NSString*)fileName
@@ -434,149 +221,10 @@
     }
 }
 
-- (void)callPaymentGateWayForProduct:(NSString*) productId
-{
-    transactionCount = 0;
-    if ([SKPaymentQueue canMakePayments]) {
-        processTransaction = true;
-        SKPayment* payment = [SKPayment paymentWithProductIdentifier:productId];
-        [[SKPaymentQueue defaultQueue] addPayment:payment];
-    }
-    else {
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"inapp_disabled", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-        [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithBool:NO]];
-    }
-}
-
 - (void)missingAlertView
 {
     UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"missing_resources", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
     [closeAlert show];
-}
-- (void)restorePurchasedTransaction
-{
-    if ([SKPaymentQueue canMakePayments]) {
-        [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
-        [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
-    }
-    else {
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"inapp_disabled", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-    }
-}
-
-- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue*)queue
-{
-    for (SKPaymentTransaction* transaction in queue.transactions) {
-        [restoreIdArr addObject:transaction.payment.productIdentifier];
-        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-    for (int i = 0; i < [restoreIdArr count]; i++) {
-        if ([[restoreIdArr objectAtIndex:i] isEqual:OBJ_IMPORT_IAP]) {
-            [cache addOBJImporterColumn];
-            [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
-            [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:NO];
-            break;
-        }
-    }
-    }
-    if([restoreIdArr count] == 0) {
-        if(self.delegate != nil)
-            [self.delegate transactionCancelled];
-    }
-    [self removeTransactionObserver];
-}
-
-- (NSMutableArray*)getRestoreIds
-{
-    return restoreIdArr;
-}
-
-- (void)paymentQueue:(SKPaymentQueue*)queue restoreCompletedTransactionsFailedWithError:(NSError*)error
-{
-    UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil)
-                                                      message:error.localizedDescription
-                                                     delegate:nil
-                                            cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                            otherButtonTitles:nil];
-    [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-    [self performSelectorOnMainThread:@selector(statusForRestorePurchase:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:NO];
-    if(self.delegate != nil)
-        [self.delegate transactionCancelled];
-    [self performSelectorInBackground:@selector(transactionCancelled) withObject:nil];
-}
-
-- (void)statusForRestorePurchase:(NSNumber*)object
-{
-    if(self.delegate != nil)
-        [self.delegate statusForRestorePurchase:object];
-}
-
-- (void)paymentQueue:(SKPaymentQueue*)queue updatedTransactions:(NSArray*)transactions
-{
-    [restoreIdArr removeAllObjects];
-    if (transactions.count > 1) {
-        for (int i = 1; i < transactions.count; i++)
-            [[SKPaymentQueue defaultQueue] finishTransaction:transactions[i]];
-    }
-    for (SKPaymentTransaction* transaction in transactions) {
-        if (transactionCount > 0 && (transaction.transactionState != SKPaymentTransactionStatePurchasing)) {
-            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-        }
-        else
-            transactionCount++;
-
-        switch (transaction.transactionState) {
-        case SKPaymentTransactionStatePurchased: {
-//            [self.delegate loadingViewStatus:NO];
-            NSString *productId = transaction.payment.productIdentifier;
-            NSLog(@"Purchased %@ ", transaction.payment.productIdentifier);
-
-            if ([productId isEqualToString:FIVE_THOUSAND_CREDITS]) {
-                processTransaction = false;
-                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:5000]];
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            } else if ([productId isEqualToString:TWENTY_THOUSAND_CREDITS]) {
-                processTransaction = false;
-                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:20000]];
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            } else if ([productId isEqualToString:FIFTY_THOUSAND_CREDITS]) {
-                processTransaction = false;
-                [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:50000]];
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            }
-
-            break;
-        }
-
-        case SKPaymentTransactionStateFailed: {
-//            [self.delegate loadingViewStatus:NO];
-            processTransaction = false;
-            NSLog(@"Cancelled");
-
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-            [self performSelectorInBackground:@selector(statusForOBJImport:) withObject:[NSNumber numberWithInt:0]];
-            [self performSelectorInBackground:@selector(transactionCancelled) withObject:nil];
-            if (transaction.error.code != SKErrorPaymentCancelled) {
-                UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:transaction.error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-                [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-            }
-            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            break;
-        }
-
-        case SKPaymentTransactionStateRestored: {
-            processTransaction = false;
-            [restoreIdArr addObject:transaction.payment.productIdentifier];
-            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-            break;
-        }
-
-        default: {
-            break;
-        }
-        }
-    }
 }
 
 -(void) showErrorAlertViewWithMessage:(NSString*)message
@@ -586,20 +234,10 @@
 
 }
 
-- (void)transactionCancelled
-{
-    if(self.delegate != nil)
-        [self.delegate transactionCancelled];
-}
 - (void)statusForOBJImport:(NSNumber*)status
 {
     if(self.delegate != nil)
         [self.delegate statusForOBJImport:status];
-}
-- (void)premiumUnlocked
-{
-    if(self.delegate != nil)
-        [self.delegate premiumUnlocked];
 }
 
 - (void)parseHelpJson
@@ -635,141 +273,6 @@
         return [actionStatements objectAtIndex:randindex];
     }
     return @"";
-}
-
-- (void) useOrRechargeCredits:(NSString*) uniqueId credits:(int) credits For:(NSString*)usageType
-{
-    if(uniqueId.length < 5) {
-        NSLog(@" \n Show alert ");
-        return;
-    }
-    
-    NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
-    
-    NSString* receiptDataStr = (credits < 0) ? @"" : [receiptData base64EncodedStringWithOptions:0];
-    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/credits.php"];
-    NSURL *url = [NSURL URLWithString:phpPath];
-    NSString *postPath = phpPath;
-    
-    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    NSLog(@" \n unique id %@ Deduct credits %d ", uniqueId, credits);
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", usageType, @"usagetype", [NSString stringWithFormat:@"%d", credits], @"credits", receiptDataStr, @"receiptdata", nil]];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        int status = [[dict objectForKey:@"result"] intValue];
-        NSString* result = [dict objectForKey:@"result"];
-        NSLog(@" \n Dictonary %@ ", dict);
-        
-        if(status > 0) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsused" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result,@"result",nil]];
-        } else {
-            NSString *message = [dict objectForKey:@"message"];
-            [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
-
-        }
-        
-    }
-                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-                                         [userNameAlert show];
-                                     }];
-    [operation start];
-}
-
-
-- (void) getCreditsForUniqueId: (NSString*)uniqueId Name:(NSString*) name Email:(NSString*) email SignInType:(int) type
-{
-    if(uniqueId.length < 5) {
-        NSLog(@" \n Show alert ");
-        return;
-    }
-    
-    __block int credits = -1;
-    NSURL *url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/login.php"];
-    NSString *postPath = @"https://www.iyan3dapp.com/appapi/login.php";
-    
-    NSString* deviceId = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
-    NSString* osVersion = [UIDevice currentDevice].systemVersion;
-    NSString* hwversion = [self deviceName];
-    NSString *deviceToken = [[AppHelper getAppHelper] userDefaultsForKey:@"deviceToken"];
-
-    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", name, @"username", email, @"email", hwversion, @"hwversion", osVersion, @"osversion", deviceId, @"deviceid", [NSString stringWithFormat:@"%d",type], @"signintype",deviceToken, @"pushid", nil]];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSLog(@" Login : %@ ", dict);
-        int status = [[dict objectForKey:@"result"] intValue];
-        BOOL premium = [[dict objectForKey:@"premium"] boolValue];
-        if(status > 0) {
-            credits = [[dict objectForKey:@"credits"] intValue];
-            [self saveToUserDefaults:[NSNumber numberWithInt:credits] withKey:@"credits"];
-        } else {
-            NSString *message = [dict objectForKey:@"message"];
-            [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:YES], @"network", [NSNumber numberWithBool:premium], @"premium", nil]];
-    }
-                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         NSLog(@"Failure: %@", error.localizedDescription);
-                                         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-                                         [userNameAlert show];
-                                         
-                                         [[NSNotificationCenter defaultCenter] postNotificationName:@"creditsupdate" object:nil userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:credits], @"credits", [NSNumber numberWithBool:NO], @"network", nil]];
-                                         
-                                     }];
-    [operation start];
-}
-
-- (void) verifyRestorePurchase
-{
-    
-    if(![[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
-        return;
-    
-    NSData *receiptData = [[AppHelper getAppHelper] getReceiptData];
-    
-    NSString* phpPath = [NSString stringWithFormat:@"https://www.iyan3dapp.com/appapi/restore.php"];
-
-    NSURL *url = [NSURL URLWithString:phpPath];
-    NSString *postPath = phpPath;
-
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    NSString * uniqueId = [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"];
-    NSMutableURLRequest *request = [httpClient requestWithMethod:@"GET" path:postPath parameters:[NSDictionary dictionaryWithObjectsAndKeys:uniqueId, @"uniqueid", [receiptData base64EncodedStringWithOptions:0], @"receiptdata", nil]];
-    
-    NSLog(@"Request initiated");
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Request Successfull");
-        NSLog(@"response %@",[operation responseString]);
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        int status = [[dict objectForKey:@"result"] intValue];
-        if(status > 0) {
-            NSString *message = [dict objectForKey:@"message"];
-            UIAlertView *userNameAlert = [[UIAlertView alloc]initWithTitle:@"Success" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [userNameAlert show];
-        } else {
-            NSString *message = [dict objectForKey:@"message"];
-            [[AppHelper getAppHelper] showErrorAlertViewWithMessage:message];
-        }
-
-    }
-     
-                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         NSLog(@"Failure: %@", error);
-                                         UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];                                         [userNameAlert show];
-                                         
-                                     }];
-    [operation start];
 }
 
 - (void) toggleHelp:(UIViewController*) vc Enable:(BOOL)enable
@@ -873,23 +376,11 @@
 {
     cache = nil;
 
-    if (productIdentifierList && [productIdentifierList count])
-        [productIdentifierList removeAllObjects];
-    productIdentifierList = nil;
-
     if (self.productsRequest) {
         self.productsRequest.delegate = nil;
         [self.productsRequest cancel];
         self.productsRequest = nil;
     }
-
-    if (allAssets && [allAssets count])
-        [allAssets removeAllObjects];
-    allAssets = nil;
-
-    allProducts = nil;
-    priceFormatter = nil;
-    jsonArray = nil;
 }
 
 @end

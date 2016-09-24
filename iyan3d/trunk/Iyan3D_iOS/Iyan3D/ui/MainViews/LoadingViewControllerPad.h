@@ -16,17 +16,13 @@
 
 @interface LoadingViewControllerPad : GAITrackedViewController<AppHelperDelegate>
 {
-    NSNumberFormatter * priceFormatter;
     NSArray *jsonArr;
     CacheSystem* cache;
-    NSArray *textureFile,*sceneFiles,*objFiles,*rigFiles;
     BOOL isAppFirstTime;
     BOOL isOldUser;
     NSDate *startTime;
 }
 
-@property (strong, nonatomic) NSArray *allProducts;
-@property (strong, nonatomic) NSMutableDictionary *allAssets;
 @property (weak, nonatomic) IBOutlet UILabel* ProgessLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 

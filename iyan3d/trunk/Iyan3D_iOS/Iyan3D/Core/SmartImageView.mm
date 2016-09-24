@@ -35,6 +35,7 @@
     }
     return self;
 }
+
 - (id)initWithCoder:(NSCoder*)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -48,6 +49,7 @@
     }
     return self;
 }
+
 - (void)setImageInfo:(NSString*)assetId forView:(int)viewType OperationQueue:(NSOperationQueue*)q ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
 {
     queue = q;
@@ -64,46 +66,16 @@
     [activityIndicator startAnimating];
     _assetId = assetId;
     _viewType = viewType;
-    if (viewType == ASSET_SELECTION) {
-        UIImage* image = [self GetImage:assetId];
-        BOOL updateImage;
-        if ([AppHelper getAppHelper].isAssetsUpdated)
-            updateImage = [[AppHelper getAppHelper] userDefaultsBoolForKey:[NSString stringWithFormat:@"updateImage%@", assetId]];
-        else
-            updateImage = false;
-        
-        if (image && !updateImage) {
-            [self setImage:image];
-            [activityIndicator stopAnimating];
-        }
-        else {
-            [self setImage:nil];
-            [self performSelectorInBackground:@selector(DownloadImage:) withObject:assetId];
-        }
-    }
-    else if (viewType == MY_ANIMATION_VIEW) {
-        UIImage* image = [self GetImage:assetId];
-        if (image) {
-            [self setImage:image];
-            [activityIndicator stopAnimating];
-        }
-        else {
-            [self setImage:nil];
-            //[self performSelectorInBackground:@selector(DownloadImage:) withObject:assetId];
-        }
-    }
-    else if (viewType == ALL_ANIMATION_VIEW) {
-        UIImage* image = [self GetImage:assetId];
-        if (image) {
-            [self setImage:image];
-            [activityIndicator stopAnimating];
-        }
-        else {
-            [self setImage:nil];
-            [self performSelectorInBackground:@selector(DownloadAnimationImage:) withObject:assetId];
-        }
-    }
+    
+    UIImage* image = [self GetImage:assetId];
+    [self setImage:image];
+    
+    if (image)
+        [activityIndicator stopAnimating];
+    else
+        [self performSelectorInBackground:@selector(DownloadImage:) withObject:assetId];
 }
+
 - (void)reLoadImage:(NSString*)assetId
 {
     UIImage* image = [self GetImage:assetId];
@@ -115,6 +87,7 @@
         }
     }
 }
+
 - (void)DownloadAnimationImage:(NSString*)assetId
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -127,6 +100,7 @@
     task.taskType = DOWNLOAD_AND_WRITE_IMAGE;
     [queue addOperation:task];
 }
+
 - (void)DownloadImage:(NSString*)assetId
 {
 
@@ -140,6 +114,7 @@
     task.taskType = DOWNLOAD_AND_WRITE_IMAGE;
     [queue addOperation:task];
 }
+
 - (BOOL)downloadImageFromURL:(NSString*)imageURL SaveWithFileName:(NSString*)fileName
 {
     NSData* imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
@@ -151,6 +126,7 @@
     else
         return NO;
 }
+
 - (UIImage*)GetImage:(NSString*)assetId
 {
     UIImage* image = nil;
@@ -183,6 +159,7 @@
     }
     return image;
 }
+
 - (void)dealloc
 {
     [activityIndicator removeFromSuperview];

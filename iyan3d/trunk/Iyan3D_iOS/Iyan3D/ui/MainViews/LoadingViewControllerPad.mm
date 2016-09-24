@@ -26,11 +26,22 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-       
-//        isOldUser = NO;
-//        if(!(isOldUser = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"OldUser"]))
-//            [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"OldUser"];
+        
+        self.ProgessLabel.text = NSLocalizedString(@"Loading Assets", nil);
+        
+        cache = [CacheSystem cacheSystem];
+        [cache OpenDatabase];
+        [cache createTablesForPrice];
+        [cache createRenderTaskTables];
+        [cache createAnimationTables];
+        [cache checkAndCreateGroupColumnInAssetsTable];
+        [self.activityIndicator startAnimating];
+        [AppHelper getAppHelper].delegate = self;
+        [[AppHelper getAppHelper] downloadJsonData];
+        [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
+        [[AppHelper getAppHelper] setIdentifierForVendor];
 
+        
         [Answers logCustomEventWithName:@"AppStart" customAttributes:@{}];
         startTime = [NSDate date];
         
@@ -76,7 +87,8 @@
                 [fm moveItemAtPath:[docsDir stringByAppendingPathComponent:dbName] toPath:[resourceDirPath stringByAppendingPathComponent:dbName] error:nil];
                 NSArray *dirFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:docsDir error:nil];
                 // Move existing sgb files in documents directory to Projects directory
-                sceneFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.sgb'"]];
+                
+                NSArray *sceneFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.sgb'"]];
                 for (NSString *fileName in sceneFiles) {
                     NSArray *subStrings = [fileName componentsSeparatedByString:@"."];
                     NSString* sceneSGBFile = [NSString stringWithFormat:@"%@.sgb",[subStrings objectAtIndex:0]];
@@ -89,7 +101,7 @@
                 NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
                 NSString* cachesDir = [paths objectAtIndex:0];
                 NSArray *cacheDirFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:cachesDir error:nil];
-                objFiles = [cacheDirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH '2'"]];
+                NSArray *objFiles = [cacheDirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH '2'"]];
                 for (NSString *fileName in objFiles) {
                     NSArray *fileNameArray = [fileName componentsSeparatedByString:@"."];
                     NSString *file =[fileNameArray objectAtIndex:0];
@@ -102,7 +114,7 @@
                     }
                 }
                 // Move existing sgr files (made by user) in caches directory to Rigs directory
-                rigFiles = [cacheDirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH '4'"]];
+                NSArray *rigFiles = [cacheDirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self BEGINSWITH '4'"]];
                 for (NSString *fileName in rigFiles) {
                     NSArray *fileNameArray = [fileName componentsSeparatedByString:@"."];
                     NSString *file =[fileNameArray objectAtIndex:0];
@@ -126,7 +138,6 @@
         if(![fileManager fileExistsAtPath:videos])
             [[NSFileManager defaultManager] createDirectoryAtPath:videos withIntermediateDirectories:NO attributes:nil error:nil];
 
-        
         NSArray* basicShapes = [NSArray arrayWithObjects:@"60001",@"60002",@"60003",@"60004",@"60005",@"60006",nil];
         /*
          CONE = 60001
@@ -168,11 +179,6 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
         }
         
-        cache = [CacheSystem cacheSystem];
-        priceFormatter = [[NSNumberFormatter alloc] init];
-        [priceFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-        [priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-        
     }
     return self;
 }
@@ -198,17 +204,6 @@
 {
     [super viewDidLoad];
     self.screenName = @"LoadingView iOS";
-    
-    self.ProgessLabel.text = NSLocalizedString(@"Loading Assets", nil);
-    [cache OpenDatabase];
-    [cache createTablesForPrice];
-    [cache createRenderTaskTables];
-    [cache createAnimationTables];
-    [cache checkAndCreateGroupColumnInAssetsTable];
-    [self.activityIndicator startAnimating];
-    [self performSelectorInBackground:@selector(performBackgroundTasks) withObject:nil];
-    [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
-    [[AppHelper getAppHelper] setIdentifierForVendor];
 }
 
 - (void) didReceiveMemoryWarning
@@ -216,35 +211,8 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) performBackgroundTasks
-{
-    [AppHelper getAppHelper].delegate = self;
-    [[AppHelper getAppHelper] downloadJsonData];
-}
-
 - (void) performLocalTasks
 {
-    
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
-        [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
-    } else if([[[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"] isEqualToString:@"4.0"]) {
-        [[AppHelper getAppHelper] saveBoolUserDefaults:[cache checkOBJImporterPurchase] withKey:@"premiumUnlocked"];
-    }
-    
-    if(![[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
-        [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
-        
-    } else if([[AppHelper getAppHelper] userDefaultsForKey:@"APP_VERSION"]) {
-        [[AppHelper getAppHelper] saveToUserDefaults:APP_VERSION withKey:@"APP_VERSION"];
-    }
-    
-    //TODO : Remove all premium upgrade functions
-    // [[AppHelper getAppHelper] saveBoolUserDefaults:true withKey:@"premiumUnlocked"];
-    
-    if([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"])
-        [[AppHelper getAppHelper] initializeFontListArray];
-    
-    
     NSArray* cachepaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [cachepaths objectAtIndex:0];
     
@@ -260,6 +228,7 @@
    
     NSArray *dirFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentsDirectory error:nil];
 
+    NSArray *textureFile;
     if([dirFiles count] > 0)
         textureFile = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
     
@@ -270,7 +239,6 @@
         [imageDataforDisplay writeToFile:desFilePathForDisplay atomically:YES];
     }
     [self performSelectorOnMainThread:@selector(loadSceneView) withObject:nil waitUntilDone:NO];
-    
 }
 
 - (NSData*) convertAndScaleImage:(UIImage*)image size:(int)textureRes
@@ -329,10 +297,6 @@
 {
 	cache = nil;
     jsonArr = nil;
-    priceFormatter = nil;
-    _allProducts = nil;
-    _allAssets = nil;
-    textureFile = nil;
     [AppHelper getAppHelper].delegate = nil;
 }
 
