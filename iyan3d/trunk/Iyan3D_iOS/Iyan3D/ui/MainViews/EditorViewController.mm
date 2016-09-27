@@ -2324,7 +2324,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     
     assetAddType = IMPORT_ASSET_ACTION;
-    if((selectedNodeType == NODE_RIG || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
+    if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->getProperty(TEXTURE).fileName.c_str()
@@ -2412,7 +2412,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
         
-    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS) {
+    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS) {
         
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
@@ -3889,7 +3889,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [self storeRigTextureinTexturesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
     assetAddType = IMPORT_ASSET_ACTION;
     objAsset.isTempAsset = NO;
-    objAsset.textureName = (vertexColor == -1) ? [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"] : @"-1";
+    objAsset.textureName = (vertexColor == -1) ? [NSString stringWithFormat:@"%d%@",objAsset.assetId,@"-cm"] : @"";
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
     editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size()-1);
     editorScene->animMan->copyPropsOfNode(selectedNodeId, editorScene->nodes.size()-1, true);

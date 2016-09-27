@@ -689,7 +689,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
     else
         texType = NODE_TEXTURE_TYPE_REFLECTIONMAP;
 
-    if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
+    if(textureFileName.length() > 4 && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x = (pIndex == TEXTURE) ? false : nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, matIndex).value.x; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
         
         if(nodes[selectedNodeId]->node->type == NODE_TYPE_INSTANCED) {
@@ -716,7 +716,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         }
         
         if(!isTemp || isUndoRedo){
-            nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = "-1";
+            nodes[selectedNodeId]->getProperty(pIndex, matIndex).fileName = "";
         }
         
         if(pIndex == BUMP_MAP) {
@@ -759,7 +759,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
         setEnvironmentTexture(shaderMGR->getProperty(ENVIRONMENT_TEXTURE).fileName, false);
     }
     else {
-        string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(pIndex).fileName;
+        string textureFileName = FileHelper::getTexturesDirectory() + nodes[selectedNode]->getProperty(pIndex, selectedMeshBufferId).fileName;
 
         if(selectedMaterialIndex == -1)
             selectedMaterialIndex = 0;
@@ -771,17 +771,17 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
             nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(NULL, texType);
             
             if(pIndex == TEXTURE) {
-                if(nodes[selectedNode]->getProperty(TEXTURE).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
-                    nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
-                    Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNodeId]->getProperty(TEXTURE_SMOOTH, selectedMeshBufferId).value.x);
+                if(nodes[selectedNode]->getProperty(TEXTURE, selectedMeshBufferId).fileName.length() > 3 && nodes[selectedNode]->checkFileExists(textureFileName)) {
+                    nodes[selectedNode]->getProperty(IS_VERTEX_COLOR, selectedMeshBufferId).value.x = false; // Vector4(false, 0, 0, 0), MATERIAL_PROPS);
+                    Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(TEXTURE, selectedMeshBufferId).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, nodes[selectedNode]->getProperty(TEXTURE_SMOOTH, selectedMeshBufferId).value.x);
                     nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
                 } else {
-                    nodes[selectedNode]->getProperty(TEXTURE).fileName = "-1";
-                    nodes[selectedNode]->getProperty(VERTEX_COLOR).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
-                    nodes[selectedNode]->getProperty(IS_VERTEX_COLOR).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
+                    nodes[selectedNode]->getProperty(TEXTURE, selectedMeshBufferId).fileName = "";
+                    nodes[selectedNode]->getProperty(VERTEX_COLOR, selectedMeshBufferId).value = nodes[selectedNode]->getProperty(ORIG_VERTEX_COLOR).value;
+                    nodes[selectedNode]->getProperty(IS_VERTEX_COLOR, selectedMeshBufferId).value.x = true; // Vector4(true, 0, 0, 0), MATERIAL_PROPS);
                 }
             } else if(pIndex == BUMP_MAP) {
-                if(nodes[selectedNode]->getProperty(BUMP_MAP).fileName != "-1" && nodes[selectedNode]->checkFileExists(textureFileName)) {
+                if(nodes[selectedNode]->getProperty(BUMP_MAP).fileName.length() > 3  && nodes[selectedNode]->checkFileExists(textureFileName)) {
                     Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->getProperty(BUMP_MAP).fileName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, true);
                     nodes[selectedNode]->materialProps[selectedMaterialIndex]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_NORMALMAP);
                 } else {

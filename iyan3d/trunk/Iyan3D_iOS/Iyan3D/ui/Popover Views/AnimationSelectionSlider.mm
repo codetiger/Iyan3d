@@ -717,7 +717,7 @@
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
         isFirstTimeAnimationApplyed = false;
-        if(animationType == RIG_ANIMATION){
+        if(animationType == RIG_ANIMATION || animationType == TEXT_ANIMATION){
             if(animBoneCount == bonecount || animationType == TEXT_ANIMATION){
                 [self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
             } else {
@@ -725,8 +725,10 @@
                 [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
             }
         }
-        else
-            [self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
+        else {
+            NSLog(@" \n Animation file not exists %@ ", fileName);
+        }
+            //[self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
     }
    [self.delegate showOrHideProgress:0];
 }

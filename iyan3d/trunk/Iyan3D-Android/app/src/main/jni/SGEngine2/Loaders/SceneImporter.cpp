@@ -258,6 +258,10 @@ void SceneImporter::importNodeFromMesh(SGEditorScene *sgScene, SGNode* sceneNode
     
     sgScene->freezeRendering = false;
     
+    if(sceneNode->getType() == NODE_TEXT_SKIN) {
+        sgScene->textJointsBasePos[(int)sgScene->nodes.size()] = sgScene->animMan->storeTextInitialPositions(sceneNode);
+    }
+    
 }
 
 Mesh* SceneImporter::loadMeshFromFile(string filePath)
@@ -534,6 +538,10 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     sceneNode->node = sgn;
     sceneNode->actionId = ++sgScene->actionObjectsSize;
     sceneNode->node->setID(sgScene->assetIDCounter++);
+    
+    if(sceneNode->getType() == NODE_TEXT_SKIN) {
+        sgScene->textJointsBasePos[(int)sgScene->nodes.size()] = sgScene->animMan->storeTextInitialPositions(sceneNode);
+    }
     
     sgScene->nodes.push_back(sceneNode);
 }

@@ -67,8 +67,13 @@ void SGAnimationManager::copyKeysOfNode(int fromNodeId, int toNodeId)
     animScene->nodes[toNodeId]->rotationKeys = animScene->nodes[fromNodeId]->rotationKeys;
     animScene->nodes[toNodeId]->scaleKeys = animScene->nodes[fromNodeId]->scaleKeys;
     if(animScene->nodes[fromNodeId]->joints.size() > 0){
-    for (int i =0; i < animScene->nodes[fromNodeId]->joints.size(); i++)
-        animScene->nodes[toNodeId]->joints[i]->rotationKeys = animScene->nodes[fromNodeId]->joints[i]->rotationKeys;
+        for (int i =0; i < animScene->nodes[fromNodeId]->joints.size(); i++) {
+            animScene->nodes[toNodeId]->joints[i]->rotationKeys = animScene->nodes[fromNodeId]->joints[i]->rotationKeys;
+            if(animScene->nodes[toNodeId]->getType() == NODE_TEXT_SKIN) {
+                animScene->nodes[toNodeId]->joints[i]->positionKeys = animScene->nodes[fromNodeId]->joints[i]->positionKeys;
+                animScene->nodes[toNodeId]->joints[i]->scaleKeys = animScene->nodes[fromNodeId]->joints[i]->scaleKeys;
+            }
+        }
     }
 }
 
