@@ -483,8 +483,6 @@
 
 - (void) reloadCollectionView
 {
-    [self.downloadIndicator stopAnimating];
-    [self.downloadIndicator setHidden:YES];
     [self.animationCollectionView reloadData];
 }
 

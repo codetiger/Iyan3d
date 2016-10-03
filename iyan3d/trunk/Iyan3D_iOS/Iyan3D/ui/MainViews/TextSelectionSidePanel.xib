@@ -19,6 +19,8 @@
                 <outlet property="fontTab" destination="X3h-3Z-EP7" id="Zpy-ye-qkS"/>
                 <outlet property="inputText" destination="CyO-w9-dd0" id="Y4K-HK-YZu"/>
                 <outlet property="noFontMessageLable" destination="WZA-PG-YhB" id="2zP-YN-X2R"/>
+                <outlet property="titleLabel" destination="xGM-i8-p5U" id="NVK-Ed-33f"/>
+                <outlet property="titleView" destination="kan-bt-NfR" id="fNJ-xy-BnF"/>
                 <outlet property="view" destination="D2q-EF-2et" id="T7L-vs-Kw9"/>
             </connections>
         </placeholder>
@@ -124,15 +126,15 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With Bone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="veO-ZZ-Lbt">
                             <frame key="frameInset" minX="55" minY="18" width="106" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="X3h-3Z-EP7">
-                    <frame key="frameInset" minX="72" minY="131" width="157" height="29"/>
+                <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="X3h-3Z-EP7">
+                    <frame key="frameInset" minX="4" minY="123" width="81" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <segments>
                         <segment title="Font Store"/>
@@ -161,6 +163,20 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" hint="Toggle between store fonts and the fonts you have imported." identifier="1"/>
+                </view>
+                <view contentMode="scaleToFill" misplaced="YES" id="kan-bt-NfR">
+                    <frame key="frameInset" minX="117" minY="128" width="81" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="My Fonts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xGM-i8-p5U">
+                            <frame key="frameInset" minX="2" minY="4" width="77" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

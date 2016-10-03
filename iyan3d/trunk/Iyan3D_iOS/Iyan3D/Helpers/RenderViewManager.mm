@@ -42,7 +42,7 @@ SGEditorScene *editorScene;
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cachesDir = [paths objectAtIndex:0];
-    constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
+    constants::CachesStoragePath = [cachesDir UTF8String];
     touchCountTracker = 0;
     smgr = sceneMngr;
 }
@@ -277,8 +277,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             delete loader;
             
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
 
@@ -307,8 +305,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             delete loader;
             
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
             break;
@@ -320,7 +316,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
                 [self.delegate updateAssetListInScenes];
-                                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
             }
             break;
         }
@@ -331,8 +326,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_ADD, assetId);
                 [self.delegate updateAssetListInScenes];
             }
             break;
@@ -360,14 +353,12 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             Vector4 textColor = Vector4(red,green,blue,alpha);
             NODE_TYPE nodeType = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
             
-            std::string fontFilePath = FileHelper::getCachesDirectory() + [fontFileName UTF8String];
+            std::string fontFilePath = FileHelper::getDocumentsDirectory() + [fontFileName UTF8String];
             
             SceneImporter * loader = new SceneImporter();
             loader->import3DText(editorScene, name, fontFilePath, 4, 4, imgHeight / 50.0f, 4, (type == ASSET_TEXT_RIG), isTempNode);
-            
+            delete loader;
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
             
@@ -376,10 +367,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         case ASSET_ADDITIONAL_LIGHT: {
             if(ShaderManager::lightPosition.size() < MAX_NUM_OF_LIGHTS) {
                 editorScene->loader->loadNode(NODE_ADDITIONAL_LIGHT, assetId, "",  "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId , "Light"+ to_string(assetId-ASSET_ADDITIONAL_LIGHT));
-
-                }
                 [self.delegate updateAssetListInScenes];
             } else {
                 NSLog(@"Max lights 5");
@@ -391,8 +378,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(particle)
                 particle->isTempNode = isTempNode;
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
                 [self.delegate updateAssetListInScenes];
             }
         }
@@ -412,12 +397,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         if(editorScene->isNodeSelected && editorScene->selectedNodeId != nodeIndex)
             editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
         editorScene->selectedNodeId = nodeIndex;
-        if(!isUndoOrRedo){
-            if(editorScene->nodes[nodeIndex]->getType() == NODE_TEXT_SKIN || editorScene->nodes[nodeIndex]->getType() == NODE_TEXT || editorScene->nodes[nodeIndex]->getType() == NODE_IMAGE || editorScene->nodes[nodeIndex]->getType() == NODE_VIDEO)
-                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, 0);
-            else if (editorScene->nodes[nodeIndex]->getType() == NODE_OBJ || editorScene->nodes[nodeIndex]->getType() == NODE_SGM || editorScene->nodes[nodeIndex]->getType() == NODE_RIG || editorScene->nodes[nodeIndex]->getType() == NODE_ADDITIONAL_LIGHT|| editorScene->nodes[nodeIndex]->getType() == NODE_PARTICLES)
-                editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
-        }
+        
+        editorScene->actionMan->removeActionsWithActionId(editorScene->nodes[editorScene->selectedNodeId]->actionId);
         [self performSelectorOnMainThread:@selector(removeNodeInMainThread:) withObject:[NSNumber numberWithInt:nodeIndex] waitUntilDone:YES];
     }
 }

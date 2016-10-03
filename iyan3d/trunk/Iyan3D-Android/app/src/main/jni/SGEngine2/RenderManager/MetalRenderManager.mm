@@ -476,8 +476,18 @@ void MetalRenderManager::BindUniform(Material* mat, shared_ptr<Node> node, u16 u
 
 void MetalRenderManager::bindDynamicUniform(Material *material, string name, void* values, DATA_TYPE type, ushort count, u16 paramIndex, int nodeIndex, Texture *tex, bool isFragmentData, bool blurTex)
 {
+    
     if(tex)
         BindUniform(type, 0, values, count, paramIndex, ((MTLTexture*)tex)->texture, name, NOT_EXISTS, isFragmentData, blurTex);
+    else{
+        int dataTypeSize = (type == DATA_INTEGER) ? sizeof(int) : sizeof(float);
+        int bufIndex = getAvailableBfferWithSize(count * dataTypeSize);
+        
+        uint8_t *bufferPointer = (uint8_t *)[MTLBuffersMap[count * dataTypeSize][bufIndex].buf contents];
+        memcpy(bufferPointer,values,count * sizeof(float));
+        
+        BindUniform(type, MTLBuffersMap[count * dataTypeSize][bufIndex].buf, values, count, paramIndex, NULL, name, NOT_EXISTS, isFragmentData);
+    }
 }
 
 int MetalRenderManager::getAvailableBfferWithSize(int bufSize)

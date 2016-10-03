@@ -893,6 +893,8 @@ static const NSString* SCENE_FILE = @"scene_file";
                 sqlite3_finalize(statement);
             }
             sqlite3_finalize(statement);
+        } else {
+            NSLog(@"Failed Inserting Scene %s", sqlite3_errmsg(_cacheSystem));
         }
     }
     return true;

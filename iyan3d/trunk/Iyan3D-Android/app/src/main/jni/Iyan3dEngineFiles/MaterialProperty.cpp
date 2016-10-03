@@ -55,13 +55,15 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(TEXTURE, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Texture");
         addOrUpdateProperty(TEXTURE_SCALE, Vector4(1, 0, 0, true), MATERIAL_PROPS, SLIDER_TYPE, "Scale");
         addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Texture Smooth");
-        addOrUpdateProperty(BUMP_MAP, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Bump Map");
+        addOrUpdateProperty(BUMP_MAP, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Normal Map");
         addOrUpdateProperty(BUMP_DEPTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Depth");
-        
+
     } else if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES) {
-        
-        if(nodeType != NODE_PARTICLES)
+
+        if(nodeType != NODE_PARTICLES) {
+            addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Texture Smooth");
             addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
+        }
     }
 
 }

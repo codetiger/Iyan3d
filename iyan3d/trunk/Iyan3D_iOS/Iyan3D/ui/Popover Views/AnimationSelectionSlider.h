@@ -57,7 +57,7 @@
 
 @property (assign) int tableType;
 @property (weak, nonatomic) IBOutlet UIButton *publishBtn;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *downloadIndicator;
+
 @property (strong, nonatomic) id <SliderDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIButton *categoryBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *animationCollectionView;

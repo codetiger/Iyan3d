@@ -19,7 +19,6 @@ class SGActionManager
 private:
     SceneManager* smgr;
     SGAction changeKeysAction;
-    SGAction propertyAction;
     Vector3 startScale;
     MIRROR_SWITCH_STATE mirrorSwitchState;
     void rotateJoint(Quaternion outputValue);
@@ -27,6 +26,8 @@ private:
 
 public:
     
+    SGAction propertyAction;
+
     int currentAction;
     SGAction assetAction;
     SGAction addJointAction;
@@ -61,12 +62,17 @@ public:
     
     /* Property Change actions */
     
+    void removeActionsWithActionId(int actionId);
+    void storePropertyChangeAction(int selectedNodeId, Vector4 value, PROP_INDEX pIndex, bool isChanged = false, bool isSceneProp = false);
+    void storeTexturesChangeAction(int selectedNodeId, std::string fileName, Vector4 color, PROP_INDEX pIndex, bool hasMeshColor, bool isChanged = false, bool isSceneProp = false);
+    
     void changeMeshProperty(float refraction, float reflection, bool isLighting, bool isVisible, bool isChanged = false);
     void changeUVScale(int nodeIndex, int meshBufferIndex, float scale);
     void changeCameraProperty(float fov , int resolutionType, bool isChanged = false);
     void changeLightProperty(float red , float green, float blue, float shadow,float distance, int lightType, bool isChanged = false);
     void storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity,float distance, int lightType);
 
+    void updatePropsOnUndoRedo(PROP_INDEX pIndex, Vector4 value, int selectedNodeId);
     /* Mirror Change action */
     
     void setMirrorState(MIRROR_SWITCH_STATE flag);

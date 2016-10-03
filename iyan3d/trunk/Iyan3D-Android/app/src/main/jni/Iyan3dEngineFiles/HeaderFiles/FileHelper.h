@@ -50,6 +50,7 @@ public:
     static void writeVector2(ofstream *file, Vector2 value);
     
     static void printStatement(char* stringToPrint);
+    static std::string getFontsDirectory();
     static std::string getTexturesDirectory();
     static std::string getCachesDirectory();
     static std::string getDocumentsDirectory();

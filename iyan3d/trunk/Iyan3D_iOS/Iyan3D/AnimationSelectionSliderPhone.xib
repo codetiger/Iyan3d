@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -12,7 +12,6 @@
                 <outlet property="animationCollectionView" destination="RlG-I2-LDV" id="q4B-ZZ-L7x"/>
                 <outlet property="cancelBtn" destination="i0w-zU-jVr" id="C5g-Vm-tvB"/>
                 <outlet property="categoryBtn" destination="XzH-K7-siT" id="hzP-Dc-RSM"/>
-                <outlet property="downloadIndicator" destination="VsW-0G-Ktr" id="Lwk-fG-xzU"/>
                 <outlet property="view" destination="b6E-he-mWH" id="tHZ-qC-pfg"/>
             </connections>
         </placeholder>
@@ -72,10 +71,6 @@
                     </subviews>
                     <color key="backgroundColor" red="0.058823529409999999" green="0.058823529409999999" blue="0.058823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" id="VsW-0G-Ktr">
-                    <frame key="frameInset" minX="95" minY="150" width="20" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </activityIndicatorView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" dataMode="none" id="RlG-I2-LDV">
                     <frame key="frameInset" minX="-1" minY="32" width="213" maxY="35"/>
                     <autoresizingMask key="autoresizingMask" heightSizable="YES"/>

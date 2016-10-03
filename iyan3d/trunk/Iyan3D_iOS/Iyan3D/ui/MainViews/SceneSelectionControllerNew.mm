@@ -738,6 +738,18 @@
     settingsVc = nil;
     self.popUpVc = nil;
     self.popoverController = nil;
+    if(settingsVc) {
+        settingsVc.delegate = nil;
+        settingsVc = nil;
+    }
+    if(_popoverController) {
+        _popoverController.delegate = nil;
+        _popoverController = nil;
+    }
+    if(_docController) {
+        _docController.delegate = nil;
+        _docController = nil;
+    }
 }
 
 @end

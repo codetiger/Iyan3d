@@ -686,6 +686,18 @@
 		251BF4781C2C1D4A00A5D41D /* SGEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */; };
 		251BF4821C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
 		251BF4831C2C20A300A5D41D /* RenderViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4811C2C20A300A5D41D /* RenderViewManager.mm */; };
+		25243D151DA2891400BA517B /* Bernstein Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D0F1DA2891400BA517B /* Bernstein Regular.ttf */; };
+		25243D161DA2891400BA517B /* Bernstein Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D0F1DA2891400BA517B /* Bernstein Regular.ttf */; };
+		25243D171DA2891400BA517B /* CAC Champagne.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D101DA2891400BA517B /* CAC Champagne.ttf */; };
+		25243D181DA2891400BA517B /* CAC Champagne.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D101DA2891400BA517B /* CAC Champagne.ttf */; };
+		25243D191DA2891400BA517B /* Hot Pizza.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D111DA2891400BA517B /* Hot Pizza.ttf */; };
+		25243D1A1DA2891400BA517B /* Hot Pizza.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D111DA2891400BA517B /* Hot Pizza.ttf */; };
+		25243D1B1DA2891400BA517B /* Idigital Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D121DA2891400BA517B /* Idigital Bold.otf */; };
+		25243D1C1DA2891400BA517B /* Idigital Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D121DA2891400BA517B /* Idigital Bold.otf */; };
+		25243D1D1DA2891400BA517B /* Open Sans Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D131DA2891400BA517B /* Open Sans Light.ttf */; };
+		25243D1E1DA2891400BA517B /* Open Sans Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D131DA2891400BA517B /* Open Sans Light.ttf */; };
+		25243D1F1DA2891400BA517B /* Quicksand Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D141DA2891400BA517B /* Quicksand Italic.otf */; };
+		25243D201DA2891400BA517B /* Quicksand Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 25243D141DA2891400BA517B /* Quicksand Italic.otf */; };
 		2544C2751CCE2CF8009A3620 /* Mat4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2544C2731CCE2CF8009A3620 /* Mat4.cpp */; };
 		2544C2761CCE2CF8009A3620 /* Mat4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2544C2731CCE2CF8009A3620 /* Mat4.cpp */; };
 		254A4B2C1D34C93700D23D6D /* SliderPropCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 254A4B2B1D34C93700D23D6D /* SliderPropCell.mm */; };
@@ -2907,6 +2919,12 @@
 		251BF4721C2C1D4A00A5D41D /* SGEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGEditorScene.cpp; sourceTree = "<group>"; };
 		251BF4801C2C20A300A5D41D /* RenderViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderViewManager.h; sourceTree = "<group>"; };
 		251BF4811C2C20A300A5D41D /* RenderViewManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderViewManager.mm; sourceTree = "<group>"; };
+		25243D0F1DA2891400BA517B /* Bernstein Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bernstein Regular.ttf"; sourceTree = "<group>"; };
+		25243D101DA2891400BA517B /* CAC Champagne.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CAC Champagne.ttf"; sourceTree = "<group>"; };
+		25243D111DA2891400BA517B /* Hot Pizza.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hot Pizza.ttf"; sourceTree = "<group>"; };
+		25243D121DA2891400BA517B /* Idigital Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Idigital Bold.otf"; sourceTree = "<group>"; };
+		25243D131DA2891400BA517B /* Open Sans Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Open Sans Light.ttf"; sourceTree = "<group>"; };
+		25243D141DA2891400BA517B /* Quicksand Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand Italic.otf"; sourceTree = "<group>"; };
 		2544C2731CCE2CF8009A3620 /* Mat4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mat4.cpp; sourceTree = "<group>"; };
 		2544C2741CCE2CF8009A3620 /* Mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mat4.h; sourceTree = "<group>"; };
 		254A4B2A1D34C93700D23D6D /* SliderPropCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SliderPropCell.h; path = "ui/Popover Views/SliderPropCell.h"; sourceTree = "<group>"; };
@@ -4816,6 +4834,20 @@
 			name = OnBoarding;
 			sourceTree = "<group>";
 		};
+		25243D0E1DA2891400BA517B /* FontFiles */ = {
+			isa = PBXGroup;
+			children = (
+				25243D0F1DA2891400BA517B /* Bernstein Regular.ttf */,
+				25243D101DA2891400BA517B /* CAC Champagne.ttf */,
+				25243D111DA2891400BA517B /* Hot Pizza.ttf */,
+				25243D121DA2891400BA517B /* Idigital Bold.otf */,
+				25243D131DA2891400BA517B /* Open Sans Light.ttf */,
+				25243D141DA2891400BA517B /* Quicksand Italic.otf */,
+			);
+			name = FontFiles;
+			path = Resources/FontFiles;
+			sourceTree = "<group>";
+		};
 		254F7DAB1A94CA34004D63A8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -6723,6 +6755,7 @@
 		C82EA4BC187EAAA800A8468A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				25243D0E1DA2891400BA517B /* FontFiles */,
 				7F30F5AB1B576D5600B311E3 /* Helper */,
 				E24973FB196BD9B90025D442 /* JsonFiles */,
 				C844F2A018894D750079B6F4 /* Mesh */,
@@ -7204,6 +7237,7 @@
 				25EC6C341C7F39DD002CF5D2 /* wm27.png in Resources */,
 				01B02CF11C61CDB500C9102A /* color_IPhone@3x.png in Resources */,
 				3D5F99161C4D04EB00DD47F5 /* Cube.png in Resources */,
+				25243D171DA2891400BA517B /* CAC Champagne.ttf in Resources */,
 				25EC3D1A1D360CFF006AE211 /* Help_iphone@3x.png in Resources */,
 				7FC900FA1A0A01470051B941 /* undo-img-phone.png in Resources */,
 				3D04EAEB1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */,
@@ -7257,6 +7291,7 @@
 				62FA5F531990E9D4003B0893 /* feedback-img.png in Resources */,
 				01B395271C37AA3A003955C6 /* Export-video_Pad@2x.png in Resources */,
 				25EC6BA01C7F066B002CF5D2 /* wm10.png in Resources */,
+				25243D151DA2891400BA517B /* Bernstein Regular.ttf in Resources */,
 				01E618901C2C145700DBBC00 /* Toon-shader_Pad.png in Resources */,
 				7FC524DD1B6F6F3600C5D26D /* Minimize-Full-screen.png in Resources */,
 				01B4CFEA1C29219A0091E19B /* Add-Frames.png in Resources */,
@@ -7370,6 +7405,7 @@
 				C8AA47011C227D3600C4AB53 /* Mail.png in Resources */,
 				01B6C8B61C3B920B0050D2F9 /* AnimationSelectionSliderPhone.xib in Resources */,
 				7F31A7551AA4960300A6E7B1 /* undo-img-phone@3x.png in Resources */,
+				25243D1F1DA2891400BA517B /* Quicksand Italic.otf in Resources */,
 				3D5F99281C4D04EB00DD47F5 /* Torus@2x.png in Resources */,
 				01F8726B1C3A42EF009AA31E /* EXPORT.png in Resources */,
 				01B6F3F31C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
@@ -7556,6 +7592,7 @@
 				25EC6BC21C7F066B002CF5D2 /* wm8.png in Resources */,
 				7FC900D11A0A01470051B941 /* feedback-img-phone@2x.png in Resources */,
 				25F80AF91CFDB6E700CF331B /* Subscribe button ipad.psd in Resources */,
+				25243D1D1DA2891400BA517B /* Open Sans Light.ttf in Resources */,
 				01F872E61C3A6C4E009AA31E /* Import-Light_IPhone@2x.png in Resources */,
 				25EC6BBC1C7F066B002CF5D2 /* wm5.png in Resources */,
 				62FB866F1988D33A00AC7424 /* add-frame.png in Resources */,
@@ -7646,6 +7683,7 @@
 				25EC6CA21C7F39DD002CF5D2 /* wm82.png in Resources */,
 				7FC900EA1A0A01470051B941 /* render_image-phone.png in Resources */,
 				01B3951B1C37A8DD003955C6 /* View@2x.png in Resources */,
+				25243D1B1DA2891400BA517B /* Idigital Bold.otf in Resources */,
 				01F872D81C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png in Resources */,
 				01BA324E1C5CC292000A5F3E /* popover-delete@2x.png in Resources */,
 				01BA32431C5CC086000A5F3E /* popover-clone.png in Resources */,
@@ -7766,6 +7804,7 @@
 				25EC6B9E1C7F066B002CF5D2 /* wm1.png in Resources */,
 				01ACD1021C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */,
 				7F31A73E1AA4960300A6E7B1 /* last-phone@3x.png in Resources */,
+				25243D191DA2891400BA517B /* Hot Pizza.ttf in Resources */,
 				01ACD0FC1C3D44930096AD14 /* Google_Pad@2x.png in Resources */,
 				25EC3D2E1D3612D6006AE211 /* Login-IPhone.png in Resources */,
 				7F22BB571AC54C96006B44C6 /* center-align.png in Resources */,
@@ -8115,6 +8154,7 @@
 				7FC524ED1B6F8C0A00C5D26D /* Full-screen-phone@2x.png in Resources */,
 				25EC6C351C7F39DD002CF5D2 /* wm27.png in Resources */,
 				01B02CF21C61CDB500C9102A /* color_IPhone@3x.png in Resources */,
+				25243D181DA2891400BA517B /* CAC Champagne.ttf in Resources */,
 				3D5F99171C4D04EB00DD47F5 /* Cube.png in Resources */,
 				7FC524EE1B6F8C0A00C5D26D /* Full-screen-phone@3x.png in Resources */,
 				7FC524EF1B6F8C0A00C5D26D /* Full-screen.png in Resources */,
@@ -8168,6 +8208,7 @@
 				25EC6C311C7F39DD002CF5D2 /* wm25.png in Resources */,
 				25F748D41D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */,
 				251815961D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
+				25243D161DA2891400BA517B /* Bernstein Regular.ttf in Resources */,
 				25C90F511B362D6E00D803DB /* bevel-phone.png in Resources */,
 				25EC3D531D366882006AE211 /* View_IPhone.png in Resources */,
 				01B02CB91C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */,
@@ -8281,6 +8322,7 @@
 				E206722F1B049AA6006DD2F7 /* delete-img.png in Resources */,
 				01F8726C1C3A42EF009AA31E /* EXPORT.png in Resources */,
 				01B6F3F41C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
+				25243D201DA2891400BA517B /* Quicksand Italic.otf in Resources */,
 				3D5F99291C4D04EB00DD47F5 /* Torus@2x.png in Resources */,
 				E20672301B049AA6006DD2F7 /* feedback-img-phone.png in Resources */,
 				E20672321B049AA6006DD2F7 /* undo-img-phone.png in Resources */,
@@ -8467,6 +8509,7 @@
 				250FEC281D1E52D2000C8A2C /* Welcome-Img@2x.png in Resources */,
 				25EC6BC31C7F066B002CF5D2 /* wm8.png in Resources */,
 				01F872E71C3A6C4E009AA31E /* Import-Light_IPhone@2x.png in Resources */,
+				25243D1E1DA2891400BA517B /* Open Sans Light.ttf in Resources */,
 				E20672AF1B049AA6006DD2F7 /* back-img@2x.png in Resources */,
 				25DC3E951D49F81F00D6F26C /* mesh.vsh in Resources */,
 				01B4CFF11C29219A0091E19B /* Next-Frame.png in Resources */,
@@ -8557,6 +8600,7 @@
 				01B3951C1C37A8DD003955C6 /* View@2x.png in Resources */,
 				01BA324F1C5CC292000A5F3E /* popover-delete@2x.png in Resources */,
 				01BA32441C5CC086000A5F3E /* popover-clone.png in Resources */,
+				25243D1C1DA2891400BA517B /* Idigital Bold.otf in Resources */,
 				0169C4661C33ED5A00132FF6 /* popoverArrowLeft.png in Resources */,
 				E20672F11B049AA6006DD2F7 /* rotate-img.png in Resources */,
 				25EC6CB91C7F39DD002CF5D2 /* wm93.png in Resources */,
@@ -8677,6 +8721,7 @@
 				25EC3D2D1D3612D6006AE211 /* info-icon_phone.png in Resources */,
 				01ACD1031C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */,
 				256F6B961BF6246300154622 /* json_valueiterator.inl in Resources */,
+				25243D1A1DA2891400BA517B /* Hot Pizza.ttf in Resources */,
 				01ACD0FD1C3D44930096AD14 /* Google_Pad@2x.png in Resources */,
 				E20673301B049AA6006DD2F7 /* back-img.png in Resources */,
 				3DC60FFD1C6B192D00A8D412 /* hq-IPhone@2x.png in Resources */,

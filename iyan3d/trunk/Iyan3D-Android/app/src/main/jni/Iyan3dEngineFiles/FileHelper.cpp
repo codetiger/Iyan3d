@@ -212,6 +212,16 @@ Vector2 FileHelper::readVector2(ifstream *file)
     return value;
 }
 
+std::string FileHelper::getFontsDirectory()
+{
+#ifdef ANDROID
+    return FileHelper::getDocumentsDirectory() + "/fonts/";
+#else
+    return FileHelper::getDocumentsDirectory() + "Resources/Fonts/";
+#endif
+}
+
+
 std::string FileHelper::getTexturesDirectory()
 {
     #ifdef ANDROID

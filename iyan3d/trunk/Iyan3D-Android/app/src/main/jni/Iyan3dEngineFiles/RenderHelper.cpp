@@ -377,7 +377,7 @@ void RenderHelper::drawCameraPreview()
     Vector4 camprevlay = renderingScene->getCameraPreviewLayout();
     std::map< int, Vector3 > nPositions;
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
-        if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+        if(renderingScene->nodes[i]->getType() <= NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
 
         if(!(renderingScene->nodes[i]->getProperty(VISIBILITY).value.x)) {
@@ -398,7 +398,7 @@ void RenderHelper::drawCameraPreview()
     smgr->setActiveCamera(renderingScene->viewCamera);
     
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++) {
-        if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
+        if(renderingScene->nodes[i]->getType() <= NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(true);
         
         if(!(renderingScene->nodes[i]->getProperty(VISIBILITY).value.x)) {
@@ -588,6 +588,7 @@ void RenderHelper::drawMeshBuffersForRTT()
         vector<float> isMeshColored;
         vector<bool> mBSelected;
         vector<float> transparancies;
+        vector<float> reflections;
         
         
         bool isLighting = sgNode->getProperty(LIGHTING).value.x;
@@ -602,7 +603,9 @@ void RenderHelper::drawMeshBuffersForRTT()
             isMeshColored.push_back(sgNode->getProperty(IS_VERTEX_COLOR, i).value.x);
             mBSelected.push_back(sgNode->getProperty(SELECTED, i).value.x);
             transparancies.push_back(sgNode->getProperty(TRANSPARENCY, i).value.x);
+            reflections.push_back(sgNode->getProperty(REFLECTION, i).value.x);
             
+            sgNode->getProperty(REFLECTION, i).value.x = 0.0;
             sgNode->getProperty(TRANSPARENCY, i).value.x = 1.0;
             sgNode->getProperty(SELECTED, i).value.x = false;
             sgNode->getProperty(IS_VERTEX_COLOR, i).value.x = true;
@@ -622,9 +625,13 @@ void RenderHelper::drawMeshBuffersForRTT()
             sgNode->getProperty(IS_VERTEX_COLOR, i).value.x = isMeshColored[i];
             sgNode->getProperty(VERTEX_COLOR, i).value = vertexColors[i];
             sgNode->getProperty(TRANSPARENCY, i).value = transparancies[i];
+            sgNode->getProperty(REFLECTION, i).value.x = reflections[i];
         }
         vertexColors.clear();
         isMeshColored.clear();
+        transparancies.clear();
+        reflections.clear();
+        mBSelected.clear();
         
         if(renderingScene->shaderMGR->deviceType == METAL)
             smgr->EndDisplay();

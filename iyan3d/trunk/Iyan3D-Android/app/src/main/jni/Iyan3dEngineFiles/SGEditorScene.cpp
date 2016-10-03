@@ -84,6 +84,17 @@ SGEditorScene::~SGEditorScene()
         }
         sceneControls.clear();
     }
+    
+    if(directionLine)
+        delete directionLine;
+    if(lightCircles)
+        delete lightCircles;
+    if(greenGrid)
+        delete greenGrid;
+    if(blueGrid)
+        delete blueGrid;
+    if(redGrid)
+        delete redGrid;    
     if(directionIndicator)
         delete directionIndicator;
     if(rotationCircle)
@@ -555,12 +566,13 @@ void SGEditorScene::setEnvironmentTexture(std::string textureFilePath, bool isPr
 {
     freezeRendering = true;
     
-    if(shaderMGR->environmentTex)
+    if(shaderMGR->environmentTex) {
         smgr->RemoveTexture(shaderMGR->environmentTex);
+        shaderMGR->environmentTex = NULL;
+    }
 
     string envTexFilePath = FileHelper::getTexturesDirectory() + textureFilePath;
-
-    shaderMGR->environmentTex = smgr->loadTexture("Env Texture", envTexFilePath, TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
+        shaderMGR->environmentTex = smgr->loadTexture("Env Texture", envTexFilePath, TEXTURE_RGBA8, TEXTURE_BYTE, true, 10);
     
     if(!isPreview) {
         shaderMGR->addOrUpdateProperty(ENVIRONMENT_TEXTURE, Vector4(0), UNDEFINED, IMAGE_TYPE, "Environment Matcap", "Scene Properties", textureFilePath);
@@ -632,6 +644,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
     renHelper->setControlsVisibility(true);
     smgr->EndDisplay();
+    
 }
 
 int SGEditorScene::undo(int &returnValue2)
@@ -728,8 +741,6 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, b
         }
     }
     
-    if(!isTemp)
-        actionMan->storeAddOrRemoveAssetAction(ACTION_TEXTURE_CHANGE, 0);
     if(!isTemp || isUndoRedo){
         nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->getProperty(TEXTURE, matIndex).fileName;
         nodes[selectedNodeId]->getProperty(ORIG_VERTEX_COLOR, matIndex).value = nodes[selectedNodeId]->getProperty(VERTEX_COLOR, matIndex).value;

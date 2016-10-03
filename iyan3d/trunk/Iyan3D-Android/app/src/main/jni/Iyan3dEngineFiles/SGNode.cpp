@@ -80,6 +80,12 @@ void SGNode::setPropertiesOfNode()
 
 SGNode::~SGNode()
 {
+    if(materialProps.size()) {
+        for(int i = 0; i < materialProps.size(); i++)
+            delete materialProps[i];
+    }
+    materialProps.clear();
+    
     instanceNodes.clear();
     clearSGJoints();
     node.reset();
@@ -364,7 +370,7 @@ shared_ptr<Node> SGNode::loadImage(string textureName, SceneManager *smgr, float
     char* textureFileName = new char[256];
     
 #ifdef ANDROID
-    string path = constants::DocumentsStoragePath+ "/importedImages/"+textureName;
+    string path = FileHelper::getTexturesDirectory()+textureName;
     textureFileName=(path).c_str();
 #else
     sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
@@ -382,7 +388,8 @@ shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, floa
 {Texture *nodeTex;
 #ifdef  ANDROID
     string dummyPath = constants::BundlePath + "/whiteborder.png";
-    nodeTex = smgr->loadTexture("Dummy Vid Tex", dummyPath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+    //TODO nodeTex = smgr->loadTexture("Dummy Vid Tex", dummyPath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
+    return NULL;
 #else
     nodeTex = smgr->loadTextureFromVideo(videoFileName, TEXTURE_RGBA8, TEXTURE_BYTE);
 #endif
@@ -1057,6 +1064,14 @@ void SGNode::setMeshProperties(int matIndex, float refraction, float reflection,
     getProperty(PHYSICS_KIND).value.x = physicsType;
     getProperty(FORCE_MAGNITUDE).value.x = fMagnitude;
     setVisibility(isVisible, currentFrame);
+    
+    //TODO Remove all keys if changed to physics none from some other type
+    for(int pI = (int)PHYSICS_NONE; pI <= (int)PHYSICS_JELLY; pI++) {
+        if(pI == physicsType)
+            getProperty((PROP_INDEX)pI).value.x = 1.0;
+        else
+            getProperty((PROP_INDEX)pI).value.x = 0.0;
+    }
 }
 
 void SGNode::clearSGJoints()

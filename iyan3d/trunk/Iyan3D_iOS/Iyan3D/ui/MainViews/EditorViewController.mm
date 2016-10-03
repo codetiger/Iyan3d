@@ -127,12 +127,12 @@ BOOL missingAlertShown;
     if (self) {
         currentScene = scene;
         cache = [CacheSystem cacheSystem];
-        constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
+        constants::BundlePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         cachesDir = [paths objectAtIndex:0];
         NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         docDir = [docPaths objectAtIndex:0];
-        constants::CachesStoragePath = (char*)[cachesDir cStringUsingEncoding:NSASCIIStringEncoding];
+        constants::CachesStoragePath = [cachesDir UTF8String];
         isViewLoaded = false;
         lightCount = 1;
         renderBgColor = Vector4(0.1,0.1,0.1,1.0);
@@ -182,13 +182,15 @@ BOOL missingAlertShown;
         isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
 #endif
 
-    constants::BundlePath = (char*)[[[NSBundle mainBundle] resourcePath] cStringUsingEncoding:NSASCIIStringEncoding];
+    constants::BundlePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     if ([Utility IsPadDevice])
         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNew" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
     else
         [self.framesCollectionView registerNib:[UINib nibWithNibName:@"FrameCellNewPhone" bundle:nil] forCellWithReuseIdentifier:@"FRAMECELL"];
-    assetsInScenes = [NSMutableArray array];
+    
+    assetsInScenes = [[NSMutableArray alloc] init];
+    
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"])
         [self.framesCollectionView setTag:[[[AppHelper getAppHelper] userDefaultsForKey:@"indicationType"] longValue]];
     else
@@ -1128,7 +1130,7 @@ BOOL missingAlertShown;
             [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
             NSString *tempDir = NSTemporaryDirectory();
             NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
-            string path = (char*)[sgrFilePath cStringUsingEncoding:NSUTF8StringEncoding];
+            string path = [sgrFilePath UTF8String];
             [self exportSgr:sgrFilePath];
             [_rigAddToSceneBtn setHidden:NO];
             [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
@@ -1170,7 +1172,7 @@ BOOL missingAlertShown;
 
 - (void)exportSgr:(NSString*)pathStr
 {
-    string path = (char*)[pathStr cStringUsingEncoding:NSUTF8StringEncoding];
+    string path = [pathStr UTF8String];
     editorScene->rigMan->exportSGR(path);
 }
 
@@ -1603,21 +1605,6 @@ BOOL missingAlertShown;
             }
             break;
         }
-        case ADD_INSTANCE_BACK: {
-            SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction - 1];
-            
-            int actionId = recentAction.actionSpecificIntegers[1];
-            int nodeIndex = -1;
-            for (int i = 0; i < editorScene->nodes.size(); i++) {
-                if(actionId == editorScene->nodes[i]->actionId)
-                    nodeIndex = i;
-            }
-            
-            if(nodeIndex != NOT_EXISTS) {
-                editorScene->loader->createInstance(editorScene->nodes[nodeIndex], editorScene->nodes[nodeIndex]->getType(), UNDO_ACTION);
-            }
-            break;
-        }
         case DELETE_MULTI_ASSET:
         case ADD_MULTI_ASSET_BACK:{
             [self undoMultiAssetDeleted:returnValue2];
@@ -1708,25 +1695,7 @@ BOOL missingAlertShown;
     else if (returnValue == SWITCH_MIRROR) {
         //self.mirrorSwitch.on = animationScene->getMirrorState();
     }
-    else if(returnValue == ACTION_MULTI_NODE_DELETED_BEFORE || returnValue == (int)ADD_MULTI_ASSET_BACK){
-        SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction-1];
-        [self redoMultiAssetDeleted:recentAction.objectIndex];
-    }
-    else if (returnValue == ADD_INSTANCE_BACK) {
-        SGAction &recentAction = editorScene->actionMan->actions[editorScene->actionMan->currentAction];
-        
-        int actionId = recentAction.actionSpecificIntegers[1];
-        int nodeIndex = -1;
-        for (int i = 0; i < editorScene->nodes.size(); i++) {
-            if(actionId == editorScene->nodes[i]->actionId)
-                nodeIndex = i;
-        }
-        
-        if(nodeIndex != NOT_EXISTS) {
-            editorScene->loader->createInstance(editorScene->nodes[nodeIndex], editorScene->nodes[nodeIndex]->getType(), REDO_ACTION);
-        }
-        
-    }  else {
+    else {
         if (returnValue != DEACTIVATE_UNDO && returnValue != DEACTIVATE_REDO && returnValue != DEACTIVATE_BOTH) {
             //importPressed = NO;
             assetAddType = REDO_ACTION;
@@ -2332,9 +2301,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         assetItem.isTempAsset = YES;
         [self cloneSelectedAssetWithId:selectedAssetId NodeType:selectedNodeType AndSelNodeId:selectedNode];
         editorScene->animMan->copyKeysOfNode(selectedNode, (int)editorScene->nodes.size()-1);
-//        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
+        editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
     }
-    else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
+    else if((selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
@@ -2357,7 +2326,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     NODE_TYPE selectedNodeType = NODE_UNDEFINED;
     
     if(editorScene && editorScene->selectedNodeIds.size() > 0) {
-        editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_ADDED, 0);
+        
         vector< int > addedNodeIds;
         vector< int > fromNodeIds(editorScene->selectedNodeIds);
         
@@ -2374,7 +2343,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             editorScene->selectMan->selectObject(addedNodeIds[i], editorScene->selectedMeshBufferId, true);
         }
         editorScene->updater->updateControlsOrientaion();
-        editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_ADDED, 0);
         
     } else if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         selectedAssetId = editorScene->nodes[editorScene->selectedNodeId]->assetId;
@@ -2405,14 +2373,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
         editorScene->loader->createInstance(sgNode, sgNode->getType(), assetAddType);
         
-        if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-            editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, sgNode->assetId);
         [self updateAssetListInScenes];
         
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
         
-    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_PARTICLES) && selectedAssetId != NOT_EXISTS) {
+    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_PARTICLES || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS) {
         
         assetAddType = IMPORT_ASSET_ACTION;
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
@@ -2480,9 +2446,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     SceneImporter* importer = new SceneImporter();
     importer->importNodeFromMesh(editorScene, newNode, copiedMesh);
     editorScene->nodes.push_back(newNode);
-    //delete importer;
+    delete importer;
     editorScene->animMan->copyPropsOfNode(indexOfNode, (int)editorScene->nodes.size()-1);
-
+    editorScene->animMan->copyKeysOfNode(indexOfNode, (int)editorScene->nodes.size()-1);
     [self reloadSceneObjects];
 }
 
@@ -2500,6 +2466,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     selectedNodeId = editorScene->selectedNodeId;
     selectedMeshBufferId = editorScene->selectedMeshBufferId;
     
+    editorScene->actionMan->storeTexturesChangeAction(selectedNodeId, "", Vector4(1.0), pIndex, false, false, (pIndex == ENVIRONMENT_TEXTURE));
+
     if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];
         objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:CHANGE_TEXTURE AndPropIndex:pIndex];
@@ -3174,12 +3142,17 @@ void downloadFile(NSString* url, NSString* fileName)
             bool prevLighting = selectedNode->getProperty(LIGHTING).value.x;
             bool prevVisibility = selectedNode->getProperty(VISIBILITY).value.x;
             
+            editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
             editorScene->actionMan->changeMeshProperty((index == REFRACTION) ? value.x : prevRefraction, (index == REFLECTION) ? value.x : prevReflection, (index == LIGHTING) ? value.x : prevLighting, (index == VISIBILITY) ? value.x : prevVisibility, status);
+
             break;
         }
         case TEXTURE_SMOOTH: {
             if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
+                
+                editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
                 editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH, matIndex).value.x = value.x;
+
                 if(smgr->device == OPENGLES2)
                     [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
             }
@@ -3192,8 +3165,10 @@ void downloadFile(NSString* url, NSString* fileName)
             break;
         }
         case TEXTURE_SCALE: {
+            editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
             editorScene->selectMan->unHightlightSelectedNode();
             editorScene->actionMan->changeUVScale(editorScene->selectedNodeId, editorScene->selectedMeshBufferId, value.x);
+
             break;
         }
         case DELETE: {
@@ -3218,6 +3193,7 @@ void downloadFile(NSString* url, NSString* fileName)
         }
         case VERTEX_COLOR: {
             if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
+                editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
                 [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
             }
             break;
@@ -3225,19 +3201,17 @@ void downloadFile(NSString* url, NSString* fileName)
         
         case SPECIFIC_FLOAT: {
             if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
+                editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
                 [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
             }
             break;
         }
         case SHADOW_DARKNESS:
         case LIGHT_DIRECTIONAL:
-        case LIGHT_POINT: {
-            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
-            break;
-        }
+        case LIGHT_POINT:
         case LIGHT_TYPE: {
-            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:false];
-            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:true];
+            editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
+            [self changeLightPropertyAtIndex:index WithValue:value AndStatus:status];
             break;
         }
         case FORCE_DIRECTION: {
@@ -3249,13 +3223,18 @@ void downloadFile(NSString* url, NSString* fileName)
             
             float cameraFOV = (index == FOV) ? value.x : editorScene->nodes[editorScene->selectedNodeId]->getProperty(FOV).value.x;
             int resolnType = (index == CAM_RESOLUTION) ? value.x : editorScene->nodes[editorScene->selectedNodeId]->getProperty(CAM_RESOLUTION).value.x;
-            
+            editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
             editorScene->actionMan->changeCameraProperty(cameraFOV , resolnType, status);
+
             break;
         }
         case AMBIENT_LIGHT: {
+            editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status, true);
             editorScene->shaderMGR->getProperty(AMBIENT_LIGHT).value.x = value.x;
             break;
+        }
+        case PHYSICS_KIND: {
+            editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
         }
         default:
             break;
@@ -3271,13 +3250,12 @@ void downloadFile(NSString* url, NSString* fileName)
     Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, selectedNode->scaleKeys);
     Vector4 lightProps = (pIndex == VERTEX_COLOR) ? value : Vector4(scale, ShaderManager::shadowDensity);
     float dist = (pIndex == SPECIFIC_FLOAT) ? value.x : selectedNode->getProperty(SPECIFIC_FLOAT).value.x;
-    int lightType = (selectedNode->getProperty(pIndex).groupName == "LIGHT TYPE") ? pIndex - LIGHT_CONSTANT : selectedNode->getProperty(LIGHT_TYPE).value.x;
+    int lightType = (pIndex == LIGHT_TYPE) ? value.x : selectedNode->getProperty(LIGHT_TYPE).value.x;
     lightProps.w = (pIndex == SHADOW_DARKNESS) ? value.x : ShaderManager::shadowDensity;
+    
     /* Number 22 because Point light's value is 0 in previous version , now it is 22 */
-    if(!status)
-        editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w, dist, lightType, true);
-    else if(status)
-        editorScene->actionMan->storeLightPropertyChangeAction(lightProps.x, lightProps.y, lightProps.z, lightProps.w, dist, lightType);
+    
+    editorScene->actionMan->changeLightProperty(lightProps.x, lightProps.y, lightProps.z, lightProps.w, dist, lightType, true);
     
     if(status) {
         [self performSelectorOnMainThread:@selector(updateLightInMainThread:) withObject:[NSNumber numberWithInt:lightType] waitUntilDone:NO];
@@ -3287,7 +3265,7 @@ void downloadFile(NSString* url, NSString* fileName)
 
 - (void) applyPhysicsProps:(Property) property
 {
-    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED || (property.index != HAS_PHYSICS) || property.value.x != 1)
+    if(!editorScene || editorScene->selectedNodeId == NOT_SELECTED || (property.index != HAS_PHYSICS))
         return;
     
     SGNode* selectedNode = editorScene->nodes[editorScene->selectedNodeId];
@@ -3307,6 +3285,8 @@ void downloadFile(NSString* url, NSString* fileName)
         if(currentPhysics[PHYSICS_KIND].value.x != newPhysics[PHYSICS_KIND].value.x) {
             
             [self meshPropertyChanged:prevRefraction Reflection:prevReflection Lighting:prevLighting Visible:prevVisibility storeInAction:NO];
+            selectedNode->getProperty(PHYSICS_KIND).value.x = newPhysics[PHYSICS_KIND].value.x;
+
             int pType = (newPhysics[PHYSICS_KIND].value.x);
             if(pType == PHYSICS_NONE)
                 [self setPhysics:false];
@@ -4042,6 +4022,12 @@ void downloadFile(NSString* url, NSString* fileName)
         *texture = *new std::string((isTemp)? [tempPath UTF8String] : [textureName UTF8String]);
     }
     
+    Vector4 mColor = Vector4(color, 0.0);
+
+//    if(!isTemp) {
+//        editorScene->actionMan->storeTexturesChangeAction(selectedNodeId, [textureName UTF8String], mColor, pIndex, false, false, (pIndex == ENVIRONMENT_TEXTURE));
+//    }
+    
     if(pIndex == ENVIRONMENT_TEXTURE) {
         editorScene->setEnvironmentTexture(*texture, isTemp);
     }
@@ -4053,12 +4039,18 @@ void downloadFile(NSString* url, NSString* fileName)
             editorScene->setLightingOn();
         }
     }
+    
+    if(!isTemp) {
+        editorScene->actionMan->storeTexturesChangeAction(selectedNodeId, [textureName UTF8String], mColor, pIndex, false, true, (pIndex == ENVIRONMENT_TEXTURE));
+    }
+
     [self showOrHideProgress:HIDE_PROGRESS];
     delete texture;
 }
 
 - (void) removeTempTextureAndVertex:(PROP_INDEX) pIndex
 {
+    editorScene->actionMan->propertyAction.drop();
     editorScene->removeTempTextureAndVertex(selectedNodeId, selectedMeshBufferId, pIndex);
 }
 
@@ -4111,7 +4103,12 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     if(smgr)
         delete smgr;
-
+    
+    for(int i = 0; i < [assetsInScenes count]; i++) {
+        NSString* object = [assetsInScenes objectAtIndex:i];
+        object = nil;
+    }
+    
     [assetsInScenes removeAllObjects];
     assetsInScenes = nil;
     importImageViewVC.delegate = nil;
@@ -4123,6 +4120,10 @@ void downloadFile(NSString* url, NSString* fileName)
     assetSelectionSlider.assetSelectionDelegate = nil;
     assetSelectionSlider = nil;
     followUsVC = nil;
+    if(objVc) {
+        objVc.objSlideDelegate = nil;
+        objVc = nil;
+    }
     currentScene = nil;
     cache = nil;
     [playTimer invalidate];

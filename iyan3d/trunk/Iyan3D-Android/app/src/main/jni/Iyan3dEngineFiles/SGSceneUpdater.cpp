@@ -495,8 +495,8 @@ void SGSceneUpdater::reloadKeyFrameMap()
         SGNode *selectedMesh = updatingScene->nodes[updatingScene->selectedNodeId];
         bool searchPos = true,searchRot = false,searchScale = false;
         updatingScene->isKeySetForFrame.clear();
-        searchRot = (selectedMesh->getType() == NODE_LIGHT) ? false:true;
-        searchScale = (selectedMesh->getType() > NODE_LIGHT) ? true:false;
+        searchRot = true;
+        searchScale = (selectedMesh->getType() > NODE_CAMERA) ? true:false;
         if(searchPos){
             for(unsigned long i = 0; i < selectedMesh->positionKeys.size(); i++)
                 updatingScene->isKeySetForFrame.insert(pair<int,int>(selectedMesh->positionKeys[i].id,selectedMesh->positionKeys[i].id));

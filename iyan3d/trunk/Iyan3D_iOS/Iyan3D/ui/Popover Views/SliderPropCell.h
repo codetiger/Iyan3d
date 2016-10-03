@@ -18,6 +18,9 @@
 @interface SliderPropCell : UITableViewCell
 {
     BOOL sliderMoving;
+    BOOL actionStored;
+    float prevValue;
+    float value;
 }
 
 @property (assign) int tableIndex;

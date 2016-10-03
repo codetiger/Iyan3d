@@ -360,8 +360,11 @@ Texture* SceneManager::loadTexture(string textureName, string filePath, TEXTURE_
         renderMan->resetTextureCache();
         textures.push_back(newTex);
         return newTex;
-    } else
+    } else {
+        if(newTex)
+            delete newTex;
         return NULL;
+    }
 }
 
 Texture* SceneManager::loadTextureFromVideo(string videoFileName, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type)

@@ -19,6 +19,9 @@ SceneImporter::SceneImporter()
 
 SceneImporter::~SceneImporter()
 {
+    if(bones != NULL) {
+        bones = NULL;
+    }
     if(scene)
         delete scene;
 }
@@ -56,9 +59,12 @@ string getFileName(const string& s)
 bool copyFile(string srcFile, string dstFile)
 {
     std::ifstream src(srcFile, std::ios::binary);
-    std::ofstream dest(dstFile, std::ios::binary);
-    dest << src.rdbuf();
-    return src && dest;
+    if(src.is_open()) {
+        std::ofstream dest(dstFile, std::ios::binary);
+        dest << src.rdbuf();
+        return src && dest;
+    }
+    return false;
 }
 
 Mat4 getDeltaMatrix(string ext, bool isRigged)
@@ -303,7 +309,7 @@ SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
         return NULL;
     }
     
-    map< string, Joint* > *bones = new map< string, Joint* >();
+    map< string, Joint* > *lBones = new map< string, Joint* >();
     
     SkinMesh* mesh = new SkinMesh();
     for (int i = 0; i < scene->mNumMeshes; i++) {
@@ -317,12 +323,12 @@ SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
             mesh->addMeshBuffer(mbvd, mbi, 0);
             
             if(aiM->HasBones())
-                loadBonesFromMesh(aiM, mesh, bones);
+                loadBonesFromMesh(aiM, mesh, lBones);
         }
     }
-    loadBoneHierarcy((SkinMesh*)mesh, bones);
+    loadBoneHierarcy((SkinMesh*)mesh, lBones);
     mesh->finalize();
-    
+        
     delete importer;
     scene = NULL;
     return mesh;

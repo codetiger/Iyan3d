@@ -62,7 +62,6 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
 
             if(sgNode->getType() == NODE_CAMERA || sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
                 loadNode(sgNode, OPEN_SAVED_FILE);
-                sgNode->setPropertiesOfNode();
                 if(sgNode->getType() == NODE_CAMERA) {
                     sgNode->getProperty(FOV).value.x = cameraFov;
                     sgNode->getProperty(CAM_RESOLUTION).value.x = cameraResolution;
@@ -73,7 +72,7 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
                 
                 SceneImporter* importer = new SceneImporter();
                 importer->importNodeFromMesh(currentScene, sgNode, mesh);
-                
+                delete importer;
                 for(int j = 0; j < sgNode->materialProps.size(); j++) {
                     string textureName = sgNode->getProperty(TEXTURE, j).fileName;
                     Texture * texture = smgr->loadTexture(textureName, FileHelper::getTexturesDirectory() + textureName, TEXTURE_RGBA8, TEXTURE_BYTE, sgNode->getProperty(TEXTURE_SMOOTH, j).value.x);
@@ -132,6 +131,25 @@ bool SGSceneLoader::readScene(ifstream *filePointer)
         
         if(!nodeLoaded)
             delete sgNode;
+    }
+    
+    for( int i = 0; i < currentScene->nodes.size(); i++) {
+        if(currentScene->nodes[i]->getType() == NODE_LIGHT || currentScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT) {
+            ActionKey key = currentScene->nodes[i]->getKeyForFrame(0);
+            float red = 1.0; float green = 1.0; float blue = 1.0;
+            if(key.isScaleKey) {
+                red = key.scale.x;
+                green = key.scale.y;
+                blue = key.scale.z;
+            }
+            float shadow = currentScene->nodes[i]->getProperty(SHADOW_DARKNESS).value.x;
+            float distance = currentScene->nodes[i]->getProperty(SPECIFIC_FLOAT).value.x;
+            int lightType = currentScene->nodes[i]->getProperty(LIGHT_TYPE).value.x;
+            
+            currentScene->selectMan->selectObject(i, NOT_EXISTS, false);
+            currentScene->actionMan->changeLightProperty(red, green, blue, shadow, distance, lightType);
+            currentScene->selectMan->unselectObject(i);
+        }
     }
     
     currentScene->syncSceneWithPhysicsWorld();
@@ -608,18 +626,13 @@ bool SGSceneLoader::removeSelectedObjects()
         currentScene->selectMan->unselectObject(currentScene->selectedNodeIds[i]);
         actionIds.push_back(currentScene->nodes[currentScene->selectedNodeIds[i]]->actionId);
     }
-    currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED_BEFORE, 0);
+ //TODO Remove actions of the node using nodeId
     for(int i =0; i < actionIds.size(); i++){
         int nodeId = currentScene->actionMan->getObjectIndex(actionIds[i]);
         if(nodeId < 2 || nodeId > currentScene->nodes.size())
             continue;
-        if(currentScene->nodes[nodeId]->getType() == NODE_TEXT_SKIN || currentScene->nodes[nodeId]->getType() == NODE_TEXT || currentScene->nodes[nodeId]->getType() == NODE_IMAGE || currentScene->nodes[nodeId]->getType() == NODE_VIDEO)
-            currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_TEXT_IMAGE_DELETE, nodeId);
-        else if (currentScene->nodes[nodeId]->getType() == NODE_OBJ || currentScene->nodes[nodeId]->getType() == NODE_SGM || currentScene->nodes[nodeId]->getType() == NODE_RIG || currentScene->nodes[nodeId]->getType() == NODE_ADDITIONAL_LIGHT || currentScene->nodes[nodeId]->getType() == NODE_PARTICLES)
-            currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, nodeId);
         removeObject(nodeId);
     }    
-    currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED_AFTER, 0);
     
     if(currentScene->getParentNode()) {
         smgr->RemoveNode(currentScene->getParentNode());
@@ -709,6 +722,16 @@ SGNode* SGSceneLoader::copyOfSGNode(SGNode *sgNode)
         MaterialProperty * m = new MaterialProperty(nType);
         memcpy(m, sgNode->materialProps[i], sizeof(sgNode->materialProps[i]));
         m->getProps() = sgNode->materialProps[i]->getPropsCopy();
+        
+        for( int j = 0; j < 2; j++) {
+            if(sgNode->materialProps[i]->getTextureOfType((node_texture_type)j)) {
+                PROP_INDEX pI = (j==0) ? TEXTURE : BUMP_MAP;
+                string fileName = m->getProperty(pI).fileName;
+                Texture *tex = smgr->loadTexture(fileName, FileHelper::getTexturesDirectory() + fileName, TEXTURE_RGBA8, TEXTURE_BYTE, m->getProperty(TEXTURE_SMOOTH).value.x);
+                m->setTextureForType(tex, (node_texture_type)j);
+            }
+        }
+
         newNode->materialProps.push_back(m);
     }
     

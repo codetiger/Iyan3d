@@ -76,6 +76,8 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:fonts withIntermediateDirectories:NO attributes:nil error:nil];
             
+            [self copyFontFilesToDocumentsDirectory:docsDir];
+            
             if (![[NSFileManager defaultManager] fileExistsAtPath:databasePath]) {
                 isAppFirstTime = true;
             } else {
@@ -181,6 +183,23 @@
         
     }
     return self;
+}
+
+- (void) copyFontFilesToDocumentsDirectory:(NSString*) destinationDir
+{
+    NSArray* extensions = [NSArray arrayWithObjects:@"ttf", @"otf", nil];
+    NSString* sourceDir = [[NSBundle mainBundle] bundlePath];
+    
+    NSArray* fontFilesToCopy = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:sourceDir error:Nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
+    
+    for (NSString* aFile in fontFilesToCopy) {
+        NSError* error;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[destinationDir stringByAppendingPathComponent:aFile]]) {
+            [[NSFileManager defaultManager] copyItemAtPath:[sourceDir stringByAppendingPathComponent:aFile] toPath:[destinationDir stringByAppendingPathComponent:aFile] error:&error];
+        }
+        if (error)
+            NSLog(@" Error copying font files %@ due to %@", error.localizedDescription, error.localizedFailureReason);
+    }
 }
 
 -(bool) isFullyInteger:(NSString*)str

@@ -41,7 +41,6 @@
     CacheSystem* cache;
     NSString* docDirPath;
     NSMutableArray* fontArray;
-    NSOperationQueue *downloadQueue , *assetDownloadQueue;
     NSString* fontDirectoryPath,*typedText;
     NSString *cacheDirectory;
     CGFontRef customFont;
@@ -74,6 +73,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *noFontMessageLable;
 @property (weak, nonatomic) IBOutlet UILabel *addBoneLabel;
 @property (weak, nonatomic) IBOutlet UILabel *colorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIView *titleView;
 
 @end
 

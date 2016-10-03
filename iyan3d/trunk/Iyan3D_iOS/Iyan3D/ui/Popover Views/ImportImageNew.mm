@@ -8,8 +8,8 @@
 
 #import "ImportImageNew.h"
 
-#define PICK_IMAGE 1
-#define PICK_VIDEO 2
+#define PICK_IMAGE 2
+#define PICK_VIDEO 3
 
 @interface ImportImageNew ()
 

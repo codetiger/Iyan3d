@@ -8,7 +8,6 @@
 
 #import "TextSelectionSidePanel.h"
 #import "Constants.h"
-#import "DownloadTask.h"
 #import "Utility.h"
 
 #define CANCEL_PREMIUM_NOT_PURCHASE 50
@@ -33,11 +32,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         cache = [CacheSystem cacheSystem];
-        downloadQueue = [[NSOperationQueue alloc] init];
-        [downloadQueue setMaxConcurrentOperationCount:3];
         NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         docDirPath = [srcDirPath objectAtIndex:0];
-        tabValue = FONT_STORE;
+        tabValue = MY_FONT;
         red = green = blue = alpha = 1;
         withRig = false;
         isCanceled = false;
@@ -50,7 +47,18 @@
     [super viewDidLoad];
     self.screenName = @"TextSelection iOS";
     
-    fontArray = [cache GetAssetList:FONT Search:@""];
+    [self initializeFontListArray];
+    if ([fontArray count] > 0) {
+        [self.fontTab setSelectedSegmentIndex:MY_FONT];
+        tabValue = MY_FONT;
+        [self.collectionView reloadData];
+    }
+    else {
+        tabValue = MY_FONT;
+    }
+
+    
+//    fontArray = [cache GetAssetList:FONT Search:@""];
     typedText = [NSString stringWithFormat:@"Text"];
     cache = [CacheSystem cacheSystem];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -64,10 +72,12 @@
        [self.collectionView registerNib:[UINib nibWithNibName:@"TextFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"]; 
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetsSet) name:@"AssetsSet" object:nil];
+    self.titleView.layer.cornerRadius=CORNER_RADIUS;
     self.cancelBtn.layer.cornerRadius=CORNER_RADIUS;
     self.addToScene.layer.cornerRadius=CORNER_RADIUS;
     self.bevelSlider.value = bevelRadius;
     
+    [self.titleLabel setText:NSLocalizedString(@"My Fonts", nil)];
     [self.inputText setText:NSLocalizedString(@"Enter Text", nil)];
     [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
     [self.addToScene setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
@@ -131,13 +141,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if ([fontArray count] == 0) {
-            [[AppHelper getAppHelper] initHelper];
-            [[AppHelper getAppHelper] performReadingJsonInQueue:downloadQueue ForPage:TEXT_VIEW];
-    }
-    else {
-        [self loadAllFonts];
-    }
+    [self loadAllFonts];
 }
 
 - (IBAction)boneSwitchAction:(id)sender {
@@ -159,7 +163,6 @@
 - (void)loadAllFonts
 {
     [self resetFontsList];
-    [[AppHelper getAppHelper] loadAllFontsInQueue:downloadQueue WithDelegate:self AndSelectorMethod:@selector(fontReloadData:)];
 }
 
 - (void)resetFontsList
@@ -182,21 +185,6 @@
     
     customFontName = (NSString*)CFBridgingRelease(CGFontCopyPostScriptName(customFont));
     CTFontManagerRegisterGraphicsFont(customFont, Nil);
-}
-
-#pragma mark Download delegate methods
-
-- (void)fontReloadData:(id)returnValue
-{
-    NSString* assetName;
-    if ([returnValue isKindOfClass:[DownloadTask class]]) {
-        assetName = ((DownloadTask*)returnValue).returnObj;
-    }
-    else
-        assetName = returnValue;
-
-    [self.collectionView reloadData];
-    
 }
 
 #pragma mark CollectionView Delegate methods
@@ -414,10 +402,6 @@
     customFontName = nil;
     fontFileName = nil;
     cache = nil;
-    [assetDownloadQueue cancelAllOperations];
-    assetDownloadQueue = nil;
-    [downloadQueue cancelAllOperations];
-    downloadQueue = nil;
     _textSelectionDelegate = nil;
     _inputText.delegate = nil;
 }
