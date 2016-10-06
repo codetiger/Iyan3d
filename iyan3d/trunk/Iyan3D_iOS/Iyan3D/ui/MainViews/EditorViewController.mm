@@ -2463,10 +2463,10 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) changeTextureForAsset:(PROP_INDEX) pIndex
 {
+    editorScene->actionMan->storeTexturesChangeAction(editorScene->selectedNodeId, "", Vector4(1.0), pIndex, false, false, (pIndex == ENVIRONMENT_TEXTURE));
+
     selectedNodeId = editorScene->selectedNodeId;
     selectedMeshBufferId = editorScene->selectedMeshBufferId;
-    
-    editorScene->actionMan->storeTexturesChangeAction(selectedNodeId, "", Vector4(1.0), pIndex, false, false, (pIndex == ENVIRONMENT_TEXTURE));
 
     if([Utility IsPadDevice]){
         [self.popoverController dismissPopoverAnimated:YES];

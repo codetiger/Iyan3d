@@ -74,20 +74,18 @@
     }
     
     _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
-    if(viewType == CHANGE_TEXTURE) {
-        [_addBtn setTitle:NSLocalizedString(@"APPLY", nil) forState:UIControlStateNormal];
-    }
+
     [self setToolTips];
     
     UITapGestureRecognizer *tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     tapGest.delegate = self;
     [self.view addGestureRecognizer:tapGest];
     
-    [self.viewTitle setText:NSLocalizedString(@"Import Obj", nil)];
+    [self.viewTitle setText:NSLocalizedString((viewType == IMPORT_OBJFILE) ? @"Import Obj" : @"Choose Texture", nil)];
     [self.ObjInfoLable setText:NSLocalizedString(@"Copy OBJ files in Document Directory.", nil)];
     
     [self.cancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
-    [self.addBtn setTitle:NSLocalizedString(@"NEXT", nil) forState:UIControlStateNormal];
+    [self.addBtn setTitle:NSLocalizedString((viewType == IMPORT_OBJFILE) ? @"ADD" : @"APPLY", nil) forState:UIControlStateNormal];
 }
 
 - (void) resetCollectionView:(int) caseNum

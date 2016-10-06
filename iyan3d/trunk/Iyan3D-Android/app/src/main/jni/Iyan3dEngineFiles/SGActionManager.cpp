@@ -364,16 +364,17 @@ void SGActionManager::storeTexturesChangeAction(int selectedNodeId, std::string 
         propertyAction.actionSpecificIntegers.push_back(actionScene->selectedMeshBufferId);
         propertyAction.actionSpecificIntegers.push_back(pIndex);
         
-        std::string prevFileName = (isSceneProp) ? actionScene->shaderMGR->getProperty(pIndex).fileName : actionScene->nodes[selectedNodeId]->getProperty(pIndex).fileName;
+        std::string prevFileName = (isSceneProp) ? actionScene->shaderMGR->getProperty(pIndex).fileName : actionScene->nodes[selectedNodeId]->getProperty(pIndex, actionScene->selectedMeshBufferId).fileName;
         propertyAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(prevFileName));
         
-        Vector4 vColor = (isSceneProp) ? Vector4(0.0) : actionScene->nodes[selectedNodeId]->getProperty(VERTEX_COLOR).value;
+        
+        Vector4 vColor = (isSceneProp) ? Vector4(0.0) : actionScene->nodes[selectedNodeId]->getProperty(VERTEX_COLOR, actionScene->selectedMeshBufferId).value;
         propertyAction.actionSpecificFloats.push_back(vColor.x);
         propertyAction.actionSpecificFloats.push_back(vColor.y);
         propertyAction.actionSpecificFloats.push_back(vColor.z);
         
         propertyAction.actionSpecificFlags.push_back(isSceneProp);
-        bool isVColor = (isSceneProp) ? false : actionScene->nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR).value.x;
+        bool isVColor = (isSceneProp) ? false : actionScene->nodes[selectedNodeId]->getProperty(IS_VERTEX_COLOR, actionScene->selectedMeshBufferId).value.x;
         propertyAction.actionSpecificFlags.push_back(isVColor);
         
     }
