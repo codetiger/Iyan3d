@@ -46,7 +46,8 @@ void main()
         if(vertexLightCoord.w > 0.0) {
             vShadowDist = (vertexLightCoord.z) / 5000.0;
             vShadowDist += 0.00000009;
-        }
+        } else
+            vShadowDist = 0.0;
     } else {
         vShadowDist = 0.0;
         vTexCoordBias = vec2(0.0);

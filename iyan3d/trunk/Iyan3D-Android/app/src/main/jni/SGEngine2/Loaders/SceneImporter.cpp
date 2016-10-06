@@ -549,6 +549,9 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
         sgScene->textJointsBasePos[(int)sgScene->nodes.size()] = sgScene->animMan->storeTextInitialPositions(sceneNode);
     }
     
+    for(int i = 0; i < sceneNode->materialProps.size(); i++)
+        sceneNode->materialProps[i]->setTextureForType(sgScene->shaderMGR->shadowTexture, NODE_TEXTURE_TYPE_SHADOWMAP);
+    
     sgScene->nodes.push_back(sceneNode);
 }
 

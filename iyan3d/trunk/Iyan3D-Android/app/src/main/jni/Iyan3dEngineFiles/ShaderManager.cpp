@@ -422,9 +422,7 @@ void ShaderManager::setEyePos(SGNode *sgNode,int paramIndex)
 
 void ShaderManager::setLightViewProjMatrix(SGNode *sgNode,int paramIndex)
 {
-    Mat4 lightViewProjMatrix = lighCamProjMatrix;
-    lightViewProjMatrix *= lighCamViewMatrix;
-    Mat4 lvp = lightViewProjMatrix;// * sgNode->node->getModelMatrix();
+    Mat4 lvp = lighCamProjMatrix * lighCamViewMatrix;
     
     smgr->setPropertyValue(sgNode->node->material, "lvp", lvp.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex,smgr->getNodeIndexByID(sgNode->node->getID()));
 }

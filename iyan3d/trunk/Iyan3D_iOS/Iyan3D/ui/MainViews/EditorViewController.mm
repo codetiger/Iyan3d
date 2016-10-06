@@ -736,7 +736,7 @@ BOOL missingAlertShown;
         return;
     
     if(editorScene) {
-        ShaderManager::shadowsOff = editorScene->screenScale > 1.0f ? true : false;
+        ShaderManager::shadowsOff = (editorScene->screenScale > 1.0f) ? false : true;
         
         if (editorScene && renderViewMan.checkCtrlSelection) {
             bool isMultiSelectEnabled=[[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];

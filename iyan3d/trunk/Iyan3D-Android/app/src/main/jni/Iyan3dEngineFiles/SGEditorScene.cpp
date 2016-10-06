@@ -433,8 +433,8 @@ MIRROR_SWITCH_STATE SGEditorScene::getMirrorState()
 void SGEditorScene::initLightCamera(Vector3 position)
 {
     lightCamera = smgr->createCameraNode("LightUniforms");
-    lightCamera->setFOVInRadians(150.0 * DEGTORAD);
-    lightCamera->setNearValue(5.0);
+    //lightCamera->setFOVInRadians(150.0 * DEGTORAD);
+    //lightCamera->setNearValue(5.0);
     updater->updateLightCam(position);
 }
 
@@ -594,6 +594,9 @@ bool SGEditorScene::loadSceneData(std::string *filePath)
 
 void SGEditorScene::saveSceneData(std::string *filePath)
 {
+    if(selectedNodeId != NOT_SELECTED)
+        selectMan->unselectObject(selectedNodeId);
+    
     writer->saveSceneData(filePath);
 }
 
@@ -638,10 +641,10 @@ void SGEditorScene::saveThumbnail(char* targetPath)
             nodes[i]->node->setVisible(true);
     }
     
-    if(selectedNodeId != NOT_SELECTED)
-        nodes[selectedNodeId]->getProperty(SELECTED).value.x = true;
-    
-    selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
+//    if(selectedNodeId != NOT_SELECTED)
+//        nodes[selectedNodeId]->getProperty(SELECTED).value.x = true;
+//    
+//    selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
     renHelper->setControlsVisibility(true);
     smgr->EndDisplay();
     

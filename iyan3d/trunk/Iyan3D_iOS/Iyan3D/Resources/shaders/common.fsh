@@ -24,11 +24,12 @@ float unpack(const in vec4 rgba_depth)
 
 float GetShadowValue()
 {
+    
     vec4 texelColor = texture2D(shadowMap, vTexCoordBias);
     vec4 unpackValue = vec4(texelColor.xyz, 1.0);
     float extractedDistance = unpack(unpackValue);
-    float shadow = clamp(extractedDistance - vShadowDist, 0.0, shadowDarkness);
-    return shadow;
+    return (extractedDistance < vShadowDist) ? (shadowDarkness):(0.0);
+
 }
 
 vec4 getColorOfLight(in int index, in vec3 normal)

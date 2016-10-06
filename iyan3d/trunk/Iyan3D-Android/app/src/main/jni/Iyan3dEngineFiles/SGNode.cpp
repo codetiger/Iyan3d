@@ -72,6 +72,13 @@ void SGNode::setPropertiesOfNode()
         }
     } else if(type == NODE_IMAGE || type == NODE_VIDEO || type == NODE_PARTICLES) {
         
+        if(type != NODE_PARTICLES) {
+            addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
+            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "SpecificFloat");
+            addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), UNDEFINED, TYPE_NONE, "Color");
+            addOrUpdateProperty(TEXTURE, Vector4(1), UNDEFINED, TYPE_NONE, "Texture");
+        }
+        
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
     }
