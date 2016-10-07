@@ -520,8 +520,9 @@ fragment half4 Common_Fragment(ColorInOut in [[stage_in]],
             float4 lightDir = (lightType[i] == 1.0) ? light_position_ws : normalize(light_position_ws - in.vertexPosition_ws);
             float distanceFromLight = distance(light_position_ws, in.vertexPosition_ws);
             
-            float distanceRatio = (1.0 - saturate(distanceFromLight / lightFadeDistance[i]));
-            distanceRatio = mix(1.0, distanceRatio, lightType[i]);
+            float distanceRatio = 1.0;
+            if(lightType[i] == 0.0)
+                distanceRatio = (1.0 - saturate(distanceFromLight / lightFadeDistance[i]));
             
             float n_dot_l = saturate(dot(normal, lightDir));
             
