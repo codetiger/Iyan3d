@@ -29,19 +29,6 @@
         
         self.ProgessLabel.text = NSLocalizedString(@"Loading Assets", nil);
         
-        cache = [CacheSystem cacheSystem];
-        [cache OpenDatabase];
-        [cache createTablesForPrice];
-        [cache createRenderTaskTables];
-        [cache createAnimationTables];
-        [cache checkAndCreateGroupColumnInAssetsTable];
-        [self.activityIndicator startAnimating];
-        [AppHelper getAppHelper].delegate = self;
-        [[AppHelper getAppHelper] downloadJsonData];
-        [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
-        [[AppHelper getAppHelper] setIdentifierForVendor];
-
-        
         [Answers logCustomEventWithName:@"AppStart" customAttributes:@{}];
         startTime = [NSDate date];
         
@@ -180,6 +167,18 @@
         if (![fileManager fileExistsAtPath:animationFolderPath]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
         }
+        
+        cache = [CacheSystem cacheSystem];
+        [cache OpenDatabase];
+        [cache createTablesForPrice];
+        [cache createRenderTaskTables];
+        [cache createAnimationTables];
+        [cache checkAndCreateGroupColumnInAssetsTable];
+        [self.activityIndicator startAnimating];
+        [AppHelper getAppHelper].delegate = self;
+        [[AppHelper getAppHelper] downloadJsonData];
+        [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
+        [[AppHelper getAppHelper] setIdentifierForVendor];
         
     }
     return self;

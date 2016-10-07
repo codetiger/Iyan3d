@@ -4008,7 +4008,7 @@ void downloadFile(NSString* url, NSString* fileName)
     NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@", docDirPath, textureName];
-    std::string *texture = new std::string([textureName UTF8String]);
+    std::string texture = std::string([textureName UTF8String]);
     NSString* tempPath = [NSString stringWithFormat:@"temp.%@", [textureName pathExtension]];
     
     
@@ -4019,7 +4019,7 @@ void downloadFile(NSString* url, NSString* fileName)
         UIImage *image =[UIImage imageWithContentsOfFile:srcTextureFilePath];
         NSData *imageData = [self convertAndScaleImage:image size:-1];
         [imageData writeToFile:desFilePath atomically:YES];
-        *texture = *new std::string((isTemp)? [tempPath UTF8String] : [textureName UTF8String]);
+        texture = std::string((isTemp)? [tempPath UTF8String] : [textureName UTF8String]);
     }
     
     Vector4 mColor = Vector4(color, 0.0);
@@ -4029,12 +4029,12 @@ void downloadFile(NSString* url, NSString* fileName)
 //    }
     
     if(pIndex == ENVIRONMENT_TEXTURE) {
-        editorScene->setEnvironmentTexture(*texture, isTemp);
+        editorScene->setEnvironmentTexture(texture, isTemp);
     }
     else {
         editorScene->selectMan->selectObject(selectedNodeId, selectedMeshBufferId, false);
         if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
-            editorScene->changeTexture(*texture, Vector3(color), isTemp, NO, pIndex);
+            editorScene->changeTexture(texture, Vector3(color), isTemp, NO, pIndex);
             editorScene->selectMan->unselectObject(selectedNodeId);
             editorScene->setLightingOn();
         }
@@ -4045,7 +4045,6 @@ void downloadFile(NSString* url, NSString* fileName)
     }
 
     [self showOrHideProgress:HIDE_PROGRESS];
-    delete texture;
 }
 
 - (void) removeTempTextureAndVertex:(PROP_INDEX) pIndex

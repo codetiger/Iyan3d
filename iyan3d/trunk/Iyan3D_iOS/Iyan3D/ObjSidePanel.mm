@@ -41,6 +41,10 @@
         viewType = type;
         textureFileName = @"-1";
         propIndex = pIndex;
+        
+        srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        docDirPath = [srcDirPath objectAtIndex:0];
+
     }
     return self;
 }
@@ -53,8 +57,6 @@
     if([[AppHelper getAppHelper] iPhone6Plus])
         nibName = @"ObjCellViewPhone";
      [self.importFilesCollectionView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellWithReuseIdentifier:@"CELL"];
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
     filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", @"OBJ", @"FBX", @"DAE", @"3DS", nil]]];
 
@@ -96,8 +98,6 @@
     else
         extensions = [NSArray arrayWithObjects:@"obj", @"fbx", @"dae", @"3ds", @"OBJ", @"FBX", @"DAE", @"3DS", nil];
     
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
     filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
     
@@ -175,8 +175,6 @@
         }
         else{
             [cell.propsBtn setHidden:NO];
-            NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString* docDirPath = [srcDirPath objectAtIndex:0];
             NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row-1]];
             cell.assetNameLabel.text = filesList[indexPath.row-1];
             cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
@@ -273,8 +271,6 @@
         [_importBtn setHidden:NO];
         filesList=nil;
         NSArray *extensions = [NSArray arrayWithObjects:@"png", @"PNG", @"jpeg", @"JPEG", @"jpg", @"JPG", @"tga", @"TGA", nil];
-        NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* docDirPath = [srcDirPath objectAtIndex:0];
         NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
         filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
         [self.addBtn setTitle:NSLocalizedString((viewType == CHANGE_TEXTURE) ? @"APPLY" : @"ADD TO SCENE", nil) forState:UIControlStateNormal];
@@ -356,8 +352,6 @@
 {
 
     NSFileManager *fm = [NSFileManager defaultManager];
-    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* targetFilePath;
     int caseNum = 0;
     if(_addBtn.tag == OBJ) {

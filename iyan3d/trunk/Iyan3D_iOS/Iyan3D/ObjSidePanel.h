@@ -39,6 +39,9 @@
     int viewType;
     FPPopoverController *popover;
     PROP_INDEX propIndex;
+    
+    NSArray* srcDirPath;
+    NSString* docDirPath ;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type AndPropIndex:(PROP_INDEX) pIndex;

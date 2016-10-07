@@ -39,7 +39,8 @@ void SGNode::setPropertiesOfNode()
     } else if(type == NODE_LIGHT || type == NODE_ADDITIONAL_LIGHT) {
         
         addOrUpdateProperty(SHADOW_DARKNESS, Vector4(0, 0, 0, 0), UNDEFINED, (type == NODE_LIGHT) ? SLIDER_TYPE : TYPE_NONE, "Shadow Darkness");
-        addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(300.0, 0, 0, 0), UNDEFINED, (type == NODE_LIGHT) ? TYPE_NONE : SLIDER_TYPE, "Distance");
+        float distance = (type == NODE_LIGHT) ? 300.0 : 30.0;
+        addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(distance, 300.0, 5.0, true), UNDEFINED, (type == NODE_LIGHT) ? TYPE_NONE : SLIDER_TYPE, "Distance");
         int lightType = (type == NODE_LIGHT) ? DIRECTIONAL_LIGHT : POINT_LIGHT;
         
         addOrUpdateProperty(LIGHT_TYPE, Vector4(lightType, 0, 0, 0), UNDEFINED, TYPE_NONE, "Light Type");

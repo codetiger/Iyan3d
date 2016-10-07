@@ -640,6 +640,12 @@
 		250FEC8D1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */; };
 		250FEC8E1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */; };
 		250FEC8F1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */; };
+		251181D31DA7813C0064BDB8 /* property-icon_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 251181D01DA7813C0064BDB8 /* property-icon_iphone.png */; };
+		251181D41DA7813C0064BDB8 /* property-icon_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 251181D01DA7813C0064BDB8 /* property-icon_iphone.png */; };
+		251181D51DA7813C0064BDB8 /* property-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 251181D11DA7813C0064BDB8 /* property-icon.png */; };
+		251181D61DA7813C0064BDB8 /* property-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 251181D11DA7813C0064BDB8 /* property-icon.png */; };
+		251181D71DA7813C0064BDB8 /* property-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 251181D21DA7813C0064BDB8 /* property-icon@2x.png */; };
+		251181D81DA7813C0064BDB8 /* property-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 251181D21DA7813C0064BDB8 /* property-icon@2x.png */; };
 		2512BFD51CB24581006E19A3 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD41CB24581006E19A3 /* SafariServices.framework */; };
 		2512BFD61CB2458C006E19A3 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD41CB24581006E19A3 /* SafariServices.framework */; };
 		2512BFD81CB247AE006E19A3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD71CB247AD006E19A3 /* libz.tbd */; };
@@ -2883,6 +2889,9 @@
 		250FEC7F1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img_phone@3x.png"; sourceTree = "<group>"; };
 		250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img_phone@3x.png"; sourceTree = "<group>"; };
 		250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img_phone@3x.png"; sourceTree = "<group>"; };
+		251181D01DA7813C0064BDB8 /* property-icon_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "property-icon_iphone.png"; path = "Resources/imgs/property-icon_iphone.png"; sourceTree = "<group>"; };
+		251181D11DA7813C0064BDB8 /* property-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "property-icon.png"; path = "Resources/imgs/property-icon.png"; sourceTree = "<group>"; };
+		251181D21DA7813C0064BDB8 /* property-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "property-icon@2x.png"; path = "Resources/imgs/property-icon@2x.png"; sourceTree = "<group>"; };
 		2512BFD41CB24581006E19A3 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		2512BFD71CB247AD006E19A3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = GoogleAnalytics.a; path = FrameWorks/GoogleAnalytics.a; sourceTree = "<group>"; };
@@ -6395,6 +6404,9 @@
 		62FB86591988D32000AC7424 /* imgs */ = {
 			isa = PBXGroup;
 			children = (
+				251181D01DA7813C0064BDB8 /* property-icon_iphone.png */,
+				251181D11DA7813C0064BDB8 /* property-icon.png */,
+				251181D21DA7813C0064BDB8 /* property-icon@2x.png */,
 				25BBCB0F1C203D6A0039DA5C /* Splash-6+1.png */,
 				25BBCB101C203D6A0039DA5C /* Splash.png */,
 				25EA8ED61BD90506005DBA15 /* light_ipad.png */,
@@ -7607,6 +7619,7 @@
 				25EC3D3E1D36143D006AE211 /* Help.png in Resources */,
 				25F80B091CFDB6E700CF331B /* gplusFollowPhone@2x.png in Resources */,
 				25EC6C6C1C7F39DD002CF5D2 /* wm55.png in Resources */,
+				251181D71DA7813C0064BDB8 /* property-icon@2x.png in Resources */,
 				01B4D04F1C2937000091E19B /* My-objects-Camera_Pad.png in Resources */,
 				25EC6C621C7F39DD002CF5D2 /* wm50.png in Resources */,
 				01B02CD61C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
@@ -7650,6 +7663,7 @@
 				250FEC401D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
 				25EC6C321C7F39DD002CF5D2 /* wm26.png in Resources */,
 				7FC524DE1B6F6F3600C5D26D /* Minimize-Full-screen@2x.png in Resources */,
+				251181D31DA7813C0064BDB8 /* property-icon_iphone.png in Resources */,
 				7F7D5A371B8C91D100E6BA86 /* googlelogout_Pad.png in Resources */,
 				251815831D1D4924009F68A8 /* Step-1_-img.png in Resources */,
 				250FEC4C1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
@@ -7785,6 +7799,7 @@
 				7FC901361A0A07860051B941 /* select-img@2x.png in Resources */,
 				25EC6C741C7F39DD002CF5D2 /* wm59.png in Resources */,
 				7F7D5A321B8C91D100E6BA86 /* googlelogin_Pad.png in Resources */,
+				251181D51DA7813C0064BDB8 /* property-icon.png in Resources */,
 				25EC3D2C1D3612D6006AE211 /* info-icon_phone.png in Resources */,
 				7F307CEB1B58FBF10065BBC1 /* like-phone.png in Resources */,
 				25EC6B9E1C7F066B002CF5D2 /* wm1.png in Resources */,
@@ -8524,6 +8539,7 @@
 				01F8727E1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
 				25EC6C631C7F39DD002CF5D2 /* wm50.png in Resources */,
 				250E54BB1D3E092C0081A7CB /* Icon1@3x.png in Resources */,
+				251181D81DA7813C0064BDB8 /* property-icon@2x.png in Resources */,
 				25EBB2AB1D1174050031F18D /* MediaPreviewVC.xib in Resources */,
 				25EC3D3F1D36143D006AE211 /* Help.png in Resources */,
 				25F80B0A1CFDB6E700CF331B /* gplusFollowPhone@2x.png in Resources */,
@@ -8567,6 +8583,7 @@
 				250FEC411D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
 				E20672E51B049AA6006DD2F7 /* properties-img.png in Resources */,
 				E20672EA1B049AA6006DD2F7 /* render_video-phone.png in Resources */,
+				251181D41DA7813C0064BDB8 /* property-icon_iphone.png in Resources */,
 				25EC6C891C7F39DD002CF5D2 /* wm69.png in Resources */,
 				251815841D1D4924009F68A8 /* Step-1_-img.png in Resources */,
 				250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
@@ -8702,6 +8719,7 @@
 				E206732A1B049AA6006DD2F7 /* animate-img-phone@2x.png in Resources */,
 				25EC6C751C7F39DD002CF5D2 /* wm59.png in Resources */,
 				E206732C1B049AA6006DD2F7 /* new-img@2x.png in Resources */,
+				251181D61DA7813C0064BDB8 /* property-icon.png in Resources */,
 				E206732D1B049AA6006DD2F7 /* BoneMesh.sgm in Resources */,
 				25EC6B9F1C7F066B002CF5D2 /* wm1.png in Resources */,
 				25EC3D2D1D3612D6006AE211 /* info-icon_phone.png in Resources */,

@@ -55,6 +55,7 @@ static NSString* dbLock = nil;
                 
                 NSString* createSceneTable = [NSString stringWithFormat:@"CREATE TABLE %@ (%@ INTEGER PRIMARY KEY AUTOINCREMENT, %@ TEXT, %@ TEXT, %@ TEXT)", TABLE_SCENE_INFO, SCENE_ID, SCENE_NAME, SCENE_DATE, SCENE_FILE];
                 if(sqlite3_exec(_cacheSystem, [createSceneTable UTF8String], NULL, NULL, &errMsg) != SQLITE_OK){
+                    printf(" \n Scene Table not created %s ", errMsg);
                 }
                 
                 NSString* createDownloadedTable = [NSString stringWithFormat:@"CREATE TABLE %@ (%@ INTEGER PRIMARY KEY AUTOINCREMENT, %@ INTEGER, %@ INTEGER)", TABLE_DOWNLOADED_ASSET_INFO, DOWNLOADED_ASSET_PRIMARYID, DOWNLOADED_ASSET_ID, DOWNLOADED_ASSET_TYPE];

@@ -390,9 +390,9 @@ void RenderHelper::drawCameraPreview()
     }
     setControlsVisibility(false);
     
-    smgr->Render(true);
     if(renderingScene->whiteBorderTexture)
         smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    smgr->Render(true);
     
     smgr->setRenderTarget(NULL, false, false);
     smgr->setActiveCamera(renderingScene->viewCamera);
@@ -988,7 +988,6 @@ void RenderHelper::rttShadowMap()
     bool indState = renderingScene->directionIndicator->node->getVisible();
     renderingScene->directionIndicator->node->setVisible(false);
     ShaderManager::isRenderingDepthPass = true;
-    Vector3 posn = renderingScene->lightCamera->getAbsolutePosition();
     
     smgr->setActiveCamera(renderingScene->lightCamera);
     smgr->setRenderTarget(renderingScene->shaderMGR->shadowTexture,true,true,true,Vector4(255,255,255,255));

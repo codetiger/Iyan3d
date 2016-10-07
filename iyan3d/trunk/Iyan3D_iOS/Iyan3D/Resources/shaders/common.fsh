@@ -37,8 +37,9 @@ vec4 getColorOfLight(in int index, in vec3 normal)
     vec3 lightDir = (lightTypes[index] == 1.0) ? lightPos[index] :  normalize(lightPos[index] - vVertexPosition);
     float distanceFromLight = distance(lightPos[index] , vVertexPosition);
 
-    float distanceRatio = (1.0 - clamp((distanceFromLight / fadeEndDistance[index]), 0.0, 1.0));
-    distanceRatio = mix(1.0, distanceRatio, lightTypes[index]);
+    float distanceRatio = 1.0;
+    if(lightTypes[index] == 0.0)
+        distanceRatio = (1.0 - clamp((distanceFromLight / fadeEndDistance[index]), 0.0, 1.0));
 
     float n_dot_l = clamp(dot(normal, lightDir), 0.0, 1.0);
 

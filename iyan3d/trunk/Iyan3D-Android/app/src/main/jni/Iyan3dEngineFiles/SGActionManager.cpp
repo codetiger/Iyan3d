@@ -481,7 +481,7 @@ void SGActionManager::changeLightProperty(float red , float green, float blue, f
     SGNode *selectedNode = actionScene->nodes[actionScene->selectedNodeId];
     
     if(selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
-        selectedNode->getProperty(SPECIFIC_FLOAT).value.x = (distance + 0.001) * 300.0;
+        selectedNode->getProperty(SPECIFIC_FLOAT).value.x = (distance);
     }
     
     if(selectedNode->getType() == NODE_LIGHT || selectedNode->getType() == NODE_ADDITIONAL_LIGHT) {
