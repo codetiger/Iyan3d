@@ -20,6 +20,7 @@ SceneImporter::SceneImporter()
 SceneImporter::~SceneImporter()
 {
     if(bones != NULL) {
+        delete bones;
         bones = NULL;
     }
     if(scene)
@@ -488,7 +489,6 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
         if(bones->size()) {
             loadBoneHierarcy((SkinMesh*)mesh, bones);
             bones->clear();
-            delete bones;
         }
 
         ((SkinMesh*)mesh)->finalize();
