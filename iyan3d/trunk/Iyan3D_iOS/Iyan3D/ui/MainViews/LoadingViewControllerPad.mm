@@ -27,8 +27,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         
-        self.ProgessLabel.text = NSLocalizedString(@"Loading Assets", nil);
-        
         [Answers logCustomEventWithName:@"AppStart" customAttributes:@{}];
         startTime = [NSDate date];
         
@@ -174,7 +172,7 @@
         [cache createRenderTaskTables];
         [cache createAnimationTables];
         [cache checkAndCreateGroupColumnInAssetsTable];
-        [self.activityIndicator startAnimating];
+
         [AppHelper getAppHelper].delegate = self;
         [[AppHelper getAppHelper] downloadJsonData];
         [[AppHelper getAppHelper] moveFilesFromInboxDirectory:cache];
@@ -275,7 +273,6 @@
 
 - (void) loadSceneView
 {
-    [self.activityIndicator setHidden:YES];
     NSDate *endTime = [NSDate date];
     NSTimeInterval duration = [endTime timeIntervalSinceDate:startTime];
     NSDictionary *attribute = @{@"duration" : [NSNumber numberWithDouble:duration]};
@@ -296,11 +293,6 @@
     }
     
     [self deallocMemory];
-}
-
--(void)changeProgressLabel:(NSString*)labelString
-{
-    self.ProgessLabel.text = labelString;
 }
 
 -(BOOL)iPhone6Plus

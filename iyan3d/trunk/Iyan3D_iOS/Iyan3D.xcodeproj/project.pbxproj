@@ -655,6 +655,10 @@
 		2512BFDF1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2512BFDC1CB2708E006E19A3 /* GoogleSignIn.bundle */; };
 		2512BFE01CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */; };
 		2512BFE11CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */; };
+		2515C36B1DA8D12000B4F622 /* launch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36A1DA8D12000B4F622 /* launch.xib */; };
+		2515C36C1DA8D12000B4F622 /* launch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36A1DA8D12000B4F622 /* launch.xib */; };
+		2515C36E1DA8D1D100B4F622 /* iconlarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36D1DA8D1D100B4F622 /* iconlarge.png */; };
+		2515C36F1DA8D1D100B4F622 /* iconlarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36D1DA8D1D100B4F622 /* iconlarge.png */; };
 		2516DC091C5F52FD0034145D /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC081C5F52FD0034145D /* ParticleManager.cpp */; };
 		2516DC0A1C5F52FD0034145D /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2516DC081C5F52FD0034145D /* ParticleManager.cpp */; };
 		2516DC0C1C5F90C70034145D /* particles.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 2516DC0B1C5F90C70034145D /* particles.vsh */; };
@@ -1768,8 +1772,6 @@
 		3DA6F2D11D48C3CE00C842C6 /* libassimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA6F2D01D48C3CE00C842C6 /* libassimp.a */; };
 		3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
 		3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
-		3DAC8C3D1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */; };
-		3DAC8C3E1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */; };
 		3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
 		3DAC8C411C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
 		3DAEFFF01C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */; };
@@ -2383,7 +2385,6 @@
 		E20672FF1B049AA6006DD2F7 /* add-frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FB865A1988D33A00AC7424 /* add-frame.png */; };
 		E20673021B049AA6006DD2F7 /* frames-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC901471A0A54840051B941 /* frames-phone.png */; };
 		E20673051B049AA6006DD2F7 /* ScaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764F196BE0190025D442 /* ScaleViewController.xib */; };
-		E20673071B049AA6006DD2F7 /* LoadingViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */; };
 		E20673081B049AA6006DD2F7 /* down-arrow-large-pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0087721ADFC15400764DDE /* down-arrow-large-pad.png */; };
 		E206730A1B049AA6006DD2F7 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FB86671988D33A00AC7424 /* render_image.png */; };
 		E206730B1B049AA6006DD2F7 /* new-img-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC900A81A0A01460051B941 /* new-img-phone@2x.png */; };
@@ -2546,7 +2547,6 @@
 		E2497672196BE0190025D442 /* ScaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764F196BE0190025D442 /* ScaleViewController.xib */; };
 		E249769A196BE0310025D442 /* LoadingViewControllerPad.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */; };
 		E249769B196BE0310025D442 /* LoadingViewControllerPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */; };
-		E249769C196BE0310025D442 /* LoadingViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */; };
 		E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744119234C540036F8E3 /* OpenGLES.framework */; };
 		E262744419234C890036F8E3 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744319234C890036F8E3 /* GameKit.framework */; };
 		E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E27E71C41AD27A8200B5DE77 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -2897,6 +2897,8 @@
 		2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = GoogleAnalytics.a; path = FrameWorks/GoogleAnalytics.a; sourceTree = "<group>"; };
 		2512BFDC1CB2708E006E19A3 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = FrameWorks/GoogleSignIn.bundle; sourceTree = "<group>"; };
 		2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = FrameWorks/GoogleSignIn.framework; sourceTree = "<group>"; };
+		2515C36A1DA8D12000B4F622 /* launch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = launch.xib; sourceTree = "<group>"; };
+		2515C36D1DA8D1D100B4F622 /* iconlarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconlarge.png; sourceTree = "<group>"; };
 		2516DC051C5F4ED80034145D /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		2516DC061C5F4ED80034145D /* ParticleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleManager.h; sourceTree = "<group>"; };
 		2516DC071C5F4ED80034145D /* ParticlePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePool.h; sourceTree = "<group>"; };
@@ -3862,7 +3864,6 @@
 		3DA6EE8D1D48892700C842C6 /* colortext.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = colortext.vsh; path = Resources/shaders/colortext.vsh; sourceTree = "<group>"; };
 		3DA6F2D01D48C3CE00C842C6 /* libassimp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp.a; path = Iyan3D/3rdParty/assimp/libassimp.a; sourceTree = "<group>"; };
 		3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SceneSelectionControllerNewPhone@2x.xib"; sourceTree = "<group>"; };
-		3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LoadingViewControllerPhone@2x.xib"; path = "ui/MainViews/LoadingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RenderingViewControllerPhone@2x.xib"; path = "ui/Popover Views/RenderingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone.png"; sourceTree = "<group>"; };
 		3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone@3x.png"; sourceTree = "<group>"; };
@@ -4309,7 +4310,6 @@
 		E2497682196BE0310025D442 /* LoadingViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingViewControllerPad.h; path = ui/MainViews/LoadingViewControllerPad.h; sourceTree = "<group>"; };
 		E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LoadingViewControllerPad.mm; path = ui/MainViews/LoadingViewControllerPad.mm; sourceTree = "<group>"; };
 		E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPad.xib; path = ui/MainViews/LoadingViewControllerPad.xib; sourceTree = "<group>"; };
-		E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPhone.xib; path = ui/MainViews/LoadingViewControllerPhone.xib; sourceTree = "<group>"; };
 		E262744119234C540036F8E3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		E262744319234C890036F8E3 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E27E71C41AD27A8200B5DE77 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -6220,8 +6220,6 @@
 				E2497682196BE0310025D442 /* LoadingViewControllerPad.h */,
 				E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */,
 				E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */,
-				E2497685196BE0310025D442 /* LoadingViewControllerPhone.xib */,
-				3DAC8C3C1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib */,
 			);
 			name = LoadingView;
 			sourceTree = "<group>";
@@ -6825,6 +6823,7 @@
 		C83D627218783A1500D285C4 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2515C36D1DA8D1D100B4F622 /* iconlarge.png */,
 				25FA148B1D3CE57600A95DA3 /* CommonProps */,
 				25EC3D0B1D360CFF006AE211 /* TopView */,
 				2518156F1D1D1C69009F68A8 /* OnBoard */,
@@ -6975,6 +6974,7 @@
 		C885D7B81876BF1900A45D71 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				2515C36A1DA8D12000B4F622 /* launch.xib */,
 				E2497620196BDD9D0025D442 /* AppDelegate.h */,
 				E2497621196BDD9D0025D442 /* AppDelegate.mm */,
 				C8D9400C1898D5E400B632E0 /* Main Views */,
@@ -7477,6 +7477,7 @@
 				7FC900FD1A0A01470051B941 /* view-img-phone@2x.png in Resources */,
 				7FC900D61A0A01470051B941 /* Menu-phone.png in Resources */,
 				01B02CBC1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */,
+				2515C36B1DA8D12000B4F622 /* launch.xib in Resources */,
 				01C2B7961C46419300384370 /* TwitterKitResources.bundle in Resources */,
 				7FC900F71A0A01470051B941 /* select-img-phone@2x.png in Resources */,
 				01F8728B1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
@@ -7600,7 +7601,6 @@
 				25EC6CE41C7F39DD002CF5D2 /* wm115.png in Resources */,
 				3DD47BF81C60A43500E7CCFD /* 60005.sgm in Resources */,
 				E2497672196BE0190025D442 /* ScaleViewController.xib in Resources */,
-				E249769C196BE0310025D442 /* LoadingViewControllerPhone.xib in Resources */,
 				25069F5B1D2BD81E00DBAE44 /* CommonProps.xib in Resources */,
 				25EC6C461C7F39DD002CF5D2 /* wm36.png in Resources */,
 				25EC6CBA1C7F39DD002CF5D2 /* wm94.png in Resources */,
@@ -7623,7 +7623,6 @@
 				01B4D04F1C2937000091E19B /* My-objects-Camera_Pad.png in Resources */,
 				25EC6C621C7F39DD002CF5D2 /* wm50.png in Resources */,
 				01B02CD61C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
-				3DAC8C3D1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */,
 				01F8727D1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
 				25EC6C681C7F39DD002CF5D2 /* wm53.png in Resources */,
 				7FC9016B1A0A54850051B941 /* Stop-video-pad@2x.png in Resources */,
@@ -7948,6 +7947,7 @@
 				01B4D0611C2937000091E19B /* OPtions_Pad@2x.png in Resources */,
 				0169C46B1C33ED5A00132FF6 /* popoverArrowRight-white@2x.png in Resources */,
 				7FC901251A0A07860051B941 /* info@2x.png in Resources */,
+				2515C36E1DA8D1D100B4F622 /* iconlarge.png in Resources */,
 				8A9DE20E197FEFF10079727D /* mirrorJoints.json in Resources */,
 				25EC6C7E1C7F39DD002CF5D2 /* wm64.png in Resources */,
 				25F80B111CFDB6E700CF331B /* gplusFollowPhone@3x.png in Resources */,
@@ -8397,6 +8397,7 @@
 				E20672511B049AA6006DD2F7 /* new-img-phone@3x.png in Resources */,
 				E20672561B049AA6006DD2F7 /* right-align@3x.png in Resources */,
 				01F8728C1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
+				2515C36C1DA8D12000B4F622 /* launch.xib in Resources */,
 				01F872801C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
 				01B02CBD1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */,
 				01C2B7971C46419300384370 /* TwitterKitResources.bundle in Resources */,
@@ -8545,7 +8546,6 @@
 				25F80B0A1CFDB6E700CF331B /* gplusFollowPhone@2x.png in Resources */,
 				E20672C41B049AA6006DD2F7 /* controls2.sgm in Resources */,
 				01B02CD71C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
-				3DAC8C3E1C6C5F5E0020C31D /* LoadingViewControllerPhone@2x.xib in Resources */,
 				25EC6C691C7F39DD002CF5D2 /* wm53.png in Resources */,
 				E20672C51B049AA6006DD2F7 /* properties-img-phone@3x.png in Resources */,
 				E20672C61B049AA6006DD2F7 /* bonelimits.json in Resources */,
@@ -8643,7 +8643,6 @@
 				E20673021B049AA6006DD2F7 /* frames-phone.png in Resources */,
 				25E86EC61B44D10300BC48DC /* depthPassText.vsh in Resources */,
 				E20673051B049AA6006DD2F7 /* ScaleViewController.xib in Resources */,
-				E20673071B049AA6006DD2F7 /* LoadingViewControllerPhone.xib in Resources */,
 				E20673081B049AA6006DD2F7 /* down-arrow-large-pad.png in Resources */,
 				01B02CE11C61CAB400C9102A /* Play_IPhone@3x.png in Resources */,
 				3D5F99231C4D04EB00DD47F5 /* Sphere.png in Resources */,
@@ -8868,6 +8867,7 @@
 				E20673A71B049AA6006DD2F7 /* justify@3x.png in Resources */,
 				0169C46C1C33ED5A00132FF6 /* popoverArrowRight-white@2x.png in Resources */,
 				E20673A81B049AA6006DD2F7 /* properties-img-phone.png in Resources */,
+				2515C36F1DA8D1D100B4F622 /* iconlarge.png in Resources */,
 				E20673AA1B049AA6006DD2F7 /* last-phone@2x.png in Resources */,
 				25EC6C7F1C7F39DD002CF5D2 /* wm64.png in Resources */,
 				25F80B121CFDB6E700CF331B /* gplusFollowPhone@3x.png in Resources */,
@@ -9829,7 +9829,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -9845,6 +9844,7 @@
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
@@ -9854,7 +9854,7 @@
 					"$(PROJECT_DIR)/FrameWorks",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -9865,7 +9865,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -9881,6 +9880,7 @@
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
@@ -9890,7 +9890,7 @@
 					"$(PROJECT_DIR)/FrameWorks",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -9924,7 +9924,7 @@
 					"$(PROJECT_DIR)/FrameWorks",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "Iyan3D-Simulator";
 				WRAPPER_EXTENSION = app;
 			};
@@ -9957,7 +9957,7 @@
 					"$(PROJECT_DIR)/FrameWorks",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.animator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "Iyan3D-Simulator";
 				WRAPPER_EXTENSION = app;
 			};

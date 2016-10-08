@@ -309,9 +309,7 @@ SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
         printf("Error in Loading: %s\n", importer->GetErrorString());
         return NULL;
     }
-    
-    map< string, Joint* > *lBones = new map< string, Joint* >();
-    
+        
     SkinMesh* mesh = new SkinMesh();
     for (int i = 0; i < scene->mNumMeshes; i++) {
         aiMesh *aiM = scene->mMeshes[i];
@@ -324,10 +322,10 @@ SkinMesh* SceneImporter::loadSkinMeshFromFile(string filePath)
             mesh->addMeshBuffer(mbvd, mbi, 0);
             
             if(aiM->HasBones())
-                loadBonesFromMesh(aiM, mesh, lBones);
+                loadBonesFromMesh(aiM, mesh, bones);
         }
     }
-    loadBoneHierarcy((SkinMesh*)mesh, lBones);
+    loadBoneHierarcy((SkinMesh*)mesh, bones);
     mesh->finalize();
         
     delete importer;

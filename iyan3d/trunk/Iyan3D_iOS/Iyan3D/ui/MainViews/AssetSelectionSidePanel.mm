@@ -171,9 +171,11 @@
             cell.layer.borderColor = [UIColor clearColor].CGColor;
         }
         cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-        if(modelCategoryTab == MY_LIBRARY_TYPE)
+        if(modelCategoryTab == MY_LIBRARY_TYPE) {
             [cell.propsBtn setHidden:NO];
-        else
+            cell.propsBtn.layer.cornerRadius = 4.0;
+            cell.propsBtn.clipsToBounds = YES;
+        } else
             [cell.propsBtn setHidden:YES];
         
         cell.delegate = self;

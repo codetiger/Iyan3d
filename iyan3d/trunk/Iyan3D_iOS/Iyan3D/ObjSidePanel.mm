@@ -152,7 +152,6 @@
                 cell.assetNameLabel.text = filesList[indexPath.row-[basicShapes count]];
                 cell.layer.borderColor = [UIColor grayColor].CGColor;
                 cell.assetImageView.image = [UIImage imageNamed:[extension stringByAppendingString:@"file.png"]];
-                return cell;
             }
         }
         else{
@@ -161,7 +160,6 @@
             cell.layer.borderColor = [UIColor grayColor].CGColor;
             NSString* imageName = [NSString stringWithFormat:@"%@%s",[basicShapes objectAtIndex:indexPath.row],".png"];
             cell.assetImageView.image =[UIImage imageNamed:imageName];
-            return cell;
         }
     }
     else
@@ -179,8 +177,11 @@
             cell.assetNameLabel.text = filesList[indexPath.row-1];
             cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
         }
-            return cell;
     }
+    cell.propsBtn.layer.cornerRadius = 4.0;
+    cell.propsBtn.clipsToBounds = YES;
+
+    return cell;
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

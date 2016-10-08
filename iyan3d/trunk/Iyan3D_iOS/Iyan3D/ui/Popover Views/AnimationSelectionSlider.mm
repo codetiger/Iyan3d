@@ -110,8 +110,11 @@
     cell.category = animationCategoryTab;
     if(animationCategoryTab != MY_ANIMATION)
         [cell.propsBtn setHidden:YES];
-    else
+    else {
         [cell.propsBtn setHidden:NO];
+        cell.propsBtn.layer.cornerRadius = 4.0;
+        cell.propsBtn.clipsToBounds = YES;
+    }
     
     cell.selectedIndex = (int)indexPath.row;
     cell.parentVC = self;

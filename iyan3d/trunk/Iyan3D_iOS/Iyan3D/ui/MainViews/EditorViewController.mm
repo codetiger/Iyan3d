@@ -1727,6 +1727,8 @@ BOOL missingAlertShown;
     editorScene->isPlaying = isPlaying;
     [self showOrHideRightView:YES];
     
+    [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+    
     if (editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->selectMan->unselectObject(editorScene->selectedNodeId);
         [self.framesCollectionView reloadData];
@@ -1774,6 +1776,8 @@ BOOL missingAlertShown;
 
 - (void) stopPlaying
 {
+    [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+    
     [self.playBtn setImage:[UIImage imageNamed:@"Play_Pad.png"] forState:UIControlStateNormal];
     if(_leftView.isHidden)
         [self showOrHideRightView:NO];
@@ -1976,6 +1980,9 @@ BOOL missingAlertShown;
 
 - (void)applyAnimationToSelectedNode:(NSString*)filePath SelectedNodeId:(int)originalId SelectedFrame:(int)selectedFrame
 {
+    if(selectedNodeId == NOT_EXISTS || selectedNodeId >= editorScene->nodes.size())
+        return;
+    
     editorScene->animMan->copyKeysOfNode(originalId, (int)editorScene->nodes.size()-1);
     editorScene->nodes[originalId]->node->setVisible(false);
     editorScene->currentFrame = selectedFrame;
@@ -2293,7 +2300,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     
     assetAddType = IMPORT_ASSET_ACTION;
-    if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
+    if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
     {
         AssetItem *assetItem = [cache GetAsset:selectedAssetId];
         assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->getProperty(TEXTURE).fileName.c_str()
@@ -2303,7 +2310,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->animMan->copyKeysOfNode(selectedNode, (int)editorScene->nodes.size()-1);
         editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
     }
-    else if((selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS){
+    else if(selectedAssetId != NOT_EXISTS){
         NSString *typedText = [self stringWithwstring:editorScene->nodes[editorScene->selectedNodeId]->name];
         NSString *fontName = [NSString stringWithCString:editorScene->nodes[editorScene->selectedNodeId]->optionalFilePath.c_str()
                                                 encoding:[NSString defaultCStringEncoding]];
@@ -2387,20 +2394,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self cloneNodeByCopyingMesh:selectedNodeIndex];
 
         
-    } else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS) {
-        
-        NSString *typedText = [self stringWithwstring:sgNode->name];
-        NSString *fontName = [NSString stringWithCString:sgNode->optionalFilePath.c_str()
-                                                encoding:[NSString defaultCStringEncoding]];
-        Vector4 color = sgNode->getProperty(VERTEX_COLOR).value;
-        color.w = 0.0;
-        
-        float bevalValue = sgNode->getProperty(SPECIFIC_FLOAT).value.x;
-        int fontSize = sgNode->getProperty(FONT_SIZE).value.x;
-        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str() encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
-        editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
-        
-    } else if ((selectedNodeType == NODE_IMAGE || selectedNodeType == NODE_VIDEO) && sgNode) {
+    }else if ((selectedNodeType == NODE_IMAGE || selectedNodeType == NODE_VIDEO) && sgNode) {
         
         int assetType = (selectedNodeType == NODE_IMAGE) ? ASSET_IMAGE : ASSET_VIDEO;
         NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
@@ -2422,6 +2416,21 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                                    encoding:[NSString defaultCStringEncoding]];
         [self cloneNodeByCopyingMesh:selectedNodeIndex];
     }
+    
+/*    else if((selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS) {
+        
+        NSString *typedText = [self stringWithwstring:sgNode->name];
+        NSString *fontName = [NSString stringWithCString:sgNode->optionalFilePath.c_str()
+                                                encoding:[NSString defaultCStringEncoding]];
+        Vector4 color = sgNode->getProperty(VERTEX_COLOR).value;
+        color.w = 0.0;
+        
+        float bevalValue = sgNode->getProperty(SPECIFIC_FLOAT).value.x;
+        int fontSize = sgNode->getProperty(FONT_SIZE).value.x;
+        [self load3DTex:(selectedNodeType == NODE_TEXT) ? ASSET_TEXT : ASSET_TEXT_RIG AssetId:0 TextureName:[NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str() encoding:[NSString defaultCStringEncoding]] TypedText:typedText FontSize:fontSize BevelValue:bevalValue TextColor:color FontPath:fontName isTempNode:NO];
+        editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
+        
+    } */
 }
 
 - (void) cloneNodeByCopyingMesh:(int) indexOfNode
@@ -3575,7 +3584,7 @@ void downloadFile(NSString* url, NSString* fileName)
     
     int selctedIndex = [[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewPosition"]intValue];
     float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
-    if(selctedIndex==PREVIEW_LEFTBOTTOM){
+    if(selctedIndex == PREVIEW_LEFTBOTTOM){
         camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
         if(editorScene->camPreviewScale==1.0){
             editorScene->camPreviewOrigin.x=0;
@@ -3588,7 +3597,7 @@ void downloadFile(NSString* url, NSString* fileName)
             camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * editorScene->camPreviewScale);
             editorScene->camPreviewOrigin.x=0.0000;
             editorScene->camPreviewOrigin.y=self.renderView.layer.bounds.size.height*editorScene->screenScale-camPrevRatio;
-            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;;
+            editorScene->camPreviewEnd.x=editorScene->camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
             editorScene->camPreviewEnd.y=editorScene->camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
             
         }
@@ -3661,11 +3670,16 @@ void downloadFile(NSString* url, NSString* fileName)
     //frame1.origin.y = (self.topView.frame.size.height); // new y coordinate
     self.leftView.frame = frame1;
     
+    int toolBarPos = selctedIndex;
+    
     if(editorScene) {
-        editorScene->topLeft = Vector2((selctedIndex==TOOLBAR_RIGHT) ? 0.0 : self.rightView.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
-        editorScene->topRight = Vector2((selctedIndex==TOOLBAR_RIGHT) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
-        editorScene->bottomLeft = Vector2((selctedIndex==TOOLBAR_RIGHT) ? 0.0 : self.rightView.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
-        editorScene->bottomRight = Vector2((selctedIndex==TOOLBAR_RIGHT) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
+        editorScene->topLeft = Vector2((toolBarPos == TOOLBAR_RIGHT) ? (self.leftView.frame.size.width + self.leftView.frame.origin.x) : (self.rightView.frame.size.width + self.rightView.frame.origin.x) , self.topView.frame.size.height) * editorScene->screenScale;
+        
+        editorScene->topRight = Vector2((toolBarPos == TOOLBAR_RIGHT) ? self.rightView.frame.origin.x : self.leftView.frame.origin.x, self.topView.frame.size.height) * editorScene->screenScale;
+        
+        editorScene->bottomLeft = Vector2((toolBarPos == TOOLBAR_RIGHT) ? (self.leftView.frame.size.width + self.leftView.frame.origin.x) : (self.rightView.frame.size.width + self.rightView.frame.origin.x), self.view.frame.size.height) * editorScene->screenScale;
+        
+        editorScene->bottomRight = Vector2((toolBarPos == TOOLBAR_RIGHT) ? self.rightView.frame.origin.x : self.leftView.frame.origin.x, self.view.frame.size.height) * editorScene->screenScale;
         
         editorScene->renHelper->movePreviewToCorner();
     }

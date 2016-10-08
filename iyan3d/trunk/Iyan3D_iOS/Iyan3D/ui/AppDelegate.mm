@@ -55,13 +55,12 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:@"LoadingViewControllerPad" bundle:nil];
     
     if([Utility IsPadDevice]) {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-		loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:@"LoadingViewControllerPad" bundle:nil];
     } else {
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:([self iPhone6Plus]) ? @"LoadingViewControllerPhone@2x" : @"LoadingViewControllerPhone" bundle:nil];
     }
 
     [self.window setRootViewController:loadingViewController];

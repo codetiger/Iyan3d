@@ -23,7 +23,5 @@
     NSDate *startTime;
 }
 
-@property (weak, nonatomic) IBOutlet UILabel* ProgessLabel;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
