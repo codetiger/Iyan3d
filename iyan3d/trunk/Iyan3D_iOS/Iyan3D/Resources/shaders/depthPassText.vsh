@@ -4,15 +4,18 @@ attribute vec4 optionalData2;
 attribute vec4 optionalData3;
 attribute vec4 optionalData4;
 
-uniform mat4 jointTransforms[161];
+uniform mat4 jointTransforms[jointsSize];
 uniform mat4 mvp;
 
 void main()
 {
-    vec4 pos = vec4(0.0);
+    
+    mat4 finalMatrix = mat4(1.0);
+    
     int jointId = int(optionalData1.x);
-    float strength = optionalData2.x ;
-    pos = (jointTransforms[jointId - 1] * vec4(vertPosition,1.0)) * strength;    
-    gl_Position = (mvp) * pos;
+    if(jointId > 0)
+        finalMatrix = jointTransforms[jointId - 1] * optionalData2.x;
+    
+    gl_Position = mvp * finalMatrix * vec4(vertPosition, 1.0);
 }
 
