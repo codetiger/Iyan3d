@@ -314,7 +314,11 @@ void RenderHelper::postRTTDrawCall()
     if(renderingScene->previewTexture && (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying)) {
         movePreviewToCorner();
         Vector4 previewLayout = renderingScene->getCameraPreviewLayout();
-        smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x, previewLayout.y),Vector2(previewLayout.z, previewLayout.w), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
+        
+        if(renderingScene->whiteBorderTexture)
+            smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(previewLayout.x, previewLayout.y),Vector2(previewLayout.z, previewLayout.w), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+
+        smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x + 2.0, previewLayout.y + 2.0),Vector2(previewLayout.z - 2.0, previewLayout.w - 2.0), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
     }
 }
 
@@ -390,8 +394,8 @@ void RenderHelper::drawCameraPreview()
     }
     setControlsVisibility(false);
     
-    if(renderingScene->whiteBorderTexture)
-        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+//    if(renderingScene->whiteBorderTexture)
+//        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     smgr->Render(true);
     
     smgr->setRenderTarget(NULL, false, false);

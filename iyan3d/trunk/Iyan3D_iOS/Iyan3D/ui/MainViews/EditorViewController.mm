@@ -2300,12 +2300,8 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     }
     
     assetAddType = IMPORT_ASSET_ACTION;
-    if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ) && selectedAssetId != NOT_EXISTS)
+    if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT || selectedNodeType ==  NODE_SGM || selectedNodeType ==  NODE_OBJ))
     {
-        AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithCString:editorScene->nodes[selectedNode]->getProperty(TEXTURE).fileName.c_str()
-                                                   encoding:[NSString defaultCStringEncoding]];
-        assetItem.isTempAsset = YES;
         [self cloneSelectedAssetWithId:selectedAssetId NodeType:selectedNodeType AndSelNodeId:selectedNode];
         editorScene->animMan->copyKeysOfNode(selectedNode, (int)editorScene->nodes.size()-1);
         editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size()-1, true);
@@ -2385,12 +2381,9 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
         
         
-    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_PARTICLES || selectedNodeType == NODE_TEXT) && selectedAssetId != NOT_EXISTS) {
+    } else if((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_PARTICLES || selectedNodeType == NODE_TEXT)) {
         
         assetAddType = IMPORT_ASSET_ACTION;
-        AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
-                                                   encoding:[NSString defaultCStringEncoding]];
         [self cloneNodeByCopyingMesh:selectedNodeIndex];
 
         
@@ -2411,9 +2404,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size()-1);
     } else {
         assetAddType = IMPORT_ASSET_ACTION;
-        AssetItem *assetItem = [cache GetAsset:selectedAssetId];
-        assetItem.textureName = [NSString stringWithCString:sgNode->getProperty(TEXTURE).fileName.c_str()
-                                                   encoding:[NSString defaultCStringEncoding]];
         [self cloneNodeByCopyingMesh:selectedNodeIndex];
     }
     
@@ -3673,13 +3663,13 @@ void downloadFile(NSString* url, NSString* fileName)
     int toolBarPos = selctedIndex;
     
     if(editorScene) {
-        editorScene->topLeft = Vector2((toolBarPos == TOOLBAR_RIGHT) ? (self.leftView.frame.size.width + self.leftView.frame.origin.x) : (self.rightView.frame.size.width + self.rightView.frame.origin.x) , self.topView.frame.size.height) * editorScene->screenScale;
+        editorScene->topLeft = Vector2((toolBarPos == TOOLBAR_RIGHT) ? ((self.leftView.isHidden) ? 0.0 : self.leftView.frame.size.width + self.leftView.frame.origin.x) : (self.rightView.frame.size.width + self.rightView.frame.origin.x) , self.topView.frame.size.height) * editorScene->screenScale;
         
-        editorScene->topRight = Vector2((toolBarPos == TOOLBAR_RIGHT) ? self.rightView.frame.origin.x : self.leftView.frame.origin.x, self.topView.frame.size.height) * editorScene->screenScale;
+        editorScene->topRight = Vector2((toolBarPos == TOOLBAR_RIGHT) ? self.rightView.frame.origin.x : ((self.leftView.isHidden) ? self.view.frame.size.width :self.leftView.frame.origin.x), self.topView.frame.size.height) * editorScene->screenScale;
         
-        editorScene->bottomLeft = Vector2((toolBarPos == TOOLBAR_RIGHT) ? (self.leftView.frame.size.width + self.leftView.frame.origin.x) : (self.rightView.frame.size.width + self.rightView.frame.origin.x), self.view.frame.size.height) * editorScene->screenScale;
+        editorScene->bottomLeft = Vector2((toolBarPos == TOOLBAR_RIGHT) ? ((self.leftView.isHidden) ? 0.0 : (self.leftView.frame.size.width + self.leftView.frame.origin.x)) : (self.rightView.frame.size.width + self.rightView.frame.origin.x), self.view.frame.size.height) * editorScene->screenScale;
         
-        editorScene->bottomRight = Vector2((toolBarPos == TOOLBAR_RIGHT) ? self.rightView.frame.origin.x : self.leftView.frame.origin.x, self.view.frame.size.height) * editorScene->screenScale;
+        editorScene->bottomRight = Vector2((toolBarPos == TOOLBAR_RIGHT) ? self.rightView.frame.origin.x : ((self.leftView.isHidden) ? self.view.frame.size.width : self.leftView.frame.origin.x), self.view.frame.size.height) * editorScene->screenScale;
         
         editorScene->renHelper->movePreviewToCorner();
     }

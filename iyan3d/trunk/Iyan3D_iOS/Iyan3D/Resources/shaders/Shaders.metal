@@ -587,51 +587,42 @@ vertex ColorInOut Color_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffe
     float4 optionalData2 = vertex_array[vid].optionalData2;
     float4 optionalData3 = vertex_array[vid].optionalData3;
     float4 optionalData4 = vertex_array[vid].optionalData4;
-    float4 pos = float4(0.0);
+    
+    float4x4 finalMatrix = Identity();
     
     int jointId = int(optionalData1.x);
-    float strength = optionalData2.x ;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-    else
-        pos = in_position;
+        finalMatrix = Joint_Data[jointId - 1].JointTransform * optionalData2.x;
     
     jointId = int(optionalData1.y);
-    strength = optionalData2.y ;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.y);
     
     jointId = int(optionalData1.z);
-    strength = optionalData2.z ;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.z);
     
     jointId = int(optionalData1.w);
-    strength = optionalData2.w;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.w);
     
     jointId = int(optionalData3.x);
-    strength = optionalData4.x;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.x);
     
     jointId = int(optionalData3.y);
-    strength = optionalData4.y;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.y);
     
     jointId = int(optionalData3.z);
-    strength = optionalData4.z;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.z);
     
     jointId = int(optionalData3.w);
-    strength = optionalData4.w;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.w);
     
-    out.position = mvp * pos;
+    out.position = mvp * finalMatrix * in_position;
     out.meshColor = float3(meshColor[0].data);
     out.transparency = transparency[0];
     return out;
@@ -709,52 +700,43 @@ vertex ColorInOut Depth_Pass_Skin_vert(device vertex_heavy_t* vertex_array [[ bu
     float4 optionalData2 = vertex_array[vid].optionalData2;
     float4 optionalData3 = vertex_array[vid].optionalData3;
     float4 optionalData4 = vertex_array[vid].optionalData4;
-    float4 pos = float4(0.0);
+    
+    float4x4 finalMatrix = Identity();
     
     int jointId = int(optionalData1.x);
-    float strength = optionalData2.x ;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
-    else
-        pos = in_position;
+        finalMatrix = Joint_Data[jointId - 1].JointTransform * optionalData2.x;
     
     jointId = int(optionalData1.y);
-    strength = optionalData2.y ;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.y);
     
     jointId = int(optionalData1.z);
-    strength = optionalData2.z ;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.z);
     
     jointId = int(optionalData1.w);
-    strength = optionalData2.w;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData2.w);
     
     jointId = int(optionalData3.x);
-    strength = optionalData4.x;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.x);
     
     jointId = int(optionalData3.y);
-    strength = optionalData4.y;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.y);
     
     jointId = int(optionalData3.z);
-    strength = optionalData4.z;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.z);
     
     jointId = int(optionalData3.w);
-    strength = optionalData4.w;
     if(jointId > 0)
-        pos = pos + (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+        finalMatrix = finalMatrix + (Joint_Data[jointId - 1].JointTransform * optionalData4.w);
     
+    out.position = mvp * finalMatrix * in_position;
     
-    out.position = mvp * pos;
     return out;
 }
 
@@ -768,12 +750,15 @@ vertex ColorInOut Depth_Pass_Text_vert(device vertex_heavy_t* vertex_array [[ bu
     float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
     float4 optionalData1 = vertex_array[vid].optionalData1;
     float4 optionalData2 = vertex_array[vid].optionalData2;
-    float4 pos = float4(0.0);
+    
+    float4x4 finalMatrix = Identity();
     
     int jointId = int(optionalData1.x);
     float strength = optionalData2.x ;
+    if(jointId > 0)
+        finalMatrix = Joint_Data[jointId - 1].JointTransform * strength;
     
-    pos = (Joint_Data[jointId - 1].JointTransform * in_position) * strength;
+    float4 pos = finalMatrix * in_position;
     
     out.position = mvp * pos;
     return out;

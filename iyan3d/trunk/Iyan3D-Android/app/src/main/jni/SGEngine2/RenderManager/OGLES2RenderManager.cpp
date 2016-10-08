@@ -414,7 +414,6 @@ void OGLES2RenderManager::blendFunction(GLenum func)
 void OGLES2RenderManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 endCoord, Material *material, bool isRTT)
 {
     // to flip horizontally for opengl textures
-    setDepthFunction(GL_ALWAYS);
     Vector2 bottomRight = Helper::screenToOpenglCoords(originCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
     Vector2 upperLeft = Helper::screenToOpenglCoords(endCoord, (float)screenWidth * screenScale, (float)screenHeight * screenScale);
     vector<Vector3> vertPosition;
