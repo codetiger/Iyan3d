@@ -69,6 +69,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *colorWheelbtn;
 @property (weak, nonatomic) IBOutlet UISwitch *boneSwitch;
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
+
+- (IBAction)bevalChangeAction:(id)sender;
 - (IBAction)cancelBtnAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *noFontMessageLable;
 @property (weak, nonatomic) IBOutlet UILabel *addBoneLabel;

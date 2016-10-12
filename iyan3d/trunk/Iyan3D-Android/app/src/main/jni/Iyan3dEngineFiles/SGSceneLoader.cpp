@@ -257,6 +257,24 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
     currentScene->updater->updateControlsOrientaion();
     currentScene->freezeRendering = false;
     
+        if(sgnode->getType() == NODE_ADDITIONAL_LIGHT) {
+            ActionKey key = sgnode->getKeyForFrame(0);
+            float red = 1.0; float green = 1.0; float blue = 1.0;
+            if(key.isScaleKey) {
+                red = key.scale.x;
+                green = key.scale.y;
+                blue = key.scale.z;
+            }
+            float shadow = sgnode->getProperty(SHADOW_DARKNESS).value.x;
+            float distance = sgnode->getProperty(SPECIFIC_FLOAT).value.x;
+            int lightType = sgnode->getProperty(LIGHT_TYPE).value.x;
+            
+            currentScene->selectMan->selectObject(currentScene->nodes.size()-1, NOT_EXISTS, false);
+            currentScene->actionMan->changeLightProperty(red, green, blue, shadow, distance, lightType);
+            currentScene->selectMan->unselectObject(currentScene->nodes.size()-1);
+        }
+
+    
     return sgnode;
 }
 

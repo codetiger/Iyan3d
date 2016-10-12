@@ -121,6 +121,12 @@
     [self copyFontFilesFromDirectory:docDirPath ToDirectory:fontDirectoryPath withExtensions:fontExtensions];
     filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fontDirectoryPath error:Nil];
     fontListArray = [filesGathered filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
+    
+    if([fontListArray count] > 0){
+        fontFileName = [fontListArray objectAtIndex:0];
+        [[AppHelper getAppHelper] saveToUserDefaults:fontFileName withKey:@"Font_Store_Array"];
+    }
+
 }
 
 - (void)copyFontFilesFromDirectory:(NSString*)sourceDir ToDirectory:(NSString*)destinationDir withExtensions:(NSArray*)extensions
@@ -146,6 +152,7 @@
 
 - (IBAction)boneSwitchAction:(id)sender {
     withRig = (_boneSwitch.isOn) ? true : false;
+    [self load3dText];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -245,6 +252,12 @@
             [cell.displayText setHidden:NO];
             [cell.progress stopAnimating];
             [cell.progress setHidden:YES];
+            
+            if([fontListArray containsObject:fontFileName]) {
+                int index = [fontListArray indexOfObject:fontFileName];
+                if(indexPath.row == index)
+                    cell.layer.backgroundColor = [UIColor colorWithRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0].CGColor;
+            }
         }
     }
     

@@ -2561,7 +2561,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) animationBtnDelegateAction:(int)indexValue
 {
-    if(indexValue==APPLY_ANIMATION) {
+    if(indexValue == APPLY_ANIMATION) {
         [self.popoverController dismissPopoverAnimated:YES];
         if (editorScene->selectedNodeId <= 1 || (!(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG) && !(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_TEXT_SKIN)) || editorScene->isJointSelected) {
             [self.view endEditing:YES];
