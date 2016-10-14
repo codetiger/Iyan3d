@@ -92,7 +92,7 @@ void SkinMesh::copyJointsFromMesh(SkinMesh* otherMesh)
             newJ= addJoint(NULL);
         
         newJ->originalJointMatrix = originalJ->originalJointMatrix;
-        newJ->LocalAnimatedMatrix = originalJ->LocalAnimatedMatrix;
+        newJ->LocalAnimatedMatrix = originalJ->originalJointMatrix;
         
         
         for( int j = 0; j < originalJ->PaintedVertices->size(); ++j) {
