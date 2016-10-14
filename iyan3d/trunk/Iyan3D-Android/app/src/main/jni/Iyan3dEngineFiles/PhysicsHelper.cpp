@@ -62,22 +62,27 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
     switch (pType) {
         case PHYSICS_STATIC:
             sgNode->getProperty(WEIGHT).value.x = 0.0;
+        sgNode->getProperty(IS_SOFT).value.x = 0.0;
             return;
             break;
         case PHYSICS_LIGHT:
             density = 3.0;
+        sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
         case PHYSICS_MEDIUM:
             density = 9.0;
+        sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
         case PHYSICS_HEAVY:
             density = 27.0;
+        sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
         case PHYSICS_CLOTH:
         case PHYSICS_JELLY:
             sgNode->getProperty(IS_SOFT).value.x = 1.0;
             break;
         default:
+            sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
     }
     sgNode->node->updateBoundingBox();
