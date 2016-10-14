@@ -394,7 +394,7 @@ void SGActionManager::storeTexturesChangeAction(int selectedNodeId, std::string 
     }
 }
 
-void SGActionManager::updatePropsOnUndoRedo(PROP_INDEX pIndex, Vector4 value, int selectedNodeId)
+void SGActionManager::updatePropsOnUndoRedo(PROP_INDEX pIndex, Vector4 value, int selectedNodeId, int frame)
 {
     switch (pIndex) {
         case LIGHT_TYPE: {
@@ -431,6 +431,10 @@ void SGActionManager::updatePropsOnUndoRedo(PROP_INDEX pIndex, Vector4 value, in
                 else
                     actionScene->nodes[NODE_CAMERA]->getProperty((PROP_INDEX)pI).value.x = 0.0;
             }
+            break;
+        }
+        case VISIBILITY: {
+            actionScene->nodes[selectedNodeId]->setVisibility(value.x, frame);
             break;
         }
             
@@ -758,7 +762,7 @@ int SGActionManager::undo(int &returnValue2)
                 else
                     actionScene->nodes[indexOfAction]->getProperty(pIndex, matIndex).value = value;
                 
-                updatePropsOnUndoRedo(pIndex, value, indexOfAction);
+                updatePropsOnUndoRedo(pIndex, value, indexOfAction, recentAction.frameId);
             }
             break;
         }
@@ -904,7 +908,7 @@ int SGActionManager::redo()
                 else
                     actionScene->nodes[indexOfAction]->getProperty(pIndex, matIndex).value = value;
                 
-                updatePropsOnUndoRedo(pIndex, value, indexOfAction);
+                updatePropsOnUndoRedo(pIndex, value, indexOfAction, recentAction.frameId);
             }
             break;
         }

@@ -72,7 +72,7 @@ public:
     void changeLightProperty(float red , float green, float blue, float shadow,float distance, int lightType, bool isChanged = false);
     void storeLightPropertyChangeAction(float red , float green , float blue , float shadowDensity,float distance, int lightType);
 
-    void updatePropsOnUndoRedo(PROP_INDEX pIndex, Vector4 value, int selectedNodeId);
+    void updatePropsOnUndoRedo(PROP_INDEX pIndex, Vector4 value, int selectedNodeId, int frame);
     /* Mirror Change action */
     
     void setMirrorState(MIRROR_SWITCH_STATE flag);
