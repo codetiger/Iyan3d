@@ -34,6 +34,8 @@ SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_
     } else if(type == METAL) {
         #if !(TARGET_IPHONE_SIMULATOR)
             renderMan = (RenderManager*)initMetalRenderManager(renderView, width, height, screenScale);
+            if(!renderMan)
+                return NULL;
             common::deviceType = METAL;
         #endif
     }

@@ -27,7 +27,9 @@ MetalRenderManager::MetalRenderManager(void *renderView, float screenWidth, floa
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
     this->screenScale = screenScale;
-    setupMetal();
+    if(!setupMetal())
+        return NULL;
+    
     setUpDepthState(CompareFunctionLessEqual);
     isCmdBufferCommited = false; isEncodingEnded = true;
     renderingTexture = NULL;
@@ -42,16 +44,26 @@ MetalRenderManager::~MetalRenderManager()
         this->camera.reset();
 }
 
-void MetalRenderManager::setupMetal()
+bool MetalRenderManager::setupMetal()
 {
     device = MTLCreateSystemDefaultDevice();
     _commandQueue = [device newCommandQueue];
+    if(!_commandQueue)
+        return false;
+    
     _defaultLibrary = [device newDefaultLibrary];
+    if(!_defaultLibrary)
+        return false;
+
     setupMetalLayer();
     MetalHandler::setDevice(device);
     MetalHandler::setMTLLayer(_metalLayer);
     MetalHandler::setMTLLibrary(_defaultLibrary);
     _inflight_semaphore = dispatch_semaphore_create(4);
+    if(!currentDrawable())
+        return false;
+
+    return true;
 }
 
 void MetalRenderManager::setupMetalLayer()

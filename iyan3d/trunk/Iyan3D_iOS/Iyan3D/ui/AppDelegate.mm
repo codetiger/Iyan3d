@@ -99,9 +99,12 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
     NSLog(@" Error %@ ", error.localizedDescription);
 }
 
--(void) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*) view
+-(BOOL) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*) view
 {
     scenemgr = new SceneManager(width, height, screenScale, (DEVICE_TYPE)type, [[[NSBundle mainBundle] resourcePath] UTF8String], (__bridge void*)view);
+    if(!scenemgr)
+        return false;
+    return true;
 }
 
 +(AppDelegate *)getAppDelegate

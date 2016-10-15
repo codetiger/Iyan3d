@@ -20,7 +20,7 @@
 
 +(AppDelegate *)getAppDelegate;
 -(void*) getSceneManager;
--(void) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*)view; 
+-(BOOL) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*)view;
 -(bool) isMetalSupported;
 
 @end

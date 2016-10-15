@@ -395,7 +395,7 @@
         
     } else if (indexValue == RATE_US) {
         [self.popoverController dismissPopoverAnimated:YES];
-        NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
+        NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id1163508489?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
         
     } else if (indexValue == FOLLOW_US) {

@@ -63,7 +63,7 @@ private:
     bool isCmdBufferCommited,isEncodingEnded;
     float screenWidth,screenHeight, screenScale;
 
-    void setupMetal();
+    bool setupMetal();
     void setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth = true,bool setToRenderBuffer = false);
     void setupRenderPassDescriptorForTexture(id <MTLTexture> texture, Vector4 color = Vector4(0.0,0.0,0.0,1.0), bool isDepthPass = false);
     void freeDynamicBuffers();

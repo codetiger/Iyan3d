@@ -178,7 +178,6 @@ BOOL missingAlertShown;
     
     
 #if !(TARGET_IPHONE_SIMULATOR)
-    if (iOSVersion >= 8.0)
         isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
 #endif
 
@@ -295,14 +294,17 @@ BOOL missingAlertShown;
     [renderViewMan setupLayer:_renderView];
     
     if (isMetalSupported) {
-        [[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
-        smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-        
-        editorScene = new SGEditorScene(METAL, smgr, ScreenWidth * screenScale, ScreenHeight * screenScale, 4000);
-        [renderViewMan setUpPaths:smgr];
-        editorScene->screenScale = screenScale;
+        if(![[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView]) {
+            isMetalSupported = false;
+        } else {
+            smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
+            
+            editorScene = new SGEditorScene(METAL, smgr, ScreenWidth * screenScale, ScreenHeight * screenScale, 4000);
+            [renderViewMan setUpPaths:smgr];
+            editorScene->screenScale = screenScale;
+        }
     }
-    else {
+    if(!isMetalSupported) {
         
         maxUnisKey = [NSString stringWithFormat:@"maxUniforms%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
         maxJointsKey = [NSString stringWithFormat:@"maxJoints%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
@@ -2923,7 +2925,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
     } else if (indexValue == RATE_US) {
         [self.popoverController dismissPopoverAnimated:YES];
-        NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
+        NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id1163508489?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
     } else if (indexValue == FOLLOW_US) {
         [self.popoverController dismissPopoverAnimated:YES];
