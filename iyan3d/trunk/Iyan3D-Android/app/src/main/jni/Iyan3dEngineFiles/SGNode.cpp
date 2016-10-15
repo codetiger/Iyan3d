@@ -985,6 +985,10 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
     name = FileHelper::readWString(filePointer);
     int keysCount = FileHelper::readInt(filePointer);
     KeyHelper::readData(filePointer,keysCount,positionKeys, rotationKeys, scaleKeys, visibilityKeys);
+    ActionKey key = getKeyForFrame(0);
+    if(key.isRotationKey)
+        nodeInitialRotation = key.rotation;
+    
     joints.clear();
     int jointsCount = FileHelper::readInt(filePointer);
     for(int i = 0; i < jointsCount; i++)

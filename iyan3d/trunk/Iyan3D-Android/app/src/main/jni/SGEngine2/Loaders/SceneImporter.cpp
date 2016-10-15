@@ -527,10 +527,12 @@ void SceneImporter::loadDetails2Node(SGNode *sceneNode, Mesh* mesh, aiMatrix4x4 
     
     sceneNode->setPosition(m.getTranslation(), 0);
     sceneNode->setRotation(r, 0);
+    sceneNode->nodeInitialRotation = r;
     sceneNode->setScale(m.getScale(), 0);
     sgn->setPosition(m.getTranslation());
     sgn->setRotation(r);
     sgn->setScale(m.getScale());
+    sgn->updateAbsoluteTransformation();
     
     loadAnimationKeys(sceneNode);
     

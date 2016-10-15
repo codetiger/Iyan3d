@@ -275,6 +275,15 @@ void SGSelectionManager::updateParentPosition()
     Vector3 pivot = selectionScene->getPivotPoint(true);
     getParentNode()->setPosition(pivot, true);
     getParentNode()->setScale(prevScale, true);
+    Quaternion rot = getParentNode()->getRotation();
+    Vector3 euler;
+    rot.toEuler(euler);
+    euler = euler * RADTODEG;
+    euler.y = 1.0;
+    euler = euler * DEGTORAD;
+    rot = Quaternion(euler);
+    getParentNode()->setRotation(rot);
+    getParentNode()->setRotation(rot);
     getParentNode()->updateAbsoluteTransformation();
     storeRelativePositions();
     restoreRelativeScales(scaleValues);
