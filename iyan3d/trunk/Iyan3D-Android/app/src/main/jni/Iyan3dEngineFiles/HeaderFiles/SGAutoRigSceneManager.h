@@ -78,9 +78,6 @@ public:
     
     SGNode* getRiggedNode();
     
-    /* Call Backs */
-    void (*objLoaderCallBack)(int);
-    
     bool setSceneMode(AUTORIG_SCENE_MODE mode);
     void switchSceneMode(AUTORIG_SCENE_MODE mode);
     void initSkeletonJoints();

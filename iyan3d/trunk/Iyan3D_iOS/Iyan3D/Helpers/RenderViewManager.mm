@@ -127,33 +127,6 @@ SGEditorScene *editorScene;
 
 }
 
-- (void) setupAutoRigCallBacks
-{
-    editorScene->rigMan->objLoaderCallBack = &objLoaderCallBack;
-}
-
-
-void objLoaderCallBack(int status)
-{
-    
-    /* TODO show alert
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    AutoRigViewController *autoRigVC = (AutoRigViewController*)[[appDelegate window] rootViewController];
-    if(status == OBJ_CROSSED_MAX_VERTICES_LIMIT){
-        [autoRigVC.view endEditing:YES];
-        UIAlertView *objLoadMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"The obj file is too heavy. Maximum vertices limit is 2.7 Millions." delegate:autoRigVC cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [objLoadMsg show];
-    }else if(status == OBJ_NOT_LOADED){
-        UIAlertView *objLoadMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Please load any obj file to rig." delegate:autoRigVC cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [objLoadMsg show];
-    }else{
-        [autoRigVC.view endEditing:YES];
-        UIAlertView *objLoadMsg = [[UIAlertView alloc]initWithTitle:@"Information" message:@"Obj file corrupted please try another file." delegate:autoRigVC cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [objLoadMsg show];
-    }
-     */
-}
-
 void shaderCallBackForNode(int nodeID, string matName, int materialIndex, string callbackFuncName)
 {
     if(!editorScene)
