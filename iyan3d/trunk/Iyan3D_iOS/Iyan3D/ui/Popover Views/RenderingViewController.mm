@@ -147,14 +147,10 @@
     if([Utility IsPadDevice])
         return UIEdgeInsetsMake(20, 20, 20, 20);
     else {
-        if(iOSVersion >= 8.0 && ScreenWidth == 667)
-        {
+        if(ScreenWidth == 667)
             return UIEdgeInsetsMake(12, 170, 25, 70);
-        }
-        else if(iOSVersion >= 8.0 && ScreenWidth <= 640)
-        {
+        else if(ScreenWidth <= 640)
             return UIEdgeInsetsMake(12, 90, 25, 75);
-        }
         else
             return UIEdgeInsetsMake(20, 50, 25, 75);
     }

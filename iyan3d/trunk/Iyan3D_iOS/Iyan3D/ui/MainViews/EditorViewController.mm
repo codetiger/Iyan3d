@@ -178,7 +178,7 @@ BOOL missingAlertShown;
     
     
 #if !(TARGET_IPHONE_SIMULATOR)
-        isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
+    isMetalSupported = false;//(MTLCreateSystemDefaultDevice() != NULL) ? true : false;
 #endif
 
     constants::BundlePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
@@ -2914,7 +2914,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
             NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@ , iOS Version: %.01f)", [self deviceName],iOSVersion]];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@ , iOS Version: %s)", [self deviceName], iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
         }else {

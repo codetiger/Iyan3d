@@ -26,20 +26,11 @@
 + (Class)layerClass
 {
 #if !(TARGET_IPHONE_SIMULATOR)
-    if(iOSVersion >= 8.0) {
-        if(MTLCreateSystemDefaultDevice())
-            return [CAMetalLayer class];
-        else
+//        if(MTLCreateSystemDefaultDevice())
+//            return [CAMetalLayer class];
+//        else
+#endif
             return [CAEAGLLayer class];
-    }
-    else{
-        return [CAEAGLLayer class];
-    }
-    
-#endif
-#if (TARGET_IPHONE_SIMULATOR)
-        return [CAEAGLLayer class];
-#endif
 }
 
 @end
