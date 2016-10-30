@@ -121,7 +121,7 @@ public:
     PhysicsHelper * physicsHelper;
 
     std::map<int,Texture*> renderingTextureMap;
-    Texture *watermarkTexture, *whiteBorderTexture, *touchTexture;
+    Texture *whiteBorderTexture, *touchTexture;
     Texture *previewTexture, *thumbnailTexture, *alphaTexture;
     Plane3D *controlsPlane;
     Vector2 nodeJointPickerPosition;

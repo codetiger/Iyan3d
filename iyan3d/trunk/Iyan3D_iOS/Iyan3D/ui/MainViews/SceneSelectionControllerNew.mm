@@ -383,7 +383,7 @@
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
             NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d app (%@  , iOS Version: %s)", [self deviceName], iOSVersion]];
+            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d pro app (%@  , iOS Version: %@)", [self deviceName], iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
         } else {

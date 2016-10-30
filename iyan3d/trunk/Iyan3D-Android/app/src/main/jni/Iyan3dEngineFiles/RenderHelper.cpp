@@ -823,19 +823,13 @@ void RenderHelper::renderAndSaveImage(char *imagePath, bool isDisplayPrepared, i
     
     smgr->Render(false);
     
-    if(renderingScene->watermarkTexture)
-        smgr->RemoveTexture(renderingScene->watermarkTexture);
-    
     int totalImgs = 118;
     int index = 0;
     if(frame > -1) {
         int divisor = (frame > totalImgs) ? frame/totalImgs : 1;
         index = (frame > totalImgs) ? frame - (divisor * totalImgs) : frame;
     }
-    string watermarkPath = constants::BundlePath + "/wm" + to_string(index) + ".png";
-    renderingScene->watermarkTexture = smgr->loadTexture("waterMarkTexture", watermarkPath, TEXTURE_RGBA8, TEXTURE_BYTE, true);
-    int waterMarkSize = SceneHelper::screenWidth * 0.2;
-    
+   
     if(smgr->device == METAL)
         rttShadowMap();
     
