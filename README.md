@@ -1,8 +1,8 @@
 # Iyan3d
 A 3D animation app for mobile devices (iOS, Android). Project can be built on both xCode on macOS or Android Studio. The complete source code is made open source with an intention to contribute back to the community. 
 
-![](screenshots/screen1.png)
-![](screenshots/screen2.png)
+![](screenshots/screen1.jpeg)
+![](screenshots/screen2.jpeg)
 
 ### Other Open Source softwares used:
 * Open Asset Import Library (assimp - https://github.com/assimp/assimp) 
