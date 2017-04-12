@@ -30,9 +30,9 @@ And a lot more. Will keep this section update as often as possible. Lots of code
 The source code contians other Open Source parts as mentioned in the above list. Rest of the code is released under permissive MIT License. 
 
 ### App Store Links
-Iyan 3D (Free) iOS - https://itunes.apple.com/app/id640516535
-Iyan 3D (Professional) iOS - https://itunes.apple.com/app/id1163508489 (Will be made free with next version)
-Iyan 3D (Free Android) - https://play.google.com/store/apps/details?id=com.smackall.animator
+* Iyan 3D (Free) iOS - https://itunes.apple.com/app/id640516535
+* Iyan 3D (Professional) iOS - https://itunes.apple.com/app/id1163508489 (Will be made free with next version)
+* Iyan 3D (Free Android) - https://play.google.com/store/apps/details?id=com.smackall.animator
 
 ### Contact
 If you found it useful in your projects, please feel free to write to me nharishankar@gmail.com
