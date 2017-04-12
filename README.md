@@ -19,3 +19,12 @@ And a lot more. Will keep this section update as often as possible. Lots of code
 * Check if proper license files are added for various Open Source codes. (These files were missed during commits.)
 * Fix bugs in softbody rendering
 * Clean code & add more documents
+
+### Contributions
+* Harishankar Narayanan (https://github.com/codetiger)
+* Previously maintainted at Smackall Games Pvt Ltd
+
+### License
+The source code contians other Open Source parts as mentioned in the above list. Rest of the code is released under permissive MIT License. 
+
+If you are using this code or if you found it useful in your projects, please feel free to write to me nharishankar@gmail.com
