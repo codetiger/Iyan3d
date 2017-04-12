@@ -12,6 +12,8 @@ A 3D animation app for mobile devices (iOS, Android). Project can be built on bo
 * FTGL (http://sourceforge.net/projects/ftgl)
 * Apple's GLKMath library (Re-implementation)
 * FreeType2 (https://sourceforge.net/projects/freetype/files/)
+* iGLU - OpenGL Utility Library (GLU) for iPhone OS. (https://code.google.com/archive/p/iphone-glu/)
+* libpng (http://libpng.sourceforge.net)
 
 And a lot more. Will keep this section update as often as possible. Lots of code were copied from different places and eventually we lost track of where we took. 
 
@@ -27,4 +29,5 @@ And a lot more. Will keep this section update as often as possible. Lots of code
 ### License
 The source code contians other Open Source parts as mentioned in the above list. Rest of the code is released under permissive MIT License. 
 
-If you are using this code or if you found it useful in your projects, please feel free to write to me nharishankar@gmail.com
+### Contact
+If you found it useful in your projects, please feel free to write to me nharishankar@gmail.com
