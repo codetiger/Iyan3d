@@ -1,6 +1,14 @@
 # Iyan3d
 A 3D animation app for mobile devices (iOS, Android). Project can be built on both xCode on macOS or Android Studio. The complete source code is made open source with an intention to contribute back to the community. 
 
+### Features
+* A complete 3D animation editor tool for both iOS & Android
+* Import 3d models from PC softwares (3ds, fbx, obj, dae)
+* Physics Simulation with RigidBody & Softbody (Cloth, Jelly, etc) implementations
+* Create 3d Text in any font style.
+* Render using OpenGL ES Builtin renderer at FullHD or other lower resolutions
+* Source code includes Server-side Ray Tracing Renderer implementation
+
 ![](screenshots/screen1.jpeg)
 ![](screenshots/screen2.jpeg)
 
