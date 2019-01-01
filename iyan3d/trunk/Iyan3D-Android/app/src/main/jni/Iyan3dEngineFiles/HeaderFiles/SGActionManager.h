@@ -50,6 +50,8 @@ public:
     void moveJoint(Vector3 outputValue, bool touchMove = false);
     bool isIKJoint(int jointId);
     void storeActionKeys(bool finished);
+    void storeActionKeysForMulti(bool finished);
+
     
     /* Scale Mesh*/
     //sabish

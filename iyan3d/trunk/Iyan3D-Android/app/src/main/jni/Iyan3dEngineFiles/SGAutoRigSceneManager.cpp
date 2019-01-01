@@ -502,6 +502,8 @@ bool SGAutoRigSceneManager::deallocAutoRig(bool isCompleted)
     if(isCompleted){
         for(int i = 0; i < rigScene->nodes.size(); i++){
             if(rigScene->nodes[i] == nodeToRig){
+                rigScene->selectMan->selectObject(i);
+                rigScene->actionMan->storeAddOrRemoveAssetAction(ACTION_ADD_BONE, 0);
                 rigScene->loader->removeObject(i);
                 break;
             }

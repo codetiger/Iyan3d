@@ -271,6 +271,7 @@ BOOL missingAlertShown;
 
 - (void) loadNode:(AssetItem*) asset
 {
+    NSLog(@"Asset Id : %d ", asset.assetId);
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
@@ -615,9 +616,11 @@ BOOL missingAlertShown;
 
 - (IBAction)rigAddToSceneAction:(id)sender
 {
-    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%d",editorScene->nodes[selectedNodeId]->assetId] TextureFileName:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"]];
+    
     if(editorScene->rigMan->deallocAutoRig(YES)){
-        editorScene->enterOrExitAutoRigMode(false);    }
+        editorScene->enterOrExitAutoRigMode(false);
+    }
+    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"]];
     [self autoRigViewButtonHandler:YES];
     [self updateAssetListInScenes:NODE_UNDEFINED assetName:@"" actionType:DELETE_OBJECT removeObjectAtIndex:selectedNodeId];
     selectedNodeId = -1;
@@ -1049,8 +1052,9 @@ BOOL missingAlertShown;
 - (IBAction)undoBtnAction:(id)sender
 {
     int returnValue2 = NOT_SELECTED;
+
+    ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);
     NSLog(@"Undo Return Value : %d",returnValue2);
-    ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);    
     switch (actionType) {
         case DO_NOTHING: {
             break;
@@ -1060,6 +1064,10 @@ BOOL missingAlertShown;
             if (nodeIndex < assetsInScenes.count) {
                 [renderViewMan removeNodeFromScene:nodeIndex IsUndoOrRedo:YES];
             }
+            break;
+        }
+        case ADD_MULTI_ASSET_BACK:{
+            [self undoMultiAssetDeleted:returnValue2];
             break;
         }
         case ADD_TEXT_IMAGE_BACK: {
@@ -1075,6 +1083,7 @@ BOOL missingAlertShown;
                 [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
             } else {
                 AssetItem* assetObject = [cache GetAsset:assetId];
+                assetObject.isTempAsset = NO;
                 [self loadNodeInScene:assetObject ActionType:assetAddType];
             }
             break;
@@ -1097,6 +1106,11 @@ BOOL missingAlertShown;
             break;
         }
     }
+}
+
+- (void) undoMultiAssetDeleted:(int)size
+{
+    [self undoBtnAction:nil];
 }
 
 - (IBAction)redoBtnAction:(id)sender
@@ -1131,6 +1145,7 @@ BOOL missingAlertShown;
                 [self addLightToScene:[NSString stringWithFormat:@"Light%d",numberOfLight] assetId:assetId];
             } else {
                 AssetItem* assetObject = [cache GetAsset:assetId];
+                assetObject.isTempAsset = NO;
                 [self loadNodeInScene:assetObject ActionType:assetAddType];
             }
         }
@@ -1139,7 +1154,6 @@ BOOL missingAlertShown;
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         [self HighlightFrame];
         [self.framesCollectionView reloadData];
-
 }
 
 
@@ -1504,7 +1518,7 @@ BOOL missingAlertShown;
     [data writeToFile:saveFileName atomically:YES];
     
     fileNameSalt = [Utility getMD5ForString:imgSalt];
-    
+
     NSMutableDictionary *imageDetails = [[NSMutableDictionary alloc] init];
         [imageDetails setObject:[NSNumber numberWithInt:ASSET_IMAGE] forKey:@"type"];
         [imageDetails setObject:[NSNumber numberWithInt:0] forKey:@"AssetId"];
@@ -2633,7 +2647,7 @@ void downloadFile(NSString* url, NSString* fileName)
     return sgmAsset.assetId;
 }
 
--(int)addrigFileToCacheDirAndDatabase:(NSString*)objmainfilenameRig TextureFileName:(NSString*)texturemainFileNameRig
+-(int)addrigFileToCacheDirAndDatabase:(NSString*)texturemainFileNameRig
 {
     NSString *tempDir = NSTemporaryDirectory();
     NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
@@ -2646,7 +2660,7 @@ void downloadFile(NSString* url, NSString* fileName)
     objAsset.type = 1;
     objAsset.name = [NSString stringWithFormat:@"autorig%d",[cache getNextAutoRigAssetId]];
     objAsset.iap = 0;
-    objAsset.keywords = [NSString stringWithFormat:@" %@ , %@ , %@",objmainfilenameRig,texturemainFileNameRig,@"autorig"];
+    objAsset.keywords = [NSString stringWithFormat:@" %@ , %@",texturemainFileNameRig,@"autorig"];
     objAsset.boneCount = 0;
     objAsset.hash = [self getMD5ForNonReadableFile:sgrFilePath];
     objAsset.modifiedDate = dateString;
@@ -2660,7 +2674,6 @@ void downloadFile(NSString* url, NSString* fileName)
     [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
     editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size()-1);
     editorScene->updater->setDataForFrame(editorScene->currentFrame);
-    ActionKey action = editorScene->nodes[editorScene->nodes.size()-1]->getKeyForFrame(editorScene->currentFrame);
 }
 
 -(void) storeRiginCachesDirectory:(NSString*)desFilename assetId:(int)localAssetId

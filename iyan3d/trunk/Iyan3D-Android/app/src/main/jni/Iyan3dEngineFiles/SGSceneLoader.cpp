@@ -265,7 +265,7 @@ bool SGSceneLoader::loadNodeOnUndoORedo(SGAction action, int actionType)
     sgNode->props.vertexColor.y = action.actionSpecificFloats[1];
     sgNode->props.vertexColor.z = action.actionSpecificFloats[2];
     sgNode->props.nodeSpecificFloat = action.actionSpecificFloats[3];
-    sgNode->props.prevMatName = ConversionHelper::getStringForWString(action.actionSpecificStrings[0]);
+    //sgNode->props.prevMatName = ConversionHelper::getStringForWString(action.actionSpecificStrings[0]);
     sgNode->optionalFilePath = ConversionHelper::getStringForWString(action.actionSpecificStrings[1]);
     sgNode->name = action.actionSpecificStrings[2];
     
@@ -319,14 +319,14 @@ void SGSceneLoader::performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType)
                     meshObject->joints[i]->scaleKeys = deleteAction.jointScaleKeys[i];
             }
         }
-        meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
+       // meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
         meshObject->actionId = currentScene->actionMan->actions[currentScene->actionMan->currentAction-1].objectIndex;
         currentScene->actionMan->currentAction--;
     }
     
     if(actionType == REDO_ACTION) {
         SGAction &deleteAction = currentScene->actionMan->actions[currentScene->actionMan->currentAction];
-        meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
+        //meshObject->props.prevMatName = ConversionHelper::getStringForWString(deleteAction.actionSpecificStrings[0]);
         meshObject->actionId = deleteAction.objectIndex;
         currentScene->actionMan->currentAction++;
     }
@@ -370,10 +370,15 @@ bool SGSceneLoader::removeSelectedObjects()
         return false;
     
     currentScene->selectMan->removeChildren(currentScene->getParentNode());
-    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++) {
+    for(int i = 0; i < currentScene->selectedNodeIds.size(); i++)
         currentScene->selectMan->unselectObject(currentScene->selectedNodeIds[i]);
+    
+    for(int i =0; i < currentScene->selectedNodeIds.size(); i++){
+        currentScene->selectMan->selectObject(currentScene->selectedNodeIds[i]);
+        currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_DELETED, 0);
         removeObject(currentScene->selectedNodeIds[i]);
     }
+    currentScene->actionMan->storeAddOrRemoveAssetAction(ACTION_MULTI_NODE_DELETED, 0);
     
     if(currentScene->getParentNode()) {
         smgr->RemoveNode(currentScene->getParentNode());

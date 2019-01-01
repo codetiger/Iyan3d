@@ -60,7 +60,10 @@ void SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPr
     }
     selectionScene->isRTTCompleted = true;
     
-    selectionScene->actionMan->storeActionKeys(false);
+    if(selectionScene->selectedNodeIds.size() > 0)
+        selectionScene->actionMan->storeActionKeysForMulti(false);
+    else
+        selectionScene->actionMan->storeActionKeys(false);
 }
 
 void SGSelectionManager::postNodeJointSelection()
@@ -353,7 +356,7 @@ void SGSelectionManager::highlightSelectedNode(int nodeId)
     int selectedNodeId = (nodeId == -1) ? selectionScene->selectedNodeId : nodeId;
     SGNode* currentSelectedNode = selectionScene->nodes[selectedNodeId];
     
-    currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
+    //currentSelectedNode->props.prevMatName = currentSelectedNode->node->material->name;
     currentSelectedNode->props.isSelected = true;
     //currentSelectedNode->props.isLighting = false;
     if(currentSelectedNode->getType() == NODE_RIG)
@@ -420,7 +423,7 @@ void SGSelectionManager::selectObject(int objectId)
 
     selectionScene->isNodeSelected = selectionScene->selectedNode->props.isSelected = true;
     
-    selectionScene->selectedNode->props.prevMatName = selectionScene->selectedNode->node->material->name;
+    //selectionScene->selectedNode->props.prevMatName = selectionScene->selectedNode->node->material->name;
     
     if(selectionScene->selectedNode->getType() == NODE_RIG)
         selectionScene->selectedNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
