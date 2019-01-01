@@ -176,15 +176,6 @@ BOOL missingAlertShown;
         [renderViewMan setupRenderBuffer];
         [renderViewMan setupFrameBuffer:smgr];
     }
-    if(editorScene) {
-        if([Utility IsPadDevice]) {
-            editorScene->topLimit = 64.0 * editorScene->screenScale;
-            editorScene->rightLimit = self.leftView.frame.size.width * editorScene->screenScale;// 160.0;
-        } else {
-            editorScene->topLimit = 48.0 * editorScene->screenScale;
-            editorScene->rightLimit = self.leftView.frame.size.width * editorScene->screenScale;//110.0;
-        }
-    }
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
         editorScene->camPreviewScale=[[[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]floatValue];
     }
@@ -2529,10 +2520,11 @@ void downloadFile(NSString* url, NSString* fileName)
     frame1.origin.y = self.topView.frame.size.height; // new y coordinate
     self.leftView.frame = frame1;
     if(editorScene) {
-        editorScene->topLeft = Vector2((selctedIndex==1) ? 0.0 : self.view.frame.size.width-self.leftView.frame.size.width, 0.0);
-        editorScene->topRight = Vector2((selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : self.view.frame.size.width, 0.0);
-        editorScene->bottomLeft = Vector2((selctedIndex==1) ? 0.0 : self.view.frame.size.width-self.leftView.frame.size.width, self.view.frame.size.height);
-        editorScene->bottomRight = Vector2((selctedIndex==1) ? self.view.frame.size.width-self.leftView.frame.size.width : self.view.frame.size.width, self.view.frame.size.height);
+        editorScene->topLeft = Vector2((selctedIndex==0) ? 0.0 : self.rightView.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
+        editorScene->topRight = Vector2((selctedIndex==0) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.topView.frame.size.height) * editorScene->screenScale;
+        editorScene->bottomLeft = Vector2((selctedIndex==0) ? 0.0 : self.rightView.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
+        editorScene->bottomRight = Vector2((selctedIndex==0) ? self.view.frame.size.width-self.rightView.frame.size.width : self.view.frame.size.width, self.view.frame.size.height) * editorScene->screenScale;
+        
         editorScene->renHelper->movePreviewToCorner();
     }
     [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:selctedIndex] withKey:@"toolbarPosition"];

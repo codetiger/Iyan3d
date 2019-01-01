@@ -180,11 +180,11 @@ void SGSceneUpdater::updateControlsOrientaion(bool forRTT)
     float distanceFromCamera = nodePos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
     float ctrlScale = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_SCALE);
     
-    ctrlScale = forRTT ? (ctrlScale * 1.5) : ctrlScale;
+    ctrlScale = forRTT ? (ctrlScale * 1.3) : ctrlScale;
     
     float ctrlDistanceFromNode = ((distanceFromCamera / CONTROLS_MARKED_DISTANCE_FROM_CAMERA) * CONTROLS_MARKED_DISTANCE_FROM_NODE);
     
-    ctrlDistanceFromNode = forRTT ? (ctrlDistanceFromNode/1.5) : ctrlDistanceFromNode;
+    ctrlDistanceFromNode = forRTT ? (ctrlDistanceFromNode/1.3) : ctrlDistanceFromNode;
     
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
         SGNode* currentControl = updatingScene->sceneControls[i];

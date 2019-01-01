@@ -256,17 +256,25 @@ void RenderHelper::movePreviewToCorner()
     float minimumDistance = MIN(MIN(distance1, distance2) , MIN(distance3, distance4));
     
     if(distance1 == minimumDistance && distance1 > 0.0) {
-        renderingScene->camPreviewOrigin.x -= 20.0;
-        renderingScene->camPreviewOrigin.y -= 20.0;
-    } else if(distance2 == minimumDistance && distance2 > 0.0){
-        renderingScene->camPreviewOrigin.x -= 20.0;
-        renderingScene->camPreviewOrigin.y += 20.0;
-    } else if(distance3 == minimumDistance && distance3 > 0.0){
-        renderingScene->camPreviewOrigin.x += 20.0;
-        renderingScene->camPreviewOrigin.y -= 20.0;
-    } else if(distance4 == minimumDistance && distance4 > 0.0){
-        renderingScene->camPreviewOrigin.x += 20.0;
-        renderingScene->camPreviewOrigin.y += 20.0;
+        if(renderingScene->camPreviewOrigin.x > leftTop.x)
+            renderingScene->camPreviewOrigin.x -= 20.0;
+        if(renderingScene->camPreviewOrigin.y > leftTop.y)
+            renderingScene->camPreviewOrigin.y -= 20.0;
+    } else if(distance2 == minimumDistance && distance2 > 0.0) {
+        if(renderingScene->camPreviewOrigin.x > leftBottom.x)
+            renderingScene->camPreviewOrigin.x -= 20.0;
+        if(renderingScene->camPreviewEnd.y < (leftBottom.y - 1.0))
+            renderingScene->camPreviewOrigin.y += 20.0;
+    } else if(distance3 == minimumDistance && distance3 > 0.0) {
+        if(renderingScene->camPreviewEnd.x < (rightTop.x  - 1.0))
+            renderingScene->camPreviewOrigin.x += 20.0;
+        if(renderingScene->camPreviewOrigin.y > rightTop.y)
+            renderingScene->camPreviewOrigin.y -= 20.0;
+    } else if(distance4 == minimumDistance && distance4 > 0.0) {
+        if(renderingScene->camPreviewEnd.x < (rightBotton.x  - 1.0))
+            renderingScene->camPreviewOrigin.x += 20.0;
+        if(renderingScene->camPreviewEnd.y < (rightBotton.y  - 1.0))
+            renderingScene->camPreviewOrigin.y += 20.0;
     }
     
 }
@@ -763,7 +771,7 @@ void RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
     int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     renderingScene->rotationCircle->node->setVisible(false);
     smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
-    renderingScene->updater->updateControlsOrientaion(false); // TODO
+    renderingScene->updater->updateControlsOrientaion(true);
     for(int i = controlStartIndex;i <= controlEndIndex;i++){
         renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR));
         renderingScene->sceneControls[i]->props.vertexColor = Vector3(i/255.0,1.0,1.0);

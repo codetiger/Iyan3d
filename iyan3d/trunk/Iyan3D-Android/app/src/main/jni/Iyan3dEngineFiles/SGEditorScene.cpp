@@ -229,16 +229,17 @@ void SGEditorScene::setTransparencyForObjects()
 Vector4 SGEditorScene::getCameraPreviewLayout()
 {
     float camPrevRatio = RESOLUTION[cameraResolutionType][1] / ((SceneHelper::screenHeight) * CAM_PREV_PERCENT * camPreviewScale);
-    float limitX = (SceneHelper::screenWidth - rightLimit) - (SceneHelper::screenWidth * CAM_PREV_PERCENT * camPreviewScale);
-    float limitY = SceneHelper::screenHeight - (SceneHelper::screenHeight * CAM_PREV_PERCENT * camPreviewScale);
-    if(previousDistance != renHelper->cameraPreviewMoveDist && camPreviewOrigin.x > 0.0 && camPreviewOrigin.y >= topLimit && camPreviewOrigin.x <= limitX && camPreviewOrigin.y <= limitY) {
+    float limitX = topRight.x - (RESOLUTION[cameraResolutionType][0] / camPrevRatio);
+    float limitY = SceneHelper::screenHeight - (RESOLUTION[cameraResolutionType][1] / camPrevRatio);
+    
+    if(previousDistance != renHelper->cameraPreviewMoveDist && camPreviewOrigin.x >= topLeft.x && camPreviewOrigin.y >= topLeft.y && camPreviewOrigin.x <= limitX && camPreviewOrigin.y <= limitY) {
         camPreviewOrigin.x -= renHelper->cameraPreviewMoveDist.x;
         camPreviewOrigin.y -= renHelper->cameraPreviewMoveDist.y;
     } else {
-        camPreviewOrigin.x = (camPreviewOrigin.x <= 0.0) ? 0.1 : camPreviewOrigin.x;
-        camPreviewOrigin.y = (camPreviewOrigin.y <= topLimit) ? topLimit : camPreviewOrigin.y;
-        camPreviewOrigin.x = (camPreviewOrigin.x >= limitX) ? limitX : camPreviewOrigin.x;
-        camPreviewOrigin.y = (camPreviewOrigin.y >= limitY) ? limitY : camPreviewOrigin.y;
+        camPreviewOrigin.x = (camPreviewOrigin.x < topLeft.x) ? topLeft.x : camPreviewOrigin.x;
+        camPreviewOrigin.y = (camPreviewOrigin.y < topLeft.y) ? topLeft.y : camPreviewOrigin.y;
+        camPreviewOrigin.x = (camPreviewOrigin.x > limitX) ? limitX : camPreviewOrigin.x;
+        camPreviewOrigin.y = (camPreviewOrigin.y > limitY) ? limitY : camPreviewOrigin.y;
     }
     camPreviewEnd.x = camPreviewOrigin.x + RESOLUTION[cameraResolutionType][0] / camPrevRatio;
     camPreviewEnd.y = camPreviewOrigin.y + RESOLUTION[cameraResolutionType][1] / camPrevRatio;
@@ -386,6 +387,8 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     bool displayPrepared = smgr->PrepareDisplay(thumbnailTexture->width,thumbnailTexture->height,false,true,false,Vector4(255,255,255,255));
     if(!displayPrepared)
         return;
+    
+    selectMan->unselectObjects();
     renHelper->setControlsVisibility(false);
     renHelper->setJointSpheresVisibility(false);
     rotationCircle->node->setVisible(false);

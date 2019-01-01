@@ -76,8 +76,6 @@ public:
     float cameraFOV;
     float cameraRadius;
     float camPreviewScale;
-    float topLimit;
-    float rightLimit;
     Vector2 topLeft;
     Vector2 topRight;
     Vector2 bottomLeft;
