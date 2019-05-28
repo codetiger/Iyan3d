@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -583,7 +583,6 @@
 		250E54B91D3E092C0081A7CB /* Icon0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250E54B61D3E092C0081A7CB /* Icon0@3x.png */; };
 		250E54BA1D3E092C0081A7CB /* Icon1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250E54B71D3E092C0081A7CB /* Icon1@3x.png */; };
 		250E54BB1D3E092C0081A7CB /* Icon1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250E54B71D3E092C0081A7CB /* Icon1@3x.png */; };
-		250F58C11D4C9BDC006EB24A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		250FEC1B1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */; };
 		250FEC1C1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC141D1E52D2000C8A2C /* Divider-1@2x.png */; };
 		250FEC1D1D1E52D2000C8A2C /* round-close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC151D1E52D2000C8A2C /* round-close@2x.png */; };
@@ -2051,19 +2050,19 @@
 		7FC524F31B6F8C0A00C5D26D /* Minimize-Full-screen-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC524D21B6F6F3600C5D26D /* Minimize-Full-screen-phone@3x.png */; };
 		7FC524F41B6F8C0A00C5D26D /* Minimize-Full-screen.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC524D31B6F6F3600C5D26D /* Minimize-Full-screen.png */; };
 		7FC524F51B6F8C0A00C5D26D /* Minimize-Full-screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC524D41B6F6F3600C5D26D /* Minimize-Full-screen@2x.png */; };
-		7FC527611B6F96FF00C5D26D /* Mail-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527571B6F96FF00C5D26D /* Mail-phone.png */; };
-		7FC527621B6F96FF00C5D26D /* Mail-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527581B6F96FF00C5D26D /* Mail-phone@2x.png */; };
-		7FC527631B6F96FF00C5D26D /* Mail-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527591B6F96FF00C5D26D /* Mail-phone@3x.png */; };
-		7FC527641B6F96FF00C5D26D /* Mail.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275A1B6F96FF00C5D26D /* Mail.png */; };
+		7FC527611B6F96FF00C5D26D /* Mail1-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527571B6F96FF00C5D26D /* Mail1-phone.png */; };
+		7FC527621B6F96FF00C5D26D /* Mail1-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527581B6F96FF00C5D26D /* Mail1-phone@2x.png */; };
+		7FC527631B6F96FF00C5D26D /* Mail1-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527591B6F96FF00C5D26D /* Mail1-phone@3x.png */; };
+		7FC527641B6F96FF00C5D26D /* Mail1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275A1B6F96FF00C5D26D /* Mail1.png */; };
 		7FC527661B6F96FF00C5D26D /* Rate-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275C1B6F96FF00C5D26D /* Rate-phone.png */; };
 		7FC527671B6F96FF00C5D26D /* Rate-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275D1B6F96FF00C5D26D /* Rate-phone@2x.png */; };
 		7FC527681B6F96FF00C5D26D /* Rate-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275E1B6F96FF00C5D26D /* Rate-phone@3x.png */; };
 		7FC527691B6F96FF00C5D26D /* Rate.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275F1B6F96FF00C5D26D /* Rate.png */; };
 		7FC5276A1B6F96FF00C5D26D /* Rate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527601B6F96FF00C5D26D /* Rate@2x.png */; };
-		7FC5276B1B6F983D00C5D26D /* Mail-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527571B6F96FF00C5D26D /* Mail-phone.png */; };
-		7FC5276C1B6F983D00C5D26D /* Mail-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527581B6F96FF00C5D26D /* Mail-phone@2x.png */; };
-		7FC5276D1B6F983D00C5D26D /* Mail-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527591B6F96FF00C5D26D /* Mail-phone@3x.png */; };
-		7FC5276E1B6F983D00C5D26D /* Mail.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275A1B6F96FF00C5D26D /* Mail.png */; };
+		7FC5276B1B6F983D00C5D26D /* Mail1-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527571B6F96FF00C5D26D /* Mail1-phone.png */; };
+		7FC5276C1B6F983D00C5D26D /* Mail1-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527581B6F96FF00C5D26D /* Mail1-phone@2x.png */; };
+		7FC5276D1B6F983D00C5D26D /* Mail1-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC527591B6F96FF00C5D26D /* Mail1-phone@3x.png */; };
+		7FC5276E1B6F983D00C5D26D /* Mail1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275A1B6F96FF00C5D26D /* Mail1.png */; };
 		7FC527701B6F983D00C5D26D /* Rate-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275C1B6F96FF00C5D26D /* Rate-phone.png */; };
 		7FC527711B6F983D00C5D26D /* Rate-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275D1B6F96FF00C5D26D /* Rate-phone@2x.png */; };
 		7FC527721B6F983D00C5D26D /* Rate-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC5275E1B6F96FF00C5D26D /* Rate-phone@3x.png */; };
@@ -4105,10 +4104,10 @@
 		7FC524D21B6F6F3600C5D26D /* Minimize-Full-screen-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Minimize-Full-screen-phone@3x.png"; path = "Resources/imgs/Minimize-Full-screen-phone@3x.png"; sourceTree = "<group>"; };
 		7FC524D31B6F6F3600C5D26D /* Minimize-Full-screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Minimize-Full-screen.png"; path = "Resources/imgs/Minimize-Full-screen.png"; sourceTree = "<group>"; };
 		7FC524D41B6F6F3600C5D26D /* Minimize-Full-screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Minimize-Full-screen@2x.png"; path = "Resources/imgs/Minimize-Full-screen@2x.png"; sourceTree = "<group>"; };
-		7FC527571B6F96FF00C5D26D /* Mail-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mail-phone.png"; path = "Resources/imgs/Mail-phone.png"; sourceTree = "<group>"; };
-		7FC527581B6F96FF00C5D26D /* Mail-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mail-phone@2x.png"; path = "Resources/imgs/Mail-phone@2x.png"; sourceTree = "<group>"; };
-		7FC527591B6F96FF00C5D26D /* Mail-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mail-phone@3x.png"; path = "Resources/imgs/Mail-phone@3x.png"; sourceTree = "<group>"; };
-		7FC5275A1B6F96FF00C5D26D /* Mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Mail.png; path = Resources/imgs/Mail.png; sourceTree = "<group>"; };
+		7FC527571B6F96FF00C5D26D /* Mail1-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mail1-phone.png"; path = "Resources/imgs/Mail1-phone.png"; sourceTree = "<group>"; };
+		7FC527581B6F96FF00C5D26D /* Mail1-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mail1-phone@2x.png"; path = "Resources/imgs/Mail1-phone@2x.png"; sourceTree = "<group>"; };
+		7FC527591B6F96FF00C5D26D /* Mail1-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mail1-phone@3x.png"; path = "Resources/imgs/Mail1-phone@3x.png"; sourceTree = "<group>"; };
+		7FC5275A1B6F96FF00C5D26D /* Mail1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Mail1.png; path = Resources/imgs/Mail1.png; sourceTree = "<group>"; };
 		7FC5275C1B6F96FF00C5D26D /* Rate-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Rate-phone.png"; path = "Resources/imgs/Rate-phone.png"; sourceTree = "<group>"; };
 		7FC5275D1B6F96FF00C5D26D /* Rate-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Rate-phone@2x.png"; path = "Resources/imgs/Rate-phone@2x.png"; sourceTree = "<group>"; };
 		7FC5275E1B6F96FF00C5D26D /* Rate-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Rate-phone@3x.png"; path = "Resources/imgs/Rate-phone@3x.png"; sourceTree = "<group>"; };
@@ -6428,10 +6427,10 @@
 				7FDF55091B736108006DC41F /* premium.png */,
 				7FDF550A1B736108006DC41F /* premium@2x.png */,
 				7FC524CB1B6F6F3600C5D26D /* Full-screen-phone.png */,
-				7FC527571B6F96FF00C5D26D /* Mail-phone.png */,
-				7FC527581B6F96FF00C5D26D /* Mail-phone@2x.png */,
-				7FC527591B6F96FF00C5D26D /* Mail-phone@3x.png */,
-				7FC5275A1B6F96FF00C5D26D /* Mail.png */,
+				7FC527571B6F96FF00C5D26D /* Mail1-phone.png */,
+				7FC527581B6F96FF00C5D26D /* Mail1-phone@2x.png */,
+				7FC527591B6F96FF00C5D26D /* Mail1-phone@3x.png */,
+				7FC5275A1B6F96FF00C5D26D /* Mail1.png */,
 				7FC5275C1B6F96FF00C5D26D /* Rate-phone.png */,
 				7FC5275D1B6F96FF00C5D26D /* Rate-phone@2x.png */,
 				7FC5275E1B6F96FF00C5D26D /* Rate-phone@3x.png */,
@@ -7102,7 +7101,7 @@
 		C885D7731876BE6100A45D71 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Smackall Games";
 				TargetAttributes = {
 					C885D77A1876BE6100A45D71 = {
@@ -7110,16 +7109,15 @@
 						ProvisioningStyle = Manual;
 					};
 					E20670DC1B049AA6006DD2F7 = {
-						DevelopmentTeam = 3MT93EVK96;
+						DevelopmentTeam = D85GHYVU2W;
 					};
 				};
 			};
 			buildConfigurationList = C885D7761876BE6100A45D71 /* Build configuration list for PBXProject "Iyan3D" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				fr,
 				da,
@@ -7143,6 +7141,7 @@
 				th,
 				tr,
 				nl,
+				Base,
 			);
 			mainGroup = C885D7721876BE6100A45D71;
 			productRefGroup = C885D77C1876BE6100A45D71 /* Products */;
@@ -7164,7 +7163,7 @@
 				2516DC0F1C5F915C0034145D /* particles.fsh in Resources */,
 				25EA75541C60C70A007E17CA /* alpha.png in Resources */,
 				01ACD09B1C3CEEE70096AD14 /* Bevel_IPhone.png in Resources */,
-				7FC527621B6F96FF00C5D26D /* Mail-phone@2x.png in Resources */,
+				7FC527621B6F96FF00C5D26D /* Mail1-phone@2x.png in Resources */,
 				25EC6CD21C7F39DD002CF5D2 /* wm106.png in Resources */,
 				7FC900C51A0A01470051B941 /* add-frame-phone.png in Resources */,
 				25BA85E91CCB81F500E68A58 /* particlesRTT.vsh in Resources */,
@@ -7453,7 +7452,7 @@
 				01ACD1041C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */,
 				62FB86791988D33A00AC7424 /* play-video.png in Resources */,
 				3DB4ABA01C75DA9400C89B5C /* Add-Bone-IPhone@3x.png in Resources */,
-				7FC527641B6F96FF00C5D26D /* Mail.png in Resources */,
+				7FC527641B6F96FF00C5D26D /* Mail1.png in Resources */,
 				E21A894B1B08A5AA00435C87 /* clock-phone@2x.png in Resources */,
 				25FA14901D3CE57600A95DA3 /* Icon1.png in Resources */,
 				25EC3D2A1D3612D6006AE211 /* Help_iphone.png in Resources */,
@@ -7842,7 +7841,7 @@
 				25EC6BAA1C7F066B002CF5D2 /* wm15.png in Resources */,
 				627A5F8119ED438600CB545C /* last.png in Resources */,
 				01F872EE1C3A6C4E009AA31E /* Import_IPhone@2x.png in Resources */,
-				7FC527631B6F96FF00C5D26D /* Mail-phone@3x.png in Resources */,
+				7FC527631B6F96FF00C5D26D /* Mail1-phone@3x.png in Resources */,
 				01ACD0EA1C3D3AE20096AD14 /* Render-Preview-position_Right-Top@2x.png in Resources */,
 				250FEC1D1D1E52D2000C8A2C /* round-close@2x.png in Resources */,
 				3DAEFFF31C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */,
@@ -7894,7 +7893,7 @@
 				3DD47BF41C60A43500E7CCFD /* 60003.sgm in Resources */,
 				25EC6BC01C7F066B002CF5D2 /* wm7.png in Resources */,
 				01B4CFF01C29219A0091E19B /* Next-Frame.png in Resources */,
-				7FC527611B6F96FF00C5D26D /* Mail-phone.png in Resources */,
+				7FC527611B6F96FF00C5D26D /* Mail1-phone.png in Resources */,
 				7F31A7561AA4960300A6E7B1 /* videoShare@3x.png in Resources */,
 				25EC6CC21C7F39DD002CF5D2 /* wm98.png in Resources */,
 				7FC901291A0A07860051B941 /* move-img@2x.png in Resources */,
@@ -8129,17 +8128,17 @@
 				3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				7FDF55141B73688F006DC41F /* premium@2x.png in Resources */,
-				7FC5276B1B6F983D00C5D26D /* Mail-phone.png in Resources */,
+				7FC5276B1B6F983D00C5D26D /* Mail1-phone.png in Resources */,
 				C8DF1FE21C242DBD00F689D6 /* close.png in Resources */,
 				250FEC591D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */,
 				25EC6C4D1C7F39DD002CF5D2 /* wm39.png in Resources */,
 				01F8732D1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */,
-				7FC5276C1B6F983D00C5D26D /* Mail-phone@2x.png in Resources */,
+				7FC5276C1B6F983D00C5D26D /* Mail1-phone@2x.png in Resources */,
 				3DB4ABA81C75F92000C89B5C /* Options_IPhone-@2X.png in Resources */,
 				25EC6CC71C7F39DD002CF5D2 /* wm100.png in Resources */,
-				7FC5276D1B6F983D00C5D26D /* Mail-phone@3x.png in Resources */,
+				7FC5276D1B6F983D00C5D26D /* Mail1-phone@3x.png in Resources */,
 				25EC6C7B1C7F39DD002CF5D2 /* wm62.png in Resources */,
-				7FC5276E1B6F983D00C5D26D /* Mail.png in Resources */,
+				7FC5276E1B6F983D00C5D26D /* Mail1.png in Resources */,
 				7FC527701B6F983D00C5D26D /* Rate-phone.png in Resources */,
 				01B02CD11C61CAB400C9102A /* My-objects-Image_IPhone@3x.png in Resources */,
 				25EC6C7D1C7F39DD002CF5D2 /* wm63.png in Resources */,
@@ -9023,7 +9022,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./FrameWorks/Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa";
+			shellScript = "./FrameWorks/Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -9263,7 +9262,6 @@
 				25730E611AFD3C7B0042F81A /* BitmapContextRep.m in Sources */,
 				256F6B8D1BF6246300154622 /* exportSGR.cpp in Sources */,
 				25730E6B1AFD3C7B0042F81A /* BitmapScaleManipulator.m in Sources */,
-				250F58C11D4C9BDC006EB24A /* Shaders.metal in Sources */,
 				25DE10BF1CAA8D6D0076F669 /* gim_contact.cpp in Sources */,
 				25DE10BD1CAA8D6D0076F669 /* gim_box_set.cpp in Sources */,
 				25DE111F1CAA8D6D0076F669 /* btRaycastVehicle.cpp in Sources */,
@@ -9737,19 +9735,27 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = NO;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Smackall Games (3MT93EVK96)";
-				DEVELOPMENT_TEAM = 3MT93EVK96;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = D85GHYVU2W;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -9768,10 +9774,10 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../assimp-master/include/",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				MTL_OPTIMIZATION_LEVEL = s;
+				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -9785,19 +9791,27 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = NO;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Smackall Games (3MT93EVK96)";
-				DEVELOPMENT_TEAM = 3MT93EVK96;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = D85GHYVU2W;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -9816,10 +9830,10 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../assimp-master/include/",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				MTL_OPTIMIZATION_LEVEL = s;
+				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -9831,6 +9845,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 3MT93EVK96;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -9844,7 +9860,6 @@
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
@@ -9857,7 +9872,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "74cc7fd5-c7e4-40ae-8354-fad5045525b8";
-				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d Pro Dist";
+				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -9867,6 +9882,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 3MT93EVK96;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -9880,7 +9897,6 @@
 				GCC_PREFIX_HEADER = "Iyan3D/Iyan3D-Prefix.pch";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
@@ -9893,7 +9909,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "74cc7fd5-c7e4-40ae-8354-fad5045525b8";
-				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d Pro Dist";
+				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -9926,6 +9942,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "Iyan3D-Simulator";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -9958,6 +9975,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "Iyan3D-Simulator";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

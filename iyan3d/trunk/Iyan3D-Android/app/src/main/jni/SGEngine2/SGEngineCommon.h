@@ -19,6 +19,6 @@
 #include "Core/common/Plane3D.h"
 #include "Core/common/Frustum.h"
 #include "Core/Nodes/LightNode.h"
-#include  "Core/Textures/Texture.h"
+#include "Core/Textures/Texture.h"
 
 #endif
