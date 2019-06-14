@@ -7,7 +7,6 @@
 //
 
 #import <AVFoundation/AVFoundation.h>
-#import <Crashlytics/Answers.h>
 
 #import "EditorViewController.h"
 #import "FrameCellNew.h"
@@ -636,7 +635,7 @@ BOOL missingAlertShown;
 
 - (void) load3dTextOnMainThread:(NSMutableDictionary*)fontDetails
 {
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     int type = [[fontDetails objectForKey:@"type"]intValue];
     int assetId = [[fontDetails objectForKey:@"AssetId"]intValue];
     std::wstring assetName = [self getwstring:[fontDetails objectForKey:@"typedText"]];
@@ -691,7 +690,7 @@ BOOL missingAlertShown;
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId
 {
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     [renderViewMan loadNodeInScene:ASSET_ADDITIONAL_LIGHT AssetId:assetId AssetName:[self getwstring:lightName] TextureName:(@"-1") Width:20 Height:50 isTempNode:NO More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
@@ -704,7 +703,7 @@ BOOL missingAlertShown;
 
 - (void)loadNodeForImage:(NSMutableDictionary*)nsDict
 {
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     std::wstring saltedFileName = [self getwstring:[nsDict objectForKey:@"AssetName"]];
     int type = [[nsDict objectForKey:@"type"]intValue];
     int assetId = [[nsDict objectForKey:@"AssetId"]intValue];
@@ -719,7 +718,7 @@ BOOL missingAlertShown;
 
 - (void) loadNode:(AssetItem*) asset
 {
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] TextureName:(asset.textureName) Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
     if (!asset.isTempAsset) {
         [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -952,7 +951,7 @@ BOOL missingAlertShown;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         editorScene->selectMan->unselectObjects();
-        [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+        [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
         [renderViewMan removeNodeFromScene:(int)indexPath.row IsUndoOrRedo:NO];
         [self reloadFrames];
         [tableView reloadData];
@@ -1040,8 +1039,6 @@ BOOL missingAlertShown;
 
 - (void) exitScene
 {
-    [self addFabricEvent:@"BackToScenes" WithAttribute:-1];
-    
     if(editorScene)
         editorScene->freezeRendering = true;
     
@@ -1054,7 +1051,7 @@ BOOL missingAlertShown;
     if(editorScene)
         editorScene->isPreviewMode = false;
     
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(removeAllSubViewAndMemory) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(saveAndExit) withObject:nil waitUntilDone:YES];
 }
@@ -1129,7 +1126,7 @@ BOOL missingAlertShown;
             }
             
         } else if(editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW) {
-            [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+            [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
             NSString *tempDir = NSTemporaryDirectory();
             NSString *sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
             string path = [sgrFilePath UTF8String];
@@ -1144,7 +1141,7 @@ BOOL missingAlertShown;
     }
     
     [self autoRigMirrorBtnHandler];
-    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
 }
 
 - (void) switchAutoRigSceneMode:(NSNumber*)number
@@ -1208,9 +1205,7 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)rigAddToSceneAction:(id)sender
-{
-    [Answers logCustomEventWithName:@"AutoRig-Completion" customAttributes:nil];
-    
+{    
     Vector3 vertexColor = Vector3(-1.0);
     if(editorScene->rigMan->nodeToRig->getProperty(IS_VERTEX_COLOR).value.x){
         Vector4 vColor = editorScene->rigMan->nodeToRig->getProperty(VERTEX_COLOR).value;
@@ -1225,7 +1220,7 @@ BOOL missingAlertShown;
 - (void) deallocateAutoRigOnMainThread:(NSNumber*) object
 {
     [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     if(editorScene->rigMan->deallocAutoRig([object boolValue])) {
         editorScene->enterOrExitAutoRigMode(false);
         [self setupEnableDisableControls];
@@ -1234,7 +1229,7 @@ BOOL missingAlertShown;
     selectedNodeId = -1;
     [self autoRigMirrorBtnHandler];
     [self highlightObjectList];
-    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
     [self reloadSceneObjects];
 }
 
@@ -1411,7 +1406,7 @@ BOOL missingAlertShown;
         return;
     editorScene->previousFrame = editorScene->currentFrame;
     editorScene->currentFrame = 0;
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     [self switchToFrame:editorScene->currentFrame];
     [self HighlightFrame];
 }
@@ -1419,7 +1414,7 @@ BOOL missingAlertShown;
 - (void) switchToFrame:(int)frame
 {
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
-    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
 }
 
 - (IBAction)myObjectsBtnAction:(id)sender
@@ -1601,7 +1596,7 @@ BOOL missingAlertShown;
         case DELETE_ASSET: {
             int nodeIndex = returnValue2;
             if (nodeIndex < assetsInScenes.count) {
-                [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+                [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
                 [renderViewMan removeNodeFromScene:nodeIndex IsUndoOrRedo:YES];
                 [self reloadFrames];
             }
@@ -1685,7 +1680,7 @@ BOOL missingAlertShown;
     }
     else if (returnValue == DELETE_ASSET) {
         if (editorScene->selectedNodeId < assetsInScenes.count) {
-            [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+            [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:YES];
             [self reloadFrames];
         }
@@ -2598,7 +2593,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 
 - (void) importBtnDelegateAction:(int)indexValue //TODO remove downloading json and showing store models
 {
-    [self addFabricEvent:@"ImportAction" WithAttribute:indexValue];
     switch (indexValue) {
 //        case IMPORT_PARTICLE:
 //        case IMPORT_MODELS: {
@@ -2718,47 +2712,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         default:
             break;
     }
-}
-
-- (void) addFabricEvent:(NSString*)eventName WithAttribute:(int)indexValue
-{
-    NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
-    
-    switch (indexValue) {
-//        case IMPORT_PARTICLE:
-//            [attributes setObject:@"Particles" forKey:@"Import"];
-//            break;
-//        case IMPORT_MODELS:
-//            [attributes setObject:@"Models" forKey:@"Import"];
-//            break;
-        case IMPORT_IMAGES:
-            [attributes setObject:@"Images" forKey:@"Import"];
-            break;
-        case IMPORT_VIDEO:
-            [attributes setObject:@"Videos" forKey:@"Import"];
-            break;
-        case IMPORT_TEXT:
-            [attributes setObject:@"Text" forKey:@"Import"];
-            break;
-//        case IMPORT_ADDBONE:
-//            [attributes setObject:@"AddBone" forKey:@"Import"];
-//            break;
-        case IMPORT_OBJFILE:
-            [attributes setObject:@"OBJ" forKey:@"Import"];
-            break;
-        case IMPORT_LIGHT:
-            [attributes setObject:@"Light" forKey:@"Import"];
-            break;
-        case IMAGE_EXPORT:
-            [attributes setObject:@"Image" forKey:@"Export"];
-            break;
-        case VIDEO_EXPORT:
-            [attributes setObject:@"Video" forKey:@"Export"];
-            break;
-        default:
-            break;
-    }
-    [Answers logCustomEventWithName:eventName customAttributes:attributes];
 }
 
 - (void) beginRigging
@@ -3350,7 +3303,7 @@ void downloadFile(NSString* url, NSString* fileName)
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->nodes[editorScene->selectedNodeId]->getProperty(HAS_PHYSICS).value = Vector4(status, 0, 0, 0);
         if(!status) {
-            [self showLoadingActivity];
+            [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
             [self syncSceneWithPhysicsWorld];
         }
     }
@@ -3360,7 +3313,7 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->setPropsOfObject(editorScene->nodes[editorScene->selectedNodeId], type);
-        [self showLoadingActivity];
+        [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
         [self syncSceneWithPhysicsWorld];
     }
     
@@ -3370,7 +3323,7 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
         editorScene->nodes[editorScene->selectedNodeId]->getProperty(FORCE_MAGNITUDE).value = Vector4(vel, 0, 0, true);
-        [self showLoadingActivity];
+        [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
         [self syncSceneWithPhysicsWorld];
     }
 }
@@ -3473,10 +3426,10 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     
     if(value == SHOW_PROGRESS){
-        [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+        [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
     }
     else if(value == HIDE_PROGRESS){
-        [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+        [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
     }
 }
 
@@ -3498,7 +3451,7 @@ void downloadFile(NSString* url, NSString* fileName)
             [self reloadFrames];
         }
         else if(buttonIndex == 2){
-            [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+            [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
             [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
             [self reloadFrames];
         }
@@ -3759,7 +3712,7 @@ void downloadFile(NSString* url, NSString* fileName)
 - (void) importObjWithIndexPath:(int) indexPath TextureName:(NSString*) textureFileName MeshColor:(Vector3) color HasTexture:(BOOL) hasTexture IsTempNode:(BOOL) isTempNode
 {
     
-    [self performSelectorInBackground:@selector(showLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
 
     NSString *displayName, *finalMeshName, *finalTextureName;
     int finalNodeType;
@@ -3822,7 +3775,7 @@ void downloadFile(NSString* url, NSString* fileName)
     [dict setObject:[NSNumber numberWithFloat:color.z] forKey:@"z"];
     
     [self performSelectorOnMainThread:@selector(loadObjOrSGM:) withObject:dict waitUntilDone:YES];
-    [self performSelectorInBackground:@selector(hideLoadingActivity) withObject:nil];
+    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
 }
 
 -(int)addSgmFileToCacheDirAndDatabase:(NSString*)fileName

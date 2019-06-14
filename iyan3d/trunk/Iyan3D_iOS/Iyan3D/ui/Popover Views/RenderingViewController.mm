@@ -5,9 +5,6 @@
 //  Created by Harishankar Narayanan on 15/02/14.
 //  Copyright (c) 2014 Smackall Games. All rights reserved.
 
-#import <Crashlytics/Answers.h>
-
-
 #import "RenderingViewController.h"
 #import "AVFoundation/AVAssetWriterInput.h"
 #import "AVFoundation/AVAssetWriter.h"
@@ -210,8 +207,6 @@
         [_progressSub setHidden:YES];
         [self cancelButtonAction:nil];
     } else {
-        [Answers logCustomEventWithName:@"ExportNextAction" customAttributes:@{}];
-        
         self.nextButton.accessibilityHint = @"";
         
         [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
@@ -483,9 +478,6 @@
 
 - (IBAction) cancelButtonAction:(id)sender
 {
-    if(sender != nil)
-        [Answers logCustomEventWithName:@"ExportCancelAction" customAttributes:@{}];
-
     cancelPressed = YES;
     [self.cancelActivityIndicator setHidden:false];
     [self.cancelActivityIndicator startAnimating];

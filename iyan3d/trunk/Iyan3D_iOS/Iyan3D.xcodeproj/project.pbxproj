@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -378,12 +378,6 @@
 		01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */; };
 		01BA32541C5CEC8C000A5F3E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */; };
 		01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
-		01C2B7941C46419300384370 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7911C46419300384370 /* TwitterKit.framework */; };
-		01C2B7951C46419300384370 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7911C46419300384370 /* TwitterKit.framework */; };
-		01C2B7961C46419300384370 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B7921C46419300384370 /* TwitterKitResources.bundle */; };
-		01C2B7971C46419300384370 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B7921C46419300384370 /* TwitterKitResources.bundle */; };
-		01C2B7981C46419300384370 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7931C46419300384370 /* TwitterCore.framework */; };
-		01C2B7991C46419300384370 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B7931C46419300384370 /* TwitterCore.framework */; };
 		01C2B79B1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
 		01C2B79C1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
 		01C2B79D1C46553500384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
@@ -680,10 +674,6 @@
 		2518159A1D1D5C51009F68A8 /* Step-4_-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815931D1D5C51009F68A8 /* Step-4_-img.png */; };
 		2518159B1D1D5C51009F68A8 /* Welcome-Img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815941D1D5C51009F68A8 /* Welcome-Img.png */; };
 		2518159C1D1D5C51009F68A8 /* Welcome-Img.png in Resources */ = {isa = PBXBuildFile; fileRef = 251815941D1D5C51009F68A8 /* Welcome-Img.png */; };
-		251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4541C2C191700A5D41D /* Crashlytics.framework */; };
-		251BF4571C2C191700A5D41D /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4541C2C191700A5D41D /* Crashlytics.framework */; };
-		251BF4581C2C191700A5D41D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4551C2C191700A5D41D /* Fabric.framework */; };
-		251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF4551C2C191700A5D41D /* Fabric.framework */; };
 		251BF4731C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */; };
 		251BF4741C2C1D4A00A5D41D /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4701C2C1D4A00A5D41D /* RenderHelper.cpp */; };
 		251BF4751C2C1D4A00A5D41D /* SceneHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 251BF4711C2C1D4A00A5D41D /* SceneHelper.cpp */; };
@@ -1839,6 +1829,8 @@
 		3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065371C7C28B600CB7158 /* My-objects-Particles.png */; };
 		3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
 		3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
+		4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
+		4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
 		4EB39D5C1D6AC06500C31179 /* 3dsfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D591D6AC06500C31179 /* 3dsfile.png */; };
 		4EB39D5D1D6AC06500C31179 /* 3dsfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D591D6AC06500C31179 /* 3dsfile.png */; };
 		4EB39D5E1D6AC06500C31179 /* daefile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D5A1D6AC06500C31179 /* daefile.png */; };
@@ -2553,7 +2545,54 @@
 		E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B31876EF8900966179 /* libsqlite3.dylib */; };
 		E2C4DB5A1A9F5FFC00F0AD12 /* light.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB591A9F5FFC00F0AD12 /* light.sgm */; };
 		E2C4DB5C1A9F602000F0AD12 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB5B1A9F602000F0AD12 /* light.png */; };
+		EC6558AEBD06CFEFBD18CACD /* Pods_Iyan3D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2451E05FAD8199031EEB3C /* Pods_Iyan3D.framework */; };
+		ED30F0C681FD76D88F88FE2E /* Pods_Iyan3D_Simulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C622659A484A36E4452B924F /* Pods_Iyan3D_Simulator.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4EA064F622B385B000E1DCF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2B63D462DB7F827C4B11FD51E4F8E2D;
+			remoteInfo = FirebaseCore;
+		};
+		4EA064F822B385B000E1DCF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2DA0D814DFCB860D31D7BCD63D795858;
+			remoteInfo = FirebaseInstanceID;
+		};
+		4EA064FA22B385B000E1DCF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B43874C6CBB50E7134FBEC24BABFE14F;
+			remoteInfo = GoogleUtilities;
+		};
+		4EA064FC22B385B000E1DCF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06FC5C9CF96D60C50FCD47D339C91951;
+			remoteInfo = nanopb;
+		};
+		4EA064FE22B385B000E1DCF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D9C713CF906E3CA1CCFFEFF4BE68E8F8;
+			remoteInfo = "Pods-Iyan3D";
+		};
+		4EA0650022B385B000E1DCF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DEFD5D13099461BDCA94FE5FA5C91C54;
+			remoteInfo = "Pods-Iyan3D-Simulator";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown-white@2x.png"; sourceTree = "<group>"; };
@@ -2751,9 +2790,6 @@
 		01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-skin@2x.png"; sourceTree = "<group>"; };
 		01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		01C2B77D1C462CFB00384370 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		01C2B7911C46419300384370 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterKit.framework; path = FrameWorks/TwitterKit.framework; sourceTree = "<group>"; };
-		01C2B7921C46419300384370 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = FrameWorks/TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
-		01C2B7931C46419300384370 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TwitterCore.framework; path = FrameWorks/TwitterCore.framework; sourceTree = "<group>"; };
 		01C2B79A1C46543200384370 /* color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color@2x.png"; sourceTree = "<group>"; };
 		01CCD1C01C3F927D00565664 /* ObjSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjSidePanel.h; sourceTree = "<group>"; };
 		01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjSidePanel.mm; sourceTree = "<group>"; };
@@ -2834,6 +2870,7 @@
 		01F873371C3A7DE4009AA31E /* Twitter_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Twitter_IPhone@2x.png"; sourceTree = "<group>"; };
 		01F873421C3A84BF009AA31E /* Next-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Next-frame_IPhone.png"; sourceTree = "<group>"; };
 		01F873431C3A84BF009AA31E /* Previous-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Previous-frame_IPhone.png"; sourceTree = "<group>"; };
+		16C0499CA70CE2CA87914930 /* Pods-Iyan3D-Simulator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D-Simulator.release.xcconfig"; path = "Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator.release.xcconfig"; sourceTree = "<group>"; };
 		25034FD31D24F9960036F201 /* BeginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BeginView.xib; path = "ui/Popover Views/OnBoarding/BeginView.xib"; sourceTree = "<group>"; };
 		25034FD41D24F9960036F201 /* BeginViewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BeginViewPhone.xib; path = "ui/Popover Views/OnBoarding/BeginViewPhone.xib"; sourceTree = "<group>"; };
 		25034FD51D24F9960036F201 /* BeginViewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "BeginViewPhone@2x.xib"; path = "ui/Popover Views/OnBoarding/BeginViewPhone@2x.xib"; sourceTree = "<group>"; };
@@ -2912,8 +2949,6 @@
 		251815921D1D5C51009F68A8 /* Step-3_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img.png"; sourceTree = "<group>"; };
 		251815931D1D5C51009F68A8 /* Step-4_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img.png"; sourceTree = "<group>"; };
 		251815941D1D5C51009F68A8 /* Welcome-Img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img.png"; sourceTree = "<group>"; };
-		251BF4541C2C191700A5D41D /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = FrameWorks/Crashlytics.framework; sourceTree = "<group>"; };
-		251BF4551C2C191700A5D41D /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = FrameWorks/Fabric.framework; sourceTree = "<group>"; };
 		251BF46D1C2C1D3900A5D41D /* RenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderHelper.h; sourceTree = "<group>"; };
 		251BF46E1C2C1D3900A5D41D /* SceneHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneHelper.h; sourceTree = "<group>"; };
 		251BF46F1C2C1D3900A5D41D /* SGEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEditorScene.h; sourceTree = "<group>"; };
@@ -3905,6 +3940,7 @@
 		3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
 		3DE065371C7C28B600CB7158 /* My-objects-Particles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles.png"; sourceTree = "<group>"; };
 		3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightAndVideoProperties.xib; path = "ui/Popover Views/LightAndVideoProperties.xib"; sourceTree = "<group>"; };
+		45C6C1F67AB758D3309FA446 /* Pods-Iyan3D.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D.debug.xcconfig"; path = "Target Support Files/Pods-Iyan3D/Pods-Iyan3D.debug.xcconfig"; sourceTree = "<group>"; };
 		4E0323661D7560D8007688B0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		4E0323671D7560E0007688B0 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E0323681D7560E6007688B0 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3926,6 +3962,8 @@
 		4E77F4B11D75608C00BFC279 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E77F4B21D75609D00BFC279 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E77F4B31D7560AA00BFC279 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		4EB39D591D6AC06500C31179 /* 3dsfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 3dsfile.png; path = Resources/imgs/3dsfile.png; sourceTree = "<group>"; };
 		4EB39D5A1D6AC06500C31179 /* daefile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = daefile.png; path = Resources/imgs/daefile.png; sourceTree = "<group>"; };
 		4EB39D5B1D6AC06500C31179 /* fbxfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fbxfile.png; path = Resources/imgs/fbxfile.png; sourceTree = "<group>"; };
@@ -4220,11 +4258,15 @@
 		8ADEFEA7197425E8001E159D /* bonelimits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bonelimits.json; path = Resources/jsonFiles/bonelimits.json; sourceTree = "<group>"; };
 		8ADEFEA8197425E8001E159D /* humanTPoseBoneLimits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = humanTPoseBoneLimits.json; path = Resources/jsonFiles/humanTPoseBoneLimits.json; sourceTree = "<group>"; };
 		8AED29BA198A29AD004FC1E5 /* viewCameraModes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = viewCameraModes.json; path = Resources/jsonFiles/viewCameraModes.json; sourceTree = "<group>"; };
+		8D6B3ECBDA6C891A3AEF71BF /* Pods-Iyan3D-Simulator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D-Simulator.debug.xcconfig"; path = "Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator.debug.xcconfig"; sourceTree = "<group>"; };
+		8F2451E05FAD8199031EEB3C /* Pods_Iyan3D.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Iyan3D.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4B5BBE6FEEBF4475ECD9ED8 /* Pods-Iyan3D.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D.release.xcconfig"; path = "Target Support Files/Pods-Iyan3D/Pods-Iyan3D.release.xcconfig"; sourceTree = "<group>"; };
 		C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAppUtilities.framework; path = FrameWorks/GoogleAppUtilities.framework; sourceTree = "<group>"; };
 		C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAuthUtilities.framework; path = FrameWorks/GoogleAuthUtilities.framework; sourceTree = "<group>"; };
 		C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleNetworkingUtilities.framework; path = FrameWorks/GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
 		C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = FrameWorks/GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
 		C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleUtilities.framework; path = FrameWorks/GoogleUtilities.framework; sourceTree = "<group>"; };
+		C622659A484A36E4452B924F /* Pods_Iyan3D_Simulator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Iyan3D_Simulator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C825377418EA881B00F49E91 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		C82EA4BA187E869F00A8468A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		C831F1B11876E0AC00966179 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -4332,16 +4374,13 @@
 				01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */,
 				C4BEFB031D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */,
 				25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */,
-				251BF4561C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
 				E262744419234C890036F8E3 /* GameKit.framework in Frameworks */,
 				E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */,
-				01C2B7941C46419300384370 /* TwitterKit.framework in Frameworks */,
 				2512BFE01CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */,
 				2593C41C1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */,
 				E2A343B119F123F8000EF7C2 /* MobileCoreServices.framework in Frameworks */,
 				E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */,
 				62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */,
-				251BF4581C2C191700A5D41D /* Fabric.framework in Frameworks */,
 				E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */,
 				C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */,
 				C4BEFB0B1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
@@ -4350,13 +4389,13 @@
 				C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */,
 				C4BEFB071D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
 				C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */,
-				01C2B7981C46419300384370 /* TwitterCore.framework in Frameworks */,
 				C4BEFB091D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */,
 				C831F1B21876E0AC00966179 /* Security.framework in Frameworks */,
 				C885D7811876BE6100A45D71 /* CoreGraphics.framework in Frameworks */,
 				C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */,
 				C885D77F1876BE6100A45D71 /* Foundation.framework in Frameworks */,
 				2512BFDA1CB24E0B006E19A3 /* GoogleAnalytics.a in Frameworks */,
+				EC6558AEBD06CFEFBD18CACD /* Pods_Iyan3D.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4373,21 +4412,17 @@
 				25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */,
 				C4BEFB041D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */,
 				01C2B79D1C46553500384370 /* Social.framework in Frameworks */,
-				251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */,
 				7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */,
 				E20671FD1B049AA6006DD2F7 /* MobileCoreServices.framework in Frameworks */,
 				2512BFE11CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */,
 				2593C41D1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */,
-				01C2B7991C46419300384370 /* TwitterCore.framework in Frameworks */,
 				E20671FE1B049AA6006DD2F7 /* libsqlite3.dylib in Frameworks */,
 				E20671FF1B049AA6006DD2F7 /* GameKit.framework in Frameworks */,
 				E20672001B049AA6006DD2F7 /* MessageUI.framework in Frameworks */,
-				251BF4571C2C191700A5D41D /* Crashlytics.framework in Frameworks */,
 				E20672021B049AA6006DD2F7 /* OpenGLES.framework in Frameworks */,
 				E20672031B049AA6006DD2F7 /* SystemConfiguration.framework in Frameworks */,
 				C4BEFB0C1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
 				C4BEFB061D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */,
-				01C2B7951C46419300384370 /* TwitterKit.framework in Frameworks */,
 				E20672051B049AA6006DD2F7 /* CoreData.framework in Frameworks */,
 				C4BEFB081D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
 				E20672071B049AA6006DD2F7 /* StoreKit.framework in Frameworks */,
@@ -4398,6 +4433,7 @@
 				E206720B1B049AA6006DD2F7 /* UIKit.framework in Frameworks */,
 				E206720D1B049AA6006DD2F7 /* Foundation.framework in Frameworks */,
 				2512BFDB1CB24E0B006E19A3 /* GoogleAnalytics.a in Frameworks */,
+				ED30F0C681FD76D88F88FE2E /* Pods_Iyan3D_Simulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6398,6 +6434,30 @@
 			path = Resources/images/assetSelection;
 			sourceTree = "<group>";
 		};
+		40C0CB788B261612FCF3E9F9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				45C6C1F67AB758D3309FA446 /* Pods-Iyan3D.debug.xcconfig */,
+				C4B5BBE6FEEBF4475ECD9ED8 /* Pods-Iyan3D.release.xcconfig */,
+				8D6B3ECBDA6C891A3AEF71BF /* Pods-Iyan3D-Simulator.debug.xcconfig */,
+				16C0499CA70CE2CA87914930 /* Pods-Iyan3D-Simulator.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4EA064EB22B385B000E1DCF0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4EA064F722B385B000E1DCF0 /* FirebaseCore.framework */,
+				4EA064F922B385B000E1DCF0 /* FirebaseInstanceID.framework */,
+				4EA064FB22B385B000E1DCF0 /* GoogleUtilities.framework */,
+				4EA064FD22B385B000E1DCF0 /* nanopb.framework */,
+				4EA064FF22B385B000E1DCF0 /* Pods_Iyan3D.framework */,
+				4EA0650122B385B000E1DCF0 /* Pods_Iyan3D_Simulator.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		62FB86591988D32000AC7424 /* imgs */ = {
 			isa = PBXGroup;
 			children = (
@@ -6880,9 +6940,11 @@
 		C885D7721876BE6100A45D71 = {
 			isa = PBXGroup;
 			children = (
+				4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */,
 				C885D7841876BE6100A45D71 /* Iyan3D */,
 				C885D77D1876BE6100A45D71 /* Frameworks */,
 				C885D77C1876BE6100A45D71 /* Products */,
+				40C0CB788B261612FCF3E9F9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6917,11 +6979,6 @@
 				01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */,
 				25095F381C5B631900CF7C68 /* AVFoundation.framework */,
 				01C2B77D1C462CFB00384370 /* Social.framework */,
-				01C2B7911C46419300384370 /* TwitterKit.framework */,
-				01C2B7921C46419300384370 /* TwitterKitResources.bundle */,
-				01C2B7931C46419300384370 /* TwitterCore.framework */,
-				251BF4541C2C191700A5D41D /* Crashlytics.framework */,
-				251BF4551C2C191700A5D41D /* Fabric.framework */,
 				25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */,
 				7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */,
 				E27E71C41AD27A8200B5DE77 /* Metal.framework */,
@@ -6938,6 +6995,8 @@
 				C885D77E1876BE6100A45D71 /* Foundation.framework */,
 				C885D7801876BE6100A45D71 /* CoreGraphics.framework */,
 				C885D7821876BE6100A45D71 /* UIKit.framework */,
+				8F2451E05FAD8199031EEB3C /* Pods_Iyan3D.framework */,
+				C622659A484A36E4452B924F /* Pods_Iyan3D_Simulator.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -6963,6 +7022,7 @@
 			children = (
 				254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */,
 				C885D7861876BE6100A45D71 /* Iyan3D-Info.plist */,
+				4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */,
 				C885D78A1876BE6100A45D71 /* main.m */,
 				C885D78C1876BE6100A45D71 /* Iyan3D-Prefix.pch */,
 				3D3E32341D40DD700067F933 /* Localizable.strings */,
@@ -7063,10 +7123,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C885D7B01876BE6200A45D71 /* Build configuration list for PBXNativeTarget "Iyan3D" */;
 			buildPhases = (
+				030EC959997B74CFF5C8DD0C /* [CP] Check Pods Manifest.lock */,
 				C885D7771876BE6100A45D71 /* Sources */,
 				C885D7781876BE6100A45D71 /* Frameworks */,
 				C885D7791876BE6100A45D71 /* Resources */,
-				25EA8ECE1BD8E773005DBA15 /* ShellScript */,
+				733EAC34D9B8DA355F986592 /* [CP] Embed Pods Frameworks */,
+				4EA0650322B389FE00E1DCF0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -7081,10 +7143,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E20674031B049AA6006DD2F7 /* Build configuration list for PBXNativeTarget "Iyan3D-Simulator" */;
 			buildPhases = (
+				6DE0B58DDE87D3271B4695B6 /* [CP] Check Pods Manifest.lock */,
 				E20670DD1B049AA6006DD2F7 /* Sources */,
 				E20671FB1B049AA6006DD2F7 /* Frameworks */,
 				E206720E1B049AA6006DD2F7 /* Resources */,
-				25DCF8181BDFA0840045AD96 /* ShellScript */,
+				33E21E0BEB9E83B09E1EF9DB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7114,7 +7177,7 @@
 				};
 			};
 			buildConfigurationList = C885D7761876BE6100A45D71 /* Build configuration list for PBXProject "Iyan3D" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -7146,6 +7209,12 @@
 			mainGroup = C885D7721876BE6100A45D71;
 			productRefGroup = C885D77C1876BE6100A45D71 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4EA064EB22B385B000E1DCF0 /* Products */;
+					ProjectRef = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C885D77A1876BE6100A45D71 /* Iyan3D */,
@@ -7153,6 +7222,51 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4EA064F722B385B000E1DCF0 /* FirebaseCore.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FirebaseCore.framework;
+			remoteRef = 4EA064F622B385B000E1DCF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4EA064F922B385B000E1DCF0 /* FirebaseInstanceID.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FirebaseInstanceID.framework;
+			remoteRef = 4EA064F822B385B000E1DCF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4EA064FB22B385B000E1DCF0 /* GoogleUtilities.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GoogleUtilities.framework;
+			remoteRef = 4EA064FA22B385B000E1DCF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4EA064FD22B385B000E1DCF0 /* nanopb.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = nanopb.framework;
+			remoteRef = 4EA064FC22B385B000E1DCF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4EA064FF22B385B000E1DCF0 /* Pods_Iyan3D.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Iyan3D.framework;
+			remoteRef = 4EA064FE22B385B000E1DCF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4EA0650122B385B000E1DCF0 /* Pods_Iyan3D_Simulator.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Iyan3D_Simulator.framework;
+			remoteRef = 4EA0650022B385B000E1DCF0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C885D7791876BE6100A45D71 /* Resources */ = {
@@ -7478,7 +7592,6 @@
 				7FC900D61A0A01470051B941 /* Menu-phone.png in Resources */,
 				01B02CBC1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */,
 				2515C36B1DA8D12000B4F622 /* launch.xib in Resources */,
-				01C2B7961C46419300384370 /* TwitterKitResources.bundle in Resources */,
 				7FC900F71A0A01470051B941 /* select-img-phone@2x.png in Resources */,
 				01F8728B1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
 				01F8727F1C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
@@ -7802,6 +7915,7 @@
 				25EC3D2C1D3612D6006AE211 /* info-icon_phone.png in Resources */,
 				7F307CEB1B58FBF10065BBC1 /* like-phone.png in Resources */,
 				25EC6B9E1C7F066B002CF5D2 /* wm1.png in Resources */,
+				4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */,
 				01ACD1021C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */,
 				7F31A73E1AA4960300A6E7B1 /* last-phone@3x.png in Resources */,
 				25243D191DA2891400BA517B /* Hot Pizza.ttf in Resources */,
@@ -8400,7 +8514,6 @@
 				2515C36C1DA8D12000B4F622 /* launch.xib in Resources */,
 				01F872801C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
 				01B02CBD1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */,
-				01C2B7971C46419300384370 /* TwitterKitResources.bundle in Resources */,
 				E20672571B049AA6006DD2F7 /* animate-img-phone.png in Resources */,
 				01B394F51C37A282003955C6 /* Play_Pad.png in Resources */,
 				25F748CE1D08085400FB0AFD /* gPlus_Pad.png in Resources */,
@@ -8722,6 +8835,7 @@
 				E206732D1B049AA6006DD2F7 /* BoneMesh.sgm in Resources */,
 				25EC6B9F1C7F066B002CF5D2 /* wm1.png in Resources */,
 				25EC3D2D1D3612D6006AE211 /* info-icon_phone.png in Resources */,
+				4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */,
 				01ACD1031C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */,
 				256F6B961BF6246300154622 /* json_valueiterator.inl in Resources */,
 				25243D1A1DA2891400BA517B /* Hot Pizza.ttf in Resources */,
@@ -8998,31 +9112,100 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		25DCF8181BDFA0840045AD96 /* ShellScript */ = {
+		030EC959997B74CFF5C8DD0C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputFileListPaths = (
+			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Iyan3D-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./FrameWorks/Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
-		25EA8ECE1BD8E773005DBA15 /* ShellScript */ = {
+		33E21E0BEB9E83B09E1EF9DB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4EA0650322B389FE00E1DCF0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
 			inputPaths = (
+			);
+			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./FrameWorks/Fabric.framework/run 82cc1475b1d0de67c92e1f4a294db129b3dc410d d56ed891b24e1d9b2b89e3db5a265c22a8b98c1e642e8820ed8d1df51b395ffa\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		6DE0B58DDE87D3271B4695B6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Iyan3D-Simulator-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		733EAC34D9B8DA355F986592 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D/Pods-Iyan3D-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D/Pods-Iyan3D-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Iyan3D/Pods-Iyan3D-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -9842,10 +10025,11 @@
 		};
 		C885D7B11876BE6200A45D71 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45C6C1F67AB758D3309FA446 /* Pods-Iyan3D.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 3MT93EVK96;
@@ -9872,17 +10056,18 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "74cc7fd5-c7e4-40ae-8354-fad5045525b8";
-				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
+				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dist";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		C885D7B21876BE6200A45D71 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C4B5BBE6FEEBF4475ECD9ED8 /* Pods-Iyan3D.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 3MT93EVK96;
@@ -9909,13 +10094,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "74cc7fd5-c7e4-40ae-8354-fad5045525b8";
-				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
+				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dist";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		E20674041B049AA6006DD2F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D6B3ECBDA6C891A3AEF71BF /* Pods-Iyan3D-Simulator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -9949,6 +10135,7 @@
 		};
 		E20674051B049AA6006DD2F7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16C0499CA70CE2CA87914930 /* Pods-Iyan3D-Simulator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -9990,7 +10177,7 @@
 				C885D7AF1876BE6200A45D71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		C885D7B01876BE6200A45D71 /* Build configuration list for PBXNativeTarget "Iyan3D" */ = {
 			isa = XCConfigurationList;
@@ -9999,7 +10186,7 @@
 				C885D7B21876BE6200A45D71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		E20674031B049AA6006DD2F7 /* Build configuration list for PBXNativeTarget "Iyan3D-Simulator" */ = {
 			isa = XCConfigurationList;
@@ -10008,7 +10195,7 @@
 				E20674051B049AA6006DD2F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -144,32 +144,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>6.1.0</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>82cc1475b1d0de67c92e1f4a294db129b3dc410d</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-			<dict>
-				<key>KitInfo</key>
-				<dict>
-					<key>consumerKey</key>
-					<string>BrgMtotFIwnFpSdPdbmY3nPBO</string>
-					<key>consumerSecret</key>
-					<string>mFMTdOyrmzAOwOVCgdugKQuGkta0TQmpxHYKrDcVOZoTy5a7Ot</string>
-				</dict>
-				<key>KitName</key>
-				<string>Twitter</string>
-			</dict>
-		</array>
-	</dict>
+	<string>6.1.3</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>dbapi-8-emm</string>
@@ -181,8 +156,12 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Iyan 3D needs permission to write to photos when you export a scene</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Access Photos</string>
+	<string>Iyan 3D needs permission to access photos when you import textures to your scene</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -205,6 +184,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>UTImportedTypeDeclarations</key>

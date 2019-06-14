@@ -7,8 +7,6 @@
 //
 
 
-#import <Crashlytics/Answers.h>
-
 #import "MediaPreviewVC.h"
 #import "AppDelegate.h"
 #import "SceneSelectionControllerNew.h"
@@ -214,7 +212,6 @@
 
 - (IBAction)addSceneButtonAction:(id)sender
 {
-    [Answers logCustomEventWithName:@"CreateNewSceneInTopLeft" customAttributes:@{}];
     [self addNewScene];
 }
 
@@ -295,7 +292,6 @@
     cell_center = [self.view convertPoint:cell_center fromView:self.scenesCollectionView];
     
     if(indexPath.row == [scenesArray count]) {
-        [Answers logCustomEventWithName:@"CreateNewSceneInCollectionView" customAttributes:@{}];
         [self addNewScene];
     }
     else
@@ -323,13 +319,6 @@
 
 -(void)openSCene: (int)selectedScene
 {
-    if(_fromLoadingView) {
-        NSMutableDictionary * attributes = [[NSMutableDictionary alloc] init];
-        if(_isAppFirstTime)
-            [attributes setObject:@"YES" forKey:@"FirstTimeUser"];
-        [Answers logCustomEventWithName:@"SceneOpenedFirstTime" customAttributes:attributes];
-    }
-    
     SceneItem *scene = scenesArray[selectedScene];
     [[AppHelper getAppHelper] resetAppHelper];
     

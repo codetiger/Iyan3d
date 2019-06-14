@@ -16,9 +16,6 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <mach/machine.h>
-#import <Fabric/Fabric.h>
-#import <TwitterKit/TwitterKit.h>
-#import <Crashlytics/Crashlytics.h>
 
 #include <sys/time.h>
 
@@ -38,13 +35,7 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[Twitter sharedInstance] startWithConsumerKey:@"FVYtYJI6e4lZMHoZvYCt2ejao" consumerSecret:@"eiFIXzb9zjoaH0lrDZ2Jrh2ezvbmuFv6rvPJdIXLYxgkaZ7YKC"];
-
-#if !(TARGET_IPHONE_SIMULATOR)
-    [Fabric with:@[[Crashlytics class], [Twitter class]]];
-#else
-    [Fabric with:@[[Twitter class]]];
-#endif
+    [FIRApp configure];
     
     NSDictionary *appDefaults = @{kAllowTracking: @(YES)};
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];

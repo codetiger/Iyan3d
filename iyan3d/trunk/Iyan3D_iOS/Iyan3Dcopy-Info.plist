@@ -91,26 +91,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>6.0</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>82cc1475b1d0de67c92e1f4a294db129b3dc410d</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Twitter</string>
-			</dict>
-		</array>
-	</dict>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

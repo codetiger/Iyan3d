@@ -11,6 +11,8 @@
 #import "GAI.h"
 #import "ZipArchive.h"
 
+#import <Firebase/Firebase.h>
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate > {
     LoadingViewControllerPad* loadingViewController;
 }

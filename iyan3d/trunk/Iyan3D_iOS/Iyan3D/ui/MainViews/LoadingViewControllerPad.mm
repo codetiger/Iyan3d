@@ -6,9 +6,6 @@
 //  Copyright (c) 2014 Smackall Games. All rights reserved.
 //
 
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Answers.h>
-
 #import "LoadingViewControllerPad.h"
 #import "SceneSelectionControllerNew.h"
 #import "EditorViewController.h"
@@ -26,8 +23,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
-        [Answers logCustomEventWithName:@"AppStart" customAttributes:@{}];
         startTime = [NSDate date];
         
         NSString* dbName = @"iyan3d-2-0.db";
@@ -272,12 +267,7 @@
 }
 
 - (void) loadSceneView
-{
-    NSDate *endTime = [NSDate date];
-    NSTimeInterval duration = [endTime timeIntervalSinceDate:startTime];
-    NSDictionary *attribute = @{@"duration" : [NSNumber numberWithDouble:duration]};
-    [Answers logCustomEventWithName:@"LoadingComplete" customAttributes:attribute];
-    
+{    
     if([Utility IsPadDevice]) {
         SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:YES];
         sceneSelectionView.fromLoadingView = true;

@@ -7,7 +7,6 @@
 //
 
 #import "MediaPreviewVC.h"
-#import <Crashlytics/Answers.h>
 #import "Utility.h"
 #import "AppHelper.h"
 
@@ -120,7 +119,6 @@
                 [attributes setObject:@"Image" forKey:@"Share"];
             else
                 [attributes setObject:@"Video" forKey:@"Share"];
-            [Answers logCustomEventWithName:@"ShareOnPreview" customAttributes:attributes];
         }
     }];
     
