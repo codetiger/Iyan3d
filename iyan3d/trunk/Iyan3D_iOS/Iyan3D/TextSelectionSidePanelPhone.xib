@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,12 +16,8 @@
                 <outlet property="boneSwitch" destination="tHe-ur-yd2" id="q0t-pR-EaA"/>
                 <outlet property="cancelBtn" destination="Mev-Ov-cY1" id="TD2-yc-Zzz"/>
                 <outlet property="collectionView" destination="eIk-mP-vhY" id="hwb-au-jMN"/>
-                <outlet property="dummyLeft" destination="NZ2-sC-xGy" id="NU9-y4-81f"/>
-                <outlet property="dummyRight" destination="NOX-e7-aB3" id="eXU-97-M7Q"/>
-                <outlet property="fontTab" destination="En3-oy-ObV" id="o97-q1-BUm"/>
                 <outlet property="inputText" destination="Mgu-M5-NDE" id="kQj-9s-7gU"/>
                 <outlet property="noFontMessageLable" destination="44d-4M-ayc" id="21I-v1-Er2"/>
-                <outlet property="titleView" destination="Dmc-wl-azw" id="b3e-7A-7hF"/>
                 <outlet property="view" destination="NWe-6l-AkU" id="ARx-ft-kZc"/>
             </connections>
         </placeholder>
@@ -28,11 +27,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="BEJ-0c-SmA">
-                    <frame key="frameInset" width="212" height="25.54%"/>
-                    <autoresizingMask key="autoresizingMask" heightSizable="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="0.0" y="0.0" width="212" height="71"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="50" id="vy3-C5-L16">
-                            <frame key="frameInset" minX="58" minY="40" height="31" maxX="54"/>
+                            <rect key="frame" x="58" y="40" width="100" height="31"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <accessibility key="accessibilityConfiguration" hint="Add bevel to 3D text." identifier="3"/>
@@ -41,15 +40,15 @@
                             </connections>
                         </slider>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bevel_IPhone.png" id="h4g-pD-1aG">
-                            <frame key="frameInset" minY="44" width="22" height="22" maxX="12"/>
+                            <rect key="frame" x="178" y="44" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="No-Bevel_IPhone.png" id="ZIi-mM-fmZ">
-                            <frame key="frameInset" minX="12" minY="44" width="22" height="22"/>
+                            <rect key="frame" x="12" y="44" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Text" textAlignment="natural" minimumFontSize="17" id="Mgu-M5-NDE">
-                            <frame key="frameInset" minX="16" minY="8" width="80.10%" height="30"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Text" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" id="Mgu-M5-NDE">
+                            <rect key="frame" x="16" y="8" width="179" height="30"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Enter your text here." identifier="3"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -62,51 +61,8 @@
                     </subviews>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.050980392159999999" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <view contentMode="scaleToFill" id="M1E-dN-GWT">
-                    <frame key="frameInset" minY="71" width="212" maxY="171"/>
-                    <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
-                    <subviews>
-                        <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="En3-oy-ObV">
-                            <frame key="frameInset" minX="33" minY="4" height="29" maxX="162"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                            <segments>
-                                <segment title="Font Store"/>
-                                <segment title="My Fonts"/>
-                            </segments>
-                            <color key="tintColor" red="0.51372549020000002" green="0.062745098040000002" blue="0.81176470590000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <action selector="fontStoreTapChangeAction:" destination="-1" eventType="valueChanged" id="NQC-Ag-7mb"/>
-                            </connections>
-                        </segmentedControl>
-                        <view contentMode="scaleToFill" id="NOX-e7-aB3">
-                            <frame key="frameInset" minX="184" minY="4" width="9" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        </view>
-                        <view contentMode="scaleToFill" id="NZ2-sC-xGy">
-                            <frame key="frameInset" minX="22" minY="4" width="9" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        </view>
-                        <view contentMode="scaleToFill" misplaced="YES" id="Dmc-wl-azw">
-                            <frame key="frameInset" minX="62" minY="4" width="89" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="My Fonts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="76r-ia-dK5">
-                                    <frame key="frameInset" minX="12" minY="4" width="64" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                    <nil key="textColor"/>
-                                    <color key="highlightedColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" id="eIk-mP-vhY">
-                    <frame key="frameInset" minY="149" width="212" maxY="34"/>
+                    <rect key="frame" x="0.0" y="118" width="212" height="126"/>
                     <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="JiO-tV-hrJ">
@@ -121,32 +77,32 @@
                     </connections>
                 </collectionView>
                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Font files found.   Add .ttf or .otf Font files in  Document Directory." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="44d-4M-ayc">
-                    <frame key="frameInset" minX="44.44%" width="194" height="71" maxY="48"/>
+                    <rect key="frame" x="8" y="159" width="194" height="71"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="tHe-ur-yd2">
-                    <frame key="frameInset" minX="120" minY="115" width="51" height="31"/>
+                    <rect key="frame" x="120" y="79" width="51" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <connections>
                         <action selector="boneSwitchAction:" destination="-1" eventType="valueChanged" id="DZu-XE-DR6"/>
                     </connections>
                 </switch>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="With Bone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5OC-O6-A5V">
-                    <frame key="frameInset" minX="36" minY="120" width="76" height="21"/>
+                    <rect key="frame" x="36" y="84" width="76" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" id="euc-RT-KNl">
-                    <frame key="frameInset" minX="-1" width="213" height="14.39%"/>
+                    <rect key="frame" x="-1" y="238" width="213" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Mev-Ov-cY1">
-                            <frame key="frameInset" minX="8" width="80" height="30" maxY="5"/>
+                            <rect key="frame" x="8" y="5" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.1529411765" green="0.1529411765" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
@@ -159,7 +115,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Mbc-LI-pMI">
-                            <frame key="frameInset" width="80" height="30" maxX="9" maxY="5"/>
+                            <rect key="frame" x="124" y="5" width="80" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                             <accessibility key="accessibilityConfiguration" hint="Import selected 3D text into the scene." identifier="3"/>
@@ -180,16 +136,11 @@
             <accessibility key="accessibilityConfiguration" hint="Choose a font to preview 3D text." identifier="3"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="308" y="414"/>
+            <point key="canvasLocation" x="446.37681159420293" y="277.23214285714283"/>
         </view>
     </objects>
     <resources>
-        <image name="Bevel_IPhone.png" width="31" height="31"/>
-        <image name="No-Bevel_IPhone.png" width="30" height="30"/>
+        <image name="Bevel_IPhone.png" width="31.5" height="31"/>
+        <image name="No-Bevel_IPhone.png" width="30.5" height="30.5"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
 </document>

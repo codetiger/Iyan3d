@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,7 +14,6 @@
                 <outlet property="divider" destination="i4Q-3I-eIM" id="CO7-Ix-B2w"/>
                 <outlet property="pageControl" destination="WrU-uq-Jvk" id="OyY-VN-jH6"/>
                 <outlet property="scrollView" destination="IGq-KO-Yil" id="j6F-Sz-xN4"/>
-                <outlet property="skipBtn" destination="KQV-Ri-756" id="cNe-EC-pLS"/>
                 <outlet property="startBtn" destination="UiE-fK-kY1" id="9CD-RX-WIg"/>
                 <outlet property="stepBody" destination="jjS-NO-3rh" id="ou7-5j-vOp"/>
                 <outlet property="stepImgView" destination="F52-HT-iWC" id="O07-Cn-E1u"/>
@@ -26,19 +28,19 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Nn-D8-fRN">
-                    <frame key="frameInset" width="768" height="576"/>
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="576"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Step-1_-img.png" translatesAutoresizingMaskIntoConstraints="NO" id="F52-HT-iWC">
-                            <frame key="frameInset" minY="89" width="368" height="326"/>
+                            <rect key="frame" x="0.0" y="89" width="368" height="326"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Divider-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="i4Q-3I-eIM">
-                            <frame key="frameInset" minX="376" minY="149" width="74" height="248"/>
+                            <rect key="frame" x="376" y="149" width="74" height="248"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjS-NO-3rh">
-                            <frame key="frameInset" minX="458" minY="195" width="286" height="108"/>
+                            <rect key="frame" x="458" y="195" width="286" height="108"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <string key="text">Import 3d Mesh, Characters, Environment from any PC software. Most common file formats like Dae (Collada), FBX, OBJ &amp; 3DS are supported</string>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -46,7 +48,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create a Scene" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfN-O0-tnI">
-                            <frame key="frameInset" minX="435" minY="131" width="282" height="36"/>
+                            <rect key="frame" x="435" y="131" width="282" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="26"/>
                             <color key="textColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -56,7 +58,7 @@
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGq-KO-Yil">
-                    <frame key="frameInset" width="768" height="576"/>
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="576"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
@@ -64,7 +66,7 @@
                     </connections>
                 </scrollView>
                 <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="WrU-uq-Jvk">
-                    <frame key="frameInset" minX="344" minY="519" width="75" height="37"/>
+                    <rect key="frame" x="344" y="519" width="75" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="pageIndicatorTintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="currentPageIndicatorTintColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -73,7 +75,7 @@
                     </connections>
                 </pageControl>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UiE-fK-kY1">
-                    <frame key="frameInset" minX="625" minY="523" width="117" height="30"/>
+                    <rect key="frame" x="625" y="523" width="117" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="Let's get started">
                         <color key="titleColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -82,18 +84,8 @@
                         <action selector="startBtnAction:" destination="-1" eventType="touchUpInside" id="x0V-cd-ex2"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KQV-Ri-756">
-                    <frame key="frameInset" minX="29" minY="523" width="80" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="More Info">
-                        <color key="titleColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="skipBtnAction:" destination="-1" eventType="touchUpInside" id="2LY-oG-LLv"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lgp-Lc-f6e">
-                    <frame key="frameInset" minX="715" minY="28" width="31" height="31"/>
+                    <rect key="frame" x="715" y="28" width="31" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="round-close.png"/>
                     <connections>

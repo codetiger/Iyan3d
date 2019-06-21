@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,7 +14,6 @@
                 <outlet property="divider" destination="i4Q-3I-eIM" id="CO7-Ix-B2w"/>
                 <outlet property="pageControl" destination="WrU-uq-Jvk" id="OyY-VN-jH6"/>
                 <outlet property="scrollView" destination="IGq-KO-Yil" id="j6F-Sz-xN4"/>
-                <outlet property="skipBtn" destination="KQV-Ri-756" id="cNe-EC-pLS"/>
                 <outlet property="startBtn" destination="UiE-fK-kY1" id="9CD-RX-WIg"/>
                 <outlet property="stepBody" destination="jjS-NO-3rh" id="ou7-5j-vOp"/>
                 <outlet property="stepImgView" destination="F52-HT-iWC" id="O07-Cn-E1u"/>
@@ -26,22 +28,22 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="6Nn-D8-fRN">
-                    <frame key="frameInset" width="736"/>
+                    <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                     <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Divider-1.png" id="i4Q-3I-eIM">
-                            <frame key="frameInset" minX="48.87%" minY="74" width="28" height="60.88%"/>
+                            <rect key="frame" x="346" y="74" width="28" height="207"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create a Scene" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wfN-O0-tnI">
-                            <frame key="frameInset" minY="25.84%" width="257" height="27" maxX="66"/>
+                            <rect key="frame" x="413" y="100" width="257" height="27"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="26"/>
                             <color key="textColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jjS-NO-3rh">
-                            <frame key="frameInset" minX="91.39%" minY="44.12%" width="318" height="108"/>
+                            <rect key="frame" x="382" y="135" width="318" height="108"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <string key="text">Import 3d Mesh, Characters, Environment from any PC software. Most common file formats like Dae (Collada), FBX, OBJ &amp; 3DS are supported</string>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -49,14 +51,14 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Step-1_-img_phone.png" id="F52-HT-iWC">
-                            <frame key="frameInset" minX="53" minY="41.51%" width="229" height="202"/>
+                            <rect key="frame" x="53" y="88" width="229" height="202"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="IGq-KO-Yil">
-                    <frame key="frameInset" width="736"/>
+                    <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                     <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
@@ -64,7 +66,7 @@
                     </connections>
                 </scrollView>
                 <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" id="WrU-uq-Jvk">
-                    <frame key="frameInset" minX="44.02%" width="13.18%" height="37" maxY="3"/>
+                    <rect key="frame" x="324" y="374" width="97" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="pageIndicatorTintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="currentPageIndicatorTintColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -73,7 +75,7 @@
                     </connections>
                 </pageControl>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UiE-fK-kY1">
-                    <frame key="frameInset" width="102" height="30" maxX="16" maxY="10"/>
+                    <rect key="frame" x="618" y="374" width="102" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <state key="normal" title="Let's get started">
@@ -83,19 +85,8 @@
                         <action selector="startBtnAction:" destination="-1" eventType="touchUpInside" id="x0V-cd-ex2"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KQV-Ri-756">
-                    <frame key="frameInset" minX="10" width="102" height="30" maxY="10"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                    <state key="normal" title="More Info">
-                        <color key="titleColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="skipBtnAction:" destination="-1" eventType="touchUpInside" id="2LY-oG-LLv"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="lgp-Lc-f6e">
-                    <frame key="frameInset" minY="23" width="22" height="22" maxX="16"/>
+                    <rect key="frame" x="698" y="23" width="22" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="round-close_phone.png"/>
                     <connections>
@@ -105,17 +96,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="502" y="430"/>
+            <point key="canvasLocation" x="727.536231884058" y="287.94642857142856"/>
         </view>
     </objects>
     <resources>
         <image name="Divider-1.png" width="74" height="248"/>
-        <image name="Step-1_-img_phone.png" width="228" height="201"/>
+        <image name="Step-1_-img_phone.png" width="228" height="201.5"/>
         <image name="round-close_phone.png" width="20" height="20"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
 </document>

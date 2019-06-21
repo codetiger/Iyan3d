@@ -296,7 +296,7 @@
 - (IBAction)inputTextChangedAction:(id)sender {
     if(isCanceled) return NO;
     [self load3dText];
-    [_inputText resignFirstResponder];
+//    [_inputText resignFirstResponder];
 }
 
 - (IBAction)bevalChangeAction:(id)sender {
