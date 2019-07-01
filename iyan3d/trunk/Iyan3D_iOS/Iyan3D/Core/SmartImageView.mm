@@ -70,10 +70,10 @@
     UIImage* image = [self GetImage:assetId];
     [self setImage:image];
     
-    if (image)
-        [activityIndicator stopAnimating];
-    else
-        [self performSelectorInBackground:@selector(DownloadImage:) withObject:assetId];
+    if (!image)
+        NSLog(@"Error loading image");
+    
+    [activityIndicator stopAnimating];
 }
 
 - (void)reLoadImage:(NSString*)assetId
@@ -86,45 +86,6 @@
             [activityIndicator stopAnimating];
         }
     }
-}
-
-- (void)DownloadAnimationImage:(NSString*)assetId
-{
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths objectAtIndex:0];
-    NSString* assetCellImagePath = [NSString stringWithFormat:@"%@/%@.png", cacheDirectory, assetId];
-    NSString* imageUrl128 = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/animationImage/%@.png", assetId];
-
-    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(reLoadImage:) returnObject:assetId outputFilePath:assetCellImagePath andURL:imageUrl128];
-    task.queuePriority = NSOperationQueuePriorityNormal;
-    task.taskType = DOWNLOAD_AND_WRITE_IMAGE;
-    [queue addOperation:task];
-}
-
-- (void)DownloadImage:(NSString*)assetId
-{
-
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory = [paths objectAtIndex:0];
-    NSString* assetCellImagePath = [NSString stringWithFormat:@"%@/%@.png", cacheDirectory, assetId];
-    NSString* imageUrl128 = [NSString stringWithFormat:@"https://iyan3dapp.com/appapi/128images/%@.png", assetId];
-
-    DownloadTask* task = [[DownloadTask alloc] initWithDelegateObject:self selectorMethod:@selector(reLoadImage:) returnObject:assetId outputFilePath:assetCellImagePath andURL:imageUrl128];
-    task.queuePriority = NSOperationQueuePriorityNormal;
-    task.taskType = DOWNLOAD_AND_WRITE_IMAGE;
-    [queue addOperation:task];
-}
-
-- (BOOL)downloadImageFromURL:(NSString*)imageURL SaveWithFileName:(NSString*)fileName
-{
-    NSData* imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
-    if (imgData) {
-        UIImage* imageforAssetView = [UIImage imageWithData:imgData];
-        [UIImagePNGRepresentation(imageforAssetView) writeToFile:fileName options:NSAtomicWrite error:nil];
-        return YES;
-    }
-    else
-        return NO;
 }
 
 - (UIImage*)GetImage:(NSString*)assetId

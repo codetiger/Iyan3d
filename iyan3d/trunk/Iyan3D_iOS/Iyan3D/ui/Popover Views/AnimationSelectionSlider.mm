@@ -8,8 +8,6 @@
 
 #import "AnimationSelectionSlider.h"
 #import "DownloadTask.h"
-#import "AFNetworking.h"
-#import "AFHTTPRequestOperation.h"
 
 #define MY_ANIMATION 7
 
@@ -57,7 +55,6 @@
     }
     self.cancelBtn.layer.cornerRadius = CORNER_RADIUS;
     self.addBtn.layer.cornerRadius = CORNER_RADIUS;
-    [self.publishBtn setHidden:YES];
     [self.delegate createDuplicateAssetsForAnimation];
     editorSceneLocal->currentFrame = currentFrame;
     editorSceneLocal->totalFrames = totalFrame;
@@ -66,7 +63,7 @@
     editorSceneLocal->selectMan->unselectObject(selectedNodeId);
     cache = [CacheSystem cacheSystem];
     animationsItems = [cache GetAnimationList:animationType fromTable:self.tableType Search:@""];
-    [self.animationCollectionView reloadData];    
+    [self.animationCollectionView reloadData];
     [self.delegate myAnimation:YES];
     
     userid = [[AppHelper getAppHelper] userDefaultsForKey:@"identifierForVendor"];
@@ -164,7 +161,7 @@
         extension = @".sgra";
     else
         extension = @".sgta";
-
+    
     NSString* imagePath = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirectory, a.assetId];
     NSString* animPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirectory, a.assetId, extension];
     if([fm fileExistsAtPath:imagePath])
@@ -187,7 +184,7 @@
     AnimationItem *a = animationsItems[indexVal];
     
     int assetId = ANIMATIONS_ID + [cache getNextAnimationAssetId];
-
+    
     bool status = false;
     
     NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -197,20 +194,20 @@
         extension = @".sgra";
     else
         extension = @".sgta";
-
+    
     NSString* imagePath = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirectory, a.assetId];
     NSString* animPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirectory, a.assetId, extension];
     
     NSString* newImgPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirectory, assetId];
     NSString* newAnimPath = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirectory, assetId, extension];
-
+    
     if([fm fileExistsAtPath:imagePath])
         [fm copyItemAtPath:imagePath toPath:newImgPath error:nil];
     if([fm fileExistsAtPath:animPath]) {
         status = true;
         [fm copyItemAtPath:animPath toPath:newAnimPath error:nil];
     }
-
+    
     
     if (status) {
         AnimationItem* animItem = [[AnimationItem alloc] init];
@@ -238,7 +235,7 @@
         return;
     
     AnimationItem *a = animationsItems[indexVal];
-
+    
     UIAlertView* renameScene = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Rename Animation", nil) message:NSLocalizedString(@"Please enter a name", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
     [renameScene setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[renameScene textFieldAtIndex:0] setPlaceholder:a.assetName];
@@ -267,7 +264,7 @@
                                           return;
                                       [self openMyAnimations];
                                       [view dismissViewControllerAnimated:YES completion:nil];
-
+                                      
                                   }];
     switch (animationCategoryTab) {
         case MY_ANIMATION:
@@ -348,17 +345,17 @@
             [self downloadAnimation:assetItem];
         if (animationCategoryTab == MY_ANIMATION) {
             if (assetItem.published == 0) {
-               [self.delegate myAnimation:NO];
+                [self.delegate myAnimation:NO];
             }
             else
             {
-               [self.delegate myAnimation:YES];
+                [self.delegate myAnimation:YES];
             }
         }
         else {
             [self.delegate myAnimation:YES];
         }
-
+        
     }
 }
 
@@ -506,15 +503,12 @@
                     [self.view endEditing:YES];
                     UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"username_isempty", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                     [errorAlert show];
-                    [self.publishBtn setHidden:NO];
-                    
                 }
                 else {
                     [self.view endEditing:YES];
                     if ([name rangeOfCharacterFromSet:set].location != NSNotFound) {
                         UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"username_has_special_char", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
                         [errorAlert show];
-                        [self.publishBtn setHidden:NO];
                     }
                     else {
                     }
@@ -562,110 +556,7 @@
         default:
             break;
     }
-
-}
-
-- (void)publishAssetWithUserName:(NSString*)userName
-{
     
-    if ([asset.userId isEqualToString:@""])
-        asset.userId = userid;
-    
-    if (![userName isEqualToString:@""])
-        asset.userName = userName;
-    
-    if (![asset.userId isEqualToString:@""]) {
-        NSString* extension, *uniqueId, *email;
-        NSString* imgPathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d.png", docDirPath, asset.assetId];
-        
-        if (animationType == 0)
-            extension = @".sgra";
-        else
-            extension = @".sgta";
-        
-        NSString* filePathLocation = [NSString stringWithFormat:@"%@/Resources/Animations/%d%@", docDirPath, asset.assetId, extension];
-        
-        NSLog(@"\nAnimation File Locations : Image %@ \n Animation %@ \n" , imgPathLocation,filePathLocation);
-        NSString* name = [NSString stringWithFormat:@"%@", asset.assetName];
-        NSString* keyword = [NSString stringWithFormat:@"%@", asset.keywords];
-        NSString* username = [NSString stringWithFormat:@"%@", asset.userName];
-        NSString* type = [NSString stringWithFormat:@"%d", animationType];
-            if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"signedin"])
-                {
-                    uniqueId = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"uniqueid"]];
-                    email = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"email"]];
-                    userName = [NSString stringWithFormat:@"%@", [[AppHelper getAppHelper] userDefaultsForKey:@"username"]];
-                }
-            else{
-                uniqueId =  @"99999999999999";
-                email = @"anonymous@mail.com";
-            }
-        
-        NSString* asset_id = [NSString stringWithFormat:@"%d", asset.assetId];
-        NSString* bonecountanim = [NSString stringWithFormat:@"%d", asset.boneCount];
-        NSData* animationFile = [NSData dataWithContentsOfFile:filePathLocation];
-        NSData* animationImgFile = [NSData dataWithContentsOfFile:imgPathLocation];
-        NSURL* url = [NSURL URLWithString:@"https://www.iyan3dapp.com/appapi/publish.php"];
-        NSString* postPath = @"https://www.iyan3dapp.com/appapi/publish.php";
-        AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-        NSMutableURLRequest* request = [httpClient multipartFormRequestWithMethod:@"POST"
-                                                                             path:postPath
-                                                                       parameters:nil
-                                                        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                                                            if (animationImgFile != nil)
-                                                                [formData appendPartWithFileData:animationImgFile name:@"animationImgFile" fileName:[NSString stringWithFormat:@"%d.png", asset.assetId] mimeType:@"image/png"];
-                                                            if (animationFile != nil)
-                                                                [formData appendPartWithFileData:animationFile name:@"animationFile" fileName:[NSString stringWithFormat:@"%d%@", asset.assetId, extension] mimeType:@"image/png"];
-                                                            [formData appendPartWithFormData:[userid dataUsingEncoding:NSUTF8StringEncoding] name:@"userid"];
-                                                                [formData appendPartWithFormData:[uniqueId dataUsingEncoding:NSUTF8StringEncoding] name:@"uniqueId"];
-                                                                [formData appendPartWithFormData:[email dataUsingEncoding:NSUTF8StringEncoding] name:@"email"];
-                                                            [formData appendPartWithFormData:[username dataUsingEncoding:NSUTF8StringEncoding] name:@"username"];
-                                                            [formData appendPartWithFormData:[name dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_name"];
-                                                            [formData appendPartWithFormData:[keyword dataUsingEncoding:NSUTF8StringEncoding] name:@"keyword"];
-                                                            [formData appendPartWithFormData:[bonecountanim dataUsingEncoding:NSUTF8StringEncoding] name:@"bonecount"];
-                                                            [formData appendPartWithFormData:[asset_id dataUsingEncoding:NSUTF8StringEncoding] name:@"asset_id"];
-                                                            [formData appendPartWithFormData:[type dataUsingEncoding:NSUTF8StringEncoding] name:@"type"];
-                                                            NSLog(@" name %@ animationImgFile %@ ", name, [NSString stringWithFormat:@"%d.png", asset.assetId]);
-                                                        }];
-        
-        AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        __block BOOL complete = NO;
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation* operation, id responseObject) {
-
-            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Success", nil) message:NSLocalizedString(@"success_animation_publish", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Ok", nil) otherButtonTitles:nil];
-            [userNameAlert show];
-            
-            complete = YES;
-            asset.published = [[operation responseString] intValue];
-            NSLog(@"Publishid : %d",asset.published);
-            if(asset.published > 0) {
-                [cache UpdateMyAnimation:asset];
-                [self.view setUserInteractionEnabled:YES];
-                if ([animationsItems containsObject:asset]) {
-                    int indexRow = (int)[animationsItems indexOfObject:asset];
-                    [self displayBasedOnSelection:[NSNumber numberWithInt:indexRow]];
-                    [self performSelectorOnMainThread:@selector(reloadCollectionView) withObject:nil waitUntilDone:YES];
-                    [_publishBtn setHidden:YES];
-                }
-            }
-                                    [self.delegate showOrHideProgress:0];
-        } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
-            NSLog(@"Failure: %@", error);
-            [self.view setUserInteractionEnabled:YES];
-            [self.view endEditing:YES];
-            UIAlertView* userNameAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-            [userNameAlert show];
-            complete = YES;
-            [_publishBtn setHidden:NO];
-                                    [self.delegate showOrHideProgress:0];
-        }];
-        [operation start];
-    }
-}
-    
-- (void)hideOrShowPublishBtn:(NSNumber*)value
-{
-    [_publishBtn setHidden:[value boolValue]];
 }
 
 #pragma mark OpenGl related Functions
@@ -696,7 +587,7 @@
         fileName = [NSString stringWithFormat:@"%@/Resources/Animations/%d.%@", docDirPath, selectedAssetId, extension];
     else
         fileName = [NSString stringWithFormat:@"%@/%d.%@", cacheDirectory, selectedAssetId, extension];
-
+    
     if(animBoneCount != bonecount && animationType != TEXT_ANIMATION) {
         UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"bone_count_mismatch", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
@@ -729,9 +620,9 @@
         else {
             NSLog(@" \n Animation file not exists %@ ", fileName);
         }
-            //[self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
+        //[self.delegate applyAnimationToSelectedNode:fileName SelectedNodeId:selectedNodeId SelectedFrame:currentFrame];
     }
-   [self.delegate showOrHideProgress:0];
+    [self.delegate showOrHideProgress:0];
 }
 
 - (void)deallocView
@@ -747,3 +638,4 @@
 }
 
 @end
+

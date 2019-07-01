@@ -13,17 +13,12 @@
 #import "AppHelper.h"
 #import "Constants.h"
 #import "DownloadTask.h"
-#import "AFHTTPRequestOperation.h"
-#import "AFHTTPClient.h"
-
 
 #define FIVE_THOUSAND_CREDITS @"basicrecharge"
 #define TWENTY_THOUSAND_CREDITS @"mediumrecharge"
 #define FIFTY_THOUSAND_CREDITS @"megarecharge"
 
 @implementation AppHelper
-
-@synthesize productsRequest = _productsRequest;
 
 + (AppHelper*)getAppHelper
 {
@@ -50,7 +45,7 @@
     fontDirPath = [NSString stringWithFormat:@"%@/Resources/Fonts", docDirPath];
     NSArray* fontExtensions = [NSArray arrayWithObjects:@"ttf", @"otf", nil];
     NSArray* filesGathered;
-
+    
     if (![[NSFileManager defaultManager] fileExistsAtPath:fontDirPath]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:fontDirPath withIntermediateDirectories:YES attributes:Nil error:Nil];
     }
@@ -61,7 +56,7 @@
 - (void)copyFontFilesFromDirectory:(NSString*)sourceDir ToDirectory:(NSString*)destinationDir withExtensions:(NSArray*)extensions
 {
     NSArray* fontFilesToCopy = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:sourceDir error:Nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
-
+    
     for (NSString* aFile in fontFilesToCopy) {
         NSError* error;
         if (![[NSFileManager defaultManager] fileExistsAtPath:[destinationDir stringByAppendingPathComponent:aFile]]) {
@@ -85,11 +80,6 @@
             [[AppHelper getAppHelper] saveToUserDefaults:uniqueIdentifier withKey:@"identifierForVendor"];
         }
     }
-}
-
-- (void)setAssetsDetails
-{
-    [self setAssetsDetails:SCENE_SELECTION];
 }
 
 - (void)writeDataToFile:(NSData*)data FileName:(NSString*)fileName
@@ -123,10 +113,10 @@
 {
     NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
     NSString* val = nil;
-
+    
     if (standardUserDefaults)
         val = [standardUserDefaults objectForKey:key];
-
+    
     return val;
 }
 
@@ -134,10 +124,10 @@
 {
     NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary* val = nil;
-
+    
     if (standardUserDefaults)
         val = [standardUserDefaults objectForKey:key];
-
+    
     return val;
 }
 
@@ -151,7 +141,7 @@
 - (void)saveToUserDefaults:(id)value withKey:(NSString*)key
 {
     NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
-
+    
     if (standardUserDefaults) {
         [standardUserDefaults setObject:value forKey:key];
         [standardUserDefaults synchronize];
@@ -173,16 +163,16 @@
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSString* inboxDirectoryPath = [docDirPath stringByAppendingPathComponent:@"Inbox"];
     NSArray* filesGathered;
-
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:inboxDirectoryPath]) {
         filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:inboxDirectoryPath error:Nil];
-
+        
         for (NSString* aFile in filesGathered) {
             NSError* error;
             if (![[NSFileManager defaultManager] fileExistsAtPath:[docDirPath stringByAppendingPathComponent:aFile]]) {
                 [[NSFileManager defaultManager] moveItemAtPath:[inboxDirectoryPath stringByAppendingPathComponent:aFile] toPath:[docDirPath stringByAppendingPathComponent:aFile] error:&error];
             }
-
+            
             if (error)
                 NSLog(@" Error copying font files %@ due to %@", error.localizedDescription, error.localizedFailureReason);
             else
@@ -199,16 +189,16 @@
     NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
     NSArray* fontExtensions = [NSArray arrayWithObjects:@"ttf", @"otf", nil];
     NSArray* filesGathered;
-
+    
     if ([cache checkOBJImporterPurchase]) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:fontDirectoryPath]) {
             filesGathered = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fontDirectoryPath error:Nil];
         }
         else {
             [[NSFileManager defaultManager] createDirectoryAtPath:fontDirectoryPath withIntermediateDirectories:YES attributes:Nil error:Nil];
-
+            
             NSArray* fontFilesToCopy = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:bundlePath error:Nil] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", fontExtensions]];
-
+            
             for (NSString* aFile in fontFilesToCopy) {
                 NSError* error;
                 if (![[NSFileManager defaultManager] fileExistsAtPath:[fontDirectoryPath stringByAppendingPathComponent:aFile]]) {
@@ -231,7 +221,7 @@
 {
     UIAlertView* errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [errorAlert show];
-
+    
 }
 
 - (void)statusForOBJImport:(NSNumber*)status
@@ -253,7 +243,7 @@
         return nil;
     
     NSString* jsonStr = [NSString stringWithContentsOfFile:jsonPath encoding:NSUTF8StringEncoding error:nil];
-
+    
     jsonStr = [jsonStr stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
     NSDictionary* outputDict = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
     if (error)
@@ -265,7 +255,7 @@
 {
     // use int action to get array of statements from the parsed json
     NSArray* actionStatements = [helpStatements objectForKey:[NSString stringWithFormat:@"%d", action]];
-
+    
     // use size of array to get a random number
     if (actionStatements.count) {
         long randindex = arc4random() % (int)actionStatements.count;
@@ -367,7 +357,8 @@
     return std::wstring((wchar_t*)[asData bytes], [asData length] / sizeof(wchar_t));
 }
 
--(BOOL)iPhone6Plus{
+-(BOOL)iPhone6Plus
+{
     if (([UIScreen mainScreen].scale > 2.0)) return YES;
     return NO;
 }
@@ -375,12 +366,7 @@
 - (void)resetAppHelper
 {
     cache = nil;
-
-    if (self.productsRequest) {
-        self.productsRequest.delegate = nil;
-        [self.productsRequest cancel];
-        self.productsRequest = nil;
-    }
 }
 
 @end
+

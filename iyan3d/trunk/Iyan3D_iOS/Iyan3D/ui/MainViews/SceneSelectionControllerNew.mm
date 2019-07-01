@@ -13,8 +13,6 @@
 #import "SceneItem.h"
 #import <sys/utsname.h>
 #import "ZipArchive.h"
-#import "AFHTTPRequestOperation.h"
-#import "AFHTTPClient.h"
 
 #define SCENE_NAME_ALERT 0
 #define LOGOUT_ALERT 1
@@ -222,7 +220,7 @@
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         picker.mailComposeDelegate = self;
         NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
-        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@, iOS Version: %s)", [self deviceName], iOSVersion]];
+        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@, iOS Version: %@)", [self deviceName], iOSVersion]];
         [picker setToRecipients:usersTo];
         [self presentModalViewController:picker animated:YES];
     } else {
@@ -386,28 +384,6 @@
         [self.popoverController dismissPopoverAnimated:YES];
         NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id1163508489?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
-        
-    } else if (indexValue == FOLLOW_US) {
-        
-        [self.popoverController dismissPopoverAnimated:YES];
-        if([Utility IsPadDevice]) {
-            if(_followUsVC == nil)
-                _followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVC" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_followUsVC];
-            self.popoverController.popoverContentSize = CGSizeMake(425.0 , 325.0);
-        } else {
-            if(_followUsVC == nil)
-                _followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVCPhone" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_followUsVC];
-            self.popoverController.popoverContentSize = CGSizeMake(312.0 , 213.0);
-        }
-        
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [_followUsVC.view setClipsToBounds:YES];
-        self.popUpVc.delegate=self;
-        self.popoverController.delegate =self;
-        [self.popoverController presentPopoverFromRect:_infoBtn.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     }
 }
 
@@ -718,7 +694,6 @@
 
 - (void)dealloc
 {
-    _followUsVC = nil;
     self.fileBeginsWith = nil;
     cache = nil;
     [scenesArray removeAllObjects];

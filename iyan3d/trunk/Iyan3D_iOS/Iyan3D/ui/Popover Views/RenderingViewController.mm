@@ -14,8 +14,6 @@
 #import "ZipArchive.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "AFHTTPRequestOperation.h"
-#import "AFHTTPClient.h"
 
 #if !(TARGET_IPHONE_SIMULATOR)
     #import <QuartzCore/CAMetalLayer.h>

@@ -29,7 +29,6 @@
     [self setArrayValues];
     [self setupScrollView];
     [self.scrollView bringSubviewToFront:self.pageControl];
-    [self.skipBtn setHidden:YES];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -150,10 +149,8 @@
 - (void) updateUI
 {
     if(self.pageControl.currentPage == SCROLL_COUNT-1) {
-        [self.skipBtn setHidden:NO];
         [self.startBtn setHidden:YES];
     } else {
-        [self.skipBtn setHidden:YES];
         [self.startBtn setHidden:NO];
         if(self.pageControl.currentPage > 0)
             [self.startBtn setTitle:NSLocalizedString(@"Next", nil) forState:UIControlStateNormal];
@@ -207,10 +204,6 @@
             [self.delegate closingOnBoard];
         }];
     }
-}
-
-- (IBAction)skipBtnAction:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.iyan3dapp.com/tutorial-videos/"]];
 }
 
 - (IBAction)closeBtnAction:(id)sender {

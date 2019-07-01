@@ -279,7 +279,7 @@
 
 -(CGPoint)originFromView:(UIView*)fromView
 {
-    CGPoint p;
+    CGPoint p = CGPointZero;
     if([_contentView arrowDirection] == FPPopoverArrowDirectionUp ||
        [_contentView arrowDirection] == FPPopoverNoArrow)
     {

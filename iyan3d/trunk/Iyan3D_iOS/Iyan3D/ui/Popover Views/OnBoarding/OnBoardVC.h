@@ -30,7 +30,6 @@
 @property (weak, nonatomic) id < OnBoardDelegate > delegate;
 @property (weak, nonatomic) IBOutlet UIView *beginView;
 @property (weak, nonatomic) IBOutlet UIButton *startBtn;
-@property (weak, nonatomic) IBOutlet UIButton *skipBtn;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 - (IBAction)startBtnAction:(id)sender;

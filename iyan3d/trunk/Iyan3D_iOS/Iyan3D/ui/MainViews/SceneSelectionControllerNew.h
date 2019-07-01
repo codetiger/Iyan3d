@@ -9,7 +9,6 @@
 #ifndef SceneSelectionControllerNew_h
 #define SceneSelectionControllerNew_h
 
-
 #import <UIKit/UIKit.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -21,7 +20,6 @@
 #import "EditorViewController.h"
 #import "WEPopoverController.h"
 #import "SettingsViewController.h"
-#import "FollowUsVC.h"
 
 
 @interface SceneSelectionControllerNew : GAITrackedViewController< UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, MFMailComposeViewControllerDelegate, ScenePropertiesDelegate, UIAlertViewDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, SettingsViewControllerDelegate, MFMailComposeViewControllerDelegate, OnBoardDelegate, UIDocumentInteractionControllerDelegate> {
@@ -51,7 +49,6 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *scenesCollectionView;
 @property (nonatomic, strong) PopUpViewController *popUpVc;
-@property (nonatomic, strong) FollowUsVC *followUsVC;
 @property (nonatomic, strong) WEPopoverController *popoverController;
 
 @property (nonatomic, strong) UIDocumentInteractionController *docController;

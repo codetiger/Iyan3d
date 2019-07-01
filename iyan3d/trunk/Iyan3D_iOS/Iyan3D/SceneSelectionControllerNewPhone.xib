@@ -67,7 +67,7 @@
                     <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" dataMode="none" id="pam-NN-pGu" userLabel="SceneSelection Collection View">
-                    <rect key="frame" x="0.0" y="47" width="896" height="367"/>
+                    <rect key="frame" x="0.0" y="43" width="896" height="371"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="23" minimumInteritemSpacing="10" id="hO9-zT-1F7">
@@ -88,7 +88,7 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <point key="canvasLocation" x="734.05797101449286" y="237.38839285714283"/>
+            <point key="canvasLocation" x="733.92857142857144" y="236.23188405797103"/>
         </view>
     </objects>
     <resources>

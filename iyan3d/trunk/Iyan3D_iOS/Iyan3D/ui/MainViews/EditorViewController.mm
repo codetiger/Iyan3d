@@ -165,7 +165,6 @@ BOOL missingAlertShown;
     [self.autorigMirrorLable setText:NSLocalizedString(@"MIRROR", nil)];
 
     isSelected=NO;
-    followUsVC = nil;
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
     [_rigCancelBtn setHidden:YES];
@@ -177,7 +176,7 @@ BOOL missingAlertShown;
     
     
 #if !(TARGET_IPHONE_SIMULATOR)
-    isMetalSupported = false;//(MTLCreateSystemDefaultDevice() != NULL) ? true : false;
+    isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
 #endif
 
     constants::BundlePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
@@ -1003,10 +1002,6 @@ BOOL missingAlertShown;
     if(animationsliderVC != nil){
         [animationsliderVC cancelBtnFunction:nil];
         [animationsliderVC removeFromParentViewController];
-    }
-    if(assetSelectionSlider != nil){
-        [assetSelectionSlider cancelButtonAction:nil];
-        [assetSelectionSlider removeFromParentViewController];
     }
     if(textSelectionSlider != nil){
         [textSelectionSlider cancelBtnAction:nil];
@@ -2594,25 +2589,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void) importBtnDelegateAction:(int)indexValue //TODO remove downloading json and showing store models
 {
     switch (indexValue) {
-//        case IMPORT_PARTICLE:
-//        case IMPORT_MODELS: {
-//            if([Utility IsPadDevice]) {
-//                [self.popoverController dismissPopoverAnimated:YES];
-//                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanel" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-//                assetSelectionSlider.assetSelectionDelegate = self;
-//                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-//            } else {
-//                [self.popoverController dismissPopoverAnimated:YES];
-//                assetSelectionSlider =[[AssetSelectionSidePanel alloc] initWithNibName:@"AssetSelectionSidePanelPhone" bundle:Nil Type:(indexValue == IMPORT_MODELS) ? IMPORT_MODELS : ASSET_PARTICLES ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-//                assetSelectionSlider.assetSelectionDelegate = self;
-//                [self showOrHideLeftView:YES withView:assetSelectionSlider.view];
-//            }
-//            NSInteger toolBarPos = [[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue];
-//            assetSelectionSlider.modelCategory.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
-//            assetSelectionSlider.view.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
-//            
-//            break;
-//        }
         case IMPORT_VIDEO:
         case IMPORT_IMAGES:
             [self.popoverController dismissPopoverAnimated:YES];
@@ -2880,29 +2856,6 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         [self.popoverController dismissPopoverAnimated:YES];
         NSString *templateReviewURLiOS7 = @"https://itunes.apple.com/app/id1163508489?mt=8";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
-    } else if (indexValue == FOLLOW_US) {
-        [self.popoverController dismissPopoverAnimated:YES];
-        if([Utility IsPadDevice]) {
-            if(followUsVC == nil)
-                followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVC" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:followUsVC];
-            self.popoverController.popoverContentSize = CGSizeMake(425.0 , 325.0);
-        } else {
-            if(followUsVC == nil)
-                followUsVC = [[FollowUsVC alloc] initWithNibName:@"FollowUsVCPhone" bundle:nil];
-            self.popoverController = [[WEPopoverController alloc] initWithContentViewController:followUsVC];
-            self.popoverController.popoverContentSize = CGSizeMake(312.0 , 213.0);
-        }
-        
-        self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
-        [followUsVC.view setClipsToBounds:YES];
-        self.popUpVc.delegate=self;
-        self.popoverController.delegate =self;
-        [self.popoverController presentPopoverFromRect:_infoBtn.frame
-                                                inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionUp
-                                              animated:YES];
     }
 }
 
@@ -4044,9 +3997,6 @@ void downloadFile(NSString* url, NSString* fileName)
     if(animationsliderVC != nil)
         animationsliderVC = nil;
 
-    if(assetSelectionSlider != nil)
-        assetSelectionSlider = nil;
-
     if(textSelectionSlider != nil)
         textSelectionSlider = nil;
 
@@ -4075,9 +4025,6 @@ void downloadFile(NSString* url, NSString* fileName)
     animationsliderVC = nil;
     textSelectionSlider.textSelectionDelegate = nil;
     textSelectionSlider = nil;
-    assetSelectionSlider.assetSelectionDelegate = nil;
-    assetSelectionSlider = nil;
-    followUsVC = nil;
     if(objVc) {
         objVc.objSlideDelegate = nil;
         objVc = nil;

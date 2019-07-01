@@ -18,7 +18,7 @@
 -(void) performLocalTasks;
 @end
 
-@interface AppHelper : NSObject <SKProductsRequestDelegate,SKPaymentTransactionObserver>
+@interface AppHelper : NSObject
 {
     CacheSystem* cache;
     BOOL processTransaction;
@@ -29,7 +29,6 @@
 }
 
 @property (nonatomic, assign) id  <AppHelperDelegate> delegate;
-@property (nonatomic, strong) SKProductsRequest *productsRequest;
 
 +(AppHelper *)getAppHelper;
 -(void) setIdentifierForVendor;
@@ -41,11 +40,6 @@
 -(void) downloadJsonData;
 
 -(void) initializeFontListArray;
-- (void) loadAllAssets;
--(void)performReadingJsonInQueue:(NSOperationQueue*)queue ForPage:(int)viewType;
--(void) loadAllFontsInQueue:(NSOperationQueue*)queue WithDelegate:(id)delegateObj AndSelectorMethod:(SEL)selectorMethod;
--(void) setAssetsDetails;
--(void) setAssetsDetails:(int)fromPage;
 -(void) saveBoolUserDefaults:(BOOL)value withKey:(NSString*)key;
 -(void) saveToUserDefaults:(id)value withKey:(NSString*)key;
 -(void) removeFromUserDefaultsWithKey:(NSString*)key;

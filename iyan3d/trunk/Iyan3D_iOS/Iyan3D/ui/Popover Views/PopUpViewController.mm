@@ -79,7 +79,6 @@
                      NSLocalizedString(@"Tutorials", nil),
                      NSLocalizedString(@"Settings", nil),
                      NSLocalizedString(@"Rate This App", nil),
-                     NSLocalizedString(@"Follow Us", nil),
                      NSLocalizedString(@"Contact Us", nil),
                      nil];
     } else if([clickedBtnName isEqualToString:@"viewBtn"]) {
@@ -130,7 +129,6 @@
                      NSLocalizedString(@"Clone", nil),
                      NSLocalizedString(@"Delete", nil),
                      NSLocalizedString(@"Rename", nil),
-                     NSLocalizedString(@"Publish", nil),
                      nil];
     } else if([clickedBtnName isEqualToString:@"objImport"]) {
         [self allowMultipleSelection:NO];

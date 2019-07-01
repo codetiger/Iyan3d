@@ -7,7 +7,6 @@
 //
 
 #include <metal_stdlib>
-#include <metal_geometric>
 #include <simd/simd.h>
 
 using namespace metal;
@@ -297,9 +296,10 @@ vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
     
     float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
     float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
-    
+    float4 endColor = float4(eColor[0], eColor[1], eColor[2], 1.0);
+
     float4 s = mix(startColor, midColor, phase);
-    float4 e = mix(midColor, eColor, phase);
+    float4 e = mix(midColor, endColor, phase);
     float age = mix(percent, float(percent - 0.5), phase) * 2.0;
     
     out.meshColor = (int(hasMeshColor[0]) == 0) ? float3(mix(s, e, age).xyz) : float3(float4(sColor).xyz);
