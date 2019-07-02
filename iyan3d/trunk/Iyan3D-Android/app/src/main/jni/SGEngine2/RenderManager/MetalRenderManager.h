@@ -38,7 +38,7 @@ private:
     id <MTLBuffer> _dynamicConstantBuffer;
     
     // renderer
-    id <MTLDevice> device;
+    id <MTLDevice> _device;
     id <MTLCommandQueue> _commandQueue;
     id <MTLLibrary> _defaultLibrary;
     id <MTLBuffer> vertexBuffer;

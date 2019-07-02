@@ -801,11 +801,6 @@
 		256F6DB21BF624FB00154622 /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6C021BF624FB00154622 /* MTLTexture.mm */; };
 		256F6DB41BF624FB00154622 /* OGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6C031BF624FB00154622 /* OGLTexture.cpp */; };
 		256F6DB51BF624FB00154622 /* OGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256F6C031BF624FB00154622 /* OGLTexture.cpp */; };
-		256F6E801BF624FB00154622 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D2F1BF624FB00154622 /* png.c */; };
-		256F6E861BF624FB00154622 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D371BF624FB00154622 /* pngmem.c */; };
-		256F6E881BF624FB00154622 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D381BF624FB00154622 /* pngpread.c */; };
-		256F6E8A1BF624FB00154622 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D3B1BF624FB00154622 /* pngread.c */; };
-		256F6E9C1BF624FB00154622 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D451BF624FB00154622 /* pngwtran.c */; };
 		256F6EA41BF624FB00154622 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D4D1BF624FB00154622 /* MetalHandler.mm */; };
 		256F6EA61BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */; };
 		256F6EA71BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 256F6D501BF624FB00154622 /* ImageLoaderOBJC.mm */; };
@@ -1795,6 +1790,36 @@
 		4E1A2C5F22C85FCF007827E3 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
 		4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
+		4EAC76AE22CB21CC00820B63 /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769722CB21C900820B63 /* pngset.c */; };
+		4EAC76AF22CB21CC00820B63 /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769722CB21C900820B63 /* pngset.c */; };
+		4EAC76B022CB21CC00820B63 /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769822CB21C900820B63 /* pngtrans.c */; };
+		4EAC76B122CB21CC00820B63 /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769822CB21C900820B63 /* pngtrans.c */; };
+		4EAC76B222CB21CC00820B63 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769922CB21C900820B63 /* pngmem.c */; };
+		4EAC76B322CB21CC00820B63 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769922CB21C900820B63 /* pngmem.c */; };
+		4EAC76B422CB21CC00820B63 /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769C22CB21CA00820B63 /* pngrio.c */; };
+		4EAC76B522CB21CC00820B63 /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769C22CB21CA00820B63 /* pngrio.c */; };
+		4EAC76B622CB21CC00820B63 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769E22CB21CA00820B63 /* pngwutil.c */; };
+		4EAC76B722CB21CC00820B63 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769E22CB21CA00820B63 /* pngwutil.c */; };
+		4EAC76B822CB21CC00820B63 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769F22CB21CA00820B63 /* pngwrite.c */; };
+		4EAC76B922CB21CC00820B63 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC769F22CB21CA00820B63 /* pngwrite.c */; };
+		4EAC76BA22CB21CC00820B63 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A022CB21CA00820B63 /* pngget.c */; };
+		4EAC76BB22CB21CC00820B63 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A022CB21CA00820B63 /* pngget.c */; };
+		4EAC76BC22CB21CC00820B63 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A422CB21CB00820B63 /* pngwio.c */; };
+		4EAC76BD22CB21CC00820B63 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A422CB21CB00820B63 /* pngwio.c */; };
+		4EAC76BE22CB21CC00820B63 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A522CB21CB00820B63 /* pngwtran.c */; };
+		4EAC76BF22CB21CC00820B63 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A522CB21CB00820B63 /* pngwtran.c */; };
+		4EAC76C022CB21CC00820B63 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A722CB21CB00820B63 /* png.c */; };
+		4EAC76C122CB21CC00820B63 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A722CB21CB00820B63 /* png.c */; };
+		4EAC76C222CB21CC00820B63 /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A822CB21CB00820B63 /* pngerror.c */; };
+		4EAC76C322CB21CC00820B63 /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A822CB21CB00820B63 /* pngerror.c */; };
+		4EAC76C422CB21CC00820B63 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A922CB21CB00820B63 /* pngrtran.c */; };
+		4EAC76C522CB21CC00820B63 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76A922CB21CB00820B63 /* pngrtran.c */; };
+		4EAC76C622CB21CC00820B63 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76AA22CB21CB00820B63 /* pngrutil.c */; };
+		4EAC76C722CB21CC00820B63 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76AA22CB21CB00820B63 /* pngrutil.c */; };
+		4EAC76C822CB21CC00820B63 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76AC22CB21CC00820B63 /* pngread.c */; };
+		4EAC76C922CB21CC00820B63 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76AC22CB21CC00820B63 /* pngread.c */; };
+		4EAC76CA22CB21CC00820B63 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76AD22CB21CC00820B63 /* pngpread.c */; };
+		4EAC76CB22CB21CC00820B63 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 4EAC76AD22CB21CC00820B63 /* pngpread.c */; };
 		4EB39D5C1D6AC06500C31179 /* 3dsfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D591D6AC06500C31179 /* 3dsfile.png */; };
 		4EB39D5D1D6AC06500C31179 /* 3dsfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D591D6AC06500C31179 /* 3dsfile.png */; };
 		4EB39D5E1D6AC06500C31179 /* daefile.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB39D5A1D6AC06500C31179 /* daefile.png */; };
@@ -3027,11 +3052,6 @@
 		256F6C031BF624FB00154622 /* OGLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OGLTexture.cpp; sourceTree = "<group>"; };
 		256F6C041BF624FB00154622 /* OGLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGLTexture.h; sourceTree = "<group>"; };
 		256F6C051BF624FB00154622 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
-		256F6D2F1BF624FB00154622 /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = ../../../../../../../Iyan3D_iOS/png.c; sourceTree = "<group>"; };
-		256F6D371BF624FB00154622 /* pngmem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngmem.c; path = ../../../../../../../Iyan3D_iOS/pngmem.c; sourceTree = "<group>"; };
-		256F6D381BF624FB00154622 /* pngpread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngpread.c; path = ../../../../../../../Iyan3D_iOS/pngpread.c; sourceTree = "<group>"; };
-		256F6D3B1BF624FB00154622 /* pngread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngread.c; path = ../../../../../../../Iyan3D_iOS/pngread.c; sourceTree = "<group>"; };
-		256F6D451BF624FB00154622 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = ../../../../../../../Iyan3D_iOS/pngwtran.c; sourceTree = "<group>"; };
 		256F6D4C1BF624FB00154622 /* MetalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHandler.h; path = ../MetalHandler.h; sourceTree = "<group>"; };
 		256F6D4D1BF624FB00154622 /* MetalHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHandler.mm; path = ../MetalHandler.mm; sourceTree = "<group>"; };
 		256F6D4F1BF624FB00154622 /* ImageLoaderOBJC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoaderOBJC.h; sourceTree = "<group>"; };
@@ -3881,6 +3901,30 @@
 		4E77F4B31D7560AA00BFC279 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
+		4EAC768B22CB21C900820B63 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../libpng/config.h; sourceTree = "<group>"; };
+		4EAC769722CB21C900820B63 /* pngset.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngset.c; path = ../libpng/pngset.c; sourceTree = "<group>"; };
+		4EAC769822CB21C900820B63 /* pngtrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngtrans.c; path = ../libpng/pngtrans.c; sourceTree = "<group>"; };
+		4EAC769922CB21C900820B63 /* pngmem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngmem.c; path = ../libpng/pngmem.c; sourceTree = "<group>"; };
+		4EAC769A22CB21CA00820B63 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngconf.h; path = ../libpng/pngconf.h; sourceTree = "<group>"; };
+		4EAC769B22CB21CA00820B63 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = png.h; path = ../libpng/png.h; sourceTree = "<group>"; };
+		4EAC769C22CB21CA00820B63 /* pngrio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrio.c; path = ../libpng/pngrio.c; sourceTree = "<group>"; };
+		4EAC769D22CB21CA00820B63 /* pngdebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngdebug.h; path = ../libpng/pngdebug.h; sourceTree = "<group>"; };
+		4EAC769E22CB21CA00820B63 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwutil.c; path = ../libpng/pngwutil.c; sourceTree = "<group>"; };
+		4EAC769F22CB21CA00820B63 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwrite.c; path = ../libpng/pngwrite.c; sourceTree = "<group>"; };
+		4EAC76A022CB21CA00820B63 /* pngget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngget.c; path = ../libpng/pngget.c; sourceTree = "<group>"; };
+		4EAC76A122CB21CA00820B63 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pnglibconf.h; path = ../libpng/pnglibconf.h; sourceTree = "<group>"; };
+		4EAC76A222CB21CA00820B63 /* pngprefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngprefix.h; path = ../libpng/pngprefix.h; sourceTree = "<group>"; };
+		4EAC76A322CB21CB00820B63 /* pngstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngstruct.h; path = ../libpng/pngstruct.h; sourceTree = "<group>"; };
+		4EAC76A422CB21CB00820B63 /* pngwio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwio.c; path = ../libpng/pngwio.c; sourceTree = "<group>"; };
+		4EAC76A522CB21CB00820B63 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = ../libpng/pngwtran.c; sourceTree = "<group>"; };
+		4EAC76A622CB21CB00820B63 /* pnginfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pnginfo.h; path = ../libpng/pnginfo.h; sourceTree = "<group>"; };
+		4EAC76A722CB21CB00820B63 /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = ../libpng/png.c; sourceTree = "<group>"; };
+		4EAC76A822CB21CB00820B63 /* pngerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngerror.c; path = ../libpng/pngerror.c; sourceTree = "<group>"; };
+		4EAC76A922CB21CB00820B63 /* pngrtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrtran.c; path = ../libpng/pngrtran.c; sourceTree = "<group>"; };
+		4EAC76AA22CB21CB00820B63 /* pngrutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngrutil.c; path = ../libpng/pngrutil.c; sourceTree = "<group>"; };
+		4EAC76AB22CB21CB00820B63 /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = ../libpng/pngpriv.h; sourceTree = "<group>"; };
+		4EAC76AC22CB21CC00820B63 /* pngread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngread.c; path = ../libpng/pngread.c; sourceTree = "<group>"; };
+		4EAC76AD22CB21CC00820B63 /* pngpread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngpread.c; path = ../libpng/pngpread.c; sourceTree = "<group>"; };
 		4EB39D591D6AC06500C31179 /* 3dsfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 3dsfile.png; path = Resources/imgs/3dsfile.png; sourceTree = "<group>"; };
 		4EB39D5A1D6AC06500C31179 /* daefile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = daefile.png; path = Resources/imgs/daefile.png; sourceTree = "<group>"; };
 		4EB39D5B1D6AC06500C31179 /* fbxfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fbxfile.png; path = Resources/imgs/fbxfile.png; sourceTree = "<group>"; };
@@ -6291,11 +6335,30 @@
 		4E69CEDC22CA1BB300080FFF /* png */ = {
 			isa = PBXGroup;
 			children = (
-				256F6D2F1BF624FB00154622 /* png.c */,
-				256F6D451BF624FB00154622 /* pngwtran.c */,
-				256F6D3B1BF624FB00154622 /* pngread.c */,
-				256F6D371BF624FB00154622 /* pngmem.c */,
-				256F6D381BF624FB00154622 /* pngpread.c */,
+				4EAC768B22CB21C900820B63 /* config.h */,
+				4EAC76A722CB21CB00820B63 /* png.c */,
+				4EAC769B22CB21CA00820B63 /* png.h */,
+				4EAC769A22CB21CA00820B63 /* pngconf.h */,
+				4EAC769D22CB21CA00820B63 /* pngdebug.h */,
+				4EAC76A822CB21CB00820B63 /* pngerror.c */,
+				4EAC76A022CB21CA00820B63 /* pngget.c */,
+				4EAC76A622CB21CB00820B63 /* pnginfo.h */,
+				4EAC76A122CB21CA00820B63 /* pnglibconf.h */,
+				4EAC769922CB21C900820B63 /* pngmem.c */,
+				4EAC76AD22CB21CC00820B63 /* pngpread.c */,
+				4EAC76A222CB21CA00820B63 /* pngprefix.h */,
+				4EAC76AB22CB21CB00820B63 /* pngpriv.h */,
+				4EAC76AC22CB21CC00820B63 /* pngread.c */,
+				4EAC769C22CB21CA00820B63 /* pngrio.c */,
+				4EAC76A922CB21CB00820B63 /* pngrtran.c */,
+				4EAC76AA22CB21CB00820B63 /* pngrutil.c */,
+				4EAC769722CB21C900820B63 /* pngset.c */,
+				4EAC76A322CB21CB00820B63 /* pngstruct.h */,
+				4EAC769822CB21C900820B63 /* pngtrans.c */,
+				4EAC76A422CB21CB00820B63 /* pngwio.c */,
+				4EAC769F22CB21CA00820B63 /* pngwrite.c */,
+				4EAC76A522CB21CB00820B63 /* pngwtran.c */,
+				4EAC769E22CB21CA00820B63 /* pngwutil.c */,
 			);
 			path = png;
 			sourceTree = "<group>";
@@ -9043,7 +9106,6 @@
 				25DE10ED1CAA8D6D0076F669 /* btGeneric6DofSpring2Constraint.cpp in Sources */,
 				25DE10DF1CAA8D6D0076F669 /* btKinematicCharacterController.cpp in Sources */,
 				25CACF631B27C20F0027F48C /* FontCellView.m in Sources */,
-				256F6E801BF624FB00154622 /* png.c in Sources */,
 				E24973F9196BD80F0025D442 /* SmartImageView.mm in Sources */,
 				7F30F5B31B576D8C00B311E3 /* Base64.m in Sources */,
 				25DE10C31CAA8D6D0076F669 /* gim_tri_collision.cpp in Sources */,
@@ -9081,21 +9143,23 @@
 				25DE105B1CAA8D6D0076F669 /* btSimulationIslandManager.cpp in Sources */,
 				25B5B16A1BE33EFB00AC2525 /* mztools.c in Sources */,
 				25DE10D71CAA8D6D0076F669 /* btRaycastCallback.cpp in Sources */,
+				4EAC76C222CB21CC00820B63 /* pngerror.c in Sources */,
 				256F6B891BF6246300154622 /* BoneLimitsHelper.cpp in Sources */,
 				25034FEC1D24F9960036F201 /* StepView.m in Sources */,
 				25FA14A01D3CF6B000A95DA3 /* TexturePropCell.m in Sources */,
-				256F6E9C1BF624FB00154622 /* pngwtran.c in Sources */,
 				E24973FA196BD80F0025D442 /* Utility.m in Sources */,
+				4EAC76B822CB21CC00820B63 /* pngwrite.c in Sources */,
 				256F6F831BF6275A00154622 /* ConversionHelper.cpp in Sources */,
 				256F6DA81BF624FB00154622 /* MeshNode.cpp in Sources */,
-				256F6E8A1BF624FB00154622 /* pngread.c in Sources */,
 				25DE10CF1CAA8D6D0076F669 /* btGjkPairDetector.cpp in Sources */,
 				25DE105F1CAA8D6D0076F669 /* btSphereSphereCollisionAlgorithm.cpp in Sources */,
 				25DE11151CAA8D6D0076F669 /* btMultiBodyPoint2Point.cpp in Sources */,
 				25DE10A11CAA8D6D0076F669 /* btTriangleBuffer.cpp in Sources */,
 				25DE10DB1CAA8D6D0076F669 /* btVoronoiSimplexSolver.cpp in Sources */,
+				4EAC76BA22CB21CC00820B63 /* pngget.c in Sources */,
 				25730E621AFD3C7B0042F81A /* NSImage+ANImageBitmapRep.m in Sources */,
 				25DE10E71CAA8D6D0076F669 /* btFixedConstraint.cpp in Sources */,
+				4EAC76B022CB21CC00820B63 /* pngtrans.c in Sources */,
 				25DE10831CAA8D6D0076F669 /* btConvexTriangleMeshShape.cpp in Sources */,
 				256F6BA11BF6246300154622 /* SGAction.cpp in Sources */,
 				25DE10631CAA8D6D0076F669 /* btUnionFind.cpp in Sources */,
@@ -9113,7 +9177,6 @@
 				25DE113B1CAA91310076F669 /* btDefaultSoftBodySolver.cpp in Sources */,
 				256F6D8C1BF624FB00154622 /* CubeMeshNode.cpp in Sources */,
 				3D58CD681C3D43C2006371DE /* WEPopoverController.m in Sources */,
-				256F6E861BF624FB00154622 /* pngmem.c in Sources */,
 				3D58CD6A1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
 				25DE109B1CAA8D6D0076F669 /* btStaticPlaneShape.cpp in Sources */,
 				E249766C196BE0190025D442 /* RenderingViewController.mm in Sources */,
@@ -9131,12 +9194,14 @@
 				25DE10C11CAA8D6D0076F669 /* gim_memory.cpp in Sources */,
 				E2497622196BDD9D0025D442 /* AppDelegate.mm in Sources */,
 				25DE10411CAA8D6D0076F669 /* btCollisionWorldImporter.cpp in Sources */,
+				4EAC76CA22CB21CC00820B63 /* pngpread.c in Sources */,
 				25DE113F1CAA91310076F669 /* btSoftBodyConcaveCollisionAlgorithm.cpp in Sources */,
 				25B5B16E1BE33EFB00AC2525 /* zip.c in Sources */,
 				25F0C2661C2E916100C8EC85 /* SGActionManager.cpp in Sources */,
 				25DE10691CAA8D6D0076F669 /* btBoxShape.cpp in Sources */,
 				2544C2751CCE2CF8009A3620 /* Mat4.cpp in Sources */,
 				25DE113D1CAA91310076F669 /* btSoftBody.cpp in Sources */,
+				4EAC76BC22CB21CC00820B63 /* pngwio.c in Sources */,
 				256F6BAD1BF6246300154622 /* SGNode.cpp in Sources */,
 				256F6DA01BF624FB00154622 /* EmptyNode.cpp in Sources */,
 				25DE11171CAA8D6D0076F669 /* btDantzigLCP.cpp in Sources */,
@@ -9159,6 +9224,7 @@
 				256F6D6E1BF624FB00154622 /* BoundingBox.cpp in Sources */,
 				25DE10D31CAA8D6D0076F669 /* btPersistentManifold.cpp in Sources */,
 				C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
+				4EAC76C822CB21CC00820B63 /* pngread.c in Sources */,
 				256F6D881BF624FB00154622 /* OGLMaterial.cpp in Sources */,
 				4E1A2C5F22C85FCF007827E3 /* Shaders.metal in Sources */,
 				25DE10811CAA8D6D0076F669 /* btConvexShape.cpp in Sources */,
@@ -9185,7 +9251,6 @@
 				25DE103B1CAA8D6D0076F669 /* btCollisionDispatcher.cpp in Sources */,
 				25DE10B71CAA8D6D0076F669 /* btGImpactQuantizedBvh.cpp in Sources */,
 				25DE10E51CAA8D6D0076F669 /* btContactConstraint.cpp in Sources */,
-				256F6E881BF624FB00154622 /* pngpread.c in Sources */,
 				256F6DB21BF624FB00154622 /* MTLTexture.mm in Sources */,
 				3D58CD601C3D43C2006371DE /* WEBlockingGestureRecognizer.m in Sources */,
 				25DE10491CAA8D6D0076F669 /* btConvexConcaveCollisionAlgorithm.cpp in Sources */,
@@ -9230,7 +9295,9 @@
 				256F6D721BF624FB00154622 /* Frustum.cpp in Sources */,
 				256F6EA61BF624FB00154622 /* ImageLoaderOBJC.mm in Sources */,
 				25DE10531CAA8D6D0076F669 /* btGhostObject.cpp in Sources */,
+				4EAC76C622CB21CC00820B63 /* pngrutil.c in Sources */,
 				25EFBEBC1BE25D2800DB300C /* RenderItem.m in Sources */,
+				4EAC76B622CB21CC00820B63 /* pngwutil.c in Sources */,
 				25DE10591CAA8D6D0076F669 /* btManifoldResult.cpp in Sources */,
 				256F6D9E1BF624FB00154622 /* CameraNode.cpp in Sources */,
 				25DE10AD1CAA8D6D0076F669 /* btUniformScalingShape.cpp in Sources */,
@@ -9248,7 +9315,9 @@
 				25730E6B1AFD3C7B0042F81A /* BitmapScaleManipulator.m in Sources */,
 				25DE10BF1CAA8D6D0076F669 /* gim_contact.cpp in Sources */,
 				25DE10BD1CAA8D6D0076F669 /* gim_box_set.cpp in Sources */,
+				4EAC76C422CB21CC00820B63 /* pngrtran.c in Sources */,
 				25DE111F1CAA8D6D0076F669 /* btRaycastVehicle.cpp in Sources */,
+				4EAC76B422CB21CC00820B63 /* pngrio.c in Sources */,
 				256F6EB41BF624FB00154622 /* DownloadTask.mm in Sources */,
 				256F6EA81BF624FB00154622 /* MetalRenderManager.mm in Sources */,
 				25730E661AFD3C7B0042F81A /* CGImageContainer.m in Sources */,
@@ -9256,6 +9325,7 @@
 				25DE108B1CAA8D6D0076F669 /* btMinkowskiSumShape.cpp in Sources */,
 				25DE10251CAA8D6D0076F669 /* btDbvtBroadphase.cpp in Sources */,
 				256F6D781BF624FB00154622 /* Plane3D.cpp in Sources */,
+				4EAC76C022CB21CC00820B63 /* png.c in Sources */,
 				25F0C25E1C2E6F0D00C8EC85 /* SGSceneLoader.cpp in Sources */,
 				25DE10711CAA8D6D0076F669 /* btCompoundShape.cpp in Sources */,
 				25730E6A1AFD3C7B0042F81A /* BitmapRotationManipulator.m in Sources */,
@@ -9273,6 +9343,7 @@
 				25DE10CB1CAA8D6D0076F669 /* btGjkEpa2.cpp in Sources */,
 				C8AA46F31C227D1000C4AB53 /* SceneSelectionControllerNew.mm in Sources */,
 				25DE10E91CAA8D6D0076F669 /* btGearConstraint.cpp in Sources */,
+				4EAC76BE22CB21CC00820B63 /* pngwtran.c in Sources */,
 				25DE10851CAA8D6D0076F669 /* btCylinderShape.cpp in Sources */,
 				25DE10D91CAA8D6D0076F669 /* btSubSimplexConvexCast.cpp in Sources */,
 				E24973F7196BD80F0025D442 /* CacheSystem.m in Sources */,
@@ -9293,11 +9364,13 @@
 				25DE106D1CAA8D6D0076F669 /* btCapsuleShape.cpp in Sources */,
 				25DE11191CAA8D6D0076F669 /* btLemkeAlgorithm.cpp in Sources */,
 				25DE10EF1CAA8D6D0076F669 /* btGeneric6DofSpringConstraint.cpp in Sources */,
+				4EAC76AE22CB21CC00820B63 /* pngset.c in Sources */,
 				25DE102B1CAA8D6D0076F669 /* btOverlappingPairCache.cpp in Sources */,
 				E24973F8196BD80F0025D442 /* SceneItem.m in Sources */,
 				25FCAB4D1C3003330051DBBA /* SGMovementManager.cpp in Sources */,
 				E249769A196BE0310025D442 /* LoadingViewControllerPad.mm in Sources */,
 				25DE101F1CAA8D6D0076F669 /* btBroadphaseProxy.cpp in Sources */,
+				4EAC76B222CB21CC00820B63 /* pngmem.c in Sources */,
 				25730E651AFD3C7B0042F81A /* CGContextCreator.m in Sources */,
 				256F6B851BF6246300154622 /* AutoRigHelper.cpp in Sources */,
 				256F6D921BF624FB00154622 /* PlaneMeshNode.cpp in Sources */,
@@ -9354,10 +9427,12 @@
 				25DE10801CAA8D6D0076F669 /* btConvexPolyhedron.cpp in Sources */,
 				256F6B8E1BF6246300154622 /* exportSGR.cpp in Sources */,
 				256F6D731BF624FB00154622 /* Frustum.cpp in Sources */,
+				4EAC76BD22CB21CC00820B63 /* pngwio.c in Sources */,
 				25DE11081CAA8D6D0076F669 /* btSimpleDynamicsWorld.cpp in Sources */,
 				25DE111C1CAA8D6D0076F669 /* btMLCPSolver.cpp in Sources */,
 				25DE10B41CAA8D6D0076F669 /* btGImpactBvh.cpp in Sources */,
 				25DE106A1CAA8D6D0076F669 /* btBoxShape.cpp in Sources */,
+				4EAC76C322CB21CC00820B63 /* pngerror.c in Sources */,
 				25DE108A1CAA8D6D0076F669 /* btHeightfieldTerrainShape.cpp in Sources */,
 				25DE104E1CAA8D6D0076F669 /* btConvexPlaneCollisionAlgorithm.cpp in Sources */,
 				25FA14A11D3CF6B000A95DA3 /* TexturePropCell.m in Sources */,
@@ -9390,6 +9465,7 @@
 				25DE110A1CAA8D6D0076F669 /* btMultiBody.cpp in Sources */,
 				3D3F59141C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */,
 				25DE10C61CAA8D6D0076F669 /* btContinuousConvexCollision.cpp in Sources */,
+				4EAC76B322CB21CC00820B63 /* pngmem.c in Sources */,
 				25069F591D2B9CEB00DBAE44 /* Options.m in Sources */,
 				25DE102C1CAA8D6D0076F669 /* btOverlappingPairCache.cpp in Sources */,
 				25DE10CA1CAA8D6D0076F669 /* btGjkConvexCast.cpp in Sources */,
@@ -9397,6 +9473,7 @@
 				25DE10941CAA8D6D0076F669 /* btPolyhedralConvexShape.cpp in Sources */,
 				25DE10B21CAA8D6D0076F669 /* btGenericPoolAllocator.cpp in Sources */,
 				25D96E631CCF43E600A5AEED /* Vector4.cpp in Sources */,
+				4EAC76B122CB21CC00820B63 /* pngtrans.c in Sources */,
 				25DE10521CAA8D6D0076F669 /* btEmptyCollisionAlgorithm.cpp in Sources */,
 				25DE103A1CAA8D6D0076F669 /* btBoxBoxDetector.cpp in Sources */,
 				256F6BAE1BF6246300154622 /* SGNode.cpp in Sources */,
@@ -9441,12 +9518,16 @@
 				25B5B1711BE33EFB00AC2525 /* ZipArchive.mm in Sources */,
 				3D71B0741C2930E30038C4BD /* AssetFrameCell.mm in Sources */,
 				C8AA46F41C227D1000C4AB53 /* SceneSelectionControllerNew.mm in Sources */,
+				4EAC76BF22CB21CC00820B63 /* pngwtran.c in Sources */,
 				E20671161B049AA6006DD2F7 /* NSImage+ANImageBitmapRep.m in Sources */,
+				4EAC76AF22CB21CC00820B63 /* pngset.c in Sources */,
 				25D96E671CCF7B9900A5AEED /* Quaternion.cpp in Sources */,
 				25DE10401CAA8D6D0076F669 /* btCollisionWorld.cpp in Sources */,
 				256F6DA11BF624FB00154622 /* EmptyNode.cpp in Sources */,
 				25DE10221CAA8D6D0076F669 /* btCollisionAlgorithm.cpp in Sources */,
+				4EAC76C922CB21CC00820B63 /* pngread.c in Sources */,
 				25DE11021CAA8D6D0076F669 /* btUniversalConstraint.cpp in Sources */,
+				4EAC76C122CB21CC00820B63 /* png.c in Sources */,
 				25DE10881CAA8D6D0076F669 /* btEmptyShape.cpp in Sources */,
 				3D3F591B1C2801C600713C79 /* TextFrameCell.m in Sources */,
 				25DE10AC1CAA8D6D0076F669 /* btTriangleMeshShape.cpp in Sources */,
@@ -9466,6 +9547,7 @@
 				018501DD1C2BDA730090FA65 /* EditorViewController.mm in Sources */,
 				256F6DA31BF624FB00154622 /* InstanceNode.cpp in Sources */,
 				25DE10D01CAA8D6D0076F669 /* btGjkPairDetector.cpp in Sources */,
+				4EAC76B522CB21CC00820B63 /* pngrio.c in Sources */,
 				3D58CD5F1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */,
 				25D7DA691D06F6DC00E84D2F /* UILabel+JDFTooltips.m in Sources */,
 				25DE10901CAA8D6D0076F669 /* btMultiSphereShape.cpp in Sources */,
@@ -9494,6 +9576,7 @@
 				25DE11041CAA8D6D0076F669 /* btDiscreteDynamicsWorld.cpp in Sources */,
 				256F6EAB1BF624FB00154622 /* OGLES2RenderManager.cpp in Sources */,
 				25DE0EA21CAA8C980076F669 /* btConvexHullComputer.cpp in Sources */,
+				4EAC76B722CB21CC00820B63 /* pngwutil.c in Sources */,
 				25DE114A1CAA91310076F669 /* btSoftSoftCollisionAlgorithm.cpp in Sources */,
 				E20671551B049AA6006DD2F7 /* ANImageBitmapRep.m in Sources */,
 				E20671561B049AA6006DD2F7 /* OSCommonImage.m in Sources */,
@@ -9502,6 +9585,7 @@
 				25DE11441CAA91310076F669 /* btSoftBodyRigidBodyCollisionConfiguration.cpp in Sources */,
 				01ACD0D41C3D38D90096AD14 /* SGAutoRigSceneManager.cpp in Sources */,
 				25DE10861CAA8D6D0076F669 /* btCylinderShape.cpp in Sources */,
+				4EAC76CB22CB21CC00820B63 /* pngpread.c in Sources */,
 				25DE0EA81CAA8C980076F669 /* btQuickprof.cpp in Sources */,
 				25DE102E1CAA8D6D0076F669 /* btQuantizedBvh.cpp in Sources */,
 				E206715C1B049AA6006DD2F7 /* AssetItem.m in Sources */,
@@ -9543,6 +9627,7 @@
 				3DC311C51C85BCF000D716F2 /* TableViewCell.m in Sources */,
 				25FCAB4E1C3003330051DBBA /* SGMovementManager.cpp in Sources */,
 				E206718A1B049AA6006DD2F7 /* UIImage+ANImageBitmapRep.m in Sources */,
+				4EAC76B922CB21CC00820B63 /* pngwrite.c in Sources */,
 				25DE10981CAA8D6D0076F669 /* btShapeHull.cpp in Sources */,
 				25DE108C1CAA8D6D0076F669 /* btMinkowskiSumShape.cpp in Sources */,
 				25DE11121CAA8D6D0076F669 /* btMultiBodyJointLimitConstraint.cpp in Sources */,
@@ -9558,6 +9643,7 @@
 				25DE105C1CAA8D6D0076F669 /* btSimulationIslandManager.cpp in Sources */,
 				25069F601D2BDAC900DBAE44 /* CommonProps.mm in Sources */,
 				256F6D6F1BF624FB00154622 /* BoundingBox.cpp in Sources */,
+				4EAC76C522CB21CC00820B63 /* pngrtran.c in Sources */,
 				25DE10F21CAA8D6D0076F669 /* btHinge2Constraint.cpp in Sources */,
 				25DE103C1CAA8D6D0076F669 /* btCollisionDispatcher.cpp in Sources */,
 				25DE11181CAA8D6D0076F669 /* btDantzigLCP.cpp in Sources */,
@@ -9571,6 +9657,7 @@
 				25DAD21F1C2D49090050BC88 /* SGSelectionManager.cpp in Sources */,
 				256F6BB41BF6246300154622 /* ShaderManager.cpp in Sources */,
 				25DE10821CAA8D6D0076F669 /* btConvexShape.cpp in Sources */,
+				4EAC76BB22CB21CC00820B63 /* pngget.c in Sources */,
 				25D7DA631D06F6DC00E84D2F /* JDFSequentialTooltipManager.m in Sources */,
 				25034FE51D24F9960036F201 /* OnBoardVC.m in Sources */,
 				256F6D751BF624FB00154622 /* Line3D.cpp in Sources */,
@@ -9582,6 +9669,7 @@
 				256F6EB71BF624FB00154622 /* Helper.cpp in Sources */,
 				256F6D791BF624FB00154622 /* Plane3D.cpp in Sources */,
 				25DE101E1CAA8D6D0076F669 /* btAxisSweep3.cpp in Sources */,
+				4EAC76C722CB21CC00820B63 /* pngrutil.c in Sources */,
 				E20671B21B049AA6006DD2F7 /* CacheSystem.m in Sources */,
 				256F6B8A1BF6246300154622 /* BoneLimitsHelper.cpp in Sources */,
 				256F6DA71BF624FB00154622 /* LightNode.cpp in Sources */,
@@ -9946,7 +10034,7 @@
 				C885D7AF1876BE6200A45D71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C885D7B01876BE6200A45D71 /* Build configuration list for PBXNativeTarget "Iyan3D" */ = {
 			isa = XCConfigurationList;
@@ -9955,7 +10043,7 @@
 				C885D7B21876BE6200A45D71 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		E20674031B049AA6006DD2F7 /* Build configuration list for PBXNativeTarget "Iyan3D-Simulator" */ = {
 			isa = XCConfigurationList;
@@ -9964,7 +10052,7 @@
 				E20674051B049AA6006DD2F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

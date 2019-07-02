@@ -47,11 +47,9 @@ typedef struct
 
 typedef struct {
     float hasLighting;
-    float pointSize [[point_size]];
     float vertexDepth, reflection;
     float hasMeshColor;
     float shadowDarkness, transparency;
-    float2 pointCoord [[ point_coord ]];
     float2 uv,texture2UV;
     float4 position [[position]] , vertexPosition_ws;
     float4 eyeVec, lightDir, lightColor;
@@ -260,105 +258,6 @@ vertex ColorInOut Text_Skin_Vertex(device vertex_heavy_t* vertex_array [[ buffer
     out.eyeVec = normalize(eye_position_cameraspace - vertexPosition_ws);
     
     return out;
-}
-
-#define SHADER_PARTICLE_vp 1
-#define SHADER_PARTICLE_sColor 2
-#define SHADER_PARTICLE_mColor 3
-#define SHADER_PARTICLE_eColor 4
-#define SHADER_PARTICLE_props 5
-#define SHADER_PARTICLE_positions 6
-#define SHADER_PARTICLE_rotations 7
-#define SHADER_PARTICLE_texture1 8
-#define SHADER_PARTICLE_world 9
-#define SHADER_PARTICLE_hasMeshColor 10
-
-vertex ColorInOut Particle_Vertex(device vertex_t* vertex_array [[ buffer(0) ]],
-                                  constant float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
-                                  constant float4x4& model [[ buffer(SHADER_PARTICLE_world)]],
-                                  constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
-                                  constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
-                                  constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
-                                  constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
-                                  constant float* hasMeshColor[[ buffer(SHADER_PARTICLE_hasMeshColor)]],
-                                  unsigned int vid [[ vertex_id ]]
-                                  )
-{
-    
-    float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
-    float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
-    
-    
-    ColorInOut out;
-    
-    float percent = (in_normal.x/props[0]);
-    float phase = (percent > 0.5);
-    
-    float4 startColor = float4(sColor[0], sColor[1], sColor[2], 1.0);
-    float4 midColor = float4(mColor[0], mColor[1], mColor[2], 1.0);
-    float4 endColor = float4(eColor[0], eColor[1], eColor[2], 1.0);
-
-    float4 s = mix(startColor, midColor, phase);
-    float4 e = mix(midColor, endColor, phase);
-    float age = mix(percent, float(percent - 0.5), phase) * 2.0;
-    
-    out.meshColor = (int(hasMeshColor[0]) == 0) ? float3(mix(s, e, age).xyz) : float3(float4(sColor).xyz);
-    
-    float live = float(in_normal.x > 0.0 && in_normal.x <= props[0]);
-    
-    float3 temp = float3(props[1] - in_position.x, props[2] - in_position.y, props[3] - in_position.z);
-    float dist = sqrt(temp.x * temp.x + temp.y * temp.y + temp.z * temp.z);
-    
-    out.position = vp * in_position;
-    
-    out.pointSize = (64.0 * sColor[3]/mColor[3] * live) * (100.0/dist);
-    
-    return out;
-}
-
-vertex ColorInOut Particle_Vertex_RTT(device vertex_t* vertex_array [[ buffer(0) ]],
-                                      constant float4x4& vp [[ buffer(SHADER_PARTICLE_vp) ]],
-                                      constant float4x4& model [[ buffer(SHADER_PARTICLE_world)]],
-                                      constant packed_float4& sColor [[ buffer(SHADER_PARTICLE_sColor) ]],
-                                      constant packed_float4& mColor [[ buffer(SHADER_PARTICLE_mColor) ]],
-                                      constant packed_float4& eColor [[ buffer(SHADER_PARTICLE_eColor) ]],
-                                      constant packed_float4& props [[ buffer(SHADER_PARTICLE_props) ]],
-                                      constant float4Struct *positions [[ buffer(SHADER_PARTICLE_positions) ]],
-                                      constant float4Struct *rotations [[ buffer(SHADER_PARTICLE_rotations) ]],
-                                      constant float* hasMeshColor[[ buffer(SHADER_PARTICLE_hasMeshColor)]],
-                                      unsigned int vid [[ vertex_id ]]
-                                      )
-{
-    float4 in_position = float4(float3(vertex_array[vid].position), 1.0);
-    float4 in_normal = float4(float3(vertex_array[vid].normal), 0.0);
-    
-    ColorInOut out;
-    
-    out.meshColor = float4(sColor).xyz;
-    
-    float live = float(in_normal.x > 0.0 && in_normal.x <= props[0]);
-    
-    float3 temp = float3(props[1] - in_position[0], props[2] - in_position[1], props[3] - in_position[2]);
-    float dist = sqrt(temp.x * temp.x + temp.y * temp.y + temp.z * temp.z);
-    
-    out.position = vp * in_position;
-    out.pointSize = (8.0 * live) * (100.0/dist);
-    
-    return out;
-}
-
-fragment float4 Particle_Fragment(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
-{
-    float4 color = float4(in.meshColor, 1.0);
-    constexpr sampler quad_sampler(address::repeat,filter::linear);
-    color[3] =  tex2D.sample(quad_sampler, in.pointCoord)[0];
-    return color;
-}
-
-fragment float4 Particle_Fragment_RTT(ColorInOut in [[stage_in]], texture2d<half>  tex2D [[texture(SHADER_PARTICLE_texture1)]])
-{
-    float4 color = float4(in.meshColor, 1.0);
-    return color;
 }
 
 #define SHADER_MESH_mvp 1

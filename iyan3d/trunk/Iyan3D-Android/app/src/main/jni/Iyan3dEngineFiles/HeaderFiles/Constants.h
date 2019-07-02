@@ -18,7 +18,7 @@
 #define OBJ_IMPORT_IAP @"objimport"
 #define VIEWCAMERA_ZOOM_START 1.89
 #define CONTROLS_DEFAULT_DISTANCE 7.0
-#define TOTAL_MATERIALS 12
+#define TOTAL_MATERIALS 10
 #define SELECTION_COLOR_R 0.0
 #define SELECTION_COLOR_G 1.0
 #define SELECTION_COLOR_B 0.0
@@ -181,8 +181,8 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_SHADOW_DEPTH_PASS_SKIN","depthPassSkin.vsh","depthPass.fsh"},
     {"SHADER_DRAW_2D_IMAGE_DEPTH", "draw2dImage.vsh","draw2dImage.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
-    {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
-    {"SHADER_PARTICLES_RTT", "particlesRTT.vsh","particles.fsh"}
+//    {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
+//    {"SHADER_PARTICLES_RTT", "particlesRTT.vsh","particles.fsh"}
 };
 
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
@@ -197,8 +197,8 @@ const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_SHADOW_DEPTH_PASS_SKIN","Depth_Pass_Skin_vert",""},
     {"SHADER_DRAW_2D_IMAGE_DEPTH", "Draw2DImage_Vertex","Draw2DImage_Fragment_Depth"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
-    {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"},
-    {"SHADER_PARTICLES_RTT", "Particle_Vertex_RTT","Particle_Fragment_RTT"}
+//    {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"},
+//    {"SHADER_PARTICLES_RTT", "Particle_Vertex_RTT","Particle_Fragment_RTT"}
 };
 
 

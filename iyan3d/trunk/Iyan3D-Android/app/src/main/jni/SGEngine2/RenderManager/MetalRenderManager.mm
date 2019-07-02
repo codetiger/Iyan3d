@@ -37,7 +37,7 @@ MetalRenderManager::MetalRenderManager(void *renderView, float screenWidth, floa
 
 MetalRenderManager::~MetalRenderManager()
 {
-    device = nil;
+    _device = nil;
     _commandQueue = nil;
     
     if(this->camera)
@@ -46,17 +46,17 @@ MetalRenderManager::~MetalRenderManager()
 
 bool MetalRenderManager::setupMetal()
 {
-    device = MTLCreateSystemDefaultDevice();
-    _commandQueue = [device newCommandQueue];
+    _device = MTLCreateSystemDefaultDevice();
+    _commandQueue = [_device newCommandQueue];
     if(!_commandQueue)
         return false;
     
-    _defaultLibrary = [device newDefaultLibrary];
+    _defaultLibrary = [_device newDefaultLibrary];
     if(!_defaultLibrary)
         return false;
 
     setupMetalLayer();
-    MetalHandler::setDevice(device);
+    MetalHandler::setDevice(_device);
     MetalHandler::setMTLLayer(_metalLayer);
     MetalHandler::setMTLLibrary(_defaultLibrary);
     _inflight_semaphore = dispatch_semaphore_create(4);
@@ -69,7 +69,7 @@ bool MetalRenderManager::setupMetal()
 void MetalRenderManager::setupMetalLayer()
 {
     _metalLayer = (CAMetalLayer*)mtlRenderView.layer;
-    _metalLayer.device = device;
+    _metalLayer.device = _device;
     _metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
     _metalLayer.framebufferOnly = YES;
     CGSize drawableSize = renderView.bounds.size;
@@ -84,11 +84,11 @@ void MetalRenderManager::setupMetalLayer()
     MTLDepthStencilDescriptor *depthStateDesc = [[MTLDepthStencilDescriptor alloc] init];
     depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
     depthStateDesc.depthWriteEnabled = YES;
-    _generalDepthWriteEnableState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+    _generalDepthWriteEnableState = [_device newDepthStencilStateWithDescriptor:depthStateDesc];
 
     depthStateDesc.depthCompareFunction = CompareFunctionLessEqual;
     depthStateDesc.depthWriteEnabled = NO;
-    _generalDepthWriteDisableState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
+    _generalDepthWriteDisableState = [_device newDepthStencilStateWithDescriptor:depthStateDesc];
 }
 
 void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func, bool writeDepth, bool clearDepthBuffer)
@@ -146,7 +146,8 @@ void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> tex
         MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width: texture.width height: texture.height mipmapped: NO];
         desc.textureType = colorTextureType;
         desc.sampleCount = sampleCount;
-        _depthTex = [device newTextureWithDescriptor: desc];
+        desc.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
+        _depthTex = [_device newTextureWithDescriptor: desc];
     }
     
     _renderPassDescriptor.depthAttachment.texture = _depthTex;
@@ -517,7 +518,7 @@ int MetalRenderManager::getAvailableBfferWithSize(int bufSize)
     }
     if(bufIndex == NOT_EXISTS){
         BufferState bufState;
-        bufState.buf = [device newBufferWithLength:bufSize options:MTLResourceCPUCacheModeWriteCombined];
+        bufState.buf = [_device newBufferWithLength:bufSize options:MTLResourceCPUCacheModeWriteCombined];
         MTLBuffersMap[bufSize].push_back(bufState);
         bufIndex = (int)MTLBuffersMap[bufSize].size() - 1;
         MTLBuffersMap[bufSize][bufIndex].isOccupied = true;
@@ -547,6 +548,7 @@ shared_ptr<CameraNode> MetalRenderManager::getActiveCamera()
 Texture* MetalRenderManager::createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height)
 {
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:getTexturePixelFormat(format) width:width height:height mipmapped:NO];
+    texDesc.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
     id<MTLTexture> texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
     MTLTexture *MtlTex = new MTLTexture();
     MtlTex->texture = texture;
@@ -571,7 +573,8 @@ id<MTLTexture> MetalRenderManager::getMSATexture(int sampleCount,int width,int h
                                          width:width height:height mipmapped:NO];
     msaaTexDesc.textureType = MTLTextureType2DMultisample;
     msaaTexDesc.sampleCount = sampleCount;
-    return [device newTextureWithDescriptor:msaaTexDesc];
+    msaaTexDesc.usage = MTLTextureUsageRenderTarget;
+    return [_device newTextureWithDescriptor:msaaTexDesc];
 }
 
 void MetalRenderManager::setRenderTarget(Texture *renderTexture, bool clearBackBuffer, bool clearZBuffer, bool isDepthPass, Vector4 color)
@@ -602,7 +605,8 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture, bool clearBackB
             MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width:((MTLTexture*)renderTexture)->texture.width height:((MTLTexture*)renderTexture)->texture.height mipmapped: NO];
             desc.sampleCount = sampleCount;
             desc.textureType = colorTextureType;
-            _renderTargetDepthTex = [device newTextureWithDescriptor: desc];
+            desc.usage = MTLTextureUsageRenderTarget;
+            _renderTargetDepthTex = [_device newTextureWithDescriptor: desc];
             //            }
         }
         
@@ -679,7 +683,7 @@ void MetalRenderManager::createVertexAndIndexBuffers(shared_ptr<Node> node,MESH_
         
         if(updateBothBuffers) {
             unsigned int length = nodeMes->getIndicesCount(i) * sizeof(unsigned short);
-            [MTLNode->indexBuffers addObject:[device newBufferWithBytes:nodeMes->getIndicesArray(i) length:length options:MTLResourceCPUCacheModeWriteCombined]];
+            [MTLNode->indexBuffers addObject:[_device newBufferWithBytes:nodeMes->getIndicesArray(i) length:length options:MTLResourceCPUCacheModeWriteCombined]];
         }
     }
 }
@@ -721,9 +725,9 @@ void MetalRenderManager::createVertexBuffer(shared_ptr<Node> node,short meshBuff
         
     } else {
         if(meshType == MESH_TYPE_LITE)
-            buf = [device newBufferWithBytes:&(nodeMes->getLiteVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexData) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceCPUCacheModeWriteCombined];
+            buf = [_device newBufferWithBytes:&(nodeMes->getLiteVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexData) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceCPUCacheModeWriteCombined];
         else
-            buf = [device newBufferWithBytes:&(nodeMes->getHeavyVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexDataHeavy) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceCPUCacheModeWriteCombined];
+            buf = [_device newBufferWithBytes:&(nodeMes->getHeavyVerticesArray(meshBufferIndex)[0]) length:sizeof(vertexDataHeavy) * nodeMes->getVerticesCountInMeshBuffer(meshBufferIndex) options:MTLResourceCPUCacheModeWriteCombined];
         if(buf)
             [MTLNode->VertexBuffers addObject:buf];
     }

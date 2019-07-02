@@ -20,17 +20,18 @@
     {
         
     }
-   return self;
+    return self;
 }
 
 + (Class)layerClass
 {
 #if !(TARGET_IPHONE_SIMULATOR)
-//        if(MTLCreateSystemDefaultDevice())
-//            return [CAMetalLayer class];
-//        else
+    if(MTLCreateSystemDefaultDevice())
+        return [CAMetalLayer class];
+    else
 #endif
-            return [CAEAGLLayer class];
+        return [CAEAGLLayer class];
 }
 
 @end
+

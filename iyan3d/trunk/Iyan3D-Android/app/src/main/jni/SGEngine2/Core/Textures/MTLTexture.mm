@@ -104,7 +104,8 @@ bool MTLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
     CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), image.CGImage );
     
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
-    
+    texDesc.usage = MTLTextureUsageShaderRead;
+
     texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
     if(!texture)
         return NO;
@@ -164,6 +165,7 @@ bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
     CGContextDrawImage(spriteContext, CGRectMake(0, 0, target, target), imageRef);
 
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
+    texDesc.usage = MTLTextureUsageShaderRead;
     texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
     if(!texture || !textureData || !spriteContext)
         return NO;

@@ -25,7 +25,7 @@ void MetalHandler::setDevice(id <MTLDevice> metalDevice)
 id <MTLDevice> MetalHandler::getMTLDevice()
 {
     if(!device)
-        Logger::log(ERROR,"MetalHandler" , "Metal Device is null,not from metal view");
+        Logger::log(ERROR,"MetalHandler" , "Metal Device is null, not from metal view");
     return device;
 }
 
