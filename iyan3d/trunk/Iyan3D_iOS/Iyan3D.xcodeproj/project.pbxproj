@@ -1474,7 +1474,6 @@
 		4EB47E7022D49BE900DC89D0 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6822D49BE800DC89D0 /* Material.cpp */; };
 		4EB47E7122D49BE900DC89D0 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6822D49BE800DC89D0 /* Material.cpp */; };
 		4EB47E7222D49BE900DC89D0 /* MTLMaterial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6B22D49BE900DC89D0 /* MTLMaterial.mm */; };
-		4EB47E7322D49BE900DC89D0 /* MTLMaterial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6B22D49BE900DC89D0 /* MTLMaterial.mm */; };
 		4EB47E7422D49BE900DC89D0 /* MaterialManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6C22D49BE900DC89D0 /* MaterialManager.cpp */; };
 		4EB47E7522D49BE900DC89D0 /* MaterialManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6C22D49BE900DC89D0 /* MaterialManager.cpp */; };
 		4EB47E7622D49BE900DC89D0 /* OGLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6E22D49BE900DC89D0 /* OGLMaterial.cpp */; };
@@ -1500,7 +1499,6 @@
 		4EB47EB222D49C2400DC89D0 /* JointNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9822D49C2200DC89D0 /* JointNode.cpp */; };
 		4EB47EB322D49C2400DC89D0 /* JointNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9822D49C2200DC89D0 /* JointNode.cpp */; };
 		4EB47EB422D49C2400DC89D0 /* MTLNodeData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9922D49C2200DC89D0 /* MTLNodeData.mm */; };
-		4EB47EB522D49C2400DC89D0 /* MTLNodeData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9922D49C2200DC89D0 /* MTLNodeData.mm */; };
 		4EB47EB622D49C2400DC89D0 /* LightNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9A22D49C2300DC89D0 /* LightNode.cpp */; };
 		4EB47EB722D49C2400DC89D0 /* LightNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9A22D49C2300DC89D0 /* LightNode.cpp */; };
 		4EB47EB822D49C2400DC89D0 /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9C22D49C2300DC89D0 /* ParticleManager.cpp */; };
@@ -1518,7 +1516,6 @@
 		4EB47EC422D49C2400DC89D0 /* AnimatedMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EAA22D49C2400DC89D0 /* AnimatedMeshNode.cpp */; };
 		4EB47EC522D49C2400DC89D0 /* AnimatedMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EAA22D49C2400DC89D0 /* AnimatedMeshNode.cpp */; };
 		4EB47ECD22D49C3B00DC89D0 /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EC822D49C3A00DC89D0 /* MTLTexture.mm */; };
-		4EB47ECE22D49C3B00DC89D0 /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EC822D49C3A00DC89D0 /* MTLTexture.mm */; };
 		4EB47ECF22D49C3B00DC89D0 /* OGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47ECA22D49C3B00DC89D0 /* OGLTexture.cpp */; };
 		4EB47ED022D49C3B00DC89D0 /* OGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47ECA22D49C3B00DC89D0 /* OGLTexture.cpp */; };
 		4EB47ED522D49C5600DC89D0 /* SceneImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47ED322D49C5600DC89D0 /* SceneImporter.cpp */; };
@@ -1528,7 +1525,6 @@
 		4EB47EE822D49C7400DC89D0 /* PngFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EDC22D49C7300DC89D0 /* PngFileManager.cpp */; };
 		4EB47EE922D49C7400DC89D0 /* PngFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EDC22D49C7300DC89D0 /* PngFileManager.cpp */; };
 		4EB47EEA22D49C7400DC89D0 /* MetalRenderManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE022D49C7300DC89D0 /* MetalRenderManager.mm */; };
-		4EB47EEB22D49C7400DC89D0 /* MetalRenderManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE022D49C7300DC89D0 /* MetalRenderManager.mm */; };
 		4EB47EEC22D49C7400DC89D0 /* OGLES2RenderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE222D49C7400DC89D0 /* OGLES2RenderManager.cpp */; };
 		4EB47EED22D49C7400DC89D0 /* OGLES2RenderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE222D49C7400DC89D0 /* OGLES2RenderManager.cpp */; };
 		4EB47EEE22D49C7400DC89D0 /* ImageLoaderOBJC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE422D49C7400DC89D0 /* ImageLoaderOBJC.mm */; };
@@ -1536,7 +1532,6 @@
 		4EB47EF222D49C9000DC89D0 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EF022D49C9000DC89D0 /* SceneManager.cpp */; };
 		4EB47EF322D49C9000DC89D0 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EF022D49C9000DC89D0 /* SceneManager.cpp */; };
 		4EB47EF922D49CAD00DC89D0 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EF722D49CAD00DC89D0 /* MetalHandler.mm */; };
-		4EB47EFA22D49CAD00DC89D0 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EF722D49CAD00DC89D0 /* MetalHandler.mm */; };
 		4EB47F0322D49D0000DC89D0 /* Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EFB22D49CFF00DC89D0 /* Helper.cpp */; };
 		4EB47F0422D49D0000DC89D0 /* Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EFB22D49CFF00DC89D0 /* Helper.cpp */; };
 		4EB47F0522D49D0000DC89D0 /* DownloadTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EFD22D49D0000DC89D0 /* DownloadTask.mm */; };
@@ -9441,7 +9436,6 @@
 				4EB4811022D49E0E00DC89D0 /* btGImpactBvh.cpp in Sources */,
 				4EB47D9F22D49AA400DC89D0 /* SGSelectionManager.cpp in Sources */,
 				254A4B321D34F82B00D23D6D /* SwitchPropCell.mm in Sources */,
-				4EB47E7322D49BE900DC89D0 /* MTLMaterial.mm in Sources */,
 				25D7DA671D06F6DC00E84D2F /* JDFTooltipView.m in Sources */,
 				4EB47E3822D49B6E00DC89D0 /* pngwrite.c in Sources */,
 				01B4BCC01C32A69900E09269 /* PopUpViewController.mm in Sources */,
@@ -9500,7 +9494,6 @@
 				4EB47E8C22D49C0500DC89D0 /* Joint.cpp in Sources */,
 				4EB47F0A22D49D0000DC89D0 /* Logger.cpp in Sources */,
 				4EB480A422D49E0E00DC89D0 /* btMultiSapBroadphase.cpp in Sources */,
-				4EB47EB522D49C2400DC89D0 /* MTLNodeData.mm in Sources */,
 				3D58CD651C3D43C2006371DE /* WEPopoverContainerViewProperties.m in Sources */,
 				4EB4819422D49E0F00DC89D0 /* btMLCPSolver.cpp in Sources */,
 				3D58CD481C3D0D3D006371DE /* TextColorPicker.mm in Sources */,
@@ -9632,12 +9625,10 @@
 				E206716A1B049AA6006DD2F7 /* main.m in Sources */,
 				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				4EB481B422D49E0F00DC89D0 /* btFixedConstraint.cpp in Sources */,
-				4EB47ECE22D49C3B00DC89D0 /* MTLTexture.mm in Sources */,
 				4EB4813022D49E0E00DC89D0 /* btCollisionShape.cpp in Sources */,
 				4EB47E7722D49BE900DC89D0 /* OGLMaterial.cpp in Sources */,
 				E20671771B049AA6006DD2F7 /* AssetCellView.mm in Sources */,
 				4EB480B622D49E0E00DC89D0 /* btGjkPairDetector.cpp in Sources */,
-				4EB47EFA22D49CAD00DC89D0 /* MetalHandler.mm in Sources */,
 				4EB4812622D49E0E00DC89D0 /* btBox2dShape.cpp in Sources */,
 				25B5B16D1BE33EFB00AC2525 /* unzip.c in Sources */,
 				4EB4812422D49E0E00DC89D0 /* btTriangleCallback.cpp in Sources */,
@@ -9685,7 +9676,6 @@
 				01B4CF8B1C291EFD0091E19B /* FrameCellNew.mm in Sources */,
 				4EB4817422D49E0E00DC89D0 /* btSoftBodyHelpers.cpp in Sources */,
 				4EB47E1E22D49B6E00DC89D0 /* pngrtran.c in Sources */,
-				4EB47EEB22D49C7400DC89D0 /* MetalRenderManager.mm in Sources */,
 				4EB480B822D49E0E00DC89D0 /* btConvexCast.cpp in Sources */,
 				4EB481B222D49E0F00DC89D0 /* btPoint2PointConstraint.cpp in Sources */,
 				4EB480BE22D49E0E00DC89D0 /* btGjkEpa2.cpp in Sources */,
