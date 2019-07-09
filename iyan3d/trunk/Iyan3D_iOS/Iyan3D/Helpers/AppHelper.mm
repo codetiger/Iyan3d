@@ -14,10 +14,6 @@
 #import "Constants.h"
 #import "DownloadTask.h"
 
-#define FIVE_THOUSAND_CREDITS @"basicrecharge"
-#define TWENTY_THOUSAND_CREDITS @"mediumrecharge"
-#define FIFTY_THOUSAND_CREDITS @"megarecharge"
-
 @implementation AppHelper
 
 + (AppHelper*)getAppHelper

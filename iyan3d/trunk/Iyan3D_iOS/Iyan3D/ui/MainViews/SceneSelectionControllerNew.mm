@@ -219,7 +219,7 @@
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
         picker.mailComposeDelegate = self;
-        NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
+        NSArray *usersTo = [NSArray arrayWithObject: @"codetiger42@icloud.com"];
         [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@, iOS Version: %@)", [self deviceName], iOSVersion]];
         [picker setToRecipients:usersTo];
         [self presentModalViewController:picker animated:YES];
@@ -369,7 +369,7 @@
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
             picker.mailComposeDelegate = self;
-            NSArray *usersTo = [NSArray arrayWithObject: @"iyan3d@smackall.com"];
+            NSArray *usersTo = [NSArray arrayWithObject: @"codetiger42@icloud.com"];
             [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d pro app (%@  , iOS Version: %@)", [self deviceName], iOSVersion]];
             [picker setToRecipients:usersTo];
             [self presentModalViewController:picker animated:YES];
@@ -539,7 +539,6 @@
 
 -(void)shareScene:(NSNumber*)value
 {
-    
     SceneItem * scene = scenesArray[selectedSceneIndex];
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];

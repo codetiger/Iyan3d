@@ -859,8 +859,6 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize)
     thread = nil;
     [self.delegate freezeEditorRender:NO];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsupdate" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"creditsused" object:nil];
 }
 
 - (IBAction)transparentBgValueChanged:(id)sender
