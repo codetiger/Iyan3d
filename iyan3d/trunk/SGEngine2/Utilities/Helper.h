@@ -13,16 +13,8 @@
 #include <iostream>
 #include "../Core/common/common.h"
 
-#ifdef ANDROID
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#elif IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-#elif UBUNTU
-
-#endif
-
 
 class Helper{
 public:

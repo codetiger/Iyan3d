@@ -5,10 +5,9 @@
 //  Created by Vivek on 07/02/15.
 //  Copyright (c) 2015 Vivek. All rights reserved.
 //
-#ifdef IOS
+
 #import <Foundation/Foundation.h>
 #include "MetalHandler.h"
-#endif
 #include "MTLMaterial.h"
 
 MTLMaterial::MTLMaterial()

@@ -6,16 +6,13 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifdef IOS
 #ifndef __SGEngine2__MetalRenderManager__
 #define __SGEngine2__MetalRenderManager__
-#ifdef IOS
-#if !(TARGET_IPHONE_SIMULATOR)
-    #import <QuartzCore/CAMetalLayer.h>
-    #import <Metal/Metal.h>
-#endif
+
+#import <QuartzCore/CAMetalLayer.h>
+#import <Metal/Metal.h>
 #import <UIKit/UIKit.h>
-#endif
+
 #import "MetalWrapper.h"
 #include "RenderManager.h"
 #include "../Utilities/Logger.h"
@@ -27,8 +24,6 @@
 class MetalRenderManager:public RenderManager{
     
 private:
-    //---
-#if !(TARGET_IPHONE_SIMULATOR)
     CAMetalLayer *_metalLayer;
     id <CAMetalDrawable> _currentDrawable;
     MTLRenderPassDescriptor *_renderPassDescriptor;
@@ -59,7 +54,7 @@ private:
     id <CAMetalDrawable> drawable;
         
     dispatch_semaphore_t        _inflight_semaphore;
-    UIView *renderView;
+    MTKView *renderView;
     bool isCmdBufferCommited,isEncodingEnded;
     float screenWidth,screenHeight, screenScale;
 
@@ -116,13 +111,6 @@ public:
     void writeImageToFile(Texture *texture , char* filePath,IMAGE_FLIP flipType = NO_FLIP);
 
     void resetTextureCache();
-
-#endif
 };
 
-
-
-
 #endif /* defined(__SGEngine2__MetalRenderManager__) */
-
-#endif

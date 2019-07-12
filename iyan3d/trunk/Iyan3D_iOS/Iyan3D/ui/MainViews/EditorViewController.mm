@@ -175,10 +175,6 @@ BOOL missingAlertShown;
     self.publishBtn.layer.cornerRadius = CORNER_RADIUS;
     
     
-#if !(TARGET_IPHONE_SIMULATOR)
-    isMetalSupported = (MTLCreateSystemDefaultDevice() != NULL) ? true : false;
-#endif
-
     constants::BundlePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     if ([Utility IsPadDevice])
@@ -291,37 +287,12 @@ BOOL missingAlertShown;
     renderViewMan.delegate = self;
     [renderViewMan setupLayer:_renderView];
     
-    if (isMetalSupported) {
-        if(![[AppDelegate getAppDelegate] initEngine:METAL ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView]) {
-            isMetalSupported = false;
-        } else {
-            smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-            
-            editorScene = new SGEditorScene(METAL, smgr, ScreenWidth * screenScale, ScreenHeight * screenScale, 4000);
-            [renderViewMan setUpPaths:smgr];
-            editorScene->screenScale = screenScale;
-        }
-    }
-    if(!isMetalSupported) {
-        
-        maxUnisKey = [NSString stringWithFormat:@"maxUniforms%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
-        maxJointsKey = [NSString stringWithFormat:@"maxJoints%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]];
-        
-        [renderViewMan setupContext];
-        [[AppDelegate getAppDelegate] initEngine:OPENGLES2 ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView];
+    if([[AppDelegate getAppDelegate] initEngine:ScreenWidth ScreenHeight:ScreenHeight ScreenScale:screenScale renderView:_renderView]) {
         smgr = (SceneManager*)[[AppDelegate getAppDelegate] getSceneManager];
-        [self getMaxUniformsForOpenGL];
-        [self getMaximumJointsSize];
-        int maxUnis = [[[AppHelper getAppHelper] userDefaultsForKey: maxUnisKey] intValue];
-        int maxJoints = [[[AppHelper getAppHelper] userDefaultsForKey: maxJointsKey] intValue];
-        editorScene = new SGEditorScene(OPENGLES2, smgr, ScreenWidth*screenScale, ScreenHeight*screenScale, maxUnis, maxJoints);
-        NSLog(@" \n Max joints %d ", maxJoints);
-        editorScene->screenScale = screenScale;
-        [renderViewMan setUpPaths:smgr];
-        [renderViewMan setupDepthBuffer:_renderView];
         
-        [renderViewMan setupRenderBuffer];
-        [renderViewMan setupFrameBuffer];
+        editorScene = new SGEditorScene(smgr, ScreenWidth * screenScale, ScreenHeight * screenScale, 4000);
+        [renderViewMan setUpPaths:smgr];
+        editorScene->screenScale = screenScale;
     }
     
     if ([[AppHelper getAppHelper] userDefaultsForKey:@"cameraPreviewSize"]){
@@ -331,13 +302,11 @@ BOOL missingAlertShown;
     [renderViewMan setUpCallBacks:editorScene];
     [renderViewMan addGesturesToSceneView];
     [self performSelectorOnMainThread:@selector(loadScene) withObject:nil waitUntilDone:YES];
-    
 }
 
 - (void) getMaxUniformsForOpenGL
 {
     ShaderManager::BundlePath = constants::BundlePath;
-    ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:maxUnisKey]) {
         
@@ -345,7 +314,7 @@ BOOL missingAlertShown;
         int upperLimit = 512;
         while ((upperLimit - lowerLimit) != 1) {
             int mid = (lowerLimit + upperLimit) / 2;
-            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_MESH", "mesh.vsh", "common.fsh", ShaderManager::getShaderStringsToReplace(mid), true))
+            if(ShaderManager::LoadShader(smgr, "SHADER_MESH", "mesh.vsh", "common.fsh", ShaderManager::getShaderStringsToReplace(mid), true))
                 lowerLimit = mid;
             else
                 upperLimit = mid;
@@ -361,7 +330,6 @@ BOOL missingAlertShown;
 - (void) getMaximumJointsSize
 {
     ShaderManager::BundlePath = constants::BundlePath;
-    ShaderManager::deviceType = (isMetalSupported) ? METAL : OPENGLES2;
     
     if(![[AppHelper getAppHelper] userDefaultsForKey:maxJointsKey]) {
         
@@ -369,7 +337,7 @@ BOOL missingAlertShown;
         int upperLimit = 512;
         while ((upperLimit - lowerLimit) != 1) {
             int mid = (lowerLimit + upperLimit) / 2;
-            if(ShaderManager::LoadShader(smgr, OPENGLES2, "SHADER_SKIN", "skin.vsh", "common.fsh", ShaderManager::getStringsForRiggedObjects(mid), true))
+            if(ShaderManager::LoadShader(smgr, "SHADER_SKIN", "skin.vsh", "common.fsh", ShaderManager::getStringsForRiggedObjects(mid), true))
                 lowerLimit = mid;
             else
                 upperLimit = mid;
@@ -380,11 +348,6 @@ BOOL missingAlertShown;
         smgr->clearMaterials();
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:lowerLimit] withKey:maxJointsKey];
     }
-}
-
-- (bool) isMetalSupportedDevice
-{
-    return isMetalSupported;
 }
 
 - (void) reloadFrames
@@ -766,9 +729,8 @@ BOOL missingAlertShown;
         }
         if(renderViewMan.makePanOrPinch)
             [renderViewMan panOrPinchProgress];
+        
         editorScene->renderAll();
-        if(!isMetalSupported)
-            [renderViewMan presentRenderBuffer];
     }
 }
 
@@ -3059,9 +3021,6 @@ void downloadFile(NSString* url, NSString* fileName)
                 
                 editorScene->actionMan->storePropertyChangeAction(editorScene->selectedNodeId, value, index, status);
                 editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH, matIndex).value.x = value.x;
-
-                if(smgr->device == OPENGLES2)
-                    [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
             }
             break;
         }
@@ -3229,8 +3188,6 @@ void downloadFile(NSString* url, NSString* fileName)
 {
     if(editorScene && editorScene->selectedNodeId != NOT_SELECTED && editorScene->nodes[editorScene->selectedNodeId]) {
         editorScene->nodes[editorScene->selectedNodeId]->getProperty(TEXTURE_SMOOTH, editorScene->selectedMeshBufferId).value.x = status;
-        if(smgr->device == OPENGLES2)
-            [self performSelectorOnMainThread:@selector(reloadTexture) withObject:nil waitUntilDone:NO];
     }
 }
 

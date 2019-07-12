@@ -214,49 +214,29 @@ Vector2 FileHelper::readVector2(ifstream *file)
 
 std::string FileHelper::getFontsDirectory()
 {
-#ifdef ANDROID
-    return FileHelper::getDocumentsDirectory() + "/fonts/";
-#else
     return FileHelper::getDocumentsDirectory() + "Resources/Fonts/";
-#endif
 }
 
 
 std::string FileHelper::getTexturesDirectory()
 {
-    #ifdef ANDROID
-        return FileHelper::getDocumentsDirectory() + "/textures/";
-    #else
-        return FileHelper::getDocumentsDirectory() + "Resources/Textures/";
-    #endif
+    return FileHelper::getDocumentsDirectory() + "Resources/Textures/";
 }
 
 std::string FileHelper::getCachesDirectory()
 {
-#ifdef UBUNTU
-	return "";
-#elif ANDROID
-    return constants::DocumentsStoragePath;
-#else
 	std::string home = getenv("HOME");
 	std::string caches = "/Library/Caches/";
 	std::string cachesPath = home + caches;
 	return cachesPath;
-#endif
 }
 
 std::string FileHelper::getDocumentsDirectory()
 {
-#ifdef UBUNTU
-	return "";
-#elif ANDROID
-	return constants::DocumentsStoragePath;
-#else
     std::string home = getenv("HOME");
     std::string documents = "/Documents/";
     std::string documentsPath = home + documents;
     return documentsPath;
-#endif
 }
 
 void FileHelper::setDocumentsDirectory(string documentsPath)

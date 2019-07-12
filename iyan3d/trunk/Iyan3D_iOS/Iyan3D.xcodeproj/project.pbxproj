@@ -1520,8 +1520,6 @@
 		4EB47ED022D49C3B00DC89D0 /* OGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47ECA22D49C3B00DC89D0 /* OGLTexture.cpp */; };
 		4EB47ED522D49C5600DC89D0 /* SceneImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47ED322D49C5600DC89D0 /* SceneImporter.cpp */; };
 		4EB47ED622D49C5600DC89D0 /* SceneImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47ED322D49C5600DC89D0 /* SceneImporter.cpp */; };
-		4EB47EE622D49C7400DC89D0 /* RenderingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EDA22D49C7300DC89D0 /* RenderingView.m */; };
-		4EB47EE722D49C7400DC89D0 /* RenderingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EDA22D49C7300DC89D0 /* RenderingView.m */; };
 		4EB47EE822D49C7400DC89D0 /* PngFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EDC22D49C7300DC89D0 /* PngFileManager.cpp */; };
 		4EB47EE922D49C7400DC89D0 /* PngFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EDC22D49C7300DC89D0 /* PngFileManager.cpp */; };
 		4EB47EEA22D49C7400DC89D0 /* MetalRenderManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE022D49C7300DC89D0 /* MetalRenderManager.mm */; };
@@ -1832,6 +1830,11 @@
 		4EB481CC22D49E0F00DC89D0 /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4809C22D49E0E00DC89D0 /* btAlignedAllocator.cpp */; };
 		4EB481CE22D4A55300DC89D0 /* ConversionHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB481CD22D4A55300DC89D0 /* ConversionHelper.cpp */; };
 		4EB481CF22D4A55300DC89D0 /* ConversionHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EB481CD22D4A55300DC89D0 /* ConversionHelper.cpp */; };
+		4EB481F322D4B75B00DC89D0 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EF722D49CAD00DC89D0 /* MetalHandler.mm */; };
+		4EB481F422D4B76A00DC89D0 /* MTLMaterial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E6B22D49BE900DC89D0 /* MTLMaterial.mm */; };
+		4EB481F522D4B77700DC89D0 /* MTLNodeData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47E9922D49C2200DC89D0 /* MTLNodeData.mm */; };
+		4EB481F622D4B78000DC89D0 /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EC822D49C3A00DC89D0 /* MTLTexture.mm */; };
+		4EB481F722D4B78900DC89D0 /* MetalRenderManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4EB47EE022D49C7300DC89D0 /* MetalRenderManager.mm */; };
 		62044E3419920D8F0067E21E /* button-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 62044E3319920D8F0067E21E /* button-background.png */; };
 		6231CEDF1B1484AE00DCD585 /* depthPass.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED51B1484AE00DCD585 /* depthPass.fsh */; };
 		6231CEE01B1484AE00DCD585 /* depthPass.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6231CED61B1484AE00DCD585 /* depthPass.vsh */; };
@@ -3541,7 +3544,6 @@
 		4EB47ED722D49C7300DC89D0 /* MetalWrapperForMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalWrapperForMaterial.h; path = ../../../../../../../SGEngine2/RenderManager/MetalWrapperForMaterial.h; sourceTree = "<group>"; };
 		4EB47ED822D49C7300DC89D0 /* MetalRenderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalRenderManager.h; path = ../../../../../../../SGEngine2/RenderManager/MetalRenderManager.h; sourceTree = "<group>"; };
 		4EB47ED922D49C7300DC89D0 /* RenderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderManager.h; path = ../../../../../../../SGEngine2/RenderManager/RenderManager.h; sourceTree = "<group>"; };
-		4EB47EDA22D49C7300DC89D0 /* RenderingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RenderingView.m; path = ../../../../../../../SGEngine2/RenderManager/RenderingView.m; sourceTree = "<group>"; };
 		4EB47EDB22D49C7300DC89D0 /* PngFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PngFileManager.h; path = ../../../../../../../SGEngine2/RenderManager/PngFileManager.h; sourceTree = "<group>"; };
 		4EB47EDC22D49C7300DC89D0 /* PngFileManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PngFileManager.cpp; path = ../../../../../../../SGEngine2/RenderManager/PngFileManager.cpp; sourceTree = "<group>"; };
 		4EB47EDD22D49C7300DC89D0 /* MTLNodeDataWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLNodeDataWrapper.h; path = ../../../../../../../SGEngine2/RenderManager/MTLNodeDataWrapper.h; sourceTree = "<group>"; };
@@ -3552,7 +3554,6 @@
 		4EB47EE222D49C7400DC89D0 /* OGLES2RenderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OGLES2RenderManager.cpp; path = ../../../../../../../SGEngine2/RenderManager/OGLES2RenderManager.cpp; sourceTree = "<group>"; };
 		4EB47EE322D49C7400DC89D0 /* MetalWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalWrapper.h; path = ../../../../../../../SGEngine2/RenderManager/MetalWrapper.h; sourceTree = "<group>"; };
 		4EB47EE422D49C7400DC89D0 /* ImageLoaderOBJC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ImageLoaderOBJC.mm; path = ../../../../../../../SGEngine2/RenderManager/ImageLoaderOBJC.mm; sourceTree = "<group>"; };
-		4EB47EE522D49C7400DC89D0 /* RenderingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderingView.h; path = ../../../../../../../SGEngine2/RenderManager/RenderingView.h; sourceTree = "<group>"; };
 		4EB47EF022D49C9000DC89D0 /* SceneManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneManager.cpp; path = ../../../../../../../SGEngine2/SceneManager/SceneManager.cpp; sourceTree = "<group>"; };
 		4EB47EF122D49C9000DC89D0 /* SceneManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneManager.h; path = ../../../../../../../SGEngine2/SceneManager/SceneManager.h; sourceTree = "<group>"; };
 		4EB47EF422D49CAD00DC89D0 /* MetalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHandler.h; path = ../../../../../../SGEngine2/MetalHandler.h; sourceTree = "<group>"; };
@@ -5103,8 +5104,6 @@
 				4EB47EDE22D49C7300DC89D0 /* OGLES2RenderManager.h */,
 				4EB47EDC22D49C7300DC89D0 /* PngFileManager.cpp */,
 				4EB47EDB22D49C7300DC89D0 /* PngFileManager.h */,
-				4EB47EE522D49C7400DC89D0 /* RenderingView.h */,
-				4EB47EDA22D49C7300DC89D0 /* RenderingView.m */,
 				4EB47ED922D49C7300DC89D0 /* RenderManager.h */,
 			);
 			path = RenderManager;
@@ -9227,7 +9226,6 @@
 				3D3F59131C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */,
 				4EB47ED522D49C5600DC89D0 /* SceneImporter.cpp in Sources */,
 				4EB4814322D49E0E00DC89D0 /* btTriangleBuffer.cpp in Sources */,
-				4EB47EE622D49C7400DC89D0 /* RenderingView.m in Sources */,
 				4EB481A522D49E0F00DC89D0 /* btHingeConstraint.cpp in Sources */,
 				4EB4810922D49E0E00DC89D0 /* gim_box_set.cpp in Sources */,
 				4EB480EF22D49E0E00DC89D0 /* btCompoundCollisionAlgorithm.cpp in Sources */,
@@ -9617,6 +9615,7 @@
 				4EB47EED22D49C7400DC89D0 /* OGLES2RenderManager.cpp in Sources */,
 				E206715E1B049AA6006DD2F7 /* FPPopoverView.m in Sources */,
 				E20671631B049AA6006DD2F7 /* GetPixelDemo.m in Sources */,
+				4EB481F422D4B76A00DC89D0 /* MTLMaterial.mm in Sources */,
 				4EB47DCB22D49AA400DC89D0 /* SGSceneUpdater.cpp in Sources */,
 				4EB4816C22D49E0E00DC89D0 /* btSoftBody.cpp in Sources */,
 				4EB47DA722D49AA400DC89D0 /* json_writer.cpp in Sources */,
@@ -9626,6 +9625,7 @@
 				C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				4EB481B422D49E0F00DC89D0 /* btFixedConstraint.cpp in Sources */,
 				4EB4813022D49E0E00DC89D0 /* btCollisionShape.cpp in Sources */,
+				4EB481F322D4B75B00DC89D0 /* MetalHandler.mm in Sources */,
 				4EB47E7722D49BE900DC89D0 /* OGLMaterial.cpp in Sources */,
 				E20671771B049AA6006DD2F7 /* AssetCellView.mm in Sources */,
 				4EB480B622D49E0E00DC89D0 /* btGjkPairDetector.cpp in Sources */,
@@ -9659,6 +9659,7 @@
 				E206719B1B049AA6006DD2F7 /* CGImageContainer.m in Sources */,
 				4EB4818822D49E0E00DC89D0 /* btMultiBodyPoint2Point.cpp in Sources */,
 				4EB481A822D49E0F00DC89D0 /* btGeneric6DofConstraint.cpp in Sources */,
+				4EB481F722D4B78900DC89D0 /* MetalRenderManager.mm in Sources */,
 				25069F601D2BDAC900DBAE44 /* CommonProps.mm in Sources */,
 				4EB47EBB22D49C2400DC89D0 /* ParticlePool.cpp in Sources */,
 				4EB480AA22D49E0E00DC89D0 /* btDbvtBroadphase.cpp in Sources */,
@@ -9694,12 +9695,14 @@
 				4EB47E5722D49BBE00DC89D0 /* Mat4.cpp in Sources */,
 				4EB47E8E22D49C0500DC89D0 /* SGCircleNode.cpp in Sources */,
 				4EB4814822D49E0E00DC89D0 /* btSphereShape.cpp in Sources */,
+				4EB481F622D4B78000DC89D0 /* MTLTexture.mm in Sources */,
 				4EB47D9122D49AA400DC89D0 /* SGAutoRigSceneManager.cpp in Sources */,
 				4EB47E2022D49B6E00DC89D0 /* pngerror.c in Sources */,
 				E20671BB1B049AA6006DD2F7 /* SceneItem.m in Sources */,
 				25EFBEB51BE25CA700DB300C /* RETrimControl.m in Sources */,
 				E20671C01B049AA6006DD2F7 /* LoadingViewControllerPad.mm in Sources */,
 				E20671C21B049AA6006DD2F7 /* CGContextCreator.m in Sources */,
+				4EB481F522D4B77700DC89D0 /* MTLNodeData.mm in Sources */,
 				4EB47D9322D49AA400DC89D0 /* SGEditorScene.cpp in Sources */,
 				4EB481C222D49E0F00DC89D0 /* btGeometryUtil.cpp in Sources */,
 				E20671C81B049AA6006DD2F7 /* FPTouchView.m in Sources */,
@@ -9709,7 +9712,6 @@
 				4EB4811422D49E0E00DC89D0 /* btGImpactShape.cpp in Sources */,
 				25B5B16F1BE33EFB00AC2525 /* zip.c in Sources */,
 				4EB47F0422D49D0000DC89D0 /* Helper.cpp in Sources */,
-				4EB47EE722D49C7400DC89D0 /* RenderingView.m in Sources */,
 				4EB481C022D49E0F00DC89D0 /* btSerializer.cpp in Sources */,
 				4EB4811222D49E0E00DC89D0 /* btGImpactCollisionAlgorithm.cpp in Sources */,
 				4EB4814422D49E0E00DC89D0 /* btTriangleBuffer.cpp in Sources */,
@@ -9818,7 +9820,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
-				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -9875,7 +9877,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
-				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

@@ -90,9 +90,9 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
     NSLog(@" Error %@ ", error.localizedDescription);
 }
 
--(BOOL) initEngine:(int)type ScreenWidth:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*) view
+-(BOOL) initEngine:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*) view
 {
-    scenemgr = new SceneManager(width, height, screenScale, (DEVICE_TYPE)type, [[[NSBundle mainBundle] resourcePath] UTF8String], (__bridge void*)view);
+    scenemgr = new SceneManager(width, height, screenScale, [[[NSBundle mainBundle] resourcePath] UTF8String], (__bridge void*)view);
     if(!scenemgr)
         return false;
     return true;
@@ -106,21 +106,6 @@ static NSString *const kClient = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm
 -(void*) getSceneManager
 {
     return scenemgr;
-}
-
--(bool) isMetalSupported
-{
-    size_t size;
-    cpu_type_t type;
-    cpu_subtype_t subtype;
-    size = sizeof(type);
-    sysctlbyname("hw.cputype", &type, &size, NULL, 0);
-    
-    size = sizeof(subtype);
-    sysctlbyname("hw.cpusubtype", &subtype, &size, NULL, 0);
-    if(subtype == CPU_SUBTYPE_ARM64_V8)
-        return true;
-    return false;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

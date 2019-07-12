@@ -6,12 +6,6 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifdef ANDROID
-#include <malloc.h>
-//#include "../../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/android/log.h"
-#include "../../../opengl.h"
-#endif
-
 #include "OGLTexture.h"
 
 
@@ -48,13 +42,7 @@ bool OGLTexture::loadTexture(string name, string texturePath, TEXTURE_DATA_FORMA
     texelFormat = format;
     this->texelType = texelType;
 
-    unsigned char *imageData;
-#ifndef IOS
-    imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
-#else
-    imageData = loadPNGImage(texturePath, width, height, hasTransparency, blurRadius);
-#endif
-
+    unsigned char *imageData = loadPNGImage(texturePath, width, height, hasTransparency, blurRadius);
     if(!imageData)
         return false;
 
@@ -74,12 +62,7 @@ bool OGLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
     textureName = videoFileName;
     texelFormat = format;
     this->texelType = texelType;
-    unsigned char *imageData;
-    #ifdef ANDROID
-        imageData = PNGFileManager::getImageDataFromVideo(videoFileName, 0, width, height);
-    #else
-        imageData = getImageDataFromVideo(videoFileName, 0, width, height);
-    #endif
+    unsigned char *imageData = getImageDataFromVideo(videoFileName, 0, width, height);
 
     if(!imageData)
         return false;
@@ -95,12 +78,7 @@ bool OGLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT f
 
 void OGLTexture::updateTexture(string fileName, int frame)
 {
-    unsigned char *imageData;
-    #ifdef ANDROID
-        imageData = PNGFileManager::getImageDataFromVideo(fileName, frame, width, height);
-    #else
-        imageData = getImageDataFromVideo(fileName, frame, width, height);
-    #endif
+    unsigned char *imageData = getImageDataFromVideo(fileName, frame, width, height);
     if(!imageData)
         return false;
 
@@ -108,18 +86,6 @@ void OGLTexture::updateTexture(string fileName, int frame)
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, getOGLTextureFormat(texelFormat), getOGLTextureType(texelType), imageData);
     free(imageData);
 }
-
-#ifdef  ANDROID
-void OGLTexture::updateTexture(unsigned char* imageData)
-{
-    if(!imageData)
-        return false;
-
-    glBindTexture(GL_TEXTURE_2D, OGLTextureName);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, getOGLTextureFormat(texelFormat), getOGLTextureType(texelType), imageData);
-    free(imageData);
-}
-#endif
 
 GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format)
 {

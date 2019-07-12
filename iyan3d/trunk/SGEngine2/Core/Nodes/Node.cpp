@@ -7,9 +7,8 @@
 //
 
 #include "Node.h"
-#ifdef IOS
 #import "TargetConditionals.h"
-#endif
+
 Node::Node()
 {
     skinType = GPU_SKIN;
@@ -26,17 +25,8 @@ Node::Node()
     isVisible = true;
     hasTransparency = false;
     
-    #ifdef ANDROID
-    nodeData = make_shared<OGLNodeData>();
-    #elif IOS
-    if(common::deviceType == OPENGLES2)
-        nodeData = make_shared<OGLNodeData>();
-    else{
-        #if !(TARGET_IPHONE_SIMULATOR)
-            nodeData = static_pointer_cast<APIData>(initMetalNodeData());
-        #endif
-    }
-    #endif
+    nodeData = static_pointer_cast<APIData>(initMetalNodeData());
+
     drawMode = DRAW_MODE_TRIANGLES;
 }
 
@@ -86,7 +76,6 @@ bool Node::operator==(shared_ptr<Node> n)
 
 bool Node::isMetalSupported()
 {
-    #ifdef IOS
     size_t size;
     cpu_type_t type;
     cpu_subtype_t subtype;
@@ -98,7 +87,6 @@ bool Node::isMetalSupported()
     if(subtype == CPU_SUBTYPE_ARM64_V8)
         return true;
     return false;
-    #endif
 }
 
 void Node::setRotation(Quaternion r, bool updateBB)
@@ -226,13 +214,11 @@ void Node::FlagTransformationToChildren()
 
 void Node::setMaterial(Material *mat, bool isTransparentMaterial)
 {    
-#ifndef UBUNTU
     if(type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
         return;
     
     this->material = mat;
     this->material->isTransparent = isTransparentMaterial;
-#endif
 }
 
 void Node::setID(int id)

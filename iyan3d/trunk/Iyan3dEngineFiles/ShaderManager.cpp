@@ -8,10 +8,6 @@
 
 #include "HeaderFiles/ShaderManager.h"
 
-#ifdef ANDROID
-#include "../opengl.h"
-#endif
-
 bool ShaderManager::renderingPreview = false;
 bool ShaderManager::isRenderingDepthPass = false;
 bool ShaderManager::shadowsOff = false;
@@ -27,12 +23,11 @@ vector< int > ShaderManager::lightTypes;
 Mat4 ShaderManager::lighCamProjMatrix;
 Mat4 ShaderManager::lighCamViewMatrix;
 string ShaderManager::BundlePath = " ";
-DEVICE_TYPE ShaderManager::deviceType = OPENGLES2;
 int ShaderManager::maxIntsances = 100;
 int ShaderManager::maxJoints = 1;
 float ShaderManager::ambientLight = 0.0f;
 
-ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints)
+ShaderManager::ShaderManager(SceneManager *smgr, int maxUniforms, int maxJoints)
 {
     isRenderingDepthPass = false;
     shadowDensity = 0.0;
@@ -40,10 +35,7 @@ ShaderManager::ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxU
     camPos = Vector3(0.0);
     this->smgr = smgr;
     ShaderManager::BundlePath = constants::BundlePath;
-    ShaderManager::deviceType = deviceType;
-#ifndef UBUNTU
-    loadAllShaders(smgr,deviceType, maxUniforms, maxJoints);
-#endif
+    loadAllShaders(smgr, maxUniforms, maxJoints);
 }
 
 ShaderManager::~ShaderManager()
@@ -107,7 +99,7 @@ Property& ShaderManager::getProperty(PROP_INDEX pIndex)
         addOrUpdateProperty(pIndex, Vector4(0), UNDEFINED);
         printf("\n No such scene property ..");
         return sceneProps[pIndex];
-
+        
     } else {
         if(sceneProps.size() > 0 && sceneProps.find(pIndex) != sceneProps.end()) {
             return sceneProps.find(pIndex)->second;
@@ -119,27 +111,15 @@ Property& ShaderManager::getProperty(PROP_INDEX pIndex)
     }
 }
 
-void ShaderManager::loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints)
+void ShaderManager::loadAllShaders(SceneManager *smgr, int maxUniforms, int maxJoints)
 {
     std::map< string, string > strsToReplace;
     
-    if(deviceType == OPENGLES2) {
-        std::map< string, string > temp;
-        temp = getShaderStringsToReplace(maxUniforms-1);
-        strsToReplace.insert(temp.begin(), temp.end());
-        temp.clear();
-        temp = getStringsForRiggedObjects(maxJoints);
-        strsToReplace.insert(temp.begin(), temp.end());
-    } else {
-        ShaderManager::maxIntsances = 4000;
-        ShaderManager::maxJoints = 250; //TODO
-    }
+    ShaderManager::maxIntsances = 4000;
+    ShaderManager::maxJoints = 250; //TODO
     
     for(int i = 0; i < TOTAL_MATERIALS;i++) {
-        if(deviceType == OPENGLES2)
-            LoadShader(smgr, deviceType, OGLMaterialAndShaderNames[i][0], OGLMaterialAndShaderNames[i][1], OGLMaterialAndShaderNames[i][2], strsToReplace);
-        else if(deviceType == METAL)
-            LoadShader(smgr, deviceType, MTLMaterialAndShaderNames[i][0], MTLMaterialAndShaderNames[i][1], MTLMaterialAndShaderNames[i][2], strsToReplace);
+        LoadShader(smgr, MTLMaterialAndShaderNames[i][0], MTLMaterialAndShaderNames[i][1], MTLMaterialAndShaderNames[i][2], strsToReplace);
     }
 }
 
@@ -162,23 +142,18 @@ std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniform
 std::map<string, string> ShaderManager::getStringsForRiggedObjects(int maxJoints)
 {
     std::map<string, string> strsToReplace;
-        
+    
     ShaderManager::maxJoints = maxJoints;
     strsToReplace.insert(std::pair<string, string>("jointsSize", to_string(ShaderManager::maxJoints+1)));
     
     return strsToReplace;
 }
 
-bool ShaderManager::LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest)
+bool ShaderManager::LoadShader(SceneManager* smgr, string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest)
 {
     bool isDepthPass = (fShaderName == "") ? true : false;
     
-    if(deviceType == OPENGLES2)
-        return smgr->LoadShaders(materialName, BundlePath + "/" + vShaderName, BundlePath + "/" + fShaderName, shadersStr, false, isTest);
-    else if(deviceType == METAL)
-        return smgr->LoadShaders(materialName, vShaderName, fShaderName, shadersStr, isDepthPass);
-    
-    return false;
+    return smgr->LoadShaders(materialName, vShaderName, fShaderName, shadersStr, isDepthPass);
 }
 
 void ShaderManager::setUniforms(SGNode *sgNode, string matName, int materialIndex)
@@ -259,9 +234,9 @@ void ShaderManager::setVertexColorUniform(SGNode *sgNode, Vector4 color, int par
     
     Vector4 vertexColor = sgNode->getProperty(SELECTED).value.x ? ((isMBSelected) ? Vector4(1.0, 1.0, 1.0, 0) : Vector4(0.0, 1.0, 0.0, 0)) : color;
     vertexColor = sgNode->getProperty(SELECTED, materialIndex).value.x ? Vector4(0.0, 1.0, 0.0, 0) : vertexColor;
-//    if(isRendering && sgNode->node->getID() == JOINT_SPHERES_START_ID) {
-//        printf(" \n Mesh Color %f %f %f ", vertexColor.x, vertexColor.y, vertexColor.z);
-//    }
+    //    if(isRendering && sgNode->node->getID() == JOINT_SPHERES_START_ID) {
+    //        printf(" \n Mesh Color %f %f %f ", vertexColor.x, vertexColor.y, vertexColor.z);
+    //    }
     vertColor[0] = vertexColor.x;
     vertColor[1] = vertexColor.y;
     vertColor[2] = vertexColor.z;
@@ -456,17 +431,11 @@ void ShaderManager::setTextureForNode(SGNode* sgNode, Texture* texture, string t
 {
     if(texture == NULL)
         return;
-        
+    
     int textureValue = 0;
     
-    if(deviceType == OPENGLES2) {
-        OGLTexture* tex = (OGLTexture*)texture;
-        textureValue = tex->OGLTextureName;
-        smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, tex, userValue);
-    } else if(deviceType == METAL) {
-        textureValue =  userValue;
-        smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, smoothTexture);
-    }
+    textureValue =  userValue;
+    smgr->setPropertyValue(sgNode->node->material, textureName, &textureValue, DATA_TEXTURE_2D, 1, true, paramIndex + userValue, smgr->getNodeIndexByID(sgNode->node->getID()), materialIndex, texture, 1, smoothTexture);
 }
 
 void ShaderManager::setSamplerType(SGNode *sgNode, u16 paramIndex, bool smoothTexture)
@@ -509,7 +478,7 @@ void ShaderManager::setUVScaleValue(SGNode *sgNode, u16 paramIndex, int material
     
     bool isUVScaleAvailable = sgNode->materialProps[materialIndex]->IsPropertyExists(TEXTURE_SCALE);
     float *uvScale = new float[((endIndex - startIndex)+1)];
-
+    
     uvScale[0] = isUVScaleAvailable ? sgNode->getProperty(TEXTURE_SCALE, materialIndex).value.x : 1.0;
     
     int i = 0;
@@ -533,7 +502,7 @@ void ShaderManager::setModelViewProjMatrix(SGNode *sgNode, u16 paramIndex, bool 
     
     Mat4 mvp;
     std::string uniformName = "mvp";
-
+    
     if(sgNode->node->getID() == GREEN_LINES_ID || sgNode->node->getID() == BLUE_LINES_ID || sgNode->node->getID() == RED_LINES_ID || sgNode->node->material->name == "SHADER_MESH") {
         uniformName = (sgNode->node->drawMode == DRAW_MODE_LINES) ? "mvp" : "vp";
         mvp = projMat * viewMat;
@@ -555,8 +524,8 @@ void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
     }
     
     //if(!meshCacheCreated) {
-        pNode->shouldUpdateMesh = true;
-        smgr->updateVertexAndIndexBuffers(sgNode->node, MESH_TYPE_LITE);
+    pNode->shouldUpdateMesh = true;
+    smgr->updateVertexAndIndexBuffers(sgNode->node, MESH_TYPE_LITE);
     //}
     Mat4 model = sgNode->node->getModelMatrix();
     Mat4 vp = projMat * viewMat;
@@ -685,4 +654,5 @@ Mat4 ShaderManager::ortho2d_oc(float left, float right, float bottom, float top,
     
     return mat;
 }
+
 

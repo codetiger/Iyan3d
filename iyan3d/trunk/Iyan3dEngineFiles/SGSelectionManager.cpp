@@ -33,9 +33,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isMultiSelect
 
    
     selectionScene->renHelper->rttNodeJointSelection(touchPosition,isMultiSelectEnabled, false);
-    if(selectionScene->shaderMGR->deviceType == METAL){
-        getNodeColorFromTouchTexture(isMultiSelectEnabled,false, true);
-    }
+    getNodeColorFromTouchTexture(isMultiSelectEnabled,false, true);
     selectionScene->isRTTCompleted = true;
     selectionScene->updater->updateControlsOrientaion();
     postNodeJointSelection();
@@ -51,9 +49,7 @@ bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos, bool isMultiSel
     selectionScene->updater->updateControlsOrientaion();
     bool status = false;
     status = selectionScene->renHelper->rttControlSelectionAnim(curTouchPos);
-    if(selectionScene->shaderMGR->deviceType == METAL){
-        status = getCtrlColorFromTouchTextureAnim(curTouchPos);
-    }
+    status = getCtrlColorFromTouchTextureAnim(curTouchPos);
     
 //TODO select and move object in plane
     
@@ -588,24 +584,18 @@ void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
         case RIG_MODE_MOVE_JOINTS:{
 //            selectionScene->rigMan->clearNodeSelections();
             selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
-            if(selectionScene->shaderMGR->deviceType == METAL){
-                readSkeletonSelectionTexture();
-            }
+            readSkeletonSelectionTexture();
             break;
         }
         case RIG_MODE_EDIT_ENVELOPES:{
 //            selectionScene->rigMan->clearNodeSelections();
             selectionScene->renHelper->AttachSkeletonModeRTTSelection(touchPosition);
-            if(selectionScene->shaderMGR->deviceType == METAL){
-                readSkeletonSelectionTexture();
-            }
+            readSkeletonSelectionTexture();
             break;
         }
         case RIG_MODE_PREVIEW:{
             selectionScene->renHelper->rttSGRNodeJointSelection(touchPosition);
-            if(selectionScene->shaderMGR->deviceType == METAL){
-                readSGRSelectionTexture();
-            }
+            readSGRSelectionTexture();
             break;
         }
         default:

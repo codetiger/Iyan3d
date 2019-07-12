@@ -56,9 +56,6 @@ RenderHelper::~RenderHelper()
 
 bool RenderHelper::supportsVAO()
 {
-    #ifdef  ANDROID
-     return renderingScene->addVAOSupport;
-    #endif
     return true;
 }
 
@@ -230,7 +227,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
     
     bool isNodeSelected = renderingScene->hasNodeSelected();
     SGNode* selectedNode = renderingScene->getSelectedNode();
-
+    
     if(renderingScene->selectedNodeIds.size() <= 0 && isNodeSelected && selectedNode->getType() == NODE_LIGHT && selectedNode->getProperty(LIGHT_TYPE).value.x != (int)DIRECTIONAL_LIGHT)
         renderingScene->controlType = MOVE;
     
@@ -248,7 +245,7 @@ void RenderHelper::setControlsVisibility(bool isVisible)
         } else {
             for (int i = 0; i < renderingScene->sceneControls.size(); i++)
                 renderingScene->sceneControls[i]->node->setVisible(false);
-
+            
             return;
         }
     }
@@ -317,7 +314,7 @@ void RenderHelper::postRTTDrawCall()
         
         if(renderingScene->whiteBorderTexture)
             smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(previewLayout.x, previewLayout.y),Vector2(previewLayout.z, previewLayout.w), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
-
+        
         smgr->draw2DImage(renderingScene->previewTexture,Vector2(previewLayout.x + 2.0, previewLayout.y + 2.0),Vector2(previewLayout.z - 2.0, previewLayout.w - 2.0), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE),true);
     }
 }
@@ -326,11 +323,11 @@ void RenderHelper::rttDrawCall()
 {
     if (!renderingScene)
         return;
-
+    
     if (renderingScene->selectedNodeId == NODE_CAMERA || renderingScene->isPlaying) {
         drawCameraPreview();
     }
-
+    
     if ((!renderingScene->isRigMode && !renderingScene->shadowsOff && ShaderManager::shadowDensity > 0.0) || isFirstTimeRender) {
         rttShadowMap();
         renderingScene->shadowsOff = true;
@@ -383,7 +380,7 @@ void RenderHelper::drawCameraPreview()
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
         if(renderingScene->nodes[i]->getType() <= NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
             renderingScene->nodes[i]->node->setVisible(false);
-
+        
         if(!(renderingScene->nodes[i]->getProperty(VISIBILITY).value.x)) {
             renderingScene->nodes[i]->node->setVisible(false);
             if(renderingScene->nodes[i]->node->type == NODE_TYPE_INSTANCED) {
@@ -394,8 +391,8 @@ void RenderHelper::drawCameraPreview()
     }
     setControlsVisibility(false);
     
-//    if(renderingScene->whiteBorderTexture)
-//        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
+    //    if(renderingScene->whiteBorderTexture)
+    //        smgr->draw2DImage(renderingScene->whiteBorderTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth, SceneHelper::screenHeight), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     smgr->Render(true);
     
     smgr->setRenderTarget(NULL, false, false);
@@ -440,14 +437,13 @@ void RenderHelper::setRenderCameraOrientation()
     rotmat.setRotation(rot);
     rotmat.rotateVect(upReal);
     renderingScene->renderCamera->setUpVector(upReal);
-#ifndef UBUNTU
+    
     int rT = renderingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
     float texWidth = (float)renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->width;
     float texHeight = renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->height;
     float aspectRatio = texWidth/ texHeight;
     renderingScene->renderCamera->setAspectRatio(aspectRatio);
     smgr->setActiveCamera(renderingScene->renderCamera);
-#endif
 }
 
 void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSelectenabled, bool touchMove)
@@ -455,11 +451,10 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     if(!renderingScene || !smgr)
         return;
     
-    if(renderingScene->shaderMGR->deviceType == METAL){
-        bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
-        if(!displayPrepared)
-            return;
-    }
+    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+    if(!displayPrepared)
+        return;
+    
     renderingScene->nodeJointPickerPosition = touchPosition;
     setControlsVisibility(false);
     renderingScene->rotationCircle->node->setVisible(false);
@@ -485,19 +480,19 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         isLighting.push_back(renderingScene->nodes[i]->getProperty(LIGHTING).value.x);
         transparency.push_back(renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x);
         previousMaterialNames.push_back(renderingScene->nodes[i]->node->material->name);
-
+        
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->getProperty(SELECTED).value.x = true;
         else
             renderingScene->nodes[i]->getProperty(SELECTED).value.x = false;
-
+        
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = true;
-
+        
         renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x = 1.0;
-
+        
         renderingScene->nodes[i]->getProperty(VISIBILITY).value.x = renderingScene->nodes[i]->isTempNode ? false : true;
-
+        
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(renderingScene->nodes[i]->node->skinType == CPU_SKIN ? SHADER_COLOR : SHADER_COLOR_SKIN));
         else if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
@@ -507,12 +502,12 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
                 renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
             renderingScene->nodes[i]->getProperty(LIGHTING).value.x = false;
         }
-
+        
         vector<Vector4> mbVColors;
         vector<bool> mbIsVColored;
         vector<bool> mbIsSelected;
         vector<float> mbReflections;
-
+        
         for(int j = 0; j < renderingScene->nodes[i]->materialProps.size(); j ++) {
             mbVColors.push_back(renderingScene->nodes[i]->getProperty(VERTEX_COLOR, j).value);
             mbIsSelected.push_back(renderingScene->nodes[i]->getProperty(SELECTED, j).value.x);
@@ -522,7 +517,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
             renderingScene->nodes[i]->getProperty(REFLECTION, j).value.x = 0.0;
             renderingScene->nodes[i]->getProperty(SELECTED, j).value.x = false;
             renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR, j).value.x = true;
-
+            
             Vector3 packed = MathHelper::packInterger(i);
             renderingScene->nodes[i]->getProperty(VERTEX_COLOR, j).value = Vector4(packed/255.0 ,1.0);
         }
@@ -539,19 +534,19 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         if(renderingScene->selectedMeshBufferId == NOT_SELECTED) {
             drawJointsSpheresForRTT(true);
         }
-            drawMeshBufferRTT = true;
+        drawMeshBufferRTT = true;
     }
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
         if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
             renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = false;
-
+        
         renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByName(previousMaterialNames[i]));
         renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x = transparency[i];
         renderingScene->nodes[i]->getProperty(VISIBILITY).value.x = nodesVisibility[i];
         renderingScene->nodes[i]->getProperty(SELECTED).value.x = nodeSelection[i];
         renderingScene->nodes[i]->getProperty(LIGHTING).value.x = isLighting[i];
-
+        
         for( int j = 0; j < renderingScene->nodes[i]->materialProps.size(); j ++) {
             renderingScene->nodes[i]->getProperty(SELECTED, j).value.x = bufferSelection[i][j];
             renderingScene->nodes[i]->getProperty(VERTEX_COLOR, j).value = vertexColors[i][j];
@@ -565,27 +560,21 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     }
     previousMaterialNames.clear(); vertexColors.clear(); transparency.clear();
     isVcolored.clear(); bufferSelection.clear(); reflections.clear();
-    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        renderingScene->selectMan->getNodeColorFromTouchTexture(isMultiSelectenabled, touchMove, drawMeshBufferRTT);
     smgr->setRenderTarget(NULL,false,false);
-    if(renderingScene->shaderMGR->deviceType == METAL)
-        smgr->EndDisplay();
+    smgr->EndDisplay();
 }
 
 void RenderHelper::drawMeshBuffersForRTT()
 {
     if(renderingScene->selectedNodeId != NOT_SELECTED) {
+        smgr->EndDisplay();
         
-        if(renderingScene->shaderMGR->deviceType == METAL){
-            smgr->EndDisplay();
-            
-            bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
-            if(!displayPrepared)
-                return;
-        }
-
+        bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+        if(!displayPrepared)
+            return;
+        
         smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
-
+        
         SGNode *sgNode = renderingScene->selectedNode;
         int totalMeshBufferIndex = sgNode->materialProps.size();
         vector<Vector4> vertexColors;
@@ -637,8 +626,7 @@ void RenderHelper::drawMeshBuffersForRTT()
         reflections.clear();
         mBSelected.clear();
         
-        if(renderingScene->shaderMGR->deviceType == METAL)
-            smgr->EndDisplay();
+        smgr->EndDisplay();
         
         renderingScene->selectMan->getNodeColorFromTouchTexture(false, false);
     }
@@ -684,7 +672,7 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
 {
     if(!renderingScene || !smgr)
         return;
-
+    
     bool isNodeSelected = renderingScene->hasNodeSelected();
     SGNode *selectedNode = renderingScene->getSelectedNode();
     visibilityFlag = (!isNodeSelected || renderingScene->selectedNodeIds.size() > 0) ?false:visibilityFlag;
@@ -697,7 +685,7 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
     
     for(int i = 1; i < renderingScene->jointSpheres.size(); i++) {
         if(isNodeSelected && selectedNode && (selectedNode->getType() == NODE_RIG || selectedNode->getType() == NODE_TEXT_SKIN) && i < selectedNode->joints.size())
-                renderingScene->jointSpheres[i]->node->setVisible(visibilityFlag);
+            renderingScene->jointSpheres[i]->node->setVisible(visibilityFlag);
         else if (renderingScene->selectedNodeIds.size() > 0)
             renderingScene->jointSpheres[i]->node->setVisible(false);
         else
@@ -782,8 +770,6 @@ void RenderHelper::renderAndSaveImage(char *imagePath, bool isDisplayPrepared, i
     if(!isLightOn)
         renderingScene->setLightingOn();
     
-    if(smgr->device == OPENGLES2)
-        rttShadowMap();
     int rT = renderingScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
     bool displayPrepared = smgr->PrepareDisplay(renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->width, renderingScene->renderingTextureMap[RESOLUTION[rT][0]]->height,false,true,false,Vector4(bgColor));
     if(!displayPrepared)
@@ -829,13 +815,11 @@ void RenderHelper::renderAndSaveImage(char *imagePath, bool isDisplayPrepared, i
         int divisor = (frame > totalImgs) ? frame/totalImgs : 1;
         index = (frame > totalImgs) ? frame - (divisor * totalImgs) : frame;
     }
-   
-    if(smgr->device == METAL)
-        rttShadowMap();
+    
+    rttShadowMap();
     
     smgr->EndDisplay();
-    smgr->writeImageToFile(renderingScene->renderingTextureMap[RESOLUTION[rT][0]],imagePath,(renderingScene->shaderMGR->deviceType == OPENGLES2) ?FLIP_VERTICAL : NO_FLIP);
-    
+    smgr->writeImageToFile(renderingScene->renderingTextureMap[RESOLUTION[rT][0]], imagePath, NO_FLIP);
     smgr->setActiveCamera(renderingScene->viewCamera);
     smgr->setRenderTarget(NULL,true,true,false,Vector4(bgColor));
     
@@ -853,7 +837,7 @@ void RenderHelper::renderAndSaveImage(char *imagePath, bool isDisplayPrepared, i
     renderingScene->greenGrid->node->setVisible(true);
     renderingScene->blueGrid->node->setVisible(true);
     renderingScene->redGrid->node->setVisible(true);
-
+    
     ShaderManager::shadowsOff = isShadowsOff;
     
     if(selectedObjectId != NOT_SELECTED)
@@ -864,7 +848,7 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
 {
     if(!renderingScene || !smgr)
         return false;
-
+    
     bool status = false;;
     
     removeJointSpheres();
@@ -873,18 +857,18 @@ bool RenderHelper::displayJointSpheresForNode(shared_ptr<AnimatedMeshNode> animN
         status = createJointSpheres(bonesCount - (int)renderingScene->jointSpheres.size());
     
     renderingScene->updater->updateJointSpheresPosition();
-
+    
     for(int i = 0;i < bonesCount;i++){
         
-            Vector3 pos = renderingScene->jointSpheres[i]->node->getPosition();
-            float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
-            float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
-            jointScale = jointScale * 1.5;
-            Vector3 sphereScale = Vector3(jointScale);
-            
-            renderingScene->jointSpheres[i]->node->setScale(sphereScale);
+        Vector3 pos = renderingScene->jointSpheres[i]->node->getPosition();
+        float distanceFromCamera = pos.getDistanceFrom(smgr->getActiveCamera()->getPosition());
+        float jointScale = ((distanceFromCamera / JOINT_MARKED_DISTANCE_FROM_CAMERA) * JOINT_MARKED_SCALE);
+        jointScale = jointScale * 1.5;
+        Vector3 sphereScale = Vector3(jointScale);
+        
+        renderingScene->jointSpheres[i]->node->setScale(sphereScale);
     }
-
+    
     setJointSpheresVisibility(true);
     displayJointsBasedOnSelection();
     return status;
@@ -894,14 +878,14 @@ bool RenderHelper::createJointSpheres(int additionalJoints)
 {
     if(!renderingScene || !smgr)
         return false;
-
+    
     if(additionalJoints <= 0)
         return false;
     int maxCount = (int)renderingScene->jointSpheres.size() + additionalJoints;
     for(int i = (int)renderingScene->jointSpheres.size();i < maxCount;i++){
         SGNode *sgNode = new SGNode(NODE_SGM);
         sgNode->materialProps.push_back(new MaterialProperty(NODE_SGM));
-
+        
         SceneImporter *importer = new SceneImporter();
         Mesh *jointSphereMesh = importer->loadMeshFromFile(constants::BundlePath + "/sphere.sgm");
         delete importer;
@@ -935,7 +919,7 @@ void RenderHelper::displayJointsBasedOnSelection()
     SGNode* selectedNode = renderingScene->getSelectedNode();
     if(!selectedNode)
         return;
-
+    
     for(int i = 0;i < renderingScene->jointSpheres.size();i++){
         int selectedJointId = (!renderingScene->isRigMode) ? renderingScene->selectedJointId : renderingScene->rigMan->selectedJointId;
         //jointSpheres[i]->props.vertexColor = (i == selectedJointId) ? selectionColor :sgrJointDefaultColor;
@@ -953,7 +937,7 @@ void RenderHelper::removeJointSpheres()
 {
     if(!renderingScene || !smgr)
         return;
-
+    
     for(int i = 0; i < renderingScene->jointSpheres.size();i++){
         if(renderingScene->jointSpheres[i]) {
             smgr->RemoveNode(renderingScene->jointSpheres[i]->node);
@@ -978,7 +962,7 @@ void RenderHelper::rttShadowMap()
     renderingScene->redGrid->node->setVisible(false);
     bool isDirectionLineVisible = renderingScene->directionLine->node->getVisible();
     bool lightCirclesVisible = renderingScene->lightCircles->node->getVisible();
-
+    
     renderingScene->directionLine->node->setVisible(false);
     renderingScene->lightCircles->node->setVisible(false);
     
@@ -1014,7 +998,7 @@ void RenderHelper::rttShadowMap()
             
         }
     }
-
+    
     smgr->Render(false);
     setJointSpheresVisibility(true); // Unhide joints
     renderingScene->directionIndicator->node->setVisible(indState);
@@ -1045,12 +1029,11 @@ bool RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
 {
     if(!renderingScene || !smgr)
         return false;
+    
+    bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
+    if(!displayPrepared)
+        return false;
 
-    if(renderingScene->shaderMGR->deviceType == METAL){
-        bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
-        if(!displayPrepared)
-            return false;
-    }
     int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
     renderingScene->rotationCircle->node->setVisible(false);
@@ -1067,15 +1050,12 @@ bool RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
             smgr->RenderNode(true, nodeIndex);
     }
     bool status = true;
-    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        status = renderingScene->selectMan->getCtrlColorFromTouchTextureAnim(touchPosition);
     smgr->setRenderTarget(NULL,false,false);
     for(int i = controlStartIndex;i <= controlEndIndex;i++) {
         renderingScene->sceneControls[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     }
     renderingScene->updater->updateControlsOrientaion();
-    if(renderingScene->shaderMGR->deviceType == METAL)
-        smgr->EndDisplay();
+    smgr->EndDisplay();
     return status;
 }
 
@@ -1083,7 +1063,7 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
 {
     if(!renderingScene || !smgr || !renderingScene->isRigMode)
         return;
-
+    
     renderingScene->rigMan->touchPosForSkeletonSelection = touchPosition;
     setControlsVisibility(false);
     renderingScene->rotationCircle->node->setVisible(false);
@@ -1122,14 +1102,12 @@ void RenderHelper::AttachSkeletonModeRTTSelection(Vector2 touchPosition)
         }
     }
     /*
-    for(int i = 0; i < renderingScene->tPoseJoints.size(); i++) {
-        if(renderingScene->tPoseJoints[i].id != 0)
-            rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(scaleValues[i]);
-    }
-    */
+     for(int i = 0; i < renderingScene->tPoseJoints.size(); i++) {
+     if(renderingScene->tPoseJoints[i].id != 0)
+     rigKeys[renderingScene->tPoseJoints[i].id].sphere->node->setScale(scaleValues[i]);
+     }
+     */
     // Draw Joints
-    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        renderingScene->selectMan->readSkeletonSelectionTexture();
     smgr->setRenderTarget(NULL,false,false);
     smgr->EndDisplay();
 }
@@ -1138,7 +1116,7 @@ void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
 {
     if(!renderingScene || !smgr || !renderingScene->isRigMode || renderingScene->rigMan->sceneMode != RIG_MODE_PREVIEW)
         return;
-
+    
     renderingScene->rigMan->touchPosForSkeletonSelection = touchPosition;
     SGNode* sgrSGNode = renderingScene->rigMan->getRiggedNode();
     if(sgrSGNode == NULL)
@@ -1180,9 +1158,9 @@ void RenderHelper::rttSGRNodeJointSelection(Vector2 touchPosition)
         if(!renderingScene->rigMan->isSGRJointSelected)
             setJointSpheresVisibility(false);
     }
-    if(renderingScene->shaderMGR->deviceType == OPENGLES2)
-        renderingScene->selectMan->readSGRSelectionTexture();
+
     smgr->setRenderTarget(NULL,false,false);
     smgr->EndDisplay();
     //animNode.reset();
 }
+

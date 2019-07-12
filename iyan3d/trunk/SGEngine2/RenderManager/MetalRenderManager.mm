@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifdef IOS
-
 #include "../Core/Nodes/ParticleManager.h"
 
 #import "MetalRenderManager.h"
@@ -22,7 +20,7 @@ std::map<int,vector<BufferState> > MTLBuffersMap;
 MetalRenderManager::MetalRenderManager(void *renderView, float screenWidth, float screenHeight, float screenScale)
 {
     _currentDrawable = drawable = nil;
-    this->renderView = (__bridge UIView*)renderView;
+    this->renderView = (__bridge MTKView*)renderView;
     mtlRenderView = (RenderingView*)this->renderView;
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
@@ -171,10 +169,8 @@ id <CAMetalDrawable> MetalRenderManager::currentDrawable()
 
 void* initMetalRenderManager(void *renderView, float screenWidth, float screenHeight, float screenScale)
 {
-#if !(TARGET_IPHONE_SIMULATOR)
     MetalRenderManager *metalRenderManager = new MetalRenderManager(renderView, screenWidth, screenHeight, screenScale);
     return metalRenderManager;
-#endif
 }
 
 void MetalRenderManager::Initialize()
@@ -757,11 +753,7 @@ void MetalRenderManager::writeImageToFile(Texture *texture , char* filePath,IMAG
             buffer[pixelPos + 3] = A;
         }
     }
-#ifndef IOS
-    PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
-#else
     writePNGImage(buffer,texture->width,texture->height,filePath);
-#endif
     
     delete[] buffer;
 }
@@ -787,6 +779,3 @@ int MetalRenderManager::getMTLDrawMode(DRAW_MODE mode)
 void MetalRenderManager::resetTextureCache() {
     
 }
-
-
-#endif

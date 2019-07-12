@@ -6,14 +6,13 @@
 //  Copyright (c) 2015 Smackall Games. All rights reserved.
 //
 
-#if !(TARGET_IPHONE_SIMULATOR)
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
-#endif
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import <MetalKit/MetalKit.h>
 
-@interface RenderingView : UIView
+@interface RenderingView : MTKView
 {
     
 }

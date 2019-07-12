@@ -11,17 +11,9 @@
 
 #include <iostream>
 #include "Material.h"
-#ifdef ANDROID
-#include "../../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-x86_64/usr/include/stdint.h"
-#endif
-#ifdef IOS
-#if !(TARGET_IPHONE_SIMULATOR)
-    #import <QuartzCore/CAMetalLayer.h>
-    #import <Metal/Metal.h>
+#import <QuartzCore/CAMetalLayer.h>
+#import <Metal/Metal.h>
 #include <stdint.h>
-
-#endif
-#endif
 
 
 using namespace std;
@@ -32,16 +24,13 @@ struct MTLUniform{
     DATA_TYPE type;
     u16 parameterIndex, count;
     void *values;
-#if !(TARGET_IPHONE_SIMULATOR)
     id<MTLBuffer> buf;
-#endif
     short nodeIndex, materialIndex, renderTargetIndex;
 };
 
 class MTLMaterial : public Material{
     
 public:
-#if !(TARGET_IPHONE_SIMULATOR)
     vector<MTLUniform> uniforms;
     MTLMaterial();
     ~MTLMaterial();
@@ -50,8 +39,5 @@ public:
     virtual short setPropertyValue(string name, float *values, DATA_TYPE type, u16 count, u16 paramIndex = 0, int nodeIndex = NOT_EXISTS, int materialIndex = NOT_EXISTS, int renderTargetIndex = NOT_EXISTS);
     virtual short setPropertyValue(string name, int *values, DATA_TYPE type, u16 count, u16 paramIndex = 0, int nodeIndex = NOT_EXISTS, int materialIndex = NOT_EXISTS, int renderTargetIndex = NOT_EXISTS);
     
-    
-#endif
-
 };
 #endif

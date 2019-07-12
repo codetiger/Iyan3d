@@ -9,13 +9,8 @@
 #ifndef __SGEngine2__OGLES2RenderManager__
 #define __SGEngine2__OGLES2RenderManager__
 
-#ifdef ANDROID
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#elif IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-#endif
 
 #include "RenderManager.h"
 
@@ -51,9 +46,6 @@ public:
     
     OGLES2RenderManager(float screenWidth, float screenHeight, float screenScale);
     ~OGLES2RenderManager();
-    #ifdef ANDROID
-    void initialiseOtherVAOFunc ();
-    #endif
     Vector4 clearColor;
     GLenum depthState;
     GLenum dFactor;

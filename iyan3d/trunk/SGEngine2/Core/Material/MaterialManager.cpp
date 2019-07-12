@@ -7,17 +7,11 @@
 //
 
 #include "MaterialManager.h"
-
-#ifdef IOS
 #import "TargetConditionals.h"
 #include "../../RenderManager/MetalWrapper.h"
-#elif ANDROID
-#include "../../../opengl.h"
-#endif
 
-MaterialManager::MaterialManager(DEVICE_TYPE deviceType)
+MaterialManager::MaterialManager()
 {
-    this->deviceType = deviceType;
     materials = new vector<Material*>();
 }
 
@@ -29,27 +23,7 @@ MaterialManager::~MaterialManager()
 
 bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
 {
-    Material *newMat = NULL;
-    bool status;
-
-#ifdef ANDROID
-    LOGI("Material initialize");
-    newMat = new OGLMaterial();
-      status = ((OGLMaterial*)newMat)->LoadShaders(vShaderName, fShaderName, shadersStr);
-      if(!status && isTest)
-        return false;
-#elif IOS
-    if(deviceType == METAL){
-    #if !(TARGET_IPHONE_SIMULATOR)
-        newMat = LoadMetalShaders(vShaderName,fShaderName,isDepthPass);
-    #endif
-    } else if(deviceType == OPENGLES2) {
-        newMat = new OGLMaterial();
-        status = ((OGLMaterial*)newMat)->LoadShaders(vShaderName,fShaderName, shadersStr);
-        if(!status && isTest)
-            return false;
-    }
-#endif
+    Material *newMat = LoadMetalShaders(vShaderName,fShaderName,isDepthPass);
     
     if(!newMat){
         Logger::log(ERROR, "MaterialManager", "Null Material");

@@ -12,11 +12,6 @@
 #include <cstdio>
 #include <iostream>
 
-#ifdef ANDROID
-#include <android/log.h>
-#include "../../opengl.h"
-#endif
-
 using namespace std;
 
 enum logger_message_t{

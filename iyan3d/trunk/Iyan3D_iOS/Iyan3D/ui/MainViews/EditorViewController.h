@@ -9,17 +9,14 @@
 #ifndef EditorViewController_h
 #define EditorViewController_h
 
-#if !(TARGET_IPHONE_SIMULATOR)
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
-#endif
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import <GameKit/GameKit.h>
 
 #import "OnBoardVC.h"
-#import "RenderingView.h"
 #import "ImportImageNew.h"
 #import "AnimationSelectionSlider.h"
 #import "TextSelectionSidePanel.h"
@@ -40,7 +37,6 @@
     AnimationSelectionSlider *animationsliderVC;
     TextSelectionSidePanel *textSelectionSlider;
     ObjSidePanel *objVc;
-    bool isMetalSupported;
     BOOL isSelected;
     RenderViewManager *renderViewMan;
     SceneManager *smgr;
@@ -69,7 +65,7 @@
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil SceneItem:(SceneItem*)scene selectedindex:(int)index;
 @property (weak, nonatomic) IBOutlet UIButton *toolTipBtn;
 
-@property (weak, nonatomic) IBOutlet RenderingView *renderView;
+@property (weak, nonatomic) IBOutlet MTKView *renderView;
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *framesCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *addFrameBtn;

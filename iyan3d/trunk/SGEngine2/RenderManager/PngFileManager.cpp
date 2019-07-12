@@ -2,14 +2,6 @@
 // Created by shankarganesh on 12/9/15.
 //
 
-//#include <stdlib.h>
-//#include <stdio.h>
-//#include "libpng/png.h"
-#ifdef ANDROID
-//#include "../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/android/log.h"
-#include <android/log.h>
-#include "../../opengl.h"
-#endif
 
 #include "Logger.h"
 #include "PngFileManager.h"

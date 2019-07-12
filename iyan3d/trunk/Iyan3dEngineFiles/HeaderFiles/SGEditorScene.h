@@ -17,13 +17,8 @@
 #define SHADOW_TEXTURE_HEIGHT 2048
 #define PREVIEW_TEXTURE_WIDTH 512
 #define PREVIEW_TEXTURE_HEIGHT 512
-#ifdef ANDROID
-    #define THUMBNAIL_TEXTURE_WIDTH 270
-    #define THUMBNAIL_TEXTURE_HEIGHT 190
-#else
-    #define THUMBNAIL_TEXTURE_WIDTH 540
-    #define THUMBNAIL_TEXTURE_HEIGHT 380
-#endif
+#define THUMBNAIL_TEXTURE_WIDTH 540
+#define THUMBNAIL_TEXTURE_HEIGHT 380
 #define CAM_UPVEC_UPREAL_MAX_DIF 0.80
 #define CAM_PREV_PERCENT 0.18
 #define CAM_PREV_GAP_PERCENT_FROM_SCREEN_EDGE 1.5
@@ -138,22 +133,18 @@ public:
     std::map<int,vector<Vector3> > textJointsBasePos;
     CollisionManager *cmgr;
     
-    SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms = 0, int maxJoints = 0);
+    SGEditorScene(SceneManager *smgr, int screenWidth, int screenHeight, int maxUniforms = 0, int maxJoints = 0);
     ~SGEditorScene();
     
     void removeAllNodes();
     
     void initTextures();
     void enterOrExitAutoRigMode(bool rigMode);
-    void initVariables(SceneManager *sceneMngr, DEVICE_TYPE devType, int maxUniforms, int maxJoints);
+    void initVariables(SceneManager *sceneMngr, int maxUniforms, int maxJoints);
     void initLightCamera(Vector3 position);
     
     void renderAll();
-    
-    #ifdef ANDROID
-        unsigned char* (*getVideoFrameCallBack)(std::string fileName, int frame,int width, int height);
-    #endif
-    
+        
     void (*fileWriteCallBack)();
     void shaderCallBackForNode(int nodeID, string matName, int materialIndex);
     float getNodeTransparency(int nodeId);

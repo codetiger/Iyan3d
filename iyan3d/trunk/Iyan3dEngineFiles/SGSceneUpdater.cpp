@@ -44,12 +44,7 @@ void SGSceneUpdater::setDataForFrame(int frame, bool updateBB)
 
         if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
             Texture* nodeTex = updatingScene->nodes[i]->materialProps[0]->getTextureOfType(NODE_TEXTURE_TYPE_COLORMAP);
-#ifdef ANDROID
-            unsigned char* imageData = updatingScene->getVideoFrameCallBack(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame, 256, 256); //TODO give correct width and height
-            nodeTex->updateTexture(imageData);
-#else
-            nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
-#endif
+        nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
         }
 
         Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, updatingScene->nodes[i]->positionKeys);
@@ -65,10 +60,9 @@ void SGSceneUpdater::setDataForFrame(int frame, bool updateBB)
         sgNode->setPositionOnNode(position, shouldUpdateBB);
         
         if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
-			#ifndef UBUNTU
         	if(updatingScene->directionLine->node->getVisible() || updatingScene->lightCircles->node->getVisible())
                 updatingScene->updateDirectionLine();
-			#endif
+
             if(sgNode->scaleKeys.size() > 0) {
                 sgNode->getProperty(VERTEX_COLOR).value = Vector4(scale.x, scale.y, scale.z, 0);
                 lightChanged = true;
@@ -96,13 +90,11 @@ void SGSceneUpdater::setDataForFrame(int frame, bool updateBB)
         }
 
     }
-#ifndef UBUNTU
     updateControlsOrientaion(updatingScene);
     updateJointSpheresPosition();
     updateLightCamera();
     if(lightChanged)
         updateLightProperties(frame);
-#endif
 }
 
 void SGSceneUpdater::setKeysForFrame(int frame)
@@ -428,7 +420,6 @@ void SGSceneUpdater::updateLightProperties(int frameId)
 
 void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
 {
-#ifndef UBUNTU
     if(!updatingScene || !smgr)
         return;
 
@@ -483,7 +474,6 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                 }
         }
     }
-#endif
 }
 
 void SGSceneUpdater::reloadKeyFrameMap()

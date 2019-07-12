@@ -13,24 +13,16 @@
 #include "iostream"
 #include "../Meshes/Mesh.h"
 #include "APIData.h"
-
-#ifndef UBUNTU
 #include "OGLNodeData.h"
-#endif
 
 #include "../Textures/Texture.h"
 #include "../Material/Material.h"
 #include <sys/types.h>
 #include <memory>
-#ifdef IOS
 #include <sys/sysctl.h>
 #include <mach/machine.h>
 
-#if !(TARGET_IPHONE_SIMULATOR)
 #include "../../RenderManager/MTLNodeDataWrapper.h"
-#endif
-
-#endif
 
 typedef enum {
     NODE_TYPE_EMPTY,

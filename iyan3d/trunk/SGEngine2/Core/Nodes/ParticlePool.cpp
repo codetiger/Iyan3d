@@ -76,10 +76,6 @@ bool checkOrder(Particle *A, Particle *B)
 
 void ParticlePool::sortByDistance()
 {
-#ifdef UBUNTU
     std::sort(particles.begin(), particles.end(), checkOrder);
-#else
-    std::sort(particles.begin(), particles.end(), checkOrder);
-#endif
 }
 

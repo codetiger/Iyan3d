@@ -47,26 +47,23 @@ SGEditorScene *editorScene;
     smgr = sceneMngr;
 }
 
-- (void)setupLayer:(UIView*)renderView
+- (void)setupLayer:(MTKView*)renderView
 {
-    _renderView = (RenderingView*)renderView;
+    _renderView = renderView;
     screenScale = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"] ? 1.0 : [[UIScreen mainScreen] scale];
-    if(![self.delegate isMetalSupportedDevice]) {
-        _eaglLayer = (CAEAGLLayer*)renderView.layer;
-        _eaglLayer.opaque = YES;
-        _eaglLayer.contentsScale = screenScale;
-    }
 }
+
 - (void)setupContext
 {
     EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context)
         Logger::log(INFO, "AnimatinEditor", "Failed to initialize OpenGLES 2.0 context");
-        
-        if (![EAGLContext setCurrentContext:_context])
-            Logger::log(INFO, "AnimatinEditor", "Failed to set current OpenGL context");
-            }
+    
+    if (![EAGLContext setCurrentContext:_context])
+        Logger::log(INFO, "AnimatinEditor", "Failed to set current OpenGL context");
+}
+
 - (void)setupRenderBuffer
 {
     glGenRenderbuffers(1, &_colorRenderBuffer);
@@ -74,13 +71,15 @@ SGEditorScene *editorScene;
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
     [self check_gl_error];
 }
-- (void)setupDepthBuffer:(UIView*)renderView
+
+- (void)setupDepthBuffer:(MTKView*)renderView
 {
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, renderView.frame.size.width * screenScale, renderView.frame.size.height * screenScale);
     [self check_gl_error];
 }
+
 - (void)setupFrameBuffer
 {
     glGenFramebuffers(1, &_frameBuffer);
@@ -110,6 +109,7 @@ SGEditorScene *editorScene;
         err=glGetError();
     }
 }
+
 - (void)presentRenderBuffer
 {
     if(_context)
@@ -124,14 +124,14 @@ SGEditorScene *editorScene;
     
     smgr->ShaderCallBackForNode = &shaderCallBackForNode;
     smgr->isTransparentCallBack = &isTransparentCallBack;
-
+    
 }
 
 void shaderCallBackForNode(int nodeID, string matName, int materialIndex, string callbackFuncName)
 {
     if(!editorScene)
         return;
-        
+    
     if (callbackFuncName.compare("setUniforms") == 0)
         editorScene->shaderCallBackForNode(nodeID, matName, materialIndex);
     else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
@@ -171,35 +171,35 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     if(!editorScene)
         return false;
     
-        if (callbackFuncName.compare("setUniforms") == 0)
-            return editorScene->isNodeTransparent(nodeId);
-        else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
-            return editorScene->isJointTransparent(nodeId, callbackFuncName);
-        else if (callbackFuncName.compare("setCtrlUniforms") == 0)
-            return editorScene->isControlsTransparent(nodeId, callbackFuncName);
-        else if (callbackFuncName.compare("setOBJUniforms") == 0)
-            return false;
-        else if (callbackFuncName.compare("RotationCircle") == 0 || callbackFuncName.compare("LightCircles") == 0)
-            return false;
-        else if (callbackFuncName.compare("GreenLines") == 0)
-            return false;
-        else if (callbackFuncName.compare("BlueLines") == 0)
-            return false;
-        else if (callbackFuncName.compare("RedLines") == 0)
-            return false;
-        else if (callbackFuncName.compare("LightLine") == 0)
-            return false;
-        else if(callbackFuncName.compare("ObjUniforms") == 0)
-            return editorScene->rigMan->isOBJTransparent(callbackFuncName);
-        else if(callbackFuncName.compare("jointUniforms") == 0)
-            return false;
-        else if(callbackFuncName.compare("BoneUniforms") == 0)
-            return false;
-        else if(callbackFuncName.compare("envelopeUniforms") == 0)
-            return false;
-        else if(callbackFuncName.compare("sgrUniforms") == 0)
-            return editorScene->rigMan->isSGRTransparent(nodeId,callbackFuncName);
-
+    if (callbackFuncName.compare("setUniforms") == 0)
+        return editorScene->isNodeTransparent(nodeId);
+    else if (callbackFuncName.compare("setJointSpheresUniforms") == 0)
+        return editorScene->isJointTransparent(nodeId, callbackFuncName);
+    else if (callbackFuncName.compare("setCtrlUniforms") == 0)
+        return editorScene->isControlsTransparent(nodeId, callbackFuncName);
+    else if (callbackFuncName.compare("setOBJUniforms") == 0)
+        return false;
+    else if (callbackFuncName.compare("RotationCircle") == 0 || callbackFuncName.compare("LightCircles") == 0)
+        return false;
+    else if (callbackFuncName.compare("GreenLines") == 0)
+        return false;
+    else if (callbackFuncName.compare("BlueLines") == 0)
+        return false;
+    else if (callbackFuncName.compare("RedLines") == 0)
+        return false;
+    else if (callbackFuncName.compare("LightLine") == 0)
+        return false;
+    else if(callbackFuncName.compare("ObjUniforms") == 0)
+        return editorScene->rigMan->isOBJTransparent(callbackFuncName);
+    else if(callbackFuncName.compare("jointUniforms") == 0)
+        return false;
+    else if(callbackFuncName.compare("BoneUniforms") == 0)
+        return false;
+    else if(callbackFuncName.compare("envelopeUniforms") == 0)
+        return false;
+    else if(callbackFuncName.compare("sgrUniforms") == 0)
+        return editorScene->rigMan->isSGRTransparent(nodeId,callbackFuncName);
+    
 }
 
 - (void) addCameraLight
@@ -213,7 +213,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (bool) loadNodeInScene:(int)type AssetId:(int)assetId AssetName:(wstring)name TextureName:(NSString*)textureName Width:(int)imgWidth Height:(int)imgHeight isTempNode:(bool)isTempNode More:(NSMutableDictionary*)moreDetail ActionType:(ActionType)assetAddType VertexColor:(Vector4)vertexColor
 {
-   
+    
     string textureNameStr = std::string([textureName UTF8String]);
     
     if(editorScene) {
@@ -237,7 +237,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             string meshPath = FileHelper::getCachesDirectory() + to_string(assetId) + ".sgm";
             Vector3 mColor = Vector3(vertexColor.x, vertexColor.y, vertexColor.z);
             editorScene->loader->removeTempNodeIfExists();
-
+            
             SceneImporter *loader = new SceneImporter();
             string error;
             
@@ -246,17 +246,17 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incompatible_File_Title", nil) message:errorMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
                 [alert show];
             }
-                
+            
             delete loader;
             
             if(!isTempNode){
                 [self.delegate updateAssetListInScenes];
             }
-
-            /* 
+            
+            /*
              //TODO store add action for undo/redo
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
-                    editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+             if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+             editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
              */
             break;
         }
@@ -274,7 +274,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incompatible_File_Title", nil) message:errorMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Ok", nil), nil];
                 [alert show];
             }
-
+            
             delete loader;
             
             if(!isTempNode){
@@ -343,11 +343,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
                 [self.delegate updateAssetListInScenes];
             } else {
                 NSLog(@"Max lights 5");
-            }            
+            }
             break;
         }
         case ASSET_PARTICLES: {
-           SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId, "",  "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
+            SGNode* particle =  editorScene->loader->loadNode(NODE_PARTICLES, assetId, "",  "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
             if(particle)
                 particle->isTempNode = isTempNode;
             if(!isTempNode){
@@ -382,7 +382,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     editorScene->loader->removeObject(nodeIndex);
     [self.delegate updateAssetListInScenes];
     [self.delegate showOrHideProgress:0];
-
+    
 }
 
 - (void)addGesturesToSceneView
@@ -404,7 +404,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 
 - (void)tapGesture:(UITapGestureRecognizer*)rec
 {
-//    isTapped = true;
+    //    isTapped = true;
     CGPoint position;
     position = [rec locationInView:self.renderView];
     
@@ -433,17 +433,11 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 {
     _isPanned = true;
     vector<Vector2> p(2);
-    CGPoint velocity = (![self.delegate isMetalSupportedDevice]) ? [rec velocityInView:self.renderView] : [rec velocityInView:self.renderView];
+    CGPoint velocity = [rec velocityInView:self.renderView];
     NSUInteger touchCount = rec.numberOfTouches;
     for (int i = 0; i < touchCount; i++) {
-        if (![self.delegate isMetalSupportedDevice]) {
-            p[i].x = [rec locationOfTouch:i inView:self.renderView].x;
-            p[i].y = [rec locationOfTouch:i inView:self.renderView].y;
-        }
-        else {
-            p[i].x = [rec locationOfTouch:i inView:self.renderView].x;
-            p[i].y = [rec locationOfTouch:i inView:self.renderView].y;
-        }
+        p[i].x = [rec locationOfTouch:i inView:self.renderView].x;
+        p[i].y = [rec locationOfTouch:i inView:self.renderView].y;
     }
     switch (rec.state) {
         case UIGestureRecognizerStateBegan: {
@@ -534,10 +528,10 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         CGPoint position;
         position = [sender locationInView:self.renderView];
         _longPresPosition=CGRectMake(position.x, position.y, 1, 1);
-
+        
         if (!_isPlaying && !_isPanned)
         {
-
+            
             if(editorScene->selectedNodeIds.size() > 0) {
                 if(editorScene->allNodesRemovable() || editorScene->allNodesClonable())
                     [self.delegate presentPopOver:_longPresPosition];
@@ -639,7 +633,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     for(int i = 0; i < textureFileNames.size(); i++) {
         [fileNamesToZip addObject:[NSString stringWithCString:textureFileNames[i].c_str() encoding:NSUTF8StringEncoding]];
     }
-
+    
     return fileNamesToZip;
 }
 
@@ -649,7 +643,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     NSString *docDirPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString* sgbFilePath = [self.delegate getSGBPath];
     NSString* sgbName = [[sgbFilePath lastPathComponent] stringByDeletingPathExtension];
-
+    
     NSString* zipfile = [docDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Projects/%@.i3d", sgbName]];
     NSMutableArray *userFiles = [self getFileteredFilePathsFrom:fileNames];
     [userFiles addObject:thumbPath];
@@ -667,3 +661,4 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
 }
 
 @end
+

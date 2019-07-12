@@ -423,22 +423,13 @@ bool SGAnimationManager::storeAnimations(int assetId)
     animScene->updater->setDataForFrame(animScene->currentFrame);
     string extension = (currentType == NODE_RIG) ? ".sgra" : ".sgta";
     
-#ifdef IOS
     string filePath =  FileHelper::getDocumentsDirectory()+ "Resources/Animations/" + to_string(assetId) + extension;
     string thumbnailPath = FileHelper::getDocumentsDirectory() + "Resources/Animations/" + to_string(assetId) + ".png";
-#elif ANDROID
-    string filePath =  constants::DocumentsStoragePath + "/animations/" + to_string(assetId) + extension;
-    string thumbnailPath = constants::DocumentsStoragePath + "/animations/" + to_string(assetId) + ".png";
-#elif UBUNTU
-    string filePath =  "/animations/" + to_string(assetId) + extension;
-    string thumbnailPath = "/animations/" + to_string(assetId) + ".png";
-#endif
     int oldResolution = animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x;
 
     animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = 2;
     animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), true, animScene->currentFrame);
-    if(animScene->shaderMGR->deviceType == METAL)
-        animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), true, animScene->currentFrame);
+    animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), true, animScene->currentFrame);
     animScene->nodes[NODE_CAMERA]->getProperty(CAM_RESOLUTION).value.x = oldResolution;
     
     vector<int> totalKeyFrames;

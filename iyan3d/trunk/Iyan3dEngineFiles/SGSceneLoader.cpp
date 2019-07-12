@@ -230,10 +230,8 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
     if(type == NODE_CAMERA)
         ShaderManager::camPos = sgnode->node->getAbsolutePosition();
     else if (type == NODE_LIGHT) {
-#ifndef UBUNTU
         currentScene->initLightCamera(sgnode->node->getPosition());
         addLight(sgnode);
-#endif
     } else if(type == NODE_IMAGE || type == NODE_VIDEO) {
         sgnode->getProperty(LIGHTING).value.x = false; // Vector4(false, 0, 0, 0), UNDEFINED);
     } else if (type == NODE_TEXT_SKIN) {
@@ -324,10 +322,8 @@ bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
     if(sgNode->getType() == NODE_CAMERA)
         ShaderManager::camPos = sgNode->node->getAbsolutePosition();
     if(sgNode->getType() == NODE_LIGHT) {
-#ifndef UBUNTU
         currentScene->initLightCamera(sgNode->node->getPosition());
         addLight(sgNode);
-#endif
     } else if(sgNode->getType() == NODE_ADDITIONAL_LIGHT) {
         addLight(sgNode);
     } else if((sgNode->getType() == NODE_IMAGE || sgNode->getType() == NODE_VIDEO) && actionType != OPEN_SAVED_FILE && actionType != UNDO_ACTION)
@@ -592,8 +588,7 @@ void SGSceneLoader::setFirstInstanceAsMainNode(SGNode* currentNode)
     it->second->instanceNodes.erase(newIt);
     it->second->node->setUserPointer(it->second);
     it->second->node->type = NODE_TYPE_MESH;
-    if(smgr->device == METAL)
-        it->second->node->shouldUpdateMesh = true;
+    it->second->node->shouldUpdateMesh = true;
     
     for(newIt = it->second->instanceNodes.begin(); newIt != it->second->instanceNodes.end(); newIt++) {
         newIt->second->node->original = it->second->node;
@@ -616,8 +611,7 @@ void SGSceneLoader::copyMeshFromOriginalNode(SGNode* sgNode)
         dynamic_pointer_cast<MeshNode>(sgNode->node)->meshCache->copyDataFromMesh(meshCache);
     }
 
-    if(smgr->device == METAL || !smgr->renderMan->supportsVAO)
-        sgNode->node->shouldUpdateMesh = true;
+    sgNode->node->shouldUpdateMesh = true;
 }
 
 void SGSceneLoader::removeNodeFromInstances(SGNode *currentNode)

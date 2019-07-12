@@ -32,7 +32,6 @@ public:
     static Mat4 lighCamProjMatrix;
     static Mat4 lighCamViewMatrix;
     static string BundlePath;
-    static DEVICE_TYPE deviceType;
     static float ambientLight;
     
     Texture* shadowTexture;
@@ -41,13 +40,13 @@ public:
     
     std::map< PROP_INDEX, Property > sceneProps;
     
-    ShaderManager(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints);
+    ShaderManager(SceneManager *smgr, int maxUniforms, int maxJoints);
     void setUniforms(SGNode *node, string matName, int materialIndex = 0);
-    void loadAllShaders(SceneManager *smgr,DEVICE_TYPE deviceType, int maxUniforms, int maxJoints);
+    void loadAllShaders(SceneManager *smgr, int maxUniforms, int maxJoints);
     static std::map<string, string> getShaderStringsToReplace(int maxUniforms);
     static std::map<string, string> getStringsForRiggedObjects(int maxJoints);
     
-    static bool LoadShader(SceneManager* smgr, DEVICE_TYPE deviceType,string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest = false);
+    static bool LoadShader(SceneManager* smgr, string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest = false);
     ~ShaderManager();
     
     

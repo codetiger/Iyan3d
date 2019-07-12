@@ -15,17 +15,13 @@
 #include "../../Core/Nodes/Node.h"
 #include "../../Core/common/common.h"
 #include "Material.h"
-
-#ifndef UBUNTU
 #include "../../Core/Textures/OGLTexture.h"
-#endif
 
 class MaterialManager {
 public:
-    DEVICE_TYPE deviceType;
     vector<Material*> *materials;
     
-    MaterialManager(DEVICE_TYPE deviceType);
+    MaterialManager();
     ~MaterialManager();
     bool CreateMaterial(string MaterialNamel, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false, bool isTest = false);
     void RemoveAllMaterials();

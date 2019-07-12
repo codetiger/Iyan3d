@@ -8,56 +8,24 @@
 
 #include "SceneManager.h"
 
-#ifdef IOS
 #import "TargetConditionals.h"
-#elif ANDROID
-//#include "../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/android/log.h"
-#endif
 
-DEVICE_TYPE common::deviceType = OPENGLES2;
-
-SceneManager::SceneManager(float width, float height, float screenScale, DEVICE_TYPE type, string bundlePath, void *renderView)
+SceneManager::SceneManager(float width, float height, float screenScale, string bundlePath, void *renderView)
 {
-    device = type;
     displayWidth = width;
     displayHeight = height;
     this->screenScale = screenScale;
     this->bundlePath = bundlePath;
     renderTargetIndex = 0;
-    #ifdef ANDROID
-    renderMan = new OGLES2RenderManager(width, height, screenScale);
-    common::deviceType = OPENGLES2;
-    #elif IOS
-    if(type == OPENGLES2) {
-        renderMan = new OGLES2RenderManager(width, height, screenScale);
-        common::deviceType = OPENGLES2;
-    } else if(type == METAL) {
-        #if !(TARGET_IPHONE_SIMULATOR)
-            renderMan = (RenderManager*)initMetalRenderManager(renderView, width, height, screenScale);
-            if(!renderMan)
-                return NULL;
-            common::deviceType = METAL;
-        #endif
-    }
-    #endif
-    
-#ifndef UBUNTU
-    string extensions = "";
-    if(device == OPENGLES2)
-        extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
-    
-    if(device == OPENGLES2 && extensions.find("GL_EXT_draw_instanced") == std::string::npos) {
-        renderMan->supportsInstancing = false;
-    } else
-        renderMan->supportsInstancing = true;
 
-    mtlManger = new MaterialManager(type);
+    renderMan = (RenderManager*)initMetalRenderManager(renderView, width, height, screenScale);
+    if(!renderMan)
+        return NULL;
     
-    if(device == METAL)
-        renderMan->maxInstances = 4000;
-
-#endif
+    renderMan->supportsInstancing = true;
+    mtlManger = new MaterialManager();
     
+    renderMan->maxInstances = 4000;
     renderMan->emptyTexture = loadTexture("Env Texture", bundlePath + "/envmap.png", TEXTURE_RGBA8, TEXTURE_BYTE, true, 0);
 }
 
@@ -90,7 +58,7 @@ void SceneManager::RemoveAllTextures()
             delete textures[i];
     }
     textures.clear();
-
+    
 }
 
 void SceneManager::setDisplayResolution(int width, int height)
@@ -101,20 +69,17 @@ void SceneManager::setDisplayResolution(int width, int height)
 
 void SceneManager::AddNode(shared_ptr<Node> node, MESH_TYPE meshType)
 {
-#ifndef UBUNTU
-    if((device == METAL && node->type != NODE_TYPE_INSTANCED) || (!renderMan->supportsVAO && node->type != NODE_TYPE_INSTANCED))
+    if(node->type != NODE_TYPE_INSTANCED || (!renderMan->supportsVAO && node->type != NODE_TYPE_INSTANCED))
         renderMan->createVertexAndIndexBuffers(node,meshType);
-#endif
     nodes.push_back(node);
 }
 
 void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node, MESH_TYPE meshType)
 {
-#ifndef UBUNTU
-    if(device == METAL || !renderMan->supportsVAO)
+    if(!renderMan->supportsVAO)
         renderMan->createVertexAndIndexBuffers(node,meshType, true);
     
-    if(device == OPENGLES2 && node->type == NODE_TYPE_PARTICLES) {
+    if(node->type == NODE_TYPE_PARTICLES) {
         for( int i = 0; i < dynamic_pointer_cast<MeshNode>(node)->getMesh()->getMeshBufferCount(); i++) {
             if(renderMan->supportsVAO)
                 ((OGLES2RenderManager*)renderMan)->updateVAO(node, true, false, i);
@@ -122,8 +87,6 @@ void SceneManager::updateVertexAndIndexBuffers(shared_ptr<Node> node, MESH_TYPE 
                 ((OGLES2RenderManager*)renderMan)->bindBufferAndAttributes(node, i, meshType);
         }
     }
-#endif
-
 }
 
 void SceneManager::RemoveNode(shared_ptr<Node> node)
@@ -137,7 +100,7 @@ void SceneManager::RemoveNode(shared_ptr<Node> node)
     
     if(sameNodeIdcount > 1)
         Logger::log(ERROR,"SceneManager::RemoveNode","Node id repeats");
-
+    
     for(int i = 0; i < nodes.size(); i++) {
         if(nodes[i]->getID() == node->getID()) {
             nodes[i]->detachFromParent();
@@ -155,18 +118,10 @@ void SceneManager::RemoveTexture(Texture *texture)
 {
     for(int i = 0; i < textures.size(); i++) {
         if(textures[i] == texture) {
-            if(device == OPENGLES2) {
-                if(((OGLTexture*)textures[i])->OGLTextureName == ((OGLTexture*)texture)->OGLTextureName) {
-                    delete textures[i];
-                    textures.erase(textures.begin() + i);
-                    break;
-                }
-            } else if(device == METAL) {
-                if(textures[i] == texture)
-                    delete textures[i];
-                textures.erase(textures.begin() + i);
-                break;
-            }
+            if(textures[i] == texture)
+                delete textures[i];
+            textures.erase(textures.begin() + i);
+            break;
         }
     }
 }
@@ -207,7 +162,7 @@ void SceneManager::Render(bool isRTT)
     
     if(nodeIndex.size()) {
         renderMan->setTransparencyBlending(true);
-    
+        
         for (int i = 0; i < nodeIndex.size(); i++) {
             int nodeId = nodeIndex[i];
             if((nodes[nodeId]->getID() >= 600000 && nodes[nodeId]->getID() < 600010) || (nodes[nodeId]->getID() >= 300000 && nodes[nodeId]->getID() <= 301000))
@@ -247,14 +202,14 @@ void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
         meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->meshCache;
     else
         meshToRender = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh();
-
+    
     for(int meshBufferIndex = 0; meshBufferIndex < meshToRender->getMeshBufferCount(); meshBufferIndex++) {
         
         if(!renderMan->PrepareNode(nodes[index], meshBufferIndex, false, index))
             return;
-
+        
         int materialIndex = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh()->getMeshBufferMaterialIndices(meshBufferIndex);
-
+        
         if(nodes[index]->instancedNodes.size() > 0) {
             for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
                 ShaderCallBackForNode(nodes[index]->getID(), nodes[index]->material->name, materialIndex, nodes[index]->callbackFuncName);
@@ -266,7 +221,7 @@ void SceneManager::RenderNodeAlone(shared_ptr<Node> node)
         }
         
     }
-
+    
     nodes[index]->shouldUpdateMesh = false;
 }
 
@@ -275,10 +230,8 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
     if(!nodes[index])
         return;
     
-    if(device == METAL) {
-        renderMan->setUpDepthState(func, true, clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
-    }
-
+    renderMan->setUpDepthState(func, true, clearDepthBuffer); // ToDo change in depthstate for each render,  need optimisation
+    
     nodes[index]->update();
     Mesh* meshToRender;
     if(nodes[index]->instancedNodes.size() > 0 && !renderMan->supportsInstancing)
@@ -296,7 +249,7 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
         int materialIndex = dynamic_pointer_cast<MeshNode>(nodes[index])->getMesh()->getMeshBufferMaterialIndices(meshBufferIndex);
         if(nodes[index]->instancedNodes.size() > 0) {
             for(nodes[index]->instancingRenderIt = 0; nodes[index]->instancingRenderIt < nodes[index]->instancedNodes.size(); nodes[index]->instancingRenderIt += renderMan->maxInstances) {
-
+                
                 if(!renderMan->supportsVAO && nodes[index]->instancingRenderIt > 0)
                     renderMan->PrepareNode(nodes[index], meshBufferIndex, isRTT, index);
                 
@@ -309,18 +262,16 @@ void SceneManager::RenderNode(bool isRTT, int index, bool clearDepthBuffer, META
         }
         
     }
-
+    
     nodes[index]->shouldUpdateMesh = false;
 }
 
 void SceneManager::setShaderState(int nodeIndex)
 {
     if(nodes[nodeIndex]->type <= NODE_TYPE_CAMERA)
-         return;
+        return;
     
-    if(device == METAL) {
-        MTLPipelineStateCallBack(nodeIndex);
-    }
+    MTLPipelineStateCallBack(nodeIndex);
 }
 
 void SceneManager::setActiveCamera(shared_ptr<Node> node)
@@ -329,9 +280,7 @@ void SceneManager::setActiveCamera(shared_ptr<Node> node)
         if(nodes[i]->type <= NODE_TYPE_CAMERA)
             (dynamic_pointer_cast<CameraNode>(nodes[i]))->setActive(false);
     }
-#ifndef UBUNTU
     renderMan->setActiveCamera(dynamic_pointer_cast<CameraNode>(node));
-#endif
 }
 
 shared_ptr<CameraNode> SceneManager::getActiveCamera()
@@ -341,22 +290,7 @@ shared_ptr<CameraNode> SceneManager::getActiveCamera()
 
 Texture* SceneManager::loadTexture(string textureName, string filePath, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type, bool blurTexture, int blurRadius)
 {
-    Texture *newTex = NULL;
-    #ifdef ANDROID
-        newTex = new OGLTexture();
-    #elif IOS
-    if(device == OPENGLES2)
-        newTex = new OGLTexture();
-    else if(device == METAL){
-        #if !(TARGET_IPHONE_SIMULATOR)
-            newTex = (Texture*)initMTLTexture();
-        #endif
-    }
-    #endif
-
-#ifdef UBUNTU
-    newTex = new DummyTexture();
-#endif
+    Texture *newTex = (Texture*)initMTLTexture();
     
     if(newTex->loadTexture(textureName, filePath, format, type, blurTexture, blurRadius)) {
         renderMan->resetTextureCache();
@@ -371,22 +305,8 @@ Texture* SceneManager::loadTexture(string textureName, string filePath, TEXTURE_
 
 Texture* SceneManager::loadTextureFromVideo(string videoFileName, TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE type)
 {
-    Texture *newTex = NULL;
-#ifdef ANDROID
-    newTex = new OGLTexture();
-#elif IOS
-    if(device == OPENGLES2)
-        newTex = new OGLTexture();
-    else if(device == METAL){
-#if !(TARGET_IPHONE_SIMULATOR)
-        newTex = (Texture*)initMTLTexture();
-#endif
-    }
-#endif
+    Texture *newTex = (Texture*)initMTLTexture();
     
-#ifdef UBUNTU
-    newTex = new DummyTexture();
-#endif
     newTex->loadTextureFromVideo(videoFileName, format, type);
     renderMan->resetTextureCache();
     textures.push_back(newTex);
@@ -492,7 +412,7 @@ void SceneManager::draw2DImage(Texture *texture, Vector2 originCoord, Vector2 en
         return;
     
     renderMan->useMaterialToRender(material);
-    int textureValue = (device == OPENGLES2) ? ((OGLTexture*)texture)->OGLTextureName : 0;
+    int textureValue = 0;
     setPropertyValue(material, "texture1", &textureValue, DATA_TEXTURE_2D, 1, true, 0, NOT_EXISTS, NOT_EXISTS, texture);
     renderMan->draw2DImage(texture, originCoord, endCoord, material, isRTT);
     
@@ -531,7 +451,7 @@ void SceneManager::setPropertyValue(Material *material, string name, float* valu
     shared_ptr<Node> nod;
     if(nodeIndex != NOT_EXISTS) nod = nodes[nodeIndex];
     
-    if(nodeIndex == NOT_EXISTS && device == METAL) {
+    if(nodeIndex == NOT_EXISTS) {
         renderMan->bindDynamicUniform(material,name,values,type,count,paramIndex,nodeIndex,tex,isFragmentData);
     } else {
         short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex, renderTargetIndex);
@@ -545,36 +465,25 @@ void SceneManager::setPropertyValue(Material *material, string name, int* values
     if(nodeIndex != NOT_EXISTS)
         nod = nodes[nodeIndex];
     
-    if(nodeIndex == NOT_EXISTS && device == METAL) {
+    if(nodeIndex == NOT_EXISTS) {
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     } else {
         short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex, renderTargetIndex);
-        if(device == METAL)
-            renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
-        else
-            renderMan->BindUniform(material, nod, uIndex, isFragmentData, userValue, blurTex);
+        renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     }
 }
 
 bool SceneManager::LoadShaders(string materialName, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
 {
-    if(device == OPENGLES2) {
-        if(shadersStr.find("uniSize") != shadersStr.end())
-            renderMan->maxInstances = stoi(shadersStr["uniSize"]) - 1;
-    }
-    return mtlManger->CreateMaterial(materialName,vShaderName,fShaderName, shadersStr, isDepthPass, isTest);
+    return mtlManger->CreateMaterial(materialName, vShaderName, fShaderName, shadersStr, isDepthPass, isTest);
 }
 
 Material* SceneManager::getMaterialByIndex(int index)
 {
-#ifdef UBUNTU
-	return 0;
-#endif
-
-	if(index < (int)(*mtlManger->materials).size())
-		return (*mtlManger->materials)[index];
-	else
-		return 0;
+    if(index < (int)(*mtlManger->materials).size())
+        return (*mtlManger->materials)[index];
+    else
+        return 0;
 }
 
 Material* SceneManager::getMaterialByName(string name)
@@ -624,9 +533,7 @@ void SceneManager::writeImageToFile(Texture *texture, char* filePath, IMAGE_FLIP
 
 void SceneManager::setFrameBufferObjects(uint32_t fb, uint32_t cb, uint32_t db)
 {
-	#ifndef UBUNTU
-    	((OGLES2RenderManager*)renderMan)->setFrameBufferObjects(fb,cb,db);
-	#endif
+    ((OGLES2RenderManager*)renderMan)->setFrameBufferObjects(fb,cb,db);
 }
 
 shared_ptr<EmptyNode> SceneManager::addEmptyNode()
@@ -638,29 +545,14 @@ shared_ptr<EmptyNode> SceneManager::addEmptyNode()
 
 void SceneManager::updateVertexBuffer(int nodeIndex)
 {
-	#ifndef UBUNTU
-		if(device == OPENGLES2 && renderMan->supportsVAO)
-			dynamic_pointer_cast<OGLNodeData>(nodes[nodeIndex]->nodeData)->removeVertexBuffers();
-			else if(device == OPENGLES2)
-			    renderMan->createVertexAndIndexBuffers(nodes[nodeIndex], dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->meshType, false);
     for(int i = 0; i < dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->getMeshBufferCount(); i++) {
-        if(device == METAL)
-			renderMan->createVertexBuffer(nodes[nodeIndex],i);
-        else if(renderMan->supportsVAO)
-            ((OGLES2RenderManager*)renderMan)->updateVAO(nodes[nodeIndex], false, false, i);
-        else
-            ((OGLES2RenderManager*)renderMan)->bindBufferAndAttributes(nodes[nodeIndex], i, dynamic_pointer_cast<MeshNode>(nodes[nodeIndex])->getMesh()->meshType);
+        renderMan->createVertexBuffer(nodes[nodeIndex],i);
     }
-	#endif
 }
 
 bool SceneManager::setVAOSupport(bool status)
 {
     renderMan->supportsVAO = status;
-
-    #ifdef ANDROID
-    if(status && device == OPENGLES2)
-        ((OGLES2RenderManager*)renderMan)->initialiseOtherVAOFunc();
-    #endif
 }
+
 

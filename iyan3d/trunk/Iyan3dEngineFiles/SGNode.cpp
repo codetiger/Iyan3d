@@ -6,10 +6,6 @@
 #include "MeshRW.h"
 #include "SceneImporter.h"
 
-#ifdef ANDROID
-#include "../opengl.h"
-#endif
-
 SGNode::SGNode(NODE_TYPE type)
 {
     this->type = type;
@@ -163,22 +159,9 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             string meshPath = "";
             string texPath = "";
             string jsonPath = "";
-#ifdef IOS
+
             meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
             texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
-#elif ANDROID
-            meshPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + ".sgm";
-            texPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + "-cm.png";
-            jsonPath = constants::DocumentsStoragePath + "/mesh/" + to_string(assetId) + ".json";
-#else
-            meshPath = to_string(assetId) + ".sgm";
-            texPath = to_string(assetId) + "-cm.png";
-#endif
-#ifdef ANDROID
-            if (!checkFileExists(meshPath) || !checkFileExists(texPath) || !checkFileExists(jsonPath)) {
-                return shared_ptr<Node>();
-            }
-#endif
             Json::Value pData = parseParticlesJson(assetId);
             
             SceneImporter *importer = new SceneImporter();
@@ -222,11 +205,7 @@ Json::Value SGNode::parseParticlesJson(int assetId)
     string jsonFileName = to_string(assetId) + ".json";
     string jsonPath = jsonFileName;
     
-#ifdef IOS
     jsonPath = constants::CachesStoragePath + "/" + jsonFileName;
-#elif ANDROID
-    jsonPath = constants::DocumentsStoragePath + "/mesh/"+jsonFileName;
-#endif
     
     ifstream jsonFile(jsonPath);
     Json::Reader reader;
@@ -377,12 +356,8 @@ shared_ptr<Node> SGNode::loadImage(string textureName, SceneManager *smgr, float
 {
     char* textureFileName = new char[256];
     
-#ifdef ANDROID
-    string path = FileHelper::getTexturesDirectory()+textureName;
-    textureFileName=(path).c_str();
-#else
     sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
-#endif
+
     Property smoothProperty = materialProps[0]->getProperty(TEXTURE_SMOOTH);
     Texture *nodeTex = smgr->loadTexture(textureName, textureFileName, TEXTURE_RGBA8, TEXTURE_BYTE, smoothProperty.value.x);
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
@@ -394,13 +369,7 @@ shared_ptr<Node> SGNode::loadImage(string textureName, SceneManager *smgr, float
 
 shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio)
 {Texture *nodeTex;
-#ifdef  ANDROID
-    string dummyPath = constants::BundlePath + "/whiteborder.png";
-    //TODO nodeTex = smgr->loadTexture("Dummy Vid Tex", dummyPath, TEXTURE_RGBA8, TEXTURE_BYTE, smoothTexture);
-    return NULL;
-#else
     nodeTex = smgr->loadTextureFromVideo(videoFileName, TEXTURE_RGBA8, TEXTURE_BYTE);
-#endif
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
     materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);

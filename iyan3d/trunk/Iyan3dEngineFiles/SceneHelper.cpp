@@ -17,9 +17,7 @@ Mesh* SceneHelper::pointLightMesh = NULL;
 
 shared_ptr<CameraNode> SceneHelper::initViewCamera(SceneManager *smgr, Vector3& cameraTarget, float& cameraRadius)
 {
-#ifndef UBUNTU
     CameraViewHelper::readData();
-#endif
 
     shared_ptr<CameraNode> viewCamera = smgr->createCameraNode("NoUniformCallbackFunctions");
     smgr->setActiveCamera(viewCamera);

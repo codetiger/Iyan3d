@@ -10,30 +10,7 @@
 #include <stdint.h>
 #include "../Core/Nodes/ParticleManager.h"
 #include "OGLES2RenderManager.h"
-#ifdef IOS
 #include <OpenGLES/ES2/glext.h>
-#endif
-#ifdef ANDROID
-//#include "../../../../../../../../../Android/Sdk/ndk-bundle/platforms/android-21/arch-arm/usr/include/stdint.h"
-#include "../../opengl.h"
-#include <EGL/egl.h>
-
-PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES;
-PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES;
-PFNGLISVERTEXARRAYOESPROC glIsVertexArrayOES;
-PFNGLDISCARDFRAMEBUFFEREXTPROC glDiscardFramebufferEXT;
-
-void OGLES2RenderManager::initialiseOtherVAOFunc ()
-{
-    glGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress ( "glGenVertexArraysOES" );
-    glBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress ( "glBindVertexArrayOES" );
-    glIsVertexArrayOES = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress ( "glIsVertexArrayOES" );
-    if(glGenVertexArraysOES == NULL){
-        Logger::log(INFO, "OGLRenderManager", "glGenVertexArraysOES is null");
-    }
-}
-
-#endif
 
 OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,float screenScale)
 {
@@ -45,10 +22,6 @@ OGLES2RenderManager::OGLES2RenderManager(float screenWidth,float screenHeight,fl
     depthBuffer = colorBuffer = frameBuffer = 0;
     shaderPrograms.clear();
     Initialize();
-
-    #ifdef ANDROID
-        glDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC)eglGetProcAddress("glDiscardFramebufferEXT");
-    #endif
 
     resetTextureCache();
 }
@@ -256,11 +229,9 @@ void OGLES2RenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeInde
 
 void OGLES2RenderManager::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *data, GLsizei instanceCount)
 {
-#ifdef IOS
     if(instanceCount > 1)
         glDrawElementsInstancedEXT(mode, count, type, data, instanceCount);
     else
-#endif
         glDrawElements(mode, count, type, data);
 }
 
@@ -580,11 +551,7 @@ void OGLES2RenderManager::writeImageToFile(Texture *texture, char *filePath, IMA
         }
     }
     
-#ifndef IOS
-    PNGFileManager::write_png_file(filePath, buffer, texture->width, texture->height);
-#else
     writePNGImage(buffer,texture->width,texture->height,filePath);
-#endif
     
     delete[] buffer;
     delete[] imageData;

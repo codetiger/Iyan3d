@@ -82,11 +82,6 @@ enum TEXTURE_DATA_TYPE {
     TEXTURE_BYTE
 };
 
-enum DEVICE_TYPE {
-    OPENGLES2,
-    METAL
-};
-
 enum FPLANES {
     F_FAR_PLANE = 0,
     F_NEAR_PLANE = 1,
@@ -126,7 +121,6 @@ static const u_int32_t attributesTotalValuesSkinned[MAX_VERTEX_DATA_SKINNED] = {
 
 class common {
 public:
-    static DEVICE_TYPE deviceType;
 };
 
 #endif

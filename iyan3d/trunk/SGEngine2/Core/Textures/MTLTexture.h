@@ -12,18 +12,13 @@
 #include "../common/common.h"
 #include "../../RenderManager/ImageLoaderOBJCWrapper.h"
 
-#ifdef IOS
-#if !(TARGET_IPHONE_SIMULATOR)
-    #import <QuartzCore/CAMetalLayer.h>
-    #import <Metal/Metal.h>
-#endif
+#import <QuartzCore/CAMetalLayer.h>
+#import <Metal/Metal.h>
 #import <UIKit/UIKit.h>
-#endif
 #include "Texture.h"
 
 class MTLTexture:public Texture{
 public:
-#if !(TARGET_IPHONE_SIMULATOR)
     id <MTLTexture> texture;
     
     MTLTexture();
@@ -37,6 +32,5 @@ public:
     int getMTLPixelBytesForFormat(TEXTURE_DATA_FORMAT format);
     int getBitsPerCompomentForFormat(TEXTURE_DATA_FORMAT format);
     void createRenderTargetTexture(string textureName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType,int width,int height);
-#endif
 };
 #endif /* defined(__SGEngine2__MTLTexture__) */

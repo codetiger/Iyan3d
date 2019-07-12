@@ -23,10 +23,6 @@
 #include "../Core/Nodes/EmptyNode.h"
 #include "../Core/Meshes/SGCircleNode.h"
 
-#ifdef UBUNTU
-#include "../Core/Textures/DummyTexture.h"
-#endif
-
 class SceneManager {
 private:
     int draw2DMatIndex;
@@ -37,16 +33,15 @@ private:
 public:
     void AddNode(shared_ptr<Node> node,MESH_TYPE meshType = MESH_TYPE_LITE);
 
-    DEVICE_TYPE device;
     RenderManager *renderMan;
     string bundlePath;
     vector< shared_ptr<Node> > nodes;
     vector<Texture*> textures;
     float displayWidth,displayHeight,screenScale;
 
-    SceneManager(float width,float height,float screenScale,DEVICE_TYPE type,string bundlePath,void *renderView = NULL);
+    SceneManager(float width,float height,float screenScale,string bundlePath,void *renderView = NULL);
     ~SceneManager();
-    void initRenderManager(DEVICE_TYPE type);
+    void initRenderManager();
     
     void clearMaterials();
     Vector2 getViewPort();

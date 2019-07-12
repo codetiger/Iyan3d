@@ -5,7 +5,7 @@
 //  Created by Harishankar on 15/11/14.
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
-#ifdef IOS
+
 #import "MetalHandler.h"
 #import "MTLNodeData.h"
 #include "MeshNode.h"
@@ -83,5 +83,3 @@ Material* LoadMetalShaders(string vertexFuncName,string fragFuncName,bool isDept
     }
     return newMat;
 }
-
-#endif

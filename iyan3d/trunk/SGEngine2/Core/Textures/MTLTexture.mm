@@ -8,12 +8,9 @@
 
 
 #import "MTLTexture.h"
-#ifdef IOS
 #import "MetalHandler.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Accelerate/Accelerate.h>
-#endif
-
 
 MTLTexture::MTLTexture()
 {

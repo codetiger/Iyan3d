@@ -15,22 +15,19 @@ string constants::DocumentsStoragePath="";
 string constants::impotedImagesPathAndroid="";
 float constants::iOS_Version = 0;
 
-SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWidth,int screenHeight, int maxUniforms, int maxJoints)
+SGEditorScene::SGEditorScene(SceneManager *smgr, int screenWidth, int screenHeight, int maxUniforms, int maxJoints)
 {
     SceneHelper::screenWidth = screenWidth;
     SceneHelper::screenHeight = screenHeight;
     this->smgr = smgr;
     renHelper = new RenderHelper(smgr, this);
 
-#ifdef IOS
     this->smgr->setVAOSupport(renHelper->supportsVAO());
-#endif
 
     viewCamera =  SceneHelper::initViewCamera(smgr, cameraTarget, cameraRadius);
     SceneHelper::initLightMesh(smgr);
-    initVariables(smgr, device, maxUniforms, maxJoints);
+    initVariables(smgr, maxUniforms, maxJoints);
 
-#ifndef UBUNTU
     initTextures();
     rotationCircle = SceneHelper::createCircle(smgr);
     directionLine = SceneHelper::createLightDirLine(smgr);
@@ -43,7 +40,6 @@ SGEditorScene::SGEditorScene(DEVICE_TYPE device,SceneManager *smgr,int screenWid
     directionIndicator = SceneHelper::initIndicatorNode(smgr);
     BoneLimitsHelper::init();
     AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
-#endif
 
     renderCamera = SceneHelper::initRenderCamera(smgr, DEFAULT_CAMERA_FOV);
 }
@@ -162,10 +158,10 @@ void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
     updater->setDataForFrame(currentFrame);
 }
 
-void SGEditorScene::initVariables(SceneManager* sceneMngr, DEVICE_TYPE devType, int maxUniforms, int maxJoints)
+void SGEditorScene::initVariables(SceneManager* sceneMngr, int maxUniforms, int maxJoints)
 {
     cmgr = new CollisionManager();
-    shaderMGR = new ShaderManager(sceneMngr, devType, maxUniforms, maxJoints);
+    shaderMGR = new ShaderManager(sceneMngr, maxUniforms, maxJoints);
     selectMan = new SGSelectionManager(sceneMngr, this);
     updater = new SGSceneUpdater(sceneMngr, this);
     loader = new SGSceneLoader(sceneMngr, this);
@@ -274,10 +270,8 @@ void SGEditorScene::setPropsOfObject(SGNode *sgNode, int pType)
 
 void SGEditorScene::syncSceneWithPhysicsWorld()
 {
-#ifndef UBUNTU
     if(physicsHelper)
         physicsHelper->syncPhysicsWorld();
-#endif
 }
 
 void SGEditorScene::updatePhysics(int frame)
@@ -295,7 +289,6 @@ void SGEditorScene::enableDirectionIndicator()
 
 void SGEditorScene::updateDirectionLine()
 {
-#ifndef UBUNTU
     bool status = (selectedNodeId != NOT_EXISTS && (nodes[selectedNodeId]->getType() == NODE_LIGHT || nodes[selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT));
     
     if(!status) {
@@ -321,7 +314,6 @@ void SGEditorScene::updateDirectionLine()
         lightCircles->node->setScale(Vector3(nodes[selectedNodeId]->getProperty(SPECIFIC_FLOAT).value.x));
         lightCircles->node->updateAbsoluteTransformation();
     }
-#endif
 }
 
 void SGEditorScene::setTransparencyForObjects()
@@ -632,7 +624,7 @@ void SGEditorScene::saveThumbnail(char* targetPath)
     
     smgr->Render(false);
     smgr->EndDisplay();
-    smgr->writeImageToFile(thumbnailTexture, targetPath, (shaderMGR->deviceType == OPENGLES2) ? FLIP_VERTICAL : NO_FLIP);
+    smgr->writeImageToFile(thumbnailTexture, targetPath, NO_FLIP);
     
     smgr->setRenderTarget(NULL, true, true, false, Vector4(0.0));
     
@@ -755,11 +747,7 @@ void SGEditorScene::removeTempTextureAndVertex(int selectedNode, int selectedMat
     if(selectedNode == NOT_EXISTS && pIndex != ENVIRONMENT_TEXTURE)
         return;
     
-    string StoragePath;
-#ifdef IOS
-    StoragePath = constants::CachesStoragePath + "/";
-#endif
-
+    string StoragePath = constants::CachesStoragePath + "/";
 
     node_texture_type texType;
     if(pIndex == TEXTURE)

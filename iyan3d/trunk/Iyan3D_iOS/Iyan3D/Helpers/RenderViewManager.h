@@ -12,20 +12,17 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#if !(TARGET_IPHONE_SIMULATOR)
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
-#endif
+#import <MetalKit/MetalKit.h>
 
 #import <GameKit/GameKit.h>
-#import "RenderingView.h"
 #import "SceneManager.h"
 #import "Constants.h"
 #import "Vector3.h"
 
 @protocol RenderViewManagerDelegate
 
-- (bool) isMetalSupportedDevice;
 - (void) updateXYZValuesHide:(BOOL)hide X:(float)x Y:(float)y Z:(float)z;
 - (void) reloadFrames;
 - (void) presentPopOver:(CGRect )arect;
@@ -50,7 +47,7 @@
     int touchCountTracker;
     
 }
-@property (strong, atomic) RenderingView *renderView;
+@property (strong, atomic) MTKView *renderView;
 @property (strong, atomic) id <RenderViewManagerDelegate> delegate;
 @property (nonatomic) bool isPlaying;
 @property (nonatomic) bool isPanned;
@@ -62,10 +59,10 @@
 @property (nonatomic) vector<Vector2> touchMovePosition;
 @property (nonatomic) bool checkCtrlSelection;
 - (void)setUpPaths:(SceneManager*)sceneMngr;
-- (void)setupLayer:(UIView*)renderView;
+- (void)setupLayer:(MTKView*)renderView;
 - (void)setupContext;
 - (void)setupRenderBuffer;
-- (void)setupDepthBuffer:(UIView*)renderView;
+- (void)setupDepthBuffer:(MTKView*)renderView;
 - (void)setupFrameBuffer;
 - (void)presentRenderBuffer;
 - (void) setUpCallBacks:(void*)scene;

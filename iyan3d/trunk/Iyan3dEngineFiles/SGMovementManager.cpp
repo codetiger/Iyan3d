@@ -405,9 +405,7 @@ void SGMovementManager::touchBeganRig(Vector2 curTouchPos) {
     prevTouchPoints[0] = curTouchPos;
     moveScene->updater->updateControlsOrientaion();
     moveScene->renHelper->rttControlSelectionAnim(curTouchPos);
-    if(moveScene->shaderMGR->deviceType == METAL){
-        moveScene->selectMan->getCtrlColorFromTouchTextureAnim(curTouchPos);
-    }
+    moveScene->selectMan->getCtrlColorFromTouchTextureAnim(curTouchPos);
     xAcceleration = yAcceleration = 0.0;
 }
 

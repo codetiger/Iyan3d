@@ -8,13 +8,9 @@
 
 #ifndef __SGEngine2__MTLNodeData__
 #define __SGEngine2__MTLNodeData__
-#ifdef IOS
-#if !(TARGET_IPHONE_SIMULATOR)
-    #import <QuartzCore/CAMetalLayer.h>
-    #import <Metal/Metal.h>
-#endif
+#import <QuartzCore/CAMetalLayer.h>
+#import <Metal/Metal.h>
 #import <UIKit/UIKit.h>
-#endif
 #include "APIData.h"
 
 

@@ -15,10 +15,8 @@
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-#if !(TARGET_IPHONE_SIMULATOR)
-    #import <QuartzCore/CAMetalLayer.h>
-    #import <Metal/Metal.h>
-#endif
+#import <QuartzCore/CAMetalLayer.h>
+#import <Metal/Metal.h>
 
 #define RENDER_IMAGE 0
 #define RENDER_VIDEO 1

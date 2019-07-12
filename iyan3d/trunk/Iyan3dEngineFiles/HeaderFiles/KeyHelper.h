@@ -11,10 +11,6 @@
 #include "SGVisibilityKey.h"
 #include <algorithm>
 
-#ifdef ANDROID
-#include "../../opengl.h"
-#endif
-
 class KeyHelper
 {
     

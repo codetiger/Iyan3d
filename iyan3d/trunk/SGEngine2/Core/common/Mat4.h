@@ -11,15 +11,7 @@
 
 #include "Vector4.h"
 #include "Quaternion.h"
-
-#ifdef ANDROID
-#include "Utilities/Maths.h"
-#elif IOS
 #include "Maths.h"
-#elif UBUNTU
-#include "Maths.h"
-#include <string.h>
-#endif
 
 class Quaternion;
 

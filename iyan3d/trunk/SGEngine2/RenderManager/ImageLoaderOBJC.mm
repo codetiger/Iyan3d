@@ -6,9 +6,6 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#ifdef IOS
-
-
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/gl.h>
 #import <AVFoundation/AVFoundation.h>
@@ -204,5 +201,3 @@ void* getImageContextFromVideo(string fileName, int frame, int &width, int &heig
         return NULL;
     }
 }
-
-#endif

@@ -25,11 +25,9 @@
 
 + (Class)layerClass
 {
-#if !(TARGET_IPHONE_SIMULATOR)
     if(MTLCreateSystemDefaultDevice())
         return [CAMetalLayer class];
     else
-#endif
         return [CAEAGLLayer class];
 }
 
