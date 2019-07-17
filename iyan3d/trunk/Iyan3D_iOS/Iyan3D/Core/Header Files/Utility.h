@@ -16,10 +16,7 @@
 
 @interface Utility : NSObject {
     CacheSystem* cache;
-    
 }
-
-
 
 + (NSMutableData*)decryptData:(NSData*)data Password:(NSString*)pwd;
 + (NSMutableData*)decryptData1:(NSData*)data Password:(NSString*)pwd;

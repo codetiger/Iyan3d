@@ -24,3 +24,4 @@ string ConversionHelper::getStringForWString(std::wstring inputWString)
     return narrowString;
     
 }
+

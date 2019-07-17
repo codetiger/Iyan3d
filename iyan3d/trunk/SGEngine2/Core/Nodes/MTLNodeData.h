@@ -13,13 +13,11 @@
 #import <UIKit/UIKit.h>
 #include "APIData.h"
 
-
-class MTLNodeData:public APIData{
-
+class MTLNodeData : public APIData {
 public:
-    bool VAOCreated;
-    NSMutableArray *indexBuffers;
-    NSMutableArray *VertexBuffers;
+    bool            VAOCreated;
+    NSMutableArray* indexBuffers;
+    NSMutableArray* VertexBuffers;
     MTLNodeData();
     ~MTLNodeData();
     void removeVertexBuffers();

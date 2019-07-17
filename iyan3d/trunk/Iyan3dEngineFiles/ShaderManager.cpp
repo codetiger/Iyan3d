@@ -123,22 +123,6 @@ void ShaderManager::loadAllShaders(SceneManager *smgr, int maxUniforms, int maxJ
     }
 }
 
-std::map<string, string> ShaderManager::getShaderStringsToReplace(int maxUniforms)
-{
-    std::map<string, string> strsToReplace;
-    
-    string extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
-    
-    if(extensions.find("GL_EXT_draw_instanced") == std::string::npos) {
-        strsToReplace.insert(std::pair<string, string>("gl_InstanceIDEXT", "int(vertColor.w)"));
-    }
-    
-    ShaderManager::maxIntsances = maxUniforms;
-    strsToReplace.insert(std::pair<string, string>("uniSize", to_string(ShaderManager::maxIntsances+1)));
-    
-    return strsToReplace;
-}
-
 std::map<string, string> ShaderManager::getStringsForRiggedObjects(int maxJoints)
 {
     std::map<string, string> strsToReplace;

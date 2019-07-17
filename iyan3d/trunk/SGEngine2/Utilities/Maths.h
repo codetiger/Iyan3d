@@ -15,17 +15,16 @@
 
 static const double ROUNDING_ERROR_f64 = 0.00000001;
 
-class Maths{
+class Maths {
 public:
-    static  bool iszero( const double value, const double tolerance = ROUNDING_ERROR_f64){
+    static bool iszero(const double value, const double tolerance = ROUNDING_ERROR_f64) {
         return fabs(value) <= tolerance;
     }
-    static double clamp(double value, double low,double high)
-    {
-        return fmin(fmax(value,low), high);
+    static double clamp(double value, double low, double high) {
+        return fmin(fmax(value, low), high);
     }
-    static int getRandInRange(int min,int max){
-        return min + ((float)rand()/(float)RAND_MAX) * max;
+    static int getRandInRange(int min, int max) {
+        return min + ((float)rand() / (float)RAND_MAX) * max;
     }
 };
 

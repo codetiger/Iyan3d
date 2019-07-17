@@ -11,14 +11,13 @@
 
 #include <iostream>
 #include "Node.h"
-class JointNode:public Node{
-    
+class JointNode : public Node {
 public:
     string name;
-    
+
     JointNode();
     ~JointNode();
-    
+
     void update();
     void updateBoundingBox();
 };

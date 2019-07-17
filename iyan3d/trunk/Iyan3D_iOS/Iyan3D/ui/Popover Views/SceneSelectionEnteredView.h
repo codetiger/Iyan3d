@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SceneSelectionEnteredView : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *bottom_bar;
-@property (weak, nonatomic) IBOutlet UIButton *close_btn;
+@interface                           SceneSelectionEnteredView : UIViewController
+@property (weak, nonatomic) IBOutlet UIView* bottom_bar;
+@property (weak, nonatomic) IBOutlet UIButton* close_btn;
 
 @end

@@ -14,14 +14,13 @@
 #include "Plane3D.h"
 
 class Frustum {
-
 private:
 public:
     Plane3D planes[F_PLANE_COUNT];
 
     Frustum();
     ~Frustum();
-    void constructWithProjViewMatrix(Mat4 ProjViewMat);
+    void    constructWithProjViewMatrix(Mat4 ProjViewMat);
     Vector3 getFarLeftUp();
     Vector3 getFarLeftDown();
     Vector3 getFarRightUp();

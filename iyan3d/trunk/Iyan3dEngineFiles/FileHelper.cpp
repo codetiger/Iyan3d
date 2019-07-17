@@ -1,4 +1,4 @@
- //
+//
 //  FileHelper.cpp
 //  Iyan3DEngine
 //
@@ -225,10 +225,10 @@ std::string FileHelper::getTexturesDirectory()
 
 std::string FileHelper::getCachesDirectory()
 {
-	std::string home = getenv("HOME");
-	std::string caches = "/Library/Caches/";
-	std::string cachesPath = home + caches;
-	return cachesPath;
+    std::string home = getenv("HOME");
+    std::string caches = "/Library/Caches/";
+    std::string cachesPath = home + caches;
+    return cachesPath;
 }
 
 std::string FileHelper::getDocumentsDirectory()
@@ -251,11 +251,12 @@ char * FileHelper::getCharacterPointer(std::string &str)
 
 bool FileHelper::checkFileExists(std::string fileName)
 {
-     if(FILE *file = fopen(fileName.c_str(), "r"))
-     {
-         fclose(file);
-         return true;
-     }else {
-         return false;
-     }
- }
+    if(FILE *file = fopen(fileName.c_str(), "r"))
+    {
+        fclose(file);
+        return true;
+    }else {
+        return false;
+    }
+}
+

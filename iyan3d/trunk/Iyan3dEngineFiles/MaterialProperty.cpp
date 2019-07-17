@@ -26,9 +26,9 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(REFLECTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Reflection");
         addOrUpdateProperty(REFRACTION, Vector4(0, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Glassy");
         addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), MATERIAL_PROPS, TYPE_NONE, "Color");
-
+        
     } else if(nodeType == NODE_LIGHT || nodeType == NODE_ADDITIONAL_LIGHT) {
-
+        
         addOrUpdateProperty(MATERIAL_PROPS, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Material Properties", "PROPERTIES");
         addOrUpdateProperty(TRANSPARENCY, Vector4(1.0, 0.0, 0.0, 0.0), UNDEFINED, TYPE_NONE, "Transparency");
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, TYPE_NONE, "Visible");
@@ -57,15 +57,15 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Texture Smooth");
         addOrUpdateProperty(BUMP_MAP, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Normal Map");
         addOrUpdateProperty(BUMP_DEPTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Depth");
-
+        
     } else if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES) {
-
+        
         if(nodeType != NODE_PARTICLES) {
             addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Texture Smooth");
             addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
         }
     }
-
+    
 }
 
 MaterialProperty::~MaterialProperty()
@@ -79,7 +79,7 @@ Texture* MaterialProperty::getTextureOfType(node_texture_type texType)
         return NULL;
     
     return textures[texType];
-
+    
 }
 
 void MaterialProperty::setTextureForType(Texture* texture, node_texture_type texType)
@@ -235,7 +235,7 @@ void MaterialProperty::readProperties(ifstream *filePointer)
     
     if(IsPropertyExists(TEXTURE_SCALE)) {
         getProperty(TEXTURE_SCALE).value.x = FileHelper::readFloat(filePointer);
-   } else
+    } else
         FileHelper::readFloat(filePointer);
     
     if(IsPropertyExists(TEXTURE_SMOOTH)) {
@@ -277,4 +277,5 @@ void MaterialProperty::readProperties(ifstream *filePointer)
     FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
     FileHelper::readString(filePointer, SGB_VERSION_CURRENT);
 }
+
 

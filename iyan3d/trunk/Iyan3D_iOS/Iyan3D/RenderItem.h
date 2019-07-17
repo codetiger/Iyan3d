@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RenderItem : NSObject
+@interface                              RenderItem : NSObject
 @property (nonatomic, strong) NSString* taskName;
 @property (nonatomic, strong) NSString* dateAdded;
-@property (atomic, assign) int taskId;
-@property (atomic, assign) int taskProgress;
-@property (atomic, assign) int taskFrames;
+@property (atomic, assign) int          taskId;
+@property (atomic, assign) int          taskProgress;
+@property (atomic, assign) int          taskFrames;
 
 @end

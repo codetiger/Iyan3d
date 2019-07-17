@@ -13,7 +13,6 @@
 #include "common.h"
 
 class BoundingBox {
-
 private:
     Vector3 MaxEdge;
     Vector3 MinEdge;
@@ -22,19 +21,19 @@ private:
 public:
     BoundingBox();
     ~BoundingBox();
-    
-    void clearPoints();
-    void addPointsToCalculateBoundingBox(Vector3 pointPosition);
-    Vector3 getMaxEdge();
-    Vector3 getMinEdge();
-    Vector3 getCenter();
-    Vector3 getEdgeByIndex(unsigned short index);
+
+    void        clearPoints();
+    void        addPointsToCalculateBoundingBox(Vector3 pointPosition);
+    Vector3     getMaxEdge();
+    Vector3     getMinEdge();
+    Vector3     getCenter();
+    Vector3     getEdgeByIndex(unsigned short index);
     BoundingBox transformBoundingBox(Mat4 absTransformation);
-    void calculateEdges();
-    bool isValid();
-    float getZExtend();
-    float getXExtend();
-    float getYExtend();
+    void        calculateEdges();
+    bool        isValid();
+    float       getZExtend();
+    float       getXExtend();
+    float       getYExtend();
 };
 
 #endif /* defined(__FatMan__BoundingBox__) */

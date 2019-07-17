@@ -10,8 +10,8 @@
 
 @interface SegmentCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentCtrl;
+@property (weak, nonatomic) IBOutlet UILabel* titleLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl* segmentCtrl;
 - (IBAction)segmentChanged:(id)sender;
 
 @end

@@ -16,21 +16,20 @@
 #include "btSoftBody.h"
 
 class MeshNode : public Node {
-    
 public:
-    Mesh *mesh;
-    Mesh *meshCache;
+    Mesh* mesh;
+    Mesh* meshCache;
 
-    std::map<int, int> MeshMap;
+    std::map<int, int>               MeshMap;
     std::map<int, btSoftBody::Node*> m_vertices;
 
     MeshNode();
     virtual ~MeshNode();
     virtual Mesh* getMesh();
-    virtual void update();
+    virtual void  update();
     virtual short getActiveMeshIndex(int index);
     virtual Mesh* getMeshByIndex(int index);
-    void updateBoundingBox();
+    void          updateBoundingBox();
 };
 
 #endif /* defined(__SGEngine2__MeshNode__) */

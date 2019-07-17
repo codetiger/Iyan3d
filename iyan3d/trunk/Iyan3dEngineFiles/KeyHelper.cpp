@@ -158,3 +158,4 @@ void KeyHelper::writeData(ofstream* filePointer, vector<SGPositionKey> &position
     }
     
 }
+

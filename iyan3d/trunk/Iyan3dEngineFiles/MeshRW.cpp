@@ -55,7 +55,7 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
         vector< vertexDataHeavy > vertices = skinnedMesh->getHeavyVerticesArray(i);
         vector< unsigned short > indicesArr = skinnedMesh->getIndicesArrayAtMeshBufferIndex(i);
         int verticesCount = (int)vertices.size();
-                
+        
         FileHelper::writeInt(filePointer, skinnedMesh->getMeshBufferMaterialIndices(i));
         
         FileHelper::writeInt(filePointer, verticesCount);
@@ -112,7 +112,7 @@ void MeshRW::writeSkinMeshData(ofstream *filePointer, SkinMesh* skinnedMesh, sha
         FileHelper::writeFloat(filePointer, (*skinnedMesh->joints)[j]->envelopeRadius);
         FileHelper::writeFloat(filePointer, (*skinnedMesh->joints)[j]->sphereRadius);
         
-
+        
     }
 }
 
@@ -142,7 +142,7 @@ Mesh* MeshRW::readMeshData(ifstream* filePointer)
         }
         
         unsigned int indicesCount = FileHelper::readUnsignedInt(filePointer);
-
+        
         for(unsigned int j = 0; j < indicesCount; j++) {
             unsigned short index = FileHelper::readInt(filePointer);
             mbi.push_back(index);
@@ -166,7 +166,7 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
         
         vector<vertexDataHeavy> mbvd;
         vector<unsigned short> mbi;
-
+        
         int materialIndex = FileHelper::readInt(filePointer);
         int verticesCount = FileHelper::readInt(filePointer);
         
@@ -239,6 +239,7 @@ Mesh* MeshRW::readSkinMeshData(ifstream *filePointer)
     
     return mesh;
 }
+
 
 
 

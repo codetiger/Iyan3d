@@ -8,18 +8,14 @@
 
 #include "LightNode.h"
 
-LightNode::LightNode()
-{
+LightNode::LightNode() {
     decayStartDistance = decayEndDistance = 20.0;
-    type = LIGHT_TYPE_POINT;
-    lightColor = Vector3(1.0, 1.0, 1.0);
+    type                                  = LIGHT_TYPE_POINT;
+    lightColor                            = Vector3(1.0, 1.0, 1.0);
 }
 
-LightNode::~LightNode()
-{
-    
+LightNode::~LightNode() {
 }
 
-void LightNode::update()
-{
+void LightNode::update() {
 }

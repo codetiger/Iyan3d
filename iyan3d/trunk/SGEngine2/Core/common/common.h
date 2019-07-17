@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-
 #ifndef SGEngine2_common_h
 #define SGEngine2_common_h
 
@@ -29,7 +28,7 @@
 #include "../../Utilities/Logger.h"
 #include "../../Utilities/Maths.h"
 
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 #define MAX_VERTEX_DATA 6
@@ -40,21 +39,21 @@ using namespace std;
 using std::string;
 using std::vector;
 typedef unsigned short u16;
-typedef unsigned int u32;
-typedef char c8;
-typedef float f32;
+typedef unsigned int   u32;
+typedef char           c8;
+typedef float          f32;
 
-static float const PI = 3.141592653589793f;
-static const double RADTODEG = (180.0 / PI);
-static const double DEGTORAD = (PI / 180.0);
-static short const NOT_EXISTS = -1;
+static float const  PI         = 3.141592653589793f;
+static const double RADTODEG   = (180.0 / PI);
+static const double DEGTORAD   = (PI / 180.0);
+static short const  NOT_EXISTS = -1;
 
 static int maxInstanceCount = 100;
 
 typedef enum {
     CPU_SKIN,
     GPU_SKIN
-}skin_type;
+} skin_type;
 
 enum DATA_TYPE {
     DATA_BOOL = 0,
@@ -83,7 +82,7 @@ enum TEXTURE_DATA_TYPE {
 };
 
 enum FPLANES {
-    F_FAR_PLANE = 0,
+    F_FAR_PLANE  = 0,
     F_NEAR_PLANE = 1,
     F_LEFT_PLANE,
     F_RIGHT_PLANE,
@@ -93,14 +92,14 @@ enum FPLANES {
 };
 
 enum METAL_DEPTH_FUNCTION {
-    CompareFunctionNever = 0,
-    CompareFunctionLess = 1,
-    CompareFunctionEqual = 2,
-    CompareFunctionLessEqual = 3,
-    CompareFunctionGreater = 4,
-    CompareFunctionNotEqual = 5,
+    CompareFunctionNever        = 0,
+    CompareFunctionLess         = 1,
+    CompareFunctionEqual        = 2,
+    CompareFunctionLessEqual    = 3,
+    CompareFunctionGreater      = 4,
+    CompareFunctionNotEqual     = 5,
     CompareFunctionGreaterEqual = 6,
-    CompareFunctionAlways = 7
+    CompareFunctionAlways       = 7
 };
 
 enum IMAGE_FLIP {
@@ -109,14 +108,14 @@ enum IMAGE_FLIP {
     FLIP_VERTICAL
 };
 
-static const int totalAttributes = MAX_VERTEX_DATA;
-static const string attributesName[MAX_VERTEX_DATA] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "vertColor" };
-static const DATA_TYPE attributesType[MAX_VERTEX_DATA] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
+static const int       totalAttributes                        = MAX_VERTEX_DATA;
+static const string    attributesName[MAX_VERTEX_DATA]        = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "vertColor" };
+static const DATA_TYPE attributesType[MAX_VERTEX_DATA]        = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
 static const u_int32_t attributesTotalValues[MAX_VERTEX_DATA] = { 3, 3, 2, 3, 3, 4 };
 
-static const int totalAttributesSkinned = MAX_VERTEX_DATA_SKINNED;
-static const string attributesNameSkinned[MAX_VERTEX_DATA_SKINNED] = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "vertColor", "optionalData1", "optionalData2", "optionalData3", "optionalData4" };
-static const DATA_TYPE attributesTypeSkinned[MAX_VERTEX_DATA_SKINNED] = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
+static const int       totalAttributesSkinned                                = MAX_VERTEX_DATA_SKINNED;
+static const string    attributesNameSkinned[MAX_VERTEX_DATA_SKINNED]        = { "vertPosition", "vertNormal", "texCoord1", "vertTangent", "vertBitangent", "vertColor", "optionalData1", "optionalData2", "optionalData3", "optionalData4" };
+static const DATA_TYPE attributesTypeSkinned[MAX_VERTEX_DATA_SKINNED]        = { DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT, DATA_FLOAT };
 static const u_int32_t attributesTotalValuesSkinned[MAX_VERTEX_DATA_SKINNED] = { 3, 3, 2, 3, 3, 4, 4, 4, 4, 4 };
 
 class common {

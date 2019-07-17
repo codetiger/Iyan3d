@@ -9,7 +9,7 @@
 #ifndef SGEngine2_SGEngineMTL_h
 #define SGEngine2_SGEngineMTL_h
 
-#include  "RenderManager/MetalRenderManager.h"
+#include "RenderManager/MetalRenderManager.h"
 #import "MetalHandler.h"
 #import "Core/Material/MTLMaterial.h"
 

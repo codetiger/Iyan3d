@@ -43,7 +43,6 @@ public:
     ShaderManager(SceneManager *smgr, int maxUniforms, int maxJoints);
     void setUniforms(SGNode *node, string matName, int materialIndex = 0);
     void loadAllShaders(SceneManager *smgr, int maxUniforms, int maxJoints);
-    static std::map<string, string> getShaderStringsToReplace(int maxUniforms);
     static std::map<string, string> getStringsForRiggedObjects(int maxJoints);
     
     static bool LoadShader(SceneManager* smgr, string materialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isTest = false);

@@ -21,3 +21,4 @@ Vector2 CameraViewHelper::getCameraAngle(CAMERA_VIEW_MODE mode)
 {
     return Vector2(cameraViewData[mode]["AngleX"].asDouble(),cameraViewData[mode]["AngleY"].asDouble());
 }
+

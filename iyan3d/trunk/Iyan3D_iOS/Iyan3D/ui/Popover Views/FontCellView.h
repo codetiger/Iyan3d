@@ -10,10 +10,10 @@
 
 @interface FontCellView : UICollectionViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *assetNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *freeTagLabel;
-@property (weak, nonatomic) IBOutlet UILabel *displayText;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingView;
-@property (weak, nonatomic) IBOutlet UIImageView *premiumicon;
+@property (weak, nonatomic) IBOutlet UILabel* assetNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel* freeTagLabel;
+@property (weak, nonatomic) IBOutlet UILabel* displayText;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView* loadingView;
+@property (weak, nonatomic) IBOutlet UIImageView* premiumicon;
 
 @end

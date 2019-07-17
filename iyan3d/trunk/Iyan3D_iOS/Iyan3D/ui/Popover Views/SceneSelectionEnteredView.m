@@ -15,14 +15,13 @@
 @implementation SceneSelectionEnteredView
 
 - (void)viewDidLoad {
-    
-    CALayer *TopBorder = [CALayer layer];
-    TopBorder.frame = CGRectMake(0.0f, 0.0f, _bottom_bar.frame.size.width, 3.0f);
+    CALayer* TopBorder        = [CALayer layer];
+    TopBorder.frame           = CGRectMake(0.0f, 0.0f, _bottom_bar.frame.size.width, 3.0f);
     TopBorder.backgroundColor = [UIColor grayColor].CGColor;
     [_bottom_bar.layer addSublayer:TopBorder];
-    
+
     [super viewDidLoad];
-    
+
     // Do any additional setup after loading the view from its nib.
 }
 

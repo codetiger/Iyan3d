@@ -19,18 +19,16 @@ typedef enum {
 
 //TODO Fix inheritance issue
 class LightNode : public MeshNode {
-    
 public:
-    bool isShadowCaster;
+    bool       isShadowCaster;
     light_type type;
-    Vector3 lightColor;
-    
+    Vector3    lightColor;
+
     float decayStartDistance, decayEndDistance;
-    
+
     LightNode();
     ~LightNode();
     virtual void update();
-
 };
 
 #endif /* defined(__SGEngine2__LightNode__) */

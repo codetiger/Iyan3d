@@ -11,7 +11,7 @@
 @interface SceneItem : NSObject {
 }
 
-@property (atomic, assign) int sceneId;
+@property (atomic, assign) int     sceneId;
 @property (atomic, copy) NSString* sceneFile;
 @property (atomic, copy) NSString* name;
 @property (atomic, copy) NSString* createdDate;

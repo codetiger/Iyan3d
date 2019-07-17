@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface SmartImageView : UIImageView {
-    NSString* _assetId;
-    int _viewType;
+    NSString*                _assetId;
+    int                      _viewType;
     UIActivityIndicatorView* activityIndicator;
-    NSOperationQueue* queue;
+    NSOperationQueue*        queue;
 }
 
 - (void)setImageInfo:(NSString*)assetId forView:(int)viewType OperationQueue:(NSOperationQueue*)q ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight;

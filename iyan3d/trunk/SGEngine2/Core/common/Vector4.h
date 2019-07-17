@@ -14,7 +14,7 @@
 class Vector4 {
 public:
     float x, y, z, w;
-    
+
     Vector4();
     Vector4(float value);
     Vector4(Vector3 a, float W);
@@ -22,28 +22,28 @@ public:
     Vector4(GLKVector4 vect);
     ~Vector4();
     void setValues(GLKVector4 vect);
-    
+
     GLKVector4 glkVector() const;
-    Vector4& operator=(const Vector4& b);
-    Vector4 operator+(const Vector4& b) const;
-    Vector4 operator-(const Vector4& b) const;
-    Vector4 operator+() const;
-    Vector4 operator-() const;
-    Vector4 operator*(const float v) const;
-    Vector4 operator/(const float v) const;
-    
+    Vector4&   operator=(const Vector4& b);
+    Vector4    operator+(const Vector4& b) const;
+    Vector4    operator-(const Vector4& b) const;
+    Vector4    operator+() const;
+    Vector4    operator-() const;
+    Vector4    operator*(const float v) const;
+    Vector4    operator/(const float v) const;
+
     Vector4& operator+=(const Vector4& b);
     Vector4& operator-=(const Vector4& b);
     Vector4& operator*=(const float v);
     Vector4& operator/=(const float v);
-    
+
     Vector4 normalize();
-    
+
     bool operator==(const Vector4& b) const;
     bool operator!=(const Vector4& b) const;
-    
+
     float& operator[](unsigned i);
-    float operator[](unsigned i) const;
+    float  operator[](unsigned i) const;
 };
 
 #endif

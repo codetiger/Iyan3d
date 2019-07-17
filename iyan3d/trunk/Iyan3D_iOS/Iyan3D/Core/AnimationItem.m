@@ -10,10 +10,10 @@
 
 @implementation AnimationItem
 
--(void) dealloc{
-    _assetName = nil;
-    _userName = nil;
+- (void)dealloc {
+    _assetName    = nil;
+    _userName     = nil;
     _modifiedDate = nil;
-    _keywords = nil;
+    _keywords     = nil;
 }
 @end

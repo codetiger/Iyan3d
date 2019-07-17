@@ -9,20 +9,18 @@
 #include "../Nodes/ParticlePool.h"
 #include <algorithm>
 
-ParticlePool::ParticlePool(int count)
-{
+ParticlePool::ParticlePool(int count) {
     maxParticleCount = count;
     for (int i = 0; i < count; i++) {
         Particle* p = new Particle();
-        p->isLive = false;
+        p->isLive   = false;
         particles.push_back(p);
     }
 }
 
-ParticlePool::~ParticlePool()
-{
-    for(int i = 0; i < particles.size(); i++) {
-        if(particles[i]) {
+ParticlePool::~ParticlePool() {
+    for (int i = 0; i < particles.size(); i++) {
+        if (particles[i]) {
             delete particles[i];
             particles[i] = NULL;
         }
@@ -30,52 +28,45 @@ ParticlePool::~ParticlePool()
     particles.clear();
 }
 
-Particle* ParticlePool::reuseDeadParticle()
-{
+Particle* ParticlePool::reuseDeadParticle() {
     int stopIteration = deadIterator;
-    
+
     while (particles[deadIterator]->isLive) {
         deadIterator++;
-        if(deadIterator >= maxParticleCount)
+        if (deadIterator >= maxParticleCount)
             deadIterator = 0;
-        if(deadIterator == stopIteration)
+        if (deadIterator == stopIteration)
             return NULL;
     }
-    
+
     return particles[deadIterator];
 }
 
-Particle* ParticlePool::getNextLiveParticle()
-{
-    if(iterator >= maxParticleCount)
+Particle* ParticlePool::getNextLiveParticle() {
+    if (iterator >= maxParticleCount)
         return NULL;
     else {
         while (!particles[iterator]->isLive) {
             iterator++;
-            if(iterator >= maxParticleCount)
+            if (iterator >= maxParticleCount)
                 return NULL;
         }
         return particles[iterator++];
     }
 }
 
-Particle* ParticlePool::getParticleByIndex(int index)
-{
+Particle* ParticlePool::getParticleByIndex(int index) {
     return particles[index];
 }
 
-void ParticlePool::resetIteration()
-{
+void ParticlePool::resetIteration() {
     iterator = 0;
 }
 
-bool checkOrder(Particle *A, Particle *B)
-{
+bool checkOrder(Particle* A, Particle* B) {
     return A->distance > B->distance;
 }
 
-void ParticlePool::sortByDistance()
-{
+void ParticlePool::sortByDistance() {
     std::sort(particles.begin(), particles.end(), checkOrder);
 }
-

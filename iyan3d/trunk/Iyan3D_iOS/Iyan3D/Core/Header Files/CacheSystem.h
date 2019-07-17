@@ -14,52 +14,51 @@
 #include "RenderItem.h"
 
 @interface CacheSystem : NSObject {
-    sqlite3 *_cacheSystem;
-    
+    sqlite3* _cacheSystem;
 }
-+ (CacheSystem*) cacheSystem;
-- (void) OpenDatabase;
-- (NSString*) insertImportedScene;
-- (void) UpdateAsset:(AssetItem *)a;
++ (CacheSystem*)cacheSystem;
+- (void)OpenDatabase;
+- (NSString*)insertImportedScene;
+- (void)UpdateAsset:(AssetItem*)a;
 - (void)updateAssetPrice:(AssetItem*)asset;
-- (void) deleteMyAsset:(int) assetId;
-- (NSMutableArray*) GetAssetList:(int)type Search:(NSString*)keyword;
+- (void)deleteMyAsset:(int)assetId;
+- (NSMutableArray*)GetAssetList:(int)type Search:(NSString*)keyword;
 - (NSString*)getAssetPrice:(NSString*)iap;
-- (AssetItem*) GetAsset:(int)assetId;
-- (AssetItem*) GetAssetByName:(NSString*)assetName;
-- (AssetItem*) GetAssetItem:(NSString*)assetIap;
-- (NSMutableArray*) GetSceneList:(NSString*)keyword;
+- (AssetItem*)GetAsset:(int)assetId;
+- (AssetItem*)GetAssetByName:(NSString*)assetName;
+- (AssetItem*)GetAssetItem:(NSString*)assetIap;
+- (NSMutableArray*)GetSceneList:(NSString*)keyword;
 
-- (void) UpdateAnimation:(AnimationItem *)a;
-- (void) UpdateUserInfoToAnimationTable:(NSArray *)userArray Usrid:(NSString*)userId;
-- (void) UpdateMyAnimation:(AnimationItem *)a;
-- (void) deleteMyAnimation:(int) assetId;
-- (AnimationItem*) GetAnimation:(int)assetId fromTable:(int)tableType;
-- (NSMutableArray*) GetAnimationList:(int)type fromTable:(int)tableType Search:(NSString*)keyword;
-- (int) getNextAnimationAssetId;
+- (void)UpdateAnimation:(AnimationItem*)a;
+- (void)UpdateUserInfoToAnimationTable:(NSArray*)userArray Usrid:(NSString*)userId;
+- (void)UpdateMyAnimation:(AnimationItem*)a;
+- (void)deleteMyAnimation:(int)assetId;
+- (AnimationItem*)GetAnimation:(int)assetId fromTable:(int)tableType;
+- (NSMutableArray*)GetAnimationList:(int)type fromTable:(int)tableType Search:(NSString*)keyword;
+- (int)getNextAnimationAssetId;
 
-- (void) UpdateScene:(SceneItem *)s;
-- (bool) AddScene:(SceneItem *)s;
-- (void) DeleteScene:(SceneItem *)s;
-- (void) DeleteTableData:(int)assetId;
-- (NSMutableArray*) GetSceneList;
+- (void)UpdateScene:(SceneItem*)s;
+- (bool)AddScene:(SceneItem*)s;
+- (void)DeleteScene:(SceneItem*)s;
+- (void)DeleteTableData:(int)assetId;
+- (NSMutableArray*)GetSceneList;
 
-- (void) AddDownloadedAsset:(AssetItem*)a;
-- (int) getNextObjAssetId;
-- (bool) checkOBJImporterPurchase;
-- (bool) checkDownloadedAsset:(int)assetId;
-- (void) addOBJImporterColumn;
-- (void) createTablesForPrice;
-- (void) createAnimationTables;
-- (int) getNextAutoRigAssetId;
-- (BOOL) checkAndCreateGroupColumnInAssetsTable;
-- (void) createRenderTaskTables;
+- (void)AddDownloadedAsset:(AssetItem*)a;
+- (int)getNextObjAssetId;
+- (bool)checkOBJImporterPurchase;
+- (bool)checkDownloadedAsset:(int)assetId;
+- (void)addOBJImporterColumn;
+- (void)createTablesForPrice;
+- (void)createAnimationTables;
+- (int)getNextAutoRigAssetId;
+- (BOOL)checkAndCreateGroupColumnInAssetsTable;
+- (void)createRenderTaskTables;
 
-- (NSMutableArray *) getRenderTask;
-- (RenderItem *)getRenderTaskByTaskId:(int) taskId;
-- (RenderItem *)getRenderTaskByDate:(NSString*) dateTime;
-- (void) updateRenderTask:(int)taskId WithProgress:(int)progress;
-- (void) deleteRenderTaskData: (int)taskId;
-- (void) addRenderTaskData: (int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName date:(NSString*) dateStr;
+- (NSMutableArray*)getRenderTask;
+- (RenderItem*)getRenderTaskByTaskId:(int)taskId;
+- (RenderItem*)getRenderTaskByDate:(NSString*)dateTime;
+- (void)updateRenderTask:(int)taskId WithProgress:(int)progress;
+- (void)deleteRenderTaskData:(int)taskId;
+- (void)addRenderTaskData:(int)taskId estTime:(float)estimatedTime proName:(NSString*)projectName date:(NSString*)dateStr;
 
 @end

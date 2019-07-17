@@ -13,7 +13,7 @@
 #include "../common/common.h"
 #include "Node.h"
 
-class EmptyNode : public Node{
+class EmptyNode : public Node {
 public:
     EmptyNode();
     ~EmptyNode();

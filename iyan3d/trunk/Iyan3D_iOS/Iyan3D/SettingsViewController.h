@@ -13,51 +13,50 @@
 #import "GAI.h"
 #import "AppHelper.h"
 
-
 @protocol SettingsViewControllerDelegate
--(void)frameCountDisplayMode;
--(void)cameraPreviewSize;
--(void)cameraPreviewPosition;
--(void)toolbarPosition:(int)selctedIndex;
--(void)multiSelectUpdate:(BOOL)value;
+- (void)frameCountDisplayMode;
+- (void)cameraPreviewSize;
+- (void)cameraPreviewPosition;
+- (void)toolbarPosition:(int)selctedIndex;
+- (void)multiSelectUpdate:(BOOL)value;
 @end
 
-@interface SettingsViewController : GAITrackedViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate, AppHelperDelegate>{
-    UIScrollView *myScrollView;
+@interface SettingsViewController : GAITrackedViewController <UIGestureRecognizerDelegate, UIScrollViewDelegate, AppHelperDelegate> {
+    UIScrollView* myScrollView;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil;
-@property (weak, nonatomic) IBOutlet UIButton *restoreBtn;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *toolbarPosition;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *renderPreviewSize;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *frameCountDisplay;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *renderPreviewPosition;
-@property (weak, nonatomic) IBOutlet UIImageView *toolbarRight;
-@property (strong, nonatomic) IBOutlet UIView *masterView;
-@property (weak, nonatomic) IBOutlet UIButton *doneBtn;
-@property (weak, nonatomic) id <SettingsViewControllerDelegate> delegate;
-@property (weak, nonatomic) IBOutlet UIImageView *toolbarLeft;
-@property (weak, nonatomic) IBOutlet UIImageView *renderPreviewSizeSmall;
-@property (weak, nonatomic) IBOutlet UIImageView *renderPreviewSizeLarge;
-@property (weak, nonatomic) IBOutlet UIImageView *framesDisplayCount;
-@property (weak, nonatomic) IBOutlet UISwitch *multiSelectSwitch;
-@property (weak, nonatomic) IBOutlet UIImageView *framesDisplayDuration;
-@property (weak, nonatomic) IBOutlet UIImageView *previewPositionRightBottom;
-@property (weak, nonatomic) IBOutlet UIImageView *previewPositionRightTop;
-@property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftBottom;
-@property (weak, nonatomic) IBOutlet UIImageView *previewPositionLeftTop;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *restorePurchaseProgress;
-@property (weak, nonatomic) IBOutlet UISwitch *speedSwitch;
-@property (weak, nonatomic) IBOutlet UIButton *helpBtn;
+@property (weak, nonatomic) IBOutlet UIButton* restoreBtn;
+@property (weak, nonatomic) IBOutlet UISegmentedControl* toolbarPosition;
+@property (weak, nonatomic) IBOutlet UISegmentedControl* renderPreviewSize;
+@property (weak, nonatomic) IBOutlet UISegmentedControl* frameCountDisplay;
+@property (weak, nonatomic) IBOutlet UISegmentedControl* renderPreviewPosition;
+@property (weak, nonatomic) IBOutlet UIImageView* toolbarRight;
+@property (strong, nonatomic) IBOutlet UIView* masterView;
+@property (weak, nonatomic) IBOutlet UIButton*                 doneBtn;
+@property (weak, nonatomic) id<SettingsViewControllerDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UIImageView* toolbarLeft;
+@property (weak, nonatomic) IBOutlet UIImageView* renderPreviewSizeSmall;
+@property (weak, nonatomic) IBOutlet UIImageView* renderPreviewSizeLarge;
+@property (weak, nonatomic) IBOutlet UIImageView* framesDisplayCount;
+@property (weak, nonatomic) IBOutlet UISwitch* multiSelectSwitch;
+@property (weak, nonatomic) IBOutlet UIImageView* framesDisplayDuration;
+@property (weak, nonatomic) IBOutlet UIImageView* previewPositionRightBottom;
+@property (weak, nonatomic) IBOutlet UIImageView* previewPositionRightTop;
+@property (weak, nonatomic) IBOutlet UIImageView* previewPositionLeftBottom;
+@property (weak, nonatomic) IBOutlet UIImageView* previewPositionLeftTop;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView* restorePurchaseProgress;
+@property (weak, nonatomic) IBOutlet UISwitch* speedSwitch;
+@property (weak, nonatomic) IBOutlet UIButton* helpBtn;
 
-@property (weak, nonatomic) IBOutlet UILabel *frameCountLabel;
-@property (weak, nonatomic) IBOutlet UILabel *toolBarLabel;
-@property (weak, nonatomic) IBOutlet UILabel *workspaceLabel;
-@property (weak, nonatomic) IBOutlet UILabel *qualityLebel;
-@property (weak, nonatomic) IBOutlet UILabel *speedLabel;
-@property (weak, nonatomic) IBOutlet UILabel *qualitySettingIfoLabel;
-@property (weak, nonatomic) IBOutlet UILabel *multiselectLabel;
-@property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel* frameCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel* toolBarLabel;
+@property (weak, nonatomic) IBOutlet UILabel* workspaceLabel;
+@property (weak, nonatomic) IBOutlet UILabel* qualityLebel;
+@property (weak, nonatomic) IBOutlet UILabel* speedLabel;
+@property (weak, nonatomic) IBOutlet UILabel* qualitySettingIfoLabel;
+@property (weak, nonatomic) IBOutlet UILabel* multiselectLabel;
+@property (weak, nonatomic) IBOutlet UILabel* settingsTitleLabel;
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)qualityOrSpeed:(id)sender;

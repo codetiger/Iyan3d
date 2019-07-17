@@ -44,7 +44,7 @@ Quaternion MathHelper::irrGetLocalQuaternion(shared_ptr<Node> node, Quaternion q
     Quaternion modelQuaernion = Quaternion();
     if(!node)
         return modelQuaernion;
-
+    
     shared_ptr<Node> parent = node->Parent;
     return q * getGlobalQuaternion((parent)).makeInverse();
 }
@@ -98,7 +98,7 @@ Vector3 MathHelper::packInterger(int toPack)
     res.x = (int)((toPack >> 8) & 0xFF);
     res.y = (int)(toPack  & 0xFF);
     res.z = 255.0;
-
+    
     return res;
 }
 
@@ -111,6 +111,7 @@ int MathHelper::unpackInterger(Vector3 toUnpack)
     res = res | ((int)toUnpack.y & 0xFF);
     return res;
 }
+
 
 
 

@@ -12,50 +12,49 @@
 #import "CacheSystem.h"
 
 @protocol AppHelperDelegate
--(void)loadingViewStatus:(BOOL)status;
--(void)statusForOBJImport:(NSNumber*)object;
--(void)setAnimationData:(NSArray*)allAnimations;
--(void) performLocalTasks;
+- (void)loadingViewStatus:(BOOL)status;
+- (void)statusForOBJImport:(NSNumber*)object;
+- (void)setAnimationData:(NSArray*)allAnimations;
+- (void)performLocalTasks;
 @end
 
-@interface AppHelper : NSObject
-{
-    CacheSystem* cache;
-    BOOL processTransaction;
-    int transactionCount;
-    NSString *fontDirPath;
-    NSDictionary* helpStatements;
-    NSMutableArray * toolTips;
+@interface AppHelper : NSObject {
+    CacheSystem*    cache;
+    BOOL            processTransaction;
+    int             transactionCount;
+    NSString*       fontDirPath;
+    NSDictionary*   helpStatements;
+    NSMutableArray* toolTips;
 }
 
-@property (nonatomic, assign) id  <AppHelperDelegate> delegate;
+@property (nonatomic, assign) id<AppHelperDelegate> delegate;
 
-+(AppHelper *)getAppHelper;
--(void) setIdentifierForVendor;
--(void) parseHelpJson;
--(NSDictionary*) parseJsonFileWithName:(NSString*)jsonFileName;
--(NSString*) getHelpStatementForAction:(int)action;
--(void) initHelper;
--(void) missingAlertView;
--(void) downloadJsonData;
++ (AppHelper*)getAppHelper;
+- (void)setIdentifierForVendor;
+- (void)parseHelpJson;
+- (NSDictionary*)parseJsonFileWithName:(NSString*)jsonFileName;
+- (NSString*)getHelpStatementForAction:(int)action;
+- (void)initHelper;
+- (void)missingAlertView;
+- (void)downloadJsonData;
 
--(void) initializeFontListArray;
--(void) saveBoolUserDefaults:(BOOL)value withKey:(NSString*)key;
--(void) saveToUserDefaults:(id)value withKey:(NSString*)key;
--(void) removeFromUserDefaultsWithKey:(NSString*)key;
--(NSMutableDictionary*) dictionaryForKey:(NSString*)key;
-- (id) userDefaultsForKey:(NSString*)key;
--(BOOL) userDefaultsBoolForKey:(NSString*)key;
--(void) moveFontFilesIfNeccasary;
--(void) moveFilesFromInboxDirectory:(CacheSystem*)presentCache;
--(void) resetAppHelper;
--(void) writeDataToFile:(NSData*)data FileName:(NSString*)fileName;
+- (void)initializeFontListArray;
+- (void)saveBoolUserDefaults:(BOOL)value withKey:(NSString*)key;
+- (void)saveToUserDefaults:(id)value withKey:(NSString*)key;
+- (void)removeFromUserDefaultsWithKey:(NSString*)key;
+- (NSMutableDictionary*)dictionaryForKey:(NSString*)key;
+- (id)userDefaultsForKey:(NSString*)key;
+- (BOOL)userDefaultsBoolForKey:(NSString*)key;
+- (void)moveFontFilesIfNeccasary;
+- (void)moveFilesFromInboxDirectory:(CacheSystem*)presentCache;
+- (void)resetAppHelper;
+- (void)writeDataToFile:(NSData*)data FileName:(NSString*)fileName;
 
 // Tool Tip methods
 
-- (void) toggleHelp:(UIViewController*) vc Enable:(BOOL)enable;
-- (void) showTipForView:(UIView*) subView InMainView:(UIView*)view;
+- (void)toggleHelp:(UIViewController*)vc Enable:(BOOL)enable;
+- (void)showTipForView:(UIView*)subView InMainView:(UIView*)view;
 
--(BOOL)iPhone6Plus;
+- (BOOL)iPhone6Plus;
 
 @end

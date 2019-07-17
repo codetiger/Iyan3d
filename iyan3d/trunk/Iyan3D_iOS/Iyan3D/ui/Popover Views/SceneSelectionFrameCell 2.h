@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SceneSelectionFrameCell : UIViewController
-@property (weak, nonatomic) IBOutlet UIImageView *sceneImage;
-@property (weak, nonatomic) IBOutlet UILabel *sceneName;
+@interface                           SceneSelectionFrameCell : UIViewController
+@property (weak, nonatomic) IBOutlet UIImageView* sceneImage;
+@property (weak, nonatomic) IBOutlet UILabel* sceneName;
 @end

@@ -13,7 +13,6 @@
 #include "../Nodes/MeshNode.h"
 
 class PlaneMeshNode : public MeshNode {
-    
 public:
     PlaneMeshNode(float aspectRatio);
     ~PlaneMeshNode();

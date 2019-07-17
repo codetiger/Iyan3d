@@ -16,10 +16,10 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 
-class Helper{
+class Helper {
 public:
-    static GLenum getOGLES2DataType(DATA_TYPE type);
+    static GLenum    getOGLES2DataType(DATA_TYPE type);
     static DATA_TYPE getSGEngineDataType(GLenum type);
-    static Vector2 screenToOpenglCoords(Vector2 originCoord,float screenWidth,float screenHeight);
+    static Vector2   screenToOpenglCoords(Vector2 originCoord, float screenWidth, float screenHeight);
 };
 #endif /* defined(__Iyan3D__Helper__) */

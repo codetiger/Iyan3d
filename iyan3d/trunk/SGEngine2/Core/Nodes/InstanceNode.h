@@ -14,14 +14,14 @@
 #include "MeshNode.h"
 
 class InstanceNode : public MeshNode {
-
 private:
-        Mat4 AbsoluteTransformation;
-        Vector3 position,scale,rotation;
+    Mat4    AbsoluteTransformation;
+    Vector3 position, scale, rotation;
+
 public:
     InstanceNode(shared_ptr<Node> node);
     virtual ~InstanceNode();
-    
+
     virtual void update();
 };
 

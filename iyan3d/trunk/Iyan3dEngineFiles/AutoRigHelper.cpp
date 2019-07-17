@@ -3,7 +3,8 @@
 vector< set<int> > adjacentVertices;
 std::map<int, Mat4> envelopeMatrices;
 
-void initAdjacencyMatrix(int verticesCount, int indicesCount, unsigned short* indices) {
+void initAdjacencyMatrix(int verticesCount, int indicesCount, unsigned short* indices)
+{
     adjacentVertices.clear();
     set<int> emptySet;
     emptySet.clear();
@@ -297,3 +298,4 @@ Vector3 AutoRigHelper::getVertexGlobalPosition(Vector3 vertexPos,shared_ptr<Mesh
     
     return vertexMat.getTranslation();
 }
+

@@ -15,15 +15,14 @@
 #include "../../Core/Nodes/Node.h"
 #include "../../Core/common/common.h"
 #include "Material.h"
-#include "../../Core/Textures/OGLTexture.h"
 
 class MaterialManager {
 public:
-    vector<Material*> *materials;
-    
+    vector<Material*>* materials;
+
     MaterialManager();
     ~MaterialManager();
-    bool CreateMaterial(string MaterialNamel, string vShaderName, string fShaderName, std::map< string, string > shadersStr, bool isDepthPass = false, bool isTest = false);
+    bool CreateMaterial(string MaterialNamel, string vShaderName, string fShaderName, std::map<string, string> shadersStr, bool isDepthPass = false, bool isTest = false);
     void RemoveAllMaterials();
 };
 

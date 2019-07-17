@@ -13,19 +13,18 @@
 #import "Vector3.h"
 
 @protocol TextColorPickerDelegate
-- (void) changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish;
+- (void)changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish;
 @end
 
-@interface TextColorPicker : GAITrackedViewController<GetPixelDemoDelegate>{
-    Vector3 color;    
+@interface TextColorPicker : GAITrackedViewController <GetPixelDemoDelegate> {
+    Vector3 color;
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil TextColor:(Vector3)textColor;
 
-@property (weak, nonatomic) IBOutlet UIView *colorPickerView;
-@property (weak, nonatomic) IBOutlet UIView *colorPreview;
-@property (strong, nonatomic) GetPixelDemo *demoView;
-@property (strong, nonatomic) id <TextColorPickerDelegate> delegate;
-
+@property (weak, nonatomic) IBOutlet UIView* colorPickerView;
+@property (weak, nonatomic) IBOutlet UIView*              colorPreview;
+@property (strong, nonatomic) GetPixelDemo*               demoView;
+@property (strong, nonatomic) id<TextColorPickerDelegate> delegate;
 
 @end

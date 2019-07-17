@@ -7,10 +7,9 @@
 //
 
 #include "APIData.h"
+
 APIData::APIData() {
-    
 }
 
 APIData::~APIData() {
-    
 }

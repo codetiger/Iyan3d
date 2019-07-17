@@ -7,7 +7,6 @@
 //
 #include <memory>
 
-
 #ifndef SGEngine2_MTLNodeDataWrapper_h
 #define SGEngine2_MTLNodeDataWrapper_h
 shared_ptr<void> initMetalNodeData();

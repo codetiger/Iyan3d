@@ -7,10 +7,10 @@
 //
 
 #include "Material.h"
-Material::Material(){
+
+Material::Material() {
     isTransparent = false;
 }
 
-Material::~Material(){
-    
+Material::~Material() {
 }

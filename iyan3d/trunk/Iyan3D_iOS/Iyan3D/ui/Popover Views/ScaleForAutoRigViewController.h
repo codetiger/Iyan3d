@@ -10,23 +10,22 @@
 #import "GAI.h"
 
 @protocol AutoRigScaleViewControllerDelegate
-- (void) scalePropertyChangedInRigView:(float)scaleValue;
-- (void) scaleValueForAction:(float)scaleValue;
+- (void)scalePropertyChangedInRigView:(float)scaleValue;
+- (void)scaleValueForAction:(float)scaleValue;
 
 @end
 
-@interface ScaleForAutoRigViewController : GAITrackedViewController
-{
+@interface ScaleForAutoRigViewController : GAITrackedViewController {
     float scale;
 }
 
-@property (weak, nonatomic) IBOutlet UISlider *scaleSlider;
-@property (weak, nonatomic) IBOutlet UILabel *scaleValue;
+@property (weak, nonatomic) IBOutlet UISlider* scaleSlider;
+@property (weak, nonatomic) IBOutlet UILabel* scaleValue;
 
-@property (weak, nonatomic) id <AutoRigScaleViewControllerDelegate> delegate;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil updateScale:(float)currentEnvelopeScale;
--(void) updateScale:(float)scaleValue;
+@property (weak, nonatomic) id<AutoRigScaleViewControllerDelegate> delegate;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil updateScale:(float)currentEnvelopeScale;
+- (void)updateScale:(float)scaleValue;
 - (IBAction)settingsValueChangedAction:(id)sender;
--(IBAction)changeSliderStarted:(id)sender;
+- (IBAction)changeSliderStarted:(id)sender;
 
 @end

@@ -7,12 +7,12 @@
 class Particle {
 public:
     bool isLive;
-    int age;
-    
+    int  age;
+
     Vector3 position;
     Vector3 initialPos;
     Vector3 velocity;
-    
+
     double distance;
 };
 

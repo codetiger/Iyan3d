@@ -12,21 +12,21 @@
 
 @protocol ObjCellViewDelegate
 
-- (void) deleteAssetAtIndex:(int) indexVal;
+- (void)deleteAssetAtIndex:(int)indexVal;
 
 @end
 
-@interface ObjCellView : UICollectionViewCell < PopUpViewControllerDelegate >
+@interface ObjCellView : UICollectionViewCell <PopUpViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *assetNameLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *assetImageView;
-@property (weak, nonatomic) id <ObjCellViewDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UILabel* assetNameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView*   assetImageView;
+@property (weak, nonatomic) id<ObjCellViewDelegate> delegate;
 
-@property (assign) int cellIndex;
-@property (nonatomic, strong) WEPopoverController *popoverController;
-@property (nonatomic, strong) PopUpViewController *popUpVc;
+@property (assign) int                             cellIndex;
+@property (nonatomic, strong) WEPopoverController* popoverController;
+@property (nonatomic, strong) PopUpViewController* popUpVc;
 
-@property (weak, nonatomic) IBOutlet UIButton *propsBtn;
+@property (weak, nonatomic) IBOutlet UIButton* propsBtn;
 - (IBAction)propsAction:(id)sender;
 
 @end

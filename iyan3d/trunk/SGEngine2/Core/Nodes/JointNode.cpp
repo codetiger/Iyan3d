@@ -8,23 +8,17 @@
 
 #include "JointNode.h"
 
-JointNode::JointNode()
-{
+JointNode::JointNode() {
     Parent = shared_ptr<JointNode>();
 }
 
-JointNode::~JointNode()
-{
-    
+JointNode::~JointNode() {
 }
 
-void JointNode::update()
-{
-    
+void JointNode::update() {
 }
 
-void JointNode::updateBoundingBox()
-{
-    if(Parent)
+void JointNode::updateBoundingBox() {
+    if (Parent)
         Parent->updateBoundingBox();
 }

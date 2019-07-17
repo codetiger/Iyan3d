@@ -6,7 +6,7 @@ void AutoRigJointsDataHelper::getTPoseJointsData(vector<TPoseJoint> & tPoseJoint
     tPoseJoints.clear();
     
     Json::Value jointsData;
-
+    
     //std::string documentsDir = FileHelper::getDocumentsDirectory();
     ifstream jsonFile( constants::BundlePath + "/jointsData.json");
     Json::Reader reader;
@@ -43,11 +43,11 @@ void AutoRigJointsDataHelper::getTPoseJointsData(vector<TPoseJoint> & tPoseJoint
 void AutoRigJointsDataHelper::getTPoseJointsDataFromMesh(vector<TPoseJoint> &tPoseJoints, SkinMesh *sMesh)
 {
     tPoseJoints.clear();
-
+    
     TPoseJoint tJoint;
     
     Mat4 globalTransfrom;
-
+    
     for(int i = 0 ; i < sMesh->joints->size(); i++) {
         Joint * joint = (*sMesh->joints)[i];
         tJoint.id = joint->Index;
@@ -105,3 +105,4 @@ void AutoRigJointsDataHelper::addNewTPoseJointData(vector<TPoseJoint> & tPoseJoi
     tPoseJoints.push_back(joint);
     return;
 }
+

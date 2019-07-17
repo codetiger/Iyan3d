@@ -18,16 +18,16 @@ PhysicsHelper::PhysicsHelper(void *currentScene)
     scene = (SGEditorScene*)currentScene;
     
     btVector3 worldAabbMin(-10000,-10000,-10000);
-    btVector3 worldAabbMax(10000,10000,10000);
+    btVector3 worldAabbMax(10000, 10000,10000);
     int maxProxies = 10240;
-
+    
     broadphase = new btAxisSweep3(worldAabbMin,worldAabbMax,maxProxies);
     m_softBodyWorldInfo.m_broadphase = broadphase;
     collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
     m_softBodyWorldInfo.m_dispatcher = dispatcher;
     solver = new btSequentialImpulseConstraintSolver;
-    world = new btSoftRigidDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+    world = new btSoftRigidDynamicsWorld(dispatcher, broadphase,solver,collisionConfiguration);
     
     m_softBodyWorldInfo.m_sparsesdf.Initialize();
     m_softBodyWorldInfo.m_gravity.setValue(0,-9.8,0);
@@ -58,24 +58,24 @@ void PhysicsHelper::calculateAndSetPropsOfObject(SGNode* sgNode, int pType)
     
     for(int pI = PHYSICS_NONE; pI < PHYSICS_JELLY; pI++)
         sgNode->getProperty((PROP_INDEX)pI).value.x = (pType == pI) ? 1 : 0;
-
+    
     switch (pType) {
         case PHYSICS_STATIC:
             sgNode->getProperty(WEIGHT).value.x = 0.0;
-        sgNode->getProperty(IS_SOFT).value.x = 0.0;
+            sgNode->getProperty(IS_SOFT).value.x = 0.0;
             return;
             break;
         case PHYSICS_LIGHT:
             density = 3.0;
-        sgNode->getProperty(IS_SOFT).value.x = 0.0;
+            sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
         case PHYSICS_MEDIUM:
             density = 9.0;
-        sgNode->getProperty(IS_SOFT).value.x = 0.0;
+            sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
         case PHYSICS_HEAVY:
             density = 27.0;
-        sgNode->getProperty(IS_SOFT).value.x = 0.0;
+            sgNode->getProperty(IS_SOFT).value.x = 0.0;
             break;
         case PHYSICS_CLOTH:
         case PHYSICS_JELLY:
@@ -98,13 +98,13 @@ void PhysicsHelper::syncPhysicsWorld()
         delete pr;
         
         world->removeRigidBody(rBodies[i]);
-
+        
         if(rBodies[i]->getMotionState())
             delete rBodies[i]->getMotionState();
-
+        
         if(rBodies[i]->getCollisionShape())
             delete rBodies[i]->getCollisionShape();
-
+        
         if(rBodies[i])
             delete rBodies[i];
     }
@@ -113,8 +113,8 @@ void PhysicsHelper::syncPhysicsWorld()
         ((btSoftRigidDynamicsWorld*)world)->removeSoftBody(sBodies[i]);
         if(sBodies[i]->getCollisionShape())
             delete sBodies[i]->getCollisionShape();
-//        if(sBodies[i])
-//            delete sBodies[i];
+        //        if(sBodies[i])
+        //            delete sBodies[i];
     }
     
     for( int i = 0; i < constraints.size(); i++) {
@@ -167,7 +167,7 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
                 
                 PhysicsReference* pr = (PhysicsReference*)rBodies[j]->getUserPointer();
                 SGNode* sgNode = (SGNode*)pr->nodeReference;
-
+                
                 if(!pr->isJoint) {
                     sgNode->setPosition(nodePos, frame);
                     sgNode->setRotation(nodeRot, frame);
@@ -204,12 +204,12 @@ void PhysicsHelper::updatePhysicsUpToFrame(int frame)
 void PhysicsHelper::updateMeshCache(SGNode* sgNode)
 {
     shared_ptr<MeshNode> n = dynamic_pointer_cast<MeshNode>(sgNode->node);
-
+    
     if(!n->meshCache) {
         n->meshCache = n->getMesh()->clone();
         sgNode->node->memtype = NODE_GPUMEM_TYPE_DYNAMIC;
     }
-
+    
     for (int i = 0; i < n->meshCache->getVerticesCountInMeshBuffer(0); i++) {
         vertexData *v = n->meshCache->getLiteVerticesForMeshBuffer(0, i);
         int index = n->MeshMap.find(i)->second;
@@ -239,9 +239,9 @@ void PhysicsHelper::addRigidBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
                 break;
             }
         }
-
+        
         addChildBody(sgNode, world, rBodies, NULL, rootJointNode);
-
+        
     } else {
         ActionKey key = sgNode->getKeyForFrame(0);
         Vector3 nodePos = key.position;
@@ -251,7 +251,7 @@ void PhysicsHelper::addRigidBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
         btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
         btScalar bodyMass = physicsProps[WEIGHT].value.x;
         btVector3 bodyInertia;
-
+        
         btCollisionShape* shape = getShapeForNode(sgNode);
         shape->setLocalScaling(btVector3(key.scale.x, key.scale.y, key.scale.z));
         shape->calculateLocalInertia(bodyMass, bodyInertia);
@@ -287,7 +287,7 @@ void PhysicsHelper::addRigidBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
 void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, vector < btRigidBody* > &rBodies, btRigidBody* pbody, shared_ptr<JointNode> jointNode)
 {
     Vector3 nodePos = jointNode->getAbsolutePosition();
-
+    
     float shortDist2Child = 2.0;
     
     for (int i = 0; i < jointNode->Children->size(); i++) {
@@ -300,7 +300,7 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
             }
         }
     }
-
+    
     shared_ptr<JointNode> parent = dynamic_pointer_cast<JointNode>(jointNode->getParent());
     if(parent) {
         if(nodePos != parent->getAbsolutePosition()) {
@@ -309,7 +309,7 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
                 shortDist2Child = dist;
         }
     }
-   
+    
     Quaternion nodeRot = jointNode->getAbsoluteTransformation().getRotation();
     
     btQuaternion rotation = btQuaternion(nodeRot.x, nodeRot.y, nodeRot.z, nodeRot.w);
@@ -317,7 +317,7 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
     btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
     btScalar bodyMass = 0.25;
     btVector3 bodyInertia;
-
+    
     btCollisionShape* shape = new btSphereShape(0.5);
     shape->setLocalScaling(btVector3(1.0, 1.0, 1.0));
     shape->calculateLocalInertia(bodyMass, bodyInertia);
@@ -334,7 +334,7 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
     pr->nodeReference = sgNode;
     pr->isJoint = true;
     pr->jointIndex = jointNode->getID();
-
+    
     body->setUserPointer(pr);
     body->setLinearFactor(btVector3(1, 1, 1));
     
@@ -344,7 +344,7 @@ void PhysicsHelper::addChildBody(SGNode* sgNode, btDiscreteDynamicsWorld* world,
     if(pbody) {
         Vector3 localPos = jointNode->getPosition();
         float distance = localPos.getDistanceFrom(Vector3(0.0));
-
+        
         Vector3 pos1 = localPos.normalize() * (distance / 2.0);
         Vector3 pos2 = localPos.normalize() * (-distance / 2.0);
         btPoint2PointConstraint *constraint = new btPoint2PointConstraint(*pbody, *body, btVector3(pos1.x, pos1.y, pos1.z), btVector3(pos2.x, pos2.y, pos2.z));
@@ -365,15 +365,15 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
     shared_ptr<MeshNode> n = dynamic_pointer_cast<MeshNode>(sgNode->node);
     n->MeshMap.clear();
     n->m_vertices.clear();
-
+    
     std::map<int, int> index_map;
     std::map<int, int> bullet_map;
     std::map<int, Vector3> vertex_map;
     int count = 0;
-
+    
     int indicesCount = n->mesh->getIndicesCount(0);
     unsigned short *indicesArray = n->mesh->getIndicesArray(0);
-   
+    
     int vtxCount = n->mesh->getVerticesCountInMeshBuffer(0);
     vertexData *vertexArray = n->mesh->getLiteVerticesForMeshBuffer(0, 0);
     
@@ -400,14 +400,14 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
             count++;
         }
     }
-
+    
     int *indices = new int[indicesCount];
     for(int i = 0; i < indicesCount; i++) {
         int index1 = index_map.find(i)->second;
         int index2 = bullet_map.find(index1)->second;
         indices[i]   = index2;
     }
-
+    
     int vertexCount = (int)vertex_map.size();
     btScalar *vertices = new btScalar[vertexCount*3];
     
@@ -416,11 +416,11 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
         vertices[3*i+1] = vertex_map[i].y;
         vertices[3*i+2] = vertex_map[i].z;
     }
-
+    
     btSoftBody* sBody = btSoftBodyHelpers::CreateFromTriMesh(m_softBodyWorldInfo, vertices, indices, indicesCount/3);
-
+    
     std::map<btSoftBody::Node*, int> node_map;
-
+    
     for(int i = 0; i < sBody->m_faces.size(); i++) {
         auto face = sBody->m_faces[i];
         
@@ -428,7 +428,7 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
             if(node_map.find(face.m_n[j]) == node_map.end())
                 node_map.insert(std::make_pair(face.m_n[j], node_map.size()));
     }
-
+    
     for(auto& node_iter : std::move(node_map))
         n->m_vertices.insert(std::make_pair(node_iter.second, node_iter.first));
     
@@ -445,7 +445,7 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
             }
         }
     }
-
+    
     ActionKey key = sgNode->getKeyForFrame(0);
     Vector3 nodePos = key.position;
     Quaternion nodeRot = key.rotation;
@@ -471,7 +471,7 @@ void PhysicsHelper::addSoftBody(SGNode* sgNode, btDiscreteDynamicsWorld* world, 
     pr->nodeReference = sgNode;
     pr->isJoint = false;
     pr->jointIndex = -1;
-
+    
     sBody->setUserPointer((void*)pr);
     
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
@@ -496,14 +496,14 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
     Mesh* mesh = node->getMesh();
     
     std::map<PROP_INDEX, Property> physicsProps = sgNode->getProperty(HAS_PHYSICS).subProps;
-
+    
     if(physicsProps[PHYSICS_KIND].value.x == PHYSICS_STATIC) {
         btTriangleMesh *m = new btTriangleMesh();
         
         for (int mbi = 0; mbi < mesh->getMeshBufferCount(); mbi++) {
-
+            
             unsigned short* indices = mesh->getIndicesArray(mbi);
-
+            
             for (int i = 0; i < mesh->getIndicesCount(mbi); i += 3) {
                 Vector3 vpos1, vpos2, vpos3;
                 
@@ -533,7 +533,7 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
         btConvexHullShape* _shape = new btConvexHullShape();
         
         for (int mbi = 0; mbi < mesh->getMeshBufferCount(); mbi++) {
-
+            
             for (int i = 0; i < mesh->getVerticesCountInMeshBuffer(mbi); i++) {
                 Vector3 vpos;
                 
@@ -546,7 +546,7 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
                 _shape->addPoint(btv);
             }
         }
-
+        
         btShapeHull *hull = new btShapeHull(_shape);
         hull->buildHull(0.0f);
         
@@ -557,3 +557,4 @@ btCollisionShape* PhysicsHelper::getShapeForNode(SGNode* sgNode)
         return simlifiedShape;
     }
 }
+

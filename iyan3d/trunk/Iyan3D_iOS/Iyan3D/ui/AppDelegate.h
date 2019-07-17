@@ -13,16 +13,15 @@
 
 #import <Firebase/Firebase.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate > {
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate> {
     LoadingViewControllerPad* loadingViewController;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property(nonatomic, strong) id<GAITracker> tracker;
+@property (nonatomic, retain) IBOutlet UIWindow* window;
+@property (nonatomic, strong) id<GAITracker>     tracker;
 
-+(AppDelegate *)getAppDelegate;
--(void*) getSceneManager;
--(BOOL) initEngine:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*)view;
++ (AppDelegate*)getAppDelegate;
+- (void*)getSceneManager;
+- (BOOL)initEngine:(float)width ScreenHeight:(float)height ScreenScale:(float)screenScale renderView:(UIView*)view;
 
 @end
-

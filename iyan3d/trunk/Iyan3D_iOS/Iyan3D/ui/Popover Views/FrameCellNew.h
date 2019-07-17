@@ -9,11 +9,10 @@
 #ifndef FrameCellNew_h
 #define FrameCellNew_h
 
-
 #import <UIKit/UIKit.h>
 
-@interface FrameCellNew : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UILabel *framesLabel;
+@interface                           FrameCellNew : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UILabel* framesLabel;
 
 @end
 

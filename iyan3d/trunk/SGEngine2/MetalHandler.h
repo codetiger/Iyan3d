@@ -9,7 +9,6 @@
 #ifndef __SGEngine2__MetalHandler__
 #define __SGEngine2__MetalHandler__
 
-
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 
@@ -21,13 +20,12 @@
 #import "MetalWrapper.h"
 #import "MetalWrapperForMaterial.h"
 
-class MetalHandler{
-
+class MetalHandler {
 public:
-    static MTLRenderPipelineDescriptor* FMGetPipelineDesc(NSString* VertFuncName,NSString* FragFuncName);
-    static void setDevice(id <MTLDevice> device);
-    static void setMTLLayer(CAMetalLayer* mtlLayer);
-    static void setMTLLibrary(id <MTLLibrary> mtlLib);
-    static id <MTLDevice> getMTLDevice();
+    static MTLRenderPipelineDescriptor* FMGetPipelineDesc(NSString* VertFuncName, NSString* FragFuncName);
+    static void                         setDevice(id<MTLDevice> device);
+    static void                         setMTLLayer(CAMetalLayer* mtlLayer);
+    static void                         setMTLLibrary(id<MTLLibrary> mtlLib);
+    static id<MTLDevice>                getMTLDevice();
 };
 #endif /* defined(__SGEngine2__MetalHandler__) */

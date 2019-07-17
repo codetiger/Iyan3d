@@ -22,8 +22,7 @@
 
 @implementation SmartImageView
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -36,8 +35,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder*)aDecoder
-{
+- (id)initWithCoder:(NSCoder*)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -50,9 +48,8 @@
     return self;
 }
 
-- (void)setImageInfo:(NSString*)assetId forView:(int)viewType OperationQueue:(NSOperationQueue*)q ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight
-{
-    queue = q;
+- (void)setImageInfo:(NSString*)assetId forView:(int)viewType OperationQueue:(NSOperationQueue*)q ScreenWidth:(int)screenWidth ScreenHeight:(int)screenHeight {
+    queue   = q;
     float x = 0.0;
     if (screenWidth == 1024)
         x = 3.8;
@@ -64,20 +61,19 @@
     if (viewType == ASSET_DETAIL)
         [activityIndicator setFrame:aRect];
     [activityIndicator startAnimating];
-    _assetId = assetId;
+    _assetId  = assetId;
     _viewType = viewType;
-    
+
     UIImage* image = [self GetImage:assetId];
     [self setImage:image];
-    
+
     if (!image)
         NSLog(@"Error loading image");
-    
+
     [activityIndicator stopAnimating];
 }
 
-- (void)reLoadImage:(NSString*)assetId
-{
+- (void)reLoadImage:(NSString*)assetId {
     UIImage* image = [self GetImage:assetId];
     if (image) {
         if ([_assetId isEqualToString:assetId]) {
@@ -88,30 +84,27 @@
     }
 }
 
-- (UIImage*)GetImage:(NSString*)assetId
-{
-    UIImage* image = nil;
+- (UIImage*)GetImage:(NSString*)assetId {
+    UIImage*  image = nil;
     NSString* storagePath;
-    NSArray* strings = [assetId componentsSeparatedByString:@"_"];
-    int localId = [strings[0] intValue];
+    NSArray*  strings = [assetId componentsSeparatedByString:@"_"];
+    int       localId = [strings[0] intValue];
     ;
-    NSArray* docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirectory = [docPaths objectAtIndex:0];
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSArray*  docPaths       = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirectory   = [docPaths objectAtIndex:0];
+    NSArray*  paths          = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString* cacheDirectory = [paths objectAtIndex:0];
     if (_viewType != ALL_ANIMATION_VIEW) {
-        if ([assetId hasPrefix:@"2"] && localId >= 20000){
+        if ([assetId hasPrefix:@"2"] && localId >= 20000) {
             storagePath = [NSString stringWithFormat:@"%@/Resources/Sgm", docDirectory];
             //storagePath = [NSString stringWithFormat:@"%@/Resources/Objs", docDirectory];
-        }
-        else if ([assetId hasPrefix:@"4"] && localId >= 40000)
+        } else if ([assetId hasPrefix:@"4"] && localId >= 40000)
             storagePath = [NSString stringWithFormat:@"%@/Resources/Rigs", docDirectory];
         else if ([assetId hasPrefix:@"8"] && localId >= 80000)
             storagePath = [NSString stringWithFormat:@"%@/Resources/Animations", docDirectory];
         else
             storagePath = cacheDirectory;
-    }
-    else {
+    } else {
         storagePath = cacheDirectory;
     }
     NSString* fileName = [NSString stringWithFormat:@"%@/%@.png", storagePath, assetId];
@@ -121,8 +114,7 @@
     return image;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [activityIndicator removeFromSuperview];
     activityIndicator = nil;
 }

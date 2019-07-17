@@ -18,34 +18,33 @@ typedef enum {
     NO_RIG,
     CHARACTER_RIG,
     TEXT_RIG
-}rig_type;
+} rig_type;
 
-class AnimatedMeshNode: public MeshNode {
+class AnimatedMeshNode : public MeshNode {
 private:
-    vector< shared_ptr<JointNode> > jointNodes;
-    
+    vector<shared_ptr<JointNode> > jointNodes;
+
 public:
     unsigned short totalFrames;
     unsigned short currentFrame;
 
     AnimatedMeshNode();
     ~AnimatedMeshNode();
-    virtual SkinMesh* getMesh();
-    Mesh* getMeshCache();
-    void initializeMeshCache();
-    void updateMeshCache();
-    void updatePartOfMeshCache(int jointId = 0);
-    void getAllPaintedVertices(SkinMesh *skinMesh , vector<int> &paintedVertices , int jointId);
-    void setMesh(SkinMesh *mesh, int maxJoints, rig_type rigType = NO_RIG);
-    void updateBoundingBox();
-    void update();
-    virtual short getActiveMeshIndex(int index);
-    virtual Mesh* getMeshByIndex(int index);
+    virtual SkinMesh*     getMesh();
+    Mesh*                 getMeshCache();
+    void                  initializeMeshCache();
+    void                  updateMeshCache();
+    void                  updatePartOfMeshCache(int jointId = 0);
+    void                  getAllPaintedVertices(SkinMesh* skinMesh, vector<int>& paintedVertices, int jointId);
+    void                  setMesh(SkinMesh* mesh, int maxJoints, rig_type rigType = NO_RIG);
+    void                  updateBoundingBox();
+    void                  update();
+    virtual short         getActiveMeshIndex(int index);
+    virtual Mesh*         getMeshByIndex(int index);
     shared_ptr<JointNode> getJointNode(int jointId);
-    int getJointCount();
-    void calculateJointTransforms(vertexDataHeavy *vertex , vector<Mat4> jointTransforms , Vector3 &vertPosition, Vector3 &vertNormal , rig_type rigType = CHARACTER_RIG);
-    void calculateSingleJointTransforms(vertexDataHeavy* vertex, Mat4 jointTransform, int jointId, Vector3& vertPosition, Vector3& vertNormal , rig_type rigType = CHARACTER_RIG);
+    int                   getJointCount();
+    void                  calculateJointTransforms(vertexDataHeavy* vertex, vector<Mat4> jointTransforms, Vector3& vertPosition, Vector3& vertNormal, rig_type rigType = CHARACTER_RIG);
+    void                  calculateSingleJointTransforms(vertexDataHeavy* vertex, Mat4 jointTransform, int jointId, Vector3& vertPosition, Vector3& vertNormal, rig_type rigType = CHARACTER_RIG);
 };
-
 
 #endif /* defined(__SGEngine2__AnimatedMeshNode__) */

@@ -14,7 +14,6 @@
 #include "../Nodes/MeshNode.h"
 
 class CubeMeshNode : public MeshNode {
-    
 public:
     CubeMeshNode();
     ~CubeMeshNode();

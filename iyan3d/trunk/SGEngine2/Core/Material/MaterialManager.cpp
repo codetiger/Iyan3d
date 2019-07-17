@@ -10,22 +10,19 @@
 #import "TargetConditionals.h"
 #include "../../RenderManager/MetalWrapper.h"
 
-MaterialManager::MaterialManager()
-{
+MaterialManager::MaterialManager() {
     materials = new vector<Material*>();
 }
 
-MaterialManager::~MaterialManager()
-{
+MaterialManager::~MaterialManager() {
     RemoveAllMaterials();
     delete materials;
 }
 
-bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,string fShaderName, std::map< string, string > shadersStr, bool isDepthPass, bool isTest)
-{
-    Material *newMat = LoadMetalShaders(vShaderName,fShaderName,isDepthPass);
-    
-    if(!newMat){
+bool MaterialManager::CreateMaterial(string MaterialName, string vShaderName, string fShaderName, std::map<string, string> shadersStr, bool isDepthPass, bool isTest) {
+    Material* newMat = LoadMetalShaders(vShaderName, fShaderName, isDepthPass);
+
+    if (!newMat) {
         Logger::log(ERROR, "MaterialManager", "Null Material");
         return -1;
     }
@@ -35,10 +32,9 @@ bool MaterialManager::CreateMaterial(string MaterialName,string vShaderName,stri
     return true;
 }
 
-void MaterialManager::RemoveAllMaterials()
-{
-    for(int i = 0;i < materials->size();i++) {
-        if((*materials)[i])
+void MaterialManager::RemoveAllMaterials() {
+    for (int i = 0; i < materials->size(); i++) {
+        if ((*materials)[i])
             delete (*materials)[i];
     }
     materials->clear();

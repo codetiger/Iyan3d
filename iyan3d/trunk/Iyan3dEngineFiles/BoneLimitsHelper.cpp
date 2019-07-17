@@ -47,12 +47,12 @@ void BoneLimitsHelper::init()
         Logger::log(ERROR, "humanTPoseBoneLimits.json parser error", "BoneLimitsHelper");
         return;
     }
-
+    
     int num_joints = initialRotationArray.size();
     for(int i=0; i<num_joints; i++)
         tPoseRotations.push_back(Vector3(initialRotationArray[i]["X"].asDouble(),
-                                           initialRotationArray[i]["Y"].asDouble(),
-                                           initialRotationArray[i]["Z"].asDouble()));
+                                         initialRotationArray[i]["Y"].asDouble(),
+                                         initialRotationArray[i]["Z"].asDouble()));
     
     
     Json::Value mirrorJointsJson;
@@ -97,4 +97,5 @@ BoneLimits BoneLimitsHelper::getBoneLimits(std::string name)
     boneLimits.maxRotation.z = boneLimitsValue["Z"]["max"].asDouble();
     return boneLimits;
 }
+
 

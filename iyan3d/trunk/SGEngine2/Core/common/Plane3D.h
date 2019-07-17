@@ -13,7 +13,6 @@
 #include "common.h"
 
 class Plane3D {
-
 private:
 public:
     Plane3D();

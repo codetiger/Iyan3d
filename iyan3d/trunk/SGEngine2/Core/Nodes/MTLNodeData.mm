@@ -8,29 +8,26 @@
 
 #import "MTLNodeData.h"
 
-MTLNodeData::MTLNodeData(){
-    
+MTLNodeData::MTLNodeData() {
 }
 
-MTLNodeData::~MTLNodeData(){
-    if(VertexBuffers) {
+MTLNodeData::~MTLNodeData() {
+    if (VertexBuffers) {
         [VertexBuffers removeAllObjects];
         VertexBuffers = nil;
     }
-    
-    if(indexBuffers) {
+
+    if (indexBuffers) {
         [indexBuffers removeAllObjects];
         indexBuffers = nil;
     }
-    
+
     VAOCreated = false;
 }
 
-shared_ptr<void> initMetalNodeData(){
+shared_ptr<void> initMetalNodeData() {
     return make_shared<MTLNodeData>();
 }
 
-void MTLNodeData::removeVertexBuffers()
-{
-    
+void MTLNodeData::removeVertexBuffers() {
 }

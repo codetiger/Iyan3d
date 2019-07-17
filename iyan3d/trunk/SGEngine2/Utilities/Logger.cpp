@@ -17,7 +17,7 @@ void Logger::setMode(logger_mode_t m) {
 }
 
 void Logger::log(logger_message_t type, string module, string message) {
-    string messageTypes[] = {"ERROR", "DEBUG", "INFO"};
+    string messageTypes[] = { "ERROR", "DEBUG", "INFO" };
     if (type == ERROR)
         printf("[SGE2 - %s - %s] - %s\n", module.c_str(), messageTypes[type].c_str(), message.c_str());
     else if (type == DEBUGGING && mode >= LOGGER_MODE_TEST)

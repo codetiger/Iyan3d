@@ -10,9 +10,9 @@
 
 @implementation Options
 
--(void) dealloc{
+- (void)dealloc {
     _title = nil;
-    if(_subProps != nil) {
+    if (_subProps != nil) {
         _subProps = nil;
     }
     _selector = nil;

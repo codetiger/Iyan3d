@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TextFrameCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UILabel *displayText;
-@property (weak, nonatomic) IBOutlet UILabel *fontName;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *progress;
+@interface                           TextFrameCell : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UILabel* displayText;
+@property (weak, nonatomic) IBOutlet UILabel* fontName;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView* progress;
 
 @end

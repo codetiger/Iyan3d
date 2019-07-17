@@ -16,40 +16,40 @@
 class Vector3 {
 public:
     float x, y, z;
-        
+
     Vector3();
     Vector3(float value);
     Vector3(float X, float Y, float Z);
     Vector3(GLKVector3 vect);
     ~Vector3();
-    
-    void setValues(GLKVector3 vect);
+
+    void       setValues(GLKVector3 vect);
     GLKVector3 glkVector() const;
-    Vector3& operator=(const Vector3& b);
-    Vector3 operator+(const Vector3& b) const;
-    Vector3 operator-(const Vector3& b) const;
-    Vector3 operator/(const Vector3& other) const;
-    Vector3 operator*(const Vector3 v) const;
-    Vector3& operator*=(const Vector3 v);
-    Vector3& operator/=(const Vector3& other);
-    Vector3 operator+() const;
-    Vector3 operator-() const;
-    Vector3 operator*(const float v) const;
-    Vector3 operator/(const float v) const;
-    
+    Vector3&   operator=(const Vector3& b);
+    Vector3    operator+(const Vector3& b) const;
+    Vector3    operator-(const Vector3& b) const;
+    Vector3    operator/(const Vector3& other) const;
+    Vector3    operator*(const Vector3 v) const;
+    Vector3&   operator*=(const Vector3 v);
+    Vector3&   operator/=(const Vector3& other);
+    Vector3    operator+() const;
+    Vector3    operator-() const;
+    Vector3    operator*(const float v) const;
+    Vector3    operator/(const float v) const;
+
     Vector3& operator+=(const Vector3& b);
     Vector3& operator-=(const Vector3& b);
     Vector3& operator*=(const float v);
     Vector3& operator/=(const float v);
-    
+
     bool operator==(const Vector3& b) const;
     bool operator!=(const Vector3& b) const;
-    
+
     Vector3 normalize();
     Vector3 crossProduct(Vector3 p);
-    float dotProduct(Vector3 other);
-    double getLength();
-    double getDistanceFrom(Vector3 other);
+    float   dotProduct(Vector3 other);
+    double  getLength();
+    double  getDistanceFrom(Vector3 other);
     Vector3 rotationToDirection(const Vector3& forwards = Vector3(0, 0, 1));
 };
 

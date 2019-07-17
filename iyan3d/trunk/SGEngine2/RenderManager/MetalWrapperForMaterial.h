@@ -7,6 +7,8 @@
 //
 #ifndef SGEngine2_MetalWrapperForMaterial_h
 #define SGEngine2_MetalWrapperForMaterial_h
+
 #include "Material.h"
-Material* LoadMetalShaders(std::string vertexFuncName,std::string fragFuncName,bool isDepthPass);
+Material* LoadMetalShaders(std::string vertexFuncName, std::string fragFuncName, bool isDepthPass);
+
 #endif

@@ -10,7 +10,7 @@
 
 @interface TexturePropCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *texImageView;
+@property (weak, nonatomic) IBOutlet UILabel* titleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView* texImageView;
 
 @end

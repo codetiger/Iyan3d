@@ -13,7 +13,6 @@
 #include "ImageLoaderOBJCWrapper.h"
 #include "Logger.h"
 
-class ImageLoaderOBJC{
-
+class ImageLoaderOBJC {
 };
 #endif /* defined(__SGEngine2__MetalRenderManager__) */

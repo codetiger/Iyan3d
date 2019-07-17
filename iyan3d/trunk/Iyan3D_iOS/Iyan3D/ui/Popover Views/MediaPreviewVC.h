@@ -12,25 +12,23 @@
 
 @protocol MediaPreviewDelegate
 
-- (void) closeView;
+- (void)closeView;
 
 @end
 
-@interface MediaPreviewVC : UIViewController
-{
-    int mediaType;
-    NSString *mediaPath;
+@interface MediaPreviewVC : UIViewController {
+    int       mediaType;
+    NSString* mediaPath;
 }
 
-@property (weak, nonatomic) IBOutlet UIView *medView;
-@property (weak, nonatomic) IBOutlet UIButton *shareBtn;
-@property (weak, nonatomic) IBOutlet UIButton *closeBtn;
-@property (weak, nonatomic) id < MediaPreviewDelegate > delegate;
+@property (weak, nonatomic) IBOutlet UIView* medView;
+@property (weak, nonatomic) IBOutlet UIButton* shareBtn;
+@property (weak, nonatomic) IBOutlet UIButton*       closeBtn;
+@property (weak, nonatomic) id<MediaPreviewDelegate> delegate;
 
-@property (strong, nonatomic) MPMoviePlayerController *moviePlayer;
+@property (strong, nonatomic) MPMoviePlayerController* moviePlayer;
 
-
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil mediaType:(int)medType medPath:(NSString*) medPath;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil mediaType:(int)medType medPath:(NSString*)medPath;
 - (IBAction)closeAction:(id)sender;
 - (IBAction)shareAction:(id)sender;
 

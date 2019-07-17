@@ -13,8 +13,7 @@
 #include <iostream>
 #include "../common/common.h"
 
-class APIData{
-    
+class APIData {
 public:
     APIData();
     virtual ~APIData();

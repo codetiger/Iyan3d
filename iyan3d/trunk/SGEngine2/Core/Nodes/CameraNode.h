@@ -13,21 +13,20 @@
 #include "../Nodes/Node.h"
 #include "../common/Frustum.h"
 class CameraNode : public Node {
-
 private:
-    bool isActive, bindTargetAndRotation;
-    Vector3 target;
-    Vector3 UpVector;
-    float fov, aspectRatio, nearDistance, farDistance;
-    Mat4 view, projection;
-    Frustum *viewFrustum;
+    bool     isActive, bindTargetAndRotation;
+    Vector3  target;
+    Vector3  UpVector;
+    float    fov, aspectRatio, nearDistance, farDistance;
+    Mat4     view, projection;
+    Frustum* viewFrustum;
 
 public:
     Vector2 size;
-    
+
     CameraNode();
     ~CameraNode();
-    
+
     void setPosition(Vector3 position);
     void setTarget(Vector3 target);
     void setRotation(Quaternion rotation);
@@ -39,20 +38,20 @@ public:
     void setUpVector(Vector3 UpVector);
     void setTargetAndRotationBindStatus(bool bind);
     void update();
-    
+
     bool getActiveStatus();
-    
+
     Vector3 getUpVector();
     Vector3 getPosition();
     Vector3 getTarget();
-    
+
     float getFOVInRadians();
     float getAspectRatio();
     float getNearValue();
     float getFarValue();
-    
-    Mat4 getViewMatrix();
-    Mat4 getProjectionMatrix();
+
+    Mat4     getViewMatrix();
+    Mat4     getProjectionMatrix();
     Frustum* getViewFrustum();
 };
 

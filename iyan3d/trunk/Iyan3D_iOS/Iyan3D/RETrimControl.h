@@ -29,41 +29,41 @@
 @protocol RETrimControlDelegate;
 
 @interface RETrimControl : UIView {
-    int frameLeft,frameRight;
-    UIImageView *_outerView;
-    UIImageView *_innerView;
-    UIView *_sliderMiddleView;
-    UIImageView *_leftThumbView;
-    UIImageView *_rightThumbView;
-    
-    RETrimPopover *_leftPopover;
-    RETrimPopover *_rightPopover;
-    
-    UIView *_popoverViewLong;
-    UILabel *_timeLabelLong;
+    int          frameLeft, frameRight;
+    UIImageView* _outerView;
+    UIImageView* _innerView;
+    UIView*      _sliderMiddleView;
+    UIImageView* _leftThumbView;
+    UIImageView* _rightThumbView;
+
+    RETrimPopover* _leftPopover;
+    RETrimPopover* _rightPopover;
+
+    UIView*   _popoverViewLong;
+    UILabel*  _timeLabelLong;
     NSInteger _maxValue;
     NSInteger _minValue;
-    CGFloat _leftValue;
-    CGFloat _rightValue;
+    CGFloat   _leftValue;
+    CGFloat   _rightValue;
 }
 
 @property (weak, readwrite, nonatomic) id<RETrimControlDelegate> delegate;
-@property (assign, readwrite, nonatomic) NSInteger length;
-@property (assign, readonly, nonatomic) CGFloat leftValue;
-@property (assign, readonly, nonatomic) CGFloat rightValue;
-@property (assign, readwrite, nonatomic) NSInteger threshold;
-@property (strong, readonly, nonatomic) NSString *resourceBundle;
-@property (strong, readwrite, nonatomic) UIFont *font;
-@property (strong, readwrite, nonatomic) UIColor *textColor;
-@property (strong, readwrite, nonatomic) UIColor *textBackgroundColor;
-@property (assign, readwrite, nonatomic) NSInteger textVerticalOffset;
+@property (assign, readwrite, nonatomic) NSInteger               length;
+@property (assign, readonly, nonatomic) CGFloat                  leftValue;
+@property (assign, readonly, nonatomic) CGFloat                  rightValue;
+@property (assign, readwrite, nonatomic) NSInteger               threshold;
+@property (strong, readonly, nonatomic) NSString*                resourceBundle;
+@property (strong, readwrite, nonatomic) UIFont*                 font;
+@property (strong, readwrite, nonatomic) UIColor*                textColor;
+@property (strong, readwrite, nonatomic) UIColor*                textBackgroundColor;
+@property (assign, readwrite, nonatomic) NSInteger               textVerticalOffset;
 
-- (id)initWithFrame:(CGRect)frame resourceBundle:(NSString *)resourceBundle;
+- (id)initWithFrame:(CGRect)frame resourceBundle:(NSString*)resourceBundle;
 
 @end
 
 @protocol RETrimControlDelegate <NSObject>
 
-- (void)trimControl:(RETrimControl *)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue;
+- (void)trimControl:(RETrimControl*)trimControl didChangeLeftValue:(CGFloat)leftValue rightValue:(CGFloat)rightValue;
 
 @end

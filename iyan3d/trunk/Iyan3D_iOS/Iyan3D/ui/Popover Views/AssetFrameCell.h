@@ -16,22 +16,21 @@
 
 @protocol AssetFrameCellDelegate
 
-- (void) deleteAssetAtIndex:(int) indexVal;
-- (void) cloneAssetAtIndex:(int) indexVal;
-- (void) renameAssetAtIndex:(int) indexVal;
+- (void)deleteAssetAtIndex:(int)indexVal;
+- (void)cloneAssetAtIndex:(int)indexVal;
+- (void)renameAssetAtIndex:(int)indexVal;
 
 @end
 
-@interface AssetFrameCell : UICollectionViewCell < PopUpViewControllerDelegate >
-@property (weak, nonatomic) IBOutlet SmartImageView *assetImage;
-@property (weak, nonatomic) IBOutlet UILabel *assetName;
-@property (weak, nonatomic) IBOutlet UIButton *propsBtn;
-@property (weak, nonatomic) id <AssetFrameCellDelegate> delegate;
+@interface                           AssetFrameCell : UICollectionViewCell <PopUpViewControllerDelegate>
+@property (weak, nonatomic) IBOutlet SmartImageView* assetImage;
+@property (weak, nonatomic) IBOutlet UILabel* assetName;
+@property (weak, nonatomic) IBOutlet UIButton*         propsBtn;
+@property (weak, nonatomic) id<AssetFrameCellDelegate> delegate;
 
-@property (assign) int cellIndex;
-@property (nonatomic, strong) WEPopoverController *popoverController;
-@property (nonatomic, strong) PopUpViewController *popUpVc;
-
+@property (assign) int                             cellIndex;
+@property (nonatomic, strong) WEPopoverController* popoverController;
+@property (nonatomic, strong) PopUpViewController* popUpVc;
 
 - (IBAction)propsAction:(id)sender;
 

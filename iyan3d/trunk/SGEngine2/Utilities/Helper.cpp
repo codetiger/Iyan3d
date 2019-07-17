@@ -7,7 +7,8 @@
 //
 
 #include "Helper.h"
-GLenum Helper::getOGLES2DataType(DATA_TYPE type){
+
+GLenum Helper::getOGLES2DataType(DATA_TYPE type) {
     switch (type) {
         case DATA_BOOL:
             return GL_BOOL;
@@ -25,7 +26,8 @@ GLenum Helper::getOGLES2DataType(DATA_TYPE type){
     }
     return 0;
 }
-DATA_TYPE Helper::getSGEngineDataType(GLenum type){
+
+DATA_TYPE Helper::getSGEngineDataType(GLenum type) {
     switch (type) {
         case GL_BOOL:
             return DATA_BOOL;
@@ -44,16 +46,14 @@ DATA_TYPE Helper::getSGEngineDataType(GLenum type){
         default:
             break;
     }
-    Logger::log(ERROR,"Helper","Mismatched OGLDataType");
+    Logger::log(ERROR, "Helper", "Mismatched OGLDataType");
     return DATA_FLOAT;
 }
-Vector2 Helper::screenToOpenglCoords(Vector2 coord,float screenWidth,float screenHeight)
-{
-    float sWMid = screenWidth / 2.0;
-    float sHMid = screenHeight / 2.0;
+
+Vector2 Helper::screenToOpenglCoords(Vector2 coord, float screenWidth, float screenHeight) {
+    float sWMid        = screenWidth / 2.0;
+    float sHMid        = screenHeight / 2.0;
     float difFromsWMid = (coord.x - sWMid);
     float difFromsHMid = (sHMid - coord.y);
-    return Vector2(difFromsWMid/sWMid,difFromsHMid/sHMid);
+    return Vector2(difFromsWMid / sWMid, difFromsHMid / sHMid);
 }
-
-

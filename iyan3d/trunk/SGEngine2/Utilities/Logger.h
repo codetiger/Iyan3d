@@ -14,13 +14,13 @@
 
 using namespace std;
 
-enum logger_message_t{
+enum logger_message_t {
     ERROR = 0,
     DEBUGGING,
     INFO,
 };
 
-enum logger_mode_t{
+enum logger_mode_t {
     LOGGER_MODE_PROD = 0,
     LOGGER_MODE_TEST,
     LOGGER_MODE_DEV,
@@ -28,10 +28,10 @@ enum logger_mode_t{
 
 class Logger {
     static logger_mode_t mode;
-    
+
 public:
     static void setMode(logger_mode_t m);
-    static void log(logger_message_t type,string module,string message);
+    static void log(logger_message_t type, string module, string message);
 };
 
 #endif /* defined(__SGEngine2__Logger__) */

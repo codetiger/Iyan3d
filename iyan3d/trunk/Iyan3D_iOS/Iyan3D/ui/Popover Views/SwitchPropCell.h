@@ -11,20 +11,20 @@
 
 @protocol SwitchPropDelegate
 
-- (void) actionMadeInTable:(int) tableIndex AtIndexPath:(NSIndexPath*) indexPath WithValue:(Vector4) value AndStatus:(BOOL) status;
+- (void)actionMadeInTable:(int)tableIndex AtIndexPath:(NSIndexPath*)indexPath WithValue:(Vector4)value AndStatus:(BOOL)status;
 
 @end
 
-@interface SwitchPropCell : UITableViewCell
-@property (assign) int tableIndex;
-@property (weak, nonatomic) id < SwitchPropDelegate > delegate;
-@property (strong, nonatomic) NSIndexPath* indexPath;
+@interface                                         SwitchPropCell : UITableViewCell
+@property (assign) int                             tableIndex;
+@property (weak, nonatomic) id<SwitchPropDelegate> delegate;
+@property (strong, nonatomic) NSIndexPath*         indexPath;
 
-@property (weak, nonatomic) IBOutlet UILabel *title;
-@property (weak, nonatomic) IBOutlet UISwitch *specSwitch;
-@property (weak, nonatomic) IBOutlet UIButton *setBtn;
-@property (weak, nonatomic) IBOutlet UIButton *nextBtn;
-@property (weak, nonatomic) IBOutlet UIImageView *thumbImgView;
+@property (weak, nonatomic) IBOutlet UILabel* title;
+@property (weak, nonatomic) IBOutlet UISwitch* specSwitch;
+@property (weak, nonatomic) IBOutlet UIButton* setBtn;
+@property (weak, nonatomic) IBOutlet UIButton* nextBtn;
+@property (weak, nonatomic) IBOutlet UIImageView* thumbImgView;
 
 - (IBAction)switchChanged:(id)sender;
 - (IBAction)setBtnAction:(id)sender;

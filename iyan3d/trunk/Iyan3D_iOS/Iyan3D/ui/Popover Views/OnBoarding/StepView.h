@@ -10,9 +10,9 @@
 
 @interface StepView : UIView
 
-@property (weak, nonatomic) IBOutlet UIImageView *stepImgView;
-@property (weak, nonatomic) IBOutlet UIImageView *divider;
-@property (weak, nonatomic) IBOutlet UILabel *stepTitle;
-@property (weak, nonatomic) IBOutlet UILabel *stepDec;
+@property (weak, nonatomic) IBOutlet UIImageView* stepImgView;
+@property (weak, nonatomic) IBOutlet UIImageView* divider;
+@property (weak, nonatomic) IBOutlet UILabel* stepTitle;
+@property (weak, nonatomic) IBOutlet UILabel* stepDec;
 
 @end

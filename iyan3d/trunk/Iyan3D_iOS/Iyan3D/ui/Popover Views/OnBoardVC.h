@@ -10,32 +10,32 @@
 
 @protocol OnBoardDelegate
 
-- (void) closingOnBoard;
+- (void)closingOnBoard;
 
 @end
 
-@interface OnBoardVC : UIViewController
-{
+@interface OnBoardVC : UIViewController {
     NSArray* titlesArray;
     NSArray* descArray;
-    BOOL pageControlBeingUsed;
-    int totalPages;
-
+    BOOL     pageControlBeingUsed;
+    int      totalPages;
 }
-@property (weak, nonatomic) IBOutlet UIView *stepView;
-@property (weak, nonatomic) IBOutlet UIImageView *stepImgView;
-@property (weak, nonatomic) IBOutlet UILabel *stepTitle;
-@property (weak, nonatomic) IBOutlet UILabel *stepBody;
-@property (weak, nonatomic) IBOutlet UIImageView *divider;
-@property (weak, nonatomic) id < OnBoardDelegate > delegate;
-@property (weak, nonatomic) IBOutlet UIView *beginView;
-@property (weak, nonatomic) IBOutlet UIButton *startBtn;
-@property (weak, nonatomic) IBOutlet UIButton *skipBtn;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+
+@property (weak, nonatomic) IBOutlet UIView* stepView;
+@property (weak, nonatomic) IBOutlet UIImageView* stepImgView;
+@property (weak, nonatomic) IBOutlet UILabel* stepTitle;
+@property (weak, nonatomic) IBOutlet UILabel* stepBody;
+@property (weak, nonatomic) IBOutlet UIImageView* divider;
+@property (weak, nonatomic) id<OnBoardDelegate>   delegate;
+@property (weak, nonatomic) IBOutlet UIView* beginView;
+@property (weak, nonatomic) IBOutlet UIButton* startBtn;
+@property (weak, nonatomic) IBOutlet UIButton* skipBtn;
+@property (weak, nonatomic) IBOutlet UIScrollView* scrollView;
+@property (weak, nonatomic) IBOutlet UIPageControl* pageControl;
+
 - (IBAction)startBtnAction:(id)sender;
 - (IBAction)skipBtnAction:(id)sender;
 - (IBAction)closeBtnAction:(id)sender;
-- (IBAction) changePage;
+- (IBAction)changePage;
 
 @end

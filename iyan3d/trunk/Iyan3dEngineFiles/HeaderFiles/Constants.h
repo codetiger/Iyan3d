@@ -2,7 +2,6 @@
 #define newiyan3d_constants_h
 
 #include "SGEngineCommon.h"
-#include "SGEngineOGL.h"
 #include "ConversionHelper.h"
 #define LOG_TYPE LOG_ERROR
 #define BITSPERPIXEL 16

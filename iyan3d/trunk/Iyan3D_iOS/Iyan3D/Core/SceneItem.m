@@ -9,9 +9,9 @@
 #import "SceneItem.h"
 
 @implementation SceneItem
--(void) dealloc{
-	_sceneFile = nil;
-	_name = nil;
-	_createdDate = nil;
+- (void)dealloc {
+    _sceneFile   = nil;
+    _name        = nil;
+    _createdDate = nil;
 }
 @end

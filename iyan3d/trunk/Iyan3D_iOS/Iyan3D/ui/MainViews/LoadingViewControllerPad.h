@@ -14,14 +14,12 @@
 #import "GAI.h"
 #import "AppHelper.h"
 
-@interface LoadingViewControllerPad : GAITrackedViewController<AppHelperDelegate>
-{
-    NSArray *jsonArr;
+@interface LoadingViewControllerPad : GAITrackedViewController <AppHelperDelegate> {
+    NSArray*     jsonArr;
     CacheSystem* cache;
-    BOOL isAppFirstTime;
-    BOOL isOldUser;
-    NSDate *startTime;
+    BOOL         isAppFirstTime;
+    BOOL         isOldUser;
+    NSDate*      startTime;
 }
-
 
 @end

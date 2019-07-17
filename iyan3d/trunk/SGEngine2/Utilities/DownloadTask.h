@@ -9,7 +9,6 @@
 #ifndef DownloadTask_h
 #define DownloadTask_h
 
-
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
@@ -17,14 +16,13 @@
     SEL selectorMethod;
 }
 
-@property(nonatomic , strong) id delegate;
-@property(nonatomic , strong) NSString* inputURL;
-@property(nonatomic , strong) NSString* outputPath;
-@property(nonatomic , strong) id returnObj;
-@property(nonatomic , assign) OPERATION_TYPE taskType;
+@property (nonatomic, strong) id             delegate;
+@property (nonatomic, strong) NSString*      inputURL;
+@property (nonatomic, strong) NSString*      outputPath;
+@property (nonatomic, strong) id             returnObj;
+@property (nonatomic, assign) OPERATION_TYPE taskType;
 
-
-- (id)initWithDelegateObject:(id) delegateObj selectorMethod:(SEL)method returnObject:(id) retObj outputFilePath:(NSString*) filePath andURL:(NSString *)url;
+- (id)initWithDelegateObject:(id)delegateObj selectorMethod:(SEL)method returnObject:(id)retObj outputFilePath:(NSString*)filePath andURL:(NSString*)url;
 
 @end
 
