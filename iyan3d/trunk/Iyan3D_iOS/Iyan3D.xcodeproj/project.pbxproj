@@ -1429,12 +1429,6 @@
 		4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
 		4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
 		62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F3385B196C1508007694C5 /* MessageUI.framework */; };
-		7F30F5B31B576D8C00B311E3 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F30F5AE1B576D8C00B311E3 /* Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		7F30F5B41B576D8C00B311E3 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F30F5B01B576D8C00B311E3 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		7F30F5B51B576D8C00B311E3 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F30F5B21B576D8C00B311E3 /* NSString+NSHash.m */; };
-		7F30F5B71B576DB900B311E3 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F30F5AE1B576D8C00B311E3 /* Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		7F30F5B91B576DB900B311E3 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F30F5B01B576D8C00B311E3 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		7F30F5BB1B576DB900B311E3 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F30F5B21B576D8C00B311E3 /* NSString+NSHash.m */; };
 		7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */; };
 		7FBE04E71B1DB88500F9B7C1 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE04E61B1DB88500F9B7C1 /* whiteborder.png */; };
 		7FBE04E81B1DB88500F9B7C1 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE04E61B1DB88500F9B7C1 /* whiteborder.png */; };
@@ -2791,12 +2785,6 @@
 		4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		62F3385B196C1508007694C5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		7F30F5AD1B576D8C00B311E3 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = Resources/helper/Base64/Base64.h; sourceTree = "<group>"; };
-		7F30F5AE1B576D8C00B311E3 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = Resources/helper/Base64/Base64.m; sourceTree = "<group>"; };
-		7F30F5AF1B576D8C00B311E3 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "Resources/helper/Base64/NSData+Base64.h"; sourceTree = "<group>"; };
-		7F30F5B01B576D8C00B311E3 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "Resources/helper/Base64/NSData+Base64.m"; sourceTree = "<group>"; };
-		7F30F5B11B576D8C00B311E3 /* NSString+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+NSHash.h"; path = "Resources/helper/Base64/NSString+NSHash.h"; sourceTree = "<group>"; };
-		7F30F5B21B576D8C00B311E3 /* NSString+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+NSHash.m"; path = "Resources/helper/Base64/NSString+NSHash.m"; sourceTree = "<group>"; };
 		7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		7FBE04E61B1DB88500F9B7C1 /* whiteborder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whiteborder.png; path = ../whiteborder.png; sourceTree = "<group>"; };
 		8A32F15F197D5D4000FA8984 /* boneLimits45.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = boneLimits45.json; path = Resources/jsonFiles/boneLimits45.json; sourceTree = "<group>"; };
@@ -4714,27 +4702,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7F30F5AB1B576D5600B311E3 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				7F30F5AC1B576D6600B311E3 /* Base64 */,
-			);
-			name = Helper;
-			sourceTree = "<group>";
-		};
-		7F30F5AC1B576D6600B311E3 /* Base64 */ = {
-			isa = PBXGroup;
-			children = (
-				7F30F5AD1B576D8C00B311E3 /* Base64.h */,
-				7F30F5AE1B576D8C00B311E3 /* Base64.m */,
-				7F30F5AF1B576D8C00B311E3 /* NSData+Base64.h */,
-				7F30F5B01B576D8C00B311E3 /* NSData+Base64.m */,
-				7F30F5B11B576D8C00B311E3 /* NSString+NSHash.h */,
-				7F30F5B21B576D8C00B311E3 /* NSString+NSHash.m */,
-			);
-			name = Base64;
-			sourceTree = "<group>";
-		};
 		C813E57B1888005B00247AE9 /* Popover Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -4758,7 +4725,6 @@
 			isa = PBXGroup;
 			children = (
 				25243D0E1DA2891400BA517B /* FontFiles */,
-				7F30F5AB1B576D5600B311E3 /* Helper */,
 				E24973FB196BD9B90025D442 /* JsonFiles */,
 				C844F2A018894D750079B6F4 /* Mesh */,
 				C82EA4BD187EAACE00A8468A /* Shaders */,
@@ -6259,7 +6225,6 @@
 				4E0DB27422DAEE0E00911CAA /* SGSceneLoader.cpp in Sources */,
 				25CACF631B27C20F0027F48C /* FontCellView.m in Sources */,
 				4E4314CF22D89E7200C2A4E2 /* ParticlePool.cpp in Sources */,
-				7F30F5B31B576D8C00B311E3 /* Base64.m in Sources */,
 				4E0DB1F622DAEE0E00911CAA /* btSphereShape.cpp in Sources */,
 				4E4314E522D89E7200C2A4E2 /* SkinMesh.cpp in Sources */,
 				4E0DB15A22DAEE0D00911CAA /* btSimpleBroadphase.cpp in Sources */,
@@ -6343,7 +6308,6 @@
 				4E0DB19222DAEE0D00911CAA /* btConvex2dConvex2dAlgorithm.cpp in Sources */,
 				018501DC1C2BDA730090FA65 /* EditorViewController.mm in Sources */,
 				4E0DB21C22DAEE0E00911CAA /* btKinematicCharacterController.cpp in Sources */,
-				7F30F5B51B576D8C00B311E3 /* NSString+NSHash.m in Sources */,
 				4E0DB25422DAEE0E00911CAA /* btQuickprof.cpp in Sources */,
 				C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */,
 				4E1A2C5F22C85FCF007827E3 /* Shaders.metal in Sources */,
@@ -6510,7 +6474,6 @@
 				4E0DB17E22DAEE0D00911CAA /* btInternalEdgeUtility.cpp in Sources */,
 				4E0DB1E022DAEE0E00911CAA /* btStaticPlaneShape.cpp in Sources */,
 				3D58CD621C3D43C2006371DE /* WEPopoverContainerView.m in Sources */,
-				7F30F5B41B576D8C00B311E3 /* NSData+Base64.m in Sources */,
 				4E0DB24422DAEE0E00911CAA /* btUniversalConstraint.cpp in Sources */,
 				4E0DB20822DAEE0E00911CAA /* btTriangleIndexVertexMaterialArray.cpp in Sources */,
 				4E0DB1BE22DAEE0E00911CAA /* btGImpactBvh.cpp in Sources */,
@@ -6552,15 +6515,12 @@
 				4E0DB16922DAEE0D00911CAA /* btGjkConvexCast.cpp in Sources */,
 				4E0DB14722DAEE0D00911CAA /* btSoftRigidDynamicsWorld.cpp in Sources */,
 				4E0DB1CD22DAEE0E00911CAA /* btConvex2dShape.cpp in Sources */,
-				7F30F5B71B576DB900B311E3 /* Base64.m in Sources */,
 				4E0DB27322DAEE0E00911CAA /* AutoRigJointsDataHelper.cpp in Sources */,
 				4E0DB24322DAEE0E00911CAA /* btGeneric6DofConstraint.cpp in Sources */,
 				4E0DB22722DAEE0E00911CAA /* btMultiBody.cpp in Sources */,
 				4E0DB15122DAEE0D00911CAA /* btDbvt.cpp in Sources */,
 				4E0DB1C322DAEE0E00911CAA /* btGImpactShape.cpp in Sources */,
 				254A4B2D1D34C93700D23D6D /* SliderPropCell.mm in Sources */,
-				7F30F5B91B576DB900B311E3 /* NSData+Base64.m in Sources */,
-				7F30F5BB1B576DB900B311E3 /* NSString+NSHash.m in Sources */,
 				4E0DB15D22DAEE0D00911CAA /* btDispatcher.cpp in Sources */,
 				4E0DB19D22DAEE0D00911CAA /* btConvexPlaneCollisionAlgorithm.cpp in Sources */,
 				4E0DB1AD22DAEE0D00911CAA /* btBoxBoxCollisionAlgorithm.cpp in Sources */,
