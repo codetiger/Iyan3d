@@ -12,7 +12,6 @@
                 <outlet property="addFrameBtn" destination="w5e-Hu-oAW" id="ULL-KG-xTQ"/>
                 <outlet property="addJointBtn" destination="Ubt-RU-0Zf" id="CKx-fW-TXf"/>
                 <outlet property="animationBtn" destination="58f-dD-DRm" id="xhC-4N-gIj"/>
-                <outlet property="autoRigLbl" destination="qdS-vI-nOZ" id="ph9-Sa-Hcn"/>
                 <outlet property="autoRigMirrorSwitch" destination="sjM-8J-tg4" id="ETK-Jo-m0y"/>
                 <outlet property="autorigMirrorBtnHolder" destination="e0e-wp-KIX" id="iev-dQ-b53"/>
                 <outlet property="autorigMirrorLable" destination="he0-im-Bzm" id="jDn-o2-Fgf"/>
@@ -28,16 +27,11 @@
                 <outlet property="leftView" destination="L0B-6d-c1X" id="Pu8-ZT-SOi"/>
                 <outlet property="moveBtn" destination="6eX-px-hba" id="jIJ-DK-UgE"/>
                 <outlet property="moveBtnAutorig" destination="rRU-cR-7ay" id="J7J-zn-kma"/>
-                <outlet property="moveFirst" destination="D8h-yp-xgX" id="R16-a4-MKF"/>
-                <outlet property="moveLast" destination="ppu-Mk-vaf" id="b7O-W6-lH9"/>
                 <outlet property="myObjectsBtn" destination="hOI-Vg-cWf" id="D1j-Xi-lxn"/>
                 <outlet property="optionsBtn" destination="vjP-Os-nSO" id="4Q7-DF-Z0P"/>
                 <outlet property="playBtn" destination="qOP-cU-h2X" id="yrL-b7-DGC"/>
                 <outlet property="redoBtn" destination="58E-D6-XBN" id="qt2-nl-f6B"/>
                 <outlet property="renderView" destination="r4X-gk-zDO" id="OHf-j3-hkZ"/>
-                <outlet property="rigAddToSceneBtn" destination="tas-gG-dDx" id="1De-ZL-DIh"/>
-                <outlet property="rigCancelBtn" destination="LIQ-ou-vmF" id="GyQ-O8-WLW"/>
-                <outlet property="rigScreenLabel" destination="Imw-FQ-ihq" id="VCA-gZ-8nW"/>
                 <outlet property="rigTitle" destination="QA5-Gc-qcB" id="1j5-L4-RqT"/>
                 <outlet property="rightView" destination="85u-8e-wxJ" id="xPl-8g-ns0"/>
                 <outlet property="rotateBtn" destination="vf5-0G-U3P" id="jjq-LL-aGa"/>
@@ -65,48 +59,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tas-gG-dDx">
-                            <rect key="frame" x="626" y="377" width="74" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.047058823530000002" green="0.4941176471" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to add the rigged model in to the scene" identifier="2"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
-                            <state key="normal" title="ADD TO SCENE">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="rigAddToSceneAction:" destination="-1" eventType="touchUpInside" id="4q8-5Z-gMp"/>
-                            </connections>
-                        </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppu-Mk-vaf">
-                            <rect key="frame" x="544" y="377" width="25" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="move-last.png">
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="moveLastAction:" destination="-1" eventType="touchUpInside" id="QIU-8A-45O"/>
-                            </connections>
-                        </button>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="IMPORT OBJ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Imw-FQ-ihq">
-                            <rect key="frame" x="407" y="377" width="92" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.34089422225952148" green="0.34063816070556641" blue="0.34847700595855713" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Current mode in rigging" identifier="2"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D8h-yp-xgX">
-                            <rect key="frame" x="334" y="377" width="25" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="move-first.png">
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="moveFirstAction:" destination="-1" eventType="touchUpInside" id="nTC-7x-Xbk"/>
-                            </connections>
-                        </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="X :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zrk-a3-LO2">
                             <rect key="frame" x="680" y="68" width="21" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -153,41 +105,9 @@
                             <rect key="frame" x="436" y="197" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIQ-ou-vmF">
-                            <rect key="frame" x="201" y="380" width="74" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549018" blue="0.16862745098039217" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Cancel rigging and go back to the scene" identifier="2"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
-                            <state key="normal" title="CANCEL">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="rigCancelAction:" destination="-1" eventType="touchUpInside" id="lyU-3o-1mG"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qdS-vI-nOZ">
-                            <rect key="frame" x="120" y="55" width="329" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.1085464015" green="0.1085464015" blue="0.1085464015" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aMt-d7-UIk">
-                    <rect key="frame" x="5" y="51" width="51" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </switch>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jl8-44-P9I">
-                    <rect key="frame" x="62" y="56" width="59" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" hint="Enable to move / rotate the mirror joint of selected joint" identifier="3"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L0B-6d-c1X" userLabel="leftView">
                     <rect key="frame" x="0.0" y="48" width="212" height="366"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
@@ -527,8 +447,6 @@
         <image name="Scale_IPhone.png" width="25" height="18"/>
         <image name="View_IPhone.png" width="22" height="22"/>
         <image name="info-icon_phone.png" width="22" height="22"/>
-        <image name="move-first.png" width="35" height="35"/>
-        <image name="move-last.png" width="35" height="35"/>
         <image name="undo_IPhone.png" width="17.5" height="20.5"/>
     </resources>
 </document>

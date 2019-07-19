@@ -177,12 +177,6 @@
                 cell.imageView.image = [UIImage imageNamed:@"Export-video_Pad"];
             else if (indexPath.row == 4)
                 cell.imageView.image = [UIImage imageNamed:@"Import-Light_Pad"];
-            //            else if(indexPath.row == 5)
-            //                cell.imageView.image = [UIImage imageNamed:@"Import-models_Pad"];
-            //            else if(indexPath.row == 6)
-            //                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_Pad"];
-            //            else if(indexPath.row == 7)
-            //                cell.imageView.image = [UIImage imageNamed:@"Particles"];
         }
     } else {
         if ([clickedBtn isEqualToString:@"exportBtn"]) {
@@ -201,13 +195,6 @@
                 cell.imageView.image = [UIImage imageNamed:@"Export-video_IPhone"];
             else if (indexPath.row == 4)
                 cell.imageView.image = [UIImage imageNamed:@"Import-Light_IPhone"];
-            //            else if(indexPath.row == 5)
-            //                cell.imageView.image = [UIImage imageNamed:@"Import-models_IPhone"];
-            //            else if(indexPath.row == 6)
-            //                cell.imageView.image = [UIImage imageNamed:@"Add-Bones_IPhone"];
-            //            else if(indexPath.row == 7)
-            //                cell.imageView.image = [UIImage imageNamed:@"Particle_IPhone"];
-
         } else if ([clickedBtn isEqualToString:@"myObjectsBtn"]) {
             enum NODE_TYPE nodeType = [self.delegate getNodeType:(int)indexPath.row];
 

@@ -12,7 +12,6 @@
                 <outlet property="addFrameBtn" destination="euE-kx-9ry" id="QPc-Cg-jPZ"/>
                 <outlet property="addJointBtn" destination="fwg-e6-BF2" id="xz2-3o-ea1"/>
                 <outlet property="animationBtn" destination="xCo-ML-HQa" id="6qx-QH-suT"/>
-                <outlet property="autoRigLbl" destination="CKg-eO-T66" id="u8U-MP-oNo"/>
                 <outlet property="autoRigMirrorSwitch" destination="WHM-dW-fbm" id="rbb-Mf-R2T"/>
                 <outlet property="autorigMirrorBtnHolder" destination="M0Q-M4-4QQ" id="LcK-ui-Sjh"/>
                 <outlet property="autorigMirrorLable" destination="DiH-XA-X1s" id="Aq2-kz-RyS"/>
@@ -29,8 +28,6 @@
                 <outlet property="leftView" destination="J91-Zq-MM8" id="zw6-fn-tY4"/>
                 <outlet property="moveBtn" destination="2KQ-lp-58n" id="9XV-Gw-Fgb"/>
                 <outlet property="moveBtnAutorig" destination="3o8-L5-yrV" id="tSa-C9-LYQ"/>
-                <outlet property="moveFirst" destination="GJx-oe-voh" id="aDk-Kf-Jtf"/>
-                <outlet property="moveLast" destination="hqf-aQ-aK5" id="q4T-bf-GhI"/>
                 <outlet property="myObjectsLabel" destination="AOn-20-20f" id="KyZ-Ic-29x"/>
                 <outlet property="numberOfItems" destination="eVO-10-Ptq" id="yAB-Uo-G2Z"/>
                 <outlet property="objTableview" destination="0go-cP-r4u" id="hXs-EQ-Xed"/>
@@ -39,9 +36,6 @@
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
                 <outlet property="redoBtn" destination="WSd-xV-ijo" id="ug4-eC-5Ka"/>
                 <outlet property="renderView" destination="1HF-XL-EYs" id="SUb-1h-g6Q"/>
-                <outlet property="rigAddToSceneBtn" destination="LIw-J1-TwZ" id="rG7-rO-rCo"/>
-                <outlet property="rigCancelBtn" destination="hQW-uY-VHV" id="WE4-Un-pxO"/>
-                <outlet property="rigScreenLabel" destination="h2z-Ga-oHa" id="pyX-sE-m1w"/>
                 <outlet property="rigTitle" destination="IrV-Kk-m6o" id="T8N-FA-qjg"/>
                 <outlet property="rightView" destination="RgQ-Eo-s8S" id="auz-s6-o1K"/>
                 <outlet property="rotateBtn" destination="kdb-Pl-f7f" id="Vdr-7W-QsP"/>
@@ -70,35 +64,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GJx-oe-voh">
-                            <rect key="frame" x="377" y="694" width="40" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <state key="normal" image="move-first.png">
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="moveFirstAction:" destination="-1" eventType="touchUpInside" id="zx7-zo-rqL"/>
-                            </connections>
-                        </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hqf-aQ-aK5">
-                            <rect key="frame" x="607" y="694" width="40" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                            <state key="normal" image="move-last.png">
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="moveLastAction:" destination="-1" eventType="touchUpInside" id="Iw2-Kl-tez"/>
-                            </connections>
-                        </button>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="IMPORT OBJ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h2z-Ga-oHa">
-                            <rect key="frame" x="424" y="694" width="175" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.34089422225952148" green="0.34063816070556641" blue="0.34847700595855713" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Current mode in rigging" identifier="2"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="x:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYO-TR-Nts">
                             <rect key="frame" x="688" y="72" width="17" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -141,25 +106,6 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Sb-uD-Qsc">
-                            <rect key="frame" x="9" y="67" width="51" height="31"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </switch>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="15c-ju-Cfc">
-                            <rect key="frame" x="70" y="72" width="81" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <accessibility key="accessibilityConfiguration" hint="Enable to move / rotate the mirror joint of selected joint." identifier="3"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKg-eO-T66">
-                            <rect key="frame" x="191" y="75" width="640" height="46"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -167,30 +113,6 @@
                     <rect key="frame" x="493" y="366" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hQW-uY-VHV">
-                    <rect key="frame" x="199" y="696" width="100" height="35"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="0.15686274509803921" green="0.16078431372549018" blue="0.16862745098039217" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <accessibility key="accessibilityConfiguration" hint="Cancel rigging and go back to the scene." identifier="2"/>
-                    <state key="normal" title="CANCEL">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="rigCancelAction:" destination="-1" eventType="touchUpInside" id="azZ-7d-Yd0"/>
-                    </connections>
-                </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIw-J1-TwZ">
-                    <rect key="frame" x="723" y="696" width="110" height="35"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="0.51764705882352935" green="0.0" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <accessibility key="accessibilityConfiguration" hint="Tap to add the rigged model in to the scene" identifier="2"/>
-                    <state key="normal" title="ADD TO SCENE">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="rigAddToSceneAction:" destination="-1" eventType="touchUpInside" id="Q6J-mb-zLJ"/>
-                    </connections>
-                </button>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J91-Zq-MM8" userLabel="leftView">
                     <rect key="frame" x="0.0" y="64" width="300" height="704"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
@@ -393,7 +315,7 @@
                             <accessibility key="accessibilityConfiguration" hint="Apply animation to the selected model/text" identifier="1"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  ANIMATION" image="Animation_Pad.png">
+                            <state key="normal" title="  ANIMATION" image="I">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
@@ -553,10 +475,10 @@
     <resources>
         <image name="Add-Bone-pad.png" width="42" height="29"/>
         <image name="Add-Frames.png" width="36.5" height="36"/>
-        <image name="Animation_Pad.png" width="42" height="29"/>
         <image name="Back.png" width="13" height="21.5"/>
         <image name="Export_Pad.png" width="42" height="29"/>
         <image name="Help.png" width="22" height="22"/>
+        <image name="I" width="16" height="16"/>
         <image name="Import_Pad.png" width="42" height="29"/>
         <image name="Move_Pad.png" width="42" height="29"/>
         <image name="Next-Frame.png" width="32.5" height="36"/>
@@ -569,7 +491,5 @@
         <image name="Undo_Pad.png" width="23.5" height="40"/>
         <image name="View.png" width="22" height="22"/>
         <image name="info-icon.png" width="22" height="22"/>
-        <image name="move-first.png" width="35" height="35"/>
-        <image name="move-last.png" width="35" height="35"/>
     </resources>
 </document>

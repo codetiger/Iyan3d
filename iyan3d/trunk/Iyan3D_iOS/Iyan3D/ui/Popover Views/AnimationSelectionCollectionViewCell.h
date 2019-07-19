@@ -13,7 +13,6 @@
 
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
-#import "SmartImageView.h"
 
 @protocol AnimationPropsDelegate
 - (void)deleteAnimationAtIndex:(int)indexVal;
@@ -30,7 +29,7 @@
 @property (strong, nonatomic) id     parentVC;
 @property (weak, nonatomic) IBOutlet UIButton* propsBtn;
 @property (weak, nonatomic) IBOutlet UILabel* assetNameLabel;
-@property (weak, nonatomic) IBOutlet SmartImageView* assetImageView;
+@property (weak, nonatomic) IBOutlet UIImage* assetImageView;
 
 @property (weak, nonatomic) id<AnimationPropsDelegate> delegate;
 

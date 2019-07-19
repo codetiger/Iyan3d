@@ -12,7 +12,6 @@
 #import <UIKit/UIKit.h>
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
-#import "SmartImageView.h"
 
 @protocol AssetFrameCellDelegate
 
@@ -23,7 +22,7 @@
 @end
 
 @interface                           AssetFrameCell : UICollectionViewCell <PopUpViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet SmartImageView* assetImage;
+@property (weak, nonatomic) IBOutlet UIImage* assetImage;
 @property (weak, nonatomic) IBOutlet UILabel* assetName;
 @property (weak, nonatomic) IBOutlet UIButton*         propsBtn;
 @property (weak, nonatomic) id<AssetFrameCellDelegate> delegate;

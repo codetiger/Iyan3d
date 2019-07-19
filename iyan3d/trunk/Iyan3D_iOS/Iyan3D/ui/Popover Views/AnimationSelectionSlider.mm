@@ -109,8 +109,14 @@
     cell.selectedIndex   = (int)indexPath.row;
     cell.parentVC        = self;
     cell.backgroundColor = [UIColor clearColor];
-    [cell.assetImageView setImageInfo:[NSString stringWithFormat:@"%d", assetItem.assetId] forView:MY_ANIMATION_VIEW OperationQueue:nil ScreenWidth:ScreenWidth ScreenHeight:ScreenHeight];
-
+    
+    NSArray*  paths          = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString* cacheDirectory = [paths objectAtIndex:0];
+    NSString* fileName = [NSString stringWithFormat:@"%@/%d.png", cacheDirectory, assetItem.assetId];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+        cell.assetImageView = [UIImage imageWithContentsOfFile:fileName];
+    }
+    
     cell.assetNameLabel.textColor = [UIColor whiteColor];
     cell.assetNameLabel.font      = [UIFont fontWithName:@"Helvetica-Bold" size:11];
     if (assetItem.assetId == selectedAssetId) {
