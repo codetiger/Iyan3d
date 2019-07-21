@@ -67,14 +67,11 @@ void SGNode::setPropertiesOfNode()
             addOrUpdateProperty(IS_SOFT, Vector4(0, 0, 0, 0), HAS_PHYSICS, TYPE_NONE, "Soft");
             addOrUpdateProperty(PHYSICS_KIND, Vector4(PHYSICS_NONE), HAS_PHYSICS, TYPE_NONE, "Physics Type");
         }
-    } else if(type == NODE_IMAGE || type == NODE_VIDEO || type == NODE_PARTICLES) {
-        
-        if(type != NODE_PARTICLES) {
-            addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
-            addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "SpecificFloat");
-            addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), UNDEFINED, TYPE_NONE, "Color");
-            addOrUpdateProperty(TEXTURE, Vector4(1), UNDEFINED, TYPE_NONE, "Texture");
-        }
+    } else if(type == NODE_IMAGE || type == NODE_VIDEO) {        
+        addOrUpdateProperty(SELECTED, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "Selected");
+        addOrUpdateProperty(SPECIFIC_FLOAT, Vector4(0, 0, 0, 0), UNDEFINED, TYPE_NONE, "SpecificFloat");
+        addOrUpdateProperty(VERTEX_COLOR, Vector4(1.0), UNDEFINED, TYPE_NONE, "Color");
+        addOrUpdateProperty(TEXTURE, Vector4(1), UNDEFINED, TYPE_NONE, "Texture");
         
         addOrUpdateProperty(CLONE, Vector4(1, 0, 0, 0), UNDEFINED,  ICON_TYPE, "Clone", "GENERAL", "", CLONE_ICON);
         addOrUpdateProperty(VISIBILITY, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Visible", "PROPERTIES");
@@ -152,30 +149,6 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string meshPath, std::string
             getProperty(SPECIFIC_FLOAT).value.x = (height == 0) ? 50.0 : height;
             break;
         }
-        case NODE_PARTICLES:
-        {
-            getProperty(TEXTURE).fileName = to_string(assetId) + "-cm";
-            
-            string meshPath = "";
-            string texPath = "";
-            string jsonPath = "";
-
-            meshPath = constants::CachesStoragePath + "/" + to_string(assetId) + ".sgm";
-            texPath = constants::CachesStoragePath + "/" + to_string(assetId) + "-cm.png";
-            Json::Value pData = parseParticlesJson(assetId);
-            
-            SceneImporter *importer = new SceneImporter();
-            Mesh *mesh = importer->loadMeshFromFile(meshPath);
-            delete importer;
-            
-            node = smgr->createParticlesFromMesh(mesh, "setUniforms", MESH_TYPE_LITE, SHADER_PARTICLES);
-            setParticlesData(node, pData);
-            node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
-            Texture *nodeTex = smgr->loadTexture("Particle Texture", texPath,TEXTURE_RGBA8,TEXTURE_BYTE, true);
-            materialProps[0]->setTextureForType(nodeTex, NODE_TEXTURE_TYPE_COLORMAP);
-            getProperty(TRANSPARENCY).value.x = 0.7 ;// Vector4(0.7, 0, 0, 0), UNDEFINED);
-            break;
-        }
         default:
             Logger::log(ERROR, "SGNode::loadNode ", "Unknown node type to load");
             break;
@@ -197,37 +170,6 @@ shared_ptr<Node> SGNode::addAdittionalLight(SceneManager* smgr, float distance ,
     lightNode->lightColor = lightColor;
     
     return lightNode;
-}
-
-Json::Value SGNode::parseParticlesJson(int assetId)
-{
-    Json::Value particlesData;
-    string jsonFileName = to_string(assetId) + ".json";
-    string jsonPath = jsonFileName;
-    
-    jsonPath = constants::CachesStoragePath + "/" + jsonFileName;
-    
-    ifstream jsonFile(jsonPath);
-    Json::Reader reader;
-    if(!reader.parse(jsonFile, particlesData, false)){
-        Logger::log(ERROR, "Unable to parse jointsData.json", "AutoRigHelper");
-        return particlesData;
-    }
-    jsonFile.close();
-    return particlesData;
-}
-
-void SGNode::setParticlesData(shared_ptr<Node> particleNode, Json::Value pData)
-{
-    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(particleNode);
-    Vector4 sColor = Vector4(pData["sColorX"].asDouble(), pData["sColorY"].asDouble(), pData["sColorZ"].asDouble(), 1.0);
-    Vector4 mColor = Vector4(pData["mColorX"].asDouble(), pData["mColorY"].asDouble(), pData["mColorZ"].asDouble(), 1.0);
-    Vector4 eColor = Vector4(pData["eColorX"].asDouble(), pData["eColorY"].asDouble(), pData["eColorZ"].asDouble(), 1.0);
-    
-    pNode->setDataFromJson(pData["Count"].asInt(), sColor, mColor, eColor, pData["Gravity"].asDouble(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
-    
-    printf(" Counnt %d gravity %d sAngle %f sMag %f magRand %f emSpeed %d maxLife %d perce %d scale %f delta %f ",pData["Count"].asInt(), pData["Gravity"].asBool(), pData["startVelocitySpreadAngle"].asDouble(), pData["startVelocityMagnitude"].asDouble(), pData["startVelocityMagnitudeRand"].asDouble(), pData["emissionSpeed"].asInt(), pData["maxLife"].asInt(), pData["maxLifeRandPercent"].asInt(), pData["startScale"].asDouble(), pData["deltaScale"].asDouble());
-    
 }
 
 bool SGNode::checkFileExists(std::string fileName)

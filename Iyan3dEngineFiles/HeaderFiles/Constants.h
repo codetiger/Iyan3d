@@ -180,8 +180,6 @@ const string OGLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_SHADOW_DEPTH_PASS_SKIN","depthPassSkin.vsh","depthPass.fsh"},
     {"SHADER_DRAW_2D_IMAGE_DEPTH", "draw2dImage.vsh","draw2dImage.fsh"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","depthPassText.vsh","depthPass.fsh"},
-//    {"SHADER_PARTICLES", "particles.vsh","particles.fsh"},
-//    {"SHADER_PARTICLES_RTT", "particlesRTT.vsh","particles.fsh"}
 };
 
 const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
@@ -196,8 +194,6 @@ const string MTLMaterialAndShaderNames[TOTAL_MATERIALS][3] =
     {"SHADER_SHADOW_DEPTH_PASS_SKIN","Depth_Pass_Skin_vert",""},
     {"SHADER_DRAW_2D_IMAGE_DEPTH", "Draw2DImage_Vertex","Draw2DImage_Fragment_Depth"},
     {"SHADER_SHADOW_DEPTH_PASS_TEXT","Depth_Pass_Text_vert",""},
-//    {"SHADER_PARTICLES", "Particle_Vertex","Particle_Fragment"},
-//    {"SHADER_PARTICLES_RTT", "Particle_Vertex_RTT","Particle_Fragment_RTT"}
 };
 
 
@@ -238,7 +234,6 @@ enum NODE_TYPE
     NODE_ADDITIONAL_LIGHT = 7,
     NODE_TEXT = 8,
     NODE_VIDEO = 9,
-    NODE_PARTICLES = 10,
     NODE_TEMP_INST = 11
 };
 
@@ -271,9 +266,8 @@ enum MATERIAL_TYPE
     SHADER_SHADOW_DEPTH_PASS_SKIN,
     SHADER_DRAW_2D_IMAGE_DEPTH,
     SHADER_SHADOW_DEPTH_PASS_TEXT,
-    SHADER_PARTICLES,
-    SHADER_PARTICLES_RTT
 };
+
 enum ActionType
 {
     ACTION_EMPTY = -1,

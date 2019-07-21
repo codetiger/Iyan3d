@@ -376,16 +376,6 @@ BOOL missingAlertShown;
             [self.scaleBtn setEnabled:false];
             [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
             return;
-
-        } else if (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES) {
-            [self.moveBtn setEnabled:true];
-            [self.rotateBtn setEnabled:true];
-            [self.optionsBtn setEnabled:true];
-            [self.scaleBtn setEnabled:false];
-            if (editorScene->controlType == SCALE)
-                [self.moveBtn sendActionsForControlEvents:UIControlEventTouchUpInside];
-            return;
-
         } else if (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA) {
             [self.moveBtn setEnabled:true];
             [self.rotateBtn setEnabled:true];
@@ -766,8 +756,6 @@ BOOL missingAlertShown;
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_Pad"];
         else if (editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_IMAGE)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_Pad"];
-        else if (editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_PARTICLES)
-            cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
         else if (editorScene && editorScene->nodes[indexPath.row]->getType() == NODE_VIDEO)
             cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_Pad"];
         else
@@ -1499,7 +1487,7 @@ BOOL missingAlertShown;
 - (BOOL)canUploadToCloud {
     if (editorScene) {
         for (int i = 0; i < editorScene->nodes.size(); i++) {
-            if (editorScene->nodes[i]->getType() == NODE_VIDEO || editorScene->nodes[i]->getType() == NODE_PARTICLES) {
+            if (editorScene->nodes[i]->getType() == NODE_VIDEO) {
                 return false;
                 break;
             }
@@ -1803,11 +1791,6 @@ const NSStringEncoding kEncoding_wchar_t =
     if (editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA)) {
         [self showCommonPropsVCAtRect:longPressposition WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties() AnyDirection:YES];
 
-    } else if (editorScene && editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_PARTICLES)) {
-        CGRect rect = _optionsBtn.frame;
-        rect        = [self.view convertRect:rect fromView:_optionsBtn.superview];
-        [self presentPopOver:rect];
-
     } else if (editorScene && editorScene->hasNodeSelected()) {
         bool      isVideoOrImageOrParticle = false;
         NODE_TYPE nodeType                 = NODE_UNDEFINED;
@@ -1914,7 +1897,7 @@ const NSStringEncoding kEncoding_wchar_t =
 
         editorScene->animMan->copyPropsOfNode(selectedNodeIndex, (int)editorScene->nodes.size() - 1);
 
-    } else if ((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_PARTICLES || selectedNodeType == NODE_TEXT)) {
+    } else if ((selectedNodeType == NODE_RIG || selectedNodeType == NODE_TEXT_SKIN || selectedNodeType == NODE_TEXT)) {
         assetAddType = IMPORT_ASSET_ACTION;
         [self cloneNodeByCopyingMesh:selectedNodeIndex];
 
@@ -1981,7 +1964,7 @@ const NSStringEncoding kEncoding_wchar_t =
 }
 
 - (void)loadCloneNodeWithType:(int)selectedNodeType WithObject:(id)object nodeId:(int)selectedNode {
-    if (selectedNodeType == NODE_RIG || selectedNodeType == NODE_SGM || selectedNodeType == NODE_OBJ || selectedNodeType == NODE_PARTICLES) {
+    if (selectedNodeType == NODE_RIG || selectedNodeType == NODE_SGM || selectedNodeType == NODE_OBJ) {
         [self loadNode:(AssetItem*)object];
     }
     editorScene->animMan->copyPropsOfNode(selectedNode, (int)editorScene->nodes.size() - 1);

@@ -69,8 +69,6 @@ public:
     void setSkinningData(SkinMesh *mesh, bool applyInverseBindPose = true);
     shared_ptr<Node> loadNode(int assetId, std::string meshPath, std::string texturePath, NODE_TYPE objectType, SceneManager *smgr, std::wstring imagePath, int width, int height, Vector4 textColor, string &filePath);
     shared_ptr<Node> addAdittionalLight(SceneManager *smgr, float distance , Vector3 lightColor, float attenuation = 1.0);
-    Json::Value parseParticlesJson(int assetId);
-    void setParticlesData(shared_ptr<Node> node, Json::Value pData);
     shared_ptr<Node> loadImage(string imageName,SceneManager *smgr , float aspectRatio = 1.0);
     shared_ptr<Node> loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio = 1.0);
     shared_ptr<Node> initLightSceneNode(SceneManager *smgr);

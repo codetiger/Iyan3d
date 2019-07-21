@@ -58,14 +58,10 @@ MaterialProperty::MaterialProperty(NODE_TYPE nType)
         addOrUpdateProperty(BUMP_MAP, Vector4(1), MATERIAL_PROPS, IMAGE_TYPE, "Normal Map");
         addOrUpdateProperty(BUMP_DEPTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, TYPE_NONE, "Depth");
         
-    } else if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO || nodeType == NODE_PARTICLES) {
-        
-        if(nodeType != NODE_PARTICLES) {
-            addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Texture Smooth");
-            addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
-        }
-    }
-    
+    } else if(nodeType == NODE_IMAGE || nodeType == NODE_VIDEO) {
+        addOrUpdateProperty(TEXTURE_SMOOTH, Vector4(1, 0, 0, 0), MATERIAL_PROPS, SWITCH_TYPE, "Texture Smooth");
+        addOrUpdateProperty(LIGHTING, Vector4(1, 0, 0, 0), UNDEFINED, SWITCH_TYPE, "Lighting", "PROPERTIES");
+    }    
 }
 
 MaterialProperty::~MaterialProperty()

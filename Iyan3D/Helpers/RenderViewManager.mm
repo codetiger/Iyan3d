@@ -252,14 +252,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName) {
             }
             break;
         }
-        case ASSET_PARTICLES: {
-            SGNode* particle = editorScene->loader->loadNode(NODE_PARTICLES, assetId, "", "", name, imgWidth, imgHeight, assetAddType, Vector4(1.0), "", isTempNode);
-            if (particle)
-                particle->isTempNode = isTempNode;
-            if (!isTempNode) {
-                [self.delegate updateAssetListInScenes];
-            }
-        }
         default: {
             break;
         }

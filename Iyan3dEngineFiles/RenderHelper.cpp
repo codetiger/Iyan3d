@@ -469,13 +469,7 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         transparency.push_back(renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x);
         previousMaterialNames.push_back(renderingScene->nodes[i]->node->material->name);
         
-        if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->getProperty(SELECTED).value.x = true;
-        else
-            renderingScene->nodes[i]->getProperty(SELECTED).value.x = false;
-        
-        if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = true;
+        renderingScene->nodes[i]->getProperty(SELECTED).value.x = false;
         
         renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x = 1.0;
         
@@ -483,8 +477,6 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
         
         if(renderingScene->nodes[i]->getType() == NODE_RIG || renderingScene->nodes[i]->getType() == NODE_TEXT_SKIN)
             renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(renderingScene->nodes[i]->node->skinType == CPU_SKIN ? SHADER_COLOR : SHADER_COLOR_SKIN));
-        else if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES_RTT));
         else {
             if(renderingScene->nodes[i]->getType() == NODE_CAMERA)
                 renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByIndex(SHADER_MESH));
@@ -526,9 +518,6 @@ void RenderHelper::rttNodeJointSelection(Vector2 touchPosition, bool isMultiSele
     }
     
     for (int i = 0; i < renderingScene->nodes.size(); i++) {
-        if(renderingScene->nodes[i]->getType() == NODE_PARTICLES)
-            renderingScene->nodes[i]->getProperty(IS_VERTEX_COLOR).value.x = false;
-        
         renderingScene->nodes[i]->node->setMaterial(smgr->getMaterialByName(previousMaterialNames[i]));
         renderingScene->nodes[i]->getProperty(TRANSPARENCY).value.x = transparency[i];
         renderingScene->nodes[i]->getProperty(VISIBILITY).value.x = nodesVisibility[i];
@@ -906,7 +895,7 @@ void RenderHelper::rttShadowMap()
         if(!sgNode->getProperty(VISIBILITY).value.x || !sgNode->getProperty(LIGHTING).value.x)
             sgNode->node->setVisible(false);
         
-        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT || sgNode->getType() == NODE_PARTICLES)
+        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT)
             sgNode->node->setVisible(false);
         previousMaterialNames.push_back(sgNode->node->material->name);
         
@@ -932,7 +921,7 @@ void RenderHelper::rttShadowMap()
         SGNode* sgNode = renderingScene->nodes[i];
         if(!sgNode->getProperty(VISIBILITY).value.x || !sgNode->getProperty(LIGHTING).value.x)
             sgNode->node->setVisible(true);
-        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT || sgNode->getType() == NODE_PARTICLES)
+        if(sgNode->getType() == NODE_LIGHT || sgNode->getType() == NODE_ADDITIONAL_LIGHT)
             sgNode->node->setVisible(true);
         sgNode->node->setMaterial(smgr->getMaterialByName(previousMaterialNames[i - 2]));
     }

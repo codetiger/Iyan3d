@@ -874,8 +874,6 @@
 		4E82DBBC22E1E22400587210 /* MTLNodeData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98422E1E22300587210 /* MTLNodeData.mm */; };
 		4E82DBBD22E1E22400587210 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98622E1E22300587210 /* Node.cpp */; };
 		4E82DBBE22E1E22400587210 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98622E1E22300587210 /* Node.cpp */; };
-		4E82DBBF22E1E22400587210 /* ParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98722E1E22300587210 /* ParticlePool.cpp */; };
-		4E82DBC022E1E22400587210 /* ParticlePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98722E1E22300587210 /* ParticlePool.cpp */; };
 		4E82DBC122E1E22400587210 /* AnimatedMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98922E1E22300587210 /* AnimatedMeshNode.cpp */; };
 		4E82DBC222E1E22400587210 /* AnimatedMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98922E1E22300587210 /* AnimatedMeshNode.cpp */; };
 		4E82DBC322E1E22400587210 /* InstanceNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98A22E1E22300587210 /* InstanceNode.cpp */; };
@@ -884,8 +882,6 @@
 		4E82DBC622E1E22400587210 /* EmptyNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98C22E1E22300587210 /* EmptyNode.cpp */; };
 		4E82DBC722E1E22400587210 /* CameraNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98E22E1E22300587210 /* CameraNode.cpp */; };
 		4E82DBC822E1E22400587210 /* CameraNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D98E22E1E22300587210 /* CameraNode.cpp */; };
-		4E82DBC922E1E22400587210 /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D99022E1E22300587210 /* ParticleManager.cpp */; };
-		4E82DBCA22E1E22400587210 /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D99022E1E22300587210 /* ParticleManager.cpp */; };
 		4E82DBCB22E1E22400587210 /* LightNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D99222E1E22300587210 /* LightNode.cpp */; };
 		4E82DBCC22E1E22400587210 /* LightNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D99222E1E22300587210 /* LightNode.cpp */; };
 		4E82DBCD22E1E22400587210 /* MeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D99422E1E22300587210 /* MeshNode.cpp */; };
@@ -900,8 +896,6 @@
 		4E82DBD622E1E22400587210 /* SkinMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D99C22E1E22300587210 /* SkinMesh.cpp */; };
 		4E82DBD722E1E22400587210 /* SGCircleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A222E1E22300587210 /* SGCircleNode.cpp */; };
 		4E82DBD822E1E22400587210 /* SGCircleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A222E1E22300587210 /* SGCircleNode.cpp */; };
-		4E82DBD922E1E22400587210 /* CubeMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A322E1E22300587210 /* CubeMeshNode.cpp */; };
-		4E82DBDA22E1E22400587210 /* CubeMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A322E1E22300587210 /* CubeMeshNode.cpp */; };
 		4E82DBDB22E1E22400587210 /* PlaneMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A422E1E22300587210 /* PlaneMeshNode.cpp */; };
 		4E82DBDC22E1E22400587210 /* PlaneMeshNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A422E1E22300587210 /* PlaneMeshNode.cpp */; };
 		4E82DBDD22E1E22400587210 /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9A922E1E22300587210 /* Vector4.cpp */; };
@@ -1966,7 +1960,6 @@
 		4E82D98422E1E22300587210 /* MTLNodeData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTLNodeData.mm; sourceTree = "<group>"; };
 		4E82D98522E1E22300587210 /* EmptyNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyNode.h; sourceTree = "<group>"; };
 		4E82D98622E1E22300587210 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
-		4E82D98722E1E22300587210 /* ParticlePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePool.cpp; sourceTree = "<group>"; };
 		4E82D98822E1E22300587210 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		4E82D98922E1E22300587210 /* AnimatedMeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedMeshNode.cpp; sourceTree = "<group>"; };
 		4E82D98A22E1E22300587210 /* InstanceNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InstanceNode.cpp; sourceTree = "<group>"; };
@@ -1974,14 +1967,10 @@
 		4E82D98C22E1E22300587210 /* EmptyNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmptyNode.cpp; sourceTree = "<group>"; };
 		4E82D98D22E1E22300587210 /* InstanceNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceNode.h; sourceTree = "<group>"; };
 		4E82D98E22E1E22300587210 /* CameraNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraNode.cpp; sourceTree = "<group>"; };
-		4E82D98F22E1E22300587210 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
-		4E82D99022E1E22300587210 /* ParticleManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleManager.cpp; sourceTree = "<group>"; };
-		4E82D99122E1E22300587210 /* ParticlePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePool.h; sourceTree = "<group>"; };
 		4E82D99222E1E22300587210 /* LightNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LightNode.cpp; sourceTree = "<group>"; };
 		4E82D99322E1E22300587210 /* CameraNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNode.h; sourceTree = "<group>"; };
 		4E82D99422E1E22300587210 /* MeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshNode.cpp; sourceTree = "<group>"; };
 		4E82D99522E1E22300587210 /* APIData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIData.h; sourceTree = "<group>"; };
-		4E82D99622E1E22300587210 /* ParticleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleManager.h; sourceTree = "<group>"; };
 		4E82D99722E1E22300587210 /* JointNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JointNode.cpp; sourceTree = "<group>"; };
 		4E82D99822E1E22300587210 /* MTLNodeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLNodeData.h; sourceTree = "<group>"; };
 		4E82D99A22E1E22300587210 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
@@ -1989,11 +1978,9 @@
 		4E82D99C22E1E22300587210 /* SkinMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkinMesh.cpp; sourceTree = "<group>"; };
 		4E82D99D22E1E22300587210 /* SGCircleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGCircleNode.h; sourceTree = "<group>"; };
 		4E82D99E22E1E22300587210 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		4E82D99F22E1E22300587210 /* CubeMeshNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeMeshNode.h; sourceTree = "<group>"; };
 		4E82D9A022E1E22300587210 /* Joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joint.h; sourceTree = "<group>"; };
 		4E82D9A122E1E22300587210 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		4E82D9A222E1E22300587210 /* SGCircleNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGCircleNode.cpp; sourceTree = "<group>"; };
-		4E82D9A322E1E22300587210 /* CubeMeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeMeshNode.cpp; sourceTree = "<group>"; };
 		4E82D9A422E1E22300587210 /* PlaneMeshNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlaneMeshNode.cpp; sourceTree = "<group>"; };
 		4E82D9A522E1E22300587210 /* SkinMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinMesh.h; sourceTree = "<group>"; };
 		4E82D9A622E1E22300587210 /* PlaneMeshNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaneMeshNode.h; sourceTree = "<group>"; };
@@ -3471,7 +3458,6 @@
 				4E82D98422E1E22300587210 /* MTLNodeData.mm */,
 				4E82D98522E1E22300587210 /* EmptyNode.h */,
 				4E82D98622E1E22300587210 /* Node.cpp */,
-				4E82D98722E1E22300587210 /* ParticlePool.cpp */,
 				4E82D98822E1E22300587210 /* Node.h */,
 				4E82D98922E1E22300587210 /* AnimatedMeshNode.cpp */,
 				4E82D98A22E1E22300587210 /* InstanceNode.cpp */,
@@ -3479,14 +3465,10 @@
 				4E82D98C22E1E22300587210 /* EmptyNode.cpp */,
 				4E82D98D22E1E22300587210 /* InstanceNode.h */,
 				4E82D98E22E1E22300587210 /* CameraNode.cpp */,
-				4E82D98F22E1E22300587210 /* Particle.h */,
-				4E82D99022E1E22300587210 /* ParticleManager.cpp */,
-				4E82D99122E1E22300587210 /* ParticlePool.h */,
 				4E82D99222E1E22300587210 /* LightNode.cpp */,
 				4E82D99322E1E22300587210 /* CameraNode.h */,
 				4E82D99422E1E22300587210 /* MeshNode.cpp */,
 				4E82D99522E1E22300587210 /* APIData.h */,
-				4E82D99622E1E22300587210 /* ParticleManager.h */,
 				4E82D99722E1E22300587210 /* JointNode.cpp */,
 				4E82D99822E1E22300587210 /* MTLNodeData.h */,
 			);
@@ -3496,8 +3478,6 @@
 		4E82D99922E1E22300587210 /* Meshes */ = {
 			isa = PBXGroup;
 			children = (
-				4E82D9A322E1E22300587210 /* CubeMeshNode.cpp */,
-				4E82D99F22E1E22300587210 /* CubeMeshNode.h */,
 				4E82D99B22E1E22300587210 /* Joint.cpp */,
 				4E82D9A022E1E22300587210 /* Joint.h */,
 				4E82D99E22E1E22300587210 /* md5.h */,
@@ -5406,7 +5386,6 @@
 				4E82DBC522E1E22400587210 /* EmptyNode.cpp in Sources */,
 				4E82DBB322E1E22400587210 /* ImageLoaderOBJC.mm in Sources */,
 				4E82DCA122E1E22500587210 /* btBoxBoxCollisionAlgorithm.cpp in Sources */,
-				4E82DBC922E1E22400587210 /* ParticleManager.cpp in Sources */,
 				4E82DBC322E1E22400587210 /* InstanceNode.cpp in Sources */,
 				01B4CF8E1C291EFD0091E19B /* ImportImageNew.mm in Sources */,
 				25CACF631B27C20F0027F48C /* FontCellView.m in Sources */,
@@ -5500,7 +5479,6 @@
 				25730E671AFD3C7B0042F81A /* BitmapContextManipulator.m in Sources */,
 				4E82DD4722E1E22500587210 /* btSerializer.cpp in Sources */,
 				C8E6173718C5DD7100BC5342 /* FPPopoverController.m in Sources */,
-				4E82DBBF22E1E22400587210 /* ParticlePool.cpp in Sources */,
 				4E82DC4522E1E22500587210 /* btQuantizedBvh.cpp in Sources */,
 				4E82DC4922E1E22500587210 /* btMultiSapBroadphase.cpp in Sources */,
 				3D58CD6C1C3D43C2006371DE /* WEPopoverViewController.m in Sources */,
@@ -5540,7 +5518,6 @@
 				4E82DC4D22E1E22500587210 /* btOverlappingPairCache.cpp in Sources */,
 				4E82DC8722E1E22500587210 /* btConvex2dConvex2dAlgorithm.cpp in Sources */,
 				4E82DD5722E1E22500587210 /* RenderHelper.cpp in Sources */,
-				4E82DBD922E1E22400587210 /* CubeMeshNode.cpp in Sources */,
 				4E82DC9922E1E22500587210 /* btEmptyCollisionAlgorithm.cpp in Sources */,
 				E24973F6196BD80F0025D442 /* AssetItem.m in Sources */,
 				4E82DC9322E1E22500587210 /* btCompoundCollisionAlgorithm.cpp in Sources */,
@@ -5701,7 +5678,6 @@
 				4E82DBB422E1E22400587210 /* ImageLoaderOBJC.mm in Sources */,
 				25D7DA671D06F6DC00E84D2F /* JDFTooltipView.m in Sources */,
 				4E82DCA222E1E22500587210 /* btBoxBoxCollisionAlgorithm.cpp in Sources */,
-				4E82DBCA22E1E22400587210 /* ParticleManager.cpp in Sources */,
 				4E82DBC422E1E22400587210 /* InstanceNode.cpp in Sources */,
 				01B4BCC01C32A69900E09269 /* PopUpViewController.mm in Sources */,
 				25FA14A11D3CF6B000A95DA3 /* TexturePropCell.m in Sources */,
@@ -5793,7 +5769,6 @@
 				3D58CD5F1C3D43C2006371DE /* UIBarButtonItem+WEPopover.m in Sources */,
 				4E82DD4822E1E22500587210 /* btSerializer.cpp in Sources */,
 				25D7DA691D06F6DC00E84D2F /* UILabel+JDFTooltips.m in Sources */,
-				4E82DBC022E1E22400587210 /* ParticlePool.cpp in Sources */,
 				4E82DC4622E1E22500587210 /* btQuantizedBvh.cpp in Sources */,
 				4E82DC4A22E1E22500587210 /* btMultiSapBroadphase.cpp in Sources */,
 				25D7DA6B1D06F6DC00E84D2F /* UIView+JDFTooltips.m in Sources */,
@@ -5833,7 +5808,6 @@
 				4E82DC4E22E1E22500587210 /* btOverlappingPairCache.cpp in Sources */,
 				4E82DC8822E1E22500587210 /* btConvex2dConvex2dAlgorithm.cpp in Sources */,
 				4E82DD5822E1E22500587210 /* RenderHelper.cpp in Sources */,
-				4E82DBDA22E1E22400587210 /* CubeMeshNode.cpp in Sources */,
 				4E82DC9A22E1E22500587210 /* btEmptyCollisionAlgorithm.cpp in Sources */,
 				E20671461B049AA6006DD2F7 /* BitmapContextManipulator.m in Sources */,
 				4E82DC9422E1E22500587210 /* btCompoundCollisionAlgorithm.cpp in Sources */,

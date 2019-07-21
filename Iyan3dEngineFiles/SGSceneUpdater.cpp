@@ -464,11 +464,6 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                         sgNode->node->setMaterial(smgr->getMaterialByIndex(vertexColorTextType));
                         break;
                     }
-                    case NODE_PARTICLES: {
-                        sgNode->node->setMaterial(smgr->getMaterialByIndex(SHADER_PARTICLES));
-                        break;
-                    }
-                        
                     default:
                         break;
                 }

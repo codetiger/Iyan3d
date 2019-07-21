@@ -210,8 +210,6 @@
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Text_IPhone"];
             else if (nodeType == NODE_IMAGE)
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Image_IPhone"];
-            else if (nodeType == NODE_PARTICLES)
-                cell.imageView.image = [UIImage imageNamed:@"My-objects-Particles"];
             else if (nodeType == NODE_VIDEO)
                 cell.imageView.image = [UIImage imageNamed:@"My-objects-Camera_IPhone"];
             else

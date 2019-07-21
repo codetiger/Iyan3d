@@ -218,9 +218,6 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
         return NULL;
     }
     
-    if(sgnode->getType() == NODE_PARTICLES)
-        sgnode->getProperty(SELECTED).value.x = isTempNode;
-    
     sgnode->assetId = assetId;
     sgnode->name = name;
     sgnode->setInitialKeyValues(actionType);

@@ -194,9 +194,6 @@ void Node::FlagTransformationToChildren() {
 }
 
 void Node::setMaterial(Material* mat, bool isTransparentMaterial) {
-    if (type == NODE_TYPE_PARTICLES && mat->name != "SHADER_PARTICLES" && mat->name != "SHADER_PARTICLES_RTT")
-        return;
-
     this->material                = mat;
     this->material->isTransparent = isTransparentMaterial;
 }

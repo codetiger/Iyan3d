@@ -361,11 +361,7 @@ vector<string> SGEditorScene::getUserFileNames(bool forBackup)
             userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
         else if (sgNode->getType() == NODE_IMAGE)
             userFileNames.push_back(sgNode->getProperty(TEXTURE).fileName + ".png");
-        else if (sgNode->getType() == NODE_PARTICLES) {
-            userFileNames.push_back(to_string(sgNode->assetId) + ".json");
-            userFileNames.push_back(to_string(sgNode->assetId) + ".sgm");
-            userFileNames.push_back(sgNode->getProperty(TEXTURE).fileName + ".png");
-        } else if (sgNode->getType() == NODE_VIDEO && forBackup) {
+        else if (sgNode->getType() == NODE_VIDEO && forBackup) {
             userFileNames.push_back(ConversionHelper::getStringForWString(sgNode->name));
         }
     }
@@ -432,7 +428,7 @@ bool SGEditorScene::isNodeTransparent(int nodeId)
     else {
         for(int i = 0; i < nodes.size(); i++) {
             if(nodes[i]->node->getID() == nodeId) {
-                if(nodes[i]->getType() == NODE_PARTICLES || nodes[i]->node->hasTransparency)
+                if(nodes[i]->node->hasTransparency)
                     return true;
                 
                 return (nodes[i]->getProperty(TRANSPARENCY).value.x < 1.0) || nodes[i]->getProperty(SELECTED).value.x || (!nodes[i]->getProperty(VISIBILITY).value.x);
@@ -782,7 +778,7 @@ bool SGEditorScene::allObjectsScalable()
     bool status = true;
     for(int i = 0; i < selectedNodeIds.size(); i++) {
         NODE_TYPE nType = nodes[selectedNodeIds[i]]->getType();
-        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT || nType == NODE_PARTICLES) {
+        if(nType == NODE_CAMERA || nType == NODE_LIGHT || nType == NODE_ADDITIONAL_LIGHT) {
             status = false;
             break;
         }

@@ -192,10 +192,6 @@ void ShaderManager::setUniforms(SGNode *sgNode, string matName, int materialInde
         setJointTransform(sgNode,SHADER_DEPTH_PASS_SKIN_jointdata,smgr);
     } else if(matName == "SHADER_SHADOW_DEPTH_PASS") {
         setModelViewProjMatrix(sgNode,SHADER_DEPTH_PASS_mvp, true);
-    } else if (matName.find("SHADER_PARTICLES") !=  string::npos) {
-        setHasMeshColor(sgNode, sgNode->getProperty(IS_VERTEX_COLOR).value.x , SHADER_MESH_hasMeshColor, false, materialIndex);
-        setMVPForParticles(sgNode,0);
-        setTexturesUniforms(sgNode, SHADER_PARTICLE_texture1, materialIndex);
     }
 }
 
@@ -249,7 +245,7 @@ void ShaderManager::setHasMeshColor(SGNode *sgNode, bool status, int paramIndex,
         endIndex = (int)sgNode->instanceNodes.size();
     
     float *hasMeshColor = new float[(endIndex - startIndex) + 1];
-    hasMeshColor[0] = ((sgNode->getType() != NODE_PARTICLES) && (sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x || sgNode->getProperty(SELECTED).value.x || status)) ? 1.0 : 0.0;
+    hasMeshColor[0] = ((sgNode->getProperty(IS_VERTEX_COLOR, materialIndex).value.x || sgNode->getProperty(SELECTED).value.x || status)) ? 1.0 : 0.0;
     
     int i = 0;
     vector < std::pair<int, SGNode*> > v(sgNode->instanceNodes.begin(), sgNode->instanceNodes.end());
@@ -494,71 +490,6 @@ void ShaderManager::setModelViewProjMatrix(SGNode *sgNode, u16 paramIndex, bool 
         mvp = projMat * viewMat * sgNode->node->getModelMatrix();
     
     smgr->setPropertyValue(sgNode->node->material, uniformName, mvp.pointer(), DATA_FLOAT_MAT4, 16, false, paramIndex, smgr->getNodeIndexByID(sgNode->node->getID()));
-}
-
-void ShaderManager::setMVPForParticles(SGNode *sgNode, u16 paramIndex)
-{
-    Mat4 projMat = smgr->getActiveCamera()->getProjectionMatrix();
-    Mat4 viewMat = smgr->getActiveCamera()->getViewMatrix();
-    shared_ptr<ParticleManager> pNode = dynamic_pointer_cast<ParticleManager>(sgNode->node);
-    
-    bool meshCacheCreated = false;
-    if(!renderingPreview) {
-        meshCacheCreated = pNode->updateParticles((sgNode->getProperty(SELECTED).value.x || isRendering), smgr->getActiveCamera()->getPosition());
-    }
-    
-    //if(!meshCacheCreated) {
-    pNode->shouldUpdateMesh = true;
-    smgr->updateVertexAndIndexBuffers(sgNode->node, MESH_TYPE_LITE);
-    //}
-    Mat4 model = sgNode->node->getModelMatrix();
-    Mat4 vp = projMat * viewMat;
-    
-    Vector3 camPos = smgr->getActiveCamera()->getAbsolutePosition();
-    
-    float* particleProps = new float[4];
-    Vector4 props = pNode->getParticleProps();
-    particleProps[0] = props.x;
-    particleProps[1] = camPos.x;
-    particleProps[2] = camPos.y;
-    particleProps[3] = camPos.z;
-    
-    Vector2 viewport = smgr->getViewPort();
-    float viewRatio = viewport.x/2048.0;
-    
-    float fovRatio = (smgr->getActiveCamera()->getFOVInRadians() * 180.0f / PI) / 35.0;
-    
-    float* sColor = new float[4];
-    Vector4 vColor = sgNode->getProperty(VERTEX_COLOR).value.x;
-    sColor[0] = (sgNode->getProperty(IS_VERTEX_COLOR).value.x) ? vColor.x : pNode->startColor.x;
-    sColor[1] = (sgNode->getProperty(IS_VERTEX_COLOR).value.x) ? vColor.y : pNode->startColor.y;
-    sColor[2] = (sgNode->getProperty(IS_VERTEX_COLOR).value.x) ? vColor.z : pNode->startColor.z;
-    sColor[3] = viewRatio;
-    
-    float* mColor = new float[4];
-    mColor[0] = pNode->midColor.x;
-    mColor[1] = pNode->midColor.y;
-    mColor[2] = pNode->midColor.z;
-    mColor[3] = fovRatio;
-    
-    float* eColor = new float[4];
-    eColor[0] = pNode->endColor.x;
-    eColor[1] = pNode->endColor.y;
-    eColor[2] = pNode->endColor.z;
-    eColor[3] = pNode->endColor.w;
-    
-    smgr->setPropertyValue(sgNode->node->material, "props", particleProps, DATA_FLOAT_VEC4, 4, false, SHADER_PARTICLE_props, smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material, "startColor", sColor, DATA_FLOAT_VEC4, 4, false, SHADER_PARTICLE_sColor, smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material, "midColor", mColor, DATA_FLOAT_VEC4, 4, false, SHADER_PARTICLE_mColor, smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material, "endColor", eColor, DATA_FLOAT_VEC4, 4, false, SHADER_PARTICLE_eColor, smgr->getNodeIndexByID(sgNode->node->getID()));
-    
-    smgr->setPropertyValue(sgNode->node->material, "vp", vp.pointer(), DATA_FLOAT_MAT4, 16, false, SHADER_PARTICLE_vp, smgr->getNodeIndexByID(sgNode->node->getID()));
-    smgr->setPropertyValue(sgNode->node->material, "model", model.pointer(), DATA_FLOAT_MAT4, 16, false, SHADER_PARTICLE_world, smgr->getNodeIndexByID(sgNode->node->getID()));
-    
-    delete [] particleProps;
-    delete [] sColor;
-    delete [] mColor;
-    delete [] eColor;
 }
 
 void ShaderManager::setModelMatrix(SGNode *sgNode, u16 paramIndex)

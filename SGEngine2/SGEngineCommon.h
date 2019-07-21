@@ -11,7 +11,6 @@
 
 #include "SceneManager/SceneManager.h"
 #include "Core/Nodes/MeshNode.h"
-#include "Core/Meshes/CubeMeshNode.h"
 #include "Core/Meshes/SGCircleNode.h"
 #include "Core/Meshes/PlaneMeshNode.h"
 #include "Core/common/Line3D.h"

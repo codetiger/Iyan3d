@@ -228,10 +228,7 @@ void SGMovementManager::touchMove(Vector2 curTouchPos, Vector2 prevTouchPos, flo
                 outputValue.y = 0.01;
             if(currentScale.z <= 0.01 && moveScene->selectedControlId == Z_SCALE)
                 outputValue.z = 0.01;
-            
-            if(moveScene->getSelectedNode() && moveScene->getSelectedNode()->getType() == NODE_PARTICLES)
-                outputValue = (moveScene->selectedControlId == X_SCALE) ? Vector3(outputValue.x) : (moveScene->selectedControlId == Y_SCALE) ? Vector3(outputValue.y) : Vector3(outputValue.z);
-            
+                        
             moveScene->actionMan->changeObjectScale(moveScene->getSelectedNodeScale() + outputValue, false);
         } else
             isMoved |= moveScene->actionMan->changeObjectOrientation(outputValue, outputQuatValue);

@@ -54,7 +54,6 @@ public:
     void setLightsProperties(SGNode *sgNode, int param1, int param2, int param3, int param4, int param5);
     void setJointTransform(SGNode *node, SkinMesh *SMesh, int paramIndex);
     void setModelViewProjMatrix(SGNode *node, u16 paramIndex, bool isDepthPass = false);
-    void setMVPForParticles(SGNode *node, u16 paramIndex);
     void setVertexColorUniform(SGNode *sgNode, Vector4 color, int paramIndex, int nodeIndex, int materialIndex);
     void setNodeLighting(SGNode *sgNode, int paramIndex, int materialIndex);
     void setViewProjMatrix(Material *material);

@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
-#include "../Core/Nodes/ParticleManager.h"
-
 #import "MetalRenderManager.h"
 #import "../Core/Nodes/MTLNodeData.h"
 struct BufferState {
@@ -327,27 +325,12 @@ void MetalRenderManager::Render(shared_ptr<Node> node, bool isRTT, int nodeIndex
 
     MTLIndexType indexType = MTLIndexTypeUInt16;
 
-    if (node->type == NODE_TYPE_PARTICLES) {
-        nodeMes                    = (dynamic_pointer_cast<MeshNode>(node))->meshCache;
-        unsigned int  indicesCount = nodeMes->getIndicesCount(0);
-        id<MTLBuffer> buf          = [MTLNode->indexBuffers objectAtIndex:0];
+    unsigned int  indicesCount = nodeMes->getIndicesCount(meshBufferIndex);
+    id<MTLBuffer> buf          = [MTLNode->indexBuffers objectAtIndex:meshBufferIndex];
 
-        if (!isRTT)
-            [RenderCMDBuffer setDepthStencilState:_generalDepthWriteDisableState];
+    int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) : maxInstances;
 
-        drawPrimitives(getMTLDrawMode(DRAW_MODE_POINTS), indicesCount, indexType, buf, 0);
-
-        if (!isRTT)
-            [RenderCMDBuffer setDepthStencilState:_generalDepthWriteEnableState];
-
-    } else {
-        unsigned int  indicesCount = nodeMes->getIndicesCount(meshBufferIndex);
-        id<MTLBuffer> buf          = [MTLNode->indexBuffers objectAtIndex:meshBufferIndex];
-
-        int instancingCount = (node->instancedNodes.size() == 0) ? 0 : (node->instancingRenderIt + maxInstances > (int)node->instancedNodes.size()) ? ((int)node->instancedNodes.size() - node->instancingRenderIt) : maxInstances;
-
-        drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount, indexType, buf, (supportsInstancing) ? instancingCount + 1 : 0);
-    }
+    drawPrimitives(getMTLDrawMode(node->drawMode), indicesCount, indexType, buf, (supportsInstancing) ? instancingCount + 1 : 0);
 
     node->shouldUpdateMesh = false;
 }
