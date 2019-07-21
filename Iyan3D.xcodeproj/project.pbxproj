@@ -1312,6 +1312,8 @@
 		4E8B1D8922E402E700AFB715 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */; };
 		4E8B1D8B22E4031800AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
 		4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
+		4E8B1D8F22E4061200AFB715 /* libassimp_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8D22E4061200AFB715 /* libassimp_sim.a */; };
+		4E8B1D9022E4061200AFB715 /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */; };
 		4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D422E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D522E3833200575D98 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56CF22E3833200575D98 /* render_image.png */; };
@@ -2521,6 +2523,8 @@
 		4E8B1D8422E4029F00AFB715 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4E8B1D8A22E4031800AFB715 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		4E8B1D8D22E4061200AFB715 /* libassimp_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp_sim.a; path = FrameWorks/libassimp_sim.a; sourceTree = "<group>"; };
+		4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2_sim.a; path = FrameWorks/libFreetype2_sim.a; sourceTree = "<group>"; };
 		4E9A56C322E3833100575D98 /* render_image-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@3x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@3x.png"; sourceTree = "<group>"; };
 		4E9A56CF22E3833200575D98 /* render_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = render_image.png; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image.png"; sourceTree = "<group>"; };
 		4E9A56D022E3833200575D98 /* render_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image@2x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image@2x.png"; sourceTree = "<group>"; };
@@ -2613,6 +2617,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E8B1D9022E4061200AFB715 /* libFreetype2_sim.a in Frameworks */,
+				4E8B1D8F22E4061200AFB715 /* libassimp_sim.a in Frameworks */,
 				4E8B1D8922E402E700AFB715 /* MobileCoreServices.framework in Frameworks */,
 				4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */,
 				4E8B1D8322E4027F00AFB715 /* MessageUI.framework in Frameworks */,
@@ -4245,6 +4251,8 @@
 				4E8B1D8122E4027700AFB715 /* MessageUI.framework */,
 				4E8B1D7F22E3FE6000AFB715 /* libassimp.a */,
 				4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */,
+				4E8B1D8D22E4061200AFB715 /* libassimp_sim.a */,
+				4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
