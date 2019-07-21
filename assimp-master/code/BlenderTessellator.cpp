@@ -2,7 +2,8 @@
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2017, assimp team
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -58,7 +59,11 @@ static const unsigned int BLEND_TESS_MAGIC = 0x83ed9ac3;
 
 namspace Assimp
 {
-    template< > const std::string LogFunctions< BlenderTessellatorGL >::log_prefix = "BLEND_TESS_GL: ";
+    template< > const char* LogFunctions< BlenderTessellatorGL >::Prefix()
+    {
+        static auto prefix = "BLEND_TESS_GL: ";
+        return prefix;
+    }
 }
 
 using namespace Assimp;
@@ -251,7 +256,11 @@ void BlenderTessellatorGL::TessellateError( GLenum errorCode, void* )
 
 namespace Assimp
 {
-    template< > const std::string LogFunctions< BlenderTessellatorP2T >::log_prefix = "BLEND_TESS_P2T: ";
+    template< > const char* LogFunctions< BlenderTessellatorP2T >::Prefix()
+    {
+        static auto prefix = "BLEND_TESS_P2T: ";
+        return prefix;
+    }
 }
 
 using namespace Assimp;
@@ -412,9 +421,9 @@ float BlenderTessellatorP2T::FindLargestMatrixElem( const aiMatrix3x3& mtx ) con
 {
     float result = 0.0f;
 
-    for ( size_t x = 0; x < 3; ++x )
+    for ( unsigned int x = 0; x < 3; ++x )
     {
-        for ( size_t y = 0; y < 3; ++y )
+        for ( unsigned int y = 0; y < 3; ++y )
         {
             result = p2tMax( std::fabs( mtx[ x ][ y ] ), result );
         }
@@ -429,9 +438,9 @@ aiMatrix3x3 BlenderTessellatorP2T::ScaleMatrix( const aiMatrix3x3& mtx, float sc
 {
     aiMatrix3x3 result;
 
-    for ( size_t x = 0; x < 3; ++x )
+    for ( unsigned int x = 0; x < 3; ++x )
     {
-        for ( size_t y = 0; y < 3; ++y )
+        for ( unsigned int y = 0; y < 3; ++y )
         {
             result[ x ][ y ] = mtx[ x ][ y ] * scale;
         }

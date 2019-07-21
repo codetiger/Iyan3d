@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E9A56C022E375FB00575D98 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E9A56BF22E375FB00575D98 /* scene.cpp */; };
+		4E9A56C222E3773E00575D98 /* CreateAnimMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E9A56C122E3773E00575D98 /* CreateAnimMesh.cpp */; };
 		4EAB94F11D6DBB3000B54096 /* SGMLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB94EF1D6DBB3000B54096 /* SGMLoader.cpp */; };
 		4EBC24A31D6EEA1C00AE14DF /* Text3DLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC24A11D6EEA1C00AE14DF /* Text3DLoader.cpp */; };
 		4EBC25331D6F0A1000AE14DF /* Contour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC25021D6F0A1000AE14DF /* Contour.cpp */; };
@@ -199,6 +201,9 @@
 		4BBDEB63CFEB4F2EAA95358D /* Subdivision.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Subdivision.cpp; path = code/Subdivision.cpp; sourceTree = SOURCE_ROOT; };
 		4CBC1122A79D4F6C94E36CE3 /* StdOStreamLogStream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = StdOStreamLogStream.h; path = code/StdOStreamLogStream.h; sourceTree = SOURCE_ROOT; };
 		4D82A29A8BBF44E69E026F84 /* importerdesc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = importerdesc.h; path = include/assimp/importerdesc.h; sourceTree = SOURCE_ROOT; };
+		4E9A56BD22E2E18500575D98 /* revision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = revision.h; path = "../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/assimp-master/include/assimp/revision.h"; sourceTree = "<group>"; };
+		4E9A56BF22E375FB00575D98 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scene.cpp; path = "../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/assimp-master/code/scene.cpp"; sourceTree = "<group>"; };
+		4E9A56C122E3773E00575D98 /* CreateAnimMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CreateAnimMesh.cpp; path = "../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/assimp-master/code/CreateAnimMesh.cpp"; sourceTree = "<group>"; };
 		4EAB94EF1D6DBB3000B54096 /* SGMLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMLoader.cpp; path = code/SGMLoader.cpp; sourceTree = "<group>"; };
 		4EAB94F01D6DBB3000B54096 /* SGMLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGMLoader.h; path = code/SGMLoader.h; sourceTree = "<group>"; };
 		4EBC24A11D6EEA1C00AE14DF /* Text3DLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Text3DLoader.cpp; path = code/Text3DLoader.cpp; sourceTree = "<group>"; };
@@ -630,19 +635,22 @@
 		628C9A9A9FA640B9AA1DAC09 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				2DC891CD1D2CFA75001E0B0E /* ByteSwapper.h */,
+				4E9A56C122E3773E00575D98 /* CreateAnimMesh.cpp */,
+				4E9A56BF22E375FB00575D98 /* scene.cpp */,
 				A58410FEAA884A2D8D73ACCE /* BaseImporter.cpp */,
 				32170F499DAC4E4595AF6D6B /* BaseImporter.h */,
 				FAB6BC13FCFE40F5801D0972 /* BaseProcess.cpp */,
 				F468200042534D7CA2C9D891 /* BaseProcess.h */,
 				10238FBD7A9D401A82D667CB /* Bitmap.cpp */,
 				49AFF879142C4BA4865843DC /* Bitmap.h */,
+				2DC891CD1D2CFA75001E0B0E /* ByteSwapper.h */,
 				339E56B5FD264481BBF21835 /* CInterfaceIOWrapper.h */,
 				F9FEF4D69EFC4605A4F752E5 /* DefaultIOStream.cpp */,
 				32CC68350B7640ACA7C83DDA /* DefaultIOStream.h */,
 				1D502654EF864101A2DA9476 /* DefaultIOSystem.cpp */,
 				D9AB66BD27E246A18091626F /* DefaultIOSystem.h */,
 				B7192C50B16142398B7CD221 /* DefaultProgressHandler.h */,
+				1AF1EE8EFE594A40ACE03D19 /* fast_atof.h */,
 				3ACFF3FC39C74C4A966C0FEA /* GenericProperty.h */,
 				9C5E3F9248B64C7EBF20EC27 /* Hash.h */,
 				6AC645CEB6F74AE5A62DF68B /* IFF.h */,
@@ -655,15 +663,16 @@
 				0C1B00249A554394A4F9CF2A /* ParsingUtils.h */,
 				E663847651834244834CB9F5 /* PostStepRegistry.cpp */,
 				5C1EA03E3AE24AA5A778B7F1 /* Profiler.h */,
+				262DFE65C6D34442AA79D15A /* qnan.h */,
 				6A86069DEEDC42B88634F78D /* RemoveComments.cpp */,
 				B4086213AE40445F817FA840 /* RemoveComments.h */,
-				52836A0629E24447B924750A /* SGSpatialSort.cpp */,
-				8299401C3E4A43A18E887DC1 /* SGSpatialSort.h */,
 				73A3D87FF2C04C3BA3684F54 /* SceneCombiner.cpp */,
 				8476FEE874C1404B9B4B9617 /* SceneCombiner.h */,
 				1775DE08FC8647EB896A0FB3 /* ScenePreprocessor.cpp */,
 				4FE1E4726B144AD1B922A1A0 /* ScenePreprocessor.h */,
 				97914BDA4AA34081855BF16C /* ScenePrivate.h */,
+				52836A0629E24447B924750A /* SGSpatialSort.cpp */,
+				8299401C3E4A43A18E887DC1 /* SGSpatialSort.h */,
 				9B2827B3E64147E08A5AD334 /* SkeletonMeshBuilder.cpp */,
 				45BC2EB74251493CBBFAEB5D /* SkeletonMeshBuilder.h */,
 				2DCF6F156A3A4B4C807E5368 /* SmoothingGroups.h */,
@@ -685,8 +694,6 @@
 				0AAF26EBF0A64ABDB840BA64 /* VertexTriangleAdjacency.cpp */,
 				F4AE5F74C20B400EA688B5ED /* VertexTriangleAdjacency.h */,
 				DC67FF8B4313494F8C03D840 /* XMLTools.h */,
-				1AF1EE8EFE594A40ACE03D19 /* fast_atof.h */,
-				262DFE65C6D34442AA79D15A /* qnan.h */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -949,6 +956,7 @@
 				6D72952403D04713A6451654 /* vector3.h */,
 				8D53CC35AAED4CE8B9710E04 /* vector3.inl */,
 				FC0801BA1F95494498A089AF /* version.h */,
+				4E9A56BD22E2E18500575D98 /* revision.h */,
 			);
 			name = "Header Files";
 			sourceTree = "<group>";
@@ -991,6 +999,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = BCC52F1D5AF74E54A2D69524;
@@ -1011,6 +1020,7 @@
 				7F79242B1AB43E20005A8E5D /* 3DSExporter.cpp in Sources */,
 				4EBC253F1D6F0A1000AE14DF /* tess.c in Sources */,
 				7F79242C1AB43E20005A8E5D /* 3DSLoader.cpp in Sources */,
+				4E9A56C022E375FB00575D98 /* scene.cpp in Sources */,
 				7F7924321AB43E20005A8E5D /* Assimp.cpp in Sources */,
 				7F7924331AB43E20005A8E5D /* AssimpCExport.cpp in Sources */,
 				4EBC25351D6F0A1000AE14DF /* Vectoriser.cpp in Sources */,
@@ -1095,6 +1105,7 @@
 				7F7924A81AB43E20005A8E5D /* ScenePreprocessor.cpp in Sources */,
 				7F7924A91AB43E20005A8E5D /* SkeletonMeshBuilder.cpp in Sources */,
 				7F7924AA1AB43E20005A8E5D /* SortByPTypeProcess.cpp in Sources */,
+				4E9A56C222E3773E00575D98 /* CreateAnimMesh.cpp in Sources */,
 				7F7924AB1AB43E20005A8E5D /* SpatialSort.cpp in Sources */,
 				7F7924AC1AB43E20005A8E5D /* SplitByBoneCountProcess.cpp in Sources */,
 				7F7924AD1AB43E20005A8E5D /* SplitLargeMeshes.cpp in Sources */,
@@ -1155,10 +1166,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1170,7 +1179,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					assimp_EXPORTS,
@@ -1223,6 +1231,10 @@
 					ASSIMP_BUILD_NO_3DS_EXPORTER,
 					ASSIMP_BUILD_NO_GLTF_EXPORTER,
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
+					ASSIMP_BUILD_NO_X3D_IMPORTER,
+					ASSIMP_BUILD_NO_MMD_IMPORTER,
+					ASSIMP_BUILD_NO_AMF_IMPORTER,
+					ASSIMP_BUILD_NO_ASSBIN_IMPORTER,
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1231,7 +1243,6 @@
 					"$(SRCROOT)",
 					"$(SRCROOT)/code/freeType/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1243,10 +1254,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1258,7 +1267,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					assimp_EXPORTS,
@@ -1311,6 +1319,10 @@
 					ASSIMP_BUILD_NO_3DS_EXPORTER,
 					ASSIMP_BUILD_NO_GLTF_EXPORTER,
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
+					ASSIMP_BUILD_NO_X3D_IMPORTER,
+					ASSIMP_BUILD_NO_MMD_IMPORTER,
+					ASSIMP_BUILD_NO_AMF_IMPORTER,
+					ASSIMP_BUILD_NO_ASSBIN_IMPORTER,
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1319,7 +1331,6 @@
 					"$(SRCROOT)",
 					"$(SRCROOT)/code/freeType/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1331,10 +1342,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1346,7 +1355,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					assimp_EXPORTS,
@@ -1399,6 +1407,10 @@
 					ASSIMP_BUILD_NO_3DS_EXPORTER,
 					ASSIMP_BUILD_NO_GLTF_EXPORTER,
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
+					ASSIMP_BUILD_NO_X3D_IMPORTER,
+					ASSIMP_BUILD_NO_MMD_IMPORTER,
+					ASSIMP_BUILD_NO_AMF_IMPORTER,
+					ASSIMP_BUILD_NO_ASSBIN_IMPORTER,
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1407,7 +1419,6 @@
 					"$(SRCROOT)",
 					"$(SRCROOT)/code/freeType/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1419,10 +1430,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -1434,7 +1443,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 3.0.0;
 				DYLIB_CURRENT_VERSION = 3.1.1;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					assimp_EXPORTS,
@@ -1487,6 +1495,10 @@
 					ASSIMP_BUILD_NO_3DS_EXPORTER,
 					ASSIMP_BUILD_NO_GLTF_EXPORTER,
 					ASSIMP_BUILD_NO_ASSXML_EXPORTER,
+					ASSIMP_BUILD_NO_X3D_IMPORTER,
+					ASSIMP_BUILD_NO_MMD_IMPORTER,
+					ASSIMP_BUILD_NO_AMF_IMPORTER,
+					ASSIMP_BUILD_NO_ASSBIN_IMPORTER,
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1495,7 +1507,6 @@
 					"$(SRCROOT)",
 					"$(SRCROOT)/code/freeType/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

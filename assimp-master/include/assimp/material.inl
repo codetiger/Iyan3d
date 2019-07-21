@@ -3,7 +3,8 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2017, assimp team
+
 
 All rights reserved.
 
@@ -47,6 +48,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AI_MATERIAL_INL_INC
 #define AI_MATERIAL_INL_INC
 
+// ---------------------------------------------------------------------------
+inline aiPropertyTypeInfo ai_real_to_property_type_info(float)
+{
+	return aiPTI_Float;
+}
+
+inline aiPropertyTypeInfo ai_real_to_property_type_info(double)
+{
+	return aiPTI_Double;
+}
+// ---------------------------------------------------------------------------
+
 //! @cond never
 
 // ---------------------------------------------------------------------------
@@ -55,7 +68,7 @@ inline aiReturn aiMaterial::GetTexture( aiTextureType type,
    C_STRUCT aiString* path,
    aiTextureMapping* mapping    /*= NULL*/,
    unsigned int* uvindex        /*= NULL*/,
-   float* blend                /*= NULL*/,
+   ai_real* blend               /*= NULL*/,
    aiTextureOp* op              /*= NULL*/,
    aiTextureMapMode* mapmode    /*= NULL*/) const
 {
@@ -123,7 +136,7 @@ inline aiReturn aiMaterial::Get(const char* pKey,unsigned int type,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::Get(const char* pKey,unsigned int type,
-    unsigned int idx,float* pOut,
+    unsigned int idx,ai_real* pOut,
     unsigned int* pMax) const
 {
     return ::aiGetMaterialFloatArray(this,pKey,type,idx,pOut,pMax);
@@ -137,7 +150,7 @@ inline aiReturn aiMaterial::Get(const char* pKey,unsigned int type,
 }
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::Get(const char* pKey,unsigned int type,
-    unsigned int idx,float& pOut) const
+    unsigned int idx,ai_real& pOut) const
 {
     return aiGetMaterialFloat(this,pKey,type,idx,&pOut);
 }
@@ -209,7 +222,7 @@ inline aiReturn aiMaterial::AddProperty(const double* pInput,
     unsigned int index)
 {
     return AddBinaryProperty((const void*)pInput,
-        pNumValues * sizeof(float),
+        pNumValues * sizeof(double),
         pKey,type,index,aiPTI_Double);
 }
 
@@ -222,7 +235,7 @@ inline aiReturn aiMaterial::AddProperty(const aiUVTransform* pInput,
 {
     return AddBinaryProperty((const void*)pInput,
         pNumValues * sizeof(aiUVTransform),
-        pKey,type,index,aiPTI_Float);
+        pKey,type,index,ai_real_to_property_type_info(pInput->mRotation));
 }
 
 // ---------------------------------------------------------------------------
@@ -234,7 +247,7 @@ inline aiReturn aiMaterial::AddProperty(const aiColor4D* pInput,
 {
     return AddBinaryProperty((const void*)pInput,
         pNumValues * sizeof(aiColor4D),
-        pKey,type,index,aiPTI_Float);
+        pKey,type,index,ai_real_to_property_type_info(pInput->a));
 }
 
 // ---------------------------------------------------------------------------
@@ -246,7 +259,7 @@ inline aiReturn aiMaterial::AddProperty(const aiColor3D* pInput,
 {
     return AddBinaryProperty((const void*)pInput,
         pNumValues * sizeof(aiColor3D),
-        pKey,type,index,aiPTI_Float);
+        pKey,type,index,ai_real_to_property_type_info(pInput->b));
 }
 
 // ---------------------------------------------------------------------------
@@ -258,7 +271,7 @@ inline aiReturn aiMaterial::AddProperty(const aiVector3D* pInput,
 {
     return AddBinaryProperty((const void*)pInput,
         pNumValues * sizeof(aiVector3D),
-        pKey,type,index,aiPTI_Float);
+        pKey,type,index,ai_real_to_property_type_info(pInput->x));
 }
 
 // ---------------------------------------------------------------------------
@@ -291,6 +304,19 @@ inline aiReturn aiMaterial::AddProperty<float>(const float* pInput,
     return AddBinaryProperty((const void*)pInput,
         pNumValues * sizeof(float),
         pKey,type,index,aiPTI_Float);
+}
+
+// ---------------------------------------------------------------------------
+template<>
+inline aiReturn aiMaterial::AddProperty<double>(const double* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    unsigned int type,
+    unsigned int index)
+{
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(double),
+        pKey,type,index,aiPTI_Double);
 }
 
 // ---------------------------------------------------------------------------

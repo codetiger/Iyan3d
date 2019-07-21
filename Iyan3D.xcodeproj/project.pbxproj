@@ -885,30 +885,30 @@
 		3D5D0F471C633697006B987E /* Particle_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5D0F451C633697006B987E /* Particle_IPhone@2x.png */; };
 		3D5D0F491C6336A4006B987E /* Particle_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5D0F481C6336A4006B987E /* Particle_IPhone@3x.png */; };
 		3D5D0F4A1C6336A4006B987E /* Particle_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5D0F481C6336A4006B987E /* Particle_IPhone@3x.png */; };
-		3D5F99121C4D04EB00DD47F5 /* Cone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99061C4D04EB00DD47F5 /* Cone.png */; };
-		3D5F99131C4D04EB00DD47F5 /* Cone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99061C4D04EB00DD47F5 /* Cone.png */; };
-		3D5F99141C4D04EB00DD47F5 /* Cone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99071C4D04EB00DD47F5 /* Cone@2x.png */; };
-		3D5F99151C4D04EB00DD47F5 /* Cone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99071C4D04EB00DD47F5 /* Cone@2x.png */; };
-		3D5F99161C4D04EB00DD47F5 /* Cube.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99081C4D04EB00DD47F5 /* Cube.png */; };
-		3D5F99171C4D04EB00DD47F5 /* Cube.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99081C4D04EB00DD47F5 /* Cube.png */; };
-		3D5F99181C4D04EB00DD47F5 /* Cube@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99091C4D04EB00DD47F5 /* Cube@2x.png */; };
-		3D5F99191C4D04EB00DD47F5 /* Cube@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99091C4D04EB00DD47F5 /* Cube@2x.png */; };
-		3D5F991A1C4D04EB00DD47F5 /* Cylinder.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990A1C4D04EB00DD47F5 /* Cylinder.png */; };
-		3D5F991B1C4D04EB00DD47F5 /* Cylinder.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990A1C4D04EB00DD47F5 /* Cylinder.png */; };
-		3D5F991C1C4D04EB00DD47F5 /* Cylinder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990B1C4D04EB00DD47F5 /* Cylinder@2x.png */; };
-		3D5F991D1C4D04EB00DD47F5 /* Cylinder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990B1C4D04EB00DD47F5 /* Cylinder@2x.png */; };
-		3D5F991E1C4D04EB00DD47F5 /* Plane.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990C1C4D04EB00DD47F5 /* Plane.png */; };
-		3D5F991F1C4D04EB00DD47F5 /* Plane.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990C1C4D04EB00DD47F5 /* Plane.png */; };
-		3D5F99201C4D04EB00DD47F5 /* Plane@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990D1C4D04EB00DD47F5 /* Plane@2x.png */; };
-		3D5F99211C4D04EB00DD47F5 /* Plane@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990D1C4D04EB00DD47F5 /* Plane@2x.png */; };
-		3D5F99221C4D04EB00DD47F5 /* Sphere.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990E1C4D04EB00DD47F5 /* Sphere.png */; };
-		3D5F99231C4D04EB00DD47F5 /* Sphere.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990E1C4D04EB00DD47F5 /* Sphere.png */; };
-		3D5F99241C4D04EB00DD47F5 /* Sphere@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990F1C4D04EB00DD47F5 /* Sphere@2x.png */; };
-		3D5F99251C4D04EB00DD47F5 /* Sphere@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990F1C4D04EB00DD47F5 /* Sphere@2x.png */; };
-		3D5F99261C4D04EB00DD47F5 /* Torus.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99101C4D04EB00DD47F5 /* Torus.png */; };
-		3D5F99271C4D04EB00DD47F5 /* Torus.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99101C4D04EB00DD47F5 /* Torus.png */; };
-		3D5F99281C4D04EB00DD47F5 /* Torus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99111C4D04EB00DD47F5 /* Torus@2x.png */; };
-		3D5F99291C4D04EB00DD47F5 /* Torus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99111C4D04EB00DD47F5 /* Torus@2x.png */; };
+		3D5F99121C4D04EB00DD47F5 /* shape1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99061C4D04EB00DD47F5 /* shape1.png */; };
+		3D5F99131C4D04EB00DD47F5 /* shape1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99061C4D04EB00DD47F5 /* shape1.png */; };
+		3D5F99141C4D04EB00DD47F5 /* shape1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99071C4D04EB00DD47F5 /* shape1@2x.png */; };
+		3D5F99151C4D04EB00DD47F5 /* shape1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99071C4D04EB00DD47F5 /* shape1@2x.png */; };
+		3D5F99161C4D04EB00DD47F5 /* shape2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99081C4D04EB00DD47F5 /* shape2.png */; };
+		3D5F99171C4D04EB00DD47F5 /* shape2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99081C4D04EB00DD47F5 /* shape2.png */; };
+		3D5F99181C4D04EB00DD47F5 /* shape2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99091C4D04EB00DD47F5 /* shape2@2x.png */; };
+		3D5F99191C4D04EB00DD47F5 /* shape2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99091C4D04EB00DD47F5 /* shape2@2x.png */; };
+		3D5F991A1C4D04EB00DD47F5 /* shape3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990A1C4D04EB00DD47F5 /* shape3.png */; };
+		3D5F991B1C4D04EB00DD47F5 /* shape3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990A1C4D04EB00DD47F5 /* shape3.png */; };
+		3D5F991C1C4D04EB00DD47F5 /* shape3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990B1C4D04EB00DD47F5 /* shape3@2x.png */; };
+		3D5F991D1C4D04EB00DD47F5 /* shape3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990B1C4D04EB00DD47F5 /* shape3@2x.png */; };
+		3D5F991E1C4D04EB00DD47F5 /* shape4.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990C1C4D04EB00DD47F5 /* shape4.png */; };
+		3D5F991F1C4D04EB00DD47F5 /* shape4.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990C1C4D04EB00DD47F5 /* shape4.png */; };
+		3D5F99201C4D04EB00DD47F5 /* shape4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990D1C4D04EB00DD47F5 /* shape4@2x.png */; };
+		3D5F99211C4D04EB00DD47F5 /* shape4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990D1C4D04EB00DD47F5 /* shape4@2x.png */; };
+		3D5F99221C4D04EB00DD47F5 /* shape5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990E1C4D04EB00DD47F5 /* shape5.png */; };
+		3D5F99231C4D04EB00DD47F5 /* shape5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990E1C4D04EB00DD47F5 /* shape5.png */; };
+		3D5F99241C4D04EB00DD47F5 /* shape5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990F1C4D04EB00DD47F5 /* shape5@2x.png */; };
+		3D5F99251C4D04EB00DD47F5 /* shape5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F990F1C4D04EB00DD47F5 /* shape5@2x.png */; };
+		3D5F99261C4D04EB00DD47F5 /* shape6.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99101C4D04EB00DD47F5 /* shape6.png */; };
+		3D5F99271C4D04EB00DD47F5 /* shape6.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99101C4D04EB00DD47F5 /* shape6.png */; };
+		3D5F99281C4D04EB00DD47F5 /* shape6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99111C4D04EB00DD47F5 /* shape6@2x.png */; };
+		3D5F99291C4D04EB00DD47F5 /* shape6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D5F99111C4D04EB00DD47F5 /* shape6@2x.png */; };
 		3D63A2CB1D27B44000611F2E /* envmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D63A2CA1D27B44000611F2E /* envmap.png */; };
 		3D63A2CC1D27B44000611F2E /* envmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D63A2CA1D27B44000611F2E /* envmap.png */; };
 		3D71B0731C2930E30038C4BD /* AssetFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B0711C2930E30038C4BD /* AssetFrameCell.mm */; };
@@ -1431,6 +1431,16 @@
 		4E82DD9922E2B72800587210 /* round83.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9222E2B72800587210 /* round83.png */; };
 		4E82DD9A22E2B72800587210 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9322E2B72800587210 /* whiteborder.png */; };
 		4E82DD9B22E2B72800587210 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9322E2B72800587210 /* whiteborder.png */; };
+		4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
+		4E9A56D422E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
+		4E9A56D522E3833200575D98 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56CF22E3833200575D98 /* render_image.png */; };
+		4E9A56D622E3833200575D98 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56CF22E3833200575D98 /* render_image.png */; };
+		4E9A56D722E3833200575D98 /* render_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D022E3833200575D98 /* render_image@2x.png */; };
+		4E9A56D822E3833200575D98 /* render_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D022E3833200575D98 /* render_image@2x.png */; };
+		4E9A56D922E3833200575D98 /* render_image-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D122E3833200575D98 /* render_image-phone@2x.png */; };
+		4E9A56DA22E3833200575D98 /* render_image-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D122E3833200575D98 /* render_image-phone@2x.png */; };
+		4E9A56DB22E3833200575D98 /* render_image-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D222E3833200575D98 /* render_image-phone.png */; };
+		4E9A56DC22E3833200575D98 /* render_image-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D222E3833200575D98 /* render_image-phone.png */; };
 		4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
 		4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
 		62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F3385B196C1508007694C5 /* MessageUI.framework */; };
@@ -2158,18 +2168,18 @@
 		3D5D0F421C63368D006B987E /* Particle_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Particle_IPhone.png; sourceTree = "<group>"; };
 		3D5D0F451C633697006B987E /* Particle_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Particle_IPhone@2x.png"; sourceTree = "<group>"; };
 		3D5D0F481C6336A4006B987E /* Particle_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Particle_IPhone@3x.png"; sourceTree = "<group>"; };
-		3D5F99061C4D04EB00DD47F5 /* Cone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cone.png; sourceTree = "<group>"; };
-		3D5F99071C4D04EB00DD47F5 /* Cone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cone@2x.png"; sourceTree = "<group>"; };
-		3D5F99081C4D04EB00DD47F5 /* Cube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cube.png; sourceTree = "<group>"; };
-		3D5F99091C4D04EB00DD47F5 /* Cube@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cube@2x.png"; sourceTree = "<group>"; };
-		3D5F990A1C4D04EB00DD47F5 /* Cylinder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cylinder.png; sourceTree = "<group>"; };
-		3D5F990B1C4D04EB00DD47F5 /* Cylinder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cylinder@2x.png"; sourceTree = "<group>"; };
-		3D5F990C1C4D04EB00DD47F5 /* Plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plane.png; sourceTree = "<group>"; };
-		3D5F990D1C4D04EB00DD47F5 /* Plane@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plane@2x.png"; sourceTree = "<group>"; };
-		3D5F990E1C4D04EB00DD47F5 /* Sphere.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sphere.png; sourceTree = "<group>"; };
-		3D5F990F1C4D04EB00DD47F5 /* Sphere@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sphere@2x.png"; sourceTree = "<group>"; };
-		3D5F99101C4D04EB00DD47F5 /* Torus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Torus.png; sourceTree = "<group>"; };
-		3D5F99111C4D04EB00DD47F5 /* Torus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Torus@2x.png"; sourceTree = "<group>"; };
+		3D5F99061C4D04EB00DD47F5 /* shape1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shape1.png; sourceTree = "<group>"; };
+		3D5F99071C4D04EB00DD47F5 /* shape1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shape1@2x.png"; sourceTree = "<group>"; };
+		3D5F99081C4D04EB00DD47F5 /* shape2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shape2.png; sourceTree = "<group>"; };
+		3D5F99091C4D04EB00DD47F5 /* shape2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shape2@2x.png"; sourceTree = "<group>"; };
+		3D5F990A1C4D04EB00DD47F5 /* shape3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shape3.png; sourceTree = "<group>"; };
+		3D5F990B1C4D04EB00DD47F5 /* shape3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shape3@2x.png"; sourceTree = "<group>"; };
+		3D5F990C1C4D04EB00DD47F5 /* shape4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shape4.png; sourceTree = "<group>"; };
+		3D5F990D1C4D04EB00DD47F5 /* shape4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shape4@2x.png"; sourceTree = "<group>"; };
+		3D5F990E1C4D04EB00DD47F5 /* shape5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shape5.png; sourceTree = "<group>"; };
+		3D5F990F1C4D04EB00DD47F5 /* shape5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shape5@2x.png"; sourceTree = "<group>"; };
+		3D5F99101C4D04EB00DD47F5 /* shape6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shape6.png; sourceTree = "<group>"; };
+		3D5F99111C4D04EB00DD47F5 /* shape6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shape6@2x.png"; sourceTree = "<group>"; };
 		3D63A2CA1D27B44000611F2E /* envmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = envmap.png; path = Iyan3D/Resources/images/envmap.png; sourceTree = SOURCE_ROOT; };
 		3D71B0701C2930E30038C4BD /* AssetFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetFrameCell.h; path = "ui/Popover Views/AssetFrameCell.h"; sourceTree = "<group>"; };
 		3D71B0711C2930E30038C4BD /* AssetFrameCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AssetFrameCell.mm; path = "ui/Popover Views/AssetFrameCell.mm"; sourceTree = "<group>"; };
@@ -2789,6 +2799,11 @@
 		4E82DD9122E2B72700587210 /* randNoise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = randNoise.png; path = Resources/images/randNoise.png; sourceTree = "<group>"; };
 		4E82DD9222E2B72800587210 /* round83.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = round83.png; path = Resources/images/round83.png; sourceTree = "<group>"; };
 		4E82DD9322E2B72800587210 /* whiteborder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whiteborder.png; path = Resources/images/whiteborder.png; sourceTree = "<group>"; };
+		4E9A56C322E3833100575D98 /* render_image-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@3x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@3x.png"; sourceTree = "<group>"; };
+		4E9A56CF22E3833200575D98 /* render_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = render_image.png; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image.png"; sourceTree = "<group>"; };
+		4E9A56D022E3833200575D98 /* render_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image@2x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image@2x.png"; sourceTree = "<group>"; };
+		4E9A56D122E3833200575D98 /* render_image-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@2x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@2x.png"; sourceTree = "<group>"; };
+		4E9A56D222E3833200575D98 /* render_image-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone.png"; sourceTree = "<group>"; };
 		4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		62F3385B196C1508007694C5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -3215,6 +3230,11 @@
 		01F872421C3A42EF009AA31E /* IPhone */ = {
 			isa = PBXGroup;
 			children = (
+				4E9A56D222E3833200575D98 /* render_image-phone.png */,
+				4E9A56D122E3833200575D98 /* render_image-phone@2x.png */,
+				4E9A56C322E3833100575D98 /* render_image-phone@3x.png */,
+				4E9A56CF22E3833200575D98 /* render_image.png */,
+				4E9A56D022E3833200575D98 /* render_image@2x.png */,
 				3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */,
 				3D5D0F421C63368D006B987E /* Particle_IPhone.png */,
 				01F872B51C3A6C4E009AA31E /* Iphone 2x */,
@@ -3845,18 +3865,18 @@
 		3D5F99051C4D04EB00DD47F5 /* ImportObj */ = {
 			isa = PBXGroup;
 			children = (
-				3D5F99061C4D04EB00DD47F5 /* Cone.png */,
-				3D5F99071C4D04EB00DD47F5 /* Cone@2x.png */,
-				3D5F99081C4D04EB00DD47F5 /* Cube.png */,
-				3D5F99091C4D04EB00DD47F5 /* Cube@2x.png */,
-				3D5F990A1C4D04EB00DD47F5 /* Cylinder.png */,
-				3D5F990B1C4D04EB00DD47F5 /* Cylinder@2x.png */,
-				3D5F990C1C4D04EB00DD47F5 /* Plane.png */,
-				3D5F990D1C4D04EB00DD47F5 /* Plane@2x.png */,
-				3D5F990E1C4D04EB00DD47F5 /* Sphere.png */,
-				3D5F990F1C4D04EB00DD47F5 /* Sphere@2x.png */,
-				3D5F99101C4D04EB00DD47F5 /* Torus.png */,
-				3D5F99111C4D04EB00DD47F5 /* Torus@2x.png */,
+				3D5F99061C4D04EB00DD47F5 /* shape1.png */,
+				3D5F99071C4D04EB00DD47F5 /* shape1@2x.png */,
+				3D5F99081C4D04EB00DD47F5 /* shape2.png */,
+				3D5F99091C4D04EB00DD47F5 /* shape2@2x.png */,
+				3D5F990A1C4D04EB00DD47F5 /* shape3.png */,
+				3D5F990B1C4D04EB00DD47F5 /* shape3@2x.png */,
+				3D5F990C1C4D04EB00DD47F5 /* shape4.png */,
+				3D5F990D1C4D04EB00DD47F5 /* shape4@2x.png */,
+				3D5F990E1C4D04EB00DD47F5 /* shape5.png */,
+				3D5F990F1C4D04EB00DD47F5 /* shape5@2x.png */,
+				3D5F99101C4D04EB00DD47F5 /* shape6.png */,
+				3D5F99111C4D04EB00DD47F5 /* shape6@2x.png */,
 			);
 			name = ImportObj;
 			path = Resources/images/ImportObj;
@@ -5157,7 +5177,7 @@
 				3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCE1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
 				01B4D05D1C2937000091E19B /* My-objects-Text_Pad@2x.png in Resources */,
-				3D5F99241C4D04EB00DD47F5 /* Sphere@2x.png in Resources */,
+				3D5F99241C4D04EB00DD47F5 /* shape5@2x.png in Resources */,
 				257564C51AE6E3D400B66113 /* RenderingViewControllerPhone.xib in Resources */,
 				2518158F1D1D4EB2009F68A8 /* Divider-1.png in Resources */,
 				8A32F160197D5D4000FA8984 /* boneLimits45.json in Resources */,
@@ -5184,7 +5204,7 @@
 				01B4CF881C291EFD0091E19B /* AnimationSelectionSlider.xib in Resources */,
 				3DC114771C872DD000F09177 /* EditorViewControllerPhone@2x.xib in Resources */,
 				01B02CF11C61CDB500C9102A /* color_IPhone@3x.png in Resources */,
-				3D5F99161C4D04EB00DD47F5 /* Cube.png in Resources */,
+				3D5F99161C4D04EB00DD47F5 /* shape2.png in Resources */,
 				25243D171DA2891400BA517B /* CAC Champagne.ttf in Resources */,
 				25EC3D1A1D360CFF006AE211 /* Help_iphone@3x.png in Resources */,
 				3D04EAEB1C2581BC00C18E1A /* TextSelectionSidePanel.xib in Resources */,
@@ -5193,6 +5213,7 @@
 				01B4D0591C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
 				25EC3D321D36139B006AE211 /* Login-icon.png in Resources */,
 				01B395391C37AB90003955C6 /* My-objects-Image_Pad@2x.png in Resources */,
+				4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */,
 				01F872A71C3A689B009AA31E /* Add-Bones_IPhone.png in Resources */,
 				01ACD09D1C3CEEE70096AD14 /* Bevel_IPhone@2x.png in Resources */,
 				01B395361C37AACE003955C6 /* Import-text_Pad@2x.png in Resources */,
@@ -5220,6 +5241,7 @@
 				01F872EA1C3A6C4E009AA31E /* Import-models_IPhone@2x.png in Resources */,
 				01ACD0EC1C3D3AE20096AD14 /* Render-Preview-size_Large@2x.png in Resources */,
 				01D2F09E1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */,
+				4E9A56D722E3833200575D98 /* render_image@2x.png in Resources */,
 				01F873021C3A6C4E009AA31E /* Next-Frame_IPhone@2x.png in Resources */,
 				01F872951C3A42EF009AA31E /* Rotate_IPhone.png in Resources */,
 				01F872D61C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */,
@@ -5270,7 +5292,7 @@
 				C8AA47011C227D3600C4AB53 /* Mail.png in Resources */,
 				01B6C8B61C3B920B0050D2F9 /* AnimationSelectionSliderPhone.xib in Resources */,
 				25243D1F1DA2891400BA517B /* Quicksand Italic.otf in Resources */,
-				3D5F99281C4D04EB00DD47F5 /* Torus@2x.png in Resources */,
+				3D5F99281C4D04EB00DD47F5 /* shape6@2x.png in Resources */,
 				01F8726B1C3A42EF009AA31E /* EXPORT.png in Resources */,
 				01B6F3F31C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
 				250FEC501D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */,
@@ -5296,13 +5318,14 @@
 				01B02CB01C61CAB400C9102A /* Back_IPhone@3x.png in Resources */,
 				01F872651C3A42EF009AA31E /* Back_IPhone.png in Resources */,
 				0169C4791C33ED5A00132FF6 /* popoverArrowUpSimple.png in Resources */,
+				4E9A56D922E3833200575D98 /* render_image-phone@2x.png in Resources */,
 				2518158C1D1D4AAD009F68A8 /* round-close.png in Resources */,
 				01B395091C37A42C003955C6 /* Import-text_Pad.png in Resources */,
 				250FEC8C1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */,
 				01B4D04B1C2937000091E19B /* Move_Pad.png in Resources */,
 				01F8733E1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */,
 				01B02CB61C61CAB400C9102A /* EXPORT@3x.png in Resources */,
-				3D5F991C1C4D04EB00DD47F5 /* Cylinder@2x.png in Resources */,
+				3D5F991C1C4D04EB00DD47F5 /* shape3@2x.png in Resources */,
 				01B02CC41C61CAB400C9102A /* Import-text_IPhone@3x.png in Resources */,
 				0169C46D1C33ED5A00132FF6 /* popoverArrowRight.png in Resources */,
 				250FEC231D1E52D2000C8A2C /* Step-3_-img@2x.png in Resources */,
@@ -5372,7 +5395,7 @@
 				250FEC271D1E52D2000C8A2C /* Welcome-Img@2x.png in Resources */,
 				25243D1D1DA2891400BA517B /* Open Sans Light.ttf in Resources */,
 				01F872E61C3A6C4E009AA31E /* Import-Light_IPhone@2x.png in Resources */,
-				3D5F99181C4D04EB00DD47F5 /* Cube@2x.png in Resources */,
+				3D5F99181C4D04EB00DD47F5 /* shape2@2x.png in Resources */,
 				3DD47BF81C60A43500E7CCFD /* 60005.sgm in Resources */,
 				E2497672196BE0190025D442 /* ScaleViewController.xib in Resources */,
 				25069F5B1D2BD81E00DBAE44 /* CommonProps.xib in Resources */,
@@ -5386,7 +5409,7 @@
 				01B4D04F1C2937000091E19B /* My-objects-Camera_Pad.png in Resources */,
 				01B02CD61C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
 				01F8727D1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
-				3D5F99201C4D04EB00DD47F5 /* Plane@2x.png in Resources */,
+				3D5F99201C4D04EB00DD47F5 /* shape4@2x.png in Resources */,
 				25EC3D181D360CFF006AE211 /* Help_iphone@2x.png in Resources */,
 				250FEC881D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
 				01B4D05B1C2937000091E19B /* My-objects-Text_Pad.png in Resources */,
@@ -5395,7 +5418,7 @@
 				01B395301C37AACE003955C6 /* Import-Light_Pad@2x.png in Resources */,
 				01B395171C37A8DD003955C6 /* Next-Frame@2x.png in Resources */,
 				01F872F41C3A6C4E009AA31E /* Move_IPhone@2x.png in Resources */,
-				3D5F991A1C4D04EB00DD47F5 /* Cylinder.png in Resources */,
+				3D5F991A1C4D04EB00DD47F5 /* shape3.png in Resources */,
 				C8AA47051C227D3600C4AB53 /* New.png in Resources */,
 				01CCD1C81C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */,
 				01B4CF901C291EFD0091E19B /* ImportImageNew.xib in Resources */,
@@ -5435,7 +5458,7 @@
 				01A395361C40E8EC007531DB /* SettingsViewControllerPhone2x.xib in Resources */,
 				01F872671C3A42EF009AA31E /* Export-image_IPhone.png in Resources */,
 				01B02CE01C61CAB400C9102A /* Play_IPhone@3x.png in Resources */,
-				3D5F99221C4D04EB00DD47F5 /* Sphere.png in Resources */,
+				3D5F99221C4D04EB00DD47F5 /* shape5.png in Resources */,
 				250E54B21D3E09060081A7CB /* BackBtn@2x.png in Resources */,
 				3DE065351C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */,
 				01F873121C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
@@ -5444,12 +5467,12 @@
 				250FEC8A1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */,
 				E2497654196BE0190025D442 /* AssetCellView.xib in Resources */,
 				01F872831C3A42EF009AA31E /* My-objects-Models_IPhone.png in Resources */,
-				3D5F991E1C4D04EB00DD47F5 /* Plane.png in Resources */,
+				3D5F991E1C4D04EB00DD47F5 /* shape4.png in Resources */,
 				01ACD0B11C3D11BF0096AD14 /* SettingsViewController.xib in Resources */,
 				250991AD1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */,
 				25EC3D201D360CFF006AE211 /* Login-IPhone@2x.png in Resources */,
 				01F872DA1C3A6C4E009AA31E /* Animation_IPhone@2x.png in Resources */,
-				3D5F99141C4D04EB00DD47F5 /* Cone@2x.png in Resources */,
+				3D5F99141C4D04EB00DD47F5 /* shape1@2x.png in Resources */,
 				25F748E31D08175200FB0AFD /* twit_Pad@2x.png in Resources */,
 				254A4B331D34F82B00D23D6D /* SwitchPropCell.xib in Resources */,
 				257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */,
@@ -5493,7 +5516,7 @@
 				3DAEFFF01C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */,
 				4E82DD9622E2B72800587210 /* randNoise.png in Resources */,
 				01F8730A1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
-				3D5F99261C4D04EB00DD47F5 /* Torus.png in Resources */,
+				3D5F99261C4D04EB00DD47F5 /* shape6.png in Resources */,
 				25F748CB1D08085400FB0AFD /* fb_Phone@2x.png in Resources */,
 				25034FE21D24F9960036F201 /* BeginViewPhone@2x.xib in Resources */,
 				250FEC841D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */,
@@ -5514,7 +5537,7 @@
 				01ACD0C61C3D1AAA0096AD14 /* Render-Preview-position_Right-Bottom.png in Resources */,
 				01F872F81C3A6C4E009AA31E /* My-objects-Image_IPhone@2x.png in Resources */,
 				01ACD0BE1C3D1AAA0096AD14 /* Frame-Count-Display_Duration.png in Resources */,
-				3D5F99121C4D04EB00DD47F5 /* Cone.png in Resources */,
+				3D5F99121C4D04EB00DD47F5 /* shape1.png in Resources */,
 				3D5D0F3E1C632864006B987E /* Particles.png in Resources */,
 				3DC610001C6B192D00A8D412 /* hq@2x.png in Resources */,
 				0169C4751C33ED5A00132FF6 /* popoverArrowUp.png in Resources */,
@@ -5567,6 +5590,7 @@
 				25EC3D221D360CFF006AE211 /* Login-IPhone@3x.png in Resources */,
 				01F872711C3A42EF009AA31E /* Import-model_IPhone.png in Resources */,
 				01F872EC1C3A6C4E009AA31E /* Import-text_IPhone@2x.png in Resources */,
+				4E9A56D522E3833200575D98 /* render_image.png in Resources */,
 				25F748E11D08175200FB0AFD /* twit_Pad.png in Resources */,
 				01B02CE41C61CAB400C9102A /* Redo_IPhone@3x.png in Resources */,
 				0184EC6B1C350A5B006F0B57 /* Facebook_Pad.png in Resources */,
@@ -5609,6 +5633,7 @@
 				4E82DD9822E2B72800587210 /* round83.png in Resources */,
 				01F872991C3A42EF009AA31E /* undo_IPhone.png in Resources */,
 				01F8733A1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */,
+				4E9A56DB22E3833200575D98 /* render_image-phone.png in Resources */,
 				01ACD0C01C3D1AAA0096AD14 /* Frame-Count-Display_Frames.png in Resources */,
 				25FA149C1D3CF68700A95DA3 /* TexturePropCell.xib in Resources */,
 				E2497655196BE0190025D442 /* AssetCellViewPhone.xib in Resources */,
@@ -5629,7 +5654,7 @@
 				01ACD09C1C3CEEE70096AD14 /* Bevel_IPhone.png in Resources */,
 				3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */,
 				01B02CCF1C61CAB400C9102A /* My-objects-Camera_IPhone@3x.png in Resources */,
-				3D5F99251C4D04EB00DD47F5 /* Sphere@2x.png in Resources */,
+				3D5F99251C4D04EB00DD47F5 /* shape5@2x.png in Resources */,
 				251815901D1D4EB2009F68A8 /* Divider-1.png in Resources */,
 				01ACD0E51C3D3AE20096AD14 /* Render-Preview-position_Left-Bottom@2x.png in Resources */,
 				01ACD0CF1C3D1AAA0096AD14 /* Tool-Bar_Left.png in Resources */,
@@ -5654,7 +5679,7 @@
 				3DC114781C872DD000F09177 /* EditorViewControllerPhone@2x.xib in Resources */,
 				01B02CF21C61CDB500C9102A /* color_IPhone@3x.png in Resources */,
 				25243D181DA2891400BA517B /* CAC Champagne.ttf in Resources */,
-				3D5F99171C4D04EB00DD47F5 /* Cube.png in Resources */,
+				3D5F99171C4D04EB00DD47F5 /* shape2.png in Resources */,
 				25EC3D1B1D360CFF006AE211 /* Help_iphone@3x.png in Resources */,
 				01B02CE31C61CAB400C9102A /* Previous-frame_IPhone@3x.png in Resources */,
 				C8AA46F61C227D1000C4AB53 /* SceneSelectionControllerNew.xib in Resources */,
@@ -5666,6 +5691,7 @@
 				01ACD09E1C3CEEE70096AD14 /* Bevel_IPhone@2x.png in Resources */,
 				01B4CFF71C29219A0091E19B /* View.png in Resources */,
 				01B395371C37AACE003955C6 /* Import-text_Pad@2x.png in Resources */,
+				4E9A56D422E3833200575D98 /* render_image-phone@3x.png in Resources */,
 				01ACD0A21C3CEEE70096AD14 /* No-Bevel_IPhone@2x.png in Resources */,
 				C8AA46FE1C227D3600C4AB53 /* Clone.png in Resources */,
 				01F872E91C3A6C4E009AA31E /* Import-model_IPhone@2x.png in Resources */,
@@ -5693,6 +5719,7 @@
 				C8AA47041C227D3600C4AB53 /* New-scene.png in Resources */,
 				01F872D71C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */,
 				25CACF6B1B27D4DD0027F48C /* FontCellViewPhone.xib in Resources */,
+				4E9A56D822E3833200575D98 /* render_image@2x.png in Resources */,
 				3DD47BF71C60A43500E7CCFD /* 60004.sgm in Resources */,
 				2518159C1D1D5C51009F68A8 /* Welcome-Img.png in Resources */,
 				01F872FF1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
@@ -5738,7 +5765,7 @@
 				01F8726C1C3A42EF009AA31E /* EXPORT.png in Resources */,
 				01B6F3F41C3E70B40041D42F /* SceneSelectionFrameCellPhone.xib in Resources */,
 				25243D201DA2891400BA517B /* Quicksand Italic.otf in Resources */,
-				3D5F99291C4D04EB00DD47F5 /* Torus@2x.png in Resources */,
+				3D5F99291C4D04EB00DD47F5 /* shape6@2x.png in Resources */,
 				3DD47BF31C60A43500E7CCFD /* 60002.sgm in Resources */,
 				250FEC511D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */,
 				01B4D0481C2937000091E19B /* Import_Pad.png in Resources */,
@@ -5769,9 +5796,10 @@
 				0169C47A1C33ED5A00132FF6 /* popoverArrowUpSimple.png in Resources */,
 				250FEC8D1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */,
 				01F8733F1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */,
+				4E9A56DA22E3833200575D98 /* render_image-phone@2x.png in Resources */,
 				0169C46E1C33ED5A00132FF6 /* popoverArrowRight.png in Resources */,
 				01B02CB71C61CAB400C9102A /* EXPORT@3x.png in Resources */,
-				3D5F991D1C4D04EB00DD47F5 /* Cylinder@2x.png in Resources */,
+				3D5F991D1C4D04EB00DD47F5 /* shape3@2x.png in Resources */,
 				01B02CC51C61CAB400C9102A /* Import-text_IPhone@3x.png in Resources */,
 				250FEC241D1E52D2000C8A2C /* Step-3_-img@2x.png in Resources */,
 				01F8728C1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
@@ -5837,7 +5865,7 @@
 				4E37A44322E18D76003A91DC /* properties-img-phone.png in Resources */,
 				25243D1E1DA2891400BA517B /* Open Sans Light.ttf in Resources */,
 				01B4CFF11C29219A0091E19B /* Next-Frame.png in Resources */,
-				3D5F99191C4D04EB00DD47F5 /* Cube@2x.png in Resources */,
+				3D5F99191C4D04EB00DD47F5 /* shape2@2x.png in Resources */,
 				3DD47BF91C60A43500E7CCFD /* 60005.sgm in Resources */,
 				01B4CF911C291EFD0091E19B /* ImportImageNew.xib in Resources */,
 				25069F5C1D2BD81E00DBAE44 /* CommonProps.xib in Resources */,
@@ -5853,7 +5881,7 @@
 				E20672C41B049AA6006DD2F7 /* controls2.sgm in Resources */,
 				01B02CD71C61CAB400C9102A /* My-objects-Text_IPhone@3x.png in Resources */,
 				E20672C61B049AA6006DD2F7 /* bonelimits.json in Resources */,
-				3D5F99211C4D04EB00DD47F5 /* Plane@2x.png in Resources */,
+				3D5F99211C4D04EB00DD47F5 /* shape4@2x.png in Resources */,
 				E20672CB1B049AA6006DD2F7 /* Envelop.sgr in Resources */,
 				01F872981C3A42EF009AA31E /* Scale_IPhone.png in Resources */,
 				250FEC891D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
@@ -5862,7 +5890,7 @@
 				01B395181C37A8DD003955C6 /* Next-Frame@2x.png in Resources */,
 				01F872F51C3A6C4E009AA31E /* Move_IPhone@2x.png in Resources */,
 				25F748C81D08085400FB0AFD /* fb_Pad@2x.png in Resources */,
-				3D5F991B1C4D04EB00DD47F5 /* Cylinder.png in Resources */,
+				3D5F991B1C4D04EB00DD47F5 /* shape3.png in Resources */,
 				01CCD1C91C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */,
 				25EFBEBA1BE25CB400DB300C /* RETrimControl.bundle in Resources */,
 				250FEC411D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
@@ -5901,7 +5929,7 @@
 				01B4BCBB1C32A11A00E09269 /* FrameCellNewPhone.xib in Resources */,
 				E20673051B049AA6006DD2F7 /* ScaleViewController.xib in Resources */,
 				01B02CE11C61CAB400C9102A /* Play_IPhone@3x.png in Resources */,
-				3D5F99231C4D04EB00DD47F5 /* Sphere.png in Resources */,
+				3D5F99231C4D04EB00DD47F5 /* shape5.png in Resources */,
 				01B4D0621C2937000091E19B /* OPtions_Pad@2x.png in Resources */,
 				01F873131C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
 				3DE065361C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */,
@@ -5911,10 +5939,10 @@
 				250FEC8B1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */,
 				01F872841C3A42EF009AA31E /* My-objects-Models_IPhone.png in Resources */,
 				01ACD0B21C3D11BF0096AD14 /* SettingsViewController.xib in Resources */,
-				3D5F991F1C4D04EB00DD47F5 /* Plane.png in Resources */,
+				3D5F991F1C4D04EB00DD47F5 /* shape4.png in Resources */,
 				01F872DB1C3A6C4E009AA31E /* Animation_IPhone@2x.png in Resources */,
 				250991AE1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */,
-				3D5F99151C4D04EB00DD47F5 /* Cone@2x.png in Resources */,
+				3D5F99151C4D04EB00DD47F5 /* shape1@2x.png in Resources */,
 				25EC3D211D360CFF006AE211 /* Login-IPhone@2x.png in Resources */,
 				C8AA47061C227D3600C4AB53 /* New.png in Resources */,
 				01B4D04E1C2937000091E19B /* Move_Pad@2x.png in Resources */,
@@ -5963,7 +5991,7 @@
 				3DAEFFF11C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */,
 				01F8730B1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
 				25EC3D1D1D360CFF006AE211 /* info-icon_phone@2x.png in Resources */,
-				3D5F99271C4D04EB00DD47F5 /* Torus.png in Resources */,
+				3D5F99271C4D04EB00DD47F5 /* shape6.png in Resources */,
 				4E82DD9722E2B72800587210 /* randNoise.png in Resources */,
 				25F748CC1D08085400FB0AFD /* fb_Phone@2x.png in Resources */,
 				25034FE31D24F9960036F201 /* BeginViewPhone@2x.xib in Resources */,
@@ -5990,7 +6018,7 @@
 				E20673511B049AA6006DD2F7 /* ObjCellView.xib in Resources */,
 				01F872F91C3A6C4E009AA31E /* My-objects-Image_IPhone@2x.png in Resources */,
 				01ACD0BF1C3D1AAA0096AD14 /* Frame-Count-Display_Duration.png in Resources */,
-				3D5F99131C4D04EB00DD47F5 /* Cone.png in Resources */,
+				3D5F99131C4D04EB00DD47F5 /* shape1.png in Resources */,
 				3D5D0F3F1C632864006B987E /* Particles.png in Resources */,
 				3DC610011C6B192D00A8D412 /* hq@2x.png in Resources */,
 				01B4D0721C2937000091E19B /* Undo_Pad@2x.png in Resources */,
@@ -6040,6 +6068,7 @@
 				25EC3D231D360CFF006AE211 /* Login-IPhone@3x.png in Resources */,
 				01F872721C3A42EF009AA31E /* Import-model_IPhone.png in Resources */,
 				01F872ED1C3A6C4E009AA31E /* Import-text_IPhone@2x.png in Resources */,
+				4E9A56D622E3833200575D98 /* render_image.png in Resources */,
 				E20673BC1B049AA6006DD2F7 /* mirrorJoints.json in Resources */,
 				25F748E21D08175200FB0AFD /* twit_Pad.png in Resources */,
 				01B02CE51C61CAB400C9102A /* Redo_IPhone@3x.png in Resources */,
@@ -6082,6 +6111,7 @@
 				4E82DD9922E2B72800587210 /* round83.png in Resources */,
 				01F8729A1C3A42EF009AA31E /* undo_IPhone.png in Resources */,
 				01F8733B1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */,
+				4E9A56DC22E3833200575D98 /* render_image-phone.png in Resources */,
 				25FA149D1D3CF68700A95DA3 /* TexturePropCell.xib in Resources */,
 				01ACD0C11C3D1AAA0096AD14 /* Frame-Count-Display_Frames.png in Resources */,
 				3DBC85F51C2BCCD000B512AB /* selected_mark@2x.png in Resources */,

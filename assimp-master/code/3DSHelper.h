@@ -2,7 +2,8 @@
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2017, assimp team
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -43,15 +44,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AI_3DSFILEHELPER_H_INC
 #define AI_3DSFILEHELPER_H_INC
 
-
 #include "SpatialSort.h"
 #include "SmoothingGroups.h"
 #include "StringUtils.h"
 #include "qnan.h"
-#include "./../include/assimp/material.h"
-#include "./../include/assimp/camera.h"
-#include "./../include/assimp/light.h"
-#include "./../include/assimp/anim.h"
+#include <assimp/material.h>
+#include <assimp/camera.h>
+#include <assimp/light.h>
+#include <assimp/anim.h>
 #include <stdio.h> //sprintf
 
 namespace Assimp    {
@@ -63,16 +63,19 @@ namespace D3DS  {
 /** Discreet3DS class: Helper class for loading 3ds files. Defines chunks
 *  and data structures.
 */
-class Discreet3DS
-{
+class Discreet3DS {
 private:
-    inline Discreet3DS() {}
+    Discreet3DS() {
+        // empty
+    }
+
+    ~Discreet3DS() {
+        // empty
+    }
 
 public:
-
     //! data structure for a single chunk in a .3ds file
-    struct Chunk
-    {
+    struct Chunk {
         uint16_t    Flag;
         uint32_t    Size;
     } PACK_STRUCT;
@@ -129,6 +132,7 @@ public:
 
         CHUNK_PERCENTW  = 0x0030,       // int2   percentage
         CHUNK_PERCENTF  = 0x0031,       // float4  percentage
+        CHUNK_PERCENTD  = 0x0032,       // float8  percentage
         // ********************************************************************
 
         // Prj master chunk
@@ -368,14 +372,13 @@ struct Material
 {
     //! Default constructor. Builds a default name for the material
     Material()
-        :
-    mDiffuse            (0.6,0.6,0.6), // FIX ... we won't want object to be black
-    mSpecularExponent   (0.0),
-    mShininessStrength  (1.0),
-    mShading(Discreet3DS::Gouraud),
-    mTransparency       (1.0),
-    mBumpHeight         (1.0),
-    mTwoSided           (false)
+    : mDiffuse            ( ai_real( 0.6 ), ai_real( 0.6 ), ai_real( 0.6 ) ) // FIX ... we won't want object to be black
+    , mSpecularExponent   ( ai_real( 0.0 ) )
+    , mShininessStrength  ( ai_real( 1.0 ) )
+    , mShading(Discreet3DS::Gouraud)
+    , mTransparency       ( ai_real( 1.0 ) )
+    , mBumpHeight         ( ai_real( 1.0 ) )
+    , mTwoSided           (false)
     {
         static int iCnt = 0;
 

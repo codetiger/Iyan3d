@@ -35,7 +35,7 @@
 #include <freetype/ftoutln.h>
 #include <freetype/fttrigon.h>
 
-#include <FtglPoint.h>
+#include "FtglPoint.h"
 
 /**
  * Contour class is a container of points that describe a vector font

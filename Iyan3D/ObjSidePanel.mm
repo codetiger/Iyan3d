@@ -144,7 +144,7 @@
             [cell.propsBtn setHidden:YES];
             cell.assetNameLabel.text  = [basicShapes objectAtIndex:indexPath.row];
             cell.layer.borderColor    = [UIColor grayColor].CGColor;
-            NSString* imageName       = [NSString stringWithFormat:@"%@%s", [basicShapes objectAtIndex:indexPath.row], ".png"];
+            NSString* imageName       = [NSString stringWithFormat:@"shape%ld%s", (long)indexPath.row + 1, ".png"];
             cell.assetImageView.image = [UIImage imageNamed:imageName];
         }
     } else {
