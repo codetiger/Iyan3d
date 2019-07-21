@@ -10,11 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorViewController">
             <connections>
                 <outlet property="addFrameBtn" destination="euE-kx-9ry" id="QPc-Cg-jPZ"/>
-                <outlet property="addJointBtn" destination="fwg-e6-BF2" id="xz2-3o-ea1"/>
                 <outlet property="animationBtn" destination="xCo-ML-HQa" id="6qx-QH-suT"/>
-                <outlet property="autoRigMirrorSwitch" destination="WHM-dW-fbm" id="rbb-Mf-R2T"/>
-                <outlet property="autorigMirrorBtnHolder" destination="M0Q-M4-4QQ" id="LcK-ui-Sjh"/>
-                <outlet property="autorigMirrorLable" destination="DiH-XA-X1s" id="Aq2-kz-RyS"/>
                 <outlet property="backButton" destination="Pow-v7-nF2" id="oNj-Fi-K3x"/>
                 <outlet property="center_progress" destination="gib-cQ-h37" id="aOD-QL-gOg"/>
                 <outlet property="editobjectBtn" destination="cF5-Om-aXQ" id="Hz2-TZ-6oP"/>
@@ -27,7 +23,6 @@
                 <outlet property="lastFrameBtn" destination="awG-hy-li5" id="z1s-ln-Nhm"/>
                 <outlet property="leftView" destination="J91-Zq-MM8" id="zw6-fn-tY4"/>
                 <outlet property="moveBtn" destination="2KQ-lp-58n" id="9XV-Gw-Fgb"/>
-                <outlet property="moveBtnAutorig" destination="3o8-L5-yrV" id="tSa-C9-LYQ"/>
                 <outlet property="myObjectsLabel" destination="AOn-20-20f" id="KyZ-Ic-29x"/>
                 <outlet property="numberOfItems" destination="eVO-10-Ptq" id="yAB-Uo-G2Z"/>
                 <outlet property="objTableview" destination="0go-cP-r4u" id="hXs-EQ-Xed"/>
@@ -39,7 +34,6 @@
                 <outlet property="rigTitle" destination="IrV-Kk-m6o" id="T8N-FA-qjg"/>
                 <outlet property="rightView" destination="RgQ-Eo-s8S" id="auz-s6-o1K"/>
                 <outlet property="rotateBtn" destination="kdb-Pl-f7f" id="Vdr-7W-QsP"/>
-                <outlet property="rotateBtnAutorig" destination="04v-sm-YgU" id="ODg-M5-yG5"/>
                 <outlet property="scaleBtn" destination="6N0-LM-Ula" id="i1O-dg-bRl"/>
                 <outlet property="scaleBtnAutorig" destination="XNK-gI-GK5" id="Kap-yG-S4U"/>
                 <outlet property="toolTipBtn" destination="NXe-Tf-aXZ" id="UMQ-B9-QCh"/>
@@ -213,17 +207,6 @@
                     <rect key="frame" x="864" y="64" width="160" height="704"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwg-e6-BF2">
-                            <rect key="frame" x="10" y="5" width="139" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to add a joint to the selected joint in the rig" identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <state key="normal" title="  ADD JOINT" image="Add-Bone-pad.png"/>
-                            <connections>
-                                <action selector="addJoinAction:" destination="-1" eventType="touchUpInside" id="nGb-sr-rS1"/>
-                            </connections>
-                        </button>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-cP-r4u">
                             <rect key="frame" x="5" y="52" width="150" height="288"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -415,55 +398,6 @@
                                 <action selector="redoBtnAction:" destination="-1" eventType="touchUpInside" id="3fi-gq-gmE"/>
                             </connections>
                         </button>
-                        <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0Q-M4-4QQ">
-                            <rect key="frame" x="10" y="185" width="139" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="WHM-dW-fbm" userLabel="mirrorSwitch">
-                                    <rect key="frame" x="78" y="4" width="51" height="31"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    <connections>
-                                        <action selector="autorigMirrorSwitchAction:" destination="-1" eventType="valueChanged" id="akh-E3-DXe"/>
-                                    </connections>
-                                </switch>
-                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DiH-XA-X1s" userLabel="MirrorLable">
-                                    <rect key="frame" x="-2" y="4" width="72" height="31"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Enable mirror to move / rotate the mirror joint of the selected joint" identifier="1"/>
-                        </view>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3o8-L5-yrV">
-                            <rect key="frame" x="10" y="50" width="139" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  MOVE" image="Move_Pad.png">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="GGw-ys-1KS"/>
-                            </connections>
-                        </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="04v-sm-YgU">
-                            <rect key="frame" x="10" y="95" width="139" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode" identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  ROTATE" image="Rotate_Pad.png">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="ZMc-sR-zOd"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -473,7 +407,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Add-Bone-pad.png" width="42" height="29"/>
         <image name="Add-Frames.png" width="36.5" height="36"/>
         <image name="Back.png" width="13" height="21.5"/>
         <image name="Export_Pad.png" width="42" height="29"/>

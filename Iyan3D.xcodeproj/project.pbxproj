@@ -129,10 +129,6 @@
 		01B02CB51C61CAB400C9102A /* Export-video_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8C1C61CAB400C9102A /* Export-video_IPhone@3x.png */; };
 		01B02CB61C61CAB400C9102A /* EXPORT@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8D1C61CAB400C9102A /* EXPORT@3x.png */; };
 		01B02CB71C61CAB400C9102A /* EXPORT@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8D1C61CAB400C9102A /* EXPORT@3x.png */; };
-		01B02CB81C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8E1C61CAB400C9102A /* Facebook_IPhone@3x.png */; };
-		01B02CB91C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8E1C61CAB400C9102A /* Facebook_IPhone@3x.png */; };
-		01B02CBA1C61CAB400C9102A /* Google_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8F1C61CAB400C9102A /* Google_IPhone@3x.png */; };
-		01B02CBB1C61CAB400C9102A /* Google_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C8F1C61CAB400C9102A /* Google_IPhone@3x.png */; };
 		01B02CBC1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C901C61CAB400C9102A /* Import-image_IPhone@3x.png */; };
 		01B02CBD1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C901C61CAB400C9102A /* Import-image_IPhone@3x.png */; };
 		01B02CBE1C61CAB400C9102A /* Import-Light_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C911C61CAB400C9102A /* Import-Light_IPhone@3x.png */; };
@@ -175,8 +171,6 @@
 		01B02CE71C61CAB400C9102A /* Rotate_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA51C61CAB400C9102A /* Rotate_IPhone@3x.png */; };
 		01B02CE81C61CAB400C9102A /* Scale_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA61C61CAB400C9102A /* Scale_IPhone@3x.png */; };
 		01B02CE91C61CAB400C9102A /* Scale_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA61C61CAB400C9102A /* Scale_IPhone@3x.png */; };
-		01B02CEA1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA71C61CAB400C9102A /* Twitter_IPhone@3x.png */; };
-		01B02CEB1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA71C61CAB400C9102A /* Twitter_IPhone@3x.png */; };
 		01B02CEC1C61CAB400C9102A /* undo_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA81C61CAB400C9102A /* undo_IPhone@3x.png */; };
 		01B02CED1C61CAB400C9102A /* undo_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CA81C61CAB400C9102A /* undo_IPhone@3x.png */; };
 		01B02CF11C61CDB500C9102A /* color_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02CF01C61CDB500C9102A /* color_IPhone@3x.png */; };
@@ -856,6 +850,8 @@
 		3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
 		4E0DB29D22DB252500911CAA /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		4E1A2C5F22C85FCF007827E3 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
+		4E1D868C22E42F6C002CB832 /* libassimp_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1D868922E42F6C002CB832 /* libassimp_sim.a */; };
+		4E1D868D22E42F6C002CB832 /* libassimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1D868A22E42F6C002CB832 /* libassimp.a */; };
 		4E37A43C22E18D76003A91DC /* properties-img-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E37A43722E18D75003A91DC /* properties-img-phone@3x.png */; };
 		4E37A43D22E18D76003A91DC /* properties-img-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E37A43722E18D75003A91DC /* properties-img-phone@3x.png */; };
 		4E37A43E22E18D76003A91DC /* properties-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E37A43822E18D75003A91DC /* properties-img.png */; };
@@ -948,10 +944,6 @@
 		4E82DC0422E1E22400587210 /* MetalHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9DA22E1E22400587210 /* MetalHandler.mm */; };
 		4E82DC0522E1E22400587210 /* SceneImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9DC22E1E22400587210 /* SceneImporter.cpp */; };
 		4E82DC0622E1E22400587210 /* SceneImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9DC22E1E22400587210 /* SceneImporter.cpp */; };
-		4E82DC0922E1E22400587210 /* AutoRigJointsDataHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E022E1E22400587210 /* AutoRigJointsDataHelper.cpp */; };
-		4E82DC0A22E1E22400587210 /* AutoRigJointsDataHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E022E1E22400587210 /* AutoRigJointsDataHelper.cpp */; };
-		4E82DC0B22E1E22400587210 /* AutoRigHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E122E1E22400587210 /* AutoRigHelper.cpp */; };
-		4E82DC0C22E1E22400587210 /* AutoRigHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E122E1E22400587210 /* AutoRigHelper.cpp */; };
 		4E82DC0D22E1E22400587210 /* MaterialProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E222E1E22400587210 /* MaterialProperty.cpp */; };
 		4E82DC0E22E1E22400587210 /* MaterialProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E222E1E22400587210 /* MaterialProperty.cpp */; };
 		4E82DC0F22E1E22400587210 /* CameraViewHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9E322E1E22400587210 /* CameraViewHelper.cpp */; };
@@ -964,8 +956,6 @@
 		4E82DC1E22E1E22400587210 /* KeyHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1922E1E22400587210 /* KeyHelper.cpp */; };
 		4E82DC1F22E1E22400587210 /* SGSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1A22E1E22400587210 /* SGSceneLoader.cpp */; };
 		4E82DC2022E1E22400587210 /* SGSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1A22E1E22400587210 /* SGSceneLoader.cpp */; };
-		4E82DC2122E1E22400587210 /* SGAutoRigSceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1B22E1E22400587210 /* SGAutoRigSceneManager.cpp */; };
-		4E82DC2222E1E22400587210 /* SGAutoRigSceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1B22E1E22400587210 /* SGAutoRigSceneManager.cpp */; };
 		4E82DC2322E1E22400587210 /* SGAnimationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1C22E1E22400587210 /* SGAnimationManager.cpp */; };
 		4E82DC2422E1E22400587210 /* SGAnimationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1C22E1E22400587210 /* SGAnimationManager.cpp */; };
 		4E82DC2522E1E22400587210 /* SGJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82DA1D22E1E22400587210 /* SGJoint.cpp */; };
@@ -1302,8 +1292,6 @@
 		4E82DD9922E2B72800587210 /* round83.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9222E2B72800587210 /* round83.png */; };
 		4E82DD9A22E2B72800587210 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9322E2B72800587210 /* whiteborder.png */; };
 		4E82DD9B22E2B72800587210 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9322E2B72800587210 /* whiteborder.png */; };
-		4E8B1D7E22E3FDB500AFB715 /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */; };
-		4E8B1D8022E3FE6000AFB715 /* libassimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D7F22E3FE6000AFB715 /* libassimp.a */; };
 		4E8B1D8222E4027700AFB715 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8122E4027700AFB715 /* MessageUI.framework */; };
 		4E8B1D8322E4027F00AFB715 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8122E4027700AFB715 /* MessageUI.framework */; };
 		4E8B1D8522E4029F00AFB715 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8422E4029F00AFB715 /* MetalKit.framework */; };
@@ -1312,8 +1300,8 @@
 		4E8B1D8922E402E700AFB715 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */; };
 		4E8B1D8B22E4031800AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
 		4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
-		4E8B1D8F22E4061200AFB715 /* libassimp_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8D22E4061200AFB715 /* libassimp_sim.a */; };
-		4E8B1D9022E4061200AFB715 /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */; };
+		4E8B1D9622E4132D00AFB715 /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */; };
+		4E8B1D9822E4133100AFB715 /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */; };
 		4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D422E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D522E3833200575D98 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56CF22E3833200575D98 /* render_image.png */; };
@@ -1356,7 +1344,6 @@
 		C8E6173818C5DD7100BC5342 /* FPPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173418C5DD7100BC5342 /* FPPopoverView.m */; };
 		C8E6173918C5DD7100BC5342 /* FPTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173618C5DD7100BC5342 /* FPTouchView.m */; };
 		E20670E21B049AA6006DD2F7 /* BitmapDrawManipulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E5B1AFD3C7B0042F81A /* BitmapDrawManipulator.m */; };
-		E20670E31B049AA6006DD2F7 /* ScaleForAutoRigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */; };
 		E20670FE1B049AA6006DD2F7 /* ObjCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E249763C196BE0190025D442 /* ObjCellView.mm */; };
 		E20671081B049AA6006DD2F7 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E24973F5196BD80F0025D442 /* Utility.m */; };
 		E20671161B049AA6006DD2F7 /* NSImage+ANImageBitmapRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E4B1AFD3C7B0042F81A /* NSImage+ANImageBitmapRep.m */; };
@@ -1405,7 +1392,6 @@
 		E20673BC1B049AA6006DD2F7 /* mirrorJoints.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A9DE20D197FEFF10079727D /* mirrorJoints.json */; };
 		E20673DB1B049AA6006DD2F7 /* light.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB591A9F5FFC00F0AD12 /* light.sgm */; };
 		E20673E51B049AA6006DD2F7 /* viewCameraModes.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AED29BA198A29AD004FC1E5 /* viewCameraModes.json */; };
-		E20673E81B049AA6006DD2F7 /* ScaleForAutoRigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */; };
 		E20673EC1B049AA6006DD2F7 /* humanTPoseBoneLimits.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ADEFEA8197425E8001E159D /* humanTPoseBoneLimits.json */; };
 		E20673EE1B049AA6006DD2F7 /* controls3.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AC196BDC650025D442 /* controls3.sgm */; };
 		E20673F61B049AA6006DD2F7 /* controls4.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974AD196BDC650025D442 /* controls4.sgm */; };
@@ -1432,8 +1418,6 @@
 		E2497665196BE0190025D442 /* ObjCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249763D196BE0190025D442 /* ObjCellView.xib */; };
 		E2497666196BE0190025D442 /* ObjCellViewPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249763E196BE0190025D442 /* ObjCellViewPhone.xib */; };
 		E249766C196BE0190025D442 /* RenderingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497647196BE0190025D442 /* RenderingViewController.mm */; };
-		E249766F196BE0190025D442 /* ScaleForAutoRigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */; };
-		E2497670196BE0190025D442 /* ScaleForAutoRigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */; };
 		E2497671196BE0190025D442 /* ScaleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E249764E196BE0190025D442 /* ScaleViewController.m */; };
 		E2497672196BE0190025D442 /* ScaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764F196BE0190025D442 /* ScaleViewController.xib */; };
 		E249769A196BE0310025D442 /* LoadingViewControllerPad.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */; };
@@ -1504,8 +1488,6 @@
 		01B02C8B1C61CAB400C9102A /* Export-image_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Export-image_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C8C1C61CAB400C9102A /* Export-video_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Export-video_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C8D1C61CAB400C9102A /* EXPORT@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EXPORT@3x.png"; sourceTree = "<group>"; };
-		01B02C8E1C61CAB400C9102A /* Facebook_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Facebook_IPhone@3x.png"; sourceTree = "<group>"; };
-		01B02C8F1C61CAB400C9102A /* Google_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Google_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C901C61CAB400C9102A /* Import-image_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Import-image_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C911C61CAB400C9102A /* Import-Light_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Import-Light_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C921C61CAB400C9102A /* Import-model_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Import-model_IPhone@3x.png"; sourceTree = "<group>"; };
@@ -1527,7 +1509,6 @@
 		01B02CA41C61CAB400C9102A /* Redo_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Redo_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02CA51C61CAB400C9102A /* Rotate_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Rotate_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02CA61C61CAB400C9102A /* Scale_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Scale_IPhone@3x.png"; sourceTree = "<group>"; };
-		01B02CA71C61CAB400C9102A /* Twitter_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Twitter_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02CA81C61CAB400C9102A /* undo_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "undo_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02CF01C61CDB500C9102A /* color_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B394F01C37A282003955C6 /* Pause_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_Pad.png; sourceTree = "<group>"; };
@@ -1944,6 +1925,8 @@
 		4E0323681D7560E6007688B0 /* th */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E0323691D7560EF007688B0 /* tr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E03236A1D756102007688B0 /* nl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4E1D868922E42F6C002CB832 /* libassimp_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp_sim.a; path = FrameWorks/libassimp_sim.a; sourceTree = "<group>"; };
+		4E1D868A22E42F6C002CB832 /* libassimp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp.a; path = FrameWorks/libassimp.a; sourceTree = "<group>"; };
 		4E27B5141D755FF8002C00D2 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E27B5151D75600F002C00D2 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E27B5161D756017002C00D2 /* el */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2064,8 +2047,6 @@
 		4E82D9DA22E1E22400587210 /* MetalHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHandler.mm; sourceTree = "<group>"; };
 		4E82D9DC22E1E22400587210 /* SceneImporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneImporter.cpp; sourceTree = "<group>"; };
 		4E82D9DD22E1E22400587210 /* SceneImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneImporter.h; sourceTree = "<group>"; };
-		4E82D9E022E1E22400587210 /* AutoRigJointsDataHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoRigJointsDataHelper.cpp; sourceTree = "<group>"; };
-		4E82D9E122E1E22400587210 /* AutoRigHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoRigHelper.cpp; sourceTree = "<group>"; };
 		4E82D9E222E1E22400587210 /* MaterialProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MaterialProperty.cpp; sourceTree = "<group>"; };
 		4E82D9E322E1E22400587210 /* CameraViewHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraViewHelper.cpp; sourceTree = "<group>"; };
 		4E82D9E522E1E22400587210 /* FileHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileHelper.cpp; sourceTree = "<group>"; };
@@ -2084,7 +2065,6 @@
 		4E82D9F522E1E22400587210 /* SGRotationKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGRotationKey.h; sourceTree = "<group>"; };
 		4E82D9F622E1E22400587210 /* RenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderHelper.h; sourceTree = "<group>"; };
 		4E82D9F822E1E22400587210 /* MathHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathHelper.h; sourceTree = "<group>"; };
-		4E82D9F922E1E22400587210 /* AutoRigJointsDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoRigJointsDataHelper.h; sourceTree = "<group>"; };
 		4E82D9FA22E1E22400587210 /* SGVisibilityKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGVisibilityKey.h; sourceTree = "<group>"; };
 		4E82D9FB22E1E22400587210 /* SGNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGNode.h; sourceTree = "<group>"; };
 		4E82D9FC22E1E22400587210 /* BoneLimitsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoneLimitsHelper.h; sourceTree = "<group>"; };
@@ -2096,10 +2076,8 @@
 		4E82DA0222E1E22400587210 /* CameraViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewHelper.h; sourceTree = "<group>"; };
 		4E82DA0322E1E22400587210 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4E82DA0422E1E22400587210 /* ActionKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionKey.h; sourceTree = "<group>"; };
-		4E82DA0522E1E22400587210 /* SGAutoRigSceneManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAutoRigSceneManager.h; sourceTree = "<group>"; };
 		4E82DA0622E1E22400587210 /* RigKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RigKey.h; sourceTree = "<group>"; };
 		4E82DA0722E1E22400587210 /* SGScaleKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGScaleKey.h; sourceTree = "<group>"; };
-		4E82DA0A22E1E22400587210 /* AutoRigHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoRigHelper.h; sourceTree = "<group>"; };
 		4E82DA0B22E1E22400587210 /* ShaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderManager.h; sourceTree = "<group>"; };
 		4E82DA0C22E1E22400587210 /* SGSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSceneLoader.h; sourceTree = "<group>"; };
 		4E82DA0D22E1E22400587210 /* SceneHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneHelper.h; sourceTree = "<group>"; };
@@ -2113,7 +2091,6 @@
 		4E82DA1822E1E22400587210 /* PhysicsHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsHelper.cpp; sourceTree = "<group>"; };
 		4E82DA1922E1E22400587210 /* KeyHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyHelper.cpp; sourceTree = "<group>"; };
 		4E82DA1A22E1E22400587210 /* SGSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSceneLoader.cpp; sourceTree = "<group>"; };
-		4E82DA1B22E1E22400587210 /* SGAutoRigSceneManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGAutoRigSceneManager.cpp; sourceTree = "<group>"; };
 		4E82DA1C22E1E22400587210 /* SGAnimationManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGAnimationManager.cpp; sourceTree = "<group>"; };
 		4E82DA1D22E1E22400587210 /* SGJoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGJoint.cpp; sourceTree = "<group>"; };
 		4E82DA1E22E1E22400587210 /* MathHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathHelper.cpp; sourceTree = "<group>"; };
@@ -2518,12 +2495,10 @@
 		4E82DD9222E2B72800587210 /* round83.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = round83.png; path = Resources/images/round83.png; sourceTree = "<group>"; };
 		4E82DD9322E2B72800587210 /* whiteborder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whiteborder.png; path = Resources/images/whiteborder.png; sourceTree = "<group>"; };
 		4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2.a; path = "../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/FrameWorks/libFreetype2.a"; sourceTree = "<group>"; };
-		4E8B1D7F22E3FE6000AFB715 /* libassimp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp.a; path = FrameWorks/libassimp.a; sourceTree = "<group>"; };
 		4E8B1D8122E4027700AFB715 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4E8B1D8422E4029F00AFB715 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4E8B1D8A22E4031800AFB715 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		4E8B1D8D22E4061200AFB715 /* libassimp_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp_sim.a; path = FrameWorks/libassimp_sim.a; sourceTree = "<group>"; };
 		4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2_sim.a; path = FrameWorks/libFreetype2_sim.a; sourceTree = "<group>"; };
 		4E9A56C322E3833100575D98 /* render_image-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@3x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@3x.png"; sourceTree = "<group>"; };
 		4E9A56CF22E3833200575D98 /* render_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = render_image.png; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image.png"; sourceTree = "<group>"; };
@@ -2587,9 +2562,6 @@
 		E249763E196BE0190025D442 /* ObjCellViewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ObjCellViewPhone.xib; path = "ui/Popover Views/ObjCellViewPhone.xib"; sourceTree = "<group>"; };
 		E2497646196BE0190025D442 /* RenderingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderingViewController.h; path = "ui/Popover Views/RenderingViewController.h"; sourceTree = "<group>"; };
 		E2497647196BE0190025D442 /* RenderingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderingViewController.mm; path = "ui/Popover Views/RenderingViewController.mm"; sourceTree = "<group>"; };
-		E249764A196BE0190025D442 /* ScaleForAutoRigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScaleForAutoRigViewController.h; path = "ui/Popover Views/ScaleForAutoRigViewController.h"; sourceTree = "<group>"; };
-		E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScaleForAutoRigViewController.m; path = "ui/Popover Views/ScaleForAutoRigViewController.m"; sourceTree = "<group>"; };
-		E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ScaleForAutoRigViewController.xib; path = "ui/Popover Views/ScaleForAutoRigViewController.xib"; sourceTree = "<group>"; };
 		E249764D196BE0190025D442 /* ScaleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScaleViewController.h; path = "ui/Popover Views/ScaleViewController.h"; sourceTree = "<group>"; };
 		E249764E196BE0190025D442 /* ScaleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScaleViewController.m; path = "ui/Popover Views/ScaleViewController.m"; sourceTree = "<group>"; };
 		E249764F196BE0190025D442 /* ScaleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ScaleViewController.xib; path = "ui/Popover Views/ScaleViewController.xib"; sourceTree = "<group>"; };
@@ -2604,10 +2576,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E8B1D8022E3FE6000AFB715 /* libassimp.a in Frameworks */,
+				4E1D868D22E42F6C002CB832 /* libassimp.a in Frameworks */,
 				4E8B1D8522E4029F00AFB715 /* MetalKit.framework in Frameworks */,
-				4E8B1D7E22E3FDB500AFB715 /* libFreetype2.a in Frameworks */,
 				4E8B1D8B22E4031800AFB715 /* Accelerate.framework in Frameworks */,
+				4E8B1D9622E4132D00AFB715 /* libFreetype2.a in Frameworks */,
 				4E8B1D8822E402E400AFB715 /* MobileCoreServices.framework in Frameworks */,
 				4E8B1D8222E4027700AFB715 /* MessageUI.framework in Frameworks */,
 			);
@@ -2617,8 +2589,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E8B1D9022E4061200AFB715 /* libFreetype2_sim.a in Frameworks */,
-				4E8B1D8F22E4061200AFB715 /* libassimp_sim.a in Frameworks */,
+				4E1D868C22E42F6C002CB832 /* libassimp_sim.a in Frameworks */,
+				4E8B1D9822E4133100AFB715 /* libFreetype2_sim.a in Frameworks */,
 				4E8B1D8922E402E700AFB715 /* MobileCoreServices.framework in Frameworks */,
 				4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */,
 				4E8B1D8322E4027F00AFB715 /* MessageUI.framework in Frameworks */,
@@ -2724,8 +2696,6 @@
 				01B02C8B1C61CAB400C9102A /* Export-image_IPhone@3x.png */,
 				01B02C8C1C61CAB400C9102A /* Export-video_IPhone@3x.png */,
 				01B02C8D1C61CAB400C9102A /* EXPORT@3x.png */,
-				01B02C8E1C61CAB400C9102A /* Facebook_IPhone@3x.png */,
-				01B02C8F1C61CAB400C9102A /* Google_IPhone@3x.png */,
 				01B02C901C61CAB400C9102A /* Import-image_IPhone@3x.png */,
 				01B02C911C61CAB400C9102A /* Import-Light_IPhone@3x.png */,
 				01B02C921C61CAB400C9102A /* Import-model_IPhone@3x.png */,
@@ -2747,7 +2717,6 @@
 				01B02CA41C61CAB400C9102A /* Redo_IPhone@3x.png */,
 				01B02CA51C61CAB400C9102A /* Rotate_IPhone@3x.png */,
 				01B02CA61C61CAB400C9102A /* Scale_IPhone@3x.png */,
-				01B02CA71C61CAB400C9102A /* Twitter_IPhone@3x.png */,
 				01B02CA81C61CAB400C9102A /* undo_IPhone@3x.png */,
 			);
 			name = IPhone3x;
@@ -3298,9 +3267,6 @@
 			children = (
 				25730E761AFD3E2B0042F81A /* GetPixelDemo.h */,
 				25730E771AFD3E2B0042F81A /* GetPixelDemo.m */,
-				E249764A196BE0190025D442 /* ScaleForAutoRigViewController.h */,
-				E249764B196BE0190025D442 /* ScaleForAutoRigViewController.m */,
-				E249764C196BE0190025D442 /* ScaleForAutoRigViewController.xib */,
 				E249764D196BE0190025D442 /* ScaleViewController.h */,
 				E249764E196BE0190025D442 /* ScaleViewController.m */,
 				E249764F196BE0190025D442 /* ScaleViewController.xib */,
@@ -3644,8 +3610,6 @@
 			isa = PBXGroup;
 			children = (
 				4E82DD7B22E1E8C000587210 /* json */,
-				4E82D9E122E1E22400587210 /* AutoRigHelper.cpp */,
-				4E82D9E022E1E22400587210 /* AutoRigJointsDataHelper.cpp */,
 				4E82DBAD22E1E22400587210 /* BoneLimitsHelper.cpp */,
 				4E82DA2222E1E22400587210 /* bullet3 */,
 				4E82D9E322E1E22400587210 /* CameraViewHelper.cpp */,
@@ -3663,7 +3627,6 @@
 				4E82DBB022E1E22400587210 /* SGAction.cpp */,
 				4E82DBB122E1E22400587210 /* SGActionManager.cpp */,
 				4E82DA1C22E1E22400587210 /* SGAnimationManager.cpp */,
-				4E82DA1B22E1E22400587210 /* SGAutoRigSceneManager.cpp */,
 				4E82DA2122E1E22400587210 /* SGEditorScene.cpp */,
 				4E82DA1D22E1E22400587210 /* SGJoint.cpp */,
 				4E82DBB222E1E22400587210 /* SGMovementManager.cpp */,
@@ -3682,8 +3645,6 @@
 			children = (
 				4E82DA0422E1E22400587210 /* ActionKey.h */,
 				4E82D9FF22E1E22400587210 /* autolink.h */,
-				4E82DA0A22E1E22400587210 /* AutoRigHelper.h */,
-				4E82D9F922E1E22400587210 /* AutoRigJointsDataHelper.h */,
 				4E82DA1422E1E22400587210 /* BoneLimits.h */,
 				4E82D9FC22E1E22400587210 /* BoneLimitsHelper.h */,
 				4E82DA0222E1E22400587210 /* CameraViewHelper.h */,
@@ -3705,7 +3666,6 @@
 				4E82DA1122E1E22400587210 /* SGAction.h */,
 				4E82D9F122E1E22400587210 /* SGActionManager.h */,
 				4E82D9E822E1E22400587210 /* SGAnimationManager.h */,
-				4E82DA0522E1E22400587210 /* SGAutoRigSceneManager.h */,
 				4E82D9F022E1E22400587210 /* SGCloudRenderingHelper.h */,
 				4E82D9EE22E1E22400587210 /* SGEditorScene.h */,
 				4E82DA0122E1E22400587210 /* SGJoint.h */,
@@ -4249,10 +4209,10 @@
 				4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */,
 				4E8B1D8422E4029F00AFB715 /* MetalKit.framework */,
 				4E8B1D8122E4027700AFB715 /* MessageUI.framework */,
-				4E8B1D7F22E3FE6000AFB715 /* libassimp.a */,
 				4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */,
-				4E8B1D8D22E4061200AFB715 /* libassimp_sim.a */,
 				4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */,
+				4E1D868922E42F6C002CB832 /* libassimp_sim.a */,
+				4E1D868A22E42F6C002CB832 /* libassimp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -4652,7 +4612,6 @@
 				251815951D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
 				25EC3D521D366882006AE211 /* View_IPhone.png in Resources */,
 				01B4D0671C2937000091E19B /* Rotate_Pad.png in Resources */,
-				01B02CB81C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */,
 				01B395271C37AA3A003955C6 /* Export-video_Pad@2x.png in Resources */,
 				25243D151DA2891400BA517B /* Bernstein Regular.ttf in Resources */,
 				01B4CFEA1C29219A0091E19B /* Add-Frames.png in Resources */,
@@ -4782,7 +4741,6 @@
 				01B4D0431C2937000091E19B /* Export_Pad.png in Resources */,
 				250FEC561D1E5506000C8A2C /* Step-3_-img_phone.png in Resources */,
 				E249769B196BE0310025D442 /* LoadingViewControllerPad.xib in Resources */,
-				01B02CBA1C61CAB400C9102A /* Google_IPhone@3x.png in Resources */,
 				01F8730C1C3A6C4E009AA31E /* Redo_IPhone@2x.png in Resources */,
 				01ACD09F1C3CEEE70096AD14 /* No-Bevel_IPhone.png in Resources */,
 				01F873081C3A6C4E009AA31E /* Play_IPhone@2x.png in Resources */,
@@ -4850,7 +4808,6 @@
 				250991AF1D27CD2E005327E6 /* MediaPreviewVCPhone@2x.xib in Resources */,
 				01F872691C3A42EF009AA31E /* Export-video_IPhone.png in Resources */,
 				250FEC5E1D1E5506000C8A2C /* Step-4_-img_phone@2x.png in Resources */,
-				01B02CEA1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */,
 				25651D141B3C91570058706E /* helpStatements.json in Resources */,
 				01B4BCBA1C32A11A00E09269 /* FrameCellNewPhone.xib in Resources */,
 				01A395361C40E8EC007531DB /* SettingsViewControllerPhone2x.xib in Resources */,
@@ -4986,7 +4943,6 @@
 				3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */,
 				250FEC5C1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */,
 				8AED29BB198A29AD004FC1E5 /* viewCameraModes.json in Resources */,
-				E2497670196BE0190025D442 /* ScaleForAutoRigViewController.xib in Resources */,
 				01B02CDE1C61CAB400C9102A /* pause_IPhone@3x_.png in Resources */,
 				8ADEFEAA197425E8001E159D /* humanTPoseBoneLimits.json in Resources */,
 				01ACD0C41C3D1AAA0096AD14 /* Render-Preview-position_Left-Top.png in Resources */,
@@ -5072,7 +5028,6 @@
 				251815961D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
 				25243D161DA2891400BA517B /* Bernstein Regular.ttf in Resources */,
 				25EC3D531D366882006AE211 /* View_IPhone.png in Resources */,
-				01B02CB91C61CAB400C9102A /* Facebook_IPhone@3x.png in Resources */,
 				01B395281C37AA3A003955C6 /* Export-video_Pad@2x.png in Resources */,
 				01B4CFED1C29219A0091E19B /* External-Render.png in Resources */,
 				01F872EB1C3A6C4E009AA31E /* Import-models_IPhone@2x.png in Resources */,
@@ -5198,7 +5153,6 @@
 				250FEC571D1E5506000C8A2C /* Step-3_-img_phone.png in Resources */,
 				4E37A44122E18D76003A91DC /* properties-img@2x.png in Resources */,
 				01F8730D1C3A6C4E009AA31E /* Redo_IPhone@2x.png in Resources */,
-				01B02CBB1C61CAB400C9102A /* Google_IPhone@3x.png in Resources */,
 				01ACD0A01C3CEEE70096AD14 /* No-Bevel_IPhone.png in Resources */,
 				01F873091C3A6C4E009AA31E /* Play_IPhone@2x.png in Resources */,
 				25034FEF1D24F9960036F201 /* StepView.xib in Resources */,
@@ -5266,7 +5220,6 @@
 				3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */,
 				250991B01D27CD2E005327E6 /* MediaPreviewVCPhone@2x.xib in Resources */,
 				250FEC5F1D1E5506000C8A2C /* Step-4_-img_phone@2x.png in Resources */,
-				01B02CEB1C61CAB400C9102A /* Twitter_IPhone@3x.png in Resources */,
 				4E37A43D22E18D76003A91DC /* properties-img-phone@3x.png in Resources */,
 				01A395371C40E8EC007531DB /* SettingsViewControllerPhone2x.xib in Resources */,
 				01F872681C3A42EF009AA31E /* Export-image_IPhone.png in Resources */,
@@ -5413,7 +5366,6 @@
 				01B02CDF1C61CAB400C9102A /* pause_IPhone@3x_.png in Resources */,
 				E20673E51B049AA6006DD2F7 /* viewCameraModes.json in Resources */,
 				01ACD0C51C3D1AAA0096AD14 /* Render-Preview-position_Left-Top.png in Resources */,
-				E20673E81B049AA6006DD2F7 /* ScaleForAutoRigViewController.xib in Resources */,
 				3D04EAF41C25830F00C18E1A /* Bevel-pad.png in Resources */,
 				3D5D0F4A1C6336A4006B987E /* Particle_IPhone@3x.png in Resources */,
 				01F872FD1C3A6C4E009AA31E /* My-objects-Models_IPhone@2x.png in Resources */,
@@ -5461,7 +5413,6 @@
 				25730E691AFD3C7B0042F81A /* BitmapDrawManipulator.m in Sources */,
 				4E82DBC522E1E22400587210 /* EmptyNode.cpp in Sources */,
 				4E82DBB322E1E22400587210 /* ImageLoaderOBJC.mm in Sources */,
-				E249766F196BE0190025D442 /* ScaleForAutoRigViewController.m in Sources */,
 				4E82DCA122E1E22500587210 /* btBoxBoxCollisionAlgorithm.cpp in Sources */,
 				4E82DBC922E1E22400587210 /* ParticleManager.cpp in Sources */,
 				4E82DBC322E1E22400587210 /* InstanceNode.cpp in Sources */,
@@ -5630,7 +5581,6 @@
 				E2497671196BE0190025D442 /* ScaleViewController.m in Sources */,
 				4E82DCA322E1E22500587210 /* btCollisionObject.cpp in Sources */,
 				C885D78B1876BE6100A45D71 /* main.m in Sources */,
-				4E82DC0B22E1E22400587210 /* AutoRigHelper.cpp in Sources */,
 				4E82DC6F22E1E22500587210 /* btRaycastCallback.cpp in Sources */,
 				3D3F591A1C2801C600713C79 /* TextFrameCell.m in Sources */,
 				4E82DD2D22E1E22500587210 /* btSliderConstraint.cpp in Sources */,
@@ -5725,14 +5675,12 @@
 				4E82DD2722E1E22500587210 /* btSequentialImpulseConstraintSolver.cpp in Sources */,
 				4E82DBE522E1E22400587210 /* BoundingBox.cpp in Sources */,
 				4E82DD3522E1E22500587210 /* btSolve2LinearConstraint.cpp in Sources */,
-				4E82DC0922E1E22400587210 /* AutoRigJointsDataHelper.cpp in Sources */,
 				4E82DBCF22E1E22400587210 /* JointNode.cpp in Sources */,
 				3D58CD621C3D43C2006371DE /* WEPopoverContainerView.m in Sources */,
 				4E82DCD522E1E22500587210 /* btMultimaterialTriangleMeshShape.cpp in Sources */,
 				4E82DC6722E1E22500587210 /* btVoronoiSimplexSolver.cpp in Sources */,
 				4E82DCD322E1E22500587210 /* btStaticPlaneShape.cpp in Sources */,
 				25B5B1701BE33EFB00AC2525 /* ZipArchive.mm in Sources */,
-				4E82DC2122E1E22400587210 /* SGAutoRigSceneManager.cpp in Sources */,
 				4E82DBD322E1E22400587210 /* Joint.cpp in Sources */,
 				4E82DCAD22E1E22500587210 /* gim_box_set.cpp in Sources */,
 				25EBB2A71D1173B50031F18D /* MediaPreviewVC.m in Sources */,
@@ -5772,7 +5720,6 @@
 				4E82DC5A22E1E22500587210 /* btMinkowskiPenetrationDepthSolver.cpp in Sources */,
 				25034FED1D24F9960036F201 /* StepView.m in Sources */,
 				E20670E21B049AA6006DD2F7 /* BitmapDrawManipulator.m in Sources */,
-				E20670E31B049AA6006DD2F7 /* ScaleForAutoRigViewController.m in Sources */,
 				3D3F59141C27EC8000713C79 /* TextSelectionSidePanel.mm in Sources */,
 				4E82DD0622E1E22500587210 /* btRigidBody.cpp in Sources */,
 				4E82DD0A22E1E22500587210 /* btRaycastVehicle.cpp in Sources */,
@@ -5928,7 +5875,6 @@
 				E20671571B049AA6006DD2F7 /* BitmapCropManipulator.m in Sources */,
 				4E82DCA422E1E22500587210 /* btCollisionObject.cpp in Sources */,
 				E206715C1B049AA6006DD2F7 /* AssetItem.m in Sources */,
-				4E82DC0C22E1E22400587210 /* AutoRigHelper.cpp in Sources */,
 				4E82DC7022E1E22500587210 /* btRaycastCallback.cpp in Sources */,
 				E206715E1B049AA6006DD2F7 /* FPPopoverView.m in Sources */,
 				4E82DD2E22E1E22500587210 /* btSliderConstraint.cpp in Sources */,
@@ -6024,14 +5970,12 @@
 				4E82DD2822E1E22500587210 /* btSequentialImpulseConstraintSolver.cpp in Sources */,
 				4E82DBE622E1E22400587210 /* BoundingBox.cpp in Sources */,
 				4E82DD3622E1E22500587210 /* btSolve2LinearConstraint.cpp in Sources */,
-				4E82DC0A22E1E22400587210 /* AutoRigJointsDataHelper.cpp in Sources */,
 				4E82DBD022E1E22400587210 /* JointNode.cpp in Sources */,
 				25B5B16F1BE33EFB00AC2525 /* zip.c in Sources */,
 				4E82DCD622E1E22500587210 /* btMultimaterialTriangleMeshShape.cpp in Sources */,
 				4E82DC6822E1E22500587210 /* btVoronoiSimplexSolver.cpp in Sources */,
 				4E82DCD422E1E22500587210 /* btStaticPlaneShape.cpp in Sources */,
 				3D58CD6B1C3D43C2006371DE /* WEPopoverTableViewController.m in Sources */,
-				4E82DC2222E1E22400587210 /* SGAutoRigSceneManager.cpp in Sources */,
 				4E82DBD422E1E22400587210 /* Joint.cpp in Sources */,
 				4E82DCAE22E1E22500587210 /* gim_box_set.cpp in Sources */,
 				25EFBEB71BE25CA700DB300C /* RETrimPopover.m in Sources */,

@@ -39,7 +39,6 @@ SGEditorScene::SGEditorScene(SceneManager *smgr, int screenWidth, int screenHeig
     sceneControls = SceneHelper::initControls(smgr);
     directionIndicator = SceneHelper::initIndicatorNode(smgr);
     BoneLimitsHelper::init();
-    AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
 
     renderCamera = SceneHelper::initRenderCamera(smgr, DEFAULT_CAMERA_FOV);
 }
@@ -65,8 +64,6 @@ SGEditorScene::~SGEditorScene()
             delete jointSpheres[i];
     }
     jointSpheres.clear();
-    
-    tPoseJoints.clear();
     
     if(renderingTextureMap.size())
         renderingTextureMap.clear();
@@ -130,34 +127,6 @@ void SGEditorScene::removeAllNodes()
     }
 }
 
-void SGEditorScene::enterOrExitAutoRigMode(bool rigMode)
-{
-    isRigMode = rigMode;
-    
-    if(rigMode) {
-        riggingNodeId = selectedNodeId;
-        for(int i = 0; i < nodes.size(); i++)
-            if(i != riggingNodeId)
-                nodes[i]->node->setVisible(false);
-
-        rigMan = new SGAutoRigSceneManager(smgr,this);
-        //setTransparencyForObjects();
-        selectMan->unselectObject(selectedNodeId);
-        clearSelections();
-        
-    } else {
-        for(int i = 0; i < nodes.size(); i++)
-            nodes[i]->node->setVisible(true);
-        
-        riggingNodeId = NOT_EXISTS;
-        delete rigMan;
-        updater->resetMaterialTypes(false);
-        AutoRigJointsDataHelper::getTPoseJointsData(tPoseJoints);
-        setLightingOn();
-    }
-    updater->setDataForFrame(currentFrame);
-}
-
 void SGEditorScene::initVariables(SceneManager* sceneMngr, int maxUniforms, int maxJoints)
 {
     cmgr = new CollisionManager();
@@ -174,12 +143,11 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, int maxUniforms, int 
     camPreviewOrigin = camPreviewEnd = Vector2(0.0, 0.0);
     isMultipleSelection = false;
     isJointSelected = isNodeSelected = isControlSelected = shadowsOff = false;
-    freezeRendering = isPlaying = isPreviewMode = isRigMode = false;
+    freezeRendering = isPlaying = isPreviewMode = false;
     selectedNodeId = selectedJointId = selectedMeshBufferId = riggingNodeId = NOT_EXISTS;
     selectedNode = NULL;
     selectedJoint = NULL;
     jointSpheres.clear();
-    tPoseJoints.clear();
     controlType = MOVE;
     selectedControlId = NOT_EXISTS;
     selectedNode = NULL;
@@ -236,7 +204,7 @@ void SGEditorScene::renderAll()
         rotationCircle->node->setVisible(false);
         renHelper->drawGrid();
         
-        if((selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA) || isPlaying || isRigMode)
+        if((selectedNodeId != NOT_EXISTS && nodes[selectedNodeId]->getType() == NODE_CAMERA) || isPlaying)
             ShaderManager::isRendering = true;
         else
             ShaderManager::isRendering = false;
@@ -246,8 +214,6 @@ void SGEditorScene::renderAll()
         renHelper->drawCircle();
         renHelper->drawMoveAxisLine();
         renHelper->renderControls();
-        if(isRigMode && rigMan)
-            renHelper->renderEnvelopes();
         
 //        if(touchTexture)
 //            smgr->draw2DImage(touchTexture, Vector2(0.0, 100.0), Vector2(256.0, 356.0), smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE), false);
@@ -324,15 +290,15 @@ void SGEditorScene::setTransparencyForObjects()
     isPreviewMode = false;
 
     for(int index = 0; index < nodes.size(); index++) {
-        if(nodes[index]->isTempNode || (isRigMode && riggingNodeId == index)) {
+        if(nodes[index]->isTempNode) {
             isPreviewMode = true;
             nodes[index]->getProperty(TRANSPARENCY).value.x = 1.0;
         } else {
-            nodes[index]->getProperty(TRANSPARENCY).value.x = (isRigMode) ? 0.0 : 0.2;
+            nodes[index]->getProperty(TRANSPARENCY).value.x = 0.2;
         }
     }
 
-    if(!isPreviewMode && !isRigMode) {
+    if(!isPreviewMode) {
         for(int index = 0; index < nodes.size(); index++)
             if(nodes[index]->getProperty(VISIBILITY).value.x)
                 nodes[index]->getProperty(TRANSPARENCY).value.x = 1.0;
@@ -518,33 +484,29 @@ bool SGEditorScene::isControlsTransparent(int nodeID,string matName)
 
 bool SGEditorScene::hasNodeSelected()
 {
-    return (isRigMode && rigMan) ? rigMan->isNodeSelected : isNodeSelected;
+    return isNodeSelected;
 }
 
 bool SGEditorScene::hasMeshBufferSelected()
 {
-    return (isRigMode && rigMan) ? false : (selectedMeshBufferId != NOT_EXISTS);
+    return (selectedMeshBufferId != NOT_EXISTS);
 }
 
 bool SGEditorScene::hasJointSelected()
 {
-    return (isRigMode && rigMan) ? rigMan->isSGRJointSelected : isJointSelected;
+    return isJointSelected;
 }
 
 SGNode* SGEditorScene::getSelectedNode()
 {
-    if(isRigMode && rigMan->isNodeSelected)
-        return rigMan->selectedNode;
-    else if (isNodeSelected)
+    if (isNodeSelected)
         return selectedNode;
     return NULL;
 }
 
 SGJoint* SGEditorScene::getSelectedJoint()
 {
-    if(isRigMode && rigMan->isSGRJointSelected)
-        return rigMan->selectedJoint;
-    else if (isJointSelected)
+    if (isJointSelected)
         return selectedJoint;
     return NULL;    
 }
@@ -654,8 +616,7 @@ int SGEditorScene::redo()
 
 void SGEditorScene::setLightingOn()
 {
-    if(!isRigMode)
-        ShaderManager::sceneLighting = true;
+    ShaderManager::sceneLighting = true;
 }
 
 void SGEditorScene::setLightingOff()
@@ -924,7 +885,7 @@ bool SGEditorScene::switchMirrorState()
     action.actionSpecificFlags.push_back(getMirrorState());
     actionMan->addAction(action);
     setMirrorState((MIRROR_SWITCH_STATE)!getMirrorState());
-    if(isJointSelected || (isRigMode && (rigMan->isSGRJointSelected || rigMan->isSkeletonJointSelected)))
+    if(isJointSelected)
         selectMan->highlightMeshBufferAndJointSpheres();
     return getMirrorState();
 }

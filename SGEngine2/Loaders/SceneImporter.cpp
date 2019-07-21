@@ -232,7 +232,6 @@ void SceneImporter::importNodeFromMesh(SGEditorScene* sgScene, SGNode* sceneNode
 
         sgn->setMaterial(sgScene->getSceneManager()->getMaterialByIndex((sceneNode->getType() == NODE_RIG) ? SHADER_SKIN : SHADER_TEXT_SKIN));
         sceneNode->setInitialKeyValues(OPEN_SAVED_FILE);
-        sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
 
     } else {
@@ -516,7 +515,6 @@ void SceneImporter::loadDetails2Node(SGNode* sceneNode, Mesh* mesh, aiMatrix4x4 
     loadAnimationKeys(sceneNode);
 
     if (sceneNode->getType() == NODE_RIG || sceneNode->getType() == NODE_TEXT_SKIN) {
-        sgScene->loader->setJointsScale(sceneNode);
         dynamic_pointer_cast<AnimatedMeshNode>(sceneNode->node)->updateMeshCache();
     }
 

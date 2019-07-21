@@ -317,17 +317,15 @@ BOOL missingAlertShown;
 }
 
 - (void)updateXYZValuesHide:(BOOL)hide X:(float)x Y:(float)y Z:(float)z {
-    BOOL status = (editorScene && editorScene->isRigMode) ? YES : hide;
-
     if (x == -999.0 && y == -999.0 & z == -999.0)
-        status = YES;
+        hide = YES;
 
-    [_xLbl setHidden:status];
-    [_yLbl setHidden:status];
-    [_zLbl setHidden:status];
-    [_xValue setHidden:status];
-    [_yValue setHidden:status];
-    [_zValue setHidden:status];
+    [_xLbl setHidden:hide];
+    [_yLbl setHidden:hide];
+    [_zLbl setHidden:hide];
+    [_xValue setHidden:hide];
+    [_yValue setHidden:hide];
+    [_zValue setHidden:hide];
 
     _xValue.text = [NSString stringWithFormat:@"%.1f", x];
     _yValue.text = [NSString stringWithFormat:@"%.1f", y];
@@ -351,63 +349,31 @@ BOOL missingAlertShown;
 
 - (void)setupEnableDisableControls {
     [self sceneMirrorUIPositionChanger];
-    bool sceneMirrorState = !(editorScene && !editorScene->isRigMode && editorScene->getSelectedNode() && editorScene->getSelectedNode()->joints.size() == HUMAN_JOINTS_SIZE);
-    [_sceneMirrorLable setHidden:sceneMirrorState];
-    [_sceneMirrorSwitch setHidden:sceneMirrorState];
-    [_sceneMirrorSwitch setOn:editorScene->getMirrorState() animated:YES];
 
-    if (editorScene->isRigMode) {
-        [self.moveBtn setHidden:true];
-        [self.optionsBtn setHidden:true];
-        [self.rotateBtn setHidden:true];
-        [self.scaleBtn setHidden:true];
-        [self.undoBtn setHidden:true];
-        [self.redoBtn setHidden:true];
-        [self.importBtn setHidden:true];
-        [self.exportBtn setHidden:true];
-        [self.animationBtn setHidden:true];
-        [self.optionsBtn setHidden:true];
-        [self.objectList setHidden:true];
-        [self.playBtn setHidden:true];
-        [self.framesCollectionView setHidden:true];
-        [self.lastFrameBtn setHidden:true];
-        [self.firstFrameBtn setHidden:true];
-        [self.addFrameBtn setHidden:true];
-        [self.objTableview setHidden:true];
-        [self.backButton setHidden:true];
-        [self.rigTitle setHidden:false];
-        [self.scaleBtnAutorig setHidden:false];
-        [self.moveBtnAutorig setHidden:false];
-        [self.rotateBtnAutorig setHidden:false];
-        [self.myObjectsBtn setHidden:YES];
-        return;
-
-    } else {
-        [self.moveBtn setHidden:false];
-        [self.optionsBtn setHidden:false];
-        [self.rotateBtn setHidden:false];
-        [self.scaleBtn setHidden:false];
-        [self.undoBtn setHidden:false];
-        [self.redoBtn setHidden:false];
-        [self.importBtn setHidden:false];
-        [self.exportBtn setHidden:false];
-        [self.animationBtn setHidden:false];
-        [self.optionsBtn setHidden:false];
-        [self.objectList setHidden:false];
-        [self.playBtn setHidden:false];
-        [self.framesCollectionView setHidden:false];
-        [self.lastFrameBtn setHidden:false];
-        [self.firstFrameBtn setHidden:false];
-        [self.addFrameBtn setHidden:false];
-        [self.objTableview setHidden:false];
-        [self.backButton setHidden:false];
-        [self.rigTitle setHidden:true];
-        [self.scaleBtnAutorig setHidden:true];
-        [self.moveBtnAutorig setHidden:true];
-        [self.rotateBtnAutorig setHidden:true];
-        [self.autorigMirrorBtnHolder setHidden:true];
-        [self.myObjectsBtn setHidden:NO];
-    }
+    [self.moveBtn setHidden:false];
+    [self.optionsBtn setHidden:false];
+    [self.rotateBtn setHidden:false];
+    [self.scaleBtn setHidden:false];
+    [self.undoBtn setHidden:false];
+    [self.redoBtn setHidden:false];
+    [self.importBtn setHidden:false];
+    [self.exportBtn setHidden:false];
+    [self.animationBtn setHidden:false];
+    [self.optionsBtn setHidden:false];
+    [self.objectList setHidden:false];
+    [self.playBtn setHidden:false];
+    [self.framesCollectionView setHidden:false];
+    [self.lastFrameBtn setHidden:false];
+    [self.firstFrameBtn setHidden:false];
+    [self.addFrameBtn setHidden:false];
+    [self.objTableview setHidden:false];
+    [self.backButton setHidden:false];
+    [self.rigTitle setHidden:true];
+    [self.scaleBtnAutorig setHidden:true];
+    [self.moveBtnAutorig setHidden:true];
+    [self.rotateBtnAutorig setHidden:true];
+    [self.autorigMirrorBtnHolder setHidden:true];
+    [self.myObjectsBtn setHidden:NO];
 
     if (editorScene->isNodeSelected) {
         if (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT) {
@@ -646,23 +612,14 @@ BOOL missingAlertShown;
             renderViewMan.checkCtrlSelection = false;
         }
         if (editorScene && renderViewMan.checkTapSelection) {
-            if (editorScene->isRigMode) {
-                editorScene->selectMan->checkSelectionForAutoRig(renderViewMan.tapPosition);
-            } else {
-                bool isMultiSelectEnabled = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
-                editorScene->selectMan->checkSelection(renderViewMan.tapPosition, isMultiSelectEnabled);
-                [self changeAllButtonBG];
-                [self setupEnableDisableControls];
-            }
+            bool isMultiSelectEnabled = [[AppHelper getAppHelper] userDefaultsBoolForKey:@"multiSelectOption"];
+            editorScene->selectMan->checkSelection(renderViewMan.tapPosition, isMultiSelectEnabled);
+            [self changeAllButtonBG];
+            [self setupEnableDisableControls];
+
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
             [self highlightObjectList];
-            if (editorScene && editorScene->isRigMode && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_MOVE_JOINTS)) {
-                [_addJointBtn setEnabled:(editorScene->rigMan->isSkeletonJointSelected) ? YES : NO];
-            }
-            if (editorScene && editorScene->isRigMode)
-                [self autoRigMirrorBtnHandler];
-
             [renderViewMan showPopOver:editorScene->selectedNodeId];
         }
         if (renderViewMan.makePanOrPinch)
@@ -673,11 +630,6 @@ BOOL missingAlertShown;
 }
 
 - (void)touchesEnded:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
-    if (editorScene) {
-        if (editorScene->isRigMode && editorScene->rigMan && editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_PREVIEW)) {
-            [_addJointBtn setEnabled:(editorScene->rigMan->isSGRJointSelected) ? NO : YES];
-        }
-    }
 }
 
 - (void)loadScene {
@@ -968,44 +920,6 @@ BOOL missingAlertShown;
     self.redoBtn.accessibilityHint                      = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"Undo / Redo your actions." : @"", nil);
 }
 
-- (IBAction)moveLastAction:(id)sender {
-    if (sender != nil)
-        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
-
-    if ((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_PREVIEW) {
-        if (editorScene->rigMan->sceneMode == RIG_MODE_OBJVIEW) {
-            if (editorScene->rigMan->rigNodeType == NODE_RIG) {
-                [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
-            } else {
-                UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select Bone Structure", nil) message:NSLocalizedString(@"start_single_bone_or_human_message", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Single Bone", nil), NSLocalizedString(@"Human Bone Structure", nil), nil];
-                [closeAlert setTag:CHOOSE_RIGGING_METHOD];
-                [closeAlert show];
-            }
-
-        } else if (editorScene->rigMan->sceneMode + 1 == RIG_MODE_PREVIEW) {
-            [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
-            NSString* tempDir     = NSTemporaryDirectory();
-            NSString* sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
-            string    path        = [sgrFilePath UTF8String];
-            [self exportSgr:sgrFilePath];
-            [_rigAddToSceneBtn setHidden:NO];
-            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
-            [_addJointBtn setEnabled:NO];
-        } else {
-            [_rigAddToSceneBtn setHidden:YES];
-            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
-        }
-    }
-
-    [self autoRigMirrorBtnHandler];
-    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
-}
-
-- (void)switchAutoRigSceneMode:(NSNumber*)number {
-    if (editorScene && editorScene->rigMan)
-        editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode + [number intValue]));
-}
-
 - (void)showLoadingActivity {
     if (_center_progress != nil) {
         [_center_progress setHidden:NO];
@@ -1020,68 +934,6 @@ BOOL missingAlertShown;
 - (void)hideLoadingActivity {
     [_center_progress stopAnimating];
     [_center_progress setHidden:YES];
-}
-
-- (void)exportSgr:(NSString*)pathStr {
-    string path = [pathStr UTF8String];
-    editorScene->rigMan->exportSGR(path);
-}
-
-- (IBAction)moveFirstAction:(id)sender {
-    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
-    if ((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode) != RIG_MODE_OBJVIEW) {
-        if ((AUTORIG_SCENE_MODE)(editorScene->rigMan->sceneMode - 1) == RIG_MODE_OBJVIEW) {
-            [self.view endEditing:YES];
-            UIAlertView* dataLossAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"rigging_back_previous_mode", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"NO", nil) otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
-            [dataLossAlert setTag:DATA_LOSS_ALERT];
-            [dataLossAlert show];
-        } else {
-            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:-1] waitUntilDone:YES];
-        }
-    }
-    [_rigAddToSceneBtn setHidden:YES];
-    [_addJointBtn setEnabled:NO];
-    [self autoRigMirrorBtnHandler];
-}
-
-- (IBAction)rigCancelAction:(id)sender {
-    [self performSelectorOnMainThread:@selector(deallocateAutoRig) withObject:nil waitUntilDone:YES];
-}
-
-- (void)deallocateAutoRig {
-    [self performSelectorOnMainThread:@selector(deallocateAutoRigOnMainThread:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:YES];
-}
-
-- (IBAction)rigAddToSceneAction:(id)sender {
-    Vector3 vertexColor = Vector3(-1.0);
-    if (editorScene->rigMan->nodeToRig->getProperty(IS_VERTEX_COLOR).value.x) {
-        Vector4 vColor = editorScene->rigMan->nodeToRig->getProperty(VERTEX_COLOR).value;
-        vertexColor    = Vector3(vColor.x, vColor.y, vColor.z);
-    }
-
-    [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@", editorScene->nodes[selectedNodeId]->getProperty(TEXTURE).fileName.c_str(), @".png"] VertexColor:vertexColor];
-
-    [self performSelectorOnMainThread:@selector(deallocateAutoRigOnMainThread:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
-}
-
-- (void)deallocateAutoRigOnMainThread:(NSNumber*)object {
-    [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
-    [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
-    if (editorScene->rigMan->deallocAutoRig([object boolValue])) {
-        editorScene->enterOrExitAutoRigMode(false);
-        [self setupEnableDisableControls];
-    }
-    [self autoRigViewButtonHandler:YES];
-    selectedNodeId = -1;
-    [self autoRigMirrorBtnHandler];
-    [self highlightObjectList];
-    [self performSelectorOnMainThread:@selector(hideLoadingActivity) withObject:nil waitUntilDone:YES];
-    [self reloadSceneObjects];
-}
-
-- (IBAction)addJoinAction:(id)sender {
-    if (editorScene->rigMan->isSkeletonJointSelected)
-        editorScene->rigMan->addNewJoint();
 }
 
 - (IBAction)editFunction:(id)sender {
@@ -1285,15 +1137,6 @@ BOOL missingAlertShown;
     NSLog(@"\nPopup Size %f %f ", _popUpVc.view.frame.size.width, _popUpVc.view.frame.size.height);
 }
 
-- (IBAction)autorigMirrorSwitchAction:(id)sender {
-    if (editorScene && editorScene->isRigMode)
-        editorScene->rigMan->switchMirrorState();
-}
-
-- (IBAction)sceneMirrorAction:(id)sender {
-    editorScene->switchMirrorState();
-}
-
 - (IBAction)optionsBtnAction:(id)sender {
     CGRect rect = _optionsBtn.frame;
     rect        = [self.view convertRect:rect fromView:_optionsBtn.superview];
@@ -1345,55 +1188,28 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)scaleBtnAction:(id)sender {
-    if (!editorScene->isRigMode || (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS))) {
-        bool status = false;
-        if ((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable())) {
-            status = true;
-        } else if (!(editorScene->selectedNodeIds.size() > 0) && (editorScene->isRigMode || (editorScene->hasNodeSelected() && (editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_CAMERA && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT)))) {
-            status = true;
-        } else
-            status = false;
-
-        if (status) {
-            editorScene->controlType = SCALE;
-            editorScene->updater->updateControlsOrientaion();
-            editorScene->renHelper->setControlsVisibility(false);
-            Vector3 currentScale                        = (editorScene->isRigMode) ? editorScene->rigMan->getSelectedNodeScale() : editorScene->getSelectedNodeScale();
-            _scaleProps                                 = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
-            _scaleProps.delegate                        = self;
-            BOOL status                                 = ([[[AppHelper getAppHelper] userDefaultsForKey:@"toolbarPosition"] integerValue] == TOOLBAR_LEFT);
-            self.popoverController                      = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
-            self.popoverController.popoverContentSize   = CGSizeMake(270, 177);
-            self.popoverController.popoverLayoutMargins = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            self.popoverController.animationType        = WEPopoverAnimationTypeCrossFade;
-            [_popUpVc.view setClipsToBounds:YES];
-            CGRect rect = ((UIButton*)sender).frame;
-            rect        = [self.view convertRect:rect fromView:((UIButton*)sender).superview];
-            [self.popoverController presentPopoverFromRect:rect
-                                                    inView:self.view
-                                  permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
-                                                  animated:NO];
-        }
-        [self changeAllButtonBG];
-    } else if (editorScene->isRigMode && (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_EDIT_ENVELOPES) && editorScene->rigMan->isSkeletonJointSelected) {
-        float scale                               = editorScene->rigMan->getSelectedJointScale();
-        scaleAutoRig                              = [[ScaleForAutoRigViewController alloc] initWithNibName:@"ScaleForAutoRigViewController" bundle:nil updateScale:scale];
-        scaleAutoRig.delegate                     = self;
-        self.popoverController                    = [[WEPopoverController alloc] initWithContentViewController:scaleAutoRig];
-        self.popoverController.animationType      = WEPopoverAnimationTypeCrossFade;
-        self.popoverController.popoverContentSize = CGSizeMake(390, 100.0);
-        self.popoverController.delegate           = self;
-        CGRect rect                               = ((UIButton*)sender).frame;
-        rect                                      = [self.view convertRect:rect fromView:((UIButton*)sender).superview];
+    bool status = false;
+    if ((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable())) {
+        editorScene->controlType = SCALE;
+        editorScene->updater->updateControlsOrientaion();
+        editorScene->renHelper->setControlsVisibility(false);
+        Vector3 currentScale                        = editorScene->getSelectedNodeScale();
+        _scaleProps                                 = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
+        _scaleProps.delegate                        = self;
+        BOOL status                                 = ([[[AppHelper getAppHelper] userDefaultsForKey:@"toolbarPosition"] integerValue] == TOOLBAR_LEFT);
+        self.popoverController                      = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
+        self.popoverController.popoverContentSize   = CGSizeMake(270, 177);
+        self.popoverController.popoverLayoutMargins = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.popoverController.animationType        = WEPopoverAnimationTypeCrossFade;
+        [_popUpVc.view setClipsToBounds:YES];
+        CGRect rect = ((UIButton*)sender).frame;
+        rect        = [self.view convertRect:rect fromView:((UIButton*)sender).superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionRight
-                                              animated:YES];
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                              animated:NO];
     }
-}
-
-- (void)changeSkeletonScale:(Vector3)scale {
-    editorScene->rigMan->changeNodeScale(scale);
+    [self changeAllButtonBG];
 }
 
 - (IBAction)undoBtnAction:(id)sender {
@@ -1776,14 +1592,11 @@ BOOL missingAlertShown;
 }
 
 - (void)scalePropertyChanged:(float)XValue YValue:(float)YValue ZValue:(float)ZValue {
-    if (!editorScene->isRigMode && (editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size()) && editorScene->selectedNodeIds.size() <= 0)
+    if ((editorScene->selectedNodeId < 0 || editorScene->selectedNodeId > editorScene->nodes.size()) && editorScene->selectedNodeIds.size() <= 0)
         return;
-    if (editorScene->isRigMode && editorScene->rigMan->isNodeSelected)
-        [self changeSkeletonScale:Vector3(XValue, YValue, ZValue)];
-    else {
-        editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
+
+    editorScene->actionMan->changeObjectScale(Vector3(XValue, YValue, ZValue), false);
         [_framesCollectionView reloadData];
-    }
 }
 
 - (void)scaleValueForAction:(float)XValue YValue:(float)YValue ZValue:(float)ZValue {
@@ -2351,31 +2164,6 @@ const NSStringEncoding kEncoding_wchar_t =
             objVc.addBtn.accessibilityIdentifier        = (toolBarPos == TOOLBAR_LEFT) ? @"1" : @"3";
             break;
         }
-            //        case IMPORT_ADDBONE: {
-            //            [self.popoverController dismissPopoverAnimated:YES];
-            //            NODE_TYPE selectedNodeType = NODE_UNDEFINED;
-            //            if(editorScene && editorScene->selectedNodeId != NOT_SELECTED) {
-            //                selectedNodeType = editorScene->nodes[editorScene->selectedNodeId]->getType();
-            //
-            //                if(selectedNodeType != NODE_SGM && selectedNodeType != NODE_TEXT && selectedNodeType != NODE_RIG) {
-            //                    UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Bones cannot be added to this model.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-            //                    [error show];
-            //                } else if(selectedNodeType == NODE_RIG && !editorScene->canEditRigBones(editorScene->nodes[editorScene->selectedNodeId])) {
-            //                    UIAlertView* warning = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"model_cannot_add_bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"NO", nil) otherButtonTitles:NSLocalizedString(@"YES", nil), nil];
-            //                    [warning setTag:SGR_WARNING];
-            //                    [warning show];
-            //
-            //                } else {
-            //                    [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:YES];
-            //                }
-            //            }
-            //            else
-            //            {
-            //                UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"Please Select any Node to add Bone", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-            //                [error show];
-            //            }
-            //            break;
-            //        }
         case IMPORT_TEXT: {
             if ([Utility IsPadDevice]) {
                 [self.popoverController dismissPopoverAnimated:YES];
@@ -2400,31 +2188,6 @@ const NSStringEncoding kEncoding_wchar_t =
         }
         default:
             break;
-    }
-}
-
-- (void)beginRigging {
-    [self.autoRigLbl setHidden:NO];
-    [self showOrHideProgress:SHOW_PROGRESS];
-    [self.addJointBtn setHidden:NO];
-    [self.addJointBtn setEnabled:NO];
-    [self.moveLast setHidden:NO];
-    [self.moveFirst setHidden:NO];
-    [self.rigScreenLabel setHidden:NO];
-    selectedNodeId = editorScene->riggingNodeId = editorScene->selectedNodeId;
-    editorScene->enterOrExitAutoRigMode(true);
-    editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
-    editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
-    [self setupEnableDisableControls];
-    [_rigCancelBtn setHidden:NO];
-    [self autoRigMirrorBtnHandler];
-    [self moveLastAction:nil];
-    [self showOrHideProgress:HIDE_PROGRESS];
-
-    if (![[AppHelper getAppHelper] userDefaultsBoolForKey:@"AutoRigTip"]) {
-        [[AppHelper getAppHelper] toggleHelp:nil Enable:NO];
-        [[AppHelper getAppHelper] toggleHelp:self Enable:YES];
-        [[AppHelper getAppHelper] saveBoolUserDefaults:YES withKey:@"AutoRigTip"];
     }
 }
 
@@ -3030,11 +2793,6 @@ void downloadFile(NSString* url, NSString* fileName) {
 }
 
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == SGR_WARNING) {
-        if (buttonIndex == OK_BUTTON_INDEX) {
-            [self performSelectorOnMainThread:@selector(beginRigging) withObject:nil waitUntilDone:NO];
-        }
-    }
     alertView.delegate = nil;
 }
 
@@ -3071,25 +2829,7 @@ void downloadFile(NSString* url, NSString* fileName) {
                 }
             }
         }
-    } else if (alertView.tag == CHOOSE_RIGGING_METHOD) {
-        if (buttonIndex == HUMAN_RIGGING) {
-            editorScene->rigMan->skeletonType = SKELETON_HUMAN;
-            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
-        } else if (buttonIndex == OWN_RIGGING) {
-            editorScene->rigMan->skeletonType = SKELETON_OWN;
-            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
-        }
-        [self autoRigMirrorBtnHandler];
-    } else if (alertView.tag == DATA_LOSS_ALERT) {
-        if (buttonIndex == CANCEL_BUTTON_INDEX) {
-        } else if (buttonIndex == OK_BUTTON_INDEX) {
-            [self performSelectorOnMainThread:@selector(switchAutoRigSceneMode:) withObject:[NSNumber numberWithInt:-1] waitUntilDone:YES];
-            [self moveLastAction:nil];
-        }
     }
-
-    if (editorScene && editorScene->isRigMode)
-        [self autoRigMirrorBtnHandler];
 }
 
 - (void)frameCountDisplayMode {
@@ -3230,47 +2970,6 @@ void downloadFile(NSString* url, NSString* fileName) {
         [self.addFrameBtn setEnabled:true];
         [self.viewBtn setEnabled:true];
         [self.infoBtn setEnabled:true];
-    }
-}
-
-- (void)autoRigMirrorBtnHandler {
-    bool status = YES;
-    if (editorScene && editorScene->isRigMode && (editorScene->rigMan->sceneMode == RIG_MODE_MOVE_JOINTS || editorScene->rigMan->sceneMode == RIG_MODE_EDIT_ENVELOPES)) {
-        status = (editorScene->rigMan->isNodeSelected && editorScene->rigMan->skeletonType == SKELETON_HUMAN) ? NO : YES;
-    }
-    [self.autoRigLbl setHidden:(!editorScene->isRigMode)];
-    [_autorigMirrorBtnHolder setHidden:status];
-    [_autorigMirrorLable setHidden:status];
-    [_autoRigMirrorSwitch setHidden:status];
-    if (editorScene && editorScene->isRigMode) {
-        switch (editorScene->rigMan->sceneMode) {
-            case RIG_MODE_OBJVIEW:
-            case RIG_MODE_MOVE_JOINTS:
-                [self.autoRigLbl setText:NSLocalizedString(@"Step_1_rigging_message", nil)];
-                _rigScreenLabel.text = NSLocalizedString(@"ATTACH SKELETON", nil);
-                break;
-            case RIG_MODE_EDIT_ENVELOPES:
-                [self.autoRigLbl setText:NSLocalizedString(@"Step_2_rigging_message", nil)];
-                _rigScreenLabel.text = NSLocalizedString(@"ADJUST ENVELOP", nil);
-                break;
-            case RIG_MODE_PREVIEW: {
-                [self.autoRigLbl setText:NSLocalizedString(@"Step_3_rigging_message", nil)];
-                _rigScreenLabel.text = NSLocalizedString(@"PREVIEW", nil);
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-    if ((editorScene && editorScene->isRigMode) && (((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_MOVE_JOINTS)) || (editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_PREVIEW))) {
-        [_moveBtnAutorig setEnabled:YES];
-        [_rotateBtnAutorig setEnabled:YES];
-        [_scaleBtnAutorig setEnabled:YES];
-    } else {
-        [_moveBtnAutorig setEnabled:NO];
-        [_rotateBtnAutorig setEnabled:NO];
-        [_scaleBtnAutorig setEnabled:(editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)RIG_MODE_EDIT_ENVELOPES) ? YES : NO];
     }
 }
 
@@ -3518,12 +3217,6 @@ void downloadFile(NSString* url, NSString* fileName) {
         [self reloadSceneObjects];
 }
 
-- (void)scalePropertyChangedInRigView:(float)scaleValue {
-    if ((editorScene->rigMan->sceneMode == (AUTORIG_SCENE_MODE)(RIG_MODE_EDIT_ENVELOPES)) && editorScene->rigMan->isSkeletonJointSelected) {
-        editorScene->rigMan->changeEnvelopeScale(Vector3(scaleValue), false);
-    }
-}
-
 - (void)changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp AtIndex:(PROP_INDEX)pIndex {
     NSArray*    srcDirPath         = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString*   docDirPath         = [srcDirPath objectAtIndex:0];
@@ -3638,8 +3331,6 @@ void downloadFile(NSString* url, NSString* fileName) {
     renderViewMan                   = nil;
     objVc.objSlideDelegate          = nil;
     objVc                           = nil;
-    scaleAutoRig.delegate           = nil;
-    scaleAutoRig                    = nil;
     self.imagePicker.delegate       = nil;
     self.imagePicker                = nil;
     self.popoverController.delegate = nil;

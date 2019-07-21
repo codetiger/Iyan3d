@@ -35,10 +35,6 @@ public:
     void setControlsVisibility(bool isVisible = true);
     void setRenderCameraOrientation();
     void setJointSpheresVisibility(bool visibilityFlag);
-    void setJointAndBonesVisibility(std::map<int, RigKey>& rigKeys, bool isVisible);
-    void setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool isVisible);
-    void drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId);
-    void renderEnvelopes();
     void renderAndSaveImage(char *imagePath, bool isDisplayPrepared, int frame, Vector4 bgColor = Vector4(0.1, 0.1, 0.1, 1.0));
     
     void movePreviewToCorner();
@@ -56,9 +52,6 @@ public:
     bool createJointSpheres(int additionalJoints);
     void displayJointsBasedOnSelection();
     void removeJointSpheres();
-    
-    void AttachSkeletonModeRTTSelection(Vector2 touchPosition);
-    void rttSGRNodeJointSelection(Vector2 touchPosition);
 };
 
 #endif /* RenderHelper_h */

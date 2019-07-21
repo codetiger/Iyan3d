@@ -48,11 +48,6 @@ public:
     void unselectObject(int objectId);
     
     void checkSelectionForAutoRig(Vector2 touchPosition);
-    void readSkeletonSelectionTexture();
-    bool selectSkeletonJointInPixel(Vector2 touchPixel);
-    void updateSkeletonSelectionColors(int prevSelectedNodeId);
-    void readSGRSelectionTexture();
-    void updateSGRSelection(int selectedNodeColor,int selectedJointColor, shared_ptr<AnimatedMeshNode> animNode);
 };
 
 #endif /* SGGestureManager_h */

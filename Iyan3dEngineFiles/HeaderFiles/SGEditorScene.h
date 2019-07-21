@@ -27,14 +27,12 @@
 
 #include "Constants.h"
 #include "cmath"
-#include "AutoRigJointsDataHelper.h"
 #include "SGNode.h"
 #include "ShaderManager.h"
 #include "SGAction.h"
 #include "BoneLimitsHelper.h"
 #include "CameraViewHelper.h"
 #include "SceneHelper.h"
-#include "SGAutoRigSceneManager.h"
 #include "RenderHelper.h"
 #include "SGActionManager.h"
 #include "SGMovementManager.h"
@@ -60,7 +58,7 @@ protected:
 public:
     
     bool addVAOSupport;
-    bool isPreviewMode, isRigMode , shadowsOff, shouldRecalculatePhysics;
+    bool isPreviewMode, shadowsOff, shouldRecalculatePhysics;
     bool freezeRendering , isPlaying;
     bool isMultipleSelection;
     bool isNodeSelected,isJointSelected,isControlSelected;
@@ -101,7 +99,6 @@ public:
     vector<SGNode*> sceneControls;
     vector<SGNode*> nodes;
     vector<SGNode*> jointSpheres;
-    vector<TPoseJoint> tPoseJoints;
 
     ShaderManager *shaderMGR;
     RenderHelper *renHelper;
@@ -112,7 +109,6 @@ public:
     SGActionManager *actionMan;
     SGSceneWriter *writer;
     SGAnimationManager *animMan;
-    SGAutoRigSceneManager *rigMan;
     PhysicsHelper * physicsHelper;
 
     std::map<int,Texture*> renderingTextureMap;
@@ -139,7 +135,6 @@ public:
     void removeAllNodes();
     
     void initTextures();
-    void enterOrExitAutoRigMode(bool rigMode);
     void initVariables(SceneManager *sceneMngr, int maxUniforms, int maxJoints);
     void initLightCamera(Vector3 position);
     

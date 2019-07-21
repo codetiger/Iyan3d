@@ -28,9 +28,8 @@
 #import "ScaleViewController.h"
 #import "ObjSidePanel.h"
 #import "CommonProps.h"
-#import "ScaleForAutoRigViewController.h"
 
-@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, SettingsViewControllerDelegate, AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, SettingsViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
     NSMutableArray*                assetsInScenes;
     ImportImageNew*                importImageViewVC;
     AnimationSelectionSlider*      animationsliderVC;
@@ -50,7 +49,6 @@
     NSTimer*                       playTimer;
     SettingsViewController*        settingsVc;
     CADisplayLink*                 displayLink;
-    ScaleForAutoRigViewController* scaleAutoRig;
     Vector4                        renderBgColor;
     NSString *                     cachesDir, *docDir;
     int                            ScreenWidth;
@@ -125,7 +123,6 @@
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)moveLastAction:(id)sender;
 - (IBAction)moveFirstAction:(id)sender;
-- (IBAction)addJoinAction:(id)sender;
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;
 - (IBAction)exportAction:(id)sender;
@@ -141,9 +138,6 @@
 - (IBAction)viewBtn:(id)sender;
 - (IBAction)lastFrameBtnAction:(id)sender;
 - (IBAction)firstFrameBtnAction:(id)sender;
-- (IBAction)myObjectsBtnAction:(id)sender;
-- (IBAction)autorigMirrorSwitchAction:(id)sender;
-- (IBAction)sceneMirrorAction:(id)sender;
 
 @end
 

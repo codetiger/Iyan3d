@@ -79,17 +79,6 @@ void shaderCallBackForNode(int nodeID, string matName, int materialIndex, string
         editorScene->setGridLinesUniforms(nodeID, 2, matName);
     else if (callbackFuncName.compare("RedLines") == 0)
         editorScene->setGridLinesUniforms(nodeID, 1, matName);
-    else if (callbackFuncName.compare("ObjUniforms") == 0) {
-        editorScene->rigMan->objNodeCallBack(matName);
-    } else if (callbackFuncName.compare("jointUniforms") == 0) {
-        editorScene->rigMan->jointNodeCallBack(nodeID, matName);
-    } else if (callbackFuncName.compare("BoneUniforms") == 0) {
-        editorScene->rigMan->boneNodeCallBack(nodeID, matName);
-    } else if (callbackFuncName.compare("envelopeUniforms") == 0) {
-        editorScene->rigMan->setEnvelopeUniforms(nodeID, matName);
-    } else if (callbackFuncName.compare("sgrUniforms") == 0) {
-        editorScene->rigMan->setSGRUniforms(nodeID, matName);
-    }
 }
 
 float getTransparency(int nodeId, string callbackFuncName) {
@@ -118,16 +107,12 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName) {
         return false;
     else if (callbackFuncName.compare("LightLine") == 0)
         return false;
-    else if (callbackFuncName.compare("ObjUniforms") == 0)
-        return editorScene->rigMan->isOBJTransparent(callbackFuncName);
     else if (callbackFuncName.compare("jointUniforms") == 0)
         return false;
     else if (callbackFuncName.compare("BoneUniforms") == 0)
         return false;
     else if (callbackFuncName.compare("envelopeUniforms") == 0)
         return false;
-    else if (callbackFuncName.compare("sgrUniforms") == 0)
-        return editorScene->rigMan->isSGRTransparent(nodeId, callbackFuncName);
 }
 
 - (void)addCameraLight {
@@ -391,10 +376,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName) {
             }
             switch (touchCount) {
                 case 1: {
-                    if (editorScene->isRigMode)
-                        editorScene->moveMan->touchMoveRig(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
-                    else
-                        editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
+                    editorScene->moveMan->touchMove(p[0] * screenScale, p[1] * screenScale, SCREENWIDTH * screenScale, SCREENHEIGHT * screenScale);
 
                     if (!editorScene->renHelper->isMovingPreview) {
                         editorScene->moveMan->swipeProgress(-velocity.x / 50.0, -velocity.y / 50.0);
@@ -432,9 +414,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName) {
 }
 
 - (void)handleLongPressGestures:(UILongPressGestureRecognizer*)sender {
-    if (editorScene && editorScene->isRigMode)
-        return;
-
     if (sender.state == UIGestureRecognizerStateBegan) {
         _longPress = true;
         CGPoint position;

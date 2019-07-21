@@ -276,23 +276,6 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type, int assetId, string meshPath, st
     return sgnode;
 }
 
-void SGSceneLoader::setJointsScale(SGNode *sgNode)
-{
-    if(sgNode->getType() != NODE_RIG)
-        return;
-    
-    shared_ptr<AnimatedMeshNode> animNode = dynamic_pointer_cast<AnimatedMeshNode>(sgNode->node);
-    SkinMesh * sMesh = (SkinMesh*)animNode->mesh;
-    if(sMesh->joints->size() != currentScene->tPoseJoints.size())
-        return;
-    
-    for(int i = 0; i < (int)sMesh->joints->size(); i++) {
-        float scale = currentScene->tPoseJoints[i].sphereRadius;
-        (*sMesh->joints)[i]->sphereRadius = scale;
-    }
-    
-}
-
 bool SGSceneLoader::loadNode(SGNode *sgNode,int actionType,bool isTempNode)
 {
     if(!currentScene || !smgr)
@@ -673,53 +656,6 @@ bool SGSceneLoader::removeTempNodeIfExists()
         }
     }
     return true;
-}
-
-void SGSceneLoader::initEnvelope(std::map<int, SGNode*>& envelopes, int jointId)
-{
-    std::map<int, RigKey>& rigKeys = currentScene->rigMan->rigKeys;
-
-    SGNode *envelopeSgNod = (envelopes.find(jointId) == envelopes.end()) ? NULL:envelopes[jointId];
-    if(jointId<=1 || !rigKeys[jointId].referenceNode || !rigKeys[jointId].referenceNode->node) return;  //skipping envelope between hip and it's parent.
-    int parentId = rigKeys[jointId].parentId;
-    
-    if(envelopeSgNod == NULL){
-        envelopeSgNod = new SGNode(NODE_RIG);
-        
-        SceneImporter *importer = new SceneImporter();
-        SkinMesh *mesh = importer->loadSkinMeshFromFile(constants::BundlePath + "/Envelop.sgr");
-        delete importer;
-
-        envelopeSgNod->setSkinningData((SkinMesh*)mesh);
-        shared_ptr<AnimatedMeshNode> envelopeNode = smgr->createAnimatedNodeFromMesh(mesh, "envelopeUniforms", ShaderManager::maxJoints, CHARACTER_RIG, MESH_TYPE_HEAVY);
-        envelopeNode->setID(ENVELOPE_START_ID + jointId);
-        envelopeNode->setParent(rigKeys[parentId].referenceNode->node);
-        envelopeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COLOR_SKIN));
-        envelopeSgNod->node = envelopeNode;
-        envelopeSgNod->getProperty(VERTEX_COLOR).value = Vector4(1.0);
-        envelopeSgNod->getProperty(TRANSPARENCY).value.x = 0.4; // Vector4(0.4, 0.0, 0.0, 0.0), UNDEFINED);
-    }
-    if(envelopeSgNod->node) {
-        envelopeSgNod->node->updateAbsoluteTransformation();
-        
-        Vector3 currentDir = BONE_BASE_DIRECTION;
-        Vector3 targetDir = Vector3(rigKeys[jointId].referenceNode->node->getPosition()).normalize();
-        envelopeSgNod->node->setRotation(MathHelper::rotationBetweenVectors(targetDir, currentDir));
-        envelopeSgNod->node->updateAbsoluteTransformation();
-        shared_ptr<JointNode> topJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_TOP_JOINT_ID);
-        shared_ptr<JointNode> bottomJoint = (dynamic_pointer_cast<AnimatedMeshNode>(envelopeSgNod->node))->getJointNode(ENVELOPE_BOTTOM_JOINT_ID);
-        
-        float height = rigKeys[parentId].referenceNode->node->getAbsolutePosition().getDistanceFrom(rigKeys[jointId].referenceNode->node->getAbsolutePosition());
-        topJoint->setPosition(Vector3(0,height,0));
-        topJoint->updateAbsoluteTransformation();
-        
-        bottomJoint->setScale(Vector3(rigKeys[parentId].envelopeRadius));
-        bottomJoint->updateAbsoluteTransformation();
-        topJoint->setScale(Vector3(rigKeys[jointId].envelopeRadius));
-        topJoint->updateAbsoluteTransformation();
-        envelopes[jointId] = envelopeSgNod;
-        envelopes[jointId]->node->setVisible(true);
-    }
 }
 
 SGNode* SGSceneLoader::copyOfSGNode(SGNode *sgNode)

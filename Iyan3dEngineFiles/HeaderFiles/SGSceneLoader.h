@@ -31,14 +31,11 @@ public:
     void setFirstInstanceAsMainNode(SGNode* currentNode);
     bool removeSelectedObjects();
     bool removeTempNodeIfExists();
-    
-    void initEnvelope(std::map<int, SGNode*>& envelopes, int jointId);
-    
+        
     SGNode* loadNode(NODE_TYPE type,int assetId, string meshPath, string textureName, std::wstring imagePath = L" ", int imgWidth = 0, int imgHeight = 0, int actionType = OPEN_SAVED_FILE, Vector4 textColor = Vector4(0), string fontFilePath = "", bool isTempNode = false);
     bool loadNode(SGNode *sgNode,int actionType,bool isTempNode = false);
     bool loadNodeOnUndoORedo(SGAction action, int actionType);
     
-    void setJointsScale(SGNode *sgNode);
     void addLight(SGNode *light);
     void performUndoRedoOnNodeLoad(SGNode* meshObject,int actionType);
     

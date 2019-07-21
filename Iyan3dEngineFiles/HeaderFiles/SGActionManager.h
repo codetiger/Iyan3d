@@ -86,13 +86,6 @@ public:
     
     int undo(int& returnValue2);
     int redo();
-    
-    /* AutoRig */
-    
-    bool changeSkeletonPosition(Vector3 outputValue);
-    bool changeSkeletonRotation(Quaternion outputValue);
-    bool changeSGRPosition(Vector3 outputValue);
-    bool changeSGRRotation(Quaternion outputValue);
 };
 
 #endif /* SGActionManager_h */
